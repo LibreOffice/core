@@ -31,7 +31,6 @@
 #include <map>
 #include <vector>
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
@@ -73,9 +72,17 @@ private:
 // Hyperlinks =================================================================
 
 /** Provides importing hyperlinks and inserting them into a document. */
-class XclImpHyperlink : private boost::noncopyable
+class XclImpHyperlink
 {
 public:
+    /** delete copy constructor */
+    XclImpHyperlink(const XclImpHyperlink&) = delete;
+    /** delete copy-assignment operator  */
+    const XclImpHyperlink& operator=(const XclImpHyperlink&) = delete;
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. */
+    XclImpHyperlink() = delete;
+
     /** Reads a HLINK record and inserts it into the document.
         @descr  Import stream must be located at start of a HLINK record. */
     static void         ReadHlink( XclImpStream& rStrm );
@@ -89,29 +96,24 @@ public:
     /** Convert the sheet name with invalid character(s) in URL when the URL is
         to a location within the same document (e.g. #'Sheet&Name'.A1). */
     static void         ConvertToValidTabName(OUString& rName);
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclImpHyperlink();
 };
 
 // Label ranges ===============================================================
 
 /** Provides importing label ranges and inserting them into a document. */
-class XclImpLabelranges : private  boost::noncopyable
+class XclImpLabelranges
 {
 public:
+    /** delete copy constructor */
+    XclImpLabelranges(const XclImpLabelranges&) = delete;
+    /** delete copy-assignment operator */
+    const XclImpLabelranges& operator=(const XclImpLabelranges&) = delete;
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. */
+    XclImpLabelranges() = delete;
     /** Reads a LABELRANGES record and inserts the label ranges into the document.
         @descr  Import stream must be located at start of a LABELRANGES record. */
     static void         ReadLabelranges( XclImpStream& rStrm );
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclImpLabelranges();
 };
 
 // Conditional formatting =====================================================
@@ -253,18 +255,20 @@ private:
 // Decryption =================================================================
 
 /** Provides static functions to import stream decryption settings. */
-class XclImpDecryptHelper : private boost::noncopyable
+class XclImpDecryptHelper
 {
 public:
+    /** delete copy constructor */
+    XclImpDecryptHelper(const XclImpDecryptHelper&) = delete;
+    /** delete copy-assignment operator */
+    const XclImpDecryptHelper& operator=(const XclImpDecryptHelper&) = delete;
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. */
+    XclImpDecryptHelper() = delete;
+
     /** Reads the FILEPASS record, queries a password and sets decryption algorithm.
         @return  Error code that may cause an error message after import. */
     static ErrCode      ReadFilepass( XclImpStream& rStrm );
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclImpDecryptHelper();
 };
 
 // Document protection ========================================================

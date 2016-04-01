@@ -33,8 +33,6 @@
 
 #include <set>
 
-#include <boost/noncopyable.hpp>
-
 class ScDocument;
 class ScTabViewShell;
 class ScInputWindow;
@@ -52,7 +50,7 @@ struct ESelection;
 
 //  ScInputHandler
 
-class ScInputHandler : private boost::noncopyable
+class ScInputHandler
 {
 private:
     VclPtr<ScInputWindow>          pInputWin;
@@ -163,6 +161,9 @@ private:
     DECL_LINK_TYPED( ShowHideTipVisibleSecParentListener, VclWindowEvent&, void );
 
 public:
+    ScInputHandler(const ScInputHandler&) = delete;
+    const ScInputHandler& operator=(const ScInputHandler&) = delete;
+
                     ScInputHandler();
     virtual         ~ScInputHandler();
 

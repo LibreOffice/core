@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <boost/noncopyable.hpp>
 
 
 namespace sc { namespace sidebar {
@@ -37,11 +36,14 @@ namespace
 }
 
 class ScPanelFactory
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PanelFactoryInterfaceBase
 {
 public:
+    // noncopyable
+    ScPanelFactory(const ScPanelFactory&) = delete;
+    const ScPanelFactory& operator=(const ScPanelFactory&) = delete;
+
     ScPanelFactory();
     virtual ~ScPanelFactory();
 

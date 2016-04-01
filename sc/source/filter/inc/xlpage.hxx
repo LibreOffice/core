@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLPAGE_HXX
 
 #include <tools/gen.hxx>
-#include <boost/noncopyable.hpp>
 #include "xltools.hxx"
 #include <memory>
 
@@ -90,8 +89,12 @@ const sal_uInt16 EXC_PAPERSIZE_USER         = 0xFFFF;
 class SvxBrushItem;
 
 /** Contains all page (print) settings for a single sheet. */
-struct XclPageData : private boost::noncopyable
+struct XclPageData
 {
+    /** noncopyable */
+    XclPageData(const XclPageData&) = delete;
+    const XclPageData& operator=(const XclPageData&) = delete;
+
     typedef std::unique_ptr< SvxBrushItem > SvxBrushItemPtr;
 
     ScfUInt16Vec        maHorPageBreaks;    /// Horizontal page breaks.

@@ -85,7 +85,6 @@
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Calc.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace oox {
@@ -110,9 +109,14 @@ bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rNam
     return rName1.compareToIgnoreAsciiCase(rName2 ) < 0;
 }
 
-class WorkbookGlobals : private boost::noncopyable
+class WorkbookGlobals
 {
 public:
+    // noncopyable ------------------------------------------------------------
+
+    WorkbookGlobals(const WorkbookGlobals&) = delete;
+    const WorkbookGlobals& operator=(const WorkbookGlobals&) = delete;
+
     explicit            WorkbookGlobals( ExcelFilter& rFilter );
                         ~WorkbookGlobals();
 
