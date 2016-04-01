@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <utility>
-#include <boost/noncopyable.hpp>
 
 #include "chart2uno.hxx"
 #include "miscuno.hxx"
@@ -139,12 +138,17 @@ uno::Reference< frame::XModel > lcl_GetXModel( ScDocument * pDoc )
     return xModel;
 }
 
-struct TokenTable : boost::noncopyable
+struct TokenTable
 {
     SCROW mnRowCount;
     SCCOL mnColCount;
     vector<FormulaToken*> maTokens;
 
+    // noncopyable
+    TokenTable(const TokenTable&) = delete;
+    const TokenTable& operator=(const TokenTable&) = delete;
+
+    TokenTable() = default;
     void init( SCCOL nColCount, SCROW nRowCount )
     {
         mnColCount = nColCount;
@@ -426,7 +430,7 @@ vector<ScTokenRef> Chart2PositionMap::getDataRowRanges(SCROW nRow) const
  * Designed to be a drop-in replacement for ScChartPositioner, in order to
  * handle external references.
  */
-class Chart2Positioner : private boost::noncopyable
+class Chart2Positioner
 {
     enum GlueType
     {
@@ -438,6 +442,9 @@ class Chart2Positioner : private boost::noncopyable
     };
 
 public:
+    Chart2Positioner(const Chart2Positioner&) = delete;
+    const Chart2Positioner& operator=(const Chart2Positioner&) = delete;
+
     Chart2Positioner(ScDocument* pDoc, const vector<ScTokenRef>& rRefTokens) :
         mrRefTokens(rRefTokens),
         mpPositionMap(nullptr),

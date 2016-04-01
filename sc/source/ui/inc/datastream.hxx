@@ -17,7 +17,6 @@
 #include <vcl/timer.hxx>
 #include <address.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 
 #include <documentstreamaccess.hxx>
@@ -33,9 +32,12 @@ namespace datastreams {
     class ReaderThread;
 }
 
-class DataStream : private boost::noncopyable
+class DataStream
 {
 public:
+    DataStream(const DataStream&) = delete;
+    const DataStream& operator=(const DataStream&) = delete;
+
     struct Cell
     {
         struct Str

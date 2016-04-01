@@ -36,7 +36,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::container;
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace oox { namespace xls {
@@ -47,14 +46,19 @@ namespace {
  * Cache the token array for the last cell position in each column. We use
  * one cache per sheet.
  */
-class CachedTokenArray : private boost::noncopyable
+class CachedTokenArray
 {
 public:
+    CachedTokenArray(const CachedTokenArray&) = delete;
+    const CachedTokenArray& operator=(const CachedTokenArray&) = delete;
 
-    struct Item : boost::noncopyable
+    struct Item
     {
         SCROW mnRow;
         ScFormulaCell* mpCell;
+
+        Item(const Item&) = delete;
+        const Item& operator=(const Item&) = delete;
 
         Item() : mnRow(-1), mpCell(nullptr) {}
     };
@@ -307,7 +311,7 @@ void processSheetFormulaCells(
         applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues);
 }
 
-class WorkerThread: public salhelper::Thread, private boost::noncopyable
+class WorkerThread: public salhelper::Thread
 {
     ScDocumentImport& mrDoc;
     FormulaBuffer::SheetItem& mrItem;
@@ -315,6 +319,9 @@ class WorkerThread: public salhelper::Thread, private boost::noncopyable
     const uno::Sequence<sheet::ExternalLinkInfo>& mrExternalLinks;
 
 public:
+    WorkerThread(const WorkerThread&) = delete;
+    const WorkerThread& operator=(const WorkerThread&) = delete;
+
     WorkerThread(
         ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter* pFormatter,
         const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks ) :

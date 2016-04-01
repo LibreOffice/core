@@ -26,16 +26,18 @@
 #include <sfx2/linkmgr.hxx>
 #include <vcl/layout.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sc {
 
-struct DocumentLinkManagerImpl : boost::noncopyable
+struct DocumentLinkManagerImpl
 {
     SfxObjectShell* mpShell;
     std::unique_ptr<DataStream> mpDataStream;
     std::unique_ptr<sfx2::LinkManager> mpLinkManager;
+
+    DocumentLinkManagerImpl(const DocumentLinkManagerImpl&) = delete;
+    const DocumentLinkManagerImpl& operator=(const DocumentLinkManagerImpl&) = delete;
 
     explicit DocumentLinkManagerImpl(SfxObjectShell* pShell)
         : mpShell(pShell), mpDataStream(nullptr), mpLinkManager(nullptr) {}

@@ -26,7 +26,6 @@
 
 #include "rangenam.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 
@@ -34,7 +33,7 @@ class ScRangeData;
 class ScTokenArray;
 
 /** Represents a defined name. It may be related to a single sheet or global. */
-class XclImpName : protected XclImpRoot, public boost::noncopyable
+class XclImpName : protected XclImpRoot
 {
     struct TokenStrmData
     {
@@ -47,6 +46,9 @@ class XclImpName : protected XclImpRoot, public boost::noncopyable
     };
 
 public:
+    XclImpName(const XclImpName&) = delete;
+    const XclImpName& operator=(const XclImpName&) = delete;
+
     explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx );
 
     inline const OUString& GetXclName() const { return maXclName; }

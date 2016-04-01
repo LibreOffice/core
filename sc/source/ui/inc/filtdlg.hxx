@@ -35,7 +35,6 @@
 #include <deque>
 #include <vector>
 #include <map>
-#include <boost/noncopyable.hpp>
 
 class ScFilterOptionsMgr;
 class ScViewData;
@@ -44,10 +43,14 @@ class ScQueryItem;
 
 class ScFilterDlg : public ScAnyRefDlg
 {
-    struct EntryList : boost::noncopyable
+    struct EntryList
     {
         std::vector<ScTypedStrData> maList;
         size_t mnHeaderPos;
+
+        EntryList(const EntryList&) = delete;
+        const EntryList& operator=(const EntryList&) = delete;
+
         EntryList();
     };
     typedef std::map<SCCOL, std::unique_ptr<EntryList>> EntryListsMap;

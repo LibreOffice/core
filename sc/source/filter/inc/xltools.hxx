@@ -22,7 +22,6 @@
 
 #include "address.hxx"
 #include "ftools.hxx"
-#include <boost/noncopyable.hpp>
 
 class SfxObjectShell;
 
@@ -76,9 +75,18 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid );
 // Excel Tools ================================================================
 
 /** This class contains static helper methods for the Excel import and export filters. */
-class XclTools : private boost::noncopyable
+class XclTools
 {
 public:
+    // noncopyable nonconstructable -------------------------------------------
+
+    XclTools(const XclTools&) = delete;
+    const XclTools& operator=(const XclTools&) = delete;
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static items. */
+    XclTools() = delete;
+
+
     // GUID's -----------------------------------------------------------------
 
     static const XclGuid maGuidStdLink;     /// GUID of StdLink (HLINK record).
@@ -238,11 +246,6 @@ private:
     static const OUString maCFStyleNamePrefix2; /// Prefix for cond. formatting style names from OOX filter.
     static const OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
     static const OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
-
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static items. To enforce this, the default constructor
-        is made private */
-    XclTools();
 };
 
 // read/write colors ----------------------------------------------------------

@@ -26,8 +26,6 @@
 #include <set>
 #include <unordered_set>
 
-#include <boost/noncopyable.hpp>
-
 #include <svl/broadcast.hxx>
 
 #include "global.hxx"
@@ -51,7 +49,7 @@ struct AreaListener
     Used in a Unique Associative Container.
  */
 
-class ScBroadcastArea : private boost::noncopyable
+class ScBroadcastArea
 {
 private:
     ScBroadcastArea*    pUpdateChainNext;
@@ -63,6 +61,9 @@ private:
     bool mbGroupListening:1;
 
 public:
+    ScBroadcastArea(const ScBroadcastArea&) = delete;
+    const ScBroadcastArea& operator=(const ScBroadcastArea&) = delete;
+
     ScBroadcastArea( const ScRange& rRange );
 
     inline SvtBroadcaster&       GetBroadcaster()       { return aBroadcaster; }

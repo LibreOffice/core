@@ -28,7 +28,6 @@
 #include <editeng/flditem.hxx>
 
 #include <boost/optional.hpp>
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 
@@ -47,10 +46,13 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
         explicit ParaFormat(ScEditEngineDefaulter& rEditEngine);
     };
 
-    struct Field : boost::noncopyable
+    struct Field
     {
         SvxFieldData* mpData;
         ESelection maSelection;
+
+        Field(const Field&) = delete;
+        const Field& operator=(const Field&) = delete;
 
         explicit Field(SvxFieldData* pData);
         ~Field();

@@ -29,8 +29,6 @@
 #include "gridwin.hxx"
 #include "drawview.hxx"
 
-#include <boost/noncopyable.hpp>
-
 namespace editeng {
     struct MisspellRanges;
 }
@@ -80,7 +78,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
-class ScTabView : private boost::noncopyable
+class ScTabView
 {
 private:
     enum BlockMode { None = 0, Normal = 1, Own = 2 };
@@ -226,6 +224,10 @@ protected:
     void            UpdateIMap( SdrObject* pObj );
 
 public:
+    /** make noncopyable */
+                    ScTabView(const ScTabView&) = delete;
+    const ScTabView&    operator=(const ScTabView&) = delete;
+
                     ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScTabView();
 
