@@ -52,12 +52,10 @@ struct SalSessionInteractionEvent : public SalSessionEvent
 struct SalSessionSaveRequestEvent : public SalSessionEvent
 {
     bool                        m_bShutdown;
-    bool                        m_bCancelable;
 
-    SalSessionSaveRequestEvent( bool bShutdown, bool bCancelable )
+    SalSessionSaveRequestEvent( bool bShutdown )
             : SalSessionEvent( SaveRequest ),
-              m_bShutdown( bShutdown ),
-              m_bCancelable( bCancelable )
+              m_bShutdown( bShutdown )
     {}
 };
 

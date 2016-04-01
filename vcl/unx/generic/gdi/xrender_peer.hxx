@@ -55,7 +55,7 @@ public:
                     const XRenderPictureAttributes* ) const;
     void        SetPictureClipRegion( Picture, Region ) const;
     void        CompositePicture( int nOp, Picture aSrc, Picture aMask, Picture aDst,
-                    int nXSrc, int nYSrc, int nXMask, int nYMask,
+                    int nXSrc, int nYSrc,
                     int nXDst, int nYDst, unsigned nWidth, unsigned nHeight ) const;
     void        FreePicture( Picture ) const;
 
@@ -109,11 +109,11 @@ inline void XRenderPeer::SetPictureClipRegion( Picture aPicture,
 
 inline void XRenderPeer::CompositePicture( int nXRenderOp,
     Picture aSrcPic, Picture aMaskPic, Picture aDstPic,
-    int nSrcX, int nSrcY, int nMaskX, int nMaskY, int nDstX, int nDstY,
+    int nSrcX, int nSrcY, int nDstX, int nDstY,
     unsigned nWidth, unsigned nHeight ) const
 {
     XRenderComposite( mpDisplay, nXRenderOp, aSrcPic, aMaskPic, aDstPic,
-                      nSrcX, nSrcY, nMaskX, nMaskY, nDstX, nDstY, nWidth, nHeight );
+                      nSrcX, nSrcY, 0/*nMaskX*/, 0/*nMaskY*/, nDstX, nDstY, nWidth, nHeight );
 }
 
 inline void XRenderPeer::FreePicture( Picture aPicture ) const

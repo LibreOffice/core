@@ -1187,7 +1187,7 @@ public:
     // transparent background for selected or checked items in toolboxes etc.
     void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder );
     // support rounded edges in the selection rect
-    void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly, Color* pSelectionTextColor, Color* pPaintColor );
+    void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, Color* pSelectionTextColor, Color* pPaintColor );
 
     void                                ShowTracking( const Rectangle& rRect,
                                                       sal_uInt16 nFlags = SHOWTRACK_SMALL );
