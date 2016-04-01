@@ -52,8 +52,6 @@ using namespace ::com::sun::star::frame;
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
-
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
 static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
@@ -82,8 +80,6 @@ OString readStringFromPipe(osl::StreamPipe & pipe) {
     }
 }
 
-#endif
-
 }
 
 // Type of pipe we use
@@ -98,8 +94,6 @@ namespace desktop
 {
 
 namespace {
-
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
 
 class Parser: public CommandLineArgs::Supplier {
 public:
@@ -235,8 +229,6 @@ bool addArgument(OStringBuffer &rArguments, char prefix,
     }
     return true;
 }
-
-#endif
 
 }
 
@@ -641,7 +633,6 @@ void RequestHandler::WaitForReady()
 
 void PipeReaderThread::execute()
 {
-#if HAVE_FEATURE_DESKTOP
     do
     {
         osl::StreamPipe aStreamPipe;
@@ -915,7 +906,6 @@ void PipeReaderThread::execute()
             salhelper::Thread::wait( tval );
         }
     } while( schedule() );
-#endif
 }
 
 static void AddToDispatchList(
