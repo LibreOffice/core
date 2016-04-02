@@ -1854,8 +1854,11 @@ namespace svgio
                 }
                 case SVGTokenMarker:
                 {
-                    readLocalUrl(aContent, maMarkerEndXLink);
-                    maMarkerStartXLink = maMarkerMidXLink = maMarkerEndXLink;
+                    if(bCaseIndependent)
+                    {
+                        readLocalUrl(aContent, maMarkerEndXLink);
+                        maMarkerStartXLink = maMarkerMidXLink = maMarkerEndXLink;
+                    }
                     break;
                 }
                 case SVGTokenMarkerStart:
