@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_c2587a59",
+        "filename": "chart2/qa/extras/chart2_trendcalculators.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-04-02T16:16:57Z",
+      "side": 1,
+      "message": "Done.\nI hope I put header file in the right place.",
+      "parentUuid": "9ad45d7e_62742ecf",
+      "revId": "514f1448831f0fb7f404f3e431edcae439bb6a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_c2819a91",
         "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
         "patchSetId": 2
