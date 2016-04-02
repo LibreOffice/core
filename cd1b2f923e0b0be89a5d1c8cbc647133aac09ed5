@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_e24e5e95",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2016-04-02T11:20:09Z",
+      "side": 0,
+      "message": "so it changes library name?\n\nHow is this supposed to work with system-firebird? You didn\u0027t touch configure.ac..\n\nSee https://cgit.freedesktop.org/libreoffice/core/tree/configure.ac#n8709 ff.",
+      "revId": "cd1b2f923e0b0be89a5d1c8cbc647133aac09ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
