@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_62742ecf",
+        "filename": "chart2/qa/extras/chart2_trendcalculators.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-02T06:42:44Z",
+      "side": 1,
+      "message": "might be nice as a follow-on to move these unicode characters to a common header file and give them nice names",
+      "revId": "514f1448831f0fb7f404f3e431edcae439bb6a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c2819a91",
+        "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-02T06:42:44Z",
+      "side": 1,
+      "message": "maybe instead of limiting yourself to 2 digits like this, using one of the formatting functions to convert the integer to a string (eg. OUString::number) and then convert each digit in the resulting string into it\u0027s superscript counterpart.",
+      "revId": "514f1448831f0fb7f404f3e431edcae439bb6a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
