@@ -220,18 +220,6 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // What? The under-flow portion is not in the portion chain?
     OSL_ENSURE( pPor, "SwTextFormatter::Underflow: overflow but underflow" );
 
-    // i#29529 - correction: no delete of footnotes
-//    if( rInf.IsFootnoteInside() && pPor && !rInf.IsQuick() )
-//    {
-//        SwLinePortion *pTmp = pPor->GetPortion();
-//        while( pTmp )
-//        {
-//            if( pTmp->IsFootnotePortion() )
-//                ((SwFootnotePortion*)pTmp)->ClearFootnote();
-//            pTmp = pTmp->GetPortion();
-//        }
-//    }
-
     // Snapshot
     if ( pPor==rInf.GetLast() )
     {
