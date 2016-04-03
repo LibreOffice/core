@@ -21,6 +21,7 @@
 
 #include <dmapper/resourcemodel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
+#include <vector>
 
 namespace writerfilter {
 namespace ooxml
@@ -29,7 +30,7 @@ class OOXMLBinaryObjectReference :
         public writerfilter::Reference<BinaryObj>
 {
     OOXMLStream::Pointer_t mpStream;
-    css::uno::Sequence<sal_Int8> mSequence;
+    std::vector<sal_Int8> mSequence;
     bool mbRead;
 
     void read();

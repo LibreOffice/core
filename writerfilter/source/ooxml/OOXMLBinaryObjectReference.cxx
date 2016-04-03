@@ -50,9 +50,9 @@ void OOXMLBinaryObjectReference::read()
     {
         nOldSize = nSize;
         nSize += nBytesRead;
-        mSequence.realloc(nSize);
+        mSequence.resize(nSize);
 
-        memcpy(&mSequence[nOldSize], aSeq.getArray(), nBytesRead);
+        memcpy(&mSequence.data()[nOldSize], aSeq.getArray(), nBytesRead);
     }
 
     mbRead = true;
@@ -66,8 +66,8 @@ void OOXMLBinaryObjectReference::resolve(BinaryObj & rHandler)
     writerfilter::Reference<Properties>::Pointer_t pRef =
         writerfilter::Reference<Properties>::Pointer_t();
 
-    rHandler.data(reinterpret_cast<sal_uInt8 *>(&mSequence[0]),
-                  mSequence.getLength(), pRef);
+    rHandler.data(reinterpret_cast<sal_uInt8 *>(mSequence.data()),
+                  mSequence.size(), pRef);
 }
 
 }}
