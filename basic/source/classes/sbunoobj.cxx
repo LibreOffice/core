@@ -3269,7 +3269,7 @@ Reference< XTypeDescriptionEnumeration > getTypeDescriptorEnumeration( const OUS
     return xEnum;
 }
 
-typedef std::unordered_map< OUString, Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
+typedef std::unordered_map< OUString, Any, OUStringHash > VBAConstantsHash;
 
 VBAConstantHelper&
 VBAConstantHelper::instance()
