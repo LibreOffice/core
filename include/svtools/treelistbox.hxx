@@ -796,6 +796,8 @@ public:
     virtual Size    GetOptimalSize() const override;
 
     void            SetAlternatingRowColors( const bool bEnable );
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"
