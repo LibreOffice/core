@@ -42,7 +42,8 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
         throw css::io::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    aData.realloc(nBytesToRead);
+    if (aData.getLength() < nBytesToRead)
+        aData.realloc(nBytesToRead);
 
     sal_Size nRead(0);
     ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, static_cast<void*>(aData.getArray()), nBytesToRead, &nRead);
@@ -52,7 +53,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
         throw css::io::IOException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     // adjust sequence if data read is lower than the desired data
-    if (nRead < (sal_uInt32)nBytesToRead)
+    if (nRead < (sal_Size)aData.getLength())
         aData.realloc( nRead );
 
     return nRead;
