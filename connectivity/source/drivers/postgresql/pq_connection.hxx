@@ -147,9 +147,7 @@ struct HashByteSequence
 typedef std::unordered_map<
     ::rtl::ByteSequence,
     ::com::sun::star::uno::WeakReference< com::sun::star::sdbc::XCloseable >,
-    HashByteSequence,
-    ::std::equal_to< ::rtl::ByteSequence >
-> WeakHashMap;
+    HashByteSequence > WeakHashMap;
 typedef ::std::vector< OString > OStringVector;
 
 

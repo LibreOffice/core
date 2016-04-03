@@ -157,7 +157,7 @@ public:
 
 //typedef std::map< OUString, Reference< browse::XBrowseNode > >
 typedef std::unordered_map< OUString, Reference< browse::XBrowseNode >,
-    OUStringHash, ::std::equal_to< OUString > >
+    OUStringHash >
         BrowseNodeAggregatorHash;
 typedef std::vector< OUString > vString;
 

@@ -581,7 +581,7 @@ namespace {
 struct bootstrap_map: private boost::noncopyable {
     typedef std::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
-        rtl::OUStringHash, std::equal_to< rtl::OUString > > t;
+        rtl::OUStringHash > t;
 
     // get and release must only be called properly synchronized via some mutex
     // (e.g., osl::Mutex::getGlobalMutex()):

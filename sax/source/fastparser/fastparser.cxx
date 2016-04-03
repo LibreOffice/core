@@ -68,7 +68,7 @@ struct NamespaceDefine;
 struct Entity;
 
 typedef std::unordered_map< OUString, sal_Int32,
-        OUStringHash, std::equal_to< OUString > > NamespaceMap;
+        OUStringHash > NamespaceMap;
 
 typedef std::vector<Event> EventList;
 

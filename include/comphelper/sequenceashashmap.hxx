@@ -43,8 +43,7 @@ namespace comphelper{
 struct SequenceAsHashMapBase : public std::unordered_map<
     OUString                    ,
     css::uno::Any         ,
-    OUStringHash                ,
-    ::std::equal_to< OUString > >
+    OUStringHash >
 {
 };
 

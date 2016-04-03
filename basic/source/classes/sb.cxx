@@ -1148,7 +1148,7 @@ struct ClassModuleRunInitItem
 // to allow forward declaration in sbmod.hxx
 class ModuleInitDependencyMap : public
     std::unordered_map< OUString, ClassModuleRunInitItem,
-                          OUStringHash, ::std::equal_to< OUString > >
+                          OUStringHash >
 {};
 
 void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem )

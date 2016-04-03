@@ -143,7 +143,7 @@ struct VbaTimerInfoHash
 };
 
 // ====VbaTimerHashMap==================================
-typedef std::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
+typedef std::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash > VbaTimerHashMap;
 
 // ====VbaApplicationBase_Impl==================================
 struct VbaApplicationBase_Impl

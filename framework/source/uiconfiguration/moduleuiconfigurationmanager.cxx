@@ -168,7 +168,7 @@ private:
         css::uno::Reference< css::container::XIndexAccess > xSettings;
     };
 
-    typedef std::unordered_map< OUString, UIElementData, OUStringHash, std::equal_to< OUString > > UIElementDataHashMap;
+    typedef std::unordered_map< OUString, UIElementData, OUStringHash > UIElementDataHashMap;
 
     struct UIElementType
     {
@@ -187,7 +187,7 @@ private:
 
     typedef std::vector< UIElementType > UIElementTypesVector;
     typedef std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-    typedef std::unordered_map< OUString, UIElementInfo, OUStringHash, std::equal_to< OUString > > UIElementInfoHashMap;
+    typedef std::unordered_map< OUString, UIElementInfo, OUStringHash > UIElementInfoHashMap;
 
     void            impl_Initialize();
     void            implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );

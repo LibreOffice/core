@@ -190,8 +190,7 @@ struct TranslateInfo
 
 typedef std::unordered_map< OUString,
 std::list< TranslateInfo >,
-OUStringHash,
-::std::equal_to< OUString > > EventInfoHash;
+OUStringHash > EventInfoHash;
 
 
 struct TranslatePropMap
@@ -487,8 +486,7 @@ public:
     { return !m_hEvents.empty(); }
 private:
 
-typedef std::unordered_map< OUString, Any, OUStringHash,
-::std::equal_to< OUString > > EventSupplierHash;
+typedef std::unordered_map< OUString, Any, OUStringHash > EventSupplierHash;
 
     EventSupplierHash m_hEvents;
 };

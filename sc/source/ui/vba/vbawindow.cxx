@@ -50,8 +50,7 @@ using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
 
 typedef  std::unordered_map< OUString,
-SCTAB, OUStringHash,
-::std::equal_to< OUString > > NameIndexHash;
+SCTAB, OUStringHash > NameIndexHash;
 
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > > Sheets;
 
