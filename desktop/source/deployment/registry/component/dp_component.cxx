@@ -953,9 +953,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
 
             const Reference<io::XInputStream> xData(
                 ::xmlscript::createInputStream(
-                    ::rtl::ByteSequence(
                         reinterpret_cast<sal_Int8 const *>(buf2.getStr()),
-                        buf2.getLength() ) ) );
+                        buf2.getLength() ) );
             ::ucbhelper::Content ucb_content(
                 makeURL( getCachePath(), getPlatformString() + "rc" ),
                 xCmdEnv, m_xComponentContext );
@@ -978,9 +977,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     // write unorc:
     const Reference<io::XInputStream> xData(
         ::xmlscript::createInputStream(
-            ::rtl::ByteSequence(
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
-                buf.getLength() ) ) );
+                buf.getLength() ) );
     ::ucbhelper::Content ucb_content(
         makeURL( getCachePath(), "unorc" ), xCmdEnv, m_xComponentContext );
     ucb_content.writeStream( xData, true /* replace existing */ );

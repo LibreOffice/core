@@ -34,11 +34,11 @@ namespace xmlscript
 class BSeqInputStream
     : public ::cppu::WeakImplHelper< io::XInputStream >
 {
-    ByteSequence _seq;
+    std::vector<sal_Int8> _seq;
     sal_Int32 _nPos;
 
 public:
-    explicit BSeqInputStream( ByteSequence const & rSeq )
+    explicit BSeqInputStream( std::vector<sal_Int8> const & rSeq )
         : _seq( rSeq )
         , _nPos( 0 )
         {}
@@ -63,12 +63,13 @@ sal_Int32 BSeqInputStream::readBytes(
     Sequence< sal_Int8 > & rData, sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException, std::exception)
 {
-    nBytesToRead = ((nBytesToRead > _seq.getLength() - _nPos)
-                    ? _seq.getLength() - _nPos
+    nBytesToRead = ((nBytesToRead > (sal_Int32)_seq.size() - _nPos)
+                    ? _seq.size() - _nPos
                     : nBytesToRead);
 
-    ByteSequence aBytes( _seq.getConstArray() + _nPos, nBytesToRead );
-    rData = toUnoSequence( aBytes );
+    if (rData.getLength() != nBytesToRead)
+        rData.realloc( nBytesToRead );
+    memcpy(rData.getArray(), &_seq.data()[_nPos], nBytesToRead);
     _nPos += nBytesToRead;
     return nBytesToRead;
 }
@@ -89,7 +90,7 @@ void BSeqInputStream::skipBytes(
 sal_Int32 BSeqInputStream::available()
     throw (io::NotConnectedException, io::IOException, RuntimeException, std::exception)
 {
-    return (_seq.getLength() - _nPos);
+    return _seq.size() - _nPos;
 }
 
 void BSeqInputStream::closeInput()
@@ -100,10 +101,10 @@ void BSeqInputStream::closeInput()
 class BSeqOutputStream
     : public ::cppu::WeakImplHelper< io::XOutputStream >
 {
-    ByteSequence * _seq;
+    std::vector<sal_Int8> * _seq;
 
 public:
-    explicit BSeqOutputStream( ByteSequence * seq )
+    explicit BSeqOutputStream( std::vector<sal_Int8> * seq )
         : _seq( seq )
         {}
 
@@ -120,9 +121,9 @@ public:
 void BSeqOutputStream::writeBytes( Sequence< sal_Int8 > const & rData )
     throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException, std::exception)
 {
-    sal_Int32 nPos = _seq->getLength();
-    _seq->realloc( nPos + rData.getLength() );
-    memcpy( _seq->getArray() + nPos,
+    sal_Int32 nPos = _seq->size();
+    _seq->resize( nPos + rData.getLength() );
+    memcpy( _seq->data() + nPos,
                       rData.getConstArray(),
                       rData.getLength() );
 }
@@ -136,12 +137,19 @@ void BSeqOutputStream::closeOutput()
 {
 }
 
-Reference< io::XInputStream > SAL_CALL createInputStream( ByteSequence const & rInData )
+Reference< io::XInputStream > SAL_CALL createInputStream( std::vector<sal_Int8> const & rInData )
 {
     return new BSeqInputStream( rInData );
 }
 
-Reference< io::XOutputStream > SAL_CALL createOutputStream( ByteSequence * pOutData )
+Reference< io::XInputStream > SAL_CALL createInputStream( const sal_Int8* pData, int len )
+{
+    std::vector<sal_Int8> rInData(len);
+    memcpy( rInData.data(), pData, len);
+    return new BSeqInputStream( rInData );
+}
+
+Reference< io::XOutputStream > SAL_CALL createOutputStream( std::vector<sal_Int8> * pOutData )
 {
     return new BSeqOutputStream( pOutData );
 }

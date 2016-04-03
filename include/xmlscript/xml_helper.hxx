@@ -112,11 +112,15 @@ protected:
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
 SAL_CALL createInputStream(
-    ::rtl::ByteSequence const & rInData );
+    std::vector<sal_Int8> const & rInData );
+
+XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
+SAL_CALL createInputStream(
+    const sal_Int8* pData, int len );
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XOutputStream >
 SAL_CALL createOutputStream(
-    ::rtl::ByteSequence * pOutData );
+    std::vector<sal_Int8> * pOutData );
 
 }
 

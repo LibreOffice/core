@@ -900,7 +900,8 @@ void DlgEditor::Paste()
 
                 if ( xClipDialogModel.is() )
                 {
-                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( rtl::ByteSequence(DialogModelBytes.getArray(), DialogModelBytes.getLength()) ) , xClipDialogModel, xContext, m_xDocument );
+                    Reference<XInputStream> xIn = ::xmlscript::createInputStream( DialogModelBytes.getConstArray(), DialogModelBytes.getLength() );
+                    ::xmlscript::importDialogModel( xIn , xClipDialogModel, xContext, m_xDocument );
                 }
 
                 // get control models from clipboard dialog model

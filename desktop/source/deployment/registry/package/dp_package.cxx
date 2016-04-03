@@ -578,9 +578,9 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
     {
         ::ucbhelper::Content descContent(
             licenseUrl, xCmdEnv, getMyBackend()->getComponentContext());
-        ::rtl::ByteSequence seq = dp_misc::readFile(descContent);
+        std::vector<sal_Int8> seq = dp_misc::readFile(descContent);
         return OUString( reinterpret_cast<sal_Char const *>(
-            seq.getConstArray()), seq.getLength(), RTL_TEXTENCODING_UTF8);
+            seq.data()), seq.size(), RTL_TEXTENCODING_UTF8);
     }
     catch (const css::uno::Exception&)
     {
@@ -1544,13 +1544,13 @@ void BackendImpl::PackageImpl::scanBundle(
                                 xCmdEnv, false /* no throw */ ))
         {
             // patch description:
-            ::rtl::ByteSequence bytes( readFile( descrFileContent ) );
+            std::vector<sal_Int8> bytes( readFile( descrFileContent ) );
             OUStringBuffer buf;
-            if ( bytes.getLength() )
+            if ( bytes.size() )
             {
                 buf.append( OUString( reinterpret_cast<sal_Char const *>(
-                                          bytes.getConstArray() ),
-                                      bytes.getLength(), RTL_TEXTENCODING_UTF8 ) );
+                                          bytes.data() ),
+                                      bytes.size(), RTL_TEXTENCODING_UTF8 ) );
             }
             else
             {

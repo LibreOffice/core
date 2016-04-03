@@ -245,9 +245,9 @@ void PackageManagerImpl::initActivationLayer(
                             aSecurity.getUserName( aUserName );
                             ucbhelper::Content remFileContent(
                                 url + "removed", Reference<XCommandEnvironment>(), m_xComponentContext);
-                            ::rtl::ByteSequence data = dp_misc::readFile(remFileContent);
-                            OString osData(reinterpret_cast<const sal_Char*>(data.getConstArray()),
-                                                  data.getLength());
+                            std::vector<sal_Int8> data = dp_misc::readFile(remFileContent);
+                            OString osData(reinterpret_cast<const sal_Char*>(data.data()),
+                                                  data.size());
                             OUString sData = OStringToOUString(
                                 osData, RTL_TEXTENCODING_UTF8);
                             if (!sData.equals(aUserName))
@@ -890,9 +890,8 @@ void PackageManagerImpl::removePackage(
                 OString stamp = OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8);
                 Reference<css::io::XInputStream> xData(
                     ::xmlscript::createInputStream(
-                        ::rtl::ByteSequence(
                             reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
-                            stamp.getLength() ) ) );
+                            stamp.getLength() ) );
                 contentRemoved.writeStream( xData, true /* replace existing */ );
             }
             m_activePackagesDB->erase( id, fileName ); // to be removed upon next start

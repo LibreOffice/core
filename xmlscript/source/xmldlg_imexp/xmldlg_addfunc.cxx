@@ -38,10 +38,10 @@ namespace xmlscript
 class InputStreamProvider
     : public ::cppu::WeakImplHelper< io::XInputStreamProvider >
 {
-    ByteSequence _bytes;
+    std::vector<sal_Int8> _bytes;
 
 public:
-    explicit InputStreamProvider( ByteSequence const & rBytes )
+    explicit InputStreamProvider( std::vector<sal_Int8> const & rBytes )
         : _bytes( rBytes )
     {
     }
@@ -63,7 +63,7 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
 {
     Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
 
-    ByteSequence aBytes;
+    std::vector<sal_Int8> aBytes;
     xWriter->setOutputStream( createOutputStream( &aBytes ) );
 
     Reference< xml::sax::XExtendedDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
