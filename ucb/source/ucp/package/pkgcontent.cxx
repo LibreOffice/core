@@ -1489,14 +1489,13 @@ uno::Any Content::open(
             try
             {
                 uno::Sequence< sal_Int8 > aBuffer;
-                sal_Int32  nRead = xIn->readSomeBytes( aBuffer, 65536 );
-
-                while ( nRead > 0 )
+                while (true)
                 {
+                    sal_Int32 nRead = xIn->readSomeBytes( aBuffer, 65536 );
+                    if (!nRead)
+                        break;
                     aBuffer.realloc( nRead );
                     xOut->writeBytes( aBuffer );
-                    aBuffer.realloc( 0 );
-                    nRead = xIn->readSomeBytes( aBuffer, 65536 );
                 }
 
                 xOut->closeOutput();
