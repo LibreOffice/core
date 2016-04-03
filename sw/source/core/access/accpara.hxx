@@ -158,7 +158,7 @@ class SwAccessibleParagraph :
 
     void _correctValues(
             const sal_Int32 nIndex,
-            css::uno::Sequence< css::beans::PropertyValue >& rValues );
+            std::vector< css::beans::PropertyValue >& rValues );
 
 public:
     SwTOXSortTabBase* GetTOXSortTabBase();

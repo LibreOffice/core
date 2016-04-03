@@ -1641,8 +1641,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     _getRunAttributesImpl( nIndex, aNames, aRunAttrSeq );
 
     // merge default and run attributes
-    uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() );
-    PropertyValue* pValues = aValues.getArray();
+    std::vector< PropertyValue > aValues( aDefAttrSeq.size() );
     sal_Int32 i = 0;
     for ( tAccParaPropValMap::const_iterator aDefIter = aDefAttrSeq.begin();
           aDefIter != aDefAttrSeq.end();
@@ -1652,11 +1651,11 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
                                         aRunAttrSeq.find( aDefIter->first );
         if ( aRunIter != aRunAttrSeq.end() )
         {
-            pValues[i] = aRunIter->second;
+            aValues[i] = aRunIter->second;
         }
         else
         {
-            pValues[i] = aDefIter->second;
+            aValues[i] = aDefIter->second;
         }
         ++i;
     }
@@ -1669,29 +1668,25 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         tAccParaPropValMap aSupplementalAttrSeq;
         _getSupplementalAttributesImpl( nIndex, aSupplementalNames, aSupplementalAttrSeq );
 
-        aValues.realloc( aValues.getLength() + aSupplementalAttrSeq.size() );
-        pValues = aValues.getArray();
+        aValues.resize( aValues.size() + aSupplementalAttrSeq.size() );
 
         for ( tAccParaPropValMap::const_iterator aSupplementalIter = aSupplementalAttrSeq.begin();
             aSupplementalIter != aSupplementalAttrSeq.end();
             ++aSupplementalIter )
         {
-            pValues[i] = aSupplementalIter->second;
+            aValues[i] = aSupplementalIter->second;
             ++i;
         }
 
         _correctValues( nIndex, aValues );
 
-        aValues.realloc( aValues.getLength() + 1 );
-
-        pValues = aValues.getArray();
+        aValues.resize( aValues.size() + 1 );
 
         OUString strTypeName = GetFieldTypeNameAtIndex(nIndex);
         if (!strTypeName.isEmpty())
         {
-            aValues.realloc( aValues.getLength() + 1 );
-            pValues = aValues.getArray();
-            PropertyValue& rValueFT = pValues[aValues.getLength() - 1];
+            aValues.resize( aValues.size() + 1 );
+            PropertyValue& rValueFT = aValues[aValues.size() - 1];
             rValueFT.Name = "FieldType";
             rValueFT.Value <<= strTypeName.toAsciiLowerCase();
             rValueFT.Handle = -1;
@@ -1700,24 +1695,23 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
         //sort property values
         // build sorted index array
-        sal_Int32 nLength = aValues.getLength();
-        const PropertyValue* pPairs = aValues.getConstArray();
+        sal_Int32 nLength = aValues.size();
         sal_Int32* pIndices = new sal_Int32[nLength];
         for( i = 0; i < nLength; i++ )
             pIndices[i] = i;
-        sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
+        sort( &pIndices[0], &pIndices[nLength], IndexCompare(aValues.data()) );
         // create sorted sequences according to index array
         uno::Sequence<PropertyValue> aNewValues( nLength );
         PropertyValue* pNewValues = aNewValues.getArray();
         for( i = 0; i < nLength; i++ )
         {
-            pNewValues[i] = pPairs[pIndices[i]];
+            pNewValues[i] = aValues[pIndices[i]];
         }
         delete[] pIndices;
         return aNewValues;
     }
 
-    return aValues;
+    return comphelper::containerToSequence(aValues);
 }
 
 static void SetPutRecursive(SfxItemSet &targetSet, const SfxItemSet &sourceSet)
@@ -2144,7 +2138,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 }
 
 void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
-                                           uno::Sequence< PropertyValue >& rValues)
+                                            std::vector< PropertyValue >& rValues)
 {
     PropertyValue ChangeAttr, ChangeAttrColor;
 
@@ -2209,14 +2203,12 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
     }
 
-    PropertyValue* pValues = rValues.getArray();
-
     const SwTextNode* pTextNode( GetTextNode() );
 
-    sal_Int32 nValues = rValues.getLength();
+    sal_Int32 nValues = rValues.size();
     for (sal_Int32 i = 0;  i < nValues;  ++i)
     {
-        PropertyValue& rValue = pValues[i];
+        PropertyValue& rValue = rValues[i];
 
         if (rValue.Name == ChangeAttr.Name )
         {

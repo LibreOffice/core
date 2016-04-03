@@ -2960,7 +2960,7 @@ class SwXFieldEnumeration::Impl
 public:
     SwDoc * m_pDoc;
 
-    uno::Sequence< uno::Reference<text::XTextField> > m_Items;
+    std::vector< uno::Reference<text::XTextField> > m_Items;
     sal_Int32       m_nNextIndex;  ///< index of next element to be returned
 
     explicit Impl(SwDoc & rDoc)
@@ -2997,10 +2997,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     : m_pImpl(new Impl(rDoc))
 {
     // build sequence
-    sal_Int32 nSize = 32;
-    m_pImpl->m_Items.realloc( nSize );
-    uno::Reference< text::XTextField > *pItems = m_pImpl->m_Items.getArray();
-    sal_Int32 nFillPos = 0;
+    m_pImpl->m_Items.clear();
 
     const SwFieldTypes* pFieldTypes = m_pImpl->m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
     const size_t nCount = pFieldTypes->size();
@@ -3017,16 +3014,9 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
             bool bSkip = !pTextField ||
                          !pTextField->GetpTextNode()->GetNodes().IsDocNodes();
             if (!bSkip)
-                pItems[ nFillPos++ ] = SwXTextField::CreateXTextField(
-                        m_pImpl->m_pDoc, pCurFieldFormat);
+                m_pImpl->m_Items.push_back( SwXTextField::CreateXTextField(
+                        m_pImpl->m_pDoc, pCurFieldFormat));
             pCurFieldFormat = aIter.Next();
-
-            // enlarge sequence if necessary
-            if (m_pImpl->m_Items.getLength() == nFillPos)
-            {
-                m_pImpl->m_Items.realloc( 2 * m_pImpl->m_Items.getLength() );
-                pItems = m_pImpl->m_Items.getArray();
-            }
         }
     }
     // now handle meta-fields, which are not SwFields
@@ -3034,19 +3024,8 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
            m_pImpl->m_pDoc->GetMetaFieldManager().getMetaFields() );
     for (size_t i = 0; i < MetaFields.size(); ++i)
     {
-        pItems[ nFillPos ] = MetaFields[i];
-        nFillPos++;
-
-        //FIXME UGLY
-        // enlarge sequence if necessary
-        if (m_pImpl->m_Items.getLength() == nFillPos)
-        {
-            m_pImpl->m_Items.realloc( 2 * m_pImpl->m_Items.getLength() );
-            pItems = m_pImpl->m_Items.getArray();
-        }
+        m_pImpl->m_Items.push_back( MetaFields[i] );
     }
-    // resize sequence to actual used size
-    m_pImpl->m_Items.realloc( nFillPos );
 }
 
 SwXFieldEnumeration::~SwXFieldEnumeration()
@@ -3058,7 +3037,7 @@ throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    return m_pImpl->m_nNextIndex < m_pImpl->m_Items.getLength();
+    return m_pImpl->m_nNextIndex < (sal_Int32)m_pImpl->m_Items.size();
 }
 
 uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
@@ -3067,7 +3046,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 {
     SolarMutexGuard aGuard;
 
-    if (!(m_pImpl->m_nNextIndex < m_pImpl->m_Items.getLength()))
+    if (!(m_pImpl->m_nNextIndex < (sal_Int32)m_pImpl->m_Items.size()))
         throw container::NoSuchElementException(
             "SwXFieldEnumeration::nextElement",
             css::uno::Reference<css::uno::XInterface>());
@@ -3077,7 +3056,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     (void)pItems;
 #endif
     uno::Reference< text::XTextField >  &rxField =
-        m_pImpl->m_Items.getArray()[ m_pImpl->m_nNextIndex++ ];
+        m_pImpl->m_Items[ m_pImpl->m_nNextIndex++ ];
     uno::Any aRet;
     aRet <<= rxField;
     rxField = nullptr;  // free memory for item that is not longer used
