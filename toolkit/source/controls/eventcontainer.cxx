@@ -64,7 +64,7 @@ Any NameContainer_Impl::getByName( const OUString& aName )
         throw NoSuchElementException();
     }
     sal_Int32 iHashResult = (*aIt).second;
-    Any aRetAny = mValues.getConstArray()[ iHashResult ];
+    Any aRetAny = mValues[ iHashResult ];
     return aRetAny;
 }
 
@@ -97,8 +97,8 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
         throw NoSuchElementException();
     }
     sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues.getConstArray()[ iHashResult ];
-    mValues.getArray()[ iHashResult ] = aElement;
+    Any aOldElement = mValues[ iHashResult ];
+    mValues[ iHashResult ] = aElement;
 
     // Fire event
     ContainerEvent aEvent;
@@ -126,9 +126,9 @@ void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElemen
 
     sal_Int32 nCount = mNames.getLength();
     mNames.realloc( nCount + 1 );
-    mValues.realloc( nCount + 1 );
+    mValues.resize( nCount + 1 );
     mNames.getArray()[ nCount ] = aName;
-    mValues.getArray()[ nCount ] = aElement;
+    mValues[ nCount ] = aElement;
     mHashMap[ aName ] = nCount;
 
     // Fire event
@@ -149,7 +149,7 @@ void NameContainer_Impl::removeByName( const OUString& Name )
     }
 
     sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues.getConstArray()[ iHashResult ];
+    Any aOldElement = mValues[ iHashResult ];
 
     // Fire event
     ContainerEvent aEvent;
@@ -163,14 +163,12 @@ void NameContainer_Impl::removeByName( const OUString& Name )
     if( iLast != iHashResult )
     {
         OUString* pNames = mNames.getArray();
-        Any* pValues = mValues.getArray();
         pNames[ iHashResult ] = pNames[ iLast ];
-        pValues[ iHashResult ] = pValues[ iLast ];
+        mValues[ iHashResult ] = mValues[ iLast ];
         mHashMap[ pNames[ iHashResult ] ] = iHashResult;
     }
     mNames.realloc( iLast );
-    mValues.realloc( iLast );
-
+    mValues.resize( iLast );
 }
 
 // Methods XContainer

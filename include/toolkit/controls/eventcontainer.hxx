@@ -50,7 +50,7 @@ class NameContainer_Impl : public NameContainerHelper
 {
     NameContainerNameMap mHashMap;
     css::uno::Sequence< OUString > mNames;
-    css::uno::Sequence< css::uno::Any > mValues;
+    std::vector< css::uno::Any > mValues;
     sal_Int32 mnElementCount;
     css::uno::Type mType;
 
