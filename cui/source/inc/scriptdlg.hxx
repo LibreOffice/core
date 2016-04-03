@@ -39,7 +39,7 @@
 #define OBJTYPE_SFROOT          4L
 
 typedef std::unordered_map < OUString, OUString,
-                             OUStringHash, std::equal_to< OUString > > Selection_hash;
+                             OUStringHash > Selection_hash;
 
 class SFEntry;
 

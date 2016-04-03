@@ -167,7 +167,7 @@ namespace svgio
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
         {
-            typedef std::unordered_map< OUString, SVGToken, OUStringHash, std::equal_to< OUString >  > SVGTokenMapper;
+            typedef std::unordered_map< OUString, SVGToken, OUStringHash > SVGTokenMapper;
             typedef std::pair< OUString, SVGToken > SVGTokenValueType;
             static SVGTokenMapper aSVGTokenMapperList;
 

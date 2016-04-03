@@ -218,8 +218,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
     private:
         typedef std::unordered_map< OUString,
                                     WindowStateInfo,
-                                    OUStringHash,
-                                    std::equal_to< OUString > > ResourceURLToInfoCache;
+                                    OUStringHash > ResourceURLToInfoCache;
 
         osl::Mutex                        m_aMutex;
         OUString                          m_aConfigWindowAccess;
@@ -1317,13 +1316,11 @@ public:
 
     typedef std::unordered_map< OUString,
                                 OUString,
-                                OUStringHash,
-                                std::equal_to< OUString > > ModuleToWindowStateFileMap;
+                                OUStringHash > ModuleToWindowStateFileMap;
 
     typedef std::unordered_map< OUString,
                                 css::uno::Reference< css::container::XNameAccess >,
-                                OUStringHash,
-                                std::equal_to< OUString > > ModuleToWindowStateConfigHashMap;
+                                OUStringHash > ModuleToWindowStateConfigHashMap;
 
 private:
     css::uno::Reference< css::uno::XComponentContext>         m_xContext;

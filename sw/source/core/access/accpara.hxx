@@ -51,8 +51,7 @@ namespace com { namespace sun { namespace star {
 
 typedef std::unordered_map< OUString,
                          css::beans::PropertyValue,
-                         OUStringHash,
-                         ::std::equal_to< OUString > > tAccParaPropValMap;
+                         OUStringHash > tAccParaPropValMap;
 
 class SwAccessibleParagraph :
         public SwClient, // #i108125#

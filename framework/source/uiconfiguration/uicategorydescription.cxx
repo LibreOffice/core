@@ -97,8 +97,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
     private:
         typedef std::unordered_map< OUString,
                                     OUString,
-                                    OUStringHash,
-                                    std::equal_to< OUString > > IdToInfoCache;
+                                    OUStringHash > IdToInfoCache;
 
         void initializeConfigAccess();
 

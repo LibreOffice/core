@@ -89,8 +89,7 @@ typedef std::unordered_map
 <
    OUString,
    sal_Int32,
-   OUStringHash,
-   ::std::equal_to< OUString >
+   OUStringHash
 > String2IntMap;
 
 typedef ::cppu::WeakComponentImplHelper

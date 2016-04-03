@@ -107,8 +107,7 @@ typedef std::unordered_map<
 
 // mapping from ptr to object entry
 typedef std::unordered_map<
-    void *, ObjectEntry *, FctPtrHash,
-    std::equal_to< void * > > Ptr2ObjectMap;
+    void *, ObjectEntry *, FctPtrHash > Ptr2ObjectMap;
 // mapping from oid to object entry
 typedef std::unordered_map<
     OUString, ObjectEntry *, OUStringHash > OId2ObjectMap;

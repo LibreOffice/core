@@ -129,9 +129,7 @@ typedef std::unordered_map
 <
     OString,
     OString,
-    OStringHash,
-    ::std::equal_to< OString >
-> String2StringMap;
+    OStringHash > String2StringMap;
 
 OUString querySingleValue(
     const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &connection,

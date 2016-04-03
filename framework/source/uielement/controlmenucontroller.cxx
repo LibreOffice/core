@@ -221,8 +221,7 @@ private:
 
     class UrlToDispatchMap : public std::unordered_map< OUString,
                                                         uno::Reference< frame::XDispatch >,
-                                                        OUStringHash,
-                                                        std::equal_to< OUString > >
+                                                        OUStringHash >
     {
         public:
             inline void free()

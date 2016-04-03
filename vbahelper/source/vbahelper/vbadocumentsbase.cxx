@@ -59,8 +59,7 @@ static const char aSpreadsheetDocument[] = "com.sun.star.sheet.SpreadsheetDocume
 static const char aTextDocument[] = "com.sun.star.text.TextDocument";
 
 typedef  std::unordered_map< OUString,
-                             sal_Int32, OUStringHash,
-                             ::std::equal_to< OUString > > NameIndexHash;
+                             sal_Int32, OUStringHash > NameIndexHash;
 
 typedef std::vector < uno::Reference< frame::XModel > > Documents;
 

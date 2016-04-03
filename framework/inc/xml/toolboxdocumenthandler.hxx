@@ -106,8 +106,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
 
         class ToolBoxHashMap : public std::unordered_map<OUString,
                                                          ToolBox_XML_Entry,
-                                                         OUStringHash,
-                                                         std::equal_to< OUString >  >
+                                                         OUStringHash >
         {
         };
 

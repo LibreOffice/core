@@ -83,7 +83,7 @@ static const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
 namespace framework
 {
 
-typedef std::unordered_map< OUString, OUString, OUStringHash, std::equal_to< OUString > > ToolbarHashMap;
+typedef std::unordered_map< OUString, OUString, OUStringHash > ToolbarHashMap;
 
 struct ToolBarEntry
 {

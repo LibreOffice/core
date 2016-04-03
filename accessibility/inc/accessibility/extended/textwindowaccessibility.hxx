@@ -384,8 +384,7 @@ private:
 
 typedef std::unordered_map< OUString,
                          css::beans::PropertyValue,
-                         OUStringHash,
-                         ::std::equal_to< OUString > > tPropValMap;
+                         OUStringHash > tPropValMap;
 
 class Document: public ::VCLXAccessibleComponent, public ::SfxListener
 {
