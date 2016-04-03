@@ -89,11 +89,15 @@ struct SbiForStack {                // for/next stack:
 
 #define MAXRECURSION 500
 
-struct SbiGosubStack {              // GOSUB-Stack:
-    SbiGosubStack* pNext;           // Chain
+struct SbiGosub {              // GOSUB-Stack:
     const sal_uInt8* pCode;         // Return-Pointer
     sal_uInt16 nStartForLvl;        // #118235: For Level in moment of gosub
+
+    SbiGosub(const sal_uInt8* pCode_, sal_uInt16 nStartForLvl_) :
+        pCode(pCode_),
+        nStartForLvl(nStartForLvl_) {}
 };
+
 
 enum class SbAttributes {
     NONE          = 0x0000,
@@ -237,10 +241,8 @@ class SbiRuntime
     SbxVariableRef xDummyVar;       // substitute for variables that weren't found
     SbxVariable* mpExtCaller;       // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
     SbiArgvStack*  pArgvStk;        // ARGV-Stack
-    SbiGosubStack* pGosubStk;       // GOSUB stack
     SbiForStack*   pForStk;         // FOR/NEXT-Stack
     sal_uInt16        nExprLvl;         // depth of the expr-stack
-    sal_uInt16        nGosubLvl;        // to prevent dead-recursions
     sal_uInt16        nForLvl;          // #118235: Maintain for level
     const sal_uInt8*   pCode;            // current Code-Pointer
     const sal_uInt8*   pStmnt;           // beginning of the last statement
@@ -265,6 +267,8 @@ class SbiRuntime
     sal_uInt32    m_nLastTime;
 
     std::vector<SbxVariableRef>  aRefSaved; // #74254 save temporary references
+    std::vector<SbiGosub>   pGosubStk; // GOSUB stack
+
 
     SbxVariable* FindElement
     ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, bool bLocal, bool bStatic = false );
@@ -279,7 +283,6 @@ class SbiRuntime
 
     void PushGosub( const sal_uInt8* );
     void PopGosub();
-    void ClearGosubStack();
 
     void PushArgv();
     void PopArgv();
