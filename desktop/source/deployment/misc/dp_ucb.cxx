@@ -184,9 +184,9 @@ bool erase_path( OUString const & url,
 }
 
 
-::rtl::ByteSequence readFile( ::ucbhelper::Content & ucb_content )
+std::vector<sal_Int8> readFile( ::ucbhelper::Content & ucb_content )
 {
-    ::rtl::ByteSequence bytes;
+    std::vector<sal_Int8> bytes;
     Reference<io::XOutputStream> xStream(
         ::xmlscript::createOutputStream( &bytes ) );
     if (! ucb_content.openStream( xStream ))
@@ -201,9 +201,9 @@ bool readLine( OUString * res, OUString const & startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc )
 {
     // read whole file:
-    ::rtl::ByteSequence bytes( readFile( ucb_content ) );
-    OUString file( reinterpret_cast<sal_Char const *>(bytes.getConstArray()),
-                   bytes.getLength(), textenc );
+    std::vector<sal_Int8> bytes( readFile( ucb_content ) );
+    OUString file( reinterpret_cast<sal_Char const *>(bytes.data()),
+                   bytes.size(), textenc );
     sal_Int32 pos = 0;
     for (;;)
     {
@@ -257,9 +257,9 @@ bool readProperties( ::std::list< ::std::pair< OUString, OUString> > & out_resul
                      ::ucbhelper::Content & ucb_content )
 {
     // read whole file:
-    ::rtl::ByteSequence bytes( readFile( ucb_content ) );
-    OUString file( reinterpret_cast<sal_Char const *>(bytes.getConstArray()),
-                   bytes.getLength(), RTL_TEXTENCODING_UTF8);
+    std::vector<sal_Int8> bytes( readFile( ucb_content ) );
+    OUString file( reinterpret_cast<sal_Char const *>(bytes.data()),
+                   bytes.size(), RTL_TEXTENCODING_UTF8);
     sal_Int32 pos = 0;
 
     for (;;)

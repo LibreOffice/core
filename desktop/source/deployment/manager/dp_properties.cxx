@@ -119,9 +119,8 @@ void ExtensionProperties::write()
         buf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
     Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(
-            ::rtl::ByteSequence(
                 reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
-                stamp.getLength() ) ) );
+                stamp.getLength() ) );
     contentProps.writeStream( xData, true /* replace existing */ );
 }
 

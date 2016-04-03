@@ -21,6 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_UCB_H
 
 #include <list>
+#include <vector>
 #include <rtl/byteseq.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -80,7 +81,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool erase_path(
 
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::ByteSequence readFile( ::ucbhelper::Content & ucb_content );
+std::vector<sal_Int8> readFile( ::ucbhelper::Content & ucb_content );
 
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC

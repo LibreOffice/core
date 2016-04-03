@@ -109,9 +109,8 @@ void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const
         OString stamp("1" );
         Reference<css::io::XInputStream> xData(
             ::xmlscript::createInputStream(
-                ::rtl::ByteSequence(
                     reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
-                    stamp.getLength() ) ) );
+                    stamp.getLength() ) );
         ucbStamp.writeStream( xData, true /* replace existing */ );
     }
     catch(...)

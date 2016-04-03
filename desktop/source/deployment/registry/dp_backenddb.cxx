@@ -52,7 +52,7 @@ BackendDb::BackendDb(
 void BackendDb::save()
 {
     const Reference<css::io::XActiveDataSource> xDataSource(m_doc,css::uno::UNO_QUERY_THROW);
-    ::rtl::ByteSequence bytes;
+    std::vector<sal_Int8> bytes;
     xDataSource->setOutputStream(::xmlscript::createOutputStream(&bytes));
     const Reference<css::io::XActiveDataControl> xDataControl(m_doc,css::uno::UNO_QUERY_THROW);
     xDataControl->start();
