@@ -1516,15 +1516,15 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             && ( nCoordHeight == pDefCustomShape->nCoordHeight ) )
                             bIsDefaultViewBox = true;
                         sal_Int32 j, nCount = pDefCustomShape->nVertices;//==3
-                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
+                        std::vector< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
 
-                        seqCoordinates1.realloc( nCount );
+                        seqCoordinates1.resize( nCount );
                         for ( j = 0; j < nCount; j++ )
                         {
                             seqCoordinates1[j] = seqCoordinates[ rSrcPt + j];
                         }
 
-                        seqCoordinates2.realloc( nCount );
+                        seqCoordinates2.resize( nCount );
                         for ( j = 0; j < nCount; j++ )
                         {
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ j ].First, pDefCustomShape->pVertices[ j ].nValA );
