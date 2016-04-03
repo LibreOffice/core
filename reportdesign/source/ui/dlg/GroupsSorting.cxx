@@ -668,8 +668,8 @@ void SAL_CALL OFieldExpressionControl::elementRemoved(const container::Container
     sal_Int32 nGroupPos = 0;
     if ( evt.Accessor >>= nGroupPos )
     {
-        ::std::vector<sal_Int32>::iterator aFind = ::std::find(m_aGroupPositions.begin(),m_aGroupPositions.end(),nGroupPos);
-        ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.end();
+        std::vector<sal_Int32>::iterator aEnd = m_aGroupPositions.end();
+        std::vector<sal_Int32>::iterator aFind = std::find(m_aGroupPositions.begin(), aEnd, nGroupPos);
         if (aFind != aEnd)
         {
             *aFind = NO_GROUP;
