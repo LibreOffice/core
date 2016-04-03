@@ -257,12 +257,12 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, DrawGrid
     long nHorzCount = 0L;
     long nVertCount = 0L;
 
-    css::uno::Sequence< sal_Int32 > aVertBuf;
-    css::uno::Sequence< sal_Int32 > aHorzBuf;
+    std::vector< sal_Int32 > aVertBuf;
+    std::vector< sal_Int32 > aHorzBuf;
 
     if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::HorzLines ) )
     {
-        aVertBuf.realloc( aDstRect.GetHeight() / nDistY + 2L );
+        aVertBuf.resize( aDstRect.GetHeight() / nDistY + 2L );
         aVertBuf[ nVertCount++ ] = nStartY;
         while( ( nY += nDistY ) <= nBottom )
         {
@@ -272,7 +272,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, DrawGrid
 
     if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::VertLines ) )
     {
-        aHorzBuf.realloc( aDstRect.GetWidth() / nDistX + 2L );
+        aHorzBuf.resize( aDstRect.GetWidth() / nDistX + 2L );
         aHorzBuf[ nHorzCount++ ] = nStartX;
         while( ( nX += nDistX ) <= nRight )
         {
