@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_ed73efb2",
+        "filename": "sw/qa/python/check_table.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-04-03T12:17:12Z",
+      "side": 0,
+      "message": "This comes from a previous commit, but \"typeOfLine\" is misleading. This is a UNO reference to a com::sun::star::table::BorderLine and has nothing to do with a type (see http://api.libreoffice.org/docs/idl/ref/structcom_1_1sun_1_1star_1_1table_1_1BorderLine.html)\n\nA more appropriate variable name would be \"xBorderLine\" according to common PyUNO conventions.\n\n(see also: https://wiki.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Table_Properties)",
+      "revId": "8dc3b88b567d5fc4a75453654da860c47ae16403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_8d48735d",
+        "filename": "sw/qa/python/check_table.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-04-03T12:17:12Z",
+      "side": 0,
+      "message": "Please note that test code should be as easily readable and debuggable as possible. This shifts the priorities compared to production code. Namely  _some_ dull repetition is acceptable, if it helps avoiding abstraction and esp. deep call stacks.\n\nWhenever someone reads the test it will be because of a failed test. The reader should not be forced to spend time to understand the testcode (which should be as trivial as possible) because the reader really needs to care about the core code.\n\nHaving two short helper functions __test_borderAsserts() and __test_borderAssertsWithLineStyle calling each other is thus somewhat questionable. Not hardly objecting this as-is, but please keep it in mind for the future.",
+      "revId": "8dc3b88b567d5fc4a75453654da860c47ae16403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
