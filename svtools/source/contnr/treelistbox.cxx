@@ -40,6 +40,7 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
 #include "svimpbox.hxx"
+#include "uitest/uiobject.hxx"
 
 #include <set>
 #include <string.h>
@@ -3826,6 +3827,11 @@ bool SvTreeListBox::set_property(const OString &rKey, const OString &rValue)
     else
         return Control::set_property(rKey, rValue);
     return true;
+}
+
+FactoryFunction SvTreeListBox::GetUITestFactory() const
+{
+    return TreeListUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
