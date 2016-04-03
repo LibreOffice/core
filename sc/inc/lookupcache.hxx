@@ -185,7 +185,7 @@ private:
         }
     };
 
-    typedef std::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash, ::std::equal_to< QueryKey > > QueryMap;
+    typedef std::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash > QueryMap;
     QueryMap        maQueryMap;
     ScRange         maRange;
     ScDocument *    mpDoc;
@@ -195,7 +195,7 @@ private:
 
 };
 
-typedef std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash, ::std::equal_to< ScRange > > ScLookupCacheMap;
+typedef std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > ScLookupCacheMap;
 
 #endif
 

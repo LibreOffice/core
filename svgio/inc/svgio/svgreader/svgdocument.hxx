@@ -39,13 +39,12 @@ namespace svgio
 
             /// hash mapper to find nodes by their id
             typedef std::unordered_map< OUString, const SvgNode*,
-                      OUStringHash,
-                      ::std::equal_to< OUString > > IdTokenMapper;
+                      OUStringHash > IdTokenMapper;
             typedef std::pair< const OUString, const SvgNode* > IdTokenValueType;
             IdTokenMapper           maIdTokenMapperList;
 
             /// hash mapper to find css styles by their id
-            typedef std::unordered_map< OUString, const SvgStyleAttributes*, OUStringHash, ::std::equal_to< OUString > > IdStyleTokenMapper;
+            typedef std::unordered_map< OUString, const SvgStyleAttributes*, OUStringHash > IdStyleTokenMapper;
             typedef std::pair< const OUString, const SvgStyleAttributes* > IdStyleTokenValueType;
             IdStyleTokenMapper      maIdStyleTokenMapperList;
 

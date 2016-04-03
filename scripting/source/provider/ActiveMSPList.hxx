@@ -47,7 +47,7 @@ typedef std::map  <   css::uno::Reference< css::uno::XInterface >
 
 typedef std::unordered_map< OUString,
     css::uno::Reference< css::script::provider::XScriptProvider >,
-    OUStringHash, std::equal_to< OUString > > Msp_hash;
+    OUStringHash > Msp_hash;
 
 class NonDocMSPCreator;
 

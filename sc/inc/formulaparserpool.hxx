@@ -44,8 +44,7 @@ private:
     typedef std::unordered_map<
         OUString,
         css::uno::Reference< css::sheet::XFormulaParser >,
-        OUStringHash,
-        ::std::equal_to< OUString > > ParserMap;
+        OUStringHash > ParserMap;
 
     const ScDocument&   mrDoc;
     ParserMap           maParsers;

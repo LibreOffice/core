@@ -106,8 +106,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
 
         class StatusBarHashMap : public std::unordered_map<OUString,
                                                            StatusBar_XML_Entry,
-                                                           OUStringHash,
-                                                           std::equal_to< OUString > >
+                                                           OUStringHash >
         {
         };
 

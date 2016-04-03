@@ -35,12 +35,10 @@ enum ImageType
 
 typedef std::unordered_map< OUString,
                             OUString,
-                            OUStringHash,
-                            std::equal_to< OUString > > CommandToImageNameMap;
+                            OUStringHash > CommandToImageNameMap;
 typedef std::unordered_map< OUString,
                             bool,
-                            OUStringHash,
-                            std::equal_to< OUString > > CommandMap;
+                            OUStringHash > CommandMap;
 
 }
 

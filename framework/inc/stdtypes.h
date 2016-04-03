@@ -95,8 +95,7 @@ void free(std::vector<T>& vec)
 template< class TType >
 class BaseHash : public std::unordered_map< OUString                    ,
                                             TType                              ,
-                                            OUStringHash                  ,
-                                            std::equal_to< OUString > >
+                                            OUStringHash >
 {
     public:
 
