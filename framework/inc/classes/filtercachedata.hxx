@@ -310,8 +310,7 @@ struct ContentHandler
 template< class HashType >
 class SetNodeHash : public std::unordered_map< OUString                    ,
                                                HashType                           ,
-                                               OUStringHash                  ,
-                                               std::equal_to< OUString > >
+                                               OUStringHash >
 {
 };
 
@@ -321,8 +320,7 @@ class SetNodeHash : public std::unordered_map< OUString                    ,
 
 class PerformanceHash   :   public  std::unordered_map< OUString,
                                                         OUStringList,
-                                                        OUStringHash,
-                                                        std::equal_to< OUString >  >
+                                                        OUStringHash >
 {
 };
 

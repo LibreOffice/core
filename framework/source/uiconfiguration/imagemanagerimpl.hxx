@@ -127,8 +127,7 @@ namespace framework
 
             typedef std::unordered_map< OUString,
                                         sal_Bool,
-                                        OUStringHash,
-                                        std::equal_to< OUString > > ImageNameMap;
+                                        OUStringHash > ImageNameMap;
 
             enum Layer
             {

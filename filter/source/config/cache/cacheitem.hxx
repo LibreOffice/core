@@ -150,8 +150,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
  */
 typedef std::unordered_map< OUString                    ,
                             CacheItem                          ,
-                            OUStringHash                ,
-                            std::equal_to< OUString > > CacheItemList;
+                            OUStringHash > CacheItemList;
 
 
 /** @short  supports registration of multiple key to
@@ -168,8 +167,7 @@ typedef std::unordered_map< OUString                    ,
  */
 typedef std::unordered_map< OUString                    ,
                             OUStringList                       ,
-                            OUStringHash                ,
-                            std::equal_to< OUString > > CacheItemRegistration;
+                            OUStringHash > CacheItemRegistration;
 
 
 /** @short  is used to collect all matching types of an URL

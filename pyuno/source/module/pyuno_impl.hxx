@@ -184,8 +184,7 @@ typedef std::unordered_map
 <
     PyRef,
     css::uno::WeakReference< css::script::XInvocation >,
-    PyRef::Hash,
-    std::equal_to< PyRef >
+    PyRef::Hash
 > PyRef2Adapter;
 
 
@@ -193,19 +192,17 @@ typedef std::unordered_map
 <
 OUString,
 PyRef,
-OUStringHash,
-std::equal_to<OUString>
+OUStringHash
 > ExceptionClassMap;
 
 typedef std::unordered_map
 <
     OUString,
     css::uno::Sequence< sal_Int16 >,
-    OUStringHash,
-    std::equal_to< OUString >
+    OUStringHash
 > MethodOutIndexMap;
 
-typedef std::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
+typedef std::unordered_set< PyRef , PyRef::Hash > ClassSet;
 
 int PyUNO_initType();
 int PyUNOStruct_initType();

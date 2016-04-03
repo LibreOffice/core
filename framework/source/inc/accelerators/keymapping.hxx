@@ -57,8 +57,7 @@ class KeyMapping
         /** @short  hash structure to map key codes to identifier. */
         typedef std::unordered_map< sal_Int16                    ,
                                     OUString              ,
-                                    ShortHashCode                ,
-                                    std::equal_to< sal_Int16 > > Code2IdentifierHash;
+                                    ShortHashCode > Code2IdentifierHash;
 
     // member
 

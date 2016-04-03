@@ -28,8 +28,7 @@
 
 typedef std::unordered_map< OUString,
                             StylePool::SfxItemSet_Pointer_t,
-                            OUStringHash,
-                            std::equal_to< OUString > > SwStyleNameCache;
+                            OUStringHash > SwStyleNameCache;
 
 class SwStyleCache
 {

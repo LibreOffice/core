@@ -52,8 +52,7 @@ using namespace ::com::sun::star::ui;
 
 typedef std::unordered_map< OUString,
                        WeakReference< XImageManager >,
-                       OUStringHash,
-                       ::std::equal_to< OUString > > ModuleIdToImagegMgr;
+                       OUStringHash > ModuleIdToImagegMgr;
 
 
 Image SAL_CALL GetImage(

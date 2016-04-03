@@ -31,7 +31,7 @@ enum ImageType
 class VCL_DLLPUBLIC CommandImageResolver
 {
 private:
-    typedef std::unordered_map<OUString, OUString, OUStringHash, std::equal_to<OUString>> CommandToImageNameMap;
+    typedef std::unordered_map<OUString, OUString, OUStringHash > CommandToImageNameMap;
 
     CommandToImageNameMap m_aCommandToImageNameMap;
     std::vector<OUString> m_aImageCommandNameVector;
