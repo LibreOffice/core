@@ -111,11 +111,21 @@ bool StarBASIC::isVBAEnabled()
     return false;
 }
 
-
 struct SbiArgvStack {                   // Argv stack:
     SbiArgvStack*  pNext;               // Stack Chain
     SbxArrayRef    refArgv;             // Argv
     short nArgc;                        // Argc
+};
+
+#define MAXRECURSION 500 //to prevent dead-recursions
+
+struct SbiGosub {              // GOSUB-Stack:
+    const sal_uInt8* pCode;         // Return-Pointer
+    sal_uInt16 nStartForLvl;        // #118235: For Level in moment of gosub
+
+    SbiGosub(const sal_uInt8* pCode_, sal_uInt16 nStartForLvl_) :
+        pCode(pCode_),
+        nStartForLvl(nStartForLvl_) {}
 };
 
 SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // all opcodes without operands
@@ -568,7 +578,6 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     nFlags    = pe ? pe->GetDebugFlags() : 0;
     pIosys    = pInst->GetIoSystem();
     pArgvStk  = nullptr;
-    pGosubStk = nullptr;
     pForStk   = nullptr;
     pError    = nullptr;
     pErrCode  =
@@ -587,7 +596,6 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     nExprLvl  = 0;
     nArgc     = 0;
     nError    = 0;
-    nGosubLvl = 0;
     nForLvl   = 0;
     nOps      = 0;
     refExprStk = new SbxArray;
@@ -597,7 +605,6 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
 
 SbiRuntime::~SbiRuntime()
 {
-    ClearGosubStack();
     ClearArgvStack();
     ClearForStack();
 }
@@ -1049,43 +1056,24 @@ void SbiRuntime::TOSMakeTemp()
 // the GOSUB-stack collects return-addresses for GOSUBs
 void SbiRuntime::PushGosub( const sal_uInt8* pc )
 {
-    if( ++nGosubLvl > MAXRECURSION )
+    if( pGosubStk.size() >= MAXRECURSION )
     {
         StarBASIC::FatalError( ERRCODE_BASIC_STACK_OVERFLOW );
     }
-    SbiGosubStack* p = new SbiGosubStack;
-    p->pCode  = pc;
-    p->pNext  = pGosubStk;
-    p->nStartForLvl = nForLvl;
-    pGosubStk = p;
+    pGosubStk.emplace_back(pc, nForLvl);
 }
 
 void SbiRuntime::PopGosub()
 {
-    if( !pGosubStk )
+    if( pGosubStk.empty() )
     {
         Error( ERRCODE_BASIC_NO_GOSUB );
     }
     else
     {
-        SbiGosubStack* p = pGosubStk;
-        pCode = p->pCode;
-        pGosubStk = p->pNext;
-        delete p;
-        nGosubLvl--;
+        pCode = pGosubStk.back().pCode;
+        pGosubStk.pop_back();
     }
-}
-
-
-void SbiRuntime::ClearGosubStack()
-{
-    SbiGosubStack* p;
-    while(( p = pGosubStk ) != nullptr )
-    {
-        pGosubStk = p->pNext;
-        delete p;
-    }
-    nGosubLvl = 0;
 }
 
 // the Argv-stack collects current argument-vectors
@@ -4237,9 +4225,9 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         // (there's a difference here in case of a jump out of a loop)
         sal_uInt16 nExspectedForLevel = static_cast<sal_uInt16>( nOp2 / 0x100 );
-        if( pGosubStk )
+        if( !pGosubStk.empty() )
         {
-            nExspectedForLevel = nExspectedForLevel + pGosubStk->nStartForLvl;
+            nExspectedForLevel = nExspectedForLevel + pGosubStk.back().nStartForLvl;
         }
 
         // if the actual for-level is too small it'd jump out
