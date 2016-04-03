@@ -162,12 +162,13 @@ throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css
     if (nBytesToRead < 0)
         throw css::io::BufferSizeExceededException( OUString(), static_cast< css::uno::XWeak * >(this));
 
-    aData.realloc(nBytesToRead);
+    if (aData.getLength() < nBytesToRead)
+        aData.realloc(nBytesToRead);
 
     sal_uInt32 nRead = mpStream->Read(static_cast < void* > ( aData.getArray() ), nBytesToRead);
     checkError();
 
-    if (nRead < static_cast < sal_uInt32 > ( nBytesToRead ) )
+    if (nRead < (sal_Size)aData.getLength())
         aData.realloc( nRead );
 
     if ( sal::static_int_cast<sal_uInt32>(nBytesToRead) > nRead )

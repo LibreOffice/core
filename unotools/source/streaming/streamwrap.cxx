@@ -55,13 +55,14 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    aData.realloc(nBytesToRead);
+    if (aData.getLength() < nBytesToRead)
+        aData.realloc(nBytesToRead);
 
     sal_uInt32 nRead = m_pSvStream->Read(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
     // Wenn gelesene Zeichen < MaxLength, css::uno::Sequence anpassen
-    if (nRead < (sal_uInt32)nBytesToRead)
+    if (nRead < (sal_Size)aData.getLength())
         aData.realloc( nRead );
 
     return nRead;
