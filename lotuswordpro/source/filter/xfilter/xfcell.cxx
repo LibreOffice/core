@@ -88,10 +88,9 @@ void    XFCell::Add(XFContent *pContent)
         Reset();
         m_eValueType = enumXFValueTypeNone;
     }
-    if( m_pSubTable )
+    if (m_pSubTable)
     {
-        assert(false);
-        return;
+        throw std::runtime_error("subtable already set");
     }
     if (!pContent)
     {
