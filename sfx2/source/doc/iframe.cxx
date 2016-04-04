@@ -107,13 +107,11 @@ public:
 class IFrameWindow_Impl : public vcl::Window
 {
 public:
-    IFrameWindow_Impl( vcl::Window *pParent,
-                       bool bHasBorder,
-                       WinBits nWinBits = 0 );
+    IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder );
 };
 
-IFrameWindow_Impl::IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder, WinBits nWinBits )
-    : Window( pParent, nWinBits | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
+IFrameWindow_Impl::IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder )
+    : Window( pParent, WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
 {
     if ( !bHasBorder )
         SetBorderStyle( WindowBorderStyle::NOBORDER );

@@ -1015,7 +1015,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( !pView )
                 pView = SfxViewFrame::Current();
             pView->GetViewShell()->JumpToMark( aFileName.copy(1) );
-            rReq.SetReturnValue( SfxViewFrameItem( 0, pView ) );
+            rReq.SetReturnValue( SfxViewFrameItem( pView ) );
             return;
         }
 
@@ -1093,7 +1093,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             SfxObjectShell* pSh = pCntrFrame->GetCurrentDocument();
             DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
 
-            rReq.SetReturnValue( SfxViewFrameItem( 0, pCntrFrame->GetCurrentViewFrame() ) );
+            rReq.SetReturnValue( SfxViewFrameItem( pCntrFrame->GetCurrentViewFrame() ) );
 
             if ( bHidden )
                 pSh->RestoreNoDelete();

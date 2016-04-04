@@ -159,7 +159,7 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
         case  ::dbaccess::DST_USERDEFINE10:
             {
                 OUString aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
-                AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, nullptr, false, 1);
+                AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, nullptr, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
             }
             break;

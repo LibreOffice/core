@@ -42,8 +42,8 @@ class SFX2_DLLPUBLIC SfxProgress
 public:
                             SfxProgress( SfxObjectShell* pObjSh,
                                          const rtl::OUString& rText,
-                                         sal_uIntPtr nRange, bool bAllDocs = false,
-                                         bool bWait = true );
+                                         sal_uIntPtr nRange,
+                                         bool bWait = true);
     virtual                 ~SfxProgress();
 
     bool                    SetStateText( sal_uIntPtr nVal, const rtl::OUString &rVal );
