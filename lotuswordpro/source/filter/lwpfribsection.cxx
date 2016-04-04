@@ -314,11 +314,11 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
         XFSectionStyle* pSectStyle= new XFSectionStyle();
         //set margin
         pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
-        if (pStory)
+        LwpPageLayout* pCurrentLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
+        if (pCurrentLayout)
         {
-            LwpPageLayout* pCurrentLayout = pStory->GetCurrentLayout();
-            double fLeft = m_pLayout->GetMarginsValue(MARGIN_LEFT)- pCurrentLayout->GetMarginsValue(MARGIN_LEFT);
-            double fRight = m_pLayout->GetMarginsValue(MARGIN_RIGHT)- pCurrentLayout->GetMarginsValue(MARGIN_RIGHT);
+            double fLeft = m_pLayout->GetMarginsValue(MARGIN_LEFT) - pCurrentLayout->GetMarginsValue(MARGIN_LEFT);
+            double fRight = m_pLayout->GetMarginsValue(MARGIN_RIGHT) - pCurrentLayout->GetMarginsValue(MARGIN_RIGHT);
             pSectStyle->SetMarginLeft(fLeft);
             pSectStyle->SetMarginRight(fRight);
         }
