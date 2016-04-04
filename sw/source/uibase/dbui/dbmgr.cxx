@@ -888,7 +888,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
 
 static bool lcl_SaveDoc(
     const INetURLObject* pFileURL,
-    const std::shared_ptr<const SfxFilter> pStoreToFilter,
+    const std::shared_ptr<const SfxFilter>& pStoreToFilter,
     const OUString* pStoreToFilterOptions,
     const uno::Sequence< beans::PropertyValue >* pSaveToFilterData,
     const bool bIsPDFexport,

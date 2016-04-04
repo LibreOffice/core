@@ -338,7 +338,7 @@ void initColWidths(RowInfo* pRowInfo, ScDocument* pDoc, double fColScale, SCTAB 
     }
 }
 
-bool handleConditionalFormat(ScConditionalFormatList* pCondFormList, const std::vector<sal_uInt32> rCondFormats,
+bool handleConditionalFormat(ScConditionalFormatList* pCondFormList, const std::vector<sal_uInt32>& rCondFormats,
         CellInfo* pInfo, ScStyleSheetPool* pStlPool,
         const ScAddress& rAddr, bool& bHidden, bool& bHideFormula, bool bTabProtect)
 {
