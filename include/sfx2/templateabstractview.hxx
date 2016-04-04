@@ -104,6 +104,11 @@ public:
 
     void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
+    void updateThumbnailDimensions(long itemMaxSize, long itemPadding);
+
+    long getThumbnailWidth() const  { return mThumbnailWidth;}
+    long getThumbnailHeight() const {return mThumbnailHeight;}
+
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
@@ -122,6 +127,9 @@ protected:
 
     sal_uInt16 mnCurRegionId;
     OUString maCurRegionName;
+
+    long mThumbnailWidth;
+    long mThumbnailHeight;
 
     VclPtr<PushButton> maAllButton;
     VclPtr<FixedText>  maFTName;
