@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_489309a4",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-04-04T08:53:10Z",
+      "side": 1,
+      "message": "You can put both conditions into the same statement:\n\nif ( editableClassPath !\u003d editedClassPath \u0026\u0026 !editedClassPath.isEmpty() )",
+      "revId": "98bdbbcf5873f13331b614611354d7df2d97a079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
