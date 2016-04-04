@@ -347,7 +347,7 @@ bool SwOLENode::SavePersistentData()
                 }
             }
 
-            pCnt->RemoveEmbeddedObject( aOLEObj.aName, false, bKeepObjectToTempStorage );
+            pCnt->RemoveEmbeddedObject( aOLEObj.aName, bKeepObjectToTempStorage );
 
             // TODO/LATER: aOLEObj.aName has no meaning here, since the undo container contains the object
             // by different name, in future it might makes sense that the name is transported here.
@@ -701,7 +701,7 @@ SwOLEObj::~SwOLEObj()
             try
             {
                 // remove object from container but don't close it
-                pCnt->RemoveEmbeddedObject( aName, false);
+                pCnt->RemoveEmbeddedObject( aName );
             }
             catch ( uno::Exception& )
             {

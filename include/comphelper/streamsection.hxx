@@ -55,12 +55,8 @@ public:
     /** starts writing of a "skippable" section of data into the given output stream
         @param      _rxOutput           the stream the stream to write to. Must support the
                                         css::io::XMarkableStream interface
-        @param      _nPresumedLength    estimation for the length of the upcoming section. If greater 0, this
-                                        value will be written as section length and corrected (in the dtor) only if
-                                        needed. If you know how much bytes you are about to write, you may
-                                        want to use this param, saving some stream operations this way.
     */
-    OStreamSection(const css::uno::Reference< css::io::XDataOutputStream >& _rxOutput, sal_Int32 _nPresumedLength = 0);
+    OStreamSection(const css::uno::Reference< css::io::XDataOutputStream >& _rxOutput);
 
     /** dtor. <BR>If constructed for writing, the section "opened" by this object will be "closed".<BR>
         If constructed for reading, any remaining bytes 'til the end of the section will be skipped.

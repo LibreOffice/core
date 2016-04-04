@@ -71,14 +71,13 @@ namespace comphelper
         OSelectionChangeListener*                            m_pListener;
         sal_Int32                                            m_nLockCount;
         bool                                                 m_bListening        : 1;
-        bool                                                 m_bAutoSetRelease   : 1;
 
         OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&) = delete;
         OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&) = delete;
     protected:
         virtual ~OSelectionChangeMultiplexer();
     public:
-        OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  css::uno::Reference< css::view::XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet = true);
+        OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  css::uno::Reference< css::view::XSelectionSupplier>& _rxSet);
 
     // XEventListener
         virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception) override;
