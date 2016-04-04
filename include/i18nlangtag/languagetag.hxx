@@ -361,19 +361,16 @@ public:
 
     /** Test equality of two LanguageTag, possibly resolving system locale.
 
-        @param bResolveSystem
-               If TRUE, resolve empty language tags denoting the system
-               locale to the real locale used before comparing.
-               If FALSE, the behavior is identical to operator==(), system
-               locales are not resolved first.
+        Resolve empty language tags denoting the system
+        locale to the real locale used before comparing.
       */
-    bool                            equals( const LanguageTag & rLanguageTag, bool bResolveSystem = false ) const;
+    bool    equals( const LanguageTag & rLanguageTag ) const;
 
     /** Test equality of two LanguageTag.
 
         Does NOT resolve system, i.e. if the system locale is en-US
         LanguageTag("")==LanguageTag("en-US") returns false! Use
-        equals(...,true) instead if system locales shall be resolved.
+        equals(...) instead if system locales shall be resolved.
      */
     bool    operator==( const LanguageTag & rLanguageTag ) const;
 
@@ -381,7 +378,7 @@ public:
 
         Does NOT resolve system, i.e. if the system locale is en-US
         LanguageTag("")!=LanguageTag("en-US") returns true! Use
-        !equals(,...true) instead if system locales shall be resolved.
+        !equals(,..) instead if system locales shall be resolved.
      */
     bool    operator!=( const LanguageTag & rLanguageTag ) const;
 

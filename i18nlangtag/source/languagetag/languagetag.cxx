@@ -2268,15 +2268,15 @@ LanguageTag & LanguageTag::makeFallback()
 }
 
 
-bool LanguageTag::equals( const LanguageTag & rLanguageTag, bool bResolveSystem ) const
+bool LanguageTag::equals( const LanguageTag & rLanguageTag ) const
 {
     // If SYSTEM is not to be resolved or either both are SYSTEM or none, we
     // can use the operator==() optimization.
-    if (!bResolveSystem || isSystemLocale() == rLanguageTag.isSystemLocale())
+    if (isSystemLocale() == rLanguageTag.isSystemLocale())
         return operator==( rLanguageTag);
 
     // Compare full language tag strings.
-    return getBcp47( bResolveSystem) == rLanguageTag.getBcp47( bResolveSystem);
+    return getBcp47() == rLanguageTag.getBcp47();
 }
 
 
