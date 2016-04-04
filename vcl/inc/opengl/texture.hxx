@@ -96,7 +96,7 @@ private:
 
 public:
                     OpenGLTexture();
-                    OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber = 0);
+                    OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber);
 
                     OpenGLTexture( int nWidth, int nHeight, bool bAllocate = true );
                     OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
@@ -113,12 +113,14 @@ public:
 
     void            GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted=false ) const;
     void            GetWholeCoord( GLfloat* pCoord ) const;
-
+    OpenGLTexture   GetWholeTexture();
     void            Bind();
     void            Unbind();
     void            Read( GLenum nFormat, GLenum nType, sal_uInt8* pData );
     GLuint          AddStencil();
     GLuint          StencilId() const;
+
+    bool            CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
 
     void            SaveToFile(const OUString& rFileName);
 

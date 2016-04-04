@@ -147,7 +147,7 @@ public:
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
-    void DeferredTextDraw(const OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
+    void DeferredTextDraw(OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
     void FlushDeferredDrawing(bool bInDraw = false);
 
 public:

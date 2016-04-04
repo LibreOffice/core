@@ -11,6 +11,8 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_ACCUMULATEDTEXTURES_H
 #define INCLUDED_VCL_INC_OPENGL_ACCUMULATEDTEXTURES_H
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 #include <o3tl/make_unique.hxx>
 #include "opengl/texture.hxx"
 #include <memory>
@@ -34,10 +36,10 @@ struct AccumulatedTexturesEntry
         : maTexture(rTexture)
     {}
 
-    void insert(const SalColor& aColor, const SalTwoRect& r2Rect)
+    void insert(const OpenGLTexture& rTexture, const SalColor& aColor, const SalTwoRect& r2Rect)
     {
         TextureDrawParameters& aDrawParameters = maColorTextureDrawParametersMap[aColor];
-        maTexture.FillCoords<GL_TRIANGLES>(aDrawParameters.maTextureCoords, r2Rect, false);
+        rTexture.FillCoords<GL_TRIANGLES>(aDrawParameters.maTextureCoords, r2Rect, false);
 
         GLfloat nX1 = r2Rect.mnDestX;
         GLfloat nY1 = r2Rect.mnDestY;
@@ -86,19 +88,18 @@ public:
         maEntries.clear();
     }
 
-    void insert(const OpenGLTexture& rTexture, const SalColor& aColor, const SalTwoRect& r2Rect)
+    void insert(OpenGLTexture& rTexture, const SalColor& aColor, const SalTwoRect& r2Rect)
     {
         GLuint nTextureId = rTexture.Id();
 
-        auto iterator = maEntries.find(nTextureId);
-
-        if (iterator == maEntries.end())
+        if (maEntries.find(nTextureId) == maEntries.end())
         {
-            maEntries[nTextureId] = o3tl::make_unique<AccumulatedTexturesEntry>(rTexture);
+            OpenGLTexture aWholeTexture(rTexture.GetWholeTexture());
+            maEntries[nTextureId] = o3tl::make_unique<AccumulatedTexturesEntry>(aWholeTexture);
         }
 
         std::unique_ptr<AccumulatedTexturesEntry>& rEntry = maEntries[nTextureId];
-        rEntry->insert(aColor, r2Rect);
+        rEntry->insert(rTexture, aColor, r2Rect);
     }
 
     AccumulatedTexturesMap& getAccumulatedTexturesMap()

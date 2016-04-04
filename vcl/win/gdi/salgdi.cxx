@@ -591,6 +591,14 @@ OpenGLTexture* OpenGLCompatibleDC::getTexture()
     return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
 }
 
+bool OpenGLCompatibleDC::copyToTexture(OpenGLTexture& aTexture)
+{
+    if (!mpImpl)
+        return false;
+
+    return aTexture.CopyData(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
+}
+
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, SalGeometryProvider *pProvider):
     mhLocalDC(0),
     mbPrinter(eType == WinSalGraphics::PRINTER),

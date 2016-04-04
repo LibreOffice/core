@@ -172,11 +172,16 @@ public:
 
     SalTwoRect getTwoRect() { return maRects; }
 
+    Size getBitmapSize() { return Size(maRects.mnSrcWidth, maRects.mnSrcHeight); }
+
     /// Reset the DC with the defined color.
     void fill(sal_uInt32 color);
 
     /// Obtain the texture; the caller must delete it after use.
     OpenGLTexture* getTexture();
+
+    /// Copy bitmap data to the texture. Texutre must be initialized and the correct size to hold the bitmap.
+    bool copyToTexture(OpenGLTexture& aTexture);
 };
 
 class WinSalGraphics : public SalGraphics

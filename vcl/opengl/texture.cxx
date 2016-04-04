@@ -373,26 +373,31 @@ template <>
 void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry, bool bInverted) const
 {
     VCL_GL_INFO("Add coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
+    VCL_GL_INFO("   With 2Rect Src  [" << rPosAry.mnSrcX << ", " << rPosAry.mnSrcY << "] wh (" << rPosAry.mnSrcWidth << ", " << rPosAry.mnSrcHeight << ")");
+    VCL_GL_INFO("   With 2Rect Dest [" << rPosAry.mnDestX << ", " << rPosAry.mnDestY << "] wh (" << rPosAry.mnDestWidth << ", " << rPosAry.mnDestHeight << ")");
 
     GLfloat x1 = 0.0f;
     GLfloat x2 = 0.0f;
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
+    double fTextureWidth(mpImpl->mnWidth);
+    double fTextureHeight(mpImpl->mnHeight);
+
     if (mpImpl)
     {
-        x1 = (maRect.Left() + rPosAry.mnSrcX) / (double) mpImpl->mnWidth;
-        x2 = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) mpImpl->mnWidth;
+        x1 = (maRect.Left() + rPosAry.mnSrcX) / fTextureWidth;
+        x2 = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / fTextureWidth;
 
         if (bInverted)
         {
-            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
-            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / fTextureHeight;
+            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / fTextureHeight;
         }
         else
         {
-            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
-            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+            y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / fTextureHeight;
+            y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / fTextureHeight;
         }
     }
 
@@ -433,11 +438,27 @@ void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
     }
 }
 
+OpenGLTexture OpenGLTexture::GetWholeTexture()
+{
+    return OpenGLTexture(mpImpl, Rectangle(Point(0, 0), Size(mpImpl->mnWidth, mpImpl->mnHeight)), -1);
+}
+
 GLenum OpenGLTexture::GetFilter() const
 {
     if( mpImpl )
         return mpImpl->mnFilter;
     return GL_NEAREST;
+}
+
+bool OpenGLTexture::CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+{
+    if (!pData || mpImpl == nullptr)
+        return false;
+
+    int nX = maRect.Left();
+    int nY = maRect.Top();
+
+    return mpImpl->InsertBuffer(nX, nY, nWidth, nHeight, nFormat, nType, pData);
 }
 
 void OpenGLTexture::SetFilter( GLenum nFilter )
