@@ -388,7 +388,7 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
 SvTreeListEntry* BookmarkTable::GetRowByBookmarkName(const OUString& sName)
 {
     SvTreeListEntry* pEntry = First();
-    for (sal_Int32 i = GetRowCount(); i; i--)
+    while (pEntry)
     {
         sw::mark::IMark* pBookmark = static_cast<sw::mark::IMark*>(pEntry->GetUserData());
         if (pBookmark->GetName() == sName)
@@ -422,7 +422,7 @@ OUString BookmarkTable::GetNameProposal()
 {
     sal_Int32 nHighestBookmarkId = 0;
     SvTreeListEntry* pEntry = First();
-    for (sal_Int32 i = GetRowCount(); i; i--)
+    while (pEntry)
     {
         sw::mark::IMark* pBookmark = static_cast<sw::mark::IMark*>(pEntry->GetUserData());
         OUString sName = pBookmark->GetName();
