@@ -5028,6 +5028,10 @@ void DomainMapper_Impl::ApplySettingsTable()
             if( m_pSettingsTable->GetEmbedSystemFonts())
                 xSettings->setPropertyValue( getPropertyName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
             xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
+
+            // Web Layout.
+            if (m_pSettingsTable->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
+                xSettings->setPropertyValue("InBrowseMode", uno::makeAny(true));
         }
         catch(const uno::Exception&)
         {

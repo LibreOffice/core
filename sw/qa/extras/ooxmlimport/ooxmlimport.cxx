@@ -3216,6 +3216,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf98882, "tdf98882.docx")
     CPPUNIT_ASSERT_EQUAL(nFlyHeight, nContentHeight);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf99074, "tdf99074.docx")
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xSettings = xFactory->createInstance("com.sun.star.document.Settings");
+    // This was false, Web Layout was ignored on import.
+    CPPUNIT_ASSERT(getProperty<bool>(xSettings, "InBrowseMode"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
