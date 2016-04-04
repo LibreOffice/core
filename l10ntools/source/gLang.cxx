@@ -392,13 +392,13 @@ int main(int argc, char *argv[])
     try {
         cHandler.checkCommandLine(argc, argv);
     }
-    catch(const char *sErr) {
-        string myErr(sErr);
+    catch(const char *pErr) {
+        string myErr(pErr);
         cHandler.showUsage(myErr);
         exit(-1);
     }
-    catch(string sErr) {
-        cHandler.showUsage(sErr);
+    catch(const string& rErr) {
+        cHandler.showUsage(rErr);
         exit(-1);
     }
 
@@ -406,13 +406,13 @@ int main(int argc, char *argv[])
     try {
         cHandler.run();
     }
-    catch(const char *sErr) {
-        string myErr(sErr);
+    catch(const char *pErr) {
+        string myErr(pErr);
         cHandler.showRunTimeError(myErr);
         exit(-1);
     }
-    catch(string sErr) {
-        cHandler.showRunTimeError(sErr);
+    catch(const string& rErr) {
+        cHandler.showRunTimeError(rErr);
         exit(-1);
     }
 }
