@@ -142,7 +142,7 @@ private:
     sal_uInt32      m_nUseCount;
     LwpAtomHolder*  m_pAtomHolder;
 
-    LwpPara* m_pBulletPara;
+    rtl::Reference<LwpPara> m_xBulletPara;
     OUString m_strStyleName;
     sal_uInt16 m_pHideLevels[10];
 
@@ -167,7 +167,7 @@ inline OUString LwpSilverBullet::GetNumberingName()
 }
 inline LwpPara* LwpSilverBullet::GetNumberingPara()
 {
-    return m_pBulletPara;
+    return m_xBulletPara.get();
 }
 inline bool LwpSilverBullet::IsPosCumulative(sal_uInt16 nHideLevels)
 {

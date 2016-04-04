@@ -76,16 +76,12 @@ LwpSilverBullet::LwpSilverBullet(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     , m_nFlags(0)
     , m_nUseCount(0)
     , m_pAtomHolder(new LwpAtomHolder)
-    , m_pBulletPara(NULL)
 {
 }
 
 LwpSilverBullet::~LwpSilverBullet()
 {
-    if (m_pAtomHolder)
-    {
-        delete m_pAtomHolder;
-    }
+    delete m_pAtomHolder;
 }
 
 void LwpSilverBullet::Read()
@@ -129,7 +125,7 @@ void LwpSilverBullet::RegisterStyle()
         {
             ParaNumbering aParaNumbering;
             //get numbering format according to the position.
-            m_pBulletPara->GetParaNumber(nPos, &aParaNumbering);
+            m_xBulletPara->GetParaNumber(nPos, &aParaNumbering);
             LwpFribParaNumber* pParaNumber = aParaNumbering.pParaNumber;
             if (pParaNumber)
             {
@@ -205,7 +201,7 @@ OUString LwpSilverBullet::GetBulletFontName()
 
     LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
 
-    sal_uInt32 nBulletFontID = m_pBulletPara->GetBulletFontID();
+    sal_uInt32 nBulletFontID = m_xBulletPara->GetBulletFontID();
     sal_uInt16 nFinalFont = static_cast<sal_uInt16>((nBulletFontID >> 16) & 0xFFFF);
 
     //final fontid is valid?
@@ -226,7 +222,7 @@ OUString LwpSilverBullet::GetBulletFontName()
  */
 UChar32 LwpSilverBullet::GetBulletChar()
 {
-    OUString aBulletChar = m_pBulletPara->GetBulletChar();
+    OUString aBulletChar = m_xBulletPara->GetBulletChar();
 
     return aBulletChar.toChar();
 }
@@ -236,7 +232,7 @@ UChar32 LwpSilverBullet::GetBulletChar()
  */
 LwpPara* LwpSilverBullet::GetBulletPara()
 {
-    if (!m_pBulletPara)
+    if (!m_xBulletPara.is())
     {
         LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
         if (!pStory)
@@ -244,10 +240,10 @@ LwpPara* LwpSilverBullet::GetBulletPara()
             return NULL;
         }
 
-        m_pBulletPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara().obj(VO_PARA).get());
+        m_xBulletPara.set(dynamic_cast<LwpPara*>(pStory->GetFirstPara().obj(VO_PARA).get()));
     }
 
-    return m_pBulletPara;
+    return m_xBulletPara.get();
 }
 
 /**
@@ -328,10 +324,10 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
  */
 bool LwpSilverBullet::IsBulletOrdered()
 {
-    if (!m_pBulletPara)
+    if (!m_xBulletPara.is())
         return false;
 
-    LwpFribPtr& rFribs = m_pBulletPara->GetFribs();
+    LwpFribPtr& rFribs = m_xBulletPara->GetFribs();
 
     return (rFribs.HasFrib(FRIB_TAG_PARANUMBER) != NULL);
 }
@@ -374,7 +370,7 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
     bool bDivisionName = false;
     bool bSectionName = false;
 
-    LwpFrib* pParaFrib = m_pBulletPara->GetFribs().GetFribs();
+    LwpFrib* pParaFrib = m_xBulletPara->GetFribs().GetFribs();
     if (!pParaFrib)
     {
         return aEmpty;
