@@ -371,20 +371,13 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
 {
     PopupMenuToolbarController::initialize( aArguments );
 
-    bool bRelationDesignModule = m_sModuleName.endsWith( "RelationDesign" );
-
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if ( getToolboxId( nId, &pToolBox )
-        && ( bRelationDesignModule || pToolBox->GetItemCommand( nId ) != m_aCommandURL ) )
+    if ( getToolboxId( nId, &pToolBox ) && pToolBox->GetItemCommand( nId ) != m_aCommandURL )
     {
         m_bSplitButton = false;
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
     }
-
-    if ( bRelationDesignModule )
-        // No modified icon there, just disable the button if there's nothing to save.
-        return;
 
     css::uno::Reference< css::frame::XController > xController( m_xFrame->getController(), css::uno::UNO_QUERY );
     if ( xController.is() )
