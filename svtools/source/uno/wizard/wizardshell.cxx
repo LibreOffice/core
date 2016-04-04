@@ -36,10 +36,7 @@ namespace svt { namespace uno
     using css::uno::XInterface;
     using css::uno::Exception;
     using css::uno::RuntimeException;
-    using css::uno::Any;
-    using css::uno::makeAny;
     using css::uno::Sequence;
-    using css::uno::Type;
     using css::ui::dialogs::XWizardController;
     using css::ui::dialogs::XWizard;
     using css::ui::dialogs::XWizardPage;

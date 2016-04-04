@@ -25,7 +25,6 @@
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.h>
 
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>

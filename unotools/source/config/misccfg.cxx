@@ -23,7 +23,6 @@
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include "itemholder1.hxx"

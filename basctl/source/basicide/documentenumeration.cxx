@@ -42,7 +42,6 @@ namespace basctl { namespace docs {
     using ::com::sun::star::frame::XDesktop2;
     using ::com::sun::star::container::XEnumerationAccess;
     using ::com::sun::star::container::XEnumeration;
-    using ::com::sun::star::uno::Any;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XFramesSupplier;
     using ::com::sun::star::frame::XFrames;

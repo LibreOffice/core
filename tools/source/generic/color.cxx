@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <iomanip>
 #include <sstream>
 #include <stdlib.h>
 

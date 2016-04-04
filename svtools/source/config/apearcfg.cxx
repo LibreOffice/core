@@ -19,7 +19,6 @@
 
 
 #include <svtools/apearcfg.hxx>
-#include <com/sun/star/uno/Any.hxx>
 
 #include <tools/debug.hxx>
 #include <vcl/settings.hxx>

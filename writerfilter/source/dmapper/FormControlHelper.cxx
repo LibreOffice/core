@@ -33,7 +33,6 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
 
 #include "FormControlHelper.hxx"
 #include <xmloff/odffields.hxx>

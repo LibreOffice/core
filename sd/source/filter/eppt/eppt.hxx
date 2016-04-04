@@ -31,7 +31,6 @@
 #include "text.hxx"
 
 #include <vcl/mapmod.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <com/sun/star/uno/Type.h>
 #include <xmloff/xmlement.hxx>
 
 /**

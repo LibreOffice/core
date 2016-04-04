@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_UNOAPI_HXX
 #define INCLUDED_SVX_UNOAPI_HXX
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <sal/types.h>

@@ -35,7 +35,6 @@
 #include "salhelper/thread.hxx"
 #include "boost/noncopyable.hpp"
 #include <memory>
-#include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
 #include <algorithm>
 #include <map>

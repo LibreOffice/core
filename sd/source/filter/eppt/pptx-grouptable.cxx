@@ -19,7 +19,6 @@
 
 #include "grouptable.hxx"
 
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::container::XIndexAccess;
 
 GroupTable::GroupTable()

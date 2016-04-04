@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_INC_UNDOANIM_HXX
 #define INCLUDED_SD_INC_UNDOANIM_HXX
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <svx/svdundo.hxx>
 #include <memory>

@@ -21,7 +21,6 @@
 
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
-#include <com/sun/star/uno/Any.hxx>
 
 #include <rtl/instance.hxx>
 

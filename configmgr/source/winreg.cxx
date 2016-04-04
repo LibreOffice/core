@@ -19,9 +19,7 @@
 #pragma warning(pop)
 #endif
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

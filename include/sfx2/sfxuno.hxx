@@ -30,8 +30,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>

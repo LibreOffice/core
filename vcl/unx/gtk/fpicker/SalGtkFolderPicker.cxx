@@ -33,7 +33,6 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "unx/gtk/gtkinst.hxx"

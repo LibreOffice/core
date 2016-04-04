@@ -20,7 +20,6 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLCHARTCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>

@@ -17,7 +17,6 @@
 #include "MWAWDrawImportFilter.hxx"
 
 using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Any;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;

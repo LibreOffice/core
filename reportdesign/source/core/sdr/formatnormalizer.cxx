@@ -49,7 +49,6 @@ namespace rptui
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::XNumberFormatTypes;
-    using ::com::sun::star::uno::makeAny;
 
 
     //= FormatNormalizer

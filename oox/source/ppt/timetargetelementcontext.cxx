@@ -23,8 +23,6 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include <osl/diagnose.h>
 
-#include <com/sun/star/uno/Any.hxx>
-
 #include "oox/helper/attributelist.hxx"
 #include "drawingml/embeddedwavaudiofile.hxx"
 

@@ -36,7 +36,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
