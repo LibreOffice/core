@@ -19,32 +19,12 @@
  *
  *************************************************************/
 
+#include "precompiled_sc.hxx"
 
+#include "gtest/gtest.h"
 
-#ifndef SC_STRINGUTIL_HXX
-#define SC_STRINGUTIL_HXX
-
-#include "rtl/ustring.hxx"
-#include "scdllapi.h"
-
-class SC_DLLPUBLIC ScStringUtil
+int main(int argc, char **argv)
 {
-public:
-    /**
-     * Check if a given string is a simple decimal number (e.g. 12.345). We
-     * don't do any elaborate parsing here; we only check for the simplest
-     * case of decimal number format.
-     *
-     * @param rStr string to parse
-     * @param dsep decimal separator
-     * @param gsep group separator (aka thousands separator)
-     * @param rVal value of successfully parsed number
-     *
-     * @return true if the string is a valid number, false otherwise.
-     */
-    static bool parseSimpleNumber(
-        const ::rtl::OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
-};
-
-
-#endif
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

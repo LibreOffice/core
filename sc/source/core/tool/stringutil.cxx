@@ -45,6 +45,7 @@ bool ScStringUtil::parseSimpleNumber(
     const sal_Unicode* p = rStr.getStr();
     sal_Int32 nPosDSep = -1, nPosGSep = -1;
     sal_uInt32 nDigitCount = 0;
+    bool haveSeenDigit = false;
 
     for (sal_Int32 i = 0; i < n; ++i)
     {
@@ -57,6 +58,7 @@ bool ScStringUtil::parseSimpleNumber(
         {
             // this is a digit.
             aBuf.append(c);
+            haveSeenDigit = true;
             ++nDigitCount;
         }
         else if (c == dsep)
@@ -81,8 +83,8 @@ bool ScStringUtil::parseSimpleNumber(
         {
             // this is a group (thousand) separator.
 
-            if (i == 0)
-                // not allowed as the first character.
+            if (!haveSeenDigit)
+                // not allowed before digits.
                 return false;
 
             if (nPosDSep >= 0)
