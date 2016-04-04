@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_68208d4a",
+        "filename": "sd/source/ui/dlg/prltempl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-04T09:40:07Z",
+      "side": 1,
+      "message": "... maybe it has to be done here. Have a look at content of aSet at this point to see if EE_CHAR_BKGCOLOR is there and if so, replace it accordingly",
+      "revId": "aa27396624a64594e9cdee54e4f349e7e4d24f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_082bd131",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-04T09:40:07Z",
+      "side": 1,
+      "message": "I think this is a wrong place to replace SvxBrushItem w/ SvxBackgroundColor item, since at this point only a style name is known, not its item set (that only happens later, search for pSSPool-\u003eFind) ...",
+      "revId": "aa27396624a64594e9cdee54e4f349e7e4d24f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
