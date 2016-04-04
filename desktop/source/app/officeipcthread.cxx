@@ -373,7 +373,7 @@ protected:
 
     virtual ~IpcThread() {}
 
-    bool process(OString const & arguments, bool * wait);
+    bool process(OString const & arguments, bool * waitProcessed);
 
     RequestHandler * handler_;
 };
@@ -595,14 +595,14 @@ void DbusIpcThread::execute()
         }
         char const * argstr;
         dbus_message_iter_get_basic(&it, &argstr);
-        bool wait = false;
+        bool waitProcessed = false;
         {
             osl::MutexGuard g(RequestHandler::GetMutex());
-            if (!process(argstr, &wait)) {
+            if (!process(argstr, &waitProcessed)) {
                 continue;
             }
         }
-        if (wait) {
+        if (waitProcessed) {
             handler_->cProcessed.wait();
         }
         DbusMessageHolder repl(dbus_message_new_method_return(msg.message));
@@ -941,8 +941,8 @@ void RequestHandler::WaitForReady()
     }
 }
 
-bool IpcThread::process(OString const & arguments, bool * wait) {
-    assert(wait != nullptr);
+bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
+    assert(waitProcessed != nullptr);
 
     std::unique_ptr< CommandLineArgs > aCmdLineArgs;
     try
@@ -1140,7 +1140,7 @@ bool IpcThread::process(OString const & arguments, bool * wait) {
             ImplPostForeignAppEvent( pAppEvent );
         }
     }
-    *wait = bDocRequestSent;
+    *waitProcessed = bDocRequestSent;
     return true;
 }
 
@@ -1188,15 +1188,15 @@ void PipeIpcThread::execute()
             if (aArguments.isEmpty())
                 continue;
 
-            bool wait = false;
-            if (!process(aArguments, &wait)) {
+            bool waitProcessed = false;
+            if (!process(aArguments, &waitProcessed)) {
                 continue;
             }
 
             // we don't need the mutex any longer...
             aGuard.clear();
             // wait for processing to finish
-            if (wait)
+            if (waitProcessed)
                 handler_->cProcessed.wait();
             // processing finished, inform the requesting end:
             n = aStreamPipe.write(
