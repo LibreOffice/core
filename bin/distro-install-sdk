@@ -65,7 +65,7 @@ if test -d $DESTDIR$INSTALLDIR/sdk ; then
     echo "$DOCDIR/sdk/examples"                                 >>$DESTDIR/gid_Module_Root_SDK
 
     # generate default profiles
-    sed -e "s,@OO_SDK_NAME@,openoffice.org${PRODUCTVERSION}_sdk," \
+    sed -e "s,@OO_SDK_NAME@,libreoffice${PRODUCTVERSION}_sdk," \
         -e "s,@OO_SDK_HOME@,$INSTALLDIR/sdk," \
         -e "s,@OFFICE_HOME@,$INSTALLDIR," \
         -e "s,@OO_SDK_MAKE_HOME@,/usr/bin," \
