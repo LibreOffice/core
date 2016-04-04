@@ -792,8 +792,8 @@ void OFieldExpressionControl::DeleteRows()
             // we use this way to create undo actions
             m_pParent->m_pController->executeChecked(SID_GROUP_REMOVE,aArgs);
 
-            ::std::vector<sal_Int32>::iterator aFind = ::std::find(m_aGroupPositions.begin(),m_aGroupPositions.end(),nGroupPos);
-            ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.end();
+            std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
+            std::vector<sal_Int32>::iterator aFind = std::find(m_aGroupPositions.begin(), aEnd, nGroupPos);
             if (aFind != aEnd)
             {
                 *aFind = NO_GROUP;
