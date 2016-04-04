@@ -435,14 +435,14 @@ void SdTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
 
     // Did the selection callback fire?
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
 
     // Search for something on the second slide, and make sure that the set-part callback fired.
     lcl_search("bbb");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
     CPPUNIT_ASSERT_EQUAL(true, m_bFound);
     // This was 0; should be 1 match for "find".
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSearchResultSelection.size());
     // Result is on the second slide.
     CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
 
@@ -482,7 +482,7 @@ void SdTiledRenderingTest::testSearchAllSelections()
     // Make sure this is found on the 3rd slide.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
     // This was 1: only the first match was highlighted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSelection.size());
     comphelper::LibreOfficeKit::setActive(false);
 }
 

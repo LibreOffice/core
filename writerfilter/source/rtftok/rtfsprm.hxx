@@ -70,7 +70,7 @@ public:
     /// Also insert default values to override attributes of style
     /// (yes, really; that's what Word does).
     RTFSprms cloneAndDeduplicate(RTFSprms& rReference) const;
-    size_t size() const
+    std::size_t size() const
     {
         return m_pSprms->size();
     }

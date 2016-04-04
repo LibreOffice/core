@@ -172,7 +172,7 @@ void SigningTest::testDescription()
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
 }
 
@@ -205,7 +205,7 @@ void SigningTest::testOOXMLDescription()
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
 }
 
@@ -226,7 +226,7 @@ void SigningTest::testOOXMLAppend()
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then add a second document signature.
     uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
@@ -237,7 +237,7 @@ void SigningTest::testOOXMLAppend()
     // Read back the signatures and make sure that we have the expected amount.
     aManager.read(/*bUseTempStream=*/true);
     // This was 1: the original signature was lost.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 }
 
 void SigningTest::testOOXMLRemove()
@@ -252,7 +252,7 @@ void SigningTest::testOOXMLRemove()
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 
     // Then remove the last added signature.
     uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
@@ -261,7 +261,7 @@ void SigningTest::testOOXMLRemove()
 
     // Read back the signatures and make sure that only purpose1 is left.
     aManager.read(/*bUseTempStream=*/true);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     CPPUNIT_ASSERT_EQUAL(OUString("purpose1"), rInformations[0].ouDescription);
 }
 
@@ -282,7 +282,7 @@ void SigningTest::testOOXMLRemoveAll()
     aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 
     // Then remove the only signature in the document.
     uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
@@ -292,7 +292,7 @@ void SigningTest::testOOXMLRemoveAll()
     aManager.write();
 
     // Make sure that the signature count is zero and the whole signature storage is removed completely.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
     uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(!xNameAccess->hasByName("_xmlsignatures"));
 

@@ -41,7 +41,7 @@ class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector();
 
 public:
-    LOKTransferable(const char* pMimeType, const char* pData, size_t nSize);
+    LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize);
 
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor)
     throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) override;

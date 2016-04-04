@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_LOKHELPER_HXX
 
 #include <sfx2/dllapi.h>
+#include <cstddef>
 
 class SfxViewShell;
 
@@ -20,13 +21,13 @@ public:
     /// Create a new view shell from the current view frame.
     static int createView();
     /// Destroy a view shell from the global shell list.
-    static void destroyView(size_t nId);
+    static void destroyView(std::size_t nId);
     /// Set a view shell as current one.
-    static void setView(size_t nId);
+    static void setView(std::size_t nId);
     /// Get the currently active view.
-    static size_t getView();
+    static std::size_t getView();
     /// Get the number of views of the current object shell.
-    static size_t getViews();
+    static std::size_t getViews();
 };
 
 #endif

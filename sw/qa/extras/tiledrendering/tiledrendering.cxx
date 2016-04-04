@@ -339,12 +339,12 @@ void SwTiledRenderingTest::testSearch()
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    size_t nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    std::size_t nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
 
     // First hit, in the second paragraph, before the shape.
     lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    size_t nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    std::size_t nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
     /// Make sure we get search result selection for normal find as well, not only find all.
     CPPUNIT_ASSERT(!m_aSearchResultSelection.empty());
@@ -468,7 +468,7 @@ void SwTiledRenderingTest::testSearchAll()
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was 0; should be 2 results in the body text.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSearchResultSelection.size());
     // Writer documents are always a single part.
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
 

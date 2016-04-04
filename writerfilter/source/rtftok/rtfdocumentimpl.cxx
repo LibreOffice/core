@@ -1434,7 +1434,7 @@ void RTFDocumentImpl::replayRowBuffer(
         rCellsSrpms.pop_front();
         rCellsAttributes.pop_front();
     }
-    for (size_t i = 0; i < rBuffer.size(); ++i)
+    for (std::size_t i = 0; i < rBuffer.size(); ++i)
     {
         SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(rBuffer[i]),
                     "writerfilter.rtf", "dropping table cell!");
@@ -1815,7 +1815,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_DPTXBXTEXT:
         {
             bool bPictureFrame = false;
-            for (size_t i = 0; i < m_aStates.top().aShape.aProperties.size(); ++i)
+            for (std::size_t i = 0; i < m_aStates.top().aShape.aProperties.size(); ++i)
             {
                 std::pair<OUString, OUString>& rProperty = m_aStates.top().aShape.aProperties[i];
                 if (rProperty.first == "shapeType" && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
@@ -2286,7 +2286,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 "mismatch between \\itap and number of \\nestrow", nullptr);
         }
         // note: there may be several states pointing to table buffer!
-        for (size_t i = 0; i < m_aStates.size(); ++i)
+        for (std::size_t i = 0; i < m_aStates.size(); ++i)
         {
             if (m_aStates[i].pCurrentBuffer == &m_aTableBufferStack.back())
             {
@@ -2345,7 +2345,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             SAL_WARN("writerfilter.rtf", "dropping extra table buffer");
             // note: there may be several states pointing to table buffer!
-            for (size_t i = 0; i < m_aStates.size(); ++i)
+            for (std::size_t i = 0; i < m_aStates.size(); ++i)
             {
                 if (m_aStates[i].pCurrentBuffer == &m_aTableBufferStack.back())
                 {
@@ -3448,7 +3448,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
             std::vector<beans::PropertyValue> aDefaults = RTFSdrImport::getTextFrameDefaults(false);
-            for (size_t i = 0; i < aDefaults.size(); ++i)
+            for (std::size_t i = 0; i < aDefaults.size(); ++i)
             {
                 if (!lcl_findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, aDefaults[i].Name))
                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
@@ -3746,7 +3746,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         m_aStates.top().aParagraphSprms.set(nSprm, pIntValue);
         if (nKeyword == RTF_ITAP && nParam > 0)
         {
-            while (m_aTableBufferStack.size() < sal::static_int_cast<size_t>(nParam))
+            while (m_aTableBufferStack.size() < sal::static_int_cast<std::size_t>(nParam))
             {
                 m_aTableBufferStack.push_back(RTFBuffer_t());
             }
