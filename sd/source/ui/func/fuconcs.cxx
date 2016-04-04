@@ -55,7 +55,6 @@
 #include <editeng/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
-#include <com/sun/star/uno/Any.hxx>
 
 #include "sdresid.hxx"
 #include "View.hxx"

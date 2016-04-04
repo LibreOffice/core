@@ -19,7 +19,6 @@
 
 #include "oox/ppt/slidetransition.hxx"
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>

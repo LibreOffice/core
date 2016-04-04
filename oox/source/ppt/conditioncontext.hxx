@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_SOURCE_PPT_CONDITIONCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_PPT_CONDITIONCONTEXT_HXX
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/animations/Event.hpp>
 
 #include "oox/core/fragmenthandler.hxx"

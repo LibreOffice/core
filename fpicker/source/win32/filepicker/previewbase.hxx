@@ -21,7 +21,6 @@
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PREVIEWBASE_HXX
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/Any.hxx>

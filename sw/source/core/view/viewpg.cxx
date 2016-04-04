@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <hintids.hxx>
 #include <tools/fract.hxx>
 #include <vcl/window.hxx>

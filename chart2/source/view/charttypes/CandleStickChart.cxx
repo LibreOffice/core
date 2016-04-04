@@ -36,7 +36,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Reference;
 
 CandleStickChart::CandleStickChart( const uno::Reference<XChartType>& xChartTypeModel
                                     , sal_Int32 nDimensionCount )

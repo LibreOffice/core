@@ -10,7 +10,6 @@
 #include <WPXSvInputStream.hxx>
 
 #include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
-#include <com/sun/star/uno/Any.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>

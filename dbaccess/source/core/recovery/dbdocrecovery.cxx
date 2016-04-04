@@ -50,10 +50,7 @@ namespace dbaccess
     using css::uno::UNO_SET_THROW;
     using css::uno::Exception;
     using css::uno::RuntimeException;
-    using css::uno::Any;
-    using css::uno::makeAny;
     using css::uno::Sequence;
-    using css::uno::Type;
     using css::uno::XComponentContext;
     using css::embed::XStorage;
     using css::frame::XController;

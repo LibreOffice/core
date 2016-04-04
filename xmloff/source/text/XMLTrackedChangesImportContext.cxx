@@ -20,7 +20,6 @@
 #include "XMLTrackedChangesImportContext.hxx"
 #include "XMLChangedRegionImportContext.hxx"
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -29,7 +28,6 @@
 
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::xml::sax::XAttributeList;
 using namespace ::xmloff::token;
 

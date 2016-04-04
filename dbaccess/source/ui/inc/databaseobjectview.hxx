@@ -31,7 +31,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 

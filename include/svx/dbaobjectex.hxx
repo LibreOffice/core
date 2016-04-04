@@ -25,7 +25,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <svx/dataaccessdescriptor.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
 

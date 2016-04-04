@@ -25,7 +25,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <rtl/ref.hxx>

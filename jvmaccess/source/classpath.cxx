@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"

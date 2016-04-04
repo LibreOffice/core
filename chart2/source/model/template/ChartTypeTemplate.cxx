@@ -47,7 +47,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
 
 namespace
 {

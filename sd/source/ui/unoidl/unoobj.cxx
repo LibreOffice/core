@@ -83,7 +83,6 @@ using namespace ::com::sun::star::animations;
 
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::XShape;
 
 #define WID_EFFECT          1

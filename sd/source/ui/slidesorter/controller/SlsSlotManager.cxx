@@ -19,7 +19,6 @@
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Any.hxx>
 
 #include <editeng/outlobj.hxx>
 

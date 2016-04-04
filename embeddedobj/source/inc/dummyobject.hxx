@@ -26,7 +26,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <cppuhelper/implbase.hxx>

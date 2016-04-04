@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
 #define INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
 
-#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

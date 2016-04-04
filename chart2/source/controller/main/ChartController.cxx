@@ -92,7 +92,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 

@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 #include <unotools/unotoolsdllapi.h>
 

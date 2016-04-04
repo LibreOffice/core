@@ -69,9 +69,7 @@ using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 using namespace ::formula;
 
-using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
-
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImportP) :

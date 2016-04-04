@@ -29,7 +29,6 @@
 #include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

@@ -31,7 +31,6 @@
 
 // usings
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
 
 using namespace ::com::sun::star;
 

@@ -34,8 +34,6 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
 using ::std::vector;
 
 ScDPTableData::CalcInfo::CalcInfo() :

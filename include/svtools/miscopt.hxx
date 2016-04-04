@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
