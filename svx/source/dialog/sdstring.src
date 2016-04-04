@@ -2362,4 +2362,14 @@ String RID_SVXSTR_RECOVERYONLY_FINISH
     Text[ en-US ] = "~Finish";
 };
 
+String RID_SVXSTR_WIDTH_LAST_CUSTOM
+{
+    Text[ en-US ] = "Last Custom Value";
+};
+
+String RID_SVXSTR_PT
+{
+    Text[ en-US ] = "pt";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -201,7 +201,6 @@
 #define RID_POPUPPANEL_AREAPAGE_TRGR        (RID_SVX_START + 320)
 
 #define RID_SIDEBAR_LINE_PANEL              (RID_SVX_START + 321)
-#define RID_POPUPPANEL_LINEPAGE_WIDTH       (RID_SVX_START + 324)
 
 #define RID_SIDEBAR_POSSIZE_PANEL           (RID_SVX_START + 325)
 #define RID_SIDEBAR_GRAPHIC_PANEL           (RID_SVX_START + 326)
@@ -1089,8 +1088,13 @@
 #define RID_SVXSTR_ZOOM_PAGE_WIDTH       (RID_SVX_START + 1389)
 #define RID_SVXSTR_ZOOM_OPTIMAL_VIEW     (RID_SVX_START + 1390)
 
+#define RID_SVXSTR_WIDTH_LAST_CUSTOM     (RID_SVX_START + 1391)
+#define RID_SVXSTR_PT                    (RID_SVX_START + 1392)
+#define RID_SVXIMG_WIDTH_CUSTOM          (RID_SVX_START + 1393)
+#define RID_SVXIMG_WIDTH_CUSTOM_GRAY     (RID_SVX_START + 1394)
+
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1391)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1395)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be

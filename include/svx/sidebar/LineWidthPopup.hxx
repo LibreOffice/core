@@ -19,28 +19,46 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
-
 #include <svl/poolitem.hxx>
+#include <vcl/floatwin.hxx>
+#include <vcl/layout.hxx>
 
-#include <functional>
-
+class Edit;
+class MetricField;
+class ValueSet;
 
 namespace svx { namespace sidebar {
 
-class LineWidthPopup
-    : public Popup
+class LinePropertyPanelBase;
+class LineWidthValueSet;
+
+class LineWidthPopup : public FloatingWindow
 {
 public:
-    LineWidthPopup (
-        vcl::Window* pParent,
-        const ::std::function<PopupControl*(PopupContainer*)>& rControlCreator);
+    LineWidthPopup(LinePropertyPanelBase& rParent);
+    virtual void dispose() override;
     virtual ~LineWidthPopup();
 
     void SetWidthSelect (long lValue, bool bValuable, SfxMapUnit eMapUnit);
 
 private:
-    void PopupModeEndCallback();
+    LinePropertyPanelBase& m_rParent;
+    OUString* m_pStr;
+    OUString m_sPt;
+    SfxMapUnit m_eMapUnit;
+    bool m_bVSFocus;
+    bool m_bCustom;
+    bool m_bCloseByEdit;
+    long m_nCustomWidth;
+    long m_nTmpCustomWidth;
+    VclPtr<MetricField> m_xMFWidth;
+    VclPtr<VclContainer> m_xBox;
+    VclPtr<LineWidthValueSet> m_xVSWidth;
+    Image m_aIMGCus;
+    Image m_aIMGCusGray;
+
+    DECL_LINK_TYPED(VSSelectHdl, ValueSet*, void);
+    DECL_LINK_TYPED(MFModifyHdl, Edit&, void);
 };
 
 } } // end of namespace svx::sidebar

@@ -28,7 +28,7 @@ class LineWidthValueSet
     : public ValueSet
 {
 public:
-    LineWidthValueSet (vcl::Window* pParent, const ResId& rResId);
+    LineWidthValueSet(vcl::Window* pParent);
     virtual ~LineWidthValueSet();
     virtual void dispose() override;
 
@@ -39,6 +39,8 @@ public:
     void SetCusEnable(bool bEnable);
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
+    virtual void    Resize() override;
+    virtual Size    GetOptimalSize() const override;
 
 protected:
     VclPtr<VirtualDevice> pVDev;

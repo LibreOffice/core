@@ -23,16 +23,20 @@
 
 namespace svx { namespace sidebar {
 
-LineWidthValueSet::LineWidthValueSet (
-    vcl::Window* pParent, const ResId& rResId)
-    : ValueSet( pParent, rResId ),
-      pVDev(nullptr),
-      nSelItem(0),
-      bCusEnable(false)
+LineWidthValueSet::LineWidthValueSet(vcl::Window* pParent)
+    : ValueSet(pParent, WB_TABSTOP)
+    , pVDev(nullptr)
+    , nSelItem(0)
+    , bCusEnable(false)
 {
     strUnit = new OUString[9];
+}
+
+void LineWidthValueSet::Resize()
+{
     SetColCount();
-    SetLineCount( 9);
+    SetLineCount(9);
+    ValueSet::Resize();
 }
 
 LineWidthValueSet::~LineWidthValueSet()
@@ -165,6 +169,11 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aOldColor);
     pDev->SetFillColor(aOldFillColor);
     pDev->SetFont(aOldFont);
+}
+
+Size LineWidthValueSet::GetOptimalSize() const
+{
+    return LogicToPixel(Size(80, 12 * 9), MAP_APPFONT);
 }
 
 } } // end of namespace svx::sidebar

@@ -58,72 +58,13 @@ Image IMG_WIDTH8_ICON
 {
     ImageBitmap = Bitmap{File = "symphony/width8.png";};
 };
-
-Control RID_POPUPPANEL_LINEPAGE_WIDTH
+Image RID_SVXIMG_WIDTH_CUSTOM
 {
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-
-    Size = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH  + 80,    POPUPPANEL_MARGIN_SMALL + POPUPPANEL_MARGIN_LARGE + POPUP_BORDER_WIDTH + 12 * 9 + POPUPPANEL_MARGIN_SMALL * 2 + TEXT_HEIGHT + (POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL));
-
-    Control VS_WIDTH
-    {
-        HelpId = HID_PPROPERTYPANEL_LINE_VS_WIDTH ;
-        Hide = TRUE ;
-        Pos = MAP_APPFONT( POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
-        Size = MAP_APPFONT ( 80  , 12 * 9);
-        TabStop = TRUE ;
-        Text = "Width";
-    };
-    FixedText FT_CUSTOME
-    {
-        Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_LARGE + OFFSET_X, POPUPPANEL_MARGIN_SMALL + OFFSET_Y + 12 * 9 + POPUPPANEL_MARGIN_SMALL ) ;
-        Size = MAP_APPFONT ( 80  , TEXT_HEIGHT ) ;
-        Text [ en-US ] = "Custom:" ;
-    };
-    FixedText FT_LINE_WIDTH
-    {
-        Pos = MAP_APPFONT ( CUSTOM_X + POPUPPANEL_MARGIN_LARGE, CUSTOM_Y + POPUPPANEL_MARGIN_LARGE) ;
-        Size = MAP_APPFONT (  74 - POPUPPANEL_MARGIN_LARGE * 2   , TEXT_HEIGHT ) ;
-        Text [ en-US ] = "Line ~width:" ;
-    };
-    MetricField MF_WIDTH
-    {
-        Border = TRUE ;
-        HelpID = HID_PPROPERTYPANEL_LINE_MTR_WIDTH ;
-        Pos = MAP_APPFONT (  CUSTOM_X + POPUPPANEL_MARGIN_LARGE  , CUSTOM_Y + POPUPPANEL_MARGIN_LARGE + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Right = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 5000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Value = 1 ;
-        Unit = FUNIT_MM ;
-        Last = 5000 ;
-        SpinSize = 10 ;
-        QuickHelpText [ en-US ] = "Specify the width of the line.";
-    };
-
-    Image IMG_WIDTH_CUSTOM
-    {
-        ImageBitmap = Bitmap{File = "symphony/last_custom_common.png";};
-    };
-    Image IMG_WIDTH_CUSTOM_GRAY
-    {
-        ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png";};
-    };
-    String STR_WIDTH_LAST_CUSTOM
-    {
-        Text [ en-US ] = "Last Custom Value";
-    };
-    String STR_PT
-    {
-        Text [ en-US ] = "pt";
-    };
+    ImageBitmap = Bitmap{File = "symphony/last_custom_common.png";};
+};
+Image RID_SVXIMG_WIDTH_CUSTOM_GRAY
+{
+    ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png";};
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

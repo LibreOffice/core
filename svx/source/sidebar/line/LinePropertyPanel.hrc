@@ -25,15 +25,4 @@
 //style popup page
 #define PB_OPTIONS              2
 
-//width popup page
-#define VS_WIDTH        1
-#define MF_WIDTH        2
-#define FT_CUSTOME      3
-#define FT_LINE_WIDTH   4
-#define IMG_WIDTH_CUSTOM            5
-#define IMG_WIDTH_CUSTOM_GRAY       6
-#define CT_BORDER       7
-#define STR_WIDTH_LAST_CUSTOM       8
-#define STR_PT          9
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

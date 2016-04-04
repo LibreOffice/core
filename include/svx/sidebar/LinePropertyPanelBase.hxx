@@ -65,9 +65,6 @@ namespace svx
 namespace sidebar
 {
 
-class PopupContainer;
-class LineWidthControl;
-
 class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
 {
 public:
@@ -80,8 +77,6 @@ public:
     void SetWidth(long nWidth);
     void SetWidthIcon(int n);
     void SetWidthIcon();
-
-    void EndLineWidthPopupMode();
 
     // constructor/destuctor
     LinePropertyPanelBase(
@@ -152,7 +147,7 @@ private:
     std::unique_ptr<XLineEndItem>   mpEndItem;
 
     //popup windows
-    LineWidthPopup maLineWidthPopup;
+    VclPtr<LineWidthPopup> mxLineWidthPopup;
 
     // images from resource
     Image maIMGNone;
@@ -173,8 +168,6 @@ private:
     DECL_LINK_TYPED(ChangeEndHdl, ListBox&, void);
     DECL_LINK_TYPED(ChangeEdgeStyleHdl, ListBox&, void);
     DECL_LINK_TYPED(ChangeCapStyleHdl, ListBox&, void);
-
-    VclPtr<PopupControl> CreateLineWidthPopupControl (PopupContainer* pParent);
 };
 
 } } // end of namespace svx::sidebar

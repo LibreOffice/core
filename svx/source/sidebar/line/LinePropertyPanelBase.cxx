@@ -48,7 +48,6 @@
 #include <svx/xlinjoit.hxx>
 #include "svx/sidebar/PopupContainer.hxx"
 #include "svx/sidebar/PopupControl.hxx"
-#include "LineWidthControl.hxx"
 
 using namespace css;
 using namespace css::uno;
@@ -174,7 +173,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mnWidthCoreValue(0),
     mpStartItem(),
     mpEndItem(),
-    maLineWidthPopup(this, [this] (PopupContainer *const pContainer) { return this->CreateLineWidthPopupControl(pContainer); }),
+    mxLineWidthPopup(VclPtr<LineWidthPopup>::Create(*this)),
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
     mbWidthValuable(true),
@@ -205,6 +204,7 @@ LinePropertyPanelBase::~LinePropertyPanelBase()
 
 void LinePropertyPanelBase::dispose()
 {
+    mxLineWidthPopup.disposeAndClear();
     mpFTWidth.clear();
     mpTBWidth.clear();
     mpTBColor.clear();
@@ -683,8 +683,8 @@ IMPL_LINK_TYPED(LinePropertyPanelBase, ToolboxWidthSelectHdl,ToolBox*, pToolBox,
 {
     if (pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SELECTWIDTH)
     {
-        maLineWidthPopup.SetWidthSelect(mnWidthCoreValue, mbWidthValuable, meMapUnit);
-        maLineWidthPopup.Show(*pToolBox);
+        mxLineWidthPopup->SetWidthSelect(mnWidthCoreValue, mbWidthValuable, meMapUnit);
+        mxLineWidthPopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
     }
 }
 
@@ -694,16 +694,6 @@ IMPL_LINK_NOARG_TYPED( LinePropertyPanelBase, ChangeTransparentHdl, Edit&, void 
     XLineTransparenceItem aItem( nVal );
 
     setLineTransparency(aItem);
-}
-
-VclPtr<PopupControl> LinePropertyPanelBase::CreateLineWidthPopupControl (PopupContainer* pParent)
-{
-    return VclPtrInstance<LineWidthControl>(pParent, *this);
-}
-
-void LinePropertyPanelBase::EndLineWidthPopupMode()
-{
-    maLineWidthPopup.Hide();
 }
 
 void LinePropertyPanelBase::SetWidthIcon(int n)

@@ -56,7 +56,6 @@ namespace sidebar
 {
 
 class PopupContainer;
-class LineWidthControl;
 
 class LinePropertyPanel : public LinePropertyPanelBase,
                           public sfx2::sidebar::IContextChangeReceiver,

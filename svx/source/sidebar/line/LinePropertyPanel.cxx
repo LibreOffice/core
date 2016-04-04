@@ -48,7 +48,6 @@
 #include <svx/xlinjoit.hxx>
 #include "svx/sidebar/PopupContainer.hxx"
 #include "svx/sidebar/PopupControl.hxx"
-#include "LineWidthControl.hxx"
 
 using namespace css;
 using namespace css::uno;
