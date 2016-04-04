@@ -674,7 +674,7 @@ bool HierarchyContent::storeData()
 {
     HierarchyEntry aEntry(
             m_xContext, m_pProvider, m_xIdentifier->getContentIdentifier() );
-    return aEntry.setData( m_aProps.getHierarchyEntryData(), true );
+    return aEntry.setData( m_aProps.getHierarchyEntryData() );
 }
 
 

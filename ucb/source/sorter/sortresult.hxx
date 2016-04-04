@@ -77,7 +77,7 @@ public:
 
     sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
 
-    void            AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount );
+    void            AddEvent( sal_IntPtr nType, sal_IntPtr nPos );
     void            Insert( css::ucb::ListAction *pAction ) { maData.push_back( pAction ); }
     void            Clear();
     css::ucb::ListAction*     GetAction( sal_IntPtr nIndex ) { return maData[ nIndex ]; }

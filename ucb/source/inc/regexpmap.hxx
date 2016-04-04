@@ -378,7 +378,7 @@ public:
 
     RegexpMap & operator =(RegexpMap const & rOther);
 
-    void add(OUString const & rKey, Val const & rValue, bool bOverwrite);
+    void add(OUString const & rKey, Val const & rValue);
 
     iterator find(OUString const & rKey);
 
@@ -424,8 +424,7 @@ RegexpMap< Val > & RegexpMap< Val >::operator =(RegexpMap const & rOther)
 }
 
 template< typename Val >
-void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
-                           bool bOverwrite)
+void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue)
 {
     Regexp aRegexp(Regexp::parse(rKey));
 
@@ -433,9 +432,7 @@ void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
     {
         if (m_pImpl->m_pDefault)
         {
-            if (!bOverwrite)
-                return;
-            delete m_pImpl->m_pDefault;
+            return;
         }
         m_pImpl->m_pDefault = new Entry< Val >(aRegexp, rValue);
     }
@@ -448,13 +445,7 @@ void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
         {
             if (aIt->m_aRegexp == aRegexp)
             {
-                if (bOverwrite)
-                {
-                    rTheList.erase(aIt);
-                    break;
-                }
-                else
-                    return;
+               return;
             }
         }
 

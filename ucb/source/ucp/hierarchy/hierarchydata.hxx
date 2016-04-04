@@ -102,7 +102,7 @@ public:
 
     bool getData( HierarchyEntryData& rData );
 
-    bool setData( const HierarchyEntryData& rData, bool bCreate );
+    bool setData( const HierarchyEntryData& rData );
 
     bool move( const OUString& rNewURL,
                    const HierarchyEntryData& rData );
