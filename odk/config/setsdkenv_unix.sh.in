@@ -154,7 +154,7 @@ case ${sdk_platform} in
     export DYLD_LIBRARY_PATH
     ;;
 
-  linux-gnu)
+  linux-gnu*)
     directoryname=linux
     comid=gcc3
     soext=so
