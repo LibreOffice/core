@@ -620,6 +620,7 @@ else
 	vcl/opengl/program \
 	vcl/opengl/texture \
 	vcl/opengl/FixedTextureAtlas \
+	vcl/opengl/PackedTextureAtlas \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/source/window/openglwin \
