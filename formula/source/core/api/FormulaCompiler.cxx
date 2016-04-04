@@ -1490,7 +1490,7 @@ void FormulaCompiler::Factor()
                         bLimitOk = (nJumpCount <= 3);
                         break;
                     case ocChoose:
-                        bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT); /* TODO: check, really <, not <=? */
+                        bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT);
                         break;
                     case ocIfError:
                     case ocIfNA:
