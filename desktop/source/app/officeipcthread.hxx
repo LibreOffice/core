@@ -69,10 +69,13 @@ struct ProcessDocumentsRequest
 class DispatchWatcher;
 class IpcThread;
 class PipeIpcThread;
+class DbusIpcThread;
 
 class RequestHandler: public salhelper::SimpleReferenceObject
 {
+    friend IpcThread;
     friend PipeIpcThread;
+    friend DbusIpcThread;
 
   private:
     static rtl::Reference< RequestHandler > pGlobal;

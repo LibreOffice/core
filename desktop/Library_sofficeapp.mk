@@ -23,7 +23,10 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
     ) \
 ))
 
-$(eval $(call gb_Library_use_external,sofficeapp,boost_headers))
+$(eval $(call gb_Library_use_externals,sofficeapp, \
+    boost_headers \
+    dbus \
+))
 
 ifeq ($(ENABLE_BREAKPAD),TRUE)
 $(eval $(call gb_Library_use_external,sofficeapp,breakpad))
