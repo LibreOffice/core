@@ -18,6 +18,7 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/unomid.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svx/tbcontrl.hxx>
 
@@ -391,6 +392,7 @@ void ChartAreaPanel::updateData()
     if (!xInfo.is())
         return;
 
+    SolarMutexGuard aGuard;
     if (xInfo->hasPropertyByName("FillStyle"))
     {
         css::drawing::FillStyle eFillStyle = css::drawing::FillStyle_SOLID;
