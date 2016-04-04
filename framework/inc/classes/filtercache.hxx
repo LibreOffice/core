@@ -32,7 +32,6 @@
 #include <general.h>
 #include <queries.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

@@ -32,7 +32,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-using uno::Reference;
 using uno::RuntimeException;
 using uno::Sequence;
 

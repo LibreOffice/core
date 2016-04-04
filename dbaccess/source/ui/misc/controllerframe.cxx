@@ -45,7 +45,6 @@ namespace dbaui
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::frame::FrameAction;
     using ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED;

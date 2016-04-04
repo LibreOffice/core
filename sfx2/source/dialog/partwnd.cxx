@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>

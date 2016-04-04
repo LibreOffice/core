@@ -30,7 +30,6 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::container::XNameReplace;

@@ -22,7 +22,6 @@
 #include <iostream>
 
 #include "boost/noncopyable.hpp"
-#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 
 #include <cppuhelper/bootstrap.hxx>

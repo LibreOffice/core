@@ -38,7 +38,6 @@ using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::Type;
 using com::sun::star::uno::TypeClass;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;

@@ -54,7 +54,6 @@ namespace svt
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::Any;
     using ::com::sun::star::util::DateTime;
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::sdbc::XRow;

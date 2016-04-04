@@ -26,7 +26,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <svtools/GraphicExportOptionsDialog.hxx>

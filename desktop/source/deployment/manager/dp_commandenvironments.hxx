@@ -22,7 +22,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/content.hxx>
-#include <com/sun/star/uno/Type.hxx>
 
 namespace dp_manager {
 

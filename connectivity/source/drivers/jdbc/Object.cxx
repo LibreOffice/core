@@ -25,7 +25,6 @@
 #include "java/sql/SQLException.hxx"
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <com/sun/star/uno/Sequence.hxx>
 #include "java/LocalRef.hxx"
 #include "resource/jdbc_log.hrc"
 

@@ -96,7 +96,6 @@
 #include <vector>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
 IMPL_LINK_TYPED( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction, void )

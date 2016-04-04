@@ -21,7 +21,6 @@
 
 #include <svl/poolitem.hxx>
 #include <svx/xtable.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <svx/svxdllapi.h>
 

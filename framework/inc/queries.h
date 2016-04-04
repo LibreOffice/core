@@ -22,7 +22,6 @@
 
 #include "general.h"
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 

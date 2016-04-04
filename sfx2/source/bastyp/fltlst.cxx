@@ -20,8 +20,6 @@
 
 #include "fltlst.hxx"
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <comphelper/processfactory.hxx>
 

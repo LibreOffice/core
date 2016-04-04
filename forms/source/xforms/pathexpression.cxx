@@ -30,7 +30,6 @@
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <unotools/textsearch.hxx>
@@ -40,7 +39,6 @@
 
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Sequence;
 using com::sun::star::xml::dom::XNode;
 using com::sun::star::xml::dom::XNodeList;
 using com::sun::star::xml::dom::events::XEventListener;

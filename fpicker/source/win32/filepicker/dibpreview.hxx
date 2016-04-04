@@ -21,6 +21,7 @@
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_DIBPREVIEW_HXX
 
 #include "previewbase.hxx"
+#include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 
 #if defined _MSC_VER

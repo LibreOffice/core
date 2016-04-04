@@ -34,7 +34,6 @@
 #include "salhelper/linkhelper.hxx"
 #include "salhelper/thread.hxx"
 #include <memory>
-#include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
 #include <algorithm>
 #include <map>

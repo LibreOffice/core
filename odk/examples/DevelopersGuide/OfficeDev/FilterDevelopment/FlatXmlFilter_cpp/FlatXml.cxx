@@ -42,9 +42,6 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
-
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <com/sun/star/xml/sax/XParser.hpp>

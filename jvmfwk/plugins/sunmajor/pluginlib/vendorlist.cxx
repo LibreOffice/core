@@ -25,8 +25,6 @@
 #include "osl/thread.h"
 #include <stdio.h>
 
-using namespace com::sun::star::uno;
-
 
 namespace jfw_plugin
 {

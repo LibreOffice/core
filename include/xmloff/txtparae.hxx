@@ -24,7 +24,6 @@
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/styleexp.hxx>

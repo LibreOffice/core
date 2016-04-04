@@ -22,7 +22,6 @@
 
 #include <svl/lstner.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vector>

@@ -58,7 +58,6 @@
 #include "sdresid.hxx"
 #include "sdgrffilter.hxx"
 #include "../../ui/inc/ViewShellBase.hxx"
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

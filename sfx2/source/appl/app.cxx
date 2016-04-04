@@ -36,8 +36,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
