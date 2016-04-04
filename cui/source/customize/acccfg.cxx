@@ -634,7 +634,7 @@ static long AccCfgTabs[] =
 class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
 public:
-    SfxAccCfgLBoxString_Impl(const OUString& sText);
+    explicit SfxAccCfgLBoxString_Impl(const OUString& sText);
 
     virtual ~SfxAccCfgLBoxString_Impl();
 

@@ -111,8 +111,10 @@ public:
 class LibLBoxString : public SvLBoxString
 {
 public:
-    LibLBoxString( const OUString& rTxt ) :
-        SvLBoxString( rTxt ) {}
+    explicit LibLBoxString(const OUString& rTxt)
+        : SvLBoxString(rTxt)
+    {
+    }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
