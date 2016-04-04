@@ -307,9 +307,8 @@ SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
-    bool bTemporaryShape)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+    uno::Reference< drawing::XShapes >& rShapes)
+:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -394,7 +393,7 @@ SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
+:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
 }
 
@@ -427,7 +426,7 @@ SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
+:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
 }
 

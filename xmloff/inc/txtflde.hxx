@@ -340,8 +340,7 @@ protected:
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
-        const css::util::DateTime& rTime,      /// date/time value
-        bool bIsDate);           /// export as date (rather than date/time)?
+        const css::util::DateTime& rTime);      /// date/time value
 
     /// export time or dateTime
     void ProcessTimeOrDateTime(

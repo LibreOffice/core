@@ -1302,17 +1302,13 @@ void XMLTextFieldExport::ExportFieldHelper(
             // no value -> current date
             ProcessDateTime(XML_DATE_VALUE,
                             GetDateTimeProperty(sPropertyDateTimeValue,
-                                                rPropSet),
-                            // #96457#: date fields should also save time
-                            false);
+                                                rPropSet));
         }
         // TODO: remove double-handling after SRC614
         else if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
             ProcessDateTime(XML_DATE_VALUE,
-                            GetDateTimeProperty(sPropertyDateTime,rPropSet),
-                            // #96457#: date fields should also save time
-                            false);
+                            GetDateTimeProperty(sPropertyDateTime,rPropSet));
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
@@ -2636,21 +2632,11 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
 
 /// export a date or time
 void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
-                                         const util::DateTime& rTime,
-                                         bool bIsDate)
+                                         const util::DateTime& rTime)
 {
     OUStringBuffer aBuffer;
 
     util::DateTime aDateTime(rTime);
-
-    // truncate dates
-    if(bIsDate)
-    {
-        aDateTime.NanoSeconds = 0;
-        aDateTime.Seconds = 0;
-        aDateTime.Minutes = 0;
-        aDateTime.Hours = 0;
-    }
 
     // date/time value
     ::sax::Converter::convertDateTime(aBuffer, aDateTime, nullptr);
