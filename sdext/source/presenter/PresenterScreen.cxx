@@ -459,7 +459,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             return -1;
         }
 
-        SAL_INFO("sdext.presenter", "Display number is " << nDisplayNumber);
+        SAL_WARN( "sdext.presenter", "display number is " << nDisplayNumber );
 
         if (nDisplayNumber > 0)
         {
