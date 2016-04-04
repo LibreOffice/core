@@ -1029,11 +1029,11 @@ SfxItemPool* SmTextForwarder::GetPool() const
     return pEditEngine ? pEditEngine->GetEmptyItemSet().GetPool() : nullptr;
 }
 
-void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich )
+void SmTextForwarder::RemoveAttribs( const ESelection& rSelection )
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
-        pEditEngine->RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, nWhich );
+        pEditEngine->RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, 0 );
 }
 
 void SmTextForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const

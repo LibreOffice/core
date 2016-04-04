@@ -486,7 +486,7 @@ void EditView::Redo()
     pImpEditView->pEditEngine->Redo( this );
 }
 
-sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
@@ -494,11 +494,6 @@ sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFor
     EditPaM aEndPaM = pImpEditView->pEditEngine->pImpEditEngine->Read( rInput, rBaseURL, eFormat, aOldSel, pHTTPHeaderAttrs );
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_READ );
     EditSelection aNewSel( aEndPaM, aEndPaM );
-    if ( bSelect )
-    {
-        aOldSel.Adjust( pImpEditView->pEditEngine->GetEditDoc() );
-        aNewSel.Min() = aOldSel.Min();
-    }
 
     pImpEditView->SetEditSelection( aNewSel );
     bool bGotoCursor = pImpEditView->DoAutoScroll();

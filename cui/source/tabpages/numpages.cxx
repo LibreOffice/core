@@ -2496,7 +2496,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
             nFontHeight = nYStep * 15 / 10;
         aStdFont.SetFontSize(Size( 0, nFontHeight ));
 
-        SvxNodeNum aNum(sal_uInt8(0));
+        SvxNodeNum aNum;
         sal_uInt16 nPreNum = pActNum->GetLevel(0).GetStart();
 
         if (bPosition)

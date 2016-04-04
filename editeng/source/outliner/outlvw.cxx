@@ -1160,10 +1160,10 @@ void OutlinerView::SwitchOffBulletsNumbering(
 
 void OutlinerView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
 {
-    RemoveAttribs( bRemoveParaAttribs, 0, true /*keep language attribs*/ );
+    RemoveAttribs( bRemoveParaAttribs, true /*keep language attribs*/ );
 }
 
-void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich, bool bKeepLanguages )
+void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
 {
     bool bUpdate = pOwner->GetUpdateMode();
     pOwner->SetUpdateMode( false );
@@ -1171,7 +1171,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich, bo
     if (bKeepLanguages)
         pEditView->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
     else
-        pEditView->RemoveAttribs( bRemoveParaAttribs, nWhich );
+        pEditView->RemoveAttribs( bRemoveParaAttribs );
     if ( bRemoveParaAttribs )
     {
         // Loop through all paragraphs and set indentation and level
@@ -1388,7 +1388,7 @@ sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EEText
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
 
-    sal_uLong nRet = pEditView->Read( rInput, rBaseURL, eFormat, false/*bSelect*/, pHTTPHeaderAttrs );
+    sal_uLong nRet = pEditView->Read( rInput, rBaseURL, eFormat, pHTTPHeaderAttrs );
 
     long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     sal_Int32 nChangesStart = aOldSel.nStartPara;
