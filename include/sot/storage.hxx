@@ -75,7 +75,7 @@ friend class SotStorageStream;
 
 protected:
                         virtual ~SotStorage();
-   void                 CreateStorage( bool bUCBStorage, StreamMode, bool transacted );
+   void                 CreateStorage( bool bUCBStorage, StreamMode );
 public:
                         SotStorage( const OUString &,
                                     StreamMode = STREAM_STD_READWRITE );
