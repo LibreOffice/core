@@ -69,6 +69,7 @@ bool ScStringUtil::parseSimpleNumber(
     const sal_Unicode* pLast = p + (n-1);
     sal_Int32 nPosDSep = -1, nPosGSep = -1;
     sal_uInt32 nDigitCount = 0;
+    bool haveSeenDigit = false;
     sal_Int32 nPosExponent = -1;
 
     // Skip preceding spaces.
@@ -106,6 +107,7 @@ bool ScStringUtil::parseSimpleNumber(
         {
             // this is a digit.
             aBuf.append(c);
+            haveSeenDigit = true;
             ++nDigitCount;
         }
         else if (c == dsep)
@@ -130,8 +132,8 @@ bool ScStringUtil::parseSimpleNumber(
         {
             // this is a group (thousand) separator.
 
-            if (i == 0)
-                // not allowed as the first character.
+            if (!haveSeenDigit)
+                // not allowed before digits.
                 return false;
 
             if (nPosDSep >= 0)
@@ -216,6 +218,7 @@ bool ScStringUtil::parseSimpleNumber(
     const char* pLast = p + (n-1);
     sal_Int32 nPosDSep = -1, nPosGSep = -1;
     sal_uInt32 nDigitCount = 0;
+    bool haveSeenDigit = false;
     sal_Int32 nPosExponent = -1;
 
     // Skip preceding spaces.
@@ -250,6 +253,7 @@ bool ScStringUtil::parseSimpleNumber(
         {
             // this is a digit.
             aBuf.append(c);
+            haveSeenDigit = true;
             ++nDigitCount;
         }
         else if (c == dsep)
@@ -274,8 +278,8 @@ bool ScStringUtil::parseSimpleNumber(
         {
             // this is a group (thousand) separator.
 
-            if (i == 0)
-                // not allowed as the first character.
+            if (!haveSeenDigit)
+                // not allowed before digits.
                 return false;
 
             if (nPosDSep >= 0)

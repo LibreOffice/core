@@ -1815,7 +1815,9 @@ void Test::testCSV()
         { "1.0 ",      European, false, 0.0 },
         { "1.000",     European, true,  1000.0 },
         { "1137.999",  English,  true,  1137.999 },
-        { "1.000.00",  European, false, 0.0 }
+        { "1.000.00",  European, false, 0.0 },
+        { "+,123",     English,  false, 0.0 },
+        { "-,123",     English,  false, 0.0 }
     };
     for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aTests); i++) {
         OUString aStr(aTests[i].pStr, strlen (aTests[i].pStr), RTL_TEXTENCODING_UTF8);
