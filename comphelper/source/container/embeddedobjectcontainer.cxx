@@ -899,12 +899,11 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc,
 }
 
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
-bool EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool bClose, bool bKeepToTempStorage )
+bool EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool bKeepToTempStorage )
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( rName );
     if ( xObj.is() )
-        //return RemoveEmbeddedObject( xObj, bClose );
-        return RemoveEmbeddedObject( xObj, bClose, bKeepToTempStorage );
+        return RemoveEmbeddedObject( xObj, bKeepToTempStorage );
     else
         return false;
 }
@@ -960,9 +959,8 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, Embedde
     return false;
 }
 
-//sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Bool bClose )
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
-bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, bool bClose, bool bKeepToTempStorage )
+bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, bool bKeepToTempStorage )
 {
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     OUString aName;
@@ -978,86 +976,54 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
     OSL_ENSURE( bIsNotEmbedded || xAccess->hasByName(aName), "Removing element not present in storage!" );
 #endif
 
-    // try to close it if permitted
-    if ( bClose )
+    // somebody still needs the object, so we must assign a temporary persistence
+    try
     {
-        uno::Reference < ::util::XCloseable > xClose( xObj, uno::UNO_QUERY );
-        try
+        if ( xPersist.is() && bKeepToTempStorage ) // #i119941
         {
-            xClose->close( sal_True );
-        }
-        catch (const util::CloseVetoException&)
-        {
-            bClose = false;
-        }
-    }
 
-    if ( !bClose )
-    {
-        // somebody still needs the object, so we must assign a temporary persistence
-        try
-        {
-        //    if ( xPersist.is() )
-             if ( xPersist.is() && bKeepToTempStorage ) // #i119941
+            if ( !pImpl->mpTempObjectContainer )
             {
-                /*
-                //TODO/LATER: needs storage handling!  Why not letting the object do it?!
-                if ( !pImpl->mxTempStorage.is() )
-                    pImpl->mxTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                uno::Sequence < beans::PropertyValue > aSeq;
-
-                OUString aTmpPersistName = "Object ";
-                aTmpPersistName += OUString::valueOf( (sal_Int32) pImpl->maTempObjectContainer.size() );
-
-                xPersist->storeAsEntry( pImpl->mxTempStorage, aTmpPersistName, aSeq, aSeq );
-                xPersist->saveCompleted( sal_True );
-
-                pImpl->maTempObjectContainer[ aTmpPersistName ].clear();
-                */
-
-                if ( !pImpl->mpTempObjectContainer )
+                pImpl->mpTempObjectContainer = new EmbeddedObjectContainer();
+                try
                 {
-                    pImpl->mpTempObjectContainer = new EmbeddedObjectContainer();
-                    try
-                    {
-                        // TODO/LATER: in future probably the temporary container will have two storages ( of two formats )
-                        //             the media type will be provided with object insertion
-                        OUString aOrigStorMediaType;
-                        uno::Reference< beans::XPropertySet > xStorProps( pImpl->mxStorage, uno::UNO_QUERY_THROW );
-                        static const OUString s_sMediaType("MediaType");
-                        xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
+                    // TODO/LATER: in future probably the temporary container will have two storages ( of two formats )
+                    //             the media type will be provided with object insertion
+                    OUString aOrigStorMediaType;
+                    uno::Reference< beans::XPropertySet > xStorProps( pImpl->mxStorage, uno::UNO_QUERY_THROW );
+                    static const OUString s_sMediaType("MediaType");
+                    xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
 
-                        SAL_WARN_IF( aOrigStorMediaType.isEmpty(), "comphelper.container", "No valuable media type in the storage!\n" );
+                    SAL_WARN_IF( aOrigStorMediaType.isEmpty(), "comphelper.container", "No valuable media type in the storage!\n" );
 
-                        uno::Reference< beans::XPropertySet > xTargetStorProps(
-                                                                    pImpl->mpTempObjectContainer->pImpl->mxStorage,
-                                                                    uno::UNO_QUERY_THROW );
-                        xTargetStorProps->setPropertyValue( s_sMediaType,uno::makeAny( aOrigStorMediaType ) );
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        SAL_WARN( "comphelper.container", "Can not set the new media type to a storage!\n" );
-                    }
+                    uno::Reference< beans::XPropertySet > xTargetStorProps(
+                                                                pImpl->mpTempObjectContainer->pImpl->mxStorage,
+                                                                uno::UNO_QUERY_THROW );
+                    xTargetStorProps->setPropertyValue( s_sMediaType,uno::makeAny( aOrigStorMediaType ) );
                 }
-
-                OUString aTempName, aMediaType;
-                pImpl->mpTempObjectContainer->InsertEmbeddedObject( xObj, aTempName );
-
-                uno::Reference < io::XInputStream > xStream = GetGraphicStream( xObj, &aMediaType );
-                if ( xStream.is() )
-                    pImpl->mpTempObjectContainer->InsertGraphicStream( xStream, aTempName, aMediaType );
-
-                // object is stored, so at least it can be set to loaded state
-                xObj->changeState( embed::EmbedStates::LOADED );
+                catch (const uno::Exception&)
+                {
+                    SAL_WARN( "comphelper.container", "Can not set the new media type to a storage!\n" );
+                }
             }
-            else
-                // objects without persistence need to stay in running state if they shall not be closed
-                xObj->changeState( embed::EmbedStates::RUNNING );
+
+            OUString aTempName, aMediaType;
+            pImpl->mpTempObjectContainer->InsertEmbeddedObject( xObj, aTempName );
+
+            uno::Reference < io::XInputStream > xStream = GetGraphicStream( xObj, &aMediaType );
+            if ( xStream.is() )
+                pImpl->mpTempObjectContainer->InsertGraphicStream( xStream, aTempName, aMediaType );
+
+            // object is stored, so at least it can be set to loaded state
+            xObj->changeState( embed::EmbedStates::LOADED );
         }
-        catch (const uno::Exception&)
-        {
-            return false;
-        }
+        else
+            // objects without persistence need to stay in running state if they shall not be closed
+            xObj->changeState( embed::EmbedStates::RUNNING );
+    }
+    catch (const uno::Exception&)
+    {
+        return false;
     }
 
     bool bFound = false;
