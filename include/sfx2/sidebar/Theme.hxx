@@ -70,7 +70,6 @@ public:
         Image_Collapse,
         Image_TabBarMenu,
         Image_PanelMenu,
-        Image_ToolBoxItemSeparator,
         Image_Closer,
         Image_CloseIndicator,
 
@@ -124,7 +123,6 @@ public:
         __Int_Bool,
 
         Bool_UseSystemColors,
-        Bool_UseToolBoxItemSeparator,
         Bool_IsHighContrastModeActive,
 
         __Bool_Rect,

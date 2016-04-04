@@ -25,7 +25,6 @@
 #define IMAGE_SIDEBAR_GRIP                        5
 #define IMAGE_SIDEBAR_MENU                        7
 #define IMAGE_SIDEBAR_DETAIL_DIALOG               9
-#define IMAGE_SIDEBAR_TOOLBOX_SEPARATOR          11
 #define IMAGE_SIDEBAR_DECK_3D_LARGE              20
 #define IMAGE_SIDEBAR_DECK_3D_SMALL              22
 #define IMAGE_SIDEBAR_DECK_ANIMATION_LARGE       30

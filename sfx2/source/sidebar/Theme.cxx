@@ -305,10 +305,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_ToolBoxItemSeparator],
-            Any(
-                OUString("private:graphicrepository/sfx2/res/separator.png")));
 
         // ToolBox
 
@@ -332,10 +328,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Rect_ToolBoxBorder],
             Any(awt::Rectangle(0,0,0,0)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Bool_UseToolBoxItemSeparator],
-            Any(true));
-
         */
         // Gradient style
         Color aGradientStop2 (aBaseBackgroundColor);
@@ -370,9 +362,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Rect_ToolBoxBorder],
             Any(awt::Rectangle(1,1,1,1)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Bool_UseToolBoxItemSeparator],
-            Any(false));
     }
     catch(beans::UnknownPropertyException& rException)
     {
@@ -686,7 +675,6 @@ void Theme::SetupPropertyMaps()
     AddEntry(Image_Collapse);
     AddEntry(Image_TabBarMenu);
     AddEntry(Image_PanelMenu);
-    AddEntry(Image_ToolBoxItemSeparator);
     AddEntry(Image_Closer);
     AddEntry(Image_CloseIndicator);
 
@@ -732,7 +720,6 @@ void Theme::SetupPropertyMaps()
     AddEntry(Int_ButtonCornerRadius);
 
     AddEntry(Bool_UseSystemColors);
-    AddEntry(Bool_UseToolBoxItemSeparator);
     AddEntry(Bool_IsHighContrastModeActive);
 
     AddEntry(Rect_ToolBoxPadding);
@@ -752,7 +739,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Image_Collapse:
         case Image_TabBarMenu:
         case Image_PanelMenu:
-        case Image_ToolBoxItemSeparator:
         case Image_Closer:
         case Image_CloseIndicator:
             return PT_Image;
@@ -802,7 +788,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
             return PT_Integer;
 
         case Bool_UseSystemColors:
-        case Bool_UseToolBoxItemSeparator:
         case Bool_IsHighContrastModeActive:
             return PT_Boolean;
 

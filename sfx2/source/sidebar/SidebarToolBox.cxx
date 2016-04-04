@@ -54,7 +54,6 @@ namespace sfx2 { namespace sidebar {
 
 SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     : ToolBox(pParentWindow, 0),
-      maItemSeparator(Theme::GetImage(Theme::Image_ToolBoxItemSeparator)),
       maControllers(),
       mbAreHandlersRegistered(false)
 {
@@ -116,28 +115,6 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
 
     CreateController(GetItemId(aCommand), rFrame, std::max(rRequestedSize.Width(), 0L));
     RegisterHandlers();
-}
-
-void SidebarToolBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    ToolBox::Paint(rRenderContext, rRect);
-
-    if (Theme::GetBoolean(Theme::Bool_UseToolBoxItemSeparator))
-    {
-        const sal_Int32 nSeparatorY((GetSizePixel().Height() - maItemSeparator.GetSizePixel().Height()) / 2);
-        const sal_uInt16 nItemCount(GetItemCount());
-        int nLastRight(-1);
-        for (sal_uInt16 nIndex = 0; nIndex < nItemCount; ++nIndex)
-        {
-            const Rectangle aItemBoundingBox (GetItemPosRect(nIndex));
-            if (nLastRight >= 0)
-            {
-                const int nSeparatorX((nLastRight + aItemBoundingBox.Left() - 1) / 2);
-                rRenderContext.DrawImage(Point(nSeparatorX, nSeparatorY), maItemSeparator);
-            }
-            nLastRight = aItemBoundingBox.Right();
-        }
-    }
 }
 
 bool SidebarToolBox::Notify (NotifyEvent& rEvent)

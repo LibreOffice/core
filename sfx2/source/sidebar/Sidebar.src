@@ -45,11 +45,6 @@ Resource RID_SIDEBAR_RESOURCE
         ImageBitmap = Bitmap { File = "symphony/morebutton.png" ;};
     };
 
-    Image IMAGE_SIDEBAR_TOOLBOX_SEPARATOR
-    {
-        ImageBitmap = Bitmap { File = "separator.png" ;};
-    };
-
     Image IMAGE_SIDEBAR_DECK_3D_LARGE
     {
         ImageBitmap = Bitmap { File = "symphony/sidebar-3d-large.png" ;};

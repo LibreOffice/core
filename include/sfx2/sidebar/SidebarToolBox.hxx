@@ -50,8 +50,6 @@ public:
             const Size& rRequestedSize = Size(),
             sal_uInt16 nPos = TOOLBOX_APPEND) override;
 
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
-
     virtual bool Notify (NotifyEvent& rEvent) override;
 
     css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const sal_uInt16 nItemId) const;
@@ -64,8 +62,6 @@ public:
     css::uno::Reference<css::frame::XToolbarController> GetFirstController();
 
 private:
-    Image maItemSeparator;
-
     class ItemDescriptor
     {
     public:
