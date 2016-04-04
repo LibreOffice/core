@@ -475,7 +475,7 @@ void Application::Execute()
     pSVData->maAppData.mbInAppExecute = false;
 }
 
-inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased)
+inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased, bool bEnableDisabledScheduler = false )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -518,7 +518,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
 
     // Process all Tasks
-    Scheduler::ProcessTaskScheduling(eResult == SalYieldResult::EVENT);
+    Scheduler::ProcessTaskScheduling(eResult == SalYieldResult::EVENT, bEnableDisabledScheduler);
 
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
@@ -537,8 +537,9 @@ void Application::Reschedule( bool i_bAllEvents )
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1000;
-    while(Scheduler::ProcessTaskScheduling(false) ||
-          ImplYield(false, false, 0))
+
+    while(Scheduler::ProcessTaskScheduling(false, true) ||
+          ImplYield(false, false, 0, true))
     {
         if (nSanity-- < 0)
         {

@@ -89,7 +89,7 @@ public:
     /// Calculate minimum timeout - and return its value.
     static sal_uInt64 CalculateMinimumTimeout( bool &bHasActiveIdles );
     /// Process one pending task ahead of time with highest priority.
-    static bool       ProcessTaskScheduling( bool bTimerOnly );
+    static bool       ProcessTaskScheduling( bool bTimerOnly, bool bEnableDisabledScheduler = false );
     /// Process all events until we are idle
     static void       ProcessEventsToIdle();
 };
