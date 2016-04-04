@@ -376,7 +376,17 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
             GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
         }
         else
-            SfxDispatcher::ExecutePopup(this, &rCEvt.GetMousePosPixel());
+        {
+            Point aPos;
+            if (rCEvt.IsMouseEvent())
+                aPos = rCEvt.GetMousePosPixel();
+            else
+            {
+                const Size aSize = GetSizePixel();
+                aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+            }
+            SfxDispatcher::ExecutePopup(this, &aPos);
+        }
     }
     else
     if (rCEvt.GetCommand() == CommandEventId::Wheel)
