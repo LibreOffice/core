@@ -533,8 +533,7 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
                 }
                 DbusMessageHolder repl(
                     dbus_connection_send_with_reply_and_block(
-                        con.connection, msg.message, DBUS_TIMEOUT_INFINITE,
-                        &e));
+                        con.connection, msg.message, 0x7FFFFFFF, &e));
                 assert(
                     (repl.message == nullptr) == bool(dbus_error_is_set(&e)));
                 if (repl.message == nullptr) {
