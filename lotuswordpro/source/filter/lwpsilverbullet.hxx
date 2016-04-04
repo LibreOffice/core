@@ -138,7 +138,7 @@ private:
     sal_uInt32      m_nUseCount;
     LwpAtomHolder*  m_pAtomHolder;
 
-    LwpPara* m_pBulletPara;
+    rtl::Reference<LwpPara> m_xBulletPara;
     OUString m_strStyleName;
     sal_uInt16 m_pHideLevels[10];
 
