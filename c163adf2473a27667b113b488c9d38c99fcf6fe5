@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_a8c8c575",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "Given that many strings may be concatenated, specifically if a svDoubleRef is involved, rather use an OUStringBuffer instead of an OUString and only at the end obtain the OUString to push.\n\nAlso, to be able to actually append the arguments to the buffer instead of inserting them, a trick may be used: reverse the order parameters on the stack before popping them. So actually reorder parameters from pStack[sp-nParamCount] to pStack[sp-1]",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_08b911ea",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "Initialization of nRefInList must be outside of the while(nParamCount--\u003e0) loop to make this work correctly. See for example implementation of ScInterpreter::ScMin()",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_48cb0973",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "Instead of constructing an ScAddress each iteration I\u0027d rather contruct it outside of both loops and then use ScAddress::SetRow() and ScAddress::SetCol() inside the loops.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_88c5015d",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "Missing are svMatrix and svExternalDoubleRef cases.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_68cecd84",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "Manually checking for nGlobalError and pushing an error in that case is unnecessary, all push operations already check for nGlobalError and push an error if it is set. See for example implementation of ScInterpreter::PushString() in interpr4.cxx where if(!IfErrorPushError()) is called first.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_a876053c",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1546,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "For ranges Excel concatenates the elements column-wise if the reference is a full column, so this needs a different handling for that special case, see Example 1 of https://support.office.com/en-us/article/CONCAT-function-9b1a9a3f-94ff-41af-9736-694cbd6b4ca2?ui\u003den-US\u0026rs\u003den-US\u0026ad\u003dUS",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_08b0f1f3",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1586,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "svMatrix and svExternalDoubleRef cases are missing.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_08875110",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1633,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "Really? Excel handles ranges as delimiter?\nThen this would also need svMatrix and svExternalDoubleRef handling, and likely a matrix would be needed instead of a vector.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_28ab358b",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T11:30:49Z",
+      "side": 1,
+      "message": "Use an OUStringBuffer instead of OUString to gain performance.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
