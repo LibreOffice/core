@@ -631,7 +631,6 @@ void SfxTabDialog::AddTabPage
     const OUString& rRiderText,
     CreateTabPage pCreateFunc,
     GetTabPageRanges pRangesFunc,
-    bool bItemsOnDemand,
     sal_uInt16 nPos
 )
 {
@@ -639,7 +638,7 @@ void SfxTabDialog::AddTabPage
                 "Double Page-Ids in the Tabpage" );
     m_pTabCtrl->InsertPage( nId, rRiderText, nPos );
     pImpl->aData.push_back(
-        new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
+        new Data_Impl( nId, pCreateFunc, pRangesFunc, false/*bItemsOnDemand*/ ) );
 }
 
 void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )

@@ -107,7 +107,7 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
     }
     else
     {
-        pProgress = new SfxProgress( pObjSh, rText, nRange, false/*bAllDocs*/, bWait );
+        pProgress = new SfxProgress( pObjSh, rText, nRange, bWait );
         pGlobalProgress = pProgress;
         nGlobalRange = nRange;
         nGlobalPercent = 0;
