@@ -65,21 +65,13 @@ public:
             When the actual preview can not be created for some reason, then
             this text is painted in an empty rectangle of the requested size
             instead.
-        @param bObeyHighContrastMode
-            When <FALSE/> then the high contrast mode of the application is
-            ignored and the preview is rendered in normal mode.  When
-            <TRUE/> and high contrast mode is active then the preview is
-            rendered in high contrast mode.
-        @param bDisplayPresentationObjects
-            When <FALSE/> then the PresObj place holders are not displayed
-            in the returned preview.
+         The high contrast mode of the application is
+         ignored and the preview is rendered in normal mode.
     */
     Image RenderPage (
         const SdPage* pPage,
         const sal_Int32 nWidth,
-        const OUString& sSubstitutionText,
-        const bool bObeyHighContrastMode = true,
-        const bool bDisplayPresentationObjects = true);
+        const OUString& sSubstitutionText);
 
     /** Render a page with the given pixel size.
         @param pPage

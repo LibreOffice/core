@@ -820,11 +820,11 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
         {
             SdrObject* pMasterTitle = pMasterPage->GetPresObj( PRESOBJ_TITLE );
             if( pMasterTitle == nullptr )
-                pMasterPage->CreateDefaultPresObj(PRESOBJ_TITLE, true);
+                pMasterPage->CreateDefaultPresObj(PRESOBJ_TITLE);
 
             SdrObject* pMasterOutline = pMasterPage->GetPresObj( mePageKind==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
             if( pMasterOutline == nullptr )
-                pMasterPage->CreateDefaultPresObj( mePageKind == PK_STANDARD ? PRESOBJ_OUTLINE : PRESOBJ_NOTES, true );
+                pMasterPage->CreateDefaultPresObj( mePageKind == PK_STANDARD ? PRESOBJ_OUTLINE : PRESOBJ_NOTES );
         }
 
         // create header&footer objects
@@ -835,20 +835,20 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
             {
                 SdrObject* pHeader = pMasterPage->GetPresObj( PRESOBJ_HEADER );
                 if( pHeader == nullptr )
-                    pMasterPage->CreateDefaultPresObj( PRESOBJ_HEADER, true );
+                    pMasterPage->CreateDefaultPresObj( PRESOBJ_HEADER );
             }
 
             SdrObject* pDate   = pMasterPage->GetPresObj( PRESOBJ_DATETIME );
             if( pDate == nullptr )
-                pMasterPage->CreateDefaultPresObj( PRESOBJ_DATETIME, true );
+                pMasterPage->CreateDefaultPresObj( PRESOBJ_DATETIME );
 
             SdrObject* pFooter = pMasterPage->GetPresObj( PRESOBJ_FOOTER );
             if( pFooter == nullptr )
-                pMasterPage->CreateDefaultPresObj( PRESOBJ_FOOTER, true );
+                pMasterPage->CreateDefaultPresObj( PRESOBJ_FOOTER );
 
             SdrObject* pNumber = pMasterPage->GetPresObj( PRESOBJ_SLIDENUMBER );
             if( pNumber == nullptr )
-                pMasterPage->CreateDefaultPresObj( PRESOBJ_SLIDENUMBER, true );
+                pMasterPage->CreateDefaultPresObj( PRESOBJ_SLIDENUMBER );
         }
     }
 }
@@ -932,23 +932,23 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
 
 }
 
-SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
+SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
 {
 
     if( eObjKind == PRESOBJ_TITLE )
     {
         Rectangle aTitleRect( GetTitleRect() );
-        return CreatePresObj(PRESOBJ_TITLE, false, aTitleRect, bInsert);
+        return CreatePresObj(PRESOBJ_TITLE, false, aTitleRect, true/*bInsert*/);
     }
     else if( eObjKind == PRESOBJ_OUTLINE )
     {
         Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_OUTLINE, false, aLayoutRect, bInsert);
+        return CreatePresObj( PRESOBJ_OUTLINE, false, aLayoutRect, true/*bInsert*/);
     }
     else if( eObjKind == PRESOBJ_NOTES )
     {
         Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_NOTES, false, aLayoutRect, bInsert);
+        return CreatePresObj( PRESOBJ_NOTES, false, aLayoutRect, true/*bInsert*/);
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
     {
@@ -981,7 +981,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             else
             {
                 Rectangle aRect( aPos, aSize );
-                return CreatePresObj( eObjKind, false, aRect, bInsert );
+                return CreatePresObj( eObjKind, false, aRect, true/*bInsert*/ );
             }
         }
         else
@@ -1008,7 +1008,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
                 aPos.Y() = aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
 
             Rectangle aRect( aPos, aSize );
-            return CreatePresObj( eObjKind, false, aRect, bInsert );
+            return CreatePresObj( eObjKind, false, aRect, true/*bInsert*/ );
         }
     }
     else

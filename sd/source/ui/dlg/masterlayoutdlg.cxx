@@ -138,7 +138,7 @@ void MasterLayoutDialog::applyChanges()
 
 void MasterLayoutDialog::create(PresObjKind eKind)
 {
-    mpCurrentPage->CreateDefaultPresObj(eKind, true);
+    mpCurrentPage->CreateDefaultPresObj(eKind);
 }
 
 void MasterLayoutDialog::remove( PresObjKind eKind )
