@@ -2938,6 +2938,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf99140, "tdf99140.docx")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTableProperties, "HoriOrient"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf99074, "tdf99074.docx")
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xSettings = xFactory->createInstance("com.sun.star.document.Settings");
+    // This was false, Web Layout was ignored on import.
+    CPPUNIT_ASSERT(getProperty<bool>(xSettings, "InBrowseMode"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
