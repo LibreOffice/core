@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_68e7ed12",
+        "filename": "include/i18nlangtag/languagetag.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T10:14:24Z",
+      "side": 0,
+      "message": "Then please also adapt this description",
+      "revId": "69c85d4d82f096abc33367b4f849e5e3ca97e4f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_48e4a90c",
+        "filename": "include/i18nlangtag/languagetag.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-04T10:14:24Z",
+      "side": 0,
+      "message": "... and this description.",
+      "revId": "69c85d4d82f096abc33367b4f849e5e3ca97e4f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
