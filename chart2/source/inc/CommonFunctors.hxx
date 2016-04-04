@@ -24,7 +24,6 @@
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace chart

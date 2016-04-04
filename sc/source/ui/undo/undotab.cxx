@@ -54,7 +54,6 @@
 extern bool bDrawIsInUndo; // somewhere as member!
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Sequence;
 using ::std::unique_ptr;
 using ::std::vector;
 using std::shared_ptr;

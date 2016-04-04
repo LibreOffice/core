@@ -20,7 +20,6 @@
 #define INCLUDED_XMLSCRIPT_XMLMOD_IMEXP_HXX
 
 #include <com/sun/star/xml/sax/XWriter.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <xmlscript/xmlns.h>
 #include <xmlscript/xmlscriptdllapi.h>
 

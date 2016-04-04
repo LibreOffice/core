@@ -27,7 +27,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <vector>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/stl_types.hxx>

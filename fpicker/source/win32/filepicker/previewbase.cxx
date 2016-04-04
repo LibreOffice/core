@@ -20,6 +20,7 @@
 #include "previewbase.hxx"
 
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

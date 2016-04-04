@@ -59,7 +59,6 @@ namespace dbtools
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::UNO_QUERY;

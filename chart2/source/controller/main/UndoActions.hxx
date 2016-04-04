@@ -21,7 +21,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>

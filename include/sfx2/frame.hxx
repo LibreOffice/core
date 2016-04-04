@@ -24,7 +24,6 @@
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace com

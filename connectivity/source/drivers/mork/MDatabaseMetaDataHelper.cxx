@@ -13,7 +13,6 @@
 // do we need it?
 static ::osl::Mutex m_aMetaMutex;
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

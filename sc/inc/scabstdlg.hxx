@@ -23,7 +23,6 @@
 #include <tools/solar.h>
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/syswin.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/field.hxx>
 #include "sc.hrc"
 #include "global.hxx"

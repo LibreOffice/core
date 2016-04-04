@@ -21,7 +21,6 @@
 #endif
 
 #include "embeddoc.hxx"
-#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

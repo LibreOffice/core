@@ -22,7 +22,6 @@
 
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 
-#include <com/sun/star/uno/Sequence.h>
 #include "DTransHelper.hxx"
 
 #if defined _MSC_VER

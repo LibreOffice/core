@@ -91,7 +91,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
 
  /**
  * @descr   decompressed small file

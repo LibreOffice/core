@@ -27,10 +27,8 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>

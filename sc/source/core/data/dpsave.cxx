@@ -55,8 +55,6 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
 using ::std::unique_ptr;
 
 #define SC_DPSAVEMODE_DONTKNOW 2

@@ -46,10 +46,7 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XContentIdentifier;

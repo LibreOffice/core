@@ -48,9 +48,7 @@ namespace {
     using css::uno::Exception;
     using css::uno::RuntimeException;
     using css::uno::Any;
-    using css::uno::makeAny;
     using css::uno::Sequence;
-    using css::uno::Type;
     using css::lang::XServiceInfo;
     using css::ui::dialogs::XWizard;
     using css::lang::XInitialization;

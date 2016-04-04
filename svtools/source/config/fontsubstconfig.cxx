@@ -19,7 +19,6 @@
 
 #include <svtools/fontsubstconfig.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>

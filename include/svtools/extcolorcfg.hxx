@@ -22,7 +22,6 @@
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include <memory>

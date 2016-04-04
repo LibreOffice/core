@@ -26,8 +26,6 @@
 
 #include <salhelper/thread.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

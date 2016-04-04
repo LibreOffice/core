@@ -33,7 +33,6 @@
 #endif
 
 using ::std::vector;
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::xml::Attribute;
 using ::com::sun::star::io::XOutputStream;

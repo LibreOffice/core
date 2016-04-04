@@ -19,6 +19,7 @@
 
 #include <limits.h>
 
+#include <rtl/alloc.h>
 #include <vcl/bitmapaccess.hxx>
 
 #include "octree.hxx"

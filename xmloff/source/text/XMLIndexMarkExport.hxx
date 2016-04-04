@@ -22,7 +22,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star {

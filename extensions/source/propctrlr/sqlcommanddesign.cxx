@@ -70,7 +70,6 @@ namespace pcr
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XFramesSupplier;
     using ::com::sun::star::frame::XFrames;
@@ -81,7 +80,6 @@ namespace pcr
     using ::com::sun::star::frame::XDispatch;
     using ::com::sun::star::frame::Desktop;
     using ::com::sun::star::frame::XDesktop2;
-    using ::com::sun::star::uno::Any;
 
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
     namespace CommandType = ::com::sun::star::sdb::CommandType;

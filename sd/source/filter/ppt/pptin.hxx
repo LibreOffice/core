@@ -24,7 +24,6 @@
 #include <svx/msdffdef.hxx>
 #include <diadef.h>
 #include <svx/svdtypes.hxx>
-#include <com/sun/star/uno/Any.h>
 #include <memory>
 
 class SdDrawDocument;

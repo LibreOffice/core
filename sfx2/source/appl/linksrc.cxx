@@ -21,7 +21,6 @@
 #include <sfx2/linksrc.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <vcl/timer.hxx>
 #include <vector>

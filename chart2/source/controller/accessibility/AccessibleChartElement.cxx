@@ -43,7 +43,6 @@ using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::osl::ResettableMutexGuard;
 using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Any;
 
 namespace chart
 {

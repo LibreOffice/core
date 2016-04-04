@@ -44,7 +44,6 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::graphic::XGraphic;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
