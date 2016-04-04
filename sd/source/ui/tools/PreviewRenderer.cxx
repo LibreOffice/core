@@ -92,9 +92,7 @@ PreviewRenderer::~PreviewRenderer()
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     const sal_Int32 nWidth,
-    const OUString& rSubstitutionText,
-    const bool bObeyHighContrastMode,
-    const bool bDisplayPresentationObjects)
+    const OUString& rSubstitutionText)
 {
     if (pPage != nullptr)
     {
@@ -108,8 +106,7 @@ Image PreviewRenderer::RenderPage (
             pPage,
             Size(nWidth,nHeight),
             rSubstitutionText,
-            bObeyHighContrastMode,
-            bDisplayPresentationObjects);
+            false/*bObeyHighContrastMode*/);
     }
     else
         return Image();

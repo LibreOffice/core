@@ -81,8 +81,7 @@ public:
         const CacheKey aKey,
         const bool bResize);
     Bitmap GetMarkedPreviewBitmap (
-        const CacheKey aKey,
-        const bool bResize);
+        const CacheKey aKey);
     void SetMarkedPreviewBitmap (
         const CacheKey aKey,
         const Bitmap& rMarkedBitmap);

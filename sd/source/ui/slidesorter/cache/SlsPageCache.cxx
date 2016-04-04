@@ -62,7 +62,7 @@ Bitmap PageCache::GetPreviewBitmap (
 Bitmap PageCache::GetMarkedPreviewBitmap (
     const CacheKey aKey)
 {
-    return mpImplementation->GetMarkedPreviewBitmap(aKey, false/*bResize*/);
+    return mpImplementation->GetMarkedPreviewBitmap(aKey);
 }
 
 void PageCache::SetMarkedPreviewBitmap (
