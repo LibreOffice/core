@@ -283,10 +283,6 @@ public:
                                 SfxPoolItem( 0 ),
                                 pFrame( pViewFrame)
                             {}
-                            SfxViewFrameItem( sal_uInt16 nWhichId, SfxViewFrame *pViewFrame ):
-                                SfxPoolItem( nWhichId ),
-                                pFrame( pViewFrame)
-                            {}
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

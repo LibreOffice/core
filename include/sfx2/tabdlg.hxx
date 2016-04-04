@@ -136,7 +136,6 @@ public:
                                     const OUString &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
-                                    bool bItemsOnDemand = false,
                                     sal_uInt16 nPos = TAB_APPEND);
 
     void                AddTabPage( sal_uInt16 nId,

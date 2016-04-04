@@ -56,7 +56,7 @@ struct SfxProgress_Impl
     sal_uIntPtr             nMax;
     clock_t                 nCreate;
     clock_t                 nNextReschedule;
-    bool                    bLocked, bAllDocs;
+    bool                    bLocked;
     bool                    bWaitMode;
     bool                    bAllowRescheduling;
     bool                    bRunning;
@@ -74,8 +74,8 @@ struct SfxProgress_Impl
 
 void SfxProgress_Impl::Enable_Impl()
 {
-    SfxObjectShell* pDoc = bAllDocs ? nullptr : static_cast<SfxObjectShell*>(xObjSh);
-    SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
+    SfxObjectShell* pDoc = static_cast<SfxObjectShell*>(xObjSh);
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pDoc);
     while ( pFrame )
     {
         pFrame->Enable(true/*bEnable*/);
@@ -99,7 +99,6 @@ SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
     , nCreate(0)
     , nNextReschedule(0)
     , bLocked(false)
-    , bAllDocs(false)
     , bWaitMode(false)
     , bAllowRescheduling(false)
     , bRunning(false)
@@ -122,7 +121,6 @@ SfxProgress::SfxProgress
 
     sal_uIntPtr         nRange, /* Max value for range  */
 
-    bool                bAll,    /* Disable all documents or only the document of the ViewFram */
     bool                bWait    /* Activate the wait-Pointer initially (TRUE) */
 )
 
@@ -153,7 +151,6 @@ SfxProgress::SfxProgress
         "sfx.bastyp",
         "SfxProgress: created for '" << rText << "' at " << pImp->nCreate
             << "ds");
-    pImp->bAllDocs = bAll;
     pImp->pWorkWin = nullptr;
     pImp->pView = nullptr;
 
@@ -333,7 +330,7 @@ void SfxProgress::Resume()
 
         if ( pImp->bWaitMode )
         {
-            if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
+            if ( pImp->xObjSh.Is() )
             {
                 for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImp->xObjSh);
                         pFrame;
@@ -377,7 +374,7 @@ void SfxProgress::Suspend()
             pImp->xStatusInd->reset();
         }
 
-        if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
+        if ( pImp->xObjSh.Is() )
         {
             for ( SfxViewFrame *pFrame =
                     SfxViewFrame::GetFirst(pImp->xObjSh);

@@ -79,8 +79,8 @@ class SfxFrameViewWindow_Impl : public vcl::Window
     SfxViewFrame*   pFrame;
 
 public:
-                        SfxFrameViewWindow_Impl( SfxViewFrame* p, vcl::Window& rParent, WinBits nBits=0 ) :
-                            Window( &rParent, nBits | WB_CLIPCHILDREN ),
+                        SfxFrameViewWindow_Impl( SfxViewFrame* p, vcl::Window& rParent ) :
+                            Window( &rParent, WB_CLIPCHILDREN ),
                             pFrame( p )
                         {
                             p->GetFrame().GetWindow().SetBorderStyle( WindowBorderStyle::NOBORDER );
