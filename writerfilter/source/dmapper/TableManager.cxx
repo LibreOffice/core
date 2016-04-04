@@ -120,7 +120,7 @@ void TableManager::cellProps(TablePropertyMapPtr pProps)
 #endif
 }
 
-void TableManager::utext(const sal_uInt8* data, size_t len)
+void TableManager::utext(const sal_uInt8* data, std::size_t len)
 {
     // optimization: cell/row end characters are the last characters in a run
 
@@ -132,7 +132,7 @@ void TableManager::utext(const sal_uInt8* data, size_t len)
     }
 }
 
-void TableManager::text(const sal_uInt8* data, size_t len)
+void TableManager::text(const sal_uInt8* data, std::size_t len)
 {
     // optimization: cell/row end characters are the last characters in a run
     if (len > 0)
