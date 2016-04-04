@@ -20,9 +20,134 @@
 <oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ImpressWindowState" oor:package="org.openoffice.Office.UI">
   <node oor:name="UIElements">
     <node oor:name="States">
+      <node oor:name="private:resource/popupmenu/3dobject" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">3D Object</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/3dscene" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">3D Scene</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/3dscene2" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">3D Scene (group)</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/connector" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Connector/Freeform Line</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/curve" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Curve</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/draw" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Shape</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/drawtext" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Shape Text</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/form" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Form Control</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/formrichtext" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Text Box Formatting</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/gluepoint" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Glue Point</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/graphic" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Image</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/group" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Group</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/line" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Line/Arrow</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/measure" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Dimension Line</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/media" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Media</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/multiselect" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Multiple Selection</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/oleobject" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">OLE Object</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/outline" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Outline</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/page" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Slide</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pagepane" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Sorter/Pane</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pagepanenosel" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Sorter/Pane (no selection)</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pagepanemaster" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Master Sorter/Pane</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pagepanenoselmaster" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Master Sorter/Pane (no selection)</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/table" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Table</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/tabletext" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Table Text</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/textbox" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Text Box (drawing)</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
