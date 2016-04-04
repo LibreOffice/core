@@ -162,7 +162,7 @@ std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwNode& rNod
         const SwSortedObjs* pSortedObjs = pContentFrame->GetDrawObjs();
         if (pSortedObjs)
         {
-            for (size_t i = 0; i < pSortedObjs->size(); ++i)
+            for (std::size_t i = 0; i < pSortedObjs->size(); ++i)
             {
                 SwAnchoredObject* pAnchoredObject = (*pSortedObjs)[i];
                 SwFrameFormat* pTextBox = findTextBox(&pAnchoredObject->GetFrameFormat());
@@ -212,7 +212,7 @@ bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
 sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::set<const SwFrameFormat*>& rTextBoxes)
 {
     sal_Int32 nRet = 0;
-    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
         if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
             continue;
@@ -228,7 +228,7 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<
 
     SdrObject* pRet = nullptr;
     sal_Int32 nCount = 0; // Current logical index.
-    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
         if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
             continue;
@@ -251,7 +251,7 @@ sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject, std::set<const Sw
     if (const SdrPage* pPage = pObject->GetPage())
     {
         sal_Int32 nOrder = 0; // Current logical order.
-        for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+        for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
         {
             if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
                 continue;
@@ -590,7 +590,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
 
 void SwTextBoxHelper::saveLinks(const SwFrameFormats& rFormats, std::map<const SwFrameFormat*, const SwFrameFormat*>& rLinks)
 {
-    for (size_t i = 0; i < rFormats.size(); ++i)
+    for (std::size_t i = 0; i < rFormats.size(); ++i)
     {
         const SwFrameFormat* pFormat = rFormats[i];
         if (pFormat->Which() != RES_DRAWFRMFMT)
@@ -612,13 +612,13 @@ void SwTextBoxHelper::resetLink(SwFrameFormat* pShape, std::map<const SwFrameFor
 
 void SwTextBoxHelper::restoreLinks(std::set<_ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew, SavedLink& rSavedLinks, SavedContent& rOldContent)
 {
-    size_t i = 0;
+    std::size_t i = 0;
     for (std::set<_ZSortFly>::iterator aSetIt = rOld.begin(); aSetIt != rOld.end(); ++aSetIt, ++i)
     {
         SavedLink::iterator aTextBoxIt = rSavedLinks.find(aSetIt->GetFormat());
         if (aTextBoxIt != rSavedLinks.end())
         {
-            size_t j = 0;
+            std::size_t j = 0;
             for (std::set<_ZSortFly>::iterator aSetJt = rOld.begin(); aSetJt != rOld.end(); ++aSetJt, ++j)
             {
                 if (aSetJt->GetFormat() == aTextBoxIt->second)

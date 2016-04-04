@@ -249,8 +249,8 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
 
         // Export old signatures...
         uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
-        size_t nInfos = maCurrentSignatureInformations.size();
-        for (size_t n = 0; n < nInfos; n++)
+        std::size_t nInfos = maCurrentSignatureInformations.size();
+        for (std::size_t n = 0; n < nInfos; n++)
             XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
 
         // Create a new one...
@@ -270,7 +270,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
 
         // Export old signatures.
-        for (size_t i = 0; i < maCurrentSignatureInformations.size(); ++i)
+        for (std::size_t i = 0; i < maCurrentSignatureInformations.size(); ++i)
             maSignatureHelper.ExportOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, maCurrentSignatureInformations[i], i + 1);
 
         // Create a new signature.
@@ -303,8 +303,8 @@ void DocumentSignatureManager::remove(sal_uInt16 nPosition)
         uno::Reference<xml::sax::XWriter> xSaxWriter = maSignatureHelper.CreateDocumentHandlerWithHeader(xOutputStream);
 
         uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
-        size_t nInfos = maCurrentSignatureInformations.size();
-        for (size_t n = 0 ; n < nInfos ; ++n)
+        std::size_t nInfos = maCurrentSignatureInformations.size();
+        for (std::size_t n = 0 ; n < nInfos ; ++n)
             XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
 
         XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);
@@ -318,7 +318,7 @@ void DocumentSignatureManager::remove(sal_uInt16 nPosition)
         maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
 
         // Export old signatures.
-        for (size_t i = 0; i < maCurrentSignatureInformations.size(); ++i)
+        for (std::size_t i = 0; i < maCurrentSignatureInformations.size(); ++i)
             maSignatureHelper.ExportOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, maCurrentSignatureInformations[i], i + 1);
 
         // Flush objects.
@@ -363,8 +363,8 @@ void DocumentSignatureManager::write()
         uno::Reference<xml::sax::XWriter> xSaxWriter = maSignatureHelper.CreateDocumentHandlerWithHeader(xOutputStream);
 
         uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY_THROW);
-        size_t nInfos = maCurrentSignatureInformations.size();
-        for (size_t n = 0 ; n < nInfos ; ++n)
+        std::size_t nInfos = maCurrentSignatureInformations.size();
+        for (std::size_t n = 0 ; n < nInfos ; ++n)
             XMLSignatureHelper::ExportSignature(xDocumentHandler, maCurrentSignatureInformations[n]);
 
         XMLSignatureHelper::CloseDocumentHandler(xDocumentHandler);
@@ -373,7 +373,7 @@ void DocumentSignatureManager::write()
     else if (aStreamHelper.xSignatureStorage.is() && aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
     {
         // OOXML
-        size_t nSignatureCount = maCurrentSignatureInformations.size();
+        std::size_t nSignatureCount = maCurrentSignatureInformations.size();
         maSignatureHelper.ExportSignatureContentTypes(mxStore, nSignatureCount);
         if (nSignatureCount > 0)
             maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
@@ -386,7 +386,7 @@ void DocumentSignatureManager::write()
             mxStore->removeElement("_xmlsignatures");
         }
 
-        for (size_t i = 0; i < nSignatureCount; ++i)
+        for (std::size_t i = 0; i < nSignatureCount; ++i)
             maSignatureHelper.ExportOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, maCurrentSignatureInformations[i], i + 1);
     }
 

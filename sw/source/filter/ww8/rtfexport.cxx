@@ -253,7 +253,7 @@ void RtfExport::WriteRevTab()
     // RTF always seems to use Unknown as the default first entry
     GetRedline(OUString("Unknown"));
 
-    for (size_t i = 0; i < m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++i)
+    for (std::size_t i = 0; i < m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++i)
     {
         const SwRangeRedline* pRedl = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ i ];
 
@@ -262,7 +262,7 @@ void RtfExport::WriteRevTab()
 
     // Now write the table
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_REVTBL).WriteChar(' ');
-    for (size_t i = 0; i < m_aRedlineTable.size(); ++i)
+    for (std::size_t i = 0; i < m_aRedlineTable.size(); ++i)
     {
         const OUString* pAuthor = GetRedline(i);
         Strm().WriteChar('{');
@@ -394,7 +394,7 @@ void RtfExport::WriteMainText()
         std::vector< std::pair<OString, OString> > aProperties;
         aProperties.push_back(std::make_pair<OString, OString>("shapeType", "1"));
         aProperties.push_back(std::make_pair<OString, OString>("fillColor", OString::number(msfilter::util::BGRToRGB(oBrush->GetColor().GetColor()))));
-        for (size_t i = 0; i < aProperties.size(); ++i)
+        for (std::size_t i = 0; i < aProperties.size(); ++i)
         {
             Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
             Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
@@ -536,14 +536,14 @@ void RtfExport::WriteUserProps()
 void RtfExport::WritePageDescTable()
 {
     // Write page descriptions (page styles)
-    size_t nSize = m_pDoc->GetPageDescCnt();
+    std::size_t nSize = m_pDoc->GetPageDescCnt();
     if (!nSize)
         return;
 
     Strm().WriteCharPtr(SAL_NEWLINE_STRING);
     m_bOutPageDescs = true;
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCTBL);
-    for (size_t n = 0; n < nSize; ++n)
+    for (std::size_t n = 0; n < nSize; ++n)
     {
         const SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(n);
 
@@ -554,7 +554,7 @@ void RtfExport::WritePageDescTable()
         OutPageDescription(rPageDesc, false, false);
 
         // search for the next page description
-        size_t i = nSize;
+        std::size_t i = nSize;
         while (i)
             if (rPageDesc.GetFollow() == &m_pDoc->GetPageDesc(--i))
                 break;
@@ -670,7 +670,7 @@ void RtfExport::ExportDocument_Impl()
 
             if (pSet)
             {
-                size_t nPosInDoc;
+                std::size_t nPosInDoc;
                 pSttPgDsc = static_cast<const SwFormatPageDesc*>(&pSet->Get(RES_PAGEDESC));
                 if (!pSttPgDsc->GetPageDesc())
                     pSttPgDsc = nullptr;
@@ -1183,7 +1183,7 @@ void RtfExport::OutColorTable()
             InsColor(pItem->GetColorValue());
     }
 
-    for (size_t n = 0; n < m_aColTable.size(); ++n)
+    for (std::size_t n = 0; n < m_aColTable.size(); ++n)
     {
         const Color& rCol = m_aColTable[ n ];
         if (n || COL_AUTO != rCol.GetColor())

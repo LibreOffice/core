@@ -296,7 +296,7 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
             createShape("com.sun.star.text.TextFrame", o_xShape, o_xPropSet);
             m_bTextFrame = true;
             std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
-            for (size_t j = 0; j < aDefaults.size(); ++j)
+            for (std::size_t j = 0; j < aDefaults.size(); ++j)
                 o_xPropSet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
             break;
         }

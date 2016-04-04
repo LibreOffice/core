@@ -30,7 +30,7 @@ OUString SAL_CALL LOKClipboard::getName() throw (uno::RuntimeException, std::exc
     return OUString();
 }
 
-LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, size_t nSize)
+LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize)
     : m_aMimeType(pMimeType),
       m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
 {
