@@ -116,7 +116,7 @@ void convert_xrm::stopCollectData(char *yytext)
 
     copySource(yytext);
     if (!mbNoCollectingData) {
-        mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "readmeitem", mbMergeMode);
+        mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "readmeitem", "", mbMergeMode);
         mbNoCollectingData = true;
         if (mbMergeMode) {
             sTagEnd  = "</" + msTag.substr(1,msTag.size()-2) + ">\n";

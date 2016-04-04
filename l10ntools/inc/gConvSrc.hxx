@@ -52,6 +52,7 @@ class convert_src : public convert_gen
         string              msName;
         string              msTextName;
         string              msCmd;
+        string              msGroup;
         bool                     mbEnUs;
         bool                     mbExpectName;
         bool                     mbExpectMacro;
@@ -62,7 +63,7 @@ class convert_src : public convert_gen
         int                      miListCount;
         int                      miMacroLevel;
         void doExecute() override;
-        void trim(string& sText);
+        static void trim(string& sText);
         void buildKey(string& sKey);
         void insertLanguagePart(string& sKey, string& sTextType);
 };

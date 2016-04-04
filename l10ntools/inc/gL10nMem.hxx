@@ -57,6 +57,7 @@ class l10nMem
                           const string& sText,
                           const string& sComment,
                           const string& sResource,
+                          const string& sGroup,
                           bool          bIsFuzzy);
         void setSourceKey(int           iLineNo,
                           const string& sFilename,
@@ -64,6 +65,7 @@ class l10nMem
                           const string& sText,
                           const string& sComment,
                           const string& sResource,
+                          const string& sGroup,
                           bool          bMustExist);
 
         void saveTemplates(const string& sTargetDir,
@@ -88,7 +90,6 @@ class l10nMem
         int  miCurFileInx;
         int  miCurLangInx;
         int  miCurENUSinx;
-        bool mbNeedWrite;
         bool mbConvertMode;
         bool mbStrictMode;
         vector<l10nMem_enus_entry>      mcENUSlist;
@@ -111,7 +112,8 @@ class l10nMem
                          const string& sKey,
                          const string& sMsgId,
                          const string& sComment,
-                         const string& sResource);
+                         const string& sResource,
+                         const string& sGroup);
         void loadLangKey(int           iLineNo,
                          const string& sSourceFile,
                          const string& sKey,
@@ -130,6 +132,7 @@ class l10nMem
                     const string& sMsgId,
                     const string& sComment,
                     const string& sResource,
+                    const string& sGroup,
                     l10nMem::ENTRY_STATE eStat);
         bool findFileName(const string& sSourceFile);
 };

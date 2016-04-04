@@ -67,7 +67,7 @@ void convert_tree::doExecute()
             sFile  = msTargetPath + sFile2;
             mcOutputFiles[i].open(sFile.c_str(), ios::binary);
             if (!mcOutputFiles[i].is_open()) {
-                if (!convert_gen::createDir(msTargetPath, sFile2))
+                if (!createDir(msTargetPath, sFile2))
                     throw l10nMem::showError("Cannot create missing directories (" + sFile + ") for writing");
 
                 mcOutputFiles[i].open(sFile.c_str(), ios::binary);
@@ -105,7 +105,7 @@ void convert_tree::setString(char *yytext)
         case STATE_VAL_TITLE:
              string sText = copySourceSpecial(yytext, 1);
              sText.erase(sText.size()-1);
-             mcMemory.setSourceKey(miLineNo, msSourceFile, msId, sText, "", "", mbMergeMode);
+             mcMemory.setSourceKey(miLineNo, msSourceFile, msId, sText, "", "", "", mbMergeMode);
              break;
     }
     meStateVal = STATE_VAL_NONE;
@@ -127,7 +127,7 @@ void convert_tree::setState(char *yytext, STATE_TAG eNewStateTag, STATE_VAL eNew
 
 void convert_tree::setValue(char *yytext)
 {
-    mcMemory.setSourceKey(miLineNo, msSourceFile, msId, msCollector, "", msModule, mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, msId, msCollector, "", msModule, "", mbMergeMode);
     copySourceSpecial(yytext, 2);
 
     meStateTag = STATE_TAG_NONE;

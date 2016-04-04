@@ -67,7 +67,7 @@ void convert_xhp::doExecute()
             sFile  = msTargetPath + sFile2;
             mcOutputFiles[i].open(sFile.c_str(), ios::binary);
             if (!mcOutputFiles[i].is_open()) {
-                if (!convert_gen::createDir(msTargetPath, sFile2))
+                if (!createDir(msTargetPath, sFile2))
                     throw l10nMem::showError("Cannot create missing directories (" + sFile + ") for writing");
 
                 mcOutputFiles[i].open(sFile.c_str(), ios::binary);
@@ -251,7 +251,7 @@ void convert_xhp::closeTransTag(char *yytext)
             string newString(msCollector);
             if (newString[newString.length() - 1] == ' ')
                 newString = newString.substr(0, newString.length() - 1);
-            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, newString, "", "help", mbMergeMode);
+            mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, newString, "", "help", "", mbMergeMode);
         }
         msKey.clear();
         iType = 2;

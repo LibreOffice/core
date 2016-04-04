@@ -33,7 +33,7 @@ OString getBracketedContent(const OString& text) {
     return text.getToken(1, '[').getToken(0, ']');
 }
 
-void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
+static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 {
     if( rString.getLength() >= 3 && rString[0] == '\xEF' &&
         rString[1] == '\xBB' && rString[2] == '\xBF' )

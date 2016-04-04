@@ -29,7 +29,7 @@
 
 namespace
 {
-    OString lcl_NormalizeFilename(const OString& rFilename)
+    static OString lcl_NormalizeFilename(const OString& rFilename)
     {
         return rFilename.copy(
             std::max(
@@ -37,7 +37,7 @@ namespace
                 rFilename.lastIndexOf( '/' ))+1);
     };
 
-    bool lcl_ReadPoChecked(
+    static bool lcl_ReadPoChecked(
         PoEntry& o_rPoEntry, PoIfstream& rPoFile,
         const OString& rFileName)
     {

@@ -54,6 +54,7 @@ class convert_po : public convert_gen
                   const string& sText,
                   const string& sComment,
                   const string& sResource,
+                  const string& sGroup,
                   bool               bFuzzy);
         void endSave();
 

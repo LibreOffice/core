@@ -87,7 +87,7 @@ public:
 namespace
 {
     // Convert a normal string to msg/po output string
-    OString lcl_GenMsgString(const OString& rString)
+    static OString lcl_GenMsgString(const OString& rString)
     {
         if ( rString.isEmpty() )
             return "\"\"";
@@ -114,7 +114,7 @@ namespace
     }
 
     // Convert msg string to normal form
-    OString lcl_GenNormString(const OString& rString)
+    static OString lcl_GenNormString(const OString& rString)
     {
         return
             helper::unEscapeAll(
@@ -406,7 +406,7 @@ OString PoEntry::genKeyId(const OString& rGenerator)
 namespace
 {
     // Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
-    OString lcl_GetTime()
+    static OString lcl_GetTime()
     {
         time_t aNow = time(nullptr);
         struct tm* pNow = localtime(&aNow);
@@ -511,7 +511,7 @@ namespace
 {
 
 // Check the validity of read entry
-bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
+static bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
 {
     const OString sMsgCtxt = rEntry.getMsgCtxt();
     const sal_Int32 nFirstEndLine = sMsgCtxt.indexOf('\n');

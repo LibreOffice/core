@@ -59,6 +59,8 @@ void convert_src::setValue(char *syyText, char *sbuildValue)
         setListItem("", false);
     }
     msValue        = sbuildValue;
+    if (mbInListItem)
+        msGroup = msValue;
     mbValuePresent = true;
     mbExpectValue  = false;
 }
@@ -102,8 +104,12 @@ void convert_src::setName(char *syyText)
     trim(useText);
     if (mbExpectName) {
         mbExpectName = false;
-        if (!mbAutoPush)
-            msName = useText;
+        if (!mbAutoPush) {
+            if (msName.length())
+                msGroup = useText;
+            else
+                msName = useText;
+        }
         else {
             mbAutoPush = false;
             if (mcStack.size())
@@ -145,6 +151,7 @@ void convert_src::setList(char *syyText)
     miListCount = 0;
     mbInList    = true;
     trim(msCmd);
+    l10nMem::keyToLower(msCmd);
 }
 
 
@@ -158,7 +165,7 @@ void convert_src::setNL(char *syyText, bool bMacro)
 
     if (msTextName.size() && mbValuePresent && mbEnUs) {
         // locate key and extract it
-        buildKey(x);
+        buildKey(sKey);
 
         for (nL = -1;;) {
             nL = msValue.find("\\\"", nL+1);
@@ -175,10 +182,11 @@ void convert_src::setNL(char *syyText, bool bMacro)
 
 //FIX        sKey += "." + msCmd + "." + msTextName;
         if (msValue.size() && msValue != "-") {
-            mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, msValue, "", msCmd, mbMergeMode);
+            mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, msValue, "", msCmd, msGroup, mbMergeMode);
             if (mbMergeMode)
                 insertLanguagePart(sKey, msTextName);
         }
+        msGroup.clear();
     }
 
     if (!bMacro && mbExpectMacro) {
@@ -202,7 +210,6 @@ void convert_src::startBlock(char *syyText)
     copySource(syyText);
 
     mcStack.push_back(msName);
-    msName.clear();
 }
 
 
@@ -217,6 +224,7 @@ void convert_src::stopBlock(char *syyText)
 
     mbInList =
     mbEnUs   = false;
+    msName.clear();
 }
 
 
@@ -285,6 +293,9 @@ void convert_src::buildKey(string& sKey)
     for (nL = 0; nL < (int)mcStack.size(); ++nL)
         if (mcStack[nL].size())
             sKey += (sKey.size() ? "." : "") + mcStack[nL];
+
+    // FIX jan
+    sKey = mcStack[0];
 }
 
 

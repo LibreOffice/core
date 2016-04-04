@@ -178,7 +178,7 @@ bool convert_gen::prepareFile()
         if (mcOutputFile.is_open())
             return true;
 
-        if (convert_gen::createDir(msTargetPath, msSourceFile)) {
+        if (createDir(msTargetPath, msSourceFile)) {
             mcOutputFile.open((msTargetPath+msSourceFile).c_str(), ios::binary);
             if (mcOutputFile.is_open())
                 return true;

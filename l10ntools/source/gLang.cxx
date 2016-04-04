@@ -45,7 +45,7 @@ class handler
         vector<string> mvSourceFiles;
         l10nMem        mcMemory;
 
-        void showManual();
+        static void showManual();
         void loadL10MEM(bool onlyTemplates);
         void runConvert();
         void runExtract();
@@ -392,13 +392,13 @@ int main(int argc, char *argv[])
     try {
         cHandler.checkCommandLine(argc, argv);
     }
-    catch(const char *pErr) {
-        string myErr(pErr);
-        cHandler.showUsage(myErr);
+    catch(const char *sErr) {
+        string myErr(sErr);
+        handler::showUsage(myErr);
         exit(-1);
     }
-    catch(const string& rErr) {
-        cHandler.showUsage(rErr);
+    catch(string sErr) {
+        handler::showUsage(sErr);
         exit(-1);
     }
 
@@ -406,13 +406,13 @@ int main(int argc, char *argv[])
     try {
         cHandler.run();
     }
-    catch(const char *pErr) {
-        string myErr(pErr);
-        cHandler.showRunTimeError(myErr);
+    catch(const char *sErr) {
+        string myErr(sErr);
+        handler::showRunTimeError(myErr);
         exit(-1);
     }
-    catch(const string& rErr) {
-        cHandler.showRunTimeError(rErr);
+    catch(string sErr) {
+        handler::showRunTimeError(sErr);
         exit(-1);
     }
 }

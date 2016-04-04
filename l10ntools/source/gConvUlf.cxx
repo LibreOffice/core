@@ -62,7 +62,7 @@ void convert_ulf::setValue(char *syyText)
     nL = sText.rfind("\"");
     sText.erase(nL);
 
-    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "", mbMergeMode);
+    mcMemory.setSourceKey(miLineNo, msSourceFile, msKey, sText, "", "", "", mbMergeMode);
 
     if (mbMergeMode) {
         // prepare to read all languages

@@ -63,7 +63,7 @@ class convert_gen
 
         // utility functions for converters
         void writeSourceFile(const string& line);
-        bool createDir(const string& sDir, const string& sFile);
+        static bool createDir(const string& sDir, const string& sFile);
 private:
         ofstream mcOutputFile;
         static bool checkAccess(string& sFile);

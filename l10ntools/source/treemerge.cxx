@@ -27,7 +27,7 @@
 namespace
 {
     // Extract strings from nodes on all level recursively
-    void lcl_ExtractLevel(
+    static void lcl_ExtractLevel(
         const xmlDocPtr pSource, const xmlNodePtr pRoot,
         const xmlChar* pNodeName, PoOfstream& rPOStream )
     {
@@ -59,7 +59,7 @@ namespace
     }
 
     // Update id and content of the topic
-    xmlNodePtr lcl_UpdateTopic(
+    static xmlNodePtr lcl_UpdateTopic(
         const xmlNodePtr pCurrent, const OString& rXhpRoot )
     {
         xmlNodePtr pReturn = pCurrent;
@@ -139,7 +139,7 @@ namespace
         return pReturn;
     }
     // Localize title attribute of help_section and node tags
-    void lcl_MergeLevel(
+    static void lcl_MergeLevel(
         xmlDocPtr io_pSource, const xmlNodePtr pRoot,
         const xmlChar * pNodeName, MergeDataFile* pMergeDataFile,
         const OString& rLang, const OString& rXhpRoot )
