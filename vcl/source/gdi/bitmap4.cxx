@@ -585,7 +585,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
                 const long  nLx = FRound( cos( fAzim ) * cos( fElev ) * 255.0 );
                 const long  nLy = FRound( sin( fAzim ) * cos( fElev ) * 255.0 );
                 const long  nLz = FRound( sin( fElev ) * 255.0 );
-                const long  nZ2 = ( ( 6 * 255 ) / 4 ) * ( ( 6 * 255 ) / 4 );
+                const auto  nZ2 = ( ( 6 * 255 ) / 4 ) * ( ( 6 * 255 ) / 4 );
                 const long  nNzLz = ( ( 6 * 255 ) / 4 ) * nLz;
                 const sal_uInt8 cLz = (sal_uInt8) SAL_BOUND( nLz, 0, 255 );
 
