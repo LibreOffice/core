@@ -47,6 +47,8 @@ published service ExtendedUser
      */
     [property]short UserDataType;
 
+    [optional, property]long TextFieldType;
+
 };
 
 

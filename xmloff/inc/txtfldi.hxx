@@ -187,6 +187,9 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 
     const OUString sPropertyFixed;
     const OUString sPropertyFieldSubType;
+
+    const OUString sPropertyFieldSubType1;
+
     const OUString sPropertyContent;
 
 protected:

@@ -15480,6 +15480,7 @@ module com {
       [property] string CurrentPresentation;
       [property] boolean IsFixed;
       [property] short UserDataType;
+      [property, optional] long TextFieldType;
      };
      published service FileName {
       service ::com::sun::star::text::TextField;

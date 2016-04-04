@@ -37,6 +37,11 @@
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
+
+#include <com/sun/star/text/textfield/Type.hpp>
+#include "editeng/unonames.hxx"
+#include "../../../include/editeng/unofield.hxx"
+
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/PlaceholderType.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
@@ -88,6 +93,9 @@ const sal_Char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField
 
 const sal_Char sAPI_extended_user[]             = "ExtendedUser";
 const sal_Char sAPI_user_data_type[]            = "UserDataType";
+
+const sal_Char sAPI_text_field_type[]           = "TextFieldType";
+
 const sal_Char sAPI_jump_edit[]                 = "JumpEdit";
 const sal_Char sAPI_date_time[]                 = "DateTime";
 const sal_Char sAPI_page_number[]               = "PageNumber";
@@ -621,6 +629,7 @@ XMLSenderFieldImportContext::XMLSenderFieldImportContext(
     , nSubType(0)
     , sPropertyFixed(sAPI_is_fixed)
     , sPropertyFieldSubType(sAPI_user_data_type)
+    , sPropertyFieldSubType1(sAPI_text_field_type)
     , sPropertyContent(sAPI_content)
     , bFixed(true)
     , nElementToken(nToken)
@@ -677,6 +686,7 @@ void XMLSenderFieldImportContext::StartElement(
     case XML_TOK_TEXT_SENDER_STATE_OR_PROVINCE:
         nSubType = UserDataPart::STATE;
         break;
+
     default:
         bValid = false;
         break;
@@ -710,6 +720,10 @@ void XMLSenderFieldImportContext::PrepareField(
     Any aAny;
     aAny <<= nSubType;
     rPropSet->setPropertyValue(sPropertyFieldSubType, aAny);
+
+    using namespace textfield;
+    aAny <<= Type::EXTENDED_TIME;
+    rPropSet->setPropertyValue(sPropertyFieldSubType1, aAny);
 
     // set fixed
     aAny.setValue( &bFixed, cppu::UnoType<bool>::get() );

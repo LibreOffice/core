@@ -842,6 +842,9 @@
 #define UNO_NAME_ROW_INTEROP_GRAB_BAG "RowInteropGrabBag"
 #define UNO_NAME_TABLE_INTEROP_GRAB_BAG "TableInteropGrabBag"
 
+//New addition
+#define UNO_NAME_TEXT_FIELD_TYPE "TextFieldType"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
