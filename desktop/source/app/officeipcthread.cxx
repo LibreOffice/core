@@ -736,13 +736,13 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     }
 #endif
     rtl::Reference<IpcThread> thread;
-    Status stat;
+    Status stat = Status(); // silence bogus potentially-uninitialized warnings
     switch (kind) {
     case Kind::Pipe:
         stat = PipeIpcThread::enable(&thread);
         break;
-#if ENABLE_DBUS
     case Kind::Dbus:
+#if ENABLE_DBUS
         stat = DbusIpcThread::enable(&thread);
         break;
 #endif
