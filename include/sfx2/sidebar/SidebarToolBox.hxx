@@ -62,15 +62,7 @@ public:
     css::uno::Reference<css::frame::XToolbarController> GetFirstController();
 
 private:
-    class ItemDescriptor
-    {
-    public:
-        css::uno::Reference<css::frame::XToolbarController> mxController;
-        css::util::URL maURL;
-        rtl::OUString msCurrentCommand;
-    };
-
-    typedef std::map<sal_uInt16, ItemDescriptor> ControllerContainer;
+    typedef std::map<sal_uInt16, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
 
