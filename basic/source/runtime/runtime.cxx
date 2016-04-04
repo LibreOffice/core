@@ -111,10 +111,13 @@ bool StarBASIC::isVBAEnabled()
     return false;
 }
 
-struct SbiArgvStack {                   // Argv stack:
-    SbiArgvStack*  pNext;               // Stack Chain
+struct SbiArgv {                   // Argv stack:
     SbxArrayRef    refArgv;             // Argv
     short nArgc;                        // Argc
+
+    SbiArgv(SbxArrayRef refArgv_, short nArgc_) :
+        refArgv(refArgv_),
+        nArgc(nArgc_) {}
 };
 
 #define MAXRECURSION 500 //to prevent dead-recursions
@@ -577,7 +580,6 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;
     pIosys    = pInst->GetIoSystem();
-    pArgvStk  = nullptr;
     pForStk   = nullptr;
     pError    = nullptr;
     pErrCode  =
@@ -1080,31 +1082,25 @@ void SbiRuntime::PopGosub()
 
 void SbiRuntime::PushArgv()
 {
-    SbiArgvStack* p = new SbiArgvStack;
-    p->refArgv = refArgv;
-    p->nArgc = nArgc;
+    pArgvStk.emplace_back(refArgv, nArgc);
     nArgc = 1;
     refArgv.Clear();
-    p->pNext = pArgvStk;
-    pArgvStk = p;
 }
 
 void SbiRuntime::PopArgv()
 {
-    if( pArgvStk )
+    if( !pArgvStk.empty() )
     {
-        SbiArgvStack* p = pArgvStk;
-        pArgvStk = p->pNext;
-        refArgv = p->refArgv;
-        nArgc = p->nArgc;
-        delete p;
+        refArgv = pArgvStk.back().refArgv;
+        nArgc = pArgvStk.back().nArgc;
+        pArgvStk.pop_back();
     }
 }
 
 
 void SbiRuntime::ClearArgvStack()
 {
-    while( pArgvStk )
+    while( !pArgvStk.empty() )
     {
         PopArgv();
     }
