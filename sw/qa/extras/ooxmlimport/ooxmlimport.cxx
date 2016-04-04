@@ -3208,6 +3208,14 @@ DECLARE_SW_IMPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx",
         OUString("Odd page footer for sections 2 and 3 only"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf99074, "tdf99074.docx")
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xSettings = xFactory->createInstance("com.sun.star.document.Settings");
+    // This was false, Web Layout was ignored on import.
+    CPPUNIT_ASSERT(getProperty<bool>(xSettings, "InBrowseMode"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
