@@ -21,7 +21,6 @@
 
 #include "rtl/ref.hxx"
 #include "vendorbase.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
 
 namespace jfw_plugin
 {

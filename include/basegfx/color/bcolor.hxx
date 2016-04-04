@@ -21,7 +21,6 @@
 #define INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
 
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 

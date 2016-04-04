@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_HELPER_HXX
 #define INCLUDED_SFX2_SOURCE_INC_HELPER_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/errcode.hxx>

@@ -26,7 +26,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>

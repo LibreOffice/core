@@ -66,7 +66,6 @@ namespace dbmm
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
     using ::com::sun::star::sdb::XOfficeDatabaseDocument;
     using ::com::sun::star::frame::XModel2;

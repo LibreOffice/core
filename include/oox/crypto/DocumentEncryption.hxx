@@ -17,7 +17,6 @@
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <oox/crypto/CryptTools.hxx>
 #include <oox/crypto/Standard2007Engine.hxx>

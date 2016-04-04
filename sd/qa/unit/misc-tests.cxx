@@ -13,7 +13,6 @@
 #include <sddll.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>

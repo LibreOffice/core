@@ -22,9 +22,8 @@
 
 #include "dllapi.h"
 
-#include <com/sun/star/uno/Any.hxx>
-
 #include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
 
 
 namespace rptui

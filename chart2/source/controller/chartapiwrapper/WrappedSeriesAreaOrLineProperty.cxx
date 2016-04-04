@@ -21,8 +21,6 @@
 #include "DataSeriesPointWrapper.hxx"
 #include "macros.hxx"
 
-using ::com::sun::star::uno::Any;
-
 namespace chart
 {
 namespace wrapper

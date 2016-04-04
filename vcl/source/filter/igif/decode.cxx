@@ -19,6 +19,8 @@
 
 #include "decode.hxx"
 
+#include <rtl/alloc.h>
+
 struct GIFLZWTableEntry
 {
     GIFLZWTableEntry*   pPrev;

@@ -25,8 +25,6 @@
 #include <tools/color.hxx>
 #include "tabbgcolor.hxx"
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <memory>
 
 #include <memory>

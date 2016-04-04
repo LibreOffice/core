@@ -34,7 +34,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <caption.hxx>
-#include <com/sun/star/uno/Any.hxx>
 
 #include <unomid.h>
 

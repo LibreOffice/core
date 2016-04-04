@@ -106,8 +106,6 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::formula;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {

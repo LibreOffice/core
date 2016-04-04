@@ -46,8 +46,6 @@ namespace dbtools
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::beans::XPropertySet;

@@ -24,7 +24,6 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include "itemholder1.hxx"

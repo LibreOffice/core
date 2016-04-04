@@ -21,7 +21,6 @@
 #define INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace lang {

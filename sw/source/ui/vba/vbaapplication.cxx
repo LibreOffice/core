@@ -38,9 +38,6 @@ using namespace ::ooo;
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ): SwVbaApplication_BASE( xContext )
 {
 }

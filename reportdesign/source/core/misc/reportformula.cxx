@@ -24,10 +24,6 @@
 
 namespace rptui
 {
-
-
-    using ::com::sun::star::uno::Any;
-
     namespace
     {
 

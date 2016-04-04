@@ -24,8 +24,6 @@
 
 
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Type;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::TypeDescription;
 

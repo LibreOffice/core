@@ -47,7 +47,6 @@ namespace pcr
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::uno::makeAny;
 
 
     //= ObjectInspectorModel

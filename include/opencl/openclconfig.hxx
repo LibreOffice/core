@@ -17,8 +17,6 @@
 #include <opencl/platforminfo.hxx>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 struct OPENCL_DLLPUBLIC OpenCLConfig
 {
     struct ImplMatcher

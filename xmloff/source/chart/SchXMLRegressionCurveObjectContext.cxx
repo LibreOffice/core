@@ -36,8 +36,6 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-using com::sun::star::uno::Reference;
-
 SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
                                         SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,

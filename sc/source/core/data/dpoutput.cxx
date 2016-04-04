@@ -65,7 +65,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::sheet::DataPilotTableResultData;
 using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::uno::Any;
 
 #define SC_DP_FRAME_INNER_BOLD      20
 #define SC_DP_FRAME_OUTER_BOLD      40

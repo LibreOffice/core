@@ -131,7 +131,6 @@ using ::com::sun::star::frame::XController2;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::io::IOException;
 using ::com::sun::star::lang::WrappedTargetException;
-using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::document::XDocumentRecovery;
 using ::com::sun::star::document::XUndoManager;

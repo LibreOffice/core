@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_TEXTACTION_HXX
 #define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_TEXTACTION_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/renderer.hxx>

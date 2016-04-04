@@ -25,7 +25,6 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
