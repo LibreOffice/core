@@ -741,8 +741,8 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     case Kind::Pipe:
         stat = PipeIpcThread::enable(&thread);
         break;
-    case Kind::Dbus:
 #if ENABLE_DBUS
+    case Kind::Dbus:
         stat = DbusIpcThread::enable(&thread);
         break;
 #endif
