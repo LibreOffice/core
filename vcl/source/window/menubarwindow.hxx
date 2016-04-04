@@ -41,7 +41,7 @@ class DecoToolBox : public ToolBox
 
     using Window::ImplInit;
 public:
-             DecoToolBox( vcl::Window* pParent );
+    explicit DecoToolBox(vcl::Window* pParent);
     virtual ~DecoToolBox() {}
 
     void    ImplInit();

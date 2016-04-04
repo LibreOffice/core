@@ -377,7 +377,7 @@ CustomAnimationListEntry::~CustomAnimationListEntry()
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationTriggerEntryItem( const OUString& aDescription );
+    explicit        CustomAnimationTriggerEntryItem( const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     SvLBoxItem*     Create() const override;

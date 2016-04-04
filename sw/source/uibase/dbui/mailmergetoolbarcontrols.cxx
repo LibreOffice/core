@@ -44,7 +44,7 @@ class MMCurrentEntryController : public svt::ToolboxController, public lang::XSe
     DECL_LINK_TYPED(CurrentEditUpdatedHdl, Edit&, void);
 
 public:
-    MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
+    explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
         : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:MailMergeCurrentEntry"))
         , m_pCurrentEdit(nullptr)
     {
@@ -112,7 +112,7 @@ class MMExcludeEntryController : public svt::ToolboxController, public lang::XSe
     DECL_STATIC_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, void);
 
 public:
-    MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
+    explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
         : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:MailMergeExcludeEntry"))
         , m_pExcludeCheckbox(nullptr)
     {

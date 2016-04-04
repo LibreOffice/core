@@ -73,9 +73,9 @@ class SfxBooleanFlagGuard
     bool& m_rFlag;
     bool  m_bLifeValue;
 public:
-    SfxBooleanFlagGuard( bool& bFlag )
-    : m_rFlag( bFlag )
-    , m_bLifeValue( true )
+    explicit SfxBooleanFlagGuard(bool& bFlag)
+        : m_rFlag( bFlag )
+        , m_bLifeValue( true )
     {
         m_rFlag = m_bLifeValue;
     }

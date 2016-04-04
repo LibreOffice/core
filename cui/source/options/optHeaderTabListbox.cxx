@@ -31,8 +31,10 @@ namespace svx
 class OptLBoxString_Impl : public SvLBoxString
 {
 public:
-    OptLBoxString_Impl( const OUString& rTxt ) :
-        SvLBoxString( rTxt ) {}
+    explicit OptLBoxString_Impl(const OUString& rTxt)
+        : SvLBoxString(rTxt)
+    {
+    }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;

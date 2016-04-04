@@ -868,7 +868,7 @@ namespace
     {
         bool& m_rInsertingRow;
     public:
-        ProtectFlag(bool& rInsertingRow)
+        explicit ProtectFlag(bool& rInsertingRow)
             : m_rInsertingRow(rInsertingRow)
         {
             if (m_rInsertingRow)

@@ -984,8 +984,10 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 class FmFilterItemsString : public SvLBoxString
 {
 public:
-    FmFilterItemsString( const OUString& rStr )
-        :SvLBoxString(rStr) {}
+    explicit FmFilterItemsString(const OUString& rStr)
+        : SvLBoxString(rStr)
+    {
+    }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;

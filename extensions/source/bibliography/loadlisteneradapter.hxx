@@ -132,7 +132,7 @@ namespace bib
         virtual void    startComponentListening() override;
 
     public:
-        OLoadListenerAdapter(
+        explicit OLoadListenerAdapter(
             const css::uno::Reference< css::form::XLoadable >& _rxLoadable
         );
 

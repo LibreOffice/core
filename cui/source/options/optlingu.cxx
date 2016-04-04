@@ -260,7 +260,7 @@ class BrwStringDic_Impl : public SvLBoxString
 {
 public:
 
-    BrwStringDic_Impl( const OUString& rStr ) : SvLBoxString( rStr ) {}
+    explicit BrwStringDic_Impl( const OUString& rStr ) : SvLBoxString( rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
@@ -436,7 +436,7 @@ class BrwString_Impl : public SvLBoxString
 {
 public:
 
-    BrwString_Impl( const OUString& rStr ) : SvLBoxString( rStr ) {}
+    explicit BrwString_Impl( const OUString& rStr ) : SvLBoxString( rStr ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;

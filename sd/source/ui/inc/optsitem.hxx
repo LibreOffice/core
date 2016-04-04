@@ -420,8 +420,8 @@ protected:
 
 public:
 
-            SdOptionsZoom( sal_uInt16 nConfigId );
-            virtual ~SdOptionsZoom() {}
+    explicit SdOptionsZoom(sal_uInt16 nConfigId);
+    virtual ~SdOptionsZoom() {}
 
     void    GetScale( sal_Int32& rX, sal_Int32& rY ) const { Init(); rX = nX; rY = nY; }
     void    SetScale( sal_Int32 nInX, sal_Int32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
@@ -437,8 +437,8 @@ protected:
 
 public:
 
-            SdOptionsGrid( sal_uInt16 nConfigId );
-            virtual ~SdOptionsGrid();
+    explicit SdOptionsGrid(sal_uInt16 nConfigId);
+    virtual ~SdOptionsGrid();
 
     void    SetDefaults();
 

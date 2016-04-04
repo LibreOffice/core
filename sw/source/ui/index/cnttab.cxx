@@ -539,7 +539,7 @@ bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
 class SwIndexTreeLB : public SvSimpleTable
 {
 public:
-    SwIndexTreeLB(SvSimpleTableContainer& rParent);
+    explicit SwIndexTreeLB(SvSimpleTableContainer& rParent);
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void Resize() override;
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) override;

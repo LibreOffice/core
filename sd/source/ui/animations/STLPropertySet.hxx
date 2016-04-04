@@ -39,7 +39,7 @@ struct STLPropertyMapEntry
 
     STLPropertyMapEntry()
         : mnState( STLPropertyState_AMBIGUOUS ) {}
-    STLPropertyMapEntry( css::uno::Any aValue )
+    explicit STLPropertyMapEntry(css::uno::Any aValue)
         : maValue( aValue ), mnState( STLPropertyState_DEFAULT ) {}
 
 };

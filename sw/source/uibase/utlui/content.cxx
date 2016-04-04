@@ -3407,7 +3407,7 @@ bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 class SwContentLBoxString : public SvLBoxString
 {
 public:
-    SwContentLBoxString( const OUString& rStr ) : SvLBoxString(rStr) {}
+    explicit SwContentLBoxString(const OUString& rStr) : SvLBoxString(rStr) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;

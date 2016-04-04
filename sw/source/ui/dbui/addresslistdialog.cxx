@@ -135,7 +135,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProp
 class SwAddrSourceLB : public SvSimpleTable
 {
 public:
-    SwAddrSourceLB(SvSimpleTableContainer& rParent)
+    explicit SwAddrSourceLB(SvSimpleTableContainer& rParent)
         : SvSimpleTable(rParent, 0)
     {
     }

@@ -1555,9 +1555,10 @@ void ContextMenuSaveInData::Reset()
 class PopupPainter : public SvLBoxString
 {
 public:
-    PopupPainter( const OUString& rStr )
-        : SvLBoxString( rStr )
-    { }
+    explicit PopupPainter(const OUString& rStr)
+        : SvLBoxString(rStr)
+    {
+    }
 
     virtual ~PopupPainter() { }
 

@@ -60,11 +60,13 @@ class ScSolverOptionsString : public SvLBoxString
     sal_Int32   mnIntValue;
 
 public:
-    ScSolverOptionsString( const OUString& rStr ) :
-        SvLBoxString( rStr ),
-        mbIsDouble( false ),
-        mfDoubleValue( 0.0 ),
-        mnIntValue( 0 ) {}
+    explicit ScSolverOptionsString(const OUString& rStr)
+        : SvLBoxString(rStr)
+        , mbIsDouble(false)
+        , mfDoubleValue(0.0)
+        , mnIntValue(0)
+    {
+    }
 
     bool      IsDouble() const        { return mbIsDouble; }
     double    GetDoubleValue() const  { return mfDoubleValue; }

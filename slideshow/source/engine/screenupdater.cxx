@@ -31,7 +31,7 @@ namespace {
     class UpdateLock : public ::slideshow::internal::ScreenUpdater::UpdateLock
     {
     public:
-        UpdateLock (::slideshow::internal::ScreenUpdater& rUpdater);
+        explicit UpdateLock (::slideshow::internal::ScreenUpdater& rUpdater);
         virtual ~UpdateLock();
         virtual void Activate() override;
     private:

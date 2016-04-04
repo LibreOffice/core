@@ -64,7 +64,7 @@ private:
                                 DECL_LINK_TYPED( IsMusicStoppedHdl, Idle *, void );
 
 public:
-                                SdFileDialog_Imp( const short nDialogType );
+                       explicit SdFileDialog_Imp( const short nDialogType );
                        virtual ~SdFileDialog_Imp();
 
     ErrCode                     Execute();

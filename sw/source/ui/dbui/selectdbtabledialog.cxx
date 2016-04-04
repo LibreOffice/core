@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 class SwAddressTable : public SvSimpleTable
 {
 public:
-    SwAddressTable(SvSimpleTableContainer& rParent);
+    explicit SwAddressTable(SvSimpleTableContainer& rParent);
     void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
     virtual void Resize() override;
     void setColSizes();
