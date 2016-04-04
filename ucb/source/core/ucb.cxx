@@ -413,7 +413,7 @@ UniversalContentBroker::registerContentProvider(
         aList.push_front( ProviderListEntry_Impl(Provider) );
         try
         {
-            m_aProviders.add(Scheme, aList, false);
+            m_aProviders.add(Scheme, aList);
         }
         catch (const IllegalArgumentException&)
         {

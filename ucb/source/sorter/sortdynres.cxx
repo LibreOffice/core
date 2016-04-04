@@ -544,11 +544,11 @@ void EventList::Clear()
     maData.clear();
 }
 
-void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount )
+void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos )
 {
     ListAction *pAction = new ListAction;
     pAction->Position = nPos;
-    pAction->Count = nCount;
+    pAction->Count = 1;
     pAction->ListActionType = nType;
 
     Insert( pAction );

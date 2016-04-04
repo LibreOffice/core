@@ -77,11 +77,11 @@ struct SortInfo
 
 struct SortListData
 {
-    bool    mbModified;
+    bool        mbModified;
     sal_IntPtr  mnCurPos;
     sal_IntPtr  mnOldPos;
 
-    SortListData( sal_IntPtr nPos, bool bModified = false );
+    SortListData( sal_IntPtr nPos );
 };
 
 
@@ -1525,7 +1525,7 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
 
         // generate remove Event, but not for new entries
         if ( nSortPos <= nOldLastSort )
-            pEvents->AddEvent( ListActionType::REMOVED, nSortPos, 1 );
+            pEvents->AddEvent( ListActionType::REMOVED, nSortPos );
     }
 
     // correct the positions in the sorted list
@@ -1742,8 +1742,7 @@ void SortedResultSet::ResortModified( EventList* pList )
                     pAction->ActionInfo <<= nNewPos-nCurPos;
                     pList->Insert( pAction );
                 }
-                pList->AddEvent( ListActionType::PROPERTIES_CHANGED,
-                                 nNewPos, 1 );
+                pList->AddEvent( ListActionType::PROPERTIES_CHANGED, nNewPos );
             }
         }
     }
@@ -1779,7 +1778,7 @@ void SortedResultSet::ResortNew( EventList* pList )
                 maO2S.Replace( reinterpret_cast<void*>(nNewPos), (sal_uInt32) pData->mnCurPos );
             }
             mnLastSort++;
-            pList->AddEvent( ListActionType::INSERTED, nNewPos, 1 );
+            pList->AddEvent( ListActionType::INSERTED, nNewPos );
         }
     }
     catch (const SQLException&)
@@ -1792,9 +1791,9 @@ void SortedResultSet::ResortNew( EventList* pList )
 // SortListData
 
 
-SortListData::SortListData( sal_IntPtr nPos, bool bModified )
+SortListData::SortListData( sal_IntPtr nPos )
 {
-    mbModified = bModified;
+    mbModified = false;
     mnCurPos = nPos;
     mnOldPos = nPos;
 };

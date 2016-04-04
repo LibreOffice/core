@@ -253,8 +253,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
 }
 
 
-bool HierarchyEntry::setData(
-                    const HierarchyEntryData& rData, bool bCreate )
+bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 {
     try
     {
@@ -351,9 +350,6 @@ bool HierarchyEntry::setData(
                 }
                 else
                 {
-                    if ( !bCreate )
-                        return true;
-
                     // Key does not exist. Create / fill / insert it.
 
                     uno::Reference< lang::XSingleServiceFactory > xFac;
