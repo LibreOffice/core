@@ -40,7 +40,7 @@
 class SbiInstance;                  // active StarBASIC process
 class SbiRuntime;                   // active StarBASIC procedure instance
 
-struct SbiArgvStack;                // Argv stack element
+struct SbiArgv;                     // Argv stack element
 struct SbiGosub;                    // GOSUB stack element
 class  SbiImage;                    // Code-Image
 class  SbiIoSystem;
@@ -230,7 +230,6 @@ class SbiRuntime
     SbxVariableRef   refRedim;   // Array saved to use for REDIM
     SbxVariableRef xDummyVar;       // substitute for variables that weren't found
     SbxVariable* mpExtCaller;       // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
-    SbiArgvStack*  pArgvStk;        // ARGV-Stack
     SbiForStack*   pForStk;         // FOR/NEXT-Stack
     sal_uInt16        nExprLvl;         // depth of the expr-stack
     sal_uInt16        nForLvl;          // #118235: Maintain for level
@@ -258,6 +257,7 @@ class SbiRuntime
 
     std::vector<SbxVariableRef>  aRefSaved; // #74254 save temporary references
     std::vector<SbiGosub>   pGosubStk; // GOSUB stack
+    std::vector<SbiArgv>    pArgvStk;  // ARGV-Stack
 
 
     SbxVariable* FindElement
