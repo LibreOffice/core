@@ -320,7 +320,7 @@ class SvxNodeNum
     bool       bStartNum;                     // Restart numbering
 
 public:
-    explicit inline SvxNodeNum( sal_uInt8 nLevel = SVX_NO_NUM, sal_uInt16 nSetVal = USHRT_MAX );
+    explicit inline SvxNodeNum( sal_uInt16 nSetVal = USHRT_MAX );
     inline SvxNodeNum& operator=( const SvxNodeNum& rCpy );
 
     sal_uInt8 GetLevel() const                  { return nMyLevel; }
@@ -330,8 +330,8 @@ public:
           sal_uInt16* GetLevelVal()             { return nLevelVal; }
 };
 
-SvxNodeNum::SvxNodeNum( sal_uInt8 nLevel, sal_uInt16 nSetVal )
-    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( false )
+SvxNodeNum::SvxNodeNum( sal_uInt16 nSetVal )
+    : nSetValue( nSetVal ), nMyLevel( 0 ), bStartNum( false )
 {
     memset( nLevelVal, 0, sizeof( nLevelVal ) );
 }

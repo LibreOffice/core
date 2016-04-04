@@ -308,7 +308,7 @@ public:
     void        SetSelection( const ESelection& );
     void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const;
 
-    void        RemoveAttribs( bool bRemoveParaAttribs = false, sal_uInt16 nWhich = 0, bool bKeepLanguages = false );
+    void        RemoveAttribs( bool bRemoveParaAttribs = false, bool bKeepLanguages = false );
     void        RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
     bool        HasSelection() const;
 
