@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_2844d572",
+        "filename": "oox/source/core/relations.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001283
+      },
+      "writtenOn": "2016-04-04T19:05:31Z",
+      "side": 1,
+      "message": "There should be double \"return rPath.isEmpty()\"?",
+      "range": {
+        "startLine": 37,
+        "startChar": 41,
+        "endLine": 37,
+        "endChar": 63
+      },
+      "revId": "d16615b3b6ece33c23ae5645c37ae83d6d0e214d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
