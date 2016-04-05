@@ -91,7 +91,7 @@ friend class SfxViewFrame;
     DECL_DLLPRIVATE_LINK_TYPED( PostMsgHandler, SfxRequest *, void );
 
     SAL_DLLPRIVATE void Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord );
-    SAL_DLLPRIVATE void _Update_Impl( bool,bool,bool,SfxWorkWindow*);
+    SAL_DLLPRIVATE void Update_Impl_( bool,bool,bool,SfxWorkWindow*);
 
 protected:
 friend class SfxBindings;
@@ -99,10 +99,10 @@ friend class SfxStateCache;
 friend class SfxPopupMenuManager;
 friend class SfxHelp;
 
-    bool                _FindServer( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
-    bool                _FillState( const SfxSlotServer &rServer,
+    bool                FindServer_( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
+    bool                FillState_( const SfxSlotServer &rServer,
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
-    void                _Execute( SfxShell &rShell, const SfxSlot &rSlot,
+    void                Execute_( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
                                   SfxCallMode eCall = SfxCallMode::RECORD);
 
