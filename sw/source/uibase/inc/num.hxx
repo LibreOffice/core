@@ -96,8 +96,11 @@ class SwNumPositionTabPage : public SfxTabPage
 
     DECL_LINK_TYPED(LabelFollowedByHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED( ListtabPosHdl_Impl, SpinField&, void );
+    DECL_LINK_TYPED( ListtabPosFocusHdl_Impl, Control&, void );
     DECL_LINK_TYPED( AlignAtHdl_Impl, SpinField&, void );
+    DECL_LINK_TYPED( AlignAtFocusHdl_Impl, Control&, void );
     DECL_LINK_TYPED( IndentAtHdl_Impl, SpinField&, void );
+    DECL_LINK_TYPED( IndentAtFocusHdl_Impl, Control&, void );
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
