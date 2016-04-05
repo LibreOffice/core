@@ -199,6 +199,26 @@ extern bool     g_bExecuteDrag;
 
 static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView );
 
+/// Check if the selected shape has a TextBox: if so, go into that instead.
+static bool lcl_goIntoTextBox(SwEditWin& rEditWin, SwWrtShell& rSh)
+{
+    SdrObject* pSdrObject = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+    SwFrameFormat* pObjectFormat = ::FindFrameFormat(pSdrObject);
+    if (SwFrameFormat* pTextBoxFormat = SwTextBoxHelper::findTextBox(pObjectFormat))
+    {
+        SdrObject* pTextBox = pTextBoxFormat->FindRealSdrObject();
+        SdrView* pSdrView = rSh.GetDrawView();
+        // Unmark the shape.
+        pSdrView->UnmarkAllObj();
+        // Mark the textbox.
+        rSh.SelectObj(Point(), SW_ALLOW_TEXTBOX, pTextBox);
+        // Clear the DrawFuncPtr.
+        rEditWin.StopInsFrame();
+        return true;
+    }
+    return false;
+}
+
 class SwAnchorMarker
 {
     SdrHdl* pHdl;
@@ -1890,7 +1910,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else if((nSelectionType & nsSelectionType::SEL_DRW) &&
                                 0 == (nSelectionType & nsSelectionType::SEL_DRW_TXT) &&
                                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
+                        {
                             eKeyState = KS_GoIntoDrawing;
+                            if (lcl_goIntoTextBox(*this, rSh))
+                                eKeyState = KS_GoIntoFly;
+                        }
                         else if( aTmpQHD.HasContent() && !rSh.HasSelection() &&
                             aTmpQHD.m_bIsAutoText )
                             eKeyState = KS_GlossaryExpand;
@@ -2196,7 +2220,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if(nSelectionType & nsSelectionType::SEL_FRM)
                             eKeyState = KS_GoIntoFly;
                         else if((nSelectionType & nsSelectionType::SEL_DRW))
+                        {
                             eKeyState = KS_GoIntoDrawing;
+                            if (lcl_goIntoTextBox(*this, rSh))
+                                eKeyState = KS_GoIntoFly;
+                        }
                     }
                     break;
                 }
