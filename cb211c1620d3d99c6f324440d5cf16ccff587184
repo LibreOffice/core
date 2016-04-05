@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_9373724d",
+        "filename": "sfx2/source/doc/objmisc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-04-05T10:10:41Z",
+      "side": 0,
+      "message": "Hmm, this is changing behaviour depending on debug level, which is likely a bad idea in general. I\u0027d suggest to just completely remove this X() wrapper function.",
+      "revId": "cb211c1620d3d99c6f324440d5cf16ccff587184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
