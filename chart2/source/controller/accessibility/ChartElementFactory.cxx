@@ -33,7 +33,7 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
     {
         case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_LEGEND_ENTRY:
-            return new AccessibleChartElement( rAccInfo, false, false );
+            return new AccessibleChartElement( rAccInfo, false );
         case OBJECTTYPE_PAGE:
         case OBJECTTYPE_TITLE:
         case OBJECTTYPE_LEGEND:
@@ -56,7 +56,7 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
         case OBJECTTYPE_DATA_STOCK_LOSS:
         case OBJECTTYPE_DATA_STOCK_GAIN:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-            return new AccessibleChartElement( rAccInfo, true, false );
+            return new AccessibleChartElement( rAccInfo, true );
         case OBJECTTYPE_UNKNOWN:
             break;
         default:

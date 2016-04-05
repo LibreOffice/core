@@ -86,8 +86,7 @@ protected:
 
 public:
 OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( css::util::XCloseable* pCloseable
-        , css::lang::XComponent* pComponent
-        , bool bLongLastingCallsCancelable = false );
+        , css::lang::XComponent* pComponent );
 OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager();
 
 OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposedOrClosed( bool bAssert=true );

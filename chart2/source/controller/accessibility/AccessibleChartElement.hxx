@@ -69,8 +69,7 @@ class AccessibleChartElement :
 {
 public:
     AccessibleChartElement( const AccessibleElementInfo & rAccInfo,
-                            bool bMayHaveChildren,
-                            bool bAlwaysTransparent = false );
+                            bool bMayHaveChildren );
     virtual ~AccessibleChartElement();
 
     // ________ AccessibleBase ________

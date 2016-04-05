@@ -50,9 +50,8 @@ namespace chart
 
 AccessibleChartElement::AccessibleChartElement(
     const AccessibleElementInfo & rAccInfo,
-    bool bMayHaveChildren,
-    bool bAlwaysTransparent /* default: false */ ) :
-        impl::AccessibleChartElement_Base( rAccInfo, bMayHaveChildren, bAlwaysTransparent ),
+    bool bMayHaveChildren ) :
+        impl::AccessibleChartElement_Base( rAccInfo, bMayHaveChildren, false/*bAlwaysTransparent*/ ),
         m_bHasText( false )
 {
     AddState( AccessibleStateType::TRANSIENT );

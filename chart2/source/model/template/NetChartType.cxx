@@ -66,8 +66,7 @@ Reference< XCoordinateSystem > SAL_CALL
             static_cast< ::cppu::OWeakObject* >( this ), 0 );
 
     Reference< XCoordinateSystem > xResult(
-        new PolarCoordinateSystem(
-            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ false ));
+        new PolarCoordinateSystem( GetComponentContext(), DimensionCount ));
 
     Reference< XAxis > xAxis( xResult->getAxisByDimension( 0, MAIN_AXIS_INDEX ) );
     if( xAxis.is() )

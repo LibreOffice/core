@@ -47,9 +47,8 @@ namespace chart
 // explicit
 PolarCoordinateSystem::PolarCoordinateSystem(
     const uno::Reference< uno::XComponentContext > & xContext,
-    sal_Int32 nDimensionCount /* = 2 */,
-    bool bSwapXAndYAxis /* = sal_False */ ) :
-        BaseCoordinateSystem( xContext, nDimensionCount, bSwapXAndYAxis )
+    sal_Int32 nDimensionCount /* = 2 */ ) :
+        BaseCoordinateSystem( xContext, nDimensionCount, false/*bSwapXAndYAxis*/ )
 {}
 
 PolarCoordinateSystem::PolarCoordinateSystem(
@@ -115,7 +114,7 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem::getSupportedServi
 
 PolarCoordinateSystem2d::PolarCoordinateSystem2d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
-        PolarCoordinateSystem( xContext, 2, false )
+        PolarCoordinateSystem( xContext, 2 )
 {}
 
 PolarCoordinateSystem2d::~PolarCoordinateSystem2d()
@@ -158,7 +157,7 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedSer
 
 PolarCoordinateSystem3d::PolarCoordinateSystem3d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
-        PolarCoordinateSystem( xContext, 3, false )
+        PolarCoordinateSystem( xContext, 3 )
 {}
 
 PolarCoordinateSystem3d::~PolarCoordinateSystem3d()
