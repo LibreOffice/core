@@ -69,7 +69,9 @@ sal_Int32 BSeqInputStream::readBytes(
 
     if (rData.getLength() != nBytesToRead)
         rData.realloc( nBytesToRead );
-    memcpy(rData.getArray(), &_seq.data()[_nPos], nBytesToRead);
+    if (nBytesToRead != 0) {
+        memcpy(rData.getArray(), &_seq.data()[_nPos], nBytesToRead);
+    }
     _nPos += nBytesToRead;
     return nBytesToRead;
 }
@@ -145,7 +147,9 @@ Reference< io::XInputStream > SAL_CALL createInputStream( std::vector<sal_Int8> 
 Reference< io::XInputStream > SAL_CALL createInputStream( const sal_Int8* pData, int len )
 {
     std::vector<sal_Int8> rInData(len);
-    memcpy( rInData.data(), pData, len);
+    if (len != 0) {
+        memcpy( rInData.data(), pData, len);
+    }
     return new BSeqInputStream( rInData );
 }
 
