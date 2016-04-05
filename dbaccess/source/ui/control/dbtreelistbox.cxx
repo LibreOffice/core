@@ -386,7 +386,7 @@ bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewTe
 bool DBTreeListBox::DoubleClickHdl()
 {
     // continue default processing if the DoubleClickHandler didn't handle it
-    return aDoubleClickHdl.Call( this );
+    return !aDoubleClickHdl.Call( this );
 }
 
 void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,bool _bUp)
