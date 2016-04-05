@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_b3db161b",
+        "filename": "canvas/source/vcl/canvashelper_texturefill.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-04-05T10:30:27Z",
+      "side": 0,
+      "message": "Hmmm, \"extra-verbosity\"?\nThis seems to be verbose at all, but to change behavior. As such I would suggest to either triggering it on an explicit define or to remove it instead of having debug and production code behave different.",
+      "revId": "64172644c898d4f5f29494b2f8b5fbcdc2cd9824",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
