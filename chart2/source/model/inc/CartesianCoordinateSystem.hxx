@@ -29,8 +29,7 @@ class CartesianCoordinateSystem : public BaseCoordinateSystem
 public:
     explicit CartesianCoordinateSystem(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        sal_Int32 nDimensionCount = 2,
-        bool bSwapXAndYAxis = false );
+        sal_Int32 nDimensionCount = 2 );
     explicit CartesianCoordinateSystem( const CartesianCoordinateSystem & rSource );
     virtual ~CartesianCoordinateSystem();
 

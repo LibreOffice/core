@@ -96,7 +96,7 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
 
 }
 
-DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
+DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
             : E3dView(pSdrModel, pOut)
             , m_pMarkHandleProvider(nullptr)
             , m_apOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel))
@@ -104,8 +104,7 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
 {
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
-
-    SetPagePaintingAllowed(bPaintPageForEditMode);
+    SetPagePaintingAllowed(true);
 
     // #i12587# support for shapes in chart
     SdrOutliner* pOutliner = getOutliner();

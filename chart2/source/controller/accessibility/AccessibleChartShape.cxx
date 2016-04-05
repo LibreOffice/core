@@ -36,9 +36,8 @@ namespace chart
 {
 
 AccessibleChartShape::AccessibleChartShape(
-        const AccessibleElementInfo& rAccInfo,
-        bool bMayHaveChildren, bool bAlwaysTransparent )
-    :impl::AccessibleChartShape_Base( rAccInfo, bMayHaveChildren, bAlwaysTransparent )
+        const AccessibleElementInfo& rAccInfo )
+    :impl::AccessibleChartShape_Base( rAccInfo, true/*bMayHaveChildren*/, false/*bAlwaysTransparent*/ )
 {
     if ( rAccInfo.m_aOID.isAdditionalShape() )
     {

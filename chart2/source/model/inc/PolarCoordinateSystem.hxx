@@ -29,8 +29,7 @@ class PolarCoordinateSystem : public BaseCoordinateSystem
 public:
     explicit PolarCoordinateSystem(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        sal_Int32 nDimensionCount = 2,
-        bool bSwapXAndYAxis = false );
+        sal_Int32 nDimensionCount = 2 );
     explicit PolarCoordinateSystem( const PolarCoordinateSystem & rSource );
     virtual ~PolarCoordinateSystem();
 

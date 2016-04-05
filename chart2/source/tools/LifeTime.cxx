@@ -162,9 +162,8 @@ bool LifeTimeManager::dispose()
 }
 
 CloseableLifeTimeManager::CloseableLifeTimeManager( css::util::XCloseable* pCloseable
-        , css::lang::XComponent* pComponent
-        , bool bLongLastingCallsCancelable )
-        : LifeTimeManager( pComponent, bLongLastingCallsCancelable )
+        , css::lang::XComponent* pComponent )
+        : LifeTimeManager( pComponent, false/*bLongLastingCallsCancelable*/ )
         , m_pCloseable(pCloseable)
 {
     impl_init();

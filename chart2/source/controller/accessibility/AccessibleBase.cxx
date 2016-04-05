@@ -283,7 +283,7 @@ bool AccessibleBase::ImplUpdateChildren()
             }
             else if ( aIt->isAdditionalShape() )
             {
-                AddChild( new AccessibleChartShape( aAccInfo, true, false ) );
+                AddChild( new AccessibleChartShape( aAccInfo ) );
             }
         }
         bResult = true;

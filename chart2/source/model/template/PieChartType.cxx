@@ -164,8 +164,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
            uno::RuntimeException, std::exception)
 {
     Reference< chart2::XCoordinateSystem > xResult(
-        new PolarCoordinateSystem(
-            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ false ));
+        new PolarCoordinateSystem( GetComponentContext(), DimensionCount ));
 
     for( sal_Int32 i=0; i<DimensionCount; ++i )
     {
