@@ -952,7 +952,7 @@ void SbModule::SetSource32( const OUString& r )
 
 // Broadcast of a hint to all Basics
 
-static void _SendHint( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
+static void SendHint_( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
 {
     // Self a BASIC?
     if( dynamic_cast<const StarBASIC *>(pObj) != nullptr && pObj->IsBroadcaster() )
@@ -963,7 +963,7 @@ static void _SendHint( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
     {
         SbxVariable* pVar = pObjs->Get( i );
         if( dynamic_cast<const SbxObject *>(pVar) != nullptr )
-            _SendHint( dynamic_cast<SbxObject*>( pVar), nId, p  );
+            SendHint_( dynamic_cast<SbxObject*>( pVar), nId, p  );
     }
 }
 
@@ -971,7 +971,7 @@ static void SendHint( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
 {
     while( pObj->GetParent() )
         pObj = pObj->GetParent();
-    _SendHint( pObj, nId, p );
+    SendHint_( pObj, nId, p );
 }
 
 // #57841 Clear Uno-Objects, which were helt in RTL functions,
