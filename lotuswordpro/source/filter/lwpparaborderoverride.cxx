@@ -124,6 +124,21 @@ LwpParaBorderOverride* LwpParaBorderOverride::clone() const
     return new LwpParaBorderOverride(*this);
 }
 
+namespace {
+
+LwpParaBorderOverride::BorderWidthType readBorderWidthType(
+    LwpObjectStream * stream)
+{
+    sal_uInt16 n = stream->QuickReaduInt16();
+    if (n > LwpParaBorderOverride::PB_CUSTOMWIDTH) {
+        SAL_WARN("lwp", "bad BorderWidthType " << n);
+        n = LwpParaBorderOverride::PB_NONE;
+    }
+    return static_cast<LwpParaBorderOverride::BorderWidthType>(n);
+}
+
+}
+
 void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -134,15 +149,15 @@ void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
         m_pShadow->Read(pStrm);
         m_pMargins->Read(pStrm);
 
-        m_eAboveType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
-        m_eBelowType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
-        m_eRightType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+        m_eAboveType = readBorderWidthType(pStrm);
+        m_eBelowType = readBorderWidthType(pStrm);
+        m_eRightType = readBorderWidthType(pStrm);
 
         if( pStrm->CheckExtra() )
         {
             m_pBetweenStuff->Read(pStrm);
 
-            m_eBetweenType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+            m_eBetweenType = readBorderWidthType(pStrm);
             m_nBetweenWidth = pStrm->QuickReaduInt32();
             m_nBetweenMargin = pStrm->QuickReaduInt32();
 
