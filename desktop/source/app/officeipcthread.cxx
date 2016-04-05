@@ -1202,7 +1202,7 @@ void PipeIpcThread::execute()
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
                 // incl. terminating NUL
             if (n != SAL_N_ELEMENTS(PROCESSING_DONE)) {
-                SAL_WARN("desktop" , "short write: " << n);
+                SAL_WARN("desktop", "short write: " << n);
                 continue;
             }
         }
