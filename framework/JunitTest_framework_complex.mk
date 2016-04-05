@@ -62,13 +62,15 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/imageManager/_XUIConfigurationPersistence \
     framework/qa/complex/imageManager/_XUIConfiguration \
     framework/qa/complex/api_internal/CheckAPI \
-	framework/qa/complex/dispatches/checkdispatchapi \
+    framework/qa/complex/dispatches/checkdispatchapi \
     framework/qa/complex/dispatches/Interceptor \
     framework/qa/complex/ModuleManager/CheckXModuleManager \
+    framework/qa/complex/XTitle/CheckXTitle \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,framework_complex,\
     complex.dispatches.checkdispatchapi \
+    complex.XTitle.CheckXTitle \
 ))
 # these were disabled in the old build system too, please check
 # carefully before reenabling
