@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_33dd6643",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3397,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-04-05T07:39:23Z",
+      "side": 1,
+      "message": "Why 0 and not 0x0 like the other places ?",
+      "revId": "ed6dda9198949f7d9a286feee0856f9b42a580ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
