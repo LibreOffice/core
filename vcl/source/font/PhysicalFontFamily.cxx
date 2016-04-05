@@ -264,7 +264,7 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
                                               bool bEmbeddable ) const
 {
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
-    PhysicalFontFamily* pFamily = rFontCollection.FindOrCreateFontFamily( aFamilyName );
+    PhysicalFontFamily* pFamily(nullptr);
 
     for( std::vector< PhysicalFontFace* >::const_iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
     {
@@ -275,6 +275,11 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
         if( bEmbeddable && !pFoundFontFace->CanEmbed() && !pFoundFontFace->CanSubset() )
             continue;
 
+        if (!pFamily)
+        {   // tdf#98989 lazy create as family without faces won't work
+            pFamily = rFontCollection.FindOrCreateFontFamily(aFamilyName);
+        }
+        assert(pFamily);
         PhysicalFontFace* pClonedFace = pFoundFontFace->Clone();
 
 #if OSL_DEBUG_LEVEL > 0
