@@ -300,7 +300,7 @@ void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
 oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo)
 {
     if( pInfo->Signal == osl_Signal_Terminate )
-        RequestHandler::Disable(false);
+        RequestHandler::SetDowning();
     return osl_Signal_ActCallNextHdl;
 }
 
@@ -879,7 +879,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
     }
 }
 
-void RequestHandler::Disable(bool join)
+void RequestHandler::Disable()
 {
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
@@ -899,7 +899,7 @@ void RequestHandler::Disable(bool join)
         handler->cReady.set();
 
         // exit gracefully and join
-        if (join && handler->mIpcThread.is())
+        if (handler->mIpcThread.is())
         {
             handler->mIpcThread->join();
             handler->mIpcThread.clear();

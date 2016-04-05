@@ -120,7 +120,7 @@ class RequestHandler: public salhelper::SimpleReferenceObject
 
     // return sal_False if second office
     static Status               Enable(bool ipc);
-    static void                 Disable(bool join = true);
+    static void                 Disable();
     // start dispatching events...
     static void                 SetReady();
     static void                 WaitForReady();
