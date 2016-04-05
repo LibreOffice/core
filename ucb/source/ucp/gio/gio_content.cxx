@@ -685,7 +685,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const beans::PropertyValue& rValue = pValues[ n ];
-        SAL_WARN("ucb.ucp.gio", "Set prop '" << rValue.Name << "'");
+        SAL_INFO("ucb.ucp.gio", "Set prop '" << rValue.Name << "'");
         if ( rValue.Name == "ContentType" ||
              rValue.Name == "MediaType" ||
              rValue.Name == "IsDocument" ||
@@ -721,7 +721,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             if (!newName || !oldName || strcmp(newName, oldName))
             {
-                SAL_WARN("ucb.ucp.gio", "Set new name to '" << newName << "'");
+                SAL_INFO("ucb.ucp.gio", "Set new name to '" << newName << "'");
 
                 aEvent.PropertyName = "Title";
                 if (oldName)
