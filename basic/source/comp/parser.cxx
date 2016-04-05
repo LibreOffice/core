@@ -140,7 +140,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     aGlobals.SetParent( &aRtlSyms );
 
 
-    nGblChain = aGen.Gen( _JUMP, 0 );
+    nGblChain = aGen.Gen( JUMP_, 0 );
 
     rTypeArray = new SbxArray; // array for user defined types
     rEnumArray = new SbxArray; // array for Enum types
@@ -184,7 +184,7 @@ bool SbiParser::HasGlobalCode()
     if( bGblDefs && nGblChain )
     {
         aGen.BackChain( nGblChain );
-        aGen.Gen( _LEAVE );
+        aGen.Gen( LEAVE_ );
         nGblChain = 0;
     }
     return bGblDefs;
@@ -233,7 +233,7 @@ void SbiParser::Exit()
         if( eTok == eExitTok ||
             (eTok == PROPERTY && (eExitTok == GET || eExitTok == LET) ) )   // #i109051
         {
-            p->nChain = aGen.Gen( _JUMP, p->nChain );
+            p->nChain = aGen.Gen( JUMP_, p->nChain );
             return;
         }
     }
@@ -333,7 +333,7 @@ bool SbiParser::Parse()
         // AB #40689: Due to the new static-handling there
         // can be another nGblChain, so ask for it before.
         if( bNewGblDefs && nGblChain == 0 )
-            nGblChain = aGen.Gen( _JUMP, 0 );
+            nGblChain = aGen.Gen( JUMP_, 0 );
         return false;
     }
 
@@ -427,7 +427,7 @@ bool SbiParser::Parse()
                 if( bNewGblDefs && nGblChain == 0 &&
                     ( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ) )
                 {
-                    nGblChain = aGen.Gen( _JUMP, 0 );
+                    nGblChain = aGen.Gen( JUMP_, 0 );
                     bNewGblDefs = false;
                 }
                 // statement-opcode at the beginning of a sub, too, please
@@ -525,7 +525,7 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
     {
         if( !bEQ )
         {
-            aGen.Gen( _GET );
+            aGen.Gen( GET_ );
         }
         else
         {
@@ -535,17 +535,17 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
             TestToken( EQ );
             SbiExpression aExpr( this );
             aExpr.Gen();
-            SbiOpcode eOp = _PUT;
+            SbiOpcode eOp = PUT_;
             if( pDef )
             {
                 if( pDef->GetConstDef() )
                     Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
                 if( pDef->GetType() == SbxOBJECT )
                 {
-                    eOp = _SET;
+                    eOp = SET_;
                     if( pDef->GetTypeId() )
                     {
-                        aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+                        aGen.Gen( SETCLASS_, pDef->GetTypeId() );
                         return;
                     }
                 }
@@ -571,8 +571,8 @@ void SbiParser::Assign()
         nLen = aLvalue.GetRealVar()->GetLen();
     }
     if( nLen )
-        aGen.Gen( _PAD, nLen );
-    aGen.Gen( _PUT );
+        aGen.Gen( PAD_, nLen );
+    aGen.Gen( PUT_ );
 }
 
 // assignments of an object-variable
@@ -597,8 +597,8 @@ void SbiParser::Set()
         TypeDecl( *pTypeDef, true );
 
         aLvalue.Gen();
-        aGen.Gen( _CREATE, pDef->GetId(), pTypeDef->GetTypeId() );
-        aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+        aGen.Gen( CREATE_, pDef->GetId(), pTypeDef->GetTypeId() );
+        aGen.Gen( SETCLASS_, pDef->GetTypeId() );
     }
     else
     {
@@ -613,16 +613,16 @@ void SbiParser::Set()
         if( pDef->GetTypeId() )
         {
             if ( bVBASupportOn )
-                aGen.Gen( _VBASETCLASS, pDef->GetTypeId() );
+                aGen.Gen( VBASETCLASS_, pDef->GetTypeId() );
             else
-                aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+                aGen.Gen( SETCLASS_, pDef->GetTypeId() );
         }
         else
         {
             if ( bVBASupportOn )
-                aGen.Gen( _VBASET );
+                aGen.Gen( VBASET_ );
             else
-                aGen.Gen( _SET );
+                aGen.Gen( SET_ );
         }
     }
 }
@@ -644,7 +644,7 @@ void SbiParser::LSet()
     SbiExpression aExpr( this );
     aLvalue.Gen();
     aExpr.Gen();
-    aGen.Gen( _LSET );
+    aGen.Gen( LSET_ );
 }
 
 // JSM 07.10.95
@@ -662,7 +662,7 @@ void SbiParser::RSet()
     SbiExpression aExpr( this );
     aLvalue.Gen();
     aExpr.Gen();
-    aGen.Gen( _RSET );
+    aGen.Gen( RSET_ );
 }
 
 // DEFINT, DEFLNG, DEFSNG, DEFDBL, DEFSTR and so on
@@ -702,7 +702,7 @@ void SbiParser::DefXXX()
 
 void SbiParser::Stop()
 {
-    aGen.Gen( _STOP );
+    aGen.Gen( STOP_ );
     Peek();     // #35694: only Peek(), so that EOL is recognized in Single-Line-If
 }
 
@@ -855,7 +855,7 @@ void SbiParser::AddConstants()
     addStringConst( aPublics, "vbCrLf", "\x0D\x0A" );
     addStringConst( aPublics, "vbFormFeed", "\x0C" );
     addStringConst( aPublics, "vbLf", "\x0A" );
-#ifndef _WIN32
+#ifndef WIN32_
     addStringConst( aPublics, "vbNewLine", "\x0D\x0A" );
 #else
     addStringConst( aPublics, "vbNewLine", "\x0A" );
@@ -875,7 +875,7 @@ void SbiParser::ErrorStmnt()
 {
     SbiExpression aPar( this );
     aPar.Gen();
-    aGen.Gen( _ERROR );
+    aGen.Gen( ERROR_ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

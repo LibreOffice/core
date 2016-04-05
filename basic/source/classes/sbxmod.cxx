@@ -1481,7 +1481,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
     {
         SbiOpcode eOp = (SbiOpcode ) ( *p++ );
         nPC++;
-        if( bFollowJumps && eOp == _JUMP && pImg )
+        if( bFollowJumps && eOp == JUMP_ && pImg )
         {
             SAL_WARN_IF( !pImg, "basic", "FindNextStmnt: pImg==NULL with FollowJumps option" );
             sal_uInt32 nOp1 = *p++; nOp1 |= *p++ << 8;
@@ -1493,7 +1493,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             p += 4;
             nPC += 4;
         }
-        else if( eOp == _STMNT )
+        else if( eOp == STMNT_ )
         {
             sal_uInt32 nl, nc;
             nl = *p++; nl |= *p++ << 8;

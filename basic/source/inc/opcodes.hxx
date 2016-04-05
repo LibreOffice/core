@@ -27,133 +27,133 @@
 
 enum SbiOpcode {
     // all opcodes without operands
-    _NOP = 0,
+    NOP_ = 0,
 
-    SbOP0_START = _NOP,
+    SbOP0_START = NOP_,
 
     // operators
     // the following operators are ordered
     // the same way as the enum SbxVarOp
-    _EXP, _MUL, _DIV, _MOD, _PLUS, _MINUS, _NEG,
-    _EQ,  _NE,  _LT,  _GT, _LE, _GE,
-    _IDIV, _AND, _OR, _XOR, _EQV, _IMP, _NOT,
-    _CAT,
+    EXP_, MUL_, DIV_, MOD_, PLUS_, MINUS_, NEG_,
+    EQ_,  NE_,  LT_,  GT_, LE_, GE_,
+    IDIV_, AND_, OR_, XOR_, EQV_, IMP_, NOT_,
+    CAT_,
     // end of enum SbxVarOp
-    _LIKE, _IS,
+    LIKE_, IS_,
     // load/save
-    _ARGC,              // establish new Argv
-    _ARGV,              // TOS ==> current Argv
-    _INPUT,             // Input ==> TOS
-    _LINPUT,            // Line Input ==> TOS
-    _GET,               // touch TOS
-    _SET,               // save object TOS ==> TOS-1
-    _PUT,               // TOS ==> TOS-1
-    _PUTC,              // TOS ==> TOS-1, then ReadOnly
-    _DIM,               // DIM
-    _REDIM,             // REDIM
-    _REDIMP,            // REDIM PRESERVE
-    _ERASE,             // delete TOS
+    ARGC_,              // establish new Argv
+    ARGV_,              // TOS ==> current Argv
+    INPUT_,             // Input ==> TOS
+    LINPUT_,            // Line Input ==> TOS
+    GET_,               // touch TOS
+    SET_,               // save object TOS ==> TOS-1
+    PUT_,               // TOS ==> TOS-1
+    PUTC_,              // TOS ==> TOS-1, then ReadOnly
+    DIM_,               // DIM
+    REDIM_,             // REDIM
+    REDIMP_,            // REDIM PRESERVE
+    ERASE_,             // delete TOS
     // branch
-    _STOP,              // end of program
-    _INITFOR,           // initialize FOR-variable
-    _NEXT,              // increment FOR-variable
-    _CASE,              // beginning CASE
-    _ENDCASE,           // end CASE
-    _STDERROR,          // standard error handling
-    _NOERROR,           // no error handling
-    _LEAVE,             // leave UP
+    STOP_,              // end of program
+    INITFOR_,           // initialize FOR-variable
+    NEXT_,              // increment FOR-variable
+    CASE_,              // beginning CASE
+    ENDCASE_,           // end CASE
+    STDERROR_,          // standard error handling
+    NOERROR_,           // no error handling
+    LEAVE_,             // leave UP
     // E/A
-    _CHANNEL,           // TOS = channel number
-    _BPRINT,            // print TOS
-    _PRINTF,            // print TOS in field
-    _BWRITE,            // write TOS
-    _RENAME,            // Rename Tos+1 to Tos
-    _PROMPT,            // TOS = Prompt for Input
-    _RESTART,           // define restart point
-    _CHAN0,             // I/O-channel 0
+    CHANNEL_,           // TOS = channel number
+    BPRINT_,            // print TOS
+    PRINTF_,            // print TOS in field
+    BWRITE_,            // write TOS
+    RENAME_,            // Rename Tos+1 to Tos
+    PROMPT_,            // TOS = Prompt for Input
+    RESTART_,           // define restart point
+    CHAN0_,             // I/O-channel 0
     // miscellaneous
-    _EMPTY,             // empty expression on stack
-    _ERROR,             // TOS = error code
-    _LSET,              // saving object TOS ==> TOS-1
-    _RSET,              // saving object TOS ==> TOS-1
-    _REDIMP_ERASE,      // Copies array to be later used by REDIM PRESERVE before erasing it
-    _INITFOREACH,
-    _VBASET,            // VBA-like Set
-    _ERASE_CLEAR,       // Erase array and clear variable
-    _ARRAYACCESS,       // Assign parameters to TOS and get value, used for array of arrays
-    _BYVAL,             // byref -> byval for lvalue parameter passed in call
+    EMPTY_,             // empty expression on stack
+    ERROR_,             // TOS = error code
+    LSET_,              // saving object TOS ==> TOS-1
+    RSET_,              // saving object TOS ==> TOS-1
+    REDIMP_ERASE_,      // Copies array to be later used by REDIM PRESERVE before erasing it
+    INITFOREACH_,
+    VBASET_,            // VBA-like Set
+    ERASE_CLEAR_,       // Erase array and clear variable
+    ARRAYACCESS_,       // Assign parameters to TOS and get value, used for array of arrays
+    BYVAL_,             // byref -> byval for lvalue parameter passed in call
 
-    SbOP0_END = _BYVAL,
+    SbOP0_END = BYVAL_,
 
     // all opcodes with one operand
 
-    _NUMBER = 0x40,     // loading a numeric constant (+ID)
+    NUMBER_ = 0x40,     // loading a numeric constant (+ID)
 
-    SbOP1_START = _NUMBER,
+    SbOP1_START = NUMBER_,
 
-    _SCONST,            // loading a stringconstant (+ID)
-    _CONST,             // Immediate Load (+ value)
-    _ARGN,              // saving a named Arg in Argv (+StringID)
-    _PAD,               // bring string to a firm length (+length)
+    SCONST_,            // loading a stringconstant (+ID)
+    CONST_,             // Immediate Load (+ value)
+    ARGN_,              // saving a named Arg in Argv (+StringID)
+    PAD_,               // bring string to a firm length (+length)
     // Verzweigungen
-    _JUMP,              // jump (+target)
-    _JUMPT,             // evaluate TOS, conditional jump (+target)
-    _JUMPF,             // evaluate TOS, conditional jump  (+target)
-    _ONJUMP,            // evaluate TOS, jump into JUMP-table (+MaxVal)
-    _GOSUB,             // UP-call (+Target)
-    _RETURN,            // UP-return (+0 or Target)
-    _TESTFOR,           // test FOR-variable, increment (+Endlabel)
-    _CASETO,            // Tos+1 <= Case <= Tos, 2xremove (+Target)
-    _ERRHDL,            // error handler (+Offset)
-    _RESUME,            // Resume after errors (+0 or 1 or Label)
+    JUMP_,              // jump (+target)
+    JUMPT_,             // evaluate TOS, conditional jump (+target)
+    JUMPF_,             // evaluate TOS, conditional jump  (+target)
+    ONJUMP_,            // evaluate TOS, jump into JUMP-table (+MaxVal)
+    GOSUB_,             // UP-call (+Target)
+    RETURN_,            // UP-return (+0 or Target)
+    TESTFOR_,           // test FOR-variable, increment (+Endlabel)
+    CASETO_,            // Tos+1 <= Case <= Tos, 2xremove (+Target)
+    ERRHDL_,            // error handler (+Offset)
+    RESUME_,            // Resume after errors (+0 or 1 or Label)
     // E/A
-    _CLOSE,             // (+channel/0)
-    _PRCHAR,            // (+char)
+    CLOSE_,             // (+channel/0)
+    PRCHAR_,            // (+char)
     // Verwaltung
-    _SETCLASS,          // test set + class names (+StringId)
-    _TESTCLASS,         // Check TOS class (+StringId)
-    _LIB,               // set lib name for declare-procs (+StringId)
-    _BASED,             // TOS is incremented by BASE, BASE is pushed before (+base)
+    SETCLASS_,          // test set + class names (+StringId)
+    TESTCLASS_,         // Check TOS class (+StringId)
+    LIB_,               // set lib name for declare-procs (+StringId)
+    BASED_,             // TOS is incremented by BASE, BASE is pushed before (+base)
     // type adjustment in the Argv
-    _ARGTYP,            // convert last parameter in Argv (+type)
-    _VBASETCLASS,       // VBA-like Set
+    ARGTYP_,            // convert last parameter in Argv (+type)
+    VBASETCLASS_,       // VBA-like Set
 
-    SbOP1_END = _VBASETCLASS,
+    SbOP1_END = VBASETCLASS_,
 
     // all opcodes with two operands
 
-    _RTL = 0x80,        // load from the RTL (+StringID+Typ)
+    RTL_ = 0x80,        // load from the RTL (+StringID+Typ)
 
-    SbOP2_START = _RTL,
+    SbOP2_START = RTL_,
 
-    _FIND,              // load (+StringID+Typ)
-    _ELEM,              // load element (+StringID+Typ)
-    _PARAM,             // parameters (+Offset+Typ)
+    FIND_,              // load (+StringID+Typ)
+    ELEM_,              // load element (+StringID+Typ)
+    PARAM_,             // parameters (+Offset+Typ)
     // branch
-    _CALL,              // call DECLARE-method (+StringID+Typ)
-    _CALLC,             // call Cdecl-DECLARE-Method (+StringID+Typ)
-    _CASEIS,            // case-test (+Test-Opcode+True-Target)
+    CALL_,              // call DECLARE-method (+StringID+Typ)
+    CALLC_,             // call Cdecl-DECLARE-Method (+StringID+Typ)
+    CASEIS_,            // case-test (+Test-Opcode+True-Target)
     // management
-    _STMNT,             // begin of a statement (+Line+Col)
+    STMNT_,             // begin of a statement (+Line+Col)
     // E/A
-    _OPEN,              // (+StreamMode+Flags)
+    OPEN_,              // (+StreamMode+Flags)
     // objects
-    _LOCAL,             // define locals variables (+StringID+Typ)
-    _PUBLIC,            // module global variables (+StringID+Typ)
-    _GLOBAL,            // define global variables, public command (+StringID+Typ)
-    _CREATE,            // create object (+StringId+StringID)
-    _STATIC,            // static variable (+StringID+Typ) JSM
-    _TCREATE,           // create user-defined object
-    _DCREATE,           // create object-array (+StringId+StringID)
-    _GLOBAL_P,          // define global variable that's not overwritten on restarting
+    LOCAL_,             // define locals variables (+StringID+Typ)
+    PUBLIC_,            // module global variables (+StringID+Typ)
+    GLOBAL_,            // define global variables, public command (+StringID+Typ)
+    CREATE_,            // create object (+StringId+StringID)
+    STATIC_,            // static variable (+StringID+Typ) JSM
+    TCREATE_,           // create user-defined object
+    DCREATE_,           // create object-array (+StringId+StringID)
+    GLOBAL_P_,          // define global variable that's not overwritten on restarting
                         // the Basic, P=PERSIST (+StringID+Typ)
-    _FIND_G,            // finds global variable with special treatment due to _GLOBAL_P
-    _DCREATE_REDIMP,    // redimension object-array (+StringId+StringID)
-    _FIND_CM,           // Search inside a class module (CM) to enable global search in time
-    _PUBLIC_P,          //  Module global Variable (persisted between calls)(+StringID+Typ)
-    _FIND_STATIC,           //  local static var lookup (+StringID+Typ)
+    FIND_G_,            // finds global variable with special treatment due to GLOBAL_P_
+    DCREATE_REDIMP_,    // redimension object-array (+StringId+StringID)
+    FIND_CM_,           // Search inside a class module (CM) to enable global search in time
+    PUBLIC_P_,          //  Module global Variable (persisted between calls)(+StringID+Typ)
+    FIND_STATIC_,           //  local static var lookup (+StringID+Typ)
 
-    SbOP2_END = _FIND_STATIC
+    SbOP2_END = FIND_STATIC_
 };
 
 #endif

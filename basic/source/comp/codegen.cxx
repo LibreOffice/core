@@ -71,7 +71,7 @@ void SbiCodeGen::GenStmnt()
     if( bStmnt )
     {
         bStmnt = false;
-        Gen( _STMNT, nLine, nCol );
+        Gen( STMNT_, nLine, nCol );
     }
 }
 
@@ -508,17 +508,17 @@ public:
         m_ConvertedBuf += (sal_uInt8)eOp;
         switch( eOp )
         {
-            case _JUMP:
-            case _JUMPT:
-            case _JUMPF:
-            case _GOSUB:
-            case _CASEIS:
-            case _RETURN:
-            case _ERRHDL:
-            case _TESTFOR:
+            case JUMP_:
+            case JUMPT_:
+            case JUMPF_:
+            case GOSUB_:
+            case CASEIS_:
+            case RETURN_:
+            case ERRHDL_:
+            case TESTFOR_:
                 nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
-            case _RESUME:
+            case RESUME_:
                 if ( nOp1 > 1 )
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
@@ -531,7 +531,7 @@ public:
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) override
     {
         m_ConvertedBuf += (sal_uInt8)eOp;
-        if ( eOp == _CASEIS )
+        if ( eOp == CASEIS_ )
                 if ( nOp1 )
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
         m_ConvertedBuf += static_cast<S>(nOp1);

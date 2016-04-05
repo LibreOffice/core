@@ -33,7 +33,7 @@ bool SbiParser::Channel( bool bAlways )
         while( Peek() == COMMA || Peek() == SEMICOLON )
             Next();
         aExpr.Gen();
-        aGen.Gen( _CHANNEL );
+        aGen.Gen( CHANNEL_ );
         bRes = true;
     }
     else if( bAlways )
@@ -56,7 +56,7 @@ void SbiParser::Print()
             pExpr->Gen();
             pExpr.reset();
             Peek();
-            aGen.Gen( eCurTok == COMMA ? _PRINTF : _BPRINT );
+            aGen.Gen( eCurTok == COMMA ? PRINTF_ : BPRINT_ );
         }
         if( eCurTok == COMMA || eCurTok == SEMICOLON )
         {
@@ -65,12 +65,12 @@ void SbiParser::Print()
         }
         else
         {
-            aGen.Gen( _PRCHAR, '\n' );
+            aGen.Gen( PRCHAR_, '\n' );
             break;
         }
     }
     if( bChan )
-        aGen.Gen( _CHAN0 );
+        aGen.Gen( CHAN0_ );
 }
 
 // WRITE #chan, expr, ...
@@ -84,21 +84,21 @@ void SbiParser::Write()
         std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this ));
         pExpr->Gen();
         pExpr.reset();
-        aGen.Gen( _BWRITE );
+        aGen.Gen( BWRITE_ );
         if( Peek() == COMMA )
         {
-            aGen.Gen( _PRCHAR, ',' );
+            aGen.Gen( PRCHAR_, ',' );
             Next();
             if( IsEoln( Peek() ) ) break;
         }
         else
         {
-            aGen.Gen( _PRCHAR, '\n' );
+            aGen.Gen( PRCHAR_, '\n' );
             break;
         }
     }
     if( bChan )
-        aGen.Gen( _CHAN0 );
+        aGen.Gen( CHAN0_ );
 }
 
 
@@ -136,16 +136,16 @@ void SbiParser::LineInput()
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
         Error( ERRCODE_BASIC_CONVERSION );
     pExpr->Gen();
-    aGen.Gen( _LINPUT );
+    aGen.Gen( LINPUT_ );
     pExpr.reset();
-    aGen.Gen( _CHAN0 );     // ResetChannel() not in StepLINPUT() anymore
+    aGen.Gen( CHAN0_ );     // ResetChannel() not in StepLINPUT() anymore
 }
 
 // INPUT
 
 void SbiParser::Input()
 {
-    aGen.Gen( _RESTART );
+    aGen.Gen( RESTART_ );
     Channel( true );
     std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
     while( !bAbort )
@@ -153,7 +153,7 @@ void SbiParser::Input()
         if( !pExpr->IsVariable() )
             Error( ERRCODE_BASIC_VAR_EXPECTED );
         pExpr->Gen();
-        aGen.Gen( _INPUT );
+        aGen.Gen( INPUT_ );
         if( Peek() == COMMA )
         {
             Next();
@@ -162,7 +162,7 @@ void SbiParser::Input()
         else break;
     }
     pExpr.reset();
-    aGen.Gen( _CHAN0 );
+    aGen.Gen( CHAN0_ );
 }
 
 // OPEN stringexpr FOR mode ACCESS access mode AS Channel [Len=n]
@@ -266,7 +266,7 @@ void SbiParser::Open()
     if( pChan )
         pChan->Gen();
     aFileName.Gen();
-    aGen.Gen( _OPEN, static_cast<sal_uInt32>(nMode), static_cast<sal_uInt32>(nFlags) );
+    aGen.Gen( OPEN_, static_cast<sal_uInt32>(nMode), static_cast<sal_uInt32>(nFlags) );
     bInStatement = false;
 }
 
@@ -292,7 +292,7 @@ void SbiParser::Name()
     SbiExpression aExpr2( this );
     aExpr1.Gen();
     aExpr2.Gen();
-    aGen.Gen( _RENAME );
+    aGen.Gen( RENAME_ );
 }
 
 // CLOSE [n,...]
@@ -301,7 +301,7 @@ void SbiParser::Close()
 {
     Peek();
     if( IsEoln( eCurTok ) )
-        aGen.Gen( _CLOSE, 0 );
+        aGen.Gen( CLOSE_, 0 );
     else
     for( ;; )
     {
@@ -309,8 +309,8 @@ void SbiParser::Close()
         while( Peek() == COMMA || Peek() == SEMICOLON )
             Next();
         aExpr.Gen();
-        aGen.Gen( _CHANNEL );
-        aGen.Gen( _CLOSE, 1 );
+        aGen.Gen( CHANNEL_ );
+        aGen.Gen( CLOSE_, 1 );
 
         if( IsEoln( Peek() ) )
             break;
