@@ -865,7 +865,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
         sal_Int32 n = aStreamPipe.write(
             aArguments.getStr(), aArguments.getLength());
         if (n != aArguments.getLength()) {
-            SAL_INFO("desktop", "short write: " << n);
+            SAL_INFO("desktop.app", "short write: " << n);
             return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
         }
 
@@ -1177,7 +1177,7 @@ void PipeIpcThread::execute()
                 SEND_ARGUMENTS, SAL_N_ELEMENTS(SEND_ARGUMENTS));
                 // incl. terminating NUL
             if (n != SAL_N_ELEMENTS(SEND_ARGUMENTS)) {
-                SAL_WARN("desktop", "short write: " << n);
+                SAL_WARN("desktop.app", "short write: " << n);
                 continue;
             }
 
@@ -1202,7 +1202,7 @@ void PipeIpcThread::execute()
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
                 // incl. terminating NUL
             if (n != SAL_N_ELEMENTS(PROCESSING_DONE)) {
-                SAL_WARN("desktop", "short write: " << n);
+                SAL_WARN("desktop.app", "short write: " << n);
                 continue;
             }
         }
