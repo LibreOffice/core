@@ -270,7 +270,7 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
 {
     // This is rather expensive to do per face.
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
-    PhysicalFontFamily* pFamily = rFontCollection.FindOrCreateFamily( aFamilyName );
+    PhysicalFontFamily* pFamily(nullptr);
 
     for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
@@ -279,6 +279,11 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
         if( bEmbeddable && !pFace->IsEmbeddable() && !pFace->IsSubsettable() )
             continue;
 
+        if (!pFamily)
+        {   // tdf#98989 lazy create as family without faces won't work
+            pFamily = rFontCollection.FindOrCreateFamily( aFamilyName );
+        }
+        assert(pFamily);
         PhysicalFontFace* pClonedFace = pFace->Clone();
 
         assert( pClonedFace->GetFamilyName().replaceAll("-", "").trim() == GetFamilyName().replaceAll("-", "").trim() );
