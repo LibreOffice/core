@@ -46,27 +46,27 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     if ( pw1 && nItemCount>=10000 )
     {
         SAL_INFO( "svl", pw1 );
-        pw1 = NULL;
+        pw1 = nullptr;
     }
     if ( pw2 && nItemCount>=100000 )
     {
         SAL_INFO( "svl", pw2 );
-        pw2 = NULL;
+        pw2 = nullptr;
     }
     if ( pw3 && nItemCount>=1000000 )
     {
         SAL_INFO( "svl", pw3 );
-        pw3 = NULL;
+        pw3 = nullptr;
     }
     if ( pw4 && nItemCount>=5000000 )
     {
         SAL_INFO( "svl", pw4 );
-        pw4 = NULL;
+        pw4 = nullptr;
     }
     if ( pw5 && nItemCount>=10000000 )
     {
         SAL_INFO( "svl", pw5 );
-        pw5 = NULL;
+        pw5 = nullptr;
     }
 #endif
 }
@@ -82,27 +82,27 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     if ( pw1 && nItemCount>=10000 )
     {
         SAL_INFO( "svl", pw1 );
-        pw1 = NULL;
+        pw1 = nullptr;
     }
     if ( pw2 && nItemCount>=100000 )
     {
         SAL_INFO( "svl", pw2 );
-        pw2 = NULL;
+        pw2 = nullptr;
     }
     if ( pw3 && nItemCount>=1000000 )
     {
         SAL_INFO( "svl", pw3 );
-        pw3 = NULL;
+        pw3 = nullptr;
     }
     if ( pw4 && nItemCount>=5000000 )
     {
         SAL_INFO( "svl", pw4 );
-        pw4 = NULL;
+        pw4 = nullptr;
     }
     if ( pw5 && nItemCount>=10000000 )
     {
         SAL_INFO( "svl", pw5 );
-        pw5 = NULL;
+        pw5 = nullptr;
     }
 #endif
 }
