@@ -3036,15 +3036,19 @@ bool ScCompiler::IsReference( const OUString& rName )
     }
     else
     {
-        // Special treatment for the 'E:\[doc]Sheet1:Sheet3'!D5 Excel sickness,
-        // mnRangeOpPosInSymbol did not catch the range operator as it is
-        // within a quoted name.
         switch (pConv->meConv)
         {
             case FormulaGrammar::CONV_XL_A1:
-            case FormulaGrammar::CONV_XL_R1C1:
             case FormulaGrammar::CONV_XL_OOX:
-                if (rName[0] == '\'' && IsDoubleReference( rName))
+                // Special treatment for the 'E:\[doc]Sheet1:Sheet3'!D5 Excel
+                // sickness, mnRangeOpPosInSymbol did not catch the range
+                // operator as it is within a quoted name.
+                if (rName[0] != '\'')
+                    return false;   // Document name has to be single quoted.
+                // fallthru
+            case FormulaGrammar::CONV_XL_R1C1:
+                // C2 or C[1] are valid entire column references.
+                if (IsDoubleReference( rName))
                     return true;
                 break;
             default:
