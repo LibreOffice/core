@@ -742,7 +742,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         nullptr,
         &SwWW8ImplReader::Read_F_Tox,               // 8
         nullptr,
-        nullptr,
+        &SwWW8ImplReader::Read_F_Styleref,          // 10
         nullptr,
         &SwWW8ImplReader::Read_F_Seq,               // 12
         &SwWW8ImplReader::Read_F_Tox,               // 13
@@ -894,8 +894,25 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (aF.nId != 88 && m_pPlcxMan->GetDoingDrawTextBox())
         return aF.nLen;
 
+    bool bHasHandler = aWW8FieldTab[aF.nId] != nullptr;
+    if (aF.nId == ww::eSTYLEREF)
+    {
+        // STYLEREF, by default these are not handled.
+        bHasHandler = false;
+        sal_uInt64 nOldPos = m_pStrm->Tell();
+        OUString aStr;
+        aF.nLCode = m_pSBase->WW8ReadString(*m_pStrm, aStr, m_pPlcxMan->GetCpOfs() + aF.nSCode, aF.nLCode, m_eTextCharSet);
+        m_pStrm->Seek(nOldPos);
+
+        WW8ReadFieldParams aReadParam(aStr);
+        sal_Int32 nRet = aReadParam.SkipToNextToken();
+        if (nRet == -2 && !aReadParam.GetResult().isEmpty())
+            // Single numeric argument: this can be handled by SwChapterField.
+            bHasHandler = rtl::isAsciiDigit(aReadParam.GetResult()[0]);
+    }
+
     // keine Routine vorhanden
-    if (bNested || !aWW8FieldTab[aF.nId] || bCodeNest)
+    if (bNested || !bHasHandler || bCodeNest)
     {
         if( m_nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Resultat nicht als Text
@@ -1431,6 +1448,27 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, OUString& rStr )
         aField.SetFormula(aSequenceName);
 
     m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
+    return FLD_OK;
+}
+
+eF_ResT SwWW8ImplReader::Read_F_Styleref(WW8FieldDesc*, OUString& rString)
+{
+    WW8ReadFieldParams aReadParam(rString);
+    sal_Int32 nRet = aReadParam.SkipToNextToken();
+    if (nRet != -2)
+        // \param was found, not normal text.
+        return FLD_TAGIGN;
+
+    OUString aResult = aReadParam.GetResult();
+    sal_Int32 nResult = aResult.toInt32();
+    if (nResult < 1)
+        return FLD_TAGIGN;
+
+    SwFieldType* pFieldType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_CHAPTERFLD);
+    SwChapterField aField(static_cast<SwChapterFieldType*>(pFieldType), CF_TITLE);
+    aField.SetLevel(nResult - 1);
+    m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
+
     return FLD_OK;
 }
 
