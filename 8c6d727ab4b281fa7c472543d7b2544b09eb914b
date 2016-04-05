@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_135f8273",
+        "filename": "linguistic/source/lngsvcmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-04-05T12:05:58Z",
+      "side": 1,
+      "message": "This looks odd esp. with the random constant, but the call does not seem to change state/cause sideeffects.\n\nPlease look out for regressions on this one by your change.",
+      "revId": "8c6d727ab4b281fa7c472543d7b2544b09eb914b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
