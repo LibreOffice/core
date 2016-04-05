@@ -83,7 +83,7 @@ bool isAccessibilitySupportDesired()
                          || strcmp((char*) arData, "0") == 0)
                     retVal = false;
                 else
-                    assert(0);
+                    SAL_WARN("jfw", "bad registry value " << arData);
             }
             else if (dwType == REG_DWORD)
             {
@@ -92,7 +92,8 @@ bool isAccessibilitySupportDesired()
                 else if (arData[0] == 0)
                     retVal = false;
                 else
-                    assert(0);
+                    SAL_WARN(
+                        "jfw", "bad registry value " << unsigned(arData[0]));
             }
         }
     }
