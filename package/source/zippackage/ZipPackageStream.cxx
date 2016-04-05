@@ -54,6 +54,8 @@
 #include <rtl/random.h>
 
 #include <PackageConstants.hxx>
+
+#include <algorithm>
 #include <thread>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
