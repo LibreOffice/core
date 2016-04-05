@@ -722,8 +722,8 @@ ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 }
 
 RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId,
-                                  RscTop * pSuper, bool bNoIdent )
-    : RscBaseCont( nId, nTypeId, pSuper, bNoIdent )
+                                  RscTop * pSuper )
+    : RscBaseCont( nId, nTypeId, pSuper, true )
 {
 }
 
@@ -750,7 +750,7 @@ void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
-    : RscContWriteSrc( nId, nTypeId, pSuper, true/*bNoIdent*/ )
+    : RscContWriteSrc( nId, nTypeId, pSuper )
 {
 }
 
@@ -774,7 +774,7 @@ ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
 RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId,
                                     RscTop * pSuper )
-    : RscContWriteSrc( nId, nTypeId, pSuper, true/*bNoIdent*/ )
+    : RscContWriteSrc( nId, nTypeId, pSuper )
 {
 }
 

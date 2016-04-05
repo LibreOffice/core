@@ -41,7 +41,7 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
         void loadData();
-        TTableWindowData::value_type existsTable(const OUString& _rComposedTableName,bool _bCase) const;
+        TTableWindowData::value_type existsTable(const OUString& _rComposedTableName) const;
 
         // load the window positions out of the datasource
         void loadLayoutInformation();

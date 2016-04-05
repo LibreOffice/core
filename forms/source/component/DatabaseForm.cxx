@@ -185,7 +185,7 @@ void OFormSubmitResetThread::processEvent(
         bool _bSubmit)
 {
     if (_bSubmit)
-        static_cast<ODatabaseForm *>(pCompImpl)->submit_impl(_rControl, *static_cast<const css::awt::MouseEvent*>(_pEvt), true);
+        static_cast<ODatabaseForm *>(pCompImpl)->submit_impl(_rControl, *static_cast<const css::awt::MouseEvent*>(_pEvt));
     else
         static_cast<ODatabaseForm *>(pCompImpl)->reset_impl(true);
 }
@@ -2118,7 +2118,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
     {
         // direct call without any approving by the listeners
         aGuard.clear();
-        submit_impl( Control, MouseEvt, true );
+        submit_impl( Control, MouseEvt );
     }
 }
 
@@ -2152,23 +2152,20 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
     } // if (xDisp.is())
 }
 
-void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::awt::MouseEvent& MouseEvt, bool _bAproveByListeners)
+void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::awt::MouseEvent& MouseEvt)
 {
 
-    if (_bAproveByListeners)
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aSubmitListeners);
+    EventObject aEvt(static_cast<XWeak*>(this));
+    bool bCanceled = false;
+    while (aIter.hasMoreElements() && !bCanceled)
     {
-        ::comphelper::OInterfaceIteratorHelper2 aIter(m_aSubmitListeners);
-        EventObject aEvt(static_cast<XWeak*>(this));
-        bool bCanceled = false;
-        while (aIter.hasMoreElements() && !bCanceled)
-        {
-            if (!static_cast<XSubmitListener*>(aIter.next())->approveSubmit(aEvt))
-                bCanceled = true;
-        }
-
-        if (bCanceled)
-            return;
+        if (!static_cast<XSubmitListener*>(aIter.next())->approveSubmit(aEvt))
+            bCanceled = true;
     }
+
+    if (bCanceled)
+        return;
 
     FormSubmitEncoding eSubmitEncoding;
     FormSubmitMethod eSubmitMethod;

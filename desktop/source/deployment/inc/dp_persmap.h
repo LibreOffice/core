@@ -36,14 +36,13 @@ class PersistentMap
 {
     ::osl::File m_MapFile;
     t_string2string_map m_entries;
-    bool m_bReadOnly;
     bool m_bIsOpen;
     bool m_bToBeCreated;
     bool m_bIsDirty;
 
 public:
     ~PersistentMap();
-    PersistentMap( OUString const & url, bool readOnly );
+    PersistentMap( OUString const & url );
     /** in mem db */
     PersistentMap();
 
