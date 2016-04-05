@@ -1327,11 +1327,6 @@ void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
     rRenderContext.DrawRect(Rectangle(aPos,aSize));
 }
 
-vcl::Window* ScCheckListMenuWindow::GetPreferredKeyInputWindow()
-{
-    return maTabStops.GetCurrentControl();
-}
-
 Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
 {
     if (!mxAccessible.is())

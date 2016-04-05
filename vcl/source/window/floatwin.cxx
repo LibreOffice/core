@@ -715,6 +715,8 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     {
         // force key input even without focus (useful for menus)
         mbGrabFocus = true;
+        mpWindowImpl->mpFrameData->mbHasFocus = true;
+        GrabFocus();
     }
     Show( true, ShowFlags::NoActivate );
 }

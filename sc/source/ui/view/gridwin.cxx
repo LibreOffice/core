@@ -347,8 +347,6 @@ public:
     ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
     virtual ~ScFilterFloatingWindow();
     virtual void dispose() override;
-    // required for System FloatingWindows that will not process KeyInput by themselves
-    virtual vcl::Window* GetPreferredKeyInputWindow() override;
 };
 
 ScFilterFloatingWindow::ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
@@ -364,12 +362,6 @@ void ScFilterFloatingWindow::dispose()
 {
     EndPopupMode();
     FloatingWindow::dispose();
-}
-
-vcl::Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
-{
-    // redirect keyinput in the child window
-    return GetWindow(GetWindowType::FirstChild) ? GetWindow(GetWindowType::FirstChild)->GetPreferredKeyInputWindow() : nullptr;    // will be the FilterBox
 }
 
 static bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )

@@ -299,7 +299,6 @@ public:
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual bool Notify(NotifyEvent& rNEvt) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
-    virtual vcl::Window* GetPreferredKeyInputWindow() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     void setMemberSize(size_t n);

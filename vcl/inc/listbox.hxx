@@ -406,7 +406,6 @@ public:
 
     virtual void    Resize() override;
     virtual const Wallpaper& GetDisplayBackground() const override;
-    virtual vcl::Window*     GetPreferredKeyInputWindow() override;
 
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr );
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr, const Image& rImage );

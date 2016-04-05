@@ -2224,11 +2224,6 @@ void ImplListBox::GetFocus()
         Control::GetFocus();
 }
 
-vcl::Window* ImplListBox::GetPreferredKeyInputWindow()
-{
-    return maLBWindow.get();
-}
-
 void ImplListBox::Resize()
 {
     Control::Resize();

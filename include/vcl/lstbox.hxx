@@ -134,7 +134,6 @@ public:
     virtual void        DoubleClick();
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
-    virtual vcl::Window*     GetPreferredKeyInputWindow() override;
 
     virtual const Wallpaper& GetDisplayBackground() const override;
 

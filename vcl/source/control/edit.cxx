@@ -1945,14 +1945,6 @@ void Edit::GetFocus()
     Control::GetFocus();
 }
 
-vcl::Window* Edit::GetPreferredKeyInputWindow()
-{
-    if ( mpSubEdit )
-        return mpSubEdit->GetPreferredKeyInputWindow();
-    else
-        return this;
-}
-
 void Edit::LoseFocus()
 {
     if ( mpUpdateDataTimer && !mbIsSubEdit && mpUpdateDataTimer->IsActive() )

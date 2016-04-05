@@ -259,7 +259,6 @@ private:
 protected:
     virtual void    Resize() override;
     virtual bool    Close() override;
-    virtual vcl::Window* GetPreferredKeyInputWindow() override;
     virtual void    GetFocus() override;
 
 public:
@@ -285,9 +284,7 @@ private:
 protected:
     virtual void    Resize() override;
     virtual bool    Close() override;
-    virtual vcl::Window* GetPreferredKeyInputWindow() override;
     virtual void    GetFocus() override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~SvxLineWindow_Impl() { disposeOnce(); }
@@ -1659,11 +1656,6 @@ void SvxFrameWindow_Impl::dispose()
     SfxPopupWindow::dispose();
 }
 
-vcl::Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
-{
-    return aFrameSet.get();
-}
-
 void SvxFrameWindow_Impl::GetFocus()
 {
     if (aFrameSet)
@@ -2043,26 +2035,9 @@ bool SvxLineWindow_Impl::Close()
     return SfxPopupWindow::Close();
 }
 
-vcl::Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
-{
-    return m_aLineStyleLb.get();
-}
-
 void SvxLineWindow_Impl::GetFocus()
 {
     m_aLineStyleLb->GrabFocus();
-}
-
-void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxPopupWindow::DataChanged( rDCEvt );
-#if 0
-    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-    {
-        CreateBitmaps();
-        Invalidate();
-    }
-#endif
 }
 
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(

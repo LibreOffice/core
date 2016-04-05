@@ -3443,13 +3443,6 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     SetLineColor( oldLineCol );
 }
 
-// controls should return the window that gets the
-// focus by default, so keyevents can be sent to that window directly
-vcl::Window* Window::GetPreferredKeyInputWindow()
-{
-    return this;
-}
-
 bool Window::IsScrollable() const
 {
     // check for scrollbars

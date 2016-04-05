@@ -496,19 +496,6 @@ void ListBox::GetFocus()
     Control::GetFocus();
 }
 
-vcl::Window* ListBox::GetPreferredKeyInputWindow()
-{
-    if ( mpImplLB )
-    {
-        if( IsDropDownBox() )
-            return mpImplWin->GetPreferredKeyInputWindow();
-        else
-            return mpImplLB->GetPreferredKeyInputWindow();
-    }
-
-    return Control::GetPreferredKeyInputWindow();
-}
-
 void ListBox::LoseFocus()
 {
     if( IsDropDownBox() )

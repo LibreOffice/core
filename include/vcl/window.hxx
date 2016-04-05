@@ -824,7 +824,6 @@ public:
     virtual void                        DataChanged( const DataChangedEvent& rDCEvt );
     virtual bool                        PreNotify( NotifyEvent& rNEvt );
     virtual bool                        Notify( NotifyEvent& rNEvt );
-    virtual vcl::Window*                GetPreferredKeyInputWindow();
 
     // These methods call the relevant virtual method when not in/post dispose
     void                                CompatGetFocus();

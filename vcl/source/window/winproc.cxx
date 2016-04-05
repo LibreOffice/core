@@ -821,10 +821,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     if( !pChild || ( pChild->ImplGetWindowImpl()->mbFloatWin && !static_cast<FloatingWindow *>(pChild)->GrabsFocus() ) )
         pChild = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     else
-    {
-        // allow floaters to forward keyinput to some member
-        pChild = pChild->GetPreferredKeyInputWindow();
-    }
+        pChild = pChild->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
 
     // no child - than no input
     if ( !pChild )

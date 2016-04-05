@@ -73,7 +73,6 @@ public:
 
     bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }
-    virtual vcl::Window*             GetPreferredKeyInputWindow() override;
 };
 
 SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx)
@@ -126,13 +125,6 @@ void SvxPopupWindowListBox::StateChanged(
 {
     rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SfxItemState::DISABLED) );
     SfxPopupWindow::StateChanged( nSID, eState, pState );
-}
-
-vcl::Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
-{
-    // allows forwarding key events in the correct window
-    // without setting the focus
-    return m_pListBox->GetPreferredKeyInputWindow();
 }
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
