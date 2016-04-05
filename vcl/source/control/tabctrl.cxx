@@ -359,164 +359,185 @@ namespace MinimumRaggednessWrap
 
 bool TabControl::ImplPlaceTabs( long nWidth )
 {
-    if ( nWidth <= 0 )
-        return false;
     if ( mpTabCtrlData->maItemList.empty() )
         return false;
 
-    long nMaxWidth = nWidth;
+    long origWidth = nWidth;
+    nWidth -= 16;
+    if ( nWidth <= 0 )
+        return false;
 
     const long nOffsetX = 2 + GetItemsOffset().X();
     const long nOffsetY = 2 + GetItemsOffset().Y();
 
-    //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
-    //of ugly bare tabs on lines of their own
+    // fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
+    // of single bare tab on lines of their own
 
-    //collect widths
-    std::vector<sal_Int32> aWidths;
+    // collect widths
+    std::vector< sal_Int32 > aWidths;
     for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        aWidths.push_back(ImplGetItemSize( &(*it), nMaxWidth ).Width());
+        aWidths.push_back( ImplGetItemSize( &(*it), nWidth ).Width() );
     }
 
-    //aBreakIndexes will contain the indexes of the last tab on each row
-    std::deque<size_t> aBreakIndexes(MinimumRaggednessWrap::GetEndOfLineIndexes(aWidths, nMaxWidth - nOffsetX - 2));
+    // fill aBreakIndexes with indexes of the last tab on each row
+    long lineW = nWidth - nOffsetX - 2;
+    std::deque< size_t > aBreakIndexes( MinimumRaggednessWrap::GetEndOfLineIndexes( aWidths, lineW ) );
 
-    if ( (mnMaxPageWidth > 0) && (mnMaxPageWidth < nMaxWidth) )
-        nMaxWidth = mnMaxPageWidth;
-    nMaxWidth -= GetItemsOffset().X();
+    if ( ( mnMaxPageWidth > 0 ) && ( mnMaxPageWidth < nWidth ) )
+        nWidth = mnMaxPageWidth;
+
+    nWidth -= GetItemsOffset().X();
+
+    const size_t magicMaxLines = 100; // magic number of maximum lines
+
+    long maxLineWidth = 0;
+    long nLineWidths[ magicMaxLines ];
+    nLineWidths[ 0 ] = 0;
+    sal_uInt16 nLineFirstTabNums[ magicMaxLines + 1 ];
+    nLineFirstTabNums[ 0 ] = 0;
 
     long nX = nOffsetX;
     long nY = nOffsetY;
 
-    sal_uInt16 nLines = 0;
-    sal_uInt16 nCurLine = 0;
+    sal_uInt16 nLines = 0; // number of lines
+    sal_uInt16 nChosenLine = 0; // line which is active now
 
-    long nLineWidthAry[100];
-    sal_uInt16 nLinePosAry[101];
-    nLineWidthAry[0] = 0;
-    nLinePosAry[0] = 0;
-
-    size_t nIndex = 0;
-    sal_uInt16 nPos = 0;
-
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
+    sal_uInt16 nIndex = 0;
+    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() ;
+         it != mpTabCtrlData->maItemList.end() ;
+         ++it, ++nIndex )
     {
-        Size aSize = ImplGetItemSize( &(*it), nMaxWidth );
-
         bool bNewLine = false;
-        if (!aBreakIndexes.empty() && nIndex > aBreakIndexes.front())
+        if ( !aBreakIndexes.empty() && nIndex > aBreakIndexes.front() )
         {
             aBreakIndexes.pop_front();
-            bNewLine = true;
+            bNewLine = true;  // this tab is on new line
         }
 
-        if ( bNewLine && (nWidth > 2+nOffsetX) )
+        Size aSize = ImplGetItemSize( &(*it), nWidth );
+
+        if ( bNewLine && ( nWidth > 2 + nOffsetX ) )
         {
-            if ( nLines == 99 )
+            nLines++;
+            if ( nLines == magicMaxLines )
                 break;
 
             nX = nOffsetX;
             nY += aSize.Height();
-            nLines++;
-            nLineWidthAry[nLines] = 0;
-            nLinePosAry[nLines] = nPos;
+
+            nLineWidths[ nLines ] = 0;
+            nLineFirstTabNums[ nLines ] = nIndex;
         }
 
         Rectangle aNewRect( Point( nX, nY ), aSize );
-        if ( mbSmallInvalidate && (it->maRect != aNewRect) )
+        if ( mbSmallInvalidate && ( it->maRect != aNewRect ) )
             mbSmallInvalidate = false;
         it->maRect = aNewRect;
         it->mnLine = nLines;
         it->mbFullVisible = true;
 
-        nLineWidthAry[nLines] += aSize.Width();
+        nLineWidths[ nLines ] += aSize.Width();
+        if ( ( !maxLineWidth ) || ( nLineWidths[ nLines ] > maxLineWidth ) )
+            maxLineWidth = nLineWidths[ nLines ];
+
         nX += aSize.Width();
 
         if ( it->mnId == mnCurPageId )
-            nCurLine = nLines;
-
-        nPos++;
+            nChosenLine = nLines;
     }
 
-    if ( nLines )
-    { // two or more lines
-        long nLineHeightAry[100];
-        long nIH = mpTabCtrlData->maItemList[0].maRect.Bottom()-2;
+    nLineFirstTabNums[ nLines + 1 ] = static_cast< sal_uInt16 >( mpTabCtrlData->maItemList.size() );
 
-        for ( sal_uInt16 i = 0; i < nLines+1; i++ )
+    const long firstTabXWhenAlignedLeft = 1 + ( ( origWidth - nWidth ) >> 1 );
+
+    if ( nLines )
+    {   // two or more lines
+        const long tabHeight = mpTabCtrlData->maItemList[0].maRect.Bottom() - 2;
+        long nLineHeights[ nLines + 1 ];
+
+        for ( sal_uInt16 line = 0; line < nLines + 1; line++ )
         {
-            if ( i <= nCurLine )
-                nLineHeightAry[i] = nIH*(nLines-(nCurLine-i)) + GetItemsOffset().Y();
+            if ( line <= nChosenLine )
+                nLineHeights[ line ] = tabHeight * ( nLines - ( nChosenLine - line ) ) + GetItemsOffset().Y();
             else
-                nLineHeightAry[i] = nIH*(i-nCurLine-1) + GetItemsOffset().Y();
+                nLineHeights[ line ] = tabHeight * ( line - nChosenLine - 1 ) + GetItemsOffset().Y();
         }
 
-        nLinePosAry[nLines+1] = (sal_uInt16)mpTabCtrlData->maItemList.size();
+        sal_uInt32 item = 0;
+        sal_uInt16 lineN = 0;
+        bool bNewLine = false;
+        long lastX = firstTabXWhenAlignedLeft;
 
-        long nDX = 0;
-        long nModDX = 0;
-        long nIDX = 0;
-
-        sal_uInt16 i = 0;
-        sal_uInt16 n = 0;
         for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it )
+             it != mpTabCtrlData->maItemList.end(); ++it, item++ )
         {
-            if ( i == nLinePosAry[n] )
+            if ( item == nLineFirstTabNums[ lineN ] )
             {
-                if ( n == nLines+1 )
+                if ( lineN == nLines + 1 )
                     break;
 
-                nIDX = 0;
-                if( nLinePosAry[n+1]-i > 0 )
-                {
-                    nDX = ( nWidth - nOffsetX - nLineWidthAry[n] ) / ( nLinePosAry[n+1] - i );
-                    nModDX = ( nWidth - nOffsetX - nLineWidthAry[n] ) % ( nLinePosAry[n+1] - i );
-                }
-                else
-                {
-                    // FIXME: this is a case of tabctrl way too small
-                    nDX = 0;
-                    nModDX = 0;
-                }
-                n++;
+                lineN++;
+                bNewLine = true;
             }
 
-            it->maRect.Left() += nIDX;
-            it->maRect.Right() += nIDX + nDX;
-            it->maRect.Top() = nLineHeightAry[n-1];
-            it->maRect.Bottom() = nLineHeightAry[n-1] + nIH;
-            nIDX += nDX;
+            it->maRect.Top() = nLineHeights[ lineN - 1 ];
+            it->maRect.Bottom() = nLineHeights[ lineN - 1 ] + tabHeight;
 
-            if ( nModDX )
+            long lastTabOnPreviousLine = 0;
+            if ( lineN > 0 )
+                    lastTabOnPreviousLine = nLineFirstTabNums[ lineN - 1 ];
+            long itemsInRow = nLineFirstTabNums[ lineN ] - lastTabOnPreviousLine;
+
+            it->maRect.Right() += firstTabXWhenAlignedLeft;
+
+            if( ImplGetSVData()->maNWFData.mbCenteredTabs )
             {
-                nIDX++;
-                it->maRect.Right()++;
-                nModDX--;
+                long nDeltaWidth = 0;
+                long nModDW = 0;
+                if ( maxLineWidth > nLineWidths[ lineN ] )
+                {
+                    nDeltaWidth = ( maxLineWidth - nLineWidths[ lineN ] ) / itemsInRow;
+                    nModDW = ( maxLineWidth - nLineWidths[ lineN ] ) % itemsInRow;
+                }
+                if ( nDeltaWidth > 0 )
+                    it->maRect.Right() += nDeltaWidth;
+                if ( nModDW > 0 )
+                    it->maRect.Right() += ( nModDW >> 1 );
             }
 
-            i++;
+            if ( bNewLine )
+            {
+                lastX = firstTabXWhenAlignedLeft;
+                bNewLine = false;
+            }
+            it->maRect.Left() = lastX;
+            lastX = it->maRect.Right();
         }
     }
     else
-    { // only one line
-        if(ImplGetSVData()->maNWFData.mbCenteredTabs)
+    {   // only one line
+        long firstTabX = firstTabXWhenAlignedLeft;
+
+        if( ImplGetSVData()->maNWFData.mbCenteredTabs )
+        {   // place them into the middle
+            long spaceLeft = nWidth; // space left after tabs
+            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+                 it != mpTabCtrlData->maItemList.end(); ++it )
+            {
+                spaceLeft -= it->maRect.Right() - it->maRect.Left();
+            }
+            firstTabX += ( 1 + spaceLeft ) >> 1;
+        }
+
+        long lastX = firstTabX;
+        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+                it != mpTabCtrlData->maItemList.end(); ++it )
         {
-            int nRightSpace = nMaxWidth;//space left on the right by the tabs
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
-            {
-                nRightSpace -= it->maRect.Right()-it->maRect.Left();
-            }
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
-            {
-                it->maRect.Left() += nRightSpace / 2;
-                it->maRect.Right() += nRightSpace / 2;
-            }
+            it->maRect.Left() = lastX;
+            it->maRect.Right() += firstTabX;
+            lastX = it->maRect.Right();
         }
     }
 
@@ -525,59 +546,63 @@ bool TabControl::ImplPlaceTabs( long nWidth )
 
 Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHeight )
 {
-    Size aWinSize = Control::GetOutputSizePixel();
-    if ( nWidth < 0 )
-        nWidth = aWinSize.Width();
-    if ( nHeight < 0 )
-        nHeight = aWinSize.Height();
-
     if ( mpTabCtrlData->maItemList.empty() )
     {
-        long nW = nWidth-TAB_OFFSET*2;
-        long nH = nHeight-TAB_OFFSET*2;
-        return (nW > 0 && nH > 0)
-        ? Rectangle( Point( TAB_OFFSET, TAB_OFFSET ), Size( nW, nH ) )
-        : Rectangle();
+        long nW = nWidth - TAB_OFFSET * 2;
+        long nH = nHeight - TAB_OFFSET * 2;
+        return ( nW > 0 && nH > 0 )
+                ?  Rectangle( Point( TAB_OFFSET, TAB_OFFSET ), Size( nW, nH ) )
+                :  Rectangle();
+    }
+
+    if ( ( nWidth < 0 ) || ( nHeight < 0 ) ) {
+        Size aWinSize = Control::GetOutputSizePixel();
+        if ( nWidth < 0 )
+            nWidth = aWinSize.Width();
+        if ( nHeight < 0 )
+            nHeight = aWinSize.Height();
     }
 
     if ( nItemPos == TAB_PAGERECT )
     {
-        sal_uInt16 nLastPos;
+        sal_uInt16 nCurPagePos = 0;
         if ( mnCurPageId )
-            nLastPos = GetPagePos( mnCurPageId );
-        else
-            nLastPos = 0;
+            nCurPagePos = GetPagePos( mnCurPageId );
 
-        Rectangle aRect = ImplGetTabRect( nLastPos, nWidth, nHeight );
-        long nW = nWidth-TAB_OFFSET*2;
-        long nH = nHeight-aRect.Bottom()-TAB_OFFSET*2;
-        aRect = (nW > 0 && nH > 0)
-        ? Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ), Size( nW, nH ) )
-        : Rectangle();
+        Rectangle aRect = ImplGetTabRect( nCurPagePos, nWidth, nHeight );
+        long nW = nWidth;
+        long nH = nHeight - aRect.Bottom();
+        nW -= TAB_OFFSET * 2;
+        nH -= TAB_OFFSET * 2;
+        aRect = ( nW > 0 && nH > 0 )
+                    ?  Rectangle( Point( TAB_OFFSET, aRect.Bottom() + TAB_OFFSET ), Size( nW, nH ) )
+                    :  Rectangle();
         return aRect;
     }
 
     nWidth -= 1;
 
-    if ( (nWidth <= 0) || (nHeight <= 0) )
+    if ( ( nWidth <= 0 ) || ( nHeight <= 0 ) )
         return Rectangle();
 
-    if ( mbFormat || (mnLastWidth != nWidth) || (mnLastHeight != nHeight) )
+    if ( mbFormat || ( mnLastWidth != nWidth ) || ( mnLastHeight != nHeight ) )
     {
-        vcl::Font aFont( GetFont() );
-        aFont.SetTransparent( true );
-        SetFont( aFont );
+       ///vcl::Font aFont( GetFont() );
+       ///aFont.SetTransparent( true );
+       ///SetFont( aFont );
 
+        // calculate offsets & sizes for each tab
         bool bRet = ImplPlaceTabs( nWidth );
         if ( !bRet )
             return Rectangle();
 
-        mnLastWidth     = nWidth;
-        mnLastHeight    = nHeight;
-        mbFormat        = false;
+        mnLastWidth = nWidth;
+        mnLastHeight = nHeight;
+        mbFormat = false;
     }
 
-    return size_t(nItemPos) < mpTabCtrlData->maItemList.size() ? mpTabCtrlData->maItemList[nItemPos].maRect : Rectangle();
+    return static_cast< size_t >( nItemPos ) < mpTabCtrlData->maItemList.size()
+                ? mpTabCtrlData->maItemList[ nItemPos ].maRect : Rectangle();
 }
 
 void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
@@ -1612,10 +1637,11 @@ void TabControl::SetTabPageSizePixel( const Size& rSize )
     ImplFreeLayoutData();
 
     Size aNewSize( rSize );
-    aNewSize.Width() += TAB_OFFSET*2;
-    Rectangle aRect = ImplGetTabRect( TAB_PAGERECT,
-                                      aNewSize.Width(), aNewSize.Height() );
-    aNewSize.Height() += aRect.Top()+TAB_OFFSET;
+
+    aNewSize.Width() += TAB_OFFSET + TAB_OFFSET;
+    Rectangle aRect = ImplGetTabRect( TAB_PAGERECT, aNewSize.Width(), aNewSize.Height() );
+    aNewSize.Height() += aRect.Top() + TAB_OFFSET;
+
     Window::SetOutputSizePixel( aNewSize );
 }
 

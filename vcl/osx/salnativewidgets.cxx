@@ -490,8 +490,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aComboInfo.value = kThemeButtonOn;
             aComboInfo.adornment = kThemeAdornmentNone;
 
+# if ( MACOSX_SDK_VERSION > 1060 )
             if( nState & ControlState::FOCUSED )
                 aComboInfo.adornment |= kThemeAdornmentFocus;
+# endif
 
             HIThemeDrawButton(&rc, &aComboInfo, mrContext, kHIThemeOrientationNormal,&rc);
             bOK = true;
@@ -667,8 +669,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aPushInfo.adornment = ( nState & ControlState::DEFAULT ) ?
                kThemeAdornmentDefault :
                kThemeAdornmentNone;
+# if ( MACOSX_SDK_VERSION > 1060 )
             if( nState & ControlState::FOCUSED )
                 aPushInfo.adornment |= kThemeAdornmentFocus;
+# endif
 
             HIThemeDrawButton( &rc, &aPushInfo, mrContext, kHIThemeOrientationNormal, nullptr );
             bOK = true;
@@ -696,11 +700,14 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             ButtonValue aButtonValue = aValue.getTristateVal();
             aInfo.value = ImplGetButtonValue( aButtonValue );
 
-            aInfo.adornment = ( nState & ControlState::DEFAULT ) ?
-              kThemeAdornmentDefault :
-              kThemeAdornmentNone;
+            aInfo.adornment = ( nState & ControlState::DEFAULT ) ? kThemeAdornmentDefault : kThemeAdornmentNone;
+# if ( MACOSX_SDK_VERSION > 1060 )
             if( nState & ControlState::FOCUSED )
                 aInfo.adornment |= kThemeAdornmentFocus;
+# else
+            rc.origin.y -= 1;
+# endif
+
             HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, nullptr );
             bOK = true;
         }
@@ -881,20 +888,28 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     case ControlType::TabPane:
         {
             HIThemeTabPaneDrawInfo aTabPaneDrawInfo;
-            aTabPaneDrawInfo.version = 1;
+# if ( MACOSX_SDK_VERSION <= 1060 )
+            aTabPaneDrawInfo.version = 0;  // 0 for Jaguar-era tabs
+# else
+            aTabPaneDrawInfo.version = 1;  // 1 for "modern" tabs
+# endif
             aTabPaneDrawInfo.state = kThemeStateActive;
-            aTabPaneDrawInfo.direction=kThemeTabNorth;
-            aTabPaneDrawInfo.size=kHIThemeTabSizeNormal;
-            aTabPaneDrawInfo.kind=kHIThemeTabKindNormal;
+            aTabPaneDrawInfo.direction = kThemeTabNorth;
+            aTabPaneDrawInfo.size = kHIThemeTabSizeNormal;
+            aTabPaneDrawInfo.kind = kHIThemeTabKindNormal;
+            aTabPaneDrawInfo.adornment = kThemeAdornmentNone;
 
-            //the border is outside the rect rc for Carbon
-            //but for VCL it should be inside
-            rc.origin.x+=1;
-            rc.origin.y-=TAB_HEIGHT_NORMAL/2;
-            rc.size.height+=TAB_HEIGHT_NORMAL/2;
-            rc.size.width-=2;
+            // the border is outside the rect rc for Carbon
+            // but for VCL it is inside
+            rc.origin.x += 1;
+            rc.size.width -= 2;
+            if ( aTabPaneDrawInfo.version == 1 )
+            {
+                rc.origin.y -= TAB_HEIGHT_NORMAL >> 1;
+                rc.size.height += TAB_HEIGHT_NORMAL >> 1;
+            }
 
-            HIThemeDrawTabPane(&rc, &aTabPaneDrawInfo, mrContext, kHIThemeOrientationNormal);
+            HIThemeDrawTabPane( &rc, &aTabPaneDrawInfo, mrContext, kHIThemeOrientationNormal );
 
             bOK = true;
         }
@@ -903,52 +918,66 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     case ControlType::TabItem:
         {
             HIThemeTabDrawInfo aTabItemDrawInfo;
-            aTabItemDrawInfo.version=1;
-            aTabItemDrawInfo.style=kThemeTabNonFront;
-            aTabItemDrawInfo.direction=kThemeTabNorth;
-            aTabItemDrawInfo.size=kHIThemeTabSizeNormal;
-            aTabItemDrawInfo.adornment=kHIThemeTabAdornmentTrailingSeparator;
-            //State
-            if(nState & ControlState::SELECTED) {
-                aTabItemDrawInfo.style=kThemeTabFront;
+# if ( MACOSX_SDK_VERSION <= 1060 )
+            aTabItemDrawInfo.version = 0;  // 0 for Jaguar-era tabs
+# else
+            aTabItemDrawInfo.version = 1;  // 1 for "modern" tabs
+# endif
+            aTabItemDrawInfo.direction = kThemeTabNorth;
+            aTabItemDrawInfo.size = kHIThemeTabSizeNormal;
+            aTabItemDrawInfo.style = kThemeTabNonFront;
+
+            if( nState & ControlState::SELECTED ) {
+                aTabItemDrawInfo.style = kThemeTabFront;
             }
-            if(nState & ControlState::FOCUSED) {
-                aTabItemDrawInfo.adornment|=kHIThemeTabAdornmentFocus;
+# if ( MACOSX_SDK_VERSION > 1060 )
+            aTabItemDrawInfo.adornment = kHIThemeTabAdornmentTrailingSeparator;
+            if( nState & ControlState::FOCUSED ) {
+                aTabItemDrawInfo.adornment |= kHIThemeTabAdornmentFocus;
             }
+# else
+            aTabItemDrawInfo.adornment = kThemeAdornmentNone;
+# endif
 
-            //first, last or middle tab
-            aTabItemDrawInfo.position=kHIThemeTabPositionMiddle;
+            // by default it is tab somewhere in the middle
+            aTabItemDrawInfo.position = kHIThemeTabPositionMiddle;
 
-            TabitemValue const * pTabValue = static_cast<TabitemValue const *>(&aValue);
-            TabitemFlags nAlignment = pTabValue->mnAlignment;
-            //TabitemFlags::LeftAligned (and TabitemFlags::RightAligned) for the leftmost (or rightmost) tab
-            //when there are several lines of tabs because there is only one first tab and one
-            //last tab and TabitemFlags::FirstInGroup (and TabitemFlags::LastInGroup) because when the
-            //line width is different from window width, there may not be TabitemFlags::RightAligned
-            if( ( (nAlignment & TabitemFlags::LeftAligned)&&(nAlignment & TabitemFlags::RightAligned) ) ||
-                ( (nAlignment & TabitemFlags::FirstInGroup)&&(nAlignment & TabitemFlags::LastInGroup) )
-               ) //tab alone
-                aTabItemDrawInfo.position=kHIThemeTabPositionOnly;
-            else if((nAlignment & TabitemFlags::LeftAligned)||(nAlignment & TabitemFlags::FirstInGroup))
-                aTabItemDrawInfo.position=kHIThemeTabPositionFirst;
-            else if((nAlignment & TabitemFlags::RightAligned)||(nAlignment & TabitemFlags::LastInGroup))
-                aTabItemDrawInfo.position=kHIThemeTabPositionLast;
+            if ( aTabItemDrawInfo.version == 1 ) {
+                TabitemValue const * pTabValue = static_cast<TabitemValue const *>(&aValue);
+                TabitemFlags nAlignment = pTabValue->mnAlignment;
+                //TabitemFlags::LeftAligned (and TabitemFlags::RightAligned) for the leftmost (or rightmost) tab
+                //when there are several lines of tabs because there is only one first tab and one
+                //last tab and TabitemFlags::FirstInGroup (and TabitemFlags::LastInGroup) because when the
+                //line width is different from window width, there may not be TabitemFlags::RightAligned
+                if( ( (nAlignment & TabitemFlags::LeftAligned)&&(nAlignment & TabitemFlags::RightAligned) ) ||
+                    ( (nAlignment & TabitemFlags::FirstInGroup)&&(nAlignment & TabitemFlags::LastInGroup) )
+                   ) // tab alone
+                    aTabItemDrawInfo.position = kHIThemeTabPositionOnly;
+                else if((nAlignment & TabitemFlags::LeftAligned)||(nAlignment & TabitemFlags::FirstInGroup))
+                    aTabItemDrawInfo.position = kHIThemeTabPositionFirst;
+                else if((nAlignment & TabitemFlags::RightAligned)||(nAlignment & TabitemFlags::LastInGroup))
+                    aTabItemDrawInfo.position = kHIThemeTabPositionLast;
 
-            //support for RTL
-            //see issue 79748
-            if( AllSettings::GetLayoutRTL() ) {
-                if( aTabItemDrawInfo.position == kHIThemeTabPositionFirst )
-                        aTabItemDrawInfo.position = kHIThemeTabPositionLast;
-                else if( aTabItemDrawInfo.position == kHIThemeTabPositionLast )
+                //support for RTL
+                //see issue 79748
+                if( AllSettings::GetLayoutRTL() ) {
+                    if( aTabItemDrawInfo.position == kHIThemeTabPositionFirst )
+                            aTabItemDrawInfo.position = kHIThemeTabPositionLast;
+                    else if( aTabItemDrawInfo.position == kHIThemeTabPositionLast )
                         aTabItemDrawInfo.position = kHIThemeTabPositionFirst;
+                }
             }
 
-            rc.size.width+=2;//because VCL has 2 empty pixels between 2 tabs
-            rc.origin.x-=1;
+            rc.origin.x -= 1;
+            if ( aTabItemDrawInfo.version == 0 ) {
+                rc.origin.y += 2;
+            } else {
+                rc.size.width += 2; // because VCL has 2 empty pixels between 2 tabs
+            }
 
-            HIThemeDrawTab(&rc, &aTabItemDrawInfo, mrContext, kHIThemeOrientationNormal, &rc );
+            HIThemeDrawTab( &rc, &aTabItemDrawInfo, mrContext, kHIThemeOrientationNormal, &rc );
 
-            bOK=true;
+            bOK = true;
         }
         break;
 
@@ -965,8 +994,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aListInfo.value = kThemeButtonOn;
 
                 aListInfo.adornment = kThemeAdornmentDefault;
+# if ( MACOSX_SDK_VERSION > 1060 )
                 if( nState & ControlState::FOCUSED )
                     aListInfo.adornment |= kThemeAdornmentFocus;
+# endif
 
                 HIThemeDrawButton(&rc, &aListInfo, mrContext, kHIThemeOrientationNormal,&rc);
                 bOK = true;
@@ -984,7 +1015,9 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 rc.size.height+=1;
                 HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
 
+# if ( MACOSX_SDK_VERSION > 1060 )
                 if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
+# endif
 
                 bOK=true;
                 break;
@@ -1014,7 +1047,9 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
             HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
 
+# if ( MACOSX_SDK_VERSION > 1060 )
             if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
+# endif
 
             bOK=true;
         }
@@ -1043,7 +1078,9 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
                 HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
 
+# if ( MACOSX_SDK_VERSION > 1060 )
                 if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
+# endif
 
                 //buttons:
                 const SpinbuttonValue* pSpinButtonVal = (aValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue*>(&aValue) : nullptr;
@@ -1091,8 +1128,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                                             (nLowerState & ControlState::DEFAULT) ) ?
                                        kThemeAdornmentDefault :
                                        kThemeAdornmentNone;
+# if ( MACOSX_SDK_VERSION > 1060 )
                     if( (nUpperState & ControlState::FOCUSED) || (nLowerState & ControlState::FOCUSED))
                         aSpinInfo.adornment |= kThemeAdornmentFocus;
+# endif
 
                     HIThemeDrawButton( &buttonRc, &aSpinInfo, mrContext, kHIThemeOrientationNormal, nullptr );
                 }
