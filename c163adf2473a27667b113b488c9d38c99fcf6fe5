@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_f32aaee6",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-05T11:18:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad45d7e_a8c8c575",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_08b911ea",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_d32faaf4",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-05T11:18:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad45d7e_08b911ea",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_48cb0973",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2016-04-04T11:30:49Z",
       "side": 1,
       "message": "Instead of constructing an ScAddress each iteration I\u0027d rather contruct it outside of both loops and then use ScAddress::SetRow() and ScAddress::SetCol() inside the loops.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_33356646",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-05T11:18:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad45d7e_48cb0973",
       "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -81,6 +135,24 @@
       "writtenOn": "2016-04-04T11:30:49Z",
       "side": 1,
       "message": "Manually checking for nGlobalError and pushing an error in that case is unnecessary, all push operations already check for nGlobalError and push an error if it is set. See for example implementation of ScInterpreter::PushString() in interpr4.cxx where if(!IfErrorPushError()) is called first.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_f3110eb1",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-05T11:18:50Z",
+      "side": 1,
+      "message": "Here I sense a problem:\nThere are 2 ScInterpreter::PushString functions; the one with an svl::SharedString\u0026 as argument uses IfErrorPushError(), but the one with OUString\u0026 as argument doesn\u0027t!\n\nShall I amend the code of ScInterpreter::PushString( OUString\u0026 ) in a separate patch before I resubmit the CONCAT/TEXTJOIN patch set?",
+      "parentUuid": "9ad45d7e_68cecd84",
       "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
