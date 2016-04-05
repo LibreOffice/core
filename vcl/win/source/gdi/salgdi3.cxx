@@ -1466,7 +1466,7 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
     && !bImplSalCourierScalable
     && bImplSalCourierNew
     && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
-        lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
+        lstrcpynW( aLogFont.lfFaceName, L"Courier New", 12 );
 
     // #i47675# limit font requests to MAXFONTHEIGHT
     // TODO: share MAXFONTHEIGHT font instance
@@ -1503,7 +1503,7 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
     {
         // the selected font doesn't work => try a replacement
         // TODO: use its font fallback instead
-        lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
+        lstrcpynW( aLogFont.lfFaceName, L"Courier New", 12 );
         aLogFont.lfPitchAndFamily = FIXED_PITCH;
         HFONT hNewFont2 = CreateFontIndirectW( &aLogFont );
         SelectFont( getHDC(), hNewFont2 );
