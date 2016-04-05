@@ -131,16 +131,19 @@ SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
     m_pLabelFollowedByLB->SetSelectHdl( LINK(this, SwNumPositionTabPage, LabelFollowedByHdl_Impl) );
 
     aLk = LINK(this, SwNumPositionTabPage, ListtabPosHdl_Impl);
+    aLk2 = LINK(this, SwNumPositionTabPage, ListtabPosFocusHdl_Impl);
     m_pListtabMF->SetUpHdl(aLk);
     m_pListtabMF->SetDownHdl(aLk);
     m_pListtabMF->SetLoseFocusHdl(aLk2);
 
     aLk = LINK(this, SwNumPositionTabPage, AlignAtHdl_Impl);
+    aLk2 = LINK(this, SwNumPositionTabPage, AlignAtFocusHdl_Impl);
     m_pAlignedAtMF->SetUpHdl(aLk);
     m_pAlignedAtMF->SetDownHdl(aLk);
     m_pAlignedAtMF->SetLoseFocusHdl(aLk2);
 
     aLk = LINK(this, SwNumPositionTabPage, IndentAtHdl_Impl);
+    aLk2 = LINK(this, SwNumPositionTabPage, IndentAtFocusHdl_Impl);
     m_pIndentAtMF->SetUpHdl(aLk);
     m_pIndentAtMF->SetDownHdl(aLk);
     m_pIndentAtMF->SetLoseFocusHdl(aLk2);
@@ -818,6 +821,10 @@ IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, v
     SetModified();
 }
 
+IMPL_LINK_TYPED( SwNumPositionTabPage, ListtabPosFocusHdl_Impl, Control&, rControl, void )
+{
+    ListtabPosHdl_Impl(static_cast<SpinField&>(rControl));
+}
 IMPL_LINK_TYPED( SwNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
@@ -840,6 +847,10 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rSpin, vo
     SetModified();
 }
 
+IMPL_LINK_TYPED( SwNumPositionTabPage, AlignAtFocusHdl_Impl, Control&, rControl, void )
+{
+    AlignAtHdl_Impl(static_cast<SpinField&>(rControl));
+}
 IMPL_LINK_TYPED( SwNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
@@ -863,6 +874,10 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rSpin, void 
     SetModified();
 }
 
+IMPL_LINK_TYPED( SwNumPositionTabPage, IndentAtFocusHdl_Impl, Control&, rControl, void )
+{
+    IndentAtHdl_Impl(static_cast<SpinField&>(rControl));
+}
 IMPL_LINK_TYPED( SwNumPositionTabPage, IndentAtHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
