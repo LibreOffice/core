@@ -71,7 +71,7 @@ void SbiCodeGen::GenStmnt()
     if( bStmnt )
     {
         bStmnt = false;
-        Gen( STMNT_, nLine, nCol );
+        Gen( SbiOpcode::STMNT_, nLine, nCol );
     }
 }
 
@@ -84,7 +84,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
         return 0;
 
 #ifdef DBG_UTIL
-    if( eOpcode < SbOP0_START || eOpcode > SbOP0_END )
+    if( eOpcode < SbiOpcode::SbOP0_START || eOpcode > SbiOpcode::SbOP0_END )
         pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE1" );
 #endif
     GenStmnt();
@@ -98,7 +98,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
         return 0;
 
 #ifdef DBG_UTIL
-    if( eOpcode < SbOP1_START || eOpcode > SbOP1_END )
+    if( eOpcode < SbiOpcode::SbOP1_START || eOpcode > SbiOpcode::SbOP1_END )
         pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE2" );
 #endif
     GenStmnt();
@@ -114,7 +114,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOp
         return 0;
 
 #ifdef DBG_UTIL
-    if( eOpcode < SbOP2_START || eOpcode > SbOP2_END )
+    if( eOpcode < SbiOpcode::SbOP2_START || eOpcode > SbiOpcode::SbOP2_END )
         pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE3" );
 #endif
     GenStmnt();
@@ -433,9 +433,9 @@ public:
         {
             SbiOpcode eOp = (SbiOpcode)(*pCode++);
 
-            if ( eOp <= SbOP0_END )
+            if ( eOp <= SbiOpcode::SbOP0_END )
                 visitor.processOpCode0( eOp );
-            else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
+            else if( eOp >= SbiOpcode::SbOP1_START && eOp <= SbiOpcode::SbOP1_END )
             {
                 if ( visitor.processParams() )
                     nOp1 = readParam( pCode );
@@ -443,7 +443,7 @@ public:
                     pCode += sizeof( T );
                 visitor.processOpCode1( eOp, nOp1 );
             }
-            else if( eOp >= SbOP2_START && eOp <= SbOP2_END )
+            else if( eOp >= SbiOpcode::SbOP2_START && eOp <= SbiOpcode::SbOP2_END )
             {
                 if ( visitor.processParams() )
                 {
@@ -508,17 +508,17 @@ public:
         m_ConvertedBuf += (sal_uInt8)eOp;
         switch( eOp )
         {
-            case JUMP_:
-            case JUMPT_:
-            case JUMPF_:
-            case GOSUB_:
-            case CASEIS_:
-            case RETURN_:
-            case ERRHDL_:
-            case TESTFOR_:
+            case SbiOpcode::JUMP_:
+            case SbiOpcode::JUMPT_:
+            case SbiOpcode::JUMPF_:
+            case SbiOpcode::GOSUB_:
+            case SbiOpcode::CASEIS_:
+            case SbiOpcode::RETURN_:
+            case SbiOpcode::ERRHDL_:
+            case SbiOpcode::TESTFOR_:
                 nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
-            case RESUME_:
+            case SbiOpcode::RESUME_:
                 if ( nOp1 > 1 )
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
@@ -531,7 +531,7 @@ public:
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) override
     {
         m_ConvertedBuf += (sal_uInt8)eOp;
-        if ( eOp == CASEIS_ )
+        if ( eOp == SbiOpcode::CASEIS_ )
                 if ( nOp1 )
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
         m_ConvertedBuf += static_cast<S>(nOp1);

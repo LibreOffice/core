@@ -25,7 +25,7 @@
 // An opcode can have a length of 1, 3 or 5 bytes,
 // depending on its numeric value (see below).
 
-enum SbiOpcode {
+enum class SbiOpcode {
     // all opcodes without operands
     NOP_ = 0,
 

@@ -41,7 +41,7 @@ void SbiParser::If()
         sal_uInt16 iJmp = 0;                        // current table index
 
         // multiline IF
-        nEndLbl = aGen.Gen( JUMPF_, 0 );
+        nEndLbl = aGen.Gen( SbiOpcode::JUMPF_, 0 );
         eTok = Peek();
         while( !( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF ) &&
                 !bAbort && Parse() )
@@ -59,7 +59,7 @@ void SbiParser::If()
             {
                 Error( ERRCODE_BASIC_PROG_TOO_LARGE );  bAbort = true;  return;
             }
-            pnJmpToEndLbl[iJmp++] = aGen.Gen( JUMP_, 0 );
+            pnJmpToEndLbl[iJmp++] = aGen.Gen( SbiOpcode::JUMP_, 0 );
 
             Next();
             aGen.BackChain( nEndLbl );
@@ -67,7 +67,7 @@ void SbiParser::If()
             aGen.Statement();
             std::unique_ptr<SbiExpression> pCond(new SbiExpression( this ));
             pCond->Gen();
-            nEndLbl = aGen.Gen( JUMPF_, 0 );
+            nEndLbl = aGen.Gen( SbiOpcode::JUMPF_, 0 );
             pCond.reset();
             TestToken( THEN );
             eTok = Peek();
@@ -85,7 +85,7 @@ void SbiParser::If()
         {
             Next();
             sal_uInt32 nElseLbl = nEndLbl;
-            nEndLbl = aGen.Gen( JUMP_, 0 );
+            nEndLbl = aGen.Gen( SbiOpcode::JUMP_, 0 );
             aGen.BackChain( nElseLbl );
 
             aGen.Statement();
@@ -105,7 +105,7 @@ void SbiParser::If()
     {
         // single line IF
         bSingleLineIf = true;
-        nEndLbl = aGen.Gen( JUMPF_, 0 );
+        nEndLbl = aGen.Gen( SbiOpcode::JUMPF_, 0 );
         Push( eCurTok );
         while( !bAbort )
         {
@@ -118,7 +118,7 @@ void SbiParser::If()
         {
             Next();
             sal_uInt32 nElseLbl = nEndLbl;
-            nEndLbl = aGen.Gen( JUMP_, 0 );
+            nEndLbl = aGen.Gen( SbiOpcode::JUMP_, 0 );
             aGen.BackChain( nElseLbl );
             while( !bAbort )
             {
@@ -158,10 +158,10 @@ void SbiParser::DoLoop()
         {
             SbiExpression aExpr( this );
             aExpr.Gen();
-            aGen.Gen( eTok == UNTIL ? JUMPF_ : JUMPT_, nStartLbl );
+            aGen.Gen( eTok == UNTIL ? SbiOpcode::JUMPF_ : SbiOpcode::JUMPT_, nStartLbl );
         } else
             if (eTok == EOLN || eTok == REM)
-                aGen.Gen (JUMP_, nStartLbl);
+                aGen.Gen (SbiOpcode::JUMP_, nStartLbl);
             else
                 Error( ERRCODE_BASIC_EXPECTED, WHILE );
     }
@@ -173,10 +173,10 @@ void SbiParser::DoLoop()
             SbiExpression aCond( this );
             aCond.Gen();
         }
-        sal_uInt32 nEndLbl = aGen.Gen( eTok == UNTIL ? JUMPT_ : JUMPF_, 0 );
+        sal_uInt32 nEndLbl = aGen.Gen( eTok == UNTIL ? SbiOpcode::JUMPT_ : SbiOpcode::JUMPF_, 0 );
         StmntBlock( LOOP );
         TestEoln();
-        aGen.Gen( JUMP_, nStartLbl );
+        aGen.Gen( SbiOpcode::JUMP_, nStartLbl );
         aGen.BackChain( nEndLbl );
     }
     CloseBlock();
@@ -189,9 +189,9 @@ void SbiParser::While()
     SbiExpression aCond( this );
     sal_uInt32 nStartLbl = aGen.GetPC();
     aCond.Gen();
-    sal_uInt32 nEndLbl = aGen.Gen( JUMPF_, 0 );
+    sal_uInt32 nEndLbl = aGen.Gen( SbiOpcode::JUMPF_, 0 );
     StmntBlock( WEND );
-    aGen.Gen( JUMP_, nStartLbl );
+    aGen.Gen( SbiOpcode::JUMP_, nStartLbl );
     aGen.BackChain( nEndLbl );
 }
 
@@ -211,7 +211,7 @@ void SbiParser::For()
         SbiExpression aCollExpr( this, SbOPERAND );
         aCollExpr.Gen();    // Collection var to for stack
         TestEoln();
-        aGen.Gen( INITFOREACH_ );
+        aGen.Gen( SbiOpcode::INITFOREACH_ );
     }
     else
     {
@@ -235,16 +235,16 @@ void SbiParser::For()
         TestEoln();
         // The stack has all 4 elements now: variable, start, end, increment
         // bind start value
-        aGen.Gen( INITFOR_ );
+        aGen.Gen( SbiOpcode::INITFOR_ );
     }
 
     sal_uInt32 nLoop = aGen.GetPC();
     // do tests, maybe free the stack
-    sal_uInt32 nEndTarget = aGen.Gen( TESTFOR_, 0 );
+    sal_uInt32 nEndTarget = aGen.Gen( SbiOpcode::TESTFOR_, 0 );
     OpenBlock( FOR );
     StmntBlock( NEXT );
-    aGen.Gen( NEXT_ );
-    aGen.Gen( JUMP_, nLoop );
+    aGen.Gen( SbiOpcode::NEXT_ );
+    aGen.Gen( SbiOpcode::JUMP_, nLoop );
     // are there variables after NEXT?
     if( Peek() == SYMBOL )
     {
@@ -294,7 +294,7 @@ void SbiParser::OnGoto()
 {
     SbiExpression aCond( this );
     aCond.Gen();
-    sal_uInt32 nLabelsTarget = aGen.Gen( ONJUMP_, 0 );
+    sal_uInt32 nLabelsTarget = aGen.Gen( SbiOpcode::ONJUMP_, 0 );
     SbiToken eTok = Next();
     if( eTok != GOTO && eTok != GOSUB )
     {
@@ -309,7 +309,7 @@ void SbiParser::OnGoto()
         if( MayBeLabel() )
         {
             sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
-            aGen.Gen( JUMP_, nOff );
+            aGen.Gen( SbiOpcode::JUMP_, nOff );
             nLbl++;
         }
         else Error( ERRCODE_BASIC_LABEL_EXPECTED );
@@ -324,7 +324,7 @@ void SbiParser::OnGoto()
 
 void SbiParser::Goto()
 {
-    SbiOpcode eOp = eCurTok == GOTO ? JUMP_ : GOSUB_;
+    SbiOpcode eOp = eCurTok == GOTO ? SbiOpcode::JUMP_ : SbiOpcode::GOSUB_;
     Next();
     if( MayBeLabel() )
     {
@@ -342,9 +342,9 @@ void SbiParser::Return()
     if( MayBeLabel() )
     {
         sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
-        aGen.Gen( RETURN_, nOff );
+        aGen.Gen( SbiOpcode::RETURN_, nOff );
     }
-    else aGen.Gen( RETURN_, 0 );
+    else aGen.Gen( SbiOpcode::RETURN_, 0 );
 }
 
 // SELECT CASE
@@ -355,7 +355,7 @@ void SbiParser::Select()
     SbiExpression aCase( this );
     SbiToken eTok = NIL;
     aCase.Gen();
-    aGen.Gen( CASE_ );
+    aGen.Gen( SbiOpcode::CASE_ );
     TestEoln();
     sal_uInt32 nNextTarget = 0;
     sal_uInt32 nDoneTarget = 0;
@@ -397,7 +397,7 @@ void SbiParser::Select()
                     SbiExpression aCompare( this );
                     aCompare.Gen();
                     nTrueTarget = aGen.Gen(
-                        CASEIS_, nTrueTarget,
+                        SbiOpcode::CASEIS_, nTrueTarget,
                         sal::static_int_cast< sal_uInt16 >(
                             SbxEQ + ( eTok2 - EQ ) ) );
                 }
@@ -411,11 +411,11 @@ void SbiParser::Select()
                         Next();
                         SbiExpression aCase2( this );
                         aCase2.Gen();
-                        nTrueTarget = aGen.Gen( CASETO_, nTrueTarget );
+                        nTrueTarget = aGen.Gen( SbiOpcode::CASETO_, nTrueTarget );
                     }
                     else
                         // CASE a
-                        nTrueTarget = aGen.Gen( CASEIS_, nTrueTarget, SbxEQ );
+                        nTrueTarget = aGen.Gen( SbiOpcode::CASEIS_, nTrueTarget, SbxEQ );
 
                 }
                 if( Peek() == COMMA ) Next();
@@ -428,7 +428,7 @@ void SbiParser::Select()
 
             if( !bElse )
             {
-                nNextTarget = aGen.Gen( JUMP_, nNextTarget );
+                nNextTarget = aGen.Gen( SbiOpcode::JUMP_, nNextTarget );
                 aGen.BackChain( nTrueTarget );
             }
             // build the statement body
@@ -443,7 +443,7 @@ void SbiParser::Select()
                     break;
             }
             if( !bElse )
-                nDoneTarget = aGen.Gen( JUMP_, nDoneTarget );
+                nDoneTarget = aGen.Gen( SbiOpcode::JUMP_, nDoneTarget );
         }
         else if( !IsEoln( eTok ) )
             break;
@@ -454,7 +454,7 @@ done:
     if( nNextTarget )
         aGen.BackChain( nNextTarget );
     aGen.BackChain( nDoneTarget );
-    aGen.Gen( ENDCASE_ );
+    aGen.Gen( SbiOpcode::ENDCASE_ );
 }
 
 // ON Error/Variable
@@ -489,12 +489,12 @@ void SbiParser::On()
             {
                 if( eCurTok == NUMBER && !nVal )
                 {
-                    aGen.Gen( STDERROR_ );
+                    aGen.Gen( SbiOpcode::STDERROR_ );
                 }
                 else
                 {
                     sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
-                    aGen.Gen( ERRHDL_, nOff );
+                    aGen.Gen( SbiOpcode::ERRHDL_, nOff );
                 }
             }
             else if( eCurTok == MINUS )
@@ -502,7 +502,7 @@ void SbiParser::On()
                 Next();
                 if( eCurTok == NUMBER && nVal == 1 )
                 {
-                    aGen.Gen( STDERROR_ );
+                    aGen.Gen( SbiOpcode::STDERROR_ );
                 }
                 else
                 {
@@ -517,7 +517,7 @@ void SbiParser::On()
         else if( eCurTok == RESUME )
         {
             TestToken( NEXT );
-            aGen.Gen( NOERROR_ );
+            aGen.Gen( SbiOpcode::NOERROR_ );
         }
         else Error( ERRCODE_BASIC_EXPECTED, "GoTo/Resume" );
     }
@@ -533,23 +533,23 @@ void SbiParser::Resume()
     {
         case EOS:
         case EOLN:
-            aGen.Gen( RESUME_, 0 );
+            aGen.Gen( SbiOpcode::RESUME_, 0 );
             break;
         case NEXT:
-            aGen.Gen( RESUME_, 1 );
+            aGen.Gen( SbiOpcode::RESUME_, 1 );
             Next();
             break;
         case NUMBER:
             if( !nVal )
             {
-                aGen.Gen( RESUME_, 0 );
+                aGen.Gen( SbiOpcode::RESUME_, 0 );
                 break;
             } // fall through
         case SYMBOL:
             if( MayBeLabel() )
             {
                 nLbl = pProc->GetLabels().Reference( aSym );
-                aGen.Gen( RESUME_, nLbl );
+                aGen.Gen( SbiOpcode::RESUME_, nLbl );
                 Next();
                 break;
             } // fall through

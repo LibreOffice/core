@@ -765,21 +765,21 @@ bool SbiRuntime::Step()
 
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
         sal_uInt32 nOp1, nOp2;
-        if (eOp <= SbOP0_END)
+        if (eOp <= SbiOpcode::SbOP0_END)
         {
-            (this->*( aStep0[ eOp ] ) )();
+            (this->*( aStep0[ int(eOp) ] ) )();
         }
-        else if (eOp >= SbOP1_START && eOp <= SbOP1_END)
+        else if (eOp >= SbiOpcode::SbOP1_START && eOp <= SbiOpcode::SbOP1_END)
         {
             nOp1 = *pCode++; nOp1 |= *pCode++ << 8; nOp1 |= *pCode++ << 16; nOp1 |= *pCode++ << 24;
 
-            (this->*( aStep1[ eOp - SbOP1_START ] ) )( nOp1 );
+            (this->*( aStep1[ int(eOp) - int(SbiOpcode::SbOP1_START) ] ) )( nOp1 );
         }
-        else if (eOp >= SbOP2_START && eOp <= SbOP2_END)
+        else if (eOp >= SbiOpcode::SbOP2_START && eOp <= SbiOpcode::SbOP2_END)
         {
             nOp1 = *pCode++; nOp1 |= *pCode++ << 8; nOp1 |= *pCode++ << 16; nOp1 |= *pCode++ << 24;
             nOp2 = *pCode++; nOp2 |= *pCode++ << 8; nOp2 |= *pCode++ << 16; nOp2 |= *pCode++ << 24;
-            (this->*( aStep2[ eOp - SbOP2_START ] ) )( nOp1, nOp2 );
+            (this->*( aStep2[ int(eOp) - int(SbiOpcode::SbOP2_START) ] ) )( nOp1, nOp2 );
         }
         else
         {

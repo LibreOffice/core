@@ -30,30 +30,30 @@ typedef struct {
 } OpTable;
 
 static const OpTable aOpTable [] = {
-    { EXPON,EXP_ },
-    { MUL,  MUL_ },
-    { DIV,  DIV_ },
-    { IDIV, IDIV_ },
-    { MOD,  MOD_ },
-    { PLUS, PLUS_ },
-    { MINUS,MINUS_ },
-    { EQ,   EQ_ },
-    { NE,   NE_ },
-    { LE,   LE_ },
-    { GE,   GE_ },
-    { LT,   LT_ },
-    { GT,   GT_ },
-    { AND,  AND_ },
-    { OR,   OR_ },
-    { XOR,  XOR_ },
-    { EQV,  EQV_ },
-    { IMP,  IMP_ },
-    { NOT,  NOT_ },
-    { NEG,  NEG_ },
-    { CAT,  CAT_ },
-    { LIKE, LIKE_ },
-    { IS,   IS_ },
-    { NIL,  NOP_ }};
+    { EXPON,SbiOpcode::EXP_ },
+    { MUL,  SbiOpcode::MUL_ },
+    { DIV,  SbiOpcode::DIV_ },
+    { IDIV, SbiOpcode::IDIV_ },
+    { MOD,  SbiOpcode::MOD_ },
+    { PLUS, SbiOpcode::PLUS_ },
+    { MINUS,SbiOpcode::MINUS_ },
+    { EQ,   SbiOpcode::EQ_ },
+    { NE,   SbiOpcode::NE_ },
+    { LE,   SbiOpcode::LE_ },
+    { GE,   SbiOpcode::GE_ },
+    { LT,   SbiOpcode::LT_ },
+    { GT,   SbiOpcode::GT_ },
+    { AND,  SbiOpcode::AND_ },
+    { OR,   SbiOpcode::OR_ },
+    { XOR,  SbiOpcode::XOR_ },
+    { EQV,  SbiOpcode::EQV_ },
+    { IMP,  SbiOpcode::IMP_ },
+    { NOT,  SbiOpcode::NOT_ },
+    { NEG,  SbiOpcode::NEG_ },
+    { CAT,  SbiOpcode::CAT_ },
+    { LIKE, SbiOpcode::LIKE_ },
+    { IS,   SbiOpcode::IS_ },
+    { NIL,  SbiOpcode::NOP_ }};
 
 // Output of an element
 void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
@@ -65,18 +65,18 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
         switch( GetType() )
         {
         case SbxEMPTY:
-            rGen.Gen( EMPTY_ );
+            rGen.Gen( SbiOpcode::EMPTY_ );
             break;
         case SbxINTEGER:
-            rGen.Gen( CONST_,  (short) nVal );
+            rGen.Gen( SbiOpcode::CONST_,  (short) nVal );
             break;
         case SbxSTRING:
             nStringId = rGen.GetParser()->aGblStrings.Add( aStrVal );
-            rGen.Gen( SCONST_, nStringId );
+            rGen.Gen( SbiOpcode::SCONST_, nStringId );
             break;
         default:
             nStringId = rGen.GetParser()->aGblStrings.Add( nVal, eType );
-            rGen.Gen( NUMBER_, nStringId );
+            rGen.Gen( SbiOpcode::NUMBER_, nStringId );
             break;
         }
     }
@@ -86,7 +86,7 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
         SbiOpcode eOp;
         if( aVar.pDef->GetScope() == SbPARAM )
         {
-            eOp = PARAM_;
+            eOp = SbiOpcode::PARAM_;
             if( 0 == aVar.pDef->GetPos() )
             {
                 bool bTreatFunctionAsParam = true;
@@ -103,32 +103,32 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
                 }
                 if( !bTreatFunctionAsParam )
                 {
-                    eOp = aVar.pDef->IsGlobal() ? FIND_G_ : FIND_;
+                    eOp = aVar.pDef->IsGlobal() ? SbiOpcode::FIND_G_ : SbiOpcode::FIND_;
                 }
             }
         }
         // special treatment for WITH
         else if( (pWithParent_ = GetWithParent()) != nullptr )
         {
-            eOp = ELEM_;            // .-Term in WITH
+            eOp = SbiOpcode::ELEM_;            // .-Term in WITH
         }
         else
         {
-            eOp = ( aVar.pDef->GetScope() == SbRTL ) ? RTL_ :
-                (aVar.pDef->IsGlobal() ? FIND_G_ : FIND_);
+            eOp = ( aVar.pDef->GetScope() == SbRTL ) ? SbiOpcode::RTL_ :
+                (aVar.pDef->IsGlobal() ? SbiOpcode::FIND_G_ : SbiOpcode::FIND_);
         }
 
-        if( eOp == FIND_ )
+        if( eOp == SbiOpcode::FIND_ )
         {
 
             SbiProcDef* pProc = aVar.pDef->GetProcDef();
             if ( rGen.GetParser()->bClassModule )
             {
-                eOp = FIND_CM_;
+                eOp = SbiOpcode::FIND_CM_;
             }
             else if ( aVar.pDef->IsStatic() || (pProc && pProc->IsStatic()) )
             {
-                eOp = FIND_STATIC_;
+                eOp = SbiOpcode::FIND_STATIC_;
             }
         }
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
@@ -138,17 +138,17 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
                 pWithParent_->Gen(rGen);
             }
             p->GenElement( rGen, eOp );
-            eOp = ELEM_;
+            eOp = SbiOpcode::ELEM_;
         }
     }
     else if( IsTypeOf() )
     {
         pLeft->Gen(rGen);
-        rGen.Gen( TESTCLASS_, nTypeStrId );
+        rGen.Gen( SbiOpcode::TESTCLASS_, nTypeStrId );
     }
     else if( IsNew() )
     {
-        rGen.Gen( CREATE_, 0, nTypeStrId );
+        rGen.Gen( SbiOpcode::CREATE_, 0, nTypeStrId );
     }
     else
     {
@@ -172,14 +172,14 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
 void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
 {
 #ifdef DBG_UTIL
-    if ((eOp < RTL_ || eOp > CALLC_) && eOp != FIND_G_ && eOp != FIND_CM_ && eOp != FIND_STATIC_)
+    if ((eOp < SbiOpcode::RTL_ || eOp > SbiOpcode::CALLC_) && eOp != SbiOpcode::FIND_G_ && eOp != SbiOpcode::FIND_CM_ && eOp != SbiOpcode::FIND_STATIC_)
         rGen.GetParser()->Error( ERRCODE_BASIC_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
     // The ID is either the position or the String-ID
     // If the bit Bit 0x8000 is set, the variable have
     // a parameter list.
-    sal_uInt16 nId = ( eOp == PARAM_ ) ? pDef->GetPos() : pDef->GetId();
+    sal_uInt16 nId = ( eOp == SbiOpcode::PARAM_ ) ? pDef->GetPos() : pDef->GetId();
     // Build a parameter list
     if( aVar.pPar && aVar.pPar->GetSize() )
     {
@@ -194,7 +194,7 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
         for( auto& pExprList: *aVar.pvMorePar )
         {
             pExprList->Gen(rGen);
-            rGen.Gen( ARRAYACCESS_ );
+            rGen.Gen( SbiOpcode::ARRAYACCESS_ );
         }
     }
 }
@@ -207,7 +207,7 @@ void SbiExprList::Gen(SbiCodeGen& rGen)
 {
     if( !aData.empty() )
     {
-        rGen.Gen( ARGC_ );
+        rGen.Gen( SbiOpcode::ARGC_ );
         // Type adjustment at DECLARE
         sal_uInt16 nCount = 1;
 
@@ -218,7 +218,7 @@ void SbiExprList::Gen(SbiCodeGen& rGen)
             {
                 // named arg
                 sal_uInt16 nSid = rGen.GetParser()->aGblStrings.Add( pExpr->GetName() );
-                rGen.Gen( ARGN_, nSid );
+                rGen.Gen( SbiOpcode::ARGN_, nSid );
 
                 /* TODO: Check after Declare concept change
                 // From 1996-01-10: Type adjustment at named -> search suitable parameter
@@ -247,7 +247,7 @@ void SbiExprList::Gen(SbiCodeGen& rGen)
             }
             else
             {
-                rGen.Gen( ARGV_ );
+                rGen.Gen( SbiOpcode::ARGV_ );
             }
             nCount++;
         }
@@ -261,7 +261,7 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
     pExpr->Gen( pParser->aGen, eRecMode );
     if( bByVal )
     {
-        pParser->aGen.Gen( BYVAL_ );
+        pParser->aGen.Gen( SbiOpcode::BYVAL_ );
     }
     if( bBased )
     {
@@ -270,8 +270,8 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
         {
             uBase |= 0x8000;        // #109275 Flag compatibility
         }
-        pParser->aGen.Gen( BASED_, uBase );
-        pParser->aGen.Gen( ARGV_ );
+        pParser->aGen.Gen( SbiOpcode::BASED_, uBase );
+        pParser->aGen.Gen( SbiOpcode::ARGV_ );
     }
 }
 

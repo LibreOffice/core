@@ -1481,19 +1481,19 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
     {
         SbiOpcode eOp = (SbiOpcode ) ( *p++ );
         nPC++;
-        if( bFollowJumps && eOp == JUMP_ && pImg )
+        if( bFollowJumps && eOp == SbiOpcode::JUMP_ && pImg )
         {
             SAL_WARN_IF( !pImg, "basic", "FindNextStmnt: pImg==NULL with FollowJumps option" );
             sal_uInt32 nOp1 = *p++; nOp1 |= *p++ << 8;
             nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
             p = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
         }
-        else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
+        else if( eOp >= SbiOpcode::SbOP1_START && eOp <= SbiOpcode::SbOP1_END )
         {
             p += 4;
             nPC += 4;
         }
-        else if( eOp == STMNT_ )
+        else if( eOp == SbiOpcode::STMNT_ )
         {
             sal_uInt32 nl, nc;
             nl = *p++; nl |= *p++ << 8;
@@ -1503,12 +1503,12 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             nLine = (sal_uInt16)nl; nCol = (sal_uInt16)nc;
             return p;
         }
-        else if( eOp >= SbOP2_START && eOp <= SbOP2_END )
+        else if( eOp >= SbiOpcode::SbOP2_START && eOp <= SbiOpcode::SbOP2_END )
         {
             p += 8;
             nPC += 8;
         }
-        else if( !( eOp >= SbOP0_START && eOp <= SbOP0_END ) )
+        else if( !( eOp >= SbiOpcode::SbOP0_START && eOp <= SbiOpcode::SbOP0_END ) )
         {
             StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
             break;
