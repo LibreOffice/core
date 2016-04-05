@@ -1,7 +1,7 @@
-From 3f9ccaa6ac3113c45a6e021e35b2c81cf541fc1b Mon Sep 17 00:00:00 2001
+From 56448979392d78a6e1688f61ce7bc771f38a880b Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:12:29 +0100
-Subject: [PATCH 08/14] xmlsec1-vc.patch
+Subject: [PATCH] xmlsec1-vc.patch
 
 ---
  apps/cmdline.c      |  2 +-
@@ -37,7 +37,7 @@ index 49dd127..f46eeee 100644
  #endif
  
 diff --git a/apps/xmlsec.c b/apps/xmlsec.c
-index 3aa6ebd..548cdf9 100644
+index d551b5a..0467c25 100644
 --- a/apps/xmlsec.c
 +++ b/apps/xmlsec.c
 @@ -9,7 +9,7 @@
@@ -50,7 +50,7 @@ index 3aa6ebd..548cdf9 100644
  #endif
  
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index 5269202..9309c3a 100644
+index d833497..065595b 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
 @@ -311,6 +311,10 @@ CFLAGS 			= $(CFLAGS) /D PACKAGE=\"$(XMLSEC_NAME)\"

@@ -1,7 +1,7 @@
-From 26638413b86a4a690baf96547a52f2fc762bc5bb Mon Sep 17 00:00:00 2001
+From 114dad4467a2834d11ba463251cf766928dbb757 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Mon, 25 Jan 2016 09:50:03 +0100
-Subject: [PATCH 14/14] OOXML Relationship Transform
+Subject: [PATCH] OOXML Relationship Transform
 
 Conflicts:
 	include/xmlsec/transforms.h
@@ -14,10 +14,10 @@ Conflicts:
  5 files changed, 563 insertions(+)
 
 diff --git a/include/xmlsec/strings.h b/include/xmlsec/strings.h
-index 98650bf..d9fa3df 100644
+index 5e3f6a1..b386fc4 100644
 --- a/include/xmlsec/strings.h
 +++ b/include/xmlsec/strings.h
-@@ -551,6 +551,9 @@ XMLSEC_EXPORT_VAR const xmlChar xmlSecXPath2FilterUnion[];
+@@ -588,6 +588,9 @@ XMLSEC_EXPORT_VAR const xmlChar xmlSecXPath2FilterUnion[];
  XMLSEC_EXPORT_VAR const xmlChar xmlSecNameXPointer[];
  XMLSEC_EXPORT_VAR const xmlChar xmlSecNodeXPointer[];
  
@@ -43,10 +43,10 @@ index f0c70c9..5bdb1b9 100644
  #include <libxslt/security.h>
  
 diff --git a/src/strings.c b/src/strings.c
-index 99ee316..d318d16 100644
+index f746f4d..048b0a6 100644
 --- a/src/strings.c
 +++ b/src/strings.c
-@@ -543,6 +543,9 @@ const xmlChar xmlSecXPath2FilterUnion[]         = "union";
+@@ -579,6 +579,9 @@ const xmlChar xmlSecXPath2FilterUnion[]         = "union";
  const xmlChar xmlSecNameXPointer[]              = "xpointer";
  const xmlChar xmlSecNodeXPointer[]              = "XPointer";
  
@@ -79,7 +79,7 @@ index 8a2ded2..0371b82 100644
      if(xmlSecTransformIdsRegister(xmlSecTransformXsltId) < 0) {
          xmlSecError(XMLSEC_ERRORS_HERE,
 diff --git a/src/xpath.c b/src/xpath.c
-index afa7c52..92a2337 100644
+index e67631e..0fef1fe 100644
 --- a/src/xpath.c
 +++ b/src/xpath.c
 @@ -17,6 +17,7 @@
@@ -90,7 +90,7 @@ index afa7c52..92a2337 100644
  
  #include <xmlsec/xmlsec.h>
  #include <xmlsec/xmltree.h>
-@@ -1144,5 +1145,546 @@ xmlSecTransformVisa3DHackExecute(xmlSecTransformPtr transform, int last,
+@@ -1161,5 +1162,546 @@ xmlSecTransformVisa3DHackExecute(xmlSecTransformPtr transform, int last,
      return(0);
  }
  
@@ -345,10 +345,10 @@ index afa7c52..92a2337 100644
 +        return -1;
 +    if (!node2)
 +        return 1;
-+
+ 
 +    id1 = xmlGetProp(node1, "Id");
 +    id2 = xmlGetProp(node2, "Id");
-+
+ 
 +    if (!id1)
 +        return -1;
 +    if (!id2)
@@ -486,7 +486,7 @@ index afa7c52..92a2337 100644
 +	    return(-1);
 +	}
 +    }
- 
++
 +    ret = xmlSecTransformRelationshipExecute(transform, buf, nodes->doc);
 +    if (ret < 0)
 +    {
@@ -498,7 +498,7 @@ index afa7c52..92a2337 100644
 +	xmlOutputBufferClose(buf);
 +	return(-1);
 +    }
- 
++
 +    ret = xmlOutputBufferClose(buf);
 +    if (ret < 0)
 +    {

@@ -16,9 +16,6 @@ xmlsec_patches += xmlsec1-noverify.patch.1
 xmlsec_patches += xmlsec1-mingw-keymgr-mscrypto.patch.1
 xmlsec_patches += xmlsec1-vc.patch.1
 xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch.1
-xmlsec_patches += xmlsec1-android.patch.1
-# Partial backport of <https://github.com/lsh123/xmlsec/commit/6a4968bc33f83aaf61efc0a80333350ce9c372f5>.
-xmlsec_patches += xmlsec1-1.2.14-ansi.patch.1
 xmlsec_patches += xmlsec1-customkeymanage.patch.1
 xmlsec_patches += xmlsec1-update-config.guess.patch.1
 # Upstreamed as <https://github.com/lsh123/xmlsec/commit/7069e2b0ab49679008abedd6d223fb95538b0684>.
