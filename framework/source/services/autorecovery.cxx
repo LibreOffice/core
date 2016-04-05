@@ -433,16 +433,6 @@ private:
     sal_Int32 m_nMinSpaceDocSave;
     sal_Int32 m_nMinSpaceConfigSave;
 
-    /** @short  special debug option to make testing faster.
-
-        @descr  We don't interpret the timer unit as [min] ...
-                we use [ms] instead of that. Further we don't
-                wait 10 s for user idle ...
-     */
-    #if OSL_DEBUG_LEVEL > 0
-    bool m_dbg_bMakeItFaster;
-    #endif
-
 // interface
 
 public:
@@ -1265,10 +1255,6 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_nDocCacheLock           (0                                                  )
     , m_nMinSpaceDocSave        (MIN_DISCSPACE_DOCSAVE                              )
     , m_nMinSpaceConfigSave     (MIN_DISCSPACE_CONFIGSAVE                           )
-
-    #if OSL_DEBUG_LEVEL > 0
-    , m_dbg_bMakeItFaster       (false                                              )
-    #endif
 {
 }
 
@@ -2291,18 +2277,10 @@ void AutoRecovery::implts_updateTimer()
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
         nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms
-        #if OSL_DEBUG_LEVEL > 0
-        if (m_dbg_bMakeItFaster)
-            nMilliSeconds = m_nAutoSaveTimeIntervall;  // [ms]
-        #endif
     }
     else if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
     {
         nMilliSeconds = MIN_TIME_FOR_USER_IDLE;
-        #if OSL_DEBUG_LEVEL > 0
-        if (m_dbg_bMakeItFaster)
-            nMilliSeconds = 300; // let us some time, to finish this method .-)
-        #endif
     }
     else if (m_eTimerType == AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED)
         nMilliSeconds = 300; // there is a minimum time frame, where the user can lose some key input data!
