@@ -25,7 +25,6 @@
 #pragma warning (pop)
 #endif
 
-
 #include "po.hxx"
 #include "helper.hxx"
 
@@ -37,7 +36,6 @@
 class GenPoEntry
 {
 private:
-
     OString    m_sExtractCom;
     OString    m_sReference;
     OString    m_sMsgCtxt;
@@ -47,7 +45,6 @@ private:
     bool       m_bNull;
 
 public:
-
                         GenPoEntry();
     virtual             ~GenPoEntry();
                         // Default copy constructor and copy operator work well
@@ -218,10 +215,6 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         getline(rIFStream,sTemp);
     }
  }
-
-
-// Class PoEntry
-
 
 PoEntry::PoEntry()
     : m_bIsInitialized( false )
@@ -399,10 +392,6 @@ OString PoEntry::genKeyId(const OString& rGenerator)
     return OString(sKeyId);
 }
 
-
-// Class PoHeader
-
-
 namespace
 {
     // Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
@@ -441,10 +430,6 @@ PoHeader::~PoHeader()
 {
     delete m_pGenPo;
 }
-
-
-// Class PoOfstream
-
 
 PoOfstream::PoOfstream()
     : m_aOutPut()
@@ -502,10 +487,6 @@ void PoOfstream::writeEntry( const PoEntry& rPoEntry )
     assert( isOpen() && m_bIsAfterHeader && rPoEntry.m_bIsInitialized );
     rPoEntry.m_pGenPo->writeToFile( m_aOutPut );
 }
-
-
-// Class PoIfstream
-
 
 namespace
 {
