@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_73db5eee",
+        "filename": "include/vcl/lazydelete.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-04-05T12:15:42Z",
+      "side": 1,
+      "message": "the debug area should be listed in include/sal/log-areas.dox -- and include.vcl isnt a good choice as its of little importance this is in a global header (include/)\n\nEither use just \"vcl\" -- or, since this is likely very verbose, add something new like \"vcl.memory\"/\"vcl.lifecycle\" or even specific: \"vcl.lazydelete\" there.",
+      "revId": "86ab94ca93a8e5ffec0b13d63689a7ef6b662cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
