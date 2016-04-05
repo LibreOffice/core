@@ -207,7 +207,7 @@ void SbiParser::For()
 
     if( bForEach )
     {
-        TestToken( _IN_ );
+        TestToken( IN_ );
         SbiExpression aCollExpr( this, SbOPERAND );
         aCollExpr.Gen();    // Collection var to for stack
         TestEoln();
@@ -465,9 +465,9 @@ void SbiParser::On()
     OUString aString = SbiTokenizer::Symbol(eTok);
     if (aString.equalsIgnoreAsciiCase("ERROR"))
     {
-        eTok = _ERROR_; // Error comes as SYMBOL
+        eTok = ERROR_; // Error comes as SYMBOL
     }
-    if( eTok != _ERROR_ && eTok != LOCAL )
+    if( eTok != ERROR_ && eTok != LOCAL )
     {
         OnGoto();
     }

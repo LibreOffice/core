@@ -56,12 +56,12 @@ static const TokenTable aTokTable_Basic [] = {
     { BYVAL,    "ByVal", },
     { CALL,     "Call" },
     { CASE,     "Case" },
-    { _CDECL_,  "Cdecl" },
+    { CDECL_,   "Cdecl" },
     { CLASSMODULE, "ClassModule" },
     { CLOSE,    "Close" },
     { COMPARE,  "Compare" },
     { COMPATIBLE,"Compatible" },
-    { _CONST_,  "Const" },
+    { CONST_,   "Const" },
     { TCURRENCY,"Currency" },
     { TDATE,    "Date" },
     { DECLARE,  "Declare" },
@@ -94,7 +94,7 @@ static const TokenTable aTokTable_Basic [] = {
     { ENUM,     "Enum" },
     { EQV,      "Eqv" },
     { ERASE,    "Erase" },
-    { _ERROR_,  "Error" },
+    { ERROR_,   "Error" },
     { EXIT,     "Exit" },
     { BASIC_EXPLICIT, "Explicit" },
     { FOR,      "For" },
@@ -106,7 +106,7 @@ static const TokenTable aTokTable_Basic [] = {
     { IF,       "If" },
     { IMP,      "Imp" },
     { IMPLEMENTS, "Implements" },
-    { _IN_,     "In" },
+    { IN_,      "In" },
     { INPUT,    "Input" },              // also INPUT #
     { TINTEGER, "Integer" },
     { IS,       "Is" },
@@ -130,7 +130,7 @@ static const TokenTable aTokTable_Basic [] = {
     { ON,       "On" },
     { OPEN,     "Open" },
     { OPTION,   "Option" },
-    { _OPTIONAL_,   "Optional" },
+    { OPTIONAL_, "Optional" },
     { OR,       "Or" },
     { OUTPUT,   "Output" },
     { PARAMARRAY,   "ParamArray" },
@@ -192,7 +192,7 @@ TokenLabelInfo::TokenLabelInfo()
     }
     // Token accepted as label by VBA
     SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
-                               COMPARE, COMPATIBLE, DEFERR, _ERROR_, BASIC_EXPLICIT, LIB, LINE, LPRINT, NAME,
+                               COMPARE, COMPATIBLE, DEFERR, ERROR_, BASIC_EXPLICIT, LIB, LINE, LPRINT, NAME,
                                TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
     SbiToken eTok;
     for( SbiToken* pTok = eLabelToken ; (eTok = *pTok) != NIL ; ++pTok )
@@ -508,7 +508,7 @@ special:
         {
             bAs = false;
         }
-        else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 && (bErrorIsSymbol || eCurTok != _ERROR_) )
+        else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 && (bErrorIsSymbol || eCurTok != ERROR_) )
         {
             eCurTok = SYMBOL;
         }

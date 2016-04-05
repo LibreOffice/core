@@ -46,7 +46,7 @@ static const SbiStatement StmntTable [] = {
 { ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE
 { CALL,     &SbiParser::Call,       N, Y, }, // CALL
 { CLOSE,    &SbiParser::Close,      N, Y, }, // CLOSE
-{ _CONST_,  &SbiParser::Dim,        Y, Y, }, // CONST
+{ CONST_,   &SbiParser::Dim,        Y, Y, }, // CONST
 { DECLARE,  &SbiParser::Declare,    Y, N, }, // DECLARE
 { DEFBOOL,  &SbiParser::DefXXX,     Y, N, }, // DEFBOOL
 { DEFCUR,   &SbiParser::DefXXX,     Y, N, }, // DEFCUR
@@ -67,7 +67,7 @@ static const SbiStatement StmntTable [] = {
 { END,      &SbiParser::Stop,       N, Y, }, // END
 { ENUM,     &SbiParser::Enum,       Y, N, }, // TYPE
 { ERASE,    &SbiParser::Erase,      N, Y, }, // ERASE
-{ _ERROR_,  &SbiParser::ErrorStmnt, N, Y, }, // ERROR
+{ ERROR_,   &SbiParser::ErrorStmnt, N, Y, }, // ERROR
 { EXIT,     &SbiParser::Exit,       N, Y, }, // EXIT
 { FOR,      &SbiParser::For,        N, Y, }, // FOR
 { FUNCTION, &SbiParser::SubFunc,    Y, N, }, // FUNCTION
@@ -378,7 +378,7 @@ bool SbiParser::Parse()
 
         // In vba it's possible to do Error.foobar ( even if it results in
     // a runtime error
-        if ( eCurTok == _ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
+        if ( eCurTok == ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
         {
             SbiTokenizer tokens( *static_cast<SbiTokenizer*>(this) );
             tokens.Next();

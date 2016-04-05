@@ -106,7 +106,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
             case TDATE:
             case TSTRING:
             case TOBJECT:
-            case _ERROR_:
+            case ERROR_:
             case TBOOLEAN:
             case TVARIANT:
             case TBYTE:
@@ -222,9 +222,9 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     // PRIVATE is a synonymous for DIM
     // _CONST_?
     bool bConst = false;
-    if( eCurTok == _CONST_ )
+    if( eCurTok == CONST_ )
         bConst = true;
-    else if( Peek() == _CONST_ )
+    else if( Peek() == CONST_ )
     {
         Next();
         bConst = true;
@@ -831,7 +831,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     SbxDataType eType = eScanType;
     SbiProcDef* pDef = new SbiProcDef( this, aName, true );
     pDef->SetType( eType );
-    if( Peek() == _CDECL_ )
+    if( Peek() == CDECL_ )
     {
         Next(); pDef->SetCdecl();
     }
@@ -872,7 +872,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         }
         if( pDef->IsCdecl() )
         {
-            Error( ERRCODE_BASIC_UNEXPECTED, _CDECL_ );
+            Error( ERRCODE_BASIC_UNEXPECTED, CDECL_ );
         }
         pDef->SetCdecl( false );
         pDef->GetLib().clear();
@@ -887,7 +887,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         }
         if( pDef->IsCdecl() )
         {
-            Error( ERRCODE_BASIC_UNEXPECTED, _CDECL_ );
+            Error( ERRCODE_BASIC_UNEXPECTED, CDECL_ );
         }
         pDef->SetCdecl( false );
         pDef->GetAlias().clear();
@@ -907,7 +907,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                 bool bByVal = false;
                 bool bOptional = false;
                 bool bParamArray = false;
-                while( Peek() == BYVAL || Peek() == BYREF || Peek() == _OPTIONAL_ )
+                while( Peek() == BYVAL || Peek() == BYREF || Peek() == OPTIONAL_ )
                 {
                     if( Peek() == BYVAL )
                     {
@@ -917,7 +917,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                     {
                         bByVal = false;
                     }
-                    else if ( Peek() == _OPTIONAL_ )
+                    else if ( Peek() == OPTIONAL_ )
                     {
                         bOptional = true;
                     }
