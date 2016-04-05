@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_f330ee09",
+        "filename": "extras/source/autocorr/lang/pt/DocumentList.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-04-05T19:05:02Z",
+      "side": 0,
+      "message": "Why is Marco deleting the entries for the Greek capital letters, what’s wrong with them? Is he aware that these come from Pootle and will get added back by the update script?",
+      "revId": "8896bebcef656a35e653e59583c9960509162ef7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
