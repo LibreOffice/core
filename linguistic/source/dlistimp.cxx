@@ -619,7 +619,7 @@ void SAL_CALL
         aEvtListeners.removeInterface( rxListener );
 }
 
-void DicList::_CreateDicList()
+void DicList::CreateDicList()
 {
     bInCreation = true;
 

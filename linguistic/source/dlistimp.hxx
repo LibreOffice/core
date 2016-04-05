@@ -73,11 +73,11 @@ class DicList :
     DicList( const DicList & ) = delete;
     DicList & operator = (const DicList &) = delete;
 
-    void                _CreateDicList();
+    void                CreateDicList();
     DictionaryVec_t &   GetOrCreateDicList()
                         {
                             if ( !bInCreation && aDicList.empty() )
-                                _CreateDicList();
+                                CreateDicList();
                             return aDicList;
                         }
 
