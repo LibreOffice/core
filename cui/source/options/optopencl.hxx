@@ -34,38 +34,9 @@ private:
     VclPtr<CheckBox> mpUseSwInterpreter;
     VclPtr<CheckBox> mpUseOpenCL;
 
-    VclPtr<VclFrame> mpBlackListFrame;
-    VclPtr<SvSimpleTable> mpBlackList;
-    VclPtr<SvSimpleTableContainer> mpBlackListTable;
-    VclPtr<PushButton> mpBlackListEdit;
-    VclPtr<PushButton> mpBlackListAdd;
-    VclPtr<PushButton> mpBlackListDelete;
-    VclPtr<FixedText> mpOS;
-    VclPtr<FixedText> mpOSVersion;
-    VclPtr<FixedText> mpDevice;
-    VclPtr<FixedText> mpVendor;
-    VclPtr<FixedText> mpDrvVersion;
-
-    VclPtr<VclFrame> mpWhiteListFrame;
-    VclPtr<SvSimpleTable> mpWhiteList;
-    VclPtr<SvSimpleTableContainer> mpWhiteListTable;
-    VclPtr<PushButton> mpWhiteListEdit;
-    VclPtr<PushButton> mpWhiteListAdd;
-    VclPtr<PushButton> mpWhiteListDelete;
-
-    DECL_LINK_TYPED(BlackListEditHdl, Button*, void);
-    DECL_LINK_TYPED(BlackListAddHdl, Button*, void);
-    DECL_LINK_TYPED(BlackListDeleteHdl, Button*, void);
-
-    DECL_LINK_TYPED(WhiteListEditHdl, Button*, void);
-    DECL_LINK_TYPED(WhiteListAddHdl, Button*, void);
-    DECL_LINK_TYPED(WhiteListDeleteHdl, Button*, void);
+    VclPtr<FixedText> clUsed;
 
     DECL_LINK_TYPED(EnableOpenCLHdl, Button*, void);
-
-    long EditHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
-    long AddHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
-    static long DeleteHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet);
 
     static void EnableOpenCLHdl(VclFrame* pFrame, bool aEnable);
 
@@ -78,7 +49,6 @@ public:
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
-    virtual void            FillUserData() override;
 };
 
 #endif
