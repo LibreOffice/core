@@ -412,7 +412,7 @@ void SfxBindings::Update_Impl
     if ( pSet )
     {
         // Query Status
-        if ( rDispat._FillState( *pMsgServer, *pSet, pRealSlot ) )
+        if ( rDispat.FillState_( *pMsgServer, *pSet, pRealSlot ) )
         {
             // Post Status
             const SfxInterface *pInterface =
@@ -1177,7 +1177,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         const sal_uInt16 nSlotId = pRealSlot->GetSlotId();
         aReq.SetSlot( nSlotId );
         aReq.AppendItem( SfxAllEnumItem( rPool.GetWhich(nSlotId), pSlot->GetValue() ) );
-        pDispatcher->_Execute( *pShell, *pRealSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
+        pDispatcher->Execute_( *pShell, *pRealSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
     }
     else if ( SFX_KIND_ATTR == pSlot->GetKind() )
     {
@@ -1257,10 +1257,10 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             }
         }
 
-        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
+        pDispatcher->Execute_( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
     }
     else
-        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
+        pDispatcher->Execute_( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
 }
 
 

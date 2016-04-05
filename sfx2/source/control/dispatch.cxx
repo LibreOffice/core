@@ -892,7 +892,7 @@ bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
 
     Flush();
     SfxSlotServer aSvr;
-    if ( _FindServer(nSlot, aSvr, bModal) )
+    if ( FindServer_(nSlot, aSvr, bModal) )
     {
         if ( bOwnShellsOnly && aSvr.GetShellLevel() >= xImp->aStack.size() )
             return false;
@@ -918,7 +918,7 @@ bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
     @param rReq function to be performed (Id and optional parameters)
     @param eCallMode Synchronously, asynchronously or as shown in the slot
 */
-void SfxDispatcher::_Execute(SfxShell& rShell, const SfxSlot& rSlot,
+void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
         SfxRequest& rReq, SfxCallMode eCallMode)
 {
     DBG_ASSERT( !xImp->bFlushing, "recursive call to dispatcher" );
@@ -1019,7 +1019,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
             aReq.SetInternalArgs_Impl( *pInternalArgs );
         aReq.SetModifier( nModi );
 
-        _Execute( *pShell, *pSlot, aReq, nCall );
+        Execute_( *pShell, *pSlot, aReq, nCall );
         return aReq.GetReturnValue();
     }
     return nullptr;
@@ -1068,7 +1068,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
                 aSet.Put( **pArg );
             pReq->SetInternalArgs_Impl( aSet );
         }
-        _Execute( *pShell, *pSlot, *pReq, eCall );
+        Execute_( *pShell, *pSlot, *pReq, eCall );
         const SfxPoolItem* pRet = pReq->GetReturnValue();
         delete pReq; return pRet;
     }
@@ -1113,7 +1113,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
             MappedPut_Impl( aSet, *pArg );
         SfxRequest aReq( nSlot, eCall, aSet );
         aReq.SetModifier( nModi );
-        _Execute( *pShell, *pSlot, aReq, eCall );
+        Execute_( *pShell, *pSlot, aReq, eCall );
         return aReq.GetReturnValue();
     }
     return nullptr;
@@ -1168,7 +1168,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
        va_end(pVarArgs);
 
        SfxRequest aReq( nSlot, eCall, aSet );
-       _Execute( *pShell, *pSlot, aReq, eCall );
+       Execute_( *pShell, *pSlot, aReq, eCall );
        return aReq.GetReturnValue();
     }
     return nullptr;
@@ -1188,7 +1188,7 @@ IMPL_LINK_TYPED(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq, void)
         {
             Flush();
             SfxSlotServer aSvr;
-            if ( _FindServer(pReq->GetSlot(), aSvr, true ) ) // HACK(x), whatever that was supposed to mean
+            if ( FindServer_(pReq->GetSlot(), aSvr, true ) ) // HACK(x), whatever that was supposed to mean
             {
                 const SfxSlot *pSlot = aSvr.GetSlot();
                 SfxShell *pSh = GetShell(aSvr.GetShellLevel());
@@ -1336,7 +1336,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
         pActDispat = pActDispat->xImp->pParent;
     }
 
-    _Update_Impl( bUIActive, !bIsIPActive, bIsIPActive, pTaskWin );
+    Update_Impl_( bUIActive, !bIsIPActive, bIsIPActive, pTaskWin );
     if ( (bUIActive || bIsActive) && !comphelper::LibreOfficeKit::isActive() )
         pWorkWin->UpdateObjectBars_Impl();
 
@@ -1349,7 +1349,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     return;
 }
 
-void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwner, SfxWorkWindow *pTaskWin )
+void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwner, SfxWorkWindow *pTaskWin )
 {
     SfxGetpApp();
     SfxWorkWindow *pWorkWin = xImp->pFrame->GetFrame().GetWorkWindow_Impl();
@@ -1364,7 +1364,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     }
 
     if ( xImp->pParent && !xImp->bQuiet /* && bUIActive */ )
-        xImp->pParent->_Update_Impl( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
+        xImp->pParent->Update_Impl_( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         xImp->aObjBars[n].nResId = 0;
@@ -1756,7 +1756,7 @@ SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) 
                     false
                     The Slot is currently not served, rServer is invalid.
 */
-bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool bModal)
+bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer, bool bModal)
 {
     SFX_STACK(SfxDispatcher::_FindServer);
 
@@ -1815,7 +1815,7 @@ bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
     {
         if ( xImp->pParent )
         {
-            bool bRet = xImp->pParent->_FindServer( nSlot, rServer, bModal );
+            bool bRet = xImp->pParent->FindServer_( nSlot, rServer, bModal );
             rServer.SetShellLevel
                 ( rServer.GetShellLevel() + xImp->aStack.size() );
             return bRet;
@@ -1889,7 +1889,7 @@ bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
     @param rState SfxItemSet to be filled
     @param pRealSlot The actual Slot if possible
 */
-bool SfxDispatcher::_FillState(const SfxSlotServer& rSvr, SfxItemSet& rState,
+bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
         const SfxSlot* pRealSlot)
 {
     SFX_STACK(SfxDispatcher::_FillState);
