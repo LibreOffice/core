@@ -171,6 +171,8 @@ enum class SwPasteSdr
 #define SW_ADD_SELECT   1
 #define SW_ENTER_GROUP  2
 #define SW_LEAVE_FRAME  4
+/// Allow SwFEShell::SelectObj() to select the TextBox of a shape.
+#define SW_ALLOW_TEXTBOX  8
 
 enum class SwMove
 {
