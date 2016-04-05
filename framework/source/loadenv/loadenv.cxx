@@ -222,7 +222,7 @@ utl::MediaDescriptor addModelArgs(const uno::Sequence<beans::PropertyValue>& rDe
 
 void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans::PropertyValue>& lMediaDescriptor,
         const uno::Reference<frame::XFrame>& xBaseFrame, const OUString& sTarget,
-        sal_Int32 nSearchFlags, EFeature eFeature, EContentType eContentType)
+        sal_Int32 nSearchFlags, EFeature eFeature)
 {
     osl::MutexGuard g(m_mutex);
 
@@ -237,7 +237,7 @@ void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans:
     m_sTarget = sTarget;
     m_nSearchFlags = nSearchFlags;
     m_eFeature = eFeature;
-    m_eContentType = eContentType;
+    m_eContentType = E_UNSUPPORTED_CONTENT;
     m_bCloseFrameOnError = false;
     m_bReactivateControllerOnError = false;
     m_bLoaded = false;
@@ -246,12 +246,9 @@ void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans:
     // We use a default value for this in-parameter. Then we have to start a complex check method
     // internally. But if this check was already done outside it can be suppressed to perform
     // the load request. We take over the result then!
+    m_eContentType = LoadEnv::classifyContent(sURL, lMediaDescriptor);
     if (m_eContentType == E_UNSUPPORTED_CONTENT)
-    {
-        m_eContentType = LoadEnv::classifyContent(sURL, lMediaDescriptor);
-        if (m_eContentType == E_UNSUPPORTED_CONTENT)
-            throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::initializeLoading");
-    }
+        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::initializeLoading");
 
     // make URL part of the MediaDescriptor
     // It doesn't matter if it is already an item of it.

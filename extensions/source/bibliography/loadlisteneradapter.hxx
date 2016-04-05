@@ -61,7 +61,6 @@ namespace bib
         OComponentListener*                 m_pListener;
         sal_Int32                           m_nLockCount;
         bool                                m_bListening    : 1;
-        bool                                m_bAutoRelease  : 1;
 
         // impl method for dispose - virtual, 'cause you at least need to remove the listener from the broadcaster
         virtual void disposing() = 0;
@@ -79,8 +78,7 @@ namespace bib
 
     public:
         OComponentAdapterBase(
-            const css::uno::Reference< css::lang::XComponent >& _rxComp,
-            bool _bAutoRelease = true
+            const css::uno::Reference< css::lang::XComponent >& _rxComp
         );
 
         // late construction

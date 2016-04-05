@@ -253,18 +253,6 @@ public:
                 flag field, which enable/disable special features of this
                 new instance for following load call.
 
-        @param  eContentType
-                classify the given content.
-                This value is set to a default value "UNKNOWN_CONTENT", which force
-                an internal check, if this content is loadable or not.
-                But may this check was already made by the caller of this method and
-                passing this information to this LoadEnv instance can suppress this
-                might expensive check.
-                That can be useful in case this information is needed outside too,
-                to decide if its necessary to create some resources for this load
-                request ... or to reject the request immediately if it seems to be not
-                loadable in general.
-
         @throw  A LoadEnvException e.g. if another load operation is till in progress
                 or initialization of a new one fail by other reasons.
                 The real reason, a suitable message and ID will be given here immidiatly.
@@ -273,12 +261,11 @@ public:
                 the whole runtime can't be used any longer.
      */
     void initializeLoading(const OUString&                                           sURL            ,
-                                   const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
-                                   const css::uno::Reference< css::frame::XFrame >&                 xBaseFrame      ,
-                                   const OUString&                                           sTarget         ,
-                                         sal_Int32                                                  nSearchFlags    ,
-                                         EFeature                                                   eFeature        = E_NO_FEATURE         ,
-                                         EContentType                                               eContentType    = E_UNSUPPORTED_CONTENT);
+                           const css::uno::Sequence< css::beans::PropertyValue >&    lMediaDescriptor,
+                           const css::uno::Reference< css::frame::XFrame >&          xBaseFrame      ,
+                           const OUString&                                           sTarget         ,
+                                 sal_Int32                                           nSearchFlags    ,
+                                 EFeature                                            eFeature        = E_NO_FEATURE);
 
     /** @short  start loading of the resource represented by this loadenv instance.
 

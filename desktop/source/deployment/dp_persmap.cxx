@@ -35,11 +35,10 @@ namespace dp_misc
 
 static const char PmapMagic[4] = {'P','m','p','1'};
 
-PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
+PersistentMap::PersistentMap( OUString const & url_ )
 :    m_MapFile( expandUnoRcUrl(url_) )
-,    m_bReadOnly( readOnly )
 ,    m_bIsOpen( false )
-,    m_bToBeCreated( !readOnly )
+,    m_bToBeCreated( true )
 ,    m_bIsDirty( false )
 {
     open();
@@ -47,7 +46,6 @@ PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
 
 PersistentMap::PersistentMap()
 :    m_MapFile( OUString() )
-,    m_bReadOnly( false )
 ,    m_bIsOpen( false )
 ,    m_bToBeCreated( false )
 ,    m_bIsDirty( false )
@@ -141,9 +139,7 @@ static OString decodeString( const sal_Char* pEncChars, int nLen)
 void PersistentMap::open()
 {
     // open the existing file
-    sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read;
-    if( !m_bReadOnly)
-        nOpenFlags |= osl_File_OpenFlag_Write;
+    sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
 
     const osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
     m_bIsOpen = (rcOpen == osl::File::E_None);
@@ -210,7 +206,6 @@ void PersistentMap::flush()
 {
     if( !m_bIsDirty)
         return;
-    OSL_ASSERT( !m_bReadOnly);
     if( m_bToBeCreated && !m_entries.empty())
     {
         const sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
@@ -273,8 +268,6 @@ bool PersistentMap::get( OString * value, OString const & key ) const
 
 void PersistentMap::add( OString const & key, OString const & value )
 {
-    if( m_bReadOnly)
-        return;
     typedef std::pair<t_string2string_map::iterator,bool> InsertRC;
     InsertRC r = m_entries.insert( t_string2string_map::value_type(key,value));
     m_bIsDirty = r.second;
@@ -292,8 +285,6 @@ void PersistentMap::put( OString const & key, OString const & value )
 
 bool PersistentMap::erase( OString const & key )
 {
-    if( m_bReadOnly)
-        return false;
     size_t nCount = m_entries.erase( key);
     if( !nCount)
         return false;

@@ -37,7 +37,7 @@ namespace pcr
         virtual void StateChanged(StateChangedType nType) override;
 
     public:
-        OBrowserPage(vcl::Window* pParent, WinBits nWinStyle = 0);
+        OBrowserPage(vcl::Window* pParent);
         virtual ~OBrowserPage();
         virtual void dispose() override;
 

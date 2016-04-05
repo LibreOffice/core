@@ -28,8 +28,8 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    OPropertyBrowserView::OPropertyBrowserView(vcl::Window* _pParent, WinBits nBits)
-                  :Window(_pParent, nBits | WB_3DLOOK)
+    OPropertyBrowserView::OPropertyBrowserView(vcl::Window* _pParent)
+                  :Window(_pParent, WB_3DLOOK)
                   ,m_nActivePage(0)
     {
         m_pPropBox = VclPtr<OPropertyEditor>::Create( this );

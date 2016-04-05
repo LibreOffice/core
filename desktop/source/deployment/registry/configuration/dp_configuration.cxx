@@ -227,7 +227,7 @@ BackendImpl::BackendImpl(
         {
             try
             {
-                pMap.reset( new PersistentMap( aCompatURL, false ) );
+                pMap.reset( new PersistentMap( aCompatURL ) );
             }
             catch (const Exception &e)
             {

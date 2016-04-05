@@ -59,12 +59,11 @@ namespace bib
         }
     }
 
-    OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp, bool _bAutoRelease )
+    OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp )
         :m_xComponent( _rxComp )
         ,m_pListener( nullptr )
         ,m_nLockCount( 0 )
         ,m_bListening( false )
-        ,m_bAutoRelease( _bAutoRelease )
     {
         OSL_ENSURE( m_xComponent.is(), "OComponentAdapterBase::OComponentAdapterBase: invalid component!" );
     }
@@ -102,8 +101,7 @@ namespace bib
             m_pListener = nullptr;
             m_bListening = false;
 
-            if (m_bAutoRelease)
-                m_xComponent = nullptr;
+            m_xComponent = nullptr;
         }
     }
 
@@ -122,12 +120,11 @@ namespace bib
         m_pListener = nullptr;
         m_bListening = false;
 
-        if ( m_bAutoRelease )
-            m_xComponent = nullptr;
+        m_xComponent = nullptr;
     }
 
     OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable )
-        :OComponentAdapterBase( Reference< XComponent >( _rxLoadable, UNO_QUERY ), true/*_bAutoRelease*/ )
+        :OComponentAdapterBase( Reference< XComponent >( _rxLoadable, UNO_QUERY ) )
     {
     }
 

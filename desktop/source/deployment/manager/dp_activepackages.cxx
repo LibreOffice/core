@@ -118,7 +118,7 @@ ActivePackages::ActivePackages() {}
 
 ActivePackages::ActivePackages(OUString const & url)
 #if HAVE_FEATURE_EXTENSIONS
-    : m_map(url, false/*readOnly*/)
+    : m_map(url)
 #endif
 {
     (void) url;

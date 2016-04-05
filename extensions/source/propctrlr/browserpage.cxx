@@ -26,8 +26,8 @@ namespace pcr
     #define LAYOUT_BORDER_RIGHT     3
     #define LAYOUT_BORDER_BOTTOM    3
 
-    OBrowserPage::OBrowserPage(vcl::Window* pParent,WinBits nWinStyle)
-            :TabPage(pParent,nWinStyle)
+    OBrowserPage::OBrowserPage(vcl::Window* pParent)
+            :TabPage(pParent,0)
             ,m_aListBox(VclPtr<OBrowserListBox>::Create(this))
     {
         m_aListBox->SetBackground(GetBackground());
