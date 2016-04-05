@@ -56,42 +56,6 @@ static LPTSTR   *GetCommandArgs( int *pArgc )
 #endif
 }
 
-
-namespace {
-
-bool writeArgument(HANDLE pipe, char prefix, WCHAR const * argument) {
-    CHAR szBuffer[4096];
-    int n = WideCharToMultiByte(
-        CP_UTF8, 0, argument, -1, szBuffer, sizeof (szBuffer), NULL, NULL);
-    char b[1 + 2 * ((sizeof szBuffer) - 1)]; // hopefully does not overflow
-    b[0] = prefix;
-    char * p = b + 1;
-    for (int i = 0; i < n - 1; ++i) { // cannot underflow (n >= 0)
-        char c = szBuffer[i];
-        switch (c) {
-        case '\0':
-            *p++ = '\\';
-            *p++ = '0';
-            break;
-        case ',':
-            *p++ = '\\';
-            *p++ = ',';
-            break;
-        case '\\':
-            *p++ = '\\';
-            *p++ = '\\';
-            break;
-        default:
-            *p++ = c;
-            break;
-        }
-    }
-    DWORD w;
-    return WriteFile(pipe, b, p - b, &w, NULL);
-}
-
-}
-
 #ifdef __MINGW32__
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 #else
