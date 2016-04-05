@@ -1,7 +1,7 @@
-From 20e5f77bd3139482e9348fcb9f814b294af373aa Mon Sep 17 00:00:00 2001
+From 584620e74f3240d955bb9ea7a9a2e2ffc7634b95 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:19:12 +0100
-Subject: [PATCH 12/14] xmlsec1-customkeymanage.patch
+Subject: [PATCH] xmlsec1-customkeymanage.patch
 
 Conflicts:
 	include/xmlsec/nss/app.h
@@ -57,10 +57,10 @@ index 18dff94..44837b6 100644
  certkeys.h \
  crypto.h \
 diff --git a/include/xmlsec/mscrypto/Makefile.in b/include/xmlsec/mscrypto/Makefile.in
-index 477c5cb..4022177 100644
+index 235bc0c..d57481b 100644
 --- a/include/xmlsec/mscrypto/Makefile.in
 +++ b/include/xmlsec/mscrypto/Makefile.in
-@@ -293,6 +293,7 @@ top_srcdir = @top_srcdir@
+@@ -307,6 +307,7 @@ top_srcdir = @top_srcdir@
  NULL = 
  xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
  xmlsecmscryptoinc_HEADERS = \
@@ -160,10 +160,10 @@ index e352162..997ca7f 100644
  
  install-exec-hook:
 diff --git a/include/xmlsec/nss/Makefile.in b/include/xmlsec/nss/Makefile.in
-index 0fcffb4..151e091 100644
+index 8f7952d..a344a55 100644
 --- a/include/xmlsec/nss/Makefile.in
 +++ b/include/xmlsec/nss/Makefile.in
-@@ -300,6 +300,9 @@ bignum.h \
+@@ -314,6 +314,9 @@ bignum.h \
  keysstore.h \
  pkikeys.h \
  x509.h \
@@ -765,10 +765,10 @@ index 8cd8586..a14199e 100644
  
  if SHAREDLIB_HACK
 diff --git a/src/nss/Makefile.in b/src/nss/Makefile.in
-index 46c8c92..8fc7e05 100644
+index e799b8e..d9c4a27 100644
 --- a/src/nss/Makefile.in
 +++ b/src/nss/Makefile.in
-@@ -75,7 +75,8 @@ am__DEPENDENCIES_1 =
+@@ -81,7 +81,8 @@ am__DEPENDENCIES_1 =
  am__libxmlsec1_nss_la_SOURCES_DIST = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -778,7 +778,7 @@ index 46c8c92..8fc7e05 100644
  am__objects_1 =
  @SHAREDLIB_HACK_TRUE@am__objects_2 = libxmlsec1_nss_la-strings.lo
  am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
-@@ -86,6 +87,8 @@ am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
+@@ -92,6 +93,8 @@ am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
  	libxmlsec1_nss_la-x509.lo libxmlsec1_nss_la-x509vfy.lo \
  	libxmlsec1_nss_la-keysstore.lo libxmlsec1_nss_la-keytrans.lo \
  	libxmlsec1_nss_la-kw_des.lo libxmlsec1_nss_la-kw_aes.lo \
@@ -786,8 +786,8 @@ index 46c8c92..8fc7e05 100644
 +	libxmlsec1_nss_la-tokens.lo \
  	$(am__objects_1) $(am__objects_2)
  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
- libxmlsec1_nss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-@@ -345,6 +348,7 @@ libxmlsec1_nss_la_CPPFLAGS = \
+ AM_V_lt = $(am__v_lt_@AM_V@)
+@@ -370,6 +373,7 @@ libxmlsec1_nss_la_CPPFLAGS = \
  libxmlsec1_nss_la_SOURCES = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -795,7 +795,7 @@ index 46c8c92..8fc7e05 100644
  	$(NULL) $(am__append_1)
  libxmlsec1_nss_la_LIBADD = \
  	$(NSS_LIBS) \
-@@ -451,6 +455,8 @@ distclean-compile:
+@@ -476,6 +480,8 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509vfy.Plo@am__quote@
@@ -803,10 +803,10 @@ index 46c8c92..8fc7e05 100644
 +@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-tokens.Plo@am__quote@
  
  .c.o:
- @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -480,6 +486,20 @@ libxmlsec1_nss_la-app.lo: app.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@@ -505,6 +511,20 @@ libxmlsec1_nss_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
- @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
 +libxmlsec1_nss_la-akmngr.lo: akmngr.c
 +@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_nss_la-akmngr.lo -MD -MP -MF "$(DEPDIR)/libxmlsec1_nss_la-akmngr.Tpo" -c -o libxmlsec1_nss_la-akmngr.lo `test -f 'akmngr.c' || echo '$(srcdir)/'`akmngr.c; \
@@ -823,8 +823,8 @@ index 46c8c92..8fc7e05 100644
 +@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-tokens.lo `test -f 'tokens.c' || echo '$(srcdir)/'`tokens.c
 +
  libxmlsec1_nss_la-bignum.lo: bignum.c
- @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_nss_la-bignum.lo -MD -MP -MF $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo -c -o libxmlsec1_nss_la-bignum.lo `test -f 'bignum.c' || echo '$(srcdir)/'`bignum.c
- @am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo $(DEPDIR)/libxmlsec1_nss_la-bignum.Plo
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_nss_la-bignum.lo -MD -MP -MF $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo -c -o libxmlsec1_nss_la-bignum.lo `test -f 'bignum.c' || echo '$(srcdir)/'`bignum.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo $(DEPDIR)/libxmlsec1_nss_la-bignum.Plo
 diff --git a/src/nss/akmngr.c b/src/nss/akmngr.c
 new file mode 100644
 index 0000000..65b94ac
@@ -4877,7 +4877,7 @@ index 8a6e97a..d1b2850 100644
  
  
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index 9309c3a..3fd562e 100644
+index 065595b..e0ac57e 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
 @@ -226,6 +226,9 @@ XMLSEC_OPENSSL_OBJS_A = \
