@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_937412fe",
+        "filename": "oox/source/drawingml/diagram/diagram.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-04-05T12:00:53Z",
+      "side": 0,
+      "message": "urgh. this creates temporary files that are not that temporaty I assume, as they are never deleted. Also having a hardcoded path is bad. Having a hardcoded path that doesnt work well on Windows is worse.\n\nThis needs to either trigger on an explicit define flag or be removed.",
+      "revId": "901d04d3965ed73696586de06c6890e79299f266",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
