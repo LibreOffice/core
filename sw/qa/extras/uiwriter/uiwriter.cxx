@@ -196,6 +196,7 @@ public:
     void testClassificationPaste();
     void testTdf98987();
     void testTdf99004();
+    void testTdf84695();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -294,6 +295,7 @@ public:
     CPPUNIT_TEST(testClassificationPaste);
     CPPUNIT_TEST(testTdf98987);
     CPPUNIT_TEST(testTdf99004);
+    CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3607,6 +3609,29 @@ void SwUiWriterTest::testTdf99004()
     sal_Int32 nRectangle2Top = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32();
     // This was 3291 and 2531, should be now around 2472 and 2531, i.e. the two rectangles should not overlap anymore.
     CPPUNIT_ASSERT(nTextBox1Bottom < nRectangle2Top);
+}
+
+void SwUiWriterTest::testTdf84695()
+{
+    SwDoc* pDoc = createDoc("tdf84695.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(1);
+    SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
+    // First, make sure that pTextBox is a fly frame (textbox of a shape).
+    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFormat()->Which()));
+
+    // Then select it.
+    pWrtShell->SelectObj(Point(), 0, pObject);
+
+    // Now Enter + a key should add some text.
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    // This was empty, Enter did not start the fly frame edit mode.
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

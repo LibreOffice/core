@@ -229,19 +229,22 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
         }
     }
 
-    // If the fly frame is a textbox of a shape, then select the shape instead.
-    std::map<SwFrameFormat*, SwFrameFormat*> aTextBoxShapes = SwTextBoxHelper::findShapes(mpDoc);
-    for (size_t i = 0; i < rMrkList.GetMarkCount(); ++i)
+    if (!(nFlag & SW_ALLOW_TEXTBOX))
     {
-        SdrObject* pObject = rMrkList.GetMark(i)->GetMarkedSdrObj();
-        SwContact* pDrawContact = static_cast<SwContact*>(GetUserCall(pObject));
-        SwFrameFormat* pFormat = pDrawContact->GetFormat();
-        if (aTextBoxShapes.find(pFormat) != aTextBoxShapes.end())
+        // If the fly frame is a textbox of a shape, then select the shape instead.
+        std::map<SwFrameFormat*, SwFrameFormat*> aTextBoxShapes = SwTextBoxHelper::findShapes(mpDoc);
+        for (size_t i = 0; i < rMrkList.GetMarkCount(); ++i)
         {
-            SdrObject* pShape = aTextBoxShapes[pFormat]->FindSdrObject();
-            pDView->UnmarkAll();
-            pDView->MarkObj(pShape, Imp()->GetPageView(), bAddSelect, bEnterGroup);
-            break;
+            SdrObject* pObject = rMrkList.GetMark(i)->GetMarkedSdrObj();
+            SwContact* pDrawContact = static_cast<SwContact*>(GetUserCall(pObject));
+            SwFrameFormat* pFormat = pDrawContact->GetFormat();
+            if (aTextBoxShapes.find(pFormat) != aTextBoxShapes.end())
+            {
+                SdrObject* pShape = aTextBoxShapes[pFormat]->FindSdrObject();
+                pDView->UnmarkAll();
+                pDView->MarkObj(pShape, Imp()->GetPageView(), bAddSelect, bEnterGroup);
+                break;
+            }
         }
     }
 
