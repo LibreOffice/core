@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_f3fe2e04",
+        "filename": "oox/source/ppt/slidetransition.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-05T00:07:21Z",
+      "side": 1,
+      "message": "Can\u0027t seem to find that token in the ooxml schema - you sure that any PowerPoint version actually reads \u0026 writes this?",
+      "revId": "05f53a3d372975b8a7675dade8d15d75da1cda4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d3032a0c",
+        "filename": "sd/source/filter/ppt/pptanimations.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-05T00:07:21Z",
+      "side": 1,
+      "message": "This is for the binary PPT filter - you sure the ID is the right one?",
+      "revId": "05f53a3d372975b8a7675dade8d15d75da1cda4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_8803410f",
+        "filename": "slideshow/source/engine/transitions/ellipsewipe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-05T00:07:21Z",
+      "side": 1,
+      "message": "fallback to oval seems less ideal - either the fallback should be circle, or better only handle the two cases explicitely, and have every other value trigger an assertion",
+      "revId": "05f53a3d372975b8a7675dade8d15d75da1cda4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_a806051e",
+        "filename": "slideshow/source/engine/transitions/ellipsewipe.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-05T00:07:21Z",
+      "side": 1,
+      "message": "variable naming does not quite match module conventions. Look into other headers how integer member variables are named.",
+      "revId": "05f53a3d372975b8a7675dade8d15d75da1cda4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_48094931",
+        "filename": "slideshow/source/engine/transitions/ellipsewipe.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-05T00:07:21Z",
+      "side": 1,
+      "message": "The comment could be removed now.",
+      "revId": "05f53a3d372975b8a7675dade8d15d75da1cda4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
