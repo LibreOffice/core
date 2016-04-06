@@ -34,7 +34,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
-#include "../layoutmanager/helpers.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -123,20 +122,6 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
         OUString aModuleIdentifier;
         UIConfigElementWrapperBase::initialize( aArguments );
 
-        bool bMenuOnly( false );
-        Reference< XWindow > xContainerWindow;
-        for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
-        {
-            PropertyValue aPropValue;
-            if ( aArguments[n] >>= aPropValue )
-            {
-                if ( aPropValue.Name == "MenuOnly" )
-                    aPropValue.Value >>= bMenuOnly;
-                else if ( aPropValue.Name == "Container" )
-                    aPropValue.Value >>= xContainerWindow;
-            }
-        }
-
         Reference< XFrame > xFrame( m_xWeakFrame );
         if ( xFrame.is() && m_xConfigSource.is() )
         {
@@ -145,7 +130,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             VCLXMenuBar*    pAwtMenuBar = nullptr;
             {
                 SolarMutexGuard aSolarMutexGuard;
-                pVCLMenuBar = new MenuBar(getTopSystemWindow(xContainerWindow));
+                pVCLMenuBar = new MenuBar();
             }
 
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
@@ -172,6 +157,17 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             }
             catch ( const NoSuchElementException& )
             {
+            }
+
+            bool bMenuOnly( false );
+            for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+            {
+                PropertyValue aPropValue;
+                if ( aArguments[n] >>= aPropValue )
+                {
+                    if ( aPropValue.Name == "MenuOnly" )
+                        aPropValue.Value >>= bMenuOnly;
+                }
             }
 
             if ( !bMenuOnly )

@@ -2488,15 +2488,14 @@ MenuBarWindow* MenuBar::getMenuBarWindow()
     return pWin;
 }
 
-MenuBar::MenuBar(SystemWindow* pAssociatedSystemWindow)
+MenuBar::MenuBar()
     : Menu(),
       mbCloseBtnVisible(false),
       mbFloatBtnVisible(false),
       mbHideBtnVisible(false),
-      mbDisplayable(true),
-      mxAssociatedSystemWindow(pAssociatedSystemWindow)
+      mbDisplayable(true)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this, mxAssociatedSystemWindow.get());
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this);
 }
 
 MenuBar::MenuBar( const MenuBar& rMenu )
@@ -2506,7 +2505,7 @@ MenuBar::MenuBar( const MenuBar& rMenu )
       mbHideBtnVisible(false),
       mbDisplayable(true)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this, mxAssociatedSystemWindow.get());
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this);
     *this = rMenu;
 }
 
@@ -2780,13 +2779,13 @@ MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
 PopupMenu::PopupMenu()
     : pRefAutoSubMenu(nullptr)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this, nullptr);
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 }
 
 PopupMenu::PopupMenu( const ResId& rResId )
     : pRefAutoSubMenu(nullptr)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this, nullptr);
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 
     ResMgr* pMgr = rResId.GetResMgr();
     if( ! pMgr )
@@ -2820,7 +2819,7 @@ PopupMenu::PopupMenu( const PopupMenu& rMenu )
     : Menu(),
       pRefAutoSubMenu(nullptr)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this, nullptr);
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     *this = rMenu;
 }
 

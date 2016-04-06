@@ -59,7 +59,7 @@ private:
     void                        ActivateAllSubmenus(Menu* pMenuBar);
 
 public:
-    GtkSalMenu(bool bMenuBar, GActionGroup* pActionGroup);
+    GtkSalMenu( bool bMenuBar );
     virtual ~GtkSalMenu();
 
     virtual bool                VisibleMenuBar() override;   // must return TRUE to actually DISPLAY native menu bars
