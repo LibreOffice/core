@@ -13,15 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,hunspell,$(HUNSPELL_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,hunspell,\
 	external/hunspell/hunspell-solaris.patch \
-	external/hunspell/hunspell-1.3.2-overflow.patch \
-	external/hunspell/hunspell-android.patch \
-	external/hunspell/hunspell-1.3.2-nullptr.patch \
-	external/hunspell/hunspell-1.3.2-literal.patch \
-	external/hunspell/hunspell-fdo48017-wfopen.patch \
-	external/hunspell/hunspell-morph-overflow.patch \
-	external/hunspell/ubsan.patch.0 \
-	external/hunspell/hunspell-1.3.3-rhbz1261421.patch \
-	external/hunspell/hunspell-tdf95024-compound.patch \
+	external/hunspell/hunspell-windows.patch \
 ))
 
 ifeq ($(COM),MSC)
