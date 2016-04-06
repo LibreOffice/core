@@ -688,8 +688,8 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
 
 namespace {
 
-template<typename _Array, typename _Val>
-sal_Int32 FastGetPos(const _Array& rArray, const _Val* p, sal_Int32& rLastPos)
+template<typename Array, typename Val>
+sal_Int32 FastGetPos(const Array& rArray, const Val* p, sal_Int32& rLastPos)
 {
     sal_Int32 nArrayLen = rArray.size();
 

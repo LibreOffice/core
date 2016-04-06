@@ -82,10 +82,10 @@ struct ScriptTypePosInfo
     sal_Int32  nStartPos;
     sal_Int32  nEndPos;
 
-    ScriptTypePosInfo( short _Type, sal_Int32 _Start, sal_Int32 _End )
-    : nScriptType(_Type)
-    , nStartPos(_Start)
-    , nEndPos(_End)
+    ScriptTypePosInfo( short Type, sal_Int32 Start, sal_Int32 End )
+    : nScriptType(Type)
+    , nStartPos(Start)
+    , nEndPos(End)
     {
     }
 };
@@ -98,10 +98,10 @@ struct WritingDirectionInfo
     sal_Int32  nStartPos;
     sal_Int32  nEndPos;
 
-    WritingDirectionInfo( sal_uInt8 _Type, sal_Int32 _Start, sal_Int32 _End )
-    : nType(_Type)
-    , nStartPos(_Start)
-    , nEndPos(_End)
+    WritingDirectionInfo( sal_uInt8 Type, sal_Int32 Start, sal_Int32 End )
+    : nType(Type)
+    , nStartPos(Start)
+    , nEndPos(End)
     {
     }
 };
