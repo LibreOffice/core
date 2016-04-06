@@ -620,7 +620,7 @@ public:
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
                     {
                         if (ValidColRow(rPos.Col(),rPos.Row()))
-                            aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr, true/*bPutToPool*/ );
+                            aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr );
                     }
     void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,

@@ -60,18 +60,16 @@ struct Data_Impl
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
     VclPtr<SfxTabPage> pTabPage;         // The TabPage itself
-    bool bOnDemand;              // Flag: ItemSet onDemand
     bool bRefresh;                // Flag: Page must be re-initialized
 
     // Constructor
     Data_Impl( sal_uInt16 Id, CreateTabPage fnPage,
-               GetTabPageRanges fnRanges, bool bDemand ) :
+               GetTabPageRanges fnRanges ) :
 
         nId         ( Id ),
         fnCreatePage( fnPage ),
         fnGetRanges ( fnRanges ),
         pTabPage    ( nullptr ),
-        bOnDemand   ( bDemand ),
         bRefresh    ( false )
     {
         if ( !fnCreatePage  )
@@ -366,8 +364,6 @@ void SfxTabDialog::dispose()
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
-            if ( pDataObject->bOnDemand )
-                delete &pDataObject->pTabPage->GetItemSet();
             pDataObject->pTabPage.disposeAndClear();
         }
         delete pDataObject;
@@ -592,8 +588,7 @@ sal_uInt16 SfxTabDialog::AddTabPage
 )
 {
     sal_uInt16 nId = m_pTabCtrl->GetPageId(rName);
-    pImpl->aData.push_back(
-        new Data_Impl( nId, pCreateFunc, pRangesFunc, false/*bItemsOnDemand*/ ) );
+    pImpl->aData.push_back( new Data_Impl( nId, pCreateFunc, pRangesFunc ) );
     return nId;
 }
 
@@ -613,7 +608,7 @@ sal_uInt16 SfxTabDialog::AddTabPage
     assert(pCreateFunc);
     GetTabPageRanges pRangesFunc = pFact->GetTabPageRangesFunc(nPageCreateId);
     sal_uInt16 nPageId = m_pTabCtrl->GetPageId(rName);
-    pImpl->aData.push_back(new Data_Impl(nPageId, pCreateFunc, pRangesFunc, false));
+    pImpl->aData.push_back(new Data_Impl(nPageId, pCreateFunc, pRangesFunc));
     return nPageId;
 }
 
@@ -637,8 +632,7 @@ void SfxTabDialog::AddTabPage
     DBG_ASSERT( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nId ),
                 "Double Page-Ids in the Tabpage" );
     m_pTabCtrl->InsertPage( nId, rRiderText, nPos );
-    pImpl->aData.push_back(
-        new Data_Impl( nId, pCreateFunc, pRangesFunc, false/*bItemsOnDemand*/ ) );
+    pImpl->aData.push_back( new Data_Impl( nId, pCreateFunc, pRangesFunc ) );
 }
 
 void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
@@ -674,8 +668,6 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
-            if ( pDataObject->bOnDemand )
-                delete &pDataObject->pTabPage->GetItemSet();
             pDataObject->pTabPage.disposeAndClear();
         }
 
@@ -787,13 +779,7 @@ short SfxTabDialog::Ok()
 
         if ( pTabPage )
         {
-            if ( pDataObject->bOnDemand )
-            {
-                SfxItemSet& rSet = (SfxItemSet&)pTabPage->GetItemSet();
-                rSet.ClearItem();
-                bModified |= pTabPage->FillItemSet( &rSet );
-            }
-            else if ( pSet && !pTabPage->HasExchangeSupport() )
+            if ( pSet && !pTabPage->HasExchangeSupport() )
             {
                 SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
 
@@ -965,14 +951,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, ResetHdl, Button*, void)
     Data_Impl* pDataObject = Find( pImpl->aData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
 
-    if ( pDataObject->bOnDemand )
-    {
-        // CSet on AIS has problems here, thus separated
-        const SfxItemSet* pItemSet = &pDataObject->pTabPage->GetItemSet();
-        pDataObject->pTabPage->Reset( pItemSet );
-    }
-    else
-        pDataObject->pTabPage->Reset( pSet );
+    pDataObject->pTabPage->Reset( pSet );
 }
 
 
@@ -1101,7 +1080,7 @@ IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
                 pTmpSet = pSet;
         }
 
-        if ( pTmpSet && !pDataObject->bOnDemand )
+        if ( pTmpSet )
             pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, pTmpSet );
         else
             pTabPage = (pDataObject->fnCreatePage)
@@ -1134,10 +1113,7 @@ IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 
         PageCreated( nId, *pTabPage );
 
-        if ( pDataObject->bOnDemand )
-            pTabPage->Reset( &pTabPage->GetItemSet() );
-        else
-            pTabPage->Reset( pSet );
+        pTabPage->Reset( pSet );
 
         pTabCtrl->SetTabPage( nId, pTabPage );
     }
@@ -1176,10 +1152,6 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
 #ifdef DBG_UTIL
     Data_Impl* pDataObject = Find( pImpl->aData, pTabCtrl->GetCurPageId() );
     DBG_ASSERT( pDataObject, "no Data structure for current page" );
-    if ( pPage->HasExchangeSupport() && pDataObject->bOnDemand )
-    {
-        SAL_INFO( "sfx.config", "Data exchange in ItemsOnDemand is not desired!" );
-    }
 #endif
 
     int nRet = SfxTabPage::LEAVE_PAGE;

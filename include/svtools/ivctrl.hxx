@@ -118,7 +118,7 @@ class SvxIconChoiceCtrlEntry
                             }
 
 public:
-                            SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage, SvxIconViewFlags nFlags = SvxIconViewFlags::NONE );
+                            SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage );
                             ~SvxIconChoiceCtrlEntry () {}
 
     Image                   GetImage () const { return aImage; }

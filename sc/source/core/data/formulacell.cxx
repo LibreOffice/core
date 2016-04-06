@@ -2439,7 +2439,7 @@ void ScFormulaCell::SetCompile( bool bVal )
     bCompile = bVal;
 }
 
-void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag )
+void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows )
 {
     ScMatrixFormulaCellToken* pMat = aResult.GetMatrixFormulaCellTokenNonConst();
     if (pMat)
@@ -2449,7 +2449,7 @@ void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag )
         aResult.SetToken( new ScMatrixFormulaCellToken( nCols, nRows));
         // Setting the new token actually forces an empty result at this top
         // left cell, so have that recalculated.
-        SetDirty( bDirtyFlag );
+        SetDirty();
     }
 }
 

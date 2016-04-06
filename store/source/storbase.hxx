@@ -174,9 +174,9 @@ struct OStorePageGuard
 
     /** Construction.
      */
-    explicit OStorePageGuard (sal_uInt32 nMagic = 0, sal_uInt32 nCRC32 = 0)
+    explicit OStorePageGuard (sal_uInt32 nMagic = 0)
         : m_nMagic (store::htonl(nMagic)),
-          m_nCRC32 (store::htonl(nCRC32))
+          m_nCRC32 (store::htonl(0))
     {}
 
     void swap (OStorePageGuard & rhs)

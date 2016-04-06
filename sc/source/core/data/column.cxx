@@ -663,9 +663,9 @@ void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolR
     pAttrArray->FindStyleSheet( pStyleSheet, rUsedRows, bReset );
 }
 
-bool ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const
+bool ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 {
-    return pAttrArray->IsStyleSheetUsed( rStyle, bGatherAllStyles );
+    return pAttrArray->IsStyleSheetUsed( rStyle, true/*bGatherAllStyles*/ );
 }
 
 bool ScColumn::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
@@ -683,9 +683,9 @@ void ScColumn::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWh
     pAttrArray->ClearItems( nStartRow, nEndRow, pWhich );
 }
 
-void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, bool bPutToPool )
+void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 {
-    pAttrArray->SetPattern( nRow, &rPatAttr, bPutToPool );
+    pAttrArray->SetPattern( nRow, &rPatAttr, true/*bPutToPool*/ );
 }
 
 void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,

@@ -2563,7 +2563,7 @@ bool ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 
     for ( SCCOL i=0; i<=MAXCOL; i++ )
     {
-        if ( aCol[i].IsStyleSheetUsed( rStyle, true/*bGatherAllStyles*/ ) )
+        if ( aCol[i].IsStyleSheetUsed( rStyle ) )
         {
             bIsUsed = true;
         }
@@ -2621,7 +2621,7 @@ bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
 {
     if (ValidColRow(nCol,nRow))
-        aCol[nCol].SetPattern( nRow, rAttr, true/*bPutToPool*/ );
+        aCol[nCol].SetPattern( nRow, rAttr );
 }
 
 void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )

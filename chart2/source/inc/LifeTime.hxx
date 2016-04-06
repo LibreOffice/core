@@ -39,7 +39,7 @@ friend class LifeTimeGuard;
 protected:
     mutable ::osl::Mutex                    m_aAccessMutex;
 public:
-    LifeTimeManager( css::lang::XComponent* pComponent, bool bLongLastingCallsCancelable = false );
+    LifeTimeManager( css::lang::XComponent* pComponent );
     virtual ~LifeTimeManager();
 
     bool        impl_isDisposed( bool bAssert=true );
@@ -66,7 +66,6 @@ protected:
     bool volatile       m_bDisposed;
     bool volatile       m_bInDispose;
 
-    bool                m_bLongLastingCallsCancelable;
     ::osl::Condition        m_aNoLongLastingCallCountCondition;
     sal_Int32 volatile      m_nLongLastingCallCount;
 };

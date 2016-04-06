@@ -48,7 +48,7 @@ namespace chart
 PolarCoordinateSystem::PolarCoordinateSystem(
     const uno::Reference< uno::XComponentContext > & xContext,
     sal_Int32 nDimensionCount /* = 2 */ ) :
-        BaseCoordinateSystem( xContext, nDimensionCount, false/*bSwapXAndYAxis*/ )
+        BaseCoordinateSystem( xContext, nDimensionCount )
 {}
 
 PolarCoordinateSystem::PolarCoordinateSystem(
