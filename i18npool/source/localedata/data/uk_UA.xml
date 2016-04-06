@@ -314,6 +314,68 @@
           <DefaultFullName>Грудень</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>січ</DefaultAbbrvName>
+          <DefaultFullName>січня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>лют</DefaultAbbrvName>
+          <DefaultFullName>лютого</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>бер</DefaultAbbrvName>
+          <DefaultFullName>березня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>квт</DefaultAbbrvName>
+          <DefaultFullName>квітня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>трв</DefaultAbbrvName>
+          <DefaultFullName>травня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>чер</DefaultAbbrvName>
+          <DefaultFullName>червня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>лип</DefaultAbbrvName>
+          <DefaultFullName>липня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>сер</DefaultAbbrvName>
+          <DefaultFullName>серпня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>вер</DefaultAbbrvName>
+          <DefaultFullName>вересня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>жов</DefaultAbbrvName>
+          <DefaultFullName>жовтня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>лис</DefaultAbbrvName>
+          <DefaultFullName>листопада</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>гру</DefaultAbbrvName>
+          <DefaultFullName>грудня</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
