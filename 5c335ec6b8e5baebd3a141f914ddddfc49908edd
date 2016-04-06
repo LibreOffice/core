@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_8e46a9bd",
+        "filename": "slideshow/source/engine/transitions/ellipsewipe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-06T23:01:21Z",
+      "side": 1,
+      "message": "Next nitpick - the lines here \u0026 the ones below in the else branch share quite some common content. Perhaps this can be made more DRY?",
+      "revId": "5c335ec6b8e5baebd3a141f914ddddfc49908edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_4e3cb12f",
+        "filename": "slideshow/source/engine/transitions/ellipsewipe.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-06T23:01:21Z",
+      "side": 1,
+      "message": "Almost - but see e.g. slideshow/source/engine/transitions/combtransition.hxx",
+      "revId": "5c335ec6b8e5baebd3a141f914ddddfc49908edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ae49edd2",
+        "filename": "slideshow/source/engine/transitions/ellipsewipe.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-06T23:01:21Z",
+      "side": 1,
+      "message": "And then this one could be more consistent, too",
+      "revId": "5c335ec6b8e5baebd3a141f914ddddfc49908edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
