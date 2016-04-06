@@ -921,7 +921,9 @@ static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
     cairo_clip(cr);
 
     cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+    if (rTR.mnSrcWidth != 0 && rTR.mnSrcHeight != 0) {
+        cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+    }
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
     cairo_paint(cr);
 
