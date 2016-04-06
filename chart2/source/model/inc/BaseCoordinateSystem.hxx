@@ -56,8 +56,7 @@ class BaseCoordinateSystem :
 public:
     BaseCoordinateSystem(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        sal_Int32 nDimensionCount = 2,
-        bool bSwapXAndYAxis = false );
+        sal_Int32 nDimensionCount = 2 );
     explicit BaseCoordinateSystem( const BaseCoordinateSystem & rSource );
     virtual ~BaseCoordinateSystem();
 

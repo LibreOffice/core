@@ -1609,7 +1609,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 for (SCCOL nAtCol = static_cast<SCCOL>(nIMin); nAtCol <= sal::static_int_cast<SCCOL>(nIMax); nAtCol++)
                     if(!ColHidden(nAtCol))
                     {
-                        aCol[nAtCol].SetPattern(static_cast<SCROW>(nRow), *pSrcPattern, true);
+                        aCol[nAtCol].SetPattern(static_cast<SCROW>(nRow), *pSrcPattern);
                         for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatIndex.begin(), itrEnd = rCondFormatIndex.end();
                                 itr != itrEnd; ++itr)
                         {

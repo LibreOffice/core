@@ -67,17 +67,6 @@ public:
     virtual void LoseFocus() override;
 };
 
-class MyMultiEdit_Impl : public MultiLineEdit
-{
-    SvInplaceEdit2* pOwner;
-public:
-                 MyMultiEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
-    virtual     ~MyMultiEdit_Impl() { disposeOnce(); }
-    virtual void dispose() override { pOwner = nullptr; MultiLineEdit::dispose(); }
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void LoseFocus() override;
-};
-
 MyEdit_Impl::MyEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* _pOwner ) :
 
     Edit( pParent, WB_LEFT ),
@@ -99,34 +88,13 @@ void MyEdit_Impl::LoseFocus()
         pOwner->LoseFocus();
 }
 
-MyMultiEdit_Impl::MyMultiEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* _pOwner )
-    : MultiLineEdit( pParent,
-    WB_CENTER
-    ), pOwner(_pOwner)
-{
-}
-
-void MyMultiEdit_Impl::KeyInput( const KeyEvent& rKEvt )
-{
-    if( !pOwner->KeyInput( rKEvt ))
-        MultiLineEdit::KeyInput( rKEvt );
-}
-
-void MyMultiEdit_Impl::LoseFocus()
-{
-    if (pOwner)
-        pOwner->LoseFocus();
-}
-
-
 SvInplaceEdit2::SvInplaceEdit2
 (
     vcl::Window* pParent, const Point& rPos,
     const Size& rSize,
     const OUString& rData,
     const Link<SvInplaceEdit2&,void>& rNotifyEditEnd,
-    const Selection& rSelection,
-    bool bMulti
+    const Selection& rSelection
 ) :
 
     aCallBackHdl       ( rNotifyEditEnd ),
@@ -135,10 +103,7 @@ SvInplaceEdit2::SvInplaceEdit2
 
 {
 
-    if( bMulti )
-        pEdit = VclPtr<MyMultiEdit_Impl>::Create( pParent, this );
-    else
-        pEdit = VclPtr<MyEdit_Impl>::Create( pParent, this );
+    pEdit = VclPtr<MyEdit_Impl>::Create( pParent, this );
 
     vcl::Font aFont( pParent->GetFont() );
     aFont.SetTransparent( false );
@@ -974,7 +939,7 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
     pEdCtrl = new SvInplaceEdit2(
         this, rRect.TopLeft(), rRect.GetSize(), rStr,
         LINK( this, SvTreeListBox, TextEditEndedHdl_Impl ),
-        rSel, false/*bMulti*/ );
+        rSel );
 }
 
 IMPL_LINK_NOARG_TYPED(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)

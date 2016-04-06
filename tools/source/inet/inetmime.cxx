@@ -431,8 +431,7 @@ class INetMIMECharsetList_Impl
         bool m_bDisabled;
         Node * m_pNext;
 
-        inline Node(const Charset & rTheCharset, bool bTheDisabled,
-                    Node * pTheNext);
+        inline Node(const Charset & rTheCharset, Node * pTheNext);
     };
 
     Node * m_pFirst;
@@ -443,7 +442,7 @@ public:
     ~INetMIMECharsetList_Impl();
 
     void prepend(const Charset & rCharset)
-    { m_pFirst = new Node(rCharset, false, m_pFirst); }
+    { m_pFirst = new Node(rCharset, m_pFirst); }
 
     void includes(sal_uInt32 nChar);
 
@@ -455,10 +454,9 @@ public:
 };
 
 inline INetMIMECharsetList_Impl::Node::Node(const Charset & rTheCharset,
-                                            bool bTheDisabled,
                                             Node * pTheNext):
     m_aCharset(rTheCharset),
-    m_bDisabled(bTheDisabled),
+    m_bDisabled(false),
     m_pNext(pTheNext)
 {}
 

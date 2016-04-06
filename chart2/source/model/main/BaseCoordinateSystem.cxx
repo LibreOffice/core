@@ -124,8 +124,7 @@ namespace chart
 
 BaseCoordinateSystem::BaseCoordinateSystem(
     const Reference< uno::XComponentContext > & xContext,
-    sal_Int32 nDimensionCount /* = 2 */,
-    bool bSwapXAndYAxis /* = sal_False */ ) :
+    sal_Int32 nDimensionCount /* = 2 */ ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
@@ -159,7 +158,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     for( sal_Int32 i = 0; i < m_nDimensionCount; ++i )
         m_aOrigin[ i ] = uno::makeAny( double( 0.0 ) );
 
-    setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::makeAny( bSwapXAndYAxis ));
+    setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::makeAny( false ));
 }
 
 // explicit

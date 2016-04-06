@@ -657,7 +657,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point
 
         if(bIdxZwang)
         {
-            mnInsPointNum = pMarkedPath->NbcInsPoint(nIdx, aPt, bNewObj, true);
+            mnInsPointNum = pMarkedPath->NbcInsPoint(nIdx, aPt, bNewObj);
         }
         else
         {

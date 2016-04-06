@@ -29,10 +29,9 @@ using namespace ::com::sun::star;
 namespace apphelper
 {
 
-LifeTimeManager::LifeTimeManager( lang::XComponent* pComponent, bool bLongLastingCallsCancelable )
+LifeTimeManager::LifeTimeManager( lang::XComponent* pComponent )
     : m_aListenerContainer( m_aAccessMutex )
     , m_pComponent(pComponent)
-    , m_bLongLastingCallsCancelable(bLongLastingCallsCancelable)
 {
     impl_init();
 }
@@ -163,7 +162,7 @@ bool LifeTimeManager::dispose()
 
 CloseableLifeTimeManager::CloseableLifeTimeManager( css::util::XCloseable* pCloseable
         , css::lang::XComponent* pComponent )
-        : LifeTimeManager( pComponent, false/*bLongLastingCallsCancelable*/ )
+        : LifeTimeManager( pComponent )
         , m_pCloseable(pCloseable)
 {
     impl_init();
@@ -275,9 +274,6 @@ bool CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
     //this count cannot grow after try of close has started, because we wait in all those methods for end of try closing
     if( !m_nLongLastingCallCount )
         return false;
-
-      if(m_bLongLastingCallsCancelable)
-        return true;
 
     impl_setOwnership( bDeliverOwnership, true );
 

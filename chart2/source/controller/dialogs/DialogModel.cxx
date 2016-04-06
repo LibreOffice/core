@@ -737,8 +737,7 @@ void DialogModel::setData(
                 xInterpreter->interpretDataSource(
                     xDataSource, rArguments,
                     comphelper::containerToSequence( aSeriesToReUse )),
-                aSeriesToReUse,
-                true /* bSetStyles */);
+                aSeriesToReUse);
 
             ThreeDHelper::setScheme( xDiagram, e3DScheme );
         }
@@ -784,8 +783,7 @@ sal_Int32 DialogModel::GetRoleIndexForSorting( const OUString & rInternalRoleStr
 
 void DialogModel::applyInterpretedData(
     const InterpretedData & rNewData,
-    const ::std::vector< Reference< XDataSeries > > & rSeriesToReUse,
-    bool bSetStyles )
+    const ::std::vector< Reference< XDataSeries > > & rSeriesToReUse )
 {
     if( ! m_xChartDocument.is())
         return;
@@ -795,7 +793,7 @@ void DialogModel::applyInterpretedData(
     if( xDiagram.is())
     {
         // styles
-        if( bSetStyles && m_xTemplate.is() )
+        if( m_xTemplate.is() )
         {
             sal_Int32 nGroup = 0;
             sal_Int32 nSeriesCounter = 0;

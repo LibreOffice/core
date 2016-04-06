@@ -819,7 +819,7 @@ class SvInplaceEdit2
 public:
                 SvInplaceEdit2( vcl::Window* pParent, const Point& rPos, const Size& rSize,
                    const OUString& rData, const Link<SvInplaceEdit2&,void>& rNotifyEditEnd,
-                   const Selection&, bool bMultiLine = false );
+                   const Selection& );
                ~SvInplaceEdit2();
     bool        KeyInput( const KeyEvent& rKEvt );
     void        LoseFocus();

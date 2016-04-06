@@ -42,10 +42,7 @@ class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable
 public:
     CreationWizard( vcl::Window* pParent,
         const css::uno::Reference< css::frame::XModel >& xChartModel
-        , const css::uno::Reference< css::uno::XComponentContext >& xContext
-        // if nOnePageOnlyIndex is an index of an exsisting  page starting with 0
-        // then only this page is displayed without next/previous and roadmap
-        , sal_Int32 nOnePageOnlyIndex=-1 );
+        , const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     CreationWizard() = delete;
 
@@ -68,7 +65,6 @@ private:
     css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
     bool m_bIsClosable;
-    sal_Int32 m_nOnePageOnlyIndex;//if nOnePageOnlyIndex is an index of an exsisting page starting with 0, then only this page is displayed without next/previous and roadmap
     ChartTypeTemplateProvider*   m_pTemplateProvider;
     std::unique_ptr<DialogModel> m_pDialogModel;
 

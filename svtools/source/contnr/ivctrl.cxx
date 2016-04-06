@@ -34,8 +34,7 @@ using namespace ::com::sun::star::accessibility;
 \*****************************************************************************/
 
 SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText,
-                                                const Image& rImage,
-                                                SvxIconViewFlags _nFlags )
+                                                const Image& rImage )
     : aImage(rImage)
     , aText(rText)
     , pUserData(nullptr)
@@ -45,7 +44,7 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText,
     , eTextMode(IcnShowTextShort)
     , nX(0)
     , nY(0)
-    , nFlags(_nFlags)
+    , nFlags(SvxIconViewFlags::NONE)
 {
 }
 
@@ -102,7 +101,7 @@ void SvtIconChoiceCtrl::dispose()
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, const Image& rImage  )
 {
-    SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage, SvxIconViewFlags::NONE);
+    SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage);
 
     _pImp->InsertEntry( pEntry, CONTAINER_APPEND );
 

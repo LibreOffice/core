@@ -53,11 +53,10 @@ struct OStoreBTreeEntry
     */
     explicit OStoreBTreeEntry (
         K const &  rKey    = K(),
-        L const &  rLink   = L(),
-        sal_uInt32 nAttrib = 0)
+        L const &  rLink   = L())
         : m_aKey    (rKey),
           m_aLink   (rLink),
-          m_nAttrib (store::htonl(nAttrib))
+          m_nAttrib (store::htonl(0))
     {}
 
     OStoreBTreeEntry (const OStoreBTreeEntry & rhs)

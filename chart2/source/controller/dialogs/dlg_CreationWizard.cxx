@@ -45,23 +45,14 @@ using namespace ::com::sun::star;
 #define STATE_OBJECTS      3
 #define STATE_LAST         STATE_OBJECTS
 
-namespace
-{
-    const sal_Int32 nPageCount = 4;
-}
-
 CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< frame::XModel >& xChartModel
-                               , const uno::Reference< uno::XComponentContext >& xContext
-                               , sal_Int32 nOnePageOnlyIndex )
+                               , const uno::Reference< uno::XComponentContext >& xContext )
                 : svt::RoadmapWizard( pParent,
-                    (nOnePageOnlyIndex >= 0 && nOnePageOnlyIndex < nPageCount)
-                        ?  WizardButtonFlags::HELP | WizardButtonFlags::CANCEL | WizardButtonFlags::FINISH
-                        :  WizardButtonFlags::HELP | WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT | WizardButtonFlags::FINISH
+                        WizardButtonFlags::HELP | WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT | WizardButtonFlags::FINISH
                   )
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xCC( xContext )
                 , m_bIsClosable(true)
-                , m_nOnePageOnlyIndex(nOnePageOnlyIndex)
                 , m_pTemplateProvider(nullptr)
                 , m_nFirstState(STATE_FIRST)
                 , m_nLastState(STATE_LAST)
@@ -71,13 +62,7 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
     m_pDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
     defaultButton( WizardButtonFlags::FINISH );
 
-    if( m_nOnePageOnlyIndex < 0 || m_nOnePageOnlyIndex >= nPageCount )
-    {
-        m_nOnePageOnlyIndex = -1;
-        this->setTitleBase(SCH_RESSTR(STR_DLG_CHART_WIZARD));
-    }
-    else
-        this->setTitleBase(OUString());
+    this->setTitleBase(SCH_RESSTR(STR_DLG_CHART_WIZARD));
 
     declarePath( PATH_FULL
         , STATE_CHARTTYPE
@@ -109,15 +94,12 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
 VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
 {
     VclPtr<svt::OWizardPage> pRet;
-    if(m_nOnePageOnlyIndex!=-1 && m_nOnePageOnlyIndex!=nState)
-        return pRet;
-    bool bDoLiveUpdate = m_nOnePageOnlyIndex == -1;
     switch( nState )
     {
     case STATE_CHARTTYPE:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(this,m_xChartModel,bDoLiveUpdate);
+        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(this,m_xChartModel,true/*bDoLiveUpdate*/);
         pRet  = pChartTypeTabPage;
         m_pTemplateProvider = pChartTypeTabPage;
         if (m_pDialogModel)

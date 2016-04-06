@@ -2132,7 +2132,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     pClipDoc->ResetClip(this, pMarks);
 
     sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags, true/*bCloneNoteCaptions*/);
-    CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, false/*bAllTabs*/);
+    CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks);
 
     for (SCTAB i = 0; i < nEndTab; ++i)
     {
@@ -2333,7 +2333,7 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName,
 
 }
 
-void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs)
+void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks)
 {
     if (!pRangeName || pRangeName->empty())
         return;
@@ -2342,7 +2342,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pClipDoc->maTabs.size()));
     for (SCTAB i = 0; i < nMinSizeBothTabs; ++i)
         if (maTabs[i] && pClipDoc->maTabs[i])
-            if ( bAllTabs || !pMarks || pMarks->GetTableSelect(i) )
+            if ( !pMarks || pMarks->GetTableSelect(i) )
                 maTabs[i]->FindRangeNamesInUse(
                     rClipRange.aStart.Col(), rClipRange.aStart.Row(),
                     rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames);
