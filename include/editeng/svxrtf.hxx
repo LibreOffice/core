@@ -223,8 +223,8 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void ClearStyleTbl();
     void ClearAttrStack();
 
-    SvxRTFItemStackType* _GetAttrSet();  // Create new ItemStackType:s
-    void _ClearStyleAttr( SvxRTFItemStackType& rStkType );
+    SvxRTFItemStackType* GetAttrSet_();  // Create new ItemStackType:s
+    void ClearStyleAttr_( SvxRTFItemStackType& rStkType );
 
     // Sets all the attributes that are different from the current
     void SetAttrSet( SvxRTFItemStackType &rSet );
@@ -393,7 +393,7 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
     SvxRTFItemStackType* pTmp;
     if( bNewGroup || nullptr == ( pTmp = aAttrStack.empty() ? nullptr : aAttrStack.back()) )
-        pTmp = _GetAttrSet();
+        pTmp = GetAttrSet_();
     return pTmp->aAttrSet;
 }
 

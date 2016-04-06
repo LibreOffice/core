@@ -207,7 +207,7 @@ INSINGLECHAR:
         break;
     case '{':
         if (bNewGroup)          // Nesting!
-            _GetAttrSet();
+            GetAttrSet_();
         bNewGroup = true;
         break;
     case '}':
@@ -803,7 +803,7 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     return *pDfltFont;
 }
 
-SvxRTFItemStackType* SvxRTFParser::_GetAttrSet()
+SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
 {
     SvxRTFItemStackType* pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
     SvxRTFItemStackType* pNew;
@@ -820,7 +820,7 @@ SvxRTFItemStackType* SvxRTFParser::_GetAttrSet()
 }
 
 
-void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
+void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
 {
     // check attributes to the attributes of the stylesheet or to
     // the default attrs of the document
@@ -957,8 +957,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
                             if( IsChkStyleAttr() )
                             {
-                                _ClearStyleAttr( *pOld );
-                                _ClearStyleAttr( *pNew );   //#i10381#, methinks.
+                                ClearStyleAttr_( *pOld );
+                                ClearStyleAttr_( *pNew );   //#i10381#, methinks.
                             }
 
                             if( pAkt )
@@ -994,7 +994,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 redundant properties.
                 */
                 if (IsChkStyleAttr() && !pAkt)
-                    _ClearStyleAttr( *pOld );
+                    ClearStyleAttr_( *pOld );
 
                 if( pAkt )
                 {
