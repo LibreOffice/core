@@ -260,7 +260,6 @@ public:
 
     // A Warm-/Hot-Link is created. Return true if successful
     virtual bool    StartAdviseLoop();
-    bool    StopAdviseLoop();
 
 private:
     friend class    DdeInternal;
@@ -298,19 +297,11 @@ class SVL_DLLPUBLIC DdeService
 {
     friend class    DdeInternal;
 
-public:
-    bool    IsBusy();
-    OUString GetHelp();
-    // Eventually creating a new item. return 0 -> Topic creation failed
-    bool    MakeTopic( const OUString& rItem );
-
 protected:
     OUString Topics();
     OUString Formats();
     OUString SysItems();
     OUString Status();
-    OUString SysTopicGet( const OUString& );
-    bool    SysTopicExecute( const OUString* );
 
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
