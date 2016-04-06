@@ -1363,6 +1363,47 @@ void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRe
     mpProgram->Clean();
 }
 
+namespace {
+
+bool scaleTexture(const rtl::Reference< OpenGLContext > &xContext,
+    OpenGLTexture& rOutTexture, const double& ixscale, const double& iyscale, OpenGLTexture& rTexture)
+{
+    int nWidth = rTexture.GetWidth();
+    int nHeight = rTexture.GetHeight();
+    int nNewWidth = nWidth / ixscale;
+    int nNewHeight = nHeight / iyscale;
+
+    OpenGLProgram* pProgram = xContext->UseProgram("textureVertexShader", OUString("areaScaleFragmentShader"));
+    if (pProgram == nullptr)
+        return false;
+
+    OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
+    OpenGLFramebuffer* pFramebuffer = xContext->AcquireFramebuffer(aScratchTex);
+
+    pProgram->SetUniform1f("xscale", ixscale);
+    pProgram->SetUniform1f("yscale", iyscale);
+    pProgram->SetUniform1i("swidth", nWidth);
+    pProgram->SetUniform1i("sheight", nHeight);
+    // For converting between <0,nWidth-1> and <0.0,1.0> coordinate systems.
+    pProgram->SetUniform1f("xsrcconvert", 1.0 / (nWidth - 1));
+    pProgram->SetUniform1f("ysrcconvert", 1.0 / (nHeight - 1));
+    pProgram->SetUniform1f("xdestconvert", 1.0 * (nNewWidth - 1));
+    pProgram->SetUniform1f("ydestconvert", 1.0 * (nNewHeight - 1));
+
+    pProgram->SetTexture("sampler", rTexture);
+    pProgram->DrawTexture(rTexture);
+    pProgram->Clean();
+
+    OpenGLContext::ReleaseFramebuffer(pFramebuffer);
+
+    CHECK_GL_ERROR();
+
+    rOutTexture = aScratchTex;
+    return true;
+}
+
+}
+
 void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     OpenGLTexture& rTexture,
     OpenGLTexture& rMask,
@@ -1377,10 +1418,6 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
         (float) rTexture.GetWidth(), 0, (float) rTexture.GetWidth(), (float) rTexture.GetHeight() };
     GLfloat aTexCoord[8];
 
-    // If downscaling at a higher scale ratio, use the area scaling algorithm rather
-    // than plain OpenGL's scaling, for better results.
-    // See OpenGLSalBitmap::ImplScaleArea().
-
     const long nDestWidth = basegfx::fround(basegfx::B2DVector(rX - rNull).getLength());
     const long nDestHeight = basegfx::fround(basegfx::B2DVector(rY - rNull).getLength());
 
@@ -1388,19 +1425,24 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     if( nDestHeight == 0 || nDestWidth == 0 )
         return;
 
-    const double ixscale = rTexture.GetWidth()  / double(nDestWidth);
-    const double iyscale = rTexture.GetHeight() / double(nDestHeight);
+    // inverted scale ratios
+    double ixscale = rTexture.GetWidth()  / double(nDestWidth);
+    double iyscale = rTexture.GetHeight() / double(nDestHeight);
 
+    // If downscaling at a higher scale ratio, use the area scaling algorithm rather
+    // than plain OpenGL's scaling (texture mapping), for better results.
+    // See OpenGLSalBitmap::ImplScaleArea().
     bool areaScaling = false;
     bool fastAreaScaling = false;
     OUString textureFragmentShader;
-    if( ixscale >= 2 && iyscale >= 2 ) // Downscaling to 50% or less? (inverted scale ratios)
+    if( ixscale >= 2 && iyscale >= 2 )  // scale ratio less than 50%
     {
         areaScaling = true;
         fastAreaScaling = ( ixscale == int( ixscale ) && iyscale == int( iyscale ));
-        // The generic case has arrays only up to 100 ratio downscaling, which is hopefully enough
-        // in practice, but protect against buffer overflows in case such an extreme case happens
-        // (and in such case the precision of the generic algorithm probably doesn't matter anyway).
+        // The generic case has arrays only up to 16 ratio downscaling and is performed in 2 passes,
+        // when the ratio is in the 16-100 range, which is hopefully enough in practice, but protect
+        // against buffer overflows in case such an extreme case happens (and in such case the precision
+        // of the generic algorithm probably doesn't matter anyway).
         if( ixscale > 100 || iyscale > 100 )
             fastAreaScaling = true;
         if( fastAreaScaling )
@@ -1409,17 +1451,69 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
             textureFragmentShader = "areaScaleFragmentShader";
     }
 
-    if( rMask )
+    OpenGLTexture aInTexture = rTexture;
+    OpenGLTexture aInMask = rMask;
+
+    // When using the area scaling algorithm we need to reduce the texture size in 2 passes
+    // in order to not use a big array inside the fragment shader.
+    if (areaScaling && !fastAreaScaling)
+    {
+        // Perform a first texture downscaling by an inverted scale ratio equal to
+        // the square root of the whole inverted scale ratio.
+        if (ixscale > 16 || iyscale > 16)
+        {
+            // The scissor area is set to the current window size in PreDraw,
+            // so if we do not disable the scissor test, the texture produced
+            // by the first downscaling is clipped to the current window size.
+            glDisable(GL_SCISSOR_TEST);
+            CHECK_GL_ERROR();
+
+            // Maybe it can give problems too.
+            glDisable(GL_STENCIL_TEST);
+            CHECK_GL_ERROR();
+
+            // the square root of the whole inverted scale ratio
+            double ixscalesqrt = std::floor(std::sqrt(ixscale));
+            double iyscalesqrt = std::floor(std::sqrt(iyscale));
+            ixscale /= ixscalesqrt; // second pass inverted x-scale factor
+            iyscale /= iyscalesqrt; // second pass inverted y-scale factor
+
+            scaleTexture(mpContext, aInTexture, ixscalesqrt, iyscalesqrt, rTexture);
+
+            if (rMask) // we need to downscale the mask too
+            {
+                scaleTexture(mpContext, aInMask, ixscalesqrt, iyscalesqrt, rMask);
+            }
+
+            // We need to re-acquire the off-screen texture.
+            CheckOffscreenTexture();
+            CHECK_GL_ERROR();
+
+            // Re-enable scissor and stencil tests if needed.
+            if (mbUseScissor)
+            {
+                glEnable(GL_SCISSOR_TEST);
+                CHECK_GL_ERROR();
+            }
+            if (mbUseStencil)
+            {
+                glEnable(GL_STENCIL_TEST);
+                CHECK_GL_ERROR();
+            }
+        }
+    }
+
+    if( aInMask  )
     {
         if( !UseProgram( "transformedTextureVertexShader",
                 textureFragmentShader.isEmpty() ? "maskedTextureFragmentShader" : textureFragmentShader,
                 "#define MASKED" ) )
             return;
-        mpProgram->SetTexture( "mask", rMask );
+        mpProgram->SetTexture( "mask", aInMask );
         GLfloat aMaskCoord[8];
-        rMask.GetWholeCoord(aMaskCoord);
+        aInMask.GetWholeCoord(aMaskCoord);
         mpProgram->SetMaskCoord(aMaskCoord);
-        rMask.SetFilter( GL_LINEAR );
+        aInMask.SetFilter( GL_LINEAR );
         mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     }
     else
@@ -1429,42 +1523,46 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
             return;
     }
 
-    int mnWidth = rTexture.GetWidth();
-    int mnHeight = rTexture.GetHeight();
-    if(areaScaling )
+    if(areaScaling)
     {
+        int nWidth = aInTexture.GetWidth();
+        int nHeight = aInTexture.GetHeight();
+
         // From OpenGLSalBitmap::ImplScaleArea().
-        if (fastAreaScaling && mnWidth && mnHeight)
+        if (fastAreaScaling && nWidth && nHeight)
         {
             mpProgram->SetUniform1i( "xscale", ixscale );
             mpProgram->SetUniform1i( "yscale", iyscale );
-            mpProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
-            mpProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
+            mpProgram->SetUniform1f( "xstep", 1.0 / nWidth );
+            mpProgram->SetUniform1f( "ystep", 1.0 / nHeight );
             mpProgram->SetUniform1f( "ratio", 1.0 / ( ixscale * iyscale ));
         }
-        else if (mnHeight > 1 && mnWidth > 1)
+        else if (nHeight > 1 && nWidth > 1)
         {
             mpProgram->SetUniform1f( "xscale", ixscale );
             mpProgram->SetUniform1f( "yscale", iyscale );
-            mpProgram->SetUniform1i( "swidth", mnWidth );
-            mpProgram->SetUniform1i( "sheight", mnHeight );
-            // For converting between <0,mnWidth-1> and <0.0,1.0> coordinate systems.
-            mpProgram->SetUniform1f( "xsrcconvert", 1.0 / ( mnWidth - 1 ));
-            mpProgram->SetUniform1f( "ysrcconvert", 1.0 / ( mnHeight - 1 ));
-            mpProgram->SetUniform1f( "xdestconvert", 1.0 * (( mnWidth / ixscale ) - 1 ));
-            mpProgram->SetUniform1f( "ydestconvert", 1.0 * (( mnHeight / iyscale ) - 1 ));
+            mpProgram->SetUniform1i( "swidth", nWidth );
+            mpProgram->SetUniform1i( "sheight", nHeight );
+            // For converting between <0,nWidth-1> and <0.0,1.0> coordinate systems.
+            mpProgram->SetUniform1f( "xsrcconvert", 1.0 / ( nWidth - 1 ));
+            mpProgram->SetUniform1f( "ysrcconvert", 1.0 / ( nHeight - 1 ));
+            mpProgram->SetUniform1f( "xdestconvert", 1.0 * (( nWidth / ixscale ) - 1 ));
+            mpProgram->SetUniform1f( "ydestconvert", 1.0 * (( nHeight / iyscale ) - 1 ));
         }
     }
 
     ApplyProgramMatrices();
     mpProgram->SetUniform2f( "viewport", GetWidth(), GetHeight() );
+    // Here, in order to get the correct transformation we need to pass the original texture,
+    // since it has been used for initializing the rectangle vertices.
     mpProgram->SetTransform( "transform", rTexture, rNull, rX, rY );
-    rTexture.GetWholeCoord( aTexCoord );
-    mpProgram->SetTexture( "sampler", rTexture );
-    rTexture.SetFilter( GL_LINEAR );
+    aInTexture.GetWholeCoord(aTexCoord);
+    mpProgram->SetTexture("sampler", aInTexture);
+    aInTexture.SetFilter(GL_LINEAR);
     mpProgram->SetTextureCoord( aTexCoord );
-    mpProgram->SetVertices( &aVertices[0] );
+    mpProgram->SetVertices( aVertices );
     glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
+
     CHECK_GL_ERROR();
     mpProgram->Clean();
 }
