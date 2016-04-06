@@ -17,8 +17,6 @@
 
 #include <basegfx/vector/b2isize.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include "ogl_canvasfont.hxx"
 
 
@@ -29,14 +27,17 @@ namespace oglcanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XTextLayout > TextLayoutBaseT;
 
     class TextLayout : public ::comphelper::OBaseMutex,
-                       public TextLayoutBaseT,
-                       private ::boost::noncopyable
+                       public TextLayoutBaseT
     {
     public:
         TextLayout( const css::rendering::StringContext&              aText,
                     sal_Int8                                          nDirection,
                     sal_Int64                                         nRandomSeed,
                     const CanvasFont::ImplRef&                        rFont );
+
+        /// make noncopyable
+        TextLayout(const TextLayout&) = delete;
+        const TextLayout& operator=(const TextLayout&) = delete;
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;

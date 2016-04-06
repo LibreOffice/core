@@ -31,8 +31,6 @@
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"
 
-#include <boost/noncopyable.hpp>
-
 
 namespace vclcanvas
 {
@@ -42,12 +40,16 @@ namespace vclcanvas
         optional backbuffer painting, when providing it with a second
         OutputDevice to render into.
      */
-    class CanvasHelper : private ::boost::noncopyable
+    class CanvasHelper
     {
     public:
         /** Create canvas helper
          */
         CanvasHelper();
+
+        /// make noncopyable
+        CanvasHelper(const CanvasHelper&) = delete;
+        const CanvasHelper& operator=(const CanvasHelper&) = delete;
 
         /// Release all references
         void disposing();

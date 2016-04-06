@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <algorithm>
-#include <boost/noncopyable.hpp>
 
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -44,10 +43,12 @@ namespace vclcanvas
 {
     namespace
     {
-        class OutDevHolder : public OutDevProvider,
-            private ::boost::noncopyable
+        class OutDevHolder : public OutDevProvider
         {
         public:
+            OutDevHolder(const OutDevHolder&) = delete;
+            const OutDevHolder& operator=(const OutDevHolder&) = delete;
+
             explicit OutDevHolder( OutputDevice& rOutDev ) :
                 mrOutDev(rOutDev)
             {}

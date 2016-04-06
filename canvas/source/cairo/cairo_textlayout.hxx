@@ -30,8 +30,6 @@
 
 #include <vcl/outdev.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <vcl/cairo.hxx>
 #include "cairo_canvasfont.hxx"
 
@@ -44,10 +42,13 @@ namespace cairocanvas
                                              css::lang::XServiceInfo > TextLayout_Base;
 
     class TextLayout : public ::comphelper::OBaseMutex,
-                       public TextLayout_Base,
-                       private ::boost::noncopyable
+                       public TextLayout_Base
     {
     public:
+        /// make noncopyable
+        TextLayout(const TextLayout&) = delete;
+        const TextLayout& operator=(const TextLayout&) = delete;
+
         TextLayout( const css::rendering::StringContext&              aText,
                     sal_Int8                                          nDirection,
                     sal_Int64                                         nRandomSeed,

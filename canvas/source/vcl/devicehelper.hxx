@@ -30,17 +30,19 @@
 
 #include "outdevprovider.hxx"
 
-#include <boost/noncopyable.hpp>
-
 
 /* Definition of DeviceHelper class */
 
 namespace vclcanvas
 {
-    class DeviceHelper : private ::boost::noncopyable
+    class DeviceHelper
     {
     public:
         DeviceHelper();
+
+        /// make noncopyable
+        DeviceHelper(const DeviceHelper&) = delete;
+        const DeviceHelper& operator=(const DeviceHelper&) = delete;
 
         void init( const OutDevProviderSharedPtr& rOutDev );
 

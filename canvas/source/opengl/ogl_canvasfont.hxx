@@ -18,8 +18,6 @@
 
 #include <rtl/ref.hxx>
 
-#include <boost/noncopyable.hpp>
-
 
 /* Definition of CanvasFont class */
 
@@ -30,11 +28,14 @@ namespace oglcanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont > CanvasFontBaseT;
 
     class CanvasFont : public ::comphelper::OBaseMutex,
-                       public CanvasFontBaseT,
-                       private ::boost::noncopyable
+                       public CanvasFontBaseT
     {
     public:
         typedef rtl::Reference<CanvasFont> ImplRef;
+
+        /// make noncopyable
+        CanvasFont(const CanvasFont&) = delete;
+        const CanvasFont& operator=(const CanvasFont&) = delete;
 
         CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
                     const css::uno::Sequence< css::beans::PropertyValue >&    extraFontProperties,

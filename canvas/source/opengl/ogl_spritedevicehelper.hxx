@@ -15,7 +15,6 @@
 #include <rtl/ref.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <boost/noncopyable.hpp>
 
 #include "ogl_buffercontext.hxx"
 
@@ -36,11 +35,15 @@ namespace oglcanvas
     class CanvasCustomSprite;
     class CanvasHelper;
 
-    class SpriteDeviceHelper : private ::boost::noncopyable
+    class SpriteDeviceHelper
     {
     public:
         SpriteDeviceHelper();
         ~SpriteDeviceHelper();
+
+        /// make noncopyable
+        SpriteDeviceHelper(const SpriteDeviceHelper&) = delete;
+        const SpriteDeviceHelper& operator=(const SpriteDeviceHelper&) = delete;
 
         void init( vcl::Window&                            rWindow,
                    SpriteCanvas&                           rSpriteCanvas,
