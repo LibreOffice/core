@@ -448,7 +448,7 @@ void SAL_CALL Theme::setPropertyValue (
         aOldValue,
         rValue);
 
-    if (DoVetoableListenersVeto(GetVetoableListeners(__AnyItem, false), aEvent))
+    if (DoVetoableListenersVeto(GetVetoableListeners(AnyItem_, false), aEvent))
         return;
     if (DoVetoableListenersVeto(GetVetoableListeners(eItem, false), aEvent))
         return;
@@ -456,7 +456,7 @@ void SAL_CALL Theme::setPropertyValue (
     maRawValues[eItem] = rValue;
     ProcessNewValue(rValue, eItem, eType);
 
-    BroadcastPropertyChange(GetChangeListeners(__AnyItem, false), aEvent);
+    BroadcastPropertyChange(GetChangeListeners(AnyItem_, false), aEvent);
     BroadcastPropertyChange(GetChangeListeners(eItem, false), aEvent);
 }
 
@@ -486,7 +486,7 @@ void SAL_CALL Theme::addPropertyChangeListener(
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
-    ThemeItem eItem (__AnyItem);
+    ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
@@ -511,7 +511,7 @@ void SAL_CALL Theme::removePropertyChangeListener(
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
-    ThemeItem eItem (__AnyItem);
+    ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
@@ -546,7 +546,7 @@ void SAL_CALL Theme::addVetoableChangeListener(
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
-    ThemeItem eItem (__AnyItem);
+    ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
@@ -571,7 +571,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
-    ThemeItem eItem (__AnyItem);
+    ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
         PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
@@ -603,7 +603,7 @@ css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
 {
     ::std::vector<beans::Property> aProperties;
 
-    for (sal_Int32 nItem(__Begin),nEnd(__End); nItem!=nEnd; ++nItem)
+    for (sal_Int32 nItem(Begin_),nEnd(End_); nItem!=nEnd; ++nItem)
     {
         const ThemeItem eItem (static_cast<ThemeItem>(nItem));
         const PropertyType eType (GetPropertyType(eItem));
@@ -660,13 +660,13 @@ sal_Bool SAL_CALL Theme::hasPropertyByName (const ::rtl::OUString& rsPropertyNam
 
 void Theme::SetupPropertyMaps()
 {
-    maPropertyIdToNameMap.resize(__Post_Rect);
-    maImages.resize(__Image_Color - __Pre_Image - 1);
-    maColors.resize(__Color_Paint - __Image_Color - 1);
-    maPaints.resize(__Paint_Int - __Color_Paint - 1);
-    maIntegers.resize(__Int_Bool - __Paint_Int - 1);
-    maBooleans.resize(__Bool_Rect - __Int_Bool - 1);
-    maRectangles.resize(__Post_Rect - __Bool_Rect - 1);
+    maPropertyIdToNameMap.resize(Post_Rect_);
+    maImages.resize(Image_Color_ - Pre_Image_ - 1);
+    maColors.resize(Color_Paint_ - Image_Color_ - 1);
+    maPaints.resize(Paint_Int_ - Color_Paint_ - 1);
+    maIntegers.resize(Int_Bool_ - Paint_Int_ - 1);
+    maBooleans.resize(Bool_Rect_ - Int_Bool_ - 1);
+    maRectangles.resize(Post_Rect_ - Bool_Rect_ - 1);
 
     #define AddEntry(e) maPropertyNameToIdMap[OUString(#e)]=e; maPropertyIdToNameMap[e]=#e
 
@@ -833,17 +833,17 @@ sal_Int32 Theme::GetIndex (const ThemeItem eItem, const PropertyType eType)
     switch(eType)
     {
         case PT_Image:
-            return eItem - __Pre_Image-1;
+            return eItem - Pre_Image_-1;
         case PT_Color:
-            return eItem - __Image_Color-1;
+            return eItem - Image_Color_-1;
         case PT_Paint:
-            return eItem - __Color_Paint-1;
+            return eItem - Color_Paint_-1;
         case PT_Integer:
-            return eItem - __Paint_Int-1;
+            return eItem - Paint_Int_-1;
         case PT_Boolean:
-            return eItem - __Int_Bool-1;
+            return eItem - Int_Bool_-1;
         case PT_Rectangle:
-            return eItem - __Bool_Rect-1;
+            return eItem - Bool_Rect_-1;
 
         default:
             OSL_ASSERT(false);
