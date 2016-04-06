@@ -157,7 +157,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
-                __AreaCount__ = None };
+                AreaCount = None };
 
 protected:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
@@ -173,7 +173,7 @@ protected:
     ::std::function<void (double)> maThumbMotionListener;
     Area meButtonDownArea;
     Area meMouseMoveArea;
-    css::geometry::RealRectangle2D maBox[__AreaCount__];
+    css::geometry::RealRectangle2D maBox[AreaCount];
     bool mbIsNotificationActive;
     static std::weak_ptr<PresenterBitmapContainer> mpSharedBitmaps;
     std::shared_ptr<PresenterBitmapContainer> mpBitmaps;
@@ -185,7 +185,7 @@ protected:
     SharedBitmapDescriptor mpThumbStartDescriptor;
     SharedBitmapDescriptor mpThumbCenterDescriptor;
     SharedBitmapDescriptor mpThumbEndDescriptor;
-    bool maEnabledState[__AreaCount__];
+    bool maEnabledState[AreaCount];
 
     css::geometry::RealRectangle2D GetRectangle (const Area eArea) const;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const = 0;

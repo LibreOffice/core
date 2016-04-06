@@ -449,7 +449,7 @@ void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEven
 
 geometry::RealRectangle2D PresenterScrollBar::GetRectangle (const Area eArea) const
 {
-    OSL_ASSERT(eArea>=0 && eArea<__AreaCount__);
+    OSL_ASSERT(eArea>=0 && eArea<AreaCount);
 
     return maBox[eArea];
 }
@@ -602,7 +602,7 @@ PresenterBitmapContainer::BitmapDescriptor::Mode PresenterScrollBar::GetBitmapMo
 
 bool PresenterScrollBar::IsDisabled (const Area eArea) const
 {
-    OSL_ASSERT(eArea>=0 && eArea<__AreaCount__);
+    OSL_ASSERT(eArea>=0 && eArea<AreaCount);
 
     return ! maEnabledState[eArea];
 }
