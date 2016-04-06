@@ -157,8 +157,7 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
 }
 
 void SidebarToolBox::SetController(const sal_uInt16 nItemId,
-                                   const css::uno::Reference<css::frame::XToolbarController>& rxController,
-                                   const OUString& /*rsCommandName*/)
+                                   const css::uno::Reference<css::frame::XToolbarController>& rxController)
 {
     ControllerContainer::iterator iController (maControllers.find(nItemId));
     if (iController != maControllers.end())

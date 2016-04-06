@@ -93,7 +93,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
                     rxFrame, rxController,
                     VCLUnoHelper::GetInterface(maToolBox.get()),
                     0));
-            maToolBox->SetController(mnMenuItemIndex, xController, msMoreOptionsCommand);
+            maToolBox->SetController(mnMenuItemIndex, xController);
             maToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
             maToolBox->SetQuickHelpText(
                 mnMenuItemIndex,

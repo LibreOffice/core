@@ -53,8 +53,7 @@ public:
     virtual bool Notify (NotifyEvent& rEvent) override;
 
     void SetController(const sal_uInt16 nItemId,
-                       const css::uno::Reference<css::frame::XToolbarController>& rxController,
-                       const OUString& rsCommandName);
+                       const css::uno::Reference<css::frame::XToolbarController>& rxController);
 
     css::uno::Reference<css::frame::XToolbarController> GetFirstController();
 
