@@ -344,8 +344,6 @@ public:
 };
 
 
-class SmSymDefineDialog;
-
 class SmSymbolDialog : public ModalDialog
 {
     VclPtr<ListBox>         m_pSymbolSets;
