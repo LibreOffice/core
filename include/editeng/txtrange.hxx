@@ -58,7 +58,7 @@ class EDITENG_DLLPUBLIC TextRanger
     bool       bVertical :1;// for vertical writing mode
 
     TextRanger( const TextRanger& ) = delete;
-    const Rectangle& _GetBoundRect();
+    const Rectangle& GetBoundRect_();
 public:
     TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B2DPolyPolygon* pLinePolyPolygon,
@@ -76,7 +76,7 @@ public:
     bool IsVertical() const { return bVertical; }
     const tools::PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
     const Rectangle& GetBoundRect()
-        { return pBound ? static_cast< const Rectangle& >(*pBound) : _GetBoundRect(); }
+        { return pBound ? static_cast< const Rectangle& >(*pBound) : GetBoundRect_(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }
     void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
     void SetVertical( bool bNew );
