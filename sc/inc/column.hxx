@@ -449,7 +449,7 @@ public:
     void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                   ScEditDataArray* pDataArray = nullptr );
-    void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, bool bPutToPool = false );
+    void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
@@ -468,7 +468,7 @@ public:
     const ScStyleSheet* GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRow2 ) const;
 
     void        FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
-    bool    IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
+    bool        IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
                 /// May return -1 if not found
     SCsROW SearchStyle(

@@ -323,7 +323,7 @@ public:
 
     void SetCompile( bool bVal );
     ScDocument* GetDocument() const { return pDocument;}
-    void            SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag=true );
+    void            SetMatColsRows( SCCOL nCols, SCROW nRows );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // cell belongs to ChangeTrack and not to the real document

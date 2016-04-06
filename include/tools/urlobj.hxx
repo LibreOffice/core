@@ -1005,7 +1005,7 @@ private:
     TOOLS_DLLPRIVATE void setInvalid();
 
     bool setAbsURIRef(
-        OUString const & rTheAbsURIRef, bool bOctets,
+        OUString const & rTheAbsURIRef,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset, bool bSmart,
         FSysStyle eStyle);
 
@@ -1186,7 +1186,7 @@ inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     rtl_TextEncoding eCharset):
     m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
 {
-    setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, false,
+    setAbsURIRef(rTheAbsURIRef, eMechanism, eCharset, false,
                  FSysStyle(0));
 }
 
@@ -1194,7 +1194,7 @@ inline bool INetURLObject::SetURL(OUString const & rTheAbsURIRef,
                                   EncodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset)
 {
-    return setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, false,
+    return setAbsURIRef(rTheAbsURIRef, eMechanism, eCharset, false,
                         FSysStyle(0));
 }
 
@@ -1205,7 +1205,7 @@ inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     FSysStyle eStyle):
     m_eScheme(INetProtocol::NotValid), m_eSmartScheme(eTheSmartScheme)
 {
-    setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, true, eStyle);
+    setAbsURIRef(rTheAbsURIRef, eMechanism, eCharset, true, eStyle);
 }
 
 inline bool INetURLObject::SetSmartURL(OUString const & rTheAbsURIRef,
@@ -1213,7 +1213,7 @@ inline bool INetURLObject::SetSmartURL(OUString const & rTheAbsURIRef,
                                        rtl_TextEncoding eCharset,
                                        FSysStyle eStyle)
 {
-    return setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, true,
+    return setAbsURIRef(rTheAbsURIRef, eMechanism, eCharset, true,
                         eStyle);
 }
 

@@ -674,12 +674,12 @@ OUString parseScheme(
 }
 
 bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
-                                 bool bOctets,
                                  EncodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset,
                                  bool bSmart,
                                  FSysStyle eStyle)
 {
+    const bool bOctets = false;
     sal_Unicode const * pPos = rTheAbsURIRef.getStr();
     sal_Unicode const * pEnd = pPos + rTheAbsURIRef.getLength();
 
@@ -1541,7 +1541,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             if (bFSys)
             {
                 INetURLObject aNewURI;
-                aNewURI.setAbsURIRef(rTheRelURIRef, false/*bOctets*/, eMechanism,
+                aNewURI.setAbsURIRef(rTheRelURIRef, eMechanism,
                                      eCharset, true, eStyle);
                 if (!aNewURI.HasError())
                 {

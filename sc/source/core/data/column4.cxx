@@ -996,8 +996,8 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
             const ScPatternAttr* pPat2 = rOther.GetPattern(nRow);
             if (pPat1 != pPat2)
             {
-                SetPattern(nRow, *pPat2, true);
-                rOther.SetPattern(nRow, *pPat1, true);
+                SetPattern(nRow, *pPat2);
+                rOther.SetPattern(nRow, *pPat1);
             }
         }
     }

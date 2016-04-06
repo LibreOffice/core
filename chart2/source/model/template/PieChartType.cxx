@@ -128,12 +128,9 @@ namespace chart
 {
 
 PieChartType::PieChartType(
-    const uno::Reference< uno::XComponentContext > & xContext,
-    bool bUseRings  /* = sal_False */) :
+    const uno::Reference< uno::XComponentContext > & xContext) :
         ChartType( xContext )
 {
-    if( bUseRings )
-        setFastPropertyValue_NoBroadcast( PROP_PIECHARTTYPE_USE_RINGS, uno::makeAny( bUseRings ));
 }
 
 PieChartType::PieChartType( const PieChartType & rOther ) :

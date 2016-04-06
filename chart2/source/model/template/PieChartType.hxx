@@ -28,8 +28,7 @@ class PieChartType : public ChartType
 {
 public:
     PieChartType(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext,
-        bool bUseRings = false );
+        css::uno::Reference< css::uno::XComponentContext > const & xContext );
     virtual ~PieChartType();
 
     virtual OUString SAL_CALL

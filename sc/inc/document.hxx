@@ -2228,7 +2228,7 @@ private:
     void    UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs);
+    void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
 
     bool    HasPartOfMerged( const ScRange& rRange );
 

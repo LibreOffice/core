@@ -84,7 +84,7 @@ class VCLSession:
 
     void SAL_CALL disposing() override;
 
-    void callSaveRequested( bool bShutdown, bool bCancelable );
+    void callSaveRequested( bool bShutdown );
     void callShutdownCancelled();
     void callInteractionGranted( bool bGranted );
     void callQuit();
@@ -105,7 +105,7 @@ VCLSession::VCLSession()
         m_xSession->SetCallback( SalSessionEventProc, this );
 }
 
-void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
+void VCLSession::callSaveRequested( bool bShutdown )
 {
     std::list< Listener > aListeners;
     {
@@ -138,7 +138,7 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
 
     SolarMutexReleaser aReleaser;
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
-        it->m_xListener->doSave( bShutdown, bCancelable );
+        it->m_xListener->doSave( bShutdown, false/*bCancelable*/ );
 }
 
 void VCLSession::callInteractionGranted( bool bInteractionGranted )
@@ -218,7 +218,7 @@ void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
         case SaveRequest:
         {
             SalSessionSaveRequestEvent* pSEv = static_cast<SalSessionSaveRequestEvent*>(pEvent);
-            pThis->callSaveRequested( pSEv->m_bShutdown, false );
+            pThis->callSaveRequested( pSEv->m_bShutdown );
         }
         break;
         case ShutdownCancel:
