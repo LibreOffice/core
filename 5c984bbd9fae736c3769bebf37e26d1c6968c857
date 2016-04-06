@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_0e1479f3",
+        "filename": "include/sfx2/templateabstractview.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-06T13:30:40Z",
+      "side": 1,
+      "message": "mnThumbnailWidth, mnThumbnailHeight (n for integer variables)",
+      "revId": "5c984bbd9fae736c3769bebf37e26d1c6968c857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
