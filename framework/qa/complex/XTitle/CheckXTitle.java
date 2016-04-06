@@ -167,6 +167,7 @@ public class CheckXTitle
 
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_PRINT_PREVIEW );
+        utils.waitForEventIdle(m_xMSF);
         // get window title with ui in print preview mode
         String printPreviewTitle = xTitle.getTitle();
         assertEquals("Title mismatch between default view window title and print preview window title",
@@ -174,6 +175,7 @@ public class CheckXTitle
 
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
+        utils.waitForEventIdle(m_xMSF);
         //get window title with ui back in default mode
         String printPreviewClosedTitle = xTitle.getTitle();
         assertEquals("Title mismatch between default view window title and title after switching from print preview to default view window"                     ,defaultTitle, printPreviewClosedTitle);
@@ -239,8 +241,6 @@ public class CheckXTitle
                this should fail because new doc can not be opened in
                read only mode
     */
-    // cr: this test should ideally be in CheckXModuleManager
-    // but that test is disabled in JunitTest_framework_complex.mk
     @Test public void checkLoadingWithReadOnly()
     {
         PropertyValue[] lArgs = new PropertyValue[2];
