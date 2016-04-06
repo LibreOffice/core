@@ -12,12 +12,11 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sw { class Filters; }
 
-class SwDLL: private boost::noncopyable
+class SwDLL
 {
 public:
     static void RegisterFactories();
@@ -30,6 +29,9 @@ public:
     sw::Filters & getFilters();
 
 private:
+    SwDLL(SwDLL const&) = delete;
+    SwDLL& operator=(SwDLL const&) = delete;
+
     std::unique_ptr< sw::Filters > filters_;
 };
 

@@ -37,7 +37,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <boost/noncopyable.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -49,10 +48,13 @@ typedef ::cppu::WeakComponentImplHelper <
         > PanelFactoryInterfaceBase;
 
 class SwPanelFactory
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
-      public PanelFactoryInterfaceBase
+    : private ::cppu::BaseMutex
+    , public PanelFactoryInterfaceBase
 {
+private:
+    SwPanelFactory(SwPanelFactory const&) = delete;
+    SwPanelFactory& operator=(SwPanelFactory const&) = delete;
+
 public:
     SwPanelFactory();
     virtual ~SwPanelFactory();

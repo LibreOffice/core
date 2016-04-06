@@ -52,7 +52,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>

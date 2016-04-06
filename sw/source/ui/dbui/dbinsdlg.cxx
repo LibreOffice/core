@@ -91,7 +91,6 @@
 
 #include <o3tl/make_unique.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <swuiexp.hxx>
 
@@ -157,7 +156,7 @@ struct DB_Column
     }
 };
 
-struct DB_ColumnConfigData: private boost::noncopyable
+struct DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
     OUString sSource;
@@ -170,6 +169,9 @@ struct DB_ColumnConfigData: private boost::noncopyable
          bIsField : 1,
          bIsHeadlineOn : 1,
          bIsEmptyHeadln : 1;
+
+    DB_ColumnConfigData(DB_ColumnConfigData const&) = delete;
+    DB_ColumnConfigData& operator=(DB_ColumnConfigData const&) = delete;
 
     DB_ColumnConfigData()
     {
