@@ -33,6 +33,7 @@
 #include <vcl/group.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <svtools/ctrlbox.hxx>
 
 #include "pdffilter.hxx"
 
@@ -94,6 +95,7 @@ protected:
     // the following data are the configuration used throughout the dialog and pages
     bool                        mbIsPresentation;
     bool                        mbIsWriter;
+    bool                        mbIsSpreadsheet;
     bool                        mbSelectionPresent;
     bool                        mbUseCTLFont;
     bool                        mbUseLosslessCompression;
@@ -103,6 +105,7 @@ protected:
     bool                        mbUseTaggedPDF;
     sal_Int32                   mnPDFTypeSelection;
     bool                        mbExportNotes;
+    bool                        mbExportFormulaAnnotation;
     bool                        mbViewPDF;
     bool                        mbExportNotesPages;
     bool                        mbExportOnlyNotesPages;
@@ -116,6 +119,7 @@ protected:
     bool                        mbExportBookmarks;
     bool                        mbExportHiddenSlides;
     sal_Int32                   mnOpenBookmarkLevels;
+    sal_Int32                   mnAnnotColor;
 
     bool                        mbHideViewerToolbar;
     bool                        mbHideViewerMenubar;
@@ -219,6 +223,12 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     VclPtr<CheckBox>             mpCbExportBookmarks;
     VclPtr<CheckBox>             mpCbExportHiddenSlides;
     VclPtr<CheckBox>             mpCbExportNotes;
+
+    VclPtr<VclContainer>         mpFormulaFrame;
+    VclPtr<CheckBox>             mpCbExportFormulaAnnotations;
+    VclPtr<FixedText>            mpFtAnnotColor;
+    VclPtr<ColorListBox>         mpLbAnnotColor;
+
     VclPtr<CheckBox>             mpCbViewPDF;
     VclPtr<CheckBox>             mpCbExportNotesPages;
     VclPtr<CheckBox>             mpCbExportOnlyNotesPages;
@@ -229,10 +239,12 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     VclPtr<CheckBox>             mpCbWatermark;
     VclPtr<FixedText>            mpFtWatermark;
+    VclPtr<FixedText>            mpFtTransparent;
     VclPtr<Edit>                mpEdWatermark;
 
     bool                        mbIsPresentation;
     bool                        mbIsWriter;
+    bool                        mbIsSpreadsheet;
 
     VclPtr<ImpPDFTabDialog>     mpaParent;
 
@@ -244,6 +256,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     DECL_LINK_TYPED( ToggleWatermarkHdl, CheckBox&, void );
     DECL_LINK_TYPED( ToggleAddStreamHdl, CheckBox&, void );
     DECL_LINK_TYPED( ToggleExportFormFieldsHdl, CheckBox&, void );
+    DECL_LINK_TYPED( ToggleExportFormulaAnnotations, CheckBox&, void );
     DECL_LINK_TYPED( ToggleExportNotesPagesHdl, CheckBox&, void );
 
     void                        TogglePagesHdl();

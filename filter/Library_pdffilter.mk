@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_custom_headers,pdffilter,\
 
 $(eval $(call gb_Library_use_libraries,pdffilter,\
 	svt \
+	svxcore \
 	sfx \
 	tk \
 	vcl \
