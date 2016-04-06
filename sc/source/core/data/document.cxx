@@ -3379,6 +3379,11 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
 
         SetNeedsListeningGroups(aGroupPos);
         StartNeededListeners();
+
+        // Listeners may just have been setup that are affected by the current
+        // position thus were not notified by a ScColumn::BroadcastNewCell()
+        // during ScTable::SetValue(), so do it here.
+        Broadcast( ScHint( SC_HINT_DATACHANGED, rPos));
     }
     else
     {
