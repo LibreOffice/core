@@ -59,7 +59,7 @@ public:
         // wish to disable a deck or panel during debugging.
         Application_None,
 
-        __LastApplicationEnum = Application_None
+        LastApplicationEnum = Application_None
     };
     enum Context
     {
@@ -107,7 +107,7 @@ public:
 
         Context_Unknown,
 
-        __LastContextEnum = Context_Unknown
+        LastContextEnum = Context_Unknown
     };
 
     EnumContext();
