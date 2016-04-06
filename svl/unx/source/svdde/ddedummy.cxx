@@ -173,11 +173,6 @@ bool DdeTopic::StartAdviseLoop()
     return false;
 }
 
-bool DdeTopic::StopAdviseLoop()
-{
-    return false;
-}
-
 bool DdeTopic::Execute( SAL_UNUSED_PARAMETER const OUString* )
 {
     return false;
@@ -220,28 +215,8 @@ OUString DdeService::Status()
     return OUString();
 }
 
-OUString DdeService::SysTopicGet(const OUString& rString)
-{
-    return rString;
-}
-
-bool DdeService::SysTopicExecute(SAL_UNUSED_PARAMETER const OUString*)
-{
-    return false;
-}
-
 DdeService::~DdeService()
 {
-}
-
-bool DdeService::IsBusy()
-{
-  return false;
-}
-
-OUString DdeService::GetHelp()
-{
-    return OUString();
 }
 
 void DdeService::AddFormat(SAL_UNUSED_PARAMETER SotClipboardFormatId)
@@ -254,11 +229,6 @@ void DdeService::AddTopic( SAL_UNUSED_PARAMETER const DdeTopic& )
 
 void DdeService::RemoveTopic( SAL_UNUSED_PARAMETER const DdeTopic& )
 {
-}
-
-bool DdeService::MakeTopic( SAL_UNUSED_PARAMETER const OUString& )
-{
-    return false;
 }
 
 const OUString DdeService::GetName() const
