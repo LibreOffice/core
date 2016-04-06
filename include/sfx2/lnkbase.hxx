@@ -99,12 +99,12 @@ protected:
                     SvBaseLink( SfxLinkUpdateMode nLinkType, SotClipboardFormatId nContentType = SotClipboardFormatId::STRING );
     virtual         ~SvBaseLink();
 
-    void            _GetRealObject( bool bConnect = true );
+    void            GetRealObject_( bool bConnect = true );
 
     SvLinkSource*   GetRealObject()
                     {
                         if( !xObj.Is() )
-                            _GetRealObject();
+                            GetRealObject_();
                         return xObj;
                     }
 

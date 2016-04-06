@@ -282,7 +282,7 @@ void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
     aLinkName = rLnkNm;
 
     // New Connection
-    _GetRealObject();
+    GetRealObject_();
     ReleaseRef(); // should be superfluous
 }
 
@@ -296,7 +296,7 @@ void SvBaseLink::SetUpdateMode( SfxLinkUpdateMode nMode )
         Disconnect();
 
         pImplData->ClientType.nUpdateMode = nMode;
-        _GetRealObject();
+        GetRealObject_();
         ReleaseRef();
     }
 }
@@ -318,7 +318,7 @@ bool SvBaseLink::Update()
         AddNextRef();
         Disconnect();
 
-        _GetRealObject();
+        GetRealObject_();
         ReleaseRef();
         if( xObj.Is() )
         {
@@ -362,7 +362,7 @@ SfxLinkUpdateMode SvBaseLink::GetUpdateMode() const
 }
 
 
-void SvBaseLink::_GetRealObject( bool bConnect)
+void SvBaseLink::GetRealObject_( bool bConnect)
 {
     if( !pImpl->m_pLinkMgr )
         return;
@@ -455,7 +455,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndE
     pImpl->m_aEndEditLink = rEndEditHdl;
     pImpl->m_bIsConnect = xObj.Is();
     if( !pImpl->m_bIsConnect )
-        _GetRealObject( xObj.Is() );
+        GetRealObject_( xObj.Is() );
 
     bool bAsync = false;
     Link<const OUString&, void> aLink = LINK( this, SvBaseLink, EndEditHdl );

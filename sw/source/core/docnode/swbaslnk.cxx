@@ -376,7 +376,7 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
     if( !GetObj() && ( bNativFormat || ( !IsSynchron() && bWaitForData ) ))
     {
         AddNextRef();
-        _GetRealObject();
+        GetRealObject_();
         ReleaseRef();
     }
 
