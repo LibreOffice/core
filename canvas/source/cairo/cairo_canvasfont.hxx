@@ -34,7 +34,6 @@
 
 #include "cairo_spritecanvas.hxx"
 
-#include <boost/noncopyable.hpp>
 
 
 /* Definition of CanvasFont class */
@@ -45,11 +44,13 @@ namespace cairocanvas
                                              css::lang::XServiceInfo > CanvasFont_Base;
 
     class CanvasFont : public ::comphelper::OBaseMutex,
-                       public CanvasFont_Base,
-                       private ::boost::noncopyable
+                       public CanvasFont_Base
     {
     public:
         typedef rtl::Reference<CanvasFont> Reference;
+        /// make noncopyable
+        CanvasFont(const CanvasFont&) = delete;
+        const CanvasFont& operator=(const CanvasFont&) = delete;
 
         CanvasFont( const css::rendering::FontRequest&                                  fontRequest,
                     const css::uno::Sequence< css::beans::PropertyValue >& extraFontProperties,

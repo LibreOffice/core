@@ -30,7 +30,6 @@
 #include <rtl/ref.hxx>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 #include "dx_winstuff.hxx"
 #include "dx_gdiplususer.hxx"
@@ -47,11 +46,13 @@ namespace dxcanvas
                                              css::lang::XServiceInfo > CanvasFont_Base;
 
     class CanvasFont : public ::comphelper::OBaseMutex,
-                       public CanvasFont_Base,
-                       private ::boost::noncopyable
+                       public CanvasFont_Base
     {
     public:
         typedef rtl::Reference<CanvasFont> ImplRef;
+        /// make noncopyable
+        CanvasFont(const CanvasFont&) = delete;
+        const CanvasFont& operator=(const CanvasFont&) = delete;
 
         CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
                     const css::uno::Sequence< css::beans::PropertyValue >&    extraFontProperties,

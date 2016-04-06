@@ -30,8 +30,6 @@
 
 #include <canvas/rendering/isurfaceproxymanager.hxx>
 
-#include <boost/noncopyable.hpp>
-
 
 namespace dxcanvas
 {

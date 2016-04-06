@@ -21,8 +21,6 @@
 
 #include <string.h>
 
-#include <boost/noncopyable.hpp>
-
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -141,9 +139,13 @@ namespace dxcanvas
 
         private:
             /// Guard local methods against concurrent access to RenderModule
-            class ImplRenderModuleGuard : private ::boost::noncopyable
+            class ImplRenderModuleGuard
             {
             public:
+                /// make noncopyable
+                ImplRenderModuleGuard(const ImplRenderModuleGuard&) = delete;
+                const ImplRenderModuleGuard& operator=(const ImplRenderModuleGuard&) = delete;
+
                 explicit inline ImplRenderModuleGuard( DXRenderModule& rRenderModule );
                 inline ~ImplRenderModuleGuard();
 

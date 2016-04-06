@@ -21,7 +21,6 @@
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX
 
 #include "dx_winstuff.hxx"
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace Gdiplus{ class Graphics; }
@@ -30,10 +29,14 @@ namespace dxcanvas
 {
     /** Provider of a Gdiplus::Graphics. Interface
      */
-    class GraphicsProvider : private ::boost::noncopyable
+    class GraphicsProvider
     {
     public:
+        GraphicsProvider() = default;
         virtual ~GraphicsProvider() {}
+        /// make noncopyable
+        GraphicsProvider(const GraphicsProvider&) = delete;
+        const GraphicsProvider operator=(const GraphicsProvider) = delete;
 
         virtual GraphicsSharedPtr getGraphics() = 0;
     };

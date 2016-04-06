@@ -31,8 +31,6 @@
 #include "dx_gdiplususer.hxx"
 #include "dx_impltools.hxx"
 
-#include <boost/noncopyable.hpp>
-
 
 namespace dxcanvas
 {
@@ -40,10 +38,14 @@ namespace dxcanvas
         optional backbuffer painting, when providing it with a second
         HDC to render into.
      */
-    class CanvasHelper : private ::boost::noncopyable
+    class CanvasHelper
     {
     public:
         CanvasHelper();
+
+        /// make noncopyable
+        CanvasHelper(const CanvasHelper&) = delete;
+        const CanvasHelper& operator=(const CanvasHelper&) = delete;
 
         /// Release all references
         void disposing();
