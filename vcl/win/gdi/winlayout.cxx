@@ -3896,8 +3896,6 @@ bool D2DWriteTextOutRenderer::ReleaseFont()
 // baseline, and +ve means the ink starts that many pixels below.
 std::vector<Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const
 {
-    Rectangle   aExtent;
-    Point aPos;
     ptrdiff_t nGlyphs = pGidEnd - pGid;
     if (nGlyphs < 0) return std::vector<Rectangle>();
 
