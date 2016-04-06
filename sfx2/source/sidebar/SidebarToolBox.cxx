@@ -152,8 +152,8 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
     ControllerContainer::const_iterator iController (maControllers.find(nItemId));
     if (iController != maControllers.end())
         return iController->second;
-    else
-        return nullptr;
+
+    return Reference<frame::XToolbarController>();
 }
 
 void SidebarToolBox::SetController(const sal_uInt16 nItemId,
@@ -176,24 +176,6 @@ void SidebarToolBox::SetController(const sal_uInt16 nItemId,
 
     if (rxController.is())
         RegisterHandlers();
-}
-
-sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubToolbarName) const
-{
-    for (ControllerContainer::const_iterator iController(maControllers.begin()), iEnd(maControllers.end());
-         iController!=iEnd;
-         ++iController)
-    {
-        Reference<frame::XToolbarController> xController(iController->second);
-        Reference<frame::XSubToolbarController> xSubToolbarController (xController, UNO_QUERY);
-        if (xSubToolbarController.is())
-        {
-            const OUString sName (xSubToolbarController->getSubToolbarName());
-            if (sName.equals(rsSubToolbarName))
-                return iController->first;
-        }
-    }
-    return 0;
 }
 
 css::uno::Reference<css::frame::XToolbarController> SidebarToolBox::GetFirstController()
