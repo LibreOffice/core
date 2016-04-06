@@ -35,10 +35,10 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     FILETIME   CurTime, OffTime;
     __int64    Value;
 
-    typedef BOOL (WINAPI *CheckTokenMembership_PROC)( HANDLE, PSID, PBOOL );
+    typedef VOID (WINAPI *GetSystemTimePreciseAsFileTime_PROC)(LPFILETIME);
 
-    static HMODULE  hModule = NULL;
-    static CheckTokenMembership_PROC    pCheckTokenMembership = NULL;
+    static HMODULE hModule = NULL;
+    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = NULL;
 
     OSL_ASSERT(pTimeVal != 0);
 
@@ -46,12 +46,13 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     {
         hModule = GetModuleHandleA( "Kernel32.dll" );
         if ( hModule )
-            pCheckTokenMembership = (CheckTokenMembership_PROC)GetProcAddress( hModule, "GetSystemTimePreciseAsFileTime" );
+            pGetSystemTimePreciseAsFileTime = (GetSystemTimePreciseAsFileTime_PROC)
+                GetProcAddress(hModule, "GetSystemTimePreciseAsFileTime");
     }
 
     // use ~1 microsecond resolution if available
-    if ( pCheckTokenMembership )
-        GetSystemTimePreciseAsFileTime(&CurTime);
+    if (pGetSystemTimePreciseAsFileTime)
+        pGetSystemTimePreciseAsFileTime(&CurTime);
     else
     {
         GetSystemTime(&SystemTime);
