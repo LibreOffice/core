@@ -314,7 +314,7 @@ SvxAutoCorrect::~SvxAutoCorrect()
     delete pCharClass;
 }
 
-void SvxAutoCorrect::_GetCharClass( LanguageType eLang )
+void SvxAutoCorrect::GetCharClass_( LanguageType eLang )
 {
     delete pCharClass;
     pCharClass = new CharClass( LanguageTag( eLang));
@@ -1417,7 +1417,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
     } while( false );
 }
 
-SvxAutoCorrectLanguageLists& SvxAutoCorrect::_GetLanguageList(
+SvxAutoCorrectLanguageLists& SvxAutoCorrect::GetLanguageList_(
                                                         LanguageType eLang )
 {
     LanguageTag aLanguageTag( eLang);

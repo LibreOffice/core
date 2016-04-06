@@ -246,9 +246,9 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 
 
     // private methods
-    SvxAutoCorrectLanguageLists& _GetLanguageList( LanguageType eLang );
+    SvxAutoCorrectLanguageLists& GetLanguageList_( LanguageType eLang );
 
-    void _GetCharClass( LanguageType eLang );
+    void GetCharClass_( LanguageType eLang );
 
 protected:
     //  - Text with attribution (only the SWG - SWG format!)
@@ -331,7 +331,7 @@ public:
     // Load, Set, Get - the replacement list
     SvxAutocorrWordList* LoadAutocorrWordList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
-        { return _GetLanguageList( eLang ).LoadAutocorrWordList(); }
+        { return GetLanguageList_( eLang ).LoadAutocorrWordList(); }
 
     // Save word substitutions:
     //      Save these directly in the storage. The word list is updated
@@ -341,7 +341,7 @@ public:
     //  - Text with attribution (only in the SWG - SWG format!)
     void PutText( const OUString& rShort, SfxObjectShell& rShell,
                  LanguageType eLang = LANGUAGE_SYSTEM )
-        { _GetLanguageList( eLang ).PutText(rShort, rShell ); }
+        { GetLanguageList_( eLang ).PutText(rShort, rShell ); }
 
     void MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
                                   std::vector<SvxAutocorrWord>& aDeleteEntries,
@@ -352,10 +352,10 @@ public:
     void SaveCplSttExceptList( LanguageType eLang = LANGUAGE_SYSTEM );
     SvStringsISortDtor* LoadCplSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM)
-        {   return _GetLanguageList( eLang ).LoadCplSttExceptList(); }
+        {   return GetLanguageList_( eLang ).LoadCplSttExceptList(); }
     const SvStringsISortDtor* GetCplSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
-        {   return _GetLanguageList( eLang ).GetCplSttExceptList(); }
+        {   return GetLanguageList_( eLang ).GetCplSttExceptList(); }
 
     // Adds a single word. The list will be immediately written to the file!
     bool AddCplSttException( const OUString& rNew,
@@ -366,10 +366,10 @@ public:
     void SaveWrdSttExceptList( LanguageType eLang = LANGUAGE_SYSTEM );
     SvStringsISortDtor* LoadWrdSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
-        {   return _GetLanguageList( eLang ).LoadWrdSttExceptList(); }
+        {   return GetLanguageList_( eLang ).LoadWrdSttExceptList(); }
     const SvStringsISortDtor* GetWrdSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
-        {   return _GetLanguageList( eLang ).GetWrdSttExceptList(); }
+        {   return GetLanguageList_( eLang ).GetWrdSttExceptList(); }
     // Adds a single word. The list will be immediately written to the file!
     bool AddWrtSttException( const OUString& rNew, LanguageType eLang = LANGUAGE_SYSTEM);
 
@@ -417,7 +417,7 @@ public:
     CharClass& GetCharClass( LanguageType eLang )
     {
         if( !pCharClass || eLang != eCharClassLang )
-            _GetCharClass( eLang );
+            GetCharClass_( eLang );
         return *pCharClass;
     }
 };
