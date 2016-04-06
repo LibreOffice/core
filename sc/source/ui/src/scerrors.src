@@ -170,10 +170,6 @@ Resource RID_ERRHDLSC
     {
         Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
     };
-    String SCWARN_IMPORT_FEATURES_LOST & ERRCODE_RES_MASK
-    {
-        Text [ en-US] = "Not all attributes could be read." ;
-    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -379,29 +379,30 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         // RDF metadata: ODF >= 1.2
         try
         {
-            const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
-                xModel, uno::UNO_QUERY_THROW );
-            const uno::Reference< rdf::XURI > xBaseURI(
-                ::sfx2::createBaseURI( xContext, xStorage, aBaseURL, aName ) );
-            uno::Reference<task::XInteractionHandler> xHandler =
-                mrDocShell.GetMedium()->GetInteractionHandler();
-            xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
+            const uno::Reference< rdf::XDocumentMetadataAccess > xDMA( xModel, uno::UNO_QUERY );
+            if ( xDMA.is() )
+            {
+                const uno::Reference< rdf::XURI > xBaseURI( ::sfx2::createBaseURI( xContext, xStorage, aBaseURL, aName ) );
+                uno::Reference<task::XInteractionHandler> xHandler = mrDocShell.GetMedium()->GetInteractionHandler();
+                xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
+            }
+            else
+                SAL_WARN( "sc.filter", "XDocumentMetadataAccess is nil, some features may be lost" );
         }
         catch ( const lang::WrappedTargetException & e)
         {
             ucb::InteractiveAugmentedIOException iaioe;
             if ( e.TargetException >>= iaioe )
             {
+                SAL_WARN( "sc.filter", "caught ucb::InteractiveAugmentedIOException" );
                 rError = SCERR_IMPORT_UNKNOWN;
             }
             else
-            {
-                rError = SCWARN_IMPORT_FEATURES_LOST;
-            }
+                SAL_WARN( "sc.filter", "Not all attributes could be read, some features are lost" );
         }
-        catch ( const uno::Exception &)
+        catch ( ... )
         {
-            rError = SCWARN_IMPORT_FEATURES_LOST;
+            SAL_WARN( "sc.filter", "caught exception" );
         }
     }
 
