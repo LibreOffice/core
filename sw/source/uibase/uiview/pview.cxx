@@ -1136,8 +1136,8 @@ void SwPagePreview::Init()
     // Update the fields
     // ATTENTION: Do cast the EditShell up, to use the SS.
     //            At the methodes the current shell will be queried!
-    SwEditShell* pESh = static_cast<SwEditShell*>(GetViewShell());
-    bool bIsModified = pESh->IsModified();
+    SwEditShell* pESh = dynamic_cast<SwEditShell*>(GetViewShell());
+    bool bIsModified = pESh != nullptr && pESh->IsModified();
 
     SwViewOption aOpt( *pPrefs );
     aOpt.SetPagePreview(true);
@@ -1172,7 +1172,7 @@ void SwPagePreview::Init()
     GetViewShell()->CalcLayout();
     DocSzChgd( GetViewShell()->GetDocSize() );
 
-    if( !bIsModified )
+    if( !bIsModified && pESh != nullptr )
         pESh->ResetModified();
 }
 
