@@ -255,7 +255,6 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                         pDocSh->SetModified( false );
                     rReq.Done(); // Must call this before Close()!
                     bClosed = false;
-                    SolarMutexReleaser rel;
                     try
                     {
                         xTask->close(sal_True);
