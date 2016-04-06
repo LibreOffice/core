@@ -3375,7 +3375,6 @@ void WW8Export::ExportDocument_Impl()
 
 void WW8Export::PrepareStorage()
 {
-    static const char pName[] = "Microsoft Word-Document";
     static const sal_uInt8 pData[] =
     {
         0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
@@ -3401,7 +3400,8 @@ void WW8Export::PrepareStorage()
     };
 
     SvGlobalName aGName(MSO_WW8_CLASSID);
-    GetWriter().GetStorage().SetClass( aGName, SotClipboardFormatId::NONE, pName);
+    GetWriter().GetStorage().SetClass(
+        aGName, SotClipboardFormatId::NONE, "Microsoft Word-Document");
     tools::SvRef<SotStorageStream> xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
     xStor->Write( pData, sizeof( pData ) );
 
