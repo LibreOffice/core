@@ -121,9 +121,9 @@ class SvxBoundArgs
     void NoteRange( bool bToggle );
     long Cut( long nY, const Point& rPt1, const Point& rPt2 );
     void Add();
-    void _NoteFarPoint( long nPx, long nPyDiff, long nDiff );
+    void NoteFarPoint_( long nPx, long nPyDiff, long nDiff );
     void NoteFarPoint( long nPx, long nPyDiff, long nDiff )
-        { if( nDiff ) _NoteFarPoint( nPx, nPyDiff, nDiff ); }
+        { if( nDiff ) NoteFarPoint_( nPx, nPyDiff, nDiff ); }
     long CalcMax( const Point& rPt1, const Point& rPt2, long nRange, long nFar );
     void CheckCut( const Point& rLst, const Point& rNxt );
     inline long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
@@ -222,18 +222,18 @@ void SvxBoundArgs::CheckCut( const Point& rLst, const Point& rNxt )
         {
             nYps = CalcMax( rLst, rNxt, nBottom, nLower );
             if( nYps )
-                _NoteFarPoint( Cut( nYps, rLst, rNxt ), nLower-nYps, nLowDiff );
+                NoteFarPoint_( Cut( nYps, rLst, rNxt ), nLower-nYps, nLowDiff );
         }
         if( nUpDiff && ( ( nCut & 2 ) || nLast == 2 || nNext == 2 ) )
         {
             nYps = CalcMax( rLst, rNxt, nTop, nUpper );
             if( nYps )
-                _NoteFarPoint( Cut( nYps, rLst, rNxt ), nYps-nUpper, nUpDiff );
+                NoteFarPoint_( Cut( nYps, rLst, rNxt ), nYps-nUpper, nUpDiff );
         }
     }
 }
 
-void SvxBoundArgs::_NoteFarPoint( long nPa, long nPbDiff, long nDiff )
+void SvxBoundArgs::NoteFarPoint_( long nPa, long nPbDiff, long nDiff )
 {
     long nTmpA;
     double nQuot = 2 * nDiff - nPbDiff;
