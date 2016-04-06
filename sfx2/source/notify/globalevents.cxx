@@ -105,9 +105,9 @@ public:
         throw(css::uno::RuntimeException, std::exception) override;
 
     // css.document.XDocumentEventBroadcaster
-    virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL notifyDocumentEvent( const OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const css::uno::Any& Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
     // css.document.XEventListener
     virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
@@ -202,17 +202,17 @@ void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const uno::Reference< do
 }
 
 
-void SAL_CALL SfxGlobalEvents_Impl::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& _Listener )
+void SAL_CALL SfxGlobalEvents_Impl::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& Listener )
     throw(uno::RuntimeException, std::exception)
 {
-    m_aDocumentListeners.addInterface( _Listener );
+    m_aDocumentListeners.addInterface( Listener );
 }
 
 
-void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& _Listener )
+void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& Listener )
     throw(uno::RuntimeException, std::exception)
 {
-    m_aDocumentListeners.removeInterface( _Listener );
+    m_aDocumentListeners.removeInterface( Listener );
 }
 
 
@@ -235,12 +235,12 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const document::EventObject& aEv
 }
 
 
-void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const document::DocumentEvent& _Event )
+void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const document::DocumentEvent& Event )
     throw (uno::RuntimeException, std::exception)
 {
-    implts_notifyJobExecution(document::EventObject(_Event.Source, _Event.EventName));
-    implts_checkAndExecuteEventBindings(_Event);
-    implts_notifyListener(_Event);
+    implts_notifyJobExecution(document::EventObject(Event.Source, Event.EventName));
+    implts_checkAndExecuteEventBindings(Event);
+    implts_notifyListener(Event);
 }
 
 
