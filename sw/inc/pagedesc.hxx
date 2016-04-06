@@ -186,6 +186,7 @@ public:
     bool IsHidden() const { return m_IsHidden; }
     void SetHidden(bool const bValue) { m_IsHidden = bValue; }
 
+    /// Same as WriteUseOn(), but the >= PD_HEADERSHARE part of the bitfield is not modified.
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;
 
