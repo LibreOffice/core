@@ -65,7 +65,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
             OGroup(bool _bCase);
-            OGroup( const OUString& _Name, bool _bCase);
+            OGroup( const OUString& Name, bool _bCase);
             virtual ~OGroup();
             DECLARE_SERVICE_INFO();
 

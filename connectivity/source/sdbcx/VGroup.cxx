@@ -43,11 +43,11 @@ OGroup::OGroup(bool _bCase) :   OGroup_BASE(m_aMutex)
 {
 }
 
-OGroup::OGroup(const OUString& _Name, bool _bCase) :  OGroup_BASE(m_aMutex)
+OGroup::OGroup(const OUString& Name, bool _bCase) :  OGroup_BASE(m_aMutex)
                         ,ODescriptor(OGroup_BASE::rBHelper,_bCase)
                         ,m_pUsers(nullptr)
 {
-    m_Name = _Name;
+    m_Name = Name;
 }
 
 OGroup::~OGroup()

@@ -231,8 +231,8 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
 /** throws a function sequence (HY010) exception
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
-        const css::uno::Reference< css::uno::XInterface >& _Context,
-        const css::uno::Any& _Next = css::uno::Any()
+        const css::uno::Reference< css::uno::XInterface >& Context,
+        const css::uno::Any& Next = css::uno::Any()
     )
     throw ( css::sdbc::SQLException );
 
@@ -240,8 +240,8 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
 /** throw a invalid index sqlexception
 */
 OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
-        const css::uno::Reference< css::uno::XInterface >& _Context,
-        const css::uno::Any& _Next = css::uno::Any()
+        const css::uno::Reference< css::uno::XInterface >& Context,
+        const css::uno::Any& Next = css::uno::Any()
     )
     throw ( css::sdbc::SQLException );
 

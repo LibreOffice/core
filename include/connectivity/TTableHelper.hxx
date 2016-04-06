@@ -129,11 +129,11 @@ namespace connectivity
         OTableHelper(   sdbcx::OCollection* _pTables,
                         const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                         bool _bCase,
-                        const OUString& _Name,
-                        const OUString& _Type,
-                        const OUString& _Description = OUString(),
-                        const OUString& _SchemaName = OUString(),
-                        const OUString& _CatalogName = OUString()
+                        const OUString& Name,
+                        const OUString& Type,
+                        const OUString& Description = OUString(),
+                        const OUString& SchemaName = OUString(),
+                        const OUString& CatalogName = OUString()
             );
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;

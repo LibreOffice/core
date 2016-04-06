@@ -156,19 +156,19 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
     return pProps;
 }
 
-OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
+OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring Str)
 {
     OUString aStr;
-    if(_Str)
+    if(Str)
     {
         jboolean bCopy(sal_True);
-        const jchar* pChar = pEnv->GetStringChars(_Str,&bCopy);
-        jsize len = pEnv->GetStringLength(_Str);
+        const jchar* pChar = pEnv->GetStringChars(Str,&bCopy);
+        jsize len = pEnv->GetStringLength(Str);
         aStr = OUString(reinterpret_cast<sal_Unicode const *>(pChar), len);
 
         if(bCopy)
-            pEnv->ReleaseStringChars(_Str,pChar);
-        pEnv->DeleteLocalRef(_Str);
+            pEnv->ReleaseStringChars(Str,pChar);
+        pEnv->DeleteLocalRef(Str);
     }
     return aStr;
 }

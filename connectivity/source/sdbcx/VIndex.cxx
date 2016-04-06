@@ -70,20 +70,20 @@ OIndex::OIndex(bool _bCase) :   ODescriptor_BASE(m_aMutex)
 {
 }
 
-OIndex::OIndex( const OUString& _Name,
-                const OUString& _Catalog,
+OIndex::OIndex( const OUString& Name,
+                const OUString& Catalog,
                 bool _isUnique,
                 bool _isPrimaryKeyIndex,
                 bool _isClustered,
                 bool _bCase) :  ODescriptor_BASE(m_aMutex)
                         ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
-                        ,m_Catalog(_Catalog)
+                        ,m_Catalog(Catalog)
                         ,m_IsUnique(_isUnique)
                         ,m_IsPrimaryKeyIndex(_isPrimaryKeyIndex)
                         ,m_IsClustered(_isClustered)
                         ,m_pColumns(nullptr)
 {
-    m_Name = _Name;
+    m_Name = Name;
 }
 
 OIndex::~OIndex( )

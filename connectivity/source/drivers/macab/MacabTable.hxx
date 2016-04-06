@@ -38,11 +38,11 @@ namespace connectivity
             MacabTable( sdbcx::OCollection* _pTables, MacabConnection* _pConnection);
             MacabTable( sdbcx::OCollection* _pTables,
                     MacabConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description = OUString(),
-                    const OUString& _SchemaName = OUString(),
-                    const OUString& _CatalogName = OUString()
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description = OUString(),
+                    const OUString& SchemaName = OUString(),
+                    const OUString& CatalogName = OUString()
                 );
 
             MacabConnection* getConnection() { return m_pConnection;}

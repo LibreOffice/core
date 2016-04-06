@@ -343,28 +343,28 @@ void SQLExceptionIteratorHelper::next( SQLExceptionInfo& _out_rInfo )
 }
 
 
-void throwFunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
+void throwFunctionSequenceException(const Reference< XInterface >& Context, const Any& Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
     ::connectivity::SharedResources aResources;
     throw SQLException(
         aResources.getResourceString(STR_ERRORMSG_SEQUENCE),
-        _Context,
+        Context,
         getStandardSQLState( StandardSQLState::FUNCTION_SEQUENCE_ERROR ),
         0,
-        _Next
+        Next
     );
 }
 
-void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
+void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Context,
+        const ::com::sun::star::uno::Any& Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
     ::connectivity::SharedResources aResources;
     throw SQLException(
         aResources.getResourceString(STR_INVALID_INDEX),
-        _Context,
+        Context,
         getStandardSQLState( StandardSQLState::INVALID_DESCRIPTOR_INDEX ),
         0,
-        _Next
+        Next
     );
 }
 

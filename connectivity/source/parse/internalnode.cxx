@@ -35,20 +35,20 @@ OSQLInternalNode::OSQLInternalNode(const sal_Char* pNewValue,
 }
 
 
-OSQLInternalNode::OSQLInternalNode(const OString &_NewValue,
+OSQLInternalNode::OSQLInternalNode(const OString &NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
-                :OSQLParseNode(_NewValue,eNodeType,nNodeID)
+                :OSQLParseNode(NewValue,eNodeType,nNodeID)
 {
     OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
     (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
 
-OSQLInternalNode::OSQLInternalNode(const OUString &_NewValue,
+OSQLInternalNode::OSQLInternalNode(const OUString &NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
-                :OSQLParseNode(_NewValue,eNodeType,nNodeID)
+                :OSQLParseNode(NewValue,eNodeType,nNodeID)
 {
     OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
     (*OSQLParser::s_pGarbageCollector)->push_back(this);

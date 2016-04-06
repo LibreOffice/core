@@ -65,11 +65,11 @@ namespace connectivity
 
         public:
             OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description = OUString(),
-                    const OUString& _SchemaName = OUString(),
-                    const OUString& _CatalogName = OUString()
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description = OUString(),
+                    const OUString& SchemaName = OUString(),
+                    const OUString& CatalogName = OUString()
                 );
 
             virtual sal_Int32 getCurrentLastPos() const override;

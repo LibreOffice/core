@@ -92,20 +92,20 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
 
 OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description ,
-                    const OUString& _SchemaName,
-                    const OUString& _CatalogName,
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description ,
+                    const OUString& SchemaName,
+                    const OUString& CatalogName,
                     sal_Int32 _nPrivileges
                 ) : OTableHelper(   _pTables,
                                     _xConnection,
                                     true,
-                                    _Name,
-                                    _Type,
-                                    _Description,
-                                    _SchemaName,
-                                    _CatalogName)
+                                    Name,
+                                    Type,
+                                    Description,
+                                    SchemaName,
+                                    CatalogName)
  , m_nPrivileges(_nPrivileges)
 {
     construct();

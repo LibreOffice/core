@@ -510,16 +510,16 @@ void OCalcTable::fillColumns()
 
 
 OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description ,
-                    const OUString& _SchemaName,
-                    const OUString& _CatalogName
-                ) : OCalcTable_BASE(_pTables,_pConnection,_Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description ,
+                    const OUString& SchemaName,
+                    const OUString& CatalogName
+                ) : OCalcTable_BASE(_pTables,_pConnection,Name,
+                                  Type,
+                                  Description,
+                                  SchemaName,
+                                  CatalogName)
                 ,m_pConnection(_pConnection)
                 ,m_nStartCol(0)
                 ,m_nStartRow(0)

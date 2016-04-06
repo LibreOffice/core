@@ -47,8 +47,8 @@ namespace connectivity
     {
         OConnectionPool* m_pPool;
     public:
-        OPoolTimer(OConnectionPool* _pPool,const ::salhelper::TTimeValue& _Time)
-            : ::salhelper::Timer(_Time)
+        OPoolTimer(OConnectionPool* _pPool,const ::salhelper::TTimeValue& Time)
+            : ::salhelper::Timer(Time)
             ,m_pPool(_pPool)
         {}
     protected:

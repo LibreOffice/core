@@ -72,7 +72,7 @@ namespace connectivity
             void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, SQLULEN _nColumnSize, sal_Int32 _nScale, const void* _pData, SQLULEN _nDataLen, SQLLEN _nDataAllocLen);
             // Wrappers for special cases
             void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, sal_Int16 _nScale, const OUString &_sData);
-            void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, const com::sun::star::uno::Sequence< sal_Int8 > &_Data);
+            void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, const com::sun::star::uno::Sequence< sal_Int8 > &Data);
 
             bool isPrepared() const { return m_bPrepared;}
             void prepareStatement();

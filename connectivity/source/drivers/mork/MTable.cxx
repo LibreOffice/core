@@ -28,8 +28,8 @@ using namespace connectivity;
 
 
 OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
-                const OUString& _Name, const OUString& _Type, const OUString& _Description )
-    :OTable_Base(_pTables, _pConnection, true, _Name, _Type, _Description )
+                const OUString& Name, const OUString& Type, const OUString& Description )
+    :OTable_Base(_pTables, _pConnection, true, Name, Type, Description )
     ,m_pConnection( _pConnection )
 {
     construct();

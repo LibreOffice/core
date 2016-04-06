@@ -668,7 +668,7 @@ void SAL_CALL Connection::clearWarnings(  ) throw(SQLException, RuntimeException
 }
 
 // XDocumentEventListener
-void SAL_CALL Connection::documentEventOccured( const DocumentEvent& _Event )
+void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
                                                         throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
@@ -676,7 +676,7 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& _Event )
     if (!m_bIsEmbedded)
         return;
 
-    if (_Event.EventName == "OnSave" || _Event.EventName == "OnSaveAs")
+    if (Event.EventName == "OnSave" || Event.EventName == "OnSaveAs")
     {
         commit(); // Commit and close transaction
         if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )

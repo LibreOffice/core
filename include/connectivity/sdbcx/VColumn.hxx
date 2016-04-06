@@ -77,21 +77,21 @@ namespace connectivity
             virtual void    SAL_CALL release() throw() override;
 
             OColumn(    bool _bCase);
-            OColumn(    const OUString& _Name,
-                        const OUString& _TypeName,
-                        const OUString& _DefaultValue,
-                        const OUString& _Description,
-                        sal_Int32       _IsNullable,
-                        sal_Int32       _Precision,
-                        sal_Int32       _Scale,
-                        sal_Int32       _Type,
-                        bool            _IsAutoIncrement,
-                        bool            _IsRowVersion,
-                        bool            _IsCurrency,
+            OColumn(    const OUString& Name,
+                        const OUString& TypeName,
+                        const OUString& DefaultValue,
+                        const OUString& Description,
+                        sal_Int32       IsNullable,
+                        sal_Int32       Precision,
+                        sal_Int32       Scale,
+                        sal_Int32       Type,
+                        bool            IsAutoIncrement,
+                        bool            IsRowVersion,
+                        bool            IsCurrency,
                         bool            _bCase,
-                        const OUString& _CatalogName,
-                        const OUString& _SchemaName,
-                        const OUString& _TableName);
+                        const OUString& CatalogName,
+                        const OUString& SchemaName,
+                        const OUString& TableName);
 
             DECLARE_SERVICE_INFO();
             //XInterface

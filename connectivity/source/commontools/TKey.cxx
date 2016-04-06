@@ -38,9 +38,9 @@ OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::O
 }
 
 OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
-            ,const OUString& _Name
+            ,const OUString& Name
             ,const sdbcx::TKeyProperties& _rProps
-            ) : connectivity::sdbcx::OKey(_Name,_rProps,true)
+            ) : connectivity::sdbcx::OKey(Name,_rProps,true)
                 ,m_pTable(_pTable)
 {
     construct();

@@ -188,27 +188,27 @@ namespace connectivity { namespace hsqldb
     }
 
 
-    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException, std::exception)
+    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const OUString& TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
-        impl_checkExistingTable_throw( _TableName );
-        if ( !impl_isTextTable_nothrow( _TableName ) )
+        impl_checkExistingTable_throw( TableName );
+        if ( !impl_isTextTable_nothrow( TableName ) )
             return nullptr;
 
         return impl_getTextTableIcon_nothrow();
     }
 
 
-    Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+    Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
-        impl_checkExistingTable_throw( _TableName );
-        if ( !impl_isTextTable_nothrow( _TableName ) )
+        impl_checkExistingTable_throw( TableName );
+        if ( !impl_isTextTable_nothrow( TableName ) )
             return nullptr;
 
-        if ( !_DocumentUI.is() )
+        if ( !DocumentUI.is() )
         {
             ::connectivity::SharedResources aResources;
             const OUString sError( aResources.getResourceString(STR_NO_DOCUMENTUI));

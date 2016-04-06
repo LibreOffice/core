@@ -66,13 +66,13 @@ OKey::OKey(bool _bCase) :   ODescriptor_BASE(m_aMutex)
 {
 }
 
-OKey::OKey(const OUString& _Name,const TKeyProperties& _rProps, bool _bCase)
+OKey::OKey(const OUString& Name,const TKeyProperties& _rProps, bool _bCase)
 : ODescriptor_BASE(m_aMutex)
  ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
  ,m_aProps(_rProps)
  ,m_pColumns(nullptr)
 {
-    m_Name = _Name;
+    m_Name = Name;
 }
 //OKey::OKey(   const OUString& _Name,
 //          const OUString& _ReferencedTable,

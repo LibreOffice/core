@@ -149,18 +149,18 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
 OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                             const Reference< XConnection >& _xConnection,
                             bool _bCase,
-                            const OUString& _Name,
-                            const OUString& _Type,
-                            const OUString& _Description ,
-                            const OUString& _SchemaName,
-                            const OUString& _CatalogName
+                            const OUString& Name,
+                            const OUString& Type,
+                            const OUString& Description ,
+                            const OUString& SchemaName,
+                            const OUString& CatalogName
                         ) : OTable_TYPEDEF(_pTables,
                                             _bCase,
-                                            _Name,
-                                          _Type,
-                                          _Description,
-                                          _SchemaName,
-                                          _CatalogName)
+                                            Name,
+                                          Type,
+                                          Description,
+                                          SchemaName,
+                                          CatalogName)
                         ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
 }

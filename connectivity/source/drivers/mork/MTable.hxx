@@ -36,9 +36,9 @@ namespace connectivity
         public:
             OTable( sdbcx::OCollection* _pTables,
                     OConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description );
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description );
 
             OConnection* getConnection() { return m_pConnection;}
 

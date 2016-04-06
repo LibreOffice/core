@@ -78,11 +78,11 @@ namespace connectivity
         public:
             //  DECLARE_CTY_DEFAULTS( OFlatTable_BASE);
             OFlatTable( sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description = OUString(),
-                    const OUString& _SchemaName = OUString(),
-                    const OUString& _CatalogName = OUString()
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description = OUString(),
+                    const OUString& SchemaName = OUString(),
+                    const OUString& CatalogName = OUString()
                 );
 
             void construct() override; // can throw any exception

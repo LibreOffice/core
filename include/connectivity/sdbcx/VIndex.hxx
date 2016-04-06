@@ -66,8 +66,8 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:
             OIndex(bool _bCase);
-            OIndex( const OUString& _Name,
-                    const OUString& _Catalog,
+            OIndex( const OUString& Name,
+                    const OUString& Catalog,
                     bool _isUnique,
                     bool _isPrimaryKeyIndex,
                     bool _isClustered,

@@ -2007,33 +2007,33 @@ void checkDisposed(bool _bThrow) throw ( DisposedException )
 
 }
 
-OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator __first,
-                                        OSQLColumns::Vector::const_iterator __last,
+OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator first,
+                                        OSQLColumns::Vector::const_iterator last,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
     OUString sName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-    return find(__first,__last,sName,_rVal,_rCase);
+    return find(first,last,sName,_rVal,_rCase);
 }
 
-OSQLColumns::Vector::const_iterator findRealName(OSQLColumns::Vector::const_iterator __first,
-                                        OSQLColumns::Vector::const_iterator __last,
+OSQLColumns::Vector::const_iterator findRealName(OSQLColumns::Vector::const_iterator first,
+                                        OSQLColumns::Vector::const_iterator last,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
     OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
-    return find(__first,__last,sRealName,_rVal,_rCase);
+    return find(first,last,sRealName,_rVal,_rCase);
 }
 
-OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator __first,
-                                        OSQLColumns::Vector::const_iterator __last,
+OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator first,
+                                        OSQLColumns::Vector::const_iterator last,
                                         const OUString& _rProp,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
-    while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(_rProp)),_rVal))
-        ++__first;
-    return __first;
+    while (first != last && !_rCase(getString((*first)->getPropertyValue(_rProp)),_rVal))
+        ++first;
+    return first;
 }
 } //namespace connectivity
 

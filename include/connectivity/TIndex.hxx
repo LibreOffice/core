@@ -35,8 +35,8 @@ namespace connectivity
     public:
         OIndexHelper(   OTableHelper* _pTable);
         OIndexHelper(   OTableHelper* _pTable,
-                const OUString& _Name,
-                const OUString& _Catalog,
+                const OUString& Name,
+                const OUString& Catalog,
                 bool _isUnique,
                 bool _isPrimaryKeyIndex,
                 bool _isClustered

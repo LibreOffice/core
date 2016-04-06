@@ -39,21 +39,21 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:
             OIndexColumn(   bool _bCase);
-            OIndexColumn(   bool _IsAscending,
-                            const OUString& _Name,
-                            const OUString& _TypeName,
-                            const OUString& _DefaultValue,
-                            sal_Int32       _IsNullable,
-                            sal_Int32       _Precision,
-                            sal_Int32       _Scale,
-                            sal_Int32       _Type,
-                            bool            _IsAutoIncrement,
-                            bool            _IsRowVersion,
-                            bool            _IsCurrency,
+            OIndexColumn(   bool IsAscending,
+                            const OUString& Name,
+                            const OUString& TypeName,
+                            const OUString& DefaultValue,
+                            sal_Int32       IsNullable,
+                            sal_Int32       Precision,
+                            sal_Int32       Scale,
+                            sal_Int32       Type,
+                            bool            IsAutoIncrement,
+                            bool            IsRowVersion,
+                            bool            IsCurrency,
                             bool            _bCase,
-                            const OUString& _CatalogName,
-                            const OUString& _SchemaName,
-                            const OUString& _TableName);
+                            const OUString& CatalogName,
+                            const OUString& SchemaName,
+                            const OUString& TableName);
 
             virtual void construct() override;
             DECLARE_SERVICE_INFO();

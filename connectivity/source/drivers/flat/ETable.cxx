@@ -390,16 +390,16 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
 }
 
 OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description ,
-                    const OUString& _SchemaName,
-                    const OUString& _CatalogName
-                ) : OFlatTable_BASE(_pTables,_pConnection,_Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description ,
+                    const OUString& SchemaName,
+                    const OUString& CatalogName
+                ) : OFlatTable_BASE(_pTables,_pConnection,Name,
+                                  Type,
+                                  Description,
+                                  SchemaName,
+                                  CatalogName)
     ,m_nRowPos(0)
     ,m_nMaxRowCount(0)
     ,m_cStringDelimiter(_pConnection->getStringDelimiter())

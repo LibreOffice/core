@@ -43,8 +43,8 @@ OMySQLUser::OMySQLUser( const ::com::sun::star::uno::Reference< ::com::sun::star
 }
 
 OMySQLUser::OMySQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                const OUString& _Name
-            ) : connectivity::sdbcx::OUser(_Name, true)
+                const OUString& Name
+            ) : connectivity::sdbcx::OUser(Name, true)
                 ,m_xConnection(_xConnection)
 {
     construct();

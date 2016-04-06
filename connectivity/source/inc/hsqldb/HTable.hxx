@@ -78,11 +78,11 @@ namespace connectivity
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
             OHSQLTable( sdbcx::OCollection* _pTables,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                            const OUString& _Name,
-                            const OUString& _Type,
-                            const OUString& _Description = OUString(),
-                            const OUString& _SchemaName = OUString(),
-                            const OUString& _CatalogName = OUString(),
+                            const OUString& Name,
+                            const OUString& Type,
+                            const OUString& Description = OUString(),
+                            const OUString& SchemaName = OUString(),
+                            const OUString& CatalogName = OUString(),
                             sal_Int32 _nPrivileges = 0
                 );
 

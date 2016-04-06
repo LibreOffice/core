@@ -45,14 +45,14 @@ namespace connectivity
             sal_Int32       m_Type;
             sal_Int32       m_UpdateRule;
             sal_Int32       m_DeleteRule;
-            KeyProperties(const OUString& _ReferencedTable,
-                          sal_Int32     _Type,
-                          sal_Int32     _UpdateRule,
-                          sal_Int32     _DeleteRule)
-                          :m_ReferencedTable(_ReferencedTable),
-                          m_Type(_Type),
-                          m_UpdateRule(_UpdateRule),
-                          m_DeleteRule(_DeleteRule)
+            KeyProperties(const OUString& ReferencedTable,
+                          sal_Int32     Type,
+                          sal_Int32     UpdateRule,
+                          sal_Int32     DeleteRule)
+                          :m_ReferencedTable(ReferencedTable),
+                          m_Type(Type),
+                          m_UpdateRule(UpdateRule),
+                          m_DeleteRule(DeleteRule)
             {}
             KeyProperties():m_Type(0),m_UpdateRule(0),m_DeleteRule(0){}
         };
@@ -79,7 +79,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
             OKey(bool _bCase);
-            OKey(const OUString& _Name,const TKeyProperties& _rProps,bool _bCase);
+            OKey(const OUString& Name,const TKeyProperties& _rProps,bool _bCase);
 
             virtual ~OKey( );
 

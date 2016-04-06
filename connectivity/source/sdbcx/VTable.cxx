@@ -77,20 +77,20 @@ OTable::OTable(OCollection* _pTables,
 
 OTable::OTable( OCollection*    _pTables,
                 bool            _bCase,
-                const OUString& _Name,       const OUString& _Type,
-                const OUString& _Description,const OUString& _SchemaName,
-                const OUString& _CatalogName) :  OTableDescriptor_BASE(m_aMutex)
+                const OUString& Name,       const OUString& Type,
+                const OUString& Description,const OUString& SchemaName,
+                const OUString& CatalogName) :  OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase)
-                ,m_CatalogName(_CatalogName)
-                ,m_SchemaName(_SchemaName)
-                ,m_Description(_Description)
-                ,m_Type(_Type)
+                ,m_CatalogName(CatalogName)
+                ,m_SchemaName(SchemaName)
+                ,m_Description(Description)
+                ,m_Type(Type)
                 ,m_pKeys(nullptr)
                 ,m_pColumns(nullptr)
                 ,m_pIndexes(nullptr)
                 ,m_pTables(_pTables)
 {
-    m_Name = _Name;
+    m_Name = Name;
 }
 
 OTable::~OTable()

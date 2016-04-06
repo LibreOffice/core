@@ -70,38 +70,38 @@ OColumn::OColumn(bool _bCase)
     construct();
 }
 
-OColumn::OColumn(   const OUString& _Name,
-                    const OUString& _TypeName,
-                    const OUString& _DefaultValue,
-                    const OUString& _Description,
-                    sal_Int32       _IsNullable,
-                    sal_Int32       _Precision,
-                    sal_Int32       _Scale,
-                    sal_Int32       _Type,
-                    bool            _IsAutoIncrement,
-                    bool            _IsRowVersion,
-                    bool            _IsCurrency,
+OColumn::OColumn(   const OUString& Name,
+                    const OUString& TypeName,
+                    const OUString& DefaultValue,
+                    const OUString& Description,
+                    sal_Int32       IsNullable,
+                    sal_Int32       Precision,
+                    sal_Int32       Scale,
+                    sal_Int32       Type,
+                    bool            IsAutoIncrement,
+                    bool            IsRowVersion,
+                    bool            IsCurrency,
                     bool            _bCase,
-                    const OUString& _CatalogName,
-                    const OUString& _SchemaName,
-                    const OUString& _TableName)
+                    const OUString& CatalogName,
+                    const OUString& SchemaName,
+                    const OUString& TableName)
     :OColumnDescriptor_BASE(m_aMutex)
     ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
-    ,m_TypeName(_TypeName)
-    ,m_Description(_Description)
-    ,m_DefaultValue(_DefaultValue)
-    ,m_IsNullable(_IsNullable)
-    ,m_Precision(_Precision)
-    ,m_Scale(_Scale)
-    ,m_Type(_Type)
-    ,m_IsAutoIncrement(_IsAutoIncrement)
-    ,m_IsRowVersion(_IsRowVersion)
-    ,m_IsCurrency(_IsCurrency)
-    ,m_CatalogName(_CatalogName)
-    ,m_SchemaName(_SchemaName)
-    ,m_TableName(_TableName)
+    ,m_TypeName(TypeName)
+    ,m_Description(Description)
+    ,m_DefaultValue(DefaultValue)
+    ,m_IsNullable(IsNullable)
+    ,m_Precision(Precision)
+    ,m_Scale(Scale)
+    ,m_Type(Type)
+    ,m_IsAutoIncrement(IsAutoIncrement)
+    ,m_IsRowVersion(IsRowVersion)
+    ,m_IsCurrency(IsCurrency)
+    ,m_CatalogName(CatalogName)
+    ,m_SchemaName(SchemaName)
+    ,m_TableName(TableName)
 {
-    m_Name = _Name;
+    m_Name = Name;
 
     construct();
 }
