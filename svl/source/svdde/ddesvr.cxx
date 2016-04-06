@@ -245,9 +245,9 @@ found:
                 else if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_FORMATS) )
                     aRes = pService->Formats();
                 else if ( pTopic->aItem ==  reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_HELP) )
-                    aRes = pService->GetHelp();
+                    aRes = OUString();
                 else
-                    aRes = pService->SysTopicGet( pTopic->aItem );
+                    aRes = OUString();
 
                 if ( !aRes.isEmpty() )
                     pData = new DdeData( aRes );
@@ -337,8 +337,6 @@ found:
 
     case XTYP_ADVSTOP:
         pItem->DecMonitor( (sal_IntPtr)hConv );
-        if( !pItem->pImpData )
-            pTopic->StopAdviseLoop();
         pInst->hCurConvSvr = 0;
         return (HDDEDATA)sal_True;
 
@@ -353,7 +351,7 @@ found:
             aName = (const sal_Unicode *)aExec.pImp->pData;
 
             if( pTopic->IsSystemTopic() )
-                bRes = pService->SysTopicExecute( &aName );
+                bRes = false;
             else
                 bRes = pTopic->Execute( &aName );
         }
@@ -403,7 +401,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
         // Let's query our subclass
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hTopic,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
-        bContinue = rService.MakeTopic( reinterpret_cast<const sal_Unicode*>(chBuf) );
+        bContinue = false;
         // We need to search again
     }
     while( bContinue );
@@ -711,11 +709,6 @@ bool DdeTopic::StartAdviseLoop()
     return false;
 }
 
-bool DdeTopic::StopAdviseLoop()
-{
-    return false;
-}
-
 DdeItem::DdeItem( const sal_Unicode* p )
 {
     DdeInstData* pInst = ImpGetInstData();
@@ -940,35 +933,10 @@ OUString DdeService::Formats()
 
 OUString DdeService::Status()
 {
-    return IsBusy() ? OUString("Busy\r\n") : OUString("Ready\r\n");
-}
-
-bool DdeService::IsBusy()
-{
-    return false;
-}
-
-OUString DdeService::GetHelp()
-{
-    return OUString();
+    return OUString("Ready\r\n");
 }
 
 bool DdeTopic::MakeItem( const OUString& )
-{
-    return false;
-}
-
-bool DdeService::MakeTopic( const OUString& )
-{
-    return false;
-}
-
-OUString DdeService::SysTopicGet( const OUString& )
-{
-    return OUString();
-}
-
-bool DdeService::SysTopicExecute( const OUString* )
 {
     return false;
 }
