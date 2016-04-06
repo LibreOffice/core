@@ -535,6 +535,24 @@ DECLARE_WW8IMPORT_TEST(testfdo68963, "fdo68963.doc")
     CPPUNIT_ASSERT ( -1 == parseDump("/root/page/body/txt[24]/Special[2]","rText").indexOf("Reference source not found"));
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf99100, "tdf99100.doc")
+{
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
+    auto xField = getProperty< uno::Reference<lang::XServiceInfo> >(getRun(getParagraphOfText(1, xHeaderText), 2), "TextField");
+    // This failed: the second text portion wasn't a field.
+    CPPUNIT_ASSERT(xField.is());
+    CPPUNIT_ASSERT(xField->supportsService("com.sun.star.text.textfield.Chapter"));
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf99120, "tdf99120.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, odd."),  parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, even."),  parseDump("/root/page[2]/header/txt/text()"));
+    // This failed: the header was empty on the 3rd page, as the first page header was shown.
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, odd."),  parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

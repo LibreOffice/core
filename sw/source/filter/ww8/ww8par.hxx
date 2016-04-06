@@ -1858,6 +1858,8 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, OUString& rStr );
+    /// Reads a STYLEREF field.
+    eF_ResT Read_F_Styleref(WW8FieldDesc*, OUString& rStr);
 
     eF_ResT Read_F_OCX(WW8FieldDesc*, OUString&);
     eF_ResT Read_F_Hyperlink(WW8FieldDesc*, OUString& rStr);
