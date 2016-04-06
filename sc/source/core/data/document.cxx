@@ -3268,6 +3268,11 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
 
         SetNeedsListeningGroups(aGroupPos);
         StartNeededListeners();
+
+        // Listeners may just have been setup that are affected by the current
+        // position thus were not notified by a ScColumn::BroadcastNewCell()
+        // during ScTable::SetString(), so do it here.
+        Broadcast( ScHint( SC_HINT_DATACHANGED, aPos));
     }
     else
     {
