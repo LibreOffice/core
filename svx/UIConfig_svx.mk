@@ -63,11 +63,10 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/sidebararea \
     svx/uiconfig/ui/sidebarshadow \
 	svx/uiconfig/ui/sidebargraphic \
-	svx/uiconfig/ui/sidebarinsert \
 	svx/uiconfig/ui/sidebarline \
 	svx/uiconfig/ui/sidebarparagraph \
 	svx/uiconfig/ui/sidebarpossize \
-        svx/uiconfig/ui/sidebarstylespanel \
+	svx/uiconfig/ui/sidebarstylespanel \
 	svx/uiconfig/ui/sidebartextpanel \
 	svx/uiconfig/ui/textcontrolchardialog \
 	svx/uiconfig/ui/textcontrolparadialog \
