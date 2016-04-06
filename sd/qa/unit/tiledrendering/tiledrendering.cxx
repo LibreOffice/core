@@ -636,10 +636,10 @@ void SdTiledRenderingTest::testInsertTable()
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        {
-            { "Rows", uno::makeAny(sal_Int32(3)) },
-            { "Columns", uno::makeAny(sal_Int32(5)) }
-        }
+    {
+        { "Rows", uno::makeAny(sal_Int32(3)) },
+        { "Columns", uno::makeAny(sal_Int32(5)) }
+    }
     ));
 
     comphelper::dispatchCommand(".uno:InsertTable", aArgs);

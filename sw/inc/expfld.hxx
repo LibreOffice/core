@@ -73,13 +73,13 @@ public:
 class SwGetExpFieldType : public SwValueFieldType
 {
 public:
-        SwGetExpFieldType(SwDoc* pDoc);
-        virtual SwFieldType*    Copy() const override;
+    SwGetExpFieldType(SwDoc* pDoc);
+    virtual SwFieldType*    Copy() const override;
 
-        /** Overlay, because get-field cannot be changed and therefore
-         does not need to be updated. Update at changing of set-values! */
+    /** Overlay, because get-field cannot be changed and therefore
+     does not need to be updated. Update at changing of set-values! */
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 };
 
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
@@ -155,7 +155,7 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
     bool        bDeleted;
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
     SwSetExpFieldType( SwDoc* pDoc, const OUString& rName,
