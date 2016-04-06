@@ -24,8 +24,6 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <vcl/window.hxx>
 #include <vcl/bitmap.hxx>
 
@@ -35,9 +33,13 @@
 
 namespace cairocanvas
 {
-    class DeviceHelper : private ::boost::noncopyable
+    class DeviceHelper
     {
     public:
+        /// make noncopyable
+        DeviceHelper(const DeviceHelper&) = delete;
+        const DeviceHelper& operator=(const DeviceHelper&) = delete;
+
         DeviceHelper();
 
         /** init helper

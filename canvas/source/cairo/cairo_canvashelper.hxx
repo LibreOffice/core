@@ -30,7 +30,6 @@
 
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
-#include <boost/noncopyable.hpp>
 
 #include <vcl/cairo.hxx>
 #include "cairo_surfaceprovider.hxx"
@@ -51,9 +50,13 @@ namespace cairocanvas
         Clip
     };
 
-    class CanvasHelper : private ::boost::noncopyable
+    class CanvasHelper
     {
     public:
+        /// make noncopyable
+        CanvasHelper(const CanvasHelper&) = delete;
+        const CanvasHelper& operator=(const CanvasHelper&) = delete;
+
         CanvasHelper();
 
         /// Release all references

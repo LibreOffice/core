@@ -29,8 +29,6 @@
 
 #include <basegfx/vector/b2isize.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include "dx_canvasfont.hxx"
 #include "dx_ibitmap.hxx"
 #include "dx_winstuff.hxx"
@@ -44,14 +42,16 @@ namespace dxcanvas
                                              css::lang::XServiceInfo > TextLayout_Base;
 
     class TextLayout : public ::comphelper::OBaseMutex,
-                       public TextLayout_Base,
-                       private ::boost::noncopyable
+                       public TextLayout_Base
     {
     public:
         TextLayout( const css::rendering::StringContext& aText,
                     sal_Int8                                                  nDirection,
                     sal_Int64                                                 nRandomSeed,
                     const CanvasFont::ImplRef&                                rFont );
+        /// make noncopyable
+        TextLayout(const TextLayout&) = delete;
+        const TextLayout& operator=(const TextLayout&) = delete;
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();

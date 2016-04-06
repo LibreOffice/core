@@ -26,14 +26,14 @@
 
 #include "outdevprovider.hxx"
 
-#include <boost/noncopyable.hpp>
-
 namespace vclcanvas
 {
-    class WindowOutDevHolder : public OutDevProvider,
-                               private ::boost::noncopyable
+    class WindowOutDevHolder : public OutDevProvider
     {
     public:
+        WindowOutDevHolder(const WindowOutDevHolder&) = delete;
+        const WindowOutDevHolder operator=(const WindowOutDevHolder&) = delete;
+
         explicit WindowOutDevHolder( const css::uno::Reference< css::awt::XWindow>& xWin );
 
     private:

@@ -29,18 +29,21 @@
 
 #include <canvas/rendering/isurfaceproxymanager.hxx>
 #include <vcl/vclptr.hxx>
-#include <boost/noncopyable.hpp>
 
 class OutputDevice;
 /* Definition of DeviceHelper class */
 
 namespace dxcanvas
 {
-    class DeviceHelper : private ::boost::noncopyable
+    class DeviceHelper
     {
     public:
         DeviceHelper();
         ~DeviceHelper();
+
+        /// make noncopyable
+        DeviceHelper(const DeviceHelper&) = delete;
+        const DeviceHelper& operator=(const DeviceHelper&) = delete;
 
         /** Init the device helper
 
