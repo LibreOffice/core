@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import helper.URLHelper;
+import util.utils;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -211,10 +212,12 @@ public class CheckXTitle
         // switch to print preview mode
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_PRINT_PREVIEW );
+        utils.waitForEventIdle(m_xMSF);
 
         // switch back to default mode
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
+        utils.waitForEventIdle(m_xMSF);
 
         // close document
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
