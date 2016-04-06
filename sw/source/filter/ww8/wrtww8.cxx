@@ -3735,13 +3735,13 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
-    OSL_ENSURE(rFieldmark.GetFieldname() == ODF_FORMTEXT ||
-                rFieldmark.GetFieldname() == ODF_FORMDROPDOWN ||
-                rFieldmark.GetFieldname() == ODF_FORMCHECKBOX, "Unknown field type!!!");
     if ( ! ( rFieldmark.GetFieldname() == ODF_FORMTEXT ||
                 rFieldmark.GetFieldname() == ODF_FORMDROPDOWN ||
                 rFieldmark.GetFieldname() == ODF_FORMCHECKBOX ) )
+    {
+        SAL_WARN( "sw.ww8", "unknown field type" );
         return;
+    }
 
     int type = 0; // TextFieldmark
     if ( pAsCheckbox )
