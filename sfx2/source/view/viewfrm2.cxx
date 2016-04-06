@@ -261,6 +261,9 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                         xTask->close(sal_True);
                         bClosed = true;
                     }
+                    catch (css::lang::DisposedException &) {
+                        // already closed; ignore
+                    }
                     catch( CloseVetoException& )
                     {
                         bClosed = false;
