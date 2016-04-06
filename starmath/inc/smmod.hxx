@@ -34,7 +34,6 @@
 #include <memory>
 
 class SfxObjectFactory;
-class SmModule;
 class SmSymbolManager;
 class SmMathConfig;
 
