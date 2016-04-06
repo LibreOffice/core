@@ -19,7 +19,6 @@
 
 #include <iostream>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unotools/ucbstreamhelper.hxx>
@@ -183,11 +182,14 @@ typedef std::pair<long,BKMK> BKMKCP;
 typedef std::multimap<long,BKMKCP*> BKMKCPs;
 typedef BKMKCPs::iterator CPItr;
 
-class WW8_WrtBookmarks: private boost::noncopyable
+class WW8_WrtBookmarks
 {
 private:
     BKMKCPs aSttCps,aEndCps;
     BKMKNames maSwBkmkNms;
+
+    WW8_WrtBookmarks(WW8_WrtBookmarks const&) = delete;
+    WW8_WrtBookmarks& operator=(WW8_WrtBookmarks const&) = delete;
 
 public:
     WW8_WrtBookmarks();
@@ -315,11 +317,14 @@ void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
 }
 
 /// Handles export of smart tags.
-class WW8_WrtFactoids: private boost::noncopyable
+class WW8_WrtFactoids
 {
     std::vector<WW8_CP> m_aStartCPs;
     std::vector<WW8_CP> m_aEndCPs;
     std::vector< std::map<OUString, OUString> > m_aStatements;
+
+    WW8_WrtFactoids(WW8_WrtFactoids const&) = delete;
+    WW8_WrtFactoids& operator=(WW8_WrtFactoids const&) = delete;
 
 public:
     WW8_WrtFactoids();

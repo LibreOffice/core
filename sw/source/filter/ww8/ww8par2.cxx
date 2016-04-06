@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <comphelper/string.hxx>
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>
@@ -76,8 +75,12 @@
 using namespace ::com::sun::star;
 
 class WW8SelBoxInfo
-    : public std::vector<SwTableBox*>, private boost::noncopyable
+    : public std::vector<SwTableBox*>
 {
+private:
+    WW8SelBoxInfo(WW8SelBoxInfo const&) = delete;
+    WW8SelBoxInfo& operator=(WW8SelBoxInfo const&) = delete;
+
 public:
     short nGroupXStart;
     short nGroupWidth;
@@ -102,7 +105,7 @@ WW8TabBandDesc::~WW8TabBandDesc()
     delete[] pNewSHDs;
 }
 
-class WW8TabDesc: private boost::noncopyable
+class WW8TabDesc
 {
     std::vector<OUString> aNumRuleNames;
     sw::util::RedlineStack *mpOldRedlineStack;
@@ -166,6 +169,9 @@ class WW8TabDesc: private boost::noncopyable
         WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, sal_uInt16 nCol  );
     void StartMiserableHackForUnsupportedDirection(short nWwCol);
     void EndMiserableHackForUnsupportedDirection(short nWwCol);
+
+    WW8TabDesc(WW8TabDesc const&) = delete;
+    WW8TabDesc& operator=(WW8TabDesc const&) = delete;
 
 public:
     const SwTable* pTable;          // table

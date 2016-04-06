@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
@@ -439,7 +438,7 @@ OUString BasicProjImportHelper::getProjectName()
     return sProjName;
 }
 
-class Sttb : public TBBase, private boost::noncopyable
+class Sttb : public TBBase
 {
 struct SBBItem
 {
@@ -452,6 +451,9 @@ struct SBBItem
     sal_uInt16 cbExtra;
 
     std::vector< SBBItem > dataItems;
+
+    Sttb(Sttb const&) = delete;
+    Sttb& operator=(Sttb const&) = delete;
 
 public:
     Sttb();

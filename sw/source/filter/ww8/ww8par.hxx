@@ -54,7 +54,6 @@
 #include <editeng/lrspitem.hxx>
 #include <oox/ole/olehelper.hxx>
 
-#include <boost/noncopyable.hpp>
 
 class SwDoc;
 class SwPaM;
@@ -653,10 +652,14 @@ enum SwWw8ControlType
     WW8_CT_DROPDOWN
 };
 
-class WW8FormulaControl : private ::boost::noncopyable
+class WW8FormulaControl
 {
 protected:
     SwWW8ImplReader &mrRdr;
+
+    WW8FormulaControl(WW8FormulaControl const&) = delete;
+    WW8FormulaControl& operator=(WW8FormulaControl const&) = delete;
+
 public:
     WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rRdr)
         : mrRdr(rRdr), mfUnknown(0), mfDropdownIndex(0),
@@ -915,7 +918,7 @@ public:
 //Safest thing is to not delete SwTextNodes from a document during import, and
 //remove these extraneous paragraphs at the end after all SwFltControlStack are
 //destroyed.
-class wwExtraneousParas : private ::boost::noncopyable
+class wwExtraneousParas
 {
 private:
     /*
@@ -923,6 +926,10 @@ private:
     */
     std::set<SwTextNode*, SwWW8::ltnode> m_aTextNodes;
     SwDoc& m_rDoc;
+
+    wwExtraneousParas(wwExtraneousParas const&) = delete;
+    wwExtraneousParas& operator=(wwExtraneousParas const&) = delete;
+
 public:
     explicit wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
     ~wwExtraneousParas() { delete_all_from_doc(); }
@@ -930,12 +937,16 @@ public:
     void delete_all_from_doc();
 };
 
-class wwFrameNamer : private ::boost::noncopyable
+class wwFrameNamer
 {
 private:
     OUString msSeed;
     sal_Int32 mnImportedGraphicsCount;
     bool mbIsDisabled;
+
+    wwFrameNamer(wwFrameNamer const&) = delete;
+    wwFrameNamer& operator=(wwFrameNamer const&) = delete;
+
 public:
     void SetUniqueGraphName(SwFrameFormat *pFrameFormat, const OUString &rFixedPart);
     wwFrameNamer(bool bIsDisabled, const OUString &rSeed)

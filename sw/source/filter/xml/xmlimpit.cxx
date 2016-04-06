@@ -50,7 +50,6 @@
 #include <xmloff/xmlprhdl.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
-#include <boost/noncopyable.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -222,12 +221,15 @@ SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
     // nothing to do here
 }
 
-struct BoxHolder : private boost::noncopyable
+struct BoxHolder
 {
     SvxBorderLine* pTop;
     SvxBorderLine* pBottom;
     SvxBorderLine* pLeft;
     SvxBorderLine* pRight;
+
+    BoxHolder(BoxHolder const&) = delete;
+    BoxHolder& operator=(BoxHolder const&) = delete;
 
     explicit BoxHolder(SvxBoxItem& rBox)
     {
