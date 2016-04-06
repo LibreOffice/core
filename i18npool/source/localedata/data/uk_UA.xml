@@ -413,18 +413,18 @@
   </LC_TRANSLITERATION>
   <LC_MISC>
     <ReservedWords>
-      <trueWord>true</trueWord>
-      <falseWord>false</falseWord>
-      <quarter1Word>1st quarter</quarter1Word>
-      <quarter2Word>2nd quarter</quarter2Word>
-      <quarter3Word>3rd quarter</quarter3Word>
-      <quarter4Word>4th quarter</quarter4Word>
-      <aboveWord>above</aboveWord>
-      <belowWord>below</belowWord>
-      <quarter1Abbreviation>Q1</quarter1Abbreviation>
-      <quarter2Abbreviation>Q2</quarter2Abbreviation>
-      <quarter3Abbreviation>Q3</quarter3Abbreviation>
-      <quarter4Abbreviation>Q4</quarter4Abbreviation>
+      <trueWord>істина</trueWord>
+      <falseWord>брехня</falseWord>
+      <aboveWord>вище</aboveWord>
+      <belowWord>нижче</belowWord>
+      <quarter1Word>1-й квартал</quarter1Word>
+      <quarter2Word>2-й квартал</quarter2Word>
+      <quarter3Word>3-й квартал</quarter3Word>
+      <quarter4Word>4-й квартал</quarter4Word>
+      <quarter1Abbreviation>1-й кв.</quarter1Abbreviation>
+      <quarter2Abbreviation>2-й кв.</quarter2Abbreviation>
+      <quarter3Abbreviation>3-й кв.</quarter3Abbreviation>
+      <quarter4Abbreviation>4-й кв.</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
