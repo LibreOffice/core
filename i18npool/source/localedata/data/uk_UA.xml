@@ -399,7 +399,7 @@
       <CurrencyID>UAH</CurrencyID>
       <CurrencySymbol>грн.</CurrencySymbol>
       <BankSymbol>UAH</BankSymbol>
-      <CurrencyName>Hrivnya</CurrencyName>
+      <CurrencyName>Гривня</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
