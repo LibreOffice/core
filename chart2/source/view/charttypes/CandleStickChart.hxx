@@ -30,6 +30,9 @@ class CandleStickChart : public VSeriesPlotter
 {
     // public methods
 public:
+    //no default constructor
+    CandleStickChart() = delete;
+
     CandleStickChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
                       , sal_Int32 nDimensionCount );
     virtual ~CandleStickChart();
@@ -43,10 +46,6 @@ public:
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
     virtual LegendSymbolStyle getLegendSymbolStyle() override;
-
-private: //methods
-    //no default constructor
-    CandleStickChart();
 
 private: //member
     BarPositionHelper*                   m_pMainPosHelper;

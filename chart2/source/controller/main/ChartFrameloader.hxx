@@ -39,10 +39,12 @@ private:
     ::osl::Condition    m_oCancelFinished;
 
 private:
-        bool impl_checkCancel();
-    //no default constructor
-    ChartFrameLoader(){}
+    bool impl_checkCancel();
+
 public:
+    //no default constructor
+    ChartFrameLoader() = delete;
+
     explicit ChartFrameLoader(css::uno::Reference< css::uno::XComponentContext > const & xContext);
     virtual ~ChartFrameLoader();
 

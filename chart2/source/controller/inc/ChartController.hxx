@@ -106,6 +106,7 @@ class ChartController   : public ::cppu::WeakImplHelper <
 
 public:
     //no default constructor
+    ChartController() = delete;
     explicit ChartController(css::uno::Reference< css::uno::XComponentContext > const & xContext);
     virtual ~ChartController();
 
