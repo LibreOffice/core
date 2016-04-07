@@ -33,7 +33,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="button-open">
                         <property name="visible">True</property>
@@ -948,7 +947,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="sfxlo-SidebarToolBox" id="style">
                         <property name="visible">True</property>
@@ -1087,7 +1085,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="InsertSection">
                         <property name="visible">True</property>
@@ -1273,7 +1270,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="hyperlinkdialog">
                         <property name="visible">True</property>
@@ -1555,7 +1551,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="InsertPageNumberField">
                         <property name="visible">True</property>
@@ -1616,7 +1611,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="InsertObjectStarMath">
                         <property name="visible">True</property>
@@ -1733,7 +1727,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="InsertBreak">
                             <property name="visible">True</property>
@@ -2145,7 +2138,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="InsertIndexesEntry">
                             <property name="visible">True</property>
@@ -2248,7 +2240,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="InsertEndnote1">
                             <property name="visible">True</property>
@@ -2376,7 +2367,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -2618,7 +2608,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="ShowTrackedChanges">
                             <property name="visible">True</property>
@@ -2679,7 +2668,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkButton" id="AcceptTrackedChange">
@@ -2725,7 +2713,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkButton" id="NextTrackedChange">
@@ -2928,7 +2915,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="Ruler">
                         <property name="visible">True</property>
@@ -3038,7 +3024,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="ZoomPage">
                             <property name="visible">True</property>
@@ -3156,7 +3141,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="TableDialog">
                         <property name="visible">True</property>
@@ -3231,7 +3215,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="DeleteRows">
                             <property name="visible">True</property>
@@ -3305,7 +3288,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="InsertRowsBefore">
                             <property name="visible">True</property>
@@ -3363,7 +3345,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="DeleteRows1">
                             <property name="visible">True</property>
@@ -3440,7 +3421,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="MergeCells">
                         <property name="visible">True</property>
@@ -3498,7 +3478,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="Protect">
                         <property name="visible">True</property>
@@ -3568,7 +3547,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="AutoSum">
