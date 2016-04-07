@@ -783,34 +783,21 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rStrm.SetNulSubstChar( '\n' );
     ::std::unique_ptr< ScTokenArray > xTokArr1;
 
-    sal_uInt16 nLen = 0;
-    nLen = rStrm.ReaduInt16();
+    // We can't import the formula directly because we need the range
+    sal_uInt16 nLenFormula1 = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    if( nLen > 0 )
-    {
-        const ScTokenArray* pTokArr = nullptr;
-        rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
-        // formula converter owns pTokArr -> create a copy of the token array
-        if( pTokArr )
-            xTokArr1.reset( pTokArr->Clone() );
-    }
-    rStrm.SetNulSubstChar();    // back to default
+    XclImpStreamPos aPosFormula1;
+    rStrm.StorePosition(aPosFormula1);
+    rStrm.Ignore(nLenFormula1);
 
     // second formula
     ::std::unique_ptr< ScTokenArray > xTokArr2;
 
-    nLen = rStrm.ReaduInt16();
+    sal_uInt16 nLenFormula2 = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    if( nLen > 0 )
-    {
-        const ScTokenArray* pTokArr = nullptr;
-        rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
-        // formula converter owns pTokArr -> create a copy of the token array
-        if( pTokArr )
-            xTokArr2.reset( pTokArr->Clone() );
-    }
+    XclImpStreamPos aPosFormula2;
+    rStrm.StorePosition(aPosFormula2);
+    rStrm.Ignore(nLenFormula2);
 
     // read all cell ranges
     XclRangeList aXclRanges;
@@ -823,6 +810,34 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     // only continue if there are valid ranges
     if ( aScRanges.empty() )
         return;
+
+    ScRange aCombinedRange = aScRanges.Combine();
+
+    XclImpStreamPos aCurrentPos;
+    rStrm.StorePosition(aCurrentPos);
+    rStrm.RestorePosition(aPosFormula1);
+    if( nLenFormula1 > 0 )
+    {
+        const ScTokenArray* pTokArr = nullptr;
+        rFmlaConv.Reset(aCombinedRange.aStart);
+        rFmlaConv.Convert( pTokArr, rStrm, nLenFormula1, false, FT_CondFormat );
+        // formula converter owns pTokArr -> create a copy of the token array
+        if( pTokArr )
+            xTokArr1.reset( pTokArr->Clone() );
+    }
+    rStrm.SetNulSubstChar();    // back to default
+    if (nLenFormula2 > 0)
+    {
+        rStrm.RestorePosition(aPosFormula2);
+        const ScTokenArray* pTokArr = nullptr;
+        rFmlaConv.Reset(aCombinedRange.aStart);
+        rFmlaConv.Convert( pTokArr, rStrm, nLenFormula2, false, FT_CondFormat );
+        // formula converter owns pTokArr -> create a copy of the token array
+        if( pTokArr )
+            xTokArr2.reset( pTokArr->Clone() );
+    }
+
+    rStrm.RestorePosition(aCurrentPos);
 
     bool bIsValid = true;   // valid settings in flags field
 
