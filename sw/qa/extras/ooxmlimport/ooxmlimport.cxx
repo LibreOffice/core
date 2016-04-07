@@ -2917,6 +2917,21 @@ DECLARE_OOXMLIMPORT_TEST(testTdf98882, "tdf98882.docx")
     CPPUNIT_ASSERT_EQUAL(nFlyHeight, nContentHeight);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf99140, "tdf99140.docx")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 1: a multi-page floating table was imported as a TextFrame.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(1), uno::UNO_QUERY);
+    // This was text::HoriOrientation::NONE, the second table was too wide due to this.
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTableProperties, "HoriOrient"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
