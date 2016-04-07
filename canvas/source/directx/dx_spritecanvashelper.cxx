@@ -70,7 +70,7 @@ namespace dxcanvas
         maScrapRect(),
         mbShowSpriteBounds( false )
     {
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
         // inverse default for verbose debug mode
         mbShowSpriteBounds = true;
 #endif
