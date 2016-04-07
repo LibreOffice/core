@@ -60,13 +60,9 @@ struct FWI_DLLPUBLIC ProtocolHandler
     uno implementation names as value. Overloading of the index operator makes it possible
     to search for a key by using a full qualified URL on list of all possible pattern keys.
 */
-class FWI_DLLPUBLIC PatternHash : public std::unordered_map<OUString, OUString, OUStringHash>
-{
-    /* interface */
-    public:
-
-        PatternHash::iterator findPatternKey( const OUString& sURL );
-};
+typedef std::unordered_map<OUString, OUString, OUStringHash> PatternHash;
+FWI_DLLPUBLIC PatternHash::iterator findPatternKey(
+    PatternHash const & hash, const OUString& sURL);
 
 /**
     This hash holds protocol handler structs by her names.

@@ -49,10 +49,12 @@ namespace framework{
     @return     An iterator which points to the found item inside the hash or PatternHash::end()
                 if no pattern match this given <var>sURL</var>.
  */
-PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
+namespace {
+
+PatternHash::const_iterator findPatternKey(PatternHash const * hash, const OUString& sURL)
 {
-    PatternHash::iterator pItem = this->begin();
-    while( pItem!=this->end() )
+    auto pItem = hash->begin();
+    while( pItem!=hash->end() )
     {
         WildCard aPattern(pItem->first);
         if (aPattern.Matches(sURL))
@@ -60,6 +62,8 @@ PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
         ++pItem;
     }
     return pItem;
+}
+
 }
 
 /**
@@ -131,7 +135,7 @@ bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) cons
 
     SolarMutexGuard aGuard;
 
-    PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
+    PatternHash::const_iterator pItem = findPatternKey(m_pPattern, sURL);
     if (pItem!=m_pPattern->end())
     {
         *pReturn = (*m_pHandler)[pItem->second];
