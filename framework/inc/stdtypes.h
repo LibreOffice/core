@@ -38,14 +38,6 @@ namespace framework{
     Own hash functions used for stl-structures ... e.g. hash tables/maps ...
 */
 
-struct Int32HashCode
-{
-    size_t operator()( const ::sal_Int32& nValue ) const
-    {
-        return (size_t)nValue;
-    }
-};
-
 struct KeyEventHashCode
 {
     size_t operator()( const css::awt::KeyEvent& aEvent ) const
