@@ -1038,34 +1038,51 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     PrepareHeaderFooterProperties( false );
 }
 
+bool SectionPropertyMap::FloatingTableConversion(FloatingTableInfo& rInfo)
+{
+    // Note that this is just a list of heuristics till sw core can have a
+    // table that is floating and can span over multiple pages at the same
+    // time.
+
+    sal_Int32 nTextAreaWidth = GetPageWidth() - GetLeftMargin() - GetRightMargin();
+    // Count the layout width of the table.
+    sal_Int32 nTableWidth = rInfo.m_nTableWidth;
+    sal_Int32 nLeftMargin = 0;
+    if (rInfo.getPropertyValue("LeftMargin") >>= nLeftMargin)
+        nTableWidth += nLeftMargin;
+    sal_Int32 nRightMargin = 0;
+    if (rInfo.getPropertyValue("RightMargin") >>= nRightMargin)
+        nTableWidth += nRightMargin;
+
+    // If the table is wider than the text area, then don't create a fly
+    // for the table: no wrapping will be performed anyway, but multi-page
+    // tables will be broken.
+    if (nTableWidth < nTextAreaWidth)
+        return true;
+
+    // If the position is relative to the edge of the page, then we always
+    // create the fly.
+    if (rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_FRAME)
+        return true;
+
+    // If there are columns, always create the fly, otherwise the columns would
+    // restrict geometry of the table.
+    if (ColumnCount() + 1 >= 2)
+        return true;
+
+    return false;
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     // Text area width is known at the end of a section: decide if tables should be converted or not.
     std::vector<FloatingTableInfo>& rPendingFloatingTables = rDM_Impl.m_aPendingFloatingTables;
-    sal_Int32 nTextAreaWidth = GetPageWidth() - GetLeftMargin() - GetRightMargin();
     uno::Reference<text::XTextAppendAndConvert> xBodyText( rDM_Impl.GetBodyText(), uno::UNO_QUERY );
     for (size_t i = 0; i < rPendingFloatingTables.size(); ++i)
     {
         FloatingTableInfo& rInfo = rPendingFloatingTables[i];
 
-        // Count the layout width of the table.
-        sal_Int32 nTableWidth = rInfo.m_nTableWidth;
-        sal_Int32 nLeftMargin = 0;
-        if (rInfo.getPropertyValue("LeftMargin") >>= nLeftMargin)
-            nTableWidth += nLeftMargin;
-        sal_Int32 nRightMargin = 0;
-        if (rInfo.getPropertyValue("RightMargin") >>= nRightMargin)
-            nTableWidth += nRightMargin;
-
-        // If the table is wider than the text area, then don't create a fly
-        // for the table: no wrapping will be performed anyway, but multi-page
-        // tables will be broken.
-        // If the position is relative to the edge of the page, then we always
-        // create the fly.
-        // If there are columns, always create the fly, otherwise the columns would
-        // restrict geometry of the table.
-        if ( ( rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_FRAME ) ||
-             nTableWidth < nTextAreaWidth || ColumnCount() + 1 >= 2 )
+        if (FloatingTableConversion(rInfo))
             xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
     }
     rPendingFloatingTables.clear();
