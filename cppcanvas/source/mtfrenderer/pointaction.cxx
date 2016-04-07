@@ -28,8 +28,6 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include "pointaction.hxx"
 #include "outdevstate.hxx"
 #include "cppcanvas/canvas.hxx"
@@ -44,7 +42,7 @@ namespace cppcanvas
     {
         namespace
         {
-            class PointAction : public Action, private ::boost::noncopyable
+            class PointAction : public Action
             {
             public:
                 PointAction( const ::basegfx::B2DPoint&,
@@ -54,6 +52,9 @@ namespace cppcanvas
                              const CanvasSharedPtr&,
                              const OutDevState&,
                              const ::Color&     );
+
+                PointAction(const PointAction&) = delete;
+                const PointAction& operator=(const PointAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,

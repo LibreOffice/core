@@ -42,8 +42,6 @@
 #include <memory>
 #include <utility>
 
-#include <boost/noncopyable.hpp>
-
 namespace comphelper
 {
 
@@ -212,7 +210,7 @@ namespace comphelper
     };
 
 
-    class MapEnumerator: private boost::noncopyable
+    class MapEnumerator
     {
     public:
         MapEnumerator( ::cppu::OWeakObject& _rParent, MapData& _mapData, const EnumerationType _type )
@@ -238,6 +236,10 @@ namespace comphelper
                 m_disposed = true;
             }
         }
+
+        // noncopyable
+        MapEnumerator(const MapEnumerator&) = delete;
+        const MapEnumerator& operator=(const MapEnumerator&) = delete;
 
         // XEnumeration equivalents
         bool hasMoreElements();

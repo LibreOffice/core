@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <connectivity/TTableHelper.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -55,8 +54,7 @@ namespace
 {
     /// helper class for column property change events which holds the OComponentDefinition weak
 class OTableContainerListener:
-    public ::cppu::WeakImplHelper< XContainerListener >,
-    private boost::noncopyable
+    public ::cppu::WeakImplHelper< XContainerListener >
 {
     OTableHelper* m_pComponent;
     ::std::map< OUString,bool> m_aRefNames;
@@ -65,6 +63,9 @@ protected:
     virtual ~OTableContainerListener(){}
 public:
     explicit OTableContainerListener(OTableHelper* _pComponent) : m_pComponent(_pComponent){}
+    // noncopyable
+    OTableContainerListener(const OTableContainerListener&) = delete;
+    const OTableContainerListener& operator=(const OTableContainerListener&) = delete;
     virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception) override
     {
     }

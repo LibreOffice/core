@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XSet.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propstate.hxx>
@@ -71,7 +70,6 @@ namespace comphelper
                         ,public OPropertyBag_PBase
                         ,public OPropertyBag_Base
                         ,public ::cppu::IEventNotificationHook
-                        ,private boost::noncopyable
     {
     private:
         /// our IPropertyArrayHelper implementation
@@ -90,6 +88,10 @@ namespace comphelper
         bool            m_isModified;
 
     public:
+        //noncopyable
+        OPropertyBag(const OPropertyBag&) = delete;
+        const OPropertyBag& operator=(const OPropertyBag&) = delete;
+
         // XServiceInfo - static versions
         static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
         static OUString getImplementationName_static() throw( css::uno::RuntimeException );
