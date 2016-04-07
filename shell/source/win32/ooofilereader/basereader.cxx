@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/basereader.hxx"
+#include "basereader.hxx"
 
-#include "internal/xml_parser.hxx"
+#include "xml_parser.hxx"
 
 #include "assert.h"
 #include <memory>

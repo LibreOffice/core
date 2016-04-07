@@ -3,7 +3,7 @@
 #define CB_ADDSTRING	(WM_USER+3)
 #define IDC_STATIC	(-1)
 
-#include "internal/resource.h"
+#include "resource.h"
 
 MANIFEST_RESOURCE_ID RT_MANIFEST "shlxthdl.manifest"
 

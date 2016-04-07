@@ -18,7 +18,7 @@
  */
 
 #include "algorithm"
-#include "internal/fileextensions.hxx"
+#include "fileextensions.hxx"
 #include <sal/macros.h>
 
 

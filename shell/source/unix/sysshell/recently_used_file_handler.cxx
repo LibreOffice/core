@@ -29,8 +29,8 @@
 #include <osl/diagnose.h>
 #include "recently_used_file.hxx"
 
-#include "internal/xml_parser.hxx"
-#include "internal/i_xml_parser_event_handler.hxx"
+#include "xml_parser.hxx"
+#include "i_xml_parser_event_handler.hxx"
 
 #include <map>
 #include <vector>

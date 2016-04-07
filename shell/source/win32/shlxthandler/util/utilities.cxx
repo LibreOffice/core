@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/config.hxx"
-#include "internal/utilities.hxx"
+#include "config.hxx"
+#include "utilities.hxx"
 
 #ifdef _WIN32_WINNT_WINBLUE
 #include <VersionHelpers.h>

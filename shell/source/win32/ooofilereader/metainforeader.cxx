@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/metainforeader.hxx"
+#include "metainforeader.hxx"
 #include "dummytag.hxx"
 #include "simpletag.hxx"
 #include "keywordstag.hxx"

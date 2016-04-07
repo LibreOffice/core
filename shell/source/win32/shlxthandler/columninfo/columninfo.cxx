@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/global.hxx"
-#include "internal/columninfo.hxx"
-#include "internal/fileextensions.hxx"
-#include "internal/metainforeader.hxx"
-#include "internal/utilities.hxx"
-#include "internal/config.hxx"
+#include "global.hxx"
+#include "columninfo.hxx"
+#include "fileextensions.hxx"
+#include "metainforeader.hxx"
+#include "utilities.hxx"
+#include "config.hxx"
 
 #include <sal/macros.h>
 #include <malloc.h>

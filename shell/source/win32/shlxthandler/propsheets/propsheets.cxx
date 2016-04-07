@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/config.hxx"
-#include "internal/global.hxx"
+#include "config.hxx"
+#include "global.hxx"
 
-#include "internal/propsheets.hxx"
-#include "internal/utilities.hxx"
-#include "internal/resource.h"
+#include "propsheets.hxx"
+#include "utilities.hxx"
+#include "resource.h"
 #include "listviewbuilder.hxx"
 
 #if defined _MSC_VER

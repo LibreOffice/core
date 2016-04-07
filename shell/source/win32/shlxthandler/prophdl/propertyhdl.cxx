@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/global.hxx"
-#include "internal/propertyhdl.hxx"
-#include "internal/fileextensions.hxx"
-#include "internal/metainforeader.hxx"
-#include "internal/utilities.hxx"
-#include "internal/config.hxx"
+#include "global.hxx"
+#include "propertyhdl.hxx"
+#include "fileextensions.hxx"
+#include "metainforeader.hxx"
+#include "utilities.hxx"
+#include "config.hxx"
 
 #include <propkey.h>
 #include <propvarutil.h>
@@ -31,7 +31,7 @@
 #include <malloc.h>
 #include <strsafe.h>
 
-#include "internal/stream_helper.hxx"
+#include "stream_helper.hxx"
 
 
 // Module global

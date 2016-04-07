@@ -21,8 +21,8 @@
 #ifndef INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_ITAG_HXX
 #define INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_ITAG_HXX
 
-#include "internal/config.hxx"
-#include "internal/types.hxx"
+#include "config.hxx"
+#include "types.hxx"
 
 /***************************   interface of tag readers   ***************************/
 

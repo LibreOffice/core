@@ -32,7 +32,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include <string>
-#include "internal/stream_helper.hxx"
+#include "stream_helper.hxx"
 #include "testzipimpl.hxx"
 using namespace std;
 

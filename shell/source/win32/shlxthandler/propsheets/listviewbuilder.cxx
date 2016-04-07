@@ -24,12 +24,12 @@
 
 #include "listviewbuilder.hxx"
 #include "document_statistic.hxx"
-#include "internal/utilities.hxx"
-#include "internal/config.hxx"
+#include "utilities.hxx"
+#include "config.hxx"
 
 #include <commctrl.h>
 #include <tchar.h>
-#include "internal/resource.h"
+#include "resource.h"
 
 
 list_view_builder_ptr create_list_view_builder(

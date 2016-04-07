@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/global.hxx"
-#include "internal/infotips.hxx"
-#include "internal/shlxthdl.hxx"
-#include "internal/metainforeader.hxx"
-#include "internal/contentreader.hxx"
-#include "internal/utilities.hxx"
-#include "internal/registry.hxx"
-#include "internal/fileextensions.hxx"
-#include "internal/iso8601_converter.hxx"
-#include "internal/config.hxx"
+#include "global.hxx"
+#include "infotips.hxx"
+#include "shlxthdl.hxx"
+#include "metainforeader.hxx"
+#include "contentreader.hxx"
+#include "utilities.hxx"
+#include "registry.hxx"
+#include "fileextensions.hxx"
+#include "iso8601_converter.hxx"
+#include "config.hxx"
 
-#include "internal/resource.h"
+#include "resource.h"
 #include <stdio.h>
 #include <utility>
 #include <stdlib.h>

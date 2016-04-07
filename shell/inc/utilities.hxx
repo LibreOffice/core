@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <io.h>
-#include "internal/types.hxx"
+#include "types.hxx"
 
 #include <string>
 #define STRSAFE_NO_DEPRECATE

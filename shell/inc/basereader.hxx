@@ -20,14 +20,14 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_BASEREADER_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_BASEREADER_HXX
 
-#include "internal/global.hxx"
-#include "internal/types.hxx"
-#include "internal/config.hxx"
-#include "internal/utilities.hxx"
-#include "internal/i_xml_parser_event_handler.hxx"
+#include "global.hxx"
+#include "types.hxx"
+#include "config.hxx"
+#include "utilities.hxx"
+#include "i_xml_parser_event_handler.hxx"
 
-#include "internal/xml_parser.hxx"
-#include "internal/zipfile.hxx"
+#include "xml_parser.hxx"
+#include "zipfile.hxx"
 
 class CBaseReader : public i_xml_parser_event_handler
 {

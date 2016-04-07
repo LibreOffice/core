@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
 
-#include "internal/types.hxx"
+#include "types.hxx"
 
 struct IStream;
 

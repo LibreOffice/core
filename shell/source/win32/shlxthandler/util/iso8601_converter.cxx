@@ -21,8 +21,8 @@
 
 #include <stdlib.h>
 
-#include "internal/iso8601_converter.hxx"
-#include "internal/utilities.hxx"
+#include "iso8601_converter.hxx"
+#include "utilities.hxx"
 
 #include <sstream>
 #include <iomanip>

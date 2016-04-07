@@ -26,7 +26,7 @@
 #pragma warning(pop)
 #endif
 #include <malloc.h>
-#include "internal/registry.hxx"
+#include "registry.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

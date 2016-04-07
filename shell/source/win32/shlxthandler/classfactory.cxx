@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internal/global.hxx"
+#include "global.hxx"
 #include "classfactory.hxx"
-#include "internal/infotips.hxx"
-#include "internal/propsheets.hxx"
-#include "internal/columninfo.hxx"
+#include "infotips.hxx"
+#include "propsheets.hxx"
+#include "columninfo.hxx"
 #ifdef __MINGW32__
 #include <algorithm>
 using ::std::max;
 using ::std::min;
 #endif
-#include "internal/thumbviewer.hxx"
-#include "internal/shlxthdl.hxx"
+#include "thumbviewer.hxx"
+#include "shlxthdl.hxx"
 
 
 long CClassFactory::s_ServerLocks = 0;

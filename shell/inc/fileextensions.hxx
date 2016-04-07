@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_FILEEXTENSIONS_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_FILEEXTENSIONS_HXX
 
-#include "internal/global.hxx"
+#include "global.hxx"
 
 #include <string>
 

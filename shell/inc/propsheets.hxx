@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_PROPSHEETS_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_PROPSHEETS_HXX
 
-#include "internal/metainforeader.hxx"
+#include "metainforeader.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

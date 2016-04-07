@@ -23,7 +23,7 @@
 #include <utility>
 #include <string>
 #include <vector>
-#include "internal/metainforeader.hxx"
+#include "metainforeader.hxx"
 
 
 struct statistic_item

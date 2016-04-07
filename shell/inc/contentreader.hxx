@@ -17,63 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_METAINFOREADER_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_METAINFOREADER_HXX
+#ifndef INCLUDED_SHELL_INC_INTERNAL_CONTENTREADER_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_CONTENTREADER_HXX
 
-#include "internal/basereader.hxx"
-#include "internal/types.hxx"
+#include "basereader.hxx"
 #include <stack>
 
 class ITag;
-class CKeywordsTag;
-class CSimpleTag;
-class CDummyTag;
+class StreamInterface;
 
-class CMetaInfoReader : public CBaseReader
+class CContentReader : public CBaseReader
 {
 public:
-    virtual ~CMetaInfoReader();
+    virtual ~CContentReader();
 
-    CMetaInfoReader( const std::string& DocumentName );
+    CContentReader( const std::string& DocumentName, LocaleSet_t const & DocumentLocale );
 
-    CMetaInfoReader( StreamInterface* stream );
+    CContentReader( StreamInterface* stream, LocaleSet_t const & DocumentLocale );
 
-    /** check if the Tag is in the target meta.xml file.
 
-        @param TagName
-        the name of the tag that will be retrieved.
+    /** Get the chunkbuffer.
+
+        @return
+        the chunkbuffer of the document.
     */
-    bool hasTag(const std::wstring& TagName) const;
-
-
-    /** Get a specific tag content, compound tags will be returned as comma separated list.
-
-        @param TagName
-        the name of the tag that will be retrieved.
-    */
-    std::wstring getTagData(const std::wstring& TagName);
-
-    /** check if the a tag has the specific attribute.
-
-        @param TagName
-        the name of the tag.
-        @param AttributeName
-        the name of the attribute.
-    */
-    bool hasTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName);
-
-    /** Get a specific attribute content.
-
-        @param TagName
-        the name of the tag.
-        @param AttributeName
-        the name of the attribute.
-    */
-    std::wstring getTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName);
-
-    /** Get the default language of the whole document.
-    */
-    LocaleSet_t getDefaultLocale( );
+    inline ChunkBuffer_t const & getChunkBuffer( ) const{ return m_ChunkBuffer; };
 
 protected: // protected because its only an implementation relevant class
 
@@ -119,23 +87,33 @@ protected:
     ITag* chooseTagReader(
         const std::wstring& tag_name, const XmlTagAttributes_t& XmlAttributes );
 
-    /** save the received content into structure.
+    /** Get the list of style locale pair.
 
-        @param tag_name
-        the name of the tag.
+        @return
+        the Style-Locale map
     */
-    void saveTagContent( const std::wstring& tag_name );
+    inline StyleLocaleMap_t const & getStyleMap( ) const{ return m_StyleMap; };
 
-private:
-    XmlTags_t      m_AllMetaInfo;
+    /** get style of the current content.
+
+        @return style of the current content.
+    */
+    ::std::wstring getCurrentContentStyle();
+
+    /** add chunk into Chunk Buffer.
+    */
+    void addChunk( LocaleSet_t const & Locale, Content_t const & Content );
+
+    /** get a style's locale field.
+    */
+    LocaleSet_t const & getLocale( const StyleName_t& Style );
 
 private:
     std::stack<ITag*> m_TagBuilderStack;
 
-private:
-    CKeywordsTag* m_pKeywords_Builder;
-    CDummyTag*   m_pDummy_Builder;
-    CSimpleTag* m_pSimple_Builder;
+    ChunkBuffer_t   m_ChunkBuffer;
+    StyleLocaleMap_t      m_StyleMap;
+    LocaleSet_t m_DefaultLocale;
 };
 
 #endif
