@@ -31,8 +31,6 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <cppcanvas/canvas.hxx>
 
 #include <mtftools.hxx>
@@ -46,13 +44,16 @@ namespace cppcanvas
     {
         namespace
         {
-            class LineAction : public Action, private ::boost::noncopyable
+            class LineAction : public Action
             {
             public:
                 LineAction( const ::basegfx::B2DPoint&,
                             const ::basegfx::B2DPoint&,
                             const CanvasSharedPtr&,
                             const OutDevState& );
+
+                LineAction(const LineAction&) = delete;
+                const LineAction& operator=(const LineAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,

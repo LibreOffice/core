@@ -22,7 +22,6 @@
 #include "comphelper_module.hxx"
 #include "comphelper_services.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -39,11 +38,14 @@ using namespace ::com::sun::star;
 namespace {
 
 class SequenceOutputStreamService:
-    public cppu::WeakImplHelper<lang::XServiceInfo, io::XSequenceOutputStream>,
-    private boost::noncopyable
+    public cppu::WeakImplHelper<lang::XServiceInfo, io::XSequenceOutputStream>
 {
 public:
     explicit SequenceOutputStreamService();
+
+    // noncopyable
+    SequenceOutputStreamService(const SequenceOutputStreamService&) = delete;
+    const SequenceOutputStreamService& operator=(const SequenceOutputStreamService&) = delete;
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception ) override;

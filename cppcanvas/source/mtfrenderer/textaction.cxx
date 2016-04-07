@@ -41,7 +41,6 @@
 #include <canvas/canvastools.hxx>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 #include "textaction.hxx"
 #include "outdevstate.hxx"
@@ -606,7 +605,7 @@ namespace cppcanvas
             }
 
 
-            class TextAction : public Action, private ::boost::noncopyable
+            class TextAction : public Action
             {
             public:
                 TextAction( const ::basegfx::B2DPoint&  rStartPoint,
@@ -623,6 +622,9 @@ namespace cppcanvas
                             const CanvasSharedPtr&          rCanvas,
                             const OutDevState&              rState,
                             const ::basegfx::B2DHomMatrix&  rTextTransform );
+
+                TextAction(const TextAction&) = delete;
+                const TextAction& operator=(const TextAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
@@ -759,8 +761,7 @@ namespace cppcanvas
 
             class EffectTextAction :
                 public Action,
-                public TextRenderer,
-                private ::boost::noncopyable
+                public TextRenderer
             {
             public:
                 EffectTextAction( const ::basegfx::B2DPoint& rStartPoint,
@@ -787,6 +788,9 @@ namespace cppcanvas
                                   const CanvasSharedPtr&            rCanvas,
                                   const OutDevState&                rState,
                                   const ::basegfx::B2DHomMatrix&    rTextTransform );
+
+                EffectTextAction(const EffectTextAction&) = delete;
+                const EffectTextAction& operator=(const EffectTextAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
@@ -996,7 +1000,7 @@ namespace cppcanvas
             }
 
 
-            class TextArrayAction : public Action, private ::boost::noncopyable
+            class TextArrayAction : public Action
             {
             public:
                 TextArrayAction( const ::basegfx::B2DPoint&     rStartPoint,
@@ -1015,6 +1019,9 @@ namespace cppcanvas
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState,
                                  const ::basegfx::B2DHomMatrix& rTextTransform );
+
+                TextArrayAction(const TextArrayAction&) = delete;
+                const TextArrayAction& operator=(const TextArrayAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
@@ -1174,8 +1181,7 @@ namespace cppcanvas
 
             class EffectTextArrayAction :
                 public Action,
-                public TextRenderer,
-                private ::boost::noncopyable
+                public TextRenderer
             {
             public:
                 EffectTextArrayAction( const ::basegfx::B2DPoint&       rStartPoint,
@@ -1203,6 +1209,9 @@ namespace cppcanvas
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState,
                                        const ::basegfx::B2DHomMatrix&   rTextTransform );
+
+                EffectTextArrayAction(const EffectTextArrayAction&) = delete;
+                const EffectTextArrayAction& operator=(const EffectTextArrayAction&);
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
@@ -1510,8 +1519,7 @@ namespace cppcanvas
 
             class OutlineAction :
                 public Action,
-                public TextRenderer,
-                private ::boost::noncopyable
+                public TextRenderer
             {
             public:
                 OutlineAction( const ::basegfx::B2DPoint&                           rStartPoint,
@@ -1537,6 +1545,9 @@ namespace cppcanvas
                                const CanvasSharedPtr&                               rCanvas,
                                const OutDevState&                                   rState,
                                const ::basegfx::B2DHomMatrix&                       rTextTransform );
+
+                OutlineAction(const OutlineAction&) = delete;
+                const OutlineAction& operator=(const OutlineAction&);
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
