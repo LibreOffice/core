@@ -123,7 +123,7 @@ namespace stoc_connector {
         {
             notifyListeners(this, &_started, callStarted);
 
-            if( aReadBytes.getLength() < nBytesToRead )
+            if( aReadBytes.getLength() != nBytesToRead )
             {
                 aReadBytes.realloc( nBytesToRead );
             }
@@ -143,10 +143,7 @@ namespace stoc_connector {
 
                 throw ioException;
             }
-            if( i < aReadBytes.getLength() )
-            {
-                aReadBytes.realloc( i );
-            }
+
             return i;
         }
         else
