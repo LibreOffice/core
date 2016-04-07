@@ -148,7 +148,12 @@ struct TokenTable
     TokenTable(const TokenTable&) = delete;
     const TokenTable& operator=(const TokenTable&) = delete;
 
-    TokenTable() = default;
+    TokenTable()
+        : mnRowCount(0)
+        , mnColCount(0)
+    {
+    }
+
     void init( SCCOL nColCount, SCROW nRowCount )
     {
         mnColCount = nColCount;
