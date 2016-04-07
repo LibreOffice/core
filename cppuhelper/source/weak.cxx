@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -45,7 +44,7 @@ inline static Mutex & getWeakMutex()
 
 //-- OWeakConnectionPoint ----------------------------------------------------
 
-class OWeakConnectionPoint: public XAdapter, private boost::noncopyable
+class OWeakConnectionPoint: public XAdapter
 {
 public:
     /**
@@ -55,7 +54,11 @@ public:
         : m_aRefCount( 0 )
         , m_pObject(pObj)
         , m_aReferences( getWeakMutex() )
-        {}
+    {}
+
+    // noncopyable
+    OWeakConnectionPoint(const OWeakConnectionPoint&) = delete;
+    const OWeakConnectionPoint& operator=(const OWeakConnectionPoint&) = delete;
 
     // XInterface
     Any SAL_CALL        queryInterface( const Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -315,11 +318,15 @@ namespace uno
 
 //-- OWeakRefListener -----------------------------------------------------
 
-class OWeakRefListener: public XReference, private boost::noncopyable
+class OWeakRefListener: public XReference
 {
 public:
     explicit OWeakRefListener(const Reference< XInterface >& xInt);
     virtual ~OWeakRefListener();
+
+    // noncopyable
+    OWeakRefListener(const OWeakRefListener&) = delete;
+    const OWeakRefListener& operator=(const OWeakRefListener&) = delete;
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException, std::exception) override;

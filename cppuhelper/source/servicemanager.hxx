@@ -17,7 +17,6 @@
 #include <memory>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -60,12 +59,15 @@ typedef cppu::WeakComponentImplHelper<
 ServiceManagerBase;
 
 class ServiceManager:
-    private cppu::BaseMutex, public ServiceManagerBase,
-    private boost::noncopyable
+    private cppu::BaseMutex, public ServiceManagerBase
 {
 public:
-    struct Data: private boost::noncopyable {
-        struct ImplementationInfo: private boost::noncopyable {
+    struct Data {
+        Data() = default;
+        Data(const Data&) = delete;
+        const Data& operator=(const Data&) = delete;
+
+        struct ImplementationInfo {
             ImplementationInfo(
                 rtl::OUString const & theName, rtl::OUString const & theLoader,
                 rtl::OUString const & theUri,
@@ -84,6 +86,9 @@ public:
             explicit ImplementationInfo(rtl::OUString const & theName):
                 name(theName) {}
 
+            ImplementationInfo(const ImplementationInfo&) = delete;
+            const ImplementationInfo& operator=(const ImplementationInfo&) = delete;
+
             rtl::OUString const name;
             rtl::OUString const loader;
             rtl::OUString const uri;
@@ -97,7 +102,7 @@ public:
             std::vector< rtl::OUString > singletons;
         };
 
-        struct Implementation: private boost::noncopyable {
+        struct Implementation {
             Implementation(
                 rtl::OUString const & name, rtl::OUString const & loader,
                 rtl::OUString const & uri, rtl::OUString const & environment,
@@ -125,6 +130,9 @@ public:
                 factory1(theFactory1), factory2(theFactory2),
                 component(theComponent), status(STATUS_LOADED), dispose(true)
             { assert(theFactory1.is() || theFactory2.is()); }
+
+            Implementation(const Implementation&) = delete;
+            const Implementation& operator=(const Implementation&) = delete;
 
             css::uno::Reference<css::uno::XInterface> createInstance(
                 css::uno::Reference<css::uno::XComponentContext> const &
@@ -179,6 +187,9 @@ public:
     };
 
     ServiceManager(): ServiceManagerBase(m_aMutex) {}
+
+    ServiceManager(const ServiceManager&) = delete;
+    const ServiceManager& operator=(const ServiceManager&) = delete;
 
     using ServiceManagerBase::acquire;
     using ServiceManagerBase::release;
