@@ -1373,7 +1373,7 @@ bool scaleTexture(const rtl::Reference< OpenGLContext > &xContext,
     int nNewWidth = nWidth / ixscale;
     int nNewHeight = nHeight / iyscale;
 
-    OpenGLProgram* pProgram = xContext->UseProgram("textureVertexShader", OUString("areaScaleFragmentShader"));
+    OpenGLProgram* pProgram = xContext->UseProgram("textureVertexShader", "areaScaleFragmentShader");
     if (pProgram == nullptr)
         return false;
 
