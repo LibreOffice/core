@@ -67,13 +67,15 @@ private:
     OUString            maText;
     TextCharAttribList  maCharAttribs;
 
-                        TextNode( const TextNode& ) {;}
 protected:
     void                ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars );
     void                CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDelChars );
 
 public:
                         TextNode( const OUString& rText );
+
+    TextNode( const TextNode& ) = delete;
+    void operator=( const TextNode& ) = delete;
 
     const OUString&     GetText() const         { return maText; }
 

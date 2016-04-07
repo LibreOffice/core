@@ -174,11 +174,12 @@ private:
     bool                    mbInvalid;
     bool                    mbSimple;   // only type linearly
 
-                        TEParaPortion( const TEParaPortion& ) {;}
-
 public:
                         TEParaPortion( TextNode* pNode );
                         ~TEParaPortion();
+
+    TEParaPortion( const TEParaPortion& ) = delete;
+    void operator=( const TEParaPortion& ) = delete;
 
     bool                IsInvalid() const           { return mbInvalid; }
     bool                IsSimpleInvalid() const     { return mbSimple; }
