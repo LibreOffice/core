@@ -26,8 +26,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "internal/rtllifecycle.h"
-#include <internal/oslmemory.h>
+#include "rtllifecycle.h"
+#include <oslmemory.h>
 
 AllocMode alloc_mode = AMode_UNSET;
 

@@ -24,7 +24,7 @@
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>
-#include "internal/oslrandom.h"
+#include "oslrandom.h"
 /*========================================================================
  *
  * rtlRandom internals.

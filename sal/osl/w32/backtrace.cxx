@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "internal/misc.hxx"
+#include "misc.hxx"
 
 #include <windows.h>
 #include <process.h>

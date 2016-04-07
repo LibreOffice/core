@@ -22,7 +22,7 @@
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
 
-#include "internal/rtllifecycle.h"
+#include "rtllifecycle.h"
 
 static const sal_Int32 RTL_HASHTABLE_SIZE[] =
 {

@@ -25,7 +25,7 @@
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
 #include "sal/types.h"
-#include "internal/misc.hxx"
+#include "misc.hxx"
 
 #include "logformat.hxx"
 

@@ -91,6 +91,6 @@
 #include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <internal/rtllifecycle.h>
+#include <rtllifecycle.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

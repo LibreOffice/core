@@ -34,7 +34,7 @@
 #include <osl/mutex.h>
 #include <osl/thread.h>
 
-#include "internal/rtllifecycle.h"
+#include "rtllifecycle.h"
 
 // externals
 

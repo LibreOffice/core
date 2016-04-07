@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <internal/signalshared.hxx>
+#include <signalshared.hxx>
 
 #include <config_features.h>
 
