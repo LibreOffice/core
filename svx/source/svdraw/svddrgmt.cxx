@@ -2945,7 +2945,7 @@ bool SdrDragCrook::BeginSdrDrag()
     }
 }
 
-void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
+void SdrDragCrook::MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 {
     SdrPageView* pPV = getSdrDragView().GetSdrPageView();
 
@@ -3052,7 +3052,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                             i++;
                         }
 
-                        _MovCrookPoint(*pPnt,pC1,pC2);
+                        MovCrookPoint(*pPnt,pC1,pC2);
                     }
                 }
             }
@@ -3062,7 +3062,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
     }
 }
 
-void SdrDragCrook::_MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
+void SdrDragCrook::MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
 {
     bool bVert=bVertical;
     bool bC1=pC1!=nullptr;
@@ -3326,7 +3326,7 @@ void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 void SdrDragCrook::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget)
 {
     // use helper derived from old stuff
-    _MovAllPoints(rTarget);
+    MovAllPoints(rTarget);
 }
 
 bool SdrDragCrook::EndSdrDrag(bool bCopy)
@@ -3483,7 +3483,7 @@ bool SdrDragDistort::BeginSdrDrag()
     }
 }
 
-void SdrDragDistort::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
+void SdrDragDistort::MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 {
     if (bContortion)
     {
@@ -3561,7 +3561,7 @@ void SdrDragDistort::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 void SdrDragDistort::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget)
 {
     // use helper derived from old stuff
-    _MovAllPoints(rTarget);
+    MovAllPoints(rTarget);
 }
 
 

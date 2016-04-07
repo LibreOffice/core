@@ -164,8 +164,8 @@ private:
     SdrCrookMode                eMode;
 
     // helpers for applyCurrentTransformationToPolyPolygon
-    void _MovAllPoints(basegfx::B2DPolyPolygon& rTarget);
-    void _MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2);
+    void MovAllPoints(basegfx::B2DPolyPolygon& rTarget);
+    void MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2);
 
 protected:
     // needs to add drag geometry to the default
@@ -195,7 +195,7 @@ private:
     bool                        bContortion;
 
     // helper for applyCurrentTransformationToPolyPolygon
-    void _MovAllPoints(basegfx::B2DPolyPolygon& rTarget);
+    void MovAllPoints(basegfx::B2DPolyPolygon& rTarget);
 
 protected:
     // needs to add drag geometry to the default
