@@ -54,6 +54,8 @@ if __name__ == "__main__":
             lines = f.readlines()
             for line in lines:
                 line = line.strip()
+                if len(line) == 0:
+                    continue
                 generic_test(opts, line)
 
     elif "--calc-demo" in opts:
