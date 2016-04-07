@@ -16,6 +16,24 @@
       "revId": "cd1b2f923e0b0be89a5d1c8cbc647133aac09ed5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_e8363db3",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000934
+      },
+      "writtenOn": "2016-04-07T08:40:37Z",
+      "side": 0,
+      "message": "Firebird 3.0 doesn\u0027t provide a separate fbembed.so library any more. fbclient.so is able to load the engine and act as embedded.\n\nI will add configure.ac checks",
+      "parentUuid": "9ad45d7e_e24e5e95",
+      "revId": "cd1b2f923e0b0be89a5d1c8cbc647133aac09ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
