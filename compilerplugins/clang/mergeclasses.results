@@ -182,7 +182,7 @@ merge XclDebugObjCounter with XclRootData
 merge XclExpFutureRecord with XclExpChFutureRecordBase
 merge XclExpSubStream with XclExpChart
 merge XclNumFmtBuffer with XclImpNumFmtBuffer
-merge _SdrItemBrowserWindow with SdrItemBrowser
+merge SdrItemBrowserWindow with SdrItemBrowser
 merge _SfxMacroTabPage with SfxMacroTabPage
 merge abp::OModuleResourceClient with abp::OABSPilotUno
 merge accessibility::GridControlAccessibleElement with accessibility::AccessibleGridControlTableBase

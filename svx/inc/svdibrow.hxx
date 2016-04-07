@@ -29,15 +29,15 @@ class SfxItemSet;
 class ImpItemListRow;
 class BrowserMouseEvent;
 
-class _SdrItemBrowserControl: public BrowseBox
+class SdrItemBrowserControl: public BrowseBox
 {
 friend class ImpItemEdit;
     std::vector<ImpItemListRow*> aList;
     long nAktPaintRow;
     VclPtr<Edit> pEditControl;
     OUString aWNamMerk;
-    Link<_SdrItemBrowserControl&,void> aEntryChangedHdl;
-    Link<_SdrItemBrowserControl&,void> aSetDirtyHdl;
+    Link<SdrItemBrowserControl&,void> aEntryChangedHdl;
+    Link<SdrItemBrowserControl&,void> aSetDirtyHdl;
     ImpItemListRow* pAktChangeEntry;
     long   nLastWhichOfs;
     sal_uInt16 nLastWhich;
@@ -69,8 +69,8 @@ protected:
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 public:
-    _SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
-    virtual ~_SdrItemBrowserControl();
+    SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
+    virtual ~SdrItemBrowserControl();
     virtual void dispose() override;
     void Clear();
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr);
@@ -90,36 +90,36 @@ public:
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
-    void SetEntryChangedHdl(const Link<_SdrItemBrowserControl&,void>& rLink)    { aEntryChangedHdl=rLink; }
-    void SetSetDirtyHdl(const Link<_SdrItemBrowserControl&,void>& rLink)        { aSetDirtyHdl=rLink; }
+    void SetEntryChangedHdl(const Link<SdrItemBrowserControl&,void>& rLink)    { aEntryChangedHdl=rLink; }
+    void SetSetDirtyHdl(const Link<SdrItemBrowserControl&,void>& rLink)        { aSetDirtyHdl=rLink; }
 };
 
 #define WB_STDSIZEABLEDOCKWIN  (WB_STDDOCKWIN|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEMOVE)
 #define WB_STDSIZEABLEFLOATWIN (WB_STDFLOATWIN|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEMOVE)
 
-class _SdrItemBrowserWindow: public FloatingWindow {
-    VclPtr<_SdrItemBrowserControl> aBrowse;
+class SdrItemBrowserWindow: public FloatingWindow {
+    VclPtr<SdrItemBrowserControl> aBrowse;
 public:
-    _SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits=WB_STDSIZEABLEDOCKWIN);
-    virtual ~_SdrItemBrowserWindow();
+    SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits=WB_STDSIZEABLEDOCKWIN);
+    virtual ~SdrItemBrowserWindow();
     virtual void dispose() override;
     virtual void Resize() override;
     virtual void GetFocus() override;
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr) { aBrowse->SetAttributes(pAttr,p2ndSet); }
-    _SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
+    SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
 };
 
 class SdrView;
 
-class SdrItemBrowser: public _SdrItemBrowserWindow {
+class SdrItemBrowser: public SdrItemBrowserWindow {
     Idle aIdle;
     SdrView* pView;
     bool bDirty;
 private:
     static vcl::Window* ImpGetViewWin(SdrView& rView);
     DECL_LINK_TYPED(IdleHdl, Idle *, void);
-    DECL_LINK_TYPED(ChangedHdl, _SdrItemBrowserControl&, void);
-    DECL_LINK_TYPED(SetDirtyHdl, _SdrItemBrowserControl&, void);
+    DECL_LINK_TYPED(ChangedHdl, SdrItemBrowserControl&, void);
+    DECL_LINK_TYPED(SetDirtyHdl, SdrItemBrowserControl&, void);
 public:
     SdrItemBrowser(SdrView& rView);
     void ForceParent();
