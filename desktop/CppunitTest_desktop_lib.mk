@@ -36,6 +36,11 @@ $(eval $(call gb_CppunitTest_use_externals,desktop_lib, \
     cairo \
 ))
 
+$(eval $(call gb_CppunitTest_set_include,desktop_lib,\
+    -I$(SRCDIR)/desktop/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_CppunitTest_use_api,desktop_lib,\
 	offapi \
 	udkapi \

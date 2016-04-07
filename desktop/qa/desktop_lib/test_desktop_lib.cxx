@@ -31,7 +31,7 @@
 #include <unotools/tempfile.hxx>
 #include <cairo.h>
 
-#include "../../inc/lib/init.hxx"
+#include <lib/init.hxx>
 
 using namespace com::sun::star;
 using namespace desktop;
