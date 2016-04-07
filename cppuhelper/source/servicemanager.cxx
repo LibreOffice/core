@@ -13,7 +13,6 @@
 #include <cassert>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -105,12 +104,15 @@ void removeFromImplementationMap(
 // For simplicity, this code keeps throwing
 // css::registry::InvalidRegistryException for invalid XML rdbs (even though
 // that does not fit the exception's name):
-class Parser: private boost::noncopyable {
+class Parser {
 public:
     Parser(
         rtl::OUString const & uri,
         css::uno::Reference< css::uno::XComponentContext > const & alienContext,
         cppuhelper::ServiceManager::Data * data);
+
+    Parser(const Parser&) = delete;
+    const Parser& operator=(const Parser&) = delete;
 
 private:
     void handleComponent();
@@ -438,12 +440,14 @@ rtl::OUString Parser::getNameAttribute() {
 }
 
 class ContentEnumeration:
-    public cppu::WeakImplHelper1< css::container::XEnumeration >,
-    private boost::noncopyable
+    public cppu::WeakImplHelper1< css::container::XEnumeration >
 {
 public:
     explicit ContentEnumeration(std::vector< css::uno::Any > const & factories):
         factories_(factories), iterator_(factories_.begin()) {}
+
+    ContentEnumeration(const ContentEnumeration&) = delete;
+    const ContentEnumeration& operator=(const ContentEnumeration&) = delete;
 
 private:
     virtual ~ContentEnumeration() {}
@@ -490,8 +494,7 @@ css::beans::Property getDefaultContextProperty() {
 }
 
 class SingletonFactory:
-    public cppu::WeakImplHelper1<css::lang::XSingleComponentFactory>,
-    private boost::noncopyable
+    public cppu::WeakImplHelper1<css::lang::XSingleComponentFactory>
 {
 public:
     SingletonFactory(
@@ -501,6 +504,9 @@ public:
             implementation):
         manager_(manager), implementation_(implementation)
     { assert(manager.is()); assert(implementation.get() != nullptr); }
+
+    SingletonFactory(const SingletonFactory&) = delete;
+    const SingletonFactory& operator=(const SingletonFactory&) = delete;
 
 private:
     virtual ~SingletonFactory() {}
@@ -544,8 +550,7 @@ SingletonFactory::createInstanceWithArgumentsAndContext(
 class ImplementationWrapper:
     public cppu::WeakImplHelper3<
         css::lang::XSingleComponentFactory, css::lang::XSingleServiceFactory,
-        css::lang::XServiceInfo >,
-    private boost::noncopyable
+        css::lang::XServiceInfo >
 {
 public:
     ImplementationWrapper(
@@ -555,6 +560,9 @@ public:
             implementation):
         manager_(manager), implementation_(implementation)
     { assert(manager.is()); assert(implementation.get() != nullptr); }
+
+    ImplementationWrapper(const ImplementationWrapper&) = delete;
+    const ImplementationWrapper& operator=(const ImplementationWrapper&) = delete;
 
 private:
     virtual ~ImplementationWrapper() {}
