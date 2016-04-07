@@ -114,18 +114,9 @@ namespace canvas
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(rClipPoly));
 
-#if OSL_DEBUG_LEVEL > 2
         // dump polygons
-        OSL_TRACE( "Original clip polygon: %s\n"
-                   "Triangulated polygon: %s\n",
-                   OUStringToOString(
-                       basegfx::tools::exportToSvgD( rClipPoly, true, true, false ),
-                       RTL_TEXTENCODING_ASCII_US).getStr(),
-                   OUStringToOString(
-                       basegfx::tools::exportToSvgD(
-                           basegfx::B2DPolyPolygon(rTriangulatedPolygon), true, true, false ),
-                       RTL_TEXTENCODING_ASCII_US).getStr() );
-#endif
+        SAL_INFO("canvas", "Orignal clip polygon: " <<  basegfx::tools::exportToSvgD( rClipPoly, true, true, false ));
+        SAL_INFO("canvas", "Triangulated polygon: " <<  basegfx::tools::exportToSvgD(basegfx::B2DPolyPolygon(rTriangulatedPolygon), true, true, false ));
 
         for( const auto& rSurfacePtr : maSurfaceList )
             rSurfacePtr->drawWithClip( fAlpha, rPos, rTriangulatedPolygon, rTransform );
