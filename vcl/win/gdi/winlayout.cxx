@@ -4002,7 +4002,16 @@ bool D2DWriteTextOutRenderer::DrawGlyphs(const Point & origin, uint16_t * pGid, 
 
 bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const
 {
-    bool const succeeded = SUCCEEDED(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace));
+    bool succeeded = false;
+    try
+    {
+        succeeded = SUCCEEDED(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace));
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.gdi.opengl", "Error in dwrite while creating font face: " << e.what());
+        return false;
+    }
 
     if (succeeded)
     {
