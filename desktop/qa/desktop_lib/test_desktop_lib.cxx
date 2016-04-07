@@ -31,7 +31,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>
 
-#include "../../inc/lib/init.hxx"
+#include <lib/init.hxx>
 
 using namespace com::sun::star;
 using namespace desktop;
