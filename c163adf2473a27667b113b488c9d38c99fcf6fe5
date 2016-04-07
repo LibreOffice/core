@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_6e5ed546",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-07T10:44:34Z",
+      "side": 1,
+      "message": "Also moved in ScInterpreter::ScTextJoin_MS() - twice.",
+      "parentUuid": "9ad45d7e_d32faaf4",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_48cb0973",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -107,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_8e55091f",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-07T10:44:34Z",
+      "side": 1,
+      "message": "Also changed in ScInterpreter::ScTextJoin_MS() - twice.",
+      "parentUuid": "9ad45d7e_48cb0973",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_88c5015d",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -118,6 +154,24 @@
       "writtenOn": "2016-04-04T11:30:49Z",
       "side": 1,
       "message": "Missing are svMatrix and svExternalDoubleRef cases.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_0e81194b",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-07T10:44:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad45d7e_88c5015d",
       "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -176,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_aead6d8a",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1546,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-07T10:44:34Z",
+      "side": 1,
+      "message": "That is true for argument A:A, but what happens with argument A:B? I\u0027ve sent an xlsx for recalculation with Excel2016-Office365. It may take some time before I receive the results.\n\nAlso, when the reference is a single (full) column, the current does concatenate column-wise doesn\u0027t it? (nCol1\u003d\u003dnCol2, so the inner loop is only is done once for each row). Do you think (or even know) that checking for nCol1\u003d\u003dnCol2 and using a single loop -or an iterator- improves performance significantly?",
+      "parentUuid": "9ad45d7e_a876053c",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_08b0f1f3",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -187,6 +259,24 @@
       "writtenOn": "2016-04-04T11:30:49Z",
       "side": 1,
       "message": "svMatrix and svExternalDoubleRef cases are missing.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_ce4ee195",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1586,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-07T10:44:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad45d7e_08b0f1f3",
       "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -210,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_ae2f2da0",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1633,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-07T10:44:34Z",
+      "side": 1,
+      "message": "I have added svMatrix and svExternalDoubleRef, but retained the vector. If the delimiter range has less elements than the number of strings to be concatenated - 1, Excel loops the delimiter range. See test file I sent you some time ago.",
+      "parentUuid": "9ad45d7e_08875110",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_28ab358b",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -221,6 +329,24 @@
       "writtenOn": "2016-04-04T11:30:49Z",
       "side": 1,
       "message": "Use an OUStringBuffer instead of OUString to gain performance.",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_8e2ce9ac",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-07T10:44:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad45d7e_28ab358b",
       "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
