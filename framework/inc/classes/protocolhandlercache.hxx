@@ -61,8 +61,6 @@ struct FWI_DLLPUBLIC ProtocolHandler
     to search for a key by using a full qualified URL on list of all possible pattern keys.
 */
 typedef std::unordered_map<OUString, OUString, OUStringHash> PatternHash;
-FWI_DLLPUBLIC PatternHash::iterator findPatternKey(
-    PatternHash const & hash, const OUString& sURL);
 
 /**
     This hash holds protocol handler structs by her names.
