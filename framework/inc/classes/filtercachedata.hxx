@@ -86,8 +86,8 @@ struct FileType
             sClipboardFormat.clear();
             nDocumentIconID     = 0;
             lUINames.clear();
-            framework::free(lURLPattern);
-            framework::free(lExtensions);
+            lURLPattern.clear();
+            lExtensions.clear();
         }
 
         inline FileType& impl_copy( const FileType& rCopy )
@@ -148,7 +148,7 @@ struct Filter
             nFileFormatVersion  = 0;
             sTemplateName.clear();
             lUINames.clear();
-            framework::free(lUserData);
+            lUserData.clear();
         }
 
         inline Filter& impl_copy( const Filter& rCopy )
@@ -205,7 +205,7 @@ struct Detector
         inline void impl_clear()
         {
             sName.clear();
-            framework::free(lTypes);
+            lTypes.clear();
         }
 
         inline Detector& impl_copy( const Detector& rCopy )
@@ -245,7 +245,7 @@ struct Loader
         {
             sName.clear();
             lUINames.clear();
-            framework::free(lTypes);
+            lTypes.clear();
         }
 
         inline Loader& impl_copy( const Loader& rCopy )
@@ -285,7 +285,7 @@ struct ContentHandler
         inline void impl_clear()
         {
             sName.clear();
-            framework::free(lTypes);
+            lTypes.clear();
         }
 
         inline ContentHandler& impl_copy( const ContentHandler& rCopy )

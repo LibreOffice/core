@@ -81,12 +81,6 @@ struct KeyEventEqualsFunc
 
 typedef ::std::vector< OUString > OUStringList;
 
-template <class T>
-void free(std::vector<T>& vec)
-{
-    OUStringList().swap(vec);
-}
-
 /**
     Basic OUString hash.
     Key and values are OUStrings.
