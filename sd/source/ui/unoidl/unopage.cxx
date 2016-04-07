@@ -1623,7 +1623,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
 
-    _SelectObjectsInView( xShapes, pPageView );
+    SelectObjectsInView( xShapes, pPageView );
 
     mpView->CombineMarkedObjects( false );
 
@@ -1654,7 +1654,7 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
         return;
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
-    _SelectObjectInView( xGroup, pPageView );
+    SelectObjectInView( xGroup, pPageView );
     mpView->DismantleMarkedObjects();
     mpView->HideSdrPage();
 
@@ -1674,7 +1674,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
 
-    _SelectObjectsInView( xShapes, pPageView );
+    SelectObjectsInView( xShapes, pPageView );
 
     mpView->CombineMarkedObjects();
 
@@ -1705,7 +1705,7 @@ void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xSh
         return;
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
-    _SelectObjectInView( xShape, pPageView );
+    SelectObjectInView( xShape, pPageView );
     mpView->DismantleMarkedObjects( true );
     mpView->HideSdrPage();
 

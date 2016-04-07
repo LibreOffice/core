@@ -390,9 +390,9 @@ namespace
     }
 }
 
-// ATTENTION: _SelectObjectsInView selects the css::drawing::Shapes
+// ATTENTION: SelectObjectsInView selects the css::drawing::Shapes
 // only in the given SdrPageView. It hasn't to be the visible SdrPageView.
-void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
+void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
 {
     SAL_WARN_IF(!pPageView, "svx", "SdrPageView is NULL!");
     SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
@@ -412,9 +412,9 @@ void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aS
     }
 }
 
-// ATTENTION: _SelectObjectInView selects the shape only in the given SdrPageView.
+// ATTENTION: SelectObjectInView selects the shape only in the given SdrPageView.
 // It hasn't to be the visible SdrPageView.
-void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) throw()
+void SvxDrawPage::SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) throw()
 {
     SAL_WARN_IF(!pPageView, "svx", "SdrPageView is NULL!");
     SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
@@ -443,7 +443,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
 
     SdrPageView* pPageView = mpView->ShowSdrPage( mpPage );
 
-    _SelectObjectsInView( xShapes, pPageView );
+    SelectObjectsInView( xShapes, pPageView );
 
     mpView->GroupMarked();
 
@@ -481,7 +481,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
     SdrPageView* pPageView = mpView->ShowSdrPage( mpPage );
 
     Reference< drawing::XShape > xShape( aGroup, UNO_QUERY );
-    _SelectObjectInView( xShape, pPageView );
+    SelectObjectInView( xShape, pPageView );
     mpView->UnGroupMarked();
 
     mpView->HideSdrPage();
