@@ -71,7 +71,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /** cached list of all registered event names of cfg for call optimization. */
-    OUStringList m_lEvents;
+    std::vector<OUString> m_lEvents;
 
     /** we listen at the configuration for changes at the event list. */
     ConfigAccess m_aConfig;
@@ -343,7 +343,7 @@ void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent
         OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
         if (!sEvent.isEmpty())
         {
-            OUStringList::iterator pEvent = std::find(m_lEvents.begin(), m_lEvents.end(), sEvent);
+            std::vector<OUString>::iterator pEvent = std::find(m_lEvents.begin(), m_lEvents.end(), sEvent);
             if (pEvent == m_lEvents.end())
                 m_lEvents.push_back(sEvent);
         }
@@ -358,7 +358,7 @@ void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent
         OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
         if (!sEvent.isEmpty())
         {
-            OUStringList::iterator pEvent = std::find(m_lEvents.begin(), m_lEvents.end(), sEvent);
+            std::vector<OUString>::iterator pEvent = std::find(m_lEvents.begin(), m_lEvents.end(), sEvent);
             if (pEvent != m_lEvents.end())
                 m_lEvents.erase(pEvent);
         }

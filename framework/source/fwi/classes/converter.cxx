@@ -40,9 +40,9 @@ css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNa
 /**
  * converts a sequence of unicode strings into a vector of such items
  */
-OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequence< OUString >& lSource )
+std::vector<OUString> Converter::convert_seqOUString2OUStringList( const css::uno::Sequence< OUString >& lSource )
 {
-    OUStringList lDestination;
+    std::vector<OUString> lDestination;
     sal_Int32 nCount = lSource.getLength();
 
     for (sal_Int32 nItem=0; nItem<nCount; ++nItem )

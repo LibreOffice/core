@@ -39,7 +39,7 @@ class FWI_DLLPUBLIC Converter
         static css::uno::Sequence< css::beans::NamedValue >    convert_seqPropVal2seqNamedVal  ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
 
         // Seq<String> => Vector<String>
-        static OUStringList                                    convert_seqOUString2OUStringList( const css::uno::Sequence< OUString >&           lSource );
+        static std::vector<OUString> convert_seqOUString2OUStringList( const css::uno::Sequence< OUString >&           lSource );
 
         static OUString                                 convert_DateTime2ISO8601        ( const DateTime&                                        aSource );
 };

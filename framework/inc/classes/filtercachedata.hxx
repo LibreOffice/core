@@ -113,8 +113,8 @@ struct FileType
         OUString            sMediaType;
         OUString            sClipboardFormat;
         sal_Int32           nDocumentIconID;
-        OUStringList        lURLPattern;
-        OUStringList        lExtensions;
+        std::vector<OUString> lURLPattern;
+        std::vector<OUString> lExtensions;
 };
 
 // These struct describe a filter which is registered for one type.
@@ -179,7 +179,7 @@ struct Filter
         OUString     sFilterService;
         OUString     sUIComponent;
         sal_Int32           nFlags;
-        OUStringList        lUserData;
+        std::vector<OUString> lUserData;
         sal_Int32           nFileFormatVersion;
         OUString     sTemplateName;
 };
@@ -220,7 +220,7 @@ struct Detector
     public:
 
         OUString     sName;
-        OUStringList        lTypes;
+        std::vector<OUString> lTypes;
 };
 
 // Programmer can register his own services for loading documents in a frame.
@@ -262,7 +262,7 @@ struct Loader
 
         OUString sName;
         OUStringHashMap lUINames;
-        OUStringList    lTypes;
+        std::vector<OUString> lTypes;
 };
 
 // Programmer can register his own services to handle a FileType and intercept dispatches.
@@ -300,7 +300,7 @@ struct ContentHandler
     public:
 
         OUString     sName;
-        OUStringList        lTypes;
+        std::vector<OUString> lTypes;
 };
 
 // We need different hash maps for different tables of our configuration management.
@@ -319,7 +319,7 @@ class SetNodeHash : public std::unordered_map< OUString                    ,
 // The preferred hash maps file extensions to preferred types to find these ones faster.
 
 class PerformanceHash   :   public  std::unordered_map< OUString,
-                                                        OUStringList,
+                                                        std::vector<OUString>,
                                                         OUStringHash >
 {
 };

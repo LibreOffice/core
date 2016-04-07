@@ -126,11 +126,11 @@ class PresetHandler
 
         /** @short  knows the names of all presets inside the current
                     working storage of the share layer. */
-        OUStringList m_lPresets;
+        std::vector<OUString> m_lPresets;
 
         /** @short  knows the names of all targets inside the current
                     working storage of the user layer. */
-        OUStringList m_lTargets;
+        std::vector<OUString> m_lTargets;
 
         /** @short  its the current office locale and will be used
                     to handle localized presets.

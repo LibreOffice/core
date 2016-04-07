@@ -87,7 +87,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
                                                                           sal_Int32        nOpenMode)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
-    OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
+    std::vector<OUString> lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
     // SAFE -> ----------------------------------
     osl::ResettableMutexGuard aReadLock(m_mutex);
@@ -97,7 +97,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
 
     css::uno::Reference< css::embed::XStorage > xChild;
     OUString                             sRelPath;
-    OUStringList::const_iterator                pIt;
+    std::vector<OUString>::const_iterator                pIt;
 
     for (  pIt  = lFolders.begin();
            pIt != lFolders.end();
@@ -167,11 +167,11 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
 StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
-    OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
+    std::vector<OUString> lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
     StorageHolder::TStorageList  lStoragesOfPath;
     OUString              sRelPath;
-    OUStringList::const_iterator pIt;
+    std::vector<OUString>::const_iterator pIt;
 
     osl::MutexGuard g(m_mutex);
 
@@ -229,14 +229,14 @@ void StorageHolder::commitPath(const OUString& sPath)
 void StorageHolder::closePath(const OUString& rPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(rPath);
-    OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
+    std::vector<OUString> lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
     /* convert list of paths in the following way:
         [0] = "path_1" => "path_1
         [1] = "path_2" => "path_1/path_2"
         [2] = "path_3" => "path_1/path_2/path_3"
     */
-    OUStringList::iterator pIt1;
+    std::vector<OUString>::iterator pIt1;
     OUString        sParentPath;
     for (  pIt1  = lFolders.begin();
            pIt1 != lFolders.end();
@@ -249,7 +249,7 @@ void StorageHolder::closePath(const OUString& rPath)
 
     osl::MutexGuard g(m_mutex);
 
-    OUStringList::reverse_iterator pIt2;
+    std::vector<OUString>::reverse_iterator pIt2;
     for (  pIt2  = lFolders.rbegin();
            pIt2 != lFolders.rend();
          ++pIt2                     )
@@ -355,7 +355,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
 {
     // normed path = "a/b/c/" ... we search for "a/b/"
     OUString sNormedPath = StorageHolder::impl_st_normPath(sChildPath);
-    OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
+    std::vector<OUString> lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
     sal_Int32       c           = lFolders.size();
 
     // a) ""       => -       => no parent
@@ -498,9 +498,9 @@ OUString StorageHolder::impl_st_normPath(const OUString& sPath)
     return sNormedPath;
 }
 
-OUStringList StorageHolder::impl_st_parsePath(const OUString& sPath)
+std::vector<OUString> StorageHolder::impl_st_parsePath(const OUString& sPath)
 {
-    OUStringList lToken;
+    std::vector<OUString> lToken;
     sal_Int32    i  = 0;
     while (true)
     {

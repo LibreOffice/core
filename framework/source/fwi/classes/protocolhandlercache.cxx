@@ -240,7 +240,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
         aHandler.m_lProtocols = Converter::convert_seqOUString2OUStringList(lTemp);
 
         // register his pattern into the performance search hash
-        for (OUStringList::iterator pItem =aHandler.m_lProtocols.begin();
+        for (std::vector<OUString>::iterator pItem =aHandler.m_lProtocols.begin();
                                     pItem!=aHandler.m_lProtocols.end();
                                     ++pItem                             )
         {

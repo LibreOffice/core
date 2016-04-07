@@ -52,7 +52,7 @@ struct FWI_DLLPUBLIC ProtocolHandler
         /// the uno implementation name of this handler
         OUString m_sUNOName;
         /// list of URL pattern which defines the protocols which this handler is registered for
-        OUStringList m_lProtocols;
+        std::vector<OUString> m_lProtocols;
 };
 
 /**

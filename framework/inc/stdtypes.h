@@ -79,8 +79,6 @@ struct KeyEventEqualsFunc
     }
 };
 
-typedef ::std::vector< OUString > OUStringList;
-
 /**
     Basic OUString hash.
     Key and values are OUStrings.

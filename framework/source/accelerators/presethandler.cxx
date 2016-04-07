@@ -462,8 +462,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     const OUString*                                   pNames;
           sal_Int32                                          c;
           sal_Int32                                          i;
-          OUStringList                                       lPresets;
-          OUStringList                                       lTargets;
+          std::vector<OUString> lPresets;
+          std::vector<OUString> lTargets;
 
     // read preset names of share layer
     xAccess.set(xShare, css::uno::UNO_QUERY);

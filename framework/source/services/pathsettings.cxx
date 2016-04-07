@@ -121,10 +121,10 @@ class PathSettings : private cppu::BaseMutex
             OUString sPathName;
 
             /// contains all paths, which are used internally - but are not visible for the user.
-            OUStringList lInternalPaths;
+            std::vector<OUString> lInternalPaths;
 
             /// contains all paths configured by the user
-            OUStringList lUserPaths;
+            std::vector<OUString> lUserPaths;
 
             /// this special path is used to generate feature depending content there
             OUString sWritePath;
@@ -365,7 +365,7 @@ private:
     /** read a path info using the old cfg schema.
         This is needed for "migration on demand" reasons only.
         Can be removed for next major release .-) */
-    OUStringList impl_readOldFormat(const OUString& sPath);
+    std::vector<OUString> impl_readOldFormat(const OUString& sPath);
 
     /** read a path info using the new cfg schema. */
     PathSettings::PathInfo impl_readNewFormat(const OUString& sPath);
@@ -375,7 +375,7 @@ private:
         Can be removed with new major release ... */
 
     void impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
-                                 const OUStringList&           lOld );
+                                 const std::vector<OUString>& lOld );
 
     /** reload one path directly from the new configuration schema (because
         it was updated by any external code) */
@@ -386,7 +386,7 @@ private:
         or check if the given path value uses paths, which can be replaced with predefined
         placeholder variables ...
      */
-    void impl_subst(      OUStringList&                                          lVals   ,
+    void impl_subst(std::vector<OUString>& lVals   ,
                     const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
                           bool                                               bReSubst);
 
@@ -395,14 +395,14 @@ private:
 
     /** converts our new string list schema to the old ";" separated schema ... */
     OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
-    OUStringList    impl_convertOldStyle2Path(const OUString&        sOldStylePath) const;
+    std::vector<OUString> impl_convertOldStyle2Path(const OUString&        sOldStylePath) const;
 
     /** remove still known paths from the given lList argument.
         So real user defined paths can be extracted from the list of
         fix internal paths !
      */
     void impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
-                              OUStringList&           lList);
+                              std::vector<OUString>& lList);
 
     /** rebuild the member m_lPropDesc using the path list m_lPaths. */
     void impl_rebuildPropertyDescriptor();
@@ -421,7 +421,7 @@ private:
 
     /** it checks, if the given path value seems to be a valid URL or system path. */
     bool impl_isValidPath(const OUString& sPath) const;
-    bool impl_isValidPath(const OUStringList&    lPath) const;
+    bool impl_isValidPath(const std::vector<OUString>& lPath) const;
 
     void impl_storePath(const PathSettings::PathInfo& aPath);
 
@@ -581,10 +581,10 @@ void PathSettings::impl_readAll()
 }
 
 // NO substitution here ! It's done outside ...
-OUStringList PathSettings::impl_readOldFormat(const OUString& sPath)
+std::vector<OUString> PathSettings::impl_readOldFormat(const OUString& sPath)
 {
     css::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld() );
-    OUStringList aPathVal;
+    std::vector<OUString> aPathVal;
 
     if( xCfg->hasByName(sPath) )
     {
@@ -599,7 +599,7 @@ OUStringList PathSettings::impl_readOldFormat(const OUString& sPath)
         }
         else if (aVal >>= lStringListVal)
         {
-            aPathVal = comphelper::sequenceToContainer<OUStringList>(lStringListVal);
+            aPathVal = comphelper::sequenceToContainer<std::vector<OUString>>(lStringListVal);
         }
     }
 
@@ -623,19 +623,19 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
     // read internal path list
     css::uno::Reference< css::container::XNameAccess > xIPath;
     xPath->getByName(CFGPROP_INTERNALPATHS) >>= xIPath;
-    aPathVal.lInternalPaths = comphelper::sequenceToContainer<OUStringList>(xIPath->getElementNames());
+    aPathVal.lInternalPaths = comphelper::sequenceToContainer<std::vector<OUString>>(xIPath->getElementNames());
 
     // read user defined path list
     css::uno::Sequence<OUString> vTmpUserPathsSeq;
     xPath->getByName(CFGPROP_USERPATHS) >>= vTmpUserPathsSeq;
-    aPathVal.lUserPaths = comphelper::sequenceToContainer<OUStringList>(vTmpUserPathsSeq);
+    aPathVal.lUserPaths = comphelper::sequenceToContainer<std::vector<OUString>>(vTmpUserPathsSeq);
 
     // read the writeable path
     xPath->getByName(CFGPROP_WRITEPATH) >>= aPathVal.sWritePath;
 
     // avoid duplicates, by removing the writeable path from
     // the user defined path list if it happens to be there too
-    OUStringList::iterator aI = std::find(aPathVal.lUserPaths.begin(), aPathVal.lUserPaths.end(), aPathVal.sWritePath);
+    std::vector<OUString>::iterator aI = std::find(aPathVal.lUserPaths.begin(), aPathVal.lUserPaths.end(), aPathVal.sWritePath);
     if (aI != aPathVal.lUserPaths.end())
         aPathVal.lUserPaths.erase(aI);
 
@@ -705,9 +705,9 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 }
 
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
-                                          const OUStringList&           lOld )
+                                          const std::vector<OUString>& lOld )
 {
-    OUStringList::const_iterator pIt;
+    std::vector<OUString>::const_iterator pIt;
     for (  pIt  = lOld.begin();
            pIt != lOld.end();
          ++pIt                )
@@ -764,7 +764,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
     {
         // migration of old user defined values on demand
         // can be disabled for a new major
-        OUStringList lOldVals = impl_readOldFormat(sPath);
+        std::vector<OUString> lOldVals = impl_readOldFormat(sPath);
         // replace all might existing variables with real values
         // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
@@ -958,11 +958,11 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
     }
 }
 
-void PathSettings::impl_subst(      OUStringList&                                          lVals   ,
+void PathSettings::impl_subst(std::vector<OUString>& lVals   ,
                               const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
                                     bool                                               bReSubst)
 {
-    OUStringList::iterator pIt;
+    std::vector<OUString>::iterator pIt;
 
     for (  pIt  = lVals.begin();
            pIt != lVals.end();
@@ -994,8 +994,8 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
 
 OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
 {
-    OUStringList::const_iterator pIt;
-    OUStringList                 lTemp;
+    std::vector<OUString>::const_iterator pIt;
+    std::vector<OUString> lTemp;
     lTemp.reserve(rPath.lInternalPaths.size() + rPath.lUserPaths.size() + 1);
 
     for (  pIt  = rPath.lInternalPaths.begin();
@@ -1028,9 +1028,9 @@ OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& r
     return sPathVal.makeStringAndClear();
 }
 
-OUStringList PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePath) const
+std::vector<OUString> PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePath) const
 {
-    OUStringList lList;
+    std::vector<OUString> lList;
     sal_Int32    nToken = 0;
     do
     {
@@ -1044,9 +1044,9 @@ OUStringList PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePa
 }
 
 void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
-                                        OUStringList&           lList)
+                                        std::vector<OUString>& lList)
 {
-    OUStringList::iterator pIt;
+    std::vector<OUString>::iterator pIt;
 
     // Erase items in the internal path list from lList.
     // Also erase items in the internal path list from the user path list.
@@ -1055,7 +1055,7 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
          ++pIt                                 )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
+        std::vector<OUString>::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
         pItem = std::find(rPath.lUserPaths.begin(), rPath.lUserPaths.end(), rItem);
@@ -1068,7 +1068,7 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
     while ( pIt != rPath.lUserPaths.end() )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
+        std::vector<OUString>::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
         if ( pItem == lList.end() )
         {
             rPath.lUserPaths.erase(pIt);
@@ -1086,13 +1086,13 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
          ++pIt                             )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
+        std::vector<OUString>::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
     }
 
     // Erase the write path from lList
-    OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rPath.sWritePath);
+    std::vector<OUString>::iterator pItem = std::find(lList.begin(), lList.end(), rPath.sWritePath);
     if (pItem != lList.end())
         lList.erase(pItem);
 }
@@ -1211,7 +1211,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
              {
                 OUString sVal;
                 aVal >>= sVal;
-                OUStringList lList = impl_convertOldStyle2Path(sVal);
+                std::vector<OUString> lList = impl_convertOldStyle2Path(sVal);
                 impl_subst(lList, fa_getSubstitution(), false);
                 impl_purgeKnownPaths(aChangePath, lList);
                 if (! impl_isValidPath(lList))
@@ -1227,7 +1227,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 }
                 else
                 {
-                    OUStringList::const_iterator pIt;
+                    std::vector<OUString>::const_iterator pIt;
                     for (  pIt  = lList.begin();
                            pIt != lList.end();
                          ++pIt                 )
@@ -1252,7 +1252,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
                 css::uno::Sequence<OUString> lTmpList;
                 aVal >>= lTmpList;
-                OUStringList lList = comphelper::sequenceToContainer<OUStringList>(lTmpList);
+                std::vector<OUString> lList = comphelper::sequenceToContainer<std::vector<OUString>>(lTmpList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
                 aChangePath.lInternalPaths = lList;
@@ -1273,7 +1273,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
                 css::uno::Sequence<OUString> lTmpList;
                 aVal >>= lTmpList;
-                OUStringList lList = comphelper::sequenceToContainer<OUStringList>(lTmpList);
+                std::vector<OUString> lList = comphelper::sequenceToContainer<std::vector<OUString>>(lTmpList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
                 aChangePath.lUserPaths = lList;
@@ -1302,9 +1302,9 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
     pOrgPath->takeOver(aChangePath);
 }
 
-bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
+bool PathSettings::impl_isValidPath(const std::vector<OUString>& lPath) const
 {
-    OUStringList::const_iterator pIt;
+    std::vector<OUString>::const_iterator pIt;
     for (  pIt  = lPath.begin();
            pIt != lPath.end();
          ++pIt                 )
