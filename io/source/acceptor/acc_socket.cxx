@@ -203,8 +203,8 @@ namespace io_acceptor {
                 aReadBytes.realloc( nBytesToRead );
             }
 
-            sal_Int32 i = 0;
-            i = m_socket.read( aReadBytes.getArray()  , aReadBytes.getLength() );
+            sal_Int32 i = m_socket.read(
+                aReadBytes.getArray(), aReadBytes.getLength());
 
             if(i != nBytesToRead)
             {
