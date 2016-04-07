@@ -119,6 +119,8 @@ private:
 class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier, public LegendEntryProvider
 {
 public:
+    VSeriesPlotter() = delete;
+
     virtual ~VSeriesPlotter();
 
     /*
@@ -252,10 +254,6 @@ public:
 
     bool WantToPlotInFrontOfAxisLine();
     virtual bool shouldSnapRectToUsedArea();
-
-private:
-    //no default constructor
-    VSeriesPlotter();
 
 protected:
 

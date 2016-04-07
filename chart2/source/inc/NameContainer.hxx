@@ -47,6 +47,7 @@ typedef ::cppu::WeakImplHelper<
 class NameContainer : public impl::NameContainer_Base
 {
 public:
+    NameContainer() = delete;
     NameContainer( const css::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName );
     explicit NameContainer( const NameContainer & rOther );
     virtual ~NameContainer();
@@ -74,9 +75,6 @@ public:
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() throw (css::uno::RuntimeException, std::exception) override;
-
-private: //methods
-    NameContainer();//no default constructor
 
 private: //member
     const css::uno::Type           m_aType;

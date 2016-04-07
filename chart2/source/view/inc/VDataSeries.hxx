@@ -36,7 +36,6 @@
 #include <memory>
 #include <vector>
 #include <map>
-#include <boost/noncopyable.hpp>
 
 namespace chart
 {
@@ -56,12 +55,15 @@ public:
     mutable css::uno::Sequence<double> Doubles;
 };
 
-class VDataSeries final : private boost::noncopyable
+class VDataSeries final
 {
 public:
     VDataSeries( const css::uno::Reference<css::chart2::XDataSeries>& xDataSeries );
 
     ~VDataSeries();
+
+    VDataSeries(const VDataSeries&) = delete;
+    const VDataSeries& operator=(const VDataSeries&) = delete;
 
     css::uno::Reference<css::chart2::XDataSeries> getModel() const;
 

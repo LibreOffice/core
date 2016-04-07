@@ -32,8 +32,6 @@
 #include <deque>
 #include <utility>
 
-#include <boost/noncopyable.hpp>
-
 class SdrUndoAction;
 
 namespace chart
@@ -48,7 +46,6 @@ typedef ::cppu::WeakComponentImplHelper< css::document::XUndoAction > UndoElemen
 
 class UndoElement   :public UndoElement_MBase
                     ,public UndoElement_TBase
-                    ,public ::boost::noncopyable
 {
 public:
     /** creates a new undo action
@@ -65,6 +62,9 @@ public:
                  const css::uno::Reference< css::frame::XModel >& i_documentModel,
                  const std::shared_ptr< ChartModelClone >& i_modelClone
                );
+
+    UndoElement(const UndoElement&) = delete;
+    const UndoElement& operator=(const UndoElement&) = delete;
 
     // XUndoAction
     virtual OUString SAL_CALL getTitle() throw (css::uno::RuntimeException, std::exception) override;

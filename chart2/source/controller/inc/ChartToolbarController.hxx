@@ -21,8 +21,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 
-#include <boost/noncopyable.hpp>
-
 namespace chart {
 
 namespace {
@@ -34,13 +32,15 @@ typedef cppu::WeakComponentImplHelper<
 
 }
 
-class ChartToolbarController : private boost::noncopyable,
-                               private cppu::BaseMutex,
+class ChartToolbarController : private cppu::BaseMutex,
                                public ChartToolbarControllerBase
 {
 public:
     ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties);
     virtual ~ChartToolbarController();
+
+    ChartToolbarController(const ChartToolbarController&) = delete;
+    const ChartToolbarController& operator=(const ChartToolbarController&) = delete;
 
     // XToolbarContoller
     virtual void SAL_CALL execute(sal_Int16 nKeyModifier)

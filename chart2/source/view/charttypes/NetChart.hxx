@@ -29,6 +29,8 @@ class NetChart : public VSeriesPlotter
 {
     // public methods
 public:
+    NetChart() = delete;
+
     NetChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount
              , bool bNoArea
@@ -50,9 +52,6 @@ public:
     virtual css::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ ) override;
 
 private: //methods
-    //no default constructor
-    NetChart();
-
     void impl_createSeriesShapes();
     bool impl_createArea( VDataSeries* pSeries
                 , css::drawing::PolyPolygonShape3D* pSeriesPoly

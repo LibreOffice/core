@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <boost/noncopyable.hpp>
 
 
 namespace chart { namespace sidebar {
@@ -37,13 +36,15 @@ namespace
 }
 
 class ChartPanelFactory
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PanelFactoryInterfaceBase
 {
 public:
     ChartPanelFactory();
     virtual ~ChartPanelFactory();
+
+    ChartPanelFactory(const ChartPanelFactory&) = delete;
+    const ChartPanelFactory& operator=(const ChartPanelFactory&) = delete;
 
     // XUIElementFactory
     virtual css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(

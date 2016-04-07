@@ -60,6 +60,8 @@ public:
     AccessibleChartView(SdrView* pView );
     virtual ~AccessibleChartView();
 
+    AccessibleChartView() = delete;
+
     // ____ WeakComponentHelper (called from XComponent::dispose()) ____
     virtual void SAL_CALL disposing() override;
 
@@ -123,9 +125,6 @@ private: // members
     AccessibleUniqueId                                              m_aCurrentSelectionOID;
     SdrView*                                                        m_pSdrView;
     ::accessibility::IAccessibleViewForwarder*                      m_pViewForwarder;
-
-    //no default constructor
-    AccessibleChartView();
 };
 
 } //namespace chart

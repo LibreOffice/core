@@ -28,7 +28,6 @@
 #include <svtools/roadmapwizard.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace chart
@@ -44,7 +43,11 @@ public:
     CreationWizard( vcl::Window* pParent,
         const css::uno::Reference< css::frame::XModel >& xChartModel
         , const css::uno::Reference< css::uno::XComponentContext >& xContext
-        , sal_Int32 nOnePageOnlyIndex=-1 );//if nOnePageOnlyIndex is an index of an exsisting  page starting with 0, then only this page is displayed without next/previous and roadmap
+        // if nOnePageOnlyIndex is an index of an exsisting  page starting with 0
+        // then only this page is displayed without next/previous and roadmap
+        , sal_Int32 nOnePageOnlyIndex=-1 );
+
+    CreationWizard() = delete;
 
     bool isClosable() { /*@todo*/ return m_bIsClosable;}
 
@@ -60,9 +63,6 @@ protected:
     virtual OUString        getStateDisplayName( WizardState nState ) const override;
 
 private:
-    //no default constructor
-    CreationWizard();
-
     virtual VclPtr<TabPage> createPage(WizardState nState) override;
 
     css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
