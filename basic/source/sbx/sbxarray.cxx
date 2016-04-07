@@ -343,7 +343,7 @@ void SbxArray::Merge( SbxArray* p )
             {
                 // Take this element and clear the original.
                 rEntry2.mpVar = rEntry1.mpVar;
-                rEntry2.mpVar.Clear();
+                rEntry1.mpVar.Clear();
                 break;
             }
         }
