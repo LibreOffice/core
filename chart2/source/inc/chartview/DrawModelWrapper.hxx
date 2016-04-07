@@ -41,10 +41,10 @@ private:
 
     VclPtr<OutputDevice> m_pRefDevice;
 
-    //no default constructor
-    DrawModelWrapper();
-
 public:
+    //no default constructor
+    DrawModelWrapper() = delete;
+
     SAL_DLLPRIVATE DrawModelWrapper(
         const css::uno::Reference<css::uno::XComponentContext>& xContext );
     SAL_DLLPRIVATE virtual ~DrawModelWrapper();

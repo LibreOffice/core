@@ -23,8 +23,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 
-#include <boost/noncopyable.hpp>
-
 namespace chart
 {
 
@@ -35,7 +33,7 @@ namespace chart
         E_MODEL_WITH_SELECTION
     };
 
-    class ChartModelClone : public ::boost::noncopyable
+    class ChartModelClone
     {
     public:
         ChartModelClone(
@@ -44,6 +42,9 @@ namespace chart
         );
 
         ~ChartModelClone();
+
+        ChartModelClone(const ChartModelClone&) = delete;
+        const ChartModelClone& operator=(const ChartModelClone&) = delete;
 
         ModelFacet getFacet() const;
 
