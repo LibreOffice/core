@@ -631,7 +631,6 @@ void BarChart::createShapes()
     //              uno::Reference<drawing::XShape> xPointGroupShape_Shape =
     //                      uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
                     //as long as we do not iterate we do not need to create an additional group for each point
-                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes = xSeriesGroupShape_Shapes;
                     uno::Reference< beans::XPropertySet > xDataPointProperties( (*aSeriesIter)->getPropertiesOfPoint( nPointIndex ) );
                     sal_Int32 nGeometry3D = DataPointGeometry3D::CUBOID;
                     if(m_nDimension==3) try
@@ -775,7 +774,7 @@ void BarChart::createShapes()
                                     fTopHeight *= -1.0;
 
                                 xShape = createDataPoint3D_Bar(
-                                    xPointGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
+                                    xSeriesGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
                                     , xDataPointProperties, nGeometry3D );
                             }
                             else //m_nDimension!=3
@@ -795,7 +794,7 @@ void BarChart::createShapes()
                                 AddPointToPoly( aPoly, aLeftUpperPoint );
                                 AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
                                 pPosHelper->transformScaledLogicToScene( aPoly );
-                                xShape = m_pShapeFactory->createArea2D( xPointGroupShape_Shapes, aPoly );
+                                xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes, aPoly );
                                 setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                             }
 

@@ -1437,7 +1437,7 @@ bool lcl_IsPieOrDonut( const uno::Reference< XDiagram >& xDiagram )
     return DiagramHelper::isPieOrDonutChart( xDiagram );
 }
 
-void lcl_setDefaultWritingMode( std::shared_ptr< DrawModelWrapper > pDrawModelWrapper, ChartModel& rModel)
+void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDrawModelWrapper, ChartModel& rModel)
 {
     //get writing mode from parent document:
     if( SvtLanguageOptions().IsCTLFontEnabled() )

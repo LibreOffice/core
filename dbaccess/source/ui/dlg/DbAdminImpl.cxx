@@ -90,7 +90,7 @@ using namespace com::sun::star::frame;
 
 namespace
 {
-    bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, std::function<bool ( const SfxPoolItem* )> isItemType )
+    bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const std::function<bool ( const SfxPoolItem* )>& isItemType )
     {
         bool bCorrectType = false;
 

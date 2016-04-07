@@ -321,7 +321,7 @@ protected:
     /// check if we are initialized properly
     void SAL_CALL checkInit() const;
     /// initialize state from given DOM tree
-    void SAL_CALL init(css::uno::Reference<css::xml::dom::XDocument> i_xDom);
+    void SAL_CALL init(const css::uno::Reference<css::xml::dom::XDocument>& i_xDom);
     /// update element in DOM tree
     void SAL_CALL updateElement(const char *i_name,
         std::vector<std::pair<const char *, OUString> >* i_pAttrs = nullptr);
@@ -653,7 +653,7 @@ SfxDocumentMetaData::getURLProperties(
 // return the text of the (hopefully unique, i.e., normalize first!) text
 // node _below_ the given node
 OUString SAL_CALL
-getNodeText(css::uno::Reference<css::xml::dom::XNode> i_xNode)
+getNodeText(const css::uno::Reference<css::xml::dom::XNode>& i_xNode)
         throw (css::uno::RuntimeException)
 {
     if (!i_xNode.is()) throw css::uno::RuntimeException(
@@ -1119,7 +1119,7 @@ SfxDocumentMetaData::checkInit() const // throw (css::uno::RuntimeException)
 
 // initialize state from DOM tree
 void SAL_CALL SfxDocumentMetaData::init(
-        css::uno::Reference<css::xml::dom::XDocument> i_xDoc)
+        const css::uno::Reference<css::xml::dom::XDocument>& i_xDoc)
 {
     if (!i_xDoc.is()) throw css::uno::RuntimeException(
         OUString("SfxDocumentMetaData::init: no DOM tree given"), *this);

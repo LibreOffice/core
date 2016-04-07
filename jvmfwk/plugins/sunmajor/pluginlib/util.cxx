@@ -1065,7 +1065,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 }
 
 Reference<VendorBase> createInstance(createInstance_func pFunc,
-                                     vector<pair<OUString, OUString> > properties)
+                                     const vector<pair<OUString, OUString> >& properties)
 {
 
     Reference<VendorBase> aBase = (*pFunc)();

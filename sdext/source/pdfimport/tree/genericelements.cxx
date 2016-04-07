@@ -306,7 +306,7 @@ void PageElement::updateParagraphGeometry( Element* pEle )
     }
 }
 
-bool PageElement::resolveHyperlink( std::list<Element*>::iterator link_it, std::list<Element*>& rElements )
+bool PageElement::resolveHyperlink( const std::list<Element*>::iterator& link_it, std::list<Element*>& rElements )
 {
     HyperlinkElement* pLink = dynamic_cast<HyperlinkElement*>(*link_it);
     if( ! pLink ) // sanity check

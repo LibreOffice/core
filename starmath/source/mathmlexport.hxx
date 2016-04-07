@@ -49,15 +49,15 @@ public:
     void SetFlat(bool bIn) {bFlat = bIn;}
 
     static bool WriteThroughComponent(
-        css::uno::Reference< css::io::XOutputStream >   xOutputStream,
-        css::uno::Reference< css::lang::XComponent >    xComponent,
+        const css::uno::Reference< css::io::XOutputStream >&   xOutputStream,
+        const css::uno::Reference< css::lang::XComponent >&    xComponent,
         css::uno::Reference< css::uno::XComponentContext > & rxContext,
         css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
 
     static bool WriteThroughComponent(
         const css::uno::Reference< css::embed::XStorage >& xStor,
-        css::uno::Reference< css::lang::XComponent > xComponent,
+        const css::uno::Reference< css::lang::XComponent >& xComponent,
         const sal_Char* pStreamName,
         css::uno::Reference< css::uno::XComponentContext > & rxContext,
         css::uno::Reference< css::beans::XPropertySet > & rPropSet,

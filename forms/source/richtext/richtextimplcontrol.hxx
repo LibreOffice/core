@@ -149,7 +149,7 @@ namespace frm
 
     private:
         // updates the cache with the state provided by the given attribute handler
-        void    implUpdateAttribute( AttributeHandlerPool::const_iterator _pHandler );
+        void    implUpdateAttribute( const AttributeHandlerPool::const_iterator& _pHandler );
 
         // updates the cache with the given state, and calls listeners (if necessary)
         void    implCheckUpdateCache( AttributeId _nAttribute, const AttributeState& _rState );

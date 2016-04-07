@@ -700,7 +700,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
 }
 
 Image SfxConfigGroupListBox::GetImage(
-    Reference< browse::XBrowseNode > node,
+    const Reference< browse::XBrowseNode >& node,
     Reference< XComponentContext > xCtx,
     bool bIsRootNode
 )

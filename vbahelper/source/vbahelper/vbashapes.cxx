@@ -409,7 +409,7 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, 
 }
 
 void
-ScVbaShapes::setDefaultShapeProperties( uno::Reference< drawing::XShape > xShape ) throw (uno::RuntimeException)
+ScVbaShapes::setDefaultShapeProperties( const uno::Reference< drawing::XShape >& xShape ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
     xPropertySet->setPropertyValue( "FillStyle", uno::makeAny( OUString("SOLID") ) );
@@ -420,7 +420,7 @@ ScVbaShapes::setDefaultShapeProperties( uno::Reference< drawing::XShape > xShape
 }
 
 void
-ScVbaShapes::setShape_NameProperty( uno::Reference< css::drawing::XShape > xShape, const OUString& sName )
+ScVbaShapes::setShape_NameProperty( const uno::Reference< css::drawing::XShape >& xShape, const OUString& sName )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
     try

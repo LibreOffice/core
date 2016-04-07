@@ -1539,7 +1539,7 @@ bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
     return true;
 }
 
-void ViewShell::SwitchViewFireFocus(css::uno::Reference< css::accessibility::XAccessible > xAcc )
+void ViewShell::SwitchViewFireFocus(const css::uno::Reference< css::accessibility::XAccessible >& xAcc )
 {
     if (xAcc.get())
     {

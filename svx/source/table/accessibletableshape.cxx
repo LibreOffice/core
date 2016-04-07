@@ -84,7 +84,7 @@ public:
     Reference< XAccessible> mxAccessible;
     sal_Int32 mRowCount, mColCount;
     //get the cached AccessibleCell from XCell
-    Reference< AccessibleCell > getAccessibleCell (Reference< XCell > xCell);
+    Reference< AccessibleCell > getAccessibleCell (const Reference< XCell >& xCell);
     Reference< AccessibleCell > getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn) throw (IndexOutOfBoundsException, RuntimeException);
 };
 
@@ -136,7 +136,7 @@ void AccessibleTableShapeImpl::dispose()
 
 
 //get the cached AccessibleCell from XCell
-Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (Reference< XCell > xCell)
+Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (const Reference< XCell >& xCell)
 {
     AccessibleCellMap::iterator iter( maChildMap.find( xCell ) );
 

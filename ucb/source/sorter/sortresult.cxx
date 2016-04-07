@@ -963,8 +963,8 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
 
 // private methods
 
-sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
-                                   Reference < XResultSet > xResultTwo,
+sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
+                                   const Reference < XResultSet >& xResultTwo,
                                    sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
                                    SortInfo* pSortInfo )
 
@@ -1178,8 +1178,8 @@ sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
 }
 
 
-sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
-                                   Reference < XResultSet > xResultTwo,
+sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
+                                   const Reference < XResultSet >& xResultTwo,
                                    sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo )
     throw( SQLException, RuntimeException )
 {
@@ -1617,7 +1617,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
 
 
 void SortedResultSet::BuildSortInfo(
-                Reference< XResultSet > aResult,
+                const Reference< XResultSet >& aResult,
                 const Sequence < NumberedSortingInfo > &xSortInfo,
                 const Reference< XAnyCompareFactory > &xCompFactory )
 {

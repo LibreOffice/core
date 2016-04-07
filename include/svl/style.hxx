@@ -208,7 +208,7 @@ protected:
 
     virtual                     ~SfxStyleSheetBasePool();
 
-    void                        StoreStyleSheet(rtl::Reference< SfxStyleSheetBase >);
+    void                        StoreStyleSheet(const rtl::Reference< SfxStyleSheetBase >&);
 
     /** Obtain the indexed style sheets.
      */

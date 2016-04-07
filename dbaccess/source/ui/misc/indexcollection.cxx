@@ -250,7 +250,7 @@ namespace dbaui
             implFillIndexInfo(_rIndex, xIndex);
     }
 
-    void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor)
+    void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, const Reference< XPropertySet >& _rxDescriptor)
     {
         static const char s_sPrimaryIndexPropertyName[] = "IsPrimaryKeyIndex";
         static const char s_sUniquePropertyName[] = "IsUnique";

@@ -166,7 +166,7 @@ static PyTypeObject PyUNO_iterator_Type =
 #endif
 };
 
-PyObject* PyUNO_iterator_new( const Reference< XEnumeration > xEnumeration )
+PyObject* PyUNO_iterator_new( const Reference< XEnumeration >& xEnumeration )
 {
     PyUNO_iterator* self = PyObject_New( PyUNO_iterator, &PyUNO_iterator_Type );
     if ( self == nullptr )

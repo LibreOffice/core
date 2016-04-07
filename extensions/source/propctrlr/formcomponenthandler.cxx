@@ -212,7 +212,7 @@ namespace pcr
         }
 
         Reference< resource::XStringResourceResolver > lcl_getStringResourceResolverForProperty
-            ( Reference< XPropertySet > _xComponent, const OUString& _rPropertyName,
+            ( const Reference< XPropertySet >& _xComponent, const OUString& _rPropertyName,
               const Any& _rPropertyValue )
         {
             Reference< resource::XStringResourceResolver > xRet;

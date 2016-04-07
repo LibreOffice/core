@@ -2442,7 +2442,7 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
     setPropertiesToDefault(aSequence);
 }
 
-SwFormat* lcl_GetFormatForStyle(SwDoc* pDoc, rtl::Reference<SwDocStyleSheet> xStyle, const SfxStyleFamily eFamily)
+SwFormat* lcl_GetFormatForStyle(SwDoc* pDoc, const rtl::Reference<SwDocStyleSheet>& xStyle, const SfxStyleFamily eFamily)
 {
     if(!xStyle.is())
         return nullptr;

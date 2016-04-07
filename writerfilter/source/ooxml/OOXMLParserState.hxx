@@ -95,13 +95,13 @@ public:
     const OUString & getTarget() const;
 
     void resolveCharacterProperties(Stream & rStream);
-    void setCharacterProperties(OOXMLPropertySet::Pointer_t pProps);
+    void setCharacterProperties(const OOXMLPropertySet::Pointer_t& pProps);
     void resolveCellProperties(Stream & rStream);
-    void setCellProperties(OOXMLPropertySet::Pointer_t pProps);
+    void setCellProperties(const OOXMLPropertySet::Pointer_t& pProps);
     void resolveRowProperties(Stream & rStream);
-    void setRowProperties(OOXMLPropertySet::Pointer_t pProps);
+    void setRowProperties(const OOXMLPropertySet::Pointer_t& pProps);
     void resolveTableProperties(Stream & rStream);
-    void setTableProperties(OOXMLPropertySet::Pointer_t pProps);
+    void setTableProperties(const OOXMLPropertySet::Pointer_t& pProps);
 
     void startTable();
     void endTable();

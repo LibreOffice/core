@@ -1180,7 +1180,7 @@ void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListR
     pColorList = XColorListRef( static_cast<XColorList *>(xRef.get() ) );
 }
 
-void SvxColorTabPage::SetColorList( XColorListRef pColList )
+void SvxColorTabPage::SetColorList( const XColorListRef& pColList )
 {
     SetPropertyList( XCOLOR_LIST, XPropertyListRef( ( pColList.get() ) ) );
 }

@@ -21,7 +21,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL com_sun_star_com
     return cppu::acquire(new MorkDriver(context));
 }
 
-MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context):
+MorkDriver::MorkDriver(const css::uno::Reference< css::uno::XComponentContext >& context):
     context_(context),
     m_xFactory(context_->getServiceManager(), css::uno::UNO_QUERY)
 {

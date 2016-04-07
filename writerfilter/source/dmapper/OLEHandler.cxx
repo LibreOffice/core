@@ -180,7 +180,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
     }
 }
 
-void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentContext, uno::Reference<text::XTextDocument> xTextDocument, uno::Reference<text::XTextContent> xOLE)
+void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xComponentContext, const uno::Reference<text::XTextDocument>& xTextDocument, const uno::Reference<text::XTextContent>& xOLE)
 {
     OUString aFilterService;
     if (m_sProgId == "Word.Document.12")
@@ -217,7 +217,7 @@ void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentC
         m_sProgId, m_sDrawAspect);
 }
 
-OUString OLEHandler::getCLSID(uno::Reference<uno::XComponentContext> xComponentContext) const
+OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xComponentContext) const
 {
     OUString aRet;
 

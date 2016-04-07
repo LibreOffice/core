@@ -57,7 +57,7 @@ public:
 
     /** Inserts a new string into the table.
         @return  The index of the string in the SST, used in other records. */
-    sal_uInt32          Insert( XclExpStringRef xString );
+    sal_uInt32          Insert( const XclExpStringRef& xString );
 
     /** Writes the complete SST and EXTSST records. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -154,7 +154,7 @@ private:
         @param xLabelRangesRef  The core range list with all ranges.
         @param nScTab  The current Calc sheet index. */
     static void         FillRangeList( ScRangeList& rScRanges,
-                            ScRangePairListRef xLabelRangesRef, SCTAB nScTab );
+                            const ScRangePairListRef& xLabelRangesRef, SCTAB nScTab );
 
 private:
     ScRangeList         maRowRanges;    /// Cell range list for row labels.

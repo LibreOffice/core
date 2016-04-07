@@ -73,7 +73,7 @@ public:
     oox::drawingml::TextBodyPtr getTextBody(){ return mpTextBody; };
 
     void pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase,
-            ::oox::drawingml::TextListStylePtr pMasterTextListStyle,
+            const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle,
             const css::uno::Reference < css::table::XCell >& rxCell,
             const TableProperties& rTableProperties,
             const TableStyle& rTable,

@@ -71,7 +71,7 @@ namespace dbaui
         void SetDefaultValue(const css::uno::Any& _rDefaultValue);
         void SetControlDefault(const css::uno::Any& _rControlDefault);
         void SetAutoIncrementValue(const OUString& _sAutoIncValue);
-        void SetType(TOTypeInfoSP _pType);
+        void SetType(const TOTypeInfoSP& _pType);
         void SetTypeValue(sal_Int32 _nType);
         void SetTypeName(const OUString& _sTypeName);
         void SetPrecision(const sal_Int32& _rPrecision);

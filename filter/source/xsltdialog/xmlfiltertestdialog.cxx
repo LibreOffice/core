@@ -441,7 +441,7 @@ void XMLFilterTestDialog::onExportCurrentDocument()
     doExport( getFrontMostDocument( m_pFilterInfo->maDocumentService ) );
 }
 
-void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
+void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
 {
     try
     {

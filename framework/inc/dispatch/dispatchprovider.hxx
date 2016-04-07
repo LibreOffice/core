@@ -103,12 +103,12 @@ class DispatchProvider: public ::cppu::WeakImplHelper< css::frame::XDispatchProv
                                                                                           const css::uno::Reference< css::frame::XFrame >& xOwner                        ,
                                                                                           const OUString&                           sTarget = OUString()   ,
                                                                                                 sal_Int32                                  nSearchFlags = 0              );
-        bool                                     implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
-        css::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const css::uno::Reference< css::frame::XFrame >  xDesktop                      ,
+        bool                                         implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
+        css::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const css::uno::Reference< css::frame::XFrame >&  xDesktop                      ,
                                                                                           const css::util::URL&                            aURL                          ,
                                                                                           const OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );
-        css::uno::Reference< css::frame::XDispatch > implts_queryFrameDispatch          ( const css::uno::Reference< css::frame::XFrame >  xFrame                        ,
+        css::uno::Reference< css::frame::XDispatch > implts_queryFrameDispatch          ( const css::uno::Reference< css::frame::XFrame >&  xFrame                        ,
                                                                                           const css::util::URL&                            aURL                          ,
                                                                                           const OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );

@@ -187,7 +187,7 @@ Type SAL_CALL NameContainer::getElementType()
     return maType;
 }
 
-Reference< XNameContainer > comphelper::NameContainer_createInstance( Type aType )
+Reference< XNameContainer > comphelper::NameContainer_createInstance( const Type& aType )
 {
     return static_cast<XNameContainer*>(new NameContainer( aType ));
 }

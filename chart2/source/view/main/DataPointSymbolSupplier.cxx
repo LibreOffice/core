@@ -26,7 +26,7 @@ namespace chart
 using namespace ::com::sun::star;
 
 uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
-            uno::Reference< lang::XMultiServiceFactory > xShapeFactory
+            const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
             , const uno::Reference< drawing::XShapes >& xTarget
             , const drawing::Direction3D& rSize )
 {

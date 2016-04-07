@@ -28,7 +28,7 @@ public:
 
     void operator()(const OUString& rCommand, const Color& rColor);
 
-    void updateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 
     void updateData();
 

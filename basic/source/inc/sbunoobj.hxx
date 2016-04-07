@@ -38,7 +38,7 @@
 #include <vector>
 #include <map>
 
-void registerComponentToBeDisposedForBasic( css::uno::Reference< css::lang::XComponent > xComponent, StarBASIC* pBasic );
+void registerComponentToBeDisposedForBasic( const css::uno::Reference< css::lang::XComponent >& xComponent, StarBASIC* pBasic );
 
 class StructRefInfo
 {
@@ -389,9 +389,9 @@ public:
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 css::uno::Reference< css::uno::XInterface > createComListener( const css::uno::Any& aControlAny,
-                                                                                         const OUString& aVBAType,
-                                                                                         const OUString& aPrefix,
-                                                                                         SbxObjectRef xScopeObj );
+                                                               const OUString& aVBAType,
+                                                               const OUString& aPrefix,
+                                                               const SbxObjectRef& xScopeObj );
 
 bool checkUnoObjectType(SbUnoObject& refVal, const OUString& aClass);
 

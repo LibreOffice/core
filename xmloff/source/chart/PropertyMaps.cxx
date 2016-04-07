@@ -211,7 +211,7 @@ XMLChartExportPropertyMapper::~XMLChartExportPropertyMapper()
 void XMLChartExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
     std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
+    const uno::Reference< beans::XPropertySet >& rPropSet ) const
 {
     OUString aAutoPropName;
     bool bCheckAuto = false;
@@ -508,7 +508,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
     }
 }
 
-void XMLChartExportPropertyMapper::setChartDoc( uno::Reference< chart2::XChartDocument > xChartDoc )
+void XMLChartExportPropertyMapper::setChartDoc( const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
     mxChartDoc = xChartDoc;
 }

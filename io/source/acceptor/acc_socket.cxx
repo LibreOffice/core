@@ -127,7 +127,7 @@ namespace io_acceptor {
             t(listener);
     }
 
-    static void callStarted(Reference<XStreamListener> xStreamListener)
+    static void callStarted(const Reference<XStreamListener>& xStreamListener)
     {
         xStreamListener->started();
     }
@@ -137,7 +137,7 @@ namespace io_acceptor {
 
         explicit callError(const Any & any);
 
-        void operator () (Reference<XStreamListener> xStreamListener);
+        void operator () (const Reference<XStreamListener>& xStreamListener);
     };
 
     callError::callError(const Any & aAny)
@@ -145,12 +145,12 @@ namespace io_acceptor {
     {
     }
 
-    void callError::operator () (Reference<XStreamListener> xStreamListener)
+    void callError::operator () (const Reference<XStreamListener>& xStreamListener)
     {
         xStreamListener->error(any);
     }
 
-    static void callClosed(Reference<XStreamListener> xStreamListener)
+    static void callClosed(const Reference<XStreamListener>& xStreamListener)
     {
         xStreamListener->closed();
     }

@@ -137,7 +137,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
 #endif // HAVE_FEATURE_COLLADA
 
 
-static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed::XStorage> xSubStorage, ::ucbhelper::Content& rContent)
+static void lcl_EmbedExternals(const OUString& rSourceURL, const uno::Reference<embed::XStorage>& xSubStorage, ::ucbhelper::Content& rContent)
 {
     // Create a temp file with which json parser can work.
     OUString sTempFileURL;

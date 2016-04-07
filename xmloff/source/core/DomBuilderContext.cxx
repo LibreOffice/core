@@ -61,7 +61,7 @@ static Reference<XNode> lcl_createDomInstance();
 static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    Reference<XNode> xParent);
+                                    const Reference<XNode>& xParent);
 
 
 DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
@@ -195,7 +195,7 @@ static Reference<XNode> lcl_createDomInstance()
 static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    Reference<XNode> xParent)
+                                    const Reference<XNode>& xParent)
 {
     DBG_ASSERT( xParent.is(), "need parent node" );
 

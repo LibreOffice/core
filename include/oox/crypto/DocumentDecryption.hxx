@@ -55,7 +55,7 @@ public:
         oox::ole::OleStorage& rOleStorage,
         css::uno::Reference< css::uno::XComponentContext > xContext);
 
-    bool decrypt(css::uno::Reference< css::io::XStream > xDocumentStream);
+    bool decrypt(const css::uno::Reference< css::io::XStream >& xDocumentStream);
     bool readEncryptionInfo();
     bool generateEncryptionKey(const OUString& rPassword);
 

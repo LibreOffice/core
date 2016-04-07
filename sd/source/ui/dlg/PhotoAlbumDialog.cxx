@@ -636,7 +636,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
 }
 
 Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aLayout,
-    Reference< drawing::XDrawPages > xDrawPages
+    const Reference< drawing::XDrawPages >& xDrawPages
 )
 {
     Reference< drawing::XDrawPage > xSlide; // Create the slide
@@ -690,7 +690,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
 }
 
 Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OUString& sUrl,
-    Reference< graphic::XGraphicProvider> xProvider
+    const Reference< graphic::XGraphicProvider>& xProvider
 )
 {
     // The same as above, except this returns an XGraphic from the image URL

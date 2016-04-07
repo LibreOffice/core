@@ -53,7 +53,7 @@ public:
 
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
         const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
-        ::oox::drawingml::TextListStylePtr pMasterTextListStyle );
+        const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle );
 
 private:
 

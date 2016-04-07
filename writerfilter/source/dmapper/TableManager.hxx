@@ -351,7 +351,7 @@ private:
      Open a cell at current level.
      */
 
-    void openCell(const css::uno::Reference<css::text::XTextRange>& handle, TablePropertyMapPtr pProps);
+    void openCell(const css::uno::Reference<css::text::XTextRange>& handle, const TablePropertyMapPtr& pProps);
 
     /**
      Close a cell at current level.
@@ -361,7 +361,7 @@ private:
     /**
      Ensure a cell is open at the current level.
     */
-    void ensureOpenCell(TablePropertyMapPtr pProps);
+    void ensureOpenCell(const TablePropertyMapPtr& pProps);
 
 protected:
     /**
@@ -402,7 +402,7 @@ public:
 
        @param pTableDataHandler     the handler
      */
-    void setHandler(std::shared_ptr<DomainMapperTableHandler> pTableDataHandler);
+    void setHandler(const std::shared_ptr<DomainMapperTableHandler>& pTableDataHandler);
 
     /**
        Set the current handle.
@@ -482,7 +482,7 @@ public:
 
        @param pProps   the properties
      */
-    virtual void cellProps(TablePropertyMapPtr pProps);
+    virtual void cellProps(const TablePropertyMapPtr& pProps);
 
     /**
        Handle properties of a certain cell in the current row.
@@ -490,21 +490,21 @@ public:
        @paran i        index of the cell in the current row
        @param pProps   the properties
      */
-    virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps);
+    virtual void cellPropsByCell(unsigned int i, const TablePropertyMapPtr& pProps);
 
     /**
        Handle properties of the current row.
 
        @param pProps   the properties
      */
-    virtual void insertRowProps(TablePropertyMapPtr pProps);
+    virtual void insertRowProps(const TablePropertyMapPtr& pProps);
 
     /**
        Handle properties of the current table.
 
        @param pProps   the properties
      */
-    virtual void insertTableProps(TablePropertyMapPtr pProps);
+    virtual void insertTableProps(const TablePropertyMapPtr& pProps);
 
     /**
        Return if table manager has detected paragraph to ignore.

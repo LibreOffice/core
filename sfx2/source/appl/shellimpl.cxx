@@ -39,7 +39,7 @@ SfxObjectShell* SfxObjectShellArr_Impl::operator[] ( size_t i )
     return maData[i];
 }
 
-void SfxObjectShellArr_Impl::erase( iterator it )
+void SfxObjectShellArr_Impl::erase( const iterator& it )
 {
     maData.erase(it);
 }
@@ -74,7 +74,7 @@ SfxViewFrame* SfxViewFrameArr_Impl::operator[] ( size_t i )
     return maData[i];
 }
 
-void SfxViewFrameArr_Impl::erase( iterator it )
+void SfxViewFrameArr_Impl::erase( const iterator& it )
 {
     maData.erase(it);
 }
@@ -109,7 +109,7 @@ SfxViewShell* SfxViewShellArr_Impl::operator[] ( size_t i )
     return maData[i];
 }
 
-void SfxViewShellArr_Impl::erase( iterator it )
+void SfxViewShellArr_Impl::erase( const iterator& it )
 {
     maData.erase(it);
 }

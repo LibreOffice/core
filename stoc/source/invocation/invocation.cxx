@@ -204,7 +204,7 @@ private:
     void getInfoSequenceImpl( Sequence< OUString >* pStringSeq, Sequence< InvocationInfo >* pInfoSeq );
     void fillInfoForNameAccess( InvocationInfo& rInfo, const OUString& aName );
     static void fillInfoForProperty( InvocationInfo& rInfo, const Property& rProp );
-    static void fillInfoForMethod( InvocationInfo& rInfo, const Reference< XIdlMethod > xMethod );
+    static void fillInfoForMethod( InvocationInfo& rInfo, const Reference< XIdlMethod >& xMethod );
 
     Reference<XTypeConverter>           xTypeConverter;
     Reference<XIntrospection>           xIntrospection;
@@ -960,7 +960,7 @@ void Invocation_Impl::fillInfoForProperty
 void Invocation_Impl::fillInfoForMethod
 (
     InvocationInfo& rInfo,
-    const Reference< XIdlMethod > xMethod
+    const Reference< XIdlMethod >& xMethod
 )
 {
     rInfo.aName = xMethod->getName();

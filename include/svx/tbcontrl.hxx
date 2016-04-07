@@ -251,7 +251,7 @@ public:
     virtual sal_Bool SAL_CALL opensSubToolbar() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL updateImage() throw (css::uno::RuntimeException, std::exception) override;
 
-    void setColorSelectFunction(ColorSelectFunction aColorSelectFunction);
+    void setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
 };
 
 class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl

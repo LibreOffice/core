@@ -360,7 +360,7 @@ Sequence<NamedValue> DocumentDecryption::createEncryptionData(const OUString& rP
     return aEncryptionData.getAsConstNamedValueList();
 }
 
-bool DocumentDecryption::decrypt(Reference<XStream> xDocumentStream)
+bool DocumentDecryption::decrypt(const Reference<XStream>& xDocumentStream)
 {
     bool aResult = false;
 

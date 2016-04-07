@@ -70,7 +70,7 @@ namespace
         return rpFirst->GetMarkEnd() > rpSecond->GetMarkEnd();
     }
 
-    bool lcl_IsInvisibleBookmark(IDocumentMarkAccess::pMark_t pMark)
+    bool lcl_IsInvisibleBookmark(const IDocumentMarkAccess::pMark_t& pMark)
     {
         return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::MarkType::BOOKMARK;
     }

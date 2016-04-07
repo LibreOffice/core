@@ -746,7 +746,7 @@ bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument
     return true;
 }
 
-void setBuildIDAtImportInfo( uno::Reference< frame::XModel > xModel, Reference< beans::XPropertySet > xImportInfo )
+void setBuildIDAtImportInfo( const uno::Reference< frame::XModel >& xModel, const Reference< beans::XPropertySet >& xImportInfo )
 {
     OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xModel) );
     if( !aGenerator.isEmpty() )

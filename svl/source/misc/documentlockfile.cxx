@@ -63,7 +63,7 @@ DocumentLockFile::~DocumentLockFile()
 }
 
 
-void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, uno::Reference< io::XOutputStream > xOutput )
+void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, const uno::Reference< io::XOutputStream >& xOutput )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

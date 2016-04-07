@@ -33,7 +33,7 @@ SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pT
     return pToolBoxColorControl;
 }
 
-OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
+OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
@@ -51,7 +51,7 @@ OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
 }
 
 css::uno::Reference<css::beans::XPropertySet> getPropSet(
-        css::uno::Reference<css::frame::XModel> xModel)
+        const css::uno::Reference<css::frame::XModel>& xModel)
 {
     OUString aCID = getCID(xModel);
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -71,7 +71,7 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
     return xPropSet;
 }
 
-ChartController* getController(css::uno::Reference<css::frame::XModel> xModel)
+ChartController* getController(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     css::uno::Reference<css::frame::XController>xController = xModel->getCurrentController();
     if (!xController.is())
@@ -84,20 +84,20 @@ ChartController* getController(css::uno::Reference<css::frame::XModel> xModel)
     return pController;
 }
 
-ViewElementListProvider getViewElementListProvider( css::uno::Reference<css::frame::XModel> xModel)
+ViewElementListProvider getViewElementListProvider( const css::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartController* pController = getController(xModel);
     ViewElementListProvider aProvider = pController->getViewElementListProvider();
     return aProvider;
 }
 
-DrawModelWrapper* getDrawModelWrapper(css::uno::Reference<css::frame::XModel> xModel)
+DrawModelWrapper* getDrawModelWrapper(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartController* pController = getController(xModel);
     return pController->GetDrawModelWrapper();
 }
 
-XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
+XGradient getXGradientForName(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rName)
 {
     try
@@ -123,7 +123,7 @@ XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
     return XGradient();
 }
 
-XFillFloatTransparenceItem getXTransparencyGradientForName(css::uno::Reference<css::frame::XModel> xModel,
+XFillFloatTransparenceItem getXTransparencyGradientForName(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rName)
 {
     css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
@@ -145,7 +145,7 @@ XFillFloatTransparenceItem getXTransparencyGradientForName(css::uno::Reference<c
     return aItem;
 }
 
-XHatch getXHatchFromName(css::uno::Reference<css::frame::XModel> xModel,
+XHatch getXHatchFromName(const css::uno::Reference<css::frame::XModel>& xModel,
         OUString& rName)
 {
     try
@@ -175,7 +175,7 @@ XHatch getXHatchFromName(css::uno::Reference<css::frame::XModel> xModel,
     return XHatch();
 }
 
-GraphicObject getXBitmapFromName(css::uno::Reference<css::frame::XModel> xModel,
+GraphicObject getXBitmapFromName(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rName)
 {
     try

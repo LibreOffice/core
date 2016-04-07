@@ -53,7 +53,7 @@ class PlacesListBox : public Control
         virtual ~PlacesListBox( );
         virtual void dispose() override;
 
-        void AppendPlace( PlacePtr pPlace );
+        void AppendPlace( const PlacePtr& pPlace );
         void RemovePlace( sal_uInt16 nPos );
         void RemoveSelectedPlace();
         sal_Int32 GetNbEditablePlaces() { return mnNbEditables;}
@@ -74,7 +74,7 @@ class PlacesListBox : public Control
 
     private:
 
-        Image getEntryIcon( PlacePtr pPlace );
+        Image getEntryIcon( const PlacePtr& pPlace );
 
         DECL_LINK_TYPED( Selection, SvTreeListBox*, void );
         DECL_LINK_TYPED( DoubleClick, SvTreeListBox*, bool );

@@ -154,7 +154,7 @@ namespace
     /** transforms a parse node describing a complete statement into a pure select
         statement, without any filter/order/groupby/having clauses
     */
-    OUString getPureSelectStatement( const OSQLParseNode* _pRootNode, Reference< XConnection > _rxConnection )
+    OUString getPureSelectStatement( const OSQLParseNode* _pRootNode, const Reference< XConnection >& _rxConnection )
     {
         OUString sSQL = STR_SELECT;
         _pRootNode->getChild(1)->parseNodeToStr( sSQL, _rxConnection );

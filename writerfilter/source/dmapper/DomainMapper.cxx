@@ -1155,7 +1155,7 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
     return lcl_getListId(pParent, rStyleTable);
 }
 
-void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
+void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 {
     // These SPRM's are not specific to any section, so it's expected that there is no context yet.
     switch (rSprm.getId())
@@ -2922,7 +2922,7 @@ void DomainMapper::lcl_endShape( )
     }
 }
 
-void DomainMapper::PushStyleSheetProperties( PropertyMapPtr pStyleProperties, bool bAffectTableMngr )
+void DomainMapper::PushStyleSheetProperties( const PropertyMapPtr& pStyleProperties, bool bAffectTableMngr )
 {
     m_pImpl->PushStyleProperties( pStyleProperties );
     if ( bAffectTableMngr )
@@ -2939,7 +2939,7 @@ void DomainMapper::PopStyleSheetProperties( bool bAffectTableMngr )
     }
 }
 
-void DomainMapper::PushListProperties( ::std::shared_ptr<PropertyMap> pListProperties )
+void DomainMapper::PushListProperties( const ::std::shared_ptr<PropertyMap>& pListProperties )
 {
     m_pImpl->PushListProperties( pListProperties );
 }

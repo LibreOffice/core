@@ -888,7 +888,7 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
 }
 
 bool SmDocShell::writeFormulaOoxml(
-        ::sax_fastparser::FSHelperPtr const pSerializer,
+        ::sax_fastparser::FSHelperPtr const& pSerializer,
         oox::core::OoxmlVersion const version,
         oox::drawingml::DocumentType const documentType)
 {

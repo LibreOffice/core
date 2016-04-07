@@ -326,7 +326,7 @@ void OFieldDescription::SetAutoIncrementValue(const OUString& _sAutoIncValue)
     }
 }
 
-void OFieldDescription::SetType(TOTypeInfoSP _pType)
+void OFieldDescription::SetType(const TOTypeInfoSP& _pType)
 {
     m_pType = _pType;
     if ( m_pType.get() )

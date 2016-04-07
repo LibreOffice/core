@@ -257,10 +257,10 @@ public:
     static OUString CreateShellID( const SfxObjectShell* pShell );
 
     // Document-Shell Iterator
-    static SfxObjectShell*      GetFirst( std::function<bool ( const SfxObjectShell* )> isObjectShell = nullptr,
+    static SfxObjectShell*      GetFirst( const std::function<bool ( const SfxObjectShell* )>& isObjectShell = nullptr,
                                           bool bOnlyVisible = true );
     static SfxObjectShell*      GetNext( const SfxObjectShell& rPrev,
-                                         std::function<bool ( const SfxObjectShell* )> isObjectShell = nullptr,
+                                         const std::function<bool ( const SfxObjectShell* )>& isObjectShell = nullptr,
                                          bool bOnlyVisible = true );
     static SfxObjectShell*      Current();
     static css::uno::Reference< css::uno::XInterface >

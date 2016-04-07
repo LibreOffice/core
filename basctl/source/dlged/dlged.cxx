@@ -345,7 +345,7 @@ void DlgEditor::UpdateScrollBars()
 }
 
 
-void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoControlDialogModel )
+void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xUnoControlDialogModel )
 {
     // set dialog model
     m_xUnoControlDialogModel = xUnoControlDialogModel;
@@ -645,7 +645,7 @@ void DlgEditor::Cut()
 }
 
 
-void implCopyStreamToByteSequence( Reference< XInputStream > xStream,
+void implCopyStreamToByteSequence( const Reference< XInputStream >& xStream,
     Sequence< sal_Int8 >& bytes )
 {
     xStream->readBytes( bytes, xStream->available() );

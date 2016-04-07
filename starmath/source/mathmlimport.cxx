@@ -237,8 +237,8 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
 /// read a component (file + filter version)
 sal_uLong SmXMLImportWrapper::ReadThroughComponent(
-    Reference<io::XInputStream> xInputStream,
-    Reference<XComponent> xModelComponent,
+    const Reference<io::XInputStream>& xInputStream,
+    const Reference<XComponent>& xModelComponent,
     Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName,
@@ -334,7 +334,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
 
 sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
-    Reference<XComponent> xModelComponent,
+    const Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
     Reference<uno::XComponentContext> & rxContext,

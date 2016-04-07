@@ -114,7 +114,7 @@ ZipFile::~ZipFile()
     aEntries.clear();
 }
 
-void ZipFile::setInputStream ( uno::Reference < XInputStream > xNewStream )
+void ZipFile::setInputStream ( const uno::Reference < XInputStream >& xNewStream )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

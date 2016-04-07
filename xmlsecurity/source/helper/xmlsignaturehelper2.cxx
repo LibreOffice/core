@@ -46,7 +46,7 @@ ImplXMLSignatureListener::~ImplXMLSignatureListener()
 }
 
 void ImplXMLSignatureListener::setNextHandler(
-    uno::Reference< xml::sax::XDocumentHandler > xNextHandler)
+    const uno::Reference< xml::sax::XDocumentHandler >& xNextHandler)
 {
     m_xNextHandler = xNextHandler;
 }

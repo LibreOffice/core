@@ -297,7 +297,7 @@ public:
     virtual ~SvXMLExport();
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static SvXMLExport* getImplementation( css::uno::Reference< css::uno::XInterface > ) throw();
+    static SvXMLExport* getImplementation( const css::uno::Reference< css::uno::XInterface >& ) throw();
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;

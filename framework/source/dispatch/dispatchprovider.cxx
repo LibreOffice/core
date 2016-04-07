@@ -158,7 +158,7 @@ bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 
     @threadsafe yes
  */
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDesktopDispatch( const css::uno::Reference< css::frame::XFrame > xDesktop         ,
+css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDesktopDispatch( const css::uno::Reference< css::frame::XFrame >& xDesktop         ,
                                                                                             const css::util::URL&                           aURL             ,
                                                                                             const OUString&                          sTargetFrameName ,
                                                                                                   sal_Int32                                 nSearchFlags     )
@@ -241,7 +241,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     return xDispatcher;
 }
 
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrameDispatch( const css::uno::Reference< css::frame::XFrame > xFrame           ,
+css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrameDispatch( const css::uno::Reference< css::frame::XFrame >& xFrame           ,
                                                                                           const css::util::URL&                           aURL             ,
                                                                                           const OUString&                          sTargetFrameName ,
                                                                                                 sal_Int32                                 nSearchFlags     )

@@ -593,7 +593,7 @@ void lcl_getRowsColumns( PyUNO* me, sal_Int32& nRows, sal_Int32& nColumns )
     nColumns = xIndexAccessCols->getCount();
 }
 
-PyRef lcl_indexToSlice( PyRef rIndex )
+PyRef lcl_indexToSlice( const PyRef& rIndex )
 {
     Py_ssize_t nIndex = PyNumber_AsSsize_t( rIndex.get(), PyExc_IndexError );
     if (nIndex == -1 && PyErr_Occurred())

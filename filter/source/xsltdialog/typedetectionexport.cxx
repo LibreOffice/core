@@ -72,7 +72,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
     }
 }
 
-void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XMLFilterVector& rFilters )
+void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  const XMLFilterVector& rFilters )
 {
     try
     {
@@ -218,7 +218,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
     }
 }
 
-void TypeDetectionExporter::addProperty( Reference< XWriter > xHandler, const OUString& rName, const OUString& rValue )
+void TypeDetectionExporter::addProperty( const Reference< XWriter >& xHandler, const OUString& rName, const OUString& rValue )
 {
     try
     {
@@ -248,7 +248,7 @@ void TypeDetectionExporter::addProperty( Reference< XWriter > xHandler, const OU
     }
 }
 
-void TypeDetectionExporter::addLocaleProperty( Reference< XWriter > xHandler, const OUString& rName, const OUString& rValue )
+void TypeDetectionExporter::addLocaleProperty( const Reference< XWriter >& xHandler, const OUString& rName, const OUString& rValue )
 {
     try
     {

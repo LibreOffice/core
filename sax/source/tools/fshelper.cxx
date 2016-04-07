@@ -85,14 +85,14 @@ void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
     mpSerializer->endFastElement(elementTokenId);
 }
 
-void FastSerializerHelper::startElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+void FastSerializerHelper::startElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList)
 {
     FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
     assert(pAttrList);
     mpSerializer->startFastElement(elementTokenId, pAttrList);
 }
 
-void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList)
 {
     FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
     assert(pAttrList);

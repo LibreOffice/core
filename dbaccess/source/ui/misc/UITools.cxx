@@ -209,7 +209,7 @@ SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& 
 }
 
 Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
-    vcl::Window* _pErrorMessageParent, Reference< XComponentContext > _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
+    vcl::Window* _pErrorMessageParent, const Reference< XComponentContext >& _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(_rxContext);
 

@@ -159,7 +159,7 @@ void lcl_setSymbolTypeToSymbol( sal_Int32 nSymbolType, chart2::Symbol& rSymbol )
 }
 
 void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
                                     , tSeriesOrDiagramPropertyType ePropertyType )
 {
     rList.push_back( new WrappedSymbolTypeProperty( spChart2ModelContact, ePropertyType ) );
@@ -202,13 +202,13 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
 }
 
 void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
 void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }

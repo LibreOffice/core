@@ -27,7 +27,7 @@
 namespace comphelper
 {
     COMPHELPER_DLLPUBLIC css::uno::Reference< css::container::XNameContainer >
-        NameContainer_createInstance( css::uno::Type aType );
+        NameContainer_createInstance( const css::uno::Type& aType );
 }
 
 #endif // INCLUDED_COMPHELPER_NAMECONTAINER_HXX

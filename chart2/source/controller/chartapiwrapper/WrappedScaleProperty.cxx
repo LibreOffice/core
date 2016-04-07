@@ -104,7 +104,7 @@ WrappedScaleProperty::~WrappedScaleProperty()
 }
 
 void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
-            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_MAX, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_MIN, spChart2ModelContact ) );

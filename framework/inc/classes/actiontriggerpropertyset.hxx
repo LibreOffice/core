@@ -94,13 +94,13 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
                                             css::uno::Any&           aOldValue       ,
                                             css::uno::Any&           aConvertedValue ) throw( css::lang::IllegalArgumentException );
 
-        bool impl_tryToChangeProperty(  const   css::uno::Reference< css::awt::XBitmap >  xBitmap,
-                                            const   css::uno::Any&   aNewValue       ,
+        bool impl_tryToChangeProperty(  const   css::uno::Reference< css::awt::XBitmap >&  xBitmap,
+                                        const   css::uno::Any&   aNewValue       ,
                                             css::uno::Any&           aOldValue       ,
                                             css::uno::Any&           aConvertedValue ) throw( css::lang::IllegalArgumentException );
 
-        bool impl_tryToChangeProperty(  const   css::uno::Reference< css::uno::XInterface > xInterface,
-                                            const   css::uno::Any&   aNewValue       ,
+        bool impl_tryToChangeProperty(  const   css::uno::Reference< css::uno::XInterface >& xInterface,
+                                        const   css::uno::Any&   aNewValue       ,
                                             css::uno::Any&           aOldValue       ,
                                             css::uno::Any&           aConvertedValue ) throw( css::lang::IllegalArgumentException );
 

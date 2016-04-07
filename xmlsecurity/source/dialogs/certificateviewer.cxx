@@ -461,7 +461,7 @@ void CertificateViewerCertPathTP::Clear()
 }
 
 SvTreeListEntry* CertificateViewerCertPathTP::InsertCert(
-    SvTreeListEntry* _pParent, const OUString& _rName, css::uno::Reference< css::security::XCertificate > rxCert,
+    SvTreeListEntry* _pParent, const OUString& _rName, const css::uno::Reference< css::security::XCertificate >& rxCert,
     bool bValid)
 {
     Image aImage = bValid ? maCertImage : maCertNotValidatedImage;

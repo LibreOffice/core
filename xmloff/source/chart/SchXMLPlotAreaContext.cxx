@@ -977,7 +977,7 @@ SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
 
 namespace {
 
-void SetErrorBarStyleProperties( const OUString& rStyleName, uno::Reference< beans::XPropertySet > xBarProp,
+void SetErrorBarStyleProperties( const OUString& rStyleName, const uno::Reference< beans::XPropertySet >& xBarProp,
                                         SchXMLImportHelper& rImportHelper )
 {
     const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
@@ -990,7 +990,7 @@ void SetErrorBarStyleProperties( const OUString& rStyleName, uno::Reference< bea
     rSeriesStyleContext.FillPropertySet( xBarProp );
 }
 
-void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Reference< beans::XPropertySet> xBarProp,
+void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, const uno::Reference< beans::XPropertySet>& xBarProp,
                                             SchXMLImportHelper& rImportHelper, OUString& aPosRange, OUString& aNegRange)
 {
     const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();

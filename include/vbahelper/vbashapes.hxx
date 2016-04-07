@@ -52,8 +52,8 @@ protected:
 
 public:
     ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
-    static void setDefaultShapeProperties( css::uno::Reference< css::drawing::XShape > xShape ) throw (css::uno::RuntimeException);
-    static void setShape_NameProperty( css::uno::Reference< css::drawing::XShape > xShape, const OUString& sName );
+    static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape ) throw (css::uno::RuntimeException);
+    static void setShape_NameProperty( const css::uno::Reference< css::drawing::XShape >& xShape, const OUString& sName );
     //XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;

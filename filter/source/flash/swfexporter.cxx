@@ -129,7 +129,7 @@ const sal_uInt16 cBackgroundObjectsDepth = 3;
 const sal_uInt16 cPageObjectsDepth = 4;
 const sal_uInt16 cWaitButtonDepth = 10;
 
-bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOutputStream > &xOutputStream, Reference< XStatusIndicator> &xStatusIndicator )
+bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< XOutputStream > &xOutputStream, Reference< XStatusIndicator> &xStatusIndicator )
 {
     Reference< XServiceInfo > xDocServInfo( xDoc, UNO_QUERY );
     if( xDocServInfo.is() )
@@ -272,7 +272,7 @@ bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOutputS
 }
 
 
-bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 /* nPage */ )
+bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 /* nPage */ )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
@@ -308,7 +308,7 @@ bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Reference< X
     return true;
 }
 
-sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects )
+sal_uInt16 FlashExporter::exportBackgrounds( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )

@@ -1617,7 +1617,7 @@ OUString string_decode( const OUString & rText )
     return Uri::decode( rText, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 }
 
-bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS )
+bool copyStreams( const Reference< XInputStream >& xIS, const Reference< XOutputStream >& xOS )
 {
     try
     {

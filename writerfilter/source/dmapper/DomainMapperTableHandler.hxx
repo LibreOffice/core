@@ -92,7 +92,7 @@ public:
        @param nDepth  depth of the table in surrounding table hierarchy
        @param pProps  properties of the table
      */
-    void startTable(unsigned int nDepth, TablePropertyMapPtr pProps);
+    void startTable(unsigned int nDepth, const TablePropertyMapPtr& pProps);
     /// Handle end of table.
     void endTable(unsigned int nestedTableLevel);
     /**
@@ -100,7 +100,7 @@ public:
 
        @param pProps   properties of the row
      */
-    void startRow(TablePropertyMapPtr pProps);
+    void startRow(const TablePropertyMapPtr& pProps);
     /// Handle end of row.
     void endRow();
     /**
@@ -109,7 +109,7 @@ public:
        @param rT     start handle of the cell
        @param pProps properties of the cell
     */
-    void startCell(const css::uno::Reference< css::text::XTextRange > & start, TablePropertyMapPtr pProps);
+    void startCell(const css::uno::Reference< css::text::XTextRange > & start, const TablePropertyMapPtr& pProps);
     /**
         Handle end of cell.
 

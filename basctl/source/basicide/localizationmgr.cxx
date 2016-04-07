@@ -168,7 +168,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
 OUString implCreatePureResourceId
     ( const OUString& aDialogName, const OUString& aCtrlName,
       const OUString& aPropName,
-      Reference< XStringResourceManager > xStringResourceManager )
+      const Reference< XStringResourceManager >& xStringResourceManager )
 {
     sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
     OUString aPureIdStr = OUString::number( nUniqueId );
@@ -189,8 +189,8 @@ OUString implCreatePureResourceId
 // either the first one for mode SET_IDS or the last one for mode RESET_IDS
 sal_Int32 LocalizationMgr::implHandleControlResourceProperties
     (const Any& rControlAny, const OUString& aDialogName, const OUString& aCtrlName,
-        Reference< XStringResourceManager > xStringResourceManager,
-        Reference< XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode )
+        const Reference< XStringResourceManager >& xStringResourceManager,
+        const Reference< XStringResourceResolver >& xSourceStringResolver, HandleResourceMode eMode )
 {
     sal_Int32 nChangedCount = 0;
 
@@ -296,8 +296,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     // Rename resource id
                     else if( eMode == RENAME_DIALOG_IDS || eMode == RENAME_CONTROL_IDS )
                     {
-                        OUString aSourceIdStr = aPropStr;
-                        OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
+                        OUString aPureSourceIdStr = aPropStr.copy( 1 );
 
                         OUString aPureIdStr = implCreatePureResourceId
                             ( aDialogName, aCtrlName, aPropName, xStringResourceManager );
@@ -329,8 +328,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     // Replace string by string from source StringResourceResolver
                     else if( eMode == MOVE_RESOURCES && xSourceStringResolver.is() )
                     {
-                        OUString aSourceIdStr = aPropStr;
-                        OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
+                        OUString aPureSourceIdStr = aPropStr.copy( 1 );
 
                         OUString aPureIdStr = implCreatePureResourceId
                             ( aDialogName, aCtrlName, aPropName, xStringResourceManager );
@@ -366,8 +364,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     // Copy string from source to target resource
                     else if( eMode == COPY_RESOURCES && xSourceStringResolver.is() )
                     {
-                        OUString aSourceIdStr = aPropStr;
-                        OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
+                        OUString aPureSourceIdStr = aPropStr.copy( 1 );
 
                         const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
 
@@ -899,7 +896,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
 }
 
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName,
-    const OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
+    const OUString& aDlgName, const Reference< container::XNameContainer >& xDialogModel )
 {
     static const char aResourceResolverPropName[] = "ResourceResolver";
 
@@ -931,7 +928,7 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
 }
 
 void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, const OUString& aLibName,
-    const OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
+    const OUString& aDlgName, const Reference< container::XNameContainer >& xDialogModel )
 {
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
@@ -962,7 +959,7 @@ void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, 
 }
 
 void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, const OUString& aLibName,
-    const OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
+    const OUString& aDlgName, const Reference< container::XNameContainer >& xDialogModel )
 {
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
@@ -992,8 +989,8 @@ void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, 
     }
 }
 
-void LocalizationMgr::resetResourceForDialog( Reference< container::XNameContainer > xDialogModel,
-    Reference< XStringResourceManager > xStringResourceManager )
+void LocalizationMgr::resetResourceForDialog( const Reference< container::XNameContainer >& xDialogModel,
+    const Reference< XStringResourceManager >& xStringResourceManager )
 {
     if( !xStringResourceManager.is() )
         return;
@@ -1019,8 +1016,8 @@ void LocalizationMgr::resetResourceForDialog( Reference< container::XNameContain
     }
 }
 
-void LocalizationMgr::setResourceIDsForDialog( Reference< container::XNameContainer > xDialogModel,
-    Reference< XStringResourceManager > xStringResourceManager )
+void LocalizationMgr::setResourceIDsForDialog( const Reference< container::XNameContainer >& xDialogModel,
+    const Reference< XStringResourceManager >& xStringResourceManager )
 {
     if( !xStringResourceManager.is() )
         return;
@@ -1048,7 +1045,7 @@ void LocalizationMgr::setResourceIDsForDialog( Reference< container::XNameContai
 
 void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
     const Any& rControlAny, const OUString& aCtrlName,
-    Reference< XStringResourceResolver > xSourceStringResolver )
+    const Reference< XStringResourceResolver >& xSourceStringResolver )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
@@ -1073,9 +1070,9 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
           xSourceStringResolver, MOVE_RESOURCES );
 }
 
-void LocalizationMgr::copyResourceForDroppedDialog( Reference< container::XNameContainer > xDialogModel,
-    const OUString& aDialogName, Reference< XStringResourceManager > xStringResourceManager,
-    Reference< XStringResourceResolver > xSourceStringResolver )
+void LocalizationMgr::copyResourceForDroppedDialog( const Reference< container::XNameContainer >& xDialogModel,
+    const OUString& aDialogName, const Reference< XStringResourceManager >& xStringResourceManager,
+    const Reference< XStringResourceResolver >& xSourceStringResolver )
 {
     if( !xStringResourceManager.is() )
         return;
@@ -1129,7 +1126,7 @@ void LocalizationMgr::copyResourceForDialog(
 }
 
 Reference< XStringResourceManager > LocalizationMgr::getStringResourceFromDialogLibrary
-    ( Reference< container::XNameContainer > xDialogLib )
+    ( const Reference< container::XNameContainer >& xDialogLib )
 {
     Reference< XStringResourceManager > xStringResourceManager;
     if( xDialogLib.is() )

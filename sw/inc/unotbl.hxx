@@ -425,12 +425,12 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    SwXCellRange(sw::UnoCursorPointer pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
+    SwXCellRange(const sw::UnoCursorPointer& pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
     virtual ~SwXCellRange();
 
 public:
     static ::rtl::Reference<SwXCellRange> CreateXCellRange(
-            sw::UnoCursorPointer pCursor, SwFrameFormat& rFrameFormat,
+            const sw::UnoCursorPointer& pCursor, SwFrameFormat& rFrameFormat,
             SwRangeDescriptor& rDesc);
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();

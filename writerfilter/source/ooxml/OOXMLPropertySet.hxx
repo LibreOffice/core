@@ -151,8 +151,8 @@ public:
     virtual ~OOXMLPropertySet();
 
     void resolve(Properties & rHandler) override;
-    void add(OOXMLProperty::Pointer_t pProperty);
-    void add(OOXMLPropertySet::Pointer_t pPropertySet);
+    void add(const OOXMLProperty::Pointer_t& pProperty);
+    void add(const OOXMLPropertySet::Pointer_t& pPropertySet);
     OOXMLPropertySet * clone() const;
 
     OOXMLProperties_t::iterator begin();
@@ -175,7 +175,7 @@ public:
     virtual ~OOXMLTable();
 
     void resolve(Table & rTable) override;
-    void add(ValuePointer_t pPropertySet);
+    void add(const ValuePointer_t& pPropertySet);
     OOXMLTable * clone() const;
 private:
     typedef std::vector<ValuePointer_t> PropertySets_t;

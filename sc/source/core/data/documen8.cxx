@@ -992,7 +992,7 @@ const ScMatrix* ScDocument::GetDdeLinkResultMatrix( size_t nDdePos ) const
     return pDdeLink ? pDdeLink->GetResult() : nullptr;
 }
 
-bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, ScMatrixRef pResults )
+bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, const ScMatrixRef& pResults )
 {
     /*  Create a DDE link without updating it (i.e. for Excel import), to prevent
         unwanted connections. First try to find existing link. Set result array
@@ -1023,7 +1023,7 @@ bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, c
     return false;
 }
 
-bool ScDocument::SetDdeLinkResultMatrix( size_t nDdePos, ScMatrixRef pResults )
+bool ScDocument::SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pResults )
 {
     if( ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {

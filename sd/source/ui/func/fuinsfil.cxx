@@ -97,7 +97,7 @@ OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescL
 }
 
 void lcl_AddFilter ( ::std::vector< FilterDesc >& rFilterDescList,
-                     std::shared_ptr<const SfxFilter> pFilter )
+                     const std::shared_ptr<const SfxFilter>& pFilter )
 {
     if (pFilter)
         rFilterDescList.push_back( ::std::make_pair( pFilter->GetUIName(), pFilter->GetDefaultExtension() ) );

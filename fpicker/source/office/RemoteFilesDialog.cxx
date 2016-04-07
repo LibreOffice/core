@@ -399,7 +399,7 @@ void RemoteFilesDialog::Show()
     }
 }
 
-OUString lcl_GetServiceType( ServicePtr pService )
+OUString lcl_GetServiceType( const ServicePtr& pService )
 {
     INetProtocol aProtocol = pService->GetUrlObject().GetProtocol();
     switch( aProtocol )

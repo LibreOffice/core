@@ -150,7 +150,7 @@ CustomAnimationPreset::CustomAnimationPreset( CustomAnimationEffectPtr pEffect )
 
 }
 
-void CustomAnimationPreset::add( CustomAnimationEffectPtr pEffect )
+void CustomAnimationPreset::add( const CustomAnimationEffectPtr& pEffect )
 {
     maSubTypes[ pEffect->getPresetSubType() ] = pEffect;
 }
@@ -526,7 +526,7 @@ const OUString& CustomAnimationPresets::translateName( const OUString& rId, cons
         return rId;
     }
 }
-void CustomAnimationPresets::changePresetSubType( CustomAnimationEffectPtr pEffect, const OUString& rPresetSubType ) const
+void CustomAnimationPresets::changePresetSubType( const CustomAnimationEffectPtr& pEffect, const OUString& rPresetSubType ) const
 {
     if( pEffect.get() && pEffect->getPresetSubType() != rPresetSubType )
     {

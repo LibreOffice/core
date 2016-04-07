@@ -83,7 +83,7 @@ protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
-        css::uno::Reference< css::beans::XPropertySet > rPropSet ) const override;
+        const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLShapeExportPropertyMapper();
@@ -116,7 +116,7 @@ protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
-        css::uno::Reference< css::beans::XPropertySet > rPropSet ) const override;
+        const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLPageExportPropertyMapper();

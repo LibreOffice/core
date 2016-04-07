@@ -417,7 +417,7 @@ Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
     return m_xCursor;
 }
 
-static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
+static OUString lcl_AddProperty(const Reference< XNameAccess >&  xColumns,
         const Mapping* pMapping, const OUString& rColumnName)
 {
     OUString sColumnName(rColumnName);

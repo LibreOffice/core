@@ -71,7 +71,7 @@ public:
     /** Reads a CRN record (external referenced cell) at the specified address. */
     void                ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos );
 
-    void                LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheTable);
+    void                LoadCachedValues(const ScExternalRefCache::TableTypeRef& pCacheTable);
 
 private:
     typedef std::shared_ptr< XclImpCrn > XclImpCrnRef;
@@ -574,7 +574,7 @@ void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos )
     maCrnList.push_back( crnRef );
 }
 
-void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheTable)
+void XclImpSupbookTab::LoadCachedValues(const ScExternalRefCache::TableTypeRef& pCacheTable)
 {
     if (maCrnList.empty())
         return;

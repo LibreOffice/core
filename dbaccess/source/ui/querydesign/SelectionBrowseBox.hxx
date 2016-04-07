@@ -84,7 +84,7 @@ namespace dbaui
         void                        initialize();
         OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource );
         OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, bool bVis=true, bool bActivate=true );
-        void                        InsertColumn( OTableFieldDescRef pEntry, sal_uInt16& _nColumnPosition );
+        void                        InsertColumn( const OTableFieldDescRef& pEntry, sal_uInt16& _nColumnPosition );
         void                        RemoveColumn( sal_uInt16 _nColumnId );
         void                        DeleteFields( const OUString& rAliasName );
 

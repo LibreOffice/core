@@ -24,7 +24,7 @@ SmOoxmlExport::SmOoxmlExport(const SmNode *const pIn, OoxmlVersion const v,
 {
 }
 
-bool SmOoxmlExport::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
+bool SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& serializer )
 {
     if( m_pTree == nullptr )
         return false;

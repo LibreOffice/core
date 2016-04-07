@@ -523,7 +523,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
 
 static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, bool bIsZeroIndex, Type* pType = nullptr )
 {
-    Type aType = aValue.getValueType();
+    const Type& aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
 
     sal_Int32 dimCopy = dimension;
@@ -605,7 +605,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
 
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 {
-    Type aType = aValue.getValueType();
+    const Type& aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
     switch( eTypeClass )
     {
@@ -2671,11 +2671,10 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                 try
                 {
                     Reference< XNameAccess > xNameAccess( mxUnoAccess->queryAdapter( cppu::UnoType<XPropertySet>::get()), UNO_QUERY );
-                    OUString aUName2( rName );
 
-                    if( xNameAccess.is() && xNameAccess->hasByName( aUName2 ) )
+                    if( xNameAccess.is() && xNameAccess->hasByName( rName ) )
                     {
-                        Any aAny = xNameAccess->getByName( aUName2 );
+                        Any aAny = xNameAccess->getByName( rName );
 
                         // ATTENTION: Because of XNameAccess, the variable generated here
                         // may not be included as a fixed property in the object and therefore
@@ -3328,12 +3327,11 @@ VBAConstantHelper::isVBAConstantType( const OUString& rName )
 {
     init();
     bool bConstant = false;
-    OUString sKey( rName );
     VBAConstantsVector::const_iterator it = aConstCache.begin();
 
     for( ; it != aConstCache.end(); ++it )
     {
-        if( sKey.equalsIgnoreAsciiCase( *it ) )
+        if( rName.equalsIgnoreAsciiCase( *it ) )
         {
             bConstant = true;
             break;
@@ -3348,9 +3346,7 @@ VBAConstantHelper::getVBAConstant( const OUString& rName )
     SbxVariable* pConst = nullptr;
     init();
 
-    OUString sKey( rName );
-
-    VBAConstantsHash::const_iterator it = aConstHash.find( sKey.toAsciiLowerCase() );
+    VBAConstantsHash::const_iterator it = aConstHash.find( rName.toAsciiLowerCase() );
 
     if ( it != aConstHash.end() )
     {
@@ -3399,8 +3395,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
         if( m_xClass.is() )
         {
             // Is it a field(?)
-            OUString aUStr( rName );
-            Reference< XIdlField > xField = m_xClass->getField( aUStr );
+            Reference< XIdlField > xField = m_xClass->getField( rName );
             Reference< XIdlClass > xClass;
             if( xField.is() )
             {
@@ -4499,7 +4494,7 @@ void SAL_CALL ModuleInvocationProxy::removeEventListener( const Reference< XEven
 
 
 Reference< XInterface > createComListener( const Any& aControlAny, const OUString& aVBAType,
-                                           const OUString& aPrefix, SbxObjectRef xScopeObj )
+                                           const OUString& aPrefix, const SbxObjectRef& xScopeObj )
 {
     Reference< XInterface > xRet;
 
@@ -4572,7 +4567,7 @@ static StarBasicDisposeItem* lcl_getOrCreateItemForBasic( StarBASIC* pBasic )
 }
 
 void registerComponentToBeDisposedForBasic
-    ( Reference< XComponent > xComponent, StarBASIC* pBasic )
+    ( const Reference< XComponent >& xComponent, StarBASIC* pBasic )
 {
     StarBasicDisposeItem* pItem = lcl_getOrCreateItemForBasic( pBasic );
     pItem->m_vComImplementsObjects.push_back( xComponent );

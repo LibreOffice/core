@@ -343,7 +343,7 @@ namespace comphelper
 
         // check whether the type is allowed, everything else will be checked
         // by m_aDynamicProperties
-        Type aPropertyType = _rInitialValue.getValueType();
+        const Type& aPropertyType = _rInitialValue.getValueType();
         if  (   _rInitialValue.hasValue()
             &&  !m_aAllowedTypes.empty()
             &&  m_aAllowedTypes.find( aPropertyType ) == m_aAllowedTypes.end()

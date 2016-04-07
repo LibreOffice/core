@@ -1173,7 +1173,7 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
     return r.second;
 }
 
-void ScDBCollection::NamedDBs::erase(iterator itr)
+void ScDBCollection::NamedDBs::erase(const iterator& itr)
 {
     m_DBs.erase(itr);
 }

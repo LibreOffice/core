@@ -741,7 +741,7 @@ static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno:
 
 void SchXMLTableHelper::applyTableToInternalDataProvider(
     const SchXMLTable& rTable,
-    uno::Reference< chart2::XChartDocument > xChartDoc )
+    const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
     // apply all data read from the local table to the internal data provider
     if( !xChartDoc.is() || !xChartDoc->hasInternalDataProvider() )
@@ -835,7 +835,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
 void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     const SchXMLTable& rTable,
     const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-    uno::Reference< chart2::XChartDocument > xChartDoc,
+    const uno::Reference< chart2::XChartDocument >& xChartDoc,
     chart::ChartDataRowSource eDataRowSource )
 {
     if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))

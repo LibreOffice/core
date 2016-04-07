@@ -128,7 +128,7 @@ namespace sfx2
 
         void                    setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
 
-        bool                CheckFilterOptionsCapability( std::shared_ptr<const SfxFilter> _pFilter );
+        bool                CheckFilterOptionsCapability( const std::shared_ptr<const SfxFilter>& _pFilter );
 
         bool                isInOpenMode() const;
         OUString                getCurrentFilterUIName() const;
@@ -142,8 +142,8 @@ namespace sfx2
         void                    verifyPath( );
 
         void                    implGetAndCacheFiles( const css::uno::Reference< XInterface >& xPicker  ,
-                                                      std::vector<OUString>&               rpURLList,
-                                                      std::shared_ptr<const SfxFilter>                    pFilter  );
+                                                      std::vector<OUString>&                   rpURLList,
+                                                      const std::shared_ptr<const SfxFilter>&  pFilter  );
 
         DECL_LINK_TYPED( TimeOutHdl_Impl, Idle *, void);
         DECL_LINK_TYPED( InitControls, void*, void );

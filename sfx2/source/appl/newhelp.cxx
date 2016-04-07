@@ -200,7 +200,7 @@ namespace sfx2
         "text menu"   | "text* menu*"        | "text|menu"
     */
     OUString PrepareSearchString( const OUString& rSearchString,
-                                Reference< XBreakIterator > xBreak, bool bForSearch )
+                                const Reference< XBreakIterator >& xBreak, bool bForSearch )
     {
         OUString sSearchStr;
         sal_Int32 nStartPos = 0;
@@ -3017,7 +3017,7 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return bHandled || Window::PreNotify( rNEvt );
 }
 
-void SfxHelpWindow_Impl::setContainerWindow( Reference < css::awt::XWindow > xWin )
+void SfxHelpWindow_Impl::setContainerWindow( const Reference < css::awt::XWindow >& xWin )
 {
     xWindow = xWin;
     MakeLayout();

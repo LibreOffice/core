@@ -53,8 +53,7 @@ class OOXMLStreamImpl : public OOXMLStream
     /// Cache holding an Id <-> Target map of external relations.
     std::map<OUString, OUString> maIdCache;
 
-    bool lcl_getTarget(css::uno::Reference<css::embed::XRelationshipAccess>
-                       xRelationshipAccess,
+    bool lcl_getTarget(const css::uno::Reference<css::embed::XRelationshipAccess>& xRelationshipAccess,
                        StreamType_t nStreamType,
                        const OUString & rId,
                        OUString & rDocumentTarget);

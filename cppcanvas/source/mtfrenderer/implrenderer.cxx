@@ -2739,7 +2739,7 @@ namespace cppcanvas
             template< typename Functor > bool
                 forSubsetRange( Functor&                                            rFunctor,
                                 ImplRenderer::ActionVector::const_iterator          aRangeBegin,
-                                ImplRenderer::ActionVector::const_iterator          aRangeEnd,
+                                const ImplRenderer::ActionVector::const_iterator&   aRangeEnd,
                                 sal_Int32                                           nStartIndex,
                                 sal_Int32                                           nEndIndex,
                                 const ImplRenderer::ActionVector::const_iterator&   rEnd )

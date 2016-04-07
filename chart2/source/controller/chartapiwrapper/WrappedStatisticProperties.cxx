@@ -121,7 +121,7 @@ sal_Int32 lcl_getErrorBarStyle( const uno::Reference< beans::XPropertySet >& xEr
 }
 
 uno::Reference< chart2::data::XDataProvider > lcl_getDataProviderFromContact(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+    const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     uno::Reference< chart2::data::XDataProvider > xResult;
     if( spChart2ModelContact.get())
@@ -136,7 +136,7 @@ uno::Reference< chart2::data::XDataProvider > lcl_getDataProviderFromContact(
 
 void lcl_ConvertRangeFromXML(
     OUString & rInOutRange,
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+    const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     if( !rInOutRange.isEmpty())
     {
@@ -152,7 +152,7 @@ void lcl_ConvertRangeFromXML(
 
 void lcl_ConvertRangeToXML(
     OUString & rInOutRange,
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+    const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     if( !rInOutRange.isEmpty())
     {
@@ -965,7 +965,7 @@ enum
                series
  */
 void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
-            , ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact
+            , const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
             , tSeriesOrDiagramPropertyType ePropertyType )
 {
     rList.push_back( new WrappedConstantErrorLowProperty( spChart2ModelContact, ePropertyType ) );
@@ -1082,13 +1082,13 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
 }
 
 void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
-                                    , ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
 void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
-                                    , ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM  );
 }

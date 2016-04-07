@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFormat_Impl(
-                    const uno::Reference< io::XStream > xCachedVisRepr )
+                    const uno::Reference< io::XStream >& xCachedVisRepr )
         throw ( uno::Exception )
 {
     embed::VisualRepresentation aVisualRepr;

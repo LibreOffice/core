@@ -282,7 +282,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
 }
 
 void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
-    SubArguments& vSubArguments,  int argumentNum, std::string p )
+    SubArguments& vSubArguments,  int argumentNum, const std::string& p )
 {
     int i = argumentNum;
     if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble)

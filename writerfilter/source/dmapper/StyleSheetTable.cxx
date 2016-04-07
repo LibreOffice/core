@@ -96,7 +96,7 @@ TableStyleSheetEntry::~TableStyleSheetEntry( )
     m_pStyleSheet = nullptr;
 }
 
-void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps )
+void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, const PropertyMapPtr& pProps )
 {
     static const int nTypesProps = 4;
     static const TblStyleType pTypesToFix[nTypesProps] =
@@ -169,7 +169,7 @@ void StyleSheetEntry::AppendInteropGrabBag(const beans::PropertyValue& rValue)
     m_aInteropGrabBag.push_back(rValue);
 }
 
-void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
+void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr& pToAdd, TblStyleType nStyleId )
 {
     static const PropertyIds pPropsToCheck[] =
     {
@@ -900,7 +900,7 @@ uno::Sequence< OUString > PropValVector::getNames()
     return comphelper::containerToSequence(aRet);
 }
 
-void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
+void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 {
     try
     {

@@ -90,7 +90,7 @@ namespace writerfilter {
 namespace dmapper{
 
 //line numbering for header/footer
-void lcl_linenumberingHeaderFooter( uno::Reference<container::XNameContainer> xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
+void lcl_linenumberingHeaderFooter( const uno::Reference<container::XNameContainer>& xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
 {
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
@@ -114,7 +114,7 @@ void lcl_linenumberingHeaderFooter( uno::Reference<container::XNameContainer> xS
 }
 
 // Populate Dropdown Field properties from FFData structure
-void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler )
+void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFieldProps, const FFDataHandler::Pointer_t& pFFDataHandler )
 {
     if ( rxFieldProps.is() )
     {
@@ -135,7 +135,7 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
     }
 }
 
-void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler )
+void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, const FFDataHandler::Pointer_t& pFFDataHandler )
 {
     if ( rxFieldProps.is() && pFFDataHandler )
     {
@@ -501,7 +501,7 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
 }
 
 
-void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
+void DomainMapper_Impl::PushStyleProperties( const PropertyMapPtr& pStyleProperties )
 {
     m_aPropertyStacks[CONTEXT_STYLESHEET].push( pStyleProperties );
     m_aContextStack.push(CONTEXT_STYLESHEET);
@@ -510,7 +510,7 @@ void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
 }
 
 
-void DomainMapper_Impl::PushListProperties(PropertyMapPtr pListProperties)
+void DomainMapper_Impl::PushListProperties(const PropertyMapPtr& pListProperties)
 {
     m_aPropertyStacks[CONTEXT_LIST].push( pListProperties );
     m_aContextStack.push(CONTEXT_LIST);
@@ -787,7 +787,7 @@ void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFramePr
 void lcl_AddRangeAndStyle(
     ParagraphPropertiesPtr& pToBeSavedProperties,
     uno::Reference< text::XTextAppend > const& xTextAppend,
-    PropertyMapPtr pPropertyMap,
+    const PropertyMapPtr& pPropertyMap,
     TextAppendContext& rAppendContext)
 {
     uno::Reference<text::XParagraphCursor> xParaCursor(
@@ -1008,7 +1008,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
     }
 }
 
-void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
+void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("finishParagraph");
@@ -1200,7 +1200,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 #endif
 }
 
-void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap )
+void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -1318,7 +1318,7 @@ void DomainMapper_Impl::appendTextContent(
 }
 
 
-void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pOLEHandler )
+void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandlerPtr& pOLEHandler )
 {
     static const char sEmbeddedService[] = "com.sun.star.text.TextEmbeddedObject";
     try
@@ -1620,7 +1620,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 }
 
 void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xRange,
-        RedlineParamsPtr pRedline)
+        const RedlineParamsPtr& pRedline)
 {
     if ( pRedline.get( ) )
     {
@@ -2890,7 +2890,7 @@ const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
 }
 
 void DomainMapper_Impl::handleFieldAsk
-    (FieldContextPtr pContext,
+    (const FieldContextPtr& pContext,
      uno::Reference< uno::XInterface > & xFieldInterface,
      uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
@@ -2933,7 +2933,7 @@ void DomainMapper_Impl::handleFieldAsk
 }
 
 
-void  DomainMapper_Impl::handleRubyEQField( FieldContextPtr pContext)
+void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
 {
     const OUString & rCommand(pContext->GetCommand());
     sal_Int32 nIndex = 0, nEnd = 0;
@@ -3006,7 +3006,7 @@ void  DomainMapper_Impl::handleRubyEQField( FieldContextPtr pContext)
 }
 
 void DomainMapper_Impl::handleAutoNum
-    (FieldContextPtr pContext,
+    (const FieldContextPtr& pContext,
     uno::Reference< uno::XInterface > & xFieldInterface,
     uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
@@ -3049,7 +3049,7 @@ void DomainMapper_Impl::handleAuthor
 }
 
     void DomainMapper_Impl::handleDocProperty
-        (FieldContextPtr pContext,
+        (const FieldContextPtr& pContext,
         OUString const& rFirstParam,
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > const&)
@@ -3203,7 +3203,7 @@ uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyper
 }
 
 void DomainMapper_Impl::handleToc
-    (FieldContextPtr pContext,
+    (const FieldContextPtr& pContext,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
      uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
@@ -3447,7 +3447,7 @@ void DomainMapper_Impl::handleToc
 }
 
 void DomainMapper_Impl::handleBibliography
-    (FieldContextPtr pContext,
+    (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
 {
     uno::Reference< beans::XPropertySet > xTOC;
@@ -3469,7 +3469,7 @@ void DomainMapper_Impl::handleBibliography
 }
 
 void DomainMapper_Impl::handleIndex
-    (FieldContextPtr pContext,
+    (const FieldContextPtr& pContext,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
      uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
@@ -4392,7 +4392,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
     }
 }
 
-void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
+void DomainMapper_Impl::SetFieldFFData(const FFDataHandler::Pointer_t& pFFDataHandler)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("setFieldFFData");
@@ -4699,7 +4699,7 @@ void DomainMapper_Impl::ResetGraphicImport()
 }
 
 
-void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Pointer_t ref, GraphicImportType eGraphicImportType)
+void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties >::Pointer_t& ref, GraphicImportType eGraphicImportType)
 {
     GetGraphicImport(eGraphicImportType);
     if( eGraphicImportType != IMPORT_AS_DETECTED_INLINE && eGraphicImportType != IMPORT_AS_DETECTED_ANCHOR )

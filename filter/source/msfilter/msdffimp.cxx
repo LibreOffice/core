@@ -3691,7 +3691,7 @@ OUString SvxMSDffManager::MSDFFReadZString(SvStream& rIn,
     return comphelper::string::stripEnd(sBuf, 0);
 }
 
-static Size lcl_GetPrefSize(const Graphic& rGraf, MapMode aWanted)
+static Size lcl_GetPrefSize(const Graphic& rGraf, const MapMode& aWanted)
 {
     MapMode aPrefMapMode(rGraf.GetPrefMapMode());
     if (aPrefMapMode == aWanted)

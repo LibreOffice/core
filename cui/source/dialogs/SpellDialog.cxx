@@ -144,7 +144,7 @@ public:
     void                    SetErrorLanguageSelected(bool bSet){ m_bIsErrorLanguageSelected = bSet;}
     bool                    IsErrorLanguageSelected() const {return m_bIsErrorLanguageSelected;}
 
-    void                    SetDictionary(Reference<XDictionary> xDict) { m_xDictionary = xDict; }
+    void                    SetDictionary(const Reference<XDictionary>& xDict) { m_xDictionary = xDict; }
     Reference<XDictionary>  GetDictionary() const {return m_xDictionary;}
     void                    SetAddedWord(const OUString& rWord) {m_sAddedWord = rWord;}
     const OUString&         GetAddedWord() const { return m_sAddedWord;}
@@ -1580,7 +1580,7 @@ void SentenceEditWindow_Impl::dispose()
     VclMultiLineEdit::dispose();
 }
 
-bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, css::uno::Reference<css::linguistic2::XSpellChecker1> xSpell )
+bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker1>& xSpell )
 {
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );
@@ -1775,7 +1775,7 @@ void SentenceEditWindow_Impl::RestoreCurrentError()
 }
 
 
-void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xAlt )
+void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternatives>& xAlt )
 {
     TextPaM aCursor(0, m_nErrorStart);
     DBG_ASSERT(static_cast<const SpellErrorAttrib*>(

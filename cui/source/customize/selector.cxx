@@ -555,7 +555,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 }
 
 Image SvxConfigGroupListBox::GetImage(
-    Reference< browse::XBrowseNode > node,
+    const Reference< browse::XBrowseNode >& node,
     Reference< XComponentContext > xCtx,
     bool bIsRootNode
 )

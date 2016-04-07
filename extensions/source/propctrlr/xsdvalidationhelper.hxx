@@ -127,7 +127,7 @@ namespace pcr
         static OUString
                 getBasicTypeNameForClass(
                     sal_Int16 _nClass,
-                    css::uno::Reference< css::xforms::XDataTypeRepository > _rxRepository
+                    const css::uno::Reference< css::xforms::XDataTypeRepository >& _rxRepository
                 );
     };
 

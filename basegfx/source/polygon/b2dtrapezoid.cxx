@@ -271,7 +271,7 @@ namespace basegfx
             bool splitEdgeAtGivenPoint(
                 TrDeEdgeEntries::reference aEdge,
                 const B2DPoint& rCutPoint,
-                TrDeEdgeEntries::iterator aCurrent)
+                const TrDeEdgeEntries::iterator& aCurrent)
             {
                 // do not create edges without deltaY: do not split when start is identical
                 if(aEdge.getStart().equal(rCutPoint))
@@ -323,7 +323,7 @@ namespace basegfx
             bool testAndCorrectEdgeIntersection(
                 TrDeEdgeEntries::reference aEdgeA,
                 TrDeEdgeEntries::reference aEdgeB,
-                TrDeEdgeEntries::iterator aCurrent)
+                const TrDeEdgeEntries::iterator& aCurrent)
             {
                 // Exclude simple cases: same start or end point
                 if(aEdgeA.getStart().equal(aEdgeB.getStart()))

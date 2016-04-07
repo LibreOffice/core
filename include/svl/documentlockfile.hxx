@@ -39,7 +39,7 @@ class SVL_DLLPUBLIC DocumentLockFile : public LockFileCommon
 
     css::uno::Reference< css::io::XInputStream > OpenStream();
 
-    void WriteEntryToStream( const LockFileEntry& aEntry, css::uno::Reference< css::io::XOutputStream > xStream );
+    void WriteEntryToStream( const LockFileEntry& aEntry, const css::uno::Reference< css::io::XOutputStream >& xStream );
 
 public:
     DocumentLockFile( const OUString& aOrigURL );

@@ -187,7 +187,7 @@ void OOXMLFactory_ns::charactersAction(OOXMLFastContextHandler *, const OUString
 {
 }
 
-void OOXMLFactory_ns::attributeAction(OOXMLFastContextHandler *, Token_t, OOXMLValue::Pointer_t)
+void OOXMLFactory_ns::attributeAction(OOXMLFastContextHandler *, Token_t, const OOXMLValue::Pointer_t&)
 {
 }
 

@@ -80,7 +80,7 @@ private:
 
     struct ShapeHash
     {
-        size_t operator()( const css::uno::Reference < css::drawing::XShape > ) const;
+        size_t operator()( const css::uno::Reference < css::drawing::XShape >& ) const;
     };
 
 public:
@@ -89,7 +89,7 @@ public:
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;
 
-    void WriteGraphicObjectShapePart( css::uno::Reference< css::drawing::XShape > xShape, const Graphic *pGraphic=nullptr );
+    void WriteGraphicObjectShapePart( const css::uno::Reference< css::drawing::XShape >& xShape, const Graphic *pGraphic=nullptr );
 
 private:
     sal_Int32           mnXmlNamespace;
@@ -108,34 +108,34 @@ public:
     ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = nullptr, ::oox::core::XmlFilterBase* pFB = nullptr, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr );
     virtual ~ShapeExport() {}
 
-    void SetURLTranslator(std::shared_ptr<URLTransformer> pTransformer);
+    void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);
 
-    static bool         NonEmptyText( css::uno::Reference< css::uno::XInterface > xIface );
+    static bool         NonEmptyText( const css::uno::Reference< css::uno::XInterface >& xIface );
 
     ShapeExport&
-                        WriteBezierShape( css::uno::Reference< css::drawing::XShape > xShape, bool bClosed );
+                        WriteBezierShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bClosed );
     ShapeExport&
-                        WriteClosedBezierShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteClosedBezierShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteConnectorShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteConnectorShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteCustomShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteCustomShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteEllipseShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteEllipseShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteGraphicObjectShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteGraphicObjectShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteGroupShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteGroupShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteLineShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteLineShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteNonVisualDrawingProperties( css::uno::Reference< css::drawing::XShape > xShape, const char* sName );
+                        WriteNonVisualDrawingProperties( const css::uno::Reference< css::drawing::XShape >& xShape, const char* sName );
     virtual ShapeExport&
-                        WriteNonVisualProperties( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteNonVisualProperties( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteOpenBezierShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteOpenBezierShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteRectangleShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteRectangleShape( const css::uno::Reference< css::drawing::XShape >& xShape );
 
     /**
      * Write the DrawingML for a particular shape.
@@ -174,28 +174,28 @@ public:
      * @param xShape    The shape to export as DrawingML.
      * @return   <tt>*this</tt>
      */
-    ShapeExport&       WriteShape( css::uno::Reference< css::drawing::XShape > xShape );
-    ShapeExport&       WriteTextBox( css::uno::Reference< css::uno::XInterface > xIface, sal_Int32 nXmlNamespace );
+    ShapeExport&       WriteShape( const css::uno::Reference< css::drawing::XShape >& xShape );
+    ShapeExport&       WriteTextBox( const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nXmlNamespace );
     virtual ShapeExport&
-                        WriteTextShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteTextShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
-                        WriteTableShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteTableShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     void                WriteMathShape(css::uno::Reference<css::drawing::XShape> const& xShape);
     ShapeExport&
-                        WriteOLE2Shape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteOLE2Shape( const css::uno::Reference< css::drawing::XShape >& xShape );
     virtual ShapeExport&
-                        WriteUnknownShape( css::uno::Reference< css::drawing::XShape > xShape );
+                        WriteUnknownShape( const css::uno::Reference< css::drawing::XShape >& xShape );
 
-    void WriteTable( css::uno::Reference< css::drawing::XShape > rXShape );
+    void WriteTable( const css::uno::Reference< css::drawing::XShape >& rXShape );
 
-    void WriteTableCellProperties(css::uno::Reference< css::beans::XPropertySet > rXPropSet);
+    void WriteTableCellProperties(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
-    void WriteTableCellBorders(css::uno::Reference< css::beans::XPropertySet > rXPropSet);
+    void WriteTableCellBorders(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
-    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape > rShape );
-    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
-    sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape > rShape );
-    static sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape > rShape, ShapeHashMap* pShapeMap );
+    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );
+    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape, ::oox::core::XmlFilterBase* pFB );
+    sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );
+    static sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape >& rShape, ShapeHashMap* pShapeMap );
 };
 
 }}

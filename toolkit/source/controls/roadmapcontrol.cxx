@@ -192,7 +192,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    void UnoControlRoadmapModel::MakeRMItemValidation( sal_Int32 Index, Reference< XInterface > xRoadmapItem )
+    void UnoControlRoadmapModel::MakeRMItemValidation( sal_Int32 Index, const Reference< XInterface >& xRoadmapItem )
     {
         if ((Index > (sal_Int32)maRoadmapItems.size()) || ( Index < 0 ) )
             lcl_throwIndexOutOfBoundsException( );
@@ -205,7 +205,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    void UnoControlRoadmapModel::SetRMItemDefaultProperties( const sal_Int32 , Reference< XInterface > xRoadmapItem)
+    void UnoControlRoadmapModel::SetRMItemDefaultProperties( const sal_Int32 , const Reference< XInterface >& xRoadmapItem)
     {
         Any aAny;
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
@@ -255,7 +255,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    ContainerEvent UnoControlRoadmapModel::GetContainerEvent(sal_Int32 Index, Reference< XInterface > xRoadmapItem)
+    ContainerEvent UnoControlRoadmapModel::GetContainerEvent(sal_Int32 Index, const Reference< XInterface >& xRoadmapItem)
     {
         ContainerEvent aEvent;
         aEvent.Source = *this;
@@ -265,7 +265,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    sal_Int16 UnoControlRoadmapModel::GetCurrentItemID( Reference< XPropertySet > xPropertySet )
+    sal_Int16 UnoControlRoadmapModel::GetCurrentItemID( const Reference< XPropertySet >& xPropertySet )
     {
         Any aAny = xPropertySet->getPropertyValue( GetPropertyName( BASEPROPERTY_CURRENTITEMID ) );
         sal_Int16 n_CurrentItemID = 0;

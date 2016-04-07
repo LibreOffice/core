@@ -109,11 +109,11 @@ protected:
     css::uno::Reference<css::drawing::XShape> m_xParent;
     bool                                      mbIsBackgroundDark;
 
-    bool GetProperty( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& aName );
-    bool GetPropertyAndState( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
-                  css::uno::Reference< css::beans::XPropertyState > rXPropState,
+    bool GetProperty( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& aName );
+    bool GetPropertyAndState( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
+                  const css::uno::Reference< css::beans::XPropertyState >& rXPropState,
                   const OUString& aName, css::beans::PropertyState& eState );
-    OUString GetFieldValue( css::uno::Reference< css::text::XTextRange > rRun, bool& bIsURLField );
+    OUString GetFieldValue( const css::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
 
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
@@ -143,60 +143,60 @@ public:
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
     void WriteColorTransformations( const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
     void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
-    void WriteLineArrow( css::uno::Reference< css::beans::XPropertySet > rXPropSet, bool bLineStart );
+    void WriteLineArrow( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
     void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const OUString& sSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
-    void WriteSolidFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
-    void WriteGradientFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteSolidFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteGradientFill( css::awt::Gradient rGradient );
     void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, css::awt::Gradient rGradient);
 
-    void WriteBlipOrNormalFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
+    void WriteBlipOrNormalFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
             const OUString& rURLPropName );
-    void WriteBlipFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
+    void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                          const OUString& sBitmapURL, sal_Int32 nXmlNamespace,
                          bool bWriteMode, bool bRelPathToMedia = false );
-    void WriteBlipFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
+    void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
             const OUString& sURLPropName );
-    void WriteBlipFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
+    void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                          const OUString& sURLPropName, sal_Int32 nXmlNamespace );
-    void WritePattFill( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
-    void WriteSrcRect( css::uno::Reference< css::beans::XPropertySet >, const OUString& );
-    void WriteOutline( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
-    void WriteStretch( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& rURL );
+    void WritePattFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteSrcRect( const css::uno::Reference< css::beans::XPropertySet >&, const OUString& );
+    void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteStretch( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
     void WriteLinespacing( css::style::LineSpacing& rLineSpacing );
 
-    OUString WriteBlip( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
+    OUString WriteBlip( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
             const OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=nullptr );
-    void WriteBlipMode( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& rURL );
+    void WriteBlipMode( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
 
-    void WriteShapeTransformation( css::uno::Reference< css::drawing::XShape > rXShape,
+    void WriteShapeTransformation( const css::uno::Reference< css::drawing::XShape >& rXShape,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false );
     void WriteTransformation( const Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
 
-    void WriteText( css::uno::Reference< css::uno::XInterface > rXIface, const OUString& presetWarp, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);
-    void WriteParagraph( css::uno::Reference< css::text::XTextContent > rParagraph );
-    void WriteParagraphProperties( css::uno::Reference< css::text::XTextContent > rParagraph );
-    void WriteParagraphNumbering( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
+    void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, const OUString& presetWarp, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);
+    void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph );
+    void WriteParagraphProperties( const css::uno::Reference< css::text::XTextContent >& rParagraph );
+    void WriteParagraphNumbering( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                                   sal_Int16 nLevel );
-    void WriteRun( css::uno::Reference< css::text::XTextRange > rRun );
-    void WriteRunProperties( css::uno::Reference< css::beans::XPropertySet > rRun, bool bIsField, sal_Int32 nElement = XML_rPr ,bool bCheckDirect = true);
+    void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun );
+    void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement = XML_rPr ,bool bCheckDirect = true);
 
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const css::beans::PropertyValue& rProp );
-    void WriteCustomGeometry( css::uno::Reference<css::drawing::XShape> rXShape );
+    void WriteCustomGeometry( const css::uno::Reference<css::drawing::XShape>& rXShape );
     void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon );
-    void WriteFill( css::uno::Reference< css::beans::XPropertySet > xPropSet );
-    void WriteShapeStyle( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
-    void WriteShapeEffects( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
+    void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffect( const OUString& sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
-    void WriteShape3DEffects( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
-    void WriteArtisticEffect( css::uno::Reference< css::beans::XPropertySet > rXPropSet );
+    void WriteShape3DEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
-    sal_Int32 getBulletMarginIndentation (css::uno::Reference< css::beans::XPropertySet > rXPropSet,sal_Int16 nLevel, const OUString& propName);
+    sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName);
 
     static void ResetCounters();
 

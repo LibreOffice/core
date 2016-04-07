@@ -217,7 +217,7 @@ public:
 
         @return *this
      */
-    XmlFilterBase& exportDocumentProperties( css::uno::Reference< css::document::XDocumentProperties > xProperties );
+    XmlFilterBase& exportDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xProperties );
 
     void importDocumentProperties();
 
@@ -226,7 +226,7 @@ public:
     bool isMSO2007Document() const;
 
     void checkDocumentProperties(
-            css::uno::Reference<css::document::XDocumentProperties> xDocProps);
+            const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
 
 protected:
     virtual css::uno::Reference< css::io::XInputStream >

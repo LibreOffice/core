@@ -475,12 +475,12 @@ void OOXMLFastContextHandler::setLastSectionGroup()
 }
 
 void OOXMLFastContextHandler::newProperty
-(const Id & /*nId*/, OOXMLValue::Pointer_t /*pVal*/)
+(const Id & /*nId*/, const OOXMLValue::Pointer_t& /*pVal*/)
 {
 }
 
 void OOXMLFastContextHandler::setPropertySet
-(OOXMLPropertySet::Pointer_t /* pPropertySet */)
+(const OOXMLPropertySet::Pointer_t& /* pPropertySet */)
 {
 }
 
@@ -755,7 +755,7 @@ void OOXMLFastContextHandler::setXNoteId(const sal_Int32 nId)
     mpParserState->setXNoteId(nId);
 }
 
-void OOXMLFastContextHandler::setXNoteId(OOXMLValue::Pointer_t pValue)
+void OOXMLFastContextHandler::setXNoteId(const OOXMLValue::Pointer_t& pValue)
 {
     mpParserState->setXNoteId(sal_Int32(pValue->getInt()));
 }
@@ -878,7 +878,7 @@ OOXMLFastContextHandlerStream::~OOXMLFastContextHandlerStream()
 }
 
 void OOXMLFastContextHandlerStream::newProperty(const Id & rId,
-                                                OOXMLValue::Pointer_t pVal)
+                                                const OOXMLValue::Pointer_t& pVal)
 {
     if (rId != 0x0)
     {
@@ -952,7 +952,7 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
 }
 
 void OOXMLFastContextHandlerProperties::newProperty
-(const Id & rId, OOXMLValue::Pointer_t pVal)
+(const Id & rId, const OOXMLValue::Pointer_t& pVal)
 {
     if (rId != 0x0)
     {
@@ -1049,7 +1049,7 @@ void OOXMLFastContextHandlerProperties::setParent
 }
 
 void OOXMLFastContextHandlerProperties::setPropertySet
-(OOXMLPropertySet::Pointer_t pPropertySet)
+(const OOXMLPropertySet::Pointer_t& pPropertySet)
 {
     if (pPropertySet.get() != nullptr)
         mpPropertySet = pPropertySet;
@@ -1106,7 +1106,7 @@ OOXMLFastContextHandlerValue::~OOXMLFastContextHandlerValue()
 {
 }
 
-void OOXMLFastContextHandlerValue::setValue(OOXMLValue::Pointer_t pValue)
+void OOXMLFastContextHandlerValue::setValue(const OOXMLValue::Pointer_t& pValue)
 {
     mpValue = pValue;
 }
@@ -1259,12 +1259,12 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
     setForwardEvents(mbForwardEventsSaved);
 }
 
-void OOXMLFastContextHandlerXNote::checkId(OOXMLValue::Pointer_t pValue)
+void OOXMLFastContextHandlerXNote::checkId(const OOXMLValue::Pointer_t& pValue)
 {
     mnMyXNoteId = sal_Int32(pValue->getInt());
 }
 
-void OOXMLFastContextHandlerXNote::checkType(OOXMLValue::Pointer_t pValue)
+void OOXMLFastContextHandlerXNote::checkType(const OOXMLValue::Pointer_t& pValue)
 {
     mnMyXNoteType = pValue->getInt();
 }
@@ -1367,7 +1367,7 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 
 // Handle w:gridBefore here by faking necessary input that'll fake cells. I'm apparently
 // not insane enough to find out how to add cells in dmapper.
-void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_t val )
+void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Pointer_t& val )
 {
     int count = val->getInt();
     for( int i = 0;
@@ -1844,7 +1844,7 @@ OOXMLFastContextHandlerWrapper::getFastContextHandler() const
 }
 
 void OOXMLFastContextHandlerWrapper::newProperty
-(const Id & rId, OOXMLValue::Pointer_t pVal)
+(const Id & rId, const OOXMLValue::Pointer_t& pVal)
 {
     if (mxContext.is())
     {
@@ -1855,7 +1855,7 @@ void OOXMLFastContextHandlerWrapper::newProperty
 }
 
 void OOXMLFastContextHandlerWrapper::setPropertySet
-(OOXMLPropertySet::Pointer_t pPropertySet)
+(const OOXMLPropertySet::Pointer_t& pPropertySet)
 {
     if (mxContext.is())
     {

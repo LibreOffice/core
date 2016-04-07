@@ -436,7 +436,7 @@ public:
                   OUString const & i_rXmlId);
 
     /// Add a RDFa statement; parameters are XML attribute values
-    void AddRDFa( css::uno::Reference< css::rdf::XMetadatable> i_xObject,
+    void AddRDFa( const css::uno::Reference< css::rdf::XMetadatable>& i_xObject,
                   OUString const & i_rAbout,
                   OUString const & i_rProperty,
                   OUString const & i_rContent,

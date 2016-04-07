@@ -64,7 +64,7 @@ public:
     TypeDetectionImporter();
     virtual ~TypeDetectionImporter();
 
-    static void doImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext, css::uno::Reference < css::io::XInputStream > xOS, XMLFilterVector& rFilters );
+    static void doImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS, XMLFilterVector& rFilters );
 
     virtual void SAL_CALL startDocument(  )
         throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;

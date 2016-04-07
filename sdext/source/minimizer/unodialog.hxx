@@ -69,7 +69,7 @@ public:
     void setVisible( const OUString& rName, bool bVisible );
 
     css::uno::Reference< css::awt::XButton > insertButton( const OUString& rName,
-        css::uno::Reference< css::awt::XActionListener > xActionListener, const css::uno::Sequence< OUString >& rPropertyNames,
+        const css::uno::Reference< css::awt::XActionListener >& xActionListener, const css::uno::Sequence< OUString >& rPropertyNames,
             const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
     css::uno::Reference< css::awt::XFixedText > insertFixedText( const OUString& rName,

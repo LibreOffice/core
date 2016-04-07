@@ -1473,7 +1473,7 @@ Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
     return aInvalidRect;
 }
 
-void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _nColumnPosition)
+void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uInt16& _nColumnPosition)
 {
     // the control should have exactly one more column: the HandleColumn
     OSL_ENSURE(_nColumnPosition == BROWSER_INVALIDID || (_nColumnPosition <= (long)getFields().size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");

@@ -585,7 +585,7 @@ public:
      */
     void PreventExportOfControlsInMuteSections(
         const css::uno::Reference< css::container::XIndexAccess> & rShapes,
-        rtl::Reference<xmloff::OFormLayerXMLExport> xFormExport );
+        const rtl::Reference<xmloff::OFormLayerXMLExport>& xFormExport );
 
     SinglePropertySetInfoCache& GetCharStyleNamesPropInfoCache() { return aCharStyleNamesPropInfoCache; }
 

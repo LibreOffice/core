@@ -86,7 +86,7 @@ IndexedStyleSheets::GetNumberOfStyleSheets() const
 }
 
 void
-IndexedStyleSheets::AddStyleSheet(rtl::Reference< SfxStyleSheetBase > style)
+IndexedStyleSheets::AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style)
 {
     if (!HasStyleSheet(style)) {
         mStyleSheets.push_back(style);
@@ -96,7 +96,7 @@ IndexedStyleSheets::AddStyleSheet(rtl::Reference< SfxStyleSheetBase > style)
 }
 
 bool
-IndexedStyleSheets::RemoveStyleSheet(rtl::Reference< SfxStyleSheetBase > style)
+IndexedStyleSheets::RemoveStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style)
 {
     rtl::OUString styleName = style->GetName();
     std::vector<unsigned> positions = FindPositionsByName(styleName);
@@ -207,7 +207,7 @@ IndexedStyleSheets::~IndexedStyleSheets()
 {;}
 
 bool
-IndexedStyleSheets::HasStyleSheet(rtl::Reference< SfxStyleSheetBase > style) const
+IndexedStyleSheets::HasStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style) const
 {
     rtl::OUString styleName = style->GetName();
     std::vector<unsigned> positions = FindPositionsByName(styleName);

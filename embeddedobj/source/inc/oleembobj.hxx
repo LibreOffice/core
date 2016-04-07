@@ -255,7 +255,7 @@ protected:
     bool HasVisReplInStream();
 
     css::embed::VisualRepresentation GetVisualRepresentationInNativeFormat_Impl(
-                    const css::uno::Reference< css::io::XStream > xCachedVisRepr )
+                    const css::uno::Reference< css::io::XStream >& xCachedVisRepr )
         throw ( css::uno::Exception );
 
     css::uno::Reference< css::io::XStream > TryToRetrieveCachedVisualRepresentation_Impl(

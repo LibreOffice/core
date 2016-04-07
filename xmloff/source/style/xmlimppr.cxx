@@ -104,8 +104,8 @@ void SvXMLImportPropertyMapper::ChainImportMapper(
 /** fills the given itemset with the attributes in the given list */
 void SvXMLImportPropertyMapper::importXML(
         vector< XMLPropertyState >& rProperties,
-           Reference< XAttributeList > xAttrList,
-           const SvXMLUnitConverter& rUnitConverter,
+        const Reference< XAttributeList >& xAttrList,
+        const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt32 nPropType,
         sal_Int32 nStartIdx,

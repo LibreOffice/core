@@ -479,7 +479,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
 }
 
 
-void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
+void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
 {
     DBG_ASSERT(HasParent(), "kein Vater vorhanden");
     DBG_ASSERT(nParentNodePos != NODE_NOTFOUND, "Falscher Indexaufbau");

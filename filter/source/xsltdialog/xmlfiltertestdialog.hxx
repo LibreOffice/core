@@ -55,7 +55,7 @@ private:
     css::uno::Reference< css::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );
     void import( const OUString& rURL );
     static void displayXMLFile( const OUString& rURL );
-    void doExport( css::uno::Reference< css::lang::XComponent > xComp );
+    void doExport( const css::uno::Reference< css::lang::XComponent >& xComp );
 
 private:
     css::uno::Reference< css::uno::XComponentContext >              mxContext;

@@ -134,7 +134,7 @@ namespace svt { namespace table
         IAccessibleTableControl*    m_pAccessibleTable;
 
     public:
-        void        setModel( PTableModel _pModel );
+        void        setModel( const PTableModel& _pModel );
 
         inline  const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
 

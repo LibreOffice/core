@@ -85,12 +85,12 @@ public:
     bool isOLEObject() { return m_xInputStream.is(); }
 
     /// In case of a valid CLSID, import the native data to the previously created empty OLE object.
-    void importStream(css::uno::Reference<css::uno::XComponentContext> xComponentContext,
-                      css::uno::Reference<css::text::XTextDocument> xTextDocument,
-                      css::uno::Reference<css::text::XTextContent> xOLE);
+    void importStream(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext,
+                      const css::uno::Reference<css::text::XTextDocument>& xTextDocument,
+                      const css::uno::Reference<css::text::XTextContent>& xOLE);
 
     /// Get the CLSID of the OLE object, in case we can find one based on m_sProgId.
-    OUString getCLSID(css::uno::Reference<css::uno::XComponentContext> xComponentContext) const;
+    OUString getCLSID(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext) const;
 
     OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
 

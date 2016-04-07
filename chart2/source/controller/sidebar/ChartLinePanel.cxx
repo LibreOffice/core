@@ -35,7 +35,7 @@ SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pT
     return pToolBoxColorControl;
 }
 
-OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
+OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
@@ -53,7 +53,7 @@ OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
 }
 
 css::uno::Reference<css::beans::XPropertySet> getPropSet(
-        css::uno::Reference<css::frame::XModel> xModel)
+        const css::uno::Reference<css::frame::XModel>& xModel)
 {
     OUString aCID = getCID(xModel);
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -74,7 +74,7 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
 }
 
 css::uno::Any getLineDash(
-        css::uno::Reference<css::frame::XModel> xModel, const OUString& rDashName)
+        const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName)
 {
     css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
     css::uno::Reference<css::container::XNameAccess> xNameAccess(

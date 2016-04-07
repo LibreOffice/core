@@ -81,12 +81,12 @@ private:
     DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
     Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
-        Reference< drawing::XDrawPages > xDrawPages);
+        const Reference< drawing::XDrawPages >& xDrawPages);
 
     static awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
     void createCaption(const awt::Size& aPageSize);
     static Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
-        Reference< graphic::XGraphicProvider> xProvider);
+        const Reference< graphic::XGraphicProvider>& xProvider);
 
     void EnableDisableButtons();
 

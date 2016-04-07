@@ -123,8 +123,8 @@ class GrammarCheckingIterator:
     OUString GetOrCreateDocId( const css::uno::Reference< css::lang::XComponent > &xComp );
 
     void AddEntry(
-            css::uno::WeakReference< css::text::XFlatParagraphIterator > xFlatParaIterator,
-            css::uno::WeakReference< css::text::XFlatParagraph > xFlatPara,
+            const css::uno::WeakReference< css::text::XFlatParagraphIterator >& xFlatParaIterator,
+            const css::uno::WeakReference< css::text::XFlatParagraph >& xFlatPara,
             const OUString &rDocId, sal_Int32 nStartIndex, bool bAutomatic );
 
     void ProcessResult( const css::linguistic2::ProofreadingResult &rRes,

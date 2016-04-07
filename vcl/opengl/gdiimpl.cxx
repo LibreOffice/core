@@ -671,7 +671,7 @@ inline void addVertex(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rEx
     rExtrusionVectors.push_back(length);
 }
 
-inline void addVertexPair(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, glm::vec2 point, glm::vec2 extrusionVector, float length)
+inline void addVertexPair(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, const glm::vec2& point, const glm::vec2& extrusionVector, float length)
 {
     addVertex(rVertices, rExtrusionVectors, point, -extrusionVector, -length);
     addVertex(rVertices, rExtrusionVectors, point,  extrusionVector,  length);

@@ -49,7 +49,7 @@ void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr
 void dumpFillGradientAsElement(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(const css::drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapAsElement(css::uno::Reference<css::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapAsElement(const css::uno::Reference<css::awt::XBitmap>& xBitmap, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapURLAsAttribute(const OUString& sBitmapURL, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, xmlTextWriterPtr xmlWriter);
@@ -147,17 +147,17 @@ void dumpPositionAsAttribute(const css::awt::Point& rPoint, xmlTextWriterPtr xml
 void dumpSizeAsAttribute(const css::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
 
 // the rest
-void dumpShapeDescriptorAsAttribute( css::uno::Reference< css::drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter );
-void dumpXShape(css::uno::Reference< css::drawing::XShape > xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
-void dumpXShapes( css::uno::Reference< css::drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
-void dumpTextPropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpFillPropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpLinePropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpShadowPropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpPolyPolygonDescriptorService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpShapeService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
-void dumpPolyPolygonBezierDescriptorService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShapeDescriptorAsAttribute( const css::uno::Reference< css::drawing::XShapeDescriptor >& xDescr, xmlTextWriterPtr xmlWriter );
+void dumpXShape(const css::uno::Reference< css::drawing::XShape >& xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
+void dumpXShapes( const css::uno::Reference< css::drawing::XShapes >& xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
+void dumpTextPropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpFillPropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpLinePropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShadowPropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpPolyPolygonDescriptorService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShapeService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
+void dumpPolyPolygonBezierDescriptorService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
 
 
 int writeCallback(void* pContext, const char* sBuffer, int nLen)
@@ -305,7 +305,7 @@ void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "false");
 }
 
-void dumpFillBitmapAsElement(uno::Reference<awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter)
+void dumpFillBitmapAsElement(const uno::Reference<awt::XBitmap>& xBitmap, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillBitmap" ));
     if (xBitmap.is())
@@ -1086,7 +1086,7 @@ void dumpSizeAsAttribute(const awt::Size& rSize, xmlTextWriterPtr xmlWriter)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("sizeY"), "%" SAL_PRIdINT32, rSize.Height);
 }
 
-void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter )
+void dumpShapeDescriptorAsAttribute( const uno::Reference< drawing::XShapeDescriptor >& xDescr, xmlTextWriterPtr xmlWriter )
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
         OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
@@ -1216,7 +1216,7 @@ void dumpCustomShapeReplacementURLAsAttribute(const OUString& sCustomShapeReplac
 
 // methods dumping whole services
 
-void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpTextPropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     if(xInfo->hasPropertyByName("CharHeight"))
@@ -1376,7 +1376,7 @@ void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
 }
 
-void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpFillPropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillStyle");
@@ -1524,7 +1524,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
 }
 
-void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpLinePropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineStyle");
@@ -1618,7 +1618,7 @@ void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
 }
 
-void dumpShadowPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpShadowPropertiesService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
@@ -1652,7 +1652,7 @@ void dumpShadowPropertiesService(uno::Reference< beans::XPropertySet > xPropSet,
     }
 }
 
-void dumpPolyPolygonDescriptorService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpPolyPolygonDescriptorService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
@@ -1674,7 +1674,7 @@ void dumpPolyPolygonDescriptorService(uno::Reference< beans::XPropertySet > xPro
     }
 }
 
-void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties)
+void dumpShapeService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties)
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     {
@@ -1753,7 +1753,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
 }
 
-void dumpPolyPolygonBezierDescriptorService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpPolyPolygonBezierDescriptorService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
@@ -1775,7 +1775,7 @@ void dumpPolyPolygonBezierDescriptorService(uno::Reference< beans::XPropertySet 
     }
 }
 
-void dumpCustomShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeService(const uno::Reference< beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter)
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     {
@@ -1805,7 +1805,7 @@ void dumpCustomShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlT
     }
 }
 
-void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties)
+void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties)
 {
     xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
@@ -1921,7 +1921,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties )
+void dumpXShapes( const uno::Reference< drawing::XShapes >& xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties )
 {
     xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShapes" ) );
     uno::Reference< container::XIndexAccess > xIA( xShapes, uno::UNO_QUERY_THROW);
@@ -1936,7 +1936,7 @@ void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr x
 }
 } //end of namespace
 
-OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool bDumpInteropProperties)
+OUString XShapeDumper::dump(const uno::Reference<drawing::XShapes>& xPageShapes, bool bDumpInteropProperties)
 {
     OStringBuffer aString;
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, nullptr );
@@ -1960,7 +1960,7 @@ OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool b
     return OUString::fromUtf8(aString.makeStringAndClear());
 }
 
-OUString XShapeDumper::dump(uno::Reference<drawing::XShape> xPageShapes, bool bDumpInteropProperties)
+OUString XShapeDumper::dump(const uno::Reference<drawing::XShape>& xPageShapes, bool bDumpInteropProperties)
 {
     OStringBuffer aString;
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, nullptr );

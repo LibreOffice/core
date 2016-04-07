@@ -3206,7 +3206,7 @@ public:
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
 
-    Impl(sw::UnoCursorPointer const pCursor, SwFrameFormat& rFrameFormat,
+    Impl(sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat,
             SwRangeDescriptor& rDesc)
         : SwClient(&rFrameFormat)
         , m_ChartListeners(m_Mutex)
@@ -3280,7 +3280,7 @@ uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames() throw( uno::Run
         "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
-SwXCellRange::SwXCellRange(sw::UnoCursorPointer const pCursor,
+SwXCellRange::SwXCellRange(sw::UnoCursorPointer const& pCursor,
         SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc)
     : m_pImpl(new Impl(pCursor, rFrameFormat, rDesc))
 {
@@ -3291,7 +3291,7 @@ SwXCellRange::~SwXCellRange()
 }
 
 rtl::Reference<SwXCellRange> SwXCellRange::CreateXCellRange(
-        sw::UnoCursorPointer const pCursor, SwFrameFormat& rFrameFormat,
+        sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat,
         SwRangeDescriptor& rDesc)
 {
     SwXCellRange *const pCellRange(new SwXCellRange(pCursor, rFrameFormat, rDesc));

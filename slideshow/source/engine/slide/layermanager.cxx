@@ -655,7 +655,7 @@ namespace slideshow
 
         void LayerManager::commitLayerChanges( std::size_t              nCurrLayerIndex,
                                                LayerShapeMap::const_iterator  aFirstLayerShape,
-                                               LayerShapeMap::const_iterator  aEndLayerShapes )
+                                               const LayerShapeMap::const_iterator&  aEndLayerShapes )
         {
             const bool bLayerExists( maLayers.size() > nCurrLayerIndex );
             if( bLayerExists )

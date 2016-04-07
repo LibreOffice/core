@@ -105,7 +105,7 @@ namespace tools
                 B2VectorOrientation::Positive);
         }
 
-        void addPolyPolygon(B2DPolyPolygon aPoly, Operation eOp)
+        void addPolyPolygon(const B2DPolyPolygon& aPoly, Operation eOp)
         {
             commitPendingRanges();
             if( mePendingOps != eOp )

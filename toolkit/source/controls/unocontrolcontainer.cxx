@@ -308,7 +308,7 @@ OUString UnoControlHolderList::impl_getFreeName_throw()
 void implUpdateVisibility
 (
     sal_Int32 nDialogStep,
-    uno::Reference< awt::XControlContainer > xControlContainer
+    const uno::Reference< awt::XControlContainer >& xControlContainer
 )
 {
     uno::Sequence< uno::Reference< awt::XControl > >

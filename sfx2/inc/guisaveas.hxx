@@ -58,7 +58,7 @@ public:
     SfxStoringHelper();
 
     bool GUIStoreModel(
-                    css::uno::Reference< css::frame::XModel > xModel,
+                    const css::uno::Reference< css::frame::XModel >& xModel,
                     const OUString& aSlotName,
                     css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,

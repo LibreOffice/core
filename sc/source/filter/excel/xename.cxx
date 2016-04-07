@@ -46,7 +46,7 @@ public:
     explicit            XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn );
 
     /** Sets a token array containing the definition of this name. */
-    void                SetTokenArray( XclTokenArrayRef xTokArr );
+    void                SetTokenArray( const XclTokenArrayRef& xTokArr );
     /** Changes this defined name to be local on the specified Calc sheet. */
     void                SetLocalTab( SCTAB nScTab );
     /** Hides or unhides the defined name. */
@@ -117,10 +117,10 @@ public:
     sal_uInt16          InsertName( SCTAB nTab, sal_uInt16 nScNameIdx );
 
     /** Inserts a new built-in defined name. */
-    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab, const ScRangeList& aRangeList );
-    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, const ScRange& aRange );
+    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const XclTokenArrayRef& xTokArr, SCTAB nScTab, const ScRangeList& aRangeList );
+    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const XclTokenArrayRef& xTokArr, const ScRange& aRange );
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
-    sal_uInt16          InsertUniqueName( const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertUniqueName( const OUString& rName, const XclTokenArrayRef& xTokArr, SCTAB nScTab );
     /** Returns index of an existing name, or creates a name without definition. */
     sal_uInt16          InsertRawName( const OUString& rName );
     /** Searches or inserts a defined name describing a macro name.
@@ -162,7 +162,7 @@ private:
 
     /** Appends a new NAME record to the record list.
         @return  The 1-based NAME record index used elsewhere in the Excel file. */
-    sal_uInt16          Append( XclExpNameRef xName );
+    sal_uInt16          Append( const XclExpNameRef& xName );
     /** Creates a new NAME record for the passed user-defined name.
         @return  The 1-based NAME record index used elsewhere in the Excel file. */
     sal_uInt16          CreateName( SCTAB nTab, const ScRangeData& rRangeData );
@@ -226,7 +226,7 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn ) :
     }
 }
 
-void XclExpName::SetTokenArray( XclTokenArrayRef xTokArr )
+void XclExpName::SetTokenArray( const XclTokenArrayRef& xTokArr )
 {
     mxTokArr = xTokArr;
 }
@@ -364,7 +364,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx 
     return nNameIdx;
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, const ScRange& aRange )
+sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const XclTokenArrayRef& xTokArr, const ScRange& aRange )
 {
     XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
     xName->SetTokenArray( xTokArr );
@@ -374,7 +374,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTo
     return Append( xName );
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab, const ScRangeList& rRangeList )
+sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const XclTokenArrayRef& xTokArr, SCTAB nScTab, const ScRangeList& rRangeList )
 {
     XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
     xName->SetTokenArray( xTokArr );
@@ -386,7 +386,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTo
 }
 
 sal_uInt16 XclExpNameManagerImpl::InsertUniqueName(
-        const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
+        const OUString& rName, const XclTokenArrayRef& xTokArr, SCTAB nScTab )
 {
     OSL_ENSURE( !rName.isEmpty(), "XclExpNameManagerImpl::InsertUniqueName - empty name" );
     XclExpNameRef xName( new XclExpName( GetRoot(), GetUnusedName( rName ) ) );
@@ -515,7 +515,7 @@ OUString XclExpNameManagerImpl::GetUnusedName( const OUString& rName ) const
     return aNewName;
 }
 
-sal_uInt16 XclExpNameManagerImpl::Append( XclExpNameRef xName )
+sal_uInt16 XclExpNameManagerImpl::Append( const XclExpNameRef& xName )
 {
     if( maNameList.GetSize() == 0xFFFF )
         return 0;
@@ -700,7 +700,7 @@ sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScR
 }
 
 sal_uInt16 XclExpNameManager::InsertUniqueName(
-        const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
+        const OUString& rName, const XclTokenArrayRef& xTokArr, SCTAB nScTab )
 {
     return mxImpl->InsertUniqueName( rName, xTokArr, nScTab );
 }

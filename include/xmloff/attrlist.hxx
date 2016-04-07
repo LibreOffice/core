@@ -51,7 +51,7 @@ public:
     virtual ~SvXMLAttributeList();
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static SvXMLAttributeList* getImplementation( css::uno::Reference< css::uno::XInterface > ) throw();
+    static SvXMLAttributeList* getImplementation( const css::uno::Reference< css::uno::XInterface >& ) throw();
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;

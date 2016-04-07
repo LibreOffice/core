@@ -60,7 +60,7 @@ class DictionaryNeo :
     DictionaryNeo & operator = (const DictionaryNeo &) = delete;
 
     void                    launchEvent(sal_Int16 nEvent,
-                                        css::uno::Reference< css::linguistic2::XDictionaryEntry > xEntry);
+                                        const css::uno::Reference< css::linguistic2::XDictionaryEntry >& xEntry);
 
     sal_uLong                   loadEntries(const OUString &rMainURL);
     sal_uLong                   saveEntries(const OUString &rMainURL);

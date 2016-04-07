@@ -35,7 +35,7 @@ SvUnoWeakContainer::~SvUnoWeakContainer() throw()
 }
 
 /** inserts the given ref into this container */
-void SvUnoWeakContainer::insert( uno::WeakReference< uno::XInterface > xRef ) throw()
+void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xRef ) throw()
 {
     for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); )
     {

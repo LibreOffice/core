@@ -73,7 +73,7 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
-bool isWorkbook(css::uno::Reference<css::uno::XInterface> xInterface)
+bool isWorkbook(const css::uno::Reference<css::uno::XInterface>& xInterface)
 {
     css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(xInterface, css::uno::UNO_QUERY);
     return xWorkbook.is();
@@ -762,7 +762,7 @@ void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const sal_uInt16 
 }
 
 // section 2.3.4.2.3
-void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const std::vector<sal_Int32>& rLibrayMap)
+void writePROJECTMODULES(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibrayMap)
 {
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
@@ -785,7 +785,7 @@ void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XN
 }
 
 // section 2.3.4.2
-void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const std::vector<sal_Int32>& rLibraryMap, const OUString& projectName)
+void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibraryMap, const OUString& projectName)
 {
     SvMemoryStream aDirStream(4096, 4096);
 
@@ -867,7 +867,7 @@ void exportVBAProjectStream(SvStream& rStrm)
 }
 
 // section 2.3.1 PROJECT Stream
-void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer,
+void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer,
         const OUString& projectName, const std::vector<sal_Int32>& rLibraryMap)
 {
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
@@ -992,7 +992,7 @@ void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& 
     rStrm.WriteUInt16(0x0000); // terminator
 }
 
-void getCorrectExportOrder(css::uno::Reference<css::container::XNameContainer> xNameContainer, std::vector<sal_Int32>& rLibraryMap)
+void getCorrectExportOrder(const css::uno::Reference<css::container::XNameContainer>& xNameContainer, std::vector<sal_Int32>& rLibraryMap)
 {
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();

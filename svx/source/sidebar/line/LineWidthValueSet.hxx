@@ -35,7 +35,7 @@ public:
     void SetUnit(OUString* str);
     void SetSelItem(sal_uInt16 nSel);
     sal_uInt16 GetSelItem() { return nSelItem;}
-    void SetImage(Image img);
+    void SetImage(const Image& img);
     void SetCusEnable(bool bEnable);
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;

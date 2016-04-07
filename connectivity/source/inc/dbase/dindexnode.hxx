@@ -141,7 +141,7 @@ namespace connectivity
 
             // Split and merge
             ONDXNode Split(ONDXPage& rPage);
-            void Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage);
+            void Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage);
 
             // Access operators
             ONDXNode& operator[] (sal_uInt16 nPos);

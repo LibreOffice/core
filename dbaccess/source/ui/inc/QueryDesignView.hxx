@@ -140,7 +140,7 @@ namespace dbaui
                     const css::uno::Sequence< css::beans::PropertyValue >& i_rFieldDescriptions
                 );
 
-        ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
+        ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   const OTableFieldDescRef& pEntry,
                                                                     const OUString& _sCriteria,
                                                                     OUString& _rsErrorMessage,
                                                                     css::uno::Reference< css::beans::XPropertySet>& _rxColumn) const;

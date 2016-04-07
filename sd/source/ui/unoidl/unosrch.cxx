@@ -400,7 +400,7 @@ uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNex
 /** this method returns the shape that follows xCurrentShape in the shape collection xShapes.
     It steps recursive into groupshapes and returns the xCurrentShape if it is the last
     shape in this collection */
-uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( uno::Reference< container::XIndexAccess >  xShapes, uno::Reference< drawing::XShape >  xCurrentShape ) throw()
+uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( const uno::Reference< container::XIndexAccess >&  xShapes, const uno::Reference< drawing::XShape >&  xCurrentShape ) throw()
 {
     uno::Reference< drawing::XShape >  xFound;
 
@@ -457,7 +457,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( uno::R
     return xFound;
 }
 
-uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Reference< text::XTextRange >  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw()
+uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::Reference< text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw()
 {
     if(!xText.is())
         return uno::Reference< text::XTextRange > ();
@@ -658,7 +658,7 @@ bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPo
         return false;
 }
 
-ESelection SdUnoSearchReplaceShape::GetSelection( uno::Reference< text::XTextRange >  xTextRange ) throw()
+ESelection SdUnoSearchReplaceShape::GetSelection( const uno::Reference< text::XTextRange >&  xTextRange ) throw()
 {
     ESelection aSel;
     SvxUnoTextRangeBase* pRange = SvxUnoTextRangeBase::getImplementation( xTextRange );
@@ -669,7 +669,7 @@ ESelection SdUnoSearchReplaceShape::GetSelection( uno::Reference< text::XTextRan
     return aSel;
 }
 
-uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( uno::Reference< text::XTextRange >  xTextRange ) throw()
+uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( const uno::Reference< text::XTextRange >&  xTextRange ) throw()
 {
     uno::Reference< drawing::XShape >  xShape;
 

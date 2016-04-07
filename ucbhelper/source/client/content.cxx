@@ -651,7 +651,7 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
 Reference< XResultSet > Content::createSortedCursor(
                             const Sequence< OUString >& rPropertyNames,
                             const Sequence< NumberedSortingInfo >& rSortInfo,
-                            Reference< XAnyCompareFactory > rAnyCompareFactory,
+                            const Reference< XAnyCompareFactory >& rAnyCompareFactory,
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {

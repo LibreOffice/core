@@ -213,7 +213,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
 
     Reference< resource::XStringResourceManager > getStringResourceFromDialogLibrary
-        ( Reference< container::XNameContainer > xDialogLib )
+        ( const Reference< container::XNameContainer >& xDialogLib )
     {
         Reference< resource::XStringResourceManager > xStringResourceManager;
         if( xDialogLib.is() )

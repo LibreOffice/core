@@ -250,7 +250,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());
 
 
-ErrCode RequestPassword(std::shared_ptr<const SfxFilter> pCurrentFilter, OUString& aURL, SfxItemSet* pSet);
+ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString& aURL, SfxItemSet* pSet);
 }
 
 #endif

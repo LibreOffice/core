@@ -54,7 +54,7 @@ private:
     void SAL_CALL
     impl_getCurrentRowContent(
         css::uno::Any& rRowContent,
-        css::uno::Reference< css::sdbc::XRow > xRow )
+        const css::uno::Reference< css::sdbc::XRow >& xRow )
         throw ( css::sdbc::SQLException
               , css::uno::RuntimeException );
 
@@ -64,19 +64,19 @@ private:
     static void SAL_CALL
     impl_getCurrentContentIdentifierString(
             css::uno::Any& rAny
-            , css::uno::Reference< css::ucb::XContentAccess > xContentAccess )
+            , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess )
             throw ( css::uno::RuntimeException );
 
     static void SAL_CALL
     impl_getCurrentContentIdentifier(
             css::uno::Any& rAny
-            , css::uno::Reference< css::ucb::XContentAccess > xContentAccess )
+            , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess )
             throw ( css::uno::RuntimeException );
 
     static void SAL_CALL
     impl_getCurrentContent(
             css::uno::Any& rAny
-            , css::uno::Reference< css::ucb::XContentAccess > xContentAccess )
+            , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess )
             throw ( css::uno::RuntimeException );
 
     void SAL_CALL

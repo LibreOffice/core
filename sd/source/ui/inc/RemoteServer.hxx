@@ -70,9 +70,9 @@ namespace sd
 
             // For the control dialog
             SD_DLLPUBLIC static std::vector< std::shared_ptr< ClientInfo > > getClients();
-            SD_DLLPUBLIC static bool connectClient( std::shared_ptr< ClientInfo > pClient,
-                                                        const OUString& aPin );
-            SD_DLLPUBLIC static void deauthoriseClient( std::shared_ptr< ClientInfo > pClient );
+            SD_DLLPUBLIC static bool connectClient( const std::shared_ptr< ClientInfo >& pClient,
+                                                    const OUString& aPin );
+            SD_DLLPUBLIC static void deauthoriseClient( const std::shared_ptr< ClientInfo >& pClient );
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled
             SD_DLLPUBLIC static void ensureDiscoverable();

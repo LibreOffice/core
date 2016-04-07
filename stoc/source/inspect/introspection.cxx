@@ -96,7 +96,7 @@ typedef WeakImplHelper< XIntrospectionAccess, XMaterialHolder, XExactName,
 
 
 // Method to assert, if a class is derived from another class
-bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> xDerivedFromClass )
+bool isDerivedFrom( const Reference<XIdlClass>& xToTestClass, const Reference<XIdlClass>& xDerivedFromClass )
 {
     Sequence< Reference<XIdlClass> > aClassesSeq = xToTestClass->getSuperclasses();
     const Reference<XIdlClass>* pClassesArray = aClassesSeq.getConstArray();

@@ -1682,7 +1682,7 @@ AnimationsExporter::~AnimationsExporter()
 {
 }
 
-void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )
+void AnimationsExporter::prepare( const Reference< XAnimationNode >& xRootNode )
 {
     try
     {
@@ -1698,7 +1698,7 @@ void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )
     }
 }
 
-void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode )
+void AnimationsExporter::exportAnimations( const Reference< XAnimationNode >& xRootNode )
 {
     try
     {

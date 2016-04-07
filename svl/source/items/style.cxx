@@ -965,7 +965,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference<
 }
 
 void
-SfxStyleSheetBasePool::StoreStyleSheet(rtl::Reference< SfxStyleSheetBase > xStyle)
+SfxStyleSheetBasePool::StoreStyleSheet(const rtl::Reference< SfxStyleSheetBase >& xStyle)
 {
     pImp->mxIndexedStyleSheets->AddStyleSheet(xStyle);
 }

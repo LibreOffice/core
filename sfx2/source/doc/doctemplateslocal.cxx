@@ -33,7 +33,7 @@
 using namespace ::com::sun::star;
 
 
-std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
+std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext >& xContext )
     throw( uno::Exception )
 {
     OUString aStringID = "groupuinames.xml";
@@ -41,7 +41,7 @@ std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequ
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const std::vector< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
+void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const std::vector< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext >& xContext )
     throw( uno::Exception )
 {
     if ( !xOutStream.is() )
@@ -88,7 +88,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 }
 
 
-std::vector< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext > xContext )
+std::vector< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext >& xContext )
     throw( uno::Exception )
 {
     if ( !xContext.is() || !xInStream.is() )

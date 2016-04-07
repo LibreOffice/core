@@ -33,7 +33,7 @@ SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.A
 ::std::list<ScAddInListener*> ScAddInListener::aAllListeners;
 
 ScAddInListener* ScAddInListener::CreateListener(
-                        uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc )
+                        const uno::Reference<sheet::XVolatileResult>& xVR, ScDocument* pDoc )
 {
     ScAddInListener* pNew = new ScAddInListener( xVR, pDoc );
 
@@ -58,7 +58,7 @@ ScAddInListener::~ScAddInListener()
     delete pDocs;
 }
 
-ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xVR )
+ScAddInListener* ScAddInListener::Get( const uno::Reference<sheet::XVolatileResult>& xVR )
 {
     ScAddInListener* pLst = nullptr;
     sheet::XVolatileResult* pComp = xVR.get();

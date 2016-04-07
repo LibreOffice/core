@@ -135,7 +135,7 @@ class SvxConfigGroupListBox : public SvTreeListBox
     OUString m_sMyMacros;
     OUString m_sProdMacros;
     Image GetImage(
-        css::uno::Reference< css::script::browse::XBrowseNode > node,
+        const css::uno::Reference< css::script::browse::XBrowseNode >& node,
         css::uno::Reference< css::uno::XComponentContext > xCtx,
         bool bIsRootNode
     );

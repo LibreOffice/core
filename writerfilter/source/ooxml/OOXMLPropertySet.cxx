@@ -385,7 +385,7 @@ OOXMLPropertySet::end() const
     return mProperties.end();
 }
 
-void OOXMLPropertySet::add(OOXMLProperty::Pointer_t pProperty)
+void OOXMLPropertySet::add(const OOXMLProperty::Pointer_t& pProperty)
 {
     if (pProperty.get() != nullptr && pProperty->getId() != 0x0)
     {
@@ -393,7 +393,7 @@ void OOXMLPropertySet::add(OOXMLProperty::Pointer_t pProperty)
     }
 }
 
-void OOXMLPropertySet::add(OOXMLPropertySet::Pointer_t pPropertySet)
+void OOXMLPropertySet::add(const OOXMLPropertySet::Pointer_t& pPropertySet)
 {
     if (pPropertySet.get() != nullptr)
     {
@@ -722,7 +722,7 @@ void OOXMLTable::resolve(Table & rTable)
     }
 }
 
-void OOXMLTable::add(ValuePointer_t pPropertySet)
+void OOXMLTable::add(const ValuePointer_t& pPropertySet)
 {
     if (pPropertySet.get() != nullptr)
         mPropertySets.push_back(pPropertySet);

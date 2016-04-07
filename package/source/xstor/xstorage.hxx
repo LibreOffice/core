@@ -226,7 +226,7 @@ struct OStorage_Impl
     void CopyToStorage( const css::uno::Reference< css::embed::XStorage >& xDest,
                         bool bDirect );
     void CopyStorageElement( SotElement_Impl* pElement,
-                            css::uno::Reference< css::embed::XStorage > xDest,
+                            const css::uno::Reference< css::embed::XStorage >& xDest,
                             const OUString& aName,
                             bool bDirect );
 

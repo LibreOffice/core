@@ -107,7 +107,7 @@ public:
     void resetTokenArray(ScTokenArray* pTokens, const ScRange& rRange);
     void addTokenArray(ScTokenArray* pTokens, const ScRange& rRange);
     void stopListening();
-    void setCallback(std::function<void()> aCallbackFunction);
+    void setCallback(const std::function<void()>& aCallbackFunction);
 };
 
 class ScConditionalFormat;

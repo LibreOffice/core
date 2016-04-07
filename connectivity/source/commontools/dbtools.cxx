@@ -2007,8 +2007,8 @@ void checkDisposed(bool _bThrow) throw ( DisposedException )
 
 }
 
-OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator first,
-                                        OSQLColumns::Vector::const_iterator last,
+OSQLColumns::Vector::const_iterator find(const OSQLColumns::Vector::const_iterator& first,
+                                        const OSQLColumns::Vector::const_iterator& last,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
@@ -2016,8 +2016,8 @@ OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator fir
     return find(first,last,sName,_rVal,_rCase);
 }
 
-OSQLColumns::Vector::const_iterator findRealName(OSQLColumns::Vector::const_iterator first,
-                                        OSQLColumns::Vector::const_iterator last,
+OSQLColumns::Vector::const_iterator findRealName(const OSQLColumns::Vector::const_iterator& first,
+                                        const OSQLColumns::Vector::const_iterator& last,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
@@ -2026,7 +2026,7 @@ OSQLColumns::Vector::const_iterator findRealName(OSQLColumns::Vector::const_iter
 }
 
 OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator first,
-                                        OSQLColumns::Vector::const_iterator last,
+                                        const OSQLColumns::Vector::const_iterator& last,
                                         const OUString& _rProp,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)

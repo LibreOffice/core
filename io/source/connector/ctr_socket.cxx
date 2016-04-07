@@ -48,7 +48,7 @@ namespace stoc_connector {
     }
 
 
-    static void callStarted(Reference<XStreamListener> xStreamListener)
+    static void callStarted(const Reference<XStreamListener>& xStreamListener)
     {
         xStreamListener->started();
     }
@@ -58,7 +58,7 @@ namespace stoc_connector {
 
         explicit callError(const Any & any);
 
-        void operator () (Reference<XStreamListener> xStreamListener);
+        void operator () (const Reference<XStreamListener>& xStreamListener);
     };
 
     callError::callError(const Any & aAny)
@@ -66,12 +66,12 @@ namespace stoc_connector {
     {
     }
 
-    void callError::operator () (Reference<XStreamListener> xStreamListener)
+    void callError::operator () (const Reference<XStreamListener>& xStreamListener)
     {
         xStreamListener->error(any);
     }
 
-    static void callClosed(Reference<XStreamListener> xStreamListener)
+    static void callClosed(const Reference<XStreamListener>& xStreamListener)
     {
         xStreamListener->closed();
     }

@@ -52,7 +52,7 @@ TableProperties::~TableProperties()
 {
 }
 
-void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector< TableRow >& rvTableRows )
+void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, const std::vector< TableRow >& rvTableRows )
 {
     if ( rvTableRows.size() > 1 )
         xTableRows->insertByIndex( 0, rvTableRows.size() - 1 );
@@ -66,7 +66,7 @@ void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector
     }
 }
 
-void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::vector< sal_Int32 >& rvTableGrid )
+void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const std::vector< sal_Int32 >& rvTableGrid )
 {
     if ( rvTableGrid.size() > 1 )
         xTableColumns->insertByIndex( 0, rvTableGrid.size() - 1 );
@@ -256,7 +256,7 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
 }
 
 void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-    const Reference < XPropertySet >& xPropSet, TextListStylePtr pMasterTextListStyle )
+    const Reference < XPropertySet >& xPropSet, const TextListStylePtr& pMasterTextListStyle )
 {
     uno::Reference< XColumnRowRange > xColumnRowRange(
          xPropSet->getPropertyValue("Model"), uno::UNO_QUERY_THROW );

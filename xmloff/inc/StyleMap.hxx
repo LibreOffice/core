@@ -75,7 +75,7 @@ public:
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static StyleMap* getImplementation(
-            css::uno::Reference< css::uno::XInterface > ) throw();
+            const css::uno::Reference< css::uno::XInterface >& ) throw();
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(

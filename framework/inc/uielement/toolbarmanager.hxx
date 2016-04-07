@@ -138,7 +138,7 @@ class ToolBarManager : public ToolbarManager_Base
         void CreateControllers();
         void UpdateControllers();
         //for update controller via Support Visiable
-        void UpdateController( css::uno::Reference< css::frame::XToolbarController > xController);
+        void UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController);
         //end
         void AddFrameActionListener();
         void ImplClearPopupMenu( ToolBox *pToolBar );

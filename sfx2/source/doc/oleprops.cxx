@@ -796,7 +796,7 @@ bool SfxOleSection::GetDateValue( util::Date& rValue, sal_Int32 nPropId ) const
     return pProp != nullptr;
 }
 
-void SfxOleSection::SetProperty( SfxOlePropertyRef xProp )
+void SfxOleSection::SetProperty( const SfxOlePropertyRef& xProp )
 {
     if( xProp.get() )
         maPropMap[ xProp->GetPropId() ] = xProp;

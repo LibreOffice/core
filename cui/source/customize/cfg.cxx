@@ -3711,7 +3711,7 @@ ToolbarSaveInData::~ToolbarSaveInData()
 }
 
 void ToolbarSaveInData::SetSystemStyle(
-    uno::Reference< frame::XFrame > xFrame,
+    const uno::Reference< frame::XFrame >& xFrame,
     const OUString& rResourceURL,
     sal_Int32 nStyle )
 {

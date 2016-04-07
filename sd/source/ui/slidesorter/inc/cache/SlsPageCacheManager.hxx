@@ -58,7 +58,7 @@ public:
             pointer and the ReleaseCache() method has not been called.
     */
     std::shared_ptr<Cache> GetCache (
-        DocumentKey pDocument,
+        const  DocumentKey& pDocument,
         const Size& rPreviewSize);
 
     /** Tell the cache manager to release its own reference to the specified
@@ -82,14 +82,14 @@ public:
         the next time.
     */
     bool InvalidatePreviewBitmap (
-        DocumentKey pDocument,
+        const DocumentKey& pDocument,
         const SdrPage* pPage);
 
     /** Invalidate the preview bitmaps for all slides that belong to the
         specified document.  This is necessary after model changes that
         affect e.g. page number fields.
     */
-    void InvalidateAllPreviewBitmaps (DocumentKey pDocument);
+    void InvalidateAllPreviewBitmaps (const DocumentKey& pDocument);
 
     /** Invalidate all the caches that are currently in use and destroy
         those that are not.  This is used for example when the high contrast
@@ -131,7 +131,7 @@ private:
     friend class Deleter;
 
     std::shared_ptr<Cache> GetRecentlyUsedCache(
-        DocumentKey pDocument,
+        const DocumentKey& pDocument,
         const Size& rSize);
 
     /** Add the given cache to the list of recently used caches for the
@@ -148,7 +148,7 @@ private:
     */
     void Recycle (
         const std::shared_ptr<Cache>& rpCache,
-        DocumentKey pDocument,
+        const DocumentKey& pDocument,
         const Size& rPreviewSize);
 };
 

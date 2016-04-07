@@ -48,7 +48,7 @@ public:
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const ScRangeList& rRangeList );
 
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
-    sal_uInt16          InsertUniqueName( const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertUniqueName( const OUString& rName, const XclTokenArrayRef& xTokArr, SCTAB nScTab );
     /** Returns index of an existing name, or creates a name without definition. */
     sal_uInt16          InsertRawName( const OUString& rName );
     /** Searches or inserts a defined name describing a macro name.

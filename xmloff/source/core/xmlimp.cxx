@@ -1971,7 +1971,7 @@ SvXMLImport::GetRDFaImportHelper()
 }
 
 void
-SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
+SvXMLImport::AddRDFa(const uno::Reference<rdf::XMetadatable>& i_xObject,
     OUString const & i_rAbout,
     OUString const & i_rProperty,
     OUString const & i_rContent,

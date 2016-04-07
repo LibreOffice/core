@@ -219,7 +219,7 @@ public:
         SubArguments& vSubArguments );
     // only check isNan
     static void CheckSubArgumentIsNan2( std::stringstream& ss,
-        SubArguments& vSubArguments, int argumentNum, std::string p );
+        SubArguments& vSubArguments, int argumentNum, const std::string& p );
     static void UnrollDoubleVector( std::stringstream& ss,
         std::stringstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
         int nCurWindowSize );

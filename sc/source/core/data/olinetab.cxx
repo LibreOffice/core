@@ -125,7 +125,7 @@ ScOutlineCollection::const_iterator ScOutlineCollection::end() const
     return m_Entries.end();
 }
 
-void ScOutlineCollection::erase(iterator pos)
+void ScOutlineCollection::erase(const iterator& pos)
 {
     m_Entries.erase(pos);
 }

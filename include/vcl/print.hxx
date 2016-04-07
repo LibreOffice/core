@@ -381,13 +381,13 @@ public:
     static bool                 PreparePrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
                                     const JobSetup& i_rInitSetup );
     static bool                 ExecutePrintJob( std::shared_ptr<vcl::PrinterController> i_pController );
-    static void                 FinishPrintJob( std::shared_ptr<vcl::PrinterController> i_pController );
+    static void                 FinishPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController );
 
     /** Implementation detail of PrintJob being asynchronous
 
         not exported, not usable outside vcl
     */
-    static void SAL_DLLPRIVATE  ImplPrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
+    static void SAL_DLLPRIVATE  ImplPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
                                     const JobSetup& i_rInitSetup );
 };
 

@@ -1601,7 +1601,7 @@ sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument& rDo
     return nPage;
 }
 
-void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDFExtOutDevData& rPDFExtOutDevData )
+void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& xPage, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
     try
     {
@@ -1636,7 +1636,7 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
     }
 }
 
-void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
+void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
     if ( xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
     {

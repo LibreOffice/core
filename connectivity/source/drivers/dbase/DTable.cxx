@@ -1662,7 +1662,7 @@ static double toDouble(const OString& rString)
 }
 
 
-bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, const Reference<XIndexAccess>& _xCols, const bool bForceAllFields)
+bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRow, const Reference<XIndexAccess>& _xCols, const bool bForceAllFields)
 {
     OSL_ENSURE(m_pBuffer,"Buffer is NULL!");
     if ( !m_pBuffer )

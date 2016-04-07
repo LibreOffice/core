@@ -141,7 +141,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
      */
     void                InvalidateCursor();
 
-    bool writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
+    bool writeFormulaOoxml(const ::sax_fastparser::FSHelperPtr& pSerializer,
             oox::core::OoxmlVersion version,
             oox::drawingml::DocumentType documentType);
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);

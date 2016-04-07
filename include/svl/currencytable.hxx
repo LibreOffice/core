@@ -36,7 +36,7 @@ public:
 
     size_t size() const;
 
-    void insert(iterator it, std::unique_ptr<NfCurrencyEntry> p);
+    void insert(const iterator& it, std::unique_ptr<NfCurrencyEntry> p);
 };
 
 #endif

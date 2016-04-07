@@ -429,7 +429,7 @@ public:
     css::uno::Reference< css::sdbc::XResultSet >
     createSortedCursor( const css::uno::Sequence< OUString >& rPropertyNames,
                         const css::uno::Sequence< css::ucb::NumberedSortingInfo >& rSortInfo,
-                        css::uno::Reference< css::ucb::XAnyCompareFactory > rAnyCompareFactory,
+                        const css::uno::Reference< css::ucb::XAnyCompareFactory >& rAnyCompareFactory,
                         ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( css::ucb::CommandAbortedException,
                css::uno::RuntimeException,

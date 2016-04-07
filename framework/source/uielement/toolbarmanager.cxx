@@ -347,7 +347,7 @@ void ToolBarManager::UpdateControllers()
 }
 
 //for update toolbar controller via Support Visible
-void ToolBarManager::UpdateController( css::uno::Reference< css::frame::XToolbarController > xController)
+void ToolBarManager::UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController)
 {
 
     if ( !m_bUpdateControllers )

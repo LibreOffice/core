@@ -160,7 +160,7 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
     return dynamic_cast<SidebarController*>(xListener.get());
 }
 
-void SidebarController::registerSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
+void SidebarController::registerSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
 {
     // Listen for context change events.
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
@@ -172,7 +172,7 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
             xController);
 }
 
-void SidebarController::unregisterSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
+void SidebarController::unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
 {
     pController->disposeDecks();
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
@@ -765,7 +765,7 @@ VclPtr<Panel> SidebarController::CreatePanel (
     vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
     const Context& rContext,
-    VclPtr<Deck> pDeck)
+    const VclPtr<Deck>& pDeck)
 {
     const PanelDescriptor* pPanelDescriptor = mpResourceManager->GetPanelDescriptor(rsPanelId);
 
@@ -1291,7 +1291,7 @@ ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingP
     return aPanels;
 }
 
-void SidebarController::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void SidebarController::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     mpResourceManager->UpdateModel(xModel);
 }

@@ -734,7 +734,7 @@ namespace
     @return
         Return </True> if both pointers point to the same object.
 */
-bool compare_layers (uno::WeakReference<uno::XInterface> xRef, void* pSearchData)
+bool compare_layers (const uno::WeakReference<uno::XInterface>& xRef, void* pSearchData)
 {
     uno::Reference<uno::XInterface> xLayer (xRef);
     if (xLayer.is())

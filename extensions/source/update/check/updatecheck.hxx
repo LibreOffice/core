@@ -140,7 +140,7 @@ private:
 
     /* This method turns on the menubar icon and triggers the bubble window
      */
-    void handleMenuBarUI( rtl::Reference< UpdateHandler > rUpdateHandler,
+    void handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdateHandler,
                           UpdateState& eState, bool suppressBubble );
     enum State {
         NOT_INITIALIZED,

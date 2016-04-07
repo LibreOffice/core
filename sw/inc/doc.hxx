@@ -877,7 +877,7 @@ public:
 
         Convenince function used by ReplaceDocumentProperties to skip some UNO calls.
      */
-    void ReplaceUserDefinedDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties > xSourceDocProps );
+    void ReplaceUserDefinedDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xSourceDocProps );
 
     /** Replace document properties with those from rSource.
 

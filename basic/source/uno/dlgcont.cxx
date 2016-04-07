@@ -112,7 +112,7 @@ bool SAL_CALL SfxDialogLibraryContainer::isLibraryElementValid(const Any& rEleme
 }
 
 bool writeOasis2OOoLibraryElement(
-    Reference< XInputStream > xInput, Reference< XOutputStream > xOutput )
+    const Reference< XInputStream >& xInput, const Reference< XOutputStream >& xOutput )
 {
     Reference< XComponentContext > xContext(
         comphelper::getProcessComponentContext() );

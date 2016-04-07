@@ -45,10 +45,10 @@ public:
     void dumpEnhancedCustomShapeParameter(css::drawing::EnhancedCustomShapeParameter aParameter);
 
     // EnhancedCustomShapeExtrusion.idl
-    void dumpEnhancedCustomShapeExtrusionService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeExtrusionService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpExtrusionAsAttribute(bool bExtrusion);
     void dumpBrightnessAsAttribute(double aBrightness);
-    void dumpDepthAsElement(css::drawing::EnhancedCustomShapeParameterPair aDepth);
+    void dumpDepthAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aDepth);
     void dumpDiffusionAsAttribute(double aDiffusion);
     void dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberOfLineSegments);
     void dumpLightFaceAsAttribute(bool bLightFace);
@@ -60,18 +60,18 @@ public:
     void dumpSecondLightDirectionAsElement(css::drawing::Direction3D aSecondLightDirection);
     void dumpMetalAsAttribute(bool bMetal);
     void dumpShadeModeAsAttribute(css::drawing::ShadeMode eShadeMode);
-    void dumpRotateAngleAsElement(css::drawing::EnhancedCustomShapeParameterPair aRotateAngle);
+    void dumpRotateAngleAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aRotateAngle);
     void dumpRotationCenterAsElement(css::drawing::Direction3D aRotationCenter);
     void dumpShininessAsAttribute(double aShininess);
-    void dumpSkewAsElement(css::drawing::EnhancedCustomShapeParameterPair aSkew);
+    void dumpSkewAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aSkew);
     void dumpSpecularityAsAttribute(double aSpecularity);
     void dumpProjectionModeAsAttribute(css::drawing::ProjectionMode eProjectionMode);
     void dumpViewPointAsElement(css::drawing::Position3D aViewPoint);
-    void dumpOriginAsElement(css::drawing::EnhancedCustomShapeParameterPair aOrigin);
+    void dumpOriginAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aOrigin);
     void dumpExtrusionColorAsAttribute(bool bExtrusionColor);
 
     // EnhancedCustomShapeGeometry.idl
-    void dumpEnhancedCustomShapeGeometryService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeGeometryService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpTypeAsAttribute(const OUString& sType);
     void dumpViewBoxAsElement(css::awt::Rectangle aViewBox);
     void dumpMirroredXAsAttribute(bool bMirroredX); // also used in EnhancedCustomShapeHandle
@@ -85,23 +85,23 @@ public:
     void dumpHandlesAsElement(const css::uno::Sequence< css::beans::PropertyValues >& aHandles);
 
     // EnhancedCustomShapeHandle.idl
-    void dumpEnhancedCustomShapeHandleService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeHandleService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpSwitchedAsAttribute(bool bSwitched);
-    void dumpPositionAsElement(css::drawing::EnhancedCustomShapeParameterPair aPosition);
-    void dumpPolarAsElement(css::drawing::EnhancedCustomShapeParameterPair aPolar);
+    void dumpPositionAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aPosition);
+    void dumpPolarAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aPolar);
     void dumpRefXAsAttribute(sal_Int32 aRefX);
     void dumpRefYAsAttribute(sal_Int32 aRefY);
     void dumpRefAngleAsAttribute(sal_Int32 aRefAngle);
     void dumpRefRAsAttribute(sal_Int32 aRefR);
-    void dumpRangeXMinimumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeXMinimum);
-    void dumpRangeXMaximumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
-    void dumpRangeYMinimumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeYMinimum);
-    void dumpRangeYMaximumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
-    void dumpRadiusRangeMinimumAsElement(css::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum);
-    void dumpRadiusRangeMaximumAsElement(css::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum);
+    void dumpRangeXMinimumAsElement(const css::drawing::EnhancedCustomShapeParameter& aRangeXMinimum);
+    void dumpRangeXMaximumAsElement(const css::drawing::EnhancedCustomShapeParameter& aRangeXMaximum);
+    void dumpRangeYMinimumAsElement(const css::drawing::EnhancedCustomShapeParameter& aRangeYMinimum);
+    void dumpRangeYMaximumAsElement(const css::drawing::EnhancedCustomShapeParameter& aRangeXMaximum);
+    void dumpRadiusRangeMinimumAsElement(const css::drawing::EnhancedCustomShapeParameter& aRadiusRangeMinimum);
+    void dumpRadiusRangeMaximumAsElement(const css::drawing::EnhancedCustomShapeParameter& aRadiusRangeMaximum);
 
     // EnhancedCustomShapePath.idl
-    void dumpEnhancedCustomShapePathService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapePathService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpCoordinatesAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aCoordinates);
     void dumpSegmentsAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& aSegments);
     void dumpStretchXAsAttribute(sal_Int32 aStretchX);
@@ -116,7 +116,7 @@ public:
     void dumpSubViewSizeAsElement(const css::uno::Sequence< css::awt::Size >& aSubViewSize);
 
     // EnhancedCustomShapePath.idl
-    void dumpEnhancedCustomShapeTextPathService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeTextPathService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpTextPathAsAttribute(bool bTextPath);
     void dumpTextPathModeAsAttribute(css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode);
     void dumpScaleXAsAttribute(bool bScaleX);

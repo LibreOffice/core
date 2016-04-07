@@ -84,7 +84,7 @@ namespace offapp
 
 
     private:
-        OUString implGetCellText(DriverPoolingSettings::const_iterator _rPos, sal_uInt16 _nColId) const;
+        OUString implGetCellText(const DriverPoolingSettings::const_iterator& _rPos, sal_uInt16 _nColId) const;
     };
 
 
@@ -192,7 +192,7 @@ namespace offapp
     }
 
 
-    OUString DriverListControl::implGetCellText(DriverPoolingSettings::const_iterator _rPos, sal_uInt16 _nColId) const
+    OUString DriverListControl::implGetCellText(const DriverPoolingSettings::const_iterator& _rPos, sal_uInt16 _nColId) const
     {
         OSL_ENSURE(_rPos < m_aSettings.end(), "DriverListControl::implGetCellText: invalid position!");
 

@@ -39,7 +39,7 @@ protected:
     css::uno::Reference< css::io::XSeekable > m_xSeekable;
 
 public:
-    OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext > xContext, const OUString& aURL );
+    OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString& aURL );
 
     virtual ~OSelfTerminateFileStream();
 

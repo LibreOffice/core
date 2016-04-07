@@ -220,7 +220,7 @@ void SelectPersonaDialog::SetProgress( OUString& rProgress )
     }
 }
 
-void SelectPersonaDialog::SetImages( Image aImage, sal_Int32 nIndex )
+void SelectPersonaDialog::SetImages( const Image& aImage, sal_Int32 nIndex )
 {
     m_vResultList[nIndex]->Enable();
     m_vResultList[nIndex]->SetModeImage( aImage );

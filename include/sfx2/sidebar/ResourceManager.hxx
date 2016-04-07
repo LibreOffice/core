@@ -49,7 +49,7 @@ public:
     const PanelDescriptor* GetPanelDescriptor(const OUString& rsPanelId) const;
     PanelDescriptor* GetPanelDescriptor(const OUString& rsPanelId);
 
-    void UpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void UpdateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 
     void InitDeckContext(const Context& rContex);
     void SaveDecksSettings(const Context& rContext);

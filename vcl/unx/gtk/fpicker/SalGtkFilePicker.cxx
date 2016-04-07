@@ -303,19 +303,19 @@ void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<X
 
 // FilePicker Event functions
 
-void SalGtkFilePicker::impl_fileSelectionChanged( FilePickerEvent aEvent )
+void SalGtkFilePicker::impl_fileSelectionChanged( const FilePickerEvent& aEvent )
 {
     OSL_TRACE( "file selection changed");
     if (m_xListener.is()) m_xListener->fileSelectionChanged( aEvent );
 }
 
-void SalGtkFilePicker::impl_directoryChanged( FilePickerEvent aEvent )
+void SalGtkFilePicker::impl_directoryChanged( const FilePickerEvent& aEvent )
 {
     OSL_TRACE("directory changed");
     if (m_xListener.is()) m_xListener->directoryChanged( aEvent );
 }
 
-void SalGtkFilePicker::impl_controlStateChanged( FilePickerEvent aEvent )
+void SalGtkFilePicker::impl_controlStateChanged( const FilePickerEvent& aEvent )
 {
     OSL_TRACE("control state changed");
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );

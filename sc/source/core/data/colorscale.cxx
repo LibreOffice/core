@@ -102,7 +102,7 @@ void ScFormulaListener::addTokenArray(ScTokenArray* pArray, const ScRange& rRang
     startListening(pArray, rRange);
 }
 
-void ScFormulaListener::setCallback(std::function<void()> aCallback)
+void ScFormulaListener::setCallback(const std::function<void()>& aCallback)
 {
     maCallbackFunction = aCallback;
 }

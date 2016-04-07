@@ -2672,7 +2672,7 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
 }
 
 
-void SfxMedium::SetFilter( std::shared_ptr<const SfxFilter> pFilter )
+void SfxMedium::SetFilter( const std::shared_ptr<const SfxFilter>& pFilter )
 {
     pImp->m_pFilter = pFilter;
 }

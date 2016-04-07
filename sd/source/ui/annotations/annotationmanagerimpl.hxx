@@ -70,15 +70,15 @@ public:
 
     void SelectNextAnnotation(bool bForeward);
 
-    void SelectAnnotation( css::uno::Reference< css::office::XAnnotation > xAnnotation, bool bEdit = false );
+    void SelectAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bEdit = false );
     void GetSelectedAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
     void InsertAnnotation();
-    void DeleteAnnotation( css::uno::Reference< css::office::XAnnotation > xAnnotation );
+    void DeleteAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
     void DeleteAnnotationsByAuthor( const OUString& sAuthor );
     void DeleteAllAnnotations();
 
-    void ExecuteAnnotationContextMenu( css::uno::Reference< css::office::XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
+    void ExecuteAnnotationContextMenu( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
 
     static Color GetColorDark(sal_uInt16 aAuthorIndex);
     static Color GetColorLight(sal_uInt16 aAuthorIndex);

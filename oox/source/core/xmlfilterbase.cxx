@@ -209,7 +209,7 @@ XmlFilterBase::~XmlFilterBase()
     mxImpl->maFastParser.setDocumentHandler( nullptr );
 }
 
-void XmlFilterBase::checkDocumentProperties(Reference<XDocumentProperties> xDocProps)
+void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>& xDocProps)
 {
     mbMSO2007 = false;
     if (!xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
@@ -508,7 +508,7 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputSt
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const OUString& sValue )
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const OUString& sValue )
 {
     pDoc->startElement( nXmlElement, FSEND );
     pDoc->writeEscaped( sValue );
@@ -516,7 +516,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const OUString& sValue )
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
 {
     pDoc->startElement( nXmlElement, FSEND );
     pDoc->write( nValue );
@@ -524,7 +524,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const util::DateTime& rTime )
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTime& rTime )
 {
     if( rTime.Year == 0 )
         return;
@@ -547,7 +547,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const util::DateTime& rTi
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const Sequence< OUString >& aItems )
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OUString >& aItems )
 {
     if( aItems.getLength() == 0 )
         return;
@@ -564,7 +564,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const Sequence< OUString 
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const LanguageTag& rLanguageTag )
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const LanguageTag& rLanguageTag )
 {
     // dc:language, Dublin Core recommends "such as RFC 4646", which is BCP 47
     // and obsoleted by RFC 5646, see
@@ -574,7 +574,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const LanguageTag& rLangu
 }
 
 static void
-writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
+writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >& xProperties )
 {
     OUString sValue;
     if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
@@ -621,7 +621,7 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
 }
 
 static void
-writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
+writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >& xProperties )
 {
     rSelf.addRelation(
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
@@ -716,7 +716,7 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
 }
 
 static void
-writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
+writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >& xProperties )
 {
     uno::Reference<beans::XPropertyAccess> xUserDefinedProperties( xProperties->getUserDefinedProperties(), uno::UNO_QUERY );
     Sequence< PropertyValue > aprop( xUserDefinedProperties->getPropertyValues() );
@@ -800,7 +800,7 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
     pAppProps->endElement( XML_Properties );
 }
 
-XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProperties > xProperties )
+XmlFilterBase& XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperties >& xProperties )
 {
     if( xProperties.is() )
     {

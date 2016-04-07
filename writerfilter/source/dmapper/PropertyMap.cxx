@@ -804,8 +804,8 @@ bool SectionPropertyMap::HasFooter(bool bFirstPage) const
 #define MIN_HEAD_FOOT_HEIGHT 100 //minimum header/footer height
 
 void SectionPropertyMap::CopyHeaderFooterTextProperty (
-    uno::Reference< beans::XPropertySet > xPrevStyle,
-    uno::Reference< beans::XPropertySet > xStyle,
+    const uno::Reference< beans::XPropertySet >& xPrevStyle,
+    const uno::Reference< beans::XPropertySet >& xStyle,
     PropertyIds ePropId )
 {
     try {
@@ -830,8 +830,8 @@ void SectionPropertyMap::CopyHeaderFooterTextProperty (
 
 // Copy headers and footers from the previous page style.
 void SectionPropertyMap::CopyHeaderFooter(
-    uno::Reference< beans::XPropertySet > xPrevStyle,
-    uno::Reference< beans::XPropertySet > xStyle,
+    const uno::Reference< beans::XPropertySet >& xPrevStyle,
+    const uno::Reference< beans::XPropertySet >& xStyle,
     bool bOmitRightHeader, bool bOmitLeftHeader,
     bool bOmitRightFooter, bool bOmitLeftFooter)
 {

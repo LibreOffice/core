@@ -249,7 +249,7 @@ namespace pdfi
         {}
     private:
         // helper method for resolveHyperlinks
-        bool resolveHyperlink( std::list<Element*>::iterator link_it, std::list<Element*>& rElements );
+        bool resolveHyperlink( const std::list<Element*>::iterator& link_it, std::list<Element*>& rElements );
     public:
         virtual ~PageElement();
 

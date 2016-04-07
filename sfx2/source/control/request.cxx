@@ -361,7 +361,7 @@ void SfxRequest::Record_Impl
 (
     SfxShell&       rSh,    // the <SfxShell>, which has executed the Request
     const SfxSlot&  rSlot,  // the <SfxSlot>, which has executed the Request
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder,
+    const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder,
     SfxViewFrame* pViewFrame
 )
 

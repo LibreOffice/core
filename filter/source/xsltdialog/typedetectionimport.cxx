@@ -47,7 +47,7 @@ TypeDetectionImporter::~TypeDetectionImporter()
 {
 }
 
-void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxContext, Reference< XInputStream > xIS, XMLFilterVector& rFilters )
+void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& xIS, XMLFilterVector& rFilters )
 {
     try
     {

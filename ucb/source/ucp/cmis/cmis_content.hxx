@@ -109,8 +109,8 @@ private:
     OUString cancelCheckOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception );
 
-    static void copyData( css::uno::Reference< css::io::XInputStream > xIn,
-        css::uno::Reference< css::io::XOutputStream > xOut );
+    static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
+        const css::uno::Reference< css::io::XOutputStream >& xOut );
 
     css::uno::Sequence< css::uno::Any >
         setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
@@ -121,7 +121,7 @@ private:
             throw(css::uno::Exception,
                   std::exception);
 
-    bool feedSink( css::uno::Reference< css::uno::XInterface> aSink,
+    bool feedSink( const css::uno::Reference< css::uno::XInterface>& aSink,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 public:

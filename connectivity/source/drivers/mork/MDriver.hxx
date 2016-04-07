@@ -33,7 +33,7 @@ class MorkDriver:
     public cppu::WeakImplHelper< css::lang::XServiceInfo, css::sdbc::XDriver >
 {
 public:
-    explicit MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context);
+    explicit MorkDriver(const css::uno::Reference< css::uno::XComponentContext >& context);
     static OUString getImplementationName_Static()
         throw(css::uno::RuntimeException);
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static()

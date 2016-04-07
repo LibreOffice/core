@@ -417,7 +417,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
     {
 
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-        OUString aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
+        const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
         assert(aNumDecimalSep.getLength() > 0);
         sal_Unicode cDecSeparator = aNumDecimalSep.getStr()[0];
         aNumber = ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G /*rtl_math_StringFormat*/
@@ -719,7 +719,7 @@ namespace
 {
 double lcl_getErrorBarLogicLength(
     const uno::Sequence< double > & rData,
-    uno::Reference< beans::XPropertySet > xProp,
+    const uno::Reference< beans::XPropertySet >& xProp,
     sal_Int32 nErrorBarStyle,
     sal_Int32 nIndex,
     bool bPositive,
@@ -1275,7 +1275,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             else
             {
                 const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-                OUString aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
+                const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
                 assert(aNumDecimalSep.getLength() > 0);
                 sal_Unicode aDecimalSep = aNumDecimalSep.getStr()[0];
                 aFormula.append( ::rtl::math::doubleToUString(

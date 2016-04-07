@@ -159,7 +159,7 @@ public:
     void            DoScroll( ScrollBar* pActScroll );
     void            UpdateScrollBars();
 
-    void            SetDialog (css::uno::Reference<css::container::XNameContainer> xUnoControlDialogModel);
+    void            SetDialog (const css::uno::Reference<css::container::XNameContainer>& xUnoControlDialogModel);
     void            ResetDialog ();
     css::uno::Reference< css::container::XNameContainer > GetDialog() const
                         {return m_xUnoControlDialogModel;}

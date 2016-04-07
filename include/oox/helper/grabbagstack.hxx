@@ -42,7 +42,7 @@ public:
 
     css::beans::PropertyValue getRootProperty();
 
-    void appendElement(const OUString& aName, css::uno::Any aAny);
+    void appendElement(const OUString& aName, const css::uno::Any& aAny);
     void push(const OUString& aKey);
     void pop();
     void addInt32(const OUString& aElementName, sal_Int32 aIntValue);

@@ -7343,7 +7343,7 @@ void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows
     }
 }
 
-void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_Int32 >& rRows, sal_Int32 nTableBottom )
+void CreateTableRows( const Reference< XTableRows >& xTableRows, const std::set< sal_Int32 >& rRows, sal_Int32 nTableBottom )
 {
     if ( rRows.size() > 1 )
         xTableRows->insertByIndex( 0, rRows.size() - 1 );
@@ -7367,7 +7367,7 @@ void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_In
     }
 }
 
-void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::set< sal_Int32 >& rColumns, sal_Int32 nTableRight )
+void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const std::set< sal_Int32 >& rColumns, sal_Int32 nTableRight )
 {
     if ( rColumns.size() > 1 )
         xTableColumns->insertByIndex( 0, rColumns.size() - 1 );

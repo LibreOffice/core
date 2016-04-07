@@ -61,8 +61,8 @@ UNOTOOLS_DLLPUBLIC bool MakeFolder(
 
 /// like mkdir -p
 UNOTOOLS_DLLPUBLIC bool ensureFolder(
-    css::uno::Reference< css::uno::XComponentContext > xCtx,
-    css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
+    const css::uno::Reference< css::uno::XComponentContext >& xCtx,
+    const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
     const OUString& rFolder, ucbhelper::Content & result) throw();
 
 /// @return the value of the "Size" property of the given content, or zero if

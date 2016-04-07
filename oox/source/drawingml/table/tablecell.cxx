@@ -180,9 +180,9 @@ void applyTableCellProperties( const Reference < css::table::XCell >& rxCell, co
     xPropSet->setPropertyValue( "TextVerticalAdjust", Any( eVA ) );
 }
 
-void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oox::drawingml::TextListStylePtr pMasterTextListStyle,
+void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle,
     const css::uno::Reference < css::table::XCell >& rxCell, const TableProperties& rTableProperties,
-        const TableStyle& rTableStyle, sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow )
+    const TableStyle& rTableStyle, sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow )
 {
     TableStyle& rTable( const_cast< TableStyle& >( rTableStyle ) );
     TableProperties& rProperties( const_cast< TableProperties& >( rTableProperties ) );

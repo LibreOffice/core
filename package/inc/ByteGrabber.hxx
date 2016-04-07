@@ -46,7 +46,7 @@ public:
     ByteGrabber (css::uno::Reference < css::io::XInputStream > xIstream);
     ~ByteGrabber();
 
-    void setInputStream (css::uno::Reference < css::io::XInputStream > xNewStream);
+    void setInputStream (const css::uno::Reference < css::io::XInputStream >& xNewStream);
     // XInputStream
     sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);

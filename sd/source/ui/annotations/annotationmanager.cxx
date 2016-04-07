@@ -478,7 +478,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     }
 }
 
-void AnnotationManagerImpl::DeleteAnnotation( Reference< XAnnotation > xAnnotation )
+void AnnotationManagerImpl::DeleteAnnotation( const Reference< XAnnotation >& xAnnotation )
 {
     SdPage* pPage = GetCurrentPage();
 
@@ -719,7 +719,7 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
     }
 }
 
-void AnnotationManagerImpl::SelectAnnotation( css::uno::Reference< css::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
+void AnnotationManagerImpl::SelectAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bEdit /* = sal_False */ )
 {
     mxSelectedAnnotation = xAnnotation;
 
@@ -901,7 +901,7 @@ IMPL_LINK_TYPED(AnnotationManagerImpl,EventMultiplexerListener,
     }
 }
 
-void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
+void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
 {
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )

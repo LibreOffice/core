@@ -50,14 +50,14 @@ namespace writerfilter
         void endDocument();
 
         void element(const std::string & name);
-        void unoPropertySet(css::uno::Reference<css::beans::XPropertySet> rPropSet);
+        void unoPropertySet(const css::uno::Reference<css::beans::XPropertySet>& rPropSet);
         void startElement(const std::string & name);
 #endif
         void attribute(const std::string & name, const std::string & value);
 #ifdef DEBUG_WRITERFILTER
         void attribute(const std::string & name, const OUString & value);
         void attribute(const std::string & name, sal_uInt32 value);
-        void attribute(const std::string & name, const css::uno::Any aAny);
+        void attribute(const std::string & name, const css::uno::Any& aAny);
         void chars(const std::string & chars);
         void chars(const OUString & chars);
         void endElement();

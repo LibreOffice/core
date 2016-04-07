@@ -84,7 +84,7 @@ public:
       */
     void importXML(
             ::std::vector< XMLPropertyState >& rProperties,
-            css::uno::Reference< css::xml::sax::XAttributeList > xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             sal_uInt32 nPropType,

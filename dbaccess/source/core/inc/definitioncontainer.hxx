@@ -64,10 +64,10 @@ public:
     inline const_iterator end() const     { return m_aDefinitions.end(); }
 
     inline const_iterator find( const OUString& _rName ) const { return m_aDefinitions.find( _rName ); }
-           const_iterator find( TContentPtr _pDefinition ) const;
+           const_iterator find( const TContentPtr& _pDefinition ) const;
 
     inline void erase( const OUString& _rName ) { m_aDefinitions.erase( _rName ); }
-    void erase( TContentPtr _pDefinition );
+    void erase( const TContentPtr& _pDefinition );
 
     inline void insert( const OUString& _rName, TContentPtr _pDefinition )
     {
@@ -75,7 +75,7 @@ public:
     }
 
 private:
-    iterator find( TContentPtr _pDefinition );
+    iterator find( const TContentPtr& _pDefinition );
         // (for the moment, this is private. Make it public if needed. If really needed.)
 };
 

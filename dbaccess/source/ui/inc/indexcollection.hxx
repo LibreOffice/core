@@ -87,7 +87,7 @@ namespace dbaui
 
     protected:
         void implConstructFrom(const css::uno::Reference< css::container::XNameAccess >& _rxIndexes);
-        static void implFillIndexInfo(OIndex& _rIndex, css::uno::Reference< css::beans::XPropertySet > _rxDescriptor);
+        static void implFillIndexInfo(OIndex& _rIndex, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor);
         void implFillIndexInfo(OIndex& _rIndex);
     };
 

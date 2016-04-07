@@ -86,15 +86,15 @@ public:
      * If the style sheet is already contained, this call has no effect.
      */
     void
-    AddStyleSheet(rtl::Reference< SfxStyleSheetBase > style);
+    AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style);
 
     /** Removes a style sheet. */
     bool
-    RemoveStyleSheet(rtl::Reference< SfxStyleSheetBase > style);
+    RemoveStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style);
 
     /** Check whether a specified style sheet is stored. */
     bool
-    HasStyleSheet(rtl::Reference< SfxStyleSheetBase > style) const;
+    HasStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style) const;
 
     /** Obtain the number of style sheets which are held */
     unsigned

@@ -1008,7 +1008,7 @@ i12626
     // helper for playMetafile
     void implWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
                             VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
-    void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx, Graphic i_pGraphic,
+    void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx, const Graphic& i_pGraphic,
                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
 
     // helpers for CCITT 1bit bitmap stream

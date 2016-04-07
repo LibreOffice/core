@@ -712,17 +712,17 @@ void SAL_CALL Moderator::onTerminated()
    but with handled timeout;
 */
 static bool UCBOpenContentSync_(
-    UcbLockBytesRef xLockBytes,
-    Reference < XContent > xContent,
+    const UcbLockBytesRef& xLockBytes,
+    const Reference < XContent >& xContent,
     const Command& rArg,
-    Reference < XInterface > xSink,
-    Reference < XInteractionHandler > xInteract );
+    const Reference < XInterface >& xSink,
+    const Reference < XInteractionHandler >& xInteract );
 
 static bool UCBOpenContentSync(
-    UcbLockBytesRef xLockBytes,
+    const UcbLockBytesRef& xLockBytes,
     Reference < XContent > xContent,
     const Command& rArg,
-    Reference < XInterface > xSink,
+    const Reference < XInterface >& xSink,
     Reference < XInteractionHandler > xInteract )
 {
     // http protocol must be handled in a special way:
@@ -957,11 +957,11 @@ static bool UCBOpenContentSync(
     Function for opening UCB contents synchronously
  */
 static bool UCBOpenContentSync_(
-    UcbLockBytesRef xLockBytes,
-    Reference < XContent > xContent,
+    const UcbLockBytesRef& xLockBytes,
+    const Reference < XContent >& xContent,
     const Command& rArg,
-    Reference < XInterface > xSink,
-    Reference < XInteractionHandler > xInteract )
+    const Reference < XInterface >& xSink,
+    const Reference < XInteractionHandler >& xInteract )
 {
     ::ucbhelper::Content aContent(
         xContent, new UcbTaskEnvironment( xInteract, nullptr ),

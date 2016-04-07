@@ -464,7 +464,7 @@ OUString SfxObjectShell::CreateShellID( const SfxObjectShell* pShell )
 
 SfxObjectShell* SfxObjectShell::GetFirst
 (
-    std::function<bool ( const SfxObjectShell* )> isObjectShell,
+    const std::function<bool ( const SfxObjectShell* )>& isObjectShell,
     bool          bOnlyVisible
 )
 {
@@ -491,7 +491,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
 SfxObjectShell* SfxObjectShell::GetNext
 (
     const SfxObjectShell&   rPrev,
-    std::function<bool ( const SfxObjectShell* )> isObjectShell,
+    const std::function<bool ( const SfxObjectShell* )>& isObjectShell,
     bool                    bOnlyVisible
 )
 {

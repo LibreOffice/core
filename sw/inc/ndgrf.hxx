@@ -195,7 +195,7 @@ public:
     bool IsLinkedInputStreamReady() const { return mbLinkedInputStreamReady;}
     void TriggerAsyncRetrieveInputStream();
     void ApplyInputStream(
-        css::uno::Reference<css::io::XInputStream> xInputStream,
+        const css::uno::Reference<css::io::XInputStream>& xInputStream,
         const bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
     bool IsAsyncRetrieveInputStreamPossible() const;

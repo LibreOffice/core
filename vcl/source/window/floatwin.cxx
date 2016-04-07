@@ -766,7 +766,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
     StartPopupMode( aRect, nFlags );
 }
 
-void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, VclPtr<vcl::Window> xFocusId )
+void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId )
 {
     if ( !mbInPopupMode )
         return;

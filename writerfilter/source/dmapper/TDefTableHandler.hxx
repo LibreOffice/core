@@ -61,7 +61,7 @@ private:
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
     void appendGrabBag(const OUString& aKey, const OUString& aValue);
 
-    void localResolve(Id Name, writerfilter::Reference<Properties>::Pointer_t pProperties);
+    void localResolve(Id Name, const writerfilter::Reference<Properties>::Pointer_t& pProperties);
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;
@@ -71,7 +71,7 @@ public:
     TDefTableHandler();
     virtual ~TDefTableHandler();
 
-    void                                        fillCellProperties( size_t nCell, ::std::shared_ptr< TablePropertyMap > pCellProperties) const;
+    void fillCellProperties( size_t nCell, const ::std::shared_ptr< TablePropertyMap >& pCellProperties) const;
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
     static OUString getBorderTypeString(sal_Int32 nType);

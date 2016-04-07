@@ -35,7 +35,7 @@ class OOO_DLLPUBLIC_CHARTVIEW DataPointSymbolSupplier
 {
 public:
     static css::uno::Reference< css::drawing::XShapes >
-        create2DSymbolList( css::uno::Reference< css::lang::XMultiServiceFactory > xShapeFactory
+        create2DSymbolList( const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory
             , const css::uno::Reference< css::drawing::XShapes >& xTarget
             , const css::drawing::Direction3D& rSize );
 };

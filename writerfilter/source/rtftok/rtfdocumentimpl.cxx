@@ -65,7 +65,7 @@ static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
     return aBorderIds[nIndex];
 }
 
-static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
+static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue,
                                    RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true)
 {
     RTFValue::Pointer_t pParent = rSprms.find(nParent, /*bFirst=*/true, /*bForWrite=*/true);
@@ -86,7 +86,7 @@ static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValu
     rAttributes.set(nId, pValue, eOverwrite);
 }
 
-static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue)
+static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue)
 {
     lcl_putNestedAttribute(rSprms, nParent, nId, pValue, RTFOverwrite::NO_APPEND, false);
 }
@@ -123,7 +123,7 @@ static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
 }
 
 static void
-lcl_putBorderProperty(RTFStack& aStates, Id nId, RTFValue::Pointer_t pValue)
+lcl_putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pValue)
 {
     RTFSprms* pAttributes = nullptr;
     if (aStates.top().nBorderState == RTFBorderState::PARAGRAPH_BOX)

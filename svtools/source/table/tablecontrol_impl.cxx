@@ -263,7 +263,7 @@ namespace svt { namespace table
         DELETEZ( m_pSelEngine );
     }
 
-    void TableControl_Impl::setModel( PTableModel _pModel )
+    void TableControl_Impl::setModel( const PTableModel& _pModel )
     {
         SuppressCursor aHideCursor( *this );
 
