@@ -110,7 +110,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/services/pathsettings \
     framework/source/services/sessionlistener \
     framework/source/services/substitutepathvars \
-    framework/source/services/tabwindowservice \
     framework/source/services/taskcreatorsrv \
     framework/source/services/urltransformer \
     framework/source/uiconfiguration/globalsettings \

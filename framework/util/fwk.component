@@ -184,10 +184,6 @@
       constructor="com_sun_star_comp_framework_jobs_JobDispatch_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.TabWindowService"
-      constructor="com_sun_star_comp_framework_TabWindowService_get_implementation">
-    <service name="com.sun.star.ui.dialogs.TabContainerWindow"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.GenericPopupToolbarController"
       constructor="com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
