@@ -33,10 +33,12 @@ private:
     Graphic* m_pGraphic;
     sal_Int64 m_nAspect;
 
+    OUString maParentShellID;
+
 protected:
 
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
     virtual void        ObjectReleased();
 
 public:
@@ -45,6 +47,8 @@ public:
                            const Graphic* pGraphic,
                             sal_Int64 nAspect );
     ~SvEmbedTransferHelper();
+
+    void SetParentShellID( const OUString& rShellID );
 
     static void         FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,

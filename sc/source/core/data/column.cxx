@@ -1271,7 +1271,8 @@ struct DeleteCell : std::unary_function<ColEntry, void>
 
 }
 
-void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol)
+void ScColumn::CopyStaticToDocument(
+    SCROW nRow1, SCROW nRow2, const SvNumberFormatterMergeMap& rMap, ScColumn& rDestCol )
 {
     if (nRow1 > nRow2)
         return;
@@ -1354,6 +1355,19 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
     // destination column shouldn't have any cells within the specified range.
     it = std::find_if(rDestCol.maItems.begin(), rDestCol.maItems.end(), FindAboveRow(nRow2));
     rDestCol.maItems.insert(it, aCopied.begin(), aCopied.end());
+
+    // Dont' forget to copy the number formats over.  Charts may reference them.
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        sal_uInt32 nNumFmt = GetNumberFormat(nRow);
+        SvNumberFormatterMergeMap::const_iterator itNum = rMap.find(nNumFmt);
+        if (itNum != rMap.end())
+            nNumFmt = itNum->second;
+
+        rDestCol.SetNumberFormat(nRow, nNumFmt);
+    }
+
+    rDestCol.CellStorageModified();
 }
 
 void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol )

@@ -48,8 +48,8 @@ namespace rptui
             AddFormat(OGroupExchange::getReportGroupId());
         }
     }
-    // -----------------------------------------------------------------------------
-    sal_Bool OGroupExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+
+    sal_Bool OGroupExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
     {
         sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == OGroupExchange::getReportGroupId() )

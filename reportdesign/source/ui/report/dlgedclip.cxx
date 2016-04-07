@@ -51,8 +51,8 @@ void OReportExchange::AddSupportedFormats()
 {
     AddFormat(getDescriptorFormatId());
 }
-//--------------------------------------------------------------------
-sal_Bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor )
+
+ sal_Bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
 {
     const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
     return (nFormatId == getDescriptorFormatId()) ?
@@ -78,7 +78,7 @@ OReportExchange::TSectionElements OReportExchange::extractCopies(const Transfera
         SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
         OSL_ENSURE(bSuccess, "OReportExchange::extractCopies: invalid data format (no flavor)!");
 
-        uno::Any aDescriptor = _rData.GetAny(aFlavor);
+        uno::Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
         TSectionElements aCopies;
 #if OSL_DEBUG_LEVEL > 0

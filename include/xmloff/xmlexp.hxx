@@ -208,6 +208,8 @@ protected:
     // This method must be overloaded to export the content of <office:body>.
     virtual void _ExportContent() = 0;
 
+    OUString GetSourceShellID() const;
+    OUString GetDestinationShellID() const;
     void SetExtended( sal_Bool bSet=sal_True ) { mbExtended = bSet; }
 
     // save linked sections? (may be false in global documents)

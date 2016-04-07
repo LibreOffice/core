@@ -197,11 +197,13 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > InitNewDocument_Impl();
 
-    void StoreDocToStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                                sal_Int32 nStorageVersion,
-                                const OUString& aBaseURL,
-                                const OUString& aHierarchName,
-                                sal_Bool bAttachToStorage );
+    void StoreDocToStorage_Impl(
+        const css::uno::Reference<css::embed::XStorage>& xStorage,
+        const css::uno::Sequence<css::beans::PropertyValue>& rMediaArgs,
+        const css::uno::Sequence<css::beans::PropertyValue>& rObjArgs,
+        sal_Int32 nStorageVersion,
+        const OUString& aHierarchName,
+        bool bAttachToStorage );
 
     void SwitchDocToStorage_Impl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& xDoc,

@@ -245,10 +245,10 @@ void ScTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_EDITENGINE );
 }
 
-sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
+sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    bool    bOK = false;
+    sal_Bool        bOK = false;
 
     if( HasFormat( nFormat ) )
     {

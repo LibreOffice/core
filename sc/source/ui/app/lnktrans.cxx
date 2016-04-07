@@ -55,7 +55,8 @@ void ScLinkTransferObj::AddSupportedFormats()
     }
 }
 
-sal_Bool ScLinkTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool ScLinkTransferObj::GetData(
+    const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     sal_Bool bOK = false;
     if ( aLinkURL.Len() )

@@ -70,7 +70,7 @@ namespace svx
 
             // TransferableHelper overridables
             virtual void        AddSupportedFormats();
-            virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+            virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
             OXFormsDescriptor m_aDescriptor;
 
