@@ -334,7 +334,7 @@ short SwTemplateDlg::Ok()
     if( RET_OK == nRet )
     {
         const SfxPoolItem *pOutItem, *pExItem;
-        if( SfxItemState::SET == pExampleSet->GetItemState(
+        if( SfxItemState::SET == m_pExampleSet->GetItemState(
             SID_ATTR_NUMBERING_RULE, false, &pExItem ) &&
             ( !GetOutputItemSet() ||
             SfxItemState::SET != GetOutputItemSet()->GetItemState(

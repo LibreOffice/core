@@ -78,13 +78,13 @@ friend class SfxTabDialogController;
     bool m_bOwnsResetBtn;
     bool m_bOwnsBaseFmtBtn;
 
-    SfxItemSet*         pSet;
-    SfxItemSet*         pOutSet;
-    TabDlg_Impl*        pImpl;
-    sal_uInt16*         pRanges;
-    sal_uInt16          nAppPageId;
-    bool                bItemsReset;
-    bool                bStandardPushed;
+    SfxItemSet*         m_pSet;
+    SfxItemSet*         m_pOutSet;
+    TabDlg_Impl*        m_pImpl;
+    sal_uInt16*         m_pRanges;
+    sal_uInt16          m_nAppPageId;
+    bool                m_bItemsReset;
+    bool                m_bStandardPushed;
 
     DECL_DLLPRIVATE_LINK_TYPED(ActivatePageHdl, TabControl*, void );
     DECL_DLLPRIVATE_LINK_TYPED(DeactivatePageHdl, TabControl*, bool );
@@ -104,7 +104,7 @@ protected:
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
     VclPtr<VclButtonBox>   m_pActionArea;
-    SfxItemSet*     pExampleSet;
+    SfxItemSet*     m_pExampleSet;
     SfxItemSet*     GetInputSetImpl();
     SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;
 
@@ -146,11 +146,11 @@ public:
 
     void                SetCurPageId(sal_uInt16 nId)
     {
-        nAppPageId = nId;
+        m_nAppPageId = nId;
     }
     void                SetCurPageId(const OString& rName)
     {
-        nAppPageId = m_pTabCtrl->GetPageId(rName);
+        m_nAppPageId = m_pTabCtrl->GetPageId(rName);
     }
     sal_uInt16          GetCurPageId() const
     {
@@ -172,7 +172,7 @@ public:
     // may provide local slots converted by Map
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
-    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
+    const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet; }
 
     const PushButton&   GetOKButton() const { return *m_pOKBtn; }
     PushButton&         GetOKButton() { return *m_pOKBtn; }
@@ -188,8 +188,8 @@ public:
     void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     void                Start();
 
-    const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
-    SfxItemSet*         GetExampleSet() { return pExampleSet; }
+    const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
+    SfxItemSet*         GetExampleSet() { return m_pExampleSet; }
 
     void                SetApplyHandler(const Link<Button*,void>& _rHdl);
 

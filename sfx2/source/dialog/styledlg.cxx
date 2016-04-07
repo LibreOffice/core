@@ -62,8 +62,8 @@ SfxStyleDialog::SfxStyleDialog
         OUString sTxt = GetText() + ": " + rStyle.GetName();
         SetText( sTxt );
     }
-    delete pExampleSet; // in SfxTabDialog::Ctor() already created
-    pExampleSet = &pStyle->GetItemSet();
+    delete m_pExampleSet; // in SfxTabDialog::Ctor() already created
+    m_pExampleSet = &pStyle->GetItemSet();
 
     GetCancelButton().SetClickHdl( LINK(this, SfxStyleDialog, CancelHdl) );
 }
@@ -82,7 +82,7 @@ SfxStyleDialog::~SfxStyleDialog()
 
 void SfxStyleDialog::dispose()
 {
-    pExampleSet = nullptr;
+    m_pExampleSet = nullptr;
     pStyle = nullptr;
     SfxTabDialog::dispose();
 }
@@ -134,9 +134,9 @@ IMPL_LINK_NOARG_TYPED( SfxStyleDialog, CancelHdl, Button *, void )
         SfxItemState eState = pInSet->GetItemState( nWhich, false );
 
         if ( SfxItemState::DEFAULT == eState )
-            pExampleSet->ClearItem( nWhich );
+            m_pExampleSet->ClearItem( nWhich );
         else
-            pExampleSet->Put( pInSet->Get( nWhich ) );
+            m_pExampleSet->Put( pInSet->Get( nWhich ) );
         nWhich = aIter.NextWhich();
     }
 

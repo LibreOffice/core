@@ -162,8 +162,8 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     if ( !aMakes.empty() )
         _ReplaceGroup( aMakes[nLstGroup] );
 
-    if (pExampleSet)
-        pExampleSet->Put(aItem);
+    if (m_pExampleSet)
+        m_pExampleSet->Put(aItem);
 }
 
 SwLabDlg::~SwLabDlg()

@@ -425,8 +425,8 @@ namespace dbaui
         m_pImpl->translateProperties(xDatasource, *_pItems);
         SetInputSet(_pItems);
         // propagate this set as our new input set and reset the example set
-        delete pExampleSet;
-        pExampleSet = new SfxItemSet(*GetInputSetImpl());
+        delete m_pExampleSet;
+        m_pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
         const OUString eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*_pItems);
 
@@ -457,7 +457,7 @@ namespace dbaui
     void AdvancedSettingsDialog::dispose()
     {
         SetInputSet(nullptr);
-        DELETEZ(pExampleSet);
+        DELETEZ(m_pExampleSet);
         SfxTabDialog::dispose();
     }
 
@@ -475,8 +475,8 @@ namespace dbaui
         short nRet = SfxTabDialog::Execute();
         if ( nRet == RET_OK )
         {
-            pExampleSet->Put(*GetOutputItemSet());
-            m_pImpl->saveChanges(*pExampleSet);
+            m_pExampleSet->Put(*GetOutputItemSet());
+            m_pImpl->saveChanges(*m_pExampleSet);
         }
         return nRet;
     }
@@ -496,12 +496,12 @@ namespace dbaui
 
     const SfxItemSet* AdvancedSettingsDialog::getOutputSet() const
     {
-        return pExampleSet;
+        return m_pExampleSet;
     }
 
     SfxItemSet* AdvancedSettingsDialog::getWriteOutputSet()
     {
-        return pExampleSet;
+        return m_pExampleSet;
     }
 
     ::std::pair< Reference< XConnection >, sal_Bool > AdvancedSettingsDialog::createConnection()
