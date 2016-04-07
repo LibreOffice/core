@@ -29,8 +29,8 @@
 
 #include <sspellimp.hxx>
 
-#include "linguistic/lngprops.hxx"
-#include "linguistic/spelldta.hxx"
+#include "lngprops.hxx"
+#include "spelldta.hxx"
 
 using namespace utl;
 using namespace osl;

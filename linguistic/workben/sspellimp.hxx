@@ -31,7 +31,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "sprophelp.hxx"
 
 using namespace ::com::sun::star::uno;

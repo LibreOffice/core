@@ -19,10 +19,10 @@
 
 
 #include <sal/macros.h>
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 
 #include "sprophelp.hxx"
-#include "linguistic/lngprops.hxx"
+#include "lngprops.hxx"
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
