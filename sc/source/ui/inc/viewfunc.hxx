@@ -102,7 +102,7 @@ public:
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC bool           PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                                     sal_uInt16 nFunction = PASTE_NOFUNC, bool bSkipEmpty = false,
-                                    bool bTranspose = false, bool bAsLink = false,
+                                    bool bTranspose = false, bool bAsLink = false, bool bAsDDE = false,
                                     InsCellCmd eMoveMode = INS_NONE,
                                     sal_uInt16 nUndoExtraFlags = IDF_NONE,
                                     bool bAllowDialogs = false );
@@ -138,8 +138,8 @@ public:
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );
-    bool            PasteLink( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
+    bool            PasteLink( sal_uLong nFormatId,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     sal_Bool            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
 

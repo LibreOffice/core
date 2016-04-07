@@ -197,6 +197,7 @@ bool ScImportExport::IsFormatSupported( sal_uLong nFormat )
     return nFormat == FORMAT_STRING
               || nFormat == SOT_FORMATSTR_ID_SYLK
               || nFormat == SOT_FORMATSTR_ID_LINK
+              || nFormat == SOT_FORMATSTR_ID_LINK_DDE
               || nFormat == SOT_FORMATSTR_ID_HTML
               || nFormat == SOT_FORMATSTR_ID_HTML_SIMPLE
               || nFormat == SOT_FORMATSTR_ID_DIF;
@@ -398,6 +399,9 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const String& rBaseURL, sal_
     }
     if( nFmt == SOT_FORMATSTR_ID_LINK )
         return true;            // Link-Import?
+    if( nFmt == SOT_FORMATSTR_ID_LINK_DDE )
+        return true;            // Link-Import?
+
     if ( nFmt == SOT_FORMATSTR_ID_HTML )
     {
         if( HTML2Doc( rStrm, rBaseURL ) )
@@ -432,7 +436,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_
         if( Doc2Dif( rStrm ) )
             return true;
     }
-    if( nFmt == SOT_FORMATSTR_ID_LINK && !bAll )
+    if( !bAll && (nFmt == SOT_FORMATSTR_ID_LINK || nFmt == SOT_FORMATSTR_ID_LINK_DDE) )
     {
         String aDocName;
         if ( pDoc->IsClipboard() )
@@ -462,12 +466,15 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_
 
             // extra bits are used to tell the client to prefer external
             // reference link.
-            OUString aExtraBits("calc:extref");
 
             WriteUnicodeOrByteString( rStrm, aAppName, true );
             WriteUnicodeOrByteString( rStrm, aDocName, true );
             WriteUnicodeOrByteString( rStrm, aRefName, true );
-            WriteUnicodeOrByteString( rStrm, aExtraBits, true );
+            if (nFmt == SOT_FORMATSTR_ID_LINK)
+            {
+                OUString aExtraBits("calc:extref");
+                WriteUnicodeOrByteString( rStrm, aExtraBits, true );
+            }
             if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
                 rStrm << sal_Unicode(0);
             else

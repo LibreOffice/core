@@ -125,6 +125,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     nDragSourceFlags( 0 ),
     bDragWasInternal( false ),
     bUsedForLink( false ),
+    bUsedForDDE( false ),
     bUseInApi( false )
 {
     OSL_ENSURE(pDoc->IsClipboard(), "wrong document");
@@ -237,6 +238,7 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SOT_FORMATSTR_ID_HTML );
     AddFormat( SOT_FORMATSTR_ID_SYLK );
     AddFormat( SOT_FORMATSTR_ID_LINK );
+    AddFormat( SOT_FORMATSTR_ID_LINK_DDE );
     AddFormat( SOT_FORMATSTR_ID_DIF );
     AddFormat( SOT_FORMAT_STRING );
 
@@ -248,7 +250,7 @@ void ScTransferObj::AddSupportedFormats()
 sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    bool    bOK = false;
+    sal_Bool bOK = false;
 
     if( HasFormat( nFormat ) )
     {
@@ -290,9 +292,15 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             //  if this transfer object was used to create a DDE link, filtered rows
             //  have to be included for subsequent calls (to be consistent with link data)
             if ( nFormat == SOT_FORMATSTR_ID_LINK )
+            {
                 bUsedForLink = true;
+            }
+            if ( nFormat == SOT_FORMATSTR_ID_LINK_DDE )
+            {
+                bUsedForDDE = true;
+            }
 
-            bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
+            bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink || bUsedForDDE;
 
             ScRange aReducedBlock = aBlock;
             if ( nFormat == SOT_FORMATSTR_ID_HTML && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab() )
@@ -309,7 +317,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 
             ScImportExport aObj( pDoc, aReducedBlock );
             ScExportTextOptions aTextOptions(ScExportTextOptions::None, 0, true);
-            if ( bUsedForLink )
+            if ( bUsedForLink || bUsedForDDE )
             {
                 // For a DDE link, convert line breaks and separators to space.
                 aTextOptions.meNewlineConversion = ScExportTextOptions::ToSpace;

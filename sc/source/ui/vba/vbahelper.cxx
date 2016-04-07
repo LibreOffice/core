@@ -200,7 +200,7 @@ implnCut()
 void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
-    sal_Bool bAsLink(false), bOtherDoc(false);
+    sal_Bool bAsLink(false), bAsDDE(false), bOtherDoc(false);
     InsCellCmd eMoveMode = INS_NONE;
 
     ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
@@ -213,7 +213,7 @@ void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpt
         Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
         if ( pView && pWin )
         {
-            if ( bAsLink && bOtherDoc )
+            if ( (bAsLink || bAsDDE) && bOtherDoc )
                 pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
             else
             {
@@ -222,7 +222,7 @@ void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpt
                 if ( pOwnClip )
                     pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
-                    nFunction, bSkipEmpty, bTranspose, bAsLink,
+                    nFunction, bSkipEmpty, bTranspose, bAsLink, bAsDDE,
                     eMoveMode, IDF_NONE, sal_True );
                 pTabViewShell->CellContentChanged();
             }

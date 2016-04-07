@@ -161,7 +161,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     SetCursor( nPosX, nPosY );
                     Unmark();
                     PasteFromClip( IDF_ALL, pClipDoc,
-                                    PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                                    PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                                     bAllowDialogs );
                     delete pClipDoc;
                     bRet = sal_True;
@@ -272,9 +272,9 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             //TODO/LATER: if format is not available, create picture
         }
     }
-    else if ( nFormatId == SOT_FORMATSTR_ID_LINK )      // LINK is also in ScImportExport
+    else if ( nFormatId == SOT_FORMATSTR_ID_LINK || nFormatId == SOT_FORMATSTR_ID_LINK_DDE )      // LINK is also in ScImportExport
     {
-        bRet = PasteLink( rxTransferable );
+        bRet = PasteLink( nFormatId, rxTransferable );
     }
     else if ( ScImportExport::IsFormatSupported( nFormatId ) || nFormatId == SOT_FORMAT_RTF )
     {
@@ -573,7 +573,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                 pInsDoc->SetClipArea( aSource );
                 PasteFromClip( IDF_ALL, pInsDoc,
-                                PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                                PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                                 bAllowDialogs );
                 delete pInsDoc;
 
@@ -618,7 +618,8 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     return bRet;
 }
 
-bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
+bool ScViewFunc::PasteLink( sal_uLong nFormatId,
+                            const uno::Reference<datatransfer::XTransferable>& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
@@ -626,7 +627,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     //  so the source knows it will be used for a link
 
     uno::Sequence<sal_Int8> aSequence;
-    if ( !aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aSequence ) )
+    if ( !aDataHelper.GetSequence( nFormatId, aSequence ) )
     {
         OSL_FAIL("DDE Data not found.");
         return false;
@@ -691,7 +692,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     if (aStrs.size() > 3)
         pExtra = &aStrs[3];
 
-    if ( pExtra && *pExtra == "calc:extref" )
+    if ( pExtra && *pExtra == "calc:extref" && nFormatId == 0 ) // DDE workaround for LO 4.1.6 V3
     {
         // Paste this as an external reference.  Note that paste link always
         // uses Calc A1 syntax even when another formula syntax is specified

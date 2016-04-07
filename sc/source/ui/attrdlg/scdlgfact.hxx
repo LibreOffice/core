@@ -212,6 +212,7 @@ class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg  //a
     virtual sal_uInt16      GetFormulaCmdBits() const;
     virtual sal_Bool        IsSkipEmptyCells() const;
     virtual sal_Bool        IsLink() const;
+    virtual sal_Bool        IsDDE() const;
     virtual void    SetFillMode( sal_Bool bSet );
     virtual void    SetOtherDoc( sal_Bool bSet );
     virtual sal_Bool        IsTranspose() const;

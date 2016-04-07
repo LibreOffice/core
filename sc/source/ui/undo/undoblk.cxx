@@ -1092,7 +1092,7 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
             com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> aOwnClipRef( pOwnClip );
             pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
-                                    aPasteOptions.bAsLink, aPasteOptions.eMoveMode, IDF_NONE,
+                                    aPasteOptions.bAsLink, aPasteOptions.bAsDDE, aPasteOptions.eMoveMode, IDF_NONE,
                                     sal_True );     // allow warning dialog
         }
     }

@@ -68,6 +68,7 @@
 #define BTN_INSOBJECTS  41
 #define FL_SEP1         51
 #define FL_SEP2         52
+#define BTN_LINK_DDE    53
 
 // Insert/Delete Sheet
 #define FT_DEST         1
