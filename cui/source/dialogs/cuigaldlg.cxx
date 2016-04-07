@@ -461,7 +461,7 @@ short ActualizeProgress::Execute()
 {
     short nRet;
 
-    pIdle = new Idle;
+    pIdle = new Idle("ActualizeProgressTimeout");
     pIdle->SetIdleHdl( LINK( this, ActualizeProgress, TimeoutHdl ) );
     pIdle->SetPriority( SchedulerPriority::LOWEST );
     pIdle->Start();
