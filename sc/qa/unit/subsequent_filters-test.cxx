@@ -206,6 +206,7 @@ public:
     void testEditEngStrikeThroughXLSX();
     void testRefStringXLSX();
     void testHiddenSheetsXLSX();
+    void testRelFormulaValidationXLS();
 
     void testBnc762542();
 
@@ -304,6 +305,7 @@ public:
     CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
+    CPPUNIT_TEST(testRelFormulaValidationXLS);
 
     CPPUNIT_TEST(testBnc762542);
 
@@ -3193,6 +3195,35 @@ void ScFiltersTest::testHiddenSheetsXLSX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("1st sheet should be hidden", false, rDoc.IsVisible(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet should be visible", true, rDoc.IsVisible(1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("3rd sheet should be hidden", false, rDoc.IsVisible(2));
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+void checkValidationFormula(const ScAddress& rPos, ScDocument& rDoc, const OUString& rExpectedFormula)
+{
+    const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(rDoc.GetAttr(rPos, ATTR_VALIDDATA) );
+    CPPUNIT_ASSERT(pItem);
+    sal_uLong nKey = pItem->GetValue();
+    const ScValidationData* pData = rDoc.GetValidationEntry(nKey);
+    CPPUNIT_ASSERT(pData);
+
+    OUString aFormula = pData->GetExpression(rPos, 0);
+    CPPUNIT_ASSERT_EQUAL(rExpectedFormula, aFormula);
+}
+
+}
+
+void ScFiltersTest::testRelFormulaValidationXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("validation.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    checkValidationFormula(ScAddress(3, 4, 0), rDoc, "Sheet1.C5");
+    checkValidationFormula(ScAddress(5, 8, 0), rDoc, "Sheet1.D7");
 
     xDocSh->DoClose();
 }
