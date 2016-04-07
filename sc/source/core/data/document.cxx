@@ -1846,7 +1846,6 @@ void ScDocument::DeleteArea(
                 {
                     aRange.aStart.SetTab(i);
                     aRange.aEnd.SetTab(i);
-
                     SetDirty( aRange, true);
                 }
             }
@@ -5737,6 +5736,21 @@ void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& 
         // Re-start listeners on those top bottom groups that have been split.
         SetNeedsListeningGroups(aGroupPos);
         StartNeededListeners();
+
+        // If formula groups were split their listeners were destroyed and may
+        // need to be notified now that they're restored,
+        // ScTable::DeleteSelection() couldn't do that.
+        if (!aGroupPos.empty())
+        {
+            ScRangeList aRangeList;
+            rMark.FillRangeListWithMarks( &aRangeList, false);
+            for (size_t i = 0; i < aRangeList.size(); ++i)
+            {
+                const ScRange* pRange = aRangeList[i];
+                if (pRange)
+                    SetDirty( *pRange, true);
+            }
+        }
     }
 }
 
@@ -5778,6 +5792,26 @@ void ScDocument::DeleteSelectionTab(
             // Re-start listeners on those top bottom groups that have been split.
             SetNeedsListeningGroups(aGroupPos);
             StartNeededListeners();
+
+            // If formula groups were split their listeners were destroyed and may
+            // need to be notified now that they're restored,
+            // ScTable::DeleteSelection() couldn't do that.
+            if (!aGroupPos.empty())
+            {
+                ScRangeList aRangeList;
+                rMark.FillRangeListWithMarks( &aRangeList, false);
+                for (size_t i = 0; i < aRangeList.size(); ++i)
+                {
+                    const ScRange* pRange = aRangeList[i];
+                    if (pRange && pRange->aStart.Tab() <= nTab && nTab <= pRange->aEnd.Tab())
+                    {
+                        ScRange aRange( *pRange);
+                        aRange.aStart.SetTab( nTab);
+                        aRange.aEnd.SetTab( nTab);
+                        SetDirty( aRange, true);
+                    }
+                }
+            }
         }
     }
     else
