@@ -510,7 +510,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
             i_bWait && !pSVData->maAppData.mbAppQuit,
             i_bAllEvents, nReleased);
 
-    SAL_INFO("vcl.schedule", "DoYield with " << (bHasActiveIdles ? "active idles" : "no ides") <<
+    SAL_INFO("vcl.schedule", "DoYield with " << (bHasActiveIdles ? "active idles" : "no idles") <<
              " returns: " << (eResult == SalYieldResult::EVENT ? "processed event" : "timeout"));
 
     pSVData->maAppData.mnDispatchLevel--;
