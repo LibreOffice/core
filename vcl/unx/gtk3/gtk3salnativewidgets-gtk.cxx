@@ -285,7 +285,6 @@ static GtkWidget* gSpinBox;
 static GtkWidget* gEntryBox;
 static GtkWidget* gComboBox;
 static GtkWidget* gComboBoxButtonWidget;
-static GtkWidget* gComboBoxEntryWidget;
 static GtkWidget* gListBox;
 static GtkWidget* gListBoxButtonWidget;
 static GtkWidget* gMenuBarWidget;
@@ -2321,10 +2320,6 @@ static void get_combo_box_entry_inner_widgets(GtkWidget *widget, gpointer)
     if (GTK_IS_TOGGLE_BUTTON(widget))
     {
         gComboBoxButtonWidget = widget;
-    }
-    else if (GTK_IS_ENTRY(widget))
-    {
-        gComboBoxEntryWidget = widget;
     }
 }
 
