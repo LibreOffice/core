@@ -72,7 +72,7 @@ ODbAdminDialog::~ODbAdminDialog()
 void ODbAdminDialog::dispose()
 {
     SetInputSet(nullptr);
-    DELETEZ(pExampleSet);
+    DELETEZ(m_pExampleSet);
     SfxTabDialog::dispose();
 }
 
@@ -195,14 +195,14 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     m_pImpl->translateProperties(_rxDatasource, *GetInputSetImpl());
 
     // reset the example set
-    delete pExampleSet;
-    pExampleSet = new SfxItemSet(*GetInputSetImpl());
+    delete m_pExampleSet;
+    m_pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
     // special case: MySQL Native does not have the generic "advanced" page
 
     const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*getOutputSet()->GetItem(DSID_TYPECOLLECTION));
     ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
-    if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
+    if ( pCollection->determineType(getDatasourceType( *m_pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, nullptr );
         RemoveTabPage("advanced");
@@ -241,7 +241,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
         return AR_KEEP;
     }
 
-    if ( !m_pImpl->saveChanges(*pExampleSet) )
+    if ( !m_pImpl->saveChanges(*m_pExampleSet) )
         return AR_KEEP;
 
     if ( isUIEnabled() )
@@ -267,7 +267,7 @@ const SfxItemSet* ODbAdminDialog::getOutputSet() const
 
 SfxItemSet* ODbAdminDialog::getWriteOutputSet()
 {
-    return pExampleSet;
+    return m_pExampleSet;
 }
 
 ::std::pair< Reference<XConnection>,sal_Bool> ODbAdminDialog::createConnection()
