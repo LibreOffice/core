@@ -52,7 +52,7 @@ class AcceleratorCache
             commands -> keys
         */
         typedef ::std::vector< css::awt::KeyEvent > TKeyList;
-        typedef BaseHash< TKeyList > TCommand2Keys;
+        typedef std::unordered_map<OUString, TKeyList, OUStringHash> TCommand2Keys;
 
         /** TODO document me
             keys -> commands

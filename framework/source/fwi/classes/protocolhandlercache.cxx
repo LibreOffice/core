@@ -108,8 +108,6 @@ HandlerCache::~HandlerCache()
     if( m_nRefCount==1)
     {
         m_pConfig->setCache(nullptr);
-        m_pHandler->free();
-        m_pPattern->free();
 
         delete m_pConfig;
         delete m_pHandler;
@@ -164,8 +162,6 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
     m_pHandler = pHandler;
     m_pPattern = pPattern;
 
-    pOldHandler->free();
-    pOldPattern->free();
     delete pOldHandler;
     delete pOldPattern;
 }

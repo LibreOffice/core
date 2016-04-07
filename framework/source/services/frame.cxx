@@ -492,7 +492,7 @@ private:
 
     WindowCommandDispatch*                                                  m_pWindowCommandDispatch;
 
-    typedef BaseHash< css::beans::Property > TPropInfoHash;
+    typedef std::unordered_map<OUString, css::beans::Property, OUStringHash> TPropInfoHash;
     TPropInfoHash m_lProps;
 
     ListenerHash m_lSimpleChangeListener;
@@ -3108,7 +3108,7 @@ void SAL_CALL Frame::impl_disablePropertySet()
 
     m_lSimpleChangeListener.disposeAndClear(aEvent);
     m_lVetoChangeListener.disposeAndClear(aEvent);
-    m_lProps.free();
+    m_lProps.clear();
 }
 
 bool Frame::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)

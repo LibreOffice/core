@@ -136,7 +136,7 @@ class PathSettings : private cppu::BaseMutex
             bool bIsReadonly;
     };
 
-    typedef BaseHash< PathSettings::PathInfo > PathHash;
+    typedef std::unordered_map<OUString, PathSettings::PathInfo, OUStringHash> PathHash;
 
     enum EChangeOp
     {

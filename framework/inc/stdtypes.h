@@ -88,29 +88,10 @@ void free(std::vector<T>& vec)
 }
 
 /**
-    Basic hash based on a std::unordered_map() which provides key=[OUString] and value=[template type] pairs
-    It implements some additional funtionality which can be useful but
-    is missing at the normal hash implementation.
-*/
-template< class TType >
-class BaseHash : public std::unordered_map< OUString                    ,
-                                            TType                              ,
-                                            OUStringHash >
-{
-    public:
-
-        // the only way to free used memory really!
-        void free()
-        {
-            BaseHash().swap( *this );// get rid of reserved capacity
-        }
-};
-
-/**
     Basic OUString hash.
     Key and values are OUStrings.
 */
-typedef BaseHash< OUString > OUStringHashMap;
+typedef std::unordered_map<OUString, OUString, OUStringHash> OUStringHashMap;
 
 /**
     It can be used to map names (e.g. of properties) to her corresponding handles.

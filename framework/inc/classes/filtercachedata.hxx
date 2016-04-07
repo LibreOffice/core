@@ -85,7 +85,7 @@ struct FileType
             sMediaType.clear();
             sClipboardFormat.clear();
             nDocumentIconID     = 0;
-            lUINames.free   ();
+            lUINames.clear();
             framework::free(lURLPattern);
             framework::free(lExtensions);
         }
@@ -147,7 +147,7 @@ struct Filter
             nFlags              = 0;
             nFileFormatVersion  = 0;
             sTemplateName.clear();
-            lUINames.free();
+            lUINames.clear();
             framework::free(lUserData);
         }
 
@@ -244,7 +244,7 @@ struct Loader
         inline void impl_clear()
         {
             sName.clear();
-            lUINames.free();
+            lUINames.clear();
             framework::free(lTypes);
         }
 

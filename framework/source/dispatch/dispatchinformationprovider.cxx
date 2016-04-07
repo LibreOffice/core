@@ -79,7 +79,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
 
-    BaseHash< css::frame::DispatchInformation > lInfos;
+    std::unordered_map<OUString, css::frame::DispatchInformation, OUStringHash> lInfos;
 
     for (i1=0; i1<c1; ++i1)
     {
@@ -96,7 +96,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
             for (i2=0; i2<c2; ++i2)
             {
                 const css::frame::DispatchInformation&                            rInfo = lProviderInfos[i2];
-                      BaseHash< css::frame::DispatchInformation >::const_iterator pInfo = lInfos.find(rInfo.Command);
+                      auto pInfo = lInfos.find(rInfo.Command);
                 if (pInfo == lInfos.end())
                     lInfos[rInfo.Command] = rInfo;
             }
@@ -111,8 +111,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     i1 = 0;
 
     css::uno::Sequence< css::frame::DispatchInformation >       lReturn(c1);
-    BaseHash< css::frame::DispatchInformation >::const_iterator pStepp;
-    for (  pStepp  = lInfos.begin();
+    for (auto pStepp  = lInfos.begin();
            pStepp != lInfos.end  () && i1<c1;
          ++pStepp, ++i1                      )
     {

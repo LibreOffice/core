@@ -52,7 +52,7 @@ namespace framework
                 throw(css::uno::RuntimeException, std::exception) override;
 
         private:
-            typedef BaseHash< css::uno::Reference< css::graphic::XGraphic > > NameGraphicHashMap;
+            typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >, OUStringHash> NameGraphicHashMap;
             NameGraphicHashMap              m_aNameToElementMap;
             css::uno::Sequence< OUString >  m_aSeq;
     };
