@@ -1535,7 +1535,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     {
         if(!pIdle)
         {
-            pIdle=new Idle;
+            pIdle=new Idle("SfxCommonTemplate");
             pIdle->SetPriority(SchedulerPriority::LOWEST);
             pIdle->SetIdleHdl(LINK(this,SfxCommonTemplateDialog_Impl,TimeOut));
         }

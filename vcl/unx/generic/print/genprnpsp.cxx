@@ -1325,7 +1325,7 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
         doUpdate();
     else if( ! pPrinterUpdateIdle )
     {
-        pPrinterUpdateIdle = new Idle();
+        pPrinterUpdateIdle = new Idle("PrinterUpdateTimer");
         pPrinterUpdateIdle->SetPriority( SchedulerPriority::LOWEST );
         pPrinterUpdateIdle->SetIdleHdl( LINK( nullptr, PrinterUpdate, UpdateTimerHdl ) );
         pPrinterUpdateIdle->Start();
