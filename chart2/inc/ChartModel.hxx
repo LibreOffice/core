@@ -214,6 +214,7 @@ private:
 
 public:
     //no default constructor
+    ChartModel() = delete;
     ChartModel(css::uno::Reference< css::uno::XComponentContext > const & xContext);
     explicit ChartModel( const ChartModel & rOther );
     virtual ~ChartModel();

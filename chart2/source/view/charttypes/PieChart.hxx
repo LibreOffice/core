@@ -33,6 +33,9 @@ class PieChart : public VSeriesPlotter
     struct ShapeParam;
 
 public:
+    //no default constructor
+    PieChart() = delete;
+
     PieChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount, bool bExcludingPositioning );
     virtual ~PieChart();
@@ -61,9 +64,6 @@ public:
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
 private: //methods
-    //no default constructor
-    PieChart();
-
     css::uno::Reference<css::drawing::XShape>
         createDataPoint(
             const css::uno::Reference<css::drawing::XShapes>& xTarget,
