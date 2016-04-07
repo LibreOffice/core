@@ -22,7 +22,6 @@
 #include "comphelper_module.hxx"
 #include "comphelper_services.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -44,11 +43,14 @@ class SequenceInputStreamService:
     public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
         io::XSeekableInputStream,
-        lang::XInitialization>,
-    private boost::noncopyable
+        lang::XInitialization>
 {
 public:
     explicit SequenceInputStreamService();
+
+    // noncopyable
+    SequenceInputStreamService(const SequenceInputStreamService&) = delete;
+    const SequenceInputStreamService& operator=(const SequenceInputStreamService&) = delete;
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception ) override;

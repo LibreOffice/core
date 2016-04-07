@@ -24,7 +24,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <cppcanvas/canvas.hxx>
-#include <boost/noncopyable.hpp>
 
 #include "action.hxx"
 
@@ -46,8 +45,7 @@ namespace cppcanvas
             class' public render() method gets called, the cached
             representation is taken.
          */
-        class CachedPrimitiveBase : public Action,
-                                    private ::boost::noncopyable
+        class CachedPrimitiveBase : public Action
         {
         public:
             /** Constructor
@@ -64,6 +62,9 @@ namespace cppcanvas
             CachedPrimitiveBase( const CanvasSharedPtr& rCanvas,
                                  bool                   bOnlyRedrawWithSameTransform );
             virtual ~CachedPrimitiveBase() {}
+
+            CachedPrimitiveBase(const CachedPrimitiveBase&) = delete;
+            const CachedPrimitiveBase& operator=(const CachedPrimitiveBase&) = delete;
 
             virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
 
