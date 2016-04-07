@@ -119,7 +119,6 @@ private:
     bool                        bDataValid;
 
 public:
-    ScHeaderFooterTextData() = default;
     ScHeaderFooterTextData(const ScHeaderFooterTextData&) = delete;
     const ScHeaderFooterTextData& operator=(const ScHeaderFooterTextData&) = delete;
     ScHeaderFooterTextData(
