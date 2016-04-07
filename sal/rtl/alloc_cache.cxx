@@ -1286,36 +1286,6 @@ SAL_CALL rtl_cache_free (
     }
 }
 
-/* ================================================================= *
- *
- * cache wsupdate (machdep) internals.
- *
- * ================================================================= */
-
-/** rtl_cache_wsupdate_init()
- *
- *  @precond g_cache_list.m_lock initialized
- */
-static void
-rtl_cache_wsupdate_init();
-
-/** rtl_cache_wsupdate_wait()
- *
- *  @precond g_cache_list.m_lock acquired
- */
-static void
-rtl_cache_wsupdate_wait (
-    unsigned int seconds
-);
-
-/** rtl_cache_wsupdate_fini()
- *
- */
-static void
-rtl_cache_wsupdate_fini();
-
-/* ================================================================= */
-
 #if defined(SAL_UNX)
 
 void SAL_CALL
