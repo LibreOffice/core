@@ -284,9 +284,7 @@ static GtkWidget* gDumbContainer;
 static GtkWidget* gSpinBox;
 static GtkWidget* gEntryBox;
 static GtkWidget* gComboBox;
-static GtkWidget* gComboBoxButtonWidget;
 static GtkWidget* gListBox;
-static GtkWidget* gListBoxButtonWidget;
 static GtkWidget* gMenuBarWidget;
 static GtkWidget* gMenuItemMenuBarWidget;
 static GtkWidget* gCheckMenuItemWidget;
@@ -2315,22 +2313,6 @@ void GtkData::deInitNWF()
         gtk_widget_destroy(gCacheWindow);
 }
 
-static void get_combo_box_entry_inner_widgets(GtkWidget *widget, gpointer)
-{
-    if (GTK_IS_TOGGLE_BUTTON(widget))
-    {
-        gComboBoxButtonWidget = widget;
-    }
-}
-
-void get_combo_box_inner_button(GtkWidget *widget, gpointer)
-{
-    if (GTK_IS_TOGGLE_BUTTON(widget))
-    {
-        gListBoxButtonWidget = widget;
-    }
-}
-
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     : SvpSalGraphics(),
       mpFrame( pFrame ),
@@ -2436,21 +2418,13 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     /* Combobox */
     gComboBox = gtk_combo_box_text_new_with_entry();
     getStyleContext(&mpComboboxStyle, gComboBox);
-    /* Get ComboBox Entry and Button */
-    gtk_container_forall(GTK_CONTAINER(gComboBox),
-                         get_combo_box_entry_inner_widgets,
-                         nullptr);
-    mpComboboxButtonStyle = gtk_widget_get_style_context(gComboBoxButtonWidget);
+    mpComboboxButtonStyle = createStyleContext(GtkControlPart::Button, mpComboboxStyle);
 
     /* Listbox */
     gListBox = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gListBox), "sample");
     getStyleContext(&mpListboxStyle, gListBox);
-    /* Get ComboBox Button */
-    gtk_container_forall(GTK_CONTAINER(gListBox),
-                         get_combo_box_inner_button,
-                         nullptr);
-    mpListboxButtonStyle = gtk_widget_get_style_context(gListBoxButtonWidget);
+    mpListboxButtonStyle = createStyleContext(GtkControlPart::Button, mpListboxStyle);
 
     /* Frames */
     mpFrameOutStyle = mpFrameInStyle = createStyleContext(GtkControlPart::FrameBorder);
