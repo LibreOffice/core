@@ -31,7 +31,6 @@
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
-#include <classes/propertysethelper.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
@@ -44,6 +43,7 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -116,8 +116,6 @@ enum EActiveState
     @base       TransactionBase
                     help to implement unbreakable interface calls
     @base       OBroadcastHelper
-                OPropertySetHelper
-                    implements the property set
     @base       OWeakObject
                     provides the refcount and XInterface, XWeak
 
@@ -136,10 +134,11 @@ class Frame :   // interfaces
                 public  css::frame::XComponentLoader                ,
                 public  css::frame::XTitle                          ,
                 public  css::frame::XTitleChangeBroadcaster         ,
+                public css::beans::XPropertySet,
+                public css::beans::XPropertySetInfo,
                 // base classes
                 public  TransactionBase                             ,
                 private cppu::BaseMutex,
-                public  PropertySetHelper                           ,   // helper implements TransactionBase, XPropertySet, XPropertySetInfo
                 public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
 {
 public:
@@ -306,19 +305,104 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getLayoutManager() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setLayoutManager(const css::uno::Reference<css::uno::XInterface>&) throw (css::uno::RuntimeException, std::exception) override;
 
-    //  PropertySetHelper => XPropertySet, XPropertySetInfo
+    // XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw(css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL setPropertyValue(const OUString& sProperty,
+                                           const css::uno::Any&   aValue   )
+        throw(css::beans::UnknownPropertyException,
+              css::beans::PropertyVetoException   ,
+              css::lang::IllegalArgumentException ,
+              css::lang::WrappedTargetException   ,
+              css::uno::RuntimeException, std::exception          ) override;
+
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& sProperty)
+        throw(css::beans::UnknownPropertyException,
+              css::lang::WrappedTargetException   ,
+              css::uno::RuntimeException, std::exception          ) override;
+
+    virtual void SAL_CALL addPropertyChangeListener(const OUString&                                            sProperty,
+                                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
+        throw(css::beans::UnknownPropertyException,
+              css::lang::WrappedTargetException   ,
+              css::uno::RuntimeException, std::exception          ) override;
+
+    virtual void SAL_CALL removePropertyChangeListener(const OUString&                                            sProperty,
+                                                       const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
+        throw(css::beans::UnknownPropertyException,
+              css::lang::WrappedTargetException   ,
+              css::uno::RuntimeException, std::exception          ) override;
+
+    virtual void SAL_CALL addVetoableChangeListener(const OUString&                                            sProperty,
+                                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
+        throw(css::beans::UnknownPropertyException,
+              css::lang::WrappedTargetException   ,
+              css::uno::RuntimeException, std::exception          ) override;
+
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString&                                            sProperty,
+                                                       const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
+        throw(css::beans::UnknownPropertyException,
+              css::lang::WrappedTargetException   ,
+              css::uno::RuntimeException, std::exception          ) override;
+
+    // XPropertySetInfo
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties()
+        throw(css::uno::RuntimeException, std::exception) override;
+
+    virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& sName)
+        throw(css::beans::UnknownPropertyException,
+              css::uno::RuntimeException, std::exception          ) override;
+
+    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& sName)
+        throw(css::uno::RuntimeException, std::exception) override;
 
 private:
 
     void impl_initializePropInfo();
 
-    virtual void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
+    void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
                                                       sal_Int32        nHandle  ,
-                                                const css::uno::Any&   aValue   ) override;
+                                                const css::uno::Any&   aValue   );
 
-    virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
-                                                               sal_Int32        nHandle  ) override;
+    css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
+                                                               sal_Int32        nHandle  );
 
+    /** set a new owner for this helper.
+     *
+     *  This owner is used as source for all broadcasted events.
+     *  Further we hold it weak, because we don't wish to be disposed() .-)
+     */
+    void impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster);
+
+    /** add a new property info to the set of supported ones.
+     *
+     *  @param  aProperty
+     *          describes the new property.
+     *
+     *  @throw  [css::beans::PropertyExistException]
+     *          if a property with the same name already exists.
+     *
+     *  Note:   The consistence of the whole set of properties is not checked here.
+     *          Means e.g. ... a handle which exists more than once is not detected.
+     *          The owner of this class has to be sure, that every new property does
+     *          not clash with any existing one.
+     */
+    void SAL_CALL impl_addPropertyInfo(const css::beans::Property& aProperty)
+        throw(css::beans::PropertyExistException,
+              css::uno::Exception               );
+
+    /** mark the object as "useable for working" or "dead".
+     *
+     *  This correspond to the lifetime handling implemented by the base class TransactionBase.
+     *  There is no chance to reactive a "dead" object by calling impl_enablePropertySet()
+     *  again!
+     */
+    void SAL_CALL impl_disablePropertySet();
+
+    bool impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent);
+
+    void impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEvent);
 
 private:
 
@@ -408,6 +492,15 @@ private:
 
     WindowCommandDispatch*                                                  m_pWindowCommandDispatch;
 
+    typedef BaseHash< css::beans::Property > TPropInfoHash;
+    TPropInfoHash m_lProps;
+
+    ListenerHash m_lSimpleChangeListener;
+    ListenerHash m_lVetoChangeListener;
+
+    // hold it weak ... otherwise this helper has to be "killed" explicitly .-)
+    css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
+
 protected:
 
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
@@ -486,7 +579,6 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   TransactionBase             (                                                   )
-        ,   PropertySetHelper           ( m_aMutex, &m_aTransactionManager)
         //  init member
         ,   m_xContext                  ( xContext                                          )
         ,   m_aListenerContainer        ( m_aMutex )
@@ -503,6 +595,8 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
         ,   m_bIsHidden                 ( true                                          )
         ,   m_xTitleHelper              (                                                   )
         ,   m_pWindowCommandDispatch    ( nullptr                                                 )
+        , m_lSimpleChangeListener(m_aMutex)
+        , m_lVetoChangeListener  (m_aMutex)
         ,   m_aChildFrameContainer      (                                                   )
 {
 }
@@ -553,7 +647,7 @@ void Frame::initListeners()
     // Create layout manager and connect it to the newly created frame
     m_xLayoutManager = css::frame::LayoutManager::create(m_xContext);
 
-    // set information about all supported properties at the base class helper PropertySetHelper
+    // set information about all supported properties
     impl_initializePropInfo();
 }
 
@@ -1923,6 +2017,210 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
     m_xLayoutManager.set(p1, css::uno::UNO_QUERY);
 }
 
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertySetInfo()
+    throw(css::uno::RuntimeException, std::exception)
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    css::uno::Reference< css::beans::XPropertySetInfo > xInfo(static_cast< css::beans::XPropertySetInfo* >(this), css::uno::UNO_QUERY_THROW);
+    return xInfo;
+}
+
+void SAL_CALL Frame::setPropertyValue(const OUString& sProperty,
+                                                  const css::uno::Any&   aValue   )
+    throw(css::beans::UnknownPropertyException,
+          css::beans::PropertyVetoException   ,
+          css::lang::IllegalArgumentException ,
+          css::lang::WrappedTargetException   ,
+          css::uno::RuntimeException, std::exception          )
+{
+    // TODO look for e.g. readonly props and reject setProp() call!
+
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    // SAFE ->
+    SolarMutexGuard g;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+    if (pIt == m_lProps.end())
+        throw css::beans::UnknownPropertyException();
+
+    css::beans::Property aPropInfo = pIt->second;
+
+    css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
+
+    bool bWillBeChanged = (aCurrentValue != aValue);
+    if (! bWillBeChanged)
+        return;
+
+    css::beans::PropertyChangeEvent aEvent;
+    aEvent.PropertyName   = aPropInfo.Name;
+    aEvent.Further        = sal_False;
+    aEvent.PropertyHandle = aPropInfo.Handle;
+    aEvent.OldValue       = aCurrentValue;
+    aEvent.NewValue       = aValue;
+    aEvent.Source.set(m_xBroadcaster.get(), css::uno::UNO_QUERY);
+
+    if (impl_existsVeto(aEvent))
+        throw css::beans::PropertyVetoException();
+
+    impl_setPropertyValue(aPropInfo.Name, aPropInfo.Handle, aValue);
+
+    impl_notifyChangeListener(aEvent);
+}
+
+css::uno::Any SAL_CALL Frame::getPropertyValue(const OUString& sProperty)
+    throw(css::beans::UnknownPropertyException,
+          css::lang::WrappedTargetException   ,
+          css::uno::RuntimeException, std::exception          )
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    // SAFE ->
+    SolarMutexClearableGuard aReadLock;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+    if (pIt == m_lProps.end())
+        throw css::beans::UnknownPropertyException();
+
+    css::beans::Property aPropInfo = pIt->second;
+
+    return impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
+}
+
+void SAL_CALL Frame::addPropertyChangeListener(const OUString&                                            sProperty,
+                                                           const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
+    throw(css::beans::UnknownPropertyException,
+          css::lang::WrappedTargetException   ,
+          css::uno::RuntimeException, std::exception          )
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    // SAFE ->
+    SolarMutexClearableGuard aReadLock;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+    if (pIt == m_lProps.end())
+        throw css::beans::UnknownPropertyException();
+
+    aReadLock.clear();
+    // <- SAFE
+
+    m_lSimpleChangeListener.addInterface(sProperty, xListener);
+}
+
+void SAL_CALL Frame::removePropertyChangeListener(const OUString&                                            sProperty,
+                                                              const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
+    throw(css::beans::UnknownPropertyException,
+          css::lang::WrappedTargetException   ,
+          css::uno::RuntimeException, std::exception          )
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
+
+    // SAFE ->
+    SolarMutexClearableGuard aReadLock;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+    if (pIt == m_lProps.end())
+        throw css::beans::UnknownPropertyException();
+
+    aReadLock.clear();
+    // <- SAFE
+
+    m_lSimpleChangeListener.removeInterface(sProperty, xListener);
+}
+
+void SAL_CALL Frame::addVetoableChangeListener(const OUString&                                            sProperty,
+                                                           const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
+    throw(css::beans::UnknownPropertyException,
+          css::lang::WrappedTargetException   ,
+          css::uno::RuntimeException, std::exception          )
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    // SAFE ->
+    SolarMutexClearableGuard aReadLock;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+    if (pIt == m_lProps.end())
+        throw css::beans::UnknownPropertyException();
+
+    aReadLock.clear();
+    // <- SAFE
+
+    m_lVetoChangeListener.addInterface(sProperty, xListener);
+}
+
+void SAL_CALL Frame::removeVetoableChangeListener(const OUString&                                            sProperty,
+                                                              const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
+    throw(css::beans::UnknownPropertyException,
+          css::lang::WrappedTargetException   ,
+          css::uno::RuntimeException, std::exception          )
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
+
+    // SAFE ->
+    SolarMutexClearableGuard aReadLock;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+    if (pIt == m_lProps.end())
+        throw css::beans::UnknownPropertyException();
+
+    aReadLock.clear();
+    // <- SAFE
+
+    m_lVetoChangeListener.removeInterface(sProperty, xListener);
+}
+
+css::uno::Sequence< css::beans::Property > SAL_CALL Frame::getProperties()
+    throw(css::uno::RuntimeException, std::exception)
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    SolarMutexGuard g;
+
+    sal_Int32                                        c     = (sal_Int32)m_lProps.size();
+    css::uno::Sequence< css::beans::Property >       lProps(c);
+    TPropInfoHash::const_iterator pIt;
+
+    for (  pIt  = m_lProps.begin();
+           pIt != m_lProps.end();
+         ++pIt                    )
+    {
+        lProps[--c] = pIt->second;
+    }
+
+    return lProps;
+}
+
+css::beans::Property SAL_CALL Frame::getPropertyByName(const OUString& sName)
+    throw(css::beans::UnknownPropertyException,
+          css::uno::RuntimeException, std::exception          )
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    SolarMutexGuard g;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(sName);
+    if (pIt == m_lProps.end())
+        throw css::beans::UnknownPropertyException();
+
+    return pIt->second;
+}
+
+sal_Bool SAL_CALL Frame::hasPropertyByName(const OUString& sName)
+    throw(css::uno::RuntimeException, std::exception)
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+
+    SolarMutexGuard g;
+
+    TPropInfoHash::iterator pIt    = m_lProps.find(sName);
+    bool                                   bExist = (pIt != m_lProps.end());
+
+    return bExist;
+}
+
 /*-****************************************************************************************************/
 void Frame::implts_forgetSubFrames()
 {
@@ -2680,7 +2978,6 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)
-       see ctor of PropertySetHelper for further information.
     */
 
     /* Attention: You can use nHandle only, if you are sure that all supported
@@ -2737,7 +3034,6 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)
-       see ctor of PropertySetHelper for further information.
     */
 
     /* Attention: You can use nHandle only, if you are sure that all supported
@@ -2776,6 +3072,97 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
     }
 
     return aValue;
+}
+
+void Frame::impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster)
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
+
+    SolarMutexGuard g;
+    m_xBroadcaster = xBroadcaster;
+}
+
+void SAL_CALL Frame::impl_addPropertyInfo(const css::beans::Property& aProperty)
+    throw(css::beans::PropertyExistException,
+          css::uno::Exception               )
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
+
+    SolarMutexGuard g;
+
+    TPropInfoHash::const_iterator pIt = m_lProps.find(aProperty.Name);
+    if (pIt != m_lProps.end())
+        throw css::beans::PropertyExistException();
+
+    m_lProps[aProperty.Name] = aProperty;
+}
+
+void SAL_CALL Frame::impl_disablePropertySet()
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
+
+    SolarMutexGuard g;
+
+    css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::beans::XPropertySet* >(this), css::uno::UNO_QUERY);
+    css::lang::EventObject aEvent(xThis);
+
+    m_lSimpleChangeListener.disposeAndClear(aEvent);
+    m_lVetoChangeListener.disposeAndClear(aEvent);
+    m_lProps.free();
+}
+
+bool Frame::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)
+{
+    /*  Don't use the lock here!
+        The used helper is threadsafe and it lives for the whole lifetime of
+        our own object.
+    */
+    ::cppu::OInterfaceContainerHelper* pVetoListener = m_lVetoChangeListener.getContainer(aEvent.PropertyName);
+    if (! pVetoListener)
+        return false;
+
+    ::cppu::OInterfaceIteratorHelper pListener(*pVetoListener);
+    while (pListener.hasMoreElements())
+    {
+        try
+        {
+            css::uno::Reference< css::beans::XVetoableChangeListener > xListener(
+                static_cast<css::beans::XVetoableChangeListener*>(pListener.next()),
+                css::uno::UNO_QUERY_THROW);
+            xListener->vetoableChange(aEvent);
+        }
+        catch(const css::uno::RuntimeException&)
+            { pListener.remove(); }
+        catch(const css::beans::PropertyVetoException&)
+            { return true; }
+    }
+
+    return false;
+}
+
+void Frame::impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEvent)
+{
+    /*  Don't use the lock here!
+        The used helper is threadsafe and it lives for the whole lifetime of
+        our own object.
+    */
+    ::cppu::OInterfaceContainerHelper* pSimpleListener = m_lSimpleChangeListener.getContainer(aEvent.PropertyName);
+    if (! pSimpleListener)
+        return;
+
+    ::cppu::OInterfaceIteratorHelper pListener(*pSimpleListener);
+    while (pListener.hasMoreElements())
+    {
+        try
+        {
+            css::uno::Reference< css::beans::XPropertyChangeListener > xListener(
+                static_cast<css::beans::XVetoableChangeListener*>(pListener.next()),
+                css::uno::UNO_QUERY_THROW);
+            xListener->propertyChange(aEvent);
+        }
+        catch(const css::uno::RuntimeException&)
+            { pListener.remove(); }
+    }
 }
 
 /*-****************************************************************************************************
