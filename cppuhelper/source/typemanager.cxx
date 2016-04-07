@@ -17,7 +17,6 @@
 #include <stack>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -845,11 +844,14 @@ MethodDescription::getExceptions() throw (css::uno::RuntimeException, std::excep
     return s;
 }
 
-class BaseOffset: private boost::noncopyable {
+class BaseOffset {
 public:
     explicit BaseOffset(
         css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >
             const & description);
+
+    BaseOffset(const BaseOffset&) = delete;
+    const BaseOffset& operator=(const BaseOffset&) = delete;
 
     sal_Int32 get() const { return offset_; }
 

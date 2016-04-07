@@ -26,7 +26,6 @@
 #include <vector>
 #include <iostream>
 
-#include "boost/noncopyable.hpp"
 #include "rtl/alloc.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -146,12 +145,15 @@ bool isBootstrapType(OUString const & name) {
     return false;
 }
 
-class CppuType: private boost::noncopyable {
+class CppuType {
 public:
     CppuType(
         OUString const & name, rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~CppuType() {}
+
+    CppuType(const CppuType&) = delete;
+    const CppuType& operator=(const CppuType&) = delete;
 
     void dump(CppuOptions const & options);
 
@@ -1030,12 +1032,14 @@ void dumpDeprecation(FileStream & out, bool deprecated) {
     }
 }
 
-class BaseOffset: private boost::noncopyable {
+class BaseOffset {
 public:
     BaseOffset(
         rtl::Reference< TypeManager > const & manager,
         rtl::Reference< unoidl::InterfaceTypeEntity > const & entity):
         manager_(manager), offset_(0) { calculateBases(entity); }
+    BaseOffset(const BaseOffset&) = delete;
+    const BaseOffset& operator=(const BaseOffset&) = delete;
 
     sal_Int32 get() const { return offset_; }
 

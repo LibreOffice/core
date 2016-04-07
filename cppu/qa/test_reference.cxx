@@ -19,7 +19,6 @@
 
 #include <sal/types.h>
 
-#include <boost/noncopyable.hpp>
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
@@ -39,13 +38,16 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_SET_THROW;
 
-class Foo: public Interface1, private boost::noncopyable
+class Foo: public Interface1
 {
 public:
     Foo()
         :m_refCount(0)
     {
     }
+
+    Foo(const Foo&) = delete;
+    const Foo& operator=(const Foo&) = delete;
 
     virtual Any SAL_CALL queryInterface(const Type & _type)
         throw (RuntimeException, std::exception) override
