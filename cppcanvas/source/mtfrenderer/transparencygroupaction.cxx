@@ -48,8 +48,6 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include "transparencygroupaction.hxx"
 #include "outdevstate.hxx"
 #include "mtftools.hxx"
@@ -66,7 +64,7 @@ namespace cppcanvas
         // ======================
         namespace
         {
-            class TransparencyGroupAction : public Action, private ::boost::noncopyable
+            class TransparencyGroupAction : public Action
             {
             public:
                 /** Create new transparency group action.
@@ -93,6 +91,9 @@ namespace cppcanvas
                                          const ::basegfx::B2DVector&    rDstSize,
                                          const CanvasSharedPtr&         rCanvas,
                                          const OutDevState&             rState );
+
+                TransparencyGroupAction(const TransparencyGroupAction&) = delete;
+                const TransparencyGroupAction& operator=(const TransparencyGroupAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,

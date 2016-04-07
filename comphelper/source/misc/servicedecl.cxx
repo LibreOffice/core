@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cassert>
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 using namespace com::sun::star;
 
@@ -36,12 +35,14 @@ namespace service_decl {
 
 class ServiceDecl::Factory :
         public cppu::WeakImplHelper<lang::XSingleComponentFactory,
-                                     lang::XServiceInfo>,
-        private boost::noncopyable
+                                     lang::XServiceInfo>
 {
 public:
     explicit Factory( ServiceDecl const& rServiceDecl )
         : m_rServiceDecl(rServiceDecl) {}
+    // noncopyable
+    Factory(const Factory&) = delete;
+    const Factory& operator=(const Factory&) = delete;
 
     // XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
