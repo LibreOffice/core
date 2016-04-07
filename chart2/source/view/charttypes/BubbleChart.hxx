@@ -29,6 +29,8 @@ class BubbleChart : public VSeriesPlotter
 {
     // public methods
 public:
+    BubbleChart() = delete;
+
     BubbleChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount );
     virtual ~BubbleChart();
@@ -46,9 +48,6 @@ public:
     virtual LegendSymbolStyle getLegendSymbolStyle() override;
 
 private: //methods
-    //no default constructor
-    BubbleChart();
-
     void    calculateMaximumLogicBubbleSize();
     void    calculateBubbleSizeScalingFactor();
 

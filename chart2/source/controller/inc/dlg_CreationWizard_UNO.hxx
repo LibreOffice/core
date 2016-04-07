@@ -47,6 +47,8 @@ class CreationWizardUnoDlg : public MutexContainer
                             , public css::beans::XPropertySet
 {
 public:
+    CreationWizardUnoDlg() = delete;
+
     CreationWizardUnoDlg( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~CreationWizardUnoDlg();
 
@@ -101,8 +103,6 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 private:
-    //no default constructor
-    CreationWizardUnoDlg();
     void createDialogOnDemand();
 
 private:

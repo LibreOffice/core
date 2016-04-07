@@ -30,6 +30,8 @@ class BarChart : public VSeriesPlotter
 {
     // public methods
 public:
+    BarChart() = delete;
+
     BarChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount );
     virtual ~BarChart();
@@ -40,9 +42,6 @@ public:
     virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 
 private: //methods
-    //no default constructor
-    BarChart();
-
     css::uno::Reference< css::drawing::XShape >
         createDataPoint3D_Bar(
                           const css::uno::Reference< css::drawing::XShapes >& xTarget

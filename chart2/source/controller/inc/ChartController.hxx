@@ -105,7 +105,7 @@ class ChartController   : public ::cppu::WeakImplHelper <
     friend class ShapeController;
 
 public:
-    //no default constructor
+    ChartController() = delete;
     explicit ChartController(css::uno::Reference< css::uno::XComponentContext > const & xContext);
     virtual ~ChartController();
 
@@ -377,9 +377,6 @@ public:
     DrawModelWrapper* GetDrawModelWrapper();
 
     DECL_LINK_TYPED( NotifyUndoActionHdl, SdrUndoAction*, void );
-
-public:
-    //private
 
 private:
     DrawViewWrapper* GetDrawViewWrapper();
