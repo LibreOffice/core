@@ -4536,7 +4536,8 @@ void wwSectionManager::InsertSegments()
                 if ( aIter->maSep.bkc == 4 ) // Odd ( right ) Section break
                     eUseOnPage = nsUseOnPage::PD_RIGHT;
 
-                aDesc.GetPageDesc()->WriteUseOn( eUseOnPage );
+                // Keep the share flags.
+                aDesc.GetPageDesc()->SetUseOn( eUseOnPage );
                 aDesc.GetPageDesc()->SetFollow( aFollow.GetPageDesc() );
             }
 
