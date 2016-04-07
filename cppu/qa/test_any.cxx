@@ -43,7 +43,6 @@
 #include "Struct2.hpp"
 #include "Struct2a.hpp"
 #include "Struct2b.hpp"
-#include "boost/noncopyable.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -59,9 +58,12 @@
 
 namespace {
 
-class Base: private boost::noncopyable {
+class Base {
 public:
     Base(): m_count(0) {}
+
+    Base(const Base&) = delete;
+    const Base& operator=(const Base&) = delete;
 
     void acquire() {
         if (osl_atomic_increment(&m_count) == SAL_MAX_INT32) {

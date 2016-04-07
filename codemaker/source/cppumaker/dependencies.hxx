@@ -24,7 +24,6 @@
 
 #include <map>
 
-#include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
 
 namespace rtl { class OUString; }
@@ -39,7 +38,7 @@ namespace codemaker { namespace cppumaker {
 
    <p>This class is not multi-thread&ndash;safe.</p>
  */
-class Dependencies: private boost::noncopyable {
+class Dependencies {
 public:
     /**
        Flags to distinguish whether or not one entity depends on another entity
@@ -65,6 +64,9 @@ public:
         rtl::OUString const & name);
 
     ~Dependencies();
+
+    Dependencies(const Dependencies&) = delete;
+    const Dependencies& operator=(const Dependencies&) = delete;
 
     Map const & getMap() const { return m_map; }
 
