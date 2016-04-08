@@ -314,7 +314,7 @@
           <DefaultFullName>Грудень</DefaultFullName>
         </Month>
       </MonthsOfYear>
-      <GenitiveMonths>
+      <PartitiveMonths>
         <Month>
           <MonthID>jan</MonthID>
           <DefaultAbbrvName>січ</DefaultAbbrvName>
@@ -375,7 +375,7 @@
           <DefaultAbbrvName>гру</DefaultAbbrvName>
           <DefaultFullName>грудня</DefaultFullName>
         </Month>
-      </GenitiveMonths>
+      </PartitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
