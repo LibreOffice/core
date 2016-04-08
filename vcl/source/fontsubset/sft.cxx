@@ -131,21 +131,14 @@ static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 #define T_gsub 0x47535542
 #define T_CFF  0x43464620
 
-/*- inline functions */
-#ifdef __GNUC__
-#define _inline static __inline__
-#else
-#define _inline static
-#endif
-
-_inline void *smalloc(size_t size)
+static void *smalloc(size_t size)
 {
     void *res = malloc(size);
     assert(res != nullptr);
     return res;
 }
 
-_inline void *scalloc(size_t n, size_t size)
+static void *scalloc(size_t n, size_t size)
 {
     void *res = calloc(n, size);
     assert(res != nullptr);
@@ -153,7 +146,7 @@ _inline void *scalloc(size_t n, size_t size)
 }
 
 /*- Data access macros for data stored in big-endian or little-endian format */
-_inline sal_Int16 GetInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
+static sal_Int16 GetInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_Int16 t;
     assert(ptr != nullptr);
@@ -167,7 +160,7 @@ _inline sal_Int16 GetInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
     return t;
 }
 
-_inline sal_uInt16 GetUInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
+static sal_uInt16 GetUInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_uInt16 t;
     assert(ptr != nullptr);
@@ -181,7 +174,7 @@ _inline sal_uInt16 GetUInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
     return t;
 }
 
-_inline sal_Int32  GetInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
+static sal_Int32  GetInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_Int32 t;
     assert(ptr != nullptr);
@@ -197,7 +190,7 @@ _inline sal_Int32  GetInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
     return t;
 }
 
-_inline sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
+static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_uInt32 t;
     assert(ptr != nullptr);
@@ -225,7 +218,7 @@ static sal_uInt32 Int32FromMOTA(sal_uInt32 a) {
 }
 #endif
 
-_inline F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
+static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
 {
     unsigned int a1, b1;
     unsigned int a2, b2;
@@ -251,7 +244,7 @@ _inline F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
     return sign ? -res : res;
 }
 
-_inline F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
+static F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
 {
     unsigned int f, r;
     F16Dot16 res;
@@ -278,7 +271,7 @@ _inline F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
 
 /*- returns a * b / c -*/
 /* XXX provide a real implementation that preserves accuracy */
-_inline F16Dot16 fixedMulDiv(F16Dot16 a, F16Dot16 b, F16Dot16 c)
+static F16Dot16 fixedMulDiv(F16Dot16 a, F16Dot16 b, F16Dot16 c)
 {
     F16Dot16 res;
 
@@ -287,17 +280,17 @@ _inline F16Dot16 fixedMulDiv(F16Dot16 a, F16Dot16 b, F16Dot16 c)
 }
 
 /*- Translate units from TT to PS (standard 1/1000) -*/
-_inline int XUnits(int unitsPerEm, int n)
+static int XUnits(int unitsPerEm, int n)
 {
     return (n * 1000) / unitsPerEm;
 }
 
-_inline const sal_uInt8* getTable( TrueTypeFont *ttf, sal_uInt32 ord)
+static const sal_uInt8* getTable( TrueTypeFont *ttf, sal_uInt32 ord)
 {
     return ttf->tables[ord];
 }
 
-_inline sal_uInt32 getTableSize(TrueTypeFont *ttf, sal_uInt32 ord)
+static sal_uInt32 getTableSize(TrueTypeFont *ttf, sal_uInt32 ord)
 {
     return ttf->tlens[ord];
 }
@@ -324,18 +317,18 @@ static bool HexFmtFlush(HexFmt *_this)
     return bRet;
 }
 
-_inline void HexFmtOpenString(HexFmt *_this)
+static void HexFmtOpenString(HexFmt *_this)
 {
     fputs("<\n", _this->o);
 }
 
-_inline void HexFmtCloseString(HexFmt *_this)
+static void HexFmtCloseString(HexFmt *_this)
 {
     HexFmtFlush(_this);
     fputs("00\n>\n", _this->o);
 }
 
-_inline void HexFmtDispose(HexFmt *_this)
+static void HexFmtDispose(HexFmt *_this)
 {
     HexFmtFlush(_this);
     free(_this);

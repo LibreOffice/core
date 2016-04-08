@@ -64,17 +64,8 @@ typedef struct {
     sal_uInt8  *data;
 } TableEntry;
 
-/*
- * this is a duplicate code from sft.c but it is left here for performance reasons
- */
-#ifdef __GNUC__
-#define _inline static __inline__
-#else
-#define _inline static
-#endif
-
 /*- Data access macros for data stored in big-endian or little-endian format */
-_inline sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
+static sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
 {
     sal_Int16 t;
     assert(ptr != nullptr);
@@ -88,7 +79,7 @@ _inline sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendi
     return t;
 }
 
-_inline sal_uInt16 GetUInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
+static sal_uInt16 GetUInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
 {
     sal_uInt16 t;
     assert(ptr != nullptr);
@@ -102,7 +93,7 @@ _inline sal_uInt16 GetUInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigen
     return t;
 }
 
-_inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+static void PutInt16(sal_Int16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
 {
     assert(ptr != nullptr);
 
@@ -115,7 +106,7 @@ _inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bige
     }
 }
 
-_inline void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+static void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
 {
     assert(ptr != nullptr);
 
@@ -128,7 +119,7 @@ _inline void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bi
     }
 }
 
-_inline void PutUInt32(sal_uInt32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+static void PutUInt32(sal_uInt32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
 {
     assert(ptr != nullptr);
 
@@ -180,14 +171,14 @@ static sal_uInt32 CheckSum(sal_uInt32 *ptr, sal_uInt32 length)
     return sum;
 }
 
-_inline void *smalloc(sal_uInt32 size)
+static void *smalloc(sal_uInt32 size)
 {
     void *res = malloc(size);
     assert(res != nullptr);
     return res;
 }
 
-_inline void *scalloc(sal_uInt32 n, sal_uInt32 size)
+static void *scalloc(sal_uInt32 n, sal_uInt32 size)
 {
     void *res = calloc(n, size);
     assert(res != nullptr);
@@ -1522,7 +1513,7 @@ extern "C"
 }
 
 #ifdef TEST_TTCR
-_inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
+static sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
     return (a << 24) | (b << 16) | (c << 8) | d;
 }
 
