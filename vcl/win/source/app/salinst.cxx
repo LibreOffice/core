@@ -111,9 +111,9 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 
 class SalYieldMutex : public comphelper::SolarMutex
 {
-    osl::Mutex m_mutex;
-
-public: // for ImplSalYield()
+public: // for ImplSalYield() and ImplSalYieldMutexAcquireWithWait()
+    osl::Mutex                  m_mutex;
+    osl::Condition              m_condition; /// for MsgWaitForMultipleObjects()
     WinSalInstance*             mpInstData;
     sal_uLong                   mnCount;
     DWORD                       mnThreadId;
@@ -149,10 +149,11 @@ void SalYieldMutex::release()
         m_mutex.release();
     else
     {
-        SalData* pSalData = GetSalData();
-        if ( pSalData->mnAppThreadId != nThreadId )
+        bool isRelease(1 == mnCount);
+        if ( isRelease )
         {
-            if ( mnCount == 1 )
+            SalData* pSalData = GetSalData();
+            if ( pSalData->mnAppThreadId != nThreadId )
             {
                 OpenGLContext::prepareForYield();
 
@@ -160,31 +161,21 @@ void SalYieldMutex::release()
                 // Java clients doesn't come in the right order
                 GdiFlush();
 
-                // lock here to ensure that the test of mnYieldWaitCount and
-                // m_mutex.release() is atomic
-                mpInstData->mpSalWaitMutex->acquire();
-                if ( mpInstData->mnYieldWaitCount )
-                    PostMessageW( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
                 mnThreadId = 0;
-                mnCount--;
-                m_mutex.release();
-                mpInstData->mpSalWaitMutex->release();
             }
             else
-            {
-                mnCount--;
-                m_mutex.release();
-            }
-        }
-        else
-        {
-            if ( mnCount == 1 )
             {
                 mnThreadId = 0;
                 OpenGLContext::prepareForYield();
             }
-            mnCount--;
-            m_mutex.release();
+        }
+
+        mnCount--;
+        m_mutex.release();
+
+        if ( isRelease )
+        {   // do this *after* release
+            m_condition.set(); // wake up ImplSalYieldMutexAcquireWithWait()
         }
     }
 }
@@ -218,57 +209,33 @@ void ImplSalYieldMutexAcquireWithWait()
     if ( !pInst )
         return;
 
-    // If this is the main thread, then we must wait with GetMessage(),
-    // because if we don't reschedule, then we create deadlocks if a Window's
-    // create/destroy is called via SendMessage() from another thread.
-    // If this is not the main thread, call acquire directly.
     DWORD nThreadId = GetCurrentThreadId();
     SalData* pSalData = GetSalData();
+
     if ( pSalData->mnAppThreadId == nThreadId )
     {
-        // wait till we get the Mutex
-        bool bAcquire = false;
-        do
+        // tdf#96887 If this is the main thread, then we must wait for two things:
+        // - the mpSalYieldMutex being freed
+        // - SendMessage() being triggered
+        // This can nicely be done using MsgWaitForMultipleObjects. The 2nd one is
+        // needed because if we don't reschedule, then we create deadlocks if a
+        // Window's create/destroy is called via SendMessage() from another thread.
+        // Have a look at the osl_waitCondition implementation for more info.
+        pInst->mpSalYieldMutex->m_condition.reset();
+        while (!pInst->mpSalYieldMutex->tryToAcquire())
         {
-            if ( pInst->mpSalYieldMutex->tryToAcquire() )
-                bAcquire = true;
-            else
-            {
-                pInst->mpSalWaitMutex->acquire();
-                if ( pInst->mpSalYieldMutex->tryToAcquire() )
-                {
-                    bAcquire = true;
-                    pInst->mpSalWaitMutex->release();
-                }
-                else
-                {
-                    // other threads must not observe mnYieldWaitCount == 0
-                    // while main thread is blocked in GetMessage()
-                    pInst->mnYieldWaitCount++;
-                    pInst->mpSalWaitMutex->release();
-                    MSG aTmpMsg;
-                    // this call exists because it dispatches SendMessage() msg!
-                    GetMessageW( &aTmpMsg, pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, SAL_MSG_RELEASEWAITYIELD );
-                    // it is possible that another thread acquires and releases
-                    // mpSalYieldMutex after the GetMessage call returns,
-                    // observes mnYieldWaitCount != 0 and sends an extra
-                    // SAL_MSG_RELEASEWAITYIELD - but that appears unproblematic
-                    // as it will just cause the next Yield to do an extra
-                    // iteration of the while loop here
-                    pInst->mnYieldWaitCount--;
-                    if ( pInst->mnYieldWaitCount )
-                    {
-                        // repeat the message so that the next instance of this
-                        // function further up the call stack is unblocked too
-                        PostMessageW( pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
-                    }
-                }
-            }
+            // wait for SalYieldMutex::release() to set the condition
+            osl::Condition::Result res = pInst->mpSalYieldMutex->m_condition.wait();
+            assert(osl::Condition::Result::result_ok == res);
+            // reset condition *before* acquiring!
+            pInst->mpSalYieldMutex->m_condition.reset();
         }
-        while ( !bAcquire );
     }
     else
+    {
+        // If this is not the main thread, call acquire directly.
         pInst->mpSalYieldMutex->acquire();
+    }
 }
 
 bool ImplSalYieldMutexTryToAcquire()
@@ -578,8 +545,6 @@ WinSalInstance::WinSalInstance()
 {
     mhComWnd                 = 0;
     mpSalYieldMutex          = new SalYieldMutex( this );
-    mpSalWaitMutex           = new osl::Mutex;
-    mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
     ::comphelper::SolarMutex::setSolarMutex( mpSalYieldMutex );
 }
@@ -589,7 +554,6 @@ WinSalInstance::~WinSalInstance()
     ::comphelper::SolarMutex::setSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
-    delete mpSalWaitMutex;
     DestroyWindow( mhComWnd );
 }
 
@@ -711,7 +675,7 @@ SalYieldResult WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
     return eDidWork;
 }
 
-LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
 
@@ -719,19 +683,6 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
     {
         case SAL_MSG_THREADYIELD:
             ImplSalYield( (bool)wParam, (bool)lParam );
-            rDef = FALSE;
-            break;
-        // If we get this message, because another GetMessage() call
-        // has received this message, we must post this message to
-        // us again, because in the other case we wait forever.
-        case SAL_MSG_RELEASEWAITYIELD:
-            {
-            WinSalInstance* pInst = GetSalData()->mpFirstInstance;
-            // this test does not need mpSalWaitMutex locked because
-            // it can only happen on the main thread
-            if ( pInst && pInst->mnYieldWaitCount )
-                PostMessageW( hWnd, SAL_MSG_RELEASEWAITYIELD, wParam, lParam );
-            }
             rDef = FALSE;
             break;
         case SAL_MSG_STARTTIMER:
