@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -49,12 +48,14 @@ namespace drawinglayer
     {
         class XPrimitive2DRenderer:
             public cppu::WeakAggImplHelper2<
-                css::graphic::XPrimitive2DRenderer, css::lang::XServiceInfo>,
-            private boost::noncopyable
+                css::graphic::XPrimitive2DRenderer, css::lang::XServiceInfo>
         {
         public:
             XPrimitive2DRenderer();
             virtual ~XPrimitive2DRenderer();
+
+            XPrimitive2DRenderer(const XPrimitive2DRenderer&) = delete;
+            const XPrimitive2DRenderer& operator=(const XPrimitive2DRenderer&) = delete;
 
             // XPrimitive2DRenderer
             virtual uno::Reference< rendering::XBitmap > SAL_CALL rasterize(

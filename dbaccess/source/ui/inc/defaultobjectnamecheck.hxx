@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 namespace dbaui
 {
@@ -37,8 +36,7 @@ namespace dbaui
     /** class implementing the IObjectNameCheck interface, and checking given object names
         against a hierarchical name container
     */
-    class HierarchicalNameCheck :public ::boost::noncopyable
-                                ,public IObjectNameCheck
+    class HierarchicalNameCheck :public IObjectNameCheck
     {
     private:
         std::unique_ptr< HierarchicalNameCheck_Impl > m_pImpl;
@@ -59,6 +57,9 @@ namespace dbaui
         );
 
         virtual ~HierarchicalNameCheck();
+
+        HierarchicalNameCheck(const HierarchicalNameCheck&) = delete;
+        const HierarchicalNameCheck& operator=(const HierarchicalNameCheck&) = delete;
 
         // IObjectNameCheck overridables
         virtual bool    isNameValid(
@@ -85,8 +86,7 @@ namespace dbaui
         @seealso dbtools::DatabaseMetaData::supportsSubqueriesInFrom
         @seealso css::sdb::tools::XObjectNames::checkNameForCreate
     */
-    class DynamicTableOrQueryNameCheck  :public ::boost::noncopyable
-                                        ,public IObjectNameCheck
+    class DynamicTableOrQueryNameCheck  :public IObjectNameCheck
     {
     private:
         std::unique_ptr< DynamicTableOrQueryNameCheck_Impl > m_pImpl;
@@ -109,6 +109,9 @@ namespace dbaui
         );
 
         virtual ~DynamicTableOrQueryNameCheck();
+
+        DynamicTableOrQueryNameCheck(const DynamicTableOrQueryNameCheck&) = delete;
+        const DynamicTableOrQueryNameCheck& operator=(const DynamicTableOrQueryNameCheck&) = delete;
 
         // IObjectNameCheck overridables
         virtual bool    isNameValid(

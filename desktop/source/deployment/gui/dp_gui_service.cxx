@@ -36,7 +36,6 @@
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
 #include <boost/optional.hpp>
-#include <boost/noncopyable.hpp>
 #include "license_dialog.hxx"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -50,11 +49,14 @@ namespace sdecl = comphelper::service_decl;
 namespace dp_gui {
 
 
-class MyApp : public Application, private boost::noncopyable
+class MyApp : public Application
 {
 public:
     MyApp();
     virtual ~MyApp();
+
+    MyApp(const MyApp&) = delete;
+    const MyApp& operator=(const MyApp&) = delete;
 
     // Application
     virtual int Main() override;

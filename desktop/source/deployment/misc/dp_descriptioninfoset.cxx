@@ -25,7 +25,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -58,13 +57,15 @@ namespace {
 using css::uno::Reference;
 
 class EmptyNodeList:
-    public cppu::WeakImplHelper<css::xml::dom::XNodeList>,
-    private boost::noncopyable
+    public cppu::WeakImplHelper<css::xml::dom::XNodeList>
 {
 public:
     EmptyNodeList();
 
     virtual ~EmptyNodeList();
+
+    EmptyNodeList(const EmptyNodeList&) = delete;
+    const EmptyNodeList& operator=(const EmptyNodeList&) = delete;
 
     virtual ::sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) override;
 

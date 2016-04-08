@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/MessageBoxButtons.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
@@ -60,10 +59,12 @@ namespace {
 
 class Provider:
     public cppu::WeakImplHelper2<
-        css::lang::XServiceInfo, css::frame::XDispatchProvider >,
-    private boost::noncopyable
+        css::lang::XServiceInfo, css::frame::XDispatchProvider >
 {
 public:
+    Provider(const Provider&) = delete;
+    const Provider& operator=(const Provider&) = delete;
+
     static css::uno::Reference< css::uno::XInterface > SAL_CALL static_create(
         css::uno::Reference< css::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Provider(xContext)); }
@@ -151,10 +152,12 @@ Provider::queryDispatches(
 
 class Dispatch:
     public cppu::WeakImplHelper2<
-        css::lang::XServiceInfo, css::frame::XDispatch >,
-    private boost::noncopyable
+        css::lang::XServiceInfo, css::frame::XDispatch >
 {
 public:
+    Dispatch(const Dispatch&) = delete;
+    const Dispatch& operator=(const Dispatch&) = delete;
+
     static css::uno::Reference< css::uno::XInterface > SAL_CALL static_create(
         css::uno::Reference< css::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Dispatch(xContext)); }

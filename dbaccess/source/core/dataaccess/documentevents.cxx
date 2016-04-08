@@ -27,7 +27,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <boost/noncopyable.hpp>
 #include <o3tl/functional.hxx>
 
 namespace dbaccess
@@ -46,7 +45,7 @@ namespace dbaccess
     using ::com::sun::star::uno::Type;
 
     // DocumentEvents_Data
-    struct DocumentEvents_Data : public ::boost::noncopyable
+    struct DocumentEvents_Data
     {
         ::cppu::OWeakObject&    rParent;
         ::osl::Mutex&           rMutex;
@@ -58,6 +57,8 @@ namespace dbaccess
             ,rEventsData( _rEventsData )
         {
         }
+        DocumentEvents_Data(const DocumentEvents_Data&) = delete;
+        const DocumentEvents_Data& operator=(const DocumentEvents_Data&) = delete;
     };
 
     // helper

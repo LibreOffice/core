@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/noncopyable.hpp>
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -35,7 +34,7 @@ namespace drawinglayer
     {
         namespace // anonymous namespace
         {
-            class TubeBuffer : private boost::noncopyable
+            class TubeBuffer
             {
             private:
                 // data for buffered tube primitives
@@ -48,6 +47,9 @@ namespace drawinglayer
                     : m_nLineTubeSegments(0L)
                 {
                 }
+
+                TubeBuffer(const TubeBuffer&) = delete;
+                const TubeBuffer& operator=(const TubeBuffer&) = delete;
 
                 Primitive3DContainer getLineTubeSegments(
                     sal_uInt32 nSegments,
@@ -117,7 +119,7 @@ namespace drawinglayer
                 return rTheBuffer.getLineTubeSegments(nSegments, rMaterial);
             }
 
-            class CapBuffer : private boost::noncopyable
+            class CapBuffer
             {
             private:
                 // data for buffered cap primitives
@@ -130,6 +132,9 @@ namespace drawinglayer
                     : m_nLineCapSegments(0)
                 {
                 }
+                CapBuffer(const CapBuffer&) = delete;
+                const CapBuffer& operator=(const CapBuffer&) = delete;
+
                 Primitive3DContainer getLineCapSegments(
                     sal_uInt32 nSegments,
                     const attribute::MaterialAttribute3D& rMaterial)
@@ -192,7 +197,7 @@ namespace drawinglayer
                 return rTheBuffer.getLineCapSegments(nSegments, rMaterial);
             }
 
-            class CapRoundBuffer : private boost::noncopyable
+            class CapRoundBuffer
             {
             private:
                 // data for buffered capround primitives
@@ -205,6 +210,9 @@ namespace drawinglayer
                     : m_nLineCapRoundSegments(0)
                 {
                 }
+                CapRoundBuffer(const CapRoundBuffer&) = delete;
+                const CapRoundBuffer& operator=(const CapRoundBuffer&) = delete;
+
                 Primitive3DContainer getLineCapRoundSegments(
                     sal_uInt32 nSegments,
                     const attribute::MaterialAttribute3D& rMaterial)
