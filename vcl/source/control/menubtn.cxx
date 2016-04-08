@@ -114,7 +114,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ( !mpMenuTimer )
             {
-                mpMenuTimer = new Timer;
+                mpMenuTimer = new Timer("MenuTimer");
                 mpMenuTimer->SetTimeoutHdl( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
             }
 
