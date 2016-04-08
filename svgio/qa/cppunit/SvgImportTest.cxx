@@ -55,6 +55,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf97936();
     void testClipPathAndParentStyle();
     void testClipPathAndStyle();
+    void testi125329();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testTdf97936);
     CPPUNIT_TEST(testClipPathAndParentStyle);
     CPPUNIT_TEST(testClipPathAndStyle);
+    CPPUNIT_TEST(testi125329);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -441,6 +443,30 @@ void Test::testClipPathAndStyle()
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#ccccff");
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#0000cc");
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "2");
+
+}
+
+void Test::testi125329()
+{
+    //Check style inherit from * css element
+    Primitive2DSequence aSequencei125329 = parseSvg("/svgio/qa/cppunit/data/i125329.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequencei125329.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequencei125329));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#c0c0c0"); // rect background color
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "height", "30"); // rect background height
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "width", "50"); // rect background width
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "minx", "15");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "miny", "15");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "maxx", "65");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "maxy", "45");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "color", "#008000"); // rect stroke color
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "width", "1"); // rect stroke width
+
 
 }
 

@@ -1,0 +1,12 @@
+<svg version="1.1" baseProfile="full" id="svg-root"
+  width="12cm" height="6cm" viewBox="0 0 120 60"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <title id="test-title">all selector</title>
+  <style type="text/css">
+    * {fill:silver; stroke-width:1;stroke-miterlimit:100000;}
+    rect {stroke:green;}
+    #test-frame {stroke:blue; fill:none;}
+  </style>
+  <rect x="15" y="15" width="50" height="30" stroke-width="10"/>
+</svg>
