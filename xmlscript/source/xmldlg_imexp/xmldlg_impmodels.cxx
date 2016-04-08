@@ -1090,6 +1090,7 @@ void TextFieldElement::endElement()
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
     ctx.importBooleanProperty("Tabstop", "tabstop", _xAttributes );
     ctx.importAlignProperty( "Align", "align", _xAttributes );
+    ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );
     ctx.importBooleanProperty( "HardLineBreaks", "hard-linebreaks", _xAttributes );
     ctx.importBooleanProperty( "HScroll", "hscroll" ,_xAttributes );
     ctx.importBooleanProperty( "VScroll", "vscroll", _xAttributes );
