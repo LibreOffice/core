@@ -16,6 +16,24 @@
       "revId": "21d0b6512f55b33cf1e1b8d1e8855f2680dfeb0a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_62126964",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2016-04-08T14:03:00Z",
+      "side": 1,
+      "message": "Hi Miklos, \n\nThis case affect what has been implemented by c03b691a.\n\nBefore c03b691a,  the first level of the list in num-parent-style.docx was interpreted as WWNum1 and the other as Outline. After c03b691a, both were interpreted as WWNum1.\n\nBut I think that both levels should be interpreted as Outline because WWNum1\u0027s pStyle, and that expected result was wrong. So it doesn\u0027t not roundtrip without changing expected result.\n\nc03b691a is about recursively get numId from parent style. I considered to add a non-Outline case but don\u0027t know how to generate such a case with Writer or MSWord.",
+      "parentUuid": "9ad45d7e_823cbd30",
+      "revId": "21d0b6512f55b33cf1e1b8d1e8855f2680dfeb0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
