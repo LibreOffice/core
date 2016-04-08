@@ -227,7 +227,7 @@ void SbxBasicFormater::ParseBack( OUStringBuffer& sStrg, const OUString& sFormat
     }
 }
 
-#ifdef _with_sprintf
+#ifdef with_sprintf_
 
 
 void SbxBasicFormater::InitScan( double _dNum )
@@ -657,7 +657,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
     bZeroSpaceOn = false;
 
 
-#ifdef _with_sprintf
+#ifdef with_sprintf_
     InitScan( dNumber );
 #endif
     // scanning the format-string:
@@ -697,7 +697,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                         for( short j = nMaxDigit; j > nDigitPos; j-- )
                         {
                             short nTempDigit;
-#ifdef _with_sprintf
+#ifdef with_sprintf_
                             AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPosScan( j, bFoundFirstDigit ) );
 #else
                             AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPos( dNumber, j, dNumber, bFoundFirstDigit ) );
@@ -730,7 +730,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 else
                 {
                     short nTempDigit;
-#ifdef _with_sprintf
+#ifdef with_sprintf_
                     AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit ) );
 #else
                     AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPos( dNumber, nDigitPos, dNumber, bFoundFirstDigit ) );
@@ -760,7 +760,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     {
                         for( short j = nMaxExponentDigit; j > nExponentPos; j-- )
                         {
-#ifdef _with_sprintf
+#ifdef with_sprintf_
                             AppendDigit( sReturnStrg, GetDigitAtPosExpScan( dExponent, j, bFoundFirstDigit ) );
 #else
                             AppendDigit( sReturnStrg,GetDigitAtPos( dExponent, j, dExponent, bFoundFirstDigit ) );
@@ -775,7 +775,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 }
                 else
                 {
-#ifdef _with_sprintf
+#ifdef with_sprintf_
                     AppendDigit( sReturnStrg, GetDigitAtPosExpScan( dExponent, nExponentPos, bFoundFirstDigit ) );
 #else
                     AppendDigit( sReturnStrg, GetDigitAtPos( dExponent, nExponentPos, dExponent, bFoundFirstDigit ) );
@@ -817,7 +817,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 }
 
                 bool bOverflow = false;
-#ifdef _with_sprintf
+#ifdef with_sprintf_
                 short nNextDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit );
 #else
                 short nNextDigit = GetDigitAtPos( dNumber, nDigitPos, dNumber, bFoundFirstDigit );
@@ -916,7 +916,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
     // scan completed - rounding necessary?
     if( !bScientific )
     {
-#ifdef _with_sprintf
+#ifdef with_sprintf_
         short nNextDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit );
 #else
         short nNextDigit = GetDigitAtPos( dNumber, nDigitPos, dNumber, bFoundFirstDigit );
