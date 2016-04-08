@@ -1921,11 +1921,10 @@ bool StarBASIC::StoreData( SvStream& r ) const
     return true;
 }
 
-bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, css::uno::Any& aOut )
+bool StarBASIC::GetUNOConstant( const OUString& rName, css::uno::Any& aOut )
 {
     bool bRes = false;
-    OUString sVarName( OUString::createFromAscii( _pAsciiName ) );
-    SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( Find( sVarName, SbxCLASS_DONTCARE ) );
+    SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( Find( rName, SbxCLASS_DONTCARE ) );
     if ( pGlobs )
     {
         aOut = pGlobs->getUnoAny();

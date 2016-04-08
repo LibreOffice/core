@@ -1458,17 +1458,17 @@ bool BasicManager::IsBasicModified() const
 }
 
 
-bool BasicManager::GetGlobalUNOConstant( const sal_Char* _pAsciiName, uno::Any& aOut )
+bool BasicManager::GetGlobalUNOConstant( const OUString& rName, uno::Any& aOut )
 {
     bool bRes = false;
     StarBASIC* pStandardLib = GetStdLib();
     OSL_PRECOND( pStandardLib, "BasicManager::GetGlobalUNOConstant: no lib to read from!" );
     if ( pStandardLib )
-        bRes = pStandardLib->GetUNOConstant( _pAsciiName, aOut );
+        bRes = pStandardLib->GetUNOConstant( rName, aOut );
     return bRes;
 }
 
-uno::Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const uno::Any& _rValue )
+uno::Any BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::Any& _rValue )
 {
     uno::Any aOldValue;
 
@@ -1477,14 +1477,12 @@ uno::Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const 
     if ( !pStandardLib )
         return aOldValue;
 
-    OUString sVarName( OUString::createFromAscii( _pAsciiName ) );
-
     // obtain the old value
-    SbxVariable* pVariable = pStandardLib->Find( sVarName, SbxCLASS_OBJECT );
+    SbxVariable* pVariable = pStandardLib->Find( rName, SbxCLASS_OBJECT );
     if ( pVariable )
         aOldValue = sbxToUnoValue( pVariable );
 
-    SbxObjectRef xUnoObj = GetSbUnoObject( sVarName, _rValue );
+    SbxObjectRef xUnoObj = GetSbUnoObject( rName, _rValue );
     xUnoObj->SetFlag( SbxFlagBits::DontStore );
     pStandardLib->Insert( xUnoObj );
 
