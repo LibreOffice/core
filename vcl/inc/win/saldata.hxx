@@ -214,8 +214,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 // wParam == bWait; lParam == 0
 #define SAL_MSG_THREADYIELD         (WM_USER+111)
-// wParam == 0; lParam == 0
-#define SAL_MSG_RELEASEWAITYIELD    (WM_USER+112)
 // wParam == 0; lParam == nMS
 #define SAL_MSG_STARTTIMER          (WM_USER+113)
 // wParam == nFrameStyle; lParam == pParent; lResult == pFrame
