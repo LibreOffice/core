@@ -187,6 +187,13 @@ void OpenGLSalGraphicsImpl::DeInit()
 
 void OpenGLSalGraphicsImpl::PreDraw(XOROption eOpt)
 {
+    FlushDeferredDrawing();
+
+    InitializePreDrawState(eOpt);
+}
+
+void OpenGLSalGraphicsImpl::InitializePreDrawState(XOROption eOpt)
+{
     OpenGLZone::enter();
 
     mnDrawCount++;
@@ -205,8 +212,6 @@ void OpenGLSalGraphicsImpl::PreDraw(XOROption eOpt)
 
     glViewport( 0, 0, GetWidth(), GetHeight() );
     CHECK_GL_ERROR();
-
-    FlushDeferredDrawing(true);
 
     ImplInitClipRegion();
     CHECK_GL_ERROR();
@@ -268,6 +273,7 @@ void OpenGLSalGraphicsImpl::freeResources()
     {
         VCL_GL_INFO( "freeResources" );
         mpContext->makeCurrent();
+        FlushDeferredDrawing();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
     }
     ReleaseContext();
@@ -357,11 +363,15 @@ const vcl::Region& OpenGLSalGraphicsImpl::getClipRegion() const
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
-    VCL_GL_INFO( "::setClipRegion " << rClip );
     if (maClipRegion == rClip)
-        return true;
+    {
+         VCL_GL_INFO("::setClipRegion (no change) " << rClip);
+         return true;
+    }
 
     FlushDeferredDrawing();
+
+    VCL_GL_INFO("::setClipRegion " << rClip);
 
     maClipRegion = rClip;
 
@@ -378,11 +388,15 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 // set the clip region to empty
 void OpenGLSalGraphicsImpl::ResetClipRegion()
 {
-    VCL_GL_INFO( "::ResetClipRegion" );
     if (maClipRegion.IsEmpty())
+    {
+        VCL_GL_INFO("::ResetClipRegion (no change) ");
         return;
+    }
 
     FlushDeferredDrawing();
+
+    VCL_GL_INFO("::ResetClipRegion");
 
     maClipRegion.SetEmpty();
     mbUseScissor = false;
@@ -1674,13 +1688,12 @@ void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture& rTexture, SalColor a
     mpAccumulatedTextures->insert(rTexture, aMaskColor, rPosAry);
 }
 
-void OpenGLSalGraphicsImpl::FlushDeferredDrawing(bool bIsInDraw)
+void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
 {
     if (mpAccumulatedTextures->empty())
         return;
 
-    if (!bIsInDraw)
-        PreDraw();
+    InitializePreDrawState();
 
     VCL_GL_INFO("FlushDeferredDrawing");
 
@@ -1725,7 +1738,9 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing(bool bIsInDraw)
 
     if( !UseProgram( "textureVertexShader", "maskFragmentShader" ) )
         return;
+
     mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     for (auto& rPair : mpAccumulatedTextures->getAccumulatedTexturesMap())
     {
         OpenGLTexture& rTexture = rPair.second->maTexture;
@@ -1742,8 +1757,8 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing(bool bIsInDraw)
     }
     mpProgram->Clean();
     mpAccumulatedTextures->clear();
-    if (!bIsInDraw)
-        PostDraw();
+
+    PostDraw();
 }
 
 void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect )

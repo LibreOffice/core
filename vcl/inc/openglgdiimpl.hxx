@@ -148,7 +148,7 @@ public:
     void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DeferredTextDraw(OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
-    void FlushDeferredDrawing(bool bInDraw = false);
+    void FlushDeferredDrawing();
 
 public:
     // get the width of the device
@@ -165,6 +165,9 @@ public:
 
     /// Oddly not all operations obey the XOR option.
     enum XOROption { IGNORE_XOR, IMPLEMENT_XOR };
+
+    // initialize pre-draw state
+    void InitializePreDrawState(XOROption eOpt = IGNORE_XOR);
 
     // operations to do before painting
     void PreDraw(XOROption eOpt = IGNORE_XOR);
