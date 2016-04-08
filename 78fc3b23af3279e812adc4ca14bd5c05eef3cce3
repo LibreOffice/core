@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_e293f9f8",
+        "filename": "sw/source/ui/dbui/dbui.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-08T10:29:26Z",
+      "side": 1,
+      "message": "this is changing a translatable string",
+      "revId": "78fc3b23af3279e812adc4ca14bd5c05eef3cce3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c29075ef",
+        "filename": "sw/source/ui/dbui/dbui.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-08T10:29:26Z",
+      "side": 1,
+      "message": "this too",
+      "revId": "78fc3b23af3279e812adc4ca14bd5c05eef3cce3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
