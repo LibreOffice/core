@@ -43,8 +43,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST ),
-    mnOptStencil( 0 ),
-    mnFreeSlots(-1)
+    mnOptStencil( 0 )
 {
     OpenGLVCLContextZone aContextZone;
 
@@ -78,8 +77,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST ),
-    mnOptStencil( 0 ),
-    mnFreeSlots(-1)
+    mnOptStencil( 0 )
 {
     OpenGLVCLContextZone aContextZone;
 
@@ -113,8 +111,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST ),
-    mnOptStencil( 0 ),
-    mnFreeSlots(-1)
+    mnOptStencil( 0 )
 {
     OpenGLVCLContextZone aContextZone;
 
@@ -221,30 +218,13 @@ bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, in
     return true;
 }
 
-bool ImplOpenGLTexture::InitializeSlots(int nSlotSize)
+bool ImplOpenGLTexture::InitializeSlotMechanism(int nInitialSlotSize)
 {
     if (mpSlotReferences)
         return false;
 
-    mpSlotReferences.reset(new std::vector<int>(nSlotSize, 0));
-    mnFreeSlots = nSlotSize;
-
+    mpSlotReferences.reset(new std::vector<int>(nInitialSlotSize, 0));
     return true;
-}
-
-int ImplOpenGLTexture::FindFreeSlot()
-{
-    if (mnFreeSlots > 0 && mpSlotReferences)
-    {
-        for (size_t i = 0; i < mpSlotReferences->size(); i++)
-        {
-            if (mpSlotReferences->at(i) <= 0)
-            {
-                return i;
-            }
-        }
-    }
-    return -1;
 }
 
 void ImplOpenGLTexture::IncreaseRefCount(int nSlotNumber)
@@ -252,22 +232,29 @@ void ImplOpenGLTexture::IncreaseRefCount(int nSlotNumber)
     mnRefCount++;
     if (mpSlotReferences && nSlotNumber >= 0)
     {
-        if (mpSlotReferences->at(nSlotNumber) == 0)
-            mnFreeSlots--;
+        if (nSlotNumber >= int(mpSlotReferences->size()))
+            mpSlotReferences->resize(nSlotNumber + 1, 0);
+
         mpSlotReferences->at(nSlotNumber)++;
     }
 }
 
 void ImplOpenGLTexture::DecreaseRefCount(int nSlotNumber)
 {
-    mnRefCount--;
     if (mpSlotReferences && nSlotNumber >= 0)
     {
+        if (nSlotNumber >= int(mpSlotReferences->size()))
+            mpSlotReferences->resize(nSlotNumber, 0);
+
         mpSlotReferences->at(nSlotNumber)--;
-        if (mpSlotReferences->at(nSlotNumber) == 0)
-            mnFreeSlots++;
+
+        if (mpSlotReferences->at(nSlotNumber) == 0 && mFunctSlotDeallocateCallback)
+        {
+            mFunctSlotDeallocateCallback(nSlotNumber);
+        }
     }
 
+    mnRefCount--;
     if (mnRefCount <= 0)
         delete this;
 }

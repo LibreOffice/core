@@ -40,7 +40,7 @@ public:
     GLuint mnOptStencil;
 
     std::unique_ptr<std::vector<int>> mpSlotReferences;
-    int mnFreeSlots;
+    std::function<void(int)> mFunctSlotDeallocateCallback;
 
     ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate );
     ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
@@ -58,8 +58,13 @@ public:
         return mnRefCount == 1;
     }
 
-    bool InitializeSlots(int nSlotSize);
-    int  FindFreeSlot();
+    bool InitializeSlotMechanism(int nInitialSlotSize = 0);
+
+    void SetSlotDeallocateCallback(std::function<void(int)> aCallback)
+    {
+        mFunctSlotDeallocateCallback = aCallback;
+    }
+
     GLuint AddStencil();
 };
 

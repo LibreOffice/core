@@ -13,10 +13,11 @@
 
 #include "opengl/texture.hxx"
 
+struct FixedTexture;
 
 class VCL_PLUGIN_PUBLIC FixedTextureAtlasManager
 {
-    std::vector<ImplOpenGLTexture *> mpTextures;
+    std::vector<std::unique_ptr<FixedTexture>> maFixedTextures;
 
     int mWidthFactor;
     int mHeightFactor;
