@@ -45,7 +45,7 @@ public:
     const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
     TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
 
-#if defined(DBG_UTIL) && OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void dump() const;
 #endif
 
