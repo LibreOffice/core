@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_65f3930b",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-08T20:35:10Z",
+      "side": 1,
+      "message": "in an unexpected turn of events it turns out this doesn\u0027t actually work; i always get a WAIT_FAILURE with ERROR_INVALID_HANDLE here, and i think the reason is that you can\u0027t wait on a CRITICAL_SECTION - it\u0027s not a HANDLE.\n\nthat is, it still has the correct effect because eventually the tryToAcquire succeeds but it\u0027s a busy-loop.\n\napparently there\u0027s a different kind of object called a \"Mutex\" that *is* a HANDLE and can be used with WaitFor... functions.\n\nhowever Mutex appears to be a lot slower than CRITICAL_SECTION, which is a problem for SolarMutex which is locked all the time\n\nhttp://preshing.com/20111124/always-use-a-lightweight-mutex/\n\nwhat we could probably do instead is to use a oslCondition in addition to the CRITICAL_SECTION - as we have seen that is backed by a native Win32 \"Event\" that can be passed to WaitFor.. functions\n\nbasically \"reset\" the condition directly before WaitFor... and \"set\" it from SalYieldMutex::release() to replace the PostMessage there\n\n(or actually ... we can just call oslWaitCondition here?)",
+      "revId": "192bc9d997f7f293fd2626681af580735180488f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
