@@ -859,15 +859,15 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
     if (info->num_components == 1) {
       if (!jtransform_perfect_transform(srcinfo->output_width,
       srcinfo->output_height,
-      srcinfo->_min_DCT_h_scaled_size,
-      srcinfo->_min_DCT_v_scaled_size,
+      srcinfo->min_DCT_h_scaled_size_,
+      srcinfo->min_DCT_v_scaled_size_,
       info->transform))
     return FALSE;
     } else {
       if (!jtransform_perfect_transform(srcinfo->output_width,
       srcinfo->output_height,
-      srcinfo->max_h_samp_factor * srcinfo->_min_DCT_h_scaled_size,
-      srcinfo->max_v_samp_factor * srcinfo->_min_DCT_v_scaled_size,
+      srcinfo->max_h_samp_factor * srcinfo->min_DCT_h_scaled_size_,
+      srcinfo->max_v_samp_factor * srcinfo->min_DCT_v_scaled_size_,
       info->transform))
     return FALSE;
     }
@@ -886,26 +886,26 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
     info->output_width = srcinfo->output_height;
     info->output_height = srcinfo->output_width;
     if (info->num_components == 1) {
-      info->iMCU_sample_width = srcinfo->_min_DCT_v_scaled_size;
-      info->iMCU_sample_height = srcinfo->_min_DCT_h_scaled_size;
+      info->iMCU_sample_width = srcinfo->min_DCT_v_scaled_size_;
+      info->iMCU_sample_height = srcinfo->min_DCT_h_scaled_size_;
     } else {
       info->iMCU_sample_width =
-    srcinfo->max_v_samp_factor * srcinfo->_min_DCT_v_scaled_size;
+    srcinfo->max_v_samp_factor * srcinfo->min_DCT_v_scaled_size_;
       info->iMCU_sample_height =
-    srcinfo->max_h_samp_factor * srcinfo->_min_DCT_h_scaled_size;
+    srcinfo->max_h_samp_factor * srcinfo->min_DCT_h_scaled_size_;
     }
     break;
   default:
     info->output_width = srcinfo->output_width;
     info->output_height = srcinfo->output_height;
     if (info->num_components == 1) {
-      info->iMCU_sample_width = srcinfo->_min_DCT_h_scaled_size;
-      info->iMCU_sample_height = srcinfo->_min_DCT_v_scaled_size;
+      info->iMCU_sample_width = srcinfo->min_DCT_h_scaled_size_;
+      info->iMCU_sample_height = srcinfo->min_DCT_v_scaled_size_;
     } else {
       info->iMCU_sample_width =
-    srcinfo->max_h_samp_factor * srcinfo->_min_DCT_h_scaled_size;
+    srcinfo->max_h_samp_factor * srcinfo->min_DCT_h_scaled_size_;
       info->iMCU_sample_height =
-    srcinfo->max_v_samp_factor * srcinfo->_min_DCT_v_scaled_size;
+    srcinfo->max_v_samp_factor * srcinfo->min_DCT_v_scaled_size_;
     }
     break;
   }
