@@ -108,13 +108,20 @@ Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
     return m_xInfo;
 }
 
-void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& /* aPropertyName */, const uno::Any& aValue )
+void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& rPropertyName, const uno::Any& aValue )
     throw (UnknownPropertyException,
            PropertyVetoException,
            lang::IllegalArgumentException,
            lang::WrappedTargetException,
            uno::RuntimeException, std::exception)
 {
+    if (rPropertyName != m_aColorPropName)
+    {
+        // trying to catch these cases in the next crash testing
+        assert(false);
+        return;
+    }
+
     aValue >>= m_nColor;
 }
 
@@ -128,7 +135,10 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
         css::drawing::FillStyle aFillStyle = css::drawing::FillStyle_SOLID;
         return uno::makeAny(aFillStyle);
     }
-    return uno::makeAny( m_nColor );
+    else if (aPropertyName == m_aColorPropName)
+        return uno::makeAny( m_nColor );
+
+    throw UnknownPropertyException();
 }
 
 void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
@@ -199,6 +209,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropert
 {
     if( aPropertyName.equals( m_aColorPropName ))
         return uno::makeAny( m_nDefaultColor );
+
     return uno::Any();
 }
 
