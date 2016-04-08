@@ -27,7 +27,7 @@ namespace comphelper
 */
 COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
-        css::uno::Reference<css::frame::XDispatchResultListener> aListener = css::uno::Reference<css::frame::XDispatchResultListener>());
+        const css::uno::Reference<css::frame::XDispatchResultListener>& aListener = css::uno::Reference<css::frame::XDispatchResultListener>());
 
 }
 

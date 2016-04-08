@@ -130,7 +130,7 @@ namespace comphelper
     void PropertyBag::addProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Any& _rInitialValue )
     {
         // check type sanity
-        Type aPropertyType = _rInitialValue.getValueType();
+        const Type& aPropertyType = _rInitialValue.getValueType();
         if ( aPropertyType.getTypeClass() == TypeClass_VOID )
             throw IllegalTypeException(
                 "The initial value must be non-NULL to determine the property type.",
