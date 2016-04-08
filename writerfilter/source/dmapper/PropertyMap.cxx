@@ -36,6 +36,8 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -1044,7 +1046,8 @@ bool SectionPropertyMap::FloatingTableConversion(FloatingTableInfo& rInfo)
     // table that is floating and can span over multiple pages at the same
     // time.
 
-    sal_Int32 nTextAreaWidth = GetPageWidth() - GetLeftMargin() - GetRightMargin();
+    sal_Int32 nPageWidth = GetPageWidth();
+    sal_Int32 nTextAreaWidth = nPageWidth - GetLeftMargin() - GetRightMargin();
     // Count the layout width of the table.
     sal_Int32 nTableWidth = rInfo.m_nTableWidth;
     sal_Int32 nLeftMargin = 0;
@@ -1053,6 +1056,26 @@ bool SectionPropertyMap::FloatingTableConversion(FloatingTableInfo& rInfo)
     sal_Int32 nRightMargin = 0;
     if (rInfo.getPropertyValue("RightMargin") >>= nRightMargin)
         nTableWidth += nRightMargin;
+
+    sal_Int16 nHoriOrientRelation = rInfo.getPropertyValue("HoriOrientRelation").get<sal_Int16>();
+    sal_Int16 nVertOrientRelation = rInfo.getPropertyValue("VertOrientRelation").get<sal_Int16>();
+    if (nHoriOrientRelation == text::RelOrientation::PAGE_FRAME && nVertOrientRelation == text::RelOrientation::PAGE_FRAME)
+    {
+        sal_Int16 nHoriOrient = rInfo.getPropertyValue("HoriOrient").get<sal_Int16>();
+        sal_Int16 nVertOrient = rInfo.getPropertyValue("VertOrient").get<sal_Int16>();
+        if (nHoriOrient == text::HoriOrientation::NONE && nVertOrient == text::VertOrientation::NONE)
+        {
+            // Anchor position is relative to the page horizontally and vertically as well and is an absolute position.
+            // The more close we are to the left edge, the less likely there will be any wrapping.
+            // The more close we are to the bottom, the more likely the table will span over to the next page
+            // So if we're in the bottom left quarter, don't do any conversion.
+            sal_Int32 nHoriOrientPosition = rInfo.getPropertyValue("HoriOrientPosition").get<sal_Int32>();
+            sal_Int32 nVertOrientPosition = rInfo.getPropertyValue("VertOrientPosition").get<sal_Int32>();
+            sal_Int32 nPageHeight = getProperty(PROP_HEIGHT)->second.get<sal_Int32>();
+            if (nHoriOrientPosition < (nPageWidth / 2) && nVertOrientPosition > (nPageHeight / 2))
+                return false;
+        }
+    }
 
     // If the table is wider than the text area, then don't create a fly
     // for the table: no wrapping will be performed anyway, but multi-page
