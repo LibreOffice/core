@@ -68,6 +68,8 @@ $(eval $(call gb_CppunitTest_use_components,desktop_lib,\
     sw/util/swd \
     sc/util/sc \
     sc/util/scd \
+    sd/util/sd \
+    sd/util/sdd \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
