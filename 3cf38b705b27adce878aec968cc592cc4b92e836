@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_c203550e",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-08T14:14:45Z",
+      "side": 1,
+      "message": "Why +1? Also could just use pLineStyle-\u003eaLineInfo.GetWidth() which is already set above, couldn\u0027t it?",
+      "range": {
+        "startLine": 737,
+        "startChar": 20,
+        "endLine": 737,
+        "endChar": 39
+      },
+      "revId": "3cf38b705b27adce878aec968cc592cc4b92e836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
