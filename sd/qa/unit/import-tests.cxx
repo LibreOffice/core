@@ -44,6 +44,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
@@ -114,6 +115,7 @@ public:
     void testTdf89927();
     void testTdf93868();
     void testTdf95932();
+    void testTdf99030();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -161,6 +163,7 @@ public:
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf95932);
+    CPPUNIT_TEST(testTdf99030);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1297,6 +1300,29 @@ void SdImportTest::testTdf95932()
     const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
         pObj->GetMergedItem(XATTR_FILLCOLOR));
     CPPUNIT_ASSERT_EQUAL(ColorData(0x76bf3d), rColorItem.GetColorValue().GetColor());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf99030()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf99030.pptx"), PPTX);
+
+    uno::Reference< drawing::XMasterPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getMasterPages()->getByIndex( 0 ), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
+
+    sal_Int32 nFillColor(0);
+    uno::Any aAny = xPropSet->getPropertyValue( "Background" );
+    if (aAny.hasValue())
+    {
+        uno::Reference< beans::XPropertySet > xBackgroundPropSet;
+        aAny >>= xBackgroundPropSet;
+        xBackgroundPropSet->getPropertyValue( "FillColor" ) >>= nFillColor;
+    }
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x676A55), nFillColor );
 
     xDocShRef->DoClose();
 }
