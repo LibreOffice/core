@@ -17,10 +17,49 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _XBMPRIVATE
 #include <ctype.h>
 #include <comphelper/string.hxx>
 #include "xbmread.hxx"
+
+enum XBMFormat
+{
+    XBM10,
+    XBM11
+};
+
+enum ReadState
+{
+    XBMREAD_OK,
+    XBMREAD_ERROR,
+    XBMREAD_NEED_MORE
+};
+
+class XBMReader : public GraphicReader
+{
+    SvStream&           rIStm;
+    Bitmap              aBmp1;
+    BitmapWriteAccess*  pAcc1;
+    short*              pHexTable;
+    BitmapColor         aWhite;
+    BitmapColor         aBlack;
+    long                nLastPos;
+    long                nWidth;
+    long                nHeight;
+    bool                bStatus;
+
+    void            InitTable();
+    OString         FindTokenLine( SvStream* pInStm, const char* pTok1,
+                                       const char* pTok2 = nullptr, const char* pTok3 = nullptr );
+    long            ParseDefine( const sal_Char* pDefine );
+    bool            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
+
+public:
+
+    explicit        XBMReader( SvStream& rStm );
+    virtual         ~XBMReader();
+
+    ReadState       ReadXBM( Graphic& rGraphic );
+};
 
 XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),
