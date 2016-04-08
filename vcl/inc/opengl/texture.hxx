@@ -119,6 +119,10 @@ public:
     void FillCoords(std::vector<GLfloat>& aCoordVector, const SalTwoRect& rPosAry, bool bInverted) const;
 };
 
+template<> void OpenGLTexture::FillCoords<GL_TRIANGLES>(
+    std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry, bool bInverted)
+    const;
+
 #endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
