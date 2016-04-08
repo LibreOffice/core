@@ -286,28 +286,21 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
 
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
 
         Size aSz(GetOutputSizePixel());
+        float fScaleFactor = rRenderContext.GetDPIScaleFactor();
 
         if (meAlign == WindowAlign::Top || meAlign == WindowAlign::Bottom)
         {
             int height = (int) (0.6 * aSz.Height() + 0.5);
             int i = (aSz.Height() - height) / 2;
             height += i;
-            while( i <= height )
+            while (i <= height)
             {
                 int x = ImplGetDragWidth(this) / 2;
-
-                rRenderContext.DrawPixel( Point(x, i), rStyleSettings.GetDarkShadowColor() );
-                rRenderContext.DrawPixel( Point(x+1, i), rStyleSettings.GetShadowColor() );
-
-                rRenderContext.DrawPixel( Point(x, i+1), rStyleSettings.GetShadowColor() );
-                rRenderContext.DrawPixel( Point(x+1, i+1), rStyleSettings.GetFaceColor() );
-                rRenderContext.DrawPixel( Point(x+2, i+1), Color(COL_WHITE) );
-
-                rRenderContext.DrawPixel( Point(x+1, i+2), Color(COL_WHITE) );
-                rRenderContext.DrawPixel( Point(x+2, i+2), Color(COL_WHITE) );
-                i+=4;
+                rRenderContext.DrawEllipse(Rectangle(Point(x, i), Size(2 * fScaleFactor, 2 * fScaleFactor)));
+                i += 4 * fScaleFactor;
             }
         }
         else
@@ -315,20 +308,11 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
             int width = (int) (0.6 * aSz.Width() + 0.5);
             int i = (aSz.Width() - width) / 2;
             width += i;
-            while( i <= width )
+            while (i <= width)
             {
                 int y = ImplGetDragWidth(this) / 2;
-
-                rRenderContext.DrawPixel( Point(i, y), rStyleSettings.GetDarkShadowColor() );
-                rRenderContext.DrawPixel( Point(i+1, y), rStyleSettings.GetShadowColor() );
-
-                rRenderContext.DrawPixel( Point(i, y+1), rStyleSettings.GetShadowColor() );
-                rRenderContext.DrawPixel( Point(i+1, y+1), rStyleSettings.GetFaceColor() );
-                rRenderContext.DrawPixel( Point(i+2, y+1), Color(COL_WHITE) );
-
-                rRenderContext.DrawPixel( Point(i+1, y+2), Color(COL_WHITE) );
-                rRenderContext.DrawPixel( Point(i+2, y+2), Color(COL_WHITE) );
-                i+=4;
+                rRenderContext.DrawEllipse(Rectangle(Point(i, y), Size(2 * fScaleFactor, 2 * fScaleFactor)));
+                i += 4 * fScaleFactor;
             }
         }
     }
