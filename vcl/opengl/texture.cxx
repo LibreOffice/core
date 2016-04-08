@@ -29,10 +29,17 @@
 #include "opengl/framebuffer.hxx"
 #include "opengl/texture.hxx"
 #include "opengl/zone.hxx"
+namespace
+{
+
+SAL_CONSTEXPR GLenum constInternalFormat = GL_RGBA8;
+
+} // end anonymous namespace
 
 // texture with allocated size
 ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) :
     mnRefCount( 1 ),
+    mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST ),
@@ -55,7 +62,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     CHECK_GL_ERROR();
     if( bAllocate )
     {
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
+        glTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
         CHECK_GL_ERROR();
     }
     glBindTexture( GL_TEXTURE_2D, 0 );
@@ -91,7 +98,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     CHECK_GL_ERROR();
-    glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nX, nY, nWidth, nHeight, 0 );
+    glCopyTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, nX, nY, nWidth, nHeight, 0 );
     CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, 0 );
     CHECK_GL_ERROR();
@@ -111,11 +118,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
 {
     OpenGLVCLContextZone aContextZone;
 
-    if( !mnTexture )
-    {
-        glGenTextures( 1, &mnTexture );
-        CHECK_GL_ERROR();
-    }
+    glGenTextures( 1, &mnTexture );
+    CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, mnTexture );
     CHECK_GL_ERROR();
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
@@ -128,7 +132,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     CHECK_GL_ERROR();
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnWidth, mnHeight, 0, nFormat, nType, pData );
+    glTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, mnWidth, mnHeight, 0, nFormat, nType, pData );
     CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, 0 );
     CHECK_GL_ERROR();
@@ -242,6 +246,32 @@ int ImplOpenGLTexture::FindFreeSlot()
     }
     return -1;
 }
+
+void ImplOpenGLTexture::IncreaseRefCount(int nSlotNumber)
+{
+    mnRefCount++;
+    if (mpSlotReferences && nSlotNumber >= 0)
+    {
+        if (mpSlotReferences->at(nSlotNumber) == 0)
+            mnFreeSlots--;
+        mpSlotReferences->at(nSlotNumber)++;
+    }
+}
+
+void ImplOpenGLTexture::DecreaseRefCount(int nSlotNumber)
+{
+    mnRefCount--;
+    if (mpSlotReferences && nSlotNumber >= 0)
+    {
+        mpSlotReferences->at(nSlotNumber)--;
+        if (mpSlotReferences->at(nSlotNumber) == 0)
+            mnFreeSlots++;
+    }
+
+    if (mnRefCount <= 0)
+        delete this;
+}
+
 
 OpenGLTexture::OpenGLTexture() :
     maRect( 0, 0, 0, 0 ),

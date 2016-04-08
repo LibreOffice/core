@@ -50,30 +50,8 @@ public:
 
     bool InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
 
-    void IncreaseRefCount(int nSlotNumber)
-    {
-        mnRefCount++;
-        if (mpSlotReferences && nSlotNumber >= 0)
-        {
-            if (mpSlotReferences->at(nSlotNumber) == 0)
-                mnFreeSlots--;
-            mpSlotReferences->at(nSlotNumber)++;
-        }
-    }
-
-    void DecreaseRefCount(int nSlotNumber)
-    {
-        mnRefCount--;
-        if (mpSlotReferences && nSlotNumber >= 0)
-        {
-            mpSlotReferences->at(nSlotNumber)--;
-            if (mpSlotReferences->at(nSlotNumber) == 0)
-                mnFreeSlots++;
-        }
-
-        if (mnRefCount <= 0)
-            delete this;
-    }
+    void IncreaseRefCount(int nSlotNumber);
+    void DecreaseRefCount(int nSlotNumber);
 
     bool IsUnique()
     {
