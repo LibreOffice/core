@@ -2455,7 +2455,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
     {
         if ( !mpUpdateDataTimer )
         {
-            mpUpdateDataTimer = new Timer;
+            mpUpdateDataTimer = new Timer("UpdateDataTimer");
             mpUpdateDataTimer->SetTimeoutHdl( LINK( this, Edit, ImplUpdateDataHdl ) );
         }
 

@@ -1124,7 +1124,7 @@ void VclMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
     {
         if ( !pUpdateDataTimer )
         {
-            pUpdateDataTimer = new Timer;
+            pUpdateDataTimer = new Timer("MultiLineEditTimer");
             pUpdateDataTimer->SetTimeoutHdl( LINK( this, VclMultiLineEdit, ImpUpdateDataHdl ) );
         }
         pUpdateDataTimer->SetTimeout( nTimeout );

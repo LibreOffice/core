@@ -106,7 +106,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     Init( rArgSet );
 
     // Hack: RefInput control
-    pTimer = new Timer;
+    pTimer = new Timer("ScFilterTimer");
     pTimer->SetTimeout( 50 ); // Wait 50ms
     pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
 
