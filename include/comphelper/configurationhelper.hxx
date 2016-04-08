@@ -120,7 +120,7 @@ public:
      *          E.g. css::container::NoSuchElementException if the specified
      *          key does not exists.
      */
-    static css::uno::Any readRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
+    static css::uno::Any readRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
                                          const OUString&                            sRelPath,
                                          const OUString&                            sKey    );
 
@@ -150,7 +150,7 @@ public:
      *          key does not exists or css::uno::Exception if the provided configuration
      *          access does not allow writing for this key.
      */
-    static void writeRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
+    static void writeRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
                                  const OUString&                            sRelPath,
                                  const OUString&                            sKey    ,
                                  const css::uno::Any&                              aValue  );
@@ -184,7 +184,7 @@ public:
      *          E.g. css::uno::Exception if the provided configuration
      *          access does not allow writing for this set.
      */
-    static css::uno::Reference< css::uno::XInterface > makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface > xCFG         ,
+    static css::uno::Reference< css::uno::XInterface > makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface >& xCFG         ,
                                                                              const OUString&                            sRelPathToSet,
                                                                              const OUString&                            sSetNode     );
 
