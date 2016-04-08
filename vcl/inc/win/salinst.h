@@ -30,8 +30,6 @@ public:
     HINSTANCE           mhInst;                 // Instance Handle
     HWND                mhComWnd;               // window, for communication (between threads and the main thread)
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
-    osl::Mutex*         mpSalWaitMutex;         // Sal-Wait-Mutex
-    sal_uInt16              mnYieldWaitCount;       // Wait-Count
 public:
     WinSalInstance();
     virtual ~WinSalInstance();
