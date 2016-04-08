@@ -725,17 +725,6 @@ void SfxObjectShell::SetTitle
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
-OUString X(const OUString &rRet)
-{
-    if ( rRet.isEmpty() )
-        return OUString( "-empty-" );
-    return rRet;
-}
-#else
-#define X(ret) ret
-#endif
-
 
 OUString SfxObjectShell::GetTitle
 (
@@ -818,15 +807,15 @@ OUString SfxObjectShell::GetTitle
         if ( IsTemplate() )
             pThis->SetTitle( aTitle );
         bRecur = false;
-        return X(aTitle);
+        return aTitle;
     }
     else if (SFX_TITLE_APINAME == nMaxLength )
-        return X(GetAPIName());
+        return GetAPIName();
 
     // Special case templates:
     if( IsTemplate() && !pImp->aTitle.isEmpty() &&
          ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )
-        return X(pImp->aTitle);
+        return pImp->aTitle;
 
     // Picklist/Caption is mapped
     if ( pMed && ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )
@@ -836,7 +825,7 @@ OUString SfxObjectShell::GetTitle
         // considered. (See below, analysis of aTitleMap_Impl)
         const SfxStringItem* pNameItem = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_DOCINFO_TITLE, false);
         if ( pNameItem )
-            return X( pNameItem->GetValue() );
+            return pNameItem->GetValue();
     }
 
     // Still unnamed?
@@ -845,7 +834,7 @@ OUString SfxObjectShell::GetTitle
     {
         // Title already set?
         if ( !pImp->aTitle.isEmpty() )
-            return X(pImp->aTitle);
+            return pImp->aTitle;
 
         // must it be numbered?
         OUString aNoName(SFX2_RESSTR(STR_NONAME));
@@ -856,7 +845,7 @@ OUString SfxObjectShell::GetTitle
         }
 
         // Document called "noname" for the time being
-        return X(aNoName);
+        return aNoName;
     }
 
     const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : OUString( GetMedium()->GetName() ) );
@@ -875,10 +864,9 @@ OUString SfxObjectShell::GetTitle
     {
         OUString aName( aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName() );
         if ( nMaxLength == SFX_TITLE_FULLNAME )
-            return X( aName );
+            return aName;
         else if ( nMaxLength == SFX_TITLE_FILENAME )
-            return X( aURL.getName( INetURLObject::LAST_SEGMENT,
-                true, INetURLObject::DECODE_WITH_CHARSET ) );
+            return aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
         else if ( pImp->aTitle.isEmpty() )
             pImp->aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT,
                                          true, INetURLObject::DECODE_WITH_CHARSET );
@@ -892,10 +880,10 @@ OUString SfxObjectShell::GetTitle
             {
                 OUString aRet( "..." );
                 aRet += aComplete.copy( aComplete.getLength() - nMaxLength + 3, nMaxLength - 3 );
-                return X( aRet );
+                return aRet;
             }
             else
-                return X( aComplete );
+                return aComplete;
         }
         else if ( nMaxLength == SFX_TITLE_FILENAME )
         {
@@ -903,10 +891,10 @@ OUString SfxObjectShell::GetTitle
             aName = INetURLObject::decode( aName, INetURLObject::DECODE_WITH_CHARSET );
             if( aName.isEmpty() )
                 aName = aURL.GetURLNoPass();
-            return X(aName);
+            return aName;
         }
         else if ( nMaxLength == SFX_TITLE_FULLNAME )
-            return X(aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
+            return aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
 
         // Generate Title from file name if possible
         if ( pImp->aTitle.isEmpty() )
@@ -918,7 +906,7 @@ OUString SfxObjectShell::GetTitle
     }
 
     // Complete Title
-    return X(pImp->aTitle);
+    return pImp->aTitle;
 }
 
 
