@@ -59,8 +59,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <rtl/ref.hxx>
 
-#include <boost/noncopyable.hpp>
-
 namespace comphelper {
     class NamedValueCollection;
 }
@@ -78,7 +76,7 @@ typedef ::std::vector< css::uno::Reference< css::frame::XController > >   Contro
 /** helper class monitoring the views of a document, and firing appropriate events
     when views are attached / detached
 */
-class ViewMonitor : public boost::noncopyable
+class ViewMonitor
 {
 public:
     explicit ViewMonitor( DocumentEventNotifier& _rEventNotifier )
@@ -89,6 +87,9 @@ public:
         ,m_xLastConnectedController()
     {
     }
+
+    ViewMonitor(const ViewMonitor&) = delete;
+    const ViewMonitor& operator=(const ViewMonitor&) = delete;
 
     void    reset()
     {

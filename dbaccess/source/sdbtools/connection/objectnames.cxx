@@ -34,7 +34,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sdbtools
@@ -233,9 +232,11 @@ namespace sdbtools
     };
 
     // NameCheckFactory
-    class NameCheckFactory: private boost::noncopyable
+    class NameCheckFactory
     {
     public:
+        NameCheckFactory(const NameCheckFactory&) = delete;
+        const NameCheckFactory& operator=(const NameCheckFactory&) = delete;
         /** creates an INameValidation instance which can be used to check the existence of query or table names
 
             @param _rContext

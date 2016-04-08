@@ -27,7 +27,6 @@
 
 #include <memory>
 #include <map>
-#include <boost/noncopyable.hpp>
 
 namespace dbaccess
 {
@@ -42,11 +41,13 @@ namespace dbaccess
                                   >   DocumentEvents_Base;
 
     class DocumentEvents    :public DocumentEvents_Base
-                            ,public ::boost::noncopyable
     {
     public:
         DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData );
         virtual ~DocumentEvents();
+
+        DocumentEvents(const DocumentEvents&) = delete;
+        const DocumentEvents& operator=(const DocumentEvents&) = delete;
 
         static bool needsSynchronousNotification( const OUString& _rEventName );
 

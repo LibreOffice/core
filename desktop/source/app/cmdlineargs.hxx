@@ -25,13 +25,12 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 
 namespace desktop
 {
 
-class CommandLineArgs: private boost::noncopyable
+class CommandLineArgs
 {
     public:
         struct Supplier
@@ -52,6 +51,9 @@ class CommandLineArgs: private boost::noncopyable
 
         CommandLineArgs();
         explicit CommandLineArgs( Supplier& supplier );
+
+        CommandLineArgs(const CommandLineArgs&) = delete;
+        const CommandLineArgs& operator=(const CommandLineArgs&) = delete;
 
         boost::optional< OUString > getCwdUrl() const { return m_cwdUrl; }
 

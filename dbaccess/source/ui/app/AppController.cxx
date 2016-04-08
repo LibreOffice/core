@@ -123,8 +123,6 @@
 
 #include <functional>
 
-#include <boost/noncopyable.hpp>
-
 extern "C" void SAL_CALL createRegistryInfo_ODBApplication()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OApplicationController > aAutoRegistration;
@@ -184,7 +182,7 @@ Reference< XInterface > SAL_CALL OApplicationController::Create(const Reference<
 }
 
 // OApplicationController
-class SelectionNotifier : public ::boost::noncopyable
+class SelectionNotifier
 {
 private:
     ::comphelper::OInterfaceContainerHelper2   m_aSelectionListeners;
@@ -198,6 +196,9 @@ public:
         ,m_nSelectionNestingLevel( 0 )
     {
     }
+
+    SelectionNotifier(const SelectionNotifier&) = delete;
+    const SelectionNotifier& operator=(const SelectionNotifier&) = delete;
 
     void addListener( const Reference< XSelectionChangeListener >& _Listener )
     {
@@ -248,7 +249,7 @@ public:
     }
 };
 
-class SelectionGuard : public ::boost::noncopyable
+class SelectionGuard
 {
 public:
     explicit SelectionGuard( SelectionNotifier& _rNotifier )
@@ -261,6 +262,9 @@ public:
     {
         m_rNotifier.leaveSelection( SelectionNotifier::SelectionGuardAccess() );
     }
+
+    SelectionGuard(const SelectionGuard&) = delete;
+    const SelectionGuard& operator=(const SelectionGuard&) = delete;
 
 private:
     SelectionNotifier&  m_rNotifier;
