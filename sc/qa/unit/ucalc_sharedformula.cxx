@@ -1800,4 +1800,160 @@ void Test::testSharedFormulaListenerDeleteArea()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulaUpdateOnReplacement()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    const char* pData[][1] = {
+        { "1"              },
+        { "=SUM($A$1:$A1)" },
+        { "=SUM($A$1:$A2)" },
+        { "=SUM($A$1:$A3)" },
+        { "=SUM($A$1:$A4)" },
+        { "=SUM($A$1:$A5)" },
+        { "=SUM($A$1:$A6)" },
+        { "=SUM($A$1:$A7)" }
+    };
+
+    insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
+
+    // Check that A2:A8 is a formula group.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(7), pFC->GetSharedLength());
+
+    {   // Check initial results.
+        ScAddress aPos(0,0,0);
+        const double fResult[] = { 1.0, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0 };
+        for (SCROW nRow = 1; nRow < 8; ++nRow)
+        {
+            aPos.SetRow(nRow);
+            CPPUNIT_ASSERT_EQUAL( fResult[nRow], m_pDoc->GetValue( aPos));
+        }
+    }
+
+    // Set up an undo object for deleting A4.
+    ScRange aUndoRange(0,3,0,0,3,0);
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    aMark.SetMultiMarkArea(aUndoRange);
+    std::unique_ptr<ScDocument> pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    m_pDoc->CopyToDocument(aUndoRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc.get(), &aMark);
+    ScUndoDeleteContents aUndo(&getDocShell(), aMark, aUndoRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
+
+    // Delete A4.
+    clearRange(m_pDoc, aUndoRange);
+
+    // Check that A2:A3 and A5:A8 are formula groups.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+
+    {   // Check results of A4 deleted.
+        ScAddress aPos(0,0,0);
+        const double fResult[] = { 1.0, 1.0, 2.0, 0.0, 4.0, 8.0, 16.0, 32.0 };
+        for (SCROW nRow = 1; nRow < 8; ++nRow)
+        {
+            aPos.SetRow(nRow);
+            CPPUNIT_ASSERT_EQUAL( fResult[nRow], m_pDoc->GetValue( aPos));
+        }
+    }
+
+    // Restore A4.
+    aUndo.Undo();
+
+    // Check that A2:A8 is a formula group.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(7), pFC->GetSharedLength());
+
+    {   // Check initial results.
+        ScAddress aPos(0,0,0);
+        const double fResult[] = { 1.0, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0 };
+        for (SCROW nRow = 1; nRow < 8; ++nRow)
+        {
+            aPos.SetRow(nRow);
+            CPPUNIT_ASSERT_EQUAL( fResult[nRow], m_pDoc->GetValue( aPos));
+        }
+    }
+
+    // Delete A4 using selection.
+    m_pDoc->DeleteSelection(InsertDeleteFlags::ALL, aMark);
+
+    // Check that A2:A3 and A5:A8 are formula groups.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+
+    {   // Check results of A4 deleted.
+        ScAddress aPos(0,0,0);
+        const double fResult[] = { 1.0, 1.0, 2.0, 0.0, 4.0, 8.0, 16.0, 32.0 };
+        for (SCROW nRow = 1; nRow < 8; ++nRow)
+        {
+            aPos.SetRow(nRow);
+            CPPUNIT_ASSERT_EQUAL( fResult[nRow], m_pDoc->GetValue( aPos));
+        }
+    }
+
+    // Restore A4.
+    aUndo.Undo();
+
+    // Check that A2:A8 is a formula group.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(7), pFC->GetSharedLength());
+
+    {   // Check initial results.
+        ScAddress aPos(0,0,0);
+        const double fResult[] = { 1.0, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0 };
+        for (SCROW nRow = 1; nRow < 8; ++nRow)
+        {
+            aPos.SetRow(nRow);
+            CPPUNIT_ASSERT_EQUAL( fResult[nRow], m_pDoc->GetValue( aPos));
+        }
+    }
+
+    // Replace A4 with 0.
+    m_pDoc->SetString( ScAddress(0,3,0), "0");
+
+    // Check that A2:A3 and A5:A8 are formula groups.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+
+    {   // Check results of A4 set to zero.
+        ScAddress aPos(0,0,0);
+        const double fResult[] = { 1.0, 1.0, 2.0, 0.0, 4.0, 8.0, 16.0, 32.0 };
+        for (SCROW nRow = 1; nRow < 8; ++nRow)
+        {
+            aPos.SetRow(nRow);
+            CPPUNIT_ASSERT_EQUAL( fResult[nRow], m_pDoc->GetValue( aPos));
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

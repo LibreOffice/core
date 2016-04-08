@@ -360,6 +360,7 @@ public:
     void testSharedFormulaAbsCellListener();
     void testSharedFormulaUnshareAreaListeners();
     void testSharedFormulaListenerDeleteArea();
+    void testSharedFormulaUpdateOnReplacement();
     void testFormulaPosition();
     void testFormulaWizardSubformula();
 
@@ -654,6 +655,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaAbsCellListener);
     CPPUNIT_TEST(testSharedFormulaUnshareAreaListeners);
     CPPUNIT_TEST(testSharedFormulaListenerDeleteArea);
+    CPPUNIT_TEST(testSharedFormulaUpdateOnReplacement);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testMixData);
