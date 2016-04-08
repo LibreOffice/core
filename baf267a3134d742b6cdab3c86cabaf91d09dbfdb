@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_e5e7833e",
+        "filename": "sw/qa/python/check_cross_references.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-04-08T21:08:58Z",
+      "side": 1,
+      "message": "Please never ever touch the license header.",
+      "revId": "baf267a3134d742b6cdab3c86cabaf91d09dbfdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
