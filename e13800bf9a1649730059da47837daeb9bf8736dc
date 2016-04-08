@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_052bb783",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-08T14:36:03Z",
+      "side": 1,
+      "message": "yes but oslCondition is typedef void* but the \"class SalYieldMutex\" is a real class which happens to have a osl::Mutex as first member",
+      "parentUuid": "9ad45d7e_e51dc367",
+      "revId": "e13800bf9a1649730059da47837daeb9bf8736dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_82095d34",
         "filename": "vcl/win/app/salinst.cxx",
         "patchSetId": 1
