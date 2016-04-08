@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_823cbd30",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-04-08T07:27:52Z",
+      "side": 1,
+      "message": "The comment right above your change says that the old bad result was \"Outline\", and it should be \"WWNum\u003csomething\u003e\". That sounds like you broke the test and you quickly silenced the failure. ;-)\n\nCan you check manually if the roundtrip of that test document is still OK? If so, then this test has to be first adapted to assert the scenario it tests differently -- now the test will pass with and without the original fix for sure, which is not ideal.",
+      "revId": "21d0b6512f55b33cf1e1b8d1e8855f2680dfeb0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
