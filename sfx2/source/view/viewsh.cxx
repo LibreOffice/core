@@ -232,7 +232,7 @@ public:
     iterator end() { return maData.end(); }
 
     void push_back( SfxInPlaceClient* p ) { maData.push_back(p); }
-    void erase( iterator it ) { maData.erase(it); }
+    void erase( const iterator& it ) { maData.erase(it); }
     size_t size() const { return maData.size(); }
 };
 
@@ -1412,7 +1412,7 @@ void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue 
 SfxViewShell* SfxViewShell::GetFirst
 (
     bool          bOnlyVisible,
-    std::function< bool ( const SfxViewShell* ) > isViewShell
+    const std::function< bool ( const SfxViewShell* ) >& isViewShell
 )
 {
     // search for a SfxViewShell of the specified type
@@ -1450,7 +1450,7 @@ SfxViewShell* SfxViewShell::GetNext
 (
     const SfxViewShell& rPrev,
     bool                bOnlyVisible,
-    std::function<bool ( const SfxViewShell* )> isViewShell
+    const std::function<bool ( const SfxViewShell* )>& isViewShell
 )
 {
     SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();

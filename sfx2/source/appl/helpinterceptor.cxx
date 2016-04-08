@@ -101,7 +101,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
 }
 
 
-void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
+void HelpInterceptor_Impl::setInterception( const Reference< XFrame >& xFrame )
 {
     m_xIntercepted.set( xFrame, UNO_QUERY );
 

@@ -1300,7 +1300,7 @@ uno::Reference< css::frame::XModuleManager2 > SfxStoringHelper::GetModuleManager
 }
 
 
-bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
+bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xModel,
                                             const OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,

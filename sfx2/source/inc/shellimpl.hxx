@@ -41,7 +41,7 @@ public:
     const SfxObjectShell* operator[] ( size_t i ) const;
     SfxObjectShell* operator[] ( size_t i );
 
-    void erase( iterator it );
+    void erase( const iterator& it );
 
     void push_back( SfxObjectShell* p );
 
@@ -62,7 +62,7 @@ public:
     const SfxViewFrame* operator[] ( size_t i ) const;
     SfxViewFrame* operator[] ( size_t i );
 
-    void erase( iterator it );
+    void erase( const iterator& it );
 
     void push_back( SfxViewFrame* p );
 
@@ -84,7 +84,7 @@ public:
     const SfxViewShell* operator[] ( size_t i ) const;
     SfxViewShell* operator[] ( size_t i );
 
-    void erase( iterator it );
+    void erase( const iterator& it );
 
     void push_back( SfxViewShell* p );
 

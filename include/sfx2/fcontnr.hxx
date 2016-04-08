@@ -92,7 +92,7 @@ public:
                         SfxFilterMatcher(const SfxFilterMatcher&) = delete;
     SfxFilterMatcher&   operator=( const SfxFilterMatcher& ) = delete;
 
-    SAL_DLLPRIVATE static bool IsFilterInstalled_Impl( std::shared_ptr<const SfxFilter> pFilter );
+    SAL_DLLPRIVATE static bool IsFilterInstalled_Impl( const std::shared_ptr<const SfxFilter>& pFilter );
     DECL_DLLPRIVATE_LINK_TYPED( MaybeFileHdl_Impl, OUString*, bool );
 
     sal_uInt32               GuessFilterIgnoringContent( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& ) const;

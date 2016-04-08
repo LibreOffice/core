@@ -169,10 +169,10 @@ protected:
 
 public:
     // Iteration
-    static SfxViewShell*        GetFirst( bool bOnlyVisible = true, std::function<bool ( const SfxViewShell* )> isViewShell = nullptr );
+    static SfxViewShell*        GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
     static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
                                          bool bOnlyVisible = true,
-                                         std::function<bool ( const SfxViewShell* )> isViewShell = nullptr );
+                                         const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
     static SfxViewShell*        Current();
 
     static SfxViewShell*        Get( const css::uno::Reference< css::frame::XController>& i_rController );

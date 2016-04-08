@@ -52,7 +52,7 @@ public:
     const SfxChildWinFactory& operator []( size_t i ) const;
     SfxChildWinFactory& operator []( size_t i );
     void push_back( SfxChildWinFactory* p );
-    void erase( iterator it );
+    void erase( const iterator& it );
 
     iterator begin();
 };
@@ -70,7 +70,7 @@ public:
 
     SfxFrame* front();
 
-    void erase( iterator it );
+    void erase( const iterator& it );
 
     SfxFrame* operator[] ( size_t i );
 

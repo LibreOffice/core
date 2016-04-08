@@ -54,7 +54,7 @@ bool getBool(utl::OConfigurationNode const & aNode, const char* pNodeName)
     return comphelper::getBOOL(aNode.getNodeValue(pNodeName));
 }
 
-css::uno::Sequence<OUString> BuildContextList (ContextList rContextList)
+css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
 {
     const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
 
@@ -722,7 +722,7 @@ bool ResourceManager::IsDeckEnabled (
     return false;
 }
 
-void ResourceManager::UpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     for (DeckContainer::iterator itr = maDecks.begin(); itr != maDecks.end(); ++itr)
     {

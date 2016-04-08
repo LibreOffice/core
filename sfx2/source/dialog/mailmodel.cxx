@@ -129,8 +129,8 @@ void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) t
 static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
 
 SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
-    uno::Reference< lang::XMultiServiceFactory > xSMGR,
-    uno::Reference< frame::XModel > xModel,
+    const uno::Reference< lang::XMultiServiceFactory >& xSMGR,
+    const uno::Reference< frame::XModel >& xModel,
     const OUString& rFilterName,
     const OUString& rType,
     bool bModified,

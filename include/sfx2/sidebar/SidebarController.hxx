@@ -85,9 +85,9 @@ public:
     static SidebarController* GetSidebarControllerForFrame (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    static void registerSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xFrame);
+    static void registerSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xFrame);
 
-    static void unregisterSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xFrame);
+    static void unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xFrame);
 
     // ui::XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
@@ -159,7 +159,7 @@ public:
 
     void notifyDeckTitle(const OUString& targetDeckId);
 
-    void updateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 
     void disposeDecks();
 
@@ -228,7 +228,7 @@ private:
         vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext,
-        VclPtr<Deck> pDeck);
+        const VclPtr<Deck>& pDeck);
 
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,

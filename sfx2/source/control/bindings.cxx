@@ -136,7 +136,7 @@ public:
         return maData.end();
     }
 
-    void erase( iterator it )
+    void erase( const iterator& it )
     {
         maData.erase(it);
     }

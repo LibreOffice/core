@@ -59,7 +59,7 @@ void SfxChildWinFactArr_Impl::push_back( SfxChildWinFactory* p )
     maData.push_back(std::unique_ptr<SfxChildWinFactory>(p));
 }
 
-void SfxChildWinFactArr_Impl::erase( iterator it )
+void SfxChildWinFactArr_Impl::erase( const iterator& it )
 {
     maData.erase(it);
 }
@@ -84,7 +84,7 @@ SfxFrame* SfxFrameArr_Impl::front()
     return maData.front();
 }
 
-void SfxFrameArr_Impl::erase( iterator it )
+void SfxFrameArr_Impl::erase( const iterator& it )
 {
     maData.erase(it);
 }

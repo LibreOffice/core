@@ -392,7 +392,7 @@ bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedControlId
     return bIsEnabled;
 }
 
-bool FileDialogHelper_Impl::CheckFilterOptionsCapability( std::shared_ptr<const SfxFilter> _pFilter )
+bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const std::shared_ptr<const SfxFilter>& _pFilter )
 {
     bool bResult = false;
 
@@ -1304,7 +1304,7 @@ void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
         lLastURLs.push_back(*i);
 }
 
-void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList, std::shared_ptr<const SfxFilter> pFilter)
+void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList, const std::shared_ptr<const SfxFilter>& pFilter)
 {
     rpURLList.clear();
 
@@ -2599,7 +2599,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
     return nRet;
 }
 
-ErrCode RequestPassword(std::shared_ptr<const SfxFilter> pCurrentFilter, OUString& aURL, SfxItemSet* pSet)
+ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString& aURL, SfxItemSet* pSet)
 {
     uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
     // TODO: need a save way to distinguish MS filters from other filters

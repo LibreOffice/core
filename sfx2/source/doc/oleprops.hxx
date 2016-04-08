@@ -292,7 +292,7 @@ public:
     bool                GetDateValue( css::util::Date& rValue, sal_Int32 nPropId ) const;
 
     /** Adds the passed property to the property set. Drops an existing old property. */
-    void                SetProperty( SfxOlePropertyRef xProp );
+    void                SetProperty( const SfxOlePropertyRef& xProp );
     /** Inserts a signed int32 property with the passed value. */
     void                SetInt32Value( sal_Int32 nPropId, sal_Int32 nValue );
     /** Inserts a floating-point property with the passed value. */

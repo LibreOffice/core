@@ -77,8 +77,8 @@ private:
     OUString            maFromAddress;
     OUString            maSubject;
 
-    static SaveResult   ShowFilterOptionsDialog( const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR,
-                                                 const css::uno::Reference< css::frame::XModel > xModel,
+    static SaveResult   ShowFilterOptionsDialog( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
+                                                 const css::uno::Reference< css::frame::XModel >& xModel,
                                                  const OUString& rFilterName,
                                                  const OUString& rType,
                                                  bool bModified,

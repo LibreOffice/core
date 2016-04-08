@@ -42,7 +42,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocum
     DocTemplLocaleHelper();
     std::vector< css::beans::StringPair > GetParsingResult();
 
-    static std::vector< css::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext > xContext )
+    static std::vector< css::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext >& xContext )
     throw( css::uno::Exception );
 
 public:
@@ -53,7 +53,7 @@ public:
     std::vector< css::beans::StringPair >
     ReadGroupLocalizationSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
-        const css::uno::Reference< css::uno::XComponentContext > xContext )
+        const css::uno::Reference< css::uno::XComponentContext >& xContext )
             throw( css::uno::Exception );
 
     // writes sequence of elements ( GroupName, GroupUIName )
@@ -61,7 +61,7 @@ public:
     void SAL_CALL WriteGroupLocalizationSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
         const std::vector< css::beans::StringPair >& aSequence,
-        const css::uno::Reference< css::uno::XComponentContext > xContext )
+        const css::uno::Reference< css::uno::XComponentContext >& xContext )
             throw( css::uno::Exception );
 
     // XDocumentHandler

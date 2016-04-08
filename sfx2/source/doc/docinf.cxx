@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 namespace sfx2 {
 
 sal_uInt32 LoadOlePropertySet(
-    uno::Reference< document::XDocumentProperties> i_xDocProps,
+    const uno::Reference< document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage )
 {
     // *** global properties from stream "005SummaryInformation" ***
@@ -195,7 +195,7 @@ sal_uInt32 LoadOlePropertySet(
 }
 
 bool SaveOlePropertySet(
-    uno::Reference< document::XDocumentProperties> i_xDocProps,
+    const uno::Reference< document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage,
     const uno::Sequence<sal_uInt8> * i_pThumb,
     const uno::Sequence<sal_uInt8> * i_pGuid,

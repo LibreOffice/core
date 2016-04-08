@@ -499,7 +499,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, s
 }
 
 
-bool SfxFilterMatcher::IsFilterInstalled_Impl( std::shared_ptr<const SfxFilter> pFilter )
+bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFilter>& pFilter )
 {
     if ( pFilter->GetFilterFlags() & SfxFilterFlags::MUSTINSTALL )
     {

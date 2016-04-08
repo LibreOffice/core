@@ -55,7 +55,7 @@ public:
         return maData.begin();
     }
 
-    void erase( iterator it )
+    void erase( const iterator& it )
     {
         maData.erase(it);
     }

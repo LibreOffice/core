@@ -73,7 +73,7 @@ public:
     HelpInterceptor_Impl();
     virtual ~HelpInterceptor_Impl();
 
-    void                    setInterception( css::uno::Reference< css::frame::XFrame > xFrame );
+    void                    setInterception( const css::uno::Reference< css::frame::XFrame >& xFrame );
     OUString                GetCurrentURL() const { return m_aCurrentURL; }
 
 

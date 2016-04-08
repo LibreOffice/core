@@ -534,7 +534,7 @@ public:
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
-    void                setContainerWindow( css::uno::Reference < css::awt::XWindow > xWin );
+    void                setContainerWindow( const css::uno::Reference < css::awt::XWindow >& xWin );
     inline css::uno::Reference < css::frame::XFrame2 >
                         getTextFrame() const { return pTextWin->getFrame(); }
 
