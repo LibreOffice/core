@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_e51dc367",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-08T14:31:07Z",
+      "side": 1,
+      "message": "Did the same as in osl_waitCondition",
+      "parentUuid": "9ad45d7e_6509d32c",
+      "revId": "e13800bf9a1649730059da47837daeb9bf8736dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_82095d34",
         "filename": "vcl/win/app/salinst.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-04-08T14:26:39Z",
       "side": 1,
       "message": "this comment belongs to the removed code and should be removed too",
+      "revId": "e13800bf9a1649730059da47837daeb9bf8736dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_c51a3f6e",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-08T14:31:07Z",
+      "side": 1,
+      "message": "OOps..overseen, thanks!",
+      "parentUuid": "9ad45d7e_82095d34",
       "revId": "e13800bf9a1649730059da47837daeb9bf8736dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
