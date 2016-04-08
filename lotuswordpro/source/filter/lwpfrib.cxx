@@ -425,7 +425,8 @@ rtl::Reference<XFFont> LwpFrib::GetFont()
     if(m_pModifiers&&m_pModifiers->FontID)
     {
         LwpFoundry* pFoundry = m_pPara->GetFoundry();
-        pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
+        if (pFoundry)
+            pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
     }
     else
     {
