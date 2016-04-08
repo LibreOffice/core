@@ -87,6 +87,9 @@ public:
     void testModifiedStatus();
     void testSheetOperations();
     void testSheetSelections();
+    void testContextMenuCalc();
+    void testContextMenuWriter();
+    void testContextMenuImpress();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -109,6 +112,9 @@ public:
     CPPUNIT_TEST(testModifiedStatus);
     CPPUNIT_TEST(testSheetOperations);
     CPPUNIT_TEST(testSheetSelections);
+    CPPUNIT_TEST(testContextMenuCalc);
+    CPPUNIT_TEST(testContextMenuWriter);
+    CPPUNIT_TEST(testContextMenuImpress);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -125,6 +131,10 @@ public:
     // for testModifiedStatus
     osl::Condition m_aStateChangedCondition;
     bool m_bModified;
+
+    // for testContextMenu{Calc, Writer}
+    osl::Condition m_aContextMenuCondition;
+    boost::property_tree::ptree m_aContextMenuResult;
 };
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
@@ -139,6 +149,9 @@ LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDoc
         break;
     case LOK_DOCTYPE_SPREADSHEET:
         aService = "com.sun.star.sheet.SpreadsheetDocument";
+        break;
+    case LOK_DOCTYPE_PRESENTATION:
+        aService = "com.sun.star.presentation.PresentationDocument";
         break;
     default:
         CPPUNIT_ASSERT(false);
@@ -207,6 +220,14 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
             m_bModified = aPayload.copy(aPrefix.getLength()).toBoolean();
             m_aStateChangedCondition.set();
         }
+    }
+    break;
+    case LOK_CALLBACK_CONTEXT_MENU:
+    {
+        m_aContextMenuResult.clear();
+        std::stringstream aStream(pPayload);
+        boost::property_tree::read_json(aStream, m_aContextMenuResult);
+        m_aContextMenuCondition.set();
     }
     break;
     }
@@ -868,6 +889,132 @@ void DesktopLOKTest::testSheetSelections()
         free(pUsedMimeType);
         free(pCopiedContent);
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+namespace {
+
+    void verifyContextMenuStructure(boost::property_tree::ptree& aRoot)
+    {
+        for (const auto& aItemPair: aRoot)
+        {
+            // This is an array, so no key
+            CPPUNIT_ASSERT_EQUAL(std::string(aItemPair.first.data()), std::string(""));
+
+            boost::property_tree::ptree aItemValue = aItemPair.second;
+            boost::optional<boost::property_tree::ptree&> aText = aItemValue.get_child_optional("text");
+            boost::optional<boost::property_tree::ptree&> aType = aItemValue.get_child_optional("type");
+            boost::optional<boost::property_tree::ptree&> aCommand = aItemValue.get_child_optional("command");
+            boost::optional<boost::property_tree::ptree&> aSubmenu = aItemValue.get_child_optional("menu");
+            boost::optional<boost::property_tree::ptree&> aEnabled = aItemValue.get_child_optional("enabled");
+            boost::optional<boost::property_tree::ptree&> aChecktype = aItemValue.get_child_optional("checktype");
+            boost::optional<boost::property_tree::ptree&> aChecked = aItemValue.get_child_optional("checked");
+
+            // type is omnipresent
+            CPPUNIT_ASSERT( aType );
+
+            // seperator doesn't have any other attribs
+            if ( aType.get().data() == "separator" )
+            {
+                CPPUNIT_ASSERT( !aText && !aCommand && !aSubmenu && !aEnabled && !aChecktype && !aChecked );
+            }
+            else if ( aType.get().data() == "command" )
+            {
+                CPPUNIT_ASSERT( aCommand && aText );
+            }
+            else if ( aType.get().data() == "menu")
+            {
+                CPPUNIT_ASSERT( aSubmenu && aText );
+                verifyContextMenuStructure( aSubmenu.get() );
+            }
+
+            if ( aChecktype )
+            {
+                CPPUNIT_ASSERT( aChecktype.get().data() == "radio" ||
+                                aChecktype.get().data() == "checkmark" ||
+                                aChecktype.get().data() == "auto" );
+
+                CPPUNIT_ASSERT( aChecked &&
+                                ( aChecked.get().data() == "true" || aChecked.get().data() == "false" ) );
+            }
+        }
+
+    }
+
+} // end anonymous namespace
+
+void DesktopLOKTest::testContextMenuCalc()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    // Values in twips
+    int row5 = 1150;
+    int col1 = 1100;
+
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col1, row5,
+                                      1, 4, 0);
+
+    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    m_aContextMenuCondition.wait(aTimeValue);
+
+    CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
+    boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
+    CPPUNIT_ASSERT( aMenu );
+    verifyContextMenuStructure( aMenu.get() );
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testContextMenuWriter()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt", LOK_DOCTYPE_TEXT);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    Point aRandomPoint(1150, 1100);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      aRandomPoint.X(), aRandomPoint.Y(),
+                                      1, 4, 0);
+
+    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    m_aContextMenuCondition.wait(aTimeValue);
+
+    CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
+    boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
+    CPPUNIT_ASSERT( aMenu );
+    verifyContextMenuStructure( aMenu.get() );
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testContextMenuImpress()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp", LOK_DOCTYPE_PRESENTATION);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    Point aRandomPoint(1150, 1100);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      aRandomPoint.X(), aRandomPoint.Y(),
+                                      1, 4, 0);
+
+    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    m_aContextMenuCondition.wait(aTimeValue);
+
+    CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
+    boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
+    CPPUNIT_ASSERT( aMenu );
+    verifyContextMenuStructure( aMenu.get() );
 
     comphelper::LibreOfficeKit::setActive(false);
 }
