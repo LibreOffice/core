@@ -1211,7 +1211,7 @@ namespace cppcanvas
                                        const ::basegfx::B2DHomMatrix&   rTextTransform );
 
                 EffectTextArrayAction(const EffectTextArrayAction&) = delete;
-                const EffectTextArrayAction& operator=(const EffectTextArrayAction&);
+                const EffectTextArrayAction& operator=(const EffectTextArrayAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
@@ -1547,7 +1547,7 @@ namespace cppcanvas
                                const ::basegfx::B2DHomMatrix&                       rTextTransform );
 
                 OutlineAction(const OutlineAction&) = delete;
-                const OutlineAction& operator=(const OutlineAction&);
+                const OutlineAction& operator=(const OutlineAction&) = delete;
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
