@@ -20,9 +20,85 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 #include "rgbtable.hxx"
-#define _XPMPRIVATE
 #include "xpmread.hxx"
 #include <cstring>
+
+#define XPMTEMPBUFSIZE      0x00008000
+#define XPMSTRINGBUF        0x00008000
+
+#define XPMIDENTIFIER       0x00000001          // mnIdentifier includes on of the six phases
+#define XPMDEFINITION       0x00000002          // the XPM format consists of
+#define XPMVALUES           0x00000003
+#define XPMCOLORS           0x00000004
+#define XPMPIXELS           0x00000005
+#define XPMEXTENSIONS       0x00000006
+#define XPMENDEXT           0x00000007
+
+#define XPMREMARK           0x00000001          // defines used by mnStatus
+#define XPMDOUBLE           0x00000002
+#define XPMSTRING           0x00000004
+#define XPMFINISHED         0x00000008
+
+#define XPMCASESENSITIVE    0x00000001
+#define XPMCASENONSENSITIVE 0x00000002
+
+enum ReadState
+{
+    XPMREAD_OK,
+    XPMREAD_ERROR,
+    XPMREAD_NEED_MORE
+};
+
+class BitmapWriteAccess;
+class Graphic;
+
+class XPMReader : public GraphicReader
+{
+private:
+
+    SvStream&           mrIStm;
+    Bitmap              maBmp;
+    BitmapWriteAccess*  mpAcc;
+    Bitmap              maMaskBmp;
+    BitmapWriteAccess*  mpMaskAcc;
+    long                mnLastPos;
+
+    sal_uLong               mnWidth;
+    sal_uLong               mnHeight;
+    sal_uLong               mnColors;
+    sal_uLong               mnCpp;                              // characters per pix
+    bool                mbTransparent;
+    bool                mbStatus;
+    sal_uLong               mnStatus;
+    sal_uLong               mnIdentifier;
+    sal_uInt8               mcThisByte;
+    sal_uInt8               mcLastByte;
+    sal_uLong               mnTempAvail;
+    sal_uInt8*              mpTempBuf;
+    sal_uInt8*              mpTempPtr;
+    sal_uInt8*              mpFastColorTable;
+    sal_uInt8*              mpColMap;
+    sal_uLong               mnStringSize;
+    sal_uInt8*              mpStringBuf;
+    sal_uLong               mnParaSize;
+    sal_uInt8*              mpPara;
+
+    bool                    ImplGetString();
+    bool                    ImplGetColor( sal_uLong );
+    bool                    ImplGetScanLine( sal_uLong );
+    bool                    ImplGetColSub( sal_uInt8* );
+    bool                    ImplGetColKey( sal_uInt8 );
+    void                    ImplGetRGBHex( sal_uInt8*, sal_uLong );
+    bool                    ImplGetPara( sal_uLong numb );
+    static bool             ImplCompare( sal_uInt8 const *, sal_uInt8 const *, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
+    sal_uLong               ImplGetULONG( sal_uLong nPara );
+
+public:
+    explicit            XPMReader( SvStream& rStm );
+    virtual             ~XPMReader();
+
+    ReadState           ReadXPM( Graphic& rGraphic );
+};
 
 XPMReader::XPMReader(SvStream& rStm)
     : mrIStm(rStm)
