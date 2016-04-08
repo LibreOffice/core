@@ -170,7 +170,8 @@ SlideFragmentHandler::~SlideFragmentHandler()
                 pFillProperties = mpSlidePersistPtr->getTheme()->getFillStyle( rAttribs.getInteger( XML_idx, -1 ) );
             FillPropertiesPtr pFillPropertiesPtr( pFillProperties ? new FillProperties( *pFillProperties ) : new FillProperties() );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
-            return this;
+            ContextHandlerRef ret = new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() );
+            return ret;
         }
         break;
 
