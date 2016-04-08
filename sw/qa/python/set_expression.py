@@ -1,7 +1,8 @@
 import unittest
 from org.libreoffice.unotest import UnoInProcess
 
-#@unittest.skip("that seems to work")
+
+# @unittest.skip("that seems to work")
 class TestSetExpresion(unittest.TestCase):
 
     @classmethod
@@ -35,4 +36,3 @@ class TestSetExpresion(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

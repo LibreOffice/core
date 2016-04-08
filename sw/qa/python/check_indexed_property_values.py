@@ -1,12 +1,12 @@
 '''
   This file is part of the LibreOffice project.
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   This file incorporates work covered by the following license notice:
- 
+
     Licensed to the Apache Software Foundation (ASF) under one or more
     contributor license agreements. See the NOTICE file distributed
     with this work for additional information regarding copyright
@@ -26,6 +26,7 @@ from org.libreoffice.unotest import OfficeConnection
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.lang import IndexOutOfBoundsException
 
+
 class CheckIndexedPropertyValues(unittest.TestCase):
 
     @classmethod
@@ -39,11 +40,10 @@ class CheckIndexedPropertyValues(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-
     def test_checkIndexedPropertyValues(self):
-
         xServiceManager = self.xContext.ServiceManager
-        xCont = xServiceManager.createInstanceWithContext('com.sun.star.document.IndexedPropertyValues', self.xContext)
+        xCont = xServiceManager.createInstanceWithContext('com.sun.star.document.IndexedPropertyValues',
+                                                          self.xContext)
 
         p1 = PropertyValue(Name="Jupp", Value="GoodGuy")
         prop1 = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
@@ -68,10 +68,10 @@ class CheckIndexedPropertyValues(unittest.TestCase):
         self.assertEqual(p2.Value, ret[0].Value)
 
         xCont.removeByIndex(0)
-        self.assertTrue(not(xCont.hasElements()) and xCont.getCount()==0, "Could not remove PropertyValue")
+        self.assertTrue(not(xCont.hasElements()) and xCont.getCount() == 0, "Could not remove PropertyValue")
         uno.invoke(xCont, "insertByIndex", (0, prop1))
         uno.invoke(xCont, "insertByIndex", (1, prop2))
-        self.assertTrue(xCont.hasElements() and xCont.getCount()==2, "Did not insert PropertyValue")
+        self.assertTrue(xCont.hasElements() and xCont.getCount() == 2, "Did not insert PropertyValue")
 
         uno.invoke(xCont, "insertByIndex", (1, prop2))
         uno.invoke(xCont, "insertByIndex", (1, prop3))

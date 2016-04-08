@@ -3,6 +3,7 @@ import os
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 
+
 class TestVarFields(unittest.TestCase):
 
     @classmethod
@@ -29,12 +30,11 @@ class TestVarFields(unittest.TestCase):
         xField = xDoc.createInstance("com.sun.star.text.textfield.SetExpression")
         # 1. fill it with properties
         self.__class__._uno.setProperties(xField,
-                          {"Content": "0",
-                           "IsVisible": True,
-                           "Hint": "trying to reproduce fdo#55814",
-                           "SubType": 0, # VAR
-                           "Value": 0.0
-                           })
+                                          {"Content": "0",
+                                           "IsVisible": True,
+                                           "Hint": "trying to reproduce fdo#55814",
+                                           "SubType": 0,  # VAR
+                                           "Value": 0.0})
         # 2. create master field
         xMaster = xDoc.createInstance("com.sun.star.text.fieldmaster.SetExpression")
         # 3. set name of the master field to "foo"
@@ -47,7 +47,7 @@ class TestVarFields(unittest.TestCase):
         xBodyText.insertTextContent(xCursor, xField, False)
         # 7. retrieve paragraph cursor
         xParagraphCursor = xCursor
-        xParagraphCursor.gotoEndOfParagraph(False) # not selectd
+        xParagraphCursor.gotoEndOfParagraph(False)  # not selectd
         # 8. enter new line
         xBodyText.insertControlCharacter(xCursor, PARAGRAPH_BREAK, False)
         # 9. create new text section
@@ -67,9 +67,9 @@ class TestVarFields(unittest.TestCase):
         # 12. insert section
         xBodyText.insertTextContent(xCursor, xTextSection, True)
         # 12.1 insert new paragraph. Note: that's here the difference
-        xParagraphCursor.gotoEndOfParagraph(False) # not select
+        xParagraphCursor.gotoEndOfParagraph(False)  # not select
         # TODO: how to leave the section now?
-        xBodyText.insertControlCharacter(xCursor, PARAGRAPH_BREAK, False )
+        xBodyText.insertControlCharacter(xCursor, PARAGRAPH_BREAK, False)
         xBodyText.insertString(xCursor, "new paragraph", False)
         # 13. Access fields to refresh the document
         xTextFields = xDoc.getTextFields()
@@ -103,7 +103,7 @@ class TestVarFields(unittest.TestCase):
         readContent = xSection.getPropertyValue("Condition")
         # 21. check
         # expected:
-        #self.assertEqual("foo EQ 1", readContent)
+        # self.assertEqual("foo EQ 1", readContent)
         # reality:
         self.assertEqual("0", readContent)
 

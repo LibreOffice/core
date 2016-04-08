@@ -1,6 +1,7 @@
 import unittest
 from org.libreoffice.unotest import UnoInProcess
 
+
 class TestGetExpression(unittest.TestCase):
 
     @classmethod
@@ -38,4 +39,3 @@ class TestGetExpression(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
