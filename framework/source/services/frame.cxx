@@ -31,8 +31,6 @@
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
-#include <threadhelp/transactionguard.hxx>
-#include <threadhelp/transactionbase.hxx>
 #include <general.h>
 
 #include <pattern/window.hxx>
@@ -65,6 +63,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
@@ -103,54 +102,23 @@ enum EActiveState
     @descr      An instance of these class can be a normal node in frame tree. A frame support influencing of his
                 subtree, find of subframes, activate- and deactivate-mechanism as well as
                 set/get of a frame window, component or controller.
-
-    @attention  This implementation supports three states: a)uninitialized, b)working, c)disposed
-                If you call wrong methods in modes a) or c) ... you will get some exceptions.
-                How you should work with this service:
-                    i)      create it by using "xServiceManager->createInstance(...)"
-                    ii)     call XInitialization::initialize() with a valid window reference or use createInstanceWithArguments() at i)
-                    iii)    works with object
-                    iv)     dispose object by calling XComponent::dispose()
-                After iv) all further requests are rejected by exceptions! (DisposedException)
-
-    @base       TransactionBase
-                    help to implement unbreakable interface calls
-    @base       OBroadcastHelper
-    @base       OWeakObject
-                    provides the refcount and XInterface, XWeak
-
-    @devstatus  ready to use
-    @threadsafe yes
 *//*-*************************************************************************************************************/
-class Frame :   // interfaces
-                public  css::lang::XTypeProvider                    ,
-                public  css::lang::XServiceInfo                     ,
-                public  css::frame::XFrame2                         ,
-                public  css::awt::XWindowListener                   ,   // => XEventListener
-                public  css::awt::XTopWindowListener                ,
-                public  css::awt::XFocusListener                    ,
-                public  css::document::XActionLockable              ,
-                public  css::util::XCloseable                       ,   // => XCloseBroadcaster
-                public  css::frame::XComponentLoader                ,
-                public  css::frame::XTitle                          ,
-                public  css::frame::XTitleChangeBroadcaster         ,
-                public css::beans::XPropertySet,
-                public css::beans::XPropertySetInfo,
-                // base classes
-                public  TransactionBase                             ,
-                private cppu::BaseMutex,
-                public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
+class Frame:
+    private cppu::BaseMutex,
+    public cppu::PartialWeakComponentImplHelper<
+        css::lang::XServiceInfo, css::frame::XFrame2, css::awt::XWindowListener,
+        css::awt::XTopWindowListener, css::awt::XFocusListener,
+        css::document::XActionLockable, css::util::XCloseable,
+        css::frame::XComponentLoader, css::frame::XTitle,
+        css::frame::XTitleChangeBroadcaster, css::beans::XPropertySet,
+        css::beans::XPropertySetInfo>
 {
 public:
 
     explicit Frame(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~Frame();
 
     /// Initialization function after having acquire()'d.
     void initListeners();
-
-    FWK_DECLARE_XINTERFACE
-    FWK_DECLARE_XTYPEPROVIDER
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -212,7 +180,7 @@ public:
 
     //  XComponent
 
-    virtual void                                                SAL_CALL dispose                            (                                                                                                   ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing() override;
     virtual void                                                SAL_CALL addEventListener                   (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           ) throw( css::uno::RuntimeException, std::exception ) override;
     virtual void                                                SAL_CALL removeEventListener                (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           ) throw( css::uno::RuntimeException, std::exception ) override;
 
@@ -392,11 +360,7 @@ private:
         throw(css::beans::PropertyExistException,
               css::uno::Exception               );
 
-    /** mark the object as "useable for working" or "dead".
-     *
-     *  This correspond to the lifetime handling implemented by the base class TransactionBase.
-     *  There is no chance to reactive a "dead" object by calling impl_enablePropertySet()
-     *  again!
+    /** mark the object as "dead".
      */
     void SAL_CALL impl_disablePropertySet();
 
@@ -448,18 +412,12 @@ private:
         @onerror    We return sal_True
     *//*-*****************************************************************************************************/
 
-private:
-
-    static bool implcp_setActiveFrame                      (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              );
-    static bool implcp_addFrameActionListener              (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
-    static bool implcp_removeFrameActionListener           (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
-    static bool implcp_addEventListener                    (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
-    static bool implcp_removeEventListener                 (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
-    static bool implcp_windowResized                       (   const   css::awt::WindowEvent&                                              aEvent              );
-    static bool implcp_focusGained                         (   const   css::awt::FocusEvent&                                               aEvent              );
-    static bool implcp_windowActivated                     (   const   css::lang::EventObject&                                             aEvent              );
-    static bool implcp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
-    static bool implcp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
+    void checkDisposed() {
+        osl::MutexGuard g(rBHelper.rMutex);
+        if (rBHelper.bInDispose || rBHelper.bDisposed) {
+            throw css::lang::DisposedException("Frame disposed");
+        }
+    }
 
 //  variables
 //  -threadsafe by SolarMutex
@@ -506,57 +464,6 @@ protected:
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
 };
 
-//  XInterface, XTypeProvider, XServiceInfo
-
-DEFINE_XINTERFACE_22                (   Frame                                                                   ,
-                                        OWeakObject                                                             ,
-                                        DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
-                                        DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
-                                        DIRECT_INTERFACE(css::frame::XFrame2                                    ),
-                                        DIRECT_INTERFACE(css::frame::XFramesSupplier                            ),
-                                        DIRECT_INTERFACE(css::frame::XFrame                                     ),
-                                        DIRECT_INTERFACE(css::task::XStatusIndicatorFactory                     ),
-                                        DIRECT_INTERFACE(css::frame::XDispatchProvider                          ),
-                                        DIRECT_INTERFACE(css::frame::XDispatchInformationProvider               ),
-                                        DIRECT_INTERFACE(css::frame::XDispatchProviderInterception              ),
-                                        DIRECT_INTERFACE(css::lang::XComponent                                  ),
-                                        DIRECT_INTERFACE(css::beans::XPropertySet                               ),
-                                        DIRECT_INTERFACE(css::beans::XPropertySetInfo                           ),
-                                        DIRECT_INTERFACE(css::awt::XWindowListener                              ),
-                                        DIRECT_INTERFACE(css::awt::XTopWindowListener                           ),
-                                        DIRECT_INTERFACE(css::awt::XFocusListener                               ),
-                                        DERIVED_INTERFACE(css::lang::XEventListener, css::awt::XWindowListener  ),
-                                        DIRECT_INTERFACE(css::document::XActionLockable                         ),
-                                        DIRECT_INTERFACE(css::util::XCloseable                                  ),
-                                        DIRECT_INTERFACE(css::util::XCloseBroadcaster                           ),
-                                        DIRECT_INTERFACE(css::frame::XComponentLoader                           ),
-                                        DIRECT_INTERFACE(css::frame::XTitle                                     ),
-                                        DIRECT_INTERFACE(css::frame::XTitleChangeBroadcaster                    )
-                                    )
-
-DEFINE_XTYPEPROVIDER_21             (   Frame                                                                   ,
-                                        css::lang::XTypeProvider                                                ,
-                                        css::lang::XServiceInfo                                                 ,
-                                        css::frame::XFrame2                                                     ,
-                                        css::frame::XFramesSupplier                                             ,
-                                        css::frame::XFrame                                                      ,
-                                        css::task::XStatusIndicatorFactory                                      ,
-                                        css::frame::XDispatchProvider                                           ,
-                                        css::frame::XDispatchInformationProvider                                ,
-                                        css::frame::XDispatchProviderInterception                               ,
-                                        css::lang::XComponent                                                   ,
-                                        css::beans::XPropertySet                                                ,
-                                        css::beans::XPropertySetInfo                                            ,
-                                        css::awt::XWindowListener                                               ,
-                                        css::awt::XTopWindowListener                                            ,
-                                        css::awt::XFocusListener                                                ,
-                                        css::lang::XEventListener                                               ,
-                                        css::util::XCloseable                                                   ,
-                                        css::util::XCloseBroadcaster                                            ,
-                                        css::frame::XComponentLoader                                            ,
-                                        css::frame::XTitle                                                      ,
-                                        css::frame::XTitleChangeBroadcaster
-                                    )
 
 /*-****************************************************************************************************
     @short      standard constructor to create instance by factory
@@ -578,7 +485,7 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
     @onerror    ASSERT in debug version or nothing in release version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   TransactionBase             (                                                   )
+        : PartialWeakComponentImplHelper(m_aMutex)
         //  init member
         ,   m_xContext                  ( xContext                                          )
         ,   m_aListenerContainer        ( m_aMutex )
@@ -651,17 +558,6 @@ void Frame::initListeners()
     impl_initializePropInfo();
 }
 
-/*-****************************************************************************************************
-    @short      standard destructor
-    @descr      This one do NOTHING! Use dispose() instaed of this.
-
-    @seealso    method dispose()
-*//*-*****************************************************************************************************/
-Frame::~Frame()
-{
-    SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk", "Frame::~Frame(): Who forgot to dispose this service?" );
-}
-
 /*-************************************************************************************************************
     @interface  XComponentLoader
     @short      try to load given URL into a task
@@ -685,14 +581,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
                                                                                                                                                                    css::lang::IllegalArgumentException ,
                                                                                                                                                                    css::uno::RuntimeException, std::exception          )
 {
-    {
-        // If the frame is closed the call might lead to crash even with target "_blank",
-        // so the DisposedException should be thrown in this case
-        // It still looks to be too dangerous to set the transaction for the whole loading process
-        // so the guard is used in scopes to let the standard check be used
-
-        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-    }
+    checkDisposed();
 
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
@@ -715,17 +604,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-
-/*TODO
-    This is a temp. HACK!
-    Our parent (a Task!) stand in close/dispose and set working mode to E_BEFOERECLOSE
-    and call dispose on us! We tra to get this xFramesHelper and are reject by an "already closed" parent instance....
-    => We use SOFTEXCEPTIONS here... but we should make it right in further times....
- */
-
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+    checkDisposed();
 
     SolarMutexGuard g;
     // Return access to all child frames to caller.
@@ -748,9 +627,7 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( cs
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     SolarMutexGuard g;
     // Return current active frame.
@@ -772,18 +649,13 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameters.
-    SAL_WARN_IF( implcp_setActiveFrame( xFrame ), "fwk", "Frame::setActiveFrame(): Invalid parameter detected!" );
-    // Look for rejected calls!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexResettableGuard aWriteLock;
 
     // Copy necessary member for threadsafe access!
     // m_aChildFrameContainer is threadsafe himself and he live if we live!!!
-    // ...and our transaction is non breakable too ...
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
     EActiveState                              eActiveState = m_eActiveState;
 
@@ -886,6 +758,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
                     "Frame::initialize() called without a valid container window reference.",
                     static_cast< css::frame::XFrame* >(this));
 
+    checkDisposed();
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexResettableGuard aWriteLock;
 
@@ -893,12 +767,6 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
         throw css::uno::RuntimeException(
                 "Frame::initialized() is called more than once, which is not useful nor allowed.",
                 static_cast< css::frame::XFrame* >(this));
-
-    // Look for rejected calls first!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
-    // Enable object for real working ... so follow impl methods don't must handle it special! (e.g. E_SOFTEXCEPTIONS for rejected calls)
-    m_aTransactionManager.setWorkingMode( E_WORK );
 
     // This must be the first call of this method!
     // We should initialize our object and open it for working.
@@ -959,10 +827,6 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getContainerWindow() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
     SolarMutexGuard g;
     return m_xContainerWindow;
 }
@@ -986,7 +850,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getContainerWindow() th
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator ) throw( css::uno::RuntimeException, std::exception )
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE { */
         SolarMutexClearableGuard aWriteLock;
@@ -1009,10 +873,7 @@ void SAL_CALL Frame::setCreator( const css::uno::Reference< css::frame::XFramesS
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
+    checkDisposed();
     SolarMutexGuard g;
     return m_xParent;
 }
@@ -1334,10 +1195,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
+    checkDisposed();
     SolarMutexGuard g;
     // This information is set in setCreator().
     // We are top, if our parent is a task or the desktop or if no parent exist!
@@ -1356,9 +1214,7 @@ sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException, std::excepti
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexResettableGuard aWriteLock;
@@ -1366,8 +1222,6 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     // Copy necessary member and free the lock.
     // It's not necessary for m_aChildFrameContainer ... because
     // he is threadsafe himself and live if we live.
-    // We use a registered transaction to prevent us against
-    // breaks during this operation!
     css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive();
     css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -1441,9 +1295,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexResettableGuard aWriteLock;
@@ -1517,10 +1369,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
+    checkDisposed();
     SolarMutexGuard g;
     return  (
                 ( m_eActiveState    ==  E_ACTIVE    )   ||
@@ -1533,9 +1382,7 @@ sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException, std::exce
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException, std::exception )
 {
-    // Look for rejected calls!
-    // Sometimes called during closing object... => soft exceptions
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+    // Sometimes called during closing object...
     // Impl-method is threadsafe himself!
     // Send event to all listener for frame actions.
     implts_sendFrameActionEvent( css::frame::FrameAction_CONTEXT_CHANGED );
@@ -1578,7 +1425,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     if  ( xController.is() && ! xComponentWindow.is() )
         return sal_True;
 
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     // Get threadsafe some copies of used members.
     /* SAFE { */
@@ -1729,10 +1576,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
+    checkDisposed();
     SolarMutexGuard g;
     return m_xComponentWindow;
 }
@@ -1770,29 +1614,12 @@ css::uno::Reference< css::frame::XController > SAL_CALL Frame::getController() t
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    SAL_WARN_IF( implcp_addFrameActionListener( xListener ), "fwk", "Frame::addFrameActionListener(): Invalid parameter detected." );
-    // Listener container is threadsafe by himself ... but we must look for rejected calls!
-    // Our OMenuDispatch-helper (is a member of ODispatchProvider!) is create at startup of this frame BEFORE initialize!
-    // => soft exceptions!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    checkDisposed();
     m_aListenerContainer.addInterface( cppu::UnoType<css::frame::XFrameActionListener>::get(), xListener );
 }
 
 void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    SAL_WARN_IF( implcp_removeFrameActionListener( xListener ), "fwk", "Frame::removeFrameActionListener(): Invalid parameter detected." );
-    // Listener container is threadsafe by himself ... but we must look for rejected calls after disposing!
-    // But we must work with E_SOFTEXCEPTIONS ... because sometimes we are called from our listeners
-    // during dispose! Our work mode is E_BEFORECLOSE then ... and E_HARDEXCEPTIONS whould throw a DisposedException.
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( cppu::UnoType<css::frame::XFrameActionListener>::get(), xListener );
 }
 
@@ -1818,80 +1645,76 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
 void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::CloseVetoException,
                                                                 css::uno::RuntimeException, std::exception   )
 {
+    checkDisposed();
+
+    // At the end of this method may we must dispose ourself...
+    // and may nobody from outside hold a reference to us...
+    // then it's a good idea to do that by ourself.
+    css::uno::Reference< css::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
+
+    // Check any close listener before we look for currently running internal processes.
+    // Because if a listener disagree with this close() request - we have time to finish this
+    // internal operations too...
+    // Note: container is threadsafe himself.
+    css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
+    if (pContainer!=nullptr)
     {
-        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-        // At the end of this method may we must dispose ourself...
-        // and may nobody from outside hold a reference to us...
-        // then it's a good idea to do that by ourself.
-        css::uno::Reference< css::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-
-        // Check any close listener before we look for currently running internal processes.
-        // Because if a listener disagree with this close() request - we have time to finish this
-        // internal operations too...
-        // Note: container is threadsafe himself.
-        css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
-        ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
-        if (pContainer!=nullptr)
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        while (pIterator.hasMoreElements())
         {
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-            while (pIterator.hasMoreElements())
+            try
             {
-                try
-                {
-                    static_cast<css::util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
-                }
-                catch( const css::uno::RuntimeException& )
-                {
-                    pIterator.remove();
-                }
+                static_cast<css::util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+            }
+            catch( const css::uno::RuntimeException& )
+            {
+                pIterator.remove();
             }
         }
-
-        // Ok - no listener disagreed with this close() request
-        // check if this frame is used for any load process currently
-        if (isActionLocked())
-        {
-            if (bDeliverOwnership)
-            {
-                SolarMutexGuard g;
-                m_bSelfClose = true;
-            }
-
-            throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
-        }
-
-        if ( ! setComponent(nullptr,nullptr) )
-            throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
-
-        // If closing is allowed... inform all listeners and dispose this frame!
-        pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
-        if (pContainer!=nullptr)
-        {
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-            while (pIterator.hasMoreElements())
-            {
-                try
-                {
-                    static_cast<css::util::XCloseListener*>(pIterator.next())->notifyClosing( aSource );
-                }
-                catch( const css::uno::RuntimeException& )
-                {
-                    pIterator.remove();
-                }
-            }
-        }
-
-        /* SAFE { */
-        SolarMutexClearableGuard aWriteLock;
-        m_bIsHidden = true;
-        aWriteLock.clear();
-        /* } SAFE */
-        impl_checkMenuCloser();
-
-        // Attention: We must release our own registered transaction here. Otherwhise following dispose() call
-        // wait for us too ....
     }
+
+    // Ok - no listener disagreed with this close() request
+    // check if this frame is used for any load process currently
+    if (isActionLocked())
+    {
+        if (bDeliverOwnership)
+        {
+            SolarMutexGuard g;
+            m_bSelfClose = true;
+        }
+
+        throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
+    }
+
+    if ( ! setComponent(nullptr,nullptr) )
+        throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
+
+    // If closing is allowed... inform all listeners and dispose this frame!
+    pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
+    if (pContainer!=nullptr)
+    {
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        while (pIterator.hasMoreElements())
+        {
+            try
+            {
+                static_cast<css::util::XCloseListener*>(pIterator.next())->notifyClosing( aSource );
+            }
+            catch( const css::uno::RuntimeException& )
+            {
+                pIterator.remove();
+            }
+        }
+    }
+
+    /* SAFE { */
+    SolarMutexClearableGuard aWriteLock;
+    m_bIsHidden = true;
+    aWriteLock.clear();
+    /* } SAFE */
+    impl_checkMenuCloser();
+
     dispose();
 }
 
@@ -1912,25 +1735,19 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::addCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-    // We don't need any lock here ...
-    // Container lives if we live and is threadsafe by himself.
+    checkDisposed();
     m_aListenerContainer.addInterface( cppu::UnoType<css::util::XCloseListener>::get(), xListener );
 }
 
 void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
-    // Use soft exception mode - mostly this method is called during disposing of this frame...
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-    // We don't need any lock here...
-    // Container lives if we live and is threadsafe by himself.
     m_aListenerContainer.removeInterface( cppu::UnoType<css::util::XCloseListener>::get(), xListener );
 }
 
 OUString SAL_CALL Frame::getTitle()
     throw (css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
@@ -1944,7 +1761,7 @@ OUString SAL_CALL Frame::getTitle()
 void SAL_CALL Frame::setTitle( const OUString& sTitle )
     throw (css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
@@ -1958,7 +1775,7 @@ void SAL_CALL Frame::setTitle( const OUString& sTitle )
 void SAL_CALL Frame::addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
@@ -1972,7 +1789,7 @@ void SAL_CALL Frame::addTitleChangeListener( const css::uno::Reference< css::fra
 void SAL_CALL Frame::removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )
     throw (css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
@@ -1997,8 +1814,7 @@ css::uno::Reference<css::frame::XDispatchRecorderSupplier> SAL_CALL Frame::getDi
 
 void SAL_CALL Frame::setDispatchRecorderSupplier(const css::uno::Reference<css::frame::XDispatchRecorderSupplier>& p) throw (css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
+    checkDisposed();
     SolarMutexGuard g;
     m_xDispatchRecorderSupplier.set(p);
 }
@@ -2011,8 +1827,7 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL Frame::getLayoutManager() thr
 
 void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInterface>& p1) throw (css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
+    checkDisposed();
     SolarMutexGuard g;
     m_xLayoutManager.set(p1, css::uno::UNO_QUERY);
 }
@@ -2020,8 +1835,7 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertySetInfo()
     throw(css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
-
+    checkDisposed();
     css::uno::Reference< css::beans::XPropertySetInfo > xInfo(static_cast< css::beans::XPropertySetInfo* >(this), css::uno::UNO_QUERY_THROW);
     return xInfo;
 }
@@ -2036,7 +1850,7 @@ void SAL_CALL Frame::setPropertyValue(const OUString& sProperty,
 {
     // TODO look for e.g. readonly props and reject setProp() call!
 
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    checkDisposed();
 
     // SAFE ->
     SolarMutexGuard g;
@@ -2074,7 +1888,7 @@ css::uno::Any SAL_CALL Frame::getPropertyValue(const OUString& sProperty)
           css::lang::WrappedTargetException   ,
           css::uno::RuntimeException, std::exception          )
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    checkDisposed();
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
@@ -2094,7 +1908,7 @@ void SAL_CALL Frame::addPropertyChangeListener(const OUString&                  
           css::lang::WrappedTargetException   ,
           css::uno::RuntimeException, std::exception          )
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    checkDisposed();
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
@@ -2115,8 +1929,6 @@ void SAL_CALL Frame::removePropertyChangeListener(const OUString&               
           css::lang::WrappedTargetException   ,
           css::uno::RuntimeException, std::exception          )
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
-
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
 
@@ -2136,7 +1948,7 @@ void SAL_CALL Frame::addVetoableChangeListener(const OUString&                  
           css::lang::WrappedTargetException   ,
           css::uno::RuntimeException, std::exception          )
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    checkDisposed();
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
@@ -2157,8 +1969,6 @@ void SAL_CALL Frame::removeVetoableChangeListener(const OUString&               
           css::lang::WrappedTargetException   ,
           css::uno::RuntimeException, std::exception          )
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
-
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
 
@@ -2175,7 +1985,7 @@ void SAL_CALL Frame::removeVetoableChangeListener(const OUString&               
 css::uno::Sequence< css::beans::Property > SAL_CALL Frame::getProperties()
     throw(css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    checkDisposed();
 
     SolarMutexGuard g;
 
@@ -2197,7 +2007,7 @@ css::beans::Property SAL_CALL Frame::getPropertyByName(const OUString& sName)
     throw(css::beans::UnknownPropertyException,
           css::uno::RuntimeException, std::exception          )
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    checkDisposed();
 
     SolarMutexGuard g;
 
@@ -2211,7 +2021,7 @@ css::beans::Property SAL_CALL Frame::getPropertyByName(const OUString& sName)
 sal_Bool SAL_CALL Frame::hasPropertyByName(const OUString& sName)
     throw(css::uno::RuntimeException, std::exception)
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    checkDisposed();
 
     SolarMutexGuard g;
 
@@ -2268,7 +2078,7 @@ void Frame::implts_forgetSubFrames()
     @seealso    method initialize()
     @seealso    baseclass FairRWLockBase!
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL Frame::disposing()
 {
     // We should hold a reference to ourself ...
     // because our owner dispose us and release our reference ...
@@ -2299,11 +2109,6 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     css::uno::Reference< css::lang::XEventListener > xDispatchHelper(m_xDispatchHelper, css::uno::UNO_QUERY_THROW);
     xDispatchHelper->disposing(aEvent);
     xDispatchHelper.clear();
-
-    // Disable this instance for further work.
-    // This will wait for all current running ones ...
-    // and reject all further requests!
-    m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
 
     // Don't show any dialogs, errors or something else any more!
     // If somewhere called dispose() whitout close() before - normally no dialogs
@@ -2388,9 +2193,6 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     m_bSelfClose         = false;
     m_bIsHidden          = true;
 
-    // Disable this instance for further working really!
-    m_aTransactionManager.setWorkingMode( E_CLOSE );
-
     // Don't forget it restore old value -
     // otherwise no dialogs can be shown anymore in other frames.
     Application::SetDialogCancelMode( old );
@@ -2405,28 +2207,12 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    SAL_WARN_IF( implcp_addEventListener( xListener ), "fwk", "Frame::addEventListener(): Invalid parameter detected." );
-    // Look for rejected calls only!
-    // Container is threadsafe.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    checkDisposed();
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    SAL_WARN_IF( implcp_removeEventListener( xListener ), "fwk", "Frame::removeEventListener(): Invalid parameter detected." );
-    // Look for rejected calls only!
-    // Container is threadsafe.
-    // Use E_SOFTEXCEPTIONS to allow removing listeners during dispose call!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
@@ -2443,9 +2229,7 @@ void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusIndicator() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-    // Look for rejected calls!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
@@ -2491,8 +2275,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
                                                                                   sal_Int32         nSearchFlags    ) throw( css::uno::RuntimeException, std::exception )
 {
     // Don't check incoming parameter here! Our helper do it for us and it is not a good idea to do it more than ones!
-    // But look for rejected calls!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    checkDisposed();
 
     // Remove uno and cmd protocol part as we want to support both of them. We store only the command part
     // in our hash map. All other protocols are stored with the protocol part.
@@ -2526,8 +2310,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Frame::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {
     // Don't check incoming parameter here! Our helper do it for us and it is not a good idea to do it more than ones!
-    // But look for rejected calls!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    checkDisposed();
 
     // We use a helper to support these interface and an interceptor mechanism.
     // Our helper is threadsafe by himself!
@@ -2549,8 +2333,8 @@ void SAL_CALL Frame::registerDispatchProviderInterceptor( const css::uno::Refere
     // We use a helper to support these interface and an interceptor mechanism.
     // This helper is threadsafe himself and check incoming parameter too.
     // I think we don't need any lock here!
-    // But we must look for rejected calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    checkDisposed();
 
     css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
     xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
@@ -2561,9 +2345,8 @@ void SAL_CALL Frame::releaseDispatchProviderInterceptor( const css::uno::Referen
     // We use a helper to support these interface and an interceptor mechanism.
     // This helper is threadsafe himself and check incoming parameter too.
     // I think we don't need any lock here!
-    // But we must look for rejected calls ...
-    // Sometimes we are called during our dispose() method ... => soft exceptions!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+
+    // Sometimes we are called during our dispose() method
 
     css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
     xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
@@ -2595,15 +2378,9 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigu
 
     @param      "aEvent" describe source of detected event
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    (void) aEvent;
-    SAL_WARN_IF( implcp_windowResized( aEvent ), "fwk", "Frame::windowResized(): Invalid parameter detected." );
-    // Look for rejected calls.
-    // Part of dispose-mechanism => soft exceptions
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+    // Part of dispose-mechanism
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Impl-method is threadsafe!
@@ -2611,15 +2388,9 @@ void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw(
     implts_resizeComponentWindow();
 }
 
-void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    (void) aEvent;
-    SAL_WARN_IF( implcp_focusGained( aEvent ), "fwk", "Frame::focusGained(): Invalid parameter detected." );
-    // Look for rejected calls.
-    // Part of dispose() mechanism ... => soft exceptions!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+    // Part of dispose() mechanism
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
@@ -2645,14 +2416,9 @@ void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( cs
 
     @param      "aEvent" describe source of detected event
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL Frame::windowActivated( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    (void) aEvent;
-    SAL_WARN_IF( implcp_windowActivated( aEvent ), "fwk", "Frame::windowActivated(): Invalid parameter detected." );
-    // Look for rejected calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
@@ -2668,15 +2434,9 @@ void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) thr
     }
 }
 
-void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    (void) aEvent;
-    SAL_WARN_IF( implcp_windowDeactivated( aEvent ), "fwk", "Frame::windowDeactivated(): Invalid parameter detected." );
-    // Look for rejected calls.
-    // Sometimes called during dispose() => soft exceptions
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+    // Sometimes called during dispose()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
@@ -2720,18 +2480,10 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 
 void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* #i62088#
-        Some interceptor objects intercept our "internally asynchronous implemented" dispatch call.
-        And they close this frame directly (means synchronous then).
-        Means: Frame::windowClosing()->Frame::close()
-        In such situation its not a good idea to hold this transaction count alive .-)
-    */
-    {
-        // Look for rejected calls.
-        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-        // deactivate this frame ...
-        deactivate();
-    }
+    checkDisposed();
+
+    // deactivate this frame ...
+    deactivate();
 
     // ... and try to close it
     // But do it asynchron inside the main thread.
@@ -2839,13 +2591,6 @@ void SAL_CALL Frame::windowHidden( const css::lang::EventObject& ) throw(css::un
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Check incoming parameter.
-    SAL_WARN_IF( implcp_disposing( aEvent ), "fwk", "Frame::disposing(): Invalid parameter detected." );
-    // Look for rejected calls.
-    // May be we are called during releasing our windows in our in dispose call!? => soft exceptions
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexResettableGuard aWriteLock;
 
@@ -2888,9 +2633,6 @@ void SAL_CALL Frame::addActionLock() throw( css::uno::RuntimeException, std::exc
 
 void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException, std::exception )
 {
-    // Register no transaction here! Otherwhise we wait for ever inside possible
-    // implts_checkSuicide()/dispose() request ...
-
     {
         SolarMutexGuard g;
         SAL_WARN_IF( m_nExternalLockCount<=0, "fwk", "Frame::removeActionLock(): Frame is not locked! Possible multithreading problem detected." );
@@ -2912,9 +2654,6 @@ void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeE
 
 sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException, std::exception )
 {
-    // Register no transaction here! Otherwhise we wait for ever inside possible
-    // implts_checkSuicide()/dispose() request ...
-
     sal_Int16 nCurrentLocks = 0;
     {
         SolarMutexGuard g;
@@ -3076,8 +2815,6 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
 
 void Frame::impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster)
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
-
     SolarMutexGuard g;
     m_xBroadcaster = xBroadcaster;
 }
@@ -3086,8 +2823,6 @@ void SAL_CALL Frame::impl_addPropertyInfo(const css::beans::Property& aProperty)
     throw(css::beans::PropertyExistException,
           css::uno::Exception               )
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
-
     SolarMutexGuard g;
 
     TPropInfoHash::const_iterator pIt = m_lProps.find(aProperty.Name);
@@ -3099,8 +2834,6 @@ void SAL_CALL Frame::impl_addPropertyInfo(const css::beans::Property& aProperty)
 
 void SAL_CALL Frame::impl_disablePropertySet()
 {
-    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
-
     SolarMutexGuard g;
 
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::beans::XPropertySet* >(this), css::uno::UNO_QUERY);
@@ -3191,9 +2924,7 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
 *//*-*****************************************************************************************************/
 void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Sometimes used by dispose() => soft exceptions!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+    // Sometimes used by dispose()
 
     // Log information about order of events to file!
     // (only activated in debug version!)
@@ -3279,9 +3010,7 @@ void Frame::implts_resizeComponentWindow()
 *//*-*****************************************************************************************************/
 void Frame::implts_setIconOnWindow()
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Look for rejected calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary members and release lock.
@@ -3369,8 +3098,7 @@ void Frame::implts_setIconOnWindow()
 *//*-*************************************************************************************************************/
 void Frame::implts_startWindowListening()
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    checkDisposed();
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary member!
@@ -3407,9 +3135,7 @@ void Frame::implts_startWindowListening()
 
 void Frame::implts_stopWindowListening()
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Sometimes used by dispose() => soft exceptions!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+    // Sometimes used by dispose()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary member!
@@ -3597,60 +3323,6 @@ void Frame::impl_checkMenuCloser()
             impl_setCloser(xNewCloserFrame, true);
         s_xCloserFrame = xNewCloserFrame;
     }
-}
-
-//  debug methods
-
-// Its allowed to reset the active frame member variable with a NULL-css::uno::Reference but not with a NULL-pointer!
-// And we accept frames only! No tasks and desktops!
-bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
-{
-    return css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is();
-}
-
-bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
-{
-    return !xListener.is();
-}
-
-bool Frame::implcp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
-{
-    return !xListener.is();
-}
-
-bool Frame::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-{
-    return !xListener.is();
-}
-
-bool Frame::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-{
-    return !xListener.is();
-}
-
-bool Frame::implcp_windowResized( const css::awt::WindowEvent& aEvent )
-{
-    return !aEvent.Source.is();
-}
-
-bool Frame::implcp_focusGained( const css::awt::FocusEvent& aEvent )
-{
-    return !aEvent.Source.is();
-}
-
-bool Frame::implcp_windowActivated( const css::lang::EventObject& aEvent )
-{
-    return !aEvent.Source.is();
-}
-
-bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
-{
-    return !aEvent.Source.is();
-}
-
-bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
-{
-    return !aEvent.Source.is();
 }
 
 }
