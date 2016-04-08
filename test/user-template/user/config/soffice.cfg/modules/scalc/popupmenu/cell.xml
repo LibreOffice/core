@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
+  <menu:menuitem menu:id=".uno:Cut"/>
+  <menu:menuitem menu:id=".uno:Copy"/>
+  <menu:menuitem menu:id=".uno:Paste"/>
+  <menu:menuitem menu:id=".uno:PasteSpecial"/>
+  <menu:menu menu:id=".uno:PasteOnly">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:PasteOnlyText"/>
+      <menu:menuitem menu:id=".uno:PasteOnlyValue"/>
+      <menu:menuitem menu:id=".uno:PasteOnlyFormula"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:FormatCellDialog"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertCell"/>
+  <menu:menuitem menu:id=".uno:DeleteCell"/>
+  <menu:menuitem menu:id=".uno:Delete"/>
+  <menu:menuitem menu:id=".uno:MergeCells"/>
+  <menu:menuitem menu:id=".uno:SplitCell"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
+  <menu:menuitem menu:id=".uno:EditAnnotation"/>
+  <menu:menuitem menu:id=".uno:DeleteNote"/>
+  <menu:menuitem menu:id=".uno:ShowNote"/>
+  <menu:menuitem menu:id=".uno:HideNote"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:DataSelect"/>
+</menu:menupopup>
