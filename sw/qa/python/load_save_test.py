@@ -76,13 +76,17 @@ class LoadSaveTest(unittest.TestCase):
                 sourceFile = "file:///" + filepath + "/" + quote(self.fileName)
             else:
                 sourceFile = "file://" + quote(filepath) + "/" + quote(self.fileName)
-            self.xDoc = desktop.loadComponentFromURL(sourceFile ,"_blank", 0 ,  loadProps)
+            self.xDoc = desktop.loadComponentFromURL(sourceFile, "_blank", 0, loadProps)
             assert(self.xDoc)
 
             if os.name == "nt":
                 targetFile = "file:///" + self.m_TargetDir + quote(self.m_SourceDir) + "/" + quote(self.fileName)
             else:
-                targetFile = "file://" + quote(self.m_TargetDir) + quote(self.m_SourceDir) + "/" + quote(self.fileName)
+                targetFile = "file://" +
+                            quote(self.m_TargetDir) +
+                            quote(self.m_SourceDir) +
+                            "/" +
+                            quote(self.fileName)
 
             p1 = PropertyValue()
             PropValue = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
@@ -90,7 +94,6 @@ class LoadSaveTest(unittest.TestCase):
 
         except Exception:
             raise
-
 
     def getDirAndFile(self, dir):
 
@@ -114,17 +117,17 @@ class LoadSaveTest(unittest.TestCase):
                 self.getDirAndFileNames(subfileName)
 
         if os.path.isfile(fdName):
-            self.files.append(fdName.split('/')[-1]);
+            self.files.append(fdName.split('/')[-1])
 
     def makeDirs(self, target):
         if not os.path.exists(target):
             os.mkdir(target)
-            self.assertTrue( os.path.exists(target))
+            self.assertTrue(os.path.exists(target))
 
         for dir in self.dirs:
             if not os.path.exists(target + dir):
                 f = os.mkdir(target + dir)
-                self.assertTrue( os.path.exists(target + dir))
+                self.assertTrue(os.path.exists(target + dir))
 
         root = open(target + dir + "/" + self.m_SourceDir + ".odt", 'a')
-        filepath = os.path.abspath(target + dir + "/" +  self.m_SourceDir + ".odt")
+        filepath = os.path.abspath(target + dir + "/" + self.m_SourceDir + ".odt")

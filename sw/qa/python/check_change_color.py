@@ -1,6 +1,7 @@
 import unittest
 from org.libreoffice.unotest import UnoInProcess
 
+
 class CheckChangeColor(unittest.TestCase):
 
     @classmethod

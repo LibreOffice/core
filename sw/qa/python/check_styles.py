@@ -33,7 +33,7 @@ class CheckStyle(unittest.TestCase):
         self.assertEqual(len(xStyleFamilies.SupportedServiceNames), 1)
 
         for servicename in xStyleFamilies.SupportedServiceNames:
-            self.assertIn(servicename, ["com.sun.star.style.StyleFamilies"] )
+            self.assertIn(servicename, ["com.sun.star.style.StyleFamilies"])
             self.assertTrue(xStyleFamilies.supportsService(servicename))
         self.assertFalse(xStyleFamilies.supportsService("foobarbaz"))
         self.assertTrue(xStyleFamilies.hasElements())
@@ -41,7 +41,8 @@ class CheckStyle(unittest.TestCase):
         self.assertEqual(len(xStyleFamilies.ElementNames), 5)
 
         for sFamilyname in xStyleFamilies.ElementNames:
-            self.assertIn(sFamilyname, ["CharacterStyles", "ParagraphStyles", "PageStyles", "FrameStyles", "NumberingStyles"])
+            self.assertIn(sFamilyname,
+                          ["CharacterStyles", "ParagraphStyles", "PageStyles", "FrameStyles", "NumberingStyles"])
 
         with self.assertRaises(NoSuchElementException):
             xStyleFamilies.getByName("foobarbaz")
@@ -52,7 +53,7 @@ class CheckStyle(unittest.TestCase):
         self.assertEqual(len(xFamily.SupportedServiceNames), 1)
 
         for sServicename in xFamily.SupportedServiceNames:
-            self.assertIn(sServicename, ["com.sun.star.style.StyleFamily"] )
+            self.assertIn(sServicename, ["com.sun.star.style.StyleFamily"])
             self.assertTrue(xFamily.supportsService(sServicename))
         self.assertFalse(xFamily.supportsService("foobarbaz"))
         self.assertTrue(xFamily.hasElements())
@@ -68,7 +69,7 @@ class CheckStyle(unittest.TestCase):
             self.assertTrue(xFamily.hasByName(sStylename))
             self.assertEqual(xFamily[sStylename].ImplementationName, "SwXStyle")
             self.assertFalse(xFamily[sStylename].isUserDefined())
- 
+
         vExpectedNames.sort()
         vNames = list(xFamily.ElementNames)
         vNames.sort()
