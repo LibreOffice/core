@@ -361,7 +361,14 @@ namespace {
             else
             {
                 const sal_uInt16 nItemId = pMenu->GetItemId(nPos);
-                const OUString aCommandURL = pMenu->GetItemCommand(nItemId);
+                OUString aCommandURL = pMenu->GetItemCommand(nItemId);
+
+                if (aCommandURL.isEmpty())
+                {
+                    const SfxSlot *pSlot = SFX_SLOTPOOL().GetSlot(nItemId);
+                    if (pSlot)
+                        aCommandURL = pSlot->GetCommandString();
+                }
 
                 const OUString aItemText = pMenu->GetItemText(nItemId);
                 Menu* pPopupSubmenu = pMenu->GetPopupMenu(nItemId);
