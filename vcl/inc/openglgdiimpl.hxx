@@ -28,6 +28,7 @@
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
 #include "regionband.hxx"
+#include "opengl/AccumulatedTextures.hxx"
 
 #include <vcl/opengl/OpenGLContext.hxx>
 
@@ -99,6 +100,8 @@ protected:
     SalColor mProgramSolidColor;
     double mProgramSolidTransparency;
 
+    std::unique_ptr<AccumulatedTextures> mpAccumulatedTextures;
+
     void ImplInitClipRegion();
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
     void ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge = false );
@@ -144,6 +147,8 @@ public:
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
+    void DeferredTextDraw(OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
+    void FlushDeferredDrawing();
 
 public:
     // get the width of the device
@@ -163,6 +168,9 @@ public:
 
     // operations to do before painting
     void PreDraw(XOROption eOpt = IGNORE_XOR);
+
+    // initialize pre-draw state
+    void InitializePreDrawState(XOROption eOpt = IGNORE_XOR);
 
     // operations to do after painting
     void PostDraw();

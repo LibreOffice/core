@@ -51,30 +51,8 @@ public:
 
     bool InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
 
-    void IncreaseRefCount(int nSlotNumber)
-    {
-        mnRefCount++;
-        if (mpSlotReferences && nSlotNumber >= 0)
-        {
-            if (mpSlotReferences->at(nSlotNumber) == 0)
-                mnFreeSlots--;
-            mpSlotReferences->at(nSlotNumber)++;
-        }
-    }
-
-    void DecreaseRefCount(int nSlotNumber)
-    {
-        mnRefCount--;
-        if (mpSlotReferences && nSlotNumber >= 0)
-        {
-            mpSlotReferences->at(nSlotNumber)--;
-            if (mpSlotReferences->at(nSlotNumber) == 0)
-                mnFreeSlots++;
-        }
-
-        if (mnRefCount <= 0)
-            delete this;
-    }
+    void IncreaseRefCount(int nSlotNumber);
+    void DecreaseRefCount(int nSlotNumber);
 
     bool IsUnique()
     {
@@ -97,7 +75,7 @@ private:
 
 public:
                     OpenGLTexture();
-                    OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber = 0);
+                    OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber);
 
                     OpenGLTexture( int nWidth, int nHeight, bool bAllocate = true );
                     OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
@@ -111,15 +89,18 @@ public:
     GLuint          Id() const;
     int             GetWidth() const;
     int             GetHeight() const;
+
     void            GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted=false ) const;
     void            GetWholeCoord( GLfloat* pCoord ) const;
-
+    OpenGLTexture   GetWholeTexture();
     void            Bind();
     void            Unbind();
     void            Read( GLenum nFormat, GLenum nType, sal_uInt8* pData );
     GLuint          AddStencil();
     bool            HasStencil() const;
     GLuint          StencilId() const;
+
+    bool            CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
 
     void            SaveToFile(const OUString& rFileName);
 
@@ -130,6 +111,9 @@ public:
     OpenGLTexture&  operator=( const OpenGLTexture& rTexture );
     bool            operator==( const OpenGLTexture& rTexture ) const;
     bool            operator!=( const OpenGLTexture& rTexture ) const;
+
+    template<GLenum type>
+    void FillCoords(std::vector<GLfloat>& aCoordVector, const SalTwoRect& rPosAry, bool bInverted) const;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_H

@@ -83,6 +83,7 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     , mnDrawCountAtFlush(0)
     , mProgramSolidColor(SALCOLOR_NONE)
     , mProgramSolidTransparency(0.0)
+    , mpAccumulatedTextures(new AccumulatedTextures)
 {
 }
 
@@ -184,6 +185,13 @@ void OpenGLSalGraphicsImpl::DeInit()
 
 void OpenGLSalGraphicsImpl::PreDraw(XOROption eOpt)
 {
+    FlushDeferredDrawing();
+
+    InitializePreDrawState(eOpt);
+}
+
+void OpenGLSalGraphicsImpl::InitializePreDrawState(XOROption eOpt)
+{
     OpenGLZone::enter();
 
     mnDrawCount++;
@@ -263,6 +271,7 @@ void OpenGLSalGraphicsImpl::freeResources()
     {
         VCL_GL_INFO( "freeResources" );
         mpContext->makeCurrent();
+        FlushDeferredDrawing();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
     }
     ReleaseContext();
@@ -352,7 +361,16 @@ const vcl::Region& OpenGLSalGraphicsImpl::getClipRegion() const
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
+    if (maClipRegion == rClip)
+    {
+        VCL_GL_INFO("::setClipRegion (no change) " << rClip);
+        return true;
+    }
+
+    FlushDeferredDrawing();
+
     VCL_GL_INFO( "::setClipRegion " << rClip );
+
     maClipRegion = rClip;
 
     mbUseStencil = false;
@@ -368,7 +386,16 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 // set the clip region to empty
 void OpenGLSalGraphicsImpl::ResetClipRegion()
 {
-    VCL_GL_INFO( "::ResetClipRegion" );
+    if (maClipRegion.IsEmpty())
+    {
+        VCL_GL_INFO("::ResetClipRegion (no change) ");
+        return;
+    }
+
+    FlushDeferredDrawing();
+
+    VCL_GL_INFO("::ResetClipRegion");
+
     maClipRegion.SetEmpty();
     mbUseScissor = false;
     mbUseStencil = false;
@@ -1654,6 +1681,83 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
     mpProgram->Clean();
 }
 
+void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture& rTexture, SalColor aMaskColor, const SalTwoRect& rPosAry)
+{
+    mpAccumulatedTextures->insert(rTexture, aMaskColor, rPosAry);
+}
+
+void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
+{
+    if (mpAccumulatedTextures->empty())
+        return;
+
+    InitializePreDrawState();
+
+    VCL_GL_INFO("FlushDeferredDrawing");
+
+    OpenGLZone aZone;
+
+#if 0 // Draw a background rect under text for debugging - same color shows text from the same texture
+    static sal_uInt8 r = 0xBE;
+    static sal_uInt8 g = 0xF0;
+    static sal_uInt8 b = 0xFF;
+    static std::unordered_map<GLuint, Color> aColorForTextureMap;
+
+    for (auto& rPair : mpAccumulatedTextures->getAccumulatedTexturesMap())
+    {
+        OpenGLTexture& rTexture = rPair.second->maTexture;
+        Color aUseColor;
+        if (aColorForTextureMap.find(rTexture.Id()) == aColorForTextureMap.end())
+        {
+            Color aColor(r, g, b);
+            sal_uInt16 h,s,br;
+            aColor.RGBtoHSB(h, s, br);
+            aColor = Color::HSBtoRGB((h + 40) % 360, s, br);
+            r = aColor.GetRed();
+            g = aColor.GetGreen();
+            b = aColor.GetBlue();
+            aColorForTextureMap[rTexture.Id()] = aColor;
+        }
+        aUseColor = aColorForTextureMap[rTexture.Id()];
+
+        if (!UseSolid(MAKE_SALCOLOR(aUseColor.GetRed(), aUseColor.GetGreen(), aUseColor.GetBlue())))
+            return;
+        for (auto rColorTwoRectPair: rPair.second->maColorTextureDrawParametersMap)
+        {
+            TextureDrawParameters& rParameters = rColorTwoRectPair.second;
+            ApplyProgramMatrices();
+            mpProgram->SetTextureCoord(rParameters.maTextureCoords.data());
+            mpProgram->SetVertices(rParameters.maVertices.data());
+            glDrawArrays(GL_TRIANGLES, 0, rParameters.getNumberOfVertices());
+        }
+    }
+#endif
+
+    if( !UseProgram( "textureVertexShader", "maskFragmentShader" ) )
+        return;
+
+    mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    for (auto& rPair : mpAccumulatedTextures->getAccumulatedTexturesMap())
+    {
+        OpenGLTexture& rTexture = rPair.second->maTexture;
+        mpProgram->SetTexture("sampler", rTexture);
+        for (auto& rColorTwoRectPair: rPair.second->maColorTextureDrawParametersMap)
+        {
+            mpProgram->SetColor("color", rColorTwoRectPair.first, 0);
+            TextureDrawParameters& rParameters = rColorTwoRectPair.second;
+            ApplyProgramMatrices();
+            mpProgram->SetTextureCoord(rParameters.maTextureCoords.data());
+            mpProgram->SetVertices(rParameters.maVertices.data());
+            glDrawArrays(GL_TRIANGLES, 0, rParameters.getNumberOfVertices());
+        }
+    }
+    mpProgram->Clean();
+    mpAccumulatedTextures->clear();
+
+    PostDraw();
+}
+
 void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect )
 {
     OpenGLZone aZone;
@@ -2017,6 +2121,8 @@ void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGrap
 {
     VCL_GL_INFO( "::copyBits" );
 
+    rImpl.FlushDeferredDrawing();
+
     if( !rImpl.maOffscreenTex )
     {
         VCL_GL_INFO( "::copyBits - skipping copy of un-initialized framebuffer contents of size "
@@ -2113,6 +2219,8 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
 
 SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
 {
+    FlushDeferredDrawing();
+
     char pixel[3] = { 0, 0, 0 };
 
     PreDraw( XOROption::IMPLEMENT_XOR );
@@ -2369,6 +2477,8 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
 void OpenGLSalGraphicsImpl::flush()
 {
+    FlushDeferredDrawing();
+
     if( IsOffscreen() )
         return;
 
@@ -2383,6 +2493,8 @@ void OpenGLSalGraphicsImpl::flush()
 
 void OpenGLSalGraphicsImpl::doFlush()
 {
+    FlushDeferredDrawing();
+
     if( IsOffscreen() )
         return;
 
