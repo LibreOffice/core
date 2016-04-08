@@ -284,15 +284,22 @@ typedef enum
     /**
      * Context menu structure
      *
-     * Returns the structure of context menu
+     * Returns the structure of context menu.  Contains all the separators &
+     * submenus, example of the returned structure:
      *
      * {
-     *      "menu": [
-     *          {"text": "label text", "type": "command | separator | menu",
-     *      "command | menu": "..." },
-     *          ...
-     *      ]
+     *     "menu": [
+     *         { "text": "label text1", "type": "command", "command": ".uno:Something1", "enabled": "true" },
+     *         { "text": "label text2", "type": "command", "command": ".uno:Something2", "enabled": "false" },
+     *         { "type": "separator" },
+     *         { "text": "label text2", "type": "menu", "menu": [ { ... }, { ... }, ... ] },
+     *         ...
+     *     ]
      * }
+     *
+     * The 'command' can additionally have a checkable status, like:
+     *
+     *     {"text": "label text3", "type": "command", "command": ".uno:Something3", "checktype": "checkmark|radio|auto", "checked": "true|false"}
      */
     LOK_CALLBACK_CONTEXT_MENU,
 

@@ -366,57 +366,44 @@ namespace {
                 const OUString aItemText = pMenu->GetItemText(nItemId);
                 Menu* pPopupSubmenu = pMenu->GetPopupMenu(nItemId);
 
-                if (!pMenu->IsItemEnabled(nItemId))
-                    continue;
-
                 if (!aItemText.isEmpty())
-                    aItemTree.put("text", std::string(aItemText.toUtf8().getStr()));
+                    aItemTree.put("text", aItemText.toUtf8().getStr());
 
                 if (pPopupSubmenu)
                 {
                     boost::property_tree::ptree aSubmenu = fillPopupMenu(pPopupSubmenu);
-                    if (!aSubmenu.empty())
-                    {
-                        aItemTree.put("type", "menu");
-                        aItemTree.push_back(std::make_pair("menu", aSubmenu));
-                    }
-                    else
-                        aItemTree.clear();
+                    if (aSubmenu.empty())
+                        continue;
+
+                    aItemTree.put("type", "menu");
+                    aItemTree.push_back(std::make_pair("menu", aSubmenu));
                 }
                 else
                 {
-                    if (!aCommandURL.isEmpty())
-                    {
-                        aItemTree.put("type", "command");
-                        aItemTree.put("command", std::string(aCommandURL.toUtf8().getStr()));
-                    }
+                    // no point in exposing choices that don't have the .uno:
+                    // command
+                    if (aCommandURL.isEmpty())
+                        continue;
+
+                    aItemTree.put("type", "command");
+                    aItemTree.put("command", aCommandURL.toUtf8().getStr());
                 }
+
+                aItemTree.put("enabled", pMenu->IsItemEnabled(nItemId));
 
                 MenuItemBits aItemBits = pMenu->GetItemBits(nItemId);
-                bool bHasChecks = false;
+                bool bHasChecks = true;
                 if (aItemBits & MenuItemBits::CHECKABLE)
-                {
                     aItemTree.put("checktype", "checkmark");
-                    bHasChecks = true;
-                }
                 else if (aItemBits & MenuItemBits::RADIOCHECK)
-                {
                     aItemTree.put("checktype", "radio");
-                    bHasChecks = true;
-                }
                 else if (aItemBits & MenuItemBits::AUTOCHECK)
-                {
                     aItemTree.put("checktype", "auto");
-                    bHasChecks = true;
-                }
+                else
+                    bHasChecks = false;
 
                 if (bHasChecks)
-                {
-                    if (pMenu->IsItemChecked(nItemId))
-                        aItemTree.put("checked", "true");
-                    else
-                        aItemTree.put("checked", "false");
-                }
+                    aItemTree.put("checked", pMenu->IsItemChecked(nItemId));
             }
 
             if (!aItemTree.empty())
