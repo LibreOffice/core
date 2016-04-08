@@ -281,20 +281,21 @@ bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const Prope
     return false;
 }
 
-}
-
-bool lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
+void lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
 {
     // Shifts the frame left by the given value.
     for (size_t i = 0; i < rFrameProperties.size(); ++i)
     {
         if (rFrameProperties[i].Name == "HoriOrient")
         {
-            nHoriOrient = rFrameProperties[i].Value.get<sal_Int32>();
-            return true;
+            sal_Int32 nValue = rFrameProperties[i].Value.get<sal_Int32>();
+            if (nValue != text::HoriOrientation::NONE)
+                nHoriOrient = nValue;
+            return;
         }
     }
-    return false;
+}
+
 }
 
 void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
