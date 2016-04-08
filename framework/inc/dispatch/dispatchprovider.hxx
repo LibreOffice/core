@@ -22,7 +22,6 @@
 
 #include <classes/protocolhandlercache.hxx>
 
-#include <threadhelp/transactionbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <stdtypes.h>
@@ -72,9 +71,7 @@ enum EDispatchHelper
     @devstatus      ready to use
     @threadsafe     yes
 */
-class DispatchProvider  :   private TransactionBase                     ,
-                            // interfaces
-                            public  ::cppu::WeakImplHelper< css::frame::XDispatchProvider >
+class DispatchProvider: public ::cppu::WeakImplHelper< css::frame::XDispatchProvider >
 {
     /* member */
     private:

@@ -29,7 +29,6 @@
 
 #include <classes/filtercachedata.hxx>
 
-#include <threadhelp/transactionbase.hxx>
 #include <general.h>
 #include <queries.h>
 
@@ -52,13 +51,12 @@ namespace framework{
     @short          cache for all filter and type information
     @descr          Frameloader - and filterfactory need some information about our current registered filters and types.
                     For better performance its necessary to cache all needed values.
-    @base           TransactionBase
 
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class FilterCache   :   private TransactionBase
+class FilterCache
 {
     public:
 
