@@ -556,6 +556,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "HideInactiveSelection", XMLNS_DIALOGS_PREFIX ":hide-inactive-selection" );
     readAlignAttr( "Align", XMLNS_DIALOGS_PREFIX ":align" );
+    readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign" );
     readBoolAttr( "HardLineBreaks", XMLNS_DIALOGS_PREFIX ":hard-linebreaks" );
     readBoolAttr( "HScroll", XMLNS_DIALOGS_PREFIX ":hscroll" );
     readBoolAttr( "VScroll", XMLNS_DIALOGS_PREFIX ":vscroll" );
