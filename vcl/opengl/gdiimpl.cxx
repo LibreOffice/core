@@ -39,6 +39,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
+#include <glm/gtx/compatibility.hpp>
 
 #include <stdlib.h>
 
@@ -684,6 +685,8 @@ inline glm::vec2 normalize(const glm::vec2& vector)
     return vector;
 }
 
+SAL_CONSTEXPR float constMiterMinimumAngle = 15.0f;
+
 } // end anonymous namespace
 
 void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth)
@@ -863,6 +866,17 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
                 continue;
 
             nextLineVector = normalize(p2 - p1);
+
+            if (eLineJoin == basegfx::B2DLineJoin::Miter)
+            {
+                float angle = glm::atan2(previousLineVector.x * nextLineVector.y - previousLineVector.y * nextLineVector.x,
+                                         previousLineVector.x * nextLineVector.x + previousLineVector.y * nextLineVector.y);
+
+                angle = (F_PI - std::fabs(angle)) / F_PI180;
+
+                if (angle < constMiterMinimumAngle)
+                    eLineJoin = basegfx::B2DLineJoin::Bevel;
+            }
 
             if (eLineJoin == basegfx::B2DLineJoin::Miter)
             {
