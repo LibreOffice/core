@@ -42,7 +42,7 @@ void FixedTextureAtlasManager::CreateNewTexture()
     mpTextures.back()->InitializeSlots(mWidthFactor * mHeightFactor);
 }
 
-OpenGLTexture FixedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+OpenGLTexture FixedTextureAtlasManager::Reserve(int nWidth, int nHeight)
 {
     ImplOpenGLTexture* pTexture = nullptr;
 
@@ -71,14 +71,18 @@ OpenGLTexture FixedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, in
 
     Rectangle aRectangle(Point(nX, nY), Size(nWidth, nHeight));
 
-    // If available, copy the image data to the texture
-    if (pData)
-    {
-        if (!pTexture->InsertBuffer(nX, nY, nWidth, nHeight, nFormat, nType, pData))
-            return OpenGLTexture();
-    }
-
     return OpenGLTexture(pTexture, aRectangle, nSlot);
+}
+
+OpenGLTexture FixedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+{
+    OpenGLTexture aTexture = Reserve(nWidth, nHeight);
+    if (pData == nullptr)
+        return aTexture;
+
+    aTexture.CopyData(nWidth, nHeight, nFormat, nType, pData);
+
+    return aTexture;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
