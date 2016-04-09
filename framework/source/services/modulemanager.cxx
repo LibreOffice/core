@@ -36,16 +36,13 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 
-#include <boost/noncopyable.hpp>
-
 namespace {
 
 class ModuleManager:
     public cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::frame::XModuleManager2,
-        css::container::XContainerQuery >,
-    private boost::noncopyable
+        css::container::XContainerQuery >
 {
 private:
 
@@ -65,6 +62,9 @@ public:
     explicit ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
     virtual ~ModuleManager();
+
+    ModuleManager(const ModuleManager&) = delete;
+    ModuleManager& operator=(const ModuleManager&) = delete;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

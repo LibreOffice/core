@@ -33,7 +33,6 @@
 #include "rtl/instance.hxx"
 #include "salhelper/linkhelper.hxx"
 #include "salhelper/thread.hxx"
-#include "boost/noncopyable.hpp"
 #include <memory>
 #include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
@@ -205,13 +204,16 @@ rtl::Bootstrap * getBootstrap()
 }
 
 
-class FileHandleGuard: private boost::noncopyable
+class FileHandleGuard
 {
 public:
     explicit FileHandleGuard(oslFileHandle & rHandle):
         m_rHandle(rHandle) {}
 
     inline ~FileHandleGuard();
+
+    FileHandleGuard(const FileHandleGuard&) = delete;
+    FileHandleGuard& operator=(const FileHandleGuard&) = delete;
 
     inline oslFileHandle & getHandle() { return m_rHandle; }
 

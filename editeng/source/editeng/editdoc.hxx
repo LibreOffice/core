@@ -35,8 +35,6 @@
 #include <memory>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
-
 class ImpEditEngine;
 class SvxTabStop;
 
@@ -233,7 +231,7 @@ public:
 
 // class ContentNode
 
-class ContentNode : private boost::noncopyable
+class ContentNode
 {
 private:
     OUString maString;
@@ -247,6 +245,8 @@ public:
                     ContentNode( SfxItemPool& rItemPool );
                     ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs );
                     ~ContentNode();
+                    ContentNode(const ContentNode&) = delete;
+    ContentNode&    operator=(const ContentNode&) = delete;
 
     ContentAttribs& GetContentAttribs()     { return aContentAttribs; }
     const ContentAttribs& GetContentAttribs() const { return aContentAttribs; }

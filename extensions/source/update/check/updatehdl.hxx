@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 
-#include "boost/noncopyable.hpp"
 #include <osl/mutex.hxx>
 #include "com/sun/star/uno/Any.h"
 #include "com/sun/star/uno/Reference.h"
@@ -67,8 +66,7 @@ enum UpdateState {
     UPDATESTATES_COUNT
 };
 
-class UpdateHandler : private ::boost::noncopyable,
-                      public cppu::WeakImplHelper< css::awt::XActionListener,
+class UpdateHandler : public cppu::WeakImplHelper< css::awt::XActionListener,
                                                     css::awt::XTopWindowListener,
                                                     css::task::XInteractionHandler,
                                                     css::frame::XTerminateListener >
@@ -158,6 +156,8 @@ public:
                             UpdateHandler( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
                                            const rtl::Reference< IActionListener > & rxActionListener );
     virtual                ~UpdateHandler();
+                            UpdateHandler(const UpdateHandler&) = delete;
+    UpdateHandler&          operator=(const UpdateHandler&) = delete;
 
     bool                    isVisible() const;
     bool                    isMinimized() const { return mbMinimized; }

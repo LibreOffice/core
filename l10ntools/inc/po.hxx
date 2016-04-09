@@ -13,7 +13,6 @@
 #include <fstream>
 #include <memory>
 #include <rtl/string.hxx>
-#include <boost/noncopyable.hpp>
 
 class PoOfstream;
 class PoIfstream;
@@ -74,7 +73,7 @@ public:
     a po file. It's main function to generate header to
     template po files(pot).
 */
-class PoHeader: private boost::noncopyable
+class PoHeader
 {
 private:
 
@@ -88,10 +87,12 @@ public:
 
                     PoHeader( const OString& rExtSrc ); ///< Template Constructor
                     ~PoHeader();
+                    PoHeader(const PoHeader&) = delete;
+    PoHeader&       operator=(const PoHeader&) = delete;
 };
 
 /// Interface to write po entry to files as output streams
-class PoOfstream: private boost::noncopyable
+class PoOfstream
 {
 private:
 
@@ -105,6 +106,8 @@ public:
             PoOfstream();
             PoOfstream(const OString& rFileName, OpenMode aMode = TRUNC );
             ~PoOfstream();
+            PoOfstream(const PoOfstream&) = delete;
+    PoOfstream& operator=(const PoOfstream&) = delete;
     bool    isOpen() const  { return m_aOutPut.is_open(); }
 
     void    open(const OString& rFileName, OpenMode aMode = TRUNC );
@@ -114,7 +117,7 @@ public:
 };
 
 /// Interface to read po entry from files as input streams
-class PoIfstream: private boost::noncopyable
+class PoIfstream
 {
 private:
 
@@ -128,6 +131,8 @@ public:
             PoIfstream();
             PoIfstream( const OString& rFileName );
             ~PoIfstream();
+            PoIfstream(const PoIfstream&) = delete;
+    PoIfstream& operator=(const PoIfstream&) = delete;
     bool    isOpen() const  { return m_aInPut.is_open(); }
     bool    eof() const     { return m_bEof; }
 

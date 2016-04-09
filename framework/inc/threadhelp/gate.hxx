@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 
-#include <boost/noncopyable.hpp>
 #include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
@@ -37,7 +36,7 @@ namespace framework{
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class Gate : private boost::noncopyable
+class Gate
 {
 
     //  public methods
@@ -64,6 +63,16 @@ class Gate : private boost::noncopyable
         {
             open();
         }
+        /*-****************************************************************************************************
+            @short      copy-ctor
+            @descr      Forbid copy construction
+        *//*-*****************************************************************************************************/
+        Gate(const Gate&) = delete;
+        /*-****************************************************************************************************
+            @short      copy-assignment
+            @descr      Forbid copy assiging
+        *//*-*****************************************************************************************************/
+        Gate& operator=(const Gate&) = delete;
 
         /*-****************************************************************************************************
             @short      open the gate

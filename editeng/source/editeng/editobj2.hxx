@@ -28,7 +28,6 @@
 #include "svl/sharedstring.hxx"
 #include <svl/languageoptions.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 
@@ -107,7 +106,7 @@ public:
 
 };
 
-class ContentInfo : private boost::noncopyable
+class ContentInfo
 {
     friend class EditTextObjectImpl;
 public:
@@ -127,6 +126,8 @@ private:
 
 public:
                         ~ContentInfo();
+                        ContentInfo(const ContentInfo&) = delete;
+    ContentInfo&        operator=(const ContentInfo&) = delete;
 
     void NormalizeString( svl::SharedStringPool& rPool );
     const svl::SharedString& GetSharedString() const { return maText;}
@@ -155,7 +156,7 @@ public:
 #endif
 };
 
-class EditTextObjectImpl : private boost::noncopyable
+class EditTextObjectImpl
 {
 public:
     typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
@@ -187,6 +188,9 @@ public:
     EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pPool );
     EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r );
     ~EditTextObjectImpl();
+
+    EditTextObjectImpl(const EditTextObjectImpl&) = delete;
+    EditTextObjectImpl& operator=(const EditTextObjectImpl&) = delete;
 
     sal_uInt16 GetUserType() const { return nUserType;}
     void SetUserType( sal_uInt16 n );

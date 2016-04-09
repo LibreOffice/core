@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 
-#include <boost/noncopyable.hpp>
 #include <threadhelp/gate.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
@@ -96,7 +95,7 @@ enum EExceptionMode
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class FWI_DLLPUBLIC TransactionManager: private boost::noncopyable
+class FWI_DLLPUBLIC TransactionManager
 {
 
     //  public methods
@@ -105,6 +104,8 @@ class FWI_DLLPUBLIC TransactionManager: private boost::noncopyable
 
                                    TransactionManager           (                                              );
                                    ~TransactionManager          (                                              );
+                                   TransactionManager(const TransactionManager&) = delete;
+        TransactionManager&        operator=(const TransactionManager&) = delete;
         void               setWorkingMode               ( EWorkingMode eMode                           );
         EWorkingMode       getWorkingMode               (                                              ) const;
         void               registerTransaction          ( EExceptionMode eMode ) throw( css::uno::RuntimeException, css::lang::DisposedException );

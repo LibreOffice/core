@@ -24,7 +24,6 @@
 #include "datasourcehandling.hxx"
 #include "addresssettings.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -180,7 +179,7 @@ namespace abp
         }
     }
 
-    struct ODataSourceContextImpl: private boost::noncopyable
+    struct ODataSourceContextImpl
     {
         Reference< XComponentContext >      xORB;
         Reference< XNameAccess >            xContext;           /// the UNO data source context
@@ -190,6 +189,8 @@ namespace abp
             : xORB(_rxORB)
         {
         }
+        ODataSourceContextImpl(const ODataSourceContextImpl&) = delete;
+        ODataSourceContextImpl& operator=(const ODataSourceContextImpl&) = delete;
     };
 
     ODataSourceContext::ODataSourceContext(const Reference< XComponentContext >& _rxORB)
