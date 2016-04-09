@@ -1597,7 +1597,8 @@ bool X11SalGraphicsImpl::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle)
 {
     const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
 
@@ -1654,7 +1655,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     }
 
     // create the area-polygon for the line
-    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin, eLineCap) );
+    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin, eLineCap, fMiterMinimumAngle) );
 
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )

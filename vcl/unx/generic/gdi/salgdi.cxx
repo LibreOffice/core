@@ -564,10 +564,11 @@ bool X11SalGraphics::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle)
 {
     return mxImpl->drawPolyLine( rPolygon, fTransparency, rLineWidth,
-            eLineJoin, eLineCap );
+            eLineJoin, eLineCap, fMiterMinimumAngle );
 }
 
 bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradient& rGradient)

@@ -97,6 +97,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                                                      aB2DLineWidth,
                                                      basegfx::B2DLineJoin::NONE,
                                                      css::drawing::LineCap_BUTT,
+                                                     15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
                                                      this);
             }
         }
@@ -207,6 +208,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
                                                  aB2DLineWidth,
                                                  basegfx::B2DLineJoin::NONE,
                                                  css::drawing::LineCap_BUTT,
+                                                 15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
                                                  this);
         }
 
@@ -311,6 +313,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                                                      aB2DLineWidth,
                                                      basegfx::B2DLineJoin::NONE,
                                                      css::drawing::LineCap_BUTT,
+                                                     15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
                                                      this);
             }
         }

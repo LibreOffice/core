@@ -72,8 +72,14 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth,
-                                     basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, this))
+        if(mpGraphics->DrawPolyLine(
+            aB2DPolyLine,
+            0.0,
+            aB2DLineWidth,
+            basegfx::B2DLineJoin::NONE,
+            css::drawing::LineCap_BUTT,
+            15.0 * F_PI180 /*default fMiterMinimumAngle, not used*/,
+            this))
         {
             return;
         }
@@ -117,7 +123,12 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
     if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        LINE_SOLID == rLineInfo.GetStyle())
     {
-        DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin(), rLineInfo.GetLineCap());
+        DrawPolyLine(
+            rPoly.getB2DPolygon(),
+            static_cast< double >(rLineInfo.GetWidth()),
+            rLineInfo.GetLineJoin(),
+            rLineInfo.GetLineCap(),
+            15.0 * F_PI180 /* default fMiterMinimumAngle, value not available in LineInfo */);
         return;
     }
 
@@ -130,7 +141,8 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
 void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                                  double fLineWidth,
                                  basegfx::B2DLineJoin eLineJoin,
-                                 css::drawing::LineCap eLineCap)
+                                 css::drawing::LineCap eLineCap,
+                                 double fMiterMinimumAngle)
 {
     assert(!is_double_buffered_window());
 
@@ -162,7 +174,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitLineColor();
 
     // use b2dpolygon drawing if possible
-    if ( DrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap) )
+    if ( DrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap, fMiterMinimumAngle) )
         return;
 
     // #i101491#
@@ -178,7 +190,8 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                 basegfx::tools::createAreaGeometry( rB2DPolygon,
                                                     fHalfLineWidth,
                                                     eLineJoin,
-                                                    eLineCap));
+                                                    eLineCap,
+                                                    fMiterMinimumAngle));
         const Color aOldLineColor(maLineColor);
         const Color aOldFillColor(maFillColor);
 
@@ -208,7 +221,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         // to avoid optical gaps
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, bTryAA );
+            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default, not used*/, bTryAA);
         }
     }
     else
@@ -276,7 +289,8 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                                        double fTransparency,
                                        basegfx::B2DLineJoin eLineJoin,
                                        css::drawing::LineCap eLineCap,
-                                       bool bBypassAACheck )
+                                       double fMiterMinimumAngle,
+                                       bool bBypassAACheck)
 {
     assert(!is_double_buffered_window());
 
@@ -334,6 +348,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                                                       aB2DLineWidth,
                                                       eLineJoin,
                                                       eLineCap,
+                                                      fMiterMinimumAngle,
                                                       this );
 
         if( bDrawSuccess )
@@ -344,7 +359,10 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                 LineInfo aLineInfo;
                 if( fLineWidth != 0.0 )
                     aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-
+                    // Transport known informations, might be needed
+                    aLineInfo.SetLineJoin(eLineJoin);
+                    aLineInfo.SetLineCap(eLineCap);
+                    // MiterMinimumAngle does not exist yet in LineInfo
                 const tools::Polygon aToolsPolygon( rB2DPolygon );
                 mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
             }

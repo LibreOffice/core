@@ -961,7 +961,8 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
                                     double fTransparency,
                                     const basegfx::B2DVector& rLineWidths,
                                     basegfx::B2DLineJoin eLineJoin,
-                                    css::drawing::LineCap eLineCap)
+                                    css::drawing::LineCap eLineCap,
+                                    double fMiterMinimumAngle)
 {
     DBG_DRAW_OPERATION("drawPolyLine", true);
 
@@ -1000,7 +1001,8 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
     case basegfx::B2DLineJoin::Miter: aCGLineJoin = kCGLineJoinMiter; break;
     case basegfx::B2DLineJoin::Round: aCGLineJoin = kCGLineJoinRound; break;
     }
-
+    // convert miter minimum angle to miter limit
+    CGFloat fCGMiterLimit = 1.0 / sin(fMiterMinimumAngle / 2.0);
     // setup cap attribute
     CGLineCap aCGLineCap(kCGLineCapButt);
 
@@ -1047,6 +1049,7 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineCap( mrContext, aCGLineCap );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
+        CGContextSetMiterLimit(mrContext, fCGMiterLimit);
         SAL_INFO( "vcl.cg", "CGContextDrawPath(" << mrContext << ",kCGPathStroke)" );
         CGContextDrawPath( mrContext, kCGPathStroke );
         SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mrContext << ") " << mnContextStackDepth-- );
