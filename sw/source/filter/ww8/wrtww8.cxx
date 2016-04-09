@@ -3329,15 +3329,6 @@ void WW8Export::ExportDocument_Impl()
         pFib->WriteHeader( *pStrmTemp );
     }
 
-    if (m_pUsedNumTable)           // all used NumRules
-    {
-        // clear the part of the list array that was copied from the document
-        // - it's an auto delete array, so the rest of the array which are
-        // duplicated lists that were added during the export will be deleted.
-        m_pUsedNumTable->erase(m_pUsedNumTable->begin(), m_pUsedNumTable->begin() + m_pUsedNumTable->size() - m_nUniqueList);
-        delete m_pUsedNumTable;
-    }
-
     DELETEZ( m_pGrf );
     DELETEZ( m_pMagicTable );
     DELETEZ( m_pFieldFootnote );
@@ -3558,6 +3549,14 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
 
 MSWordExportBase::~MSWordExportBase()
 {
+    if (m_pUsedNumTable)           // all used NumRules
+    {
+        // clear the part of the list array that was copied from the document
+        // - it's an auto delete array, so the rest of the array which are
+        // duplicated lists that were added during the export will be deleted.
+        m_pUsedNumTable->erase(m_pUsedNumTable->begin(), m_pUsedNumTable->begin() + m_pUsedNumTable->size() - m_nUniqueList);
+        delete m_pUsedNumTable;
+    }
     delete m_pOLEExp;
     delete m_pOCXExp;
 }
