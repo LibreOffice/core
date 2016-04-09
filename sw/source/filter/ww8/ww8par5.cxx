@@ -895,7 +895,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         return aF.nLen;
 
     bool bHasHandler = aWW8FieldTab[aF.nId] != nullptr;
-    if (aF.nId == ww::eSTYLEREF)
+    if (aF.nId == 10) // STYLEREF
     {
         // STYLEREF, by default these are not handled.
         bHasHandler = false;
