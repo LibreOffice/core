@@ -105,7 +105,8 @@ public:
                 double fTransparency,
                 const basegfx::B2DVector& rLineWidths,
                 basegfx::B2DLineJoin,
-                css::drawing::LineCap) = 0;
+                css::drawing::LineCap,
+                double fMiterMinimumAngle) = 0;
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,

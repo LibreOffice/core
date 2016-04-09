@@ -767,8 +767,13 @@ void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float 
  * - http://artgrammer.blogspot.si/2011/07/drawing-polylines-by-tessellation.html
  *
  */
-void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap)
+void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap, float fMiterMinimumAngle)
 {
+    // TODO: The information fMiterMinimumAngle is ignored for now.
+    // It has to be considered in case eLineJoin == basegfx::B2DLineJoin::Miter
+    // If you need a miter limit use the equation 'miter limit' = 1.0/sin(fMiterMinimumAngle/2.0)
+    // miter limit should be >= 1.0 then.
+
     sal_uInt32 nPoints = rPolygon.count();
     bool bClosed = rPolygon.isClosed();
 
@@ -878,6 +883,11 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
                 glm::vec2 tangent = normalize(nextLineVector + previousLineVector);
                 glm::vec2 extrusionVector(-tangent.y, tangent.x);
                 GLfloat length = glm::dot(extrusionVector, normal);
+                // TODO: The information fMiterMinimumAngle is ignored for now.
+                // If you need a miter limit, use equation
+                // 'miter limit' = 1.0/sin(fMiterMinimumAngle/2.0)
+                // miter limit should be >= 1.0 then.
+                // In case current miter length > miter limit, Bevel has to be used.
 
                 addVertexPair(aVertices, aExtrusionVectors, p1, extrusionVector, length);
             }
@@ -2047,7 +2057,8 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
             double fTransparency,
             const basegfx::B2DVector& rLineWidth,
             basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap)
+            css::drawing::LineCap eLineCap,
+            double fMiterMinimumAngle)
 {
     VCL_GL_INFO( "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )
@@ -2067,7 +2078,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         else
             aPolygon.removeDoublePoints();
 
-        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap);
+        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap, fMiterMinimumAngle);
     }
     PostDraw();
 

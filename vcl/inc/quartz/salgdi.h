@@ -246,7 +246,8 @@ public:
                                 double fTransparency,
                                 const basegfx::B2DVector& rLineWidths,
                                 basegfx::B2DLineJoin,
-                                css::drawing::LineCap eLineCap) override;
+                                css::drawing::LineCap eLineCap,
+                                double fMiterMinimumAngle) override;
     virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
 
     // CopyArea --> No RasterOp, but ClipRegion

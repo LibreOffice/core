@@ -681,7 +681,8 @@ bool SvpSalGraphics::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAnlge)
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
@@ -710,6 +711,9 @@ bool SvpSalGraphics::drawPolyLine(
             eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
             break;
     }
+
+    // convert miter minimum angle to miter limit
+    double fMiterLimit = 1.0 / sin( fMiterMinimumAngle / 2.0);
 
     // setup cap attribute
     cairo_line_cap_t eCairoLineCap(CAIRO_LINE_CAP_BUTT);
@@ -741,7 +745,7 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
     cairo_set_line_width(cr, rLineWidths.getX());
-    cairo_set_miter_limit(cr, 15.0);
+    cairo_set_miter_limit(cr, fMiterLimit);
 
 
     basegfx::B2DRange extents(0, 0, 0, 0);

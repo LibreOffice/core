@@ -252,6 +252,7 @@ namespace drawinglayer
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
                     const css::drawing::LineCap aLineCap(getLineAttribute().getLineCap());
                     basegfx::B2DPolyPolygon aAreaPolyPolygon;
+                    const double fMiterMinimumAngle(getLineAttribute().getMiterMinimumAngle());
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
@@ -260,7 +261,10 @@ namespace drawinglayer
                             aHairLinePolyPolygon.getB2DPolygon(a),
                             fHalfLineWidth,
                             aLineJoin,
-                            aLineCap));
+                            aLineCap,
+                            12.5 * F_PI180 /* default fMaxAllowedAngle*/ ,
+                            0.4 /* default fMaxPartOfEdge*/ ,
+                            fMiterMinimumAngle));
                     }
 
                     // prepare return value

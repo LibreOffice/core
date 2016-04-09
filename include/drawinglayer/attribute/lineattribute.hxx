@@ -56,7 +56,8 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 double fWidth = 0.0,
                 basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLineJoin::Round,
-                css::drawing::LineCap aLineCap = css::drawing::LineCap_BUTT);
+                css::drawing::LineCap aLineCap = css::drawing::LineCap_BUTT,
+                double fMiterMinimumAngle = 15.0 * F_PI180);
             LineAttribute();
             LineAttribute(const LineAttribute& rCandidate);
             LineAttribute& operator=(const LineAttribute& rCandidate);
@@ -73,6 +74,7 @@ namespace drawinglayer
             double getWidth() const;
             basegfx::B2DLineJoin getLineJoin() const;
             css::drawing::LineCap getLineCap() const;
+            double getMiterMinimumAngle() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
