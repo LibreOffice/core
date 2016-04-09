@@ -134,7 +134,14 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if( mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, this))
+        if( mpGraphics->DrawPolyLine(
+            aB2DPolyLine,
+            0.0,
+            aB2DLineWidth,
+            basegfx::B2DLineJoin::NONE,
+            css::drawing::LineCap_BUTT,
+            15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+            this))
         {
             return;
         }
@@ -236,7 +243,14 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
             if(bTryAA)
             {
-                bDone = mpGraphics->DrawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, this);
+                bDone = mpGraphics->DrawPolyLine(
+                    aCandidate,
+                    0.0,
+                    basegfx::B2DVector(1.0,1.0),
+                    basegfx::B2DLineJoin::NONE,
+                    css::drawing::LineCap_BUTT,
+                    15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+                    this);
             }
 
             if(!bDone)

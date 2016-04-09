@@ -176,7 +176,8 @@ public:
                                         double fTransparency,
                                         const basegfx::B2DVector& rLineWidth,
                                         basegfx::B2DLineJoin,
-                                        css::drawing::LineCap ) override;
+                                        css::drawing::LineCap,
+                                        double fMiterMinimumAngle) override;
 
     virtual bool                    drawGradient( const tools::PolyPolygon&, const Gradient& ) override;
 

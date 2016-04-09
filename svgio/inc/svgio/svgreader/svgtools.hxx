@@ -83,7 +83,8 @@ namespace svgio
             Unit_mm,        // 3.543307 px
             Unit_in,        // 90 px
 
-            Unit_percent    // relative to range
+            Unit_percent,   // relative to range
+            Unit_none       // for stroke-miterlimit, which has no unit
         };
 
         class SvgNumber
