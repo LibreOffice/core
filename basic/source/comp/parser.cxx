@@ -376,17 +376,17 @@ bool SbiParser::Parse()
         Next(); return true;
     }
 
-        // In vba it's possible to do Error.foobar ( even if it results in
+    // In vba it's possible to do Error.foobar ( even if it results in
     // a runtime error
-        if ( eCurTok == ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
+    if ( eCurTok == ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
+    {
+        SbiTokenizer tokens( *this );
+        tokens.Next();
+        if ( tokens.Peek()  == DOT )
         {
-            SbiTokenizer tokens( *static_cast<SbiTokenizer*>(this) );
-            tokens.Next();
-            if ( tokens.Peek()  == DOT )
-            {
-                eCurTok = SYMBOL;
-        ePush = eCurTok;
-            }
+            eCurTok = SYMBOL;
+            ePush = eCurTok;
+        }
     }
     // if there's a symbol, it's either a variable (LET)
     // or a SUB-procedure (CALL without brackets)
