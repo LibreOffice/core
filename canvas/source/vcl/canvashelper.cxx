@@ -390,8 +390,15 @@ namespace vclcanvas
 
                 for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
                 {
-                    // TODO(F2): Use MiterLimit from StrokeAttributes,
-                    // need to convert it here to angle.
+                    double fMiterMinimumAngle;
+                    if (strokeAttributes.MiterLimit <= 1.0)
+                    {
+                        fMiterMinimumAngle = F_PI2;
+                    }
+                    else
+                    {
+                        fMiterMinimumAngle = 2.0 * asin(1.0/strokeAttributes.MiterLimit);
+                    }
 
                     // TODO(F2): Also use Cap settings from
                     // StrokeAttributes, the
@@ -403,7 +410,10 @@ namespace vclcanvas
                         aPolyPoly.getB2DPolygon(i),
                         strokeAttributes.StrokeWidth*0.5,
                         b2DJoineFromJoin(strokeAttributes.JoinType),
-                        unoCapeFromCap(strokeAttributes.StartCapType)
+                        unoCapeFromCap(strokeAttributes.StartCapType),
+                        12.5 * F_PI180 /* default fMaxAllowedAngle*/ ,
+                        0.4 /* default fMaxPartOfEdge*/ ,
+                        fMiterMinimumAngle
                         ));
                     //aStrokedPolyPoly.append(
                     //    ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),

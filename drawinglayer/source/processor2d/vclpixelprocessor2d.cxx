@@ -259,7 +259,9 @@ namespace drawinglayer
                         fLineWidth,
                         fTransparency,
                         rSource.getLineAttribute().getLineJoin(),
-                        rSource.getLineAttribute().getLineCap()))
+                        rSource.getLineAttribute().getLineCap(),
+                        rSource.getLineAttribute().getMiterMinimumAngle(),
+                        false /*bBypassAACheck, default*/))
                     {
                         bTryWorked = true;
                     }

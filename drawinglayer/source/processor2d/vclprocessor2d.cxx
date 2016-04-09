@@ -1301,7 +1301,8 @@ namespace drawinglayer
                                 aHairlinePolyPolygon.getB2DPolygon(a),
                                 fDiscreteLineWidth,
                                 rLineAttribute.getLineJoin(),
-                                rLineAttribute.getLineCap());
+                                rLineAttribute.getLineCap(),
+                                rLineAttribute.getMiterMinimumAngle());
                         }
 
                         bDone = true;

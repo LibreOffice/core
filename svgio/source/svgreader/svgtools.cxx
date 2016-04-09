@@ -189,6 +189,13 @@ namespace svgio
 
                         return fRetval;
                     }
+                    case Unit_none:
+                    {
+#ifdef DBG_UTIL
+                        myAssert("Design error, this case should have been handled in the caller");
+#endif
+                        return mfNumber;
+                    }
                     default:
                     {
                         OSL_ENSURE(false, "Do not use with percentage! ");
@@ -219,6 +226,7 @@ namespace svgio
                     case Unit_in:
                     case Unit_em:
                     case Unit_ex:
+                    case Unit_none:
                     {
                         return solveNonPercentage( rInfoProvider);
                     }
@@ -473,13 +481,13 @@ namespace svgio
                             }
                             else if('t' == aCharB)
                             {
-                                // 'pt' == 1.25 px
+                                // 'pt' == 4/3 px
                                 aRetval = Unit_pt;
                                 bTwoCharValid = true;
                             }
                             else if('c' == aCharB)
                             {
-                                // 'pc' == 15 px
+                                // 'pc' == 16 px
                                 aRetval = Unit_pc;
                                 bTwoCharValid = true;
                             }
@@ -489,7 +497,7 @@ namespace svgio
                         {
                             if('n' == aCharB)
                             {
-                                // 'in' == 90 px
+                                // 'in' == 96 px, since CSS 2.1
                                 aRetval = Unit_in;
                                 bTwoCharValid = true;
                             }
@@ -499,7 +507,7 @@ namespace svgio
                         {
                             if('m' == aCharB)
                             {
-                                // 'cm' == 35.43307 px
+                                // 'cm' == 37.79527559 px
                                 aRetval = Unit_cm;
                                 bTwoCharValid = true;
                             }
@@ -509,7 +517,7 @@ namespace svgio
                         {
                             if('m' == aCharB)
                             {
-                                // 'mm' == 3.543307 px
+                                // 'mm' == 3.779528 px
                                 aRetval = Unit_mm;
                                 bTwoCharValid = true;
                             }

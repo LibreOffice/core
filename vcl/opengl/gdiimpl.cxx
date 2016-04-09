@@ -767,7 +767,7 @@ void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float 
  * - http://artgrammer.blogspot.si/2011/07/drawing-polylines-by-tessellation.html
  *
  */
-void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap)
+void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap, float fMiterMinimumAngle)
 {
     sal_uInt32 nPoints = rPolygon.count();
     bool bClosed = rPolygon.isClosed();
@@ -866,20 +866,36 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
 
             if (eLineJoin == basegfx::B2DLineJoin::Miter)
             {
-                // With miter join we calculate the extrusion vector by adding normals of
-                // previous and next line segment. The vector shows the way but we also
-                // need the length (otherwise the line will be deformed). Length factor is
-                // calculated as dot product of extrusion vector and one of the normals.
-                // The value we get is the inverse length (used in the shader):
-                // length = line_width / dot(extrusionVector, normal)
+                // If the angle between the line segments is smaller than
+                // fMiterMinimumAngle, then line join type Bevel is used.
+                GLfloat cosResult = glm::dot((-1.0f) * previousLineVector, nextLineVector);
+                GLfloat angle = glm::acos(glm::clamp(cosResult,-1.0f,1.0f));
+                if ( angle < fMiterMinimumAngle)
+                {
+                    // Bevel is used, copied from below
+                    glm::vec2 previousNormal = glm::vec2(-previousLineVector.y, previousLineVector.x);
+                    glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
 
-                normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
+                    addVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
+                    addVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
+                }
+                else
+                {
+                    // With miter join we calculate the extrusion vector by adding normals of
+                    // previous and next line segment. The vector shows the way but we also
+                    // need the length (otherwise the line will be deformed). Length factor is
+                    // calculated as dot product of extrusion vector and one of the normals.
+                    // The value we get is the inverse length (used in the shader):
+                    // length = line_width / dot(extrusionVector, normal)
 
-                glm::vec2 tangent = normalize(nextLineVector + previousLineVector);
-                glm::vec2 extrusionVector(-tangent.y, tangent.x);
-                GLfloat length = glm::dot(extrusionVector, normal);
+                    normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
 
-                addVertexPair(aVertices, aExtrusionVectors, p1, extrusionVector, length);
+                    glm::vec2 tangent = normalize(nextLineVector + previousLineVector);
+                    glm::vec2 extrusionVector(-tangent.y, tangent.x);
+                    GLfloat length = glm::dot(extrusionVector, normal);
+
+                    addVertexPair(aVertices, aExtrusionVectors, p1, extrusionVector, length);
+                }
             }
             else if (eLineJoin == basegfx::B2DLineJoin::Bevel)
             {
@@ -2047,7 +2063,8 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
             double fTransparency,
             const basegfx::B2DVector& rLineWidth,
             basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap)
+            css::drawing::LineCap eLineCap,
+            double fMiterMinimumAngle)
 {
     VCL_GL_INFO( "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )
@@ -2067,7 +2084,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         else
             aPolygon.removeDoublePoints();
 
-        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap);
+        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap, fMiterMinimumAngle);
     }
     PostDraw();
 
