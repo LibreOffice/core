@@ -23,7 +23,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -34,8 +33,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::xml::sax::XDocumentHandler> ODFSerializerBase;
 
 class ODFSerializer : private cppu::BaseMutex,
-                public ODFSerializerBase,
-                private boost::noncopyable
+                public ODFSerializerBase
 {
 public:
     explicit ODFSerializer(const uno::Reference<io::XOutputStream>& xOut) :
@@ -46,6 +44,8 @@ public:
     {
         m_aLineFeed[0] = '\n';
     }
+    ODFSerializer(const ODFSerializer&) = delete;
+    ODFSerializer& operator=(const ODFSerializer&) = delete;
 
     virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;

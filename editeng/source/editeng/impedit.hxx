@@ -57,7 +57,6 @@
 #include <rtl/ref.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 
@@ -387,7 +386,7 @@ public:
 //  ImpEditEngine
 
 
-class ImpEditEngine : public SfxListener, private boost::noncopyable
+class ImpEditEngine : public SfxListener
 {
     friend class EditEngine;
     friend class EditDbg;
@@ -700,6 +699,8 @@ protected:
 
 public:
                             virtual ~ImpEditEngine();
+                            ImpEditEngine(const ImpEditEngine&) = delete;
+    ImpEditEngine&          operator=(const ImpEditEngine&) = delete;
 
     inline EditUndoManager& GetUndoManager();
     inline ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);

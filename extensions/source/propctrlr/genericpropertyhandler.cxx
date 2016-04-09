@@ -22,7 +22,6 @@
 #include "handlerhelper.hxx"
 #include "pcrservices.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
@@ -63,8 +62,7 @@ namespace pcr
     using ::com::sun::star::awt::XActionListener;
     using ::com::sun::star::awt::ActionEvent;
 
-    class EnumRepresentation:
-        public IPropertyEnumRepresentation, private boost::noncopyable
+    class EnumRepresentation : public IPropertyEnumRepresentation
     {
     private:
         Reference< XEnumTypeDescription >   m_xTypeDescription;
@@ -72,6 +70,8 @@ namespace pcr
 
     public:
         EnumRepresentation( const Reference< XComponentContext >& _rxContext, const Type& _rEnumType );
+        EnumRepresentation(const EnumRepresentation&) = delete;
+        EnumRepresentation& operator=(const EnumRepresentation&) = delete;
 
         // IPropertyEnumRepresentation implementqation
         virtual ::std::vector< OUString >

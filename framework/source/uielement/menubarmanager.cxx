@@ -75,7 +75,6 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/miscopt.hxx>
 #include <uielement/menubarmerger.hxx>
-#include <boost/noncopyable.hpp>
 #include <tools/urlobj.hxx>
 
 using namespace ::cppu;
@@ -705,14 +704,15 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 namespace {
 
 class QuietInteractionContext:
-    public cppu::WeakImplHelper< css::uno::XCurrentContext >,
-    private boost::noncopyable
+    public cppu::WeakImplHelper< css::uno::XCurrentContext >
 {
 public:
     explicit QuietInteractionContext(
         css::uno::Reference< css::uno::XCurrentContext >
             const & context):
         context_(context) {}
+    QuietInteractionContext(const QuietInteractionContext&) = delete;
+    QuietInteractionContext& operator=(const QuietInteractionContext&) = delete;
 
 private:
     virtual ~QuietInteractionContext() {}

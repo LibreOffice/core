@@ -35,8 +35,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/checked_delete.hpp>
-#include <boost/noncopyable.hpp>
 #include <o3tl/make_unique.hxx>
 
 #include "lngsvcmgr.hxx"
@@ -178,8 +176,7 @@ class LngSvcMgrListenerHelper :
     <
         linguistic2::XLinguServiceEventListener,
         linguistic2::XDictionaryListEventListener
-    >,
-    private boost::noncopyable
+    >
 {
     LngSvcMgr  &rMyManager;
 
@@ -196,6 +193,9 @@ class LngSvcMgrListenerHelper :
 public:
     LngSvcMgrListenerHelper( LngSvcMgr &rLngSvcMgr,
         const uno::Reference< linguistic2::XSearchableDictionaryList > &rxDicList );
+
+    LngSvcMgrListenerHelper(const LngSvcMgrListenerHelper&) = delete;
+    LngSvcMgrListenerHelper& operator=(const LngSvcMgrListenerHelper&) = delete;
 
     // lang::XEventListener
     virtual void SAL_CALL

@@ -26,7 +26,6 @@
 #include <vcl/status.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/PopupMenu.hpp>
@@ -75,10 +74,12 @@ using namespace framework;
 namespace {
 
 class LangSelectionStatusbarController:
-    public svt::StatusbarController, private boost::noncopyable
+    public svt::StatusbarController
 {
 public:
     explicit LangSelectionStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    LangSelectionStatusbarController(const LangSelectionStatusbarController&) = delete;
+    LangSelectionStatusbarController& operator=(const LangSelectionStatusbarController&) = delete;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;

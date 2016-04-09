@@ -20,8 +20,6 @@
 
 #include "ldapaccess.hxx"
 
-#include <boost/noncopyable.hpp>
-
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
@@ -32,7 +30,7 @@ namespace extensions { namespace config { namespace ldap {
 
 typedef int LdapErrCode;
 
-struct LdapMessageHolder: private boost::noncopyable
+struct LdapMessageHolder
 {
     LdapMessageHolder() : msg(nullptr) {}
     ~LdapMessageHolder()
@@ -40,6 +38,8 @@ struct LdapMessageHolder: private boost::noncopyable
         if (msg)
             ldap_msgfree(msg);
     }
+    LdapMessageHolder(const LdapMessageHolder&) = delete;
+    LdapMessageHolder& operator=(const LdapMessageHolder&) = delete;
 
     LDAPMessage * msg;
 };

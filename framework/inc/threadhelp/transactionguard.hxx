@@ -20,12 +20,11 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 
-#include <boost/noncopyable.hpp>
 #include <threadhelp/transactionmanager.hxx>
 
 namespace framework{
 
-class TransactionGuard : private boost::noncopyable
+class TransactionGuard
 {
     public:
         inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode )
@@ -38,6 +37,8 @@ class TransactionGuard : private boost::noncopyable
         {
             m_pManager->unregisterTransaction();
         }
+        TransactionGuard(const TransactionGuard&) = delete;
+        TransactionGuard& operator=(const TransactionGuard&) = delete;
 
     private:
         TransactionManager*   m_pManager;

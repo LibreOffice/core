@@ -19,7 +19,6 @@
 
 #include <iostream>
 
-#include <boost/noncopyable.hpp>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 
@@ -75,8 +74,7 @@ static osl::Mutex &  GetLangGuessMutex()
 class LangGuess_Impl :
     public ::cppu::WeakImplHelper<
         XLanguageGuessing,
-        XServiceInfo >,
-    private boost::noncopyable
+        XServiceInfo >
 {
     SimpleGuesser   m_aGuesser;
     bool            m_bInitialized;
@@ -86,6 +84,8 @@ class LangGuess_Impl :
 
 public:
     LangGuess_Impl();
+    LangGuess_Impl(const LangGuess_Impl&) = delete;
+    LangGuess_Impl& operator=(const LangGuess_Impl&) = delete;
 
     // XServiceInfo implementation
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) override;

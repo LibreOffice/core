@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -74,11 +73,13 @@ struct UrlPool
 struct StaticUrlPool : public ::rtl::Static< UrlPool, StaticUrlPool > {};
 
 /** This guard prevents recursive loading/saving of the same document. */
-class DocumentOpenedGuard: private boost::noncopyable
+class DocumentOpenedGuard
 {
 public:
     explicit            DocumentOpenedGuard( const OUString& rUrl );
                         ~DocumentOpenedGuard();
+                        DocumentOpenedGuard(const DocumentOpenedGuard&) = delete;
+    DocumentOpenedGuard& operator=(const DocumentOpenedGuard&) = delete;
 
     inline bool         isValid() const { return mbValid; }
 

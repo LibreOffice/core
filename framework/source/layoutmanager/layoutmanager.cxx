@@ -80,7 +80,6 @@
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
-#include <boost/noncopyable.hpp>
 
 //      using namespace
 using namespace ::com::sun::star;
@@ -3156,7 +3155,7 @@ void SAL_CALL LayoutManager::getFastPropertyValue( uno::Any& aValue, sal_Int32 n
 
 namespace detail
 {
-    class InfoHelperBuilder : private ::boost::noncopyable
+    class InfoHelperBuilder
     {
     private:
         ::cppu::OPropertyArrayHelper *m_pInfoHelper;
@@ -3171,6 +3170,8 @@ namespace detail
         {
             delete m_pInfoHelper;
         }
+        InfoHelperBuilder(const InfoHelperBuilder&) = delete;
+        InfoHelperBuilder& operator=(const InfoHelperBuilder&) = delete;
 
         ::cppu::OPropertyArrayHelper& getHelper() { return *m_pInfoHelper; }
     };

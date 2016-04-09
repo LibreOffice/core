@@ -23,8 +23,6 @@
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
 
-#include <boost/noncopyable.hpp>
-
 class Color;
 class SvxFont;
 class SvxFontItem;
@@ -65,7 +63,7 @@ class SfxGrabBagItem;
 
 // bFeature: Attribute must not expand/shrink, length is always 1
 // bEdge: Attribute will not expand, if you want to expand just on the edge
-class EditCharAttrib : private boost::noncopyable
+class EditCharAttrib
 {
 protected:
     const SfxPoolItem*  pItem;
@@ -78,6 +76,9 @@ protected:
 public:
     EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
     virtual ~EditCharAttrib();
+
+    EditCharAttrib(const EditCharAttrib&) = delete;
+    EditCharAttrib& operator=(const EditCharAttrib&) = delete;
 
     sal_uInt16          Which() const   { return pItem->Which(); }
     const SfxPoolItem*  GetItem() const { return pItem; }

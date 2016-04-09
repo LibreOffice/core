@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include <cppuhelper/implbase.hxx>
@@ -67,11 +66,12 @@ class StringRepresentation:
     public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
         inspection::XStringRepresentation,
-        lang::XInitialization>,
-    private boost::noncopyable
+        lang::XInitialization>
 {
 public:
     explicit StringRepresentation(uno::Reference< uno::XComponentContext > const & context);
+    StringRepresentation (const StringRepresentation&) = delete;
+    StringRepresentation& operator=(const StringRepresentation&) = delete;
 
     // lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;

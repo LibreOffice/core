@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
@@ -77,8 +76,7 @@ OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectory
 }
 
 class ConvDicNameContainer :
-    public cppu::WeakImplHelper< css::container::XNameContainer >,
-    private boost::noncopyable
+    public cppu::WeakImplHelper< css::container::XNameContainer >
 {
     std::vector< uno::Reference< XConversionDictionary > >   aConvDics;
 
@@ -87,6 +85,8 @@ class ConvDicNameContainer :
 public:
     ConvDicNameContainer();
     virtual ~ConvDicNameContainer();
+    ConvDicNameContainer(const ConvDicNameContainer&) = delete;
+    ConvDicNameContainer& operator=(const ConvDicNameContainer&) = delete;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override;

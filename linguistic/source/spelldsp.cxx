@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
@@ -56,7 +55,7 @@ using namespace linguistic;
 // Removing entries is done by assigning the empty string.
 // The sequence is constructed from all non empty strings in the original
 // while maintaining the order.
-class ProposalList: private boost::noncopyable
+class ProposalList
 {
     std::vector< OUString > aVec;
 
@@ -64,6 +63,8 @@ class ProposalList: private boost::noncopyable
 
 public:
     ProposalList()  {}
+    ProposalList(const ProposalList&) = delete;
+    ProposalList& operator=(const ProposalList&) = delete;
 
     size_t  Count() const;
     void    Prepend( const OUString &rText );

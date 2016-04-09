@@ -24,7 +24,6 @@
 #include "linedescriptor.hxx"
 #include "inspectorhelpwindow.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
@@ -77,13 +76,15 @@ namespace pcr
         }
     };
 
-    class SharedNotifier: private boost::noncopyable
+    class SharedNotifier
     {
     private:
         static ::osl::Mutex&                                        getMutex();
         static ::rtl::Reference< ::comphelper::AsyncEventNotifier > s_pNotifier;
 
     public:
+        SharedNotifier(const SharedNotifier&) = delete;
+        SharedNotifier& operator=(const SharedNotifier&) = delete;
         static const ::rtl::Reference< ::comphelper::AsyncEventNotifier >&
             getNotifier();
     };

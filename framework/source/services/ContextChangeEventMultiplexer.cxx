@@ -32,7 +32,6 @@
 #include <algorithm>
 #include <map>
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 namespace cssl = css::lang;
 namespace cssu = css::uno;
@@ -49,13 +48,14 @@ typedef ::cppu::WeakComponentImplHelper <
     > ContextChangeEventMultiplexerInterfaceBase;
 
 class ContextChangeEventMultiplexer
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public ContextChangeEventMultiplexerInterfaceBase
 {
 public:
     ContextChangeEventMultiplexer();
     virtual ~ContextChangeEventMultiplexer();
+    ContextChangeEventMultiplexer(const ContextChangeEventMultiplexer&) = delete;
+    ContextChangeEventMultiplexer& operator=(const ContextChangeEventMultiplexer&) = delete;
 
     virtual void SAL_CALL disposing() override;
 
