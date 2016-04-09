@@ -378,7 +378,7 @@ namespace svgio
 
             /// StrokeMiterLimit content
             SvgNumber getStrokeMiterLimit() const;
-            void setStrokeMiterLimit(const SvgNumber& rStrokeMiterLimit = SvgNumber()) { maStrokeMiterLimit = rStrokeMiterLimit; }
+            void setStrokeMiterLimit(const SvgNumber& rStrokeMiterLimit = SvgNumber(4.0,Unit_none,false)) { maStrokeMiterLimit = rStrokeMiterLimit; }
 
             /// StrokeOpacity content
             SvgNumber getStrokeOpacity() const;

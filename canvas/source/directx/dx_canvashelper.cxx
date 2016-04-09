@@ -75,10 +75,13 @@ namespace dxcanvas
             switch( nJoinType )
             {
                 case rendering::PathJoinType::NONE:
-                    SAL_WARN( "canvas.directx", "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
-                    // FALLTHROUGH intended
+                    SAL_WARN( "canvas.directx", "gdiJoinFromJoin(): Join NONE not possible, mapping to BEVEL (closest to NONE)" );
+                    return Gdiplus::LineJoinBevel;
+
                 case rendering::PathJoinType::MITER:
-                    return Gdiplus::LineJoinMiter;
+                    // in GDI+ fallback to Bevel, if miter limit is exceeded, is not done
+                    // by Gdiplus::LineJoinMiter but by Gdiplus::LineJoinMiterClipped
+                    return Gdiplus::LineJoinMiterClipped;
 
                 case rendering::PathJoinType::ROUND:
                     return Gdiplus::LineJoinRound;

@@ -676,13 +676,27 @@ namespace svgio
 
                         // todo: Handle getStrokeDashOffset()
 
+                        // convert svg:stroke-miterlimit to LineAttrute:mfMiterMinimumAngle
+                        // The default needs to be set explicitely, because svg default <> Draw default
+                        double fMiterMinimumAngle;
+                        if (getStrokeMiterLimit().isSet())
+                        {
+                            fMiterMinimumAngle = 2.0 * asin(1.0/getStrokeMiterLimit().getNumber());
+                        }
+                        else
+                        {
+                            fMiterMinimumAngle = 2.0 * asin(0.25); // 1.0/default 4.0
+                        }
+
                         // prepare line attribute
                         drawinglayer::primitive2d::Primitive2DReference aNewLinePrimitive;
+
                         const drawinglayer::attribute::LineAttribute aLineAttribute(
                             pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
                             fStrokeWidth,
                             aB2DLineJoin,
-                            aLineCap);
+                            aLineCap,
+                            fMiterMinimumAngle);
 
                         if(aDashArray.empty())
                         {
@@ -1411,9 +1425,9 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        if(aNum.isPositive())
-                        {
-                            setStrokeMiterLimit(aNum);
+                        if(basegfx::fTools::moreOrEqual(aNum.getNumber(), 1.0))
+                        { //readSingleNumber sets Unit_px as default, if unit is missing. Correct it here.
+                            setStrokeMiterLimit(SvgNumber(aNum.getNumber(), Unit_none));
                         }
                     }
                     break;
@@ -2297,7 +2311,7 @@ namespace svgio
             }
 
             // default is 4
-            return SvgNumber(4.0);
+            return SvgNumber(4.0, Unit_none);
         }
 
         SvgNumber SvgStyleAttributes::getStrokeOpacity() const

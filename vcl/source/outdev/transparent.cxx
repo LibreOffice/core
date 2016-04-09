@@ -256,7 +256,14 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const basegfx::B2DPolygon aOnePoly = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                mpGraphics->DrawPolyLine( aOnePoly, fTransparency, aHairlineWidth, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, this );
+                mpGraphics->DrawPolyLine(
+                    aOnePoly,
+                    fTransparency,
+                    aHairlineWidth,
+                    basegfx::B2DLineJoin::NONE,
+                    css::drawing::LineCap_BUTT,
+                    15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+                    this );
             }
         }
 
@@ -352,8 +359,14 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                bDrawn = mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths,
-                                                   basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, this );
+                bDrawn = mpGraphics->DrawPolyLine(
+                    rPolygon,
+                    fTransparency,
+                    aLineWidths,
+                    basegfx::B2DLineJoin::NONE,
+                    css::drawing::LineCap_BUTT,
+                    15.0 * F_PI180, // not used with B2DLineJoin::NONE, but the correct default
+                    this );
             }
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;

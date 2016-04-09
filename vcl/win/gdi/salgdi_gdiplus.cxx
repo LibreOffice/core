@@ -36,10 +36,11 @@ bool WinSalGraphics::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle)
 {
     return mpImpl->drawPolyLine(rPolygon, fTransparency, rLineWidths,
-            eLineJoin, eLineCap);
+            eLineJoin, eLineCap, fMiterMinimumAngle);
 }
 
 bool WinSalGraphics::blendBitmap(

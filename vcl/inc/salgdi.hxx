@@ -273,6 +273,7 @@ public:
                                     const basegfx::B2DVector& i_rLineWidth,
                                     basegfx::B2DLineJoin i_eLineJoin,
                                     css::drawing::LineCap i_eLineCap,
+                                    double i_fMiterMinimumAngle,
                                     const OutputDevice* i_pOutDev);
 
     bool                        DrawPolyLineBezier(
@@ -470,7 +471,8 @@ protected:
                                     double fTransparency,
                                     const basegfx::B2DVector& rLineWidths,
                                     basegfx::B2DLineJoin,
-                                    css::drawing::LineCap) = 0;
+                                    css::drawing::LineCap,
+                                    double fMiterMinimumAngle) = 0;
 
     virtual bool                drawPolyLineBezier(
                                     sal_uInt32 nPoints,
