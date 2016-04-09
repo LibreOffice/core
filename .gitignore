@@ -140,6 +140,9 @@ DerivedData
 # doxygen output
 /docs
 
+# make dump-deps output
+/lo.png
+
 # gdb config
 /.gdbinit
 /.gdb_history
