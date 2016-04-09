@@ -213,7 +213,7 @@ typedef std::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
 template< typename Type >
 Type BinaryInputStream::readValue()
 {
-    Type ornValue;
+    Type ornValue = Type();
     readMemory( &ornValue, static_cast< sal_Int32 >( sizeof( Type ) ), sizeof( Type ) );
     ByteOrderConverter::convertLittleEndian( ornValue );
     return ornValue;
