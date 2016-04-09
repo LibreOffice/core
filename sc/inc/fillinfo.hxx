@@ -96,7 +96,36 @@ struct ScIconSetInfo
 
 struct CellInfo
 {
-    CellInfo() = default;
+    CellInfo()
+        : pPatternAttr(nullptr)
+        , pConditionSet(nullptr)
+        , pBackground(nullptr)   // TODO: omit?
+        , pLinesAttr(nullptr)
+        , mpTLBRLine(nullptr)
+        , mpBLTRLine(nullptr)
+        , pShadowAttr(nullptr)
+        , pHShadowOrigin(nullptr)
+        , pVShadowOrigin(nullptr)
+        , eHShadowPart(SC_SHADOW_HSTART)
+        , eVShadowPart(SC_SHADOW_HSTART)
+        , nClipMark(SC_CLIPMARK_NONE)
+        , nWidth(0)
+        , nRotateDir(SC_ROTDIR_NONE)
+        , bMarked(false)
+        , bEmptyCellText(false)
+        , bMerged(false)
+        , bHOverlapped(false)
+        , bVOverlapped(false)
+        , bAutoFilter(false)
+        , bPivotButton(false)
+        , bPivotPopupButton(false)
+        , bFilterActive(false)
+        , bPrinted(false)       // view-internal
+        , bHideGrid(false)      // view-internal
+        , bEditEngine(false)    // view-internal
+    {
+    }
+
     ~CellInfo() = default;
     CellInfo(const CellInfo&) = delete;
     const CellInfo& operator=(const CellInfo&) = delete;
