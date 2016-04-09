@@ -287,7 +287,7 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
             theList->SetContinueNumber(bContinue);
         }
         //Add the outer list to pCont
-        if (nC == 0)
+        if (nC == 0 && pCont)
         {
             theList->SetStyleName(rStyleName);
             pCont->Add(theList);
