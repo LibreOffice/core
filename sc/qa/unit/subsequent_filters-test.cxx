@@ -141,6 +141,7 @@ public:
     void testNewCondFormatXLSX();
     void testCondFormatThemeColorXLSX();
     void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
+    void testCondFormatThemeColor3XLSX(); // theme index 2 and 3 are switched
     void testComplexIconSetsXLSX();
     void testCondFormatParentXLSX();
     void testColorScaleNumWithRefXLSX();
@@ -259,6 +260,7 @@ public:
     CPPUNIT_TEST(testNewCondFormatXLSX);
     CPPUNIT_TEST(testCondFormatThemeColorXLSX);
     CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
+    CPPUNIT_TEST(testCondFormatThemeColor3XLSX);
     CPPUNIT_TEST(testComplexIconSetsXLSX);
     CPPUNIT_TEST(testCondFormatParentXLSX);
     CPPUNIT_TEST(testColorScaleNumWithRefXLSX);
@@ -2466,6 +2468,60 @@ void ScFiltersTest::testCondFormatThemeColor2XLSX()
     CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor.get());
     CPPUNIT_ASSERT_EQUAL(Color(217, 217, 217), *pDataBarFormatData->mpNegativeColor.get());
     CPPUNIT_ASSERT_EQUAL(Color(197, 90, 17), pDataBarFormatData->maAxisColor);
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+void checkDatabarPositiveColor(ScConditionalFormat* pFormat, const Color& rColor)
+{
+    CPPUNIT_ASSERT(pFormat);
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::DATABAR);
+    const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
+    const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
+
+    CPPUNIT_ASSERT_EQUAL(rColor, pDataBarFormatData->maPositiveColor);
+}
+
+}
+
+void ScFiltersTest::testCondFormatThemeColor3XLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("cond_format_theme_color3.", FORMAT_XLSX);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(1, 3, 0);
+    CPPUNIT_ASSERT(pFormat);
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::COLORSCALE);
+    const ScColorScaleFormat* pColorScale = static_cast<const ScColorScaleFormat*>(pEntry);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pColorScale->size());
+    const ScColorScaleEntry* pColorScaleEntry = pColorScale->GetEntry(0);
+    CPPUNIT_ASSERT(pColorScaleEntry);
+    CPPUNIT_ASSERT_EQUAL(Color(175, 171, 171), pColorScaleEntry->GetColor());
+
+    pColorScaleEntry = pColorScale->GetEntry(1);
+    CPPUNIT_ASSERT(pColorScaleEntry);
+    CPPUNIT_ASSERT_EQUAL(Color(51, 63, 80), pColorScaleEntry->GetColor());
+
+    pFormat = rDoc.GetCondFormat(3, 3, 0);
+    checkDatabarPositiveColor(pFormat, Color(59, 56, 56));
+
+    pFormat = rDoc.GetCondFormat(5, 3, 0);
+    checkDatabarPositiveColor(pFormat, Color(173, 185, 202));
+
+    pFormat = rDoc.GetCondFormat(7, 3, 0);
+    checkDatabarPositiveColor(pFormat, Color(89, 89, 89));
+
+    pFormat = rDoc.GetCondFormat(9, 3, 0);
+    checkDatabarPositiveColor(pFormat, Color(217, 217, 217));
 
     xDocSh->DoClose();
 }
