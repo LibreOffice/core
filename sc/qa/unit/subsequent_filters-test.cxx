@@ -31,6 +31,9 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <dbdata.hxx>
@@ -208,6 +211,7 @@ public:
     void testRefStringXLSX();
     void testHiddenSheetsXLSX();
     void testRelFormulaValidationXLS();
+    void testColumnStyle2XLSX();
 
     void testBnc762542();
 
@@ -308,6 +312,7 @@ public:
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRelFormulaValidationXLS);
+    CPPUNIT_TEST(testColumnStyle2XLSX);
 
     CPPUNIT_TEST(testBnc762542);
 
@@ -3212,6 +3217,45 @@ void ScFiltersTest::testRefStringXLSX()
 
     const ScCalcConfig& rCalcConfig = rDoc.GetCalcConfig();
     CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, rCalcConfig.meStringRefAddressSyntax);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testColumnStyle2XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("column_style.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScPatternAttr* pAttr = rDoc.GetPattern(1, 1, 0);
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const Color& rColor = rBackground.GetColor();
+        CPPUNIT_ASSERT_EQUAL(Color(255, 51, 51), rColor);
+    }
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
+        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        sal_uInt16 nVal = rJustify.GetValue();
+        CPPUNIT_ASSERT_EQUAL((sal_uInt16)SVX_HOR_JUSTIFY_CENTER, nVal);
+    }
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_FONT_HEIGHT);
+        const SvxFontHeightItem& rFontHeight = static_cast<const SvxFontHeightItem&>(rItem);
+        sal_uInt16 nHeight = rFontHeight.GetHeight();
+        CPPUNIT_ASSERT_EQUAL((sal_uInt16)240, nHeight);
+    }
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_FONT);
+        const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rItem);
+        OUString aName = rFont.GetFamilyName();
+        CPPUNIT_ASSERT_EQUAL(OUString("Linux Biolinum G"), aName);
+    }
 
     xDocSh->DoClose();
 }
