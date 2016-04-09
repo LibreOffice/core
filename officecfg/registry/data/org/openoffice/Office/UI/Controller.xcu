@@ -1140,6 +1140,17 @@
           <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
         </prop>
       </node>
+      <node oor:name="SimpleSaveInBasicIDE" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Save</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.script.BasicIDE</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
       <node oor:name="FreezePanesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FreezePanes</value>
