@@ -194,14 +194,17 @@ namespace {
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
 
-        // looks like an Excel bug
+        // Excel has a bug in the mapping of index 0, 1, 2 and 3.
         if (nThemeIndex == 0)
             nThemeIndex = 1;
         else if (nThemeIndex == 1)
             nThemeIndex = 0;
+        else if (nThemeIndex == 2)
+            nThemeIndex = 3;
+        else if (nThemeIndex == 3)
+            nThemeIndex = 2;
 
         nColor = rThemeBuffer.getColorByIndex( nThemeIndex );
-
     }
 
     ::Color aColor;
