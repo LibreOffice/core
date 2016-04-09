@@ -2451,18 +2451,18 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
 {
     // get some properties from document first
     bool bHasXAxisTitle = false,
-        bHasYAxisTitle = false,
-        bHasZAxisTitle = false,
-        bHasSecondaryXAxisTitle = false,
-        bHasSecondaryYAxisTitle = false;
+         bHasYAxisTitle = false,
+         bHasZAxisTitle = false,
+         bHasSecondaryXAxisTitle = false,
+         bHasSecondaryYAxisTitle = false;
     bool bHasXAxisMajorGrid = false,
-        bHasXAxisMinorGrid = false,
-        bHasYAxisMajorGrid = false,
-        bHasYAxisMinorGrid = false,
-        bHasZAxisMajorGrid = false,
-        bHasZAxisMinorGrid = false;
+         bHasXAxisMinorGrid = false,
+         bHasYAxisMajorGrid = false,
+         bHasYAxisMinorGrid = false,
+         bHasZAxisMajorGrid = false,
+         bHasZAxisMinorGrid = false;
 
-       Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
+    Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
 
     xDiagramProperties->getPropertyValue("HasXAxisTitle") >>= bHasXAxisTitle;
     xDiagramProperties->getPropertyValue("HasYAxisTitle") >>= bHasYAxisTitle;
