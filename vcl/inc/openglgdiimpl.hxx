@@ -133,7 +133,7 @@ public:
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawLineSegment(float x1, float y1, float x2, float y2);
     void DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth);
-    void DrawPolyLine( const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap);
+    void DrawPolyLine( const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap, float fMiterMinimumAngle);
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false );
     void DrawRegionBand( const RegionBand& rRegion );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
@@ -257,7 +257,8 @@ public:
                 double fTransparency,
                 const basegfx::B2DVector& rLineWidths,
                 basegfx::B2DLineJoin,
-                css::drawing::LineCap) override;
+                css::drawing::LineCap,
+                double fMiterMinimumAngle) override;
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,

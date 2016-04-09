@@ -41,6 +41,7 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
 
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -826,7 +827,8 @@ public:
                                     const basegfx::B2DPolygon&,
                                     double fLineWidth = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::Round,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
+                                    double fMiterMinimumAngle = 15.0 * F_PI180);
 
     /** Render the given polygon as a line stroke
 
@@ -849,7 +851,9 @@ public:
                                     double fTransparency = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::NONE,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    bool bBypassAACheck = false );
+                                    double fMiterMinimumAngle = 15.0 * F_PI180,
+                                    bool bBypassAACheck = false);
+
 private:
 
     // #i101491#
