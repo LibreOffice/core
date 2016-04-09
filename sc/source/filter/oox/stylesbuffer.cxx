@@ -2230,7 +2230,7 @@ void Xf::writeToPropertySet( PropertySet& rPropSet ) const
     rPropSet.setProperties( aPropMap );
 }
 
-void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRange ) const
+void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRange )
 {
     const StylesBuffer& rStyles = getStyles();
 
@@ -2251,22 +2251,9 @@ void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRan
         }
     }
 
-    std::unique_ptr<ScPatternAttr> pAttr(new ScPatternAttr(rDoc.getDoc().GetPool()));
-
-    {
-        SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;
-
-        if (maModel.mbBorderUsed && rStyles.hasBorder(maModel.mnBorderId) && maAlignment.getApiData().mnRotation)
-            eRotateMode = SVX_ROTATE_MODE_BOTTOM;
-
-        SvxRotateModeItem aItem(eRotateMode, ATTR_ROTATE_MODE);
-        ScfTools::PutItem(pAttr->GetItemSet(), aItem, false);
-    }
-
-    // TODO : Move more properties from writeToPropertyMap().
-
+    const ScPatternAttr& rAttr = createPattern();
     rDoc.getDoc().ApplyPatternAreaTab(
-        rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow, rRange.Sheet, *pAttr);
+        rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow, rRange.Sheet, rAttr);
 }
 
 const ::ScPatternAttr&
