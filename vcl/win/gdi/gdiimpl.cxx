@@ -2025,7 +2025,8 @@ bool WinSalGraphicsImpl::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle)
 {
     const sal_uInt32 nCount(rPolygon.count());
 
@@ -2055,7 +2056,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
             }
             case basegfx::B2DLineJoin::Miter :
             {
-                const Gdiplus::REAL aMiterLimit(15.0);
+                const Gdiplus::REAL aMiterLimit(1.0/sin(fMiterMinimumAngle/2.0));
 
                 aPen.SetMiterLimit(aMiterLimit);
                 // tdf#99165 MS's LineJoinMiter creates non standard conform miter additional

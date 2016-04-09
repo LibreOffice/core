@@ -684,8 +684,6 @@ inline glm::vec2 normalize(const glm::vec2& vector)
     return vector;
 }
 
-SAL_CONSTEXPR float constMiterMinimumAngle = 15.0f;
-
 } // end anonymous namespace
 
 void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth)
@@ -769,7 +767,7 @@ void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float 
  * - http://artgrammer.blogspot.si/2011/07/drawing-polylines-by-tessellation.html
  *
  */
-void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap)
+void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap, float fMiterMinimumAngle)
 {
     sal_uInt32 nPoints = rPolygon.count();
     bool bClosed = rPolygon.isClosed();
@@ -871,9 +869,9 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
                 float angle = std::atan2(previousLineVector.x * nextLineVector.y - previousLineVector.y * nextLineVector.x,
                                          previousLineVector.x * nextLineVector.x + previousLineVector.y * nextLineVector.y);
 
-                angle = (F_PI - std::fabs(angle)) / F_PI180;
+                angle = F_PI - std::fabs(angle);
 
-                if (angle < constMiterMinimumAngle)
+                if (angle < fMiterMinimumAngle)
                     eLineJoin = basegfx::B2DLineJoin::Bevel;
             }
 
@@ -2060,7 +2058,8 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
             double fTransparency,
             const basegfx::B2DVector& rLineWidth,
             basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap)
+            css::drawing::LineCap eLineCap,
+            double fMiterMinimumAngle)
 {
     VCL_GL_INFO( "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )
@@ -2080,7 +2079,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         else
             aPolygon.removeDoublePoints();
 
-        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap);
+        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap, fMiterMinimumAngle);
     }
     PostDraw();
 

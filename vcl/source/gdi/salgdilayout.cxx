@@ -23,6 +23,7 @@
 #endif
 #include "salgdi.hxx"
 #include "salframe.hxx"
+#include <basegfx/numeric/ftools.hxx> //for F_PI180
 
 // The only common SalFrame method
 
@@ -476,6 +477,7 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
     return bRet;
 }
 
+// For calls without MiterMinimumAngle
 bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
                                 double i_fTransparency,
                                 const basegfx::B2DVector& i_rLineWidth,
@@ -487,10 +489,29 @@ bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
     {
         basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
-        bRet = drawPolyLine( aMirror, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap );
+        bRet = drawPolyLine( aMirror, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap, 15.0 * F_PI180 /*default, not used */ );
     }
     else
-        bRet = drawPolyLine( i_rPolygon, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap );
+        bRet = drawPolyLine( i_rPolygon, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap, 15.0 * F_PI180 /*default, not used */ );
+    return bRet;
+}
+
+bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
+                                double i_fTransparency,
+                                const basegfx::B2DVector& i_rLineWidth,
+                                basegfx::B2DLineJoin i_eLineJoin,
+                                css::drawing::LineCap i_eLineCap,
+                                double i_fMiterMinimumAngle,
+                                const OutputDevice* i_pOutDev )
+{
+    bool bRet = false;
+    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
+    {
+        basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
+        bRet = drawPolyLine( aMirror, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle );
+    }
+    else
+        bRet = drawPolyLine( i_rPolygon, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle );
     return bRet;
 }
 
