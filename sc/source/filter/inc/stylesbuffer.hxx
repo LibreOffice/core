@@ -659,7 +659,7 @@ public:
     /** Writes all formatting attributes to the passed property set. */
     void                writeToPropertySet( PropertySet& rPropSet ) const;
 
-    void writeToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange ) const;
+    void writeToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange );
 
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
 
