@@ -287,27 +287,9 @@ DataBarRule::DataBarRule( const CondFormat& rFormat ):
 
 void DataBarRule::importColor( const AttributeList& rAttribs )
 {
-    sal_uInt32 nColor = 0;
-    if( rAttribs.hasAttribute( XML_rgb ) )
-        nColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
-    else if( rAttribs.hasAttribute( XML_theme ) )
-    {
-        sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
-        nColor = getTheme().getColorByIndex( nThemeIndex );
-    }
-
-    ::Color aColor;
-    double nTint = rAttribs.getDouble(XML_tint, 0.0);
-    if (nTint != 0.0)
-    {
-        oox::drawingml::Color aDMColor;
-        aDMColor.setSrgbClr(nColor);
-        aDMColor.addExcelTintTransformation(nTint);
-        nColor = aDMColor.getColor(getBaseFilter().getGraphicHelper());
-        aColor = ::Color(nColor);
-    }
-    else
-        aColor = ARgbToARgbComponents( nColor );
+    ThemeBuffer& rThemeBuffer = getTheme();
+    GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
+    ::Color aColor = importOOXColor(rAttribs, rThemeBuffer, rGraphicHelper);
 
     mxFormat->maPositiveColor = aColor;
 }
