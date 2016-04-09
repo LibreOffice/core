@@ -157,11 +157,11 @@ class RowInfoFiller
     {
         alignArray(nRow);
 
-        RowInfo* pThisRowInfo = &mpRowInfo[mnArrY];
-        CellInfo* pInfo = &pThisRowInfo->pCellInfo[mnArrX];
-        pInfo->maCell = rCell;
-        pThisRowInfo->bEmptyText = false;
-        pInfo->bEmptyCellText = false;
+        RowInfo& rThisRowInfo = mpRowInfo[mnArrY];
+        CellInfo& rInfo = rThisRowInfo.pCellInfo[mnArrX];
+        rInfo.maCell = rCell;
+        rThisRowInfo.bEmptyText = false;
+        rInfo.bEmptyCellText = false;
         ++mnArrY;
     }
 
@@ -266,55 +266,27 @@ void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nRotMax, bool bPain
         const SvxShadowItem* pDefShadow, SCROW nBlockStartY, SCROW nBlockEndY,
         SCCOL nBlockStartX, SCCOL nBlockEndX)
 {
-    for (SCSIZE nArrRow = 0; nArrRow < nArrCount; nArrRow++)
+    for (SCSIZE nArrRow = 0; nArrRow < nArrCount; ++nArrRow)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-        SCROW nY = pThisRowInfo->nRowNo;
-        pThisRowInfo->pCellInfo = new CellInfo[ nRotMax+1+2 ];  // to delete the caller!
+        RowInfo& rThisRowInfo = pRowInfo[nArrRow];
+        SCROW nY = rThisRowInfo.nRowNo;
+        rThisRowInfo.pCellInfo = new CellInfo[nRotMax + 1 + 2];  // to delete the caller!
 
-        for (SCCOL nArrCol = 0; nArrCol <= nRotMax+2; nArrCol++)          // Preassign cell info
+        for (SCCOL nArrCol = 0; nArrCol <= nRotMax+2; ++nArrCol) // Preassign cell info
         {
-            SCCOL nX;
-            if (nArrCol>0)
-                nX = nArrCol-1;
-            else
-                nX = MAXCOL+1;      // invalid
-
-            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
-            pInfo->bEmptyCellText = true;
-            pInfo->maCell.clear();
+            CellInfo& rInfo = rThisRowInfo.pCellInfo[nArrCol];
             if (bPaintMarks)
-                pInfo->bMarked = ( nX >= nBlockStartX && nX <= nBlockEndX
-                                && nY >= nBlockStartY && nY <= nBlockEndY );
-            else
-                pInfo->bMarked = false;
-            pInfo->nWidth = 0;
-
-            pInfo->nClipMark    = SC_CLIPMARK_NONE;
-            pInfo->bMerged      = false;
-            pInfo->bHOverlapped = false;
-            pInfo->bVOverlapped = false;
-            pInfo->bAutoFilter  = false;
-            pInfo->bPivotButton  = false;
-            pInfo->bPivotPopupButton = false;
-            pInfo->bFilterActive = false;
-            pInfo->nRotateDir   = SC_ROTDIR_NONE;
-
-            pInfo->bPrinted     = false;                    //  view-internal
-            pInfo->bHideGrid    = false;                    //  view-internal
-            pInfo->bEditEngine  = false;                    //  view-internal
-
-            pInfo->pBackground  = nullptr;                     //TODO: omit?
-            pInfo->pPatternAttr = nullptr;
-            pInfo->pConditionSet= nullptr;
-
-            pInfo->pLinesAttr   = nullptr;
-            pInfo->mpTLBRLine   = nullptr;
-            pInfo->mpBLTRLine   = nullptr;
-
-            pInfo->pShadowAttr    = pDefShadow;
-            pInfo->pHShadowOrigin = nullptr;
-            pInfo->pVShadowOrigin = nullptr;
+            {
+                SCCOL nX;
+                if (nArrCol>0)
+                    nX = nArrCol-1;
+                else
+                    nX = MAXCOL+1;      // invalid
+                rInfo.bMarked = (nX >= nBlockStartX && nX <= nBlockEndX &&
+                                 nY >= nBlockStartY && nY <= nBlockEndY);
+            }
+            rInfo.bEmptyCellText = true;
+            rInfo.pShadowAttr    = pDefShadow;
         }
     }
 }

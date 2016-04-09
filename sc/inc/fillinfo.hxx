@@ -29,8 +29,6 @@
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
 
-#include <boost/noncopyable.hpp>
-
 class SfxItemSet;
 class SvxBrushItem;
 class SvxBoxItem;
@@ -96,8 +94,42 @@ struct ScIconSetInfo
     bool mbShowValue;
 };
 
-struct CellInfo : boost::noncopyable
+struct CellInfo
 {
+    CellInfo()
+        : pPatternAttr(nullptr)
+        , pConditionSet(nullptr)
+        , pBackground(nullptr)   // TODO: omit?
+        , pLinesAttr(nullptr)
+        , mpTLBRLine(nullptr)
+        , mpBLTRLine(nullptr)
+        , pShadowAttr(nullptr)
+        , pHShadowOrigin(nullptr)
+        , pVShadowOrigin(nullptr)
+        , eHShadowPart(SC_SHADOW_HSTART)
+        , eVShadowPart(SC_SHADOW_HSTART)
+        , nClipMark(SC_CLIPMARK_NONE)
+        , nWidth(0)
+        , nRotateDir(SC_ROTDIR_NONE)
+        , bMarked(false)
+        , bEmptyCellText(false)
+        , bMerged(false)
+        , bHOverlapped(false)
+        , bVOverlapped(false)
+        , bAutoFilter(false)
+        , bPivotButton(false)
+        , bPivotPopupButton(false)
+        , bFilterActive(false)
+        , bPrinted(false)       // view-internal
+        , bHideGrid(false)      // view-internal
+        , bEditEngine(false)    // view-internal
+    {
+    }
+
+    ~CellInfo() = default;
+    CellInfo(const CellInfo&) = delete;
+    const CellInfo& operator=(const CellInfo&) = delete;
+
     ScRefCellValue              maCell;
 
     const ScPatternAttr*        pPatternAttr;
@@ -139,8 +171,13 @@ struct CellInfo : boost::noncopyable
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
 
-struct RowInfo : boost::noncopyable
+struct RowInfo
 {
+    RowInfo() = default;
+    ~RowInfo() = default;
+    RowInfo(const RowInfo&) = delete;
+    const RowInfo& operator=(const RowInfo&) = delete;
+
     CellInfo*           pCellInfo;
 
     sal_uInt16          nHeight;
@@ -154,7 +191,7 @@ struct RowInfo : boost::noncopyable
     bool                bChanged:1;           // TRUE, if not tested
 };
 
-struct ScTableInfo : boost::noncopyable
+struct ScTableInfo
 {
     svx::frame::Array   maArray;
     RowInfo*            mpRowInfo;
@@ -163,6 +200,8 @@ struct ScTableInfo : boost::noncopyable
 
     explicit            ScTableInfo();
                         ~ScTableInfo();
+    ScTableInfo(const ScTableInfo&) = delete;
+    const ScTableInfo& operator=(const ScTableInfo&) = delete;
 };
 
 #endif
