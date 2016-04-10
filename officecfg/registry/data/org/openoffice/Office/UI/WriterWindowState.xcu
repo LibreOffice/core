@@ -846,11 +846,17 @@
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/changes" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>1,2</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>1</value>
+        </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Track Changes</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
