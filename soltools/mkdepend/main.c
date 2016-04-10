@@ -634,9 +634,9 @@ char *base_name(char *file)
         if ( *p == '/' ||  *p == '\\') {
             file = p + 1;
             break;
-        };
+        }
         p--;
-    };
+    }
     return file;
 }
 
@@ -711,7 +711,7 @@ void convert_slashes(char *path)
         for (ptr = (char*)path; *ptr; ++ptr)
             if (*ptr == '\\')
                 *ptr = '/';
-    };
+    }
 #else
     (void)path;
 #endif
@@ -730,7 +730,7 @@ char* append_slash(char *path)
             strcat(new_string, "\\");
         else
             strcat(new_string, "/");
-    };
+    }
     return new_string;
 }
 
