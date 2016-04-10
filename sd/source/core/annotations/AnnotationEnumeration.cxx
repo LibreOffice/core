@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -35,10 +34,12 @@ using namespace ::com::sun::star::lang;
 
 namespace sd {
 
-class AnnotationEnumeration: public ::cppu::WeakImplHelper< css::office::XAnnotationEnumeration >, private boost::noncopyable
+class AnnotationEnumeration: public ::cppu::WeakImplHelper< css::office::XAnnotationEnumeration >
 {
 public:
     explicit AnnotationEnumeration( const AnnotationVector& rAnnotations );
+    AnnotationEnumeration(const AnnotationEnumeration&) = delete;
+    AnnotationEnumeration& operator=(const AnnotationEnumeration&) = delete;
 
     // css::office::XAnnotationEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) override;

@@ -37,7 +37,6 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -61,8 +60,7 @@ namespace {
         end.
     */
     class PresenterScreenListener
-        : private ::boost::noncopyable,
-          private ::cppu::BaseMutex,
+        : private ::cppu::BaseMutex,
           public PresenterScreenListenerInterfaceBase
     {
     public:
@@ -70,6 +68,8 @@ namespace {
             const css::uno::Reference<css::uno::XComponentContext>& rxContext,
             const css::uno::Reference<css::frame::XModel2>& rxModel);
         virtual ~PresenterScreenListener();
+        PresenterScreenListener(const PresenterScreenListener&) = delete;
+        PresenterScreenListener& operator=(const PresenterScreenListener&) = delete;
 
         void Initialize();
         virtual void SAL_CALL disposing() override;

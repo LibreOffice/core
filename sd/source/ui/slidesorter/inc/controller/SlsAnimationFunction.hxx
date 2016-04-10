@@ -23,8 +23,6 @@
 #include "model/SlsSharedPageDescriptor.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <functional>
 #include <vector>
 

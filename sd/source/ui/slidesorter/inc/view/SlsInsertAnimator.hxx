@@ -22,7 +22,6 @@
 
 #include "controller/SlsAnimator.hxx"
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -32,10 +31,11 @@ class InsertPosition;
     position while a move or copy operation takes place.
 */
 class InsertAnimator
-    : private ::boost::noncopyable
 {
 public:
-    InsertAnimator (SlideSorter& rSlideSorter);
+    explicit InsertAnimator (SlideSorter& rSlideSorter);
+    InsertAnimator(const InsertAnimator&) = delete;
+    InsertAnimator& operator=(const InsertAnimator&) = delete;
 
     /** Set the position at which we have to make room for the display of an
         icon.

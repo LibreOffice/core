@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -45,12 +44,13 @@ namespace {
     This service is used by the presenter screen to render the notes view.
 */
 class PresenterTextView
-    : private ::boost::noncopyable,
-      public PresenterTextViewInterfaceBase
+    : public PresenterTextViewInterfaceBase
 {
 public:
     explicit PresenterTextView (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterTextView();
+    PresenterTextView(const PresenterTextView&) = delete;
+    PresenterTextView& operator=(const PresenterTextView&) = delete;
 
     // XInitialization
 

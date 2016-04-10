@@ -24,8 +24,6 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <vector>
 
 
@@ -37,7 +35,7 @@ namespace rptui
 
     //= FormatNormalizer
 
-    class FormatNormalizer : public ::boost::noncopyable
+    class FormatNormalizer
     {
     public:
         struct Field
@@ -62,6 +60,8 @@ namespace rptui
     public:
         explicit FormatNormalizer( const OReportModel& _rModel );
         ~FormatNormalizer();
+        FormatNormalizer(const FormatNormalizer&) = delete;
+        FormatNormalizer& operator=(const FormatNormalizer&) = delete;
 
         void    notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent );
         void    notifyElementInserted( const css::uno::Reference< css::uno::XInterface >& _rxElement );

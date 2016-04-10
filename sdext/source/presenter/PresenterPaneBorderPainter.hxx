@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sdext { namespace presenter {
@@ -47,14 +46,15 @@ namespace {
     objects.
 */
 class PresenterPaneBorderPainter
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
+    : protected ::cppu::BaseMutex,
       public PresenterPaneBorderPainterInterfaceBase
 {
 public:
     explicit PresenterPaneBorderPainter (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterPaneBorderPainter();
+    PresenterPaneBorderPainter(const PresenterPaneBorderPainter&) = delete;
+    PresenterPaneBorderPainter& operator=(const PresenterPaneBorderPainter&) = delete;
 
     /** Transform the bounding box of the window content to the outer
         bounding box of the border that is painted around it.

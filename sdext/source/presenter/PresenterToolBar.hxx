@@ -43,8 +43,6 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <functional>
 
 namespace {
@@ -72,7 +70,6 @@ namespace sdext { namespace presenter {
 */
 class PresenterToolBar
     : private ::cppu::BaseMutex,
-      private ::boost::noncopyable,
       public PresenterToolBarInterfaceBase,
       public CachablePresenterView
 {
@@ -88,6 +85,8 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController,
         const Anchor eAnchor);
     virtual ~PresenterToolBar();
+    PresenterToolBar(const PresenterToolBar&) = delete;
+    PresenterToolBar& operator=(const PresenterToolBar&) = delete;
 
     void Initialize (
         const OUString& rsConfigurationPath);
@@ -221,7 +220,6 @@ private:
 */
 class PresenterToolBarView
     : private ::cppu::BaseMutex,
-      private ::boost::noncopyable,
       public PresenterToolBarViewInterfaceBase
 {
 public:
@@ -231,6 +229,8 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterToolBarView();
+    PresenterToolBarView(const PresenterToolBarView&) = delete;
+    PresenterToolBarView& operator=(const PresenterToolBarView&) = delete;
 
     virtual void SAL_CALL disposing() override;
 

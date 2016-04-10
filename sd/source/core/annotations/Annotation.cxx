@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "osl/time.h"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -51,11 +50,12 @@ namespace sd {
 
 class Annotation : private ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper< XAnnotation>,
-                   public ::cppu::PropertySetMixin< XAnnotation >,
-                   private boost::noncopyable
+                   public ::cppu::PropertySetMixin< XAnnotation >
 {
 public:
     explicit Annotation( const Reference< XComponentContext >& context, SdPage* pPage );
+    Annotation(const Annotation&) = delete;
+    Annotation& operator=(const Annotation&) = delete;
 
     SdPage* GetPage() const { return mpPage; }
     SdrModel* GetModel() { return (mpPage != nullptr) ? mpPage->GetModel() : nullptr; }

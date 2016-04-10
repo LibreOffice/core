@@ -22,7 +22,6 @@
 
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <boost/noncopyable.hpp>
 
 namespace sdext { namespace presenter {
 
@@ -34,11 +33,12 @@ namespace sdext { namespace presenter {
     and hiding a sprite before disposing it (results in zombie sprites.)
 */
 class PresenterSprite
-    : private ::boost::noncopyable
 {
 public:
     PresenterSprite();
     virtual ~PresenterSprite();
+    PresenterSprite(const PresenterSprite&) = delete;
+    PresenterSprite& operator=(const PresenterSprite&) = delete;
 
     /** The given sprite canvas is used as factory to create the sprite that
         is wrapped by objects of this class.

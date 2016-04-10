@@ -22,7 +22,6 @@
 
 #include "PresenterController.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDisplayBitmap.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
@@ -56,8 +55,7 @@ namespace {
     uses a derived class that overrides the setCurrentSlide() method.
 */
 class PresenterSlidePreview
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterSlidePreviewInterfaceBase
 {
 public:
@@ -67,6 +65,8 @@ public:
         const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlidePreview();
+    PresenterSlidePreview(const PresenterSlidePreview&) = delete;
+    PresenterSlidePreview& operator=(const PresenterSlidePreview&) = delete;
     virtual void SAL_CALL disposing() override;
 
     // XResourceId

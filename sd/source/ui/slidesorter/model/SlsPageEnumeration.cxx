@@ -21,8 +21,6 @@
 
 #include <utility>
 
-#include <boost/noncopyable.hpp>
-
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 
@@ -32,13 +30,15 @@ using namespace ::sd::slidesorter::model;
 namespace {
 
 class PageEnumerationImpl
-    : public Enumeration<SharedPageDescriptor>, private boost::noncopyable
+    : public Enumeration<SharedPageDescriptor>
 {
 public:
     inline PageEnumerationImpl (
         const SlideSorterModel& rModel,
         const PageEnumeration::PagePredicate& rPredicate);
     virtual ~PageEnumerationImpl();
+    PageEnumerationImpl(const PageEnumerationImpl&) = delete;
+    PageEnumerationImpl& operator=(const PageEnumerationImpl&) = delete;
     /** Create a copy of the called enumeration object.
     */
     virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;

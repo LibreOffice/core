@@ -141,7 +141,6 @@
 #include "UndoEnv.hxx"
 
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 #include <cppuhelper/exc_hlp.hxx>

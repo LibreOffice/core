@@ -29,8 +29,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <functional>
 #include <memory>
 
@@ -51,13 +49,14 @@ namespace {
 /** Base class of horizontal and vertical scroll bars.
 */
 class PresenterScrollBar
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterScrollBarInterfaceBase
 {
 public:
     typedef ::std::function<void (double)> ThumbMotionListener;
     virtual ~PresenterScrollBar();
+    PresenterScrollBar(const PresenterScrollBar&) = delete;
+    PresenterScrollBar& operator=(const PresenterScrollBar&) = delete;
 
     virtual void SAL_CALL disposing() override;
 

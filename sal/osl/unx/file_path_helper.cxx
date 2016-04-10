@@ -20,7 +20,6 @@
 #include "file_path_helper.hxx"
 #include "uunxapi.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -157,7 +156,7 @@ bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
  the specified character
  **********************************************/
 
-class path_list_iterator: private boost::noncopyable
+class path_list_iterator
 {
 public:
 
@@ -172,6 +171,9 @@ public:
     {
         reset();
     }
+
+    path_list_iterator(const path_list_iterator&) = delete;
+    path_list_iterator& operator=(const path_list_iterator&) = delete;
 
     void reset()
     {

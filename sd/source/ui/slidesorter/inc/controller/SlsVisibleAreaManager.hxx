@@ -22,7 +22,6 @@
 
 #include "controller/SlsAnimator.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -30,11 +29,12 @@ namespace sd { namespace slidesorter { namespace controller {
 /** Manage requests for scrolling page objects into view.
 */
 class VisibleAreaManager
-    : public ::boost::noncopyable
 {
 public:
-    VisibleAreaManager (SlideSorter& rSlideSorter);
+    explicit VisibleAreaManager (SlideSorter& rSlideSorter);
     ~VisibleAreaManager();
+    VisibleAreaManager(const VisibleAreaManager&) = delete;
+    VisibleAreaManager& operator=(const VisibleAreaManager&) = delete;
 
     void ActivateCurrentSlideTracking();
     void DeactivateCurrentSlideTracking();
@@ -58,7 +58,7 @@ public:
     class TemporaryDisabler
     {
     public:
-        TemporaryDisabler (SlideSorter& rSlideSorter);
+        explicit TemporaryDisabler (SlideSorter& rSlideSorter);
         ~TemporaryDisabler();
     private:
         VisibleAreaManager& mrVisibleAreaManager;

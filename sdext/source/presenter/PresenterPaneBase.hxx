@@ -36,7 +36,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
-#include <boost/noncopyable.hpp>
 
 
 namespace sdext { namespace presenter {
@@ -60,7 +59,6 @@ namespace {
 */
 class PresenterPaneBase
     : protected ::cppu::BaseMutex,
-      private ::boost::noncopyable,
       public PresenterPaneBaseInterfaceBase
 {
 public:
@@ -68,6 +66,8 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPaneBase();
+    PresenterPaneBase(const PresenterPaneBase&) = delete;
+    PresenterPaneBase& operator=(const PresenterPaneBase&) = delete;
 
     virtual void SAL_CALL disposing() override;
 

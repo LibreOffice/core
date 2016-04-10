@@ -30,7 +30,6 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace sd { namespace presenter {
 
@@ -45,13 +44,14 @@ namespace {
 /** Render single slides into bitmaps.
 */
 class SlideRenderer
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
+    : protected ::cppu::BaseMutex,
       public SlideRendererInterfaceBase
 {
 public:
     explicit SlideRenderer (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~SlideRenderer();
+    SlideRenderer(const SlideRenderer&) = delete;
+    SlideRenderer& operator=(const SlideRenderer&) = delete;
     virtual void SAL_CALL disposing() override;
 
     // XInitialization

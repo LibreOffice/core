@@ -21,7 +21,6 @@
 
 #include "dllapi.h"
 
-#include <boost/noncopyable.hpp>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 
@@ -66,7 +65,7 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
 class OReportPage;
 class OPropertyMediator;
 
-class REPORTDESIGN_DLLPUBLIC OObjectBase: private boost::noncopyable
+class REPORTDESIGN_DLLPUBLIC OObjectBase
 {
 public:
     typedef rtl::Reference<OPropertyMediator> TMediator;
@@ -100,6 +99,8 @@ private:
                     const css::uno::Reference< css::uno::XInterface >& _rxShape );
 
 public:
+    OObjectBase(const OObjectBase&) = delete;
+    OObjectBase& operator=(const OObjectBase&) = delete;
     void StartListening();
     void EndListening(bool bRemoveListener = true);
     // PropertyChangeListener

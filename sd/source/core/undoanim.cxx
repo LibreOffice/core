@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include "CustomAnimationCloner.hxx"
@@ -111,7 +110,7 @@ OUString UndoAnimation::GetComment() const
     return SdResId(STR_UNDO_ANIMATION).toString();
 }
 
-struct UndoAnimationPathImpl: private boost::noncopyable
+struct UndoAnimationPathImpl
 {
     SdPage*         mpPage;
     sal_Int32       mnEffectOffset;
@@ -136,6 +135,8 @@ struct UndoAnimationPathImpl: private boost::noncopyable
             }
         }
     }
+    UndoAnimationPathImpl(const UndoAnimationPathImpl&) = delete;
+    UndoAnimationPathImpl& operator=(const UndoAnimationPathImpl&) = delete;
 
     CustomAnimationEffectPtr getEffect() const
     {

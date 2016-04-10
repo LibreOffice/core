@@ -41,7 +41,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace sdext { namespace presenter {
 
@@ -58,8 +57,7 @@ namespace {
 /** Manage the interactive moving and resizing of panes.
 */
 class PresenterPaneBorderManager
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
+    : protected ::cppu::BaseMutex,
       public PresenterPaneBorderManagerInterfaceBase
 {
 public:
@@ -67,6 +65,8 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPaneBorderManager();
+    PresenterPaneBorderManager(const PresenterPaneBorderManager&) = delete;
+    PresenterPaneBorderManager& operator=(const PresenterPaneBorderManager&) = delete;
 
     virtual void SAL_CALL disposing();
 

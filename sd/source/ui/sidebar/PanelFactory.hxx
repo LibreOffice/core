@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <map>
 #include <memory>
 
@@ -46,8 +45,7 @@ namespace
 }
 
 class PanelFactory
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PanelFactoryInterfaceBase
 {
 public:
@@ -56,6 +54,8 @@ public:
 
     explicit PanelFactory (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PanelFactory();
+    PanelFactory(const PanelFactory&) = delete;
+    PanelFactory& operator=(const PanelFactory&) = delete;
 
     virtual void SAL_CALL disposing() override;
 

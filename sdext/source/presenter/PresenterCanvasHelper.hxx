@@ -28,18 +28,18 @@
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <rtl/ref.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace sdext { namespace presenter {
 
 /** Collection of functions to ease the life of a canvas user.
 */
 class PresenterCanvasHelper
-    : private ::boost::noncopyable
 {
 public:
     PresenterCanvasHelper();
     ~PresenterCanvasHelper();
+    PresenterCanvasHelper(const PresenterCanvasHelper&) = delete;
+    PresenterCanvasHelper& operator=(const PresenterCanvasHelper&) = delete;
 
     void Paint (
         const SharedBitmapDescriptor& rpBitmap,
