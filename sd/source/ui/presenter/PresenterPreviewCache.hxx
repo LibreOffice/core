@@ -26,7 +26,6 @@
 #include "cache/SlsPageCache.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sd { namespace presenter {
@@ -41,13 +40,14 @@ namespace {
 /** Uno API wrapper around the slide preview cache.
 */
 class PresenterPreviewCache
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterPreviewCacheInterfaceBase
 {
 public:
     explicit PresenterPreviewCache (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterPreviewCache();
+    PresenterPreviewCache(const PresenterPreviewCache&) = delete;
+    PresenterPreviewCache& operator=(const PresenterPreviewCache&) = delete;
 
     // XInitialize
 

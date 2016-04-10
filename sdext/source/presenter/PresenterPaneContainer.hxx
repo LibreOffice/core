@@ -34,8 +34,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <functional>
 #include <memory>
 #include <vector>
@@ -56,14 +54,15 @@ namespace {
     screen but stores the views displayed in these panes as well.
 */
 class PresenterPaneContainer
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterPaneContainerInterfaceBase
 {
 public:
     explicit PresenterPaneContainer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterPaneContainer();
+    PresenterPaneContainer(const PresenterPaneContainer&) = delete;
+    PresenterPaneContainer& operator=(const PresenterPaneContainer&) = delete;
 
     virtual void SAL_CALL disposing() override;
 

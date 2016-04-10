@@ -35,7 +35,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace {
@@ -59,12 +58,13 @@ namespace sd { namespace framework {
 */
 class ConfigurationController
     : private sd::MutexOwner,
-      private boost::noncopyable,
       public ConfigurationControllerInterfaceBase
 {
 public:
     ConfigurationController() throw();
     virtual ~ConfigurationController() throw();
+    ConfigurationController(const ConfigurationController&) = delete;
+    ConfigurationController& operator=(const ConfigurationController&) = delete;
 
     virtual void SAL_CALL disposing() override;
 

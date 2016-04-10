@@ -23,7 +23,6 @@
 
 #include "pdfihelper.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
@@ -44,8 +43,7 @@ namespace
 
 class PDFPasswordRequest:
     public cppu::WeakImplHelper<
-        task::XInteractionRequest, task::XInteractionPassword >,
-    private boost::noncopyable
+        task::XInteractionRequest, task::XInteractionPassword >
 {
 private:
     mutable osl::Mutex            m_aMutex;
@@ -55,6 +53,8 @@ private:
 
 public:
     explicit PDFPasswordRequest(bool bFirstTry, const OUString& rName);
+    PDFPasswordRequest(const PDFPasswordRequest&) = delete;
+    PDFPasswordRequest& operator=(const PDFPasswordRequest&) = delete;
 
     // XInteractionRequest
     virtual uno::Any SAL_CALL getRequest(  ) throw (uno::RuntimeException, std::exception) override;
@@ -120,11 +120,12 @@ void PDFPasswordRequest::select() throw (uno::RuntimeException, std::exception)
 }
 
 class UnsupportedEncryptionFormatRequest:
-    public cppu::WeakImplHelper< task::XInteractionRequest >,
-    private boost::noncopyable
+    public cppu::WeakImplHelper< task::XInteractionRequest >
 {
 public:
     UnsupportedEncryptionFormatRequest() {}
+    UnsupportedEncryptionFormatRequest(const UnsupportedEncryptionFormatRequest&) = delete;
+    UnsupportedEncryptionFormatRequest& operator=(const UnsupportedEncryptionFormatRequest&) = delete;
 
 private:
     virtual ~UnsupportedEncryptionFormatRequest() {}

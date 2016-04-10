@@ -39,7 +39,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace sdext { namespace presenter {
 
@@ -58,8 +57,7 @@ namespace {
 /** Life view in a secondary window of a full screen slide show.
 */
 class PresenterSlideShowView
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
+    : protected ::cppu::BaseMutex,
       public PresenterSlideShowViewInterfaceBase,
       public CachablePresenterView
 {
@@ -70,6 +68,8 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlideShowView();
+    PresenterSlideShowView(const PresenterSlideShowView&) = delete;
+    PresenterSlideShowView& operator=(const PresenterSlideShowView&) = delete;
 
     void LateInit();
     virtual void SAL_CALL disposing() override;

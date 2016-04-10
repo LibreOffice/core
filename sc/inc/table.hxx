@@ -38,7 +38,6 @@
 #include <set>
 #include <map>
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 namespace utl {
     class TextSearch;
@@ -115,7 +114,7 @@ class ScDBData;
 class ScDocumentImport;
 class ScHint;
 
-class ScTable : private boost::noncopyable
+class ScTable
 {
 private:
     typedef ::std::vector< ScRange > ScRangeVec;
@@ -228,6 +227,8 @@ public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                          bool bColInfo = true, bool bRowInfo = true );
                 ~ScTable();
+                ScTable(const ScTable&) = delete;
+    ScTable&    operator=(const ScTable&) = delete;
 
     ScDocument& GetDoc() { return *pDocument;}
     const ScDocument& GetDoc() const { return *pDocument;}

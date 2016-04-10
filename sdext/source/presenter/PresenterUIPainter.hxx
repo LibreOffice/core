@@ -24,18 +24,18 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <boost/noncopyable.hpp>
 
 namespace sdext { namespace presenter {
 
 /** Functions for painting UI elements.
 */
 class PresenterUIPainter
-    : private ::boost::noncopyable
 {
 public:
     PresenterUIPainter();
     ~PresenterUIPainter();
+    PresenterUIPainter(const PresenterUIPainter&) = delete;
+    PresenterUIPainter& operator=(const PresenterUIPainter&) = delete;
 
     static void PaintHorizontalBitmapComposite (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,

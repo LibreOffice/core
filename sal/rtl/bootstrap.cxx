@@ -37,7 +37,6 @@
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <list>
 #include <algorithm>
 #include <unordered_map>
@@ -407,7 +406,7 @@ Bootstrap_Impl * get_static_bootstrap_handle()
     return s_handle;
 }
 
-struct FundamentalIniData: private boost::noncopyable {
+struct FundamentalIniData {
     rtlBootstrapHandle ini;
 
     FundamentalIniData() {
@@ -422,6 +421,9 @@ struct FundamentalIniData: private boost::noncopyable {
     }
 
     ~FundamentalIniData() { rtl_bootstrap_args_close(ini); }
+
+    FundamentalIniData(const FundamentalIniData&) = delete;
+    FundamentalIniData& operator=(const FundamentalIniData&) = delete;
 };
 
 struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
@@ -578,10 +580,13 @@ void Bootstrap_Impl::expandValue(
 
 namespace {
 
-struct bootstrap_map: private boost::noncopyable {
+struct bootstrap_map {
     typedef std::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
         rtl::OUStringHash > t;
+
+    bootstrap_map(const bootstrap_map&) = delete;
+    bootstrap_map& operator=(const bootstrap_map&) = delete;
 
     // get and release must only be called properly synchronized via some mutex
     // (e.g., osl::Mutex::getGlobalMutex()):

@@ -21,7 +21,6 @@
 
 #include <cstring>
 
-#include "boost/noncopyable.hpp"
 #include "rtl/instance.hxx"
 #include "rtl/process.h"
 #include "rtl/uuid.h"
@@ -29,9 +28,12 @@
 
 namespace {
 
-class Id: private boost::noncopyable {
+class Id {
 public:
     Id() { rtl_createUuid(uuid_, nullptr, false); }
+
+    Id(const Id&) = delete;
+    Id& operator=(const Id&) = delete;
 
     void copy(sal_uInt8 * target) const
     { std::memcpy(target, uuid_, UUID_SIZE); }

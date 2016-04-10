@@ -34,7 +34,6 @@
 #include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sd { namespace presenter {
@@ -60,8 +59,7 @@ namespace {
     construction.  This allows the shared canvas to be a canvas of sprite itself.
 */
 class PresenterCanvas
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterCanvasInterfaceBase
 {
 public:
@@ -99,6 +97,8 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxSharedWindow,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
     virtual ~PresenterCanvas();
+    PresenterCanvas(const PresenterCanvas&) = delete;
+    PresenterCanvas& operator=(const PresenterCanvas&) = delete;
 
     virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) override;

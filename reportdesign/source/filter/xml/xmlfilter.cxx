@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -83,7 +82,7 @@ using namespace ::com::sun::star::util;
 
 
 class RptMLMasterStylesContext_Impl:
-    public XMLTextMasterStylesContext, private boost::noncopyable
+    public XMLTextMasterStylesContext
 {
     ORptFilter& m_rImport;
 
@@ -95,6 +94,8 @@ public:
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~RptMLMasterStylesContext_Impl();
+    RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&) = delete;
+    RptMLMasterStylesContext_Impl& operator=(const RptMLMasterStylesContext_Impl&) = delete;
     virtual void EndElement() override;
 };
 

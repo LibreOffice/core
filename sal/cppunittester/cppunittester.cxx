@@ -52,7 +52,6 @@
 #include "cppunit/plugin/DynamicLibraryManagerException.h"
 #include "cppunit/portability/Stream.h"
 
-#include "boost/noncopyable.hpp"
 #include <memory>
 #include <boost/algorithm/string.hpp>
 
@@ -86,9 +85,11 @@ std::string convertLazy(rtl::OUString const & s16) {
 //Output how long each test took
 class TimingListener
     : public CppUnit::TestListener
-    , private boost::noncopyable
 {
 public:
+    TimingListener(const TimingListener&) = delete;
+    TimingListener& operator=(const TimingListener&) = delete;
+
     void startTest( CppUnit::Test *) override
     {
         m_nStartTime = osl_getGlobalTimer();
@@ -112,9 +113,11 @@ private:
 // have a useful value to identify the source
 class EyecatcherListener
     : public CppUnit::TestListener
-    , private boost::noncopyable
 {
 public:
+    EyecatcherListener() = default;
+    EyecatcherListener(const EyecatcherListener&) = delete;
+    EyecatcherListener& operator=(const EyecatcherListener&) = delete;
     void startTest( CppUnit::Test* test) override
     {
         std::unique_ptr<char[]> tn(new char [ test->getName().length() + 2 ]);
@@ -209,7 +212,6 @@ void addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test
 //exception before falling over and dying
 class CPPUNIT_API ProtectedFixtureFunctor
     : public CppUnit::Functor
-    , private boost::noncopyable
 {
 private:
     const std::string &testlib;
@@ -224,6 +226,8 @@ public:
         , result(result_)
     {
     }
+    ProtectedFixtureFunctor(const ProtectedFixtureFunctor&) = delete;
+    ProtectedFixtureFunctor& operator=(const ProtectedFixtureFunctor&) = delete;
     bool run() const
     {
 #ifdef DISABLE_DYNLOADING

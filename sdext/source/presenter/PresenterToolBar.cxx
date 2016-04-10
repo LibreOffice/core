@@ -50,7 +50,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -91,10 +90,11 @@ namespace {
     };
 
     class ElementMode
-        : private ::boost::noncopyable
     {
     public:
         ElementMode();
+        ElementMode(const ElementMode&) = delete;
+        ElementMode& operator=(const ElementMode&) = delete;
 
         SharedBitmapDescriptor mpIcon;
         OUString msAction;
@@ -111,9 +111,11 @@ namespace {
 }  // end of anonymous namespace
 
 class PresenterToolBar::Context
-    : private ::boost::noncopyable
 {
 public:
+    Context() = default;
+    Context(const Context&) = delete;
+    Context& operator=(const Context&) = delete;
     Reference<drawing::XPresenterHelper> mxPresenterHelper;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 };
@@ -128,12 +130,13 @@ namespace {
 
     class Element
         : private ::cppu::BaseMutex,
-          private ::boost::noncopyable,
           public ElementInterfaceBase
     {
     public:
         explicit Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~Element();
+        Element(const Element&) = delete;
+        Element& operator=(const Element&) = delete;
 
         virtual void SAL_CALL disposing() override;
 

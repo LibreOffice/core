@@ -39,7 +39,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sdext { namespace presenter {
@@ -62,8 +61,7 @@ namespace {
     to be moved or resized with the mouse.
 */
 class PresenterWindowManager
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
+    : protected ::cppu::BaseMutex,
       public PresenterWindowManagerInterfaceBase
 {
 public:
@@ -72,6 +70,8 @@ public:
         const ::rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterWindowManager();
+    PresenterWindowManager(const PresenterWindowManager&) = delete;
+    PresenterWindowManager& operator=(const PresenterWindowManager&) = delete;
 
     void SAL_CALL disposing() override;
 

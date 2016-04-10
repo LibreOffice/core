@@ -50,7 +50,6 @@
 #include <memory>
 #include <unordered_set>
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 class ScDocument;
 
@@ -235,8 +234,7 @@ class ScChart2DataSequence : public
                     css::util::XModifyBroadcaster,
                     css::beans::XPropertySet,
                     css::lang::XServiceInfo>,
-                public SfxListener,
-                private boost::noncopyable
+                public SfxListener
 {
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
@@ -244,6 +242,9 @@ public:
             ::std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
+    ScChart2DataSequence(const ScChart2DataSequence&) = delete;
+    ScChart2DataSequence& operator=(const ScChart2DataSequence&) = delete;
+
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSequence
@@ -364,21 +365,20 @@ private:
     DECL_LINK_TYPED( ValueListenerHdl, const SfxHint&, void );
 
 private:
-    ScChart2DataSequence(const ScChart2DataSequence& r) = delete;
-
     class ExternalRefListener : public ScExternalRefManager::LinkListener
     {
     public:
         ExternalRefListener(ScChart2DataSequence& rParent, ScDocument* pDoc);
         virtual ~ExternalRefListener();
+        ExternalRefListener(const ExternalRefListener&) = delete;
+        ExternalRefListener& operator=(const ExternalRefListener&) = delete;
+
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) override;
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
         const std::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
 
     private:
-        ExternalRefListener(const ExternalRefListener& r) = delete;
-
         ScChart2DataSequence&       mrParent;
         std::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;

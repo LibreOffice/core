@@ -31,7 +31,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sd { namespace slidesorter {
@@ -47,14 +46,15 @@ namespace {
 /** Implementation of the com.sun.star.drawing.SlideSorter service.
 */
 class SlideSorterService
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
+    : protected ::cppu::BaseMutex,
       public SlideSorterServiceInterfaceBase
 {
 public:
     explicit SlideSorterService (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~SlideSorterService();
+    SlideSorterService(const SlideSorterService&) = delete;
+    SlideSorterService& operator=(const SlideSorterService&) = delete;
     virtual void SAL_CALL disposing() override;
 
     // XInitialization

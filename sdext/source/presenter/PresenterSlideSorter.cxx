@@ -45,7 +45,6 @@
 #include <algorithm>
 #include <math.h>
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -134,7 +133,6 @@ private:
 //==== PresenterSlideSorter::MouseOverManager =================================
 
 class PresenterSlideSorter::MouseOverManager
-    : private ::boost::noncopyable
 {
 public:
     MouseOverManager (
@@ -143,6 +141,8 @@ public:
         const Reference<awt::XWindow>& rxInvalidateTarget,
         const std::shared_ptr<PresenterPaintManager>& rpPaintManager);
     ~MouseOverManager();
+    MouseOverManager(const MouseOverManager&) = delete;
+    MouseOverManager& operator=(const MouseOverManager&) = delete;
 
     void Paint (
         const sal_Int32 nSlideIndex,

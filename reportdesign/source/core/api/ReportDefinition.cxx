@@ -125,7 +125,6 @@
 #include <vcl/virdev.hxx>
 
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 
 //  page styles
 #define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"
@@ -2314,7 +2313,7 @@ typedef ::cppu::WeakImplHelper< container::XNameContainer,
                              container::XIndexAccess
                             > TStylesBASE;
 class OStylesHelper:
-    public cppu::BaseMutex, public TStylesBASE, private boost::noncopyable
+    public cppu::BaseMutex, public TStylesBASE
 {
     typedef ::std::map< OUString, uno::Any  , ::comphelper::UStringMixLess> TStyleElements;
     TStyleElements                                  m_aElements;
@@ -2325,6 +2324,8 @@ protected:
     virtual ~OStylesHelper(){}
 public:
     explicit OStylesHelper(const uno::Type& rType = cppu::UnoType<container::XElementAccess>::get());
+    OStylesHelper(const OStylesHelper&) = delete;
+    OStylesHelper& operator=(const OStylesHelper&) = delete;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException, std::exception) override;

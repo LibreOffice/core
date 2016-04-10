@@ -25,7 +25,6 @@
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "fupoor.hxx"
 #include <svtools/transfer.hxx>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace sd { namespace slidesorter {
@@ -37,10 +36,11 @@ namespace sd { namespace slidesorter { namespace controller {
 class SlideSorterController;
 
 class SelectionFunction
-    : public FuPoor,
-      private ::boost::noncopyable
+    : public FuPoor
 {
 public:
+    SelectionFunction(const SelectionFunction&) = delete;
+    SelectionFunction& operator=(const SelectionFunction&) = delete;
 
     static rtl::Reference<FuPoor> Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
 

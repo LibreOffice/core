@@ -25,8 +25,6 @@
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <functional>
 
 namespace sd { namespace slidesorter { namespace view {
@@ -102,11 +100,13 @@ void ForAllRectangles (const vcl::Region& rRegion, ::std::function<void (const R
     }
 }
 
-class Layer : private ::boost::noncopyable
+class Layer
 {
 public:
     Layer();
     ~Layer();
+    Layer(const Layer&) = delete;
+    Layer& operator=(const Layer&) = delete;
 
     void Initialize (sd::Window *pTargetWindow);
     void InvalidateRectangle (const Rectangle& rInvalidationBox);

@@ -18,7 +18,6 @@
  */
 #include "AddField.hxx"
 #include "UITools.hxx"
-#include <boost/noncopyable.hpp>
 #include <svx/dbaexchange.hxx>
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>

@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <osl/mutex.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <map>
 #include <memory>
 #include <vector>
@@ -38,7 +37,6 @@ class ResourceFactoryManager;
 /** Manage the set of active resources.  Activate and deactivate resources.
 */
 class ConfigurationControllerResourceManager
-    : private ::boost::noncopyable
 {
 public:
     /** For every active resource both the resource itself as well as its
@@ -62,6 +60,10 @@ public:
         const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster);
 
     ~ConfigurationControllerResourceManager();
+
+    /// Forbid copy construction and copy assignment
+    ConfigurationControllerResourceManager(const ConfigurationControllerResourceManager&) = delete;
+    ConfigurationControllerResourceManager& operator=(const ConfigurationControllerResourceManager&) = delete;
 
     /** Activate all the resources that are specified by resource ids in
         rResources.  The resource ids of activated resources are added to

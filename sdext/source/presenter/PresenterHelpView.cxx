@@ -34,7 +34,6 @@
 #include <algorithm>
 #include <vector>
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -96,7 +95,7 @@ namespace {
             const sal_Int32 nMaximalWidth);
     };
 
-    class Block: private boost::noncopyable
+    class Block
     {
     public:
         Block (
@@ -104,6 +103,8 @@ namespace {
             const OUString& rsRightText,
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
             const sal_Int32 nMaximalWidth);
+        Block(const Block&) = delete;
+        Block& operator=(const Block&) = delete;
         void Update (
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
             const sal_Int32 nMaximalWidth);

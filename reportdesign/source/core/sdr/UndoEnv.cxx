@@ -29,7 +29,6 @@
 #include "RptResId.hrc"
 #include "RptModel.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -88,7 +87,7 @@ struct ObjectInfo
 typedef ::std::map< Reference< XPropertySet >, ObjectInfo, ::comphelper::OInterfaceCompare< XPropertySet > >    PropertySetInfoCache;
 
 
-class OXUndoEnvironmentImpl: private boost::noncopyable
+class OXUndoEnvironmentImpl
 {
 public:
     OReportModel&                                       m_rModel;
@@ -103,6 +102,8 @@ public:
     bool                                            m_bIsUndo;
 
     explicit OXUndoEnvironmentImpl(OReportModel& _rModel);
+    OXUndoEnvironmentImpl(const OXUndoEnvironmentImpl&) = delete;
+    OXUndoEnvironmentImpl& operator=(const OXUndoEnvironmentImpl&) = delete;
 };
 
 OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_rModel)

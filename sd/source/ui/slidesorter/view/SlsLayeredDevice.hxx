@@ -26,7 +26,6 @@
 #include <vcl/region.hxx>
 #include <vcl/virdev.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 

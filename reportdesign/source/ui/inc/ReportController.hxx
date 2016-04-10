@@ -55,7 +55,6 @@
 #include <svx/svdedtv.hxx>
 #include <sfx2/zoomitem.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 #include <memory>
 
@@ -83,7 +82,6 @@ namespace rptui
                                 ,public SfxListener
                                 ,public ::comphelper::OPropertyStateContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper < OReportController_BASE >
-                                ,public ::boost::noncopyable
     {
     private:
         OModuleClient           m_aModuleClient;
@@ -333,7 +331,9 @@ namespace rptui
         virtual ~OReportController();
 
     public:
-        OReportController(css::uno::Reference< css::uno::XComponentContext > const & the_context);
+        explicit OReportController(css::uno::Reference< css::uno::XComponentContext > const & the_context);
+        OReportController(const OReportController&) = delete;
+        OReportController& operator=(const OReportController&) = delete;
 
         DECL_LINK_TYPED( EventLstHdl, VclWindowEvent&, void );
         DECL_LINK_TYPED( OnCreateHdl, OAddFieldWindow&, void);

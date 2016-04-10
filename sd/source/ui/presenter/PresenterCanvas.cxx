@@ -32,7 +32,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -49,8 +48,7 @@ namespace {
     > PresenterCustomSpriteInterfaceBase;
 }
 class PresenterCustomSprite
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
+    : protected ::cppu::BaseMutex,
       public PresenterCustomSpriteInterfaceBase
 {
 public:
@@ -60,6 +58,8 @@ public:
         const Reference<awt::XWindow>& rxBaseWindow,
         const css::geometry::RealSize2D& rSpriteSize);
     virtual ~PresenterCustomSprite();
+    PresenterCustomSprite(const PresenterCustomSprite&) = delete;
+    PresenterCustomSprite& operator=(const PresenterCustomSprite&) = delete;
     virtual void SAL_CALL disposing()
         throw (RuntimeException) override;
 

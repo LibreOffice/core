@@ -11,15 +11,17 @@
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IBLUETOOTHSOCKET_HXX
 
 #include <rtl/string.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace sd
 {
     /** Interface for bluetooth data io
      */
-    struct IBluetoothSocket : private boost::noncopyable
+    struct IBluetoothSocket
     {
+        IBluetoothSocket() = default;
         virtual ~IBluetoothSocket() {}
+        IBluetoothSocket(const IBluetoothSocket&) = delete;
+        IBluetoothSocket& operator=(const IBluetoothSocket&) = delete;
 
         /** Blocks until a line is read.
 

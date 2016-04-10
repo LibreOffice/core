@@ -24,7 +24,6 @@
 #include "UITools.hxx"
 #include "RptUndo.hxx"
 #include "reportformula.hxx"
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
@@ -871,10 +870,12 @@ Size NavigatorTree::GetOptimalSize() const
 }
 
 // class ONavigatorImpl
-class ONavigatorImpl: private boost::noncopyable
+class ONavigatorImpl
 {
 public:
     ONavigatorImpl(OReportController& _rController,ONavigator* _pParent);
+    ONavigatorImpl(const ONavigatorImpl&) = delete;
+    ONavigatorImpl& operator=(const ONavigatorImpl&) = delete;
 
     uno::Reference< report::XReportDefinition>  m_xReport;
     ::rptui::OReportController&                 m_rController;

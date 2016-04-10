@@ -25,7 +25,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <boost/noncopyable.hpp>
 #include <vcl/scrbar.hxx>
 #include "sddllapi.h"
 #include <memory>
@@ -66,11 +65,14 @@ namespace sd { namespace slidesorter {
     Note that this class is not in its final state.
 */
 class SlideSorter
-    : private ::boost::noncopyable
 {
     friend class controller::SlotManager;
 public:
     virtual ~SlideSorter();
+
+    /// Forbid copy construction and copy assignment
+    SlideSorter(const SlideSorter&) = delete;
+    SlideSorter& operator=(const SlideSorter&) = delete;
 
     /** Return whether the called SlideSorter object is valid and calling
         its Get(Model,View,Controller) methods is safe.  When <FALSE/> is

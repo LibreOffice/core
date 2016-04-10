@@ -66,7 +66,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <canvas/elapsedtime.hxx>
-#include <boost/noncopyable.hpp>
 
 //#define DEBUG_TIMING
 #ifdef DEBUG_TIMING
@@ -104,12 +103,13 @@ namespace {
 }
 
 class BackgroundPainter
-    : public ILayerPainter,
-      public ::boost::noncopyable
+    : public ILayerPainter
 {
 public:
     explicit BackgroundPainter (const Color& rBackgroundColor) : maBackgroundColor(rBackgroundColor) {}
     virtual ~BackgroundPainter() {}
+    BackgroundPainter(const BackgroundPainter&) = delete;
+    BackgroundPainter& operator=(const BackgroundPainter&) = delete;
 
     virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override
     {

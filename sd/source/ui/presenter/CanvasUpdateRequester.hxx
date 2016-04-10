@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_PRESENTER_CANVASUPDATEREQUESTER_HXX
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <boost/noncopyable.hpp>
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <tools/link.hxx>
@@ -37,9 +36,12 @@ namespace sd { namespace presenter {
     more PresenterCanvas wrappers).  Multiple calls are collected and lead
     to a single call to updateScreen.
 */
-class CanvasUpdateRequester : private ::boost::noncopyable
+class CanvasUpdateRequester
 {
 public:
+    CanvasUpdateRequester(const CanvasUpdateRequester&) = delete;
+    CanvasUpdateRequester& operator=(const CanvasUpdateRequester&) = delete;
+
     /** @return the Canvas UpdateRequester object for the given shared canvas.
                 A new object is created when it does not already exist.
     */
@@ -49,7 +51,7 @@ public:
     void RequestUpdate (const bool bUpdateAll);
 
 private:
-    CanvasUpdateRequester (const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
+    explicit CanvasUpdateRequester (const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
     ~CanvasUpdateRequester();
     class Deleter; friend class Deleter;
 

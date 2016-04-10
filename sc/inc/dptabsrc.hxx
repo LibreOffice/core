@@ -47,7 +47,6 @@
 #include "dpglobal.hxx"
 #include "dpresfilter.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <list>
 #include <memory>
 #include <unordered_map>
@@ -299,7 +298,7 @@ public:
     ScDPDimension*  getByIndex(long nIndex) const;
 };
 
-class ScDPDimension : private boost::noncopyable, public cppu::WeakImplHelper<
+class ScDPDimension : public cppu::WeakImplHelper<
                             css::sheet::XHierarchiesSupplier,
                             css::container::XNamed,
                             css::util::XCloneable,
@@ -325,6 +324,8 @@ class ScDPDimension : private boost::noncopyable, public cppu::WeakImplHelper<
 public:
                             ScDPDimension( ScDPSource* pSrc, long nD );
     virtual                 ~ScDPDimension();
+                            ScDPDimension(const ScDPDimension&) = delete;
+    ScDPDimension&          operator=(const ScDPDimension&) = delete;
 
     long                    GetDimension() const    { return nDim; }        // dimension index in source
     long                    GetSourceDim() const    { return nSourceDim; }  // >=0 if dup'ed
@@ -706,7 +707,7 @@ public:
     SCROW                   GetSrcItemsCount();
 };
 
-class ScDPMember : private boost::noncopyable, public cppu::WeakImplHelper<
+class ScDPMember : public cppu::WeakImplHelper<
                             css::container::XNamed,
                             css::beans::XPropertySet,
                             css::lang::XServiceInfo >
@@ -727,6 +728,8 @@ private:
 public:
     ScDPMember(ScDPSource* pSrc, long nD, long nH, long nL, SCROW nIndex);
     virtual                 ~ScDPMember();
+    ScDPMember(const ScDPMember&) = delete;
+    ScDPMember& operator=(const ScDPMember&) = delete;
 
     OUString GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;

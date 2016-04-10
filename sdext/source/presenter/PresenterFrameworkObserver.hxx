@@ -25,8 +25,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <functional>
 
 namespace sdext { namespace presenter {
@@ -39,13 +37,15 @@ typedef ::cppu::WeakComponentImplHelper <
     change takes place.
 */
 class PresenterFrameworkObserver
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterFrameworkObserverInterfaceBase
 {
 public:
     typedef ::std::function<bool ()> Predicate;
     typedef ::std::function<void (bool)> Action;
+
+    PresenterFrameworkObserver(const PresenterFrameworkObserver&) = delete;
+    PresenterFrameworkObserver& operator=(const PresenterFrameworkObserver&) = delete;
 
     static void RunOnUpdateEnd (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,

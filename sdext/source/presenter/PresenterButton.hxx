@@ -32,7 +32,6 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/noncopyable.hpp>
 #include <rtl/ref.hxx>
 
 namespace sdext { namespace presenter {
@@ -52,8 +51,7 @@ namespace {
     frame.
 */
 class PresenterButton
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterButtonInterfaceBase
 {
 public:
@@ -65,6 +63,8 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const OUString& rsConfigurationName);
     virtual ~PresenterButton();
+    PresenterButton(const PresenterButton&) = delete;
+    PresenterButton& operator=(const PresenterButton&) = delete;
 
     virtual void SAL_CALL disposing() override;
 

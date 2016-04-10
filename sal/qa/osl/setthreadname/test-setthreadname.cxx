@@ -22,7 +22,6 @@
 #include <limits>
 
 #include <sal/types.h>
-#include "boost/noncopyable.hpp"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -31,9 +30,13 @@
 
 namespace {
 
-class TestThread: public osl::Thread, private boost::noncopyable {
+class TestThread: public osl::Thread {
 private:
     virtual void SAL_CALL run() override;
+public:
+    TestThread() = default;
+    TestThread(const TestThread&) = delete;
+    TestThread& operator=(const TestThread&) = delete;
 };
 
 void TestThread::run() {

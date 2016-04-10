@@ -25,20 +25,17 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
 
-#include <boost/noncopyable.hpp>
-
 
 namespace rptui
 {
 
-
-    //= ConditionUpdater
-
-    class ConditionUpdater : public ::boost::noncopyable
+    class ConditionUpdater
     {
     public:
         ConditionUpdater();
         ~ConditionUpdater();
+        ConditionUpdater(const ConditionUpdater&) = delete;
+        ConditionUpdater& operator=(const ConditionUpdater&) = delete;
 
         /// notifies the object about the change of a property value, somewhere in the report definition
         void    notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent );
@@ -56,7 +53,6 @@ namespace rptui
     private:
         ConditionalExpressions  m_aConditionalExpressions;
     };
-
 
 } // namespace rptui
 

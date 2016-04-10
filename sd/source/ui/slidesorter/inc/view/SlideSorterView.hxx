@@ -35,7 +35,6 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 class Point;
 
@@ -60,8 +59,7 @@ class SelectionPainter;
 class ToolTip;
 
 class SlideSorterView
-    : public sd::View,
-      public ::boost::noncopyable
+    : public sd::View
 {
 public:
 
@@ -71,11 +69,14 @@ public:
             by this class.
 
     */
-    SlideSorterView (SlideSorter& rSlideSorter);
+    explicit SlideSorterView (SlideSorter& rSlideSorter);
     void Init();
 
     virtual ~SlideSorterView();
     void Dispose();
+
+    SlideSorterView(const SlideSorterView&) = delete;
+    SlideSorterView& operator=(const SlideSorterView&) = delete;
 
     /** Set the general way of layouting the page objects.  Note that this
         method does not trigger any repaints or layouts.

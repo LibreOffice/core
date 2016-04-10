@@ -18,7 +18,6 @@
  */
 #include "xmlFixedContent.hxx"
 #include "xmlfilter.hxx"
-#include <boost/noncopyable.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -38,7 +37,7 @@ namespace rptxml
 {
     using namespace ::com::sun::star;
 
-class OXMLCharContent: public XMLCharContext, private boost::noncopyable
+class OXMLCharContent: public XMLCharContext
 {
     OXMLFixedContent* m_pFixedContent;
 
@@ -58,6 +57,8 @@ public:
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_Int16 nControl );
+    OXMLCharContent(const OXMLCharContent&) = delete;
+    OXMLCharContent& operator=(const OXMLCharContent&) = delete;
 
     virtual void InsertControlCharacter(sal_Int16   _nControl) override;
     virtual void InsertString(const OUString& _sString) override;

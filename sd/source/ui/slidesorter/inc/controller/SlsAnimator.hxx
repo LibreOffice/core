@@ -37,7 +37,6 @@ namespace sd { namespace slidesorter { namespace controller {
 /** Experimental class for simple eye candy animations.
 */
 class Animator
-    : private ::boost::noncopyable
 {
 public:
     /** In some circumstances we have to avoid animation and jump to the
@@ -46,8 +45,10 @@ public:
     */
     enum AnimationMode { AM_Animated, AM_Immediate };
 
-    Animator (SlideSorter& rSlideSorter);
+    explicit Animator (SlideSorter& rSlideSorter);
     ~Animator();
+    Animator(const Animator&) = delete;
+    Animator& operator=(const Animator&) = delete;
 
     /** When disposed the animator will stop its work immediately and not
         process any timer events anymore.

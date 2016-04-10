@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <cstdlib>
 
-#include "boost/noncopyable.hpp"
 #include "osl/diagnose.h"
 #include "osl/module.hxx"
 #include "rtl/instance.hxx"
@@ -359,12 +358,15 @@ namespace {
 extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
     rtl_TextEncoding); // from tables.cxx in sal_textenc library
 
-class FullTextEncodingData: private boost::noncopyable {
+class FullTextEncodingData {
 public:
     ImplTextEncodingData const * get(rtl_TextEncoding encoding) {
         (void) this; // loplugin:staticmethods
         return sal_getFullTextEncodingData(encoding);
     }
+    FullTextEncodingData() = default;
+    FullTextEncodingData(const FullTextEncodingData&) = delete;
+    FullTextEncodingData& operator=(const FullTextEncodingData&) = delete;
 };
 
 #else
@@ -377,7 +379,7 @@ void SAL_CALL thisModule() {}
 
 };
 
-class FullTextEncodingData: private boost::noncopyable {
+class FullTextEncodingData {
 public:
     FullTextEncodingData() {
         if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo")))
@@ -397,6 +399,9 @@ public:
     ImplTextEncodingData const * get(rtl_TextEncoding encoding) {
         return (*function_)(encoding);
     }
+
+    FullTextEncodingData(const FullTextEncodingData&) = delete;
+    FullTextEncodingData& operator=(const FullTextEncodingData&) = delete;
 
 private:
     osl::Module module_;

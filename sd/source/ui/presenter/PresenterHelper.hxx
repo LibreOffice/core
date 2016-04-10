@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace sd { namespace presenter {
 
@@ -40,13 +39,14 @@ namespace {
     not be implemented in an extension.
 */
 class PresenterHelper
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PresenterHelperInterfaceBase
 {
 public:
     explicit PresenterHelper (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterHelper();
+    PresenterHelper(const PresenterHelper&) = delete;
+    PresenterHelper& operator=(const PresenterHelper&) = delete;
 
     // XInitialize
 

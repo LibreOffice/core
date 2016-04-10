@@ -28,7 +28,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <boost/noncopyable.hpp>
 #include <map>
 #include <memory>
 
@@ -40,7 +39,6 @@ namespace sdext { namespace presenter {
     A bitmap group is defined by some entries in the configuration.
 */
 class PresenterBitmapContainer
-    : private ::boost::noncopyable
 {
 public:
     /** There is one bitmap for the normal state, one for a mouse over effect and one
@@ -100,6 +98,8 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = nullptr);
     ~PresenterBitmapContainer();
+    PresenterBitmapContainer(const PresenterBitmapContainer&) = delete;
+    PresenterBitmapContainer& operator=(const PresenterBitmapContainer&) = delete;
 
     void Initialize (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext);
