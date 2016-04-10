@@ -1749,6 +1749,10 @@ void CustomAnimationPane::animationChange()
     if( maListSelection.size() == 1 )
     {
         CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
+        // tdf#99137, the selected entry may also be a subcategory title, so not an effect
+        // just leave in this case
+        if (!pPreset)
+            return;
         const double fDuration = (*pPreset)->getDuration();
         CustomAnimationPresetPtr pDescriptor(*pPreset);
         MainSequenceRebuildGuard aGuard( mpMainSequence );
