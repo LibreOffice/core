@@ -33,6 +33,7 @@
 #include "RegressionCurveHelper.hxx"
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -566,6 +567,11 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         sal_Int32 aPeriod = 2;
                         bool bForceIntercept = false;
                         double aInterceptValue = 0.0;
+                        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+                        const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
+                        assert(aNumDecimalSep.getLength() > 0);
+                        sal_Unicode cDecSeparator = aNumDecimalSep.getStr()[0];
+
                         uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                         if ( xProperties.is())
                         {
@@ -591,19 +597,25 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         aWildcard = "%FORMULA";
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
-                            aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), xCalculator->getRepresentation());
+                        {
+                            OUString aFormula ( xCalculator->getRepresentation() );
+                            if ( cDecSeparator != '.' )
+                            {
+                                aFormula = aFormula.replace( '.', cDecSeparator );
+                            }
+                            aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), aFormula );
+                        }
 
                         // replace r^2
                         aWildcard = "%RSQUARED";
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                         {
-                            sal_Unicode aDecimalSep( '.' );
                             double fR( xCalculator->getCorrelationCoefficient());
                             aRet = aRet.replaceAt(
                                 nIndex, aWildcard.getLength(),
                                 ::rtl::math::doubleToUString(
-                                    fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+                                    fR*fR, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
                         }
                     }
                     catch( const uno::Exception & ex )
@@ -649,7 +661,10 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_QUERY_THROW );
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
-                        sal_Unicode aDecimalSep( '.' );
+                        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+                        const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
+                        assert(aNumDecimalSep.getLength() > 0);
+                        sal_Unicode cDecSeparator = aNumDecimalSep.getStr()[0];
 
                         OUString aWildcard( "%AVERAGE_VALUE" );
                         sal_Int32 nIndex = aRet.indexOf( aWildcard );
@@ -660,7 +675,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                             aRet = aRet.replaceAt(
                                 nIndex, aWildcard.getLength(),
                                 ::rtl::math::doubleToUString(
-                                    fMeanValue, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+                                    fMeanValue, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
                         }
 
                         // replace standard deviation
@@ -672,7 +687,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                             aRet = aRet.replaceAt(
                                 nIndex, aWildcard.getLength(),
                                 ::rtl::math::doubleToUString(
-                                    fStdDev, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+                                    fStdDev, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
                         }
                     }
                     catch( const uno::Exception & ex )
