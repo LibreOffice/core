@@ -44,9 +44,9 @@ void UIObject::execute(const OUString& /*rAction*/,
     throw std::exception();
 }
 
-UIObjectType UIObject::get_type() const
+OUString UIObject::get_type() const
 {
-    return UIObjectType::UNKNOWN;
+    return OUString("Generic UIObject");
 }
 
 std::unique_ptr<UIObject> UIObject::get_child(const OUString&)
@@ -212,9 +212,9 @@ void WindowUIObject::execute(const OUString& rAction,
     }
 }
 
-UIObjectType WindowUIObject::get_type() const
+OUString WindowUIObject::get_type() const
 {
-    return UIObjectType::WINDOW;
+    return get_name();
 }
 
 namespace {
@@ -304,11 +304,6 @@ StringMap ButtonUIObject::get_state()
     return aMap;
 }
 
-UIObjectType ButtonUIObject::get_type() const
-{
-    return UIObjectType::BUTTON;
-}
-
 void ButtonUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
@@ -347,11 +342,6 @@ StringMap DialogUIObject::get_state()
 OUString DialogUIObject::get_name() const
 {
     return OUString("DialogUIObject");
-}
-
-UIObjectType DialogUIObject::get_type() const
-{
-    return UIObjectType::DIALOG;
 }
 
 std::unique_ptr<UIObject> DialogUIObject::create(vcl::Window* pWindow)
@@ -418,11 +408,6 @@ StringMap EditUIObject::get_state()
     return aMap;
 }
 
-UIObjectType EditUIObject::get_type() const
-{
-    return UIObjectType::EDIT;
-}
-
 OUString EditUIObject::get_name() const
 {
     return OUString("EditUIObject");
@@ -459,11 +444,6 @@ StringMap CheckBoxUIObject::get_state()
     return aMap;
 }
 
-UIObjectType CheckBoxUIObject::get_type() const
-{
-    return UIObjectType::CHECKBOX;
-}
-
 OUString CheckBoxUIObject::get_name() const
 {
     return OUString("CheckBoxUIObject");
@@ -496,11 +476,6 @@ StringMap TabPageUIObject::get_state()
     StringMap aMap = WindowUIObject::get_state();
 
     return aMap;
-}
-
-UIObjectType TabPageUIObject::get_type() const
-{
-    return UIObjectType::TABPAGE;
 }
 
 OUString TabPageUIObject::get_name() const
@@ -551,11 +526,6 @@ StringMap ListBoxUIObject::get_state()
     return aMap;
 }
 
-UIObjectType ListBoxUIObject::get_type() const
-{
-    return UIObjectType::LISTBOX;
-}
-
 OUString ListBoxUIObject::get_name() const
 {
     return OUString("ListBoxUIObject");
@@ -595,11 +565,6 @@ StringMap ComboBoxUIObject::get_state()
     StringMap aMap = WindowUIObject::get_state();
 
     return aMap;
-}
-
-UIObjectType ComboBoxUIObject::get_type() const
-{
-    return UIObjectType::COMBOBOX;
 }
 
 OUString ComboBoxUIObject::get_name() const
@@ -643,11 +608,6 @@ StringMap SpinUIObject::get_state()
     return aMap;
 }
 
-UIObjectType SpinUIObject::get_type() const
-{
-    return UIObjectType::SPINBUTTON;
-}
-
 OUString SpinUIObject::get_name() const
 {
     return OUString("SpinUIObject");
@@ -677,11 +637,6 @@ StringMap SpinFieldUIObject::get_state()
     StringMap aMap = EditUIObject::get_state();
 
     return aMap;
-}
-
-UIObjectType SpinFieldUIObject::get_type() const
-{
-    return UIObjectType::SPINFIELD;
 }
 
 OUString SpinFieldUIObject::get_name() const
