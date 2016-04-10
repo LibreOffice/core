@@ -662,7 +662,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // do not compare differing types in case of multible inheritance
+    // do not compare differing types in case of multiple inheritance
 
     if ( maAccessibleContext.get() == rEvt.Source )
     {

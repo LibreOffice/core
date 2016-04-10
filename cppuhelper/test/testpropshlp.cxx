@@ -1129,7 +1129,7 @@ void test_PropertySetHelper()
             OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
 
 
-            //vetoable exception with multible
+            //vetoable exception with multiple
             szPN[0] = "INT16";
             szPN[1] = "INT16";
             pPS->nINT32 = 0;
