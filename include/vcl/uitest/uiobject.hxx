@@ -14,21 +14,6 @@
 #include <vcl/window.hxx>
 #include <vcl/dllapi.h>
 
-enum class UIObjectType
-{
-    WINDOW,
-    DIALOG,
-    BUTTON,
-    EDIT,
-    CHECKBOX,
-    LISTBOX,
-    COMBOBOX,
-    SPINBUTTON,
-    TABPAGE,
-    SPINFIELD,
-    UNKNOWN
-};
-
 typedef std::map<const OUString, OUString> StringMap;
 
 /**
@@ -59,9 +44,8 @@ public:
     /**
      * Returns the type of the UIObject. Additional information might
      * be available through UIObject::get_state().
-     *
      */
-    virtual UIObjectType get_type() const;
+    virtual OUString get_type() const;
 
     /**
      * Returns the child of the current UIObject with the corresponding id.
@@ -110,7 +94,7 @@ public:
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
-    virtual UIObjectType get_type() const override;
+    virtual OUString get_type() const override;
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
 
@@ -139,8 +123,6 @@ public:
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
-    virtual UIObjectType get_type() const override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
@@ -155,8 +137,6 @@ class UITEST_DLLPUBLIC DialogUIObject : public WindowUIObject
 public:
 
     DialogUIObject(VclPtr<Dialog> xDialog);
-
-    virtual UIObjectType get_type() const override;
 
     virtual StringMap get_state() override;
 
@@ -180,8 +160,6 @@ public:
 
     virtual StringMap get_state() override;
 
-    virtual UIObjectType get_type() const override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
@@ -203,8 +181,6 @@ public:
 
     virtual StringMap get_state() override;
 
-    virtual UIObjectType get_type() const override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
@@ -223,8 +199,6 @@ public:
             const StringMap& rParameters) override;
 
     virtual StringMap get_state() override;
-
-    virtual UIObjectType get_type() const override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
@@ -246,8 +220,6 @@ public:
             const StringMap& rParameters) override;
 
     virtual StringMap get_state() override;
-
-    virtual UIObjectType get_type() const override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
@@ -271,8 +243,6 @@ public:
 
     virtual StringMap get_state() override;
 
-    virtual UIObjectType get_type() const override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
@@ -294,8 +264,6 @@ public:
 
     virtual StringMap get_state() override;
 
-    virtual UIObjectType get_type() const override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
@@ -315,8 +283,6 @@ public:
             const StringMap& rParameters) override;
 
     virtual StringMap get_state() override;
-
-    virtual UIObjectType get_type() const override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 

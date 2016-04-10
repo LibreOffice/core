@@ -75,11 +75,6 @@ void SfxTabDialogUIObject::execute(const OUString& rAction,
     }
 }
 
-UIObjectType SfxTabDialogUIObject::get_type() const
-{
-    return UIObjectType::DIALOG;
-}
-
 std::unique_ptr<UIObject> SfxTabDialogUIObject::create(vcl::Window* pWindow)
 {
     SfxTabDialog* pDialog = dynamic_cast<SfxTabDialog*>(pWindow);
