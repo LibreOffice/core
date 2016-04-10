@@ -33,12 +33,6 @@
 #include "resource/mork_res.hrc"
 #include "resource/common_res.hrc"
 
-#if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* OSL_DEBUG_LEVEL */
-# define OUtoCStr( x ) ("dummy")
-#endif /* OSL_DEBUG_LEVEL */
-
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::mork;
@@ -712,12 +706,12 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
         OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->get().size() + 1, "More parameters than values found" );
         rMatchString = (m_aParameterRow->get())[(sal_uInt16)m_nParamIndex];
 #if OSL_DEBUG_LEVEL > 0
-        OSL_TRACE("Prop Value       : %s", OUtoCStr( rMatchString ) );
+        SAL_INFO("connectivity.mork", "Prop Value: " << rMatchString);
 #endif
     }
 #if OSL_DEBUG_LEVEL > 0
     else {
-        OSL_TRACE("Prop Value       : Invalid ParameterRow!" );
+        SAL_INFO("connectivity.mork", "Prop Value: Invalid ParameterRow!");
     }
 #endif
 }
@@ -746,16 +740,18 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             for(;aIter != xColumns->get().end();++aIter)
             {
                 (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                OSL_TRACE("Prop Column Name : %s", OUtoCStr( aColName ) );
+#if OSL_DEBUG_LEVEL > 0
+                SAL_INFO("connectivity.mork", "Prop Column Name: " << aColName);
+#endif
                 if ( m_aParameterRow.is() ) {
                     aParameterValue = (m_aParameterRow->get())[(sal_uInt16)i];
 #if OSL_DEBUG_LEVEL > 0
-                    OSL_TRACE("Prop Value       : %s", OUtoCStr( aParameterValue ) );
+                    SAL_INFO("connectivity.mork", "Prop Value: " << aParameterValue);
 #endif
                 }
 #if OSL_DEBUG_LEVEL > 0
                 else {
-                    OSL_TRACE("Prop Value       : Invalid ParameterRow!" );
+                    SAL_INFO("connectivity.mork", "Prop Value: Invalid ParameterRow!");
                 }
 #endif
                 i++;
@@ -880,7 +876,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if(SQL_ISRULE(pColumn,column_ref))
             m_pSQLIterator->getColumnRange(pColumn,columnName,sTableRange);
 
-        OSL_TRACE("ColumnName = %s", OUtoCStr( columnName ) );
+#if OSL_DEBUG_LEVEL > 0
+        SAL_INFO("connectivity.mork", "ColumnName = " << columnName);
+#endif
 
         if ( SQL_ISRULE(pAtom,parameter) ) {
             parseParameter( pAtom, matchString );
