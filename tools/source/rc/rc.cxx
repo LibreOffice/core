@@ -18,7 +18,7 @@
  */
 
 #include <string.h>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/rc.hxx>
@@ -49,11 +49,9 @@ OUString ResId::toString() const
         OUString sRet;
 
 #if OSL_DEBUG_LEVEL > 0
-        sRet = OUStringBuffer().
-            append("<resource id ").
-            append(static_cast<sal_Int32>(GetId())).
-            append(" not found>").
-            makeStringAndClear();
+        sRet = "<resource id "
+            + OUString::number(static_cast<sal_Int32>(GetId()))
+            + " not found>";
 #endif
 
         if( pResMgr )
