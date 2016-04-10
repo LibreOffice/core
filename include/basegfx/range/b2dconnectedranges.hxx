@@ -198,8 +198,7 @@ namespace basegfx
             OSL_ENSURE( !aNewConnectedComponent.maComponentList.empty(),
                         "B2DConnectedRanges::addRange(): empty aggregate list" );
             OSL_ENSURE( !aNewConnectedComponent.maTotalBounds.isEmpty() ||
-                        (aNewConnectedComponent.maTotalBounds.isEmpty() &&
-                         aNewConnectedComponent.maComponentList.size() == 1),
+                         aNewConnectedComponent.maComponentList.size() == 1,
                         "B2DConnectedRanges::addRange(): empty ranges must be solitary");
 
             // add aNewConnectedComponent as a new entry to
