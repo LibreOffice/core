@@ -47,12 +47,10 @@ class ResId
     mutable sal_uInt32      m_nResId;      // Resource Identifier
     mutable RESOURCE_TYPE   m_nRT;         // type for loading (mutable to be set later)
     mutable ResMgr *        m_pResMgr;     // load from this ResMgr (mutable for setting on demand)
-    mutable RESOURCE_TYPE   m_nRT2;        // type for loading (supersedes m_nRT)
-    mutable sal_uInt32      m_nWinBits;    // container for original style bits on a window in a resource
 
     void ImplInit( sal_uInt32 nId, ResMgr& rMgr, RSHEADER_TYPE* pRes )
     {
-        m_pResource = pRes; m_nResId = nId; m_nRT = RSC_NOTYPE; m_pResMgr = &rMgr; m_nRT2 = RSC_NOTYPE; m_nWinBits = 0;
+        m_pResource = pRes; m_nResId = nId; m_nRT = RSC_NOTYPE; m_pResMgr = &rMgr;
         OSL_ENSURE( m_pResMgr != nullptr, "ResId without ResMgr created" );
     }
 
@@ -65,8 +63,6 @@ public:
     {
         ImplInit( nId, rMgr, nullptr );
     }
-
-    void SetWinBits( sal_uInt32 nBits ) const { m_nWinBits = nBits; }
 
     RESOURCE_TYPE   GetRT() const { return m_nRT; }
 
@@ -81,22 +77,12 @@ public:
     @see
     ResId::GetRT2(), ResId::GetRT()
     */
-    const ResId &   SetRT( RESOURCE_TYPE nType ) const
-    {
-        if( RSC_NOTYPE == m_nRT )
-            m_nRT = nType;
-        return *this;
-    }
-
-    /** Get the effective type (m_nRT2 or m_nRT1)
-
-    A second resource type is used to supersede settings
-    of the base class ( e.g. Window )
-    */
-    RESOURCE_TYPE   GetRT2() const
-    {
-        return (RSC_NOTYPE == m_nRT2) ? m_nRT : m_nRT2;
-    }
+     const ResId &   SetRT( RESOURCE_TYPE nType ) const
+     {
+         if( RSC_NOTYPE == m_nRT )
+             m_nRT = nType;
+         return *this;
+     }
 
     ResMgr *        GetResMgr() const { return m_pResMgr; }
     void            SetResMgr( ResMgr * pMgr ) const
@@ -114,11 +100,10 @@ public:
         return *this;
     }
 
-    bool        IsAutoRelease()  const
-        { return !(m_nResId & RSC_DONTRELEASE); }
+    bool            IsAutoRelease()  const { return !(m_nResId & RSC_DONTRELEASE); }
 
-    sal_uInt32      GetId()        const { return m_nResId & ~RSC_DONTRELEASE; }
-    RSHEADER_TYPE*  GetpResource() const { return m_pResource; }
+    sal_uInt32      GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
+    RSHEADER_TYPE*  GetpResource()   const { return m_pResource; }
 
     TOOLS_DLLPUBLIC OUString toString() const;
     TOOLS_DLLPUBLIC operator OUString() const { return toString(); }
