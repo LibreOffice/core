@@ -31,9 +31,9 @@ String STR_WIZ_TYPE_SELECT_TITEL
     Text [ en-US ] = "Type formatting";
 };
 
-String STR_WIZ_PKEY_ALREADY_DEFINED
+String STR_WIZ_NAME_ALREADY_DEFINED
 {
-    Text [ en-US ] = "The following fields have already been set as primary keys:\n";
+    Text [ en-US ] = "Enter a unique name for the new primary key data field.\nThe following name is already in use:";
 };
 
 String STR_WIZ_NAME_MATCHING_TITEL
