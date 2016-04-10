@@ -162,7 +162,7 @@ namespace svgio
             }
         }
 
-        void SvgNode::fillCssStyleVector(const OUString& rClassStr)
+        void SvgNode::fillCssStyleVector(const OUString& rClassStr, const SvgStyleAttributes& rOriginal)
         {
             OSL_ENSURE(!mbCssStyleVectorBuilt, "OOps, fillCssStyleVector called double ?!?");
             mbCssStyleVectorBuilt = true;
@@ -199,6 +199,9 @@ namespace svgio
                 // add CssStyle for selector '*' if found
                 maCssStyleVector.push_back(pNew);
             }
+
+            //local attributes
+            maCssStyleVector.push_back(&rOriginal);
         }
 
         const SvgStyleAttributes* SvgNode::checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
@@ -206,7 +209,7 @@ namespace svgio
             if(!mbCssStyleVectorBuilt)
             {
                 // build needed CssStyleVector for local node
-                const_cast< SvgNode* >(this)->fillCssStyleVector(rClassStr);
+                const_cast< SvgNode* >(this)->fillCssStyleVector(rClassStr, rOriginal);
             }
 
             if(maCssStyleVector.empty())
@@ -232,7 +235,6 @@ namespace svgio
                 // for the element containing the hierarchy) in a vector of pointers and to use that.
                 // Resetting the CssStyleParent on rOriginal is probably not needed
                 // but simply safer to do.
-                const_cast< SvgStyleAttributes& >(rOriginal).setCssStyleParent(nullptr);
 
                 // loop over the existing CssStyles and link them. There is a first one, take
                 // as current
@@ -245,9 +247,6 @@ namespace svgio
                     pCurrent->setCssStyleParent(pNext);
                     pCurrent = pNext;
                 }
-
-                // pCurrent is the last used CssStyle, let it point to the original style
-                pCurrent->setCssStyleParent(&rOriginal);
 
                 // return 1st CssStyle as style chain start element (only for the
                 // local element, still no hierarchy used here)
