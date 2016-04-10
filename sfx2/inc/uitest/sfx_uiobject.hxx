@@ -29,8 +29,6 @@ public:
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
-    virtual UIObjectType get_type() const override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:

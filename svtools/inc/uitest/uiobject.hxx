@@ -16,8 +16,6 @@ class TreeListUIObject : public WindowUIObject
 public:
     TreeListUIObject(VclPtr<SvTreeListBox> xTreeList);
 
-    virtual UIObjectType get_type() const override;
-
     virtual StringMap get_state() override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
