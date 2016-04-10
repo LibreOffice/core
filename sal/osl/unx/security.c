@@ -449,12 +449,12 @@ oslSecurityError SAL_CALL osl_loginUser(
     )
 {
     oslSecurityError Error;
-    rtl_String* strUserName=0;
-    rtl_String* strPassword=0;
-    sal_Char* pszUserName=0;
-    sal_Char* pszPassword=0;
+    rtl_String* strUserName=NULL;
+    rtl_String* strPassword=NULL;
+    sal_Char* pszUserName=NULL;
+    sal_Char* pszPassword=NULL;
 
-    if ( ustrUserName != 0 )
+    if ( ustrUserName != NULL )
     {
 
         rtl_uString2String( &strUserName,
@@ -466,7 +466,7 @@ oslSecurityError SAL_CALL osl_loginUser(
     }
 
 
-    if ( ustrPassword != 0 )
+    if ( ustrPassword != NULL )
     {
         rtl_uString2String( &strPassword,
                             rtl_uString_getStr(ustrPassword),
@@ -479,7 +479,7 @@ oslSecurityError SAL_CALL osl_loginUser(
 
     Error=osl_psz_loginUser(pszUserName,pszPassword,pSecurity);
 
-    if ( strUserName != 0 )
+    if ( strUserName != NULL )
     {
         rtl_string_release(strUserName);
     }

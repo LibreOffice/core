@@ -411,7 +411,7 @@ readoptions(char* filename, char*** pfargv)
                         pfa[fargc+1]=malloc(strlen(optbuff)+1);
                         strcpy(pfa[fargc+1],optbuff);
                         fargc++;
-                        pfa[fargc+1]=0;
+                        pfa[fargc+1]=NULL;
                         poptbuff=&optbuff[0];
                     }
                 }

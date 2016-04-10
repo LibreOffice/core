@@ -49,7 +49,7 @@ int file_image_open (file_image * image, const char * filename)
     struct stat st;
     void *      p;
 
-    if (image == 0)
+    if (image == NULL)
         return (EINVAL);
 
     image->m_base = MAP_FAILED, image->m_size = 0;
@@ -87,10 +87,10 @@ int file_image_pagein (file_image * image)
     size_t        k;
     volatile char c = 0;
 
-    if (image == 0)
+    if (image == NULL)
         return (EINVAL);
 
-    if ((w.m_base = image->m_base) == 0)
+    if ((w.m_base = image->m_base) == NULL)
         return (EINVAL);
     if ((w.m_size = image->m_size) == 0)
         return (0);
@@ -135,12 +135,12 @@ int file_image_pagein (file_image * image)
  */
 int file_image_close (file_image * image)
 {
-    if (image == 0)
+    if (image == NULL)
         return (EINVAL);
 
     if (munmap (image->m_base, image->m_size) == -1)
         return (errno);
 
-    image->m_base = 0, image->m_size = 0;
+    image->m_base = NULL, image->m_size = 0;
     return (0);
 }

@@ -70,7 +70,7 @@ int  main (int argc, char **argv)
 
     for (i = 1; i < argc; i++)
     {
-        FILE   * fp = 0;
+        FILE   * fp = NULL;
         size_t   k  = 0;
 
         if (argv[i][0] == '-')
@@ -99,10 +99,10 @@ int  main (int argc, char **argv)
         }
 
 
-        if ((argv[i][0] == '@') && ((fp = fopen (argv[i], "r")) == 0))
+        if ((argv[i][0] == '@') && ((fp = fopen (argv[i], "r")) == NULL))
         {
             char path[1024];
-            if ((fp = fopen (&(argv[i][1]), "r")) == 0)
+            if ((fp = fopen (&(argv[i][1]), "r")) == NULL)
             {
                 fprintf (stderr, "fopen: %s\n", strerror(errno));
                 continue;
@@ -124,7 +124,7 @@ int  main (int argc, char **argv)
         }
         else
         {
-            if (fp != 0)
+            if (fp != NULL)
                 fclose (fp);
 
             if (do_pagein (argv[i], &k) == 0)

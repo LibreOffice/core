@@ -135,10 +135,10 @@ void __osl_destroyPipeImpl(oslPipe pImpl)
 oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
 {
     oslPipe pPipe=0;
-    rtl_String* strPipeName=0;
-    sal_Char* pszPipeName=0;
+    rtl_String* strPipeName=NULL;
+    sal_Char* pszPipeName=NULL;
 
-    if ( ustrPipeName != 0 )
+    if ( ustrPipeName != NULL )
     {
         rtl_uString2String( &strPipeName,
                             rtl_uString_getStr(ustrPipeName),
@@ -148,7 +148,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
         pszPipeName = rtl_string_getStr(strPipeName);
         pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
 
-        if ( strPipeName != 0 )
+        if ( strPipeName != NULL )
         {
             rtl_string_release(strPipeName);
         }

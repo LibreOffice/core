@@ -62,7 +62,7 @@ static struct rtl_arena_list_st g_arena_list;
  *
  *  @internal
  */
-static rtl_arena_type * gp_arena_arena = 0;
+static rtl_arena_type * gp_arena_arena = NULL;
 
 
 /** gp_machdep_arena
@@ -72,7 +72,7 @@ static rtl_arena_type * gp_arena_arena = 0;
  *
  *  @internal
  */
-static rtl_arena_type * gp_machdep_arena = 0;
+static rtl_arena_type * gp_machdep_arena = NULL;
 
 
 static void *
@@ -94,7 +94,7 @@ rtl_machdep_pagesize (void);
 
 /** gp_default_arena
  */
-rtl_arena_type * gp_default_arena = 0;
+rtl_arena_type * gp_default_arena = NULL;
 
 
 /** rtl_arena_init()
@@ -150,7 +150,7 @@ rtl_arena_segment_populate (
     sal_Size                size = rtl_machdep_pagesize();
 
     span = rtl_machdep_alloc(gp_machdep_arena, &size);
-    if (span != 0)
+    if (span != NULL)
     {
         rtl_arena_segment_type *first, *last, *head;
         sal_Size                count = size / sizeof(rtl_arena_segment_type);
@@ -173,7 +173,7 @@ rtl_arena_segment_populate (
             first->m_type = 0;
         }
     }
-    return (span != 0);
+    return (span != NULL);
 }
 
 
@@ -190,7 +190,7 @@ rtl_arena_segment_get (
 {
     rtl_arena_segment_type * head;
 
-    OSL_ASSERT(*ppSegment == 0);
+    OSL_ASSERT(*ppSegment == NULL);
 
     head = &(arena->m_segment_reserve_head);
     if ((head->m_snext != head) || rtl_arena_segment_populate (arena))
@@ -232,7 +232,7 @@ rtl_arena_segment_put (
     QUEUE_INSERT_HEAD_NAMED(head, (*ppSegment), s);
 
     /* clear */
-    (*ppSegment) = 0;
+    (*ppSegment) = NULL;
 }
 
 #if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
@@ -317,7 +317,7 @@ rtl_arena_hash_rescale (
     new_bytes = new_size * sizeof(rtl_arena_segment_type*);
     new_table = (rtl_arena_segment_type **)rtl_arena_alloc (gp_arena_arena, &new_bytes);
 
-    if (new_table != 0)
+    if (new_table != NULL)
     {
         rtl_arena_segment_type ** old_table;
         sal_Size                  old_size, i;
@@ -361,7 +361,7 @@ rtl_arena_hash_rescale (
         for (i = 0; i < old_size; i++)
         {
             rtl_arena_segment_type * curr = old_table[i];
-            while (curr != 0)
+            while (curr != NULL)
             {
                 rtl_arena_segment_type  * next = curr->m_fnext;
                 rtl_arena_segment_type ** head;
@@ -372,7 +372,7 @@ rtl_arena_hash_rescale (
 
                 curr = next;
             }
-            old_table[i] = 0;
+            old_table[i] = NULL;
         }
 
         RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
@@ -429,7 +429,7 @@ rtl_arena_hash_remove (
 #endif /* OSL_DEBUG_LEVEL */
 
     segpp = &(arena->m_hash_table[RTL_ARENA_HASH_INDEX(arena, addr)]);
-    while ((segment = *segpp) != 0)
+    while ((segment = *segpp) != NULL)
     {
         if (segment->m_addr == addr)
         {
@@ -442,8 +442,8 @@ rtl_arena_hash_remove (
         segpp = &(segment->m_fnext);
     }
 
-    OSL_POSTCOND(segment != 0, "rtl_arena_hash_remove(): bad free.");
-    if (segment != 0)
+    OSL_POSTCOND(segment != NULL, "rtl_arena_hash_remove(): bad free.");
+    if (segment != NULL)
     {
         OSL_POSTCOND(segment->m_size == size, "rtl_arena_hash_remove(): wrong size.");
 
@@ -490,7 +490,7 @@ rtl_arena_segment_alloc (
 {
     int index = 0;
 
-    OSL_ASSERT(*ppSegment == 0);
+    OSL_ASSERT(*ppSegment == NULL);
     if (!RTL_MEMORY_ISP2(size))
     {
         int msb = highbit(size);
@@ -528,12 +528,12 @@ rtl_arena_segment_alloc (
     }
 
 dequeue_and_leave:
-    if (*ppSegment != 0)
+    if (*ppSegment != NULL)
     {
         /* remove from freelist */
         rtl_arena_freelist_remove (arena, (*ppSegment));
     }
-    return (*ppSegment != 0);
+    return (*ppSegment != NULL);
 }
 
 
@@ -550,15 +550,15 @@ rtl_arena_segment_create (
     rtl_arena_segment_type ** ppSegment
 )
 {
-    OSL_ASSERT((*ppSegment) == 0);
+    OSL_ASSERT((*ppSegment) == NULL);
     if (arena->m_source_alloc != 0)
     {
         rtl_arena_segment_get (arena, ppSegment);
-        if (*ppSegment != 0)
+        if (*ppSegment != NULL)
         {
-            rtl_arena_segment_type * span = 0;
+            rtl_arena_segment_type * span = NULL;
             rtl_arena_segment_get (arena, &span);
-            if (span != 0)
+            if (span != NULL)
             {
                 /* import new span from source arena */
                 RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
@@ -747,8 +747,8 @@ rtl_arena_activate (
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size)
 )
 {
-    OSL_ASSERT(arena != 0);
-    if (arena != 0)
+    OSL_ASSERT(arena != NULL);
+    if (arena != NULL)
     {
         (void) snprintf (arena->m_name, sizeof(arena->m_name), "%s", name);
 
@@ -852,7 +852,7 @@ rtl_arena_deactivate (
         /* cleanup still used segment(s) */
         for (i = 0, n = arena->m_hash_size; i < n; i++)
         {
-            while ((segment = arena->m_hash_table[i]) != 0)
+            while ((segment = arena->m_hash_table[i]) != NULL)
             {
                 /* pop from hash table */
                 arena->m_hash_table[i] = segment->m_fnext, segment->m_fnext = segment->m_fprev = segment;
@@ -998,7 +998,7 @@ SAL_CALL rtl_arena_destroy (
     rtl_arena_type * arena
 )
 {
-    if (arena != 0)
+    if (arena != NULL)
     {
         rtl_arena_deactivate (arena);
         rtl_arena_destructor (arena);
@@ -1293,7 +1293,7 @@ rtl_arena_once_init (void)
         /* machdep (pseudo) arena */
         static rtl_arena_type g_machdep_arena;
 
-        OSL_ASSERT(gp_machdep_arena == 0);
+        OSL_ASSERT(gp_machdep_arena == NULL);
         VALGRIND_CREATE_MEMPOOL(&g_machdep_arena, 0, 0);
         rtl_arena_constructor (&g_machdep_arena);
 
@@ -1304,13 +1304,13 @@ rtl_arena_once_init (void)
             0,       /* no quantum caching */
             0, 0, 0  /* no source */
         );
-        OSL_ASSERT(gp_machdep_arena != 0);
+        OSL_ASSERT(gp_machdep_arena != NULL);
     }
     {
         /* default arena */
         static rtl_arena_type g_default_arena;
 
-        OSL_ASSERT(gp_default_arena == 0);
+        OSL_ASSERT(gp_default_arena == NULL);
         VALGRIND_CREATE_MEMPOOL(&g_default_arena, 0, 0);
         rtl_arena_constructor (&g_default_arena);
 
@@ -1323,13 +1323,13 @@ rtl_arena_once_init (void)
             rtl_machdep_alloc,
             rtl_machdep_free
         );
-        OSL_ASSERT(gp_default_arena != 0);
+        OSL_ASSERT(gp_default_arena != NULL);
     }
     {
         /* arena internal arena */
         static rtl_arena_type g_arena_arena;
 
-        OSL_ASSERT(gp_arena_arena == 0);
+        OSL_ASSERT(gp_arena_arena == NULL);
         VALGRIND_CREATE_MEMPOOL(&g_arena_arena, 0, 0);
         rtl_arena_constructor (&g_arena_arena);
 
@@ -1342,7 +1342,7 @@ rtl_arena_once_init (void)
             rtl_arena_alloc,
             rtl_arena_free
         );
-        OSL_ASSERT(gp_arena_arena != 0);
+        OSL_ASSERT(gp_arena_arena != NULL);
     }
 }
 
@@ -1351,7 +1351,7 @@ rtl_arena_init (void)
 {
     static sal_once_type g_once = SAL_ONCE_INIT;
     SAL_ONCE(&g_once, rtl_arena_once_init);
-    return (gp_arena_arena != 0);
+    return (gp_arena_arena != NULL);
 }
 
 /* ================================================================= */
@@ -1377,7 +1377,7 @@ static void rtl_arena_fini (void);
 void
 rtl_arena_fini (void)
 {
-    if (gp_arena_arena != 0)
+    if (gp_arena_arena != NULL)
     {
         rtl_arena_type * arena, * head;
 

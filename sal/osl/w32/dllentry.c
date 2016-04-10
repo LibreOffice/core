@@ -128,7 +128,7 @@ __do_global_ctors (void)
    */
   if (nptrs == -1)
     {
-      for (nptrs = 0; __CTOR_LIST__[nptrs + 1] != 0; nptrs++)
+      for (nptrs = 0; __CTOR_LIST__[nptrs + 1] != NULL; nptrs++)
     ;
     }
 

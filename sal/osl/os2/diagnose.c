@@ -113,7 +113,7 @@ sal_Bool SAL_CALL osl_assertFailedLine( const sal_Char* pszFileName, sal_Int32 n
     /* format message into buffer */
     sprintf(szMessage, "Assertion Failed: %s: File %s, Line %d:\n",
             lpszAppName, pszFileName, nLine);
-    if(pszMessage != 0)
+    if(pszMessage != NULL)
         strcat( szMessage, pszMessage );
 
     szMessage[sizeof(szMessage)-1] = '\0';

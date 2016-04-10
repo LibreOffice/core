@@ -161,13 +161,13 @@ static void SignalHandlerFunction(int);
 
 static void getExecutableName_Impl (rtl_String ** ppstrProgName)
 {
-    rtl_uString * ustrProgFile = 0;
+    rtl_uString * ustrProgFile = NULL;
     osl_getExecutableFile (&ustrProgFile);
     if (ustrProgFile)
     {
-        rtl_uString * ustrProgName = 0;
+        rtl_uString * ustrProgName = NULL;
         osl_systemPathGetFileNameOrLastDirectoryPart (ustrProgFile, &ustrProgName);
-        if (ustrProgName != 0)
+        if (ustrProgName != NULL)
         {
             rtl_uString2String (
                 ppstrProgName,
@@ -183,7 +183,7 @@ static void getExecutableName_Impl (rtl_String ** ppstrProgName)
 static sal_Bool is_soffice_Impl (void)
 {
     sal_Int32    idx       = -1;
-    rtl_String * strProgName = 0;
+    rtl_String * strProgName = NULL;
 
     getExecutableName_Impl (&strProgName);
     if (strProgName)
@@ -205,7 +205,7 @@ static sal_Bool InitSignal()
     {
         sal_uInt32  argi;
         sal_uInt32  argc;
-        rtl_uString *ustrCommandArg = 0;
+        rtl_uString *ustrCommandArg = NULL;
 
         argc = osl_getCommandArgCount();
         for ( argi = 0; argi < argc; argi++ )
@@ -222,7 +222,7 @@ static sal_Bool InitSignal()
         if (ustrCommandArg)
         {
             rtl_uString_release (ustrCommandArg);
-            ustrCommandArg = 0;
+            ustrCommandArg = NULL;
         }
 
         // WORKAROUND FOR SEGV HANDLER CONFLICT

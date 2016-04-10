@@ -82,8 +82,8 @@ static void osl_diagnose_frame_Impl (
     int                 depth,
     void *              pc)
 {
-    const char *fname = 0, *sname = 0;
-    void       *fbase = 0, *saddr = 0;
+    const char *fname = NULL, *sname = NULL;
+    void       *fbase = NULL, *saddr = NULL;
     ptrdiff_t   offset;
     char        szMessage[1024];
 
@@ -183,10 +183,10 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
     fpval = ((long*)(ctx))[FRAME_PTR_OFFSET];
     fp = (struct frame*)((char*)(fpval) + STACK_BIAS);
 
-    for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
+    for (i = 0; (i < FRAME_OFFSET) && (fp != NULL); i++)
         fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
 
-    for (i = 0; (fp != 0) && (fp->fr_savpc != 0); i++)
+    for (i = 0; (fp != NULL) && (fp->fr_savpc != 0); i++)
     {
         struct frame * prev = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
         osl_diagnose_frame_Impl (f, i, (void*)(fp->fr_savpc));
@@ -215,10 +215,10 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
     setjmp (ctx);
     fp = (struct frame*)(((long*)(ctx))[FRAME_PTR_OFFSET]);
 
-    for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
+    for (i = 0; (i < FRAME_OFFSET) && (fp != NULL); i++)
         fp = fp->fr_savfp;
 
-    for (i = 0; (fp != 0) && (fp->fr_savpc != 0); i++)
+    for (i = 0; (fp != NULL) && (fp->fr_savpc != 0); i++)
     {
         struct frame * prev = fp->fr_savfp;
         osl_diagnose_frame_Impl (f, i, (void*)(fp->fr_savpc));
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
         return doAbort;
 
     /* format message into buffer */
-    if (pszMessage != 0)
+    if (pszMessage != NULL)
     {
         snprintf(szMessage, sizeof(szMessage),
                  "Error: File %s, Line %" SAL_PRIdINT32 ": %s\n",

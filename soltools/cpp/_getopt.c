@@ -54,7 +54,7 @@ int
             }
     }
     optopt = c = argv[optind][sp];
-    if (c == ':' || (cp = strchr(opts, c)) == 0)
+    if (c == ':' || (cp = strchr(opts, c)) == NULL)
     {
         ERR(": illegal option -- ", c);
         if (argv[optind][++sp] == '\0')
@@ -86,7 +86,7 @@ int
             sp = 1;
             optind++;
         }
-        optarg = 0;
+        optarg = NULL;
     }
     return c;
 }

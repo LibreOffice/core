@@ -155,7 +155,7 @@ oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_
 
     OSL_ASSERT(pszName != NULL);
 
-    if ( pszName == 0 )
+    if ( pszName == NULL )
     {
         return osl_Process_E_NotFound;
     }
@@ -167,7 +167,7 @@ oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_
         Separator = ':';
 
 
-    if ( (pchr = getenv(pszPath)) != 0 )
+    if ( (pchr = getenv(pszPath)) != NULL )
     {
         sal_Char *pstr;
 
@@ -693,9 +693,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 {
 
     oslProcessError Error;
-    sal_Char* pszWorkDir=0;
-    sal_Char** pArguments=0;
-    sal_Char** pEnvironment=0;
+    sal_Char* pszWorkDir=NULL;
+    sal_Char** pArguments=NULL;
+    sal_Char** pEnvironment=NULL;
     unsigned int idx;
 
     char szImagePath[PATH_MAX] = "";
@@ -706,13 +706,13 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         FileURLToPath( szImagePath, PATH_MAX, ustrImageName );
     }
 
-    if ( ustrWorkDir != 0 && ustrWorkDir->length )
+    if ( ustrWorkDir != NULL && ustrWorkDir->length )
     {
         FileURLToPath( szWorkDir, PATH_MAX, ustrWorkDir );
         pszWorkDir = szWorkDir;
     }
 
-    if ( pArguments == 0 && nArguments > 0 )
+    if ( pArguments == NULL && nArguments > 0 )
     {
         pArguments = (sal_Char**) malloc( ( nArguments + 2 ) * sizeof(sal_Char*) );
     }
@@ -720,7 +720,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     for ( idx = 0 ; idx < nArguments ; ++idx )
     {
-        rtl_String* strArg =0;
+        rtl_String* strArg =NULL;
 
 
         rtl_uString2String( &strArg,
@@ -731,14 +731,14 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
         pArguments[idx]=strdup(rtl_string_getStr(strArg));
         rtl_string_release(strArg);
-        pArguments[idx+1]=0;
+        pArguments[idx+1]=NULL;
     }
 
     for ( idx = 0 ; idx < nEnvironmentVars ; ++idx )
     {
-        rtl_String* strEnv=0;
+        rtl_String* strEnv=NULL;
 
-        if ( pEnvironment == 0 )
+        if ( pEnvironment == NULL )
         {
             pEnvironment = (sal_Char**) malloc( ( nEnvironmentVars + 2 ) * sizeof(sal_Char*) );
         }
@@ -751,7 +751,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
         pEnvironment[idx]=strdup(rtl_string_getStr(strEnv));
         rtl_string_release(strEnv);
-        pEnvironment[idx+1]=0;
+        pEnvironment[idx+1]=NULL;
     }
 
 
@@ -767,11 +767,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                    pErrorRead
                                    );
 
-    if ( pArguments != 0 )
+    if ( pArguments != NULL )
     {
         for ( idx = 0 ; idx < nArguments ; ++idx )
         {
-            if ( pArguments[idx] != 0 )
+            if ( pArguments[idx] != NULL )
             {
                 free(pArguments[idx]);
             }
@@ -779,11 +779,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         free(pArguments);
     }
 
-    if ( pEnvironment != 0 )
+    if ( pEnvironment != NULL )
     {
         for ( idx = 0 ; idx < nEnvironmentVars ; ++idx )
         {
-            if ( pEnvironment[idx] != 0 )
+            if ( pEnvironment[idx] != NULL )
             {
                 free(pEnvironment[idx]);
             }
@@ -859,7 +859,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     OSL_ASSERT(pszImageName != NULL);
 
-    if ( pszImageName == 0 )
+    if ( pszImageName == NULL )
     {
         return osl_Process_E_NotFound;
     }
@@ -869,7 +869,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         pszImageName = path;
 
     Data.m_pszArgs[0] = strdup(pszImageName);
-    Data.m_pszArgs[1] = 0;
+    Data.m_pszArgs[1] = NULL;
 
     if ( pszArguments != 0 )
     {
@@ -920,7 +920,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     for (i = 0; Data.m_pszEnv[i] != NULL; i++)
           free((void *)Data.m_pszEnv[i]);
 
-    if ( Data.m_pszDir != 0 )
+    if ( Data.m_pszDir != NULL )
     {
         free((void *)Data.m_pszDir);
     }
@@ -1159,7 +1159,7 @@ sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 
     if ((fd = open(name,O_RDONLY)) >=0 )
     {
-        char* tmp=0;
+        char* tmp=NULL;
         char prstatbuf[512];
         memset(prstatbuf,0,512);
         bRet = read(fd,prstatbuf,511) == 511;
@@ -1213,7 +1213,7 @@ sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 
     if ((fd = open(name,O_RDONLY)) >=0 )
     {
-        char* tmp=0;
+        char* tmp=NULL;
         char prstatusbuf[512];
         memset(prstatusbuf,0,512);
         bRet = read(fd,prstatusbuf,511) == 511;

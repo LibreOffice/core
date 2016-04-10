@@ -82,7 +82,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
     OSL_ASSERT(pThreadImpl);
 
-    if ( pThreadImpl == 0 )
+    if ( pThreadImpl == NULL )
     {
         return 0;
     }
@@ -250,7 +250,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments ?*/
-    if(pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if(pThreadImpl==NULL || pThreadImpl->m_hThread==0)
     {
         return osl_Thread_PriorityUnknown;
     }
@@ -307,7 +307,7 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments ?*/
-    if(pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if(pThreadImpl==NULL || pThreadImpl->m_hThread==0)
     {
         return sal_False;
     }
@@ -323,7 +323,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments?*/
-    if(pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if(pThreadImpl==NULL || pThreadImpl->m_hThread==0)
     {
         /* assume thread is not running */
         return;
@@ -353,7 +353,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments?*/
-    if (pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if (pThreadImpl==NULL || pThreadImpl->m_hThread==0)
     {
         /* assume thread is not running */
         return;
@@ -373,7 +373,7 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
     osl_yieldThread();
 
     /* invalid arguments?*/
-    if (pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if (pThreadImpl==NULL || pThreadImpl->m_hThread==0)
     {
         /* assume thread is not running */
         return sal_False;
@@ -432,7 +432,7 @@ static void AddKeyToList( PTLS pTls )
         EnterCriticalSection( &g_ThreadKeyListCS );
 
         pTls->pNext = g_pThreadKeyList;
-        pTls->pPrev = 0;
+        pTls->pPrev = NULL;
 
         if ( g_pThreadKeyList )
             g_pThreadKeyList->pPrev = pTls;
@@ -497,7 +497,7 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
         if ( (DWORD)-1 == (pTls->dwIndex = TlsAlloc()) )
         {
             rtl_freeMemory( pTls );
-            pTls = 0;
+            pTls = NULL;
         }
         else
             AddKeyToList( pTls );

@@ -541,13 +541,13 @@ static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const _pair *language=0;
+    const _pair *language=NULL;
 
     char  locale_buf[64] = "";
     char  codeset_buf[64];
 
-    char *ctype_locale = 0;
-    char *codeset      = 0;
+    char *ctype_locale = NULL;
+    char *codeset      = NULL;
 
     /* default to process locale if pLocale == NULL */
     if( NULL == pLocale )
@@ -765,7 +765,7 @@ const _pair _iso_language_list[] = {
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const _pair *language = 0;
+    const _pair *language = NULL;
     char locale_buf[64] = "";
     char *cp;
 

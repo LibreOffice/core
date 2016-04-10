@@ -83,7 +83,7 @@ static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SH
     0,
 };
 
-static rtl_arena_type * gp_alloc_arena = 0;
+static rtl_arena_type * gp_alloc_arena = NULL;
 
 /* ================================================================= *
  *
@@ -96,7 +96,7 @@ rtl_memory_once_init (void)
 {
     {
         /* global memory arena */
-        OSL_ASSERT(gp_alloc_arena == 0);
+        OSL_ASSERT(gp_alloc_arena == NULL);
 
         gp_alloc_arena = rtl_arena_create (
             "rtl_alloc_arena",
@@ -107,7 +107,7 @@ rtl_memory_once_init (void)
             rtl_arena_free,
             0         /* flags */
         );
-        OSL_ASSERT(gp_alloc_arena != 0);
+        OSL_ASSERT(gp_alloc_arena != NULL);
     }
     {
         sal_Size size;
@@ -137,7 +137,7 @@ rtl_memory_init (void)
 {
     static sal_once_type g_once = SAL_ONCE_INIT;
     SAL_ONCE(&g_once, rtl_memory_once_init);
-    return (gp_alloc_arena != 0);
+    return (gp_alloc_arena != NULL);
 }
 
 /* ================================================================= */
@@ -171,18 +171,18 @@ rtl_memory_fini (void)
     /* cleanup g_alloc_caches */
     for (i = 0, n = RTL_MEMORY_CACHED_SIZES; i < n; i++)
     {
-        if (g_alloc_caches[i] != 0)
+        if (g_alloc_caches[i] != NULL)
         {
             rtl_cache_destroy (g_alloc_caches[i]);
-            g_alloc_caches[i] = 0;
+            g_alloc_caches[i] = NULL;
         }
     }
 
     /* cleanup gp_alloc_arena */
-    if (gp_alloc_arena != 0)
+    if (gp_alloc_arena != NULL)
     {
         rtl_arena_destroy (gp_alloc_arena);
-        gp_alloc_arena = 0;
+        gp_alloc_arena = NULL;
     }
 }
 

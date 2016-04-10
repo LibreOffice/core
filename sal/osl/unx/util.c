@@ -64,7 +64,7 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
     return sal_False;
 #else
 
-    if ( pAddr == 0 )
+    if ( pAddr == NULL )
     {
         return sal_False;
     }

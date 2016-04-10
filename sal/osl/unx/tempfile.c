@@ -138,8 +138,8 @@ static oslFileError osl_setup_base_directory_impl_(
     rtl_uString*  pustrDirectoryURL,
     rtl_uString** ppustr_base_dir)
 {
-    rtl_uString* dir_url = 0;
-    rtl_uString* dir     = 0;
+    rtl_uString* dir_url = NULL;
+    rtl_uString* dir     = NULL;
     oslFileError error   = osl_File_E_None;
 
     if (pustrDirectoryURL)
@@ -176,9 +176,10 @@ static oslFileError osl_setup_base_directory_impl_(
  {
      oslFileError osl_error;
 
-    OSL_PRECOND(((0 != pHandle) || (0 != ppustrTempFileURL)), "Invalid parameter!");
+    OSL_PRECOND(((NULL != pHandle) || (NULL != ppustrTempFileURL)),
+            "Invalid parameter!");
 
-    if ((0 == pHandle) && (0 == ppustrTempFileURL))
+    if ((NULL == pHandle) && (NULL == ppustrTempFileURL))
     {
         osl_error = osl_File_E_INVAL;
     }
@@ -187,7 +188,7 @@ static oslFileError osl_setup_base_directory_impl_(
         osl_error = osl_setup_base_directory_impl_(
             pustrDirectoryURL, ppustr_base_dir);
 
-        *b_delete_on_close = (0 == ppustrTempFileURL);
+        *b_delete_on_close = (NULL == ppustrTempFileURL);
     }
 
     return osl_error;
@@ -203,10 +204,10 @@ static oslFileError osl_create_temp_file_impl_(
     oslFileHandle* file_handle,
     rtl_uString** ppustr_temp_file_name)
 {
-    rtl_uString*        rand_name        = 0;
+    rtl_uString*        rand_name        = NULL;
     sal_uInt32          len_base_dir     = 0;
-    rtl_uString*        tmp_file_path    = 0;
-    rtl_uString*        tmp_file_url     = 0;
+    rtl_uString*        tmp_file_path    = NULL;
+    rtl_uString*        tmp_file_url     = NULL;
     sal_Int32           capacity         = 0;
     oslFileError        osl_error        = osl_File_E_None;
     sal_Int32           offset_file_name;
@@ -307,8 +308,8 @@ oslFileError SAL_CALL osl_createTempFile(
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL)
 {
-    rtl_uString*  base_directory     = 0;
-    rtl_uString*  temp_file_name     = 0;
+    rtl_uString*  base_directory     = NULL;
+    rtl_uString*  temp_file_name     = NULL;
     oslFileHandle temp_file_handle;
     sal_Bool      b_delete_on_close;
     oslFileError  osl_error;
@@ -328,7 +329,7 @@ oslFileError SAL_CALL osl_createTempFile(
 
     if (osl_File_E_None == osl_error)
     {
-        rtl_uString* temp_file_url = 0;
+        rtl_uString* temp_file_url = NULL;
 
         /* assuming this works */
         osl_getFileURLFromSystemPath(temp_file_name, &temp_file_url);

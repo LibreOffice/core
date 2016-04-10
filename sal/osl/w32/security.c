@@ -605,7 +605,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
             if (fLoadUserProfile && fUnloadUserProfile)
             {
-                rtl_uString     *buffer = 0;
+                rtl_uString     *buffer = NULL;
                 PROFILEINFOW    pi;
 
                 getUserNameImpl(Security, &buffer, sal_False);

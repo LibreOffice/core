@@ -78,11 +78,11 @@ int backtrace( void **buffer, int max_frames )
     fpval = ((long*)(ctx))[FRAME_PTR_OFFSET];
     fp = (struct frame*)((char*)(fpval) + STACK_BIAS);
 
-    for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
+    for (i = 0; (i < FRAME_OFFSET) && (fp != NULL); i++)
         fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
 
     /* iterate through backtrace */
-    for (i = 0; (fp != 0) && (fp->fr_savpc != 0) && (i < max_frames); i++)
+    for (i = 0; (fp != NULL) && (fp->fr_savpc != 0) && (i < max_frames); i++)
     {
         /* saved (prev) frame */
         struct frame * prev = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
@@ -154,7 +154,7 @@ int backtrace( void **buffer, int max_frames )
     /* get stack- and framepointer */
     setjmp(ctx);
     fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
-    for ( i=0; (i<FRAME_OFFSET) && (fp!=0); i++)
+    for ( i=0; (i<FRAME_OFFSET) && (fp!=NULL); i++)
         fp = fp->fr_savfp;
     /* iterate through backtrace */
     for (i=0; fp && fp->fr_savpc && i<max_frames; i++)
@@ -238,7 +238,7 @@ int backtrace( void **buffer, int max_frames )
     /* get stack- and framepointer */
     setjmp(ctx);
     fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
-    for ( i=0; (i<FRAME_OFFSET) && (fp!=0); i++)
+    for ( i=0; (i<FRAME_OFFSET) && (fp!=NULL); i++)
         fp = fp->fr_savfp;
 
     /* iterate through backtrace */

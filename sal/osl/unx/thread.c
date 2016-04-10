@@ -186,7 +186,7 @@ static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
         pthread_mutex_destroy (&((*ppImpl)->m_Lock));
 
         free (*ppImpl);
-        (*ppImpl) = 0;
+        (*ppImpl) = NULL;
     }
 }
 

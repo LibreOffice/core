@@ -225,7 +225,7 @@ sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal_Int32 hash
  */
 static void rtl_locale_once_init (void)
 {
-  OSL_ASSERT(g_pLocaleTable == 0);
+  OSL_ASSERT(g_pLocaleTable == NULL);
   rtl_hashtable_init(&g_pLocaleTable, 1);
 }
 
@@ -233,7 +233,7 @@ static int rtl_locale_init (void)
 {
   static sal_once_type g_once = SAL_ONCE_INIT;
   SAL_ONCE(&g_once, rtl_locale_once_init);
-  return (g_pLocaleTable != 0);
+  return (g_pLocaleTable != NULL);
 }
 
 /*************************************************************************
@@ -248,10 +248,10 @@ static void rtl_locale_fini (void);
 
 void rtl_locale_fini (void)
 {
-  if (g_pLocaleTable != 0)
+  if (g_pLocaleTable != NULL)
   {
     rtl_hashtable_destroy (g_pLocaleTable);
-    g_pLocaleTable = 0;
+    g_pLocaleTable = NULL;
   }
 }
 

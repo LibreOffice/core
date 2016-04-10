@@ -59,7 +59,7 @@ oslMutex SAL_CALL osl_createMutex()
 
     OSL_ASSERT(pMutex);
 
-    if ( pMutex == 0 )
+    if ( pMutex == NULL )
     {
         return 0;
     }
@@ -75,7 +75,7 @@ oslMutex SAL_CALL osl_createMutex()
                   nRet, strerror(nRet));
 
         free(pMutex);
-        pMutex = 0;
+        pMutex = NULL;
     }
 
     pthread_mutexattr_destroy(&aMutexAttr);
@@ -92,7 +92,7 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 
     OSL_ASSERT(pMutex);
 
-    if ( pMutex != 0 )
+    if ( pMutex != NULL )
     {
         int nRet=0;
 
@@ -118,7 +118,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 
     OSL_ASSERT(pMutex);
 
-    if ( pMutex != 0 )
+    if ( pMutex != NULL )
     {
         int nRet=0;
 

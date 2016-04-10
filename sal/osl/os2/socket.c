@@ -693,11 +693,11 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     rtl_uString *ustrDottedAddr,
     sal_Int32    Port)
 {
-    rtl_String* strDottedAddr=0;
+    rtl_String* strDottedAddr=NULL;
     oslSocketAddr Addr;
-    sal_Char* pszDottedAddr=0;
+    sal_Char* pszDottedAddr=NULL;
 
-    if ( ustrDottedAddr != 0 )
+    if ( ustrDottedAddr != NULL )
     {
         rtl_uString2String( &strDottedAddr,
                             rtl_uString_getStr(ustrDottedAddr),
@@ -710,7 +710,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 
     Addr = osl_psz_createInetSocketAddr(pszDottedAddr, Port);
 
-    if ( strDottedAddr != 0 )
+    if ( strDottedAddr != NULL )
     {
         rtl_string_release(strDottedAddr);
     }
@@ -1168,10 +1168,10 @@ oslHostAddr SAL_CALL osl_createHostAddr (
     const oslSocketAddr Addr)
 {
     oslHostAddr HostAddr;
-    rtl_String* strHostname=0;
-    sal_Char* pszHostName=0;
+    rtl_String* strHostname=NULL;
+    sal_Char* pszHostName=NULL;
 
-    if ( ustrHostname != 0 )
+    if ( ustrHostname != NULL )
     {
         rtl_uString2String( &strHostname,
                             rtl_uString_getStr(ustrHostname),
@@ -1183,7 +1183,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
 
     HostAddr = osl_psz_createHostAddr(pszHostName,Addr);
 
-    if ( strHostname != 0 )
+    if ( strHostname != NULL )
     {
         rtl_string_release(strHostname);
     }
@@ -1230,10 +1230,10 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
 oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
 {
     oslHostAddr HostAddr;
-    rtl_String* strHostname=0;
-    sal_Char* pszHostName=0;
+    rtl_String* strHostname=NULL;
+    sal_Char* pszHostName=NULL;
 
-    if ( ustrHostname != 0 )
+    if ( ustrHostname != NULL )
     {
         rtl_uString2String( &strHostname,
                             rtl_uString_getStr(ustrHostname),
@@ -1245,7 +1245,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
 
     HostAddr = osl_psz_createHostAddrByName(pszHostName);
 
-    if ( strHostname != 0 )
+    if ( strHostname != NULL )
     {
         rtl_string_release(strHostname);
     }
@@ -1320,7 +1320,7 @@ void SAL_CALL osl_getHostnameOfHostAddr (
     const oslHostAddr   Addr,
     rtl_uString       **ustrHostname)
 {
-    const sal_Char* pHostname=0;
+    const sal_Char* pHostname=NULL;
 
     pHostname = osl_psz_getHostnameOfHostAddr(Addr);
 
@@ -1480,10 +1480,10 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
 oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
 {
     oslSocketAddr Addr;
-    rtl_String* strHostname=0;
-    sal_Char* pszHostName=0;
+    rtl_String* strHostname=NULL;
+    sal_Char* pszHostName=NULL;
 
-    if ( ustrHostname != 0 )
+    if ( ustrHostname != NULL )
     {
         rtl_uString2String( &strHostname,
                             rtl_uString_getStr(ustrHostname),
@@ -1496,7 +1496,7 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
 
     Addr = osl_psz_resolveHostname(pszHostName);
 
-    if ( strHostname != 0 )
+    if ( strHostname != NULL )
     {
         rtl_string_release(strHostname);
     }
@@ -1528,12 +1528,12 @@ oslSocketAddr SAL_CALL osl_psz_resolveHostname(const sal_Char* pszHostname)
 sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString *ustrProtocol)
 {
     sal_Int32 nPort;
-    rtl_String* strServicename=0;
-    rtl_String* strProtocol=0;
-    sal_Char* pszServiceName=0;
-    sal_Char* pszProtocol=0;
+    rtl_String* strServicename=NULL;
+    rtl_String* strProtocol=NULL;
+    sal_Char* pszServiceName=NULL;
+    sal_Char* pszProtocol=NULL;
 
-    if ( ustrServicename != 0 )
+    if ( ustrServicename != NULL )
     {
         rtl_uString2String( &strServicename,
                             rtl_uString_getStr(ustrServicename),
@@ -1543,7 +1543,7 @@ sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString 
         pszServiceName = rtl_string_getStr(strServicename);
     }
 
-    if ( ustrProtocol != 0 )
+    if ( ustrProtocol != NULL )
     {
         rtl_uString2String( &strProtocol,
                             rtl_uString_getStr(ustrProtocol),
@@ -1555,12 +1555,12 @@ sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString 
 
     nPort = osl_psz_getServicePort(pszServiceName,pszProtocol);
 
-    if ( strServicename != 0 )
+    if ( strServicename != NULL )
     {
         rtl_string_release(strServicename);
     }
 
-    if ( strProtocol != 0 )
+    if ( strProtocol != NULL )
     {
         rtl_string_release(strProtocol);
     }
@@ -1577,7 +1577,7 @@ sal_Int32 SAL_CALL osl_psz_getServicePort(const sal_Char* pszServicename,
 
     ps= getservbyname(pszServicename, pszProtocol);
 
-    if (ps != 0)
+    if (ps != NULL)
         return ntohs(ps->s_port);
 
     return OSL_INVALID_PORT;
@@ -2350,7 +2350,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
                               oslSocketMsgFlag Flag)
 {
     int nRead;
-    struct sockaddr *pSystemSockAddr = 0;
+    struct sockaddr *pSystemSockAddr = NULL;
     int AddrLen = 0;
     if( pSenderAddr )
     {
@@ -2440,7 +2440,7 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket pSocket,
 {
     int nWritten;
 
-    struct sockaddr *pSystemSockAddr = 0;
+    struct sockaddr *pSystemSockAddr = NULL;
     int AddrLen = 0;
     if( ReceiverAddr )
     {

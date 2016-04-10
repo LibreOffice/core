@@ -80,25 +80,25 @@ static struct rtl_cache_list_st g_cache_list;
  *
  *  @internal
  */
-static rtl_arena_type * gp_cache_arena = 0;
+static rtl_arena_type * gp_cache_arena = NULL;
 
 
 /** gp_cache_magazine_cache
  *  @internal
  */
-static rtl_cache_type * gp_cache_magazine_cache = 0;
+static rtl_cache_type * gp_cache_magazine_cache = NULL;
 
 
 /** gp_cache_slab_cache
  *  @internal
  */
-static rtl_cache_type * gp_cache_slab_cache = 0;
+static rtl_cache_type * gp_cache_slab_cache = NULL;
 
 
 /** gp_cache_bufctl_cache
  *  @internal
  */
-static rtl_cache_type * gp_cache_bufctl_cache = 0;
+static rtl_cache_type * gp_cache_bufctl_cache = NULL;
 
 
 /** rtl_cache_init()
@@ -133,7 +133,7 @@ rtl_cache_hash_rescale (
     new_bytes = new_size * sizeof(rtl_cache_bufctl_type*);
     new_table = (rtl_cache_bufctl_type**)rtl_arena_alloc(gp_cache_arena, &new_bytes);
 
-    if (new_table != 0)
+    if (new_table != NULL)
     {
         rtl_cache_bufctl_type ** old_table;
         sal_Size                 old_size, i;
@@ -162,7 +162,7 @@ rtl_cache_hash_rescale (
         for (i = 0; i < old_size; i++)
         {
             rtl_cache_bufctl_type * curr = old_table[i];
-            while (curr != 0)
+            while (curr != NULL)
             {
                 rtl_cache_bufctl_type  * next = curr->m_next;
                 rtl_cache_bufctl_type ** head;
@@ -173,7 +173,7 @@ rtl_cache_hash_rescale (
 
                 curr = next;
             }
-            old_table[i] = 0;
+            old_table[i] = NULL;
         }
 
         RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
@@ -222,11 +222,11 @@ rtl_cache_hash_remove (
     sal_Size                 lookups = 0;
 
     ppHead = &(cache->m_hash_table[RTL_CACHE_HASH_INDEX(cache, addr)]);
-    while ((bufctl = *ppHead) != 0)
+    while ((bufctl = *ppHead) != NULL)
     {
         if (bufctl->m_addr == addr)
         {
-            *ppHead = bufctl->m_next, bufctl->m_next = 0;
+            *ppHead = bufctl->m_next, bufctl->m_next = NULL;
             break;
         }
 
@@ -234,7 +234,7 @@ rtl_cache_hash_remove (
         ppHead = &(bufctl->m_next);
     }
 
-    OSL_ASSERT (bufctl != 0); /* bad free */
+    OSL_ASSERT (bufctl != NULL); /* bad free */
 
     if (lookups > 1)
     {
@@ -312,13 +312,13 @@ rtl_cache_slab_create (
     rtl_cache_type * cache
 )
 {
-    rtl_cache_slab_type * slab = 0;
+    rtl_cache_slab_type * slab = NULL;
     void *                addr;
     sal_Size              size;
 
     size = cache->m_slab_size;
     addr = rtl_arena_alloc (cache->m_source, &size);
-    if (addr != 0)
+    if (addr != NULL)
     {
         OSL_ASSERT(size >= cache->m_slab_size);
 
@@ -334,13 +334,13 @@ rtl_cache_slab_create (
             slab = RTL_CACHE_SLAB(addr, cache->m_slab_size);
             (void) rtl_cache_slab_constructor (slab, 0);
         }
-        if (slab != 0)
+        if (slab != NULL)
         {
             slab->m_data = (sal_uIntPtr)(addr);
 
             /* dynamic freelist initialization */
             slab->m_bp = slab->m_data;
-            slab->m_sp = 0;
+            slab->m_sp = NULL;
         }
         else
         {
@@ -368,12 +368,12 @@ rtl_cache_slab_destroy (
     {
         /* cleanup bufctl(s) for free buffer(s) */
         sal_Size ntypes = (slab->m_bp - slab->m_data) / cache->m_type_size;
-        for (ntypes -= refcnt; slab->m_sp != 0; ntypes--)
+        for (ntypes -= refcnt; slab->m_sp != NULL; ntypes--)
         {
             rtl_cache_bufctl_type * bufctl = slab->m_sp;
 
             /* pop from freelist */
-            slab->m_sp = bufctl->m_next, bufctl->m_next = 0;
+            slab->m_sp = bufctl->m_next, bufctl->m_next = NULL;
 
             /* return bufctl struct to bufctl cache */
             rtl_cache_free (gp_cache_bufctl_cache, bufctl);
@@ -411,7 +411,7 @@ rtl_cache_slab_populate (
     RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
     slab = rtl_cache_slab_create (cache);
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
-    if (slab != 0)
+    if (slab != NULL)
     {
         /* update buffer start addr w/ current color */
         slab->m_bp += cache->m_ncolor;
@@ -427,7 +427,7 @@ rtl_cache_slab_populate (
         /* insert onto 'free' queue */
         QUEUE_INSERT_HEAD_NAMED(&(cache->m_free_head), slab, slab_);
     }
-    return (slab != 0);
+    return (slab != NULL);
 }
 
 /* ================================================================= */
@@ -441,7 +441,7 @@ rtl_cache_slab_alloc (
     rtl_cache_type * cache
 )
 {
-    void                * addr = 0;
+    void                * addr = NULL;
     rtl_cache_slab_type * head;
 
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
@@ -455,7 +455,7 @@ rtl_cache_slab_alloc (
         slab = head->m_slab_next;
         OSL_ASSERT(slab->m_ntypes < cache->m_ntypes);
 
-        if (slab->m_sp == 0)
+        if (slab->m_sp == NULL)
         {
             /* initialize bufctl w/ current 'slab->m_bp' */
             OSL_ASSERT (slab->m_bp < slab->m_data + cache->m_ntypes * cache->m_type_size + cache->m_ncolor_max);
@@ -464,7 +464,7 @@ rtl_cache_slab_alloc (
                 /* allocate bufctl */
                 OSL_ASSERT (cache != gp_cache_bufctl_cache);
                 bufctl = (rtl_cache_bufctl_type*)rtl_cache_alloc (gp_cache_bufctl_cache);
-                if (bufctl == 0)
+                if (bufctl == NULL)
                 {
                     /* out of memory */
                     RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
@@ -479,7 +479,7 @@ rtl_cache_slab_alloc (
                 /* embedded bufctl */
                 bufctl = (rtl_cache_bufctl_type*)(slab->m_bp);
             }
-            bufctl->m_next = 0;
+            bufctl->m_next = NULL;
 
             /* update 'slab->m_bp' to next free buffer */
             slab->m_bp += cache->m_type_size;
@@ -545,7 +545,7 @@ rtl_cache_slab_free (
     if (cache->m_features & RTL_CACHE_FEATURE_HASH)
     {
         bufctl = rtl_cache_hash_remove (cache, (sal_uIntPtr)(addr));
-        slab = (bufctl != 0) ? (rtl_cache_slab_type*)(bufctl->m_slab) : 0;
+        slab = (bufctl != NULL) ? (rtl_cache_slab_type*)(bufctl->m_slab) : 0;
     }
     else
     {
@@ -554,7 +554,7 @@ rtl_cache_slab_free (
         slab = RTL_CACHE_SLAB(addr, cache->m_slab_size);
     }
 
-    if (slab != 0)
+    if (slab != NULL)
     {
         /* check for full slab */
         if (slab->m_ntypes == cache->m_ntypes)
@@ -605,7 +605,7 @@ rtl_cache_magazine_constructor (void * obj, void * arg)
 
     (void) arg; /* unused */
 
-    mag->m_mag_next = 0;
+    mag->m_mag_next = NULL;
     mag->m_mag_size = RTL_CACHE_MAGAZINE_SIZE;
     mag->m_mag_used = 0;
 
@@ -624,7 +624,7 @@ rtl_cache_magazine_destructor (void * obj, void * arg)
     rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
 
     /* assure removed from queue(s) */
-    OSL_ASSERT(mag->m_mag_next == 0);
+    OSL_ASSERT(mag->m_mag_next == NULL);
 
     /* assure no longer referenced */
     OSL_ASSERT(mag->m_mag_used == 0);
@@ -645,7 +645,7 @@ rtl_cache_magazine_clear (
     for (; mag->m_mag_used > 0; --mag->m_mag_used)
     {
         void * obj = mag->m_objects[mag->m_mag_used - 1];
-        mag->m_objects[mag->m_mag_used - 1] = 0;
+        mag->m_objects[mag->m_mag_used - 1] = NULL;
 
         /* DEBUG ONLY: mark cached object allocated, undefined */
         VALGRIND_MEMPOOL_ALLOC(cache, obj, cache->m_type_size);
@@ -697,15 +697,15 @@ rtl_cache_depot_dequeue (
     rtl_cache_depot_type * depot
 )
 {
-    rtl_cache_magazine_type * mag = 0;
+    rtl_cache_magazine_type * mag = NULL;
     if (depot->m_mag_count > 0)
     {
         /* dequeue magazine */
-        OSL_ASSERT(depot->m_mag_next != 0);
+        OSL_ASSERT(depot->m_mag_next != NULL);
 
         mag = depot->m_mag_next;
         depot->m_mag_next = mag->m_mag_next;
-        mag->m_mag_next = 0;
+        mag->m_mag_next = NULL;
 
         /* update depot stats */
         depot->m_mag_count--;
@@ -731,17 +731,17 @@ rtl_cache_depot_exchange_alloc (
 {
     rtl_cache_magazine_type * full;
 
-    OSL_ASSERT((empty == 0) || (empty->m_mag_used == 0));
+    OSL_ASSERT((empty == NULL) || (empty->m_mag_used == 0));
 
     /* dequeue full magazine */
     full = rtl_cache_depot_dequeue (&(cache->m_depot_full));
-    if ((full != 0) && (empty != 0))
+    if ((full != NULL) && (empty != NULL))
     {
         /* enqueue empty magazine */
         rtl_cache_depot_enqueue (&(cache->m_depot_empty), empty);
     }
 
-    OSL_ASSERT((full == 0) || (full->m_mag_used > 0));
+    OSL_ASSERT((full == NULL) || (full->m_mag_used > 0));
 
     return (full);
 }
@@ -763,17 +763,17 @@ rtl_cache_depot_exchange_free (
 {
     rtl_cache_magazine_type * empty;
 
-    OSL_ASSERT((full == 0) || (full->m_mag_used > 0));
+    OSL_ASSERT((full == NULL) || (full->m_mag_used > 0));
 
     /* dequeue empty magazine */
     empty = rtl_cache_depot_dequeue (&(cache->m_depot_empty));
-    if ((empty != 0) && (full != 0))
+    if ((empty != NULL) && (full != NULL))
     {
         /* enqueue full magazine */
         rtl_cache_depot_enqueue (&(cache->m_depot_full), full);
     }
 
-    OSL_ASSERT((empty == 0) || (empty->m_mag_used == 0));
+    OSL_ASSERT((empty == NULL) || (empty->m_mag_used == 0));
 
     return (empty);
 }
@@ -792,7 +792,7 @@ rtl_cache_depot_populate (
     rtl_cache_type * cache
 )
 {
-    rtl_cache_magazine_type * empty = 0;
+    rtl_cache_magazine_type * empty = NULL;
 
     if (cache->m_magazine_cache != 0)
     {
@@ -800,13 +800,13 @@ rtl_cache_depot_populate (
         RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
         empty = (rtl_cache_magazine_type*)rtl_cache_alloc (cache->m_magazine_cache);
         RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-        if (empty != 0)
+        if (empty != NULL)
         {
             /* enqueue (new) empty magazine */
             rtl_cache_depot_enqueue (&(cache->m_depot_empty), empty);
         }
     }
-    return (empty != 0);
+    return (empty != NULL);
 }
 
 /* ================================================================= */
@@ -881,8 +881,8 @@ rtl_cache_activate (
     int              flags
 )
 {
-    OSL_ASSERT(cache != 0);
-    if (cache != 0)
+    OSL_ASSERT(cache != NULL);
+    if (cache != NULL)
     {
         sal_Size slabsize;
 
@@ -937,8 +937,8 @@ rtl_cache_activate (
 
         if (cache->m_slab_size > source->m_quantum)
         {
-            OSL_ASSERT(gp_cache_slab_cache != 0);
-            OSL_ASSERT(gp_cache_bufctl_cache != 0);
+            OSL_ASSERT(gp_cache_slab_cache != NULL);
+            OSL_ASSERT(gp_cache_bufctl_cache != NULL);
 
             cache->m_features  |= RTL_CACHE_FEATURE_HASH;
             cache->m_ntypes     = cache->m_slab_size / cache->m_type_size;
@@ -963,7 +963,7 @@ rtl_cache_activate (
         /* magazine layer */
         if (!(flags & RTL_CACHE_FLAG_NOMAGAZINE))
         {
-            OSL_ASSERT(gp_cache_magazine_cache != 0);
+            OSL_ASSERT(gp_cache_magazine_cache != NULL);
             cache->m_magazine_cache = gp_cache_magazine_cache;
         }
 
@@ -1002,13 +1002,13 @@ rtl_cache_deactivate (
         mag_cache = cache->m_magazine_cache, cache->m_magazine_cache = 0;
 
         /* cleanup cpu layer */
-        if ((mag = cache->m_cpu_curr) != 0)
+        if ((mag = cache->m_cpu_curr) != NULL)
         {
             cache->m_cpu_curr = 0;
             rtl_cache_magazine_clear (cache, mag);
             rtl_cache_free (mag_cache, mag);
         }
-        if ((mag = cache->m_cpu_prev) != 0)
+        if ((mag = cache->m_cpu_prev) != NULL)
         {
             cache->m_cpu_prev = 0;
             rtl_cache_magazine_clear (cache, mag);
@@ -1016,12 +1016,12 @@ rtl_cache_deactivate (
         }
 
         /* cleanup depot layer */
-        while ((mag = rtl_cache_depot_dequeue(&(cache->m_depot_full))) != 0)
+        while ((mag = rtl_cache_depot_dequeue(&(cache->m_depot_full))) != NULL)
         {
             rtl_cache_magazine_clear (cache, mag);
             rtl_cache_free (mag_cache, mag);
         }
-        while ((mag = rtl_cache_depot_dequeue(&(cache->m_depot_empty))) != 0)
+        while ((mag = rtl_cache_depot_dequeue(&(cache->m_depot_empty))) != NULL)
         {
             rtl_cache_magazine_clear (cache, mag);
             rtl_cache_free (mag_cache, mag);
@@ -1059,10 +1059,10 @@ rtl_cache_deactivate (
             for (i = 0; i < n; i++)
             {
                 rtl_cache_bufctl_type * bufctl;
-                while ((bufctl = cache->m_hash_table[i]) != 0)
+                while ((bufctl = cache->m_hash_table[i]) != NULL)
                 {
                     /* pop from hash table */
-                    cache->m_hash_table[i] = bufctl->m_next, bufctl->m_next = 0;
+                    cache->m_hash_table[i] = bufctl->m_next, bufctl->m_next = NULL;
 
                     /* return to bufctl cache */
                     rtl_cache_free (gp_cache_bufctl_cache, bufctl);
@@ -1559,7 +1559,7 @@ rtl_cache_depot_wsupdate (
     for (; npurge > 0; npurge--)
     {
         rtl_cache_magazine_type * mag = rtl_cache_depot_dequeue (depot);
-        if (mag != 0)
+        if (mag != NULL)
         {
             RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
             rtl_cache_magazine_clear (cache, mag);
@@ -1656,7 +1656,7 @@ rtl_cache_once_init (void)
     }
     {
         /* cache: internal arena */
-        OSL_ASSERT(gp_cache_arena == 0);
+        OSL_ASSERT(gp_cache_arena == NULL);
 
         gp_cache_arena = rtl_arena_create (
             "rtl_cache_internal_arena",
@@ -1667,16 +1667,16 @@ rtl_cache_once_init (void)
             rtl_arena_free,
             0     /* flags */
         );
-        OSL_ASSERT(gp_cache_arena != 0);
+        OSL_ASSERT(gp_cache_arena != NULL);
 
         /* check 'gp_default_arena' initialization */
-        OSL_ASSERT(gp_default_arena != 0);
+        OSL_ASSERT(gp_default_arena != NULL);
     }
     {
         /* cache: magazine cache */
         static rtl_cache_type g_cache_magazine_cache;
 
-        OSL_ASSERT(gp_cache_magazine_cache == 0);
+        OSL_ASSERT(gp_cache_magazine_cache == NULL);
         VALGRIND_CREATE_MEMPOOL(&g_cache_magazine_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_magazine_cache);
 
@@ -1692,7 +1692,7 @@ rtl_cache_once_init (void)
             gp_default_arena, /* source */
             RTL_CACHE_FLAG_NOMAGAZINE /* during bootstrap; activated below */
         );
-        OSL_ASSERT(gp_cache_magazine_cache != 0);
+        OSL_ASSERT(gp_cache_magazine_cache != NULL);
 
         /* activate magazine layer */
         g_cache_magazine_cache.m_magazine_cache = gp_cache_magazine_cache;
@@ -1701,7 +1701,7 @@ rtl_cache_once_init (void)
         /* cache: slab (struct) cache */
         static rtl_cache_type g_cache_slab_cache;
 
-        OSL_ASSERT(gp_cache_slab_cache == 0);
+        OSL_ASSERT(gp_cache_slab_cache == NULL);
         VALGRIND_CREATE_MEMPOOL(&g_cache_slab_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_slab_cache);
 
@@ -1717,13 +1717,13 @@ rtl_cache_once_init (void)
             gp_default_arena,            /* source */
             0                            /* flags: none */
         );
-        OSL_ASSERT(gp_cache_slab_cache != 0);
+        OSL_ASSERT(gp_cache_slab_cache != NULL);
     }
     {
         /* cache: bufctl cache */
         static rtl_cache_type g_cache_bufctl_cache;
 
-        OSL_ASSERT(gp_cache_bufctl_cache == 0);
+        OSL_ASSERT(gp_cache_bufctl_cache == NULL);
         VALGRIND_CREATE_MEMPOOL(&g_cache_bufctl_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_bufctl_cache);
 
@@ -1739,7 +1739,7 @@ rtl_cache_once_init (void)
             gp_default_arena, /* source */
             0                 /* flags: none */
         );
-        OSL_ASSERT(gp_cache_bufctl_cache != 0);
+        OSL_ASSERT(gp_cache_bufctl_cache != NULL);
     }
 
     rtl_cache_wsupdate_init();
@@ -1750,7 +1750,7 @@ rtl_cache_init (void)
 {
     static sal_once_type g_once = SAL_ONCE_INIT;
     SAL_ONCE(&g_once, rtl_cache_once_init);
-    return (gp_cache_arena != 0);
+    return (gp_cache_arena != NULL);
 }
 
 /* ================================================================= */
@@ -1776,37 +1776,37 @@ static void rtl_cache_fini (void);
 void
 rtl_cache_fini (void)
 {
-    if (gp_cache_arena != 0)
+    if (gp_cache_arena != NULL)
     {
         rtl_cache_type * cache, * head;
 
         rtl_cache_wsupdate_fini();
 
-        if (gp_cache_bufctl_cache != 0)
+        if (gp_cache_bufctl_cache != NULL)
         {
-            cache = gp_cache_bufctl_cache, gp_cache_bufctl_cache = 0;
+            cache = gp_cache_bufctl_cache, gp_cache_bufctl_cache = NULL;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
             VALGRIND_DESTROY_MEMPOOL(cache);
         }
-        if (gp_cache_slab_cache != 0)
+        if (gp_cache_slab_cache != NULL)
         {
-            cache = gp_cache_slab_cache, gp_cache_slab_cache = 0;
+            cache = gp_cache_slab_cache, gp_cache_slab_cache = NULL;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
             VALGRIND_DESTROY_MEMPOOL(cache);
         }
-        if (gp_cache_magazine_cache != 0)
+        if (gp_cache_magazine_cache != NULL)
         {
-            cache = gp_cache_magazine_cache, gp_cache_magazine_cache = 0;
+            cache = gp_cache_magazine_cache, gp_cache_magazine_cache = NULL;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
             VALGRIND_DESTROY_MEMPOOL(cache);
         }
-        if (gp_cache_arena != 0)
+        if (gp_cache_arena != NULL)
         {
             rtl_arena_destroy (gp_cache_arena);
-            gp_cache_arena = 0;
+            gp_cache_arena = NULL;
         }
 
         RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));

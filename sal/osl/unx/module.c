@@ -82,7 +82,7 @@ oslModule SAL_CALL osl_loadAsciiModule(const sal_Char *pszModuleName, sal_Int32 
         void* pLib = dlopen(pszModuleName, rtld_mode);
 
 #if OSL_DEBUG_LEVEL > 1
-        if (pLib == 0)
+        if (pLib == NULL)
             OSL_TRACE("error: osl_loadModule failed with %s\n", dlerror());
 #endif /* OSL_DEBUG_LEVEL */
 

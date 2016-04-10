@@ -169,7 +169,7 @@ rtl_TestResult* rtl_tres_create( const sal_Char* meth, sal_uInt32 flags )
                                                     rtl_TestResult_Data ) );
     /* initialize members... */
     pData->m_funcs              = &trVTable;    /* ...vtableptr to vtbladr */
-    pData->m_externaldata       = 0;            /* ...external data pointer */
+    pData->m_externaldata       = NULL;            /* ...external data pointer */
 
     /* allocate memory for state structure and initialize members */
     pData->m_state              = rtl_tres_create_funcstate( meth );
@@ -192,7 +192,7 @@ rtl_TestResult* rtl_tres_create( const sal_Char* meth, sal_uInt32 flags )
  */
 rtl_FuncState* SAL_CALL rtl_tres_create_funcstate( const sal_Char* meth )
 {
-    rtl_FuncState* pStat = 0;                   /* status structure */
+    rtl_FuncState* pStat = NULL;                   /* status structure */
 
     /* allocate memory for status structure */
     pStat = (rtl_FuncState*) malloc( sizeof( struct _rtl_FuncState ) );
@@ -202,11 +202,11 @@ rtl_FuncState* SAL_CALL rtl_tres_create_funcstate( const sal_Char* meth )
         pStat->m_next  = pStat;                 /* init ptr to next struct */
         pStat->m_prev  = pStat;                 /* init ptr to prev struct */
 
-        pStat->m_name  = 0;                     /* init name */
+        pStat->m_name  = NULL;                     /* init name */
         pStat->m_flags = 0;                     /* init flags */
         pStat->m_start = rtl_tres_timer();      /* init start milliseconds */
         pStat->m_stop  = 0;                     /* init stop milliseconds */
-        pStat->m_cmp   = 0;                     /* init ptr to msg struct */
+        pStat->m_cmp   = NULL;                     /* init ptr to msg struct */
         rtl_string_newFromStr( &pStat->m_name, meth );/* copy meth to name */
 
         /* set ok flag initially */
@@ -310,7 +310,7 @@ rtl_CmpState* SAL_CALL rtl_tres_create_cmpstate(
     {
         pStat->m_next   = pStat;                /* init next with this */
         pStat->m_prev   = pStat;                /* init prev with this */
-        pStat->m_msg    = 0;
+        pStat->m_msg    = NULL;
         pStat->m_stat   = state;                /* boolean state */
         rtl_string_newFromStr( &pStat->m_msg, msg ); /* copy message */
     }
@@ -334,7 +334,7 @@ void SAL_CALL rtl_tres_destroy( rtl_TestResult* pThis_ )
 
     /* free allocted memory and reinitialize to zero */
     /* to be able to prevent dangling pointer access*/
-    free( pData ); pData = 0;
+    free( pData ); pData = NULL;
 }
 
  /**
@@ -391,11 +391,11 @@ void SAL_CALL rtl_tres_destroy_funcstate( rtl_FuncState* pState_ )
     if ( plink->m_name )
     {
         rtl_string_release( plink->m_name );
-        plink->m_name = 0;
+        plink->m_name = NULL;
     }
     plink->m_flags = 0;
     free( plink );
-    plink = 0;
+    plink = NULL;
 }
 
  /**
@@ -412,10 +412,10 @@ void SAL_CALL rtl_tres_destroy_cmpstate( rtl_CmpState* pState_ )
     if ( plink->m_msg )
     {
         rtl_string_release( plink->m_msg );
-        plink->m_msg = 0;
+        plink->m_msg = NULL;
     }
     free( plink );
-    plink = 0;
+    plink = NULL;
 }
  /**
  * central function to call in tests

@@ -133,9 +133,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 {
 
     oslProcessError Error;
-    sal_Char* pszWorkDir=0;
-    sal_Char** pArguments=0;
-    sal_Char** pEnvironment=0;
+    sal_Char* pszWorkDir=NULL;
+    sal_Char** pArguments=NULL;
+    sal_Char** pEnvironment=NULL;
     unsigned int index;
 
     char szImagePath[PATH_MAX] = "";
@@ -168,13 +168,13 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         FileURLToPath( szImagePath, PATH_MAX, ustrImageName );
     }
 
-    if ( ustrWorkDir != 0 && ustrWorkDir->length )
+    if ( ustrWorkDir != NULL && ustrWorkDir->length )
     {
         FileURLToPath( szWorkDir, PATH_MAX, ustrWorkDir );
         pszWorkDir = szWorkDir;
     }
 
-    if ( pArguments == 0 && nArguments > 0 )
+    if ( pArguments == NULL && nArguments > 0 )
     {
         pArguments = (sal_Char**) malloc( ( nArguments + 2 ) * sizeof(sal_Char*) );
     }
@@ -182,7 +182,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     for ( index = 0 ; index < nArguments ; ++index )
     {
-        rtl_String* strArg =0;
+        rtl_String* strArg =NULL;
 
 
         rtl_uString2String( &strArg,
@@ -193,14 +193,14 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
         pArguments[index]=strdup(rtl_string_getStr(strArg));
         rtl_string_release(strArg);
-        pArguments[index+1]=0;
+        pArguments[index+1]=NULL;
     }
 
     for ( index = 0 ; index < nEnvironmentVars ; ++index )
     {
-        rtl_String* strEnv=0;
+        rtl_String* strEnv=NULL;
 
-        if ( pEnvironment == 0 )
+        if ( pEnvironment == NULL )
         {
             pEnvironment = (sal_Char**) malloc( ( nEnvironmentVars + 2 ) * sizeof(sal_Char*) );
         }
@@ -213,7 +213,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
         pEnvironment[index]=strdup(rtl_string_getStr(strEnv));
         rtl_string_release(strEnv);
-        pEnvironment[index+1]=0;
+        pEnvironment[index+1]=NULL;
     }
 
     int     rc, pid;
@@ -279,11 +279,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     dup2( saveError, STDERR_FILENO);
     close( saveError);
 
-    if ( pArguments != 0 )
+    if ( pArguments != NULL )
     {
         for ( index = 0 ; index < nArguments ; ++index )
         {
-            if ( pArguments[index] != 0 )
+            if ( pArguments[index] != NULL )
             {
                 free(pArguments[index]);
             }
@@ -291,11 +291,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         free(pArguments);
     }
 
-    if ( pEnvironment != 0 )
+    if ( pEnvironment != NULL )
     {
         for ( index = 0 ; index < nEnvironmentVars ; ++index )
         {
-            if ( pEnvironment[index] != 0 )
+            if ( pEnvironment[index] != NULL )
             {
                 free(pEnvironment[index]);
             }

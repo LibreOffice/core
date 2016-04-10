@@ -321,7 +321,7 @@ const _pair _iso_language_list[] = {
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const _pair *language = 0;
+    const _pair *language = NULL;
     char locale_buf[64] = "";
     char *cp;
 

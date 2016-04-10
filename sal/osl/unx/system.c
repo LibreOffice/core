@@ -76,7 +76,7 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
                res = s;
         }
         else
-            res = 0;
+            res = NULL;
     }
 
     pthread_mutex_unlock(&getrtl_mutex);
@@ -212,7 +212,7 @@ struct spwd *getspnam_r(const char *name, struct spwd* s, char* buffer, int size
                res = s;
         }
         else
-            res = 0;
+            res = NULL;
     }
 
       pthread_mutex_unlock(&getrtl_mutex);
@@ -273,7 +273,7 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
                res = s;
         }
         else
-            res = 0;
+            res = NULL;
     }
 
     pthread_mutex_unlock(&getrtl_mutex);

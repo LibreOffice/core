@@ -221,12 +221,12 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 {
     PFN  pFunction;
     APIRET rc;
-    void* pHandle=0;
+    void* pHandle=NULL;
 
     OSL_ENSURE(Module,"osl_getSymbol : module handle is not valid");
     OSL_ENSURE(Module,"osl_getSymbol : ustrSymbolName");
 
-    if ( Module!= 0 && pSymbol != 0 )
+    if ( Module!= 0 && pSymbol != NULL )
     {
 
         rc = DosQueryProcAddr( (HMODULE) Module, 0, (PCSZ)pSymbol, &pFunction );

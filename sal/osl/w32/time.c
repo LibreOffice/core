@@ -41,7 +41,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     FILETIME   CurTime, OffTime;
     __int64    Value;
 
-    OSL_ASSERT(pTimeVal != 0);
+    OSL_ASSERT(pTimeVal != NULL);
 
     GetSystemTime(&SystemTime);
     SystemTimeToFileTime(&SystemTime, &CurTime);

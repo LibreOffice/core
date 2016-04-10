@@ -28,7 +28,7 @@
 
 void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID )
 {
-    static sal_uInt8 *pUuid = 0;
+    static sal_uInt8 *pUuid = NULL;
     if( ! pUuid )
     {
         osl_acquireMutex( * osl_getGlobalMutex() );

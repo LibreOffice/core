@@ -39,21 +39,21 @@ int main (int argc, char ** argv)
     oslFileError  result;
     oslFileHandle hFile = 0;
 
-    rtl_uString * pSystemPath = 0;
-    rtl_uString * pFileUrl = 0;
+    rtl_uString * pSystemPath = NULL;
+    rtl_uString * pFileUrl = NULL;
 
     rtl_uString_newFromAscii (&pSystemPath, argv[1]);
 
     result = osl_getFileURLFromSystemPath (pSystemPath, &pFileUrl);
-    rtl_uString_release (pSystemPath), pSystemPath = 0;
+    rtl_uString_release (pSystemPath), pSystemPath = NULL;
     if (result != osl_File_E_None)
       return (result);
 
     result = osl_openFile (pFileUrl, &hFile, osl_File_OpenFlag_Read);
-    rtl_uString_release (pFileUrl), pFileUrl = 0;
+    rtl_uString_release (pFileUrl), pFileUrl = NULL;
     if (result == osl_File_E_None)
     {
-      sal_Sequence * pBuffer = 0;
+      sal_Sequence * pBuffer = NULL;
       for ( ;; )
       {
         sal_Int32 i, n;
@@ -71,7 +71,7 @@ int main (int argc, char ** argv)
         printf("\n");
       }
 
-      rtl_byte_sequence_release (pBuffer), pBuffer = 0;
+      rtl_byte_sequence_release (pBuffer), pBuffer = NULL;
       (void) osl_closeFile (hFile);
     }
   }

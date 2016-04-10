@@ -50,7 +50,7 @@ oslCondition SAL_CALL osl_createCondition()
 
     OSL_ASSERT(pCond);
 
-    if ( pCond == 0 )
+    if ( pCond == NULL )
     {
         return 0;
     }
@@ -82,7 +82,7 @@ oslCondition SAL_CALL osl_createCondition()
         }
 
         free(pCond);
-        pCond = 0;
+        pCond = NULL;
     }
 
     return (oslCondition)pCond;
@@ -130,7 +130,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
    OSL_ASSERT(Condition);
    pCond = (oslConditionImpl*)Condition;
 
-   if ( pCond == 0 )
+   if ( pCond == NULL )
    {
        return sal_False;
    }
@@ -177,7 +177,7 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 
     pCond = (oslConditionImpl*)Condition;
 
-    if ( pCond == 0 )
+    if ( pCond == NULL )
     {
         return sal_False;
     }
@@ -215,7 +215,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     OSL_ASSERT(Condition);
     pCond = (oslConditionImpl*)Condition;
 
-    if ( pCond == 0 )
+    if ( pCond == NULL )
     {
         return osl_cond_result_error;
     }
@@ -320,7 +320,7 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
     OSL_ASSERT(Condition);
     pCond = (oslConditionImpl*)Condition;
 
-    if ( pCond == 0 )
+    if ( pCond == NULL )
     {
         return sal_False;
     }
