@@ -123,7 +123,7 @@ namespace svgio
             const SvgStyleAttributes* checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const;
 
             /// helper for filling the CssStyle vector once dependent on mbCssStyleVectorBuilt
-            void fillCssStyleVector(const OUString& rClassStr);
+            void fillCssStyleVector(const OUString& rClassStr, const SvgStyleAttributes& rOriginal);
             void fillCssStyleVectorUsingHierarchyAndSelectors(
                 const OUString& rClassStr,
                 const SvgNode& rCurrent,
