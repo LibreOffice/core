@@ -179,9 +179,8 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 
     if( !pMgr->GetLib( aLibName ) )
     {
-        BasicManager* pBasMgr = static_cast< BasicManager* >( pMgr );
         StarBASIC* pLib =
-            pBasMgr->CreateLibForLibContainer( aLibName, xScriptCont );
+            pMgr->CreateLibForLibContainer( aLibName, xScriptCont );
         DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
     }
 
@@ -190,8 +189,7 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
     {
         // Register listener for library
         Reference< container::XContainerListener > xLibraryListener
-            = static_cast< container::XContainerListener* >
-                ( new BasMgrContainerListenerImpl( pMgr, aLibName ) );
+            = new BasMgrContainerListenerImpl( pMgr, aLibName );
         xLibContainer->addContainerListener( xLibraryListener );
     }
 
@@ -534,7 +532,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         // in an 6.0+ office. So also the old basic dialogs can be saved.
         tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
         mpImpl->mpManagerStream = new SvMemoryStream();
-        static_cast<SvStream*>(&xManagerStream)->ReadStream( *mpImpl->mpManagerStream );
+        xManagerStream->ReadStream( *mpImpl->mpManagerStream );
 
         tools::SvRef<SotStorage> xBasicStorage = rStorage.OpenSotStorage( szBasicStorage, eStorageReadMode, false );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
@@ -546,7 +544,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
                 BasicLibInfo& rInfo = *mpImpl->aLibs[nL];
                 tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( rInfo.GetLibName(), eStreamReadMode );
                 mpImpl->mppLibStreams[nL] = new SvMemoryStream();
-                static_cast<SvStream*>(&xBasicStream)->ReadStream( *( mpImpl->mppLibStreams[nL] ) );
+                xBasicStream->ReadStream( *( mpImpl->mppLibStreams[nL] ) );
             }
         }
     }
@@ -607,8 +605,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         // Register listener for lib container
         OUString aEmptyLibName;
         uno::Reference< container::XContainerListener > xLibContainerListener
-            = static_cast< container::XContainerListener* >
-                ( new BasMgrContainerListenerImpl( this, aEmptyLibName ) );
+            = new BasMgrContainerListenerImpl( this, aEmptyLibName );
 
         uno::Reference< container::XContainer> xLibContainer( xScriptCont, uno::UNO_QUERY );
         xLibContainer->addContainerListener( xLibContainerListener );
@@ -1801,8 +1798,7 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
     if( !pMod )
         throw container::NoSuchElementException();
-    uno::Reference< script::XStarBasicModuleInfo > xMod = static_cast<XStarBasicModuleInfo*>(new ModuleInfo_Impl
-        ( aName, "StarBasic", pMod->GetSource32() ));
+    uno::Reference< script::XStarBasicModuleInfo > xMod = new ModuleInfo_Impl( aName, "StarBasic", pMod->GetSource32() );
     uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;
@@ -1941,7 +1937,8 @@ sal_Bool DialogContainer_Impl::hasElements()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( nullptr != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
+        SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
+        if ( pObj && (pObj->GetSbxId() == SBXID_DIALOG ) )
         {
             bRet = true;
             break;
@@ -1955,15 +1952,14 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( !( pVar && nullptr != dynamic_cast<const SbxObject*>( pVar) &&
-           ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
+    SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
+    if( !( pObj && pObj->GetSbxId() == SBXID_DIALOG ) )
     {
         throw container::NoSuchElementException();
     }
 
     uno::Reference< script::XStarBasicDialogInfo > xDialog =
-        static_cast<XStarBasicDialogInfo*>(new DialogInfo_Impl
-            ( aName, implGetDialogData( static_cast<SbxObject*>(pVar) ) ));
+        new DialogInfo_Impl(aName, implGetDialogData(pObj));
 
     uno::Any aRetAny;
     aRetAny <<= xDialog;
@@ -1981,7 +1977,8 @@ uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( nullptr != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
+        SbxObject* pObj = dynamic_cast<SbxObject*> (pVar);
+        if ( pObj && ( pObj->GetSbxId() == SBXID_DIALOG ) )
         {
             pRetSeq[ nDialogCounter ] = pVar->GetName();
             nDialogCounter++;
@@ -1996,8 +1993,8 @@ sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
 {
     bool bRet = false;
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( pVar && nullptr != dynamic_cast<const SbxObject*>( pVar) &&
-           ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
+    SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
+    if( pObj &&  ( pObj->GetSbxId() == SBXID_DIALOG ) )
     {
         bRet = true;
     }
@@ -2036,8 +2033,8 @@ void DialogContainer_Impl::removeByName( const OUString& Name )
 {
     (void)Name;
     SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxCLASS_DONTCARE );
-    if( !( pVar && nullptr != dynamic_cast<const SbxObject*>( pVar) &&
-           ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
+    SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
+    if( !( pObj && ( pObj->GetSbxId() == SBXID_DIALOG ) ) )
     {
         throw container::NoSuchElementException();
     }
@@ -2105,10 +2102,10 @@ uno::Any LibraryContainer_Impl::getByName( const OUString& aName )
     StarBASIC* pLib = mpMgr->GetLib( aName );
 
     uno::Reference< container::XNameContainer > xModuleContainer =
-        static_cast<container::XNameContainer*>(new ModuleContainer_Impl( pLib ));
+        new ModuleContainer_Impl( pLib );
 
     uno::Reference< container::XNameContainer > xDialogContainer =
-        static_cast<container::XNameContainer*>(new DialogContainer_Impl( pLib ));
+        new DialogContainer_Impl( pLib );
 
     BasicLibInfo* pLibInfo = mpMgr->FindLibInfo( pLib );
 
@@ -2220,7 +2217,7 @@ uno::Reference< container::XNameContainer > SAL_CALL StarBasicAccess_Impl::getLi
     throw(uno::RuntimeException, std::exception)
 {
     if( !mxLibContainer.is() )
-        mxLibContainer = static_cast<container::XNameContainer*>(new LibraryContainer_Impl( mpMgr ));
+        mxLibContainer = new LibraryContainer_Impl( mpMgr );
     return mxLibContainer;
 }
 
