@@ -179,9 +179,8 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 
     if( !pMgr->GetLib( aLibName ) )
     {
-        BasicManager* pBasMgr = static_cast< BasicManager* >( pMgr );
         StarBASIC* pLib =
-            pBasMgr->CreateLibForLibContainer( aLibName, xScriptCont );
+            pMgr->CreateLibForLibContainer( aLibName, xScriptCont );
         DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
     }
 
@@ -190,8 +189,7 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
     {
         // Register listener for library
         Reference< container::XContainerListener > xLibraryListener
-            = static_cast< container::XContainerListener* >
-                ( new BasMgrContainerListenerImpl( pMgr, aLibName ) );
+            = new BasMgrContainerListenerImpl( pMgr, aLibName );
         xLibContainer->addContainerListener( xLibraryListener );
     }
 
@@ -534,7 +532,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         // in an 6.0+ office. So also the old basic dialogs can be saved.
         tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
         mpImpl->mpManagerStream = new SvMemoryStream();
-        static_cast<SvStream*>(&xManagerStream)->ReadStream( *mpImpl->mpManagerStream );
+        xManagerStream->ReadStream( *mpImpl->mpManagerStream );
 
         tools::SvRef<SotStorage> xBasicStorage = rStorage.OpenSotStorage( szBasicStorage, eStorageReadMode, false );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
@@ -546,7 +544,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
                 BasicLibInfo& rInfo = *mpImpl->aLibs[nL];
                 tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( rInfo.GetLibName(), eStreamReadMode );
                 mpImpl->mppLibStreams[nL] = new SvMemoryStream();
-                static_cast<SvStream*>(&xBasicStream)->ReadStream( *( mpImpl->mppLibStreams[nL] ) );
+                xBasicStream->ReadStream( *( mpImpl->mppLibStreams[nL] ) );
             }
         }
     }
@@ -607,8 +605,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         // Register listener for lib container
         OUString aEmptyLibName;
         uno::Reference< container::XContainerListener > xLibContainerListener
-            = static_cast< container::XContainerListener* >
-                ( new BasMgrContainerListenerImpl( this, aEmptyLibName ) );
+            = new BasMgrContainerListenerImpl( this, aEmptyLibName );
 
         uno::Reference< container::XContainer> xLibContainer( xScriptCont, uno::UNO_QUERY );
         xLibContainer->addContainerListener( xLibContainerListener );
@@ -1805,8 +1802,7 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
     if( !pMod )
         throw container::NoSuchElementException();
-    uno::Reference< script::XStarBasicModuleInfo > xMod = static_cast<XStarBasicModuleInfo*>(new ModuleInfo_Impl
-        ( aName, "StarBasic", pMod->GetSource32() ));
+    uno::Reference< script::XStarBasicModuleInfo > xMod = new ModuleInfo_Impl( aName, "StarBasic", pMod->GetSource32() );
     uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;
