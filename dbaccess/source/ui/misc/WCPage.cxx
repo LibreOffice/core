@@ -205,7 +205,7 @@ bool OCopyTable::LeavePage()
         if (    m_pParent->m_bCreatePrimaryKeyColumn
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
-            OUString aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
+            OUString aInfoString( ModuleRes(STR_WIZ_NAME_ALREADY_DEFINED) );
             aInfoString += " ";
             aInfoString += m_pParent->m_aKeyName;
             m_pParent->showError(aInfoString);
