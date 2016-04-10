@@ -240,7 +240,7 @@ eval()
     opp->prec = opdope[OP_END]; /* And its precedence       */
     opp->skip = 0;          /* Not skipping now     */
     binop = 0;
-again:  ;
+again:
 #ifdef  DEBUG_EVAL
     fprintf( pCppOut, "In #if at again: skip = %d, binop = %d, line is: %s",
         opp->skip, binop, infile->bptr);
