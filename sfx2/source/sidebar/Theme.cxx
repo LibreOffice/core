@@ -668,64 +668,157 @@ void Theme::SetupPropertyMaps()
     maBooleans.resize(Bool_Rect_ - Int_Bool_ - 1);
     maRectangles.resize(Post_Rect_ - Bool_Rect_ - 1);
 
-    #define AddEntry(e) maPropertyNameToIdMap[OUString(#e)]=e; maPropertyIdToNameMap[e]=#e
+    maPropertyNameToIdMap["Image_Grip"]=Image_Grip;
+    maPropertyIdToNameMap[Image_Grip]="Image_Grip";
 
-    AddEntry(Image_Grip);
-    AddEntry(Image_Expand);
-    AddEntry(Image_Collapse);
-    AddEntry(Image_TabBarMenu);
-    AddEntry(Image_PanelMenu);
-    AddEntry(Image_Closer);
-    AddEntry(Image_CloseIndicator);
+    maPropertyNameToIdMap["Image_Expand"]=Image_Expand;
+    maPropertyIdToNameMap[Image_Expand]="Image_Expand";
 
-    AddEntry(Color_DeckTitleFont);
-    AddEntry(Color_PanelTitleFont);
-    AddEntry(Color_TabMenuSeparator);
-    AddEntry(Color_TabItemBorder);
-    AddEntry(Color_DropDownBorder);
-    AddEntry(Color_Highlight);
-    AddEntry(Color_HighlightText);
+    maPropertyNameToIdMap["Image_Collapse"]=Image_Collapse;
+    maPropertyIdToNameMap[Image_Collapse]="Image_Collapse";
 
-    AddEntry(Paint_DeckBackground);
-    AddEntry(Paint_DeckTitleBarBackground);
-    AddEntry(Paint_PanelBackground);
-    AddEntry(Paint_PanelTitleBarBackground);
-    AddEntry(Paint_TabBarBackground);
-    AddEntry(Paint_TabItemBackgroundNormal);
-    AddEntry(Paint_TabItemBackgroundHighlight);
-    AddEntry(Paint_HorizontalBorder);
-    AddEntry(Paint_VerticalBorder);
-    AddEntry(Paint_ToolBoxBackground);
-    AddEntry(Paint_ToolBoxBorderTopLeft);
-    AddEntry(Paint_ToolBoxBorderCenterCorners);
-    AddEntry(Paint_ToolBoxBorderBottomRight);
-    AddEntry(Paint_DropDownBackground);
+    maPropertyNameToIdMap["Image_TabBarMenu"]=Image_TabBarMenu;
+    maPropertyIdToNameMap[Image_TabBarMenu]="Image_TabBarMenu";
 
-    AddEntry(Int_DeckTitleBarHeight);
-    AddEntry(Int_DeckBorderSize);
-    AddEntry(Int_DeckSeparatorHeight);
-    AddEntry(Int_PanelTitleBarHeight);
-    AddEntry(Int_TabMenuPadding);
-    AddEntry(Int_TabMenuSeparatorPadding);
-    AddEntry(Int_TabItemWidth);
-    AddEntry(Int_TabItemHeight);
-    AddEntry(Int_DeckLeftPadding);
-    AddEntry(Int_DeckTopPadding);
-    AddEntry(Int_DeckRightPadding);
-    AddEntry(Int_DeckBottomPadding);
-    AddEntry(Int_TabBarLeftPadding);
-    AddEntry(Int_TabBarTopPadding);
-    AddEntry(Int_TabBarRightPadding);
-    AddEntry(Int_TabBarBottomPadding);
-    AddEntry(Int_ButtonCornerRadius);
+    maPropertyNameToIdMap["Image_PanelMenu"]=Image_PanelMenu;
+    maPropertyIdToNameMap[Image_PanelMenu]="Image_PanelMenu";
 
-    AddEntry(Bool_UseSystemColors);
-    AddEntry(Bool_IsHighContrastModeActive);
+    maPropertyNameToIdMap["Image_Closer"]=Image_Closer;
+    maPropertyIdToNameMap[Image_Closer]="Image_Closer";
 
-    AddEntry(Rect_ToolBoxPadding);
-    AddEntry(Rect_ToolBoxBorder);
+    maPropertyNameToIdMap["Image_CloseIndicator"]=Image_CloseIndicator;
+    maPropertyIdToNameMap[Image_CloseIndicator]="Image_CloseIndicator";
 
-    #undef AddEntry
+
+    maPropertyNameToIdMap["Color_DeckTitleFont"]=Color_DeckTitleFont;
+    maPropertyIdToNameMap[Color_DeckTitleFont]="Color_DeckTitleFont";
+
+    maPropertyNameToIdMap["Color_PanelTitleFont"]=Color_PanelTitleFont;
+    maPropertyIdToNameMap[Color_PanelTitleFont]="Color_PanelTitleFont";
+
+    maPropertyNameToIdMap["Color_TabMenuSeparator"]=Color_TabMenuSeparator;
+    maPropertyIdToNameMap[Color_TabMenuSeparator]="Color_TabMenuSeparator";
+
+    maPropertyNameToIdMap["Color_TabItemBorder"]=Color_TabItemBorder;
+    maPropertyIdToNameMap[Color_TabItemBorder]="Color_TabItemBorder";
+
+    maPropertyNameToIdMap["Color_DropDownBorder"]=Color_DropDownBorder;
+    maPropertyIdToNameMap[Color_DropDownBorder]="Color_DropDownBorder";
+
+    maPropertyNameToIdMap["Color_Highlight"]=Color_Highlight;
+    maPropertyIdToNameMap[Color_Highlight]="Color_Highlight";
+
+    maPropertyNameToIdMap["Color_HighlightText"]=Color_HighlightText;
+    maPropertyIdToNameMap[Color_HighlightText]="Color_HighlightText";
+
+
+    maPropertyNameToIdMap["Paint_DeckBackground"]=Paint_DeckBackground;
+    maPropertyIdToNameMap[Paint_DeckBackground]="Paint_DeckBackground";
+
+    maPropertyNameToIdMap["Paint_DeckTitleBarBackground"]=Paint_DeckTitleBarBackground;
+    maPropertyIdToNameMap[Paint_DeckTitleBarBackground]="Paint_DeckTitleBarBackground";
+
+    maPropertyNameToIdMap["Paint_PanelBackground"]=Paint_PanelBackground;
+    maPropertyIdToNameMap[Paint_PanelBackground]="Paint_PanelBackground";
+
+    maPropertyNameToIdMap["Paint_PanelTitleBarBackground"]=Paint_PanelTitleBarBackground;
+    maPropertyIdToNameMap[Paint_PanelTitleBarBackground]="Paint_PanelTitleBarBackground";
+
+    maPropertyNameToIdMap["Paint_TabBarBackground"]=Paint_TabBarBackground;
+    maPropertyIdToNameMap[Paint_TabBarBackground]="Paint_TabBarBackground";
+
+    maPropertyNameToIdMap["Paint_TabItemBackgroundNormal"]=Paint_TabItemBackgroundNormal;
+    maPropertyIdToNameMap[Paint_TabItemBackgroundNormal]="Paint_TabItemBackgroundNormal";
+
+    maPropertyNameToIdMap["Paint_TabItemBackgroundHighlight"]=Paint_TabItemBackgroundHighlight;
+    maPropertyIdToNameMap[Paint_TabItemBackgroundHighlight]="Paint_TabItemBackgroundHighlight";
+
+    maPropertyNameToIdMap["Paint_HorizontalBorder"]=Paint_HorizontalBorder;
+    maPropertyIdToNameMap[Paint_HorizontalBorder]="Paint_HorizontalBorder";
+
+    maPropertyNameToIdMap["Paint_VerticalBorder"]=Paint_VerticalBorder;
+    maPropertyIdToNameMap[Paint_VerticalBorder]="Paint_VerticalBorder";
+
+    maPropertyNameToIdMap["Paint_ToolBoxBackground"]=Paint_ToolBoxBackground;
+    maPropertyIdToNameMap[Paint_ToolBoxBackground]="Paint_ToolBoxBackground";
+
+    maPropertyNameToIdMap["Paint_ToolBoxBorderTopLeft"]=Paint_ToolBoxBorderTopLeft;
+    maPropertyIdToNameMap[Paint_ToolBoxBorderTopLeft]="Paint_ToolBoxBorderTopLeft";
+
+    maPropertyNameToIdMap["Paint_ToolBoxBorderCenterCorners"]=Paint_ToolBoxBorderCenterCorners;
+    maPropertyIdToNameMap[Paint_ToolBoxBorderCenterCorners]="Paint_ToolBoxBorderCenterCorners";
+
+    maPropertyNameToIdMap["Paint_ToolBoxBorderBottomRight"]=Paint_ToolBoxBorderBottomRight;
+    maPropertyIdToNameMap[Paint_ToolBoxBorderBottomRight]="Paint_ToolBoxBorderBottomRight";
+
+    maPropertyNameToIdMap["Paint_DropDownBackground"]=Paint_DropDownBackground;
+    maPropertyIdToNameMap[Paint_DropDownBackground]="Paint_DropDownBackground";
+
+
+    maPropertyNameToIdMap["Int_DeckTitleBarHeight"]=Int_DeckTitleBarHeight;
+    maPropertyIdToNameMap[Int_DeckTitleBarHeight]="Int_DeckTitleBarHeight";
+
+    maPropertyNameToIdMap["Int_DeckBorderSize"]=Int_DeckBorderSize;
+    maPropertyIdToNameMap[Int_DeckBorderSize]="Int_DeckBorderSize";
+
+    maPropertyNameToIdMap["Int_DeckSeparatorHeight"]=Int_DeckSeparatorHeight;
+    maPropertyIdToNameMap[Int_DeckSeparatorHeight]="Int_DeckSeparatorHeight";
+
+    maPropertyNameToIdMap["Int_PanelTitleBarHeight"]=Int_PanelTitleBarHeight;
+    maPropertyIdToNameMap[Int_PanelTitleBarHeight]="Int_PanelTitleBarHeight";
+
+    maPropertyNameToIdMap["Int_TabMenuPadding"]=Int_TabMenuPadding;
+    maPropertyIdToNameMap[Int_TabMenuPadding]="Int_TabMenuPadding";
+
+    maPropertyNameToIdMap["Int_TabMenuSeparatorPadding"]=Int_TabMenuSeparatorPadding;
+    maPropertyIdToNameMap[Int_TabMenuSeparatorPadding]="Int_TabMenuSeparatorPadding";
+
+    maPropertyNameToIdMap["Int_TabItemWidth"]=Int_TabItemWidth;
+    maPropertyIdToNameMap[Int_TabItemWidth]="Int_TabItemWidth";
+
+    maPropertyNameToIdMap["Int_TabItemHeight"]=Int_TabItemHeight;
+    maPropertyIdToNameMap[Int_TabItemHeight]="Int_TabItemHeight";
+
+    maPropertyNameToIdMap["Int_DeckLeftPadding"]=Int_DeckLeftPadding;
+    maPropertyIdToNameMap[Int_DeckLeftPadding]="Int_DeckLeftPadding";
+
+    maPropertyNameToIdMap["Int_DeckTopPadding"]=Int_DeckTopPadding;
+    maPropertyIdToNameMap[Int_DeckTopPadding]="Int_DeckTopPadding";
+
+    maPropertyNameToIdMap["Int_DeckRightPadding"]=Int_DeckRightPadding;
+    maPropertyIdToNameMap[Int_DeckRightPadding]="Int_DeckRightPadding";
+
+    maPropertyNameToIdMap["Int_DeckBottomPadding"]=Int_DeckBottomPadding;
+    maPropertyIdToNameMap[Int_DeckBottomPadding]="Int_DeckBottomPadding";
+
+    maPropertyNameToIdMap["Int_TabBarLeftPadding"]=Int_TabBarLeftPadding;
+    maPropertyIdToNameMap[Int_TabBarLeftPadding]="Int_TabBarLeftPadding";
+
+    maPropertyNameToIdMap["Int_TabBarTopPadding"]=Int_TabBarTopPadding;
+    maPropertyIdToNameMap[Int_TabBarTopPadding]="Int_TabBarTopPadding";
+
+    maPropertyNameToIdMap["Int_TabBarRightPadding"]=Int_TabBarRightPadding;
+    maPropertyIdToNameMap[Int_TabBarRightPadding]="Int_TabBarRightPadding";
+
+    maPropertyNameToIdMap["Int_TabBarBottomPadding"]=Int_TabBarBottomPadding;
+    maPropertyIdToNameMap[Int_TabBarBottomPadding]="Int_TabBarBottomPadding";
+
+    maPropertyNameToIdMap["Int_ButtonCornerRadius"]=Int_ButtonCornerRadius;
+    maPropertyIdToNameMap[Int_ButtonCornerRadius]="Int_ButtonCornerRadius";
+
+
+    maPropertyNameToIdMap["Bool_UseSystemColors"]=Bool_UseSystemColors;
+    maPropertyIdToNameMap[Bool_UseSystemColors]="Bool_UseSystemColors";
+
+    maPropertyNameToIdMap["Bool_IsHighContrastModeActive"]=Bool_IsHighContrastModeActive;
+    maPropertyIdToNameMap[Bool_IsHighContrastModeActive]="Bool_IsHighContrastModeActive";
+
+
+    maPropertyNameToIdMap["Rect_ToolBoxPadding"]=Rect_ToolBoxPadding;
+    maPropertyIdToNameMap[Rect_ToolBoxPadding]="Rect_ToolBoxPadding";
+
+    maPropertyNameToIdMap["Rect_ToolBoxBorder"]=Rect_ToolBoxBorder;
+    maPropertyIdToNameMap[Rect_ToolBoxBorder]="Rect_ToolBoxBorder";
 
     maRawValues.resize(maPropertyIdToNameMap.size());
 }
