@@ -138,7 +138,7 @@ void SvxShapeCollection::dispose()
 {
     // An frequently programming error is to release the last
     // reference to this object in the disposing message.
-    // Make it rubust, hold a self Reference.
+    // Make it robust, hold a self Reference.
     uno::Reference< lang::XComponent > xSelf( this );
 
     // Guard dispose against multible threading
