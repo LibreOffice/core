@@ -1789,7 +1789,7 @@ RTLFUNC(Val)
         OUString aStr( rPar.Get(1)->GetOUString() );
 
         FilterWhiteSpace( aStr );
-        if ( aStr[0] == '&' && aStr.getLength() > 1 )
+        if ( aStr.getLength() > 1 && aStr[0] == '&' )
         {
             int nRadix = 10;
             char aChar = (char)aStr[1];
