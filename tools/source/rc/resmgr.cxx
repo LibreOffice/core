@@ -913,7 +913,7 @@ bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 
     bool            bAvailable = false;
     RSHEADER_TYPE*  pClassRes = rId.GetpResource();
-    RESOURCE_TYPE   nRT = rId.GetRT2();
+    RESOURCE_TYPE   nRT = rId.GetRT();
     sal_uInt32      nId = rId.GetId();
     const ResMgr*   pMgr = rId.GetResMgr();
 
@@ -978,7 +978,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     }
 
     RSHEADER_TYPE*  pClassRes = rId.GetpResource();
-    RESOURCE_TYPE   nRT = rId.GetRT2();
+    RESOURCE_TYPE   nRT = rId.GetRT();
     sal_uInt32      nId = rId.GetId();
 
     incStack();
