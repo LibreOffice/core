@@ -36,7 +36,7 @@ namespace dxcanvas
         virtual ~GraphicsProvider() {}
         /// make noncopyable
         GraphicsProvider(const GraphicsProvider&) = delete;
-        const GraphicsProvider operator=(const GraphicsProvider) = delete;
+        GraphicsProvider& operator=(const GraphicsProvider&) = delete;
 
         virtual GraphicsSharedPtr getGraphics() = 0;
     };

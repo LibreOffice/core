@@ -67,7 +67,7 @@ namespace basctl
     public:
         // noncopyable
         Impl(const Impl&) = delete;
-        const Impl& operator=(const Impl) = delete;
+        Impl& operator=(const Impl&) = delete;
 
         Impl (DocumentEventListener&, Reference<XModel> const& rxDocument);
         virtual ~Impl ();
