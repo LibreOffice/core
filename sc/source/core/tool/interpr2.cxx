@@ -45,6 +45,7 @@
 #include "postit.hxx"
 #include "tokenarray.hxx"
 #include "globalnames.hxx"
+#include "stlsheet.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
@@ -2386,10 +2387,21 @@ void ScInterpreter::ScStyle()
             if (pShell)
             {
                 // notify object shell directly!
+                bool bNotify = true;
+                if (aStyle2.isEmpty())
+                {
+                    const ScStyleSheet* pStyle = pDok->GetStyle(aPos.Col(), aPos.Row(), aPos.Tab());
 
-                ScRange aRange(aPos);
-                ScAutoStyleHint aHint( aRange, aStyle1, nTimeOut, aStyle2 );
-                pShell->Broadcast( aHint );
+                    if (pStyle && pStyle->GetName() == aStyle1)
+                        bNotify = false;
+                }
+
+                if (bNotify)
+                {
+                    ScRange aRange(aPos);
+                    ScAutoStyleHint aHint( aRange, aStyle1, nTimeOut, aStyle2 );
+                    pShell->Broadcast( aHint );
+                }
             }
         }
 
