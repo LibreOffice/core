@@ -146,7 +146,7 @@ void OComponentHelper::dispose()
     // Make it robust, hold a self Reference.
     Reference<XComponent > xSelf( this );
 
-    // Guard dispose against multible threading
+    // Guard dispose against multiple threading
     // Remark: It is an error to call dispose more than once
     bool bDoDispose = false;
     {

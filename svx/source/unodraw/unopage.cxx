@@ -123,7 +123,7 @@ void SvxDrawPage::dispose()
     // Make it robust, hold a self Reference.
     uno::Reference< lang::XComponent > xSelf( this );
 
-    // Guard dispose against multible threading
+    // Guard dispose against multiple threading
     // Remark: It is an error to call dispose more than once
     bool bDoDispose = false;
     {
