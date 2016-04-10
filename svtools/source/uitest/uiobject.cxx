@@ -21,11 +21,6 @@ StringMap TreeListUIObject::get_state()
     return WindowUIObject::get_state();
 }
 
-UIObjectType TreeListUIObject::get_type() const
-{
-    return UIObjectType::WINDOW;
-}
-
 OUString TreeListUIObject::get_name() const
 {
     return OUString("TreeListUIObject");
