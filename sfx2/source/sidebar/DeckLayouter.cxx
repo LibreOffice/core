@@ -93,13 +93,6 @@ namespace {
         const Rectangle& rBox);
 }
 
-#define IterateLayoutItems(iterator_name,container)                     \
-    for(::std::vector<LayoutItem>::iterator                             \
-                   iterator_name(container.begin()),                    \
-                   iEnd(container.end());                               \
-        iterator_name!=iEnd;                                            \
-        ++iterator_name)
-
 void DeckLayouter::LayoutDeck (
     const Rectangle& rContentArea,
     sal_Int32& rMinimalWidth,
@@ -163,7 +156,11 @@ Rectangle LayoutPanels (
     // and count the different layouts.
     sal_Int32 nTotalPreferredHeight (0);
     sal_Int32 nTotalMinimumHeight (0);
-    IterateLayoutItems(iItem,rLayoutItems)
+
+    for(::std::vector<LayoutItem>::const_iterator iItem(rLayoutItems.begin()),
+         iEnd(rLayoutItems.end());
+        iItem!=iEnd;
+        ++iItem)
     {
         nTotalMinimumHeight += iItem->maLayoutSize.Minimum;
         nTotalPreferredHeight += iItem->maLayoutSize.Preferred;
@@ -254,7 +251,10 @@ sal_Int32 PlacePanels (
     sal_Int32 nY (0);
 
     // Assign heights and places.
-    IterateLayoutItems(iItem,rLayoutItems)
+    for(::std::vector<LayoutItem>::const_iterator iItem(rLayoutItems.begin()),
+         iEnd(rLayoutItems.end());
+        iItem!=iEnd;
+        ++iItem)
     {
         if (!iItem->mpPanel)
             continue;
@@ -345,7 +345,11 @@ void GetRequestedSizes (
 
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
 
-    IterateLayoutItems(iItem,rLayoutItems)
+    ::std::vector<LayoutItem>::const_iterator iEnd(rLayoutItems.end());
+
+    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
+        iItem!=iEnd;
+        ++iItem)
     {
         ui::LayoutSize aLayoutSize (ui::LayoutSize(0,0,0));
         if (iItem->mpPanel != nullptr)
@@ -402,7 +406,12 @@ void DistributeHeights (
     // (either its minimum or preferred height) and the container height.
     sal_Int32 nTotalWeight (0);
     sal_Int32 nNoMaximumCount (0);
-    IterateLayoutItems(iItem,rLayoutItems)
+
+    ::std::vector<LayoutItem>::const_iterator iEnd(rLayoutItems.end());
+
+    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
+        iItem!=iEnd;
+        ++iItem)
     {
         if (iItem->maLayoutSize.Maximum == 0)
             continue;
@@ -424,7 +433,9 @@ void DistributeHeights (
         return;
 
     // First pass of height distribution.
-    IterateLayoutItems(iItem,rLayoutItems)
+    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
+        iItem!=iEnd;
+        ++iItem)
     {
         const sal_Int32 nBaseHeight (
             bMinimumHeightIsBase
@@ -457,7 +468,10 @@ void DistributeHeights (
     // Handle rounding error.
     sal_Int32 nAdditionalHeightForFirstPanel (nRemainingHeightToDistribute
         - nNoMaximumCount*nAdditionalHeightPerPanel);
-    IterateLayoutItems(iItem,rLayoutItems)
+
+    for(::std::vector<LayoutItem>::iterator iItem(rLayoutItems.begin());
+        iItem!=iEnd;
+        ++iItem)
     {
         if (iItem->maLayoutSize.Maximum < 0)
         {
