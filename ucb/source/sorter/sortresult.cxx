@@ -81,7 +81,7 @@ struct SortListData
     sal_IntPtr  mnCurPos;
     sal_IntPtr  mnOldPos;
 
-    SortListData( sal_IntPtr nPos );
+    explicit SortListData( sal_IntPtr nPos );
 };
 
 

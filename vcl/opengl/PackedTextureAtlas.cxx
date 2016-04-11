@@ -24,7 +24,7 @@ struct Node
     std::unique_ptr<Node> mRightNode;
     bool mOccupied;
 
-    Node(Rectangle& aRectangle);
+    explicit Node(Rectangle& rRectangle);
 
     bool isLeaf();
     Node* insert(int nWidth, int nHeight, int nPadding);

@@ -28,7 +28,7 @@ class LineWidthValueSet
     : public ValueSet
 {
 public:
-    LineWidthValueSet(vcl::Window* pParent);
+    explicit LineWidthValueSet(vcl::Window* pParent);
     virtual ~LineWidthValueSet();
     virtual void dispose() override;
 

@@ -44,7 +44,7 @@ class AccessibleChartShape :
     public impl::AccessibleChartShape_Base
 {
 public:
-    AccessibleChartShape( const AccessibleElementInfo& rAccInfo );
+    explicit AccessibleChartShape( const AccessibleElementInfo& rAccInfo );
     virtual ~AccessibleChartShape();
 
     // ________ XServiceInfo ________
