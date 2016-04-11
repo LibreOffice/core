@@ -221,7 +221,7 @@ ${MYCMD} --base sysui/desktop/share --files documents.ulf launcher_comment.ulf l
 
 #${MYCMD} --base cui/source/customize --files acccfg.hrc cfg.hrc
 
-#${MYCMD} --base cui/source/dialogs --files fmsearch.hrc scriptdlg.hrc svuidlg.hrc
+#${MYCMD} --base cui/source/dialogs --files fmsearch.hrc svuidlg.hrc
 
 #${MYCMD} --base cui/source/inc --files cuires.hrc gallery.hrc helpid.hrc
 

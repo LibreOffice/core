@@ -18,7 +18,6 @@
  */
 
 #include <cuires.hrc>
-#include "scriptdlg.hrc"
 #include "helpid.hrc"
 
 String RID_SVXSTR_DELQUERY

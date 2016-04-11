@@ -27,7 +27,6 @@
 #include <osl/mutex.hxx>
 
 #include <cuires.hrc>
-#include "scriptdlg.hrc"
 #include "scriptdlg.hxx"
 #include <dialmgr.hxx>
 #include "selector.hxx"
