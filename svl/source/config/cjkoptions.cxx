@@ -66,7 +66,7 @@ public:
     virtual void    Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
     void            Load();
 
-    bool IsLoaded()                         { return bIsLoaded;         }
+    bool IsLoaded() const                   { return bIsLoaded;         }
 
     bool IsCJKFontEnabled() const           { return bCJKFont;          }
     bool IsVerticalTextEnabled() const      { return bVerticalText;     }

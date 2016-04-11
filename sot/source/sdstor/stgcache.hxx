@@ -66,13 +66,13 @@ public:
     void  IncRef()                          { m_nRef++;           }
     sal_uInt16 DecRef()                     { return --m_nRef;    }
     void  SetPhysPageSize( short );
-    sal_Int32 GetPhysPages()                { return m_nPages;    }
-    short GetPhysPageSize()                 { return m_nPageSize; }
+    sal_Int32 GetPhysPages() const          { return m_nPages;    }
+    short GetPhysPageSize() const           { return m_nPageSize; }
     SvStream* GetStrm()                     { return m_pStrm;     }
     void  SetStrm( SvStream*, bool );
     void  SetStrm( UCBStorageStream* );
-    bool  IsWritable()                      { return ( m_pStrm && m_pStrm->IsWritable() ); }
-    bool  Good()                            { return m_nError == SVSTREAM_OK; }
+    bool  IsWritable() const                { return ( m_pStrm && m_pStrm->IsWritable() ); }
+    bool  Good() const                      { return m_nError == SVSTREAM_OK; }
     ErrCode GetError()                      { return m_nError;    }
     void  MoveError( StorageBase& );
     void  SetError( ErrCode );
