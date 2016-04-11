@@ -37,7 +37,7 @@
 
 #include <cppconn/driver.h>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/string.hxx>
 
@@ -61,7 +61,7 @@ namespace connectivity
         using ::com::sun::star::uno::RuntimeException;
         typedef css::uno::Reference< css::container::XNameAccess > my_XNameAccessRef;
 
-        typedef ::cppu::WeakComponentImplHelper3<   css::sdbc::XConnection,
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XConnection,
                                                     css::sdbc::XWarningsSupplier,
                                                     css::lang::XServiceInfo
                                                 > OMetaConnection_BASE;
