@@ -28,7 +28,7 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
@@ -36,7 +36,7 @@
 
 //  class css::awt::tab::UnoControlTabPageContainerModel
 
-typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlModel
                                             ,   css::awt::tab::XTabPageContainerModel
                                             >   UnoControlTabPageContainerModel_Base;
 class UnoControlTabPageContainerModel : public UnoControlTabPageContainerModel_Base
@@ -93,7 +93,7 @@ public:
 
 // = UnoControlTabPageContainer
 
-typedef ::cppu::AggImplInheritanceHelper1   <   ControlContainerBase
+typedef ::cppu::AggImplInheritanceHelper    <   ControlContainerBase
                                             ,   css::awt::tab::XTabPageContainer
                                             >   UnoControlTabPageContainer_Base;
 class UnoControlTabPageContainer : public UnoControlTabPageContainer_Base

@@ -32,9 +32,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 #include <comphelper/uno3.hxx>
@@ -47,21 +45,21 @@ namespace toolkit
     typedef GraphicControlModel UnoControlRoadmapModel_Base;
 
 
-    typedef ::cppu::ImplHelper3 <   css::lang::XSingleServiceFactory
+    typedef ::cppu::ImplHelper  <   css::lang::XSingleServiceFactory
                                 ,   css::container::XContainer
                                 ,   css::container::XIndexContainer
                                 >   UnoControlRoadmapModel_IBase;
 
 
     typedef UnoControlBase  UnoControlRoadmap_Base;
-    typedef ::cppu::ImplHelper4 <   css::awt::XItemEventBroadcaster
+    typedef ::cppu::ImplHelper  <   css::awt::XItemEventBroadcaster
                                 ,   css::container::XContainerListener
                                 ,   css::awt::XItemListener
                                 ,   css::beans::XPropertyChangeListener
                                 >   UnoControlRoadmap_IBase;
 
 
-    typedef ::cppu::ImplHelper2< css::container::XContainerListener,
+    typedef ::cppu::ImplHelper < css::container::XContainerListener,
                                  css::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
 
 

@@ -21,7 +21,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/awt/XSpinValue.hpp>
 
@@ -32,7 +32,7 @@ namespace toolkit
 
     //= VCLXSpinButton
 
-    typedef ::cppu::ImplHelper1 <   css::awt::XSpinValue
+    typedef ::cppu::ImplHelper  <   css::awt::XSpinValue
                                 >   VCLXSpinButton_Base;
 
     class VCLXSpinButton :public VCLXWindow

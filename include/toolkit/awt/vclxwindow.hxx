@@ -37,7 +37,7 @@
 #include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <tools/gen.hxx>
@@ -61,7 +61,7 @@ namespace toolkit
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
-typedef ::cppu::ImplInheritanceHelper9  <   VCLXDevice
+typedef ::cppu::ImplInheritanceHelper   <   VCLXDevice
                                         ,   css::awt::XWindow2
                                         ,   css::awt::XVclWindowPeer
                                         ,   css::awt::XLayoutConstrains

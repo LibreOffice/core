@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
@@ -49,7 +49,7 @@ void implThrowIllegalArgumentException() throw( IllegalArgumentException )
     throw IllegalArgumentException();
 }
 
-class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >,
+class MutableTreeDataModel : public ::cppu::WeakAggImplHelper < XMutableTreeDataModel, XServiceInfo > ,
                              public MutexAndBroadcastHelper
 {
 public:
@@ -82,7 +82,7 @@ private:
     Reference< XTreeNode > mxRootNode;
 };
 
-class MutableTreeNode: public ::cppu::WeakAggImplHelper2< XMutableTreeNode, XServiceInfo >
+class MutableTreeNode: public ::cppu::WeakAggImplHelper < XMutableTreeNode, XServiceInfo >
 {
     friend class MutableTreeDataModel;
 

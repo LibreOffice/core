@@ -78,12 +78,10 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include <vcl/pointr.hxx>
 #include <vcl/image.hxx>
@@ -144,7 +142,7 @@ public:
 
 //  class VCLXButton
 
-typedef ::cppu::ImplInheritanceHelper2  <   VCLXGraphicControl
+typedef ::cppu::ImplInheritanceHelper   <   VCLXGraphicControl
                                         ,   css::awt::XButton
                                         ,   css::awt::XToggleButton
                                         >   VCLXButton_Base;
@@ -748,7 +746,7 @@ public:
 
 //  class VCLXListBox
 
-typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
+typedef ::cppu::ImplInheritanceHelper   <   VCLXWindow
                                         ,   css::awt::XListBox
                                         ,   css::awt::XTextLayoutConstrains
                                         ,   css::awt::XItemListListener
@@ -825,7 +823,7 @@ public:
 
 //  class VCLXComboBox
 
-typedef ::cppu::ImplInheritanceHelper2  <   VCLXEdit
+typedef ::cppu::ImplInheritanceHelper   <   VCLXEdit
                                         ,   css::awt::XComboBox
                                         ,   css::awt::XItemListListener > VCLXComboBox_Base;
 class VCLXComboBox :    public VCLXComboBox_Base

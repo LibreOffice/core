@@ -48,10 +48,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <vcl/bitmapex.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <list>
@@ -108,7 +105,7 @@ public:
 
 //  class UnoEditControl
 
-typedef ::cppu::ImplHelper4  <   css::awt::XTextComponent
+typedef ::cppu::ImplHelper   <   css::awt::XTextComponent
                              ,   css::awt::XTextListener
                              ,   css::awt::XLayoutConstrains
                              ,   css::awt::XTextLayoutConstrains
@@ -289,7 +286,7 @@ public:
 
 //  class UnoButtonControl
 
-typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   css::awt::XButton
                                             ,   css::awt::XToggleButton
                                             ,   css::awt::XLayoutConstrains
@@ -378,7 +375,7 @@ public:
 
 //  class UnoImageControlControl
 
-typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   css::awt::XLayoutConstrains
                                             >   UnoImageControlControl_Base;
 class UnoImageControlControl : public UnoImageControlControl_Base
@@ -442,7 +439,7 @@ public:
 
 //  class UnoRadioButtonControl
 
-typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   css::awt::XButton
                                             ,   css::awt::XRadioButton
                                             ,   css::awt::XItemListener
@@ -527,7 +524,7 @@ public:
 
 //  class UnoCheckBoxControl
 
-typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   css::awt::XButton
                                             ,   css::awt::XCheckBox
                                             ,   css::awt::XItemListener
@@ -780,7 +777,7 @@ public:
 //  class UnoControlListBoxModel
 
 struct UnoControlListBoxModel_Data;
-typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlModel
                                             ,   css::awt::XItemList
                                             >   UnoControlListBoxModel_Base;
 class TOOLKIT_DLLPUBLIC UnoControlListBoxModel : public UnoControlListBoxModel_Base
@@ -883,7 +880,7 @@ protected:
 
 //  class UnoListBoxControl
 
-typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   css::awt::XListBox
                                             ,   css::awt::XItemListener
                                             ,   css::awt::XLayoutConstrains

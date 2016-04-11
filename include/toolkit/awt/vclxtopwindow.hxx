@@ -26,13 +26,13 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <toolkit/awt/vclxcontainer.hxx>
 
-typedef ::cppu::ImplHelper1 <   css::awt::XTopWindow2
+typedef ::cppu::ImplHelper  <   css::awt::XTopWindow2
                             >   VCLXTopWindow_XBase;
-typedef ::cppu::ImplHelper1 <   css::awt::XSystemDependentWindowPeer
+typedef ::cppu::ImplHelper  <   css::awt::XSystemDependentWindowPeer
                             >   VCLXTopWindow_SBase;
 
 class TOOLKIT_DLLPUBLIC VCLXTopWindow_Base  :public VCLXTopWindow_XBase

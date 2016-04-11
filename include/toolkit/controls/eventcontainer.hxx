@@ -26,10 +26,10 @@
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unordered_map>
 
-typedef ::cppu::WeakImplHelper2< css::container::XNameContainer,
+typedef ::cppu::WeakImplHelper < css::container::XNameContainer,
                                  css::container::XContainer > NameContainerHelper;
 
 
