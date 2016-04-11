@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#define _SVX_NOIDERESIDS
 #include "breakpoint.hxx"
 #include "brkdlg.hxx"
 #include "basidesh.hxx"
-#include "basidesh.hrc"
 
 #include <sfx2/dispatch.hxx>
 

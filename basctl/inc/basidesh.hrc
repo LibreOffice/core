@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASIDESH_HRC
-#define _BASIDESH_HRC
+#ifndef BASCTL_INC_BASIDESH_HRC
+#define BASCTL_INC_BASIDESH_HRC
 
 #include <svx/svxids.hrc>
-
-// Resource-ID's...
-#ifndef _SVX_NOIDERESIDS
 
 #define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
 #define RID_EDT_WATCHEDIT               ( RID_BASICIDE_START +  4 )
@@ -149,8 +146,6 @@
 #define RID_FT_LINE                     ( RID_BASICIDE_START + 123 )
 #define RID_ED_LINE                     ( RID_BASICIDE_START + 124 )
 
-#endif  // _SVX_NOIDERESIDS
-
-#endif  // _BASIDESH_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
