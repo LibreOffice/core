@@ -154,7 +154,7 @@ public:
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
-    void                    SetFontOptions(std::shared_ptr<FontConfigFontOptions>);
+    void                    SetFontOptions(const std::shared_ptr<FontConfigFontOptions>&);
     std::shared_ptr<FontConfigFontOptions> GetFontOptions() const;
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }

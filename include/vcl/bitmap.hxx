@@ -718,7 +718,7 @@ public:
 
     SAL_DLLPRIVATE void     ImplMakeUnique();
     std::shared_ptr<ImpBitmap> ImplGetImpBitmap() const { return mxImpBmp;}
-    SAL_DLLPRIVATE void     ImplSetImpBitmap( std::shared_ptr<ImpBitmap> xImpBmp );
+    SAL_DLLPRIVATE void     ImplSetImpBitmap( const std::shared_ptr<ImpBitmap>& xImpBmp );
     SAL_DLLPRIVATE void     ImplAssignWithSize( const Bitmap& rBitmap );
 
     SAL_DLLPRIVATE void     ImplAdaptBitCount(Bitmap& rNew) const;
