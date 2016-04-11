@@ -40,7 +40,7 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 #include <float.h>
 #include <math.h>
 
-#define _NO_DIGIT                   -1
+#define NO_DIGIT_                   -1
 
 #define MAX_NO_OF_DIGITS            DBL_DIG
 #define MAX_DOUBLE_BUFFER_LENGTH    MAX_NO_OF_DIGITS + 9
@@ -260,7 +260,7 @@ short SbxBasicFormater::GetDigitAtPosScan( short nPos, bool& bFoundFirstDigit )
     // number's dissolution (double)
     if( nPos>nNumExp || abs(nNumExp-nPos)>MAX_NO_OF_DIGITS )
     {
-        return _NO_DIGIT;
+        return NO_DIGIT_;
     }
     // determine the index of the position in the number-string:
     // skip the leading sign
@@ -334,7 +334,7 @@ short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
     // error only at numbers > 0, i. e. for digits before
     // the decimal point
     if( nMaxDigit<nPos && !bFoundFirstDigit && nPos>=0 )
-        return _NO_DIGIT;
+        return NO_DIGIT_;
 
     bFoundFirstDigit = true;
     for( short i=nMaxDigit; i>=nPos; i-- )
@@ -702,7 +702,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
 #else
                             AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPos( dNumber, j, dNumber, bFoundFirstDigit ) );
 #endif
-                            if( nTempDigit!=_NO_DIGIT )
+                            if( nTempDigit != NO_DIGIT_ )
                             {
                                 bFirstDigit = false;
                             }
@@ -736,7 +736,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     AppendDigit( sReturnStrg, nTempDigit = GetDigitAtPos( dNumber, nDigitPos, dNumber, bFoundFirstDigit ) );
 #endif
 
-                    if( nTempDigit != _NO_DIGIT )
+                    if( nTempDigit != NO_DIGIT_ )
                     {
                         bFirstDigit = false;
                     }
