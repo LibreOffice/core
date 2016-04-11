@@ -172,9 +172,9 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         void ensureFilterList( const OUString& _rInitialCurrentFilter );
 
-        void impl_fileSelectionChanged( css::ui::dialogs::FilePickerEvent aEvent );
-        void impl_directoryChanged( css::ui::dialogs::FilePickerEvent aEvent );
-        void impl_controlStateChanged( css::ui::dialogs::FilePickerEvent aEvent );
+        void impl_fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+        void impl_directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+        void impl_controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
 
     private:
         css::uno::Reference< css::ui::dialogs::XFilePickerListener >

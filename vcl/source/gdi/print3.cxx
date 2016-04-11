@@ -511,13 +511,13 @@ bool Printer::ExecutePrintJob(std::shared_ptr<PrinterController> xController)
     return xController->getPrinter()->StartJob( aJobName, xController );
 }
 
-void Printer::FinishPrintJob(std::shared_ptr<PrinterController> xController)
+void Printer::FinishPrintJob(const std::shared_ptr<PrinterController>& xController)
 {
     xController->resetPaperToLastConfigured();
     xController->jobFinished( xController->getJobState() );
 }
 
-void Printer::ImplPrintJob(std::shared_ptr<PrinterController> xController,
+void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& xController,
                            const JobSetup& i_rInitSetup)
 {
     if (PreparePrintJob(xController, i_rInitSetup))

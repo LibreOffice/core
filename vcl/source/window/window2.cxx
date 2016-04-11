@@ -1976,7 +1976,7 @@ void Window::set_non_homogeneous(bool bNonHomogeneous)
     pWindowImpl->mbNonHomogeneous = bNonHomogeneous;
 }
 
-void Window::add_to_size_group(std::shared_ptr<VclSizeGroup> xGroup)
+void Window::add_to_size_group(const std::shared_ptr<VclSizeGroup>& xGroup)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     //To-Do, multiple groups

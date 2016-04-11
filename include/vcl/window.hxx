@@ -1229,7 +1229,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible >
                                         CreateAccessible();
 
-    void                                SetAccessible( css::uno::Reference< css::accessibility::XAccessible > );
+    void                                SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& );
 
     vcl::Window*                        GetAccessibleParentWindow() const;
     sal_uInt16                          GetAccessibleChildWindowCount();
@@ -1508,7 +1508,7 @@ public:
      * Adds this widget to the xGroup VclSizeGroup
      *
      */
-    void add_to_size_group(std::shared_ptr<VclSizeGroup> xGroup);
+    void add_to_size_group(const std::shared_ptr<VclSizeGroup>& xGroup);
     void remove_from_all_size_groups();
 
     /*

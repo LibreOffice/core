@@ -313,7 +313,7 @@ void Bitmap::ImplAssignWithSize( const Bitmap& rBitmap )
 }
 
 
-void Bitmap::ImplSetImpBitmap(std::shared_ptr<ImpBitmap> xImpBmp)
+void Bitmap::ImplSetImpBitmap(const std::shared_ptr<ImpBitmap>& xImpBmp)
 {
     mxImpBmp = xImpBmp;
 }

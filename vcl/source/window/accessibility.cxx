@@ -149,7 +149,7 @@ css::uno::Reference< css::accessibility::XAccessible > Window::CreateAccessible(
     return xAcc;
 }
 
-void Window::SetAccessible( css::uno::Reference< css::accessibility::XAccessible > x )
+void Window::SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& x )
 {
     mpWindowImpl->mxAccessible = x;
 }

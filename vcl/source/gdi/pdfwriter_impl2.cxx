@@ -65,7 +65,7 @@ void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, co
     m_rOuterFace.Pop();
 }
 
-void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx, Graphic i_Graphic,
+void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx, const Graphic& i_Graphic,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
     if ( !i_rBitmapEx.IsEmpty() && i_rSize.Width() && i_rSize.Height() )

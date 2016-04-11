@@ -40,7 +40,7 @@
 #include <sal/log.hxx>
 
 void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
-                                    bool bIsX11, const boost::optional<unsigned int> xid, boost::optional<Display*> pDisplay )
+                                    bool bIsX11, const boost::optional<unsigned int>& xid, boost::optional<Display*> pDisplay )
 {
     const char* appname = SalGenericSystem::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
@@ -68,8 +68,8 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
 #if ENABLE_DBUS
 void dbusInhibit( bool bInhibit,
                   const gchar* service, const gchar* path, const gchar* interface,
-                  std::function<bool( DBusGProxy*, guint&, GError*& )> fInhibit,
-                  std::function<bool( DBusGProxy*, const guint, GError*& )> fUnInhibit,
+                  const std::function<bool( DBusGProxy*, guint&, GError*& )>& fInhibit,
+                  const std::function<bool( DBusGProxy*, const guint, GError*& )>& fUnInhibit,
                   boost::optional<guint>& rCookie )
 {
     if ( ( !bInhibit && ( rCookie == boost::none ) ) ||

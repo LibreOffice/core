@@ -42,7 +42,7 @@ static css::uno::Reference<css::accessibility::XAccessibleValue>
     return css::uno::Reference<css::accessibility::XAccessibleValue>();
 }
 
-static void anyToGValue( uno::Any aAny, GValue *pValue )
+static void anyToGValue( const uno::Any& aAny, GValue *pValue )
 {
     // FIXME: expand to lots of types etc.
     double aDouble=0;
