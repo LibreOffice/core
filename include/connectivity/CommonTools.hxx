@@ -110,16 +110,16 @@ namespace connectivity
     // search from first to last the column with the name _rVal
     // when no such column exist last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator first,
-                                        OSQLColumns::Vector::const_iterator last,
+    OSQLColumns::Vector::const_iterator find(   const OSQLColumns::Vector::const_iterator& first,
+                                        const OSQLColumns::Vector::const_iterator& last,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
 
     // search from first to last the column with the realname _rVal
     // when no such column exist last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator findRealName(   OSQLColumns::Vector::const_iterator first,
-                                                OSQLColumns::Vector::const_iterator last,
+    OSQLColumns::Vector::const_iterator findRealName(   const OSQLColumns::Vector::const_iterator& first,
+                                                const OSQLColumns::Vector::const_iterator& last,
                                                 const OUString& _rVal,
                                                 const ::comphelper::UStringMixEqual& _rCase);
 
@@ -128,7 +128,7 @@ namespace connectivity
     // when no such column exist last is returned
     OOO_DLLPUBLIC_DBTOOLS
     OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator first,
-                                        OSQLColumns::Vector::const_iterator last,
+                                        const OSQLColumns::Vector::const_iterator& last,
                                         const OUString& _rProp,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);

@@ -110,7 +110,7 @@ namespace connectivity
 
             bool WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr);
             bool WriteBuffer();
-            bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
+            bool UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRow, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
             bool AllocBuffer();
 
