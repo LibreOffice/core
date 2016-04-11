@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <dispatch/dispatchprovider.hxx>
 #include <dispatch/interceptionhelper.hxx>
 #include <dispatch/closedispatcher.hxx>
@@ -385,7 +389,6 @@ private:
     // non threadsafe
     void impl_checkMenuCloser            (                                                                        );
     void impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame2 >& xFrame , bool bState );
-    void impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
     void disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager);
 
@@ -2088,10 +2091,21 @@ void SAL_CALL Frame::disposing()
     // We will die, die and die ...
     implts_stopWindowListening();
 
-    if (m_xLayoutManager.is())
-        disableLayoutManager(m_xLayoutManager);
+    css::uno::Reference<css::frame::XLayoutManager2> layoutMgr;
+    {
+        SolarMutexGuard g;
+        layoutMgr = m_xLayoutManager;
+    }
+    if (layoutMgr.is()) {
+        disableLayoutManager(layoutMgr);
+    }
 
-    delete m_pWindowCommandDispatch;
+    WindowCommandDispatch * disp = nullptr;
+    {
+        SolarMutexGuard g;
+        std::swap(disp, m_pWindowCommandDispatch);
+    }
+    delete disp;
 
     // Send message to all listener and forget her references.
     css::lang::EventObject aEvent( xThis );
@@ -2102,7 +2116,11 @@ void SAL_CALL Frame::disposing()
 
     // interception/dispatch chain must be destructed explicitly
     // Otherwise some dispatches and/or interception objects won't die.
-    css::uno::Reference< css::lang::XEventListener > xDispatchHelper(m_xDispatchHelper, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::lang::XEventListener > xDispatchHelper;
+    {
+        SolarMutexGuard g;
+        xDispatchHelper.set(m_xDispatchHelper, css::uno::UNO_QUERY_THROW);
+    }
     xDispatchHelper->disposing(aEvent);
     xDispatchHelper.clear();
 
@@ -2126,10 +2144,14 @@ void SAL_CALL Frame::disposing()
     // It's important to do that before we free some other internal structures.
     // Because if our parent gets an activate and found us as last possible active frame
     // he try to deactivate us ... and we run into some trouble (DisposedExceptions!).
-    if( m_xParent.is() )
+    css::uno::Reference<css::frame::XFramesSupplier> parent;
     {
-        m_xParent->getFrames()->remove( xThis );
-        m_xParent.clear();
+        SolarMutexGuard g;
+        std::swap(parent, m_xParent);
+    }
+    if( parent.is() )
+    {
+        parent->getFrames()->remove( xThis );
     }
 
     /* } SAFE */
@@ -2139,23 +2161,32 @@ void SAL_CALL Frame::disposing()
     // Note: Dispose it hard - because suspending must be done inside close() call!
     // But try to dispose the controller first before you destroy the window.
     // Because the window is used by the controller too ...
-    if (m_xController.is())
+    css::uno::Reference< css::lang::XComponent > xDisposableCtrl;
+    css::uno::Reference< css::lang::XComponent > xDisposableComp;
     {
-        css::uno::Reference< css::lang::XComponent > xDisposable( m_xController, css::uno::UNO_QUERY );
-        if (xDisposable.is())
-            xDisposable->dispose();
+        SolarMutexGuard g;
+        xDisposableCtrl.set( m_xController, css::uno::UNO_QUERY );
+        xDisposableComp.set( m_xComponentWindow, css::uno::UNO_QUERY );
     }
-
-    if (m_xComponentWindow.is())
-    {
-        css::uno::Reference< css::lang::XComponent > xDisposable( m_xComponentWindow, css::uno::UNO_QUERY );
-        if (xDisposable.is())
-            xDisposable->dispose();
-    }
+    if (xDisposableCtrl.is())
+        xDisposableCtrl->dispose();
+    if (xDisposableComp.is())
+        xDisposableComp->dispose();
 
     impl_checkMenuCloser();
 
-    impl_disposeContainerWindow( m_xContainerWindow );
+    css::uno::Reference<css::awt::XWindow> contWin;
+    {
+        SolarMutexGuard g;
+        std::swap(contWin, m_xContainerWindow);
+    }
+    if( contWin.is() )
+    {
+        contWin->setVisible( sal_False );
+        // All VclComponents are XComponents; so call dispose before discarding
+        // a css::uno::Reference< XVclComponent >, because this frame is the owner of the window
+        contWin->dispose();
+    }
 
     /*ATTENTION
         Clear container after successful removing from parent container ...
@@ -2169,24 +2200,28 @@ void SAL_CALL Frame::disposing()
      */
     implts_forgetSubFrames();
 
-    // Release some other references.
-    // This calls should be easy ... I hope it :-)
-    m_xDispatchHelper.clear();
-    m_xDropTargetListener.clear();
-    m_xDispatchRecorderSupplier.clear();
-    m_xLayoutManager.clear();
-    m_xIndicatorFactoryHelper.clear();
+    {
+        SolarMutexGuard g;
 
-    // It's important to set default values here!
-    // If may be later somewhere change the disposed-behaviour of this implementation
-    // and doesn't throw any DisposedExceptions we must guarantee best matching default values ...
-    m_eActiveState       = E_INACTIVE;
-    m_sName.clear();
-    m_bIsFrameTop        = false;
-    m_bConnected         = false;
-    m_nExternalLockCount = 0;
-    m_bSelfClose         = false;
-    m_bIsHidden          = true;
+        // Release some other references.
+        // This calls should be easy ... I hope it :-)
+        m_xDispatchHelper.clear();
+        m_xDropTargetListener.clear();
+        m_xDispatchRecorderSupplier.clear();
+        m_xLayoutManager.clear();
+        m_xIndicatorFactoryHelper.clear();
+
+        // It's important to set default values here!
+        // If may be later somewhere change the disposed-behaviour of this implementation
+        // and doesn't throw any DisposedExceptions we must guarantee best matching default values ...
+        m_eActiveState       = E_INACTIVE;
+        m_sName.clear();
+        m_bIsFrameTop        = false;
+        m_bConnected         = false;
+        m_nExternalLockCount = 0;
+        m_bSelfClose         = false;
+        m_bIsHidden          = true;
+    }
 
     // Don't forget it restore old value -
     // otherwise no dialogs can be shown anymore in other frames.
@@ -2285,8 +2320,15 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
     else
     {
         // We use a helper to support these interface and an interceptor mechanism.
-        // Our helper is threadsafe by himself!
-        return m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+        css::uno::Reference<css::frame::XDispatchProvider> disp;
+        {
+            SolarMutexGuard g;
+            disp = m_xDispatchHelper;
+        }
+        if (!disp.is()) {
+            throw css::lang::DisposedException("Frame disposed");
+        }
+        return disp->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
     }
 }
 
@@ -2309,8 +2351,15 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fram
     checkDisposed();
 
     // We use a helper to support these interface and an interceptor mechanism.
-    // Our helper is threadsafe by himself!
-    return m_xDispatchHelper->queryDispatches( lDescriptor );
+    css::uno::Reference<css::frame::XDispatchProvider> disp;
+    {
+        SolarMutexGuard g;
+        disp = m_xDispatchHelper;
+    }
+    if (!disp.is()) {
+        throw css::lang::DisposedException("Frame disposed");
+    }
+    return disp->queryDispatches( lDescriptor );
 }
 
 /*-****************************************************************************************************
@@ -2331,8 +2380,14 @@ void SAL_CALL Frame::registerDispatchProviderInterceptor( const css::uno::Refere
 
     checkDisposed();
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
-    xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
+    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper;
+    {
+        SolarMutexGuard g;
+        xInterceptionHelper.set( m_xDispatchHelper, css::uno::UNO_QUERY );
+    }
+    if (xInterceptionHelper.is()) {
+        xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
+    }
 }
 
 void SAL_CALL Frame::releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception )
@@ -2343,8 +2398,14 @@ void SAL_CALL Frame::releaseDispatchProviderInterceptor( const css::uno::Referen
 
     // Sometimes we are called during our dispose() method
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
-    xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
+    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper;
+    {
+        SolarMutexGuard g;
+        xInterceptionHelper.set( m_xDispatchHelper, css::uno::UNO_QUERY );
+    }
+    if (xInterceptionHelper.is()) {
+        xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
+    }
 }
 
 /*-****************************************************************************************************
@@ -2843,25 +2904,6 @@ void Frame::impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEv
         }
         catch(const css::uno::RuntimeException&)
             { pListener.remove(); }
-    }
-}
-
-/*-****************************************************************************************************
-    @short      dispose old container window and forget his reference
-    @descr      Sometimes we must repair our "modal dialog parent mechanism" too!
-    @param      "xWindow", reference to old container window to dispose it
-    @return     An empty reference.
-    @threadsafe NO!
-*//*-*****************************************************************************************************/
-void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow >& xWindow )
-{
-    if( xWindow.is() )
-    {
-        xWindow->setVisible( sal_False );
-        // All VclComponents are XComponents; so call dispose before discarding
-        // a css::uno::Reference< XVclComponent >, because this frame is the owner of the window
-        xWindow->dispose();
-        xWindow.clear();
     }
 }
 
