@@ -24,11 +24,19 @@ struct Node
     std::unique_ptr<Node> mRightNode;
     bool mOccupied;
 
-    explicit Node(Rectangle& rRectangle);
+    explicit Node(int nWidth, int nHeight);
+    explicit Node(Rectangle& aRectangle);
 
     bool isLeaf();
     Node* insert(int nWidth, int nHeight, int nPadding);
 };
+
+Node::Node(int nWidth, int nHeight)
+    : mRectangle(Rectangle(Point(), Size(nWidth, nHeight)))
+    , mLeftNode()
+    , mRightNode()
+    , mOccupied(false)
+{}
 
 Node::Node(Rectangle& aRectangle)
     : mRectangle(aRectangle)
@@ -101,8 +109,15 @@ Node* Node::insert(int nWidth, int nHeight, int nPadding)
 
 struct PackedTexture
 {
-    std::unique_ptr<Node> mpRootNode;
     ImplOpenGLTexture* mpTexture;
+    std::unique_ptr<Node> mpRootNode;
+    int mnDeallocatedArea;
+
+    PackedTexture(int nWidth, int nHeight)
+        : mpTexture(new ImplOpenGLTexture(nWidth, nHeight, true))
+        , mpRootNode(new Node(nWidth, nHeight))
+        , mnDeallocatedArea(0)
+    {}
 };
 
 PackedTextureAtlasManager::PackedTextureAtlasManager(int nTextureWidth, int nTextureHeight)
@@ -116,18 +131,17 @@ PackedTextureAtlasManager::~PackedTextureAtlasManager()
     for (std::unique_ptr<PackedTexture>& pPackedTexture : maPackedTextures)
     {
         // Free texture early in VCL shutdown while we have a context.
-        pPackedTexture->mpTexture->Dispose();
-        pPackedTexture->mpTexture->DecreaseRefCount(0);
+        delete pPackedTexture->mpTexture;
     }
 }
 
 void PackedTextureAtlasManager::CreateNewTexture()
 {
-    std::unique_ptr<PackedTexture> pPackedTexture(new PackedTexture);
-    pPackedTexture->mpTexture = new ImplOpenGLTexture(mnTextureWidth, mnTextureHeight, true);
-    Rectangle aInitialRect(Point(0, 0), Size(mnTextureWidth, mnTextureHeight));
-    pPackedTexture->mpRootNode.reset(new Node(aInitialRect));
+    std::unique_ptr<PackedTexture> pPackedTexture(new PackedTexture(mnTextureWidth, mnTextureHeight));
+    GLuint nTextureID = pPackedTexture->mpTexture->mnTexture;
     maPackedTextures.push_back(std::move(pPackedTexture));
+    VCL_GL_INFO("PackedTextureAtlas::CreateNewTexture adding texture: " << nTextureID <<
+                " atlases: " << maPackedTextures.size());
 }
 
 OpenGLTexture PackedTextureAtlasManager::Reserve(int nWidth, int nHeight)
@@ -159,6 +173,21 @@ OpenGLTexture PackedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, i
     aTexture.CopyData(nWidth, nHeight, nFormat, nType, pData);
 
     return aTexture;
+}
+
+std::vector<GLuint> PackedTextureAtlasManager::ReduceTextureNumber(int nMaxNumberOfTextures)
+{
+    std::vector<GLuint> aTextureIDs;
+    while (int(maPackedTextures.size()) > nMaxNumberOfTextures)
+    {
+        // Remove oldest created texture
+        GLuint nTextureID = maPackedTextures[0]->mpTexture->mnTexture;
+        aTextureIDs.push_back(nTextureID);
+        maPackedTextures.erase(maPackedTextures.begin());
+        VCL_GL_INFO("PackedTextureAtlas::ReduceTextureNumber removing texture: " << nTextureID <<
+                    " atlases: " << maPackedTextures.size());
+    }
+    return aTextureIDs;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
