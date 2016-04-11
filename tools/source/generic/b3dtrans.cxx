@@ -33,7 +33,7 @@ B3dTransformationSet::~B3dTransformationSet()
 {
 }
 
-void B3dTransformationSet::Orientation(basegfx::B3DHomMatrix& rTarget, basegfx::B3DPoint aVRP, basegfx::B3DVector aVPN, basegfx::B3DVector aVUP)
+void B3dTransformationSet::Orientation(basegfx::B3DHomMatrix& rTarget, const basegfx::B3DPoint& aVRP, basegfx::B3DVector aVPN, basegfx::B3DVector aVUP)
 {
     rTarget.translate( -aVRP.getX(), -aVRP.getY(), -aVRP.getZ());
     aVUP.normalize();

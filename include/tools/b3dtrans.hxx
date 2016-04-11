@@ -154,7 +154,7 @@ public:
         double fNear = 0.0, double fFar = 1.0);
     static void Orientation(
         basegfx::B3DHomMatrix& rTarget,
-        basegfx::B3DPoint aVRP = basegfx::B3DPoint(0.0,0.0,1.0),
+        const basegfx::B3DPoint& aVRP = basegfx::B3DPoint(0.0,0.0,1.0),
         basegfx::B3DVector aVPN = basegfx::B3DVector(0.0,0.0,1.0),
         basegfx::B3DVector aVUP = basegfx::B3DVector(0.0,1.0,0.0));
 
