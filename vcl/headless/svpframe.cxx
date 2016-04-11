@@ -305,7 +305,7 @@ SalFrame* SvpSalFrame::GetParent() const
     return m_pParent;
 }
 
-#define _FRAMESTATE_MASK_GEOMETRY \
+#define FRAMESTATE_MASK_GEOMETRY \
      (WINDOWSTATE_MASK_X     | WINDOWSTATE_MASK_Y |   \
       WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT)
 
@@ -315,7 +315,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
         return;
 
     // Request for position or size change
-    if (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY)
+    if (pState->mnMask & FRAMESTATE_MASK_GEOMETRY)
     {
         long nX = maGeometry.nX;
         long nY = maGeometry.nY;
@@ -345,7 +345,7 @@ bool SvpSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnY      = maGeometry.nY;
     pState->mnWidth  = maGeometry.nWidth;
     pState->mnHeight = maGeometry.nHeight;
-    pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
+    pState->mnMask   = FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
 
     return true;
 }
