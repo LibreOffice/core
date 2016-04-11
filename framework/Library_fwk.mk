@@ -67,7 +67,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/accelerators/presethandler \
     framework/source/accelerators/storageholder \
     framework/source/classes/framecontainer \
-    framework/source/classes/fwktabwindow \
     framework/source/classes/taskcreator \
     framework/source/dispatch/closedispatcher \
     framework/source/dispatch/dispatchinformationprovider \
