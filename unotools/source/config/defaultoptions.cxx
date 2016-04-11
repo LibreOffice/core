@@ -39,29 +39,29 @@ using namespace osl;
 using namespace utl;
 using namespace com::sun::star::uno;
 
-#define DEFAULTPATH__ADDIN          0
-#define DEFAULTPATH__AUTOCORRECT    1
-#define DEFAULTPATH__AUTOTEXT       2
-#define DEFAULTPATH__BACKUP         3
-#define DEFAULTPATH__BASIC          4
-#define DEFAULTPATH__BITMAP         5
-#define DEFAULTPATH__CONFIG         6
-#define DEFAULTPATH__DICTIONARY     7
-#define DEFAULTPATH__FAVORITES      8
-#define DEFAULTPATH__FILTER         9
-#define DEFAULTPATH__GALLERY        10
-#define DEFAULTPATH__GRAPHIC        11
-#define DEFAULTPATH__HELP           12
-#define DEFAULTPATH__LINGUISTIC     13
-#define DEFAULTPATH__MODULE         14
-#define DEFAULTPATH__PALETTE        15
-#define DEFAULTPATH__PLUGIN         16
-#define DEFAULTPATH__TEMP           17
-#define DEFAULTPATH__TEMPLATE       18
-#define DEFAULTPATH__USERCONFIG     19
-#define DEFAULTPATH__WORK           20
-#define DEFAULTPATH__CLASSIFICATION 21
-#define DEFAULTPATH__USERDICTIONARY 22
+#define DEFAULTPATH_ADDIN          0
+#define DEFAULTPATH_AUTOCORRECT    1
+#define DEFAULTPATH_AUTOTEXT       2
+#define DEFAULTPATH_BACKUP         3
+#define DEFAULTPATH_BASIC          4
+#define DEFAULTPATH_BITMAP         5
+#define DEFAULTPATH_CONFIG         6
+#define DEFAULTPATH_DICTIONARY     7
+#define DEFAULTPATH_FAVORITES      8
+#define DEFAULTPATH_FILTER         9
+#define DEFAULTPATH_GALLERY        10
+#define DEFAULTPATH_GRAPHIC        11
+#define DEFAULTPATH_HELP           12
+#define DEFAULTPATH_LINGUISTIC     13
+#define DEFAULTPATH_MODULE         14
+#define DEFAULTPATH_PALETTE        15
+#define DEFAULTPATH_PLUGIN         16
+#define DEFAULTPATH_TEMP           17
+#define DEFAULTPATH_TEMPLATE       18
+#define DEFAULTPATH_USERCONFIG     19
+#define DEFAULTPATH_WORK           20
+#define DEFAULTPATH_CLASSIFICATION 21
+#define DEFAULTPATH_USERDICTIONARY 22
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
@@ -281,29 +281,29 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
 
                 switch ( nProp )
                 {
-                    case DEFAULTPATH__ADDIN:            m_aAddinPath = aFullPath;         break;
-                    case DEFAULTPATH__AUTOCORRECT:      m_aAutoCorrectPath = aFullPath;   break;
-                    case DEFAULTPATH__AUTOTEXT:         m_aAutoTextPath = aFullPath;      break;
-                    case DEFAULTPATH__BACKUP:           m_aBackupPath = aFullPath;        break;
-                    case DEFAULTPATH__BASIC:            m_aBasicPath = aFullPath;         break;
-                    case DEFAULTPATH__BITMAP:           m_aBitmapPath = aFullPath;        break;
-                    case DEFAULTPATH__CONFIG:           m_aConfigPath = aFullPath;        break;
-                    case DEFAULTPATH__DICTIONARY:       m_aDictionaryPath = aFullPath;    break;
-                    case DEFAULTPATH__FAVORITES:        m_aFavoritesPath = aFullPath;     break;
-                    case DEFAULTPATH__FILTER:           m_aFilterPath = aFullPath;        break;
-                    case DEFAULTPATH__GALLERY:          m_aGalleryPath = aFullPath;       break;
-                    case DEFAULTPATH__GRAPHIC:          m_aGraphicPath = aFullPath;       break;
-                    case DEFAULTPATH__HELP:             m_aHelpPath = aFullPath;          break;
-                    case DEFAULTPATH__LINGUISTIC:       m_aLinguisticPath = aFullPath;    break;
-                    case DEFAULTPATH__MODULE:           m_aModulePath = aFullPath;        break;
-                    case DEFAULTPATH__PALETTE:          m_aPalettePath = aFullPath;       break;
-                    case DEFAULTPATH__PLUGIN:           m_aPluginPath = aFullPath;        break;
-                    case DEFAULTPATH__TEMP:             m_aTempPath = aFullPath;          break;
-                    case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = aFullPath;      break;
-                    case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = aFullPath;    break;
-                    case DEFAULTPATH__WORK:             m_aWorkPath = aFullPath;          break;
-                    case DEFAULTPATH__CLASSIFICATION:   m_aClassificationPath = aFullPath;break;
-                    case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = aFullPath;break;
+                    case DEFAULTPATH_ADDIN:            m_aAddinPath = aFullPath;         break;
+                    case DEFAULTPATH_AUTOCORRECT:      m_aAutoCorrectPath = aFullPath;   break;
+                    case DEFAULTPATH_AUTOTEXT:         m_aAutoTextPath = aFullPath;      break;
+                    case DEFAULTPATH_BACKUP:           m_aBackupPath = aFullPath;        break;
+                    case DEFAULTPATH_BASIC:            m_aBasicPath = aFullPath;         break;
+                    case DEFAULTPATH_BITMAP:           m_aBitmapPath = aFullPath;        break;
+                    case DEFAULTPATH_CONFIG:           m_aConfigPath = aFullPath;        break;
+                    case DEFAULTPATH_DICTIONARY:       m_aDictionaryPath = aFullPath;    break;
+                    case DEFAULTPATH_FAVORITES:        m_aFavoritesPath = aFullPath;     break;
+                    case DEFAULTPATH_FILTER:           m_aFilterPath = aFullPath;        break;
+                    case DEFAULTPATH_GALLERY:          m_aGalleryPath = aFullPath;       break;
+                    case DEFAULTPATH_GRAPHIC:          m_aGraphicPath = aFullPath;       break;
+                    case DEFAULTPATH_HELP:             m_aHelpPath = aFullPath;          break;
+                    case DEFAULTPATH_LINGUISTIC:       m_aLinguisticPath = aFullPath;    break;
+                    case DEFAULTPATH_MODULE:           m_aModulePath = aFullPath;        break;
+                    case DEFAULTPATH_PALETTE:          m_aPalettePath = aFullPath;       break;
+                    case DEFAULTPATH_PLUGIN:           m_aPluginPath = aFullPath;        break;
+                    case DEFAULTPATH_TEMP:             m_aTempPath = aFullPath;          break;
+                    case DEFAULTPATH_TEMPLATE:         m_aTemplatePath = aFullPath;      break;
+                    case DEFAULTPATH_USERCONFIG:       m_aUserConfigPath = aFullPath;    break;
+                    case DEFAULTPATH_WORK:             m_aWorkPath = aFullPath;          break;
+                    case DEFAULTPATH_CLASSIFICATION:   m_aClassificationPath = aFullPath;break;
+                    case DEFAULTPATH_USERDICTIONARY:   m_aUserDictionaryPath = aFullPath;break;
 
                     default:
                         SAL_WARN( "unotools.config", "invalid index to load a default path" );
