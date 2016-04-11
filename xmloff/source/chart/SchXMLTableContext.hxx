@@ -68,14 +68,14 @@ class SchXMLTableHelper
 {
 public:
     static void applyTableToInternalDataProvider( const SchXMLTable& rTable,
-                            css::uno::Reference< css::chart2::XChartDocument > xChartDoc );
+                            const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
     /** This function reorders local data to fit the correct data structure.
         Call it after the data series got their styles set.
      */
     static void switchRangesFromOuterToInternalIfNecessary( const SchXMLTable& rTable,
                                   const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-                                  css::uno::Reference< css::chart2::XChartDocument > xChartDoc,
+                                  const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
                                   css::chart::ChartDataRowSource eDataRowSource );
 };
 

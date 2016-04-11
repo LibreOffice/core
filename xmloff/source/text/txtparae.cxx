@@ -3740,7 +3740,7 @@ void XMLTextParagraphExport::exportMeta(
 
 void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
     const Reference<XIndexAccess> & rShapes,
-    rtl::Reference<xmloff::OFormLayerXMLExport> xFormExport   )
+    const rtl::Reference<xmloff::OFormLayerXMLExport>& xFormExport   )
 {
     // check parameters ad pre-conditions
     if( ( ! rShapes.is() ) || ( ! xFormExport.is() ) )

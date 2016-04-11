@@ -24,8 +24,8 @@
 
 extern css::uno::Reference< css::beans::XPropertySet >
     PropertySetMerger_CreateInstance(
-        css::uno::Reference< css::beans::XPropertySet > rPropSet1,
-        css::uno::Reference< css::beans::XPropertySet > rPropSet2 ) throw();
+        const css::uno::Reference< css::beans::XPropertySet >& rPropSet1,
+        const css::uno::Reference< css::beans::XPropertySet >& rPropSet2 ) throw();
 
 #endif
 

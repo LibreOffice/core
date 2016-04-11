@@ -667,7 +667,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
 void SvXMLExportPropertyMapper::ContextFilter(
         bool bEnableFoFontFamily,
         vector< XMLPropertyState >& rProperties,
-        Reference< XPropertySet > rPropSet ) const
+        const Reference< XPropertySet >& rPropSet ) const
 {
     // Derived class could implement this.
     if (mpImpl->mxNextMapper.is())

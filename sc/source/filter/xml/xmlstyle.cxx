@@ -191,7 +191,7 @@ ScXMLCellExportPropertyMapper::~ScXMLCellExportPropertyMapper()
 void ScXMLCellExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
     ::std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
+    const uno::Reference< beans::XPropertySet >& rPropSet ) const
 {
     XMLPropertyState* pPadding = nullptr;
     XMLPropertyState* pPadding_Bottom = nullptr;
@@ -559,7 +559,7 @@ ScXMLRowExportPropertyMapper::~ScXMLRowExportPropertyMapper()
 void ScXMLRowExportPropertyMapper::ContextFilter(
     bool /* bEnableFoFontFamily */,
     ::std::vector< XMLPropertyState >& /* rProperties */,
-    uno::Reference< beans::XPropertySet > /* rPropSet */ ) const
+    const uno::Reference< beans::XPropertySet >& /* rPropSet */ ) const
 {
     //#108550#; don't filter the height, so other applications know the calculated height
 }

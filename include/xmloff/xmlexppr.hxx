@@ -71,7 +71,7 @@ protected:
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
-            css::uno::Reference<css::beans::XPropertySet > rPropSet ) const;
+            const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const;
 
     /** fills the given attribute list with the items in the given set */
     void _exportXML( sal_uInt16 nPropType, sal_uInt16& rPropTypeFlags,

@@ -50,7 +50,7 @@ const Sequence<sal_Int8>& StyleMap::getUnoTunnelId() throw()
     return theStyleMapUnoTunnelId::get().getSeq();
 }
 
-StyleMap* StyleMap::getImplementation(Reference<XInterface> xInterface) throw()
+StyleMap* StyleMap::getImplementation(const Reference<XInterface>& xInterface) throw()
 {
     Reference<XUnoTunnel> xUnoTunnel(xInterface, UNO_QUERY);
     if (xUnoTunnel.is())

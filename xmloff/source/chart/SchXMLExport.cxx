@@ -184,8 +184,8 @@ public:
                         bool bIncludeTable = false );
     void exportTable();
     void exportPlotArea(
-        css::uno::Reference< css::chart::XDiagram > xDiagram,
-        css::uno::Reference< css::chart2::XDiagram > xNewDiagram,
+        const css::uno::Reference< css::chart::XDiagram >& xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram >& xNewDiagram,
         const css::awt::Size & rPageSize,
         bool bExportContent,
         bool bIncludeTable );
@@ -234,10 +234,10 @@ public:
 
     /// add svg position as attribute for current element
     void addPosition( const css::awt::Point & rPosition );
-    void addPosition( css::uno::Reference< css::drawing::XShape > xShape );
+    void addPosition( const css::uno::Reference< css::drawing::XShape >& xShape );
     /// add svg size as attribute for current element
     void addSize( const css::awt::Size & rSize, bool bIsOOoNamespace = false );
-    void addSize( css::uno::Reference< css::drawing::XShape > xShape );
+    void addSize( const css::uno::Reference< css::drawing::XShape >& xShape );
     /// exports a string as a paragraph element
     void exportText( const OUString& rText );
 
@@ -1818,8 +1818,8 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSyst
 }
 
 void SchXMLExportHelper_Impl::exportPlotArea(
-    Reference< chart::XDiagram > xDiagram,
-    Reference< chart2::XDiagram > xNewDiagram,
+    const Reference< chart::XDiagram >& xDiagram,
+    const Reference< chart2::XDiagram >& xNewDiagram,
     const awt::Size & rPageSize,
     bool bExportContent,
     bool bIncludeTable )
@@ -3457,7 +3457,7 @@ void SchXMLExportHelper_Impl::addPosition( const awt::Point & rPosition )
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y, msString );
 }
 
-void SchXMLExportHelper_Impl::addPosition( Reference< drawing::XShape > xShape )
+void SchXMLExportHelper_Impl::addPosition( const Reference< drawing::XShape >& xShape )
 {
     if( xShape.is())
         addPosition( xShape->getPosition());
@@ -3476,7 +3476,7 @@ void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize, bool bIsOOoNames
     mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG, XML_HEIGHT, msString );
 }
 
-void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape )
+void SchXMLExportHelper_Impl::addSize( const Reference< drawing::XShape >& xShape )
 {
     if( xShape.is())
         addSize( xShape->getSize() );

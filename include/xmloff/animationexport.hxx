@@ -43,8 +43,8 @@ public:
     AnimationsExporter( SvXMLExport& rExport, const css::uno::Reference< css::beans::XPropertySet >& xPageProps  );
     virtual ~AnimationsExporter();
 
-    void prepare( css::uno::Reference< css::animations::XAnimationNode > xRootNode );
-    void exportAnimations( css::uno::Reference< css::animations::XAnimationNode > xRootNode );
+    void prepare( const css::uno::Reference< css::animations::XAnimationNode >& xRootNode );
+    void exportAnimations( const css::uno::Reference< css::animations::XAnimationNode >& xRootNode );
 };
 
 }

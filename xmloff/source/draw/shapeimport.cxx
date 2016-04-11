@@ -65,8 +65,8 @@ struct ConnectionHint
 
 struct XShapeCompareHelper
 {
-  bool operator()(css::uno::Reference < css::drawing::XShape > x1,
-                  css::uno::Reference < css::drawing::XShape > x2 ) const
+  bool operator()(const css::uno::Reference < css::drawing::XShape >& x1,
+                  const css::uno::Reference < css::drawing::XShape >& x2 ) const
   {
     return x1.get() < x2.get();
   }

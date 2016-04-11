@@ -48,8 +48,8 @@ namespace SchXMLTools
     bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const css::uno::Reference< css::frame::XModel >& xChartModel);
     bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const css::uno::Reference< css::frame::XModel >& xChartModel);
 
-    void setBuildIDAtImportInfo( css::uno::Reference< css::frame::XModel > xModel
-        , css::uno::Reference< css::beans::XPropertySet > xImportInfo );
+    void setBuildIDAtImportInfo( const css::uno::Reference< css::frame::XModel >& xModel
+        , const css::uno::Reference< css::beans::XPropertySet >& xImportInfo );
 
     enum SchXMLChartTypeEnum
     {

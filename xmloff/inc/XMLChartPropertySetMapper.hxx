@@ -52,7 +52,7 @@ protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
-        css::uno::Reference<css::beans::XPropertySet > rPropSet ) const override;
+        const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 
 private:
     /// this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set
@@ -74,7 +74,7 @@ public:
                                   SvXMLExport& rExport );
     virtual ~XMLChartExportPropertyMapper();
 
-    void setChartDoc( css::uno::Reference< css::chart2::XChartDocument > xChartDoc );
+    void setChartDoc( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 };
 
 class XMLChartImportPropertyMapper : public SvXMLImportPropertyMapper

@@ -623,7 +623,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
 }
 
 // #82003# helper function for recursive object count
-sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(Reference< drawing::XShapes > xShapes)
+sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(const Reference< drawing::XShapes >& xShapes)
 {
     sal_uInt32 nRetval(0L);
 
@@ -1246,7 +1246,7 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
     SvXMLElementExport aPPL(*this, XML_NAMESPACE_PRESENTATION, XML_PLACEHOLDER, true, true);
 }
 
-ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetOrCreatePageMasterInfo( Reference< XDrawPage > xMasterPage )
+ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetOrCreatePageMasterInfo( const Reference< XDrawPage >& xMasterPage )
 {
     bool bDoesExist = false;
 
@@ -1614,7 +1614,7 @@ void SdXMLExport::ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSe
         AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_DATE_TIME_NAME, aSettings.maStrDateTimeDeclName );
 }
 
-OUString SdXMLExport::ImpCreatePresPageStyleName( Reference<XDrawPage> xDrawPage, bool bExportBackground /* = true */ )
+OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xDrawPage, bool bExportBackground /* = true */ )
 {
     // create name
     OUString sStyleName;
@@ -2485,7 +2485,7 @@ void SdXMLExport::ExportMasterStyles_()
     }
 }
 
-void SdXMLExport::exportFormsElement( Reference< XDrawPage > xDrawPage )
+void SdXMLExport::exportFormsElement( const Reference< XDrawPage >& xDrawPage )
 {
     if( xDrawPage.is() )
     {

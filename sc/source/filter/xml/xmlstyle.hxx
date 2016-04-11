@@ -109,7 +109,7 @@ protected:
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
-            css::uno::Reference<css::beans::XPropertySet > rPropSet ) const override;
+            const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 public:
     explicit ScXMLCellExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
@@ -138,7 +138,7 @@ protected:
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
-            css::uno::Reference<css::beans::XPropertySet > rPropSet ) const override;
+            const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 public:
     explicit ScXMLRowExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );

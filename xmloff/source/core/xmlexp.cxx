@@ -2068,7 +2068,7 @@ const uno::Sequence< sal_Int8 > & SvXMLExport::getUnoTunnelId() throw()
     return theSvXMLExportUnoTunnelId::get().getSeq();
 }
 
-SvXMLExport* SvXMLExport::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
+SvXMLExport* SvXMLExport::getImplementation( const uno::Reference< uno::XInterface >& xInt ) throw()
 {
     uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
     if( xUT.is() )

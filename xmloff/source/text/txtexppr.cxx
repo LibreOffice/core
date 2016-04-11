@@ -498,7 +498,7 @@ void lcl_FilterBorders(
 void XMLTextExportPropertySetMapper::ContextFilter(
     bool bEnableFoFontFamily,
     ::std::vector< XMLPropertyState >& rProperties,
-    Reference< XPropertySet > rPropSet ) const
+    const Reference< XPropertySet >& rPropSet ) const
 {
     // filter font
     XMLPropertyState *pFontNameState = nullptr;

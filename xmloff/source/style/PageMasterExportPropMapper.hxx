@@ -35,7 +35,7 @@ protected:
     virtual void        ContextFilter(
                             bool bEnableFoFontFamily,
                             ::std::vector< XMLPropertyState >& rProperties,
-                            css::uno::Reference< css::beans::XPropertySet > rPropSet
+                            const css::uno::Reference< css::beans::XPropertySet >& rPropSet
                             ) const override;
 
 public:

@@ -1188,7 +1188,7 @@ XMLShapeExportPropertyMapper::~XMLShapeExportPropertyMapper()
 void XMLShapeExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
     std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
+    const uno::Reference< beans::XPropertySet >& rPropSet ) const
 {
     XMLPropertyState* pRepeatOffsetX = nullptr;
     XMLPropertyState* pRepeatOffsetY = nullptr;
@@ -1569,7 +1569,7 @@ XMLPageExportPropertyMapper::~XMLPageExportPropertyMapper()
 void XMLPageExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
     std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
+    const uno::Reference< beans::XPropertySet >& rPropSet ) const
 {
     XMLPropertyState* pRepeatOffsetX = nullptr;
     XMLPropertyState* pRepeatOffsetY = nullptr;
