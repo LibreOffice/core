@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_38409e56",
+        "filename": "canvas/source/directx/dx_canvashelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2016-04-11T17:42:57Z",
+      "side": 1,
+      "message": "I kept MITER because it has been there. I agree with you, that BEVEL would come nearer to NONE. Would you mind change it, in case you push the patch?",
+      "parentUuid": "9ad45d7e_d89342f9",
+      "range": {
+        "startLine": 79,
+        "startChar": 27,
+        "endLine": 79,
+        "endChar": 49
+      },
+      "revId": "fa665f0e539bb503b346fbe6d3feb272f19bd87a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_b8900eee",
         "filename": "vcl/inc/salgdi.hxx",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "...but nothing to change now or you should do, just could not resist to annotate that, sorry ;-)",
       "parentUuid": "9ad45d7e_38bb7e74",
+      "range": {
+        "startLine": 270,
+        "startChar": 32,
+        "endLine": 270,
+        "endChar": 70
+      },
+      "revId": "fa665f0e539bb503b346fbe6d3feb272f19bd87a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_98254ac4",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2016-04-11T17:42:57Z",
+      "side": 1,
+      "message": "So please let it be postponed.",
+      "parentUuid": "9ad45d7e_d8aa2219",
       "range": {
         "startLine": 270,
         "startChar": 32,
