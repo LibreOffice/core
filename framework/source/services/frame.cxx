@@ -457,8 +457,6 @@ private:
     // hold it weak ... otherwise this helper has to be "killed" explicitly .-)
     css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
 
-protected:
-
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
 };
 
