@@ -69,6 +69,30 @@
       "revId": "fa665f0e539bb503b346fbe6d3feb272f19bd87a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_d8aa2219",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-11T15:06:33Z",
+      "side": 1,
+      "message": "...but nothing to change now or you should do, just could not resist to annotate that, sorry ;-)",
+      "parentUuid": "9ad45d7e_38bb7e74",
+      "range": {
+        "startLine": 270,
+        "startChar": 32,
+        "endLine": 270,
+        "endChar": 70
+      },
+      "revId": "fa665f0e539bb503b346fbe6d3feb272f19bd87a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
