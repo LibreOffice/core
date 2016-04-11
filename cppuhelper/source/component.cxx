@@ -150,13 +150,13 @@ void OComponentHelper::dispose()
     // Remark: It is an error to call dispose more than once
     bool bDoDispose = false;
     {
-    MutexGuard aGuard( rBHelper.rMutex );
-    if( !rBHelper.bDisposed && !rBHelper.bInDispose )
-    {
-        // only one call go into this section
-        rBHelper.bInDispose = sal_True;
-        bDoDispose = true;
-    }
+        MutexGuard aGuard( rBHelper.rMutex );
+        if( !rBHelper.bDisposed && !rBHelper.bInDispose )
+        {
+            // only one call go into this section
+            rBHelper.bInDispose = sal_True;
+            bDoDispose = true;
+        }
     }
 
     // Do not hold the mutex because we are broadcasting
