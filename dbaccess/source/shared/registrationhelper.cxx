@@ -19,7 +19,7 @@
 
 // be included in other cxx files
 
-#ifndef _REGISTRATIONHELPER_CXX_INCLUDED_INDIRECTLY_
+#ifndef REGISTRATIONHELPER_CXX_INCLUDED_INDIRECTLY_
 #error "don't build this file directly! use dbu_reghelper.cxx instead!"
 #endif
 
