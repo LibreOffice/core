@@ -379,8 +379,6 @@ void OpenGL3DRenderer::init()
     glEnable(GL_MULTISAMPLE);
 
     CHECK_GL_ERROR();
-    ClearBuffer();
-    CHECK_GL_ERROR();
 
     glGenBuffers(1, &m_CubeVertexBuf);
     glGenBuffers(1, &m_CubeNormalBuf);
@@ -2154,43 +2152,9 @@ void OpenGL3DRenderer::ResetMatrixDiff()
     m_matDiff = glm::mat4(0.0);
 }
 
-void OpenGL3DRenderer::ClearBuffer()
-{
-    CHECK_GL_ERROR();
-    glDisable(GL_DEPTH_TEST);
-    CHECK_GL_ERROR();
-
-#if defined(IOS) || defined(ANDROID)
-    glClearDepthf(1.0f);
-#else
-    glClearDepth(1.0f);
-#endif
-    CHECK_GL_ERROR();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    CHECK_GL_ERROR();
-
-    /*
-     * TODO: moggi: use a shader!!!
-    glBegin (GL_QUADS);
-    glColor3f (0.3f, 0.3f, 0.3f);
-    glVertex3f (-1.0f, -1.0f, -1.0f);
-    glVertex3f (1.0f, -1.0f, -1.0f);
-
-    glColor3f (0.0f, 0.0f, 0.0f);
-    glVertex3f (1.0f, 1.0f, -1.0f);
-    glVertex3f (-1.0f, 1.0f, -1.0f);
-    glEnd ();
-    */
-
-    glEnable(GL_DEPTH_TEST);
-    CHECK_GL_ERROR();
-}
-
 void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    CHECK_GL_ERROR();
-    ClearBuffer();
     CHECK_GL_ERROR();
     CreateSceneBoxView();
     CHECK_GL_ERROR();

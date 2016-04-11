@@ -224,7 +224,6 @@ public:
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
-    static void ClearBuffer();
     void RenderPolygon3DObject();
     void RenderLine3D(const Polygon3DInfo &polygon);
     void RenderPolygon3D(const Polygon3DInfo &polygon);
