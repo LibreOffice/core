@@ -44,7 +44,7 @@ public:
     /** Has to be implemented by each filter, returns the current theme. */
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const override;
 
-    void setCurrentTheme(::oox::drawingml::ThemePtr pTheme);
+    void setCurrentTheme(const ::oox::drawingml::ThemePtr& pTheme);
 
     /** Has to be implemented by each filter to return the collection of VML shapes. */
     virtual ::oox::vml::Drawing* getVmlDrawing() override;

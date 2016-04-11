@@ -117,9 +117,9 @@ public:
     PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB );
     void                SetMaster( bool bMaster );
     void                SetPageType( PageType ePageType );
-    ShapeExport&        WriteNonVisualProperties( Reference< XShape > xShape ) override;
-    ShapeExport&        WriteTextShape( Reference< XShape > xShape ) override;
-    ShapeExport&        WriteUnknownShape( Reference< XShape > xShape ) override;
+    ShapeExport&        WriteNonVisualProperties( const Reference< XShape >& xShape ) override;
+    ShapeExport&        WriteTextShape( const Reference< XShape >& xShape ) override;
+    ShapeExport&        WriteUnknownShape( const Reference< XShape >& xShape ) override;
     ShapeExport&        WritePlaceholderShape( Reference< XShape > xShape, PlaceholderType ePlaceholder );
     ShapeExport&        WritePageShape( Reference< XShape > xShape, PageType ePageType, bool bPresObj );
 
@@ -232,14 +232,14 @@ void PowerPointShapeExport::SetPageType( PageType ePageType )
     mePageType = ePageType;
 }
 
-ShapeExport& PowerPointShapeExport::WriteNonVisualProperties( Reference< XShape > )
+ShapeExport& PowerPointShapeExport::WriteNonVisualProperties( const Reference< XShape >& )
 {
     GetFS()->singleElementNS( XML_p, XML_nvPr, FSEND );
 
     return *this;
 }
 
-ShapeExport& PowerPointShapeExport::WriteTextShape( Reference< XShape > xShape )
+ShapeExport& PowerPointShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 {
     OUString sShapeType = xShape->getShapeType();
 
@@ -290,7 +290,7 @@ ShapeExport& PowerPointShapeExport::WriteTextShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& PowerPointShapeExport::WriteUnknownShape( Reference< XShape > xShape )
+ShapeExport& PowerPointShapeExport::WriteUnknownShape( const Reference< XShape >& xShape )
 {
     OUString sShapeType = xShape->getShapeType();
 

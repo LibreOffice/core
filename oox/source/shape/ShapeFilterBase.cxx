@@ -42,7 +42,7 @@ const ::oox::drawingml::Theme* ShapeFilterBase::getCurrentTheme() const
     return mpTheme.get();
 }
 
-void ShapeFilterBase::setCurrentTheme(::oox::drawingml::ThemePtr pTheme)
+void ShapeFilterBase::setCurrentTheme(const ::oox::drawingml::ThemePtr& pTheme)
 {
     mpTheme = pTheme;
 }

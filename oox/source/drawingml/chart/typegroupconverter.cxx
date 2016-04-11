@@ -446,7 +446,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 }
 
 void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize,
-       ModelRef< Shape > xShapeProps ) const
+       const ModelRef< Shape >& xShapeProps ) const
 {
     if( !isSeriesFrameFormat() )
     {

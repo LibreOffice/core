@@ -853,7 +853,7 @@ beans::PropertyValue lcl_createTextpathProps()
     return aRet;
 }
 
-void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, uno::Reference<drawing::XShape> xShape) const
+void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Reference<drawing::XShape>& xShape) const
 {
     if (moString.has())
     {

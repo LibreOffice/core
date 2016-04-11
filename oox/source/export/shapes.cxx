@@ -374,7 +374,7 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap
     mpURLTransformer.reset(new URLTransformer);
 }
 
-void ShapeExport::SetURLTranslator(std::shared_ptr<URLTransformer> pTransformer)
+void ShapeExport::SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer)
 {
     mpURLTransformer = pTransformer;
 }
@@ -390,7 +390,7 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
-bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
+bool ShapeExport::NonEmptyText( const Reference< XInterface >& xIface )
 {
     Reference< XPropertySet > xPropSet( xIface, UNO_QUERY );
 
@@ -431,7 +431,7 @@ bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
     return false;
 }
 
-ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bClosed )
+ShapeExport& ShapeExport::WriteBezierShape( const Reference< XShape >& xShape, bool bClosed )
 {
     SAL_INFO("oox.shape", "write open bezier shape");
 
@@ -484,17 +484,17 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bCl
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteClosedBezierShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteClosedBezierShape( const Reference< XShape >& xShape )
 {
     return WriteBezierShape( xShape, true );
 }
 
-ShapeExport& ShapeExport::WriteOpenBezierShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteOpenBezierShape( const Reference< XShape >& xShape )
 {
     return WriteBezierShape( xShape, false );
 }
 
-ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape)
+ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>& xShape)
 {
     FSHelperPtr pFS = GetFS();
     bool bToplevel = !m_xParent.is();
@@ -613,7 +613,7 @@ static bool lcl_IsOnWhitelist(OUString& rShapeType)
 }
 
 
-ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 {
     SAL_INFO("oox.shape", "write custom shape");
 
@@ -785,7 +785,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
 {
     SAL_INFO("oox.shape", "write ellipse shape");
 
@@ -830,14 +830,14 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteGraphicObjectShape( const Reference< XShape >& xShape )
 {
     WriteGraphicObjectShapePart( xShape );
 
     return *this;
 }
 
-void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const Graphic* pGraphic )
+void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape, const Graphic* pGraphic )
 {
     SAL_INFO("oox.shape", "write graphic object shape");
 
@@ -932,7 +932,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
     pFS->endElementNS( mnXmlNamespace, XML_pic );
 }
 
-ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape )
 {
     bool bFlipH = false;
     bool bFlipV = false;
@@ -1023,7 +1023,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
 {
     bool bFlipH = false;
     bool bFlipV = false;
@@ -1081,7 +1081,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteNonVisualDrawingProperties( Reference< XShape > xShape, const char* pName )
+ShapeExport& ShapeExport::WriteNonVisualDrawingProperties( const Reference< XShape >& xShape, const char* pName )
 {
     GetFS()->singleElementNS( mnXmlNamespace, XML_cNvPr,
                               XML_id, I32S( GetNewShapeID( xShape ) ),
@@ -1091,13 +1091,13 @@ ShapeExport& ShapeExport::WriteNonVisualDrawingProperties( Reference< XShape > x
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteNonVisualProperties( Reference< XShape > )
+ShapeExport& ShapeExport::WriteNonVisualProperties( const Reference< XShape >& )
 {
     // Override to generate //nvPr elements.
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape )
 {
     SAL_INFO("oox.shape", "write rectangle shape");
 
@@ -1152,7 +1152,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
     return *this;
 }
 
-typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
+typedef ShapeExport& (ShapeExport::*ShapeConverter)( const Reference< XShape >& );
 typedef std::unordered_map< const char*, ShapeConverter, rtl::CStringHash, rtl::CStringEqual> NameToConvertMapType;
 
 static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
@@ -1195,7 +1195,7 @@ static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
     return shape_converters;
 }
 
-ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
     OUString sShapeType = xShape->getShapeType();
     SAL_INFO("oox.shape", "write shape: " << sShapeType);
@@ -1210,7 +1210,7 @@ ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int32 nXmlNamespace )
+ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
     if (GetDocumentType() == DOCUMENT_DOCX && GetTextExport())
@@ -1244,7 +1244,7 @@ ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int3
     return *this;
 }
 
-void ShapeExport::WriteTable( Reference< XShape > rXShape  )
+void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
 {
     OSL_TRACE("write table");
 
@@ -1436,7 +1436,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
     mpFS->endElementNS( XML_a, XML_graphic );
 }
 
-void ShapeExport::WriteTableCellProperties(Reference< XPropertySet> xCellPropSet)
+void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCellPropSet)
 {
     sal_Int32 nLeftMargin(0), nRightMargin(0);
 
@@ -1459,7 +1459,7 @@ void ShapeExport::WriteTableCellProperties(Reference< XPropertySet> xCellPropSet
     mpFS->endElementNS( XML_a, XML_tcPr );
 }
 
-void ShapeExport::WriteTableCellBorders(Reference< XPropertySet> xCellPropSet)
+void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPropSet)
 {
     BorderLine2 aBorderLine;
 
@@ -1523,7 +1523,7 @@ void ShapeExport::WriteTableCellBorders(Reference< XPropertySet> xCellPropSet)
     }
 }
 
-ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
 {
     FSHelperPtr pFS = GetFS();
 
@@ -1554,7 +1554,7 @@ ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 {
     FSHelperPtr pFS = GetFS();
 
@@ -1640,7 +1640,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->endElementNS(XML_mc, XML_AlternateContent);
 }
 
-ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
     if (!xPropSet.is())
@@ -1842,23 +1842,23 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteUnknownShape( Reference< XShape > )
+ShapeExport& ShapeExport::WriteUnknownShape( const Reference< XShape >& )
 {
     // Override this method to do something useful.
     return *this;
 }
 
-size_t ShapeExport::ShapeHash::operator()( const Reference < XShape > rXShape ) const
+size_t ShapeExport::ShapeHash::operator()( const Reference < XShape >& rXShape ) const
 {
     return rXShape->getShapeType().hashCode();
 }
 
-sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape )
+sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape )
 {
     return GetNewShapeID( rXShape, GetFB() );
 }
 
-sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape, XmlFilterBase* pFB )
+sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape, XmlFilterBase* pFB )
 {
     if( !rXShape.is() )
         return -1;
@@ -1870,12 +1870,12 @@ sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape, XmlFilt
     return nID;
 }
 
-sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape )
+sal_Int32 ShapeExport::GetShapeID( const Reference< XShape >& rXShape )
 {
     return GetShapeID( rXShape, mpShapeMap );
 }
 
-sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape, ShapeHashMap* pShapeMap )
+sal_Int32 ShapeExport::GetShapeID( const Reference< XShape >& rXShape, ShapeHashMap* pShapeMap )
 {
     if( !rXShape.is() )
         return -1;

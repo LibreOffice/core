@@ -43,7 +43,7 @@ PropertyValue GrabBagStack::getRootProperty()
     return aProperty;
 }
 
-void GrabBagStack::appendElement(const OUString& aName, Any aAny)
+void GrabBagStack::appendElement(const OUString& aName, const Any& aAny)
 {
     PropertyValue aValue;
     aValue.Name = aName;

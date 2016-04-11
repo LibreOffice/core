@@ -73,7 +73,7 @@ OUString TextBox::getText() const
     return aBuffer.makeStringAndClear();
 }
 
-void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
+void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
 {
     uno::Reference<text::XTextAppend> xTextAppend(xShape, uno::UNO_QUERY);
     for (PortionVector::const_iterator aIt = maPortions.begin(), aEnd = maPortions.end(); aIt != aEnd; ++aIt)

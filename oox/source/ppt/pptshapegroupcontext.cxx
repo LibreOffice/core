@@ -138,7 +138,7 @@ void PPTShapeGroupContext::importExtDrawings( )
     }
 }
 
-void PPTShapeGroupContext::applyFontRefColor(oox::drawingml::ShapePtr pShape, const oox::drawingml::Color& rFontRefColor)
+void PPTShapeGroupContext::applyFontRefColor(const oox::drawingml::ShapePtr& pShape, const oox::drawingml::Color& rFontRefColor)
 {
     pShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rFontRefColor;
     std::vector< oox::drawingml::ShapePtr >& vChildren = pShape->getChildren();

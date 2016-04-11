@@ -32,7 +32,7 @@ class PPTShapeGroupContext : public ::oox::drawingml::ShapeGroupContext
     ShapeLocation       meShapeLocation;
     oox::drawingml::ShapePtr    pGraphicShape;
 
-    void                applyFontRefColor(oox::drawingml::ShapePtr pShape, const oox::drawingml::Color& rFontRefColor);
+    void                applyFontRefColor(const oox::drawingml::ShapePtr& pShape, const oox::drawingml::Color& rFontRefColor);
 
 public:
     PPTShapeGroupContext(
