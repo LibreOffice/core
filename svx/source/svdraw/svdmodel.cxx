@@ -1820,7 +1820,7 @@ uno::Reference< uno::XInterface > SdrModel::getUnoModel()
     return mxUnoModel;
 }
 
-void SdrModel::setUnoModel( css::uno::Reference< css::uno::XInterface > xModel )
+void SdrModel::setUnoModel( const css::uno::Reference< css::uno::XInterface >& xModel )
 {
     mxUnoModel = xModel;
 }
@@ -1903,7 +1903,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 }
 
 
-void SdrModel::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
+void SdrModel::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
 {
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
