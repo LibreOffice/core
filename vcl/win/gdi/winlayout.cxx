@@ -124,7 +124,7 @@ public:
         return maOpenGLTextureCache[nGlyphIndex];
     }
 
-    bool IsGlyphCached(int nGlyphIndex)
+    bool IsGlyphCached(int nGlyphIndex) const
     {
         return maOpenGLTextureCache.find(nGlyphIndex) != maOpenGLTextureCache.end();
     }
