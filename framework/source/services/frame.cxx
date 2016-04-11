@@ -366,8 +366,6 @@ private:
 
     void impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEvent);
 
-private:
-
     /*-****************************************************************************************************
         @short      helper methods
         @descr      Follow methods are needed at different points of our code (more than ones!).
@@ -419,8 +417,6 @@ private:
 
 //  variables
 //  -threadsafe by SolarMutex
-
-private:
 
     css::uno::Reference< css::uno::XComponentContext >                      m_xContext;                  /// reference to factory, which has create this instance
     css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper;   /// reference to factory helper to create status indicator objects
