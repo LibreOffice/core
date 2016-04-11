@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #ifndef INCLUDED_SFX2_MODULE_HXX
-#define INCLUDED_SFX2_MODULE_HXX  // internal
-#define _SFXMOD_HXX     // external
+#define INCLUDED_SFX2_MODULE_HXX
 
 #include <sal/config.h>
 #include <sfx2/app.hxx>
