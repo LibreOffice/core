@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REGISTRATIONHELPER_INCLUDED_INDIRECTLY_
+#ifndef REGISTRATIONHELPER_INCLUDED_INDIRECTLY_
 #error "don't include this file directly! use dbu_reghelper.hxx instead!"
 #endif
 
