@@ -63,7 +63,7 @@ public:
     virtual void    Notify( const Sequence< OUString >& _aPropertyNames ) override;
     void            Load();
 
-    bool            IsLoaded() { return m_bIsLoaded; }
+    bool            IsLoaded() const { return m_bIsLoaded; }
     void            SetCTLFontEnabled( bool _bEnabled );
     bool            IsCTLFontEnabled() const { return m_bCTLFontEnabled; }
 

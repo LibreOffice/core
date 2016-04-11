@@ -174,8 +174,8 @@ namespace dbaccess
 
     // css::sdbc::XResultSet
         bool next(  );
-        bool isBeforeFirst(  ) { return m_bBeforeFirst;}
-        bool isAfterLast(  ) { return m_bAfterLast;}
+        bool isBeforeFirst(  ) const { return m_bBeforeFirst;}
+        bool isAfterLast(  ) const { return m_bAfterLast;}
         bool isFirst(  );
         bool isLast(  );
         bool beforeFirst(  );
