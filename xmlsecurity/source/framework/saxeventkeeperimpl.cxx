@@ -34,8 +34,6 @@ namespace cssxs = com::sun::star::xml::sax;
 
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SAXEventKeeperImpl"
 
-#define _USECOMPRESSEDDOCUMENTHANDLER
-
 SAXEventKeeperImpl::SAXEventKeeperImpl( )
     :m_pRootBufferNode(nullptr),
      m_pCurrentBufferNode(nullptr),
@@ -1099,15 +1097,11 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     {
         m_xNextHandler->startElement(aName, xAttribs);
     }
-
         /*
          * If not forwarding, buffer this startElement.
          */
            if (!m_bIsForwarding)
            {
-    #ifndef _USECOMPRESSEDDOCUMENTHANDLER
-        m_xDocumentHandler->startElement(aName, xAttribs);
-    #else
         sal_Int32 nLength = xAttribs->getLength();
         cssu::Sequence< cssxcsax::XMLAttribute > aAttributes (nLength);
 
@@ -1118,8 +1112,6 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
         }
 
         m_xCompressedDocumentHandler->compressedStartElement(aName, aAttributes);
-    #endif
-
     }
 
     BufferNode* pBufferNode = addNewElementMarkBuffers();
@@ -1149,13 +1141,9 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
         (m_pCurrentBufferNode != m_pRootBufferNode) ||
         (!m_xXMLDocument->isCurrentElementEmpty()))
     {
-            if (!m_bIsForwarding)
-            {
-        #ifndef _USECOMPRESSEDDOCUMENTHANDLER
-            m_xDocumentHandler->endElement(aName);
-        #else
+        if (!m_bIsForwarding)
+        {
             m_xCompressedDocumentHandler->compressedEndElement(aName);
-        #endif
         }
 
         /*
@@ -1199,13 +1187,9 @@ void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
         if ((m_pCurrentBlockingBufferNode != nullptr) ||
             (m_pCurrentBufferNode != m_pRootBufferNode))
         {
-        #ifndef _USECOMPRESSEDDOCUMENTHANDLER
-                m_xDocumentHandler->characters(aChars);
-        #else
             m_xCompressedDocumentHandler->compressedCharacters(aChars);
-        #endif
-            }
         }
+    }
 }
 
 void SAL_CALL SAXEventKeeperImpl::ignorableWhitespace( const OUString& aWhitespaces )
@@ -1228,13 +1212,9 @@ void SAL_CALL SAXEventKeeperImpl::processingInstruction(
         if ((m_pCurrentBlockingBufferNode != nullptr) ||
             (m_pCurrentBufferNode != m_pRootBufferNode))
         {
-        #ifndef _USECOMPRESSEDDOCUMENTHANDLER
-            m_xDocumentHandler->processingInstruction(aTarget, aData);
-        #else
             m_xCompressedDocumentHandler->compressedProcessingInstruction(aTarget, aData);
-        #endif
-            }
         }
+    }
 }
 
 void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const cssu::Reference< cssxs::XLocator >&)
