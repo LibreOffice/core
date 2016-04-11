@@ -20,6 +20,11 @@
 #include <map>
 #include <string>
 
+namespace google_breakpad
+{
+class ExceptionHandler;
+}
+
 /**
  * Provides access to the crash reporter service.
  *
@@ -37,9 +42,17 @@ public:
 
     static void writeCommonInfo();
 
+    static void storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler);
+
+    // when we create the ExceptionHandler we have no access to the user
+    // profile yet, so update when we have access
+    static void updateMinidumpLocation();
+
 private:
 
     static osl::Mutex maMutex;
+
+    static google_breakpad::ExceptionHandler* mpExceptionHandler;
 };
 
 // Add dummy methods for the non-breakpad case. That allows us to use

@@ -20,6 +20,12 @@
 osl::Mutex CrashReporter::maMutex;
 
 #if HAVE_FEATURE_BREAKPAD
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#include <client/linux/handler/exception_handler.h>
+#endif
+
+google_breakpad::ExceptionHandler* CrashReporter::mpExceptionHandler = nullptr;
+
 void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
 {
     osl::MutexGuard aGuard(maMutex);
@@ -40,14 +46,43 @@ void CrashReporter::writeCommonInfo()
     minidump_file << "Version=" << LIBO_VERSION_DOTTED << "\n";
     minidump_file << "URL=" << "http://127.0.0.1:8000/submit" << "\n";
     minidump_file.close();
+
+    updateMinidumpLocation();
 }
 
-std::string CrashReporter::getIniFileName()
+namespace {
+
+OUString getCrashUserProfileDirectory()
 {
     OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/crash/");
     rtl::Bootstrap::expandMacros(url);
     osl::Directory::create(url);
 
+    return url;
+}
+
+}
+
+void CrashReporter::updateMinidumpLocation()
+{
+    OUString aURL = getCrashUserProfileDirectory();
+    OString aOStringUrl = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
+
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    google_breakpad::MinidumpDescriptor descriptor(aOStringUrl.getStr());
+    mpExceptionHandler->set_minidump_descriptor(descriptor);
+#else
+#endif
+}
+
+void CrashReporter::storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler)
+{
+    mpExceptionHandler = pExceptionHandler;
+}
+
+std::string CrashReporter::getIniFileName()
+{
+    OUString url = getCrashUserProfileDirectory();
     OString aUrl = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
     std::string aRet(aUrl.getStr());
     return aRet;
