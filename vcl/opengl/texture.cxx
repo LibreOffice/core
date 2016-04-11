@@ -398,11 +398,11 @@ void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& aCoord, const
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
-    double fTextureWidth(mpImpl->mnWidth);
-    double fTextureHeight(mpImpl->mnHeight);
-
     if (mpImpl)
     {
+        double fTextureWidth(mpImpl->mnWidth);
+        double fTextureHeight(mpImpl->mnHeight);
+
         x1 = (maRect.Left() + rPosAry.mnSrcX) / fTextureWidth;
         x2 = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / fTextureWidth;
 
