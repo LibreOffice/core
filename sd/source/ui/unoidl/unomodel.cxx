@@ -2438,9 +2438,9 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     SolarMutexGuard aGuard;
 
     DrawViewShell* pViewShell = GetViewShell();
-    Window* pWindow = pViewShell->GetActiveWindow();
     if (!pViewShell)
         return;
+    Window* pWindow = pViewShell->GetActiveWindow();
 
     Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
     MouseEvent aEvent(aPos, nCount,
