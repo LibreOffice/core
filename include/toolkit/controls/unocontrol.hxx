@@ -38,7 +38,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
@@ -65,7 +65,7 @@ struct UnoControl_Data;
 
 //  class UnoControl
 
-typedef ::cppu::WeakAggImplHelper9  <   css::awt::XControl
+typedef ::cppu::WeakAggImplHelper   <   css::awt::XControl
                                     ,   css::awt::XWindow2
                                     ,   css::awt::XView
                                     ,   css::beans::XPropertiesChangeListener

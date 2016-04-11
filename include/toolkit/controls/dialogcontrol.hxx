@@ -31,14 +31,13 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <list>
 
-typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
-                                            ,   css::awt::XUnoControlDialog
-                                            ,   css::awt::XWindowListener
-                                            >   UnoDialogControl_Base;
+typedef ::cppu::AggImplInheritanceHelper   <   ControlContainerBase
+                                           ,   css::awt::XUnoControlDialog
+                                           ,   css::awt::XWindowListener
+                                           >   UnoDialogControl_Base;
 class UnoDialogControl : public UnoDialogControl_Base
 {
 private:

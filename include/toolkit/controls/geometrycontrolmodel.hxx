@@ -26,7 +26,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star {
 
     //= OGeometryControlModel_Base
 
-    typedef ::cppu::WeakAggComponentImplHelper2 <   css::util::XCloneable
+    typedef ::cppu::WeakAggComponentImplHelper  <   css::util::XCloneable
                                                 ,   css::script::XScriptEventsSupplier
                                                 >   OGCM_Base;
     class OGeometryControlModel_Base

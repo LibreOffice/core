@@ -31,7 +31,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/anycompare.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -56,7 +56,7 @@ typedef ::cppu::WeakComponentImplHelper    <   css::awt::grid::XSortableMutableG
                                             ,   css::lang::XServiceInfo
                                             ,   css::lang::XInitialization
                                             >   SortableGridDataModel_Base;
-typedef ::cppu::ImplHelper1 <   css::awt::grid::XGridDataListener
+typedef ::cppu::ImplHelper  <   css::awt::grid::XGridDataListener
                             >   SortableGridDataModel_PrivateBase;
 class SortableGridDataModel :public ::cppu::BaseMutex
                             ,public SortableGridDataModel_Base

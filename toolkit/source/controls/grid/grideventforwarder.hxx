@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace toolkit
@@ -36,7 +36,7 @@ namespace toolkit
 
     //= GridEventForwarder
 
-    typedef ::cppu::ImplHelper2 <   css::awt::grid::XGridDataListener
+    typedef ::cppu::ImplHelper  <   css::awt::grid::XGridDataListener
                                 ,   css::container::XContainerListener
                                 >   GridEventForwarder_Base;
 

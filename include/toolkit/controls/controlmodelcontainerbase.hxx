@@ -29,8 +29,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
-#include <cppuhelper/implbase8.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
@@ -46,7 +45,7 @@
 //  class ControlModelContainerBase
 
 typedef UnoControlModel     ControlModel_Base;
-typedef ::cppu::AggImplInheritanceHelper8   <   ControlModel_Base
+typedef ::cppu::AggImplInheritanceHelper < ControlModel_Base
                             ,   css::lang::XMultiServiceFactory
                             ,   css::container::XContainer
                             ,   css::container::XNameContainer
@@ -209,7 +208,7 @@ class ResourceListener  :public css::util::XModifyListener,
         bool                                                                                    m_bListening;
 };
 
-typedef ::cppu::AggImplInheritanceHelper3   < UnoControlContainer
+typedef ::cppu::AggImplInheritanceHelper < UnoControlContainer
                             ,   css::container::XContainerListener
                             ,   css::util::XChangesListener
                             ,   css::util::XModifyListener
