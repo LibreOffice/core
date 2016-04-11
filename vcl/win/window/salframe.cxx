@@ -1061,7 +1061,9 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool WinSalFrame::PostEvent(ImplSVEvent* pData)
 {
-    return (bool)PostMessageW( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
+    BOOL const ret = PostMessageW(mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData);
+    SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    return static_cast<bool>(ret);
 }
 
 void WinSalFrame::SetTitle( const OUString& rTitle )
@@ -1207,7 +1209,10 @@ void WinSalFrame::Show( bool bVisible, bool bNoActivate )
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
-        PostMessageW( mhWnd, SAL_MSG_SHOW, bVisible, bNoActivate );
+    {
+        BOOL const ret = PostMessageW(mhWnd, SAL_MSG_SHOW, bVisible, bNoActivate);
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
     else
         ImplSalShow( mhWnd, bVisible, bNoActivate );
 }
@@ -2046,7 +2051,10 @@ void WinSalFrame::ToTop( sal_uInt16 nFlags )
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
-        PostMessageW( mhWnd, SAL_MSG_TOTOP, nFlags, 0 );
+    {
+        BOOL const ret = PostMessageW( mhWnd, SAL_MSG_TOTOP, nFlags, 0 );
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
     else
         ImplSalToTop( mhWnd, nFlags );
 }
@@ -3036,7 +3044,8 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         vcl::Window *pWin = pFrame->GetWindow();
         if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mnFocusId )
         {
-            PostMessageW( hWnd, nMsg, wParam, lParam );
+            BOOL const ret = PostMessageW( hWnd, nMsg, wParam, lParam );
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
             return 1;
         }
     }
@@ -3769,7 +3778,8 @@ static bool ImplHandlePaintMsg( HWND hWnd )
             {
                 RECT* pRect = new RECT;
                 CopyRect( pRect, &aUpdateRect );
-                PostMessageW( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
+                BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0);
+                SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
             }
             EndPaint( hWnd, &aPs );
         }
@@ -3805,7 +3815,10 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
         delete pRect;
     }
     else
-        PostMessageW( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
+    {
+        BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0);
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
 }
 
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect )
@@ -3947,7 +3960,10 @@ static void ImplHandleMoveMsg( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        PostMessageW( hWnd, SAL_MSG_POSTMOVE, 0, 0 );
+    {
+        BOOL const ret = PostMessageW( hWnd, SAL_MSG_POSTMOVE, 0, 0 );
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
 }
 
 static void ImplCallSizeHdl( HWND hWnd )
@@ -3968,7 +3984,10 @@ static void ImplCallSizeHdl( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        PostMessageW( hWnd, SAL_MSG_POSTCALLSIZE, 0, 0 );
+    {
+        BOOL const ret = PostMessageW( hWnd, SAL_MSG_POSTCALLSIZE, 0, 0 );
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
 }
 
 static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
@@ -4023,7 +4042,10 @@ static void ImplHandleFocusMsg( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        PostMessageW( hWnd, SAL_MSG_POSTFOCUS, 0, 0 );
+    {
+        BOOL const ret = PostMessageW( hWnd, SAL_MSG_POSTFOCUS, 0, 0 );
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
 }
 
 static void ImplHandleCloseMsg( HWND hWnd )
@@ -4039,7 +4061,10 @@ static void ImplHandleCloseMsg( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        PostMessageW( hWnd, WM_CLOSE, 0, 0 );
+    {
+        BOOL const ret = PostMessageW( hWnd, WM_CLOSE, 0, 0 );
+        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+    }
 }
 
 static long ImplHandleShutDownMsg( HWND hWnd )
@@ -4122,7 +4147,8 @@ static void ImplHandleForcePalette( HWND hWnd )
     {
         if ( !ImplSalYieldMutexTryToAcquire() )
         {
-            PostMessageW( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
+            BOOL const ret = PostMessageW( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
             return;
         }
 
@@ -4172,9 +4198,15 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         if ( ImplSalYieldMutexTryToAcquire() )
             bReleaseMutex = TRUE;
         else if ( nMsg == WM_QUERYNEWPALETTE )
-            PostMessageW( hWnd, SAL_MSG_POSTQUERYNEWPAL, wParam, lParam );
+        {
+            BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTQUERYNEWPAL, wParam, lParam);
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        }
         else /* ( nMsg == WM_PALETTECHANGED ) */
-            PostMessageW( hWnd, SAL_MSG_POSTPALCHANGED, wParam, lParam );
+        {
+            BOOL const ret = PostMessageW(hWnd, SAL_MSG_POSTPALCHANGED, wParam, lParam);
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        }
     }
 
     WinSalVirtualDevice*pTempVD;
@@ -5904,7 +5936,10 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             {
                 MSG aMsg;
                 if( ! PeekMessageW( &aMsg, 0, WM_PAINT, WM_PAINT, PM_NOREMOVE | PM_NOYIELD ) )
-                    PostMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_POSTTIMER, 0, nCurTime );
+                {
+                    BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_POSTTIMER, 0, nCurTime);
+                    SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+                }
             }
         }
     }

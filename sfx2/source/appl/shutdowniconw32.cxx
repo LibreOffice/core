@@ -305,8 +305,11 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             switch( lParam )
             {
                 case WM_LBUTTONDBLCLK:
-                    PostMessage( aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, (LPARAM)hWnd );
+                {
+                    BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, (LPARAM)hWnd);
+                    SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     break;
+                }
 
                 case WM_RBUTTONDOWN:
                 {
@@ -322,7 +325,8 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
-                    PostMessage( hWnd, 0, 0, 0 );
+                    BOOL const ret = PostMessage( hWnd, 0, 0, 0 );
+                    SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     switch( m )
                     {
                         case IDM_OPEN:
@@ -347,7 +351,8 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                             break;
                     }
 
-                    PostMessage( aExecuterWindow, WM_COMMAND, m, (LPARAM)hWnd );
+                    BOOL const ret2 = PostMessage(aExecuterWindow, WM_COMMAND, m, (LPARAM)hWnd);
+                    SAL_WARN_IF(0 == ret2, "sfx.appl", "ERROR: PostMessage() failed!");
                 }
                 break;
             }
@@ -372,7 +377,8 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 nid.uID = ID_QUICKSTART;
                 Shell_NotifyIconA(NIM_DELETE, &nid);
 
-                PostMessage( aExecuterWindow, WM_COMMAND, IDM_EXIT, (LPARAM)hWnd );
+                BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_EXIT, (LPARAM)hWnd);
+                SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
             }
             else
                 return DefWindowProc(hWnd, uMsg, wParam, lParam);

@@ -81,7 +81,10 @@ void WinSalTimer::Start( sal_uLong nMS )
     if ( pSalData->mpFirstInstance )
     {
         if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
-            PostMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+        {
+            BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS);
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        }
         else
             SendMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
     }
@@ -124,7 +127,11 @@ void CALLBACK SalTimerProc(PVOID, BOOLEAN)
         // always post message when the timer fires, we will remove the ones
         // that happened during execution of the callback later directly from
         // the message queue
-        PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
+        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
+#if OSL_DEBUG_LEVEL > 0
+        if (0 == ret) // SEH prevents using SAL_WARN here?
+            fputs("ERROR: PostMessage() failed!", stderr);
+#endif
 
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     }

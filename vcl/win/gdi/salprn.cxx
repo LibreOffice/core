@@ -1515,7 +1515,8 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
             bWhile = FALSE;
     }
     while ( bWhile );
-    PostMessageW( GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0 );
+    BOOL const ret = PostMessageW(GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0);
+    SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
 
     // bring up a file chooser if printing to file port but no file name given
     OUString aOutFileName;

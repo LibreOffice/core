@@ -112,7 +112,10 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                     ImplSalYieldMutexRelease();
                 }
                 else
-                    PostMessageW( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+                {
+                    BOOL const ret = PostMessageW(pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0);
+                    SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+                }
             }
         }
         else if ( pData->message == WM_KILLFOCUS )
@@ -129,7 +132,10 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                         ImplSalYieldMutexRelease();
                     }
                     else
-                        PostMessageW( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+                    {
+                        BOOL const ret = PostMessageW(pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0);
+                        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+                    }
                 }
                 else
                     pObject->mhLastFocusWnd = (HWND)pData->wParam;
@@ -153,7 +159,10 @@ bool ImplSalPreDispatchMsg( MSG* pMsg )
         ImplSalYieldMutexAcquireWithWait();
         pObject = ImplFindSalObject( pMsg->hwnd );
         if ( pObject && !pObject->IsMouseTransparent() )
-            PostMessageW( pObject->mhWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+        {
+            BOOL const ret = PostMessageW(pObject->mhWnd, SALOBJ_MSG_TOTOP, 0, 0);
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        }
         ImplSalYieldMutexRelease();
     }
 
@@ -288,7 +297,10 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             ImplSalYieldMutexAcquireWithWait();
             pSysObj = GetSalObjWindowPtr( hWnd );
             if ( pSysObj && !pSysObj->IsMouseTransparent() )
-                PostMessageW( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+            {
+                BOOL const ret = PostMessageW( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+                SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+            }
             ImplSalYieldMutexRelease();
             }
             break;
@@ -302,7 +314,10 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                 rDef = FALSE;
             }
             else
-                PostMessageW( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+            {
+                BOOL const ret = PostMessageW( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+                SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+            }
             break;
 
         case SALOBJ_MSG_POSTFOCUS:
@@ -319,7 +334,10 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                 ImplSalYieldMutexRelease();
             }
             else
-                PostMessageW( hWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+            {
+                BOOL const ret = PostMessageW(hWnd, SALOBJ_MSG_POSTFOCUS, 0, 0);
+                SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+            }
             rDef = FALSE;
             break;
 

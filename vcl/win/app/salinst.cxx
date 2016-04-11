@@ -869,7 +869,10 @@ void SalTimer::Start( sal_uLong nMS )
     if ( pSalData->mpFirstInstance )
     {
         if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
-            PostMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+        {
+            BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS);
+            SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
+        }
         else
             SendMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
     }

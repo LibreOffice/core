@@ -416,11 +416,12 @@ void SAL_CALL CWinFileOpenImpl::cancel()
     {
         // simulate a mouse click to the
         // cancel button
-        PostMessage(
+        BOOL const ret = PostMessage(
             m_hwndFileOpenDlg,
             WM_COMMAND,
             MAKEWPARAM(IDCANCEL,BN_CLICKED),
             (LPARAM)GetDlgItem(m_hwndFileOpenDlg, IDCANCEL));
+        SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
     }
 }
 
@@ -727,11 +728,12 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
     m_FilePicker->resumeEventNotification();
 
     //#105996 let vcl know that now a system window is active
-    PostMessage(
+    BOOL const ret = PostMessage(
         HWND_BROADCAST,
         RegisterWindowMessage(TEXT("SYSTEM_WINDOW_ACTIVATED")),
         0,
         0);
+    SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
 
     // call the parent function to center the
     // dialog to its parent

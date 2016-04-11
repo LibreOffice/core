@@ -248,11 +248,12 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
         }
 
         // marshall request into the sta thread
-        PostMessageA(
+        BOOL const ret = PostMessageA(
             m_hwndStaRequestWnd,
             MSG_BROWSEFORFOLDER,
             0,
             reinterpret_cast< LPARAM >( &aReqCtx ) );
+        SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
 
         // waiting for the event to be signaled or
         // window messages so that we don't block
@@ -350,11 +351,12 @@ void SAL_CALL CMtaFolderPicker::cancel( )
     {
         // simulate a mouse click to the
         // cancel button
-        PostMessageA(
+        BOOL const ret = PostMessageA(
             m_hwnd,
             WM_COMMAND,
             MAKEWPARAM( IDCANCEL, BN_CLICKED ),
             (LPARAM)GetDlgItem( m_hwnd, IDCANCEL ) );
+        SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
     }
 }
 
