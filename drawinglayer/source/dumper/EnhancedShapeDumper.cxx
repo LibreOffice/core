@@ -17,7 +17,7 @@ using namespace com::sun::star;
 // ---------- EnhancedCustomShapeExtrusion.idl ----------
 
 
-void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference< beans::XPropertySet > xPropSet)
+void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
@@ -185,7 +185,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(drawing::Enhanced
     }
 }
 
-void EnhancedShapeDumper::dumpDepthAsElement(drawing::EnhancedCustomShapeParameterPair aDepth)
+void EnhancedShapeDumper::dumpDepthAsElement(const drawing::EnhancedCustomShapeParameterPair& aDepth)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Depth" ));
     dumpEnhancedCustomShapeParameterPair(aDepth);
@@ -286,7 +286,7 @@ void EnhancedShapeDumper::dumpShadeModeAsAttribute(drawing::ShadeMode eShadeMode
     }
 }
 
-void EnhancedShapeDumper::dumpRotateAngleAsElement(drawing::EnhancedCustomShapeParameterPair aRotateAngle)
+void EnhancedShapeDumper::dumpRotateAngleAsElement(const drawing::EnhancedCustomShapeParameterPair& aRotateAngle)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotateAngle" ));
     dumpEnhancedCustomShapeParameterPair(aRotateAngle);
@@ -305,7 +305,7 @@ void EnhancedShapeDumper::dumpShininessAsAttribute(double aShininess)
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shininess"), "%f", aShininess);
 }
 
-void EnhancedShapeDumper::dumpSkewAsElement(drawing::EnhancedCustomShapeParameterPair aSkew)
+void EnhancedShapeDumper::dumpSkewAsElement(const drawing::EnhancedCustomShapeParameterPair& aSkew)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Skew" ));
     dumpEnhancedCustomShapeParameterPair(aSkew);
@@ -341,7 +341,7 @@ void EnhancedShapeDumper::dumpViewPointAsElement(drawing::Position3D aViewPoint)
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpOriginAsElement(drawing::EnhancedCustomShapeParameterPair aOrigin)
+void EnhancedShapeDumper::dumpOriginAsElement(const drawing::EnhancedCustomShapeParameterPair& aOrigin)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Origin" ));
     dumpEnhancedCustomShapeParameterPair(aOrigin);
@@ -360,7 +360,7 @@ void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(bool bExtrusionColor)
 // ---------- EnhancedCustomShapeGeometry.idl -----------
 
 
-void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference< beans::XPropertySet > xPropSet)
+void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Type");
@@ -617,7 +617,7 @@ void EnhancedShapeDumper::dumpHandlesAsElement(const uno::Sequence< beans::Prope
 // ---------- EnhancedCustomShapeHandle.idl -----------
 
 
-void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< beans::XPropertySet > xPropSet)
+void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
@@ -719,14 +719,14 @@ void EnhancedShapeDumper::dumpSwitchedAsAttribute(bool bSwitched)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "false");
 }
 
-void EnhancedShapeDumper::dumpPositionAsElement(drawing::EnhancedCustomShapeParameterPair aPosition)
+void EnhancedShapeDumper::dumpPositionAsElement(const drawing::EnhancedCustomShapeParameterPair& aPosition)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Position" ));
     dumpEnhancedCustomShapeParameterPair(aPosition);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpPolarAsElement(drawing::EnhancedCustomShapeParameterPair aPolar)
+void EnhancedShapeDumper::dumpPolarAsElement(const drawing::EnhancedCustomShapeParameterPair& aPolar)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Polar" ));
     dumpEnhancedCustomShapeParameterPair(aPolar);
@@ -781,42 +781,42 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(drawing::EnhancedCust
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
 }
 
-void EnhancedShapeDumper::dumpRangeXMinimumAsElement(drawing::EnhancedCustomShapeParameter aRangeXMinimum)
+void EnhancedShapeDumper::dumpRangeXMinimumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeXMinimum)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMinimum" ));
     dumpEnhancedCustomShapeParameter(aRangeXMinimum);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpRangeXMaximumAsElement(drawing::EnhancedCustomShapeParameter aRangeXMaximum)
+void EnhancedShapeDumper::dumpRangeXMaximumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeXMaximum)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMaximum" ));
     dumpEnhancedCustomShapeParameter(aRangeXMaximum);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpRangeYMinimumAsElement(drawing::EnhancedCustomShapeParameter aRangeYMinimum)
+void EnhancedShapeDumper::dumpRangeYMinimumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeYMinimum)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeYMinimum" ));
     dumpEnhancedCustomShapeParameter(aRangeYMinimum);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpRangeYMaximumAsElement(drawing::EnhancedCustomShapeParameter aRangeYMaximum)
+void EnhancedShapeDumper::dumpRangeYMaximumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeYMaximum)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeYMaximum" ));
     dumpEnhancedCustomShapeParameter(aRangeYMaximum);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpRadiusRangeMinimumAsElement(drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum)
+void EnhancedShapeDumper::dumpRadiusRangeMinimumAsElement(const drawing::EnhancedCustomShapeParameter& aRadiusRangeMinimum)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMinimum" ));
     dumpEnhancedCustomShapeParameter(aRadiusRangeMinimum);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum)
+void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(const drawing::EnhancedCustomShapeParameter& aRadiusRangeMaximum)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMaximum" ));
     dumpEnhancedCustomShapeParameter(aRadiusRangeMaximum);
@@ -827,7 +827,7 @@ void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(drawing::EnhancedCusto
 // ---------- EnhancedCustomShapePath.idl ---------------
 
 
-void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< beans::XPropertySet > xPropSet)
+void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Coordinates");
@@ -1034,7 +1034,7 @@ void EnhancedShapeDumper::dumpSubViewSizeAsElement(const uno::Sequence< awt::Siz
 // ---------- EnhancedCustomShapeTextPath.idl ---------------
 
 
-void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference< beans::XPropertySet > xPropSet)
+void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextPath");
