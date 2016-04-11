@@ -35,10 +35,16 @@ class VCL_PLUGIN_PUBLIC PackedTextureAtlasManager
     void CreateNewTexture();
 
 public:
+
+    /**
+     * nTextureWidth and nTextureHeight are the dimensions of the common texture(s)
+     * nTextureLimit is the maximum limit of that a texture atlas can have (0 or less - unlimited)
+     */
     PackedTextureAtlasManager(int nTextureWidth, int nTextureHeight);
     ~PackedTextureAtlasManager();
     OpenGLTexture InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
     OpenGLTexture Reserve(int nWidth, int nHeight);
+    std::vector<GLuint> ReduceTextureNumber(int nMaxNumberOfTextures);
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_PACKEDTEXTUREATLAS_HXX
