@@ -30,7 +30,6 @@
 #include <memory>
 #include <vector>
 #include <deque>
-#include <ostream>
 
 #define ATTR_BOLD       0x0001
 #define ATTR_ITALIC     0x0002

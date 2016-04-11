@@ -62,7 +62,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 
-#include <fstream>
 #include <unotools/streamwrap.hxx>
 
 #include "unomodel.hxx"
