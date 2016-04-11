@@ -1,6 +1,7 @@
 import unittest
 from org.libreoffice.unotest import UnoInProcess
 
+
 class CheckChangeColor(unittest.TestCase):
 
     @classmethod
@@ -24,6 +25,12 @@ class CheckChangeColor(unittest.TestCase):
         xPageStyle.setPropertyValue("IsLandscape", True)
         self.assertEqual(xPageStyle.BackColor, 0x000000FF)
         self.assertEqual(xPageStyle.IsLandscape, True)
+
+        xPageStyle.setPropertyValue("GridColor", 0x000000FF)
+        self.assertEqual(xPageStyle.GridColor, 0x000000FF)
+
+        xPageStyle.setPropertyValue("FootnoteLineColor", 0x000000FF)
+        self.assertEqual(xPageStyle.FootnoteLineColor, 0x000000FF)
 
 if __name__ == '__main__':
     unittest.main()
