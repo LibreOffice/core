@@ -183,7 +183,7 @@ namespace basic
 
         /** removes the Model/BasicManager pair given by iterator from our store
         */
-        void impl_removeFromRepository( BasicManagerStore::iterator _pos );
+        void impl_removeFromRepository( const BasicManagerStore::iterator& _pos );
 
     private:
         StarBASIC* impl_getDefaultAppBasicLibrary();
@@ -520,7 +520,7 @@ namespace basic
     }
 
 
-    void ImplRepository::impl_removeFromRepository( BasicManagerStore::iterator _pos )
+    void ImplRepository::impl_removeFromRepository( const BasicManagerStore::iterator& _pos )
     {
         OSL_PRECOND( _pos != m_aStore.end(), "ImplRepository::impl_removeFromRepository: invalid position!" );
 

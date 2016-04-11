@@ -149,8 +149,8 @@ public:
         , maLibName( aLibName ) {}
 
     static void insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont, BasicManager* pMgr,
-                                   uno::Any aLibAny, const OUString& aLibName );
-    static void addLibraryModulesImpl( BasicManager* pMgr, uno::Reference< container::XNameAccess > xLibNameAccess,
+                                   const uno::Any& aLibAny, const OUString& aLibName );
+    static void addLibraryModulesImpl( BasicManager* pMgr, const uno::Reference< container::XNameAccess >& xLibNameAccess,
                                        const OUString& aLibName );
 
 
@@ -172,7 +172,7 @@ public:
 
 
 void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont,
-    BasicManager* pMgr, uno::Any aLibAny, const OUString& aLibName )
+    BasicManager* pMgr, const uno::Any& aLibAny, const OUString& aLibName )
 {
     Reference< container::XNameAccess > xLibNameAccess;
     aLibAny >>= xLibNameAccess;
@@ -203,7 +203,7 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 
 
 void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
-    uno::Reference< container::XNameAccess > xLibNameAccess, const OUString& aLibName )
+    const uno::Reference< container::XNameAccess >& xLibNameAccess, const OUString& aLibName )
 {
     uno::Sequence< OUString > aModuleNames = xLibNameAccess->getElementNames();
     sal_Int32 nModuleCount = aModuleNames.getLength();
@@ -840,8 +840,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 
     if ( !aLibs.isEmpty() )
     {
-        OUString aCurStorageName( aStorName );
-        INetURLObject aCurStorage( aCurStorageName, INetProtocol::File );
+        INetURLObject aCurStorage( aStorName, INetProtocol::File );
         sal_Int32 nLibs = comphelper::string::getTokenCount(aLibs, LIB_SEP);
         for ( sal_Int32 nLib = 0; nLib < nLibs; nLib++ )
         {
@@ -1544,17 +1543,16 @@ namespace
     SbMethod* lcl_queryMacro( BasicManager* i_manager, OUString const& i_fullyQualifiedName )
     {
         sal_Int32 nLast = 0;
-        const OUString sParse = i_fullyQualifiedName;
-        OUString sLibName = sParse.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
-        OUString sModule = sParse.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
+        OUString sLibName = i_fullyQualifiedName.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
+        OUString sModule = i_fullyQualifiedName.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
         OUString sMacro;
         if(nLast >= 0)
         {
-            sMacro = sParse.copy(nLast);
+            sMacro = i_fullyQualifiedName.copy(nLast);
         }
         else
         {
-            sMacro = sParse;
+            sMacro = i_fullyQualifiedName;
         }
 
         utl::TransliterationWrapper& rTransliteration = SbGlobal::GetTransliteration();
@@ -1846,7 +1844,7 @@ void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
-    uno::Type aAnyType = aElement.getValueType();
+    const uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
         throw lang::IllegalArgumentException();
@@ -2022,7 +2020,7 @@ void DialogContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
 {
     (void)aName;
     uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
-    uno::Type aAnyType = aElement.getValueType();
+    const uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
         throw lang::IllegalArgumentException();

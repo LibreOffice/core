@@ -295,7 +295,7 @@ public:
 
     const OUString& GetDeclareClassName();
     void SetDeclareClassName( const OUString& );
-    void SetComListener( css::uno::Reference< css::uno::XInterface > xComListener,
+    void SetComListener( const css::uno::Reference< css::uno::XInterface >& xComListener,
                          StarBASIC* pParentBasic );
     void ClearComListener();
 

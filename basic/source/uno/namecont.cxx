@@ -144,7 +144,7 @@ sal_Bool NameContainer::hasByName( const OUString& aName )
 void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
-    Type aAnyType = aElement.getValueType();
+    const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
         throw IllegalArgumentException();
@@ -200,7 +200,7 @@ void NameContainer::insertCheck(const OUString& aName, const Any& aElement)
 void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
     throw(IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
-    Type aAnyType = aElement.getValueType();
+    const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
         throw IllegalArgumentException();
@@ -584,7 +584,7 @@ static void checkAndCopyFileImpl( const INetURLObject& rSourceFolderInetObj,
                                   const INetURLObject& rTargetFolderInetObj,
                                   const OUString& rCheckFileName,
                                   const OUString& rCheckExtension,
-                                  Reference< XSimpleFileAccess3 > xSFI )
+                                  const Reference< XSimpleFileAccess3 >& xSFI )
 {
     INetURLObject aTargetFolderInetObj( rTargetFolderInetObj );
     aTargetFolderInetObj.insertName( rCheckFileName, true, INetURLObject::LAST_SEGMENT,
