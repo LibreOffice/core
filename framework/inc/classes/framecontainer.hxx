@@ -20,9 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FRAMECONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_FRAMECONTAINER_HXX
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
+#include <sal/config.h>
+
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
