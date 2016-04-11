@@ -387,27 +387,6 @@ private:
     void impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame2 >& xFrame , bool bState );
     void impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
-//  debug methods
-//  (should be private everyway!)
-
-    /*-****************************************************************************************************
-        @short      debug-method to check incoming parameter of some other mehods of this class
-        @descr      The following methods are used to check parameters for other methods
-                    of this class. The return value is used directly for an ASSERT(...).
-
-        @attention  This methods are static and can't use our member directly! It's better for threadsafe code...
-                    because we call it with references or pointer to check variables ... and must make it safe
-                    by himself!
-
-        @seealso    ASSERTs in implementation!
-
-        @param      references to checking variables
-        @return     sal_True  ,on invalid parameter
-        @return     sal_False ,otherwise
-
-        @onerror    We return sal_True
-    *//*-*****************************************************************************************************/
-
     void checkDisposed() {
         osl::MutexGuard g(rBHelper.rMutex);
         if (rBHelper.bInDispose || rBHelper.bDisposed) {
