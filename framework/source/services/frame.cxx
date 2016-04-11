@@ -387,6 +387,8 @@ private:
     void impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame2 >& xFrame , bool bState );
     void impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
+    void disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager);
+
     void checkDisposed() {
         osl::MutexGuard g(rBHelper.rMutex);
         if (rBHelper.bInDispose || rBHelper.bDisposed) {
@@ -726,10 +728,9 @@ void lcl_enableLayoutManager(const css::uno::Reference< css::frame::XLayoutManag
 /*-****************************************************************************************************
    deinitialize layout manager
 **/
-void lcl_disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager,
-                              const css::uno::Reference< css::frame::XFrame >&         xFrame        )
+void Frame::disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager)
 {
-    xFrame->removeFrameActionListener(xLayoutManager);
+    removeFrameActionListener(xLayoutManager);
     xLayoutManager->setDockingAreaAcceptor(css::uno::Reference< css::ui::XDockingAreaAcceptor >());
     xLayoutManager->attachFrame(css::uno::Reference< css::frame::XFrame >());
 }
@@ -2088,7 +2089,7 @@ void SAL_CALL Frame::disposing()
     implts_stopWindowListening();
 
     if (m_xLayoutManager.is())
-        lcl_disableLayoutManager(m_xLayoutManager, this);
+        disableLayoutManager(m_xLayoutManager);
 
     delete m_pWindowCommandDispatch;
 
@@ -2694,7 +2695,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
                     {
                         m_xLayoutManager = xNewLayoutManager;
                         if (xOldLayoutManager.is())
-                            lcl_disableLayoutManager(xOldLayoutManager, this);
+                            disableLayoutManager(xOldLayoutManager);
                         if (xNewLayoutManager.is())
                             lcl_enableLayoutManager(xNewLayoutManager, this);
                     }
