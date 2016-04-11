@@ -4342,7 +4342,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             sal_uInt32 nExtra, nAtomSize = 0;
             sal_uInt32 nInstance, nUncompressedSize = p_EscherBlibEntry->mnSize;
 
-            if ( mnFlags & _E_GRAPH_PROV_USE_INSTANCES )
+            if ( mnFlags & E_GRAPH_PROV_USE_INSTANCES )
             {
                 rPicOutStrm.WriteUInt32( 0x7f90000 | (sal_uInt16)( mnBlibEntrys << 4 ) )
                            .WriteUInt32( 0 );

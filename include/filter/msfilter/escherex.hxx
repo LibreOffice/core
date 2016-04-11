@@ -655,8 +655,8 @@ public:
 };
 
 
-#define _E_GRAPH_PROV_USE_INSTANCES             1
-#define _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES   2
+#define E_GRAPH_PROV_USE_INSTANCES             1
+#define E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES   2
 
 class MSFILTER_DLLPUBLIC EscherGraphicProvider
 {
@@ -695,7 +695,7 @@ public:
     void        SetBaseURI( const OUString& rBaseURI ) { maBaseURI = rBaseURI; };
     const OUString& GetBaseURI() { return maBaseURI; };
 
-    EscherGraphicProvider( sal_uInt32 nFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
+    EscherGraphicProvider( sal_uInt32 nFlags = E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
     virtual ~EscherGraphicProvider();
 };
 
@@ -1053,7 +1053,7 @@ public:
 class MSFILTER_DLLPUBLIC EscherExGlobal : public EscherGraphicProvider
 {
 public:
-    explicit            EscherExGlobal( sal_uInt32 nGraphicProvFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
+    explicit            EscherExGlobal( sal_uInt32 nGraphicProvFlags = E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
     virtual             ~EscherExGlobal();
 
     /** Returns a new drawing ID for a new drawing container (DGCONTAINER). */
