@@ -335,7 +335,7 @@ public:
 
     /** Creates and returns the accessible object of the header bar. */
     virtual css::uno::Reference< css::accessibility::XAccessible >  CreateAccessible() override;
-    void SetAccessible( css::uno::Reference< css::accessibility::XAccessible > );
+    void SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& );
     virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface( bool bCreate ) override;
 
 };

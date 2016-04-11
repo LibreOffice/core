@@ -163,7 +163,7 @@ namespace svt { namespace table
     }
 
 
-    void TableControl::SetModel( PTableModel _pModel )
+    void TableControl::SetModel( const PTableModel& _pModel )
     {
         m_pImpl->setModel( _pModel );
     }

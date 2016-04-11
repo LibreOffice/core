@@ -53,7 +53,7 @@ namespace svt
         PWindowEventFilter          pEventFilter;
         PWindowOperator             pOperator;
 
-        DialogController_Data( vcl::Window& _xInstigator, const PWindowEventFilter _pEventFilter, const PWindowOperator _pOperator )
+        DialogController_Data( vcl::Window& _xInstigator, const PWindowEventFilter& _pEventFilter, const PWindowOperator& _pOperator )
             :xInstigator( &_xInstigator )
             ,pEventFilter( _pEventFilter )
             ,pOperator( _pOperator )

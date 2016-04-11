@@ -1389,7 +1389,7 @@ css::uno::Reference< css::accessibility::XAccessible > HeaderBar::CreateAccessib
     return mxAccessible;
 }
 
-void HeaderBar::SetAccessible( css::uno::Reference< css::accessibility::XAccessible > _xAccessible )
+void HeaderBar::SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& _xAccessible )
 {
     mxAccessible = _xAccessible;
 }

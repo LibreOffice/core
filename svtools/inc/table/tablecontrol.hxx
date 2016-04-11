@@ -67,7 +67,7 @@ namespace svt { namespace table
         virtual void dispose() override;
 
         /// sets a new table model
-        void        SetModel( PTableModel _pModel );
+        void        SetModel( const PTableModel& _pModel );
         /// retrieves the current table model
         PTableModel GetModel() const;
 
