@@ -327,8 +327,6 @@ public:
 
 private:
 
-    void impl_initializePropInfo();
-
     void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
                                                       sal_Int32        nHandle  ,
                                                 const css::uno::Any&   aValue   );
@@ -555,7 +553,37 @@ void Frame::initListeners()
     m_xLayoutManager = css::frame::LayoutManager::create(m_xContext);
 
     // set information about all supported properties
-    impl_initializePropInfo();
+    impl_setPropertyChangeBroadcaster(static_cast< css::frame::XFrame* >(this));
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER,
+            FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER,
+            cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
+            css::beans::PropertyAttribute::TRANSIENT));
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION,
+            FRAME_PROPHANDLE_INDICATORINTERCEPTION,
+            cppu::UnoType<css::task::XStatusIndicator>::get(),
+            css::beans::PropertyAttribute::TRANSIENT));
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_ASCII_ISHIDDEN,
+            FRAME_PROPHANDLE_ISHIDDEN,
+            cppu::UnoType<bool>::get(),
+            css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY));
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_ASCII_LAYOUTMANAGER,
+            FRAME_PROPHANDLE_LAYOUTMANAGER,
+            cppu::UnoType<css::frame::XLayoutManager>::get(),
+            css::beans::PropertyAttribute::TRANSIENT));
+    impl_addPropertyInfo(
+        css::beans::Property(
+            FRAME_PROPNAME_ASCII_TITLE,
+            FRAME_PROPHANDLE_TITLE,
+            cppu::UnoType<OUString>::get(),
+            css::beans::PropertyAttribute::TRANSIENT));
 }
 
 /*-************************************************************************************************************
@@ -2656,46 +2684,6 @@ sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException, 
     return nCurrentLocks;
 }
 
-void Frame::impl_initializePropInfo()
-{
-    impl_setPropertyChangeBroadcaster(static_cast< css::frame::XFrame* >(this));
-
-    impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER,
-            FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER,
-            cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
-
-    impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION,
-            FRAME_PROPHANDLE_INDICATORINTERCEPTION,
-            cppu::UnoType<css::task::XStatusIndicator>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
-
-    impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_ISHIDDEN,
-            FRAME_PROPHANDLE_ISHIDDEN,
-            cppu::UnoType<bool>::get(),
-            css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY));
-
-    impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_LAYOUTMANAGER,
-            FRAME_PROPHANDLE_LAYOUTMANAGER,
-            cppu::UnoType<css::frame::XLayoutManager>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
-
-    impl_addPropertyInfo(
-        css::beans::Property(
-            FRAME_PROPNAME_ASCII_TITLE,
-            FRAME_PROPHANDLE_TITLE,
-            cppu::UnoType<OUString>::get(),
-            css::beans::PropertyAttribute::TRANSIENT));
-}
-
 void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
                                                  sal_Int32        nHandle  ,
                                            const css::uno::Any&   aValue   )
@@ -2707,7 +2695,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
 
     /* Attention: You can use nHandle only, if you are sure that all supported
                   properties has an unique handle. That must be guaranteed
-                  inside method impl_initializePropInfo()!
+                  inside method initListeners()!
     */
     switch (nHandle)
     {
@@ -2763,7 +2751,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
 
     /* Attention: You can use nHandle only, if you are sure that all supported
                   properties has an unique handle. That must be guaranteed
-                  inside method impl_initializePropInfo()!
+                  inside method initListeners()!
     */
     css::uno::Any aValue;
     switch (nHandle)
