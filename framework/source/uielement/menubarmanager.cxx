@@ -875,7 +875,8 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                             if ( !pMenuItemHandler->xPopupMenuController.is() &&
                                  m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ) )
                             {
-                                bPopupMenu = CreatePopupMenuController( pMenuItemHandler );
+                                if( xMenuItemDispatch.is() || !pMenuItemHandler->aMenuItemURL.equalsAscii( ".uno:RecentFileList") )
+                                    bPopupMenu = CreatePopupMenuController( pMenuItemHandler );
                             }
                             else if ( pMenuItemHandler->xPopupMenuController.is() )
                             {
