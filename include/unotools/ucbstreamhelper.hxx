@@ -54,13 +54,13 @@ namespace utl
     public:
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode );
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                          css::uno::Reference < css::task::XInteractionHandler > );
+                                          const css::uno::Reference < css::task::XInteractionHandler >& );
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                           bool bFileExists );
-        static SvStream*    CreateStream( css::uno::Reference < css::io::XInputStream > xStream );
-        static SvStream*    CreateStream( css::uno::Reference < css::io::XStream > xStream );
-        static SvStream*    CreateStream( css::uno::Reference < css::io::XInputStream > xStream, bool bCloseStream );
-        static SvStream*    CreateStream( css::uno::Reference < css::io::XStream > xStream, bool bCloseStream );
+        static SvStream*    CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream );
+        static SvStream*    CreateStream( const css::uno::Reference < css::io::XStream >& xStream );
+        static SvStream*    CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream, bool bCloseStream );
+        static SvStream*    CreateStream( const css::uno::Reference < css::io::XStream >& xStream, bool bCloseStream );
     };
 }
 
