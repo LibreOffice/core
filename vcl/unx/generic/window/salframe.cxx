@@ -1609,10 +1609,10 @@ void X11SalFrame::SetAlwaysOnTop( bool bOnTop )
     }
 }
 
-#define _FRAMESTATE_MASK_GEOMETRY \
+#define FRAMESTATE_MASK_GEOMETRY \
      (WINDOWSTATE_MASK_X     | WINDOWSTATE_MASK_Y |   \
       WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT)
-#define _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY \
+#define FRAMESTATE_MASK_MAXIMIZED_GEOMETRY \
      (WINDOWSTATE_MASK_MAXIMIZED_X     | WINDOWSTATE_MASK_MAXIMIZED_Y |   \
       WINDOWSTATE_MASK_MAXIMIZED_WIDTH | WINDOWSTATE_MASK_MAXIMIZED_HEIGHT)
 
@@ -1622,7 +1622,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         return;
 
     // Request for position or size change
-    if (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY)
+    if (pState->mnMask & FRAMESTATE_MASK_GEOMETRY)
     {
         Rectangle aPosSize;
 
@@ -1633,8 +1633,8 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         if( ! IsChildWindow() &&
             (pState->mnMask & WINDOWSTATE_MASK_STATE) &&
             (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED) &&
-            (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) == _FRAMESTATE_MASK_GEOMETRY &&
-            (pState->mnMask & _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
+            (pState->mnMask & FRAMESTATE_MASK_GEOMETRY) == FRAMESTATE_MASK_GEOMETRY &&
+            (pState->mnMask & FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
             )
         {
             XSizeHints* pHints = XAllocSizeHints();
@@ -1666,7 +1666,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         {
             bool bDoAdjust = false;
             // initialize with current geometry
-            if ((pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) != _FRAMESTATE_MASK_GEOMETRY)
+            if ((pState->mnMask & FRAMESTATE_MASK_GEOMETRY) != FRAMESTATE_MASK_GEOMETRY)
                 GetPosSize (aPosSize);
 
             // change requested properties
@@ -1792,7 +1792,7 @@ bool X11SalFrame::GetWindowState( SalFrameState* pState )
     pState->mnWidth  = aPosSize.GetWidth();
     pState->mnHeight = aPosSize.GetHeight();
 
-    pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
+    pState->mnMask   = FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
 
     if (! maRestorePosSize.IsEmpty() )
     {
@@ -1802,7 +1802,7 @@ bool X11SalFrame::GetWindowState( SalFrameState* pState )
         pState->mnMaximizedY      = aPosSize.Top();
         pState->mnMaximizedWidth  = aPosSize.GetWidth();
         pState->mnMaximizedHeight = aPosSize.GetHeight();
-        pState->mnMask |= _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY;
+        pState->mnMask |= FRAMESTATE_MASK_MAXIMIZED_GEOMETRY;
     }
 
     return true;
