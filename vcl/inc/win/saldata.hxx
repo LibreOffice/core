@@ -277,6 +277,8 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 // Call the Timer's callback from the main thread
 #define SAL_MSG_TIMER_CALLBACK      (WM_USER+162)
+// Stop the timer from the main thread; wParam = 0, lParam = 0
+#define SAL_MSG_STOPTIMER           (WM_USER+163)
 
 inline void SetWindowPtr( HWND hWnd, WinSalFrame* pThis )
 {

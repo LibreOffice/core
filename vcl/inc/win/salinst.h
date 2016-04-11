@@ -83,6 +83,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameSt
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild );
 void ImplSalStartTimer( sal_uIntPtr nMS, bool bMutex = false );
+void ImplSalStopTimer();
 
 #endif // INCLUDED_VCL_INC_WIN_SALINST_H
 
