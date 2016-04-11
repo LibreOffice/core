@@ -97,7 +97,7 @@ static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 
 using namespace ::com::sun::star::i18n;
 
-void ScCompiler::fillFromAddInMap( NonConstOpCodeMapPtr xMap,FormulaGrammar::Grammar _eGrammar  ) const
+void ScCompiler::fillFromAddInMap( const NonConstOpCodeMapPtr& xMap,FormulaGrammar::Grammar _eGrammar  ) const
 {
     size_t nSymbolOffset;
     switch( _eGrammar )
@@ -125,7 +125,7 @@ void ScCompiler::fillFromAddInMap( NonConstOpCodeMapPtr xMap,FormulaGrammar::Gra
     }
 }
 
-void ScCompiler::fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const
+void ScCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& xMap ) const
 {
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
     long nCount = pColl->GetFuncCount();
@@ -138,7 +138,7 @@ void ScCompiler::fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) c
     }
 }
 
-void ScCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const
+void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const
 {
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
     long nCount = pColl->GetFuncCount();

@@ -271,9 +271,9 @@ public:
 
 protected:
     virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const;
-    virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
-    virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, FormulaGrammar::Grammar _eGrammar ) const;
-    virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
+    virtual void fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& xMap ) const;
+    virtual void fillFromAddInMap( const NonConstOpCodeMapPtr& xMap, FormulaGrammar::Grammar _eGrammar ) const;
+    virtual void fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const;
     virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec, bool _bIsEnglish) const;
 
     virtual void SetError(sal_uInt16 nError);

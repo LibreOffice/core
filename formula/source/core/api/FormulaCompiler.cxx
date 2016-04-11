@@ -150,7 +150,7 @@ public:
 
 private:
     bool getOpCodeString( OUString& rStr, sal_uInt16 nOp );
-    void putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp, const CharClass* pCharClass );
+    void putDefaultOpCode( const FormulaCompiler::NonConstOpCodeMapPtr& xMap, sal_uInt16 nOp, const CharClass* pCharClass );
 
 private:
     FormulaCompiler::SeparatorType meSepType;
@@ -236,7 +236,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
     return false;
 }
 
-void OpCodeList::putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp,
+void OpCodeList::putDefaultOpCode( const FormulaCompiler::NonConstOpCodeMapPtr& xMap, sal_uInt16 nOp,
         const CharClass* pCharClass )
 {
     ResId aRes( nOp, *ResourceManager::getResManager());
@@ -767,15 +767,15 @@ void FormulaCompiler::loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar 
     }
 }
 
-void FormulaCompiler::fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr /*xMap */) const
+void FormulaCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& /*xMap */) const
 {
 }
 
-void FormulaCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr /*xMap */) const
+void FormulaCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& /*xMap */) const
 {
 }
 
-void FormulaCompiler::fillFromAddInMap( NonConstOpCodeMapPtr /*xMap*/, FormulaGrammar::Grammar /*_eGrammar */) const
+void FormulaCompiler::fillFromAddInMap( const NonConstOpCodeMapPtr& /*xMap*/, FormulaGrammar::Grammar /*_eGrammar */) const
 {
 }
 
