@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppconn/driver.h>
 #include <osl/module.h>
 
@@ -50,7 +50,7 @@ namespace connectivity
         using ::com::sun::star::uno::Sequence;
         Reference< css::uno::XInterface > SAL_CALL MysqlCDriver_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw(Exception);
 
-        typedef ::cppu::WeakComponentImplHelper2<   css::sdbc::XDriver,
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
                                                     css::lang::XServiceInfo > ODriver_BASE;
 
         typedef void* (SAL_CALL * OMysqlCConnection_CreateInstanceFunction)(void* _pDriver);

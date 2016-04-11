@@ -36,7 +36,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
-#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/compbase.hxx>
 
 
 namespace connectivity
@@ -50,7 +50,7 @@ namespace connectivity
         /*
         **  OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<  css::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper<  css::sdbc::XResultSet,
                                                     css::sdbc::XRow,
                                                     css::sdbc::XResultSetMetaDataSupplier,
                                                     css::util::XCancellable,
