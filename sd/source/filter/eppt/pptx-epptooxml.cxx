@@ -1877,9 +1877,6 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, bool
     pFS->endElementNS( XML_p, XML_spTree );
 }
 
-#define BEGIN_SHAPE mpFS->startElementNS( XML_p, XML_sp, FSEND )
-#define END_SHAPE mpFS->endElementNS( XML_p, XML_sp )
-
 ShapeExport& PowerPointShapeExport::WritePageShape( Reference< XShape > xShape, PageType ePageType, bool bPresObj )
 {
     if( ( ePageType == NOTICE && bPresObj ) || ePageType == LAYOUT )
@@ -1902,7 +1899,7 @@ bool PowerPointShapeExport::WritePlaceholder( Reference< XShape > xShape, Placeh
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > xShape, PlaceholderType ePlaceholder )
 {
-    BEGIN_SHAPE;
+    mpFS->startElementNS( XML_p, XML_sp, FSEND );
 
     // non visual shape properties
     mpFS->startElementNS( XML_p, XML_nvSpPr, FSEND );
@@ -1960,7 +1957,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
 
     WriteTextBox( xShape, XML_p );
 
-    END_SHAPE;
+    mpFS->endElementNS( XML_p, XML_sp );
 
     return *this;
 }
