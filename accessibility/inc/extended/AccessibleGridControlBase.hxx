@@ -25,8 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -52,7 +51,7 @@ namespace utl {
 
 namespace accessibility {
 
-typedef ::cppu::WeakAggComponentImplHelper4<
+typedef ::cppu::WeakAggComponentImplHelper<
             css::accessibility::XAccessibleContext,
             css::accessibility::XAccessibleComponent,
             css::accessibility::XAccessibleEventBroadcaster,
@@ -294,7 +293,7 @@ private:
 // a version of AccessibleGridControlBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
-typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
+typedef ::cppu::ImplHelper  <   css::accessibility::XAccessible
                             >   GridControlAccessibleElement_Base;
 
 class GridControlAccessibleElement

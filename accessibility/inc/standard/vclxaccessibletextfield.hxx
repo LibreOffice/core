@@ -22,9 +22,9 @@
 
 #include <standard/vclxaccessibletextcomponent.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessible > VCLXAccessible_BASE;
+typedef ::cppu::ImplHelper< css::accessibility::XAccessible > VCLXAccessible_BASE;
 
 
 /** This class represents non editable text fields.  The object passed to

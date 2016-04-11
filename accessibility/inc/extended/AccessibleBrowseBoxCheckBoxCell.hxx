@@ -23,13 +23,13 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include "extended/accessiblebrowseboxcell.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/wintypes.hxx>
 
 namespace accessibility
 {
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
+    typedef ::cppu::ImplHelper  <   css::accessibility::XAccessible,
                                     css::accessibility::XAccessibleValue
                                 >   AccessibleCheckBoxCell_BASE;
 

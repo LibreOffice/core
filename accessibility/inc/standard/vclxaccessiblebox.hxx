@@ -25,10 +25,10 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
-typedef ::cppu::ImplHelper3<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleValue,
     css::accessibility::XAccessibleAction

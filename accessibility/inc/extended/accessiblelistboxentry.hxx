@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <svtools/treelistentry.hxx>
@@ -57,7 +57,7 @@ namespace accessibility
 
 
 // class AccessibleListBoxEntry ------------------------------------------
-    typedef ::cppu::WeakAggComponentImplHelper9< css::accessibility::XAccessible
+    typedef ::cppu::WeakAggComponentImplHelper <  css::accessibility::XAccessible
                                                 , css::accessibility::XAccessibleContext
                                                 , css::accessibility::XAccessibleComponent
                                                 , css::accessibility::XAccessibleEventBroadcaster

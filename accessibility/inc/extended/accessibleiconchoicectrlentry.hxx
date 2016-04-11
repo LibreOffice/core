@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
@@ -47,7 +47,7 @@ namespace accessibility
 
 // class AccessibleIconChoiceCtrlEntry
 
-    typedef ::cppu::WeakAggComponentImplHelper8< css::accessibility::XAccessible
+    typedef ::cppu::WeakAggComponentImplHelper <  css::accessibility::XAccessible
                                                 , css::accessibility::XAccessibleContext
                                                 , css::accessibility::XAccessibleComponent
                                                 , css::accessibility::XAccessibleEventBroadcaster

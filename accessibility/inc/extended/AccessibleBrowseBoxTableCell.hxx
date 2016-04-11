@@ -21,11 +21,11 @@
 
 #include "extended/accessiblebrowseboxcell.hxx"
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace accessibility
 {
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessibleText
+    typedef ::cppu::ImplHelper  <   css::accessibility::XAccessibleText
                                 ,   css::accessibility::XAccessible
                                 >   AccessibleTextHelper_BASE;
 

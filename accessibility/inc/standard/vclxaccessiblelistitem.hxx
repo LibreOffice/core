@@ -27,7 +27,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <standard/vclxaccessiblelist.hxx>
@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 // class VCLXAccessibleListItem ------------------------------------------
 
-typedef ::cppu::WeakAggComponentImplHelper6< css::accessibility::XAccessible
+typedef ::cppu::WeakAggComponentImplHelper < css::accessibility::XAccessible
                                             , css::accessibility::XAccessibleContext
                                             , css::accessibility::XAccessibleComponent
                                             , css::accessibility::XAccessibleEventBroadcaster

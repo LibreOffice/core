@@ -22,14 +22,14 @@
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXHEADERBAR_HXX
 
 #include "extended/AccessibleBrowseBoxTableBase.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 
 namespace accessibility {
 
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
+typedef ::cppu::ImplHelper< css::accessibility::XAccessibleSelection >
         AccessibleBrowseBoxHeaderBarImplHelper;
 
 /** This class represents the accessible object of a header bar of a BrowseBox
