@@ -356,7 +356,7 @@ bool FmFormPageImpl::validateCurForm()
 }
 
 
-void FmFormPageImpl::setCurForm(Reference< css::form::XForm >  xForm)
+void FmFormPageImpl::setCurForm(const Reference< css::form::XForm >&  xForm)
 {
     xCurrentForm = xForm;
 }

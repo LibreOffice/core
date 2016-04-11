@@ -910,7 +910,7 @@ uno::Reference< drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) th
 }
 
 /** returns the SdrObject from the given StarOffice API wrapper */
-SdrPage* GetSdrPageFromXDrawPage( uno::Reference< drawing::XDrawPage > xDrawPage ) throw()
+SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xDrawPage ) throw()
 {
     if(xDrawPage.is())
     {

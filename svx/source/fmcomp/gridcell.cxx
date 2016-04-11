@@ -298,7 +298,7 @@ DbGridColumn::~DbGridColumn()
 }
 
 
-void DbGridColumn::setModel(css::uno::Reference< css::beans::XPropertySet >  _xModel)
+void DbGridColumn::setModel(const css::uno::Reference< css::beans::XPropertySet >&  _xModel)
 {
     if ( m_pCell )
         impl_toggleScriptManager_nothrow( false );

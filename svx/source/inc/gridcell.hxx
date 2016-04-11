@@ -119,7 +119,7 @@ public:
     ~DbGridColumn();
 
     const css::uno::Reference< css::beans::XPropertySet >& getModel() const { return m_xModel; }
-    void  setModel(css::uno::Reference< css::beans::XPropertySet >  _xModel);
+    void  setModel(const css::uno::Reference< css::beans::XPropertySet >&  _xModel);
 
 
     sal_uInt16  GetId() const {return m_nId;}

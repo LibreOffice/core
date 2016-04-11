@@ -66,7 +66,7 @@ public:
     void initFrom( FmFormPageImpl& i_foreignImpl );
 
     //  nur wichtig fuer den DesignMode
-    void setCurForm(css::uno::Reference< css::form::XForm> xForm);
+    void setCurForm(const css::uno::Reference< css::form::XForm>& xForm);
     css::uno::Reference< css::form::XForm> getDefaultForm();
 
     /** finds a place in the form component hierarchy where to insert the given component

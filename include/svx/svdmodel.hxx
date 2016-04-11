@@ -565,14 +565,14 @@ public:
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
 
     css::uno::Reference< css::uno::XInterface > getUnoModel();
-    void setUnoModel( css::uno::Reference< css::uno::XInterface > xModel );
+    void setUnoModel( const css::uno::Reference< css::uno::XInterface >& xModel );
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.
     bool isLocked() const { return mbModelLocked; }
     void setLock( bool bLock );
 
-    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    void            SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
 
     void SetCharCompressType( sal_uInt16 nType );

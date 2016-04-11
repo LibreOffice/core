@@ -593,7 +593,7 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) cons
 
 
 void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,
-  SfxItemSet& rSet, uno::Reference< beans::XPropertySet > xSet, const SfxItemPropertyMap* pMap )
+  SfxItemSet& rSet, const uno::Reference< beans::XPropertySet >& xSet, const SfxItemPropertyMap* pMap )
 {
     if(rPropSet.AreThereOwnUsrAnys())
     {
@@ -4134,7 +4134,7 @@ uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw
 }
 
 /** returns the SdrObject from the given StarOffice API wrapper */
-SdrObject* GetSdrObjectFromXShape( uno::Reference< drawing::XShape > xShape ) throw()
+SdrObject* GetSdrObjectFromXShape( const uno::Reference< drawing::XShape >& xShape ) throw()
 {
     SvxShape* pShape = SvxShape::getImplementation( xShape );
     return pShape ? pShape->GetSdrObject() : nullptr;

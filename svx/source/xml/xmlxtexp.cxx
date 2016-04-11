@@ -188,7 +188,7 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
 
 static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
                                  SvXMLGraphicHelper                  **ppGraphicHelper,
-                                 uno::Reference < embed::XStorage >    xSubStorage )
+                                 const uno::Reference < embed::XStorage >& xSubStorage )
 {
     uno::Reference < io::XStream > xStream;
     xStream = xSubStorage->openStreamElement(

@@ -95,7 +95,7 @@ public:
     SvxRubyData_Impl();
     virtual ~SvxRubyData_Impl();
 
-    void SetController(Reference<XController> xCtrl);
+    void SetController(const Reference<XController>& xCtrl);
     Reference<XModel> GetModel()
     {
         if (!xController.is())
@@ -143,7 +143,7 @@ SvxRubyData_Impl::~SvxRubyData_Impl()
 {
 }
 
-void SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
+void SvxRubyData_Impl::SetController(const Reference<XController>& xCtrl)
 {
     if (xCtrl.get() != xController.get())
     {

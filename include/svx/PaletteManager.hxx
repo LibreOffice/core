@@ -72,7 +72,7 @@ public:
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
     void        PopupColorPicker(const OUString& aCommand);
 
-    void        SetColorSelectFunction(std::function<void(const OUString&, const Color&)> aColorSelectFunction);
+    void        SetColorSelectFunction(const std::function<void(const OUString&, const Color&)>& aColorSelectFunction);
 
     static void DispatchColorCommand(const OUString& aCommand, const Color& rColor);
 };

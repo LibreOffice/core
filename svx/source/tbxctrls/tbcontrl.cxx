@@ -2012,7 +2012,7 @@ struct SvxStyleToolBoxControl::Impl
 
 
     }
-    void InitializeStyles(Reference < frame::XModel > xModel)
+    void InitializeStyles(const Reference < frame::XModel >& xModel)
     {
         //now convert the default style names to the localized names
         try
@@ -2611,7 +2611,7 @@ SvxColorToolBoxControl::~SvxColorToolBoxControl()
 {
 }
 
-void SvxColorToolBoxControl::setColorSelectFunction(ColorSelectFunction aColorSelectFunction)
+void SvxColorToolBoxControl::setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction)
 {
     maColorSelectFunction = aColorSelectFunction;
     mPaletteManager.SetColorSelectFunction(aColorSelectFunction);

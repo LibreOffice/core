@@ -70,7 +70,7 @@ void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)
     }
 }
 
-void LineWidthValueSet::SetImage(Image img)
+void LineWidthValueSet::SetImage(const Image& img)
 {
     imgCus = img;
 }

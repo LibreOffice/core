@@ -348,7 +348,7 @@ SvxXMLXTableImport::~SvxXMLXTableImport() throw ()
 
 static void openStorageStream( xml::sax::InputSource *pParserInput,
                                SvXMLGraphicHelper   **ppGraphicHelper,
-                               uno::Reference < embed::XStorage > xStorage )
+                               const uno::Reference < embed::XStorage >& xStorage )
 {
     uno::Reference < io::XStream > xIStm;
     xIStm.set( xStorage->openStreamElement( "Content.xml", embed::ElementModes::READ ), uno::UNO_QUERY_THROW );

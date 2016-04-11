@@ -680,7 +680,7 @@ namespace
 
     public:
 
-        explicit find_active_databaseform( const Reference< XFormController > _xActiveController )
+        explicit find_active_databaseform( const Reference< XFormController >& _xActiveController )
             : xActiveController(_xActiveController )
         {}
 
