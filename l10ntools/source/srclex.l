@@ -203,8 +203,8 @@ void YYWarning();
 }
 
 "{"?[ \t]*\".*\"[ \t]*";"[ \t]*"}" {
-/* _LISTTEXT */
-	WorkOnTokenSet( _LISTTEXT, yytext );
+/* LISTTEXT_ */
+	WorkOnTokenSet( LISTTEXT_, yytext );
 }
 
 %%

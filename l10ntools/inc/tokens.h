@@ -52,7 +52,7 @@
 #define RSCDEFINE           515         /* #define MY_TEXT                  */
 #define RSCDEFINELEND       516         /*                                  */
 #define PRAGMA              519         /* #pragma ...                      */
-#define _LISTTEXT           521         /* { "Text" ... }                   */
+#define LISTTEXT_           521         /* { "Text" ... }                   */
 #define NORMDEFINE          524         /* #define ...                      */
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */
