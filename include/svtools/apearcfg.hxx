@@ -31,7 +31,7 @@ typedef enum {
     NoSnap
 } SnapType;
 
-typedef enum { // MUST match the order chosen in ListBox LB_DRAG_MODE in optgdlg.src
+typedef enum {
     DragFullWindow,
     DragFrame,
     DragSystemDep
