@@ -34,7 +34,6 @@ namespace comphelper { namespace module
         public:
             doInitialize()
             {
-                createRegistryInfo_UNOMemoryStream();
                 createRegistryInfo_Map();
             }
         };
