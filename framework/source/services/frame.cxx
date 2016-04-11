@@ -585,10 +585,9 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
 
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.clear();
 
-    return LoadEnv::loadComponentFromURL(xThis, xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
+    return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
 /*-****************************************************************************************************
@@ -779,7 +778,6 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     if (pWindow && pWindow->IsVisible())
         m_bIsHidden = false;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::frame::XLayoutManager2 >  xLayoutManager = m_xLayoutManager;
 
     // Release lock ... because we call some impl methods, which are threadsafe by himself.
@@ -793,7 +791,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // create progress helper
     css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
-        css::task::StatusIndicatorFactory::createWithFrame(xContext, xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
+        css::task::StatusIndicatorFactory::createWithFrame(m_xContext, xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
 
     // SAFE -> ----------------------------------
     aWriteLock.reset();
@@ -805,10 +803,10 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // So superflous messages are filtered to NULL :-)
     implts_startWindowListening();
 
-    m_pWindowCommandDispatch = new WindowCommandDispatch(xContext, this);
+    m_pWindowCommandDispatch = new WindowCommandDispatch(m_xContext, this);
 
     // Initialize title functionality
-    TitleHelper* pTitleHelper = new TitleHelper( xContext );
+    TitleHelper* pTitleHelper = new TitleHelper( m_xContext );
     m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
     pTitleHelper->setOwner(xThis);
 }
@@ -962,7 +960,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     /* SAFE { */
     SolarMutexResettableGuard aReadLock;
     css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
-    css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
     bool                                               bIsTopFrame  = m_bIsFrameTop;
     bool                                               bIsTopWindow = WindowHelper::isTopWindow(m_xContainerWindow);
     aReadLock.clear();
@@ -974,7 +971,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
-        TaskCreator aCreator(xContext);
+        TaskCreator aCreator(m_xContext);
         xTarget = aCreator.createTask(sTargetFrameName);
     }
 
@@ -1171,7 +1168,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
             (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
            )
         {
-            TaskCreator aCreator(xContext);
+            TaskCreator aCreator(m_xContext);
             xTarget = aCreator.createTask(sTargetFrameName);
         }
     }
@@ -2176,7 +2173,6 @@ void SAL_CALL Frame::disposing()
     // Release some other references.
     // This calls should be easy ... I hope it :-)
     m_xDispatchHelper.clear();
-    m_xContext.clear();
     m_xDropTargetListener.clear();
     m_xDispatchRecorderSupplier.clear();
     m_xLayoutManager.clear();
@@ -2495,15 +2491,9 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
         Otherwhise the dialog "would you save your changes?" will be shown more than once ...
      */
 
-    /* SAFE */
-    SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.clear();
-    /* SAFE */
-
     css::util::URL aURL;
     aURL.Complete = ".uno:CloseFrame";
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_SELF, 0);
@@ -2545,7 +2535,6 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
     /* SAFE { */
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XDesktop >             xDesktopCheck( m_xParent, css::uno::UNO_QUERY );
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     m_bIsHidden = false;
     aReadLock.clear();
     /* } SAFE */
@@ -2562,7 +2551,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
         if (bMustBeTriggered)
         {
             css::uno::Reference< css::task::XJobExecutor > xExecutor
-                = css::task::theJobExecutor::get( xContext );
+                = css::task::theJobExecutor::get( m_xContext );
             xExecutor->trigger( "onFirstVisibleTask" );
         }
     }
@@ -3104,7 +3093,6 @@ void Frame::implts_startWindowListening()
     // Make snapshot of necessary member!
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow;
-    css::uno::Reference< css::uno::XComponentContext >                  xContext = m_xContext;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -3122,7 +3110,7 @@ void Frame::implts_startWindowListening()
         {
             xTopWindow->addTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
+            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
             if( xDropTarget.is() )
             {
@@ -3141,7 +3129,6 @@ void Frame::implts_stopWindowListening()
     // Make snapshot of necessary member!
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow;
-    css::uno::Reference< css::uno::XComponentContext >                  xContext            = m_xContext;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -3159,7 +3146,7 @@ void Frame::implts_stopWindowListening()
         {
             xTopWindow->removeTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
+            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
             if( xDropTarget.is() )
             {
