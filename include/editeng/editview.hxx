@@ -256,8 +256,8 @@ public:
     */
     static LanguageType CheckLanguage(
                             const OUString &rText,
-                            css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpell,
-                            css::uno::Reference< css::linguistic2::XLanguageGuessing > xLangGuess,
+                            const css::uno::Reference< css::linguistic2::XSpellChecker1 >& xSpell,
+                            const css::uno::Reference< css::linguistic2::XLanguageGuessing >& xLangGuess,
                             bool bIsParaText );
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);

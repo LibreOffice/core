@@ -153,7 +153,7 @@ bool Outliner::UpdateFields()
     return pEditEngine->UpdateFields();
 }
 
-void Outliner::RemoveFields( std::function<bool ( const SvxFieldData* )> isFieldData )
+void Outliner::RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData )
 {
     pEditEngine->RemoveFields( true/*bKeepFieldText*/, isFieldData );
 }
@@ -398,7 +398,7 @@ Reference< XSpellChecker1 > Outliner::GetSpeller()
     return pEditEngine->GetSpeller();
 }
 
-void Outliner::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
+void Outliner::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
 {
     EditEngine::SetForbiddenCharsTable( xForbiddenChars );
 }

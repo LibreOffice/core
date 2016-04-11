@@ -2018,9 +2018,9 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
 // Adds one portion to the SpellPortions
 void ImpEditEngine::AddPortion(
                             const EditSelection& rSel,
-                            uno::Reference< XSpellAlternatives > xAlt,
-                                svx::SpellPortions& rToFill,
-                                bool bIsField)
+                            const uno::Reference< XSpellAlternatives >& xAlt,
+                            svx::SpellPortions& rToFill,
+                            bool bIsField)
 {
     if(rSel.HasRange())
     {
@@ -2042,8 +2042,8 @@ void ImpEditEngine::AddPortion(
 void ImpEditEngine::AddPortionIterated(
                             EditView& rEditView,
                             const EditSelection& rSel,
-                            Reference< XSpellAlternatives > xAlt,
-                                svx::SpellPortions& rToFill)
+                            const Reference< XSpellAlternatives >& xAlt,
+                            svx::SpellPortions& rToFill)
 {
     if (rSel.HasRange())
     {

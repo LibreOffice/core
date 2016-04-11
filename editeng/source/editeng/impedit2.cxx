@@ -4282,7 +4282,7 @@ rtl::Reference<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTabl
     return xF;
 }
 
-void ImpEditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
+void ImpEditEngine::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
 {
     EE_DLL().GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }

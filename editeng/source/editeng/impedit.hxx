@@ -957,14 +957,14 @@ public:
     void                AddPortionIterated(
                           EditView& rEditView,
                           const EditSelection &rSel,
-                          css::uno::Reference< css::linguistic2::XSpellAlternatives > xAlt,
+                          const css::uno::Reference< css::linguistic2::XSpellAlternatives >& xAlt,
                           svx::SpellPortions& rToFill);
     //adds one portion to the SpellPortions
-    void            AddPortion(
-                        const EditSelection &rSel,
-                        css::uno::Reference< css::linguistic2::XSpellAlternatives > xAlt,
-                        svx::SpellPortions& rToFill,
-                        bool bIsField );
+    void                AddPortion(
+                            const EditSelection &rSel,
+                            const css::uno::Reference< css::linguistic2::XSpellAlternatives >& xAlt,
+                            svx::SpellPortions& rToFill,
+                            bool bIsField );
 
     bool                    Search( const SvxSearchItem& rSearchItem, EditView* pView );
     bool                    ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
@@ -1013,7 +1013,7 @@ public:
     bool                IsAddExtLeading() const { return bAddExtLeading; }
 
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
-    static void         SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    static void         SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void                SetBeginDropHdl( const Link<EditView*,void>& rLink ) { maBeginDropHdl = rLink; }
