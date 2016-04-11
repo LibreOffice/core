@@ -425,7 +425,7 @@ public:
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
     void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );
 
-    static void     SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    static void     SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
 
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
@@ -453,7 +453,7 @@ public:
 
     bool            UpdateFields();
     bool            UpdateFieldsOnly();
-    void            RemoveFields( std::function<bool ( const SvxFieldData* )> isFieldData = [] (const SvxFieldData* ){return true;} );
+    void            RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData = [] (const SvxFieldData* ){return true;} );
 
     sal_uInt16      GetFieldCount( sal_Int32 nPara ) const;
     EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const;

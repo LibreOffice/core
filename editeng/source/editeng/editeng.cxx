@@ -2136,7 +2136,7 @@ void EditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRanges
     pImpEditEngine->SetAllMisspellRanges(rRanges);
 }
 
-void EditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
+void EditEngine::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
 {
     ImpEditEngine::SetForbiddenCharsTable( xForbiddenChars );
 }
@@ -2281,7 +2281,7 @@ bool EditEngine::UpdateFieldsOnly()
     return pImpEditEngine->UpdateFields();
 }
 
-void EditEngine::RemoveFields( std::function<bool ( const SvxFieldData* )> isFieldData )
+void EditEngine::RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData )
 {
     pImpEditEngine->UpdateFields();
 

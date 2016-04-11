@@ -75,8 +75,8 @@ using namespace com::sun::star::beans;
 // static
 LanguageType EditView::CheckLanguage(
         const OUString &rText,
-        Reference< linguistic2::XSpellChecker1 > xSpell,
-        Reference< linguistic2::XLanguageGuessing > xLangGuess,
+        const Reference< linguistic2::XSpellChecker1 >& xSpell,
+        const Reference< linguistic2::XLanguageGuessing >& xLangGuess,
         bool bIsParaText )
 {
     LanguageType nLang = LANGUAGE_NONE;
