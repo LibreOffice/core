@@ -705,15 +705,11 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
     if ( m_aParameterRow.is() ) {
         OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->get().size() + 1, "More parameters than values found" );
         rMatchString = (m_aParameterRow->get())[(sal_uInt16)m_nParamIndex];
-#if OSL_DEBUG_LEVEL > 0
         SAL_INFO("connectivity.mork", "Prop Value: " << rMatchString);
-#endif
     }
-#if OSL_DEBUG_LEVEL > 0
     else {
         SAL_INFO("connectivity.mork", "Prop Value: Invalid ParameterRow!");
     }
-#endif
 }
 
 #define WILDCARD "%"
@@ -740,20 +736,14 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             for(;aIter != xColumns->get().end();++aIter)
             {
                 (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-#if OSL_DEBUG_LEVEL > 0
                 SAL_INFO("connectivity.mork", "Prop Column Name: " << aColName);
-#endif
                 if ( m_aParameterRow.is() ) {
                     aParameterValue = (m_aParameterRow->get())[(sal_uInt16)i];
-#if OSL_DEBUG_LEVEL > 0
                     SAL_INFO("connectivity.mork", "Prop Value: " << aParameterValue);
-#endif
                 }
-#if OSL_DEBUG_LEVEL > 0
                 else {
                     SAL_INFO("connectivity.mork", "Prop Value: Invalid ParameterRow!");
                 }
-#endif
                 i++;
             }
         }
@@ -876,9 +866,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if(SQL_ISRULE(pColumn,column_ref))
             m_pSQLIterator->getColumnRange(pColumn,columnName,sTableRange);
 
-#if OSL_DEBUG_LEVEL > 0
         SAL_INFO("connectivity.mork", "ColumnName = " << columnName);
-#endif
 
         if ( SQL_ISRULE(pAtom,parameter) ) {
             parseParameter( pAtom, matchString );
