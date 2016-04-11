@@ -84,7 +84,9 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
-    google_breakpad::ExceptionHandler eh(descriptor, NULL, dumpCallback, NULL, true, -1);
+    google_breakpad::ExceptionHandler eh(descriptor, nullptr, dumpCallback, nullptr, true, -1);
+
+    CrashReporter::storeExceptionHandler(&eh);
 #else
 
 #endif
