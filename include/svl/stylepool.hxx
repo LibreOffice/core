@@ -69,7 +69,7 @@ public:
 
     virtual ~StylePool();
 
-    static OUString nameOf( SfxItemSet_Pointer_t pSet );
+    static OUString nameOf( const SfxItemSet_Pointer_t& pSet );
 };
 
 class SVL_DLLPUBLIC IStylePoolIteratorAccess

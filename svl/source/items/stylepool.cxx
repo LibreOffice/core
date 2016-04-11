@@ -332,7 +332,7 @@ namespace {
  * This static method creates a unique name from a shared pointer to a SfxItemSet
  * The name is the memory address of the SfxItemSet itself.
  */
-OUString StylePool::nameOf( SfxItemSet_Pointer_t pSet )
+OUString StylePool::nameOf( const SfxItemSet_Pointer_t& pSet )
 {
     return OUString::number( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
 }
