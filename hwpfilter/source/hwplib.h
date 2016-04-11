@@ -27,24 +27,16 @@
 /**
  * size of hunit is 4 since hwp96 version
  */
-#ifndef _HCHAR_
-#define _HCHAR_
 typedef unsigned short  hchar;
 typedef int     hunit;
 typedef unsigned char       kchar;
-#endif                                            // _HCHAR_
 
-#ifndef _UTYPE_
-#define _UTYPE_
 typedef unsigned char   uchar;
 typedef unsigned short  ushort;
 typedef unsigned int    uint;
-#endif                                            /* _UTYPE_ */
 
 typedef ::std::basic_string<hchar> hchar_string;
 
-#ifndef _ZZRECT_
-#define _ZZRECT_
 /**
  * @short Point
  */
@@ -86,7 +78,6 @@ typedef struct
     int   mulX, divX;
     int   mulY, divY;
 } ZZScaleXY;
-#endif                                            /* _ZZRECT_ */
 
 #if !defined(_WIN32) && !defined(MAX_PATH)
 #  define MAX_PATH  260
