@@ -25,14 +25,14 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 
 
 //  class VCLXAccessibleMenuItem
 
 
-typedef ::cppu::ImplHelper3<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessibleText,
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleValue > VCLXAccessibleMenuItem_BASE;

@@ -25,13 +25,13 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 //  class VCLXAccessibleRadioButton
 
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleValue > VCLXAccessibleRadioButton_BASE;
 

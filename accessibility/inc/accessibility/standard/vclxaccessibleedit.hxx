@@ -24,13 +24,13 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 //  class VCLXAccessibleEdit
 
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleEditableText > VCLXAccessibleEdit_BASE;
 

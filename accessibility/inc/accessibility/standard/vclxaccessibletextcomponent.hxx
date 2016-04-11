@@ -27,7 +27,7 @@
 //  class VCLXAccessibleTextComponent
 
 
-typedef ::cppu::ImplHelper1 <
+typedef ::cppu::ImplHelper <
     css::accessibility::XAccessibleText >  VCLXAccessibleTextComponent_BASE;
 
 class VCLXAccessibleTextComponent : public VCLXAccessibleComponent,

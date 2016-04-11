@@ -28,14 +28,14 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/vclptr.hxx>
 
 class ToolBox;
 
 typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;
-typedef ::cppu::ImplHelper4 < css::accessibility::XAccessible,
+typedef ::cppu::ImplHelper  < css::accessibility::XAccessible,
                               css::accessibility::XAccessibleAction,
                               css::accessibility::XAccessibleValue,
                               css::lang::XServiceInfo > VCLXAccessibleToolBoxItem_BASE;

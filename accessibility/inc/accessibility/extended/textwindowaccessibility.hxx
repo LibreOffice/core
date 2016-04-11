@@ -44,7 +44,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
@@ -127,7 +127,7 @@ private:
 
 typedef ::std::vector< ParagraphInfo > Paragraphs;
 
-typedef ::cppu::WeakAggComponentImplHelper7<
+typedef ::cppu::WeakAggComponentImplHelper<
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleContext,
     css::accessibility::XAccessibleComponent,

@@ -73,7 +73,7 @@ namespace
 
     // = OToolBoxWindowItem
 
-    typedef ::cppu::ImplHelper1 <   XUnoTunnel
+    typedef ::cppu::ImplHelper  <   XUnoTunnel
                                 >   OToolBoxWindowItem_Base;
 
     /** XAccessible implementation for a toolbox item which is represented by a VCL Window

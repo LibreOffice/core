@@ -27,7 +27,7 @@
 //  class VCLXAccessibleToolBox
 
 
-typedef ::cppu::ImplHelper1 < css::accessibility::XAccessibleSelection > VCLXAccessibleToolBox_BASE;
+typedef ::cppu::ImplHelper < css::accessibility::XAccessibleSelection > VCLXAccessibleToolBox_BASE;
 
 typedef std::map< sal_Int32, css::uno::Reference< css::accessibility::XAccessible > > ToolBoxItemsMap;
 
