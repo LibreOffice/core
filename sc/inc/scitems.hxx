@@ -23,7 +23,7 @@
 #include <svx/svxids.hrc>
 
 //  EditEngine is not allowed to define it's own ITEMID's
-#define _EEITEMID_HXX
+#define INCLUDED_EDITENG_EEITEMID_HXX
 
 // Item-IDs for UI-MsgPool:
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EEITEMID_HXX
-#define _EEITEMID_HXX
+#ifndef INCLUDED_EDITENG_EEITEMID_HXX
+#define INCLUDED_EDITENG_EEITEMID_HXX
 
 #include <editeng/eeitem.hxx>
 
@@ -103,6 +103,6 @@
 
 #define ITEMID_SEARCH           0
 
-#endif //_EEITEMID_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
