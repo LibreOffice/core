@@ -3322,15 +3322,16 @@ find_ucrt()
 {
     reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
     if test -n "$regvalue"; then
-        ucrttest=$regvalue
+        PathFormat "$regvalue"
+        UCRTSDKDIR=$formatted_path
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
-        ucrtdir=$regvalue
+        UCRTVERSION=$regvalue
     fi
-    if test -z "$ucrttest"; then
+    if test -z "$UCRTSDKDIR"; then
         if test -f "$VC_PRODUCT_DIR/../Common7/Tools/vsvars32.bat"; then
             PathFormat "`win_get_env_from_vsvars32bat "UniversalCRTSdkDir"`"
-            ucrttest=$formatted_path
-            ucrtdir=`win_get_env_from_vsvars32bat "UCRTVersion"`
+            UCRTSDKDIR=$formatted_path
+            UCRTVERSION=`win_get_env_from_vsvars32bat "UCRTVersion"`
         fi
     fi
 }
@@ -3421,6 +3422,9 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([No])
         fi
 
+        UCRTSDKDIR=
+        UCRTVERSION=
+
         AC_MSG_CHECKING([whether UCRT is needed for this compiler version])
         if test "$vcnum" = "120"; then
             AC_MSG_RESULT([No])
@@ -3428,10 +3432,10 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([Yes])
             AC_MSG_CHECKING([for UCRT location])
             find_ucrt
-            if test -n "$ucrttest"; then
+            if test -n "$UCRTSDKDIR"; then
                 AC_MSG_RESULT([found])
-                PathFormat "$ucrttest"
-                ucrtincpath_formatted="${formatted_path}Include/$ucrtdir/ucrt"
+                PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
+                ucrtincpath_formatted=$formatted_path
                 # SOLARINC is used for external modules and must be set too.
                 # And no, it's not sufficient to set SOLARINC only, as configure
                 # itself doesn't honour it.
@@ -3443,6 +3447,8 @@ if test "$_os" = "WINNT"; then
                 AC_MSG_ERROR([not found])
             fi
         fi
+        AC_SUBST(UCRTSDKDIR)
+        AC_SUBST(UCRTVERSION)
 
         # Find the proper version of MSBuild.exe to use based on the VS version
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
@@ -12532,8 +12538,8 @@ if test "$build_os" = "cygwin"; then
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
         fi
         if test $VCVER = 140; then
-            PathFormat "$ucrttest"
-            ucrtlibpath_formatted="${formatted_path}lib/$ucrtdir/ucrt/x64"
+            PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x64"
+            ucrtlibpath_formatted=$formatted_path
             ILIB="$ILIB;$ucrtlibpath_formatted"
         fi
     else
@@ -12546,8 +12552,8 @@ if test "$build_os" = "cygwin"; then
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
         fi
         if test $VCVER = 140; then
-            PathFormat "$ucrttest"
-            ucrtlibpath_formatted="${formatted_path}lib/$ucrtdir/ucrt/x86"
+            PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x86"
+            ucrtlibpath_formatted=$formatted_path
             ILIB="$ILIB;$ucrtlibpath_formatted"
         fi
     fi
