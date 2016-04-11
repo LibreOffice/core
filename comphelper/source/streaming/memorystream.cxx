@@ -22,6 +22,7 @@
 #include "comphelper_module.hxx"
 #include "comphelper_services.hxx"
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
@@ -71,11 +72,6 @@ public:
 
     // XTruncate
     virtual void SAL_CALL truncate() throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
-
-    // XServiceInfo - static versions (used for component registration)
-    static OUString SAL_CALL getImplementationName_static();
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-    static Reference< XInterface > SAL_CALL Create( const Reference< css::uno::XComponentContext >& );
 
 private:
     std::vector< sal_Int8 > maData;
@@ -212,28 +208,14 @@ void SAL_CALL UNOMemoryStream::truncate() throw (IOException, RuntimeException, 
     mnCursor = 0;
 }
 
-OUString SAL_CALL UNOMemoryStream::getImplementationName_static()
-{
-    return OUString("com.sun.star.comp.MemoryStream");
-}
-
-Sequence< OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_static()
-{
-    Sequence< OUString > aSeq { getImplementationName_static() };
-    return aSeq;
-}
-
-Reference< XInterface > SAL_CALL UNOMemoryStream::Create(
-    SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
-{
-    return static_cast<OWeakObject*>(new UNOMemoryStream());
-}
-
 } // namespace comphelper
 
-void createRegistryInfo_UNOMemoryStream()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_MemoryStream(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::comphelper::module::OAutoRegistration< ::comphelper::UNOMemoryStream > aAutoRegistration;
+    return cppu::acquire(new ::comphelper::UNOMemoryStream());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

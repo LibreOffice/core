@@ -31,7 +31,8 @@
       constructor="NamedPropertyValuesContainer_get_implementation">
     <service name="com.sun.star.document.NamedPropertyValues"/>
   </implementation>
-  <implementation name="com.sun.star.comp.MemoryStream">
+  <implementation name="com.sun.star.comp.MemoryStream"
+      constructor="com_sun_star_comp_MemoryStream">
     <service name="com.sun.star.comp.MemoryStream"/>
   </implementation>
   <implementation name="com.sun.star.comp.SequenceInputStreamService"
