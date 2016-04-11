@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_d89342f9",
+        "filename": "canvas/source/directx/dx_canvashelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-11T14:37:12Z",
+      "side": 1,
+      "message": "Not sure what other parts of the office use when the SubSystem is not capable of doing this, but I think Gdiplus::LineJoinBevel would be better/closer to NONE",
+      "range": {
+        "startLine": 79,
+        "startChar": 27,
+        "endLine": 79,
+        "endChar": 49
+      },
+      "revId": "fa665f0e539bb503b346fbe6d3feb272f19bd87a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_b8900eee",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-11T14:37:12Z",
+      "side": 1,
+      "message": "I would avoid to have two versions of this Function. Just remove this one and find all usages by grepping/compiling, but that\u0027s me ;-)",
+      "range": {
+        "startLine": 270,
+        "startChar": 32,
+        "endLine": 270,
+        "endChar": 70
+      },
+      "revId": "fa665f0e539bb503b346fbe6d3feb272f19bd87a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
