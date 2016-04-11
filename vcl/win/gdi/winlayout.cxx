@@ -48,6 +48,7 @@
 #include <winver.h>
 
 #include <unordered_map>
+#include <unordered_set>
 
 typedef std::unordered_map<int,int> IntMap;
 
@@ -97,19 +98,66 @@ struct OpenGLGlyphDrawElement
     }
 };
 
+class GlyphCache;
+
+struct GlobalGlyphCache
+{
+    GlobalGlyphCache()
+        : maPackedTextureAtlas(2048, 2048)
+    {}
+
+    PackedTextureAtlasManager maPackedTextureAtlas;
+    std::unordered_set<GlyphCache*> maGlyphCaches;
+};
+
 class GlyphCache
 {
 private:
-    static PackedTextureAtlasManager sPackedTextureAtlas;
+    static std::unique_ptr<GlobalGlyphCache> gGlobalGlyphCache;
     std::unordered_map<int, OpenGLGlyphDrawElement> maOpenGLTextureCache;
 
 public:
     GlyphCache()
-    {}
+    {
+        gGlobalGlyphCache.get()->maGlyphCaches.insert(this);
+    }
+
+    ~GlyphCache()
+    {
+        gGlobalGlyphCache.get()->maGlyphCaches.erase(this);
+    }
 
     void ReserveTextureSpace(OpenGLGlyphDrawElement& rElement, int nWidth, int nHeight)
     {
-        rElement.maTexture = sPackedTextureAtlas.Reserve(nWidth, nHeight);
+        GlobalGlyphCache* pGlobalGlyphCache = gGlobalGlyphCache.get();
+        rElement.maTexture = pGlobalGlyphCache->maPackedTextureAtlas.Reserve(nWidth, nHeight);
+        std::vector<GLuint> aTextureIDs = pGlobalGlyphCache->maPackedTextureAtlas.ReduceTextureNumber(8);
+        if (!aTextureIDs.empty())
+        {
+            for (auto& pGlyphCache: pGlobalGlyphCache->maGlyphCaches)
+            {
+                pGlyphCache->RemoveTextures(aTextureIDs);
+            }
+        }
+    }
+
+    void RemoveTextures(std::vector<GLuint>& rTextureIDs)
+    {
+        auto it = maOpenGLTextureCache.begin();
+
+        while (it != maOpenGLTextureCache.end())
+        {
+            GLuint nTextureID = it->second.maTexture.Id();
+
+            if (std::find(rTextureIDs.begin(), rTextureIDs.end(), nTextureID) != rTextureIDs.end())
+            {
+                it = maOpenGLTextureCache.erase(it);
+            }
+            else
+            {
+                it++;
+            }
+        }
     }
 
     void PutDrawElementInCache(const OpenGLGlyphDrawElement& rElement, int nGlyphIndex)
@@ -130,7 +178,8 @@ public:
     }
 };
 
-PackedTextureAtlasManager GlyphCache::sPackedTextureAtlas(2048, 2048);
+// static initialization
+std::unique_ptr<GlobalGlyphCache> GlyphCache::gGlobalGlyphCache(new GlobalGlyphCache);
 
 // win32 specific physical font instance
 class WinFontInstance : public LogicalFontInstance
