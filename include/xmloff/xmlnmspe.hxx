@@ -28,11 +28,11 @@ const sal_uInt16 XML_NAMESPACE_##prefix##_IDX   = key;
 
 #define XML_OLD_NAMESPACE( prefix, index ) \
 const sal_uInt16 XML_OLD_NAMESPACE_##prefix##_IDX = \
-    (_XML_OLD_NAMESPACE_BASE+index);
+    (XML_OLD_NAMESPACE_BASE+index);
 
 // current namespaces
 // These namespaces have the same index in the namespace table as prefix used.
-// If a namespace is added, _XML_OLD_NAMESPACE_BASE has to be adjusted!
+// If a namespace is added, XML_OLD_NAMESPACE_BASE has to be adjusted!
 XML_NAMESPACE( OFFICE,          0U )
 XML_NAMESPACE( STYLE,           1U )
 XML_NAMESPACE( TEXT ,           2U )
@@ -84,7 +84,7 @@ XML_NAMESPACE_EXT( DRAW,        40U )
 XML_NAMESPACE_EXT( CALC,        41U )
 XML_NAMESPACE_EXT( LO,          42U )
 
-#define _XML_OLD_NAMESPACE_BASE 43U
+#define XML_OLD_NAMESPACE_BASE 43U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
