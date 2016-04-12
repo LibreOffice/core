@@ -210,7 +210,7 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
         return new IdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
 
     default:
-        SAL_INFO("stoc", " corereflection type unsupported: " << pTypeDescr->pTypeName);
+        SAL_INFO("stoc", "corereflection type unsupported: " << pTypeDescr->pTypeName);
         return Reference< XIdlClass >();
     }
 }

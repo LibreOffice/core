@@ -891,7 +891,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                     Reference< XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
                     if (xFac2.is())
                     {
-                        SAL_INFO("stoc", " ignoring given context raising service " << rServiceSpecifier << "!!!");
+                        SAL_INFO("stoc", "ignoring given context raising service " << rServiceSpecifier << "!!!");
                         return xFac2->createInstance();
                     }
                 }
@@ -899,7 +899,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         }
         catch (const lang::DisposedException & exc)
         {
-            SAL_INFO("stoc", " DisposedException occurred: " << exc.Message);
+            SAL_INFO("stoc", "DisposedException occurred: " << exc.Message);
         }
     }
 
@@ -946,7 +946,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                     Reference< XSingleServiceFactory > xFac2( xFactory, UNO_QUERY );
                     if (xFac2.is())
                     {
-                        SAL_INFO("stoc", " ignoring given context raising service " << rServiceSpecifier << "!!!");
+                        SAL_INFO("stoc", "ignoring given context raising service " << rServiceSpecifier << "!!!");
                         return xFac2->createInstanceWithArguments( rArguments );
                     }
                 }
@@ -954,7 +954,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         }
         catch (const lang::DisposedException & exc)
         {
-            SAL_INFO("stoc", " DisposedException occurred: " << exc.Message);
+            SAL_INFO("stoc", "DisposedException occurred: " << exc.Message);
         }
     }
 

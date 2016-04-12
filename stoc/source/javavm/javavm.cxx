@@ -500,7 +500,7 @@ void initVMConfiguration(
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", " can not get INETProps because of >" << exception.Message << "<");
+        SAL_INFO("stoc", "can not get INETProps because of >" << exception.Message << "<");
     }
 
     try {
