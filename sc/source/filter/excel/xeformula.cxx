@@ -1808,6 +1808,10 @@ bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData, bool bCheck3D
         the own sheet. If 3D references are allowed, the passed reference does
         not count as 2D reference. */
 
+    // conditional formatting does not allow 3D refs in xls
+    if (this->mxData->mrCfg.meType == EXC_FMLATYPE_CONDFMT)
+        return true;
+
     if (bCheck3DFlag && rRefData.IsFlag3D())
         return false;
 
