@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUI_RESID_HRC
-#define _CUI_RESID_HRC
+#ifndef INCLUDED_CUI_SOURCE_INC_CUIRES_HRC
+#define INCLUDED_CUI_SOURCE_INC_CUIRES_HRC
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/dialogs.hrc>

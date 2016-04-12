@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CUI_HELPID_HRC
-#define _CUI_HELPID_HRC
+#ifndef INCLUDED_CUI_SOURCE_INC_HELPID_HRC
+#define INCLUDED_CUI_SOURCE_INC_HELPID_HRC
 
 #include <svx/svxcommands.h>
 #include <sfx2/sfxcommands.h>

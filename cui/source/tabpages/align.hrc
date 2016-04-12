@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ALIGN_HRC
-#define _SVX_ALIGN_HRC
+#ifndef INCLUDED_CUI_SOURCE_TABPAGES_ALIGN_HRC
+#define INCLUDED_CUI_SOURCE_TABPAGES_ALIGN_HRC
 
 // image list for ValueSets:
 #define IL_LOCK_BMPS                1100
