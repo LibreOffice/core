@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------
 #
-#    Copyright (C) 2015 Canonical Ltd.
+#    Copyright (C) 2016 Canonical Ltd.
 #
 #    This Source Code Form is subject to the terms of the Mozilla Public
 #    License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27,7 +27,7 @@ profile libreoffice-senddoc INSTDIR-/usr/lib{,32,64}/libreoffice/program/senddoc
   /bin/uname            rmix,
   /usr/bin/xdg-open     Cxr -> sanitized_helper,
   /dev/null             rw,
-  INSTDIR-program/uri-encode rmPUx,
+  INSTDIR-program/uri-encode rmpux,
   /usr/share/libreoffice/share/config/* r,
   owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
 }
