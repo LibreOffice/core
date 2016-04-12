@@ -87,7 +87,7 @@ struct MatrixPow : public ::std::binary_function<double,double,double>
 };
 
 // Multiply n x m Mat A with m x l Mat B to n x l Mat R
-void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
+void lcl_MFastMult(const ScMatrixRef& pA, const ScMatrixRef& pB, const ScMatrixRef& pR,
                    SCSIZE n, SCSIZE m, SCSIZE l)
 {
     double sum;
@@ -1869,7 +1869,7 @@ namespace {
 // Remember, ScMatrix matrices are zero based, index access (column,row).
 
 // <A;B> over all elements; uses the matrices as vectors of length M
-double lcl_GetSumProduct(ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM)
+double lcl_GetSumProduct(const ScMatrixRef& pMatA, const ScMatrixRef& pMatB, SCSIZE nM)
 {
     double fSum = 0.0;
     for (SCSIZE i=0; i<nM; i++)
@@ -1880,7 +1880,7 @@ double lcl_GetSumProduct(ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM)
 // Special version for use within QR decomposition.
 // Euclidean norm of column index C starting in row index R;
 // matrix A has count N rows.
-double lcl_GetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN)
+double lcl_GetColumnEuclideanNorm(const ScMatrixRef& pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
@@ -1890,7 +1890,7 @@ double lcl_GetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZ
 
 // Euclidean norm of row index R starting in column index C;
 // matrix A has count N columns.
-double lcl_TGetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN)
+double lcl_TGetColumnEuclideanNorm(const ScMatrixRef& pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
@@ -1901,7 +1901,7 @@ double lcl_TGetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSI
 // Special version for use within QR decomposition.
 // Maximum norm of column index C starting in row index R;
 // matrix A has count N rows.
-double lcl_GetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN)
+double lcl_GetColumnMaximumNorm(const ScMatrixRef& pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
@@ -1912,7 +1912,7 @@ double lcl_GetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE 
 
 // Maximum norm of row index R starting in col index C;
 // matrix A has count N columns.
-double lcl_TGetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN)
+double lcl_TGetColumnMaximumNorm(const ScMatrixRef& pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
@@ -1924,8 +1924,8 @@ double lcl_TGetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE
 // Special version for use within QR decomposition.
 // <A(Ca);B(Cb)> starting in row index R;
 // Ca and Cb are indices of columns, matrices A and B have count N rows.
-double lcl_GetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nCa,
-                               ScMatrixRef pMatB, SCSIZE nCb, SCSIZE nR, SCSIZE nN)
+double lcl_GetColumnSumProduct(const ScMatrixRef& pMatA, SCSIZE nCa,
+                               const ScMatrixRef& pMatB, SCSIZE nCb, SCSIZE nR, SCSIZE nN)
 {
     double fResult = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
@@ -1935,8 +1935,8 @@ double lcl_GetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nCa,
 
 // <A(Ra);B(Rb)> starting in column index C;
 // Ra and Rb are indices of rows, matrices A and B have count N columns.
-double lcl_TGetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nRa,
-                                ScMatrixRef pMatB, SCSIZE nRb, SCSIZE nC, SCSIZE nN)
+double lcl_TGetColumnSumProduct(const ScMatrixRef& pMatA, SCSIZE nRa,
+                                const ScMatrixRef& pMatB, SCSIZE nRb, SCSIZE nC, SCSIZE nN)
 {
     double fResult = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
@@ -1963,7 +1963,7 @@ double lcl_GetSign(double fValue)
  * The function returns false, if calculation breaks. But because of round-off
  * errors singularity is often not detected.
  */
-bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
+bool lcl_CalculateQRdecomposition(const ScMatrixRef& pMatA,
                                   ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
     // ScMatrix matrices are zero based, index access (column,row)
@@ -1997,7 +1997,7 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
 }
 
 // same with transposed matrix A, N is count of columns, K count of rows
-bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
+bool lcl_TCalculateQRdecomposition(const ScMatrixRef& pMatA,
                                    ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
     double fSum ;
@@ -2038,8 +2038,8 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
  * index C. A is the result of the QR decomposition as obtained from
  * lcl_CaluclateQRdecomposition.
  */
-void lcl_ApplyHouseholderTransformation(ScMatrixRef pMatA, SCSIZE nC,
-                                        ScMatrixRef pMatY, SCSIZE nN)
+void lcl_ApplyHouseholderTransformation(const ScMatrixRef& pMatA, SCSIZE nC,
+                                        const ScMatrixRef& pMatY, SCSIZE nN)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     double fDenominator = lcl_GetColumnSumProduct(pMatA, nC, pMatA, nC, nC, nN);
@@ -2051,8 +2051,8 @@ void lcl_ApplyHouseholderTransformation(ScMatrixRef pMatA, SCSIZE nC,
 }
 
 // Same with transposed matrices A and Y.
-void lcl_TApplyHouseholderTransformation(ScMatrixRef pMatA, SCSIZE nR,
-                                          ScMatrixRef pMatY, SCSIZE nN)
+void lcl_TApplyHouseholderTransformation(const ScMatrixRef& pMatA, SCSIZE nR,
+                                          const ScMatrixRef& pMatY, SCSIZE nN)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     double fDenominator = lcl_TGetColumnSumProduct(pMatA, nR, pMatA, nR, nR, nN);
@@ -2069,8 +2069,8 @@ void lcl_TApplyHouseholderTransformation(ScMatrixRef pMatA, SCSIZE nR,
  * 0 to K-1; elements on index>=K are ignored. Vector R must not have zero
  * elements, no check is done.
  */
-void lcl_SolveWithUpperRightTriangle(ScMatrixRef pMatA,
-                        ::std::vector< double>& pVecR, ScMatrixRef pMatS,
+void lcl_SolveWithUpperRightTriangle(const ScMatrixRef& pMatA,
+                        ::std::vector< double>& pVecR, const ScMatrixRef& pMatS,
                         SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
@@ -2095,8 +2095,8 @@ void lcl_SolveWithUpperRightTriangle(ScMatrixRef pMatA,
  * index 0 to K-1; elements on index>=K are ignored. Vector R must not have
  * zero elements, no check is done.
  */
-void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
-                                    ::std::vector< double>& pVecR, ScMatrixRef pMatT,
+void lcl_SolveWithLowerLeftTriangle(const ScMatrixRef& pMatA,
+                                    ::std::vector< double>& pVecR, const ScMatrixRef& pMatT,
                                     SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
@@ -2120,9 +2120,9 @@ void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
  * given as matrix with at least index 0 to K-1; elements on index>=K are
  * not used.
  */
-void lcl_ApplyUpperRightTriangle(ScMatrixRef pMatA,
-                                 ::std::vector< double>& pVecR, ScMatrixRef pMatB,
-                                 ScMatrixRef pMatZ, SCSIZE nK, bool bIsTransposed)
+void lcl_ApplyUpperRightTriangle(const ScMatrixRef& pMatA,
+                                 ::std::vector< double>& pVecR, const ScMatrixRef& pMatB,
+                                 const ScMatrixRef& pMatZ, SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     for (SCSIZE row = 0; row < nK; row++)
@@ -2137,7 +2137,7 @@ void lcl_ApplyUpperRightTriangle(ScMatrixRef pMatA,
     }
 }
 
-double lcl_GetMeanOverAll(ScMatrixRef pMat, SCSIZE nN)
+double lcl_GetMeanOverAll(const ScMatrixRef& pMat, SCSIZE nN)
 {
     double fSum = 0.0;
     for (SCSIZE i=0 ; i<nN; i++)
@@ -2147,7 +2147,7 @@ double lcl_GetMeanOverAll(ScMatrixRef pMat, SCSIZE nN)
 
 // Calculates means of the columns of matrix X. X is a RxC matrix;
 // ResMat is a 1xC matrix (=row).
-void lcl_CalculateColumnMeans(ScMatrixRef pX, ScMatrixRef pResMat,
+void lcl_CalculateColumnMeans(const ScMatrixRef& pX, const ScMatrixRef& pResMat,
                               SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE i=0; i < nC; i++)
@@ -2161,7 +2161,7 @@ void lcl_CalculateColumnMeans(ScMatrixRef pX, ScMatrixRef pResMat,
 
 // Calculates means of the rows of matrix X. X is a RxC matrix;
 // ResMat is a Rx1 matrix (=column).
-void lcl_CalculateRowMeans(ScMatrixRef pX, ScMatrixRef pResMat,
+void lcl_CalculateRowMeans(const ScMatrixRef& pX, const ScMatrixRef& pResMat,
                            SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE k=0; k < nR; k++)
@@ -2173,7 +2173,7 @@ void lcl_CalculateRowMeans(ScMatrixRef pX, ScMatrixRef pResMat,
     }
 }
 
-void lcl_CalculateColumnsDelta(ScMatrixRef pMat, ScMatrixRef pColumnMeans,
+void lcl_CalculateColumnsDelta(const ScMatrixRef& pMat, const ScMatrixRef& pColumnMeans,
                                SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE i = 0; i < nC; i++)
@@ -2182,7 +2182,7 @@ void lcl_CalculateColumnsDelta(ScMatrixRef pMat, ScMatrixRef pColumnMeans,
                              (pMat->GetDouble(i,k) , pColumnMeans->GetDouble(i) ) , i, k);
 }
 
-void lcl_CalculateRowsDelta(ScMatrixRef pMat, ScMatrixRef pRowMeans,
+void lcl_CalculateRowsDelta(const ScMatrixRef& pMat, const ScMatrixRef& pRowMeans,
                             SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE k = 0; k < nR; k++)
@@ -2194,7 +2194,7 @@ void lcl_CalculateRowsDelta(ScMatrixRef pMat, ScMatrixRef pRowMeans,
 // Case1 = simple regression
 // MatX = X - MeanX, MatY = Y - MeanY, y - haty = (y - MeanY) - (haty - MeanY)
 // = (y-MeanY)-((slope*x+a)-(slope*MeanX+a)) = (y-MeanY)-slope*(x-MeanX)
-double lcl_GetSSresid(ScMatrixRef pMatX, ScMatrixRef pMatY, double fSlope,
+double lcl_GetSSresid(const ScMatrixRef& pMatX, const ScMatrixRef& pMatY, double fSlope,
                       SCSIZE nN)
 {
     double fSum = 0.0;

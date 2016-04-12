@@ -429,7 +429,7 @@ void XclExpExtCondFormat::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_ext );
 }
 
-void XclExpExtCondFormat::AddRecord( XclExpExtConditionalFormattingRef aEntry )
+void XclExpExtCondFormat::AddRecord( const XclExpExtConditionalFormattingRef& aEntry )
 {
     maCF.AppendRecord( aEntry );
 }
@@ -448,7 +448,7 @@ void XclExtLst::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_extLst );
 }
 
-void XclExtLst::AddRecord( XclExpExtRef aEntry )
+void XclExtLst::AddRecord( const XclExpExtRef& aEntry )
 {
     maExtEntries.AppendRecord( aEntry );
 }

@@ -234,7 +234,7 @@ XclExpSst::~XclExpSst()
 {
 }
 
-sal_uInt32 XclExpSst::Insert( XclExpStringRef xString )
+sal_uInt32 XclExpSst::Insert( const XclExpStringRef& xString )
 {
     return mxImpl->Insert( xString );
 }
@@ -545,7 +545,7 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
 }
 
 void XclExpLabelranges::FillRangeList( ScRangeList& rScRanges,
-        ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
+        const ScRangePairListRef& xLabelRangesRef, SCTAB nScTab )
 {
     for ( size_t i = 0, nPairs = xLabelRangesRef->size(); i < nPairs; ++i )
     {

@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
-ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
+ScDocument* ScXMLConverter::GetScDocument( const uno::Reference< frame::XModel >& xModel )
 {
     if (xModel.is())
     {

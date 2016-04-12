@@ -259,7 +259,7 @@ public:
         iterator findByUpperName2(const OUString& rName);
         // Takes ownership of p iff it returns true:
         SAL_WARN_UNUSED_RESULT bool insert(ScDBData* p);
-        void erase(iterator itr);
+        void erase(const iterator& itr);
         bool empty() const;
         size_t size() const;
         bool operator== (const NamedDBs& r) const;

@@ -805,12 +805,12 @@ public:
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as DDE link result matrix (also for existing links).
         @return  true = DDE link found; false = Unpredictable error occurred, no DDE link created. */
-    SC_DLLPUBLIC bool            CreateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, ScMatrixRef pResults );
+    SC_DLLPUBLIC bool            CreateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, const ScMatrixRef& pResults );
     /** Sets a result matrix for the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @param pResults  The array containing all results of the DDE link (intrusive-ref-counted, do not delete).
         @return  true = DDE link found and matrix set. */
-    bool            SetDdeLinkResultMatrix( size_t nDdePos, ScMatrixRef pResults );
+    bool            SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pResults );
 
     SfxBindings*    GetViewBindings();
     SfxObjectShell* GetDocumentShell() const    { return pShell; }

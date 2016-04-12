@@ -302,8 +302,8 @@ public:
     void ApplyOperation(T aOp, ScMatrixImpl& rMat);
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
-            const std::pair<size_t, size_t>& rEndPos, ScFullMatrix::DoubleOpFunction aDoubleFunc,
-            ScFullMatrix::BoolOpFunction aBoolFunc, ScFullMatrix::StringOpFunction aStringFunc) const;
+            const std::pair<size_t, size_t>& rEndPos, const ScFullMatrix::DoubleOpFunction& aDoubleFunc,
+            const ScFullMatrix::BoolOpFunction& aBoolFunc, const ScFullMatrix::StringOpFunction& aStringFunc) const;
 
     template<typename T>
     std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
@@ -1360,7 +1360,7 @@ struct MaxOp
 
     static double boolValue(
         MatrixImplType::boolean_block_type::const_iterator it,
-        MatrixImplType::boolean_block_type::const_iterator itEnd)
+        const MatrixImplType::boolean_block_type::const_iterator& itEnd)
     {
         // If the array has at least one true value, the maximum value is 1.
         it = std::find(it, itEnd, true);
@@ -1378,7 +1378,7 @@ struct MinOp
 
     static double boolValue(
         MatrixImplType::boolean_block_type::const_iterator it,
-        MatrixImplType::boolean_block_type::const_iterator itEnd)
+        const MatrixImplType::boolean_block_type::const_iterator& itEnd)
     {
         // If the array has at least one false value, the minimum value is 0.
         it = std::find(it, itEnd, false);
@@ -2322,8 +2322,8 @@ private:
 }
 
 void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
-        const std::pair<size_t, size_t>& rEndPos, ScMatrix::DoubleOpFunction aDoubleFunc,
-        ScMatrix::BoolOpFunction aBoolFunc, ScMatrix::StringOpFunction aStringFunc) const
+        const std::pair<size_t, size_t>& rEndPos, const ScMatrix::DoubleOpFunction& aDoubleFunc,
+        const ScMatrix::BoolOpFunction& aBoolFunc, const ScMatrix::StringOpFunction& aStringFunc) const
 {
     WalkElementBlockOperation aFunc(maMat.size().row, maMat.size().column,
             aDoubleFunc, aBoolFunc, aStringFunc);

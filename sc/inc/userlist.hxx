@@ -87,7 +87,7 @@ public:
     void clear();
     size_t size() const;
     void push_back(ScUserListData* p);
-    void erase(iterator itr);
+    void erase(const iterator& itr);
 };
 
 #endif

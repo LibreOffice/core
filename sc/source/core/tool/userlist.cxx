@@ -362,7 +362,7 @@ void ScUserList::push_back(ScUserListData* p)
     maData.push_back(std::unique_ptr<ScUserListData>(p));
 }
 
-void ScUserList::erase(iterator itr)
+void ScUserList::erase(const iterator& itr)
 {
     maData.erase(itr);
 }

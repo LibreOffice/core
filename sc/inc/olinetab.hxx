@@ -79,7 +79,7 @@ public:
     iterator end();
     const_iterator begin() const;
     const_iterator end() const;
-    void erase(iterator pos);
+    void erase(const iterator& pos);
     bool empty() const;
 
     iterator FindStart(SCCOLROW nMinStart);

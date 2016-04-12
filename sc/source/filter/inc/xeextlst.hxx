@@ -159,7 +159,7 @@ public:
 
     virtual XclExpExtType GetType() override { return XclExpExtDataBarType; }
 
-    void AddRecord( XclExpExtConditionalFormattingRef aFormat );
+    void AddRecord( const XclExpExtConditionalFormattingRef& aFormat );
 
 private:
     XclExpRecordList< XclExpExtConditionalFormatting > maCF;
@@ -184,7 +184,7 @@ public:
     explicit XclExtLst( const XclExpRoot& rRoot);
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
-    void AddRecord( XclExpExtRef aEntry );
+    void AddRecord( const XclExpExtRef& aEntry );
 
     XclExpExtRef GetItem( XclExpExtType eType );
 

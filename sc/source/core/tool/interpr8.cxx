@@ -114,15 +114,15 @@ public:
     ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter );
     ~ScETSForecastCalculation();
 
-    bool PreprocessDataRange( ScMatrixRef rMatX, ScMatrixRef rMatY, int& rSmplInPrd,
-                              bool bDataCompletion, int nAggregation, ScMatrixRef rTMat,
+    bool PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int& rSmplInPrd,
+                              bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
                               ScETSType eETSType );
     sal_uInt16 GetError() { return mnErrorValue; };
-    bool GetForecastRange( ScMatrixRef rTMat, ScMatrixRef rFcMat );
-    bool GetStatisticValue( ScMatrixRef rTypeMat, ScMatrixRef rStatMat );
+    bool GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat );
+    bool GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat );
     bool GetSamplesInPeriod( double& rVal );
-    bool GetEDSPredictionIntervals( ScMatrixRef rTMat, ScMatrixRef rPIMat, double fPILevel );
-    bool GetETSPredictionIntervals( ScMatrixRef rTMat, ScMatrixRef rPIMat, double fPILevel );
+    bool GetEDSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
+    bool GetETSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel );
 };
 
 ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter )
@@ -159,8 +159,8 @@ ScETSForecastCalculation::~ScETSForecastCalculation()
     delete[] mpForecast;
 }
 
-bool ScETSForecastCalculation::PreprocessDataRange( ScMatrixRef rMatX, ScMatrixRef rMatY, int& rSmplInPrd,
-                                                    bool bDataCompletion, int nAggregation, ScMatrixRef rTMat,
+bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int& rSmplInPrd,
+                                                    bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
                                                     ScETSType eETSType )
 {
     bEDS = ( rSmplInPrd == 0 );
@@ -898,7 +898,7 @@ bool ScETSForecastCalculation::GetForecast( double fTarget, double& rForecast )
     return true;
 }
 
-bool ScETSForecastCalculation::GetForecastRange( ScMatrixRef rTMat, ScMatrixRef rFcMat )
+bool ScETSForecastCalculation::GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat )
 {
     SCSIZE nC, nR;
     rTMat->GetDimensions( nC, nR );
@@ -922,7 +922,7 @@ bool ScETSForecastCalculation::GetForecastRange( ScMatrixRef rTMat, ScMatrixRef 
     return true;
 }
 
-bool ScETSForecastCalculation::GetStatisticValue( ScMatrixRef rTypeMat, ScMatrixRef rStatMat )
+bool ScETSForecastCalculation::GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat )
 {
     if ( !initCalc() )
         return false;
@@ -984,7 +984,7 @@ double ScETSForecastCalculation::RandDev()
              ::comphelper::rng::uniform_real_distribution( 0.5, 1.0 ) ) );
 }
 
-bool ScETSForecastCalculation::GetETSPredictionIntervals( ScMatrixRef rTMat, ScMatrixRef rPIMat, double fPILevel )
+bool ScETSForecastCalculation::GetETSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel )
 {
     if ( !initCalc() )
         return false;
@@ -1115,7 +1115,7 @@ bool ScETSForecastCalculation::GetETSPredictionIntervals( ScMatrixRef rTMat, ScM
 }
 
 
-bool ScETSForecastCalculation::GetEDSPredictionIntervals( ScMatrixRef rTMat, ScMatrixRef rPIMat, double fPILevel )
+bool ScETSForecastCalculation::GetEDSPredictionIntervals( const ScMatrixRef& rTMat, const ScMatrixRef& rPIMat, double fPILevel )
 {
     if ( !initCalc() )
         return false;
