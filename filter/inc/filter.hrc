@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILTER_HRC
-#define _FILTER_HRC
+#ifndef INCLUDED_FILTER_INC_HRC
+#define INCLUDED_FILTER_INC_HRC
 
 #include <svl/solar.hrc>
 
