@@ -65,7 +65,7 @@ DomainMapperTableHandler::~DomainMapperTableHandler()
 }
 
 void DomainMapperTableHandler::startTable(unsigned int /*nDepth*/,
-                                          TablePropertyMapPtr pProps)
+                                          const TablePropertyMapPtr& pProps)
 {
     m_aTableProperties = pProps;
     m_aTableRanges.clear();
@@ -79,7 +79,7 @@ void DomainMapperTableHandler::startTable(unsigned int /*nDepth*/,
 }
 
 
-PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr& rStyleSheet, StyleSheetTablePtr pStyleSheetTable)
+PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr& rStyleSheet, const StyleSheetTablePtr& pStyleSheetTable)
 {
     PropertyMapPtr pRet;
 
@@ -108,7 +108,7 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
     return pRet;
 }
 
-void lcl_mergeBorder( PropertyIds nId, PropertyMapPtr pOrig, PropertyMapPtr pDest )
+void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const PropertyMapPtr& pDest )
 {
     boost::optional<PropertyMap::Property> pOrigVal = pOrig->getProperty(nId);
 
@@ -118,7 +118,7 @@ void lcl_mergeBorder( PropertyIds nId, PropertyMapPtr pOrig, PropertyMapPtr pDes
     }
 }
 
-void lcl_computeCellBorders( PropertyMapPtr pTableBorders, PropertyMapPtr pCellProps,
+void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
         sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow )
 {
     boost::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
@@ -262,7 +262,7 @@ struct TableInfo
 namespace
 {
 
-bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const PropertyIds nId, TableInfo& rInfo, table::BorderLine2& rLine)
+bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, const PropertyIds nId, TableInfo& rInfo, table::BorderLine2& rLine)
 {
     if (!pTableProperties)
         return false;
@@ -1132,7 +1132,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 #endif
 }
 
-void DomainMapperTableHandler::startRow(TablePropertyMapPtr pProps)
+void DomainMapperTableHandler::startRow(const TablePropertyMapPtr& pProps)
 {
     m_aRowProperties.push_back( pProps );
     m_aCellProperties.push_back( PropertyMapVector1() );
@@ -1155,7 +1155,7 @@ void DomainMapperTableHandler::endRow()
 }
 
 void DomainMapperTableHandler::startCell(const css::uno::Reference< css::text::XTextRange > & start,
-                                         TablePropertyMapPtr pProps )
+                                         const TablePropertyMapPtr& pProps )
 {
     sal_uInt32 nRow = m_aRowProperties.size();
     if ( pProps.get( ) )

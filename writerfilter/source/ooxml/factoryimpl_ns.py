@@ -674,7 +674,7 @@ def factoryAttributeAction(nsNode):
     nsLabel = nsToLabel(nsNode)
     inner = factoryAttributeActionInner(nsNode)
     if len(inner):
-        print("""void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler* _pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue)
+        print("""void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler* _pHandler, Token_t nToken, const OOXMLValue::Pointer_t& pValue)
 {
     switch (_pHandler->getDefine())
     {""" % nsLabel)
@@ -685,7 +685,7 @@ def factoryAttributeAction(nsNode):
         print("}")
         print()
     else:
-        print("void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler*, Token_t, OOXMLValue::Pointer_t)" % nsLabel)
+        print("void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler*, Token_t, const OOXMLValue::Pointer_t&)" % nsLabel)
         print("{")
         print("}")
         print()

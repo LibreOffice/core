@@ -122,7 +122,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
 }
 
 void OOXMLDocumentImpl::resolveFastSubStreamWithId(Stream & rStream,
-                                      writerfilter::Reference<Stream>::Pointer_t pStream,
+                                      const writerfilter::Reference<Stream>::Pointer_t& pStream,
                       sal_uInt32 nId)
 {
     rStream.substream(nId, pStream);
@@ -180,7 +180,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
 }
 
 
-void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream, OOXMLStream::StreamType_t nType)
+void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& pStream, OOXMLStream::StreamType_t nType)
 {
     uno::Reference<xml::dom::XDocument> xRelation;
     OOXMLStream::Pointer_t cStream;
@@ -706,7 +706,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
       }
 }
 
-void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
+void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream)
 {
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
     xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
@@ -935,7 +935,7 @@ uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
 
 OOXMLDocument *
 OOXMLDocumentFactory::createDocument
-(OOXMLStream::Pointer_t pStream,
+(const OOXMLStream::Pointer_t& pStream,
  const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
  bool mbSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {

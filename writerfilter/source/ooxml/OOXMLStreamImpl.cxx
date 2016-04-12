@@ -81,7 +81,7 @@ const OUString & OOXMLStreamImpl::getTarget() const
     return msTarget;
 }
 
-bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
+bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAccess>&
                                     xRelationshipAccess,
                                     StreamType_t nStreamType,
                                     const OUString & rId,
@@ -411,8 +411,8 @@ uno::Reference <xml::sax::XFastTokenHandler> OOXMLStreamImpl::getFastTokenHandle
 
 OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
-(uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<io::XInputStream> rStream,
+(const uno::Reference<uno::XComponentContext>& xContext,
+ const uno::Reference<io::XInputStream>& rStream,
  bool bRepairStorage)
 {
     OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, rStream,
@@ -422,7 +422,7 @@ OOXMLDocumentFactory::createStream
 
 OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
-(OOXMLStream::Pointer_t pStream,  OOXMLStream::StreamType_t nStreamType)
+(const OOXMLStream::Pointer_t& pStream,  OOXMLStream::StreamType_t nStreamType)
 {
     OOXMLStream::Pointer_t pRet;
     if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
@@ -432,7 +432,7 @@ OOXMLDocumentFactory::createStream
 
 OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
-(OOXMLStream::Pointer_t pStream, const OUString & rId)
+(const OOXMLStream::Pointer_t& pStream, const OUString & rId)
 {
     OOXMLStream::Pointer_t pRet;
     if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))

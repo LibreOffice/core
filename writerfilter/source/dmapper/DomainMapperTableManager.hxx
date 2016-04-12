@@ -105,7 +105,7 @@ public:
     const css::uno::Sequence<css::beans::PropertyValue> getCurrentTablePosition();
     TablePositionHandler* getCurrentTableRealPosition();
 
-    virtual void cellProps(TablePropertyMapPtr pProps) override
+    virtual void cellProps(const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -113,7 +113,7 @@ public:
            TableManager::cellProps( pProps );
     };
 
-    virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps) override
+    virtual void cellPropsByCell(unsigned int i, const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -121,7 +121,7 @@ public:
            TableManager::cellPropsByCell( i, pProps );
     };
 
-    virtual void insertRowProps(TablePropertyMapPtr pProps) override
+    virtual void insertRowProps(const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -129,7 +129,7 @@ public:
            TableManager::insertRowProps( pProps );
     };
 
-    virtual void insertTableProps(TablePropertyMapPtr pProps) override
+    virtual void insertTableProps(const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);

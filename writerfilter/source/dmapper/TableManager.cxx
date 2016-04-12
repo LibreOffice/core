@@ -30,7 +30,7 @@ void TableManager::clearData()
 {
 }
 
-void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rHandle, TablePropertyMapPtr pProps)
+void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rHandle, const TablePropertyMapPtr& pProps)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablemanager.openCell");
@@ -59,7 +59,7 @@ void TableManager::endOfCellAction()
 {
 }
 
-void TableManager::insertTableProps(TablePropertyMapPtr pProps)
+void TableManager::insertTableProps(const TablePropertyMapPtr& pProps)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablemanager.insertTableProps");
@@ -75,7 +75,7 @@ void TableManager::insertTableProps(TablePropertyMapPtr pProps)
 #endif
 }
 
-void TableManager::insertRowProps(TablePropertyMapPtr pProps)
+void TableManager::insertRowProps(const TablePropertyMapPtr& pProps)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablemanager.insertRowProps");
@@ -91,7 +91,7 @@ void TableManager::insertRowProps(TablePropertyMapPtr pProps)
 #endif
 }
 
-void TableManager::cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps)
+void TableManager::cellPropsByCell(unsigned int i, const TablePropertyMapPtr& pProps)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablemanager.cellPropsByCell");
@@ -104,7 +104,7 @@ void TableManager::cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps)
 #endif
 }
 
-void TableManager::cellProps(TablePropertyMapPtr pProps)
+void TableManager::cellProps(const TablePropertyMapPtr& pProps)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablemanager.cellProps");
@@ -204,7 +204,7 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
     }
 }
 
-void TableManager::ensureOpenCell(TablePropertyMapPtr pProps)
+void TableManager::ensureOpenCell(const TablePropertyMapPtr& pProps)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablemanager.ensureOpenCell");
@@ -409,7 +409,7 @@ void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHan
     setHandle(rHandle);
 }
 
-void TableManager::setHandler(std::shared_ptr<DomainMapperTableHandler> pTableDataHandler)
+void TableManager::setHandler(const std::shared_ptr<DomainMapperTableHandler>& pTableDataHandler)
 {
     mpTableDataHandler = pTableDataHandler;
 }

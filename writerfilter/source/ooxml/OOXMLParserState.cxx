@@ -121,7 +121,7 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
     }
 }
 
-void OOXMLParserState::setCharacterProperties(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setCharacterProperties(const OOXMLPropertySet::Pointer_t& pProps)
 {
     if (mpCharacterProps.get() == nullptr)
         mpCharacterProps = pProps;
@@ -129,7 +129,7 @@ void OOXMLParserState::setCharacterProperties(OOXMLPropertySet::Pointer_t pProps
         mpCharacterProps->add(pProps);
 }
 
-void OOXMLParserState::setCellProperties(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setCellProperties(const OOXMLPropertySet::Pointer_t& pProps)
 {
     if (!mCellProps.empty())
     {
@@ -142,7 +142,7 @@ void OOXMLParserState::setCellProperties(OOXMLPropertySet::Pointer_t pProps)
     }
 }
 
-void OOXMLParserState::setRowProperties(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setRowProperties(const OOXMLPropertySet::Pointer_t& pProps)
 {
     if (!mRowProps.empty())
     {
@@ -198,7 +198,7 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
     }
 }
 
-void OOXMLParserState::setTableProperties(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setTableProperties(const OOXMLPropertySet::Pointer_t& pProps)
 {
     if (!mTableProps.empty())
     {

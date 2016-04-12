@@ -493,7 +493,7 @@ public:
     }
     void SetDocumentSettingsProperty( const OUString& rPropName, const css::uno::Any& rValue );
 
-    static void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, RedlineParamsPtr pRedline);
+    static void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, const RedlineParamsPtr& pRedline);
 
     void CheckParaMarkerRedline(css::uno::Reference<css::text::XTextRange> const& xRange);
 
@@ -547,17 +547,17 @@ public:
     void setParaSdtEndDeferred(bool bParaSdtEndDeferred);
     bool isParaSdtEndDeferred();
 
-    void finishParagraph( PropertyMapPtr pPropertyMap );
-    void appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap );
+    void finishParagraph( const PropertyMapPtr& pPropertyMap );
+    void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
     void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
-    void appendOLE( const OUString& rStreamName, OLEHandlerPtr pOleHandler );
+    void appendOLE( const OUString& rStreamName, const OLEHandlerPtr& pOleHandler );
     void appendStarMath( const Value& v );
     css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange>& xBefore);
 
     // push the new properties onto the stack and make it the 'current' property map
     void    PushProperties(ContextType eId);
-    void    PushStyleProperties(PropertyMapPtr pStyleProperties);
-    void    PushListProperties(PropertyMapPtr pListProperties);
+    void    PushStyleProperties(const PropertyMapPtr& pStyleProperties);
+    void    PushListProperties(const PropertyMapPtr& pListProperties);
     void    PopProperties(ContextType eId);
 
     ContextType GetTopContextType() const { return m_aContextStack.top(); }
@@ -600,7 +600,7 @@ public:
     GraphicImportPtr GetGraphicImport( GraphicImportType eGraphicImportType );
     void            ResetGraphicImport();
     // this method deletes the current m_pGraphicImport after import
-    void    ImportGraphic(writerfilter::Reference< Properties>::Pointer_t, GraphicImportType eGraphicImportType );
+    void    ImportGraphic(const writerfilter::Reference< Properties>::Pointer_t&, GraphicImportType eGraphicImportType );
 
     void InitTabStopFromStyle(const css::uno::Sequence<css::style::TabStop>& rInitTabStops);
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
@@ -648,13 +648,13 @@ public:
     void SetFieldLocked();
     //collect the pieces of the command
     void AppendFieldCommand(OUString& rPartOfCommand);
-    void handleRubyEQField( FieldContextPtr pContext);
+    void handleRubyEQField( const FieldContextPtr& pContext);
     void handleFieldAsk
-        (FieldContextPtr pContext,
+        (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleAutoNum
-        (FieldContextPtr pContext,
+        (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     static void handleAuthor
@@ -663,23 +663,23 @@ public:
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         FieldId eFieldId);
     void handleDocProperty
-        (FieldContextPtr pContext,
+        (const FieldContextPtr& pContext,
         OUString const& rFirstParam,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleToc
-        (FieldContextPtr pContext,
+        (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         const OUString & sTOCServiceName);
     void handleIndex
-        (FieldContextPtr pContext,
+        (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         const OUString & sTOCServiceName);
 
     void handleBibliography
-        (FieldContextPtr pContext,
+        (const FieldContextPtr& pContext,
         const OUString & sTOCServiceName);
     /// The field command has to be closed (cFieldSep appeared).
     void CloseFieldCommand();
@@ -689,7 +689,7 @@ public:
     //apply the result text to the related field
     void SetFieldResult(OUString const& rResult);
     // set FFData of top field context
-    void SetFieldFFData( FFDataHandler::Pointer_t pFFDataHandler );
+    void SetFieldFFData( const FFDataHandler::Pointer_t& pFFDataHandler );
     /// The end of field is reached (cFieldEnd appeared) - the command might still be open.
     void PopFieldContext();
 

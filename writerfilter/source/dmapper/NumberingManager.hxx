@@ -81,7 +81,7 @@ public:
     void SetGraphicURL( const OUString& sValue ) { m_sGraphicURL = sValue; };
     void SetGraphicBitmap(css::uno::Reference<css::graphic::XGraphic> const& sValue)
         { m_sGraphicBitmap = sValue; }
-    void SetParaStyle( std::shared_ptr< StyleSheetEntry > pStyle );
+    void SetParaStyle( const std::shared_ptr< StyleSheetEntry >& pStyle );
 
     // Getters
     OUString GetBulletChar( ) { return m_sBulletChar; };

@@ -72,12 +72,12 @@ protected:
                                       OOXMLStream::StreamType_t nType);
 
     static void resolveFastSubStreamWithId(Stream & rStream,
-                                           writerfilter::Reference<Stream>::Pointer_t pStream,
+                                           const writerfilter::Reference<Stream>::Pointer_t& pStream,
                                            sal_uInt32 nId);
 
     css::uno::Reference<css::xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
 
-    void importSubStreamRelations(OOXMLStream::Pointer_t pStream, OOXMLStream::StreamType_t nType);
+    void importSubStreamRelations(const OOXMLStream::Pointer_t& pStream, OOXMLStream::StreamType_t nType);
 
     writerfilter::Reference<Stream>::Pointer_t
     getSubStream(const OUString & rId);
@@ -91,7 +91,7 @@ protected:
     void resolveCustomXmlStream(Stream & rStream);
     void resolveActiveXStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
-    void resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream);
+    void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
     virtual ~OOXMLDocumentImpl();

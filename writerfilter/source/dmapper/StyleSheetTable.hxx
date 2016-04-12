@@ -90,7 +90,7 @@ public:
     StyleSheetTable(DomainMapper& rDMapper, css::uno::Reference<css::text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
     virtual ~StyleSheetTable();
 
-    void ApplyStyleSheets( FontTablePtr rFontTable );
+    void ApplyStyleSheets( const FontTablePtr& rFontTable );
     const StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
     const StyleSheetEntryPtr FindStyleSheetByStyleName(const OUString& rIndex);
     const StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);
@@ -134,7 +134,7 @@ public:
 
     // Adds a new tblStylePr to the table style entry. This method
     // fixes some possible properties conflicts, like borders ones.
-    void AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps );
+    void AddTblStylePr( TblStyleType nType, const PropertyMapPtr& pProps );
 
     // Gets all the properties
     //     + corresponding to the mask,

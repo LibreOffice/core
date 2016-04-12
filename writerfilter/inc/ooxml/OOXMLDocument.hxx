@@ -239,19 +239,19 @@ class OOXMLDocumentFactory
 {
 public:
     static OOXMLStream::Pointer_t
-    createStream(css::uno::Reference<css::uno::XComponentContext> rContext,
-                 css::uno::Reference<css::io::XInputStream> rStream,
+    createStream(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                 const css::uno::Reference<css::io::XInputStream>& rStream,
                  bool bRepairStorage);
 
     static OOXMLStream::Pointer_t
-    createStream(OOXMLStream::Pointer_t pStream,
+    createStream(const OOXMLStream::Pointer_t& pStream,
                  OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
 
     static OOXMLStream::Pointer_t
-    createStream(OOXMLStream::Pointer_t pStream, const OUString & rId);
+    createStream(const OOXMLStream::Pointer_t& pStream, const OUString & rId);
 
     static OOXMLDocument *
-    createDocument(OOXMLStream::Pointer_t pStream,
+    createDocument(const OOXMLStream::Pointer_t& pStream,
                  const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator,
                  bool bSkipImage, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
 

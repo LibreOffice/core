@@ -342,7 +342,7 @@ public:
         return bYSizeValid;
     }
 
-    void applyMargins(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
+    void applyMargins(const uno::Reference< beans::XPropertySet >& xGraphicObjectProperties) const
     {
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ), uno::makeAny(nLeftMargin));
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ), uno::makeAny(nRightMargin));
@@ -350,7 +350,7 @@ public:
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ), uno::makeAny(nBottomMargin));
     }
 
-    void applyPosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
+    void applyPosition(const uno::Reference< beans::XPropertySet >& xGraphicObjectProperties) const
     {
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT          ),
                 uno::makeAny(nHoriOrient));
@@ -358,7 +358,7 @@ public:
                 uno::makeAny(nVertOrient));
     }
 
-    void applyRelativePosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties, bool bRelativeOnly = false) const
+    void applyRelativePosition(const uno::Reference< beans::XPropertySet >& xGraphicObjectProperties, bool bRelativeOnly = false) const
     {
         if (!bRelativeOnly)
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_POSITION),

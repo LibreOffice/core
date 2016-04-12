@@ -250,13 +250,13 @@ class SectionPropertyMap : public PropertyMap
                                                                        DomainMapper_Impl& rDM_Impl);
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
     static void CopyHeaderFooter(
-        css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
-        css::uno::Reference<css::beans::XPropertySet> xStyle,
+        const css::uno::Reference<css::beans::XPropertySet>& xPrevStyle,
+        const css::uno::Reference<css::beans::XPropertySet>& xStyle,
         bool bOmitRightHeader=false, bool bOmitLeftHeader=false,
         bool bOmitRightFooter=false, bool bOmitLeftFooter=false);
     static void CopyHeaderFooterTextProperty(
-        css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
-        css::uno::Reference<css::beans::XPropertySet> xStyle,
+        const css::uno::Reference<css::beans::XPropertySet>& xPrevStyle,
+        const css::uno::Reference<css::beans::XPropertySet>& xStyle,
         PropertyIds ePropId );
     void PrepareHeaderFooterProperties( bool bFirstPage );
     bool HasHeader( bool bFirstPage ) const;
