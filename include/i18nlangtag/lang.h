@@ -444,10 +444,10 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_qps_ploca                  0x05FE  /* 'qps-ploca', qps is a reserved for local use code */
 #define LANGUAGE_qps_plocm                  0x09FF  /* 'qps-plocm', qps is a reserved for local use code */
 
-#define LANGUAGE_ar_Ploc_SA__reserved       0x4401  /* 'ar-Ploc-SA', 'Ploc'?? */
-#define LANGUAGE_ja_Ploc_JP__reserved       0x0811  /* 'ja-Ploc-JP', 'Ploc'?? */
-#define LANGUAGE_pap_029__reserved          0x0479  /* 'pap-029' */
-#define LANGUAGE_ar_145__reserved           0x4801  /* 'ar-145' */
+#define LANGUAGE_ar_Ploc_SA_reserved        0x4401  /* 'ar-Ploc-SA', 'Ploc'?? */
+#define LANGUAGE_ja_Ploc_JP_reserved        0x0811  /* 'ja-Ploc-JP', 'Ploc'?? */
+#define LANGUAGE_pap_029_reserved           0x0479  /* 'pap-029' */
+#define LANGUAGE_ar_145_reserved            0x4801  /* 'ar-145' */
 #define LANGUAGE_es_419                     0x580A  /* 'es-419', not reserved, used? */
 
 /* Seems these values were used or reserved at one point of time ... */
