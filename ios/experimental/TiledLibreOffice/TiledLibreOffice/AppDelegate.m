@@ -65,14 +65,10 @@ static LibreOfficeKitDocument* document;
     return YES;
 }
 
-const char *ptyl_test_encryption_pathname;
-
 - (void)startDisplaying:(NSString*)documentPath;
 {
     ViewController *vc = [[ViewController alloc] init];
     self.window.rootViewController = vc;
-
-    ptyl_test_encryption_pathname = [documentPath UTF8String];
 
     // kit = lok_init([[[NSBundle mainBundle] bundlePath] UTF8String]);
     kit = lok_init(NULL);

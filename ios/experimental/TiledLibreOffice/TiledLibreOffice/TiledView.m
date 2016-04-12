@@ -136,9 +136,6 @@ static bool tileMatches(const char *spec, CGRect bb)
             y == (int) (bb.origin.y / bb.size.height));
 }
 
-extern void PtylTestEncryptionAndExport(const char *pathname);
-extern const char *ptyl_test_encryption_pathname;
-
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     // Even if I set the CATL's tileSize to 512x512 above, this is
@@ -148,8 +145,6 @@ extern const char *ptyl_test_encryption_pathname;
     static bool once = false;
     if (!once) {
         once = true;
-        if (getenv("PTYL_TEST_ENCRYPTION_AND_EXPORT"))
-            PtylTestEncryptionAndExport(ptyl_test_encryption_pathname);
     }
 
     CGRect bb = CGContextGetClipBoundingBox(ctx);
