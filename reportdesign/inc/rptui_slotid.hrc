@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RPTUI_SLOTID_HRC_
-#define _RPTUI_SLOTID_HRC_
+#ifndef INCLUDED_REPORTDESIGN_INC_RPTUI_SLOTID_HRC
+#define INCLUDED_REPORTDESIGN_INC_RPTUI_SLOTID_HRC
 
 #include <svx/svxids.hrc>
 
@@ -199,6 +199,6 @@
 #define SID_COLLAPSE_SECTION                    ( SID_RPTUI_START +  167 )
 #define SID_EXPAND_SECTION                      ( SID_RPTUI_START +  168 )
 
-#endif // _RPTUI_SLOTID_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

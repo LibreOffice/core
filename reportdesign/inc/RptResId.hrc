@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RPTUI_DLGRESID_HRC
-#define _RPTUI_DLGRESID_HRC
+#ifndef INCLUDED_REPORTDESIGN_INC_RPTRESID_HRC
+#define INCLUDED_REPORTDESIGN_INC_RPTRESID_HRC
 
 #include <svl/solar.hrc>
 
@@ -246,6 +246,6 @@
 #define RID_STR_VERTICAL_ALIGN_CONST        (RID_UNTYPED_START +  7)
 #define RID_STR_PARAADJUST_CONST            (RID_UNTYPED_START +  8)
 
-#endif          // _RPTUI_DLGRESID_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

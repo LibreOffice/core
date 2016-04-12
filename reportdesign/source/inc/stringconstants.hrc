@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORTDESIGN_STRINGCONSTANTS_HRC_
-#define _REPORTDESIGN_STRINGCONSTANTS_HRC_
+#ifndef INCLUDED_REPORTDESIGN_SOURCE_INC_STRINGCONSTANTS_HRC
+#define INCLUDED_REPORTDESIGN_SOURCE_INC_STRINGCONSTANTS_HRC
 
 #ifndef STRINGCONSTANTS_INCLUDED_INDIRECT
 #error "don't include this file directly! use dbastrings.hrc or dbustrings.hrc instead!"
@@ -251,6 +251,7 @@
 #define PROPERTY_ORDER                "Order"
 #define PROPERTY_APPLYFILTER          "ApplyFilter"
 #define PROPERTY_MAXROWS              "MaxRows"
-#endif // _REPORTDESIGN_STRINGCONSTANTS_HRC_
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
