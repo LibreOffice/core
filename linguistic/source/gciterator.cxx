@@ -225,7 +225,7 @@ extern "C" void lcl_workerfunc (void * gci)
 }
 
 static lang::Locale lcl_GetPrimaryLanguageOfSentence(
-    uno::Reference< text::XFlatParagraph > xFlatPara,
+    const uno::Reference< text::XFlatParagraph >& xFlatPara,
     sal_Int32 nStartIndex )
 {
     //get the language of the first word
@@ -301,8 +301,8 @@ OUString GrammarCheckingIterator::GetOrCreateDocId(
 
 
 void GrammarCheckingIterator::AddEntry(
-    uno::WeakReference< text::XFlatParagraphIterator > xFlatParaIterator,
-    uno::WeakReference< text::XFlatParagraph > xFlatPara,
+    const uno::WeakReference< text::XFlatParagraphIterator >& xFlatParaIterator,
+    const uno::WeakReference< text::XFlatParagraph >& xFlatPara,
     const OUString & rDocId,
     sal_Int32 nStartIndex,
     bool bAutomatic )

@@ -182,15 +182,15 @@ public:
     /// Read and verify a single OOXML signature.
     bool ReadAndVerifySignatureStorageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream);
     /// Adds or removes an OOXML digital signature relation to _rels/.rels if there wasn't any before.
-    void EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage, bool bAdd);
+    void EnsureSignaturesRelation(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bAdd);
     /// Given that xStorage is an OOXML _xmlsignatures storage, create origin.sigs and its relations.
-    void ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount);
+    void ExportSignatureRelations(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount);
     /// Given that xSignatureStorage is an OOXML _xmlsignatures storage, create and write a new signature.
-    bool CreateAndWriteOOXMLSignature(css::uno::Reference<css::embed::XStorage> xRootStorage, css::uno::Reference<css::embed::XStorage> xSignatureStorage, int nSignatureIndex);
+    bool CreateAndWriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::embed::XStorage>& xSignatureStorage, int nSignatureIndex);
     /// Similar to CreateAndWriteOOXMLSignature(), but used to write the signature to the persistent storage, not the temporary one.
-    void ExportOOXMLSignature(css::uno::Reference<css::embed::XStorage> xRootStorage, css::uno::Reference<css::embed::XStorage> xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex);
+    void ExportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::embed::XStorage>& xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex);
     /// Given that xStorage is an OOXML root storage, advertise signatures in its [Content_Types].xml stream.
-    void ExportSignatureContentTypes(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount);
+    void ExportSignatureContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX

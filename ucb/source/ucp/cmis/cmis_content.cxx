@@ -88,7 +88,7 @@ namespace
         return unoTime;
     }
 
-    uno::Any lcl_cmisPropertyToUno( libcmis::PropertyPtr pProperty )
+    uno::Any lcl_cmisPropertyToUno( const libcmis::PropertyPtr& pProperty )
     {
         uno::Any aValue;
         switch ( pProperty->getPropertyType( )->getType( ) )
@@ -1393,8 +1393,8 @@ namespace cmis
     const int TRANSFER_BUFFER_SIZE = 65536;
 
     void Content::copyData(
-        uno::Reference< io::XInputStream > xIn,
-        uno::Reference< io::XOutputStream > xOut )
+        const uno::Reference< io::XInputStream >& xIn,
+        const uno::Reference< io::XOutputStream >& xOut )
     {
         uno::Sequence< sal_Int8 > theData( TRANSFER_BUFFER_SIZE );
 
@@ -1498,7 +1498,7 @@ namespace cmis
         return aRet;
     }
 
-    bool Content::feedSink( uno::Reference< uno::XInterface> xSink,
+    bool Content::feedSink( const uno::Reference< uno::XInterface>& xSink,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         if ( !xSink.is() )

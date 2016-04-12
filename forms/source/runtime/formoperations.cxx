@@ -460,7 +460,7 @@ namespace frm
             return true;
         }
 
-        bool commit1Form(Reference< XFormController > xCntrl, bool &needConfirmation, bool &shouldCommit)
+        bool commit1Form(const Reference< XFormController >& xCntrl, bool &needConfirmation, bool &shouldCommit)
         {
             Reference< XFormOperations > xFrmOps(xCntrl->getFormOperations());
             if (!xFrmOps->commitCurrentControl())
@@ -477,7 +477,7 @@ namespace frm
             return true;
         }
 
-        bool commitFormAndSubforms(Reference< XFormController > xCntrl, bool needConfirmation)
+        bool commitFormAndSubforms(const Reference< XFormController >& xCntrl, bool needConfirmation)
         {
             bool shouldCommit(true);
             assert(xCntrl.is());
@@ -504,7 +504,7 @@ namespace frm
             return true;
         }
 
-        bool commit1Form(Reference< XForm > xFrm, bool &needConfirmation, bool &shouldCommit)
+        bool commit1Form(const Reference< XForm >& xFrm, bool &needConfirmation, bool &shouldCommit)
         {
             Reference< XPropertySet > xProps(xFrm, UNO_QUERY_THROW);
             // nothing to do if the record is not modified
@@ -525,7 +525,7 @@ namespace frm
             return true;
         }
 
-        bool commitFormAndSubforms(Reference< XForm > xFrm, bool needConfirmation)
+        bool commitFormAndSubforms(const Reference< XForm >& xFrm, bool needConfirmation)
         {
             // No control...  do what we can with the models
             bool shouldCommit(true);

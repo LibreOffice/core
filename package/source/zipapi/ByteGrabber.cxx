@@ -45,7 +45,7 @@ ByteGrabber::~ByteGrabber()
 {
 }
 
-void ByteGrabber::setInputStream (uno::Reference < io::XInputStream > xNewStream)
+void ByteGrabber::setInputStream (const uno::Reference < io::XInputStream >& xNewStream)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     xStream = xNewStream;

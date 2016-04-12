@@ -420,7 +420,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
     removeFromGroupMap(sGroupName,xSet);
 }
 
-OUString OGroupManager::GetGroupName( css::uno::Reference< css::beans::XPropertySet> xComponent )
+OUString OGroupManager::GetGroupName( const css::uno::Reference< css::beans::XPropertySet>& xComponent )
 {
     if (!xComponent.is())
         return OUString();

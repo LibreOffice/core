@@ -490,7 +490,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 }
 
 void DictionaryNeo::launchEvent(sal_Int16 nEvent,
-                                uno::Reference< XDictionaryEntry > xEntry)
+                                const uno::Reference< XDictionaryEntry >& xEntry)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

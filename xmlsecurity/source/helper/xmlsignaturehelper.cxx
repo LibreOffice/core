@@ -204,7 +204,7 @@ void XMLSignatureHelper::ExportSignature(
     XSecController::exportSignature(xDocumentHandler, signatureInfo);
 }
 
-void XMLSignatureHelper::ExportOOXMLSignature(uno::Reference<embed::XStorage> xRootStorage, uno::Reference<embed::XStorage> xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex)
+void XMLSignatureHelper::ExportOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<embed::XStorage>& xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
@@ -487,7 +487,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     return !mbError;
 }
 
-void XMLSignatureHelper::EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage, bool bAdd)
+void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bAdd)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
@@ -544,7 +544,7 @@ void XMLSignatureHelper::EnsureSignaturesRelation(css::uno::Reference<css::embed
     xTransact->commit();
 }
 
-void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount)
+void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
 {
     // Write the empty file, its relations will be the signatures.
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
@@ -570,7 +570,7 @@ void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed
     xTransact->commit();
 }
 
-void XMLSignatureHelper::ExportSignatureContentTypes(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount)
+void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", nOpenMode), uno::UNO_QUERY);
@@ -620,7 +620,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(css::uno::Reference<css::em
     uno::Reference<embed::XTransactedObject> xTransact(xStorage, uno::UNO_QUERY);
     xTransact->commit();
 }
-bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(uno::Reference<embed::XStorage> xRootStorage, uno::Reference<embed::XStorage> xSignatureStorage, int nSignatureIndex)
+bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<embed::XStorage>& xSignatureStorage, int nSignatureIndex)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);

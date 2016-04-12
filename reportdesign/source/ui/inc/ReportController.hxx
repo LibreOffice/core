@@ -215,11 +215,11 @@ namespace rptui
         @param _nUndoStrId the string id of the string which is shown in undo menu
         @param _nShrinkId  ID of what you would like to shrink.
         */
-        static void shrinkSectionBottom(css::uno::Reference< css::report::XSection > _xSection);
-        static void shrinkSectionTop(css::uno::Reference< css::report::XSection > _xSection);
+        static void shrinkSectionBottom(const css::uno::Reference< css::report::XSection >& _xSection);
+        static void shrinkSectionTop(const css::uno::Reference< css::report::XSection >& _xSection);
 
     public:
-        void shrinkSection(sal_uInt16 _nUndoStrId, css::uno::Reference< css::report::XSection > _xSection, sal_Int32 _nShrinkId);
+        void shrinkSection(sal_uInt16 _nUndoStrId, const css::uno::Reference< css::report::XSection >& _xSection, sal_Int32 _nShrinkId);
 
         /** opens the file open dialog to allow the user to select a image which will be
         * bound to a newly created image button.

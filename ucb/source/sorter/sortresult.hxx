@@ -145,16 +145,16 @@ private:
     sal_IntPtr          Compare( SortListData *pOne,
                                  SortListData *pTwo )
                             throw( css::sdbc::SQLException, css::uno::RuntimeException );
-    void                BuildSortInfo( css::uno::Reference< css::sdbc::XResultSet > aResult,
+    void                BuildSortInfo( const css::uno::Reference< css::sdbc::XResultSet >& aResult,
                                        const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                        const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
-    static sal_IntPtr   CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
-                                     css::uno::Reference < css::sdbc::XResultSet > xResultTwo,
+    static sal_IntPtr   CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
+                                     const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
                                      sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
                                      SortInfo* pSortInfo )
                             throw( css::sdbc::SQLException, css::uno::RuntimeException );
-    sal_IntPtr          CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
-                                     css::uno::Reference < css::sdbc::XResultSet > xResultTwo,
+    sal_IntPtr          CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
+                                     const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
                                      sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo )
                             throw( css::sdbc::SQLException, css::uno::RuntimeException );
     void                PropertyChanged( const css::beans::PropertyChangeEvent& rEvt );

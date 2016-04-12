@@ -938,7 +938,7 @@ namespace cairocanvas
         cairo_set_matrix( pCairo, &aOrigMatrix );
     }
 
-    void doPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
+    void doPolyPolygonImplementation( const ::basegfx::B2DPolyPolygon& aPolyPolygon,
                                       Operation aOperation,
                                       cairo_t* pCairo,
                                       const uno::Sequence< rendering::Texture >* pTextures,

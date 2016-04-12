@@ -490,8 +490,8 @@ Model* Binding::getModelImpl( const css::uno::Reference<css::xforms::XModel>& xM
     return pModel;
 }
 
-static void lcl_addListenerToNode( Reference<XNode> xNode,
-                            Reference<XEventListener> xListener )
+static void lcl_addListenerToNode( const Reference<XNode>& xNode,
+                                   const Reference<XEventListener>& xListener )
 {
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
     if( xTarget.is() )
@@ -511,8 +511,8 @@ static void lcl_addListenerToNode( Reference<XNode> xNode,
     }
 }
 
-static void lcl_removeListenerFromNode( Reference<XNode> xNode,
-                                 Reference<XEventListener> xListener )
+static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
+                                        const Reference<XEventListener>& xListener )
 {
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
     if( xTarget.is() )

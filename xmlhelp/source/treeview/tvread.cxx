@@ -895,7 +895,7 @@ void ExtensionIteratorBase::init()
 }
 
 Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromPackage
-    ( Reference< deployment::XPackage > xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle )
+    ( const Reference< deployment::XPackage >& xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle )
 {
     o_xParentPackageBundle.clear();
 
@@ -1042,7 +1042,7 @@ inline bool isLetter( sal_Unicode c )
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-    css::uno::Reference< css::deployment::XPackage > xPackage )
+    const css::uno::Reference< css::deployment::XPackage >& xPackage )
 {
     rv.clear();
     OUString aExtensionPath = xPackage->getURL();
@@ -1156,7 +1156,7 @@ OUString TreeFileIterator::expandURL( const OUString& aURL )
 }
 
 OUString TreeFileIterator::implGetTreeFileFromPackage
-    ( sal_Int32& rnFileSize, Reference< deployment::XPackage > xPackage )
+    ( sal_Int32& rnFileSize, const Reference< deployment::XPackage >& xPackage )
 {
     OUString aRetFile;
     OUString aLanguage = m_aLanguage;

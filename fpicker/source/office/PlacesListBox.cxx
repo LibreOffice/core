@@ -100,7 +100,7 @@ void PlacesListBox::dispose()
     Control::dispose();
 }
 
-void PlacesListBox::AppendPlace( PlacePtr pPlace )
+void PlacesListBox::AppendPlace( const PlacePtr& pPlace )
 {
     maPlaces.push_back( pPlace );
     mpImpl->InsertEntry( pPlace->GetName( ),
@@ -184,7 +184,7 @@ bool PlacesListBox::Notify( NotifyEvent& rNEvt )
     return Control::Notify( rNEvt );
 }
 
-Image PlacesListBox::getEntryIcon( PlacePtr pPlace )
+Image PlacesListBox::getEntryIcon( const PlacePtr& pPlace )
 {
     Image theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_LOCAL );
     if ( !pPlace->IsLocal( ) )

@@ -86,7 +86,7 @@ OUString Databases::expandURL( const OUString& aURL )
     return aRetURL;
 }
 
-OUString Databases::expandURL( const OUString& aURL, Reference< uno::XComponentContext > xContext )
+OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComponentContext >& xContext )
 {
     static Reference< util::XMacroExpander > xMacroExpander;
     static Reference< uri::XUriReferenceFactory > xFac;
@@ -1176,7 +1176,7 @@ void ExtensionIteratorBase::init()
 }
 
 Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromPackage
-    ( Reference< deployment::XPackage > xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle )
+    ( const Reference< deployment::XPackage >& xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle )
 {
     o_xParentPackageBundle.clear();
 
@@ -1325,7 +1325,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 }
 
 OUString ExtensionIteratorBase::implGetFileFromPackage(
-    const OUString& rFileExtension, Reference< deployment::XPackage > xPackage )
+    const OUString& rFileExtension, const Reference< deployment::XPackage >& xPackage )
 {
     // No extension -> search for pure language folder
     bool bLangFolderOnly = rFileExtension.isEmpty();
@@ -1362,7 +1362,7 @@ inline bool isLetter( sal_Unicode c )
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-    css::uno::Reference< css::deployment::XPackage > xPackage )
+    const css::uno::Reference< css::deployment::XPackage >& xPackage )
 {
     rv.clear();
     OUString aExtensionPath = xPackage->getURL();
@@ -1453,7 +1453,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, O
     return pRetHdf;
 }
 
-helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< deployment::XPackage > xPackage,
+helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( const Reference< deployment::XPackage >& xPackage,
             OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
 {
 
@@ -1574,7 +1574,7 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 
 //Returns a file URL, that does not contain macros
 OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
-    ( Reference< deployment::XPackage > xPackage )
+    ( const Reference< deployment::XPackage >& xPackage )
 {
     OUString aExpandedURL =
         implGetFileFromPackage( ".key", xPackage );
@@ -1643,7 +1643,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
 }
 
 Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
-( Reference< deployment::XPackage > xPackage, OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
+( const Reference< deployment::XPackage >& xPackage, OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
 
@@ -1771,7 +1771,7 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
     return aIndexFolder;
 }
 
-OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, Reference< deployment::XPackage > xPackage )
+OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, const Reference< deployment::XPackage >& xPackage )
 {
     OUString aIndexFolder =
         implGetFileFromPackage( ".idxl", xPackage );

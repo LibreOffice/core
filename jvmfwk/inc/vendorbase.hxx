@@ -184,7 +184,7 @@ protected:
     typedef rtl::Reference<VendorBase> (* createInstance_func) ();
     friend rtl::Reference<VendorBase> createInstance(
         createInstance_func pFunc,
-        std::vector<std::pair<OUString, OUString> > properties);
+        const std::vector<std::pair<OUString, OUString> >& properties);
 };
 
 }
