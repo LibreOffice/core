@@ -76,7 +76,6 @@
 
 
 #include <svx/svdotable.hxx>
-
 #include <config_features.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
