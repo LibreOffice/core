@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SC_CHECKLISTMENU_HRC__
-#define __SC_CHECKLISTMENU_HRC__
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HRC
+#define INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HRC
 
 #include <sc.hrc>
 

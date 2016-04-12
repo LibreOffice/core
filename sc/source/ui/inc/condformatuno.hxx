@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SC_CONDFORMATUNO_HXX_
-#define _SC_CONDFORMATUNO_HXX_
+#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATUNO_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATUNO_HXX
 
 #include "address.hxx"
 

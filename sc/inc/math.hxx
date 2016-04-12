@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __INCLUDED_SC_INC_MATH_HXX__
-#define __INCLUDED_SC_INC_MATH_HXX__
+#ifndef INCLUDED_SC_INC_MATH_HXX
+#define INCLUDED_SC_INC_MATH_HXX
 
 #include <formula/errorcodes.hxx>
 
