@@ -30,6 +30,11 @@ $(eval $(call gb_Library_add_cobjects,clew,\
     external/clew/source/clew \
 ))
 
+$(eval $(call gb_Library_set_include,clew, \
+    -I$(SRCDIR)/external/clew/source/include \
+    $$(INCLUDE) \
+))
+
 # This is required for module-deps.pl to produce correct dependencies.
 $(eval $(call gb_Library_use_libraries,clew,))
 

@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_custom_headers,scfilt,\
 
 $(eval $(call gb_Library_use_externals,scfilt,\
 	boost_headers \
+	$(call gb_Helper_optional,OPENCL,clew) \
 	mdds_headers \
 ))
 

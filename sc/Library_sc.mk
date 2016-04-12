@@ -37,6 +37,8 @@ $(eval $(call gb_Library_use_sdk_api,sc))
 
 $(eval $(call gb_Library_use_externals,sc,\
     boost_headers \
+    $(call gb_Helper_optional,OPENCL, \
+        clew) \
     icu_headers \
     icui18n \
     icuuc \
@@ -62,8 +64,6 @@ endif
 $(eval $(call gb_Library_use_libraries,sc,\
     $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
-    $(call gb_Helper_optional,OPENCL, \
-        clew) \
     comphelper \
     cppu \
     cppuhelper \
