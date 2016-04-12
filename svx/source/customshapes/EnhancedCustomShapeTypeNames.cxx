@@ -293,7 +293,7 @@ MSO_SPT EnhancedCustomShapeTypeNames::Get( const OUString& rShapeType )
     for ( i = 0; i < nLen; i++ )
         pBuf[ i ] = (char)rShapeType[ i ];
     pBuf[ i ] = 0;
-    TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf.get() ) );
+    TypeNameHashMap::const_iterator aHashIter( pHashMap->find( pBuf.get() ) );
     if ( aHashIter != pHashMap->end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;
@@ -548,7 +548,7 @@ OUString EnhancedCustomShapeTypeNames::GetAccName( const OUString& rShapeType )
     for ( i = 0; i < nLen; i++ )
         pBuf[ i ] = (char)rShapeType[ i ];
     pBuf[ i ] = 0;
-    TypeACCNameHashMap::iterator aHashIter( pACCHashMap->find( pBuf.get() ) );
+    TypeACCNameHashMap::const_iterator aHashIter( pACCHashMap->find( pBuf.get() ) );
     if ( aHashIter != pACCHashMap->end() )
         sRetValue = OUString::createFromAscii( (*aHashIter).second );
     return sRetValue;
