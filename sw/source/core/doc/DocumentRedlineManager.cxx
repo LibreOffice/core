@@ -35,7 +35,7 @@ using namespace com::sun::star;
 
 #ifdef DBG_UTIL
 
-    #define _ERROR_PREFIX "redline table corrupted: "
+    #define ERROR_PREFIX "redline table corrupted: "
 
     namespace
     {
@@ -80,7 +80,7 @@ using namespace com::sun::star;
                 // check for empty redlines
                 OSL_ENSURE( ( *(rTable[j]->GetPoint()) != *(rTable[j]->GetMark()) ) ||
                             ( rTable[j]->GetContentIdx() != nullptr ),
-                            _ERROR_PREFIX "empty redline" );
+                            ERROR_PREFIX "empty redline" );
              }
 
             // verify proper redline sorting
@@ -91,22 +91,22 @@ using namespace com::sun::star;
 
                 // check redline sorting
                 SAL_WARN_IF( *pPrev->Start() > *pCurrent->Start(), "sw",
-                             _ERROR_PREFIX "not sorted correctly" );
+                             ERROR_PREFIX "not sorted correctly" );
 
                 // check for overlapping redlines
                 SAL_WARN_IF( *pPrev->End() > *pCurrent->Start(), "sw",
-                             _ERROR_PREFIX "overlapping redlines" );
+                             ERROR_PREFIX "overlapping redlines" );
             }
 
             assert(std::is_sorted(rTable.begin(), rTable.end(), CompareSwRedlineTable()));
         }
     }
 
-    #define _CHECK_REDLINE( pDoc ) lcl_CheckRedline( pDoc );
+    #define CHECK_REDLINE( pDoc ) lcl_CheckRedline( pDoc );
 
 #else
 
-    #define _CHECK_REDLINE( pDoc )
+    #define CHECK_REDLINE( pDoc )
 
 #endif
 
@@ -622,7 +622,7 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
             }
 
             CheckAnchoredFlyConsistency(m_rDoc);
-            _CHECK_REDLINE( *this )
+            CHECK_REDLINE( *this )
 
             if (pFnc)
             {
@@ -636,7 +636,7 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
             }
 
             CheckAnchoredFlyConsistency(m_rDoc);
-            _CHECK_REDLINE( *this )
+            CHECK_REDLINE( *this )
             m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
         }
         meRedlineMode = eMode;
@@ -733,7 +733,7 @@ Behaviour of Delete-Redline:
 bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
 {
     bool bMerged = false;
-    _CHECK_REDLINE( *this )
+    CHECK_REDLINE( *this )
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
     {
@@ -1679,7 +1679,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
         delete pNewRedl;
         pNewRedl = nullptr;
     }
-    _CHECK_REDLINE( *this )
+    CHECK_REDLINE( *this )
 
     return ( nullptr != pNewRedl ) || bMerged;
 }
@@ -1691,7 +1691,7 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
     // #TODO - equivalent for 'SwTableRowRedline'
     bool bMerged = false;
     /*
-    _CHECK_REDLINE( this )
+    CHECK_REDLINE( this )
     */
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
@@ -1723,7 +1723,7 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
     }
     // #TODO - equivalent for 'SwTableRowRedline'
     /*
-    _CHECK_REDLINE( this )
+    CHECK_REDLINE( this )
     */
 
     return ( nullptr != pNewRedl ) || bMerged;
@@ -1736,7 +1736,7 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
     // #TODO - equivalent for 'SwTableCellRedline'
     bool bMerged = false;
     /*
-    _CHECK_REDLINE( this )
+    CHECK_REDLINE( this )
     */
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
@@ -1768,7 +1768,7 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
     }
     // #TODO - equivalent for 'SwTableCellRedline'
     /*
-    _CHECK_REDLINE( this )
+    CHECK_REDLINE( this )
     */
 
     return ( nullptr != pNewRedl ) || bMerged;
@@ -1776,7 +1776,7 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
 
 void DocumentRedlineManager::CompressRedlines()
 {
-    _CHECK_REDLINE( *this )
+    CHECK_REDLINE( *this )
 
     void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = nullptr;
     switch( nsRedlineMode_t::REDLINE_SHOW_MASK & meRedlineMode )
@@ -1817,7 +1817,7 @@ void DocumentRedlineManager::CompressRedlines()
                 (pPrev->*pFnc)(0, nPrevIndex);
         }
     }
-    _CHECK_REDLINE( *this )
+    CHECK_REDLINE( *this )
 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
