@@ -268,7 +268,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     return xRet;
 }
 
-void SlideSorterViewShell::SwitchViewFireFocus(css::uno::Reference< css::accessibility::XAccessible > xAcc )
+void SlideSorterViewShell::SwitchViewFireFocus(const css::uno::Reference< css::accessibility::XAccessible >& xAcc )
 {
     if (xAcc.get())
     {

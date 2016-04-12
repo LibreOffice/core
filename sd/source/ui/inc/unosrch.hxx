@@ -45,11 +45,11 @@ protected:
     css::drawing::XShape* mpShape;
     css::drawing::XDrawPage* mpPage;
 
-    css::uno::Reference< css::text::XTextRange >  Search( css::uno::Reference< css::text::XTextRange >  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw();
+    css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw();
     bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw();
-    static ESelection GetSelection( css::uno::Reference< css::text::XTextRange >  xTextRange ) throw();
-    static css::uno::Reference< css::drawing::XShape >  GetShape( css::uno::Reference< css::text::XTextRange >  xTextRange ) throw();
-    css::uno::Reference< css::drawing::XShape >  GetNextShape( css::uno::Reference< css::container::XIndexAccess >  xShapes, css::uno::Reference< css::drawing::XShape >  xCurrentShape ) throw();
+    static ESelection GetSelection( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) throw();
+    static css::uno::Reference< css::drawing::XShape >  GetShape( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) throw();
+    css::uno::Reference< css::drawing::XShape >  GetNextShape( const css::uno::Reference< css::container::XIndexAccess >&  xShapes, const css::uno::Reference< css::drawing::XShape >&  xCurrentShape ) throw();
     css::uno::Reference< css::drawing::XShape >  GetCurrentShape() const throw();
 
 public:

@@ -168,7 +168,7 @@ void PPTWriter::exportPPTPost( )
     mbStatus = true;
 };
 
-void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStream& rBinaryTagData10Atom );
+void ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMemoryStream& rBinaryTagData10Atom );
 
 void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
                                 bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
@@ -1074,7 +1074,7 @@ static OUString getInitials( const OUString& rName )
     return sInitials;
 }
 
-void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStream& rBinaryTagData10Atom )
+void ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMemoryStream& rBinaryTagData10Atom )
 {
     try
     {

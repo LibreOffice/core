@@ -292,7 +292,7 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
-    virtual void SwitchViewFireFocus( css::uno::Reference< css::accessibility::XAccessible > xAcc );
+    virtual void SwitchViewFireFocus( const css::uno::Reference< css::accessibility::XAccessible >& xAcc );
     void SwitchActiveViewFireFocus( );
     // Move these two methods from DrawViewShell to enable slide show view
     void    NotifyAccUpdate();

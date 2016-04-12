@@ -759,7 +759,7 @@ void CustomAnimationPane::updateControls()
     updateMotionPathTags();
 }
 
-static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,  EffectSequence::iterator aIter, EffectSequence::iterator aEnd, MotionPathTagVector& rOldTags, MotionPathTagVector& rNewTags )
+static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,  EffectSequence::iterator aIter, const EffectSequence::iterator& aEnd, MotionPathTagVector& rOldTags, MotionPathTagVector& rNewTags )
 {
     bool bChanges = false;
     while( aIter != aEnd )
@@ -940,7 +940,7 @@ void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
     }
 }
 
-static sal_Int32 calcMaxParaDepth( Reference< XShape > xTargetShape )
+static sal_Int32 calcMaxParaDepth( const Reference< XShape >& xTargetShape )
 {
     sal_Int32 nMaxParaDepth = -1;
 
@@ -970,7 +970,7 @@ static sal_Int32 calcMaxParaDepth( Reference< XShape > xTargetShape )
     return nMaxParaDepth + 1;
 }
 
-Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect )
+Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect )
 {
     switch( nType )
     {
@@ -1025,7 +1025,7 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, CustomAnimationEffe
     return aAny;
 }
 
-bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const Any& rValue )
+bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const Any& rValue )
 {
     bool bEffectChanged = false;
     switch( nType )

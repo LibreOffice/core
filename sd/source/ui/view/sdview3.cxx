@@ -1518,7 +1518,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     return bReturn;
 }
 
-bool View::PasteRTFTable( ::tools::SvRef<SotStorageStream> xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
+bool View::PasteRTFTable( const ::tools::SvRef<SotStorageStream>& xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
 {
     std::unique_ptr<SdDrawDocument> pModel(new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh ));
     pModel->NewOrLoadCompleted(NEW_DOC);

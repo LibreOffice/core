@@ -113,8 +113,8 @@ private:
     STLPropertySet* createSelectionSet();
     void changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet );
 
-    static css::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
-    bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const css::uno::Any& rValue );
+    static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
+    bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
     void UpdateLook();
     sal_uInt32 fillAnimationLB();
 

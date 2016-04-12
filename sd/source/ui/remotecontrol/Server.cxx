@@ -270,7 +270,7 @@ std::vector< std::shared_ptr< ClientInfo > > RemoteServer::getClients()
     return aClients;
 }
 
-bool RemoteServer::connectClient( std::shared_ptr< ClientInfo > pClient, const OUString& aPin )
+bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, const OUString& aPin )
 {
     SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )
@@ -337,7 +337,7 @@ bool RemoteServer::connectClient( std::shared_ptr< ClientInfo > pClient, const O
     }
 }
 
-void RemoteServer::deauthoriseClient( std::shared_ptr< ClientInfo > pClient )
+void RemoteServer::deauthoriseClient( const std::shared_ptr< ClientInfo >& pClient )
 {
     // TODO: we probably want to forcefully disconnect at this point too?
     // But possibly via a separate function to allow just disconnecting from

@@ -185,7 +185,7 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow) override;
     // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
-    virtual void SwitchViewFireFocus( css::uno::Reference< css::accessibility::XAccessible > xAcc ) override;
+    virtual void SwitchViewFireFocus( const css::uno::Reference< css::accessibility::XAccessible >& xAcc ) override;
 
     // Exported for unit test
     SD_DLLPUBLIC SlideSorter& GetSlideSorter() const;

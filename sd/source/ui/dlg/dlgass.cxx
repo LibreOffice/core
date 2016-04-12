@@ -161,7 +161,7 @@ public:
 
     VclPtr<vcl::Window> mpWindow;
 
-    void SavePassword( SfxObjectShellLock xDoc, const OUString& rPath );
+    void SavePassword( const SfxObjectShellLock& xDoc, const OUString& rPath );
     void RestorePassword( SfxItemSet* pSet, const OUString& rPath );
     uno::Sequence < beans::NamedValue > GetPassword( const OUString& rPath );
     void DeletePasswords();
@@ -1555,7 +1555,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
     mbPreviewUpdating = false;
 }
 
-void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rPath )
+void AssistentDlgImpl::SavePassword( const SfxObjectShellLock& xDoc, const OUString& rPath )
 {
     if(xDoc.Is())
     {

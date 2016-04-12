@@ -45,7 +45,7 @@ class CustomAnimationPreset
 public:
     CustomAnimationPreset( CustomAnimationEffectPtr pEffect );
 
-    void add( CustomAnimationEffectPtr pEffect );
+    void add( const CustomAnimationEffectPtr& pEffect );
 
     SD_DLLPUBLIC css::uno::Reference< css::animations::XAnimationNode > create( const OUString& rstrSubType );
 
@@ -109,7 +109,7 @@ public:
     SAL_DLLPRIVATE const PresetCategoryList& getMotionPathsPresets() const { return maMotionPathsPresets; }
     SAL_DLLPRIVATE const PresetCategoryList& getMiscPresets() const { return maMiscPresets; }
 
-    SAL_DLLPRIVATE void changePresetSubType( CustomAnimationEffectPtr pEffect, const OUString& rPresetSubType ) const;
+    SAL_DLLPRIVATE void changePresetSubType( const CustomAnimationEffectPtr& pEffect, const OUString& rPresetSubType ) const;
 
 private:
     SAL_DLLPRIVATE void importEffects();

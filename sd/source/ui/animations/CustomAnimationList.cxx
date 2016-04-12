@@ -522,7 +522,7 @@ void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
 
 /** selects or deselects the given effect.
     Selections of other effects are not changed */
-void CustomAnimationList::select( CustomAnimationEffectPtr pEffect )
+void CustomAnimationList::select( const CustomAnimationEffectPtr& pEffect )
 {
     CustomAnimationListEntry* pEntry = static_cast< CustomAnimationListEntry* >(First());
     while( pEntry )
@@ -551,7 +551,7 @@ void CustomAnimationList::clear()
     mxLastTargetShape = nullptr;
 }
 
-void CustomAnimationList::update( MainSequencePtr pMainSequence )
+void CustomAnimationList::update( const MainSequencePtr& pMainSequence )
 {
     if( mpMainSequence.get() )
         mpMainSequence->removeListener( this );
@@ -566,11 +566,11 @@ void CustomAnimationList::update( MainSequencePtr pMainSequence )
 struct stl_append_effect_func : public std::unary_function<CustomAnimationEffectPtr, void>
 {
     explicit stl_append_effect_func( CustomAnimationList& rList ) : mrList( rList ) {}
-    void operator()(CustomAnimationEffectPtr pEffect);
+    void operator()(const CustomAnimationEffectPtr& pEffect);
     CustomAnimationList& mrList;
 };
 
-void stl_append_effect_func::operator()(CustomAnimationEffectPtr pEffect)
+void stl_append_effect_func::operator()(const CustomAnimationEffectPtr& pEffect)
 {
     mrList.append( pEffect );
 }
@@ -790,7 +790,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     }
 }
 
-void selectShape( SvTreeListBox* pTreeList, Reference< XShape > xShape )
+void selectShape( SvTreeListBox* pTreeList, const Reference< XShape >& xShape )
 {
     CustomAnimationListEntry* pEntry = static_cast< CustomAnimationListEntry* >(pTreeList->First());
     while( pEntry )

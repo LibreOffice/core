@@ -1992,7 +1992,7 @@ stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_
 {
 }
 
-bool stl_CustomAnimationEffect_search_node_predict::operator()( CustomAnimationEffectPtr pEffect ) const
+bool stl_CustomAnimationEffect_search_node_predict::operator()( const CustomAnimationEffectPtr& pEffect ) const
 {
     return pEffect->getNode() == mxSearchNode;
 }
@@ -2450,7 +2450,7 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimati
     return pTextGroup;
 }
 
-void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextGroupPtr pTextGroup, CustomAnimationEffectPtr pEffect, bool bUsed )
+void EffectSequenceHelper::createTextGroupParagraphEffects( const CustomAnimationTextGroupPtr& pTextGroup, const CustomAnimationEffectPtr& pEffect, bool bUsed )
 {
     Reference< XShape > xTarget( pTextGroup->maTarget );
 
@@ -2543,7 +2543,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     }
 }
 
-void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping )
+void EffectSequenceHelper::setTextGrouping( const CustomAnimationTextGroupPtr& pTextGroup, sal_Int32 nTextGrouping )
 {
     if( pTextGroup->mnTextGrouping == nTextGrouping )
     {
@@ -2623,7 +2623,7 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
     }
 }
 
-void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm )
+void EffectSequenceHelper::setAnimateForm( const CustomAnimationTextGroupPtr& pTextGroup, bool bAnimateForm )
 {
     if( pTextGroup->mbAnimateForm == bAnimateForm )
     {
@@ -2695,7 +2695,7 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
     }
 }
 
-void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto )
+void EffectSequenceHelper::setTextGroupingAuto( const CustomAnimationTextGroupPtr& pTextGroup, double fTextGroupingAuto )
 {
     sal_Int32 nTextGrouping = pTextGroup->mnTextGrouping;
 
@@ -2772,7 +2772,7 @@ bool ImplStlTextGroupSortHelper::operator()( const CustomAnimationEffectPtr& p1,
     }
 }
 
-void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGroup, bool bTextReverse )
+void EffectSequenceHelper::setTextReverse( const CustomAnimationTextGroupPtr& pTextGroup, bool bTextReverse )
 {
     if( pTextGroup->mbTextReverse == bTextReverse )
     {

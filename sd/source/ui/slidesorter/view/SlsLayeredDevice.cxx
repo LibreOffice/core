@@ -74,7 +74,7 @@ void DeviceCopy (
         rSourceDevice);
 }
 
-void ForAllRectangles (const vcl::Region& rRegion, ::std::function<void (const Rectangle&)> aFunction)
+void ForAllRectangles (const vcl::Region& rRegion, const std::function<void (const Rectangle&)>& aFunction)
 {
     OSL_ASSERT(aFunction);
     RectangleVector aRectangles;

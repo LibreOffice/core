@@ -206,7 +206,7 @@ private:
 struct stl_CustomAnimationEffect_search_node_predict
 {
     stl_CustomAnimationEffect_search_node_predict( const css::uno::Reference< css::animations::XAnimationNode >& xSearchNode );
-    bool operator()( CustomAnimationEffectPtr pEffect ) const;
+    bool operator()( const CustomAnimationEffectPtr& pEffect ) const;
     const css::uno::Reference< css::animations::XAnimationNode >& mxSearchNode;
 };
 
@@ -310,10 +310,10 @@ public:
 
     SAL_DLLPRIVATE CustomAnimationTextGroupPtr findGroup( sal_Int32 nGroupId );
     CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, bool bAnimateForm, bool bTextReverse );
-    SAL_DLLPRIVATE void setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping );
-    SAL_DLLPRIVATE void setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
-    SAL_DLLPRIVATE void setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto );
-    SAL_DLLPRIVATE void setTextReverse( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
+    SAL_DLLPRIVATE void setTextGrouping( const CustomAnimationTextGroupPtr& pTextGroup, sal_Int32 nTextGrouping );
+    SAL_DLLPRIVATE void setAnimateForm( const CustomAnimationTextGroupPtr& pTextGroup, bool bAnimateForm );
+    SAL_DLLPRIVATE void setTextGroupingAuto( const CustomAnimationTextGroupPtr& pTextGroup, double fTextGroupingAuto );
+    SAL_DLLPRIVATE void setTextReverse( const  CustomAnimationTextGroupPtr& pTextGroup, bool bAnimateForm );
 
     SAL_DLLPRIVATE sal_Int32 getSequenceType() const { return mnSequenceType; }
 
@@ -327,7 +327,7 @@ protected:
     SAL_DLLPRIVATE virtual void implRebuild();
     SAL_DLLPRIVATE virtual void reset();
 
-    SAL_DLLPRIVATE void createTextGroupParagraphEffects( CustomAnimationTextGroupPtr pTextGroup, CustomAnimationEffectPtr pEffect, bool bUsed );
+    SAL_DLLPRIVATE void createTextGroupParagraphEffects( const CustomAnimationTextGroupPtr& pTextGroup, const CustomAnimationEffectPtr& pEffect, bool bUsed );
 
     SAL_DLLPRIVATE void notify_listeners();
 

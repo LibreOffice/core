@@ -190,7 +190,7 @@ PageCacheManager::~PageCacheManager()
 }
 
 std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
-    DocumentKey pDocument,
+    const DocumentKey& pDocument,
     const Size& rPreviewSize)
 {
     std::shared_ptr<Cache> pResult;
@@ -223,7 +223,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
 
 void PageCacheManager::Recycle (
     const std::shared_ptr<Cache>& rpCache,
-    DocumentKey pDocument,
+    const DocumentKey& pDocument,
     const Size& rPreviewSize)
 {
     BestFittingPageCaches aCaches;
@@ -315,7 +315,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
 }
 
 bool PageCacheManager::InvalidatePreviewBitmap (
-    DocumentKey pDocument,
+    const  DocumentKey& pDocument,
     const SdrPage* pKey)
 {
     bool bHasChanged (false);
@@ -343,7 +343,7 @@ bool PageCacheManager::InvalidatePreviewBitmap (
     return bHasChanged;
 }
 
-void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
+void PageCacheManager::InvalidateAllPreviewBitmaps (const DocumentKey& pDocument)
 {
     if (pDocument == nullptr)
         return;
@@ -387,7 +387,7 @@ void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
 }
 
 std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetRecentlyUsedCache (
-    DocumentKey pDocument,
+    const DocumentKey& pDocument,
     const Size& rPreviewSize)
 {
     std::shared_ptr<Cache> pCache;

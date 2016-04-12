@@ -89,7 +89,7 @@ void SdGlobalResourceContainer::AddResource (
 }
 
 void SdGlobalResourceContainer::AddResource (
-    std::shared_ptr<SdGlobalResource> pResource)
+    const std::shared_ptr<SdGlobalResource>& pResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 

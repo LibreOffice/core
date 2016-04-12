@@ -631,7 +631,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-long ClientBox::addEntry( std::shared_ptr<ClientInfo> pClientInfo )
+long ClientBox::addEntry( const std::shared_ptr<ClientInfo>& pClientInfo )
 {
     long         nPos = 0;
 
