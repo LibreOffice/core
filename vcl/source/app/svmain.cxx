@@ -348,6 +348,9 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
+    // lp#1560328: clear cache before disposing rest of VCL
+    if(pSVData->mpBlendFrameCache)
+        pSVData->mpBlendFrameCache->m_aLastResult.Clear();
     pSVData->mbDeInit = true;
 
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
