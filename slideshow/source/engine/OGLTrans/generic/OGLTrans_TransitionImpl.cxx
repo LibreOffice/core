@@ -1597,7 +1597,7 @@ GLuint VortexTransition::makeShader() const
     return OpenGLHelper::LoadShaders( "vortexVertexShader", "vortexFragmentShader", "vortexGeometryShader" );
 }
 
-glm::mat4 lookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up) {
+glm::mat4 lookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up) {
     glm::vec3 f = glm::normalize(center - eye);
     glm::vec3 u = glm::normalize(up);
     glm::vec3 s = glm::normalize(glm::cross(f, u));

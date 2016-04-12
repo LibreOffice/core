@@ -811,8 +811,8 @@ bool Content::doSetFileInfo(GFileInfo *pNewInfo)
 
 const int TRANSFER_BUFFER_SIZE = 65536;
 
-void Content::copyData( uno::Reference< io::XInputStream > xIn,
-    uno::Reference< io::XOutputStream > xOut )
+void Content::copyData( const uno::Reference< io::XInputStream >& xIn,
+    const uno::Reference< io::XOutputStream >& xOut )
 {
     uno::Sequence< sal_Int8 > theData( TRANSFER_BUFFER_SIZE );
 
@@ -824,7 +824,7 @@ void Content::copyData( uno::Reference< io::XInputStream > xIn,
     xOut->closeOutput();
 }
 
-bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
+bool Content::feedSink( const uno::Reference< uno::XInterface >& xSink,
     const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
 {
     if ( !xSink.is() )

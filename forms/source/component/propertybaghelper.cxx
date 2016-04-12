@@ -245,7 +245,7 @@ namespace frm
 
         struct PropertyValueLessByName : public ::std::binary_function< PropertyValue, PropertyValue, bool >
         {
-            bool operator()( const PropertyValue& _lhs, const PropertyValue _rhs ) const
+            bool operator()( const PropertyValue& _lhs, const PropertyValue& _rhs ) const
             {
                 return _lhs.Name < _rhs.Name;
             }

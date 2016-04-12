@@ -1901,7 +1901,7 @@ sal_Unicode getEscapeChar( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int32& r
     return cRet;
 }
 
-void CheckContinueInNextLine( Reference< io::XTextInputStream2 > xTextInputStream,
+void CheckContinueInNextLine( const Reference< io::XTextInputStream2 >& xTextInputStream,
     OUString& aLine, bool& bEscapePending, const sal_Unicode*& pBuf,
     sal_Int32& nLen, sal_Int32& i )
 {

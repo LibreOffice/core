@@ -311,7 +311,7 @@ void FileStreamWrapper_Impl::checkError()
 
 #define min( x, y ) (( x < y ) ? x : y)
 
-SotClipboardFormatId GetFormatId_Impl( SvGlobalName aName )
+SotClipboardFormatId GetFormatId_Impl( const SvGlobalName& aName )
 {
     if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
         return SotClipboardFormatId::STARWRITER_60;

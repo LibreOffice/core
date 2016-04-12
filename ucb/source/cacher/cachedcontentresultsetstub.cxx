@@ -332,7 +332,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
 
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentRowContent( Any& rRowContent
-        , Reference< XRow > xRow )
+        , const Reference< XRow >& xRow )
         throw ( SQLException, RuntimeException )
 {
     sal_Int32 nCount = impl_getColumnCount();
@@ -437,7 +437,7 @@ void SAL_CALL CachedContentResultSetStub
 
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContentIdentifierString( Any& rAny
-        , Reference< XContentAccess > xContentAccess )
+        , const Reference< XContentAccess >& xContentAccess )
         throw ( RuntimeException )
 {
      rAny <<= xContentAccess->queryContentIdentifierString();
@@ -445,7 +445,7 @@ void SAL_CALL CachedContentResultSetStub
 
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContentIdentifier( Any& rAny
-        , Reference< XContentAccess > xContentAccess )
+        , const Reference< XContentAccess >& xContentAccess )
         throw ( RuntimeException )
 {
      rAny <<= xContentAccess->queryContentIdentifier();
@@ -453,7 +453,7 @@ void SAL_CALL CachedContentResultSetStub
 
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContent( Any& rAny
-        , Reference< XContentAccess > xContentAccess )
+        , const Reference< XContentAccess >& xContentAccess )
         throw ( RuntimeException )
 {
      rAny <<= xContentAccess->queryContent();

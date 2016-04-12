@@ -98,7 +98,7 @@ namespace frm
     }
 
 
-    void RichTextControlImpl::implUpdateAttribute( AttributeHandlerPool::const_iterator _pHandler )
+    void RichTextControlImpl::implUpdateAttribute( const AttributeHandlerPool::const_iterator& _pHandler )
     {
         if  (  ( _pHandler->first == SID_ATTR_CHAR_WEIGHT )
             || ( _pHandler->first == SID_ATTR_CHAR_POSTURE )

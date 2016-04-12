@@ -237,7 +237,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
 
 uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer(
     const OUString& rURL, const OUString& rManagerServName,
-    uno::Reference< uno::XComponentContext > xContext)
+    const uno::Reference< uno::XComponentContext >& xContext)
 {
     uno::Reference< media::XPlayer > xPlayer;
     try

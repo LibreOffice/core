@@ -58,7 +58,7 @@ static const struct
 
 
 static void lcl_AddAsPropertyChangeListener(
-        Reference< XPropertyChangeListener > xListener,
+        const Reference< XPropertyChangeListener >& xListener,
         Reference< XLinguProperties > &rPropSet )
 {
     if (xListener.is() && rPropSet.is())
@@ -73,7 +73,7 @@ static void lcl_AddAsPropertyChangeListener(
 
 
 static void lcl_RemoveAsPropertyChangeListener(
-        Reference< XPropertyChangeListener > xListener,
+        const Reference< XPropertyChangeListener >& xListener,
         Reference< XLinguProperties > &rPropSet )
 {
     if (xListener.is() && rPropSet.is())

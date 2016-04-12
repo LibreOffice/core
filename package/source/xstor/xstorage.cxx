@@ -144,8 +144,8 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
             xDestProps->setPropertyValue( aPropNames[ind], xSourceProps->getPropertyValue( aPropNames[ind] ) );
 }
 
-uno::Reference< io::XInputStream > GetSeekableTempCopy( uno::Reference< io::XInputStream > xInStream,
-                                                        uno::Reference< uno::XComponentContext > xContext )
+uno::Reference< io::XInputStream > GetSeekableTempCopy( const uno::Reference< io::XInputStream >& xInStream,
+                                                        const uno::Reference< uno::XComponentContext >& xContext )
 {
     uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(xContext);
     uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
@@ -765,7 +765,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
 }
 
 void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
-                                        uno::Reference< embed::XStorage > xDest,
+                                        const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aName,
                                         bool bDirect )
 {

@@ -101,7 +101,7 @@ public:
 
     EntryHash& GetEntryHash() { return aEntries; }
 
-    void setInputStream ( css::uno::Reference < css::io::XInputStream > xNewStream );
+    void setInputStream ( const css::uno::Reference < css::io::XInputStream >& xNewStream );
     css::uno::Reference< css::io::XInputStream > SAL_CALL getRawData(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,

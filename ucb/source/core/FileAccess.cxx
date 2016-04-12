@@ -167,7 +167,7 @@ class OCommandEnvironment : public cppu::WeakImplHelper< XCommandEnvironment >
     Reference< XInteractionHandler > mxInteraction;
 
 public:
-    void setHandler( Reference< XInteractionHandler > xInteraction_ )
+    void setHandler( const Reference< XInteractionHandler >& xInteraction_ )
     {
         mxInteraction = xInteraction_;
     }

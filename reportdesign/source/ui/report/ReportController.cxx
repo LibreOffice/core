@@ -2625,7 +2625,7 @@ void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _
     InvalidateFeature( SID_UNDO );
 }
 
-void OReportController::shrinkSectionBottom(uno::Reference<report::XSection> _xSection)
+void OReportController::shrinkSectionBottom(const uno::Reference<report::XSection>& _xSection)
 {
     const sal_Int32 nElements = _xSection->getCount();
     if (nElements == 0)
@@ -2656,7 +2656,7 @@ void OReportController::shrinkSectionBottom(uno::Reference<report::XSection> _xS
     _xSection->setHeight(nMaxPositionY);
 }
 
-void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSection)
+void OReportController::shrinkSectionTop(const uno::Reference<report::XSection>& _xSection)
 {
     const sal_Int32 nElements = _xSection->getCount();
     if (nElements == 0)
@@ -2693,7 +2693,7 @@ void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSect
     _xSection->setHeight(nNewSectionHeight);
 }
 
-void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<report::XSection> _xSection, sal_Int32 _nSid)
+void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, const uno::Reference<report::XSection>& _xSection, sal_Int32 _nSid)
 {
     if ( _xSection.is() )
     {

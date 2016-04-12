@@ -664,7 +664,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
 namespace
 {
 #ifndef _WIN32
-    bool lcl_CopyStream(uno::Reference<io::XInputStream> xIn, uno::Reference<io::XOutputStream> xOut)
+    bool lcl_CopyStream(const uno::Reference<io::XInputStream>& xIn, const uno::Reference<io::XOutputStream>& xOut)
     {
         const sal_Int32 nChunkSize = 4096;
         uno::Sequence< sal_Int8 > aData(nChunkSize);
@@ -683,8 +683,8 @@ namespace
     //Dump the objects content to a tempfile, just the "CONTENTS" stream if
     //there is one for non-compound documents, otherwise the whole content.
     //On success a file is returned which must be removed by the caller
-    OUString lcl_ExtractObject(css::uno::Reference< css::lang::XMultiServiceFactory > xFactory,
-        css::uno::Reference< css::io::XStream > xObjectStream)
+    OUString lcl_ExtractObject(const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+        const css::uno::Reference< css::io::XStream >& xObjectStream)
     {
         OUString sUrl;
 
