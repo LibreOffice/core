@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DIALOGS_HRC
-#define _DIALOGS_HRC
+#ifndef INCLUDED_XMLSECURITY_SOURCE_DIALOGS_DIALOGS_HRC
+#define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_DIALOGS_HRC
 
 #include <svtools/controldims.hrc>
 #include <xmlsecurity/global.hrc>

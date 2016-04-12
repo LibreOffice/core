@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSEC_HELPIDS_HRC
-#define _XMLSEC_HELPIDS_HRC
+#ifndef INCLUDED_XMLSECURITY_SOURCE_DIALOGS_HELPIDS_HRC
+#define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_HELPIDS_HRC
 
 #include <svl/solar.hrc>
 
 #define HID_XMLSEC_TREE_SIGNATURESDLG                  "XMLSECURITY_HID_XMLSEC_TREE_SIGNATURESDLG"
 
-#endif // #ifndef _XMLSEC_HELPIDS_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

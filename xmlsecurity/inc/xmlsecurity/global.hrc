@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSEC_GLOBAL_HRC
-#define _XMLSEC_GLOBAL_HRC
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_GLOBAL_HRC
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_GLOBAL_HRC
 
 // global resource ids
 
