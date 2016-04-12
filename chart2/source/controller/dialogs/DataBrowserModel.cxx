@@ -51,10 +51,6 @@
 
 #include <algorithm>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <cstdio>
-#endif
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;

@@ -30,9 +30,6 @@
 #include <algorithm>
 #include <iterator>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <rtl/math.hxx>
-#endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star;

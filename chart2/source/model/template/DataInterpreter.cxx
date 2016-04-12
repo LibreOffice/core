@@ -40,7 +40,7 @@ using namespace ::chart::ContainerHelper;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CHART2_TEMPLATE
 namespace
 {
 void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource );
@@ -68,7 +68,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CHART2_TEMPLATE
     lcl_ShowDataSource( xSource );
 #endif
 
@@ -172,11 +172,11 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
             Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
             if( aSeqs.getLength() != aNewSequences.getLength() )
             {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CHART2_TEMPLATE
                 sal_Int32 j=0;
                 for( ; j<aSeqs.getLength(); ++j )
                 {
-                    OSL_ENSURE( aSeqs[j] == xValuesY, "All sequences should be used" );
+                    assert( aSeqs[j] == xValuesY && "All sequences should be used" );
                 }
 #endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );
@@ -413,7 +413,7 @@ css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceName
 
 } // namespace chart
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CHART2_TEMPLATE
 namespace
 {
 
