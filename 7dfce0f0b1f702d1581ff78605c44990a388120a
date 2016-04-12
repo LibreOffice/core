@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_9bca644e",
+        "filename": "offapi/com/sun/star/ucb/IOErrorCode.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-12T12:25:03Z",
+      "side": 1,
+      "message": "... and the same issue with published API here",
+      "revId": "7dfce0f0b1f702d1581ff78605c44990a388120a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3bb538cd",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 9372,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-12T12:25:03Z",
+      "side": 1,
+      "message": "I\u0027m afraid you can\u0027t go around and change a published API like this ... so you have to find a different way. Either use some unpublished enum or reuse one of the existing ones for your error condition",
+      "revId": "7dfce0f0b1f702d1581ff78605c44990a388120a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
