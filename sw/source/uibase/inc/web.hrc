@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WEB_HRC
-#define _WEB_HRC
+#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WEB_HRC
+#define INCLUDED_SW_SOURCE_UIBASE_INC_WEB_HRC
 
 #include "rcid.hrc"
 

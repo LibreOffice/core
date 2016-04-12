@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INITUI_HRC
-#define _INITUI_HRC
+#ifndef INCLUDED_SW_SOURCE_UIBASE_UTLUI_INITUI_HRC
+#define INCLUDED_SW_SOURCE_UIBASE_UTLUI_INITUI_HRC
 
 // Local Resources for the shells:
 #define STR_POSTIT_PAGE              1

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MISC_HRC
-#define _MISC_HRC
+#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MISC_HRC
+#define INCLUDED_SW_SOURCE_UIBASE_INC_MISC_HRC
 
 #include "rcid.hrc"
 
@@ -53,6 +53,6 @@
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-#endif  // _MISC_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

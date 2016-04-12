@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBUI_HRC
-#define _DBUI_HRC
+#ifndef INCLUDED_SW_INC_DBUI_HRC
+#define INCLUDED_SW_INC_DBUI_HRC
 
 #include "rcid.hrc"
 

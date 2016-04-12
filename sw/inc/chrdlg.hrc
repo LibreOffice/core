@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHRDLG_HRC
-#define _CHRDLG_HRC
+#ifndef INCLUDED_SW_INC_CHRDLG_HRC
+#define INCLUDED_SW_INC_CHRDLG_HRC
 
 #include "rcid.hrc"
 

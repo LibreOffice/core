@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOCORE_HRC
-#define _UNOCORE_HRC
+#ifndef INCLUDED_SW_INC_UNOCORE_HRC
+#define INCLUDED_SW_INC_UNOCORE_HRC
 
 #include "rcid.hrc"
 

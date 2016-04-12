@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GLOBALS_HRC
-#define _GLOBALS_HRC
+#ifndef INCLUDED_SW_INC_GLOBALS_HRC
+#define INCLUDED_SW_INC_GLOBALS_HRC
 
 #include "rcid.hrc"
 
@@ -211,6 +211,6 @@
 #define SID_WRT_SHELL               (RC_GLOBALS_BEGIN +  117)
 
 
-#endif // _GLOBALS_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

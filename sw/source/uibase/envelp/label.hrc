@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LABEL_HRC
-#define _LABEL_HRC
+#ifndef INCLUDED_SW_SOURCE_UIBASE_ENVELP_LABEL_HRC
+#define INCLUDED_SW_SOURCE_UIBASE_ENVELP_LABEL_HRC
 
 #include "envelp.hrc"
 

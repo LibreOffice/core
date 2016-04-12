@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LABFMT_HRC
-#define _LABFMT_HRC
+#ifndef INCLUDED_SW_SOURCE_UI_ENVELP_LABFMT_HRC
+#define INCLUDED_SW_SOURCE_UI_ENVELP_LABFMT_HRC
 
 #include "envelp.hrc"
 

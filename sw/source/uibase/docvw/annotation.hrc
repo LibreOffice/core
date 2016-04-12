@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ANNOTATION_HRC
-#define _ANNOTATION_HRC
+#ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_ANNOTATION_HRC
+#define INCLUDED_SW_SOURCE_UIBASE_DOCVW_ANNOTATION_HRC
 
 #include "rcid.hrc"
 

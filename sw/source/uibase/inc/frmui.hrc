@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRMUI_HRC
-#define _FRMUI_HRC
+#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRMUI_HRC
+#define INCLUDED_SW_SOURCE_UIBASE_INC_FRMUI_HRC
 
 #include "rcid.hrc"
 #include "globals.hrc"

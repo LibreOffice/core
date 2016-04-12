@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OLMENU_HRC
-#define _OLMENU_HRC
+#ifndef INCLUDED_SW_SOURCE_UIBASE_LINGU_OLMENU_HRC
+#define INCLUDED_SW_SOURCE_UIBASE_LINGU_OLMENU_HRC
 
 #include "rcid.hrc"
 

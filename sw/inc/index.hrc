@@ -21,8 +21,8 @@
 #define RC_INDEX_BEGIN 256
 */
 
-#ifndef _INDEX_HRC
-#define _INDEX_HRC
+#ifndef INCLUDED_SW_INC_INDEX_HRC
+#define INCLUDED_SW_INC_INDEX_HRC
 
 #include "rcid.hrc"
 
@@ -74,6 +74,6 @@
 #define  STR_ADDITIONAL_ACCNAME_STRING2 (STR_TOKEN_HELP_AUTHORITY + 4)
 #define  STR_ADDITIONAL_ACCNAME_STRING3 (STR_TOKEN_HELP_AUTHORITY + 5)
 
-#endif  // _INDEX_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
