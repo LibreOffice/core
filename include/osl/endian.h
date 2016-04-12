@@ -26,132 +26,56 @@
 extern "C" {
 #endif
 
-/** Determine the platform byte order as _BIG_ENDIAN, _LITTLE_ENDIAN, ...
+/** Define the platform byte order as OSL_BIGENDIAN or OSL_LITENDIAN.
  */
-#ifdef _WIN32
-#   if defined(_M_IX86)
-#       define _LITTLE_ENDIAN
-#   elif defined(_M_AMD64)
-#       define _LITTLE_ENDIAN
-#   elif defined(_M_MRX000)
-#       define _LITTLE_ENDIAN
-#   elif defined(_M_ALPHA)
-#       define _LITTLE_ENDIAN
-#   elif defined(_M_PPC)
-#       define _LITTLE_ENDIAN
-#   endif
-#endif
 
-#ifdef LINUX
+#if defined _WIN32
+#   if defined _M_ALPHA || defined _M_AMD64 || defined _M_IX86 \
+            || defined _M_MRX000 || defined _M_PPC
+#       define OSL_LITENDIAN
+#   endif
+#elif defined ANDROID || defined LINUX
 #   include <endian.h>
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
-#           ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#           endif
+#       define OSL_LITENDIAN
 #   elif __BYTE_ORDER == __BIG_ENDIAN
-#           ifndef _BIG_ENDIAN
-#       define _BIG_ENDIAN
-#           endif
+#       define OSL_BIGENDIAN
 #   endif
-#endif
-
-#ifdef ANDROID
-#   include <endian.h>
-#   if __BYTE_ORDER == __LITTLE_ENDIAN
-#           ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#           endif
-#   elif __BYTE_ORDER == __BIG_ENDIAN
-#           ifndef _BIG_ENDIAN
-#       define _BIG_ENDIAN
-#           endif
-#   endif
-#endif
-
-#ifdef EMSCRIPTEN
-#   include <endian.h>
-#   ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   endif
-#endif
-
-#ifdef NETBSD
+#elif defined EMSCRIPTEN
+#   define OSL_LITENDIAN
+#elif defined IOS || defined MACOSX || defined NETBSD
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#   undef _BIG_ENDIAN
+#       define OSL_LITENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
-#   undef _LITTLE_ENDIAN
+#       define OSL_BIGENDIAN
 #   endif
-#endif
-
-#ifdef FREEBSD
+#elif defined FREEBSD
 #   include <sys/param.h>
 #   include <machine/endian.h>
-#endif
-
-#ifdef AIX
+#   if defined _LITTLE_ENDIAN
+#       define OSL_LITENDIAN
+#   elif defined _BIG_ENDIAN
+#       define OSL_BIGENDIAN
+#   endif
+#elif defined AIX
 #   include <sys/machine.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       ifndef _LITTLE_ENDIAN
-#           define _LITTLE_ENDIAN
-#       endif
+#       define OSL_LITENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       ifndef _BIG_ENDIAN
-#           define _BIG_ENDIAN
-#       endif
+#       define OSL_BIGENDIAN
 #   endif
-#endif
-
-#ifdef SOLARIS
+#elif defined SOLARIS
 #   include <sys/isa_defs.h>
-#endif
-
-#ifdef MACOSX
-#   include <machine/endian.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#       endif
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       ifndef _BIG_ENDIAN
-#       define _BIG_ENDIAN
-#       endif
+#   if defined _LITTLE_ENDIAN
+#       define OSL_LITENDIAN
+#   elif defined _BIG_ENDIAN
+#       define OSL_BIGENDIAN
 #   endif
-#endif
-
-#ifdef IOS
-#   include <machine/endian.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#       endif
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       ifndef _BIG_ENDIAN
-#       define _BIG_ENDIAN
-#       endif
-#   endif
-#endif
-
-/** Check supported platform.
- */
-#if !defined(_WIN32)  && \
-    !defined(LINUX)   && !defined(NETBSD) && \
-    !defined(AIX)     && !defined(OPENBSD) && \
-    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
-    !defined(DRAGONFLY) && \
-    !defined(IOS)     && !defined(ANDROID) && \
-    !defined(EMSCRIPTEN)
+#else
 #   error "Target platform not specified !"
 #endif
-
-
-/** Define the determined byte order as OSL_BIGENDIAN or OSL_LITENDIAN.
- */
-#if defined _LITTLE_ENDIAN
-#   define OSL_LITENDIAN
-#elif defined _BIG_ENDIAN
-#   define OSL_BIGENDIAN
-#else
+#if defined OSL_LITENDIAN == defined OSL_BIGENDIAN
 #   error undetermined endianness
 #endif
 
