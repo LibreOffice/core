@@ -131,7 +131,7 @@ void OBookmarkSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     OCacheSet::fillValueRow(_rRow,_nPosition);
 }
 
-void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParameter,const ORowSetValue& _rValue)
+void OBookmarkSet::updateColumn(sal_Int32 nPos, const Reference< XRowUpdate >& _xParameter, const ORowSetValue& _rValue)
 {
     if(_rValue.isBound() && _rValue.isModified())
     {

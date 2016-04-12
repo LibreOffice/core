@@ -140,7 +140,7 @@ sal_Int32 ReadThroughComponent(
 
 /// read a component (storage version)
 sal_Int32 ReadThroughComponent(
-    uno::Reference< embed::XStorage > xStorage,
+    const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,

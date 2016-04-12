@@ -124,7 +124,7 @@ namespace
         }
         return sTableRange;
     }
-    void insertConnection(const OQueryDesignView* _pView,const EJoinType& _eJoinType,OTableFieldDescRef _aDragLeft,OTableFieldDescRef _aDragRight,bool _bNatural = false)
+    void insertConnection(const OQueryDesignView* _pView,const EJoinType& _eJoinType, const OTableFieldDescRef& _aDragLeft, const OTableFieldDescRef& _aDragRight, bool _bNatural = false)
     {
         OQueryTableView* pTableView = static_cast<OQueryTableView*>(_pView->getTableView());
         OQueryTableConnection* pConn = static_cast<OQueryTableConnection*>( pTableView->GetTabConn(static_cast<OTableWindow*>(_aDragLeft->GetTabWindow()),static_cast<OTableWindow*>(_aDragRight->GetTabWindow()),true));
@@ -2998,7 +2998,7 @@ void OQueryDesignView::SaveUIConfig()
         rCtrl.setSplitPos( m_aSplitter->GetSplitPosPixel() );
 }
 
-OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pEntry,
+OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDescRef& pEntry,
                                                            const OUString& _sCriteria,
                                                            OUString& _rsErrorMessage,
                                                            Reference<XPropertySet>& _rxColumn) const

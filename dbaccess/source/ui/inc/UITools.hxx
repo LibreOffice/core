@@ -166,7 +166,7 @@ namespace dbaui
         getDataSourceByName(
                 const OUString& _rDataSourceName,
                 vcl::Window* _pErrorMessageParent,
-                css::uno::Reference< css::uno::XComponentContext > _rxContext,
+                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
             );
 

@@ -30,7 +30,7 @@ namespace dbaccess
     {
         css::uno::Reference< css::sdbcx::XRowLocate> m_xRowLocate;
 
-        void updateColumn(sal_Int32 nPos,css::uno::Reference< css::sdbc::XRowUpdate > _xParameter,const connectivity::ORowSetValue& _rValue);
+        void updateColumn(sal_Int32 nPos, const css::uno::Reference< css::sdbc::XRowUpdate >& _xParameter, const connectivity::ORowSetValue& _rValue);
     public:
         explicit OBookmarkSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
         {}

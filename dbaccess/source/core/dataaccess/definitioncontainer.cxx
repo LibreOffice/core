@@ -53,14 +53,14 @@ namespace dbaccess
 {
 
 // ODefinitionContainer_Impl
-void ODefinitionContainer_Impl::erase( TContentPtr _pDefinition )
+void ODefinitionContainer_Impl::erase( const TContentPtr& _pDefinition )
 {
     NamedDefinitions::const_iterator aPos = find( _pDefinition );
     if ( aPos != end() )
         m_aDefinitions.erase( aPos );
 }
 
-ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( TContentPtr _pDefinition ) const
+ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( const TContentPtr& _pDefinition ) const
 {
     return ::std::find_if(
         m_aDefinitions.begin(),
@@ -70,7 +70,7 @@ ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( TCont
         });
 }
 
-ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr _pDefinition )
+ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( const TContentPtr& _pDefinition )
 {
     return ::std::find_if(
         m_aDefinitions.begin(),
