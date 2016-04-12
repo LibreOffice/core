@@ -764,11 +764,9 @@ bool SVGFilter::implExportDocument()
     if( mpSVGExport->IsUseTinyProfile() )
          mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "baseProfile", "tiny" );
 
-    // enabling _SVG_WRITE_EXTENTS means that the slide size is not adapted
+    // The following if block means that the slide size is not adapted
     // to the size of the browser window, moreover the slide is top left aligned
-    // instead of centered.
-    #define _SVG_WRITE_EXTENTS
-    #ifdef _SVG_WRITE_EXTENTS
+    // instead of centered:
     if( !mbPresentation )
     {
         aAttr = OUString::number( nDocWidth * 0.01 ) + "mm";
@@ -777,7 +775,6 @@ bool SVGFilter::implExportDocument()
         aAttr = OUString::number( nDocHeight * 0.01 ) + "mm";
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
     }
-    #endif
 
     // #i124608# set viewBox explicitely to the exported content
     if (mbExportShapeSelection)
