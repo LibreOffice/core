@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_1bddd414",
+        "filename": "extensions/source/scanner/sanedlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-12T12:28:45Z",
+      "side": 1,
+      "message": "do we really want to do this Seek unconditionally?",
+      "revId": "35d7ca80930997febb31eb7cdd95eeb684514bec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
