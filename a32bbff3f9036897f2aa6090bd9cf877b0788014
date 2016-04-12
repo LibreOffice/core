@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_9bd1c4fe",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-12T12:41:31Z",
+      "side": 1,
+      "message": "hmm this definitely looks like a bug if it would happen - i\u0027ll convert that to an assert()",
+      "parentUuid": "9ad45d7e_1b05d4c1",
+      "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_d8f182cf",
         "filename": "vcl/win/app/salinst.cxx",
         "patchSetId": 3
@@ -119,6 +137,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "9ad45d7e_d8f182cf",
+      "range": {
+        "startLine": 150,
+        "startChar": 8,
+        "endLine": 150,
+        "endChar": 12
+      },
+      "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_7bce905b",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-12T12:41:31Z",
+      "side": 1,
+      "message": "okay while i\u0027m at it i can fix that too :)",
+      "parentUuid": "9ad45d7e_d89fc25d",
       "range": {
         "startLine": 150,
         "startChar": 8,
@@ -177,6 +219,24 @@
       "writtenOn": "2016-04-12T08:54:26Z",
       "side": 1,
       "message": "Hopefully the fact that that we cannot reliably wake-up multiple threads waiting on a condition - ( one of the horrors of the condition API we have ) cf. the header:\n\n    /**\n     * Warning: the Condition abstraction is inadequate for any\n     * situation where there may be multiple threads setting,\n     * waiting, and resetting the same condition. It can only be\n     * used to synchronise interactions between two threads\n     * cf. lost wakeups in:\n     *    http://www.cs.wustl.edu/~schmidt/win32-cv-1.html\n     */\n    class Condition\n\nIs not a big issue since we are only waiting in the main thread for this (?)",
+      "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_dbdb3c1a",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-12T12:41:31Z",
+      "side": 1,
+      "message": "yes only the main thread will ever wait on this condition",
+      "parentUuid": "9ad45d7e_1b3794b1",
       "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
