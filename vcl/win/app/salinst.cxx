@@ -147,25 +147,20 @@ void SalYieldMutex::release()
         m_mutex.release();
     else
     {
-        bool isRelease(1 == mnCount);
+        bool const isRelease(1 == mnCount);
         if ( isRelease )
         {
+            OpenGLContext::prepareForYield();
+
             SalData* pSalData = GetSalData();
             if ( pSalData->mnAppThreadId != nThreadId )
             {
-                OpenGLContext::prepareForYield();
-
                 // If we don't call these message, the Output from the
                 // Java clients doesn't come in the right order
                 GdiFlush();
 
-                mnThreadId = 0;
             }
-            else
-            {
-                mnThreadId = 0;
-                OpenGLContext::prepareForYield();
-            }
+            mnThreadId = 0;
         }
 
         mnCount--;
