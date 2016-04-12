@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBU_UNO_HRC_
-#define _DBU_UNO_HRC_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_UNO_HRC
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_UNO_HRC
 
 #include "dbu_resource.hrc"
 
@@ -41,6 +41,6 @@
 #error too many resources in uno ....
 #endif
 
-#endif // _DBU_UNO_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

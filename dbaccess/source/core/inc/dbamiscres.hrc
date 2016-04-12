@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_MISCRES_HRC_
-#define _DBA_MISCRES_HRC_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DBAMISCRES_HRC
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_DBAMISCRES_HRC
 
 #define STR_MYSQL_NATIVE        24
 
 #define STR_END                 STR_MYSQL_NATIVE + 1
 
-#endif // _DBA_MISCRES_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

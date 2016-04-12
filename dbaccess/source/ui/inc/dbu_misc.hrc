@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBU_MISC_HRC_
-#define _DBU_MISC_HRC_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_MISC_HRC
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_MISC_HRC
 
 #include "dbu_resource.hrc"
 
@@ -50,6 +50,6 @@
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-#endif // _DBU_MISC_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

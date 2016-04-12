@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_DBACCESS_HELPID_HRC_
-#define _DBA_DBACCESS_HELPID_HRC_
+#ifndef INCLUDED_DBACCESS_INC_DBACCESS_HELPID_HRC
+#define INCLUDED_DBACCESS_INC_DBACCESS_HELPID_HRC
 
 
 #define HID_DATABROWSE_HEADER                             "DBACCESS_HID_DATABROWSE_HEADER"
@@ -168,6 +168,6 @@
 
 
 
-#endif // _DBA_DBACCESS_HELPID_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

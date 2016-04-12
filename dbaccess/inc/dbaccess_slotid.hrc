@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACCESS_SLOTID_HRC_
-#define _DBACCESS_SLOTID_HRC_
+#ifndef INCLUDED_DBACCESS_INC_DBACCESS_SLOTID_HRC
+#define INCLUDED_DBACCESS_INC_DBACCESS_SLOTID_HRC
 
 #include <sfx2/sfxsids.hrc>
 
@@ -105,6 +105,6 @@
 
 #define SID_QUERY_PROP_DLG              ( SID_DBACCESS_START +  69 )
 
-#endif // _DBACCESS_SLOTID_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
