@@ -143,33 +143,30 @@ void SalYieldMutex::acquire()
 void SalYieldMutex::release()
 {
     DWORD nThreadId = GetCurrentThreadId();
-    if ( mnThreadId != nThreadId )
-        m_mutex.release();
-    else
+    assert(mnThreadId == nThreadId);
+
+    bool const isRelease(1 == mnCount);
+    if ( isRelease )
     {
-        bool const isRelease(1 == mnCount);
-        if ( isRelease )
+        OpenGLContext::prepareForYield();
+
+        SalData* pSalData = GetSalData();
+        if ( pSalData->mnAppThreadId != nThreadId )
         {
-            OpenGLContext::prepareForYield();
+            // If we don't call these message, the Output from the
+            // Java clients doesn't come in the right order
+            GdiFlush();
 
-            SalData* pSalData = GetSalData();
-            if ( pSalData->mnAppThreadId != nThreadId )
-            {
-                // If we don't call these message, the Output from the
-                // Java clients doesn't come in the right order
-                GdiFlush();
-
-            }
-            mnThreadId = 0;
         }
+        mnThreadId = 0;
+    }
 
-        mnCount--;
-        m_mutex.release();
+    mnCount--;
+    m_mutex.release();
 
-        if ( isRelease )
-        {   // do this *after* release
-            m_condition.set(); // wake up ImplSalYieldMutexAcquireWithWait()
-        }
+    if ( isRelease )
+    {   // do this *after* release
+        m_condition.set(); // wake up ImplSalYieldMutexAcquireWithWait()
     }
 }
 
