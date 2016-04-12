@@ -20,6 +20,7 @@ $(eval $(call gb_Library_add_defs,opencl,\
 
 $(eval $(call gb_Library_use_externals,opencl,\
     boost_headers \
+    clew \
     icu_headers \
     icui18n \
     icuuc \
@@ -32,7 +33,6 @@ $(eval $(call gb_Library_use_custom_headers,opencl,\
 $(eval $(call gb_Library_use_sdk_api,opencl))
 
 $(eval $(call gb_Library_use_libraries,opencl,\
-    clew \
     configmgr \
     comphelper \
     cppu \

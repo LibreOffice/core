@@ -3968,4 +3968,12 @@ endef
 endif
 endif
 
+define gb_LinkTarget__use_clew
+$(call gb_LinkTarget_set_include,$(1), \
+    -I$(SRCDIR)/external/clew/source/include \
+    $$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),clew)
+endef
+
 # vim: set noet sw=4 ts=4:
