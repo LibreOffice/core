@@ -587,6 +587,8 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
     }
 
     const bool bHasCurves = rPolygon.areControlPointsUsed();
+    basegfx::B2DPoint aLast;
+
     for( int nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++ )
     {
         int nClosedIdx = nPointIdx;
@@ -621,6 +623,7 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
         {
             // first point => just move there
             cairo_move_to(cr, aPoint.getX(), aPoint.getY());
+            aLast = aPoint;
             continue;
         }
 
@@ -644,9 +647,24 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
                 aCP1 += aHalfPointOfs;
                 aCP2 += aHalfPointOfs;
             }
+
+            // tdf#99165 if the control points are 'empty', create the mathematical
+            // correct replacement ones to avoid problems with the graphical sub-system
+            if(aCP1.equal(aLast))
+            {
+                aCP1 = aLast + ((aCP2 - aLast) * 0.3);
+            }
+
+            if(aCP2.equal(aPoint))
+            {
+                aCP2 = aPoint + ((aCP1 - aPoint) * 0.3);
+            }
+
             cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),
                                aPoint.getX(), aPoint.getY());
         }
+
+        aLast = aPoint;
     }
 
     if( bClosePath )

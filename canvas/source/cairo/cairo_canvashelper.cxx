@@ -276,6 +276,8 @@ namespace cairocanvas
             useStates( viewState, renderState, true );
 
             cairo_move_to( mpCairo.get(), aBezierSegment.Px + 0.5, aBezierSegment.Py + 0.5 );
+            // tdf#99165 correction of control poinits not needed here, only hairlines drawn
+            // (see cairo_set_line_width above)
             cairo_curve_to( mpCairo.get(),
                             aBezierSegment.C1x + 0.5, aBezierSegment.C1y + 0.5,
                             aBezierSegment.C2x + 0.5, aBezierSegment.C2y + 0.5,
@@ -949,7 +951,7 @@ namespace cairocanvas
 
         bool bOpToDo = false;
         cairo_matrix_t aOrigMatrix, aIdentityMatrix;
-        double nX, nY, nBX, nBY, nAX, nAY;
+        double nX, nY, nBX, nBY, nAX, nAY, nLastX, nLastY;
 
         cairo_get_matrix( pCairo, &aOrigMatrix );
         cairo_matrix_init_identity( &aIdentityMatrix );
@@ -1022,6 +1024,20 @@ namespace cairocanvas
                                 nBY += 0.5;
                             }
 
+                            // tdf#99165 if the control points are 'empty', create the mathematical
+                            // correct replacement ones to avoid problems with the graphical sub-system
+                            if(basegfx::fTools::equal(nAX, nLastX) && basegfx::fTools::equal(nAY, nLastY))
+                            {
+                                nAX = nLastX + ((nBX - nLastX) * 0.3);
+                                nAY = nLastY + ((nBY - nLastY) * 0.3);
+                            }
+
+                            if(basegfx::fTools::equal(nBX, nX) && basegfx::fTools::equal(nBY, nY))
+                            {
+                                nBX = nX + ((nAX - nX) * 0.3);
+                                nBY = nY + ((nAY - nY) * 0.3);
+                            }
+
                             cairo_curve_to( pCairo, nAX, nAY, nBX, nBY, nX, nY );
                         }
                         else
@@ -1031,6 +1047,9 @@ namespace cairocanvas
                         }
                         bOpToDo = true;
                     }
+
+                    nLastX = nX;
+                    nLastY = nY;
                 }
 
                 if( aPolygon.isClosed() )
