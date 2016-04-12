@@ -1638,26 +1638,4 @@ throw (uno::RuntimeException, std::exception)
 
 } // namespace sfx2
 
-
-#if OSL_DEBUG_LEVEL > 0
-
-#include <stdio.h>
-
-static void dump(sfx2::XmlIdList_t * pList)
-#ifdef __GNUC__
-__attribute__ ((unused))
-#endif
-;
-static void dump(sfx2::XmlIdList_t * pList)
-{
-    fprintf(stderr, "\nXmlIdList(%p):  ", pList);
-    for (sfx2::XmlIdList_t::iterator i = pList->begin(); i != pList->end(); ++i)
-    {
-        fprintf(stderr, "%p  ", *i);
-    }
-    fprintf(stderr, "\n");
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
