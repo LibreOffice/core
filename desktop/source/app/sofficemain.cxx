@@ -49,6 +49,8 @@
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 #include <client/linux/handler/exception_handler.h>
+#elif defined WNT
+#include <client/windows/handler/exception_handler.h>
 #endif
 
 #endif
@@ -75,6 +77,19 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
     SAL_WARN("crashreport", "minidump generated: " << descriptor.path());
     return succeeded;
 }
+#elif defined WNT
+static bool dumpCallback(const wchar_t* path, const wchar_t* /*id*/,
+                            void* /*context*/, EXCEPTION_POINTERS* /*exinfo*/,
+                            MDRawAssertionInfo* /*assertion*/,
+                            bool succeeded)
+{
+    std::string ini_path = CrashReporter::getIniFileName();
+    std::ofstream minidump_file(ini_path, std::ios_base::app);
+    minidump_file << "DumpFile=" << path << "\n";;
+    minidump_file.close();
+    SAL_WARN("desktop", "minidump generated: " << path);
+    return succeeded;
+}
 #endif
 
 #endif
@@ -87,8 +102,10 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     google_breakpad::ExceptionHandler eh(descriptor, nullptr, dumpCallback, nullptr, true, -1);
 
     CrashReporter::storeExceptionHandler(&eh);
-#else
+#elif defined WNT
+    google_breakpad::ExceptionHandler eh(L".", nullptr, dumpCallback, nullptr, google_breakpad::ExceptionHandler::HANDLER_ALL);
 
+    CrashReporter::storeExceptionHandler(&eh);
 #endif
 #endif
 
