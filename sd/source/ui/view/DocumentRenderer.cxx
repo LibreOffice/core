@@ -336,7 +336,7 @@ namespace {
     {
     public:
         DialogCreator (ViewShellBase &rBase, bool bImpress, sal_Int32 nCurPage)
-            : Resource(SdResId(_STR_IMPRESS_PRINT_UI_OPTIONS))
+            : Resource(SdResId(STR_IMPRESS_PRINT_UI_OPTIONS))
             , mrBase(rBase)
             , mbImpress(bImpress)
             , mnCurPage(nCurPage)
@@ -373,7 +373,7 @@ namespace {
             maProperties.push_back(aOptionsUIFile);
 
             SvtModuleOptions aOpt;
-            OUString aAppGroupname(SD_RESSTR(_STR_IMPRESS_PRINT_UI_GROUP_NAME));
+            OUString aAppGroupname(SD_RESSTR(STR_IMPRESS_PRINT_UI_GROUP_NAME));
             aAppGroupname = aAppGroupname.replaceFirst("%s", aOpt.GetModuleName(
                 mbImpress ? SvtModuleOptions::EModule::IMPRESS : SvtModuleOptions::EModule::DRAW));
             AddDialogControl(vcl::PrinterOptionsHelper::setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage"));
@@ -384,7 +384,7 @@ namespace {
                 vcl::PrinterOptionsHelper::UIControlOptions aPrintOpt;
                 aPrintOpt.maGroupHint = "JobPage" ;
                 AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("extraimpressprintoptions",
-                                    SD_RESSTR(_STR_IMPRESS_PRINT_UI_PRINT_GROUP),
+                                    SD_RESSTR(STR_IMPRESS_PRINT_UI_PRINT_GROUP),
                                     "",
                                     aPrintOpt ));
 
@@ -392,10 +392,10 @@ namespace {
                 aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox" ;
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                     "impressdocument",
-                                    SD_RESSTR(_STR_IMPRESS_PRINT_UI_CONTENT),
+                                    SD_RESSTR(STR_IMPRESS_PRINT_UI_CONTENT),
                                     aHelpIds,
                                     "PageContentType" ,
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_CONTENT_CHOICES),
+                                    CreateChoice(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES),
                                     0)
                                 );
 
@@ -403,7 +403,7 @@ namespace {
                 vcl::PrinterOptionsHelper::UIControlOptions aContentOpt( "PageContentType" , 1 );
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                     "slidesperpage",
-                                    SD_RESSTR(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE),
+                                    SD_RESSTR(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE),
                                     aHelpIds,
                                     "SlidesPerPage" ,
                                     GetSlidesPerPageSequence(),
@@ -417,10 +417,10 @@ namespace {
                 vcl::PrinterOptionsHelper::UIControlOptions aSlidesPerPageOpt( "SlidesPerPage" , -1, true );
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                     "slidesperpageorder",
-                                    SD_RESSTR(_STR_IMPRESS_PRINT_UI_ORDER),
+                                    SD_RESSTR(STR_IMPRESS_PRINT_UI_ORDER),
                                     aHelpIds,
                                     "SlidesPerPageOrder" ,
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
+                                    CreateChoice(STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                     0,
                                     Sequence< sal_Bool >(),
                                     aSlidesPerPageOpt )
@@ -428,12 +428,12 @@ namespace {
             }
 
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("contents",
-                               SD_RESSTR(_STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT), "" ) );
+                               SD_RESSTR(STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT), "" ) );
 
             if( mbImpress )
             {
                 AddDialogControl( vcl::PrinterOptionsHelper::setBoolControlOpt("printname",
-                                    SD_RESSTR(_STR_IMPRESS_PRINT_UI_IS_PRINT_NAME),
+                                    SD_RESSTR(STR_IMPRESS_PRINT_UI_IS_PRINT_NAME),
                                     ".HelpID:vcl:PrintDialog:IsPrintName:CheckBox" ,
                                     "IsPrintName" ,
                                     false
@@ -443,7 +443,7 @@ namespace {
             else
             {
                 AddDialogControl( vcl::PrinterOptionsHelper::setBoolControlOpt("printname",
-                                    SD_RESSTR(_STR_DRAW_PRINT_UI_IS_PRINT_NAME),
+                                    SD_RESSTR(STR_DRAW_PRINT_UI_IS_PRINT_NAME),
                                     ".HelpID:vcl:PrintDialog:IsPrintName:CheckBox" ,
                                     "IsPrintName" ,
                                     false
@@ -452,7 +452,7 @@ namespace {
             }
 
             AddDialogControl( vcl::PrinterOptionsHelper::setBoolControlOpt("printdatetime",
-                                SD_RESSTR(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE),
+                                SD_RESSTR(STR_IMPRESS_PRINT_UI_IS_PRINT_DATE),
                                 ".HelpID:vcl:PrintDialog:IsPrintDateTime:CheckBox" ,
                                 "IsPrintDateTime" ,
                                 false
@@ -462,7 +462,7 @@ namespace {
             if( mbImpress )
             {
                 AddDialogControl( vcl::PrinterOptionsHelper::setBoolControlOpt("printhidden",
-                                    SD_RESSTR(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN),
+                                    SD_RESSTR(STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN),
                                     ".HelpID:vcl:PrintDialog:IsPrintHidden:CheckBox" ,
                                     "IsPrintHidden" ,
                                     false
@@ -471,7 +471,7 @@ namespace {
             }
 
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("color",
-                               SD_RESSTR(_STR_IMPRESS_PRINT_UI_QUALITY), "" ) );
+                               SD_RESSTR(STR_IMPRESS_PRINT_UI_QUALITY), "" ) );
 
             aHelpIds.realloc( 3 );
             aHelpIds[0] = ".HelpID:vcl:PrintDialog:Quality:RadioButton:0" ;
@@ -486,12 +486,12 @@ namespace {
                                 "",
                                 aHelpIds,
                                 "Quality" ,
-                                CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES),
+                                CreateChoice(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES),
                                 0)
                             );
 
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("pagesizes",
-                               SD_RESSTR(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS), "" ) );
+                               SD_RESSTR(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS), "" ) );
 
             aHelpIds.realloc( 4 );
             aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:0" ;
@@ -510,7 +510,7 @@ namespace {
                                 "",
                                 aHelpIds,
                                 "PageOptions" ,
-                                CreateChoice(mbImpress ? _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES : _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
+                                CreateChoice(mbImpress ? STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES : STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
                                 0,
                                 Sequence< sal_Bool >(),
                                 aPageOptionsOpt
@@ -520,12 +520,12 @@ namespace {
             vcl::PrinterOptionsHelper::UIControlOptions aBrochureOpt;
             aBrochureOpt.maGroupHint = "LayoutPage" ;
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("pagesides",
-                               SD_RESSTR(_STR_IMPRESS_PRINT_UI_PAGE_SIDES), "",
+                               SD_RESSTR(STR_IMPRESS_PRINT_UI_PAGE_SIDES), "",
                                aBrochureOpt ) );
 
             // brochure printing
             AddDialogControl( vcl::PrinterOptionsHelper::setBoolControlOpt("brochure",
-                                SD_RESSTR(_STR_IMPRESS_PRINT_UI_BROCHURE),
+                                SD_RESSTR(STR_IMPRESS_PRINT_UI_BROCHURE),
                                 ".HelpID:vcl:PrintDialog:PrintProspect:CheckBox" ,
                                 "PrintProspect" ,
                                 false,
@@ -540,10 +540,10 @@ namespace {
             aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintProspectInclude:ListBox" ;
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                 "brochureinclude",
-                                SD_RESSTR(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE),
+                                SD_RESSTR(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE),
                                 aHelpIds,
                                 "PrintProspectInclude" ,
-                                CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
+                                CreateChoice(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
                                 0,
                                 Sequence< sal_Bool >(),
                                 aIncludeOpt
@@ -554,7 +554,7 @@ namespace {
             vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
             aPaperTrayOpt.maGroupHint = "OptionsPageOptGroup" ;
             AddDialogControl( vcl::PrinterOptionsHelper::setBoolControlOpt("printpaperfromsetup",
-                                SD_RESSTR(_STR_IMPRESS_PRINT_UI_PAPER_TRAY),
+                                SD_RESSTR(STR_IMPRESS_PRINT_UI_PAPER_TRAY),
                                 ".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox" ,
                                 "PrintPaperFromSetup" ,
                                 false,
@@ -566,7 +566,7 @@ namespace {
             aPrintRangeOpt.mbInternalOnly = true;
             aPrintRangeOpt.maGroupHint = "PrintRange" ;
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("printrange",
-                                SD_RESSTR(_STR_IMPRESS_PRINT_UI_PAGE_RANGE),
+                                SD_RESSTR(STR_IMPRESS_PRINT_UI_PAGE_RANGE),
                                 "",
                                 aPrintRangeOpt )
                              );
@@ -613,8 +613,8 @@ namespace {
                                 aHelpIds,
                                 aPrintRangeName,
                                 CreateChoice(mbImpress
-                                             ? _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
-                                             : _STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE),
+                                             ? STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
+                                             : STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE),
                                 nPrintRange )
                             );
             // create a an Edit dependent on "Pages" selected
@@ -649,7 +649,7 @@ namespace {
         Sequence<OUString> GetSlidesPerPageSequence()
         {
             const Sequence<OUString> aChoice (
-                CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES));
+                CreateChoice(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES));
             maSlidesPerPage.clear();
             maSlidesPerPage.push_back(0); // first is using the default
             for (sal_Int32 nIndex=1,nCount=aChoice.getLength(); nIndex<nCount; ++nIndex)
