@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMULA_CORE_RESOURCE_HRC_
-#define _FORMULA_CORE_RESOURCE_HRC_
+#ifndef INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HRC
+#define INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HRC
 
 #include <svl/solar.hrc>
 
@@ -31,6 +31,6 @@
 #define RID_STRLIST_FUNCTION_NAMES_ENGLISH          (RID_CORE_OTHER_START + 2)
 #define RID_STRLIST_FUNCTION_NAMES                  (RID_CORE_OTHER_START + 3)
 
-#endif // _FORMULA_CORE_RESOURCE_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
