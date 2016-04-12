@@ -70,14 +70,14 @@ using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
-#define _MAPV(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
-#define GMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
-#define GMAP_D(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC|MID_FLAG_DEFAULT_ITEM_EXPORT,context)
-#define GMAPV(name,prefix,token,type,context,version) _MAPV(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context,version)
-#define DPMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
-#define TMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
-#define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
+#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+#define MAPV_(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
+#define GMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
+#define GMAP_D(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC|MID_FLAG_DEFAULT_ITEM_EXPORT,context)
+#define GMAPV(name,prefix,token,type,context,version) MAPV_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context,version)
+#define DPMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
+#define TMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
+#define PMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
 #define MAP_END() { nullptr, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
 
 // entry list for graphic properties
@@ -354,12 +354,12 @@ const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[] =
 */
 const XMLPropertyMapEntry aXMLTableShapeAttributes[] =
 {
-    _MAP( "UseFirstRowStyle",       XML_NAMESPACE_TABLE, XML_USE_FIRST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
-    _MAP( "UseLastRowStyle",        XML_NAMESPACE_TABLE, XML_USE_LAST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
-    _MAP( "UseFirstColumnStyle",    XML_NAMESPACE_TABLE, XML_USE_FIRST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
-    _MAP( "UseLastColumnStyle",     XML_NAMESPACE_TABLE, XML_USE_LAST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
-    _MAP( "UseBandingRowStyle",     XML_NAMESPACE_TABLE, XML_USE_BANDING_ROWS_STYLES, XML_TYPE_BOOL, 0 ),
-    _MAP( "UseBandingColumnStyle",  XML_NAMESPACE_TABLE, XML_USE_BANDING_COLUMNS_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( "UseFirstRowStyle",       XML_NAMESPACE_TABLE, XML_USE_FIRST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( "UseLastRowStyle",        XML_NAMESPACE_TABLE, XML_USE_LAST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( "UseFirstColumnStyle",    XML_NAMESPACE_TABLE, XML_USE_FIRST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( "UseLastColumnStyle",     XML_NAMESPACE_TABLE, XML_USE_LAST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( "UseBandingRowStyle",     XML_NAMESPACE_TABLE, XML_USE_BANDING_ROWS_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( "UseBandingColumnStyle",  XML_NAMESPACE_TABLE, XML_USE_BANDING_COLUMNS_STYLES, XML_TYPE_BOOL, 0 ),
     MAP_END()
 };
 
