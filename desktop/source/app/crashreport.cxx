@@ -82,7 +82,7 @@ void CrashReporter::storeExceptionHandler(google_breakpad::ExceptionHandler* pEx
 
 std::string CrashReporter::getIniFileName()
 {
-    OUString url = getCrashUserProfileDirectory();
+    OUString url = getCrashUserProfileDirectory() + "dump.ini";
     OString aUrl = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
     std::string aRet(aUrl.getStr());
     return aRet;
