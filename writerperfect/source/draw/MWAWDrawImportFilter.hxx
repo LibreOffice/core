@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _MWAWDRAWIMPORTFILTER_HXX
-#define _MWAWDRAWIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_MWAWDRAWIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_DRAW_MWAWDRAWIMPORTFILTER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

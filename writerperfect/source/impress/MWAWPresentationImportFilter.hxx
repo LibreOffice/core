@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _MWAWPRESENTATIONIMPORTFILTER_HXX
-#define _MWAWPRESENTATIONIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_IMPRESS_MWAWPRESENTATIONIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_IMPRESS_MWAWPRESENTATIONIMPORTFILTER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

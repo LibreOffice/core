@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _MSPUBIMPORTFILTER_HXX
-#define _MSPUBIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_MSPUBIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_DRAW_MSPUBIMPORTFILTER_HXX
 
 #include "ImportFilter.hxx"
 

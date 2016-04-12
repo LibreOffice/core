@@ -10,8 +10,8 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _WPGIMPORTFILTER_HXX
-#define _WPGIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_WPGIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_DRAW_WPGIMPORTFILTER_HXX
 
 #include "ImportFilter.hxx"
 

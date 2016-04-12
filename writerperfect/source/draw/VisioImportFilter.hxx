@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _VISIOIMPORTFILTER_HXX
-#define _VISIOIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_VISIOIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_DRAW_VISIOIMPORTFILTER_HXX
 
 #include "ImportFilter.hxx"
 

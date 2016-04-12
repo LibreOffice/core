@@ -8,8 +8,8 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _CMXIMPORTFILTER_HXX
-#define _CMXIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_CMXIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_DRAW_CMXIMPORTFILTER_HXX
 
 #include "ImportFilter.hxx"
 
