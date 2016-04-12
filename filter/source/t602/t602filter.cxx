@@ -116,7 +116,7 @@ namespace T602ImportFilter {
         "\x04\x4d\x02\xdd\x04\x4e\x02\xc7\x04\x4f\x00\xa7\x04\x34\x00\xe0"  // F
         "\x00\xb4\x00\xb0\x00\xc0\x02\xc6\x01\x58\x01\x59\x00\x20\x00\x20";
 
-#define _Start(_nam) \
+#define Start_(_nam) \
     if (mxHandler.is()) \
     { \
         mxHandler->startElement(_nam, mAttrList); \
@@ -124,7 +124,7 @@ namespace T602ImportFilter {
             mpAttrList->Clear(); \
     }
 
-#define _End(_nam) \
+#define End_(_nam) \
     if (mxHandler.is()) \
     { \
         mxHandler->endElement(_nam); \
@@ -238,8 +238,8 @@ void T602ImportFilter::inschr(unsigned char ch)
             sprintf(s,"%i",pst.wasspace);
             if (mpAttrList)
                 mpAttrList->AddAttribute("text:c",OUString::createFromAscii(s));
-            _Start("text:s");
-            _End("text:s");
+            Start_("text:s");
+            End_("text:s");
         }
     }
 
@@ -302,156 +302,156 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::Property
     mpAttrList->AddAttribute("xmlns:script", "http://openoffice.org/2000/script");
     mpAttrList->AddAttribute("office:class", "text");
     mpAttrList->AddAttribute("office:version", "1.0");
-    _Start("office:document-content");
+    Start_("office:document-content");
 
-    _Start("office:font-decls");
+    Start_("office:font-decls");
     mpAttrList->AddAttribute("style:name","Courier New");
     mpAttrList->AddAttribute("fo:font-family","Courier New");
     mpAttrList->AddAttribute("style:font-pitch","fixed");
-    _Start("style:font-decl");
-    _End("style:font-decl");
-    _End("office:font-decls");
+    Start_("style:font-decl");
+    End_("style:font-decl");
+    End_("office:font-decls");
 
-    _Start("office:automatic-styles");
+    Start_("office:automatic-styles");
 
     // Standardni text
     mpAttrList->AddAttribute("style:name","P1");
     mpAttrList->AddAttribute("style:family","paragraph");
     mpAttrList->AddAttribute("style:parent-style-name","Standard");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("style:font-name","Courier New");
     mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs));
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // Standardni text - konec stranky
     mpAttrList->AddAttribute("style:name","P2");
     mpAttrList->AddAttribute("style:family","paragraph");
     mpAttrList->AddAttribute("style:parent-style-name","Standard");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("style:font-name","Courier New");
     mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs));
     mpAttrList->AddAttribute("fo:break-before","page");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T1 Normalni text
     mpAttrList->AddAttribute("style:name","T1");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T2 Tucny text
     mpAttrList->AddAttribute("style:name","T2");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("fo:font-weight","bold");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T3 Kurziva
     mpAttrList->AddAttribute("style:name","T3");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("fo:font-style","italic");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T4 Siroky text
     mpAttrList->AddAttribute("style:name","T4");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("fo:font-weight","bold");
     mpAttrList->AddAttribute("style:text-scale","200%");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T5 Vysoky text
     mpAttrList->AddAttribute("style:name","T5");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs2));
     mpAttrList->AddAttribute("fo:font-weight","bold");
     mpAttrList->AddAttribute("style:text-scale","50%");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T6 Velky text
     mpAttrList->AddAttribute("style:name","T6");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs2));
     mpAttrList->AddAttribute("fo:font-weight","bold");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T7 Podtrzeny text
     mpAttrList->AddAttribute("style:name","T7");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("style:text-underline","single");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T8 Podtrzena tucny text
     mpAttrList->AddAttribute("style:name","T8");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("fo:font-weight","bold");
     mpAttrList->AddAttribute("style:text-underline","single");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T9 Podtrzena kurziva
     mpAttrList->AddAttribute("style:name","T9");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("fo:font-style","italic");
     mpAttrList->AddAttribute("style:text-underline","single");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T10 Horni index
     mpAttrList->AddAttribute("style:name","T10");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("style:text-position","27% 100%");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
     // T11 Dolni index
     mpAttrList->AddAttribute("style:name","T11");
     mpAttrList->AddAttribute("style:family","text");
-    _Start("style:style");
+    Start_("style:style");
     mpAttrList->AddAttribute("style:text-position","-27% 100%");
-    _Start("style:properties");
-    _End("style:properties");
-    _End("style:style");
+    Start_("style:properties");
+    End_("style:properties");
+    End_("style:style");
 
-    _End("office:automatic-styles");
+    End_("office:automatic-styles");
 
-    _Start("office:styles");
-    _End("office:styles");
+    Start_("office:styles");
+    End_("office:styles");
 
-    _Start("office:body");
+    Start_("office:body");
 
     Read602();
 
-    _End("office:body");
-    _End("office:document-content");
+    End_("office:body");
+    End_("office:document-content");
 
     mxHandler->endDocument();
 
@@ -542,11 +542,11 @@ void T602ImportFilter::wrtfnt()
         default       : style = "T1"; break;
     }
 
-    _End("text:span");
+    End_("text:span");
     if (mpAttrList)
         mpAttrList->AddAttribute(
             "text:style-name", OUString::createFromAscii(style));
-    _Start("text:span");
+    Start_("text:span");
 }
 
 void T602ImportFilter::setfnt(fonts fnt,bool mustwrite)
@@ -580,16 +580,16 @@ void T602ImportFilter::par602(bool endofpage)
     if(!endofpage || !pst.waspar) {
         if(ini.showcomm||!pst.comment) {
             if(pst.waspar||ini.reformatpars) {
-                _End("text:span");
-                _End("text:p");
+                End_("text:span");
+                End_("text:p");
                 if (mpAttrList)
                     mpAttrList->AddAttribute("text:style-name", "P1");
-                _Start("text:p");
-                _Start("text:span");
+                Start_("text:p");
+                Start_("text:span");
                 wrtfnt();
             } else {
-                _Start("text:line-break");
-                _End("text:line-break");
+                Start_("text:line-break");
+                End_("text:line-break");
             }
         }
 
@@ -607,12 +607,12 @@ void T602ImportFilter::par602(bool endofpage)
         if(((pst.pars+1)/2) >= endp || endofpage) {
             pst.pars = 0;
             if(!ini.reformatpars) {
-                _End("text:span");
-                _End("text:p");
+                End_("text:span");
+                End_("text:p");
                 if (mpAttrList)
                     mpAttrList->AddAttribute("text:style-name", "P2");
-                _Start("text:p");
-                _Start("text:span");
+                Start_("text:p");
+                Start_("text:span");
                 wrtfnt();
             }
         }
@@ -719,10 +719,10 @@ void T602ImportFilter::Read602()
 
     if (mpAttrList)
         mpAttrList->AddAttribute("text:style-name", "P1");
-    _Start("text:p");
+    Start_("text:p");
     if (mpAttrList)
         mpAttrList->AddAttribute("text:style-name", "T1");
-    _Start("text:span");
+    Start_("text:span");
 
     if (node==START) { node = EOL; }
 
@@ -790,8 +790,8 @@ void T602ImportFilter::Read602()
         case SETCH :
             // warning: potentially uninitialized
             switch(ch) {
-            case '\t' : _Start("text:tab-stop");
-                    _End("text:tab-stop");
+            case '\t' : Start_("text:tab-stop");
+                    End_("text:tab-stop");
                     break;
             case 0x03 : break; //condensed
             case 0x01 : break; //elite
@@ -866,8 +866,8 @@ void T602ImportFilter::Read602()
         }
     }
 
-    _End("text:span");
-    _End("text:p");
+    End_("text:span");
+    End_("text:p");
     node = QUIT;
 }
 
@@ -938,26 +938,26 @@ Locale SAL_CALL T602ImportFilterDialog::getLocale()
 bool T602ImportFilterDialog::OptionsDlg()
 {
     Any any;
-#define _propInt(_prop,_nam,_val) \
+#define propInt_(_prop,_nam,_val) \
     any <<= (sal_Int32)_val;\
     _prop->setPropertyValue(_nam, any);
-#define _propShort(_prop,_nam,_val) \
+#define propShort_(_prop,_nam,_val) \
     any <<= (sal_Int16)_val;\
     _prop->setPropertyValue(_nam, any);
-#define _propBool(_prop,_nam,_val) \
+#define propBool_(_prop,_nam,_val) \
     any <<= _val;\
     _prop->setPropertyValue(_nam, any);
-#define _propString(_prop,_nam,_val) \
+#define propString_(_prop,_nam,_val) \
     any <<= OUString(_val);\
     _prop->setPropertyValue(_nam, any);
-#define _propStringFromResId(_prop,_nam,_val) \
+#define propStringFromResId_(_prop,_nam,_val) \
     any <<= getResStr(_val);\
     _prop->setPropertyValue(_nam, any);
-#define _propGet(_prop,_nam) \
+#define propGet_(_prop,_nam) \
     _prop->getPropertyValue(_nam);
-#define _Inst(_path)\
+#define Inst_(_path)\
     xMultiServiceFactory->createInstance(_path);
-#define _Insert(_cont,_nam,_obj) \
+#define Insert_(_cont,_nam,_obj) \
     any <<= _obj;\
     _cont->insertByName( _nam, any );
 
@@ -968,11 +968,11 @@ bool T602ImportFilterDialog::OptionsDlg()
     Reference <XMultiServiceFactory> xMultiServiceFactory (rInstance,UNO_QUERY);
 
     Reference < XPropertySet > xPSetDialog( rInstance, UNO_QUERY );
-    _propInt(xPSetDialog,"PositionX",100);
-    _propInt(xPSetDialog,"PositionY",100);
-    _propInt(xPSetDialog,"Width",130);
-    _propInt(xPSetDialog,"Height",90);
-    _propStringFromResId(xPSetDialog,"Title", T602FILTER_STR_IMPORT_DIALOG_TITLE);
+    propInt_(xPSetDialog,"PositionX",100);
+    propInt_(xPSetDialog,"PositionY",100);
+    propInt_(xPSetDialog,"Width",130);
+    propInt_(xPSetDialog,"Height",90);
+    propStringFromResId_(xPSetDialog,"Title", T602FILTER_STR_IMPORT_DIALOG_TITLE);
 
 #define T602DLG_OK_BUTTON    "ok_button"
 #define T602DLG_CANCEL_BUTTON    "cancel_button"
@@ -982,25 +982,25 @@ bool T602ImportFilterDialog::OptionsDlg()
 #define T602DLG_REFORMAT_CB    "reformat_cb"
 #define T602DLG_CODE_TXT    "code_txt"
 
-    Reference < XInterface > TextModel = _Inst("com.sun.star.awt.UnoControlFixedTextModel");
+    Reference < XInterface > TextModel = Inst_("com.sun.star.awt.UnoControlFixedTextModel");
     Reference < XPropertySet > xPSetText( TextModel, UNO_QUERY );
-    _propInt(xPSetText,"PositionX",10);
-    _propInt(xPSetText,"PositionY",8);
-    _propInt(xPSetText,"Width",30);
-    _propInt(xPSetText,"Height",14);
-    _propString(xPSetText,"Name",T602DLG_CODE_TXT);
-    _propStringFromResId(xPSetText,"Label",T602FILTER_STR_ENCODING_LABEL);
+    propInt_(xPSetText,"PositionX",10);
+    propInt_(xPSetText,"PositionY",8);
+    propInt_(xPSetText,"Width",30);
+    propInt_(xPSetText,"Height",14);
+    propString_(xPSetText,"Name",T602DLG_CODE_TXT);
+    propStringFromResId_(xPSetText,"Label",T602FILTER_STR_ENCODING_LABEL);
 
-    Reference < XInterface > ListBoxModel = _Inst("com.sun.star.awt.UnoControlListBoxModel");
+    Reference < XInterface > ListBoxModel = Inst_("com.sun.star.awt.UnoControlListBoxModel");
     Reference < XPropertySet > xPSetCodeLB( ListBoxModel, UNO_QUERY );
-    _propInt(xPSetCodeLB,"PositionX",40);
-    _propInt(xPSetCodeLB,"PositionY",5);
-    _propInt(xPSetCodeLB,"Width",85);
-    _propInt(xPSetCodeLB,"Height",14);
-    _propString(xPSetCodeLB,"Name",T602DLG_CODE_LB);
-    _propShort(xPSetCodeLB,"TabIndex",1);
-    _propBool(xPSetCodeLB,"Dropdown",true);
-    _propBool(xPSetCodeLB,"MultiSelection",false);
+    propInt_(xPSetCodeLB,"PositionX",40);
+    propInt_(xPSetCodeLB,"PositionY",5);
+    propInt_(xPSetCodeLB,"Width",85);
+    propInt_(xPSetCodeLB,"Height",14);
+    propString_(xPSetCodeLB,"Name",T602DLG_CODE_LB);
+    propShort_(xPSetCodeLB,"TabIndex",1);
+    propBool_(xPSetCodeLB,"Dropdown",true);
+    propBool_(xPSetCodeLB,"MultiSelection",false);
 
     Sequence< OUString > ous(4);
     ous[0] = getResStr(T602FILTER_STR_ENCODING_AUTO);
@@ -1015,71 +1015,71 @@ bool T602ImportFilterDialog::OptionsDlg()
     any <<= shr;
     xPSetCodeLB->setPropertyValue("SelectedItems", any);
 
-    Reference < XInterface > AzbCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > AzbCheckBoxModel = Inst_("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetAzbukaCB( AzbCheckBoxModel, UNO_QUERY );
-    _propInt(xPSetAzbukaCB,"PositionX",10);
-    _propInt(xPSetAzbukaCB,"PositionY",25);
-    _propInt(xPSetAzbukaCB,"Width",100);
-    _propInt(xPSetAzbukaCB,"Height",14);
-    _propString(xPSetAzbukaCB,"Name",T602DLG_AZBUKA_CB);
-    _propShort(xPSetAzbukaCB,"TabIndex",2);
-    _propStringFromResId(xPSetAzbukaCB,"Label",T602FILTER_STR_CYRILLIC_MODE);
-    _propShort(xPSetAzbukaCB,"State",ini.ruscode);
+    propInt_(xPSetAzbukaCB,"PositionX",10);
+    propInt_(xPSetAzbukaCB,"PositionY",25);
+    propInt_(xPSetAzbukaCB,"Width",100);
+    propInt_(xPSetAzbukaCB,"Height",14);
+    propString_(xPSetAzbukaCB,"Name",T602DLG_AZBUKA_CB);
+    propShort_(xPSetAzbukaCB,"TabIndex",2);
+    propStringFromResId_(xPSetAzbukaCB,"Label",T602FILTER_STR_CYRILLIC_MODE);
+    propShort_(xPSetAzbukaCB,"State",ini.ruscode);
 
-    Reference < XInterface > RefCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > RefCheckBoxModel = Inst_("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetRefCB( RefCheckBoxModel, UNO_QUERY );
-    _propInt(xPSetRefCB,"PositionX",10);
-    _propInt(xPSetRefCB,"PositionY",40);
-    _propInt(xPSetRefCB,"Width",100);
-    _propInt(xPSetRefCB,"Height",14);
-    _propString(xPSetRefCB,"Name",T602DLG_REFORMAT_CB);
-    _propShort(xPSetRefCB,"TabIndex",3);
-    _propStringFromResId(xPSetRefCB,"Label",T602FILTER_STR_REFORMAT_TEXT);
-    _propShort(xPSetRefCB,"State",ini.reformatpars);
+    propInt_(xPSetRefCB,"PositionX",10);
+    propInt_(xPSetRefCB,"PositionY",40);
+    propInt_(xPSetRefCB,"Width",100);
+    propInt_(xPSetRefCB,"Height",14);
+    propString_(xPSetRefCB,"Name",T602DLG_REFORMAT_CB);
+    propShort_(xPSetRefCB,"TabIndex",3);
+    propStringFromResId_(xPSetRefCB,"Label",T602FILTER_STR_REFORMAT_TEXT);
+    propShort_(xPSetRefCB,"State",ini.reformatpars);
 
-    Reference < XInterface > CommCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > CommCheckBoxModel = Inst_("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetCommCB( CommCheckBoxModel, UNO_QUERY );
-    _propInt(xPSetCommCB,"PositionX",10);
-    _propInt(xPSetCommCB,"PositionY",55);
-    _propInt(xPSetCommCB,"Width",100);
-    _propInt(xPSetCommCB,"Height",14);
-    _propString(xPSetCommCB,"Name",T602DLG_COMMENT_CB);
-    _propShort(xPSetCommCB,"TabIndex",4);
-    _propStringFromResId(xPSetCommCB,"Label",T602FILTER_STR_DOT_COMMANDS);
-    _propShort(xPSetCommCB,"State",ini.showcomm);
+    propInt_(xPSetCommCB,"PositionX",10);
+    propInt_(xPSetCommCB,"PositionY",55);
+    propInt_(xPSetCommCB,"Width",100);
+    propInt_(xPSetCommCB,"Height",14);
+    propString_(xPSetCommCB,"Name",T602DLG_COMMENT_CB);
+    propShort_(xPSetCommCB,"TabIndex",4);
+    propStringFromResId_(xPSetCommCB,"Label",T602FILTER_STR_DOT_COMMANDS);
+    propShort_(xPSetCommCB,"State",ini.showcomm);
 
-    Reference < XInterface > CancelButtonModel = _Inst("com.sun.star.awt.UnoControlButtonModel");
+    Reference < XInterface > CancelButtonModel = Inst_("com.sun.star.awt.UnoControlButtonModel");
     Reference < XPropertySet > xPSetCancelButton( CancelButtonModel, UNO_QUERY );
-    _propInt(xPSetCancelButton,"PositionX",10);
-    _propInt(xPSetCancelButton,"PositionY",70);
-    _propInt(xPSetCancelButton,"Width",50);
-    _propInt(xPSetCancelButton,"Height",14);
-    _propString(xPSetCancelButton,"Name",T602DLG_CANCEL_BUTTON);
-    _propShort(xPSetCancelButton,"TabIndex",5);
-    _propShort(xPSetCancelButton,"PushButtonType",2);
-    _propStringFromResId(xPSetCancelButton,"Label",T602FILTER_STR_CANCEL_BUTTON);
+    propInt_(xPSetCancelButton,"PositionX",10);
+    propInt_(xPSetCancelButton,"PositionY",70);
+    propInt_(xPSetCancelButton,"Width",50);
+    propInt_(xPSetCancelButton,"Height",14);
+    propString_(xPSetCancelButton,"Name",T602DLG_CANCEL_BUTTON);
+    propShort_(xPSetCancelButton,"TabIndex",5);
+    propShort_(xPSetCancelButton,"PushButtonType",2);
+    propStringFromResId_(xPSetCancelButton,"Label",T602FILTER_STR_CANCEL_BUTTON);
 
-    Reference < XInterface > OkButtonModel = _Inst("com.sun.star.awt.UnoControlButtonModel");
+    Reference < XInterface > OkButtonModel = Inst_("com.sun.star.awt.UnoControlButtonModel");
     Reference < XPropertySet > xPSetOkButton( OkButtonModel, UNO_QUERY );
-    _propInt(xPSetOkButton,"PositionX",70);
-    _propInt(xPSetOkButton,"PositionY",70);
-    _propInt(xPSetOkButton,"Width",50);
-    _propInt(xPSetOkButton,"Height",14);
-    _propString(xPSetOkButton,"Name",T602DLG_OK_BUTTON);
-    _propShort(xPSetOkButton,"TabIndex",0);
-    _propShort(xPSetOkButton,"PushButtonType",1);
-    _propStringFromResId(xPSetOkButton,"Label",T602FILTER_STR_OK_BUTTON);
-    _propBool(xPSetOkButton,"DefaultButton",true);
+    propInt_(xPSetOkButton,"PositionX",70);
+    propInt_(xPSetOkButton,"PositionY",70);
+    propInt_(xPSetOkButton,"Width",50);
+    propInt_(xPSetOkButton,"Height",14);
+    propString_(xPSetOkButton,"Name",T602DLG_OK_BUTTON);
+    propShort_(xPSetOkButton,"TabIndex",0);
+    propShort_(xPSetOkButton,"PushButtonType",1);
+    propStringFromResId_(xPSetOkButton,"Label",T602FILTER_STR_OK_BUTTON);
+    propBool_(xPSetOkButton,"DefaultButton",true);
 
     Reference < XNameContainer > xNameCont (rInstance,UNO_QUERY);
 
-    _Insert(xNameCont, T602DLG_OK_BUTTON, OkButtonModel);
-    _Insert(xNameCont, T602DLG_CANCEL_BUTTON, CancelButtonModel);
-    _Insert(xNameCont, T602DLG_AZBUKA_CB, AzbCheckBoxModel);
-    _Insert(xNameCont, T602DLG_REFORMAT_CB, RefCheckBoxModel);
-    _Insert(xNameCont, T602DLG_COMMENT_CB, CommCheckBoxModel);
-    _Insert(xNameCont, T602DLG_CODE_LB, ListBoxModel);
-    _Insert(xNameCont, T602DLG_CODE_TXT, TextModel);
+    Insert_(xNameCont, T602DLG_OK_BUTTON, OkButtonModel);
+    Insert_(xNameCont, T602DLG_CANCEL_BUTTON, CancelButtonModel);
+    Insert_(xNameCont, T602DLG_AZBUKA_CB, AzbCheckBoxModel);
+    Insert_(xNameCont, T602DLG_REFORMAT_CB, RefCheckBoxModel);
+    Insert_(xNameCont, T602DLG_COMMENT_CB, CommCheckBoxModel);
+    Insert_(xNameCont, T602DLG_CODE_LB, ListBoxModel);
+    Insert_(xNameCont, T602DLG_CODE_TXT, TextModel);
 
     Reference< XUnoControlDialog > dialog = UnoControlDialog::create(rComponentContext);
 
@@ -1097,11 +1097,11 @@ bool T602ImportFilterDialog::OptionsDlg()
 
         sal_Int16 tt = 0;
 
-        any = _propGet(xPSetAzbukaCB, "State"); any >>= tt; ini.ruscode      = tt;
-        any = _propGet(xPSetRefCB,    "State"); any >>= tt; ini.reformatpars = tt;
-        any = _propGet(xPSetCommCB,   "State"); any >>= tt; ini.showcomm     = tt;
+        any = propGet_(xPSetAzbukaCB, "State"); any >>= tt; ini.ruscode      = tt;
+        any = propGet_(xPSetRefCB,    "State"); any >>= tt; ini.reformatpars = tt;
+        any = propGet_(xPSetCommCB,   "State"); any >>= tt; ini.showcomm     = tt;
 
-        any = _propGet(xPSetCodeLB,   "SelectedItems"); any >>= shr;
+        any = propGet_(xPSetCodeLB,   "SelectedItems"); any >>= shr;
 
         if( shr[0] > 0 ) {
             ini.xcode = (tcode)(shr[0]-1);
