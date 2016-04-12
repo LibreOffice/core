@@ -58,9 +58,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 
-#define INTERFACE_TYPE( xint ) \
-    cppu::UnoType<xint>::get()
-
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 : mrBHelper( getMutex() )
@@ -360,7 +357,7 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
 uno::Type SAL_CALL SvxDrawPage::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return INTERFACE_TYPE( drawing::XShape );
+    return cppu::UnoType<drawing::XShape>::get();
 }
 
 sal_Bool SAL_CALL SvxDrawPage::hasElements()
