@@ -26,6 +26,7 @@ $(eval $(call gb_StaticLibrary_add_defs,breakpad,\
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,breakpad,cc))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,breakpad,\
+	UnpackedTarball/breakpad/src/common/windows/guid_string \
 	UnpackedTarball/breakpad/src/client/windows/handler/exception_handler \
 	UnpackedTarball/breakpad/src/client/windows/crash_generation/client_info \
 	UnpackedTarball/breakpad/src/client/windows/crash_generation/crash_generation_client \
