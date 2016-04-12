@@ -105,10 +105,10 @@ namespace
     };
 
     SubTable::iterator insertSubLine( SubTable& rSubTable, SwTableLine& rLine,
-        SubTable::iterator pStartLn );
+        const SubTable::iterator& pStartLn );
 
     SubTable::iterator insertSubBox( SubTable& rSubTable, SwTableBox& rBox,
-        SubTable::iterator pStartLn, SubTable::iterator pEndLn )
+        SubTable::iterator pStartLn, const SubTable::iterator& pEndLn )
     {
         if( !rBox.GetTabLines().empty() )
         {
@@ -151,7 +151,7 @@ namespace
     }
 
     SubTable::iterator insertSubLine( SubTable& rSubTable, SwTableLine& rLine,
-        SubTable::iterator pStartLn )
+        const SubTable::iterator& pStartLn )
     {
         SubTable::iterator pMax = pStartLn;
         ++pMax;

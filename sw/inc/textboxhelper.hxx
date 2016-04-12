@@ -64,7 +64,7 @@ public:
 
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat* findTextBox(const SwFrameFormat* pShape);
-    static SwFrameFormat* findTextBox(css::uno::Reference<css::drawing::XShape> xShape);
+    static SwFrameFormat* findTextBox(const css::uno::Reference<css::drawing::XShape>& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
     static Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 

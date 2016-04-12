@@ -1107,7 +1107,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
 
 
 void SwGrfNode::ApplyInputStream(
-    css::uno::Reference<css::io::XInputStream> xInputStream,
+    const css::uno::Reference<css::io::XInputStream>& xInputStream,
     const bool bIsStreamReadOnly )
 {
     if ( IsLinkedFile() )

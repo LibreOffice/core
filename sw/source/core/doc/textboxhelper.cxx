@@ -274,7 +274,7 @@ void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& r
         rWrapThrough = it->second->GetSurround().GetSurround() == SURROUND_THROUGHT;
 }
 
-SwFrameFormat* SwTextBoxHelper::findTextBox(uno::Reference<drawing::XShape> xShape)
+SwFrameFormat* SwTextBoxHelper::findTextBox(const uno::Reference<drawing::XShape>& xShape)
 {
     SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
     if (!pShape)

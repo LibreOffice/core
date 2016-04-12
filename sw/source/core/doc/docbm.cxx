@@ -260,8 +260,8 @@ namespace
 
     IDocumentMarkAccess::const_iterator_t lcl_FindMarkByName(
         const OUString& rName,
-        IDocumentMarkAccess::const_iterator_t ppMarksBegin,
-        IDocumentMarkAccess::const_iterator_t ppMarksEnd)
+        const IDocumentMarkAccess::const_iterator_t& ppMarksBegin,
+        const  IDocumentMarkAccess::const_iterator_t& ppMarksEnd)
     {
         return find_if(
             ppMarksBegin,

@@ -36,7 +36,7 @@
 using namespace ::com::sun::star;
 
 void SwDoc::ReplaceUserDefinedDocumentProperties(
-        uno::Reference<document::XDocumentProperties> xSourceDocProps)
+        const uno::Reference<document::XDocumentProperties>& xSourceDocProps)
 {
     OSL_ENSURE(xSourceDocProps.is(), "null reference");
 

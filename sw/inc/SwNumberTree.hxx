@@ -476,7 +476,7 @@ protected:
                               - false   only set if aItLastValid is preceding
                                         the current last valid node
      */
-    void SetLastValid(tSwNumberTreeChildren::const_iterator aItLastValid,
+    void SetLastValid(const tSwNumberTreeChildren::const_iterator& aItLastValid,
                       bool bValidating = false) const;
 
     /**

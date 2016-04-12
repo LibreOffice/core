@@ -1027,7 +1027,7 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
 }
 
 void SwNumberTreeNode::SetLastValid
-                    ( SwNumberTreeNode::tSwNumberTreeChildren::const_iterator aItValid,
+                    ( const SwNumberTreeNode::tSwNumberTreeChildren::const_iterator& aItValid,
                       bool bValidating ) const
 {
     OSL_ENSURE( (aItValid == mChildren.end() || GetIterator(*aItValid) != mChildren.end()),

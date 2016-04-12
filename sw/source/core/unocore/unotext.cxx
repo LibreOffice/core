@@ -2041,7 +2041,7 @@ lcl_ApplyCellProperties(
     const sal_Int32 nCell,
     TableColumnSeparators const& rRowSeparators,
     const uno::Sequence< beans::PropertyValue >& rCellProperties,
-    uno::Reference< uno::XInterface > xCell,
+    const uno::Reference< uno::XInterface >& xCell,
     ::std::vector<VerticallyMergedCell> & rMergedCells)
 {
     const sal_Int32 nCellProperties = rCellProperties.getLength();
