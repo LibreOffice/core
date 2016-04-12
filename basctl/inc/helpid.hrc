@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BASCTL_HELPID_HRC
-#define _BASCTL_HELPID_HRC
+#ifndef INCLUDED_BASCTL_INC_HELPID_HRC
+#define INCLUDED_BASCTL_INC_HELPID_HRC
 
 #define HID_BASICIDE_OBJECTCAT                            "BASCTL_HID_BASICIDE_OBJECTCAT"
 
