@@ -250,6 +250,22 @@ protected:
         }
         xDocShRef->DoClose();
     }
+
+    uno::Reference< drawing::XDrawPagesSupplier > getDoc( sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPagesSupplier > xDoc (
+            xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+        CPPUNIT_ASSERT_MESSAGE( "no document", xDoc.is() );
+        return xDoc;
+    }
+
+    uno::Reference< drawing::XDrawPage > getPage( int nPage,  sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPagesSupplier > xDoc( getDoc( xDocShRef ) );
+        uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex( nPage ), uno::UNO_QUERY_THROW );
+        CPPUNIT_ASSERT_MESSAGE( "no page", xPage.is() );
+        return xPage;
+    }
 };
 
 #endif
