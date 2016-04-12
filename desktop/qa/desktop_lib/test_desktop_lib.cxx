@@ -974,7 +974,7 @@ void DesktopLOKTest::testContextMenuCalc()
 void DesktopLOKTest::testContextMenuWriter()
 {
     comphelper::LibreOfficeKit::setActive();
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt", LOK_DOCTYPE_TEXT);
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
 
