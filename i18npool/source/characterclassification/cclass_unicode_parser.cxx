@@ -726,7 +726,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     bool bMightBeWord = true;
     bool bMightBeWordLast = true;
     //! All the variables above (plus ParseResult) have to be resetted on ssRewindFromValue!
-    sal_Int32 nextCharIndex(0); // == index of nextChar
+    sal_Int32 nextCharIndex(nPos); // == index of nextChar
 
     while ((current != 0) && (eState != ssStop))
     {
@@ -965,7 +965,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             r = ParseResult();
             index = nPos;
             postSymbolIndex = nPos;
-            nextCharIndex = 0;
+            nextCharIndex = nPos;
             aSymbol.clear();
             current = (index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0;
             nCodePoints = (nPos < rText.getLength()) ? 1 : 0;
