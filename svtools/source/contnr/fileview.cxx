@@ -1490,7 +1490,9 @@ SvtFileView_Impl::~SvtFileView_Impl()
 {
     Clear();
     mpView.disposeAndClear();
+    mpCurView.clear();
     mpIconView.disposeAndClear();
+    mpAntiImpl.clear();
 }
 
 
