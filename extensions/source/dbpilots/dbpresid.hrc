@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
-#define _EXTENSIONS_DBP_DBPRESID_HRC_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPRESID_HRC
+#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPRESID_HRC
 
 #include "dbpilots.hrc"
 #include "extensio.hrc"
@@ -88,6 +88,6 @@
 #define WINDOW_SIZE_Y       185
 #define WINDOW_HALF_SIZE_X  ( WINDOW_SIZE_X / 2 )
 
-#endif // _EXTENSIONS_DBP_DBPRESID_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
-#define _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMLOCALID_HRC
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMLOCALID_HRC
 
 #define IMG_PLUS        1
 #define IMG_MINUS       2
 
-#endif // _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

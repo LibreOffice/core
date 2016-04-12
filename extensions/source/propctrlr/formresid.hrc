@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
-#define _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMRESID_HRC
+#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMRESID_HRC
 
 #include "propresid.hrc"
 
@@ -349,6 +349,6 @@
 #define RID_SVXIMG_SPINBUTTON                       10769
 #define RID_SVXIMG_NAVIGATIONBAR                    10607
 
-#endif // _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
