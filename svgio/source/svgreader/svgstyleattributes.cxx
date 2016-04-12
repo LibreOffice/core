@@ -1957,19 +1957,7 @@ namespace svgio
 
         const basegfx::BColor* SvgStyleAttributes::getFill() const
         {
-            if((SVGTokenMarker == mrOwner.getType()) && !maFill.isSet())
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if(pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getFill();
-                }
-
-                static basegfx::BColor aBlack(0.0, 0.0, 0.0);
-                return &aBlack;
-            }
-            else if(maFill.isSet())
+            if(maFill.isSet())
             {
                 if(maFill.isCurrent())
                 {
