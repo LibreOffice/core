@@ -102,6 +102,10 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OUString maWrapDistanceRight;        ///< Distance from the right side of the shape to the text that wraps around it.
     OUString maWrapDistanceTop;          ///< Distance from the top of the shape to the text that wraps around it.
     OUString maWrapDistanceBottom;       ///< Distance from the bottom of the shape to the text that wraps around it.
+    OptValue<OUString> moCropBottom; ///< Specifies the how much to crop the image from the bottom up as a fraction of picture size.
+    OptValue<OUString> moCropLeft; ///< Specifies how much to crop the image from the left in as a fraction of picture size.
+    OptValue<OUString> moCropRight; ///< Specifies how much to crop the image from the right in as a fraction of picture size.
+    OptValue<OUString> moCropTop; ///< Specifies how much to crop the image from the top down as a fraction of picture size.
     OUString maLayoutFlowAlt; ///< Specifies the alternate layout flow for text in textboxes.
 
     explicit            ShapeTypeModel();
