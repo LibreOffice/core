@@ -236,7 +236,7 @@ ShapeExport& PowerPointShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     DBG(printf( "shape(text): %s\n", USS(sShapeType) ));
 
-    if ( sShapeType == "com.sun.star.drawing.TextShape" )
+    if ( sShapeType == "com.sun.star.drawing.TextShape" || sShapeType == "com.sun.star.drawing.GraphicObjectShape" )
     {
     ShapeExport::WriteTextShape( xShape );
     }
@@ -277,6 +277,8 @@ ShapeExport& PowerPointShapeExport::WriteTextShape( Reference< XShape > xShape )
         if( !WritePlaceholder( xShape, Title, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
+    else
+        SAL_WARN("sd.filter", "PowerPointShapeExport::WriteTextShape: shape of type '" << sShapeType << "' is ignored");
 
     return *this;
 }
