@@ -29,10 +29,10 @@ index 669f996..0cf0798 100644
  
  bin_SCRIPTS 	= xmlsec1-config
 diff --git a/Makefile.in b/Makefile.in
-index 25e6087..f9aa108 100644
+index 9b252ff..c42b984 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -372,8 +372,9 @@ top_builddir = @top_builddir@
+@@ -452,8 +452,9 @@ top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  NULL = 
  SAFE_VERSION = @XMLSEC_VERSION_SAFE@
@@ -45,10 +45,10 @@ index 25e6087..f9aa108 100644
  bin_SCRIPTS = xmlsec1-config
  pkgconfig_DATA = xmlsec1.pc @XMLSEC_CRYPTO_PC_FILES_LIST@
 diff --git a/configure.in b/configure.in
-index 1b46a92..92c4cc2 100644
+index 7690e7a..f2c98e3 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -185,8 +185,8 @@ dnl find libxml
+@@ -188,8 +188,8 @@ dnl find libxml
  dnl ==========================================================================
  LIBXML_MIN_VERSION="2.7.4"
  LIBXML_CONFIG="xml2-config"
@@ -59,7 +59,7 @@ index 1b46a92..92c4cc2 100644
  LIBXML_FOUND="no"
  AC_ARG_WITH(libxml, 
      [  --with-libxml=[PFX]       libxml2 location]
-@@ -195,6 +195,8 @@ AC_ARG_WITH(libxml-src,
+@@ -198,6 +198,8 @@ AC_ARG_WITH(libxml-src,
      [  --with-libxml-src=[PFX]   not installed yet libxml2 location]
  )
  
@@ -68,7 +68,7 @@ index 1b46a92..92c4cc2 100644
  if test "z$with_libxml" = "zno" -o "z$with_libxml_src" = "zno"; then 
      AC_MSG_CHECKING(for libxml2 libraries >= $LIBXML_MIN_VERSION) 
      AC_MSG_ERROR(libxml2 >= $LIBXML_MIN_VERSION is required for $XMLSEC_PACKAGE)
-@@ -243,6 +245,8 @@ if test "z$LIBXML_FOUND" = "zno" ; then
+@@ -246,6 +248,8 @@ if test "z$LIBXML_FOUND" = "zno" ; then
      fi
  fi
  
@@ -77,7 +77,7 @@ index 1b46a92..92c4cc2 100644
  AC_SUBST(LIBXML_CFLAGS)
  AC_SUBST(LIBXML_LIBS)
  AC_SUBST(LIBXML_CONFIG)
-@@ -551,12 +555,26 @@ dnl ==========================================================================
+@@ -570,12 +574,26 @@ dnl ==========================================================================
  XMLSEC_NO_NSS="1"
  SEAMONKEY_MIN_VERSION="1.0"
  MOZILLA_MIN_VERSION="1.4"
@@ -106,7 +106,7 @@ index 1b46a92..92c4cc2 100644
  NSS_CRYPTO_LIB="$XMLSEC_PACKAGE-nss"
  NSS_FOUND="no"
  NSPR_PACKAGE=mozilla-nspr
-@@ -583,6 +601,16 @@ elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z
+@@ -602,6 +620,16 @@ elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z
      dnl We are going to try all options
      dnl
      if test "z$NSS_FOUND" = "zno" ; then
@@ -123,7 +123,7 @@ index 1b46a92..92c4cc2 100644
          PKG_CHECK_MODULES(NSS, seamonkey-nspr >= $NSPR_MIN_VERSION seamonkey-nss >= $SEAMONKEY_MIN_VERSION,
      	    [NSS_FOUND=yes NSPR_PACKAGE=seamonkey-nspr NSS_PACKAGE=seamonkey-nss],
  	    [NSS_FOUND=no])
-@@ -614,8 +642,8 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -633,8 +661,8 @@ if test "z$NSS_FOUND" = "zno" ; then
          ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
      fi
  
@@ -134,7 +134,7 @@ index 1b46a92..92c4cc2 100644
  
      AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
      NSPR_INCLUDES_FOUND="no"
-@@ -636,21 +664,21 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -655,21 +683,21 @@ if test "z$NSS_FOUND" = "zno" ; then
  	NSPR_PRINIT_H="$with_nspr/include/prinit.h"
      else
  	for dir in $ac_nss_inc_dir ; do
@@ -160,7 +160,7 @@ index 1b46a92..92c4cc2 100644
  		dnl do not add -L/usr/lib because compiler does it anyway
          	if test "z$dir" = "z/usr/lib" ; then
              	    NSPR_LIBS="$NSPR_LIBS_LIST"
-@@ -721,7 +749,7 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -740,7 +768,7 @@ if test "z$NSS_FOUND" = "zno" ; then
          done
         
          for dir in $ac_nss_lib_dir ; do
@@ -169,7 +169,7 @@ index 1b46a92..92c4cc2 100644
          	dnl do not add -L/usr/lib because compiler does it anyway
      		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
-@@ -740,7 +768,7 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -759,7 +787,7 @@ if test "z$NSS_FOUND" = "zno" ; then
  
      if test "z$NSS_INCLUDES_FOUND" = "zyes" -a "z$NSS_LIBS_FOUND" = "zyes" ; then
         OLD_CPPFLAGS=$CPPFLAGS
