@@ -81,6 +81,7 @@ void ScCsvControl::dispose()
 {
     if( mxAccessible.is() )
         mxAccessible->dispose();
+    mxAccessible = nullptr; // lp#1566050: prevent cyclic reference zombies
     Control::dispose();
 }
 
