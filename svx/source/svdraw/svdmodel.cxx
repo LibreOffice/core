@@ -1313,7 +1313,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     // if necessary, add separators before every third digit
     if( nVorKomma > 3 )
     {
-        OUString aThoSep( rLoc.getNumThousandSep() );
+        const OUString& aThoSep( rLoc.getNumThousandSep() );
         if ( !aThoSep.isEmpty() )
         {
             sal_Unicode cTho( aThoSep[0] );

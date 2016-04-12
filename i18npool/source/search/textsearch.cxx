@@ -685,8 +685,7 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
 
     OUString sSearchKey = bUsePrimarySrchStr ? sSrchStr : sSrchStr2;
 
-    OUString aStr( searchStr );
-    sal_Int32 nSuchIdx = aStr.getLength();
+    sal_Int32 nSuchIdx = searchStr.getLength();
     sal_Int32 nEnde = endPos;
     if( !nSuchIdx || !sSearchKey.getLength() || sSearchKey.getLength() > nSuchIdx )
         return aRet;
@@ -704,15 +703,15 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
 
     for (sal_Int32 nCmpIdx = startPos; // start position for the search
             nCmpIdx <= nEnde;
-            nCmpIdx += GetDiff( aStr[nCmpIdx + sSearchKey.getLength()-1]))
+            nCmpIdx += GetDiff( searchStr[nCmpIdx + sSearchKey.getLength()-1]))
     {
         // if the match would be the completed cells, skip it.
-        if ( (checkCTLStart && !isCellStart( aStr, nCmpIdx )) || (checkCTLEnd
-                    && !isCellStart( aStr, nCmpIdx + sSearchKey.getLength())) )
+        if ( (checkCTLStart && !isCellStart( searchStr, nCmpIdx )) || (checkCTLEnd
+                    && !isCellStart( searchStr, nCmpIdx + sSearchKey.getLength())) )
             continue;
 
         nSuchIdx = sSearchKey.getLength() - 1;
-        while( nSuchIdx >= 0 && sSearchKey[nSuchIdx] == aStr[nCmpIdx + nSuchIdx])
+        while( nSuchIdx >= 0 && sSearchKey[nSuchIdx] == searchStr[nCmpIdx + nSuchIdx])
         {
             if( nSuchIdx == 0 )
             {
@@ -721,8 +720,8 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
                     sal_Int32 nFndEnd = nCmpIdx + sSearchKey.getLength();
                     bool bAtStart = !nCmpIdx;
                     bool bAtEnd = nFndEnd == endPos;
-                    bool bDelimBefore = bAtStart || IsDelimiter( aStr, nCmpIdx-1 );
-                    bool bDelimBehind = bAtEnd || IsDelimiter(  aStr, nFndEnd );
+                    bool bDelimBefore = bAtStart || IsDelimiter( searchStr, nCmpIdx-1 );
+                    bool bDelimBehind = bAtEnd || IsDelimiter(  searchStr, nFndEnd );
                     //  *       1 -> only one word in the paragraph
                     //  *       2 -> at begin of paragraph
                     //  *       3 -> at end of paragraph
@@ -757,8 +756,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
 
     OUString sSearchKey = bUsePrimarySrchStr ? sSrchStr : sSrchStr2;
 
-    OUString aStr( searchStr );
-    sal_Int32 nSuchIdx = aStr.getLength();
+    sal_Int32 nSuchIdx = searchStr.getLength();
     sal_Int32 nEnde = endPos;
     if( nSuchIdx == 0 || sSearchKey.isEmpty() || sSearchKey.getLength() > nSuchIdx)
         return aRet;
@@ -778,13 +776,13 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     while (nCmpIdx >= nEnde)
     {
         // if the match would be the completed cells, skip it.
-        if ( (!checkCTLStart || isCellStart( aStr, nCmpIdx -
+        if ( (!checkCTLStart || isCellStart( searchStr, nCmpIdx -
                         sSearchKey.getLength() )) && (!checkCTLEnd ||
-                    isCellStart( aStr, nCmpIdx)))
+                    isCellStart( searchStr, nCmpIdx)))
         {
             nSuchIdx = 0;
             while( nSuchIdx < sSearchKey.getLength() && sSearchKey[nSuchIdx] ==
-                    aStr[nCmpIdx + nSuchIdx - sSearchKey.getLength()] )
+                    searchStr[nCmpIdx + nSuchIdx - sSearchKey.getLength()] )
                 nSuchIdx++;
             if( nSuchIdx >= sSearchKey.getLength() )
             {
@@ -793,9 +791,9 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
                     sal_Int32 nFndStt = nCmpIdx - sSearchKey.getLength();
                     bool bAtStart = !nFndStt;
                     bool bAtEnd = nCmpIdx == startPos;
-                    bool bDelimBehind = bAtEnd || IsDelimiter( aStr, nCmpIdx );
+                    bool bDelimBehind = bAtEnd || IsDelimiter( searchStr, nCmpIdx );
                     bool bDelimBefore = bAtStart || // begin of paragraph
-                        IsDelimiter( aStr, nFndStt-1 );
+                        IsDelimiter( searchStr, nFndStt-1 );
                     //  *       1 -> only one word in the paragraph
                     //  *       2 -> at begin of paragraph
                     //  *       3 -> at end of paragraph
@@ -824,7 +822,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
                 }
             }
         }
-        nSuchIdx = GetDiff( aStr[nCmpIdx - sSearchKey.getLength()] );
+        nSuchIdx = GetDiff( searchStr[nCmpIdx - sSearchKey.getLength()] );
         if( nCmpIdx < nSuchIdx )
             return aRet;
         nCmpIdx -= nSuchIdx;
@@ -1050,11 +1048,9 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
     if( !xBreak.is() )
         return aRet;
 
-    OUString aWTemp( searchStr );
-
     sal_Int32 nStt, nEnd;
 
-    Boundary aWBnd = xBreak->getWordBoundary( aWTemp, startPos,
+    Boundary aWBnd = xBreak->getWordBoundary( searchStr, startPos,
             aSrchPara.Locale,
             WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
 
@@ -1066,7 +1062,7 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
         nEnd = aWBnd.endPos > endPos ? endPos : aWBnd.endPos;
 
         if( nStt < nEnd &&
-                pWLD->WLD( aWTemp.getStr() + nStt, nEnd - nStt ) <= nLimit )
+                pWLD->WLD( searchStr.getStr() + nStt, nEnd - nStt ) <= nLimit )
         {
             aRet.subRegExpressions = 1;
             aRet.startOffset.realloc( 1 );
@@ -1077,10 +1073,10 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
         }
 
         nStt = nEnd - 1;
-        aWBnd = xBreak->nextWord( aWTemp, nStt, aSrchPara.Locale,
+        aWBnd = xBreak->nextWord( searchStr, nStt, aSrchPara.Locale,
                 WordType::ANYWORD_IGNOREWHITESPACES);
     } while( aWBnd.startPos != aWBnd.endPos ||
-            (aWBnd.endPos != aWTemp.getLength() && aWBnd.endPos != nEnd) );
+            (aWBnd.endPos != searchStr.getLength() && aWBnd.endPos != nEnd) );
     // #i50244# aWBnd.endPos != nEnd : in case there is _no_ word (only
     // whitespace) in searchStr, getWordBoundary() returned startPos,startPos
     // and nextWord() does also => don't loop forever.
@@ -1097,11 +1093,9 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
     if( !xBreak.is() )
         return aRet;
 
-    OUString aWTemp( searchStr );
-
     sal_Int32 nStt, nEnd;
 
-    Boundary aWBnd = xBreak->getWordBoundary( aWTemp, startPos,
+    Boundary aWBnd = xBreak->getWordBoundary( searchStr, startPos,
             aSrchPara.Locale,
             WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
 
@@ -1113,7 +1107,7 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
         nEnd = aWBnd.endPos > startPos ? startPos : aWBnd.endPos;
 
         if( nStt < nEnd &&
-                pWLD->WLD( aWTemp.getStr() + nStt, nEnd - nStt ) <= nLimit )
+                pWLD->WLD( searchStr.getStr() + nStt, nEnd - nStt ) <= nLimit )
         {
             aRet.subRegExpressions = 1;
             aRet.startOffset.realloc( 1 );
@@ -1125,9 +1119,9 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
         if( !nStt )
             break;
 
-        aWBnd = xBreak->previousWord( aWTemp, nStt, aSrchPara.Locale,
+        aWBnd = xBreak->previousWord( searchStr, nStt, aSrchPara.Locale,
                 WordType::ANYWORD_IGNOREWHITESPACES);
-    } while( aWBnd.startPos != aWBnd.endPos || aWBnd.endPos != aWTemp.getLength() );
+    } while( aWBnd.startPos != aWBnd.endPos || aWBnd.endPos != searchStr.getLength() );
     return aRet;
 }
 

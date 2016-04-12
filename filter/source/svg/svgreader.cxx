@@ -1853,14 +1853,13 @@ struct ShapeWritingVisitor
     void writePathShape( rtl::Reference<SvXMLAttributeList>&             xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                          const uno::Reference<xml::dom::XElement>&       xElem,
-                         const OUString&                            rStyleId,
+                         const OUString&                                 rStyleId,
                          const basegfx::B2DPolyPolygon&                  rPoly )
     {
         // we might need to split up polypolygon into multiple path
         // shapes (e.g. when emulating line stroking)
         std::vector<basegfx::B2DPolyPolygon> aPolys(1,rPoly);
         State aState = maCurrState;
-        OUString aStyleId(rStyleId);
 
         xAttrs->Clear();
 
@@ -1889,7 +1888,7 @@ struct ShapeWritingVisitor
             fillShapeProperties(xAttrs,
                                 xElem,
                                 aBounds,
-                                "svggraphicstyle"+aStyleId);
+                                "svggraphicstyle"+rStyleId);
 
             // force path coordinates to 100th millimeter, after
             // putting polygon data at origin (ODF viewbox

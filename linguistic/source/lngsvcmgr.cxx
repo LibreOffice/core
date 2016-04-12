@@ -829,10 +829,9 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailSpellSvcs);
 
-            OUString aNode( aSpellCheckerList );
             if (lcl_SeqHasString( aSpellCheckerListEntries, aKeyText ))
             {
-                pNames[0] = aNode + "/" + aKeyText;
+                pNames[0] = aSpellCheckerList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.getLength())
@@ -853,10 +852,9 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailGrammarSvcs);
 
-            OUString aNode( aGrammarCheckerList );
             if (lcl_SeqHasString( aGrammarCheckerListEntries, aKeyText ))
             {
-                pNames[0] = aNode + "/" + aKeyText;
+                pNames[0] = aGrammarCheckerList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.getLength())
@@ -880,10 +878,9 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailHyphSvcs);
 
-            OUString aNode( aHyphenatorList );
             if (lcl_SeqHasString( aHyphenatorListEntries, aKeyText ))
             {
-                pNames[0] = aNode + "/" + aKeyText;
+                pNames[0] = aHyphenatorList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.getLength())
@@ -904,10 +901,9 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailThesSvcs);
 
-            OUString aNode( aThesaurusList );
             if (lcl_SeqHasString( aThesaurusListEntries, aKeyText ))
             {
-                pNames[0] = aNode + "/" + aKeyText;
+                pNames[0] = aThesaurusList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.getLength())

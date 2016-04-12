@@ -138,7 +138,7 @@ namespace toolkit
         {
             const vcl::Window* pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
-            const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+            const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
             return (aStyleSettings.*i_pGetter)().GetColor();
         }
 
@@ -156,7 +156,7 @@ namespace toolkit
         {
             const vcl::Window* pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
-            const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+            const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
             return VCLUnoHelper::CreateFontDescriptor( (aStyleSettings.*i_pGetter)() );
         }
 
@@ -389,7 +389,7 @@ namespace toolkit
         StyleMethodGuard aGuard( *m_pData );
         const vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
-        const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+        const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return aStyleSettings.GetFaceGradientColor().GetColor();
     }
 
@@ -693,7 +693,7 @@ namespace toolkit
         StyleMethodGuard aGuard( *m_pData );
         const vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
-        const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+        const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return aStyleSettings.GetSeparatorColor().GetColor();
     }
 
@@ -759,7 +759,7 @@ namespace toolkit
         StyleMethodGuard aGuard( *m_pData );
         const vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
-        const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+        const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return aStyleSettings.GetHighContrastMode();
     }
 

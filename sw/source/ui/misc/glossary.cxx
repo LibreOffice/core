@@ -1102,10 +1102,9 @@ void SwGlossaryDlg::ResumeShowAutoText()
             {
                 uno::Any aGroup = m_xAutoText->getByName(sGroup);
                 uno::Reference< XAutoTextGroup >  xGroup;
-                OUString uShortName(sShortName);
-                if((aGroup >>= xGroup) && xGroup->hasByName(uShortName))
+                if((aGroup >>= xGroup) && xGroup->hasByName(sShortName))
                 {
-                    uno::Any aEntry(xGroup->getByName(uShortName));
+                    uno::Any aEntry(xGroup->getByName(sShortName));
                     uno::Reference< XAutoTextEntry >  xEntry;
                     aEntry >>= xEntry;
                     uno::Reference< XTextRange >  xRange(xCursor, uno::UNO_QUERY);

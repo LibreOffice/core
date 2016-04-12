@@ -66,10 +66,9 @@ namespace
         bool bAsterisk = !(!_sFieldName.isEmpty() && _sFieldName.toChar() != '*');
         if ( !bAsterisk )
         {
-            OUString sName = _sFieldName;
-            sal_Int32 nTokenCount = comphelper::string::getTokenCount(sName, '.');
-            if (    (nTokenCount == 2 && sName.getToken(1,'.')[0] == '*' )
-                ||  (nTokenCount == 3 && sName.getToken(2,'.')[0] == '*' ) )
+            sal_Int32 nTokenCount = comphelper::string::getTokenCount(_sFieldName, '.');
+            if (    (nTokenCount == 2 && _sFieldName.getToken(1,'.')[0] == '*' )
+                ||  (nTokenCount == 3 && _sFieldName.getToken(2,'.')[0] == '*' ) )
             {
                 bAsterisk = true;
             }

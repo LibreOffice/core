@@ -164,7 +164,6 @@ IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, 
 void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< css::beans::NamedValue >& evt2 ) throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 aMulti( evt );
-    css::uno::Sequence< css::beans::NamedValue > aMulti2( evt2 );
     ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
     while( aIt.hasMoreElements() )
     {
@@ -172,7 +171,7 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< c
             static_cast< css::awt::XTabListener* >( aIt.next() ) );
         try
         {
-            xListener->changed( aMulti, aMulti2 );
+            xListener->changed( aMulti, evt2 );
         }
         catch(const css::lang::DisposedException& e)
         {

@@ -124,8 +124,7 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bo
     }
 
     // When that fails, do a case insensitive search.
-    OUString aTmp = ScGlobal::pCharClass->uppercase(rSubStr);
-    OUString aUpStr = aTmp;
+    OUString aUpStr = ScGlobal::pCharClass->uppercase(rSubStr);
     itr = ::std::find_if(
         maSubStrings.begin(), maSubStrings.end(), FindByName(aUpStr, true));
     if (itr != maSubStrings.end())

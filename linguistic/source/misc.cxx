@@ -610,11 +610,10 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
         sal_Int32 tlen = aTerm.getLength();
         if ((pCC) && (tlen))
         {
-            OUString aStr(aTerm);
             sal_Int32 nc = 0;
             for (sal_Int32 tindex = 0; tindex < tlen; ++tindex)
             {
-                if (pCC->getCharacterType(aStr,tindex) &
+                if (pCC->getCharacterType(aTerm,tindex) &
                    css::i18n::KCharacterType::UPPER) nc++;
             }
 
@@ -622,7 +621,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
                 return CapType::NOCAP;
             if (nc == tlen)
                 return CapType::ALLCAP;
-            if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
+            if ((nc == 1) && (pCC->getCharacterType(aTerm,0) &
                   css::i18n::KCharacterType::UPPER))
                 return CapType::INITCAP;
 

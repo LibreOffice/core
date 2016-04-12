@@ -717,9 +717,8 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
         xConnection = pParam->xConnection;
     else
     {
-        OUString sDBName(rDBName);
-        if ( !sDBName.isEmpty() )
-            xConnection = RegisterConnection( sDBName );
+        if ( !rDBName.isEmpty() )
+            xConnection = RegisterConnection( rDBName );
     }
     if(xConnection.is())
     {
@@ -768,8 +767,7 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
         xConnection = pParam->xConnection;
     else
     {
-        OUString sDBName(rDBName);
-        xConnection = RegisterConnection( sDBName );
+        xConnection = RegisterConnection( rDBName );
     }
     GetColumnNames(pListBox, xConnection, rTableName);
 }
@@ -1666,8 +1664,7 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
             }
             else
             {
-                OUString sDBName(rDBName);
-                xConnection = RegisterConnection( sDBName );
+                xConnection = RegisterConnection( rDBName );
                 bDisposeConnection = true;
             }
             if(bUseMergeData)
@@ -1812,8 +1809,7 @@ sal_Int32 SwDBManager::GetColumnType( const OUString& rDBName,
     }
     else
     {
-        OUString sDBName(rDBName);
-        xConnection = RegisterConnection( sDBName );
+        xConnection = RegisterConnection( rDBName );
     }
     if( !xColsSupp.is() )
     {

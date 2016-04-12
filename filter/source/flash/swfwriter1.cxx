@@ -485,8 +485,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     Reference < XBreakIterator > xBI( Impl_GetBreakIterator() );
     if( xBI.is() )
     {
-        const OUString oText( rText );
-        nScriptType = xBI->getScriptType( oText, 0 );
+        nScriptType = xBI->getScriptType( rText, 0 );
     }
 
     // if the text is either right to left or complex or asian, we

@@ -902,7 +902,6 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
 
     if( aUnrotatedSizePix.Width() && aUnrotatedSizePix.Height() )
     {
-        BitmapEx        aBmpEx( rBitmapEx );
         BitmapEx        aOutBmpEx;
         Point           aOutPoint;
         Size            aOutSize;
@@ -961,14 +960,14 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
             {
                 if( bSimple )
                 {
-                    bRet = ( aOutBmpEx = aBmpEx ).Scale( aUnrotatedSizePix );
+                    bRet = ( aOutBmpEx = rBitmapEx ).Scale( aUnrotatedSizePix );
 
                     if( bRet )
                         aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
                 }
                 else
                 {
-                    bRet = ImplCreateRotatedScaled( aBmpEx, rAttributes,
+                    bRet = ImplCreateRotatedScaled( rBitmapEx, rAttributes,
                                                     nRot10, aUnrotatedSizePix,
                                                     nStartX, nEndX, nStartY, nEndY,
                                                     aOutBmpEx );
@@ -980,18 +979,18 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                 {
                     aOutPoint = pOutputDevice->PixelToLogic( aOutputPointPix );
                     aOutSize  = pOutputDevice->PixelToLogic( aOutputSizePix );
-                    aOutBmpEx = aBmpEx;
+                    aOutBmpEx = rBitmapEx;
                     bRet      = true;
                 }
                 else
                 {
                     if( bSimple )
                     {
-                        bRet = ( aOutBmpEx = aBmpEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
+                        bRet = ( aOutBmpEx = rBitmapEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
                     }
                     else
                     {
-                        bRet = ImplCreateRotatedScaled( aBmpEx, rAttributes,
+                        bRet = ImplCreateRotatedScaled( rBitmapEx, rAttributes,
                                                     nRot10, aUnrotatedSizePix,
                                                     nStartX, nEndX, nStartY, nEndY,
                                                     aOutBmpEx );
@@ -1111,7 +1110,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         const double fScaleX = fOutWH / fGrfWH;
         const double fScaleY = 1.0;
 
-        const MapMode rPrefMapMode( rMtf.GetPrefMapMode() );
+        const MapMode& rPrefMapMode( rMtf.GetPrefMapMode() );
         const Size rSizePix( pOut->LogicToPixel( aNewSize, rPrefMapMode ) );
 
 // NOTE: If you do changes in this function, check GraphicDisplayCacheEntry::IsCacheableAsBitmap

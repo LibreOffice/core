@@ -2753,7 +2753,7 @@ void UnoListBoxControl::updateFromModel()
     // notify the change of the SelectedItems property, again. While our base class, in updateFromModel,
     // already did this, our peer(s) can only legitimately set the selection after they have the string
     // item list, which we just notified with the itemListChanged call.
-    const OUString sSelectedItemsPropName( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ) );
+    const OUString& sSelectedItemsPropName( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ) );
     ImplSetPeerProperty( sSelectedItemsPropName, ImplGetPropertyValue( sSelectedItemsPropName ) );
 }
 
@@ -3773,7 +3773,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     // also change the text property (#i25106#)
     if ( xPeer.is() )
     {
-        OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
+        const OUString& sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
         ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), false );
     }
 
@@ -4055,7 +4055,7 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
 {
     // also change the text property (#i25106#)
     uno::Reference< awt::XVclWindowPeer > xPeer( getPeer(), uno::UNO_QUERY );
-    OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
+    const OUString& sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
     ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), false );
 
     // re-calc the Time property

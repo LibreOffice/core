@@ -1191,8 +1191,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         }
         else
         {
-            OUString aStr = aStrOut;
-            sal_Int32 nPos = aStr.indexOf( '\n' );
+            sal_Int32 nPos = aStrOut.indexOf( '\n' );
             if ( nPos == -1 )
             {
                 OUT_STR( aStrOut );
@@ -1202,13 +1201,13 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 sal_Int32 nStartPos = 0;
                 do
                 {
-                    OUString aSingleLine = aStr.copy( nStartPos, nPos - nStartPos );
+                    OUString aSingleLine = aStrOut.copy( nStartPos, nPos - nStartPos );
                     OUT_STR( aSingleLine );
                     TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
                     nStartPos = nPos + 1;
                 }
-                while( ( nPos = aStr.indexOf( '\n', nStartPos ) ) != -1 );
-                OUString aSingleLine = aStr.copy( nStartPos, aStr.getLength() - nStartPos );
+                while( ( nPos = aStrOut.indexOf( '\n', nStartPos ) ) != -1 );
+                OUString aSingleLine = aStrOut.copy( nStartPos, aStrOut.getLength() - nStartPos );
                 OUT_STR( aSingleLine );
             }
         }

@@ -3707,62 +3707,61 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     Any aRet;
     if(!pxDoc)
         throw RuntimeException();
-    OUString sToCompare(rName);
     OUString sSuffix("|");
-    if(sToCompare == sTables)
+    if(rName == sTables)
     {
         sSuffix += "table";
 
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
-                                        pxDoc->getTextTables(), sToCompare, sSuffix );
+                                        pxDoc->getTextTables(), rName, sSuffix );
         Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
-    else if(sToCompare == sFrames)
+    else if(rName == sFrames)
     {
         sSuffix += "frame";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
-                                        pxDoc->getTextFrames(), sToCompare, sSuffix );
+                                        pxDoc->getTextFrames(), rName, sSuffix );
         Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
-    else if(sToCompare == sSections)
+    else if(rName == sSections)
     {
         sSuffix += "region";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
-                                        pxDoc->getTextSections(), sToCompare, sSuffix );
+                                        pxDoc->getTextSections(), rName, sSuffix );
         Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
-    else if(sToCompare == sGraphics)
+    else if(rName == sGraphics)
     {
         sSuffix += "graphic";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
-                                        pxDoc->getGraphicObjects(), sToCompare, sSuffix );
+                                        pxDoc->getGraphicObjects(), rName, sSuffix );
         Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
-    else if(sToCompare == sOLEs)
+    else if(rName == sOLEs)
     {
         sSuffix += "ole";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
-                                        pxDoc->getEmbeddedObjects(), sToCompare, sSuffix );
+                                        pxDoc->getEmbeddedObjects(), rName, sSuffix );
         Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
-    else if(sToCompare == sOutlines)
+    else if(rName == sOutlines)
     {
         sSuffix += "outline";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
-                                        *pxDoc, sToCompare, sSuffix );
+                                        *pxDoc, rName, sSuffix );
         Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
-    else if(sToCompare == sBookmarks)
+    else if(rName == sBookmarks)
     {
         sSuffix.clear();
         Reference< XNameAccess >  xBkms = new SwXLinkNameAccessWrapper(
-                                        pxDoc->getBookmarks(), sToCompare, sSuffix );
+                                        pxDoc->getBookmarks(), rName, sSuffix );
         Reference< XPropertySet >  xRet(xBkms, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
@@ -3789,14 +3788,13 @@ Sequence< OUString > SwXLinkTargetSupplier::getElementNames()
 sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
                                     throw( RuntimeException, std::exception )
 {
-    OUString sToCompare(rName);
-    if( sToCompare == sTables  ||
-        sToCompare == sFrames  ||
-        sToCompare == sGraphics||
-        sToCompare == sOLEs   ||
-        sToCompare == sSections ||
-        sToCompare == sOutlines ||
-        sToCompare == sBookmarks    )
+    if( rName == sTables  ||
+        rName == sFrames  ||
+        rName == sGraphics||
+        rName == sOLEs   ||
+        rName == sSections ||
+        rName == sOutlines ||
+        rName == sBookmarks    )
         return sal_True;
     return sal_False;
 }

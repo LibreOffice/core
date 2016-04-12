@@ -665,15 +665,14 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
 
 void EditHTMLParser::ImpInsertText( const OUString& rText )
 {
-    OUString aText( rText );
     if (mpEditEngine->IsImportHandlerSet())
     {
         ImportInfo aImportInfo(HTMLIMP_INSERTTEXT, this, mpEditEngine->CreateESelection(aCurSel));
-        aImportInfo.aText = aText;
+        aImportInfo.aText = rText;
         mpEditEngine->CallImportHandler(aImportInfo);
     }
 
-    aCurSel = mpEditEngine->InsertText(aCurSel, aText);
+    aCurSel = mpEditEngine->InsertText(aCurSel, rText);
 }
 
 void EditHTMLParser::SkipGroup( int nEndToken )

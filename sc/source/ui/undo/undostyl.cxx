@@ -121,7 +121,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
 {
     ScDocument& rDoc = pDocSh->GetDocument();
     ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
-    OUString aNewName = rData.GetName();
+    const OUString& aNewName = rData.GetName();
     bool bDelete = aNewName.isEmpty();         // no new name -> delete style
     bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
 
@@ -163,7 +163,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         {
             // modify style
 
-            OUString aNewParent = rData.GetParent();
+            const OUString& aNewParent = rData.GetParent();
             if ( aNewParent != pStyle->GetParent() )
                 pStyle->SetParent( aNewParent );
 

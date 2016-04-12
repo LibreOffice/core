@@ -551,7 +551,7 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
     if (rFilter.IsOwnFormat())
         return true;
 
-    OUString aName = rFilter.GetFilterName();
+    const OUString& aName = rFilter.GetFilterName();
     if (aName.startsWith("MS Excel"))
         // We can handle all Excel variants natively.
         return true;

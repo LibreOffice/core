@@ -786,7 +786,6 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
     {
-        OUString sNewName = _rNewName;
         SvTreeListEntry* pEntry = nullptr;
         switch( _eType )
         {
@@ -808,7 +807,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
         OSL_ENSURE(pEntry,"Do you know that the name isn't existence!");
         if ( pEntry )
         {
-            pTreeView->SetEntryText(pEntry,sNewName);
+            pTreeView->SetEntryText(pEntry,_rNewName);
         }
     }
 }

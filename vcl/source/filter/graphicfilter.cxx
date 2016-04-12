@@ -2039,7 +2039,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 bool bDone(false);
 
                 // do we have a native SVG RenderGraphic, whose data can be written directly?
-                const SvgDataPtr aSvgDataPtr(rGraphic.getSvgData());
+                const SvgDataPtr& aSvgDataPtr(rGraphic.getSvgData());
 
                 if (aSvgDataPtr.get() && aSvgDataPtr->getSvgDataArrayLength())
                 {
@@ -2110,12 +2110,11 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 osl::Module aLibrary( aPhysicalName );
 
                 PFilterCall pFunc = nullptr;
-                OUString tmpFilterName = aExternalFilterName;
-                if (tmpFilterName == "egi")
+                if (aExternalFilterName == "egi")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("egiGraphicExport"));
-                else if (tmpFilterName == "eps")
+                else if (aExternalFilterName == "eps")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epsGraphicExport"));
-                else if (tmpFilterName == "eti")
+                else if (aExternalFilterName == "eti")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("etiGraphicExport"));
                  // Execute dialog in DLL
  #else

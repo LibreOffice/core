@@ -1416,11 +1416,10 @@ XMLTrackedChangesOOoTContext_Impl::~XMLTrackedChangesOOoTContext_Impl()
 void XMLTrackedChangesOOoTContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rAttrName = rAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
@@ -1441,7 +1440,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
                 {
                     Sequence < sal_Int8 > aKey;
                     ::sax::Converter::decodeBase64( aKey,
-                                        xAttrList->getValueByIndex( i ) );
+                                        rAttrList->getValueByIndex( i ) );
                     rPropSet->setPropertyValue( aPropName, makeAny( aKey ) );
                 }
                 else
@@ -1452,7 +1451,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
             break;
         }
     }
-    XMLTransformerContext::StartElement( xAttrList );
+    XMLTransformerContext::StartElement( rAttrList );
 }
 
 class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext

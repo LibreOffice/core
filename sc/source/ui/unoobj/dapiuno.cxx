@@ -435,8 +435,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
                                         throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aNameStr(aName);
-    ScDPObject* pDPObj = lcl_GetDPObject( pDocShell, nTab, aNameStr );
+    ScDPObject* pDPObj = lcl_GetDPObject( pDocShell, nTab, aName );
     if (pDPObj && pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
@@ -760,38 +759,37 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
         {
             ScDPSaveData aNewData( *pOldData );
 
-            OUString aNameString = aPropertyName;
-            if ( aNameString == SC_UNO_DP_COLGRAND )
+            if ( aPropertyName == SC_UNO_DP_COLGRAND )
             {
                 aNewData.SetColumnGrand(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString == SC_UNO_DP_IGNORE_EMPTYROWS )
+            else if ( aPropertyName == SC_UNO_DP_IGNORE_EMPTYROWS )
             {
                 aNewData.SetIgnoreEmptyRows(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString == SC_UNO_DP_REPEATEMPTY )
+            else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
             {
                 aNewData.SetRepeatIfEmpty(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString == SC_UNO_DP_ROWGRAND )
+            else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
             {
                 aNewData.SetRowGrand(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString == SC_UNO_DP_SHOWFILTER )
+            else if ( aPropertyName == SC_UNO_DP_SHOWFILTER )
             {
                 aNewData.SetFilterButton(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString == SC_UNO_DP_DRILLDOWN )
+            else if ( aPropertyName == SC_UNO_DP_DRILLDOWN )
             {
                 aNewData.SetDrillDown(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString == SC_UNO_DP_GRANDTOTAL_NAME )
+            else if ( aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME )
             {
                 OUString aStrVal;
                 if ( aValue >>= aStrVal )
                     aNewData.SetGrandTotalName(aStrVal);
             }
-            else if ( aNameString == SC_UNO_DP_IMPORTDESC )
+            else if ( aPropertyName == SC_UNO_DP_IMPORTDESC )
             {
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
@@ -823,7 +821,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     pDPObject->SetImportDesc( aImportDesc );
                 }
             }
-            else if ( aNameString == SC_UNO_DP_SOURCESERVICE )
+            else if ( aPropertyName == SC_UNO_DP_SOURCESERVICE )
             {
                 OUString aStrVal;
                 if ( aValue >>= aStrVal )
@@ -839,7 +837,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     pDPObject->SetServiceData( aServiceDesc );
                 }
             }
-            else if ( aNameString == SC_UNO_DP_SERVICEARG )
+            else if ( aPropertyName == SC_UNO_DP_SERVICEARG )
             {
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
@@ -908,38 +906,37 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
         {
             ScDPSaveData aNewData( *pOldData );
 
-            OUString aNameString = aPropertyName;
-            if ( aNameString == SC_UNO_DP_COLGRAND )
+            if ( aPropertyName == SC_UNO_DP_COLGRAND )
             {
                 aRet <<= aNewData.GetColumnGrand();
             }
-            else if ( aNameString == SC_UNO_DP_IGNORE_EMPTYROWS )
+            else if ( aPropertyName == SC_UNO_DP_IGNORE_EMPTYROWS )
             {
                 aRet <<= aNewData.GetIgnoreEmptyRows();
             }
-            else if ( aNameString == SC_UNO_DP_REPEATEMPTY )
+            else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
             {
                 aRet <<= aNewData.GetRepeatIfEmpty();
             }
-            else if ( aNameString == SC_UNO_DP_ROWGRAND )
+            else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
             {
                 aRet <<= aNewData.GetRowGrand();
             }
-            else if ( aNameString == SC_UNO_DP_SHOWFILTER )
+            else if ( aPropertyName == SC_UNO_DP_SHOWFILTER )
             {
                 aRet <<= aNewData.GetFilterButton();
             }
-            else if ( aNameString == SC_UNO_DP_DRILLDOWN )
+            else if ( aPropertyName == SC_UNO_DP_DRILLDOWN )
             {
                 aRet <<= aNewData.GetDrillDown();
             }
-            else if ( aNameString == SC_UNO_DP_GRANDTOTAL_NAME )
+            else if ( aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME )
             {
                 const OUString* pGrandTotalName = aNewData.GetGrandTotalName();
                 if (pGrandTotalName)
                     aRet <<= *pGrandTotalName;      // same behavior as in ScDPSource
             }
-            else if ( aNameString == SC_UNO_DP_IMPORTDESC )
+            else if ( aPropertyName == SC_UNO_DP_IMPORTDESC )
             {
                 const ScImportSourceDesc* pImportDesc = pDPObject->GetImportSourceDesc();
                 if ( pImportDesc )
@@ -964,7 +961,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     aRet <<= aEmpty;
                 }
             }
-            else if ( aNameString == SC_UNO_DP_SOURCESERVICE )
+            else if ( aPropertyName == SC_UNO_DP_SOURCESERVICE )
             {
                 OUString aServiceName;
                 const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
@@ -972,7 +969,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     aServiceName = pServiceDesc->aServiceName;
                 aRet <<= aServiceName;      // empty string if no ServiceDesc set
             }
-            else if ( aNameString == SC_UNO_DP_SERVICEARG )
+            else if ( aPropertyName == SC_UNO_DP_SERVICEARG )
             {
                 const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
                 if (pServiceDesc)
@@ -1177,9 +1174,8 @@ void SAL_CALL ScDataPilotTableObj::setName( const OUString& aNewName )
     {
         //! test for existing names !!!
 
-        OUString aString(aNewName);
-        pDPObj->SetName( aString );     //! Undo - DBDocFunc ???
-        aName = aString;
+        pDPObj->SetName( aNewName );     //! Undo - DBDocFunc ???
+        aName = aNewName;
 
         //  DataPilotUpdate would do too much (output table is not changed)
         GetDocShell()->SetDocumentModified();
@@ -1861,97 +1857,96 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
                RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aNameString(aPropertyName);
-    if ( aNameString == SC_UNONAME_FUNCTION )
+    if ( aPropertyName == SC_UNONAME_FUNCTION )
     {
         // #i109350# use GetEnumFromAny because it also allows sal_Int32
         GeneralFunction eFunction = (GeneralFunction)
                             ScUnoHelpFunctions::GetEnumFromAny( aValue );
         setFunction( eFunction );
     }
-    else if ( aNameString == SC_UNONAME_SUBTOTALS )
+    else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
         Sequence< GeneralFunction > aSubtotals;
         if( aValue >>= aSubtotals )
             setSubtotals( aSubtotals );
     }
-    else if ( aNameString == SC_UNONAME_ORIENT )
+    else if ( aPropertyName == SC_UNONAME_ORIENT )
     {
         //! test for correct enum type?
         DataPilotFieldOrientation eOrient = (DataPilotFieldOrientation)
                             ScUnoHelpFunctions::GetEnumFromAny( aValue );
         setOrientation( eOrient );
     }
-    else if ( aNameString == SC_UNONAME_SELPAGE )
+    else if ( aPropertyName == SC_UNONAME_SELPAGE )
     {
         OUString sCurrentPage;
         if (aValue >>= sCurrentPage)
             setCurrentPage(sCurrentPage);
     }
-    else if ( aNameString == SC_UNONAME_USESELPAGE )
+    else if ( aPropertyName == SC_UNONAME_USESELPAGE )
     {
         setUseCurrentPage(cppu::any2bool(aValue));
     }
-    else if ( aNameString == SC_UNONAME_HASAUTOSHOW )
+    else if ( aPropertyName == SC_UNONAME_HASAUTOSHOW )
     {
         if (!cppu::any2bool(aValue))
             setAutoShowInfo(nullptr);
     }
-    else if ( aNameString == SC_UNONAME_AUTOSHOW )
+    else if ( aPropertyName == SC_UNONAME_AUTOSHOW )
     {
         DataPilotFieldAutoShowInfo aInfo;
         if (aValue >>= aInfo)
             setAutoShowInfo(&aInfo);
     }
-    else if ( aNameString == SC_UNONAME_HASLAYOUTINFO )
+    else if ( aPropertyName == SC_UNONAME_HASLAYOUTINFO )
     {
         if (!cppu::any2bool(aValue))
             setLayoutInfo(nullptr);
     }
-    else if ( aNameString == SC_UNONAME_LAYOUTINFO )
+    else if ( aPropertyName == SC_UNONAME_LAYOUTINFO )
     {
         DataPilotFieldLayoutInfo aInfo;
         if (aValue >>= aInfo)
             setLayoutInfo(&aInfo);
     }
-    else if ( aNameString == SC_UNONAME_HASREFERENCE )
+    else if ( aPropertyName == SC_UNONAME_HASREFERENCE )
     {
         if (!cppu::any2bool(aValue))
             setReference(nullptr);
     }
-    else if ( aNameString == SC_UNONAME_REFERENCE )
+    else if ( aPropertyName == SC_UNONAME_REFERENCE )
     {
         DataPilotFieldReference aRef;
         if (aValue >>= aRef)
             setReference(&aRef);
     }
-    else if ( aNameString == SC_UNONAME_HASSORTINFO )
+    else if ( aPropertyName == SC_UNONAME_HASSORTINFO )
     {
         if (!cppu::any2bool(aValue))
             setSortInfo(nullptr);
     }
-    else if ( aNameString == SC_UNONAME_SORTINFO )
+    else if ( aPropertyName == SC_UNONAME_SORTINFO )
     {
         DataPilotFieldSortInfo aInfo;
         if (aValue >>= aInfo)
             setSortInfo(&aInfo);
     }
-    else if ( aNameString == SC_UNONAME_ISGROUP )
+    else if ( aPropertyName == SC_UNONAME_ISGROUP )
     {
         if (!cppu::any2bool(aValue))
             setGroupInfo(nullptr);
     }
-    else if ( aNameString == SC_UNONAME_GROUPINFO )
+    else if ( aPropertyName == SC_UNONAME_GROUPINFO )
     {
         DataPilotFieldGroupInfo aInfo;
         if (aValue >>= aInfo)
             setGroupInfo(&aInfo);
     }
-    else if ( aNameString == SC_UNONAME_SHOWEMPTY )
+    else if ( aPropertyName == SC_UNONAME_SHOWEMPTY )
     {
         setShowEmpty(cppu::any2bool(aValue));
     }
-    else if ( aNameString == SC_UNONAME_REPEATITEMLABELS )
+    else if ( aPropertyName == SC_UNONAME_REPEATITEMLABELS )
     {
         setRepeatItemLabels(cppu::any2bool(aValue));
     }
@@ -1962,60 +1957,59 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
                RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aNameString(aPropertyName);
     Any aRet;
 
-    if ( aNameString == SC_UNONAME_FUNCTION )
+    if ( aPropertyName == SC_UNONAME_FUNCTION )
         aRet <<= getFunction();
-    else if ( aNameString == SC_UNONAME_SUBTOTALS )
+    else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
         aRet <<= getSubtotals();
-    else if ( aNameString == SC_UNONAME_ORIENT )
+    else if ( aPropertyName == SC_UNONAME_ORIENT )
         aRet <<= getOrientation();
-    else if ( aNameString == SC_UNONAME_SELPAGE )
+    else if ( aPropertyName == SC_UNONAME_SELPAGE )
         aRet <<= getCurrentPage();
-    else if ( aNameString == SC_UNONAME_USESELPAGE )
+    else if ( aPropertyName == SC_UNONAME_USESELPAGE )
         aRet <<= false;
-    else if ( aNameString == SC_UNONAME_HASAUTOSHOW )
+    else if ( aPropertyName == SC_UNONAME_HASAUTOSHOW )
         aRet <<= (getAutoShowInfo() != nullptr);
-    else if ( aNameString == SC_UNONAME_AUTOSHOW )
+    else if ( aPropertyName == SC_UNONAME_AUTOSHOW )
     {
         const DataPilotFieldAutoShowInfo* pInfo = getAutoShowInfo();
         if (pInfo)
             aRet <<= DataPilotFieldAutoShowInfo(*pInfo);
     }
-    else if ( aNameString == SC_UNONAME_HASLAYOUTINFO )
+    else if ( aPropertyName == SC_UNONAME_HASLAYOUTINFO )
         aRet <<= (getLayoutInfo() != nullptr);
-    else if ( aNameString == SC_UNONAME_LAYOUTINFO )
+    else if ( aPropertyName == SC_UNONAME_LAYOUTINFO )
     {
         const DataPilotFieldLayoutInfo* pInfo = getLayoutInfo();
         if (pInfo)
             aRet <<= DataPilotFieldLayoutInfo(*pInfo);
     }
-    else if ( aNameString == SC_UNONAME_HASREFERENCE )
+    else if ( aPropertyName == SC_UNONAME_HASREFERENCE )
         aRet <<= (getReference() != nullptr);
-    else if ( aNameString == SC_UNONAME_REFERENCE )
+    else if ( aPropertyName == SC_UNONAME_REFERENCE )
     {
         const DataPilotFieldReference* pRef = getReference();
         if (pRef)
             aRet <<= DataPilotFieldReference(*pRef);
     }
-    else if ( aNameString == SC_UNONAME_HASSORTINFO )
+    else if ( aPropertyName == SC_UNONAME_HASSORTINFO )
         aRet <<= (getSortInfo() != nullptr);
-    else if ( aNameString == SC_UNONAME_SORTINFO )
+    else if ( aPropertyName == SC_UNONAME_SORTINFO )
     {
         const DataPilotFieldSortInfo* pInfo = getSortInfo();
         if (pInfo)
             aRet <<= DataPilotFieldSortInfo(*pInfo);
     }
-    else if ( aNameString == SC_UNONAME_ISGROUP )
+    else if ( aPropertyName == SC_UNONAME_ISGROUP )
         aRet <<= (hasGroupInfo());
-    else if ( aNameString == SC_UNONAME_GROUPINFO )
+    else if ( aPropertyName == SC_UNONAME_GROUPINFO )
     {
         aRet <<= getGroupInfo();
     }
-    else if ( aNameString == SC_UNONAME_SHOWEMPTY )
+    else if ( aPropertyName == SC_UNONAME_SHOWEMPTY )
         aRet <<= getShowEmpty();
-    else if ( aNameString == SC_UNONAME_REPEATITEMLABELS )
+    else if ( aPropertyName == SC_UNONAME_REPEATITEMLABELS )
         aRet <<= getRepeatItemLabels();
 
     return aRet;
@@ -3429,11 +3423,10 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
 
                     if ( bGetNewIndex )     // after SetDPObject, get the new index
                     {
-                        OUString aOUName( sName );
                         Sequence< OUString > aItemNames = xMembers->getElementNames();
                         sal_Int32 nItemCount = aItemNames.getLength();
                         for (sal_Int32 nItem=0; nItem<nItemCount; ++nItem)
-                            if (aItemNames[nItem] == aOUName)
+                            if (aItemNames[nItem] == sName)
                                 mnIndex = nItem;
                     }
                 }

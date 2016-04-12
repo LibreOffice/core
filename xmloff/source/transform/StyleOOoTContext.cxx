@@ -392,8 +392,6 @@ rtl::Reference<XMLTransformerContext> XMLPropertiesOOoTContext_Impl::CreateChild
 void XMLPropertiesOOoTContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
-
     XMLTypedPropertiesOOoTContext_Impl * pIntervalMinorDivisorContext = nullptr;
     double fIntervalMajor = 0.0;
     double fIntervalMinor = 0.0;
@@ -412,11 +410,11 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     OUString aDrawMirrorAttrValue;
     XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( nullptr );
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString sAttrName = xAttrList->getNameByIndex( i );
-        const OUString sAttrValue = xAttrList->getValueByIndex( i );
+        const OUString sAttrName = rAttrList->getNameByIndex( i );
+        const OUString sAttrValue = rAttrList->getValueByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( sAttrName,
@@ -506,7 +504,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_PTACTION_LINE_MODE:
             {
-                OUString aAttrValue( GetXMLToken(
+                const OUString& aAttrValue( GetXMLToken(
                                         IsXMLToken( sAttrValue, XML_TRUE )
                                             ? XML_CONTINUOUS
                                             : XML_SKIP_WHITE_SPACE) );
@@ -525,7 +523,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_PTACTION_KEEP_WITH_NEXT:
             {
-                OUString aAttrValue( GetXMLToken(
+                const OUString& aAttrValue( GetXMLToken(
                                         IsXMLToken( sAttrValue, XML_TRUE )
                                             ? XML_ALWAYS
                                             : XML_AUTO) );

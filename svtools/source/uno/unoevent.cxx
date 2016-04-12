@@ -71,7 +71,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
                 // macro name
                 PropertyValue aNameValue;
                 aNameValue.Name = sMacroName;
-                OUString sNameTmp(rMacro.GetMacName());
+                const OUString& sNameTmp(rMacro.GetMacName());
                 aTmp <<= sNameTmp;
                 aNameValue.Value = aTmp;
                 aSequence[1] = aNameValue;
@@ -79,7 +79,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
                 // library name
                 PropertyValue aLibValue;
                 aLibValue.Name = sLibrary;
-                OUString sLibTmp(rMacro.GetLibName());
+                const OUString& sLibTmp(rMacro.GetLibName());
                 aTmp <<= sLibTmp;
                 aLibValue.Value = aTmp;
                 aSequence[2] = aLibValue;
@@ -104,7 +104,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
                 // macro name
                 PropertyValue aNameValue;
                 aNameValue.Name = sScript;
-                OUString sNameTmp(rMacro.GetMacName());
+                const OUString& sNameTmp(rMacro.GetMacName());
                 aTmp <<= sNameTmp;
                 aNameValue.Value = aTmp;
                 aSequence[1] = aNameValue;

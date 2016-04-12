@@ -235,7 +235,7 @@ void SvxUndoRedoControl::StateChanged(
         {
             const SfxStringItem& rItem = *static_cast<const SfxStringItem *>(pState);
             ToolBox& rBox = GetToolBox();
-            OUString aQuickHelpText = rItem.GetValue();
+            const OUString& aQuickHelpText = rItem.GetValue();
             rBox.SetQuickHelpText( GetId(), aQuickHelpText );
         }
         SvxListBoxControl::StateChanged( nSID, eState, pState );

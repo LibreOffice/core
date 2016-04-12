@@ -62,8 +62,8 @@ namespace drawinglayer
                 const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
                 const attribute::GradientStyle aGradientStyle(rFillGradient.getStyle());
                 sal_uInt32 nSteps(rFillGradient.getSteps());
-                const basegfx::BColor aStart(rFillGradient.getStartColor());
-                const basegfx::BColor aEnd(rFillGradient.getEndColor());
+                const basegfx::BColor& aStart(rFillGradient.getStartColor());
+                const basegfx::BColor& aEnd(rFillGradient.getEndColor());
                 const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
                 std::shared_ptr< texture::GeoTexSvx > pNewTex;
 

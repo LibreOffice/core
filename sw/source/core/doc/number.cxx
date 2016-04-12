@@ -708,8 +708,8 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 SVX_NUM_CHAR_SPECIAL != rMyNFormat.GetNumberingType() &&
                 SVX_NUM_BITMAP != rMyNFormat.GetNumberingType() )
             {
-                const OUString sPrefix = rMyNFormat.GetPrefix();
-                const OUString sSuffix = rMyNFormat.GetSuffix();
+                const OUString& sPrefix = rMyNFormat.GetPrefix();
+                const OUString& sSuffix = rMyNFormat.GetSuffix();
 
                 aStr = sPrefix + aStr + sSuffix;
                 if ( pExtremities )

@@ -382,7 +382,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
         OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
             "OConnection::throwSQLException: unsupported error code combination!" );
 
-        OUString sParameter( _rError.getParameter() );
+        const OUString& sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
         {
             const OUString sError( getResources().getResourceStringWithSubstitution(
@@ -400,7 +400,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     if ( _rError.getErrorCondition() != 0 )
     {
         SQLError aErrorHelper( comphelper::getComponentContext(getDriver()->getFactory()) );
-        OUString sParameter( _rError.getParameter() );
+        const OUString& sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
         else

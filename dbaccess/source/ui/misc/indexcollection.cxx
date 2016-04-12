@@ -67,13 +67,11 @@ namespace dbaui
 
     Indexes::const_iterator OIndexCollection::find(const OUString& _rName) const
     {
-        OUString sNameCompare(_rName);
-
         // loop'n'compare
         Indexes::const_iterator aSearch = m_aIndexes.begin();
         Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->sName == sNameCompare)
+            if (aSearch->sName == _rName)
                 break;
 
         return aSearch;
@@ -81,13 +79,11 @@ namespace dbaui
 
     Indexes::iterator OIndexCollection::find(const OUString& _rName)
     {
-        OUString sNameCompare(_rName);
-
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
         Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->sName == sNameCompare)
+            if (aSearch->sName == _rName)
                 break;
 
         return aSearch;
@@ -95,13 +91,11 @@ namespace dbaui
 
     Indexes::const_iterator OIndexCollection::findOriginal(const OUString& _rName) const
     {
-        OUString sNameCompare(_rName);
-
         // loop'n'compare
         Indexes::const_iterator aSearch = m_aIndexes.begin();
         Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->getOriginalName() == sNameCompare)
+            if (aSearch->getOriginalName() == _rName)
                 break;
 
         return aSearch;
@@ -109,13 +103,11 @@ namespace dbaui
 
     Indexes::iterator OIndexCollection::findOriginal(const OUString& _rName)
     {
-        OUString sNameCompare(_rName);
-
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
         Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
-            if (aSearch->getOriginalName() == sNameCompare)
+            if (aSearch->getOriginalName() == _rName)
                 break;
 
         return aSearch;

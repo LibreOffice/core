@@ -312,13 +312,12 @@ TVRead::getByHierarchicalName( const OUString& aName )
            RuntimeException, std::exception )
 {
     sal_Int32 idx;
-    OUString name( aName );
 
-    if( ( idx = name.indexOf( '/' ) ) != -1  &&
-        name.copy( 0,idx ) == "Children" )
-        return Children->getByHierarchicalName( name.copy( 1 + idx ) );
+    if( ( idx = aName.indexOf( '/' ) ) != -1  &&
+        aName.copy( 0,idx ) == "Children" )
+        return Children->getByHierarchicalName( aName.copy( 1 + idx ) );
 
-    return getByName( name );
+    return getByName( aName );
 }
 
 sal_Bool SAL_CALL
@@ -326,13 +325,12 @@ TVRead::hasByHierarchicalName( const OUString& aName )
     throw( RuntimeException, std::exception )
 {
     sal_Int32 idx;
-    OUString name( aName );
 
-       if( ( idx = name.indexOf( '/' ) ) != -1  &&
-        name.copy( 0,idx ) == "Children" )
-        return Children->hasByHierarchicalName( name.copy( 1 + idx ) );
+    if( ( idx = aName.indexOf( '/' ) ) != -1  &&
+        aName.copy( 0,idx ) == "Children" )
+        return Children->hasByHierarchicalName( aName.copy( 1 + idx ) );
 
-    return hasByName( name );
+    return hasByName( aName );
 }
 
 /**************************************************************************/
@@ -573,20 +571,19 @@ TVChildTarget::getByHierarchicalName( const OUString& aName )
            RuntimeException, std::exception )
 {
     sal_Int32 idx;
-    OUString name( aName );
 
-    if( ( idx = name.indexOf( '/' ) ) != -1 )
+    if( ( idx = aName.indexOf( '/' ) ) != -1 )
     {
-        OUString num( name.getStr()+2,idx-4 );
+        OUString num( aName.getStr()+2,idx-4 );
         sal_Int32 pref = num.toInt32() - 1;
 
         if( pref < 0 || Elements.size() <= sal_uInt32( pref ) )
             throw NoSuchElementException();
 
-        return Elements[pref]->getByHierarchicalName( name.copy( 1 + idx ) );
+        return Elements[pref]->getByHierarchicalName( aName.copy( 1 + idx ) );
     }
     else
-        return getByName( name );
+        return getByName( aName );
 }
 
 sal_Bool SAL_CALL
@@ -594,19 +591,18 @@ TVChildTarget::hasByHierarchicalName( const OUString& aName )
     throw( RuntimeException, std::exception )
 {
     sal_Int32 idx;
-    OUString name( aName );
 
-       if( ( idx = name.indexOf( '/' ) ) != -1 )
+    if( ( idx = aName.indexOf( '/' ) ) != -1 )
     {
-        OUString num( name.getStr()+2,idx-4 );
+        OUString num( aName.getStr()+2,idx-4 );
         sal_Int32 pref = num.toInt32() - 1;
         if( pref < 0 || Elements.size() <= sal_uInt32( pref ) )
             return false;
 
-        return Elements[pref]->hasByHierarchicalName( name.copy( 1 + idx ) );
+        return Elements[pref]->hasByHierarchicalName( aName.copy( 1 + idx ) );
     }
     else
-        return hasByName( name );
+        return hasByName( aName );
 }
 
 ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )

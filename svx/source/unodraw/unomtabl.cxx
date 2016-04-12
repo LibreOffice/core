@@ -191,17 +191,15 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
         return;
     }
 
-    OUString Name = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
+    OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
-    const OUString aSearchName( Name );
-
     while( aIter != aEnd )
     {
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
-        if( pItem->GetName() == aSearchName )
+        if( pItem->GetName() == aName )
         {
             delete (*aIter);
             maItemSetVector.erase( aIter );
@@ -210,7 +208,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
         ++aIter;
     }
 
-    if( !hasByName( Name ) )
+    if( !hasByName( aName ) )
         throw container::NoSuchElementException();
 }
 
@@ -220,27 +218,25 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
 {
     SolarMutexGuard aGuard;
 
-    OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
+    const OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
-    const OUString aSearchName( aName );
-
     while( aIter != aEnd )
     {
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
-        if( pItem->GetName() == aSearchName )
+        if( pItem->GetName() == aName )
         {
             XLineEndItem aEndMarker;
-            aEndMarker.SetName( aSearchName );
+            aEndMarker.SetName( aName );
             if( !aEndMarker.PutValue( aElement, 0 ) )
                 throw lang::IllegalArgumentException();
 
             (*aIter)->Put( aEndMarker, XATTR_LINEEND );
 
             XLineStartItem aStartMarker;
-            aStartMarker.SetName( aSearchName );
+            aStartMarker.SetName( aName );
             aStartMarker.PutValue( aElement, 0 );
 
             (*aIter)->Put( aStartMarker, XATTR_LINESTART );
@@ -257,7 +253,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
     {
         NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate)));
-        if( pItem && pItem->GetName() == aSearchName )
+        if( pItem && pItem->GetName() == aName )
         {
             pItem->PutValue( aElement, 0 );
             bFound = true;
@@ -269,7 +265,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {
         NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate)));
-        if( pItem && pItem->GetName() == aSearchName )
+        if( pItem && pItem->GetName() == aName )
         {
             pItem->PutValue( aElement, 0 );
             bFound = true;

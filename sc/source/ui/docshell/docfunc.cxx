@@ -467,7 +467,7 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
         for (size_t i=0; i < nCount; ++i)
         {
             const ScDetOpData& rData = pList->GetObject(i);
-            ScAddress aPos = rData.GetPos();
+            const ScAddress& aPos = rData.GetPos();
             ScDetectiveFunc aFunc( &rDoc, aPos.Tab() );
             SCCOL nCol = aPos.Col();
             SCROW nRow = aPos.Row();

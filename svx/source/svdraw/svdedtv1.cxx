@@ -680,15 +680,14 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
 
         Rectangle aRefRect(rRef);
-        XPolygon  aRefPoly(rDistortedRect);
         const SdrObjList* pOL=pO->GetSubList();
         if (bNoContortion || pOL==nullptr) {
-            ImpDistortObj(pO,aRefRect,aRefPoly,bNoContortion);
+            ImpDistortObj(pO,aRefRect,rDistortedRect,bNoContortion);
         } else {
             SdrObjListIter aIter(*pOL,IM_DEEPNOGROUPS);
             while (aIter.IsMore()) {
                 SdrObject* pO1=aIter.Next();
-                ImpDistortObj(pO1,aRefRect,aRefPoly,bNoContortion);
+                ImpDistortObj(pO1,aRefRect,rDistortedRect,bNoContortion);
             }
         }
     }

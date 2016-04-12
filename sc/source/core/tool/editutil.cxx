@@ -199,7 +199,7 @@ OUString ScEditUtil::GetCellFieldValue(
         case text::textfield::Type::URL:
         {
             const SvxURLField& rField = static_cast<const SvxURLField&>(rFieldData);
-            OUString aURL = rField.GetURL();
+            const OUString& aURL = rField.GetURL();
 
             switch (rField.GetFormat())
             {

@@ -637,7 +637,7 @@ namespace svt
 
         // the template directories from the config
         const SvtPathOptions aPathOptions;
-        OUString aDirs = aPathOptions.GetTemplatePath();
+        const OUString& aDirs = aPathOptions.GetTemplatePath();
 
         // loop through all the root-level template folders
         sal_Int32 nIndex = 0;

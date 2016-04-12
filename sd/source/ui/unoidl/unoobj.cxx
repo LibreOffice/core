@@ -1421,11 +1421,9 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             }
             else
             {
-                OUString aMacro = aStrMacro;
-
-                OUString aLibName   = aMacro.getToken(0, '.');
-                OUString aModulName = aMacro.getToken(1, '.');
-                OUString aMacroName = aMacro.getToken(2, '.');
+                OUString aLibName   = aStrMacro.getToken(0, '.');
+                OUString aModulName = aStrMacro.getToken(1, '.');
+                OUString aMacroName = aStrMacro.getToken(2, '.');
 
                 OUStringBuffer sBuffer;
                 sBuffer.append( aMacroName );

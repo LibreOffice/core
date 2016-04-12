@@ -641,7 +641,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat 
         return nullptr;
 
     const SdrUnoObj& rFormObj = dynamic_cast<const SdrUnoObj&>(*pObj);
-    uno::Reference< awt::XControlModel >  xControlModel =
+    const uno::Reference< awt::XControlModel >&  xControlModel =
             rFormObj.GetUnoControlModel();
 
     OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
@@ -691,7 +691,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                                      const SdrUnoObj& rFormObj,
                                      bool bInCntnr )
 {
-    uno::Reference< awt::XControlModel > xControlModel =
+    const uno::Reference< awt::XControlModel >& xControlModel =
         rFormObj.GetUnoControlModel();
 
     OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
@@ -1280,7 +1280,7 @@ static void AddControl( HTMLControls& rControls,
                         const SdrUnoObj& rFormObj,
                         sal_uInt32 nNodeIdx )
 {
-    uno::Reference< awt::XControlModel > xControlModel =
+    const uno::Reference< awt::XControlModel >& xControlModel =
             rFormObj.GetUnoControlModel();
     if( !xControlModel.is() )
         return;

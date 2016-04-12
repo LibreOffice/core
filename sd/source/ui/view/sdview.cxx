@@ -400,7 +400,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                                 : (aTranslate.getY() + aScale.getY()) - fVerDist);
 
                             // get font attributes; use normally scaled font
-                            const basegfx::BColor aFontColor(aRGBColor);
                             vcl::Font aVclFont;
                             basegfx::B2DVector aTextSizeAttribute;
 
@@ -436,7 +435,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                                     aDXArray,
                                     aFontAttribute,
                                     aLocale,
-                                    aFontColor));
+                                    aRGBColor));
                             xRetval.push_back(xRef);
                         }
                     }

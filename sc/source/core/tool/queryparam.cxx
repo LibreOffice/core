@@ -178,58 +178,57 @@ void ScQueryParamBase::Resize(size_t nNew)
 }
 
 void ScQueryParamBase::FillInExcelSyntax(
-    svl::SharedStringPool& rPool, const OUString& rStr, SCSIZE nIndex, SvNumberFormatter* pFormatter )
+    svl::SharedStringPool& rPool, const OUString& rCellStr, SCSIZE nIndex, SvNumberFormatter* pFormatter )
 {
-    const OUString aCellStr = rStr;
     if (nIndex >= m_Entries.size())
         Resize(nIndex+1);
 
     ScQueryEntry& rEntry = GetEntry(nIndex);
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
-    if (aCellStr.isEmpty())
+    if (rCellStr.isEmpty())
         rItem.maString = svl::SharedString::getEmptyString();
     else
     {
         rEntry.bDoQuery = true;
         // Operatoren herausfiltern
-        if (aCellStr[0] == '<')
+        if (rCellStr[0] == '<')
         {
-            if (aCellStr[1] == '>')
+            if (rCellStr[1] == '>')
             {
-                rItem.maString = rPool.intern(aCellStr.copy(2));
+                rItem.maString = rPool.intern(rCellStr.copy(2));
                 rEntry.eOp   = SC_NOT_EQUAL;
             }
-            else if (aCellStr[1] == '=')
+            else if (rCellStr[1] == '=')
             {
-                rItem.maString = rPool.intern(aCellStr.copy(2));
+                rItem.maString = rPool.intern(rCellStr.copy(2));
                 rEntry.eOp   = SC_LESS_EQUAL;
             }
             else
             {
-                rItem.maString = rPool.intern(aCellStr.copy(1));
+                rItem.maString = rPool.intern(rCellStr.copy(1));
                 rEntry.eOp   = SC_LESS;
             }
         }
-        else if (aCellStr[0]== '>')
+        else if (rCellStr[0]== '>')
         {
-            if (aCellStr[1] == '=')
+            if (rCellStr[1] == '=')
             {
-                rItem.maString = rPool.intern(aCellStr.copy(2));
+                rItem.maString = rPool.intern(rCellStr.copy(2));
                 rEntry.eOp   = SC_GREATER_EQUAL;
             }
             else
             {
-                rItem.maString = rPool.intern(aCellStr.copy(1));
+                rItem.maString = rPool.intern(rCellStr.copy(1));
                 rEntry.eOp   = SC_GREATER;
             }
         }
         else
         {
-            if (aCellStr[0] == '=')
-                rItem.maString = rPool.intern(aCellStr.copy(1));
+            if (rCellStr[0] == '=')
+                rItem.maString = rPool.intern(rCellStr.copy(1));
             else
-                rItem.maString = rPool.intern(aCellStr);
+                rItem.maString = rPool.intern(rCellStr);
             rEntry.eOp = SC_EQUAL;
         }
     }

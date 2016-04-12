@@ -380,11 +380,10 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWindow(
-    const uno::Reference< awt::XWindow >& Parent )
+    const uno::Reference< awt::XWindow >& xParent )
     throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xItemWindow;
-    uno::Reference< awt::XWindow > xParent( Parent );
 
     vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )

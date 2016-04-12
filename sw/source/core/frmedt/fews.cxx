@@ -884,7 +884,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                 aEnvOfObj.GetHoriEnvironmentLayoutFrame( *pFrame );
             const SwLayoutFrame& rVertEnvironLayFrame =
                                 aEnvOfObj.GetVertEnvironmentLayoutFrame( *pFrame );
-            SwRect aHoriEnvironRect( rHoriEnvironLayFrame.Frame() );
+            const SwRect& aHoriEnvironRect( rHoriEnvironLayFrame.Frame() );
             SwRect aVertEnvironRect;
             if ( _bFollowTextFlow )
             {

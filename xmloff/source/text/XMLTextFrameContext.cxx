@@ -1056,7 +1056,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 OUString sValue( rValue );
                 sValue = sValue.trim();
-                const OUString aRotate(GetXMLToken(XML_ROTATE));
+                const OUString& aRotate(GetXMLToken(XML_ROTATE));
                 const sal_Int32 nRotateLen(aRotate.getLength());
                 sal_Int32 nLen = sValue.getLength();
                 if( nLen >= nRotateLen+3 &&

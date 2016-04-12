@@ -227,7 +227,6 @@ static OUString ImplPatternReformat( const OUString& rStr,
     if (rEditMask.isEmpty())
         return rStr;
 
-    OUString    aStr    = rStr;
     OUStringBuffer    aOutStr = OUString(rLiteralMask);
     sal_Unicode cTempChar;
     sal_Unicode cChar;
@@ -239,10 +238,10 @@ static OUString ImplPatternReformat( const OUString& rStr,
 
     while ( i < rEditMask.getLength() )
     {
-        if ( nStrIndex >= aStr.getLength() )
+        if ( nStrIndex >= rStr.getLength() )
             break;
 
-        cChar = aStr[nStrIndex];
+        cChar = rStr[nStrIndex];
         cLiteral = rLiteralMask[i];
         cMask = rEditMask[i];
 

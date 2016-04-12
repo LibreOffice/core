@@ -116,7 +116,7 @@ sal_uInt16 XMLEventOOoTransformerContext::GetEventName(
         OUString& rNewName,
            XMLTransformerOOoEventMap_Impl& rMap )
 {
-    XMLTransformerOOoEventMap_Impl::key_type aKey( rName );
+    const XMLTransformerOOoEventMap_Impl::key_type& aKey( rName );
     XMLTransformerOOoEventMap_Impl::const_iterator aIter = rMap.find( aKey );
     if( aIter == rMap.end() )
     {

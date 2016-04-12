@@ -2068,7 +2068,6 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
 static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const SvTreeListBox& rTreeLB )
 {
-    OUString sGroupName( rGroupName );
     sal_uInt16 nRet = 0;
     SvTreeListEntry* pEntry = rTreeLB.First();
     while( pEntry )
@@ -2076,7 +2075,7 @@ static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const SvTreeListBo
         if ( !rTreeLB.GetParent( pEntry ) )
         {
             OUString sTemp( rTreeLB.GetEntryText( pEntry ) );
-            if ( sTemp == sGroupName )
+            if ( sTemp == rGroupName )
                 return nRet;
             nRet++;
         }

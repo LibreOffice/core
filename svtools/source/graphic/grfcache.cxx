@@ -516,7 +516,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
     bool        bNonBitmapActionEncountered(false);
     if( aNewSize.Width() && aNewSize.Height() && rSz.Width() && rSz.Height() )
     {
-        const MapMode rPrefMapMode( rMtf.GetPrefMapMode() );
+        const MapMode& rPrefMapMode( rMtf.GetPrefMapMode() );
         const Size rSizePix( pOut->LogicToPixel( aNewSize, rPrefMapMode ) );
 
         sal_uInt32  nCurPos;

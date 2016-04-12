@@ -64,7 +64,7 @@ namespace basegfx
                 }
                 else
                 {
-                    const B2DPoint aLastNext(rBase.getEndPoint());
+                    const B2DPoint& aLastNext(rBase.getEndPoint());
                     const B2DVector aLastEdge(aLastNext - aNext);
 
                     fLength += aLastEdge.getLength();

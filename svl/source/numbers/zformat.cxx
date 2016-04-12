@@ -1649,36 +1649,35 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
                                                      bool bQuoteSymbol )
 {
     OUString aTmp;
-    OUString aSource(rStr);
     sal_Int32 nStartPos, nPos, nLen;
-    nLen = aSource.getLength();
+    nLen = rStr.getLength();
     nStartPos = 0;
-    while ( (nPos = aSource.indexOf( "[$", nStartPos )) >= 0 )
+    while ( (nPos = rStr.indexOf( "[$", nStartPos )) >= 0 )
     {
         sal_Int32 nEnd;
-        if ( (nEnd = GetQuoteEnd( aSource, nPos )) >= 0 )
+        if ( (nEnd = GetQuoteEnd( rStr, nPos )) >= 0 )
         {
-            aTmp += aSource.copy( nStartPos, ++nEnd - nStartPos );
+            aTmp += rStr.copy( nStartPos, ++nEnd - nStartPos );
             nStartPos = nEnd;
         }
         else
         {
-            aTmp += aSource.copy( nStartPos, nPos - nStartPos );
+            aTmp += rStr.copy( nStartPos, nPos - nStartPos );
             nStartPos = nPos + 2;
             sal_Int32 nDash;
             nEnd = nStartPos - 1;
             do
             {
-                nDash = aSource.indexOf( '-', ++nEnd );
+                nDash = rStr.indexOf( '-', ++nEnd );
             }
-            while ( (nEnd = GetQuoteEnd( aSource, nDash )) >= 0 );
+            while ( (nEnd = GetQuoteEnd( rStr, nDash )) >= 0 );
             sal_Int32 nClose;
             nEnd = nStartPos - 1;
             do
             {
-                nClose = aSource.indexOf( ']', ++nEnd );
+                nClose = rStr.indexOf( ']', ++nEnd );
             }
-            while ( (nEnd = GetQuoteEnd( aSource, nClose )) >= 0 );
+            while ( (nEnd = GetQuoteEnd( rStr, nClose )) >= 0 );
 
             if(nClose < 0)
             {
@@ -1694,14 +1693,14 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
             {
                 nPos = nDash;
             }
-            if ( !bQuoteSymbol || aSource[ nStartPos ] == '"' )
+            if ( !bQuoteSymbol || rStr[ nStartPos ] == '"' )
             {
-                aTmp += aSource.copy( nStartPos, nPos - nStartPos );
+                aTmp += rStr.copy( nStartPos, nPos - nStartPos );
             }
             else
             {
                 aTmp += "\"";
-                aTmp += aSource.copy( nStartPos, nPos - nStartPos );
+                aTmp += rStr.copy( nStartPos, nPos - nStartPos );
                 aTmp += "\"";
             }
             nStartPos = nClose + 1;
@@ -1709,7 +1708,7 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
     }
     if ( nLen > nStartPos )
     {
-        aTmp += aSource.copy( nStartPos, nLen - nStartPos );
+        aTmp += rStr.copy( nStartPos, nLen - nStartPos );
     }
     return aTmp;
 }

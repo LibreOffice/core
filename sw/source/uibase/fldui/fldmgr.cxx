@@ -1383,7 +1383,6 @@ void SwFieldMgr::UpdateCurField(sal_uLong nFormat,
 
     bool bSetPar2 = true;
     bool bSetPar1 = true;
-    OUString sPar1( rPar1 );
     OUString sPar2( rPar2 );
 
     // Order to Format
@@ -1472,7 +1471,7 @@ void SwFieldMgr::UpdateCurField(sal_uLong nFormat,
             for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
                 pArray[nToken] = sPar2.getToken(nToken, DB_DELIM);
             static_cast<SwDropDownField*>(pTmpField)->SetItems(aEntries);
-            static_cast<SwDropDownField*>(pTmpField)->SetName(sPar1);
+            static_cast<SwDropDownField*>(pTmpField)->SetName(rPar1);
             bSetPar1 = bSetPar2 = false;
         }
         break;
@@ -1503,8 +1502,8 @@ void SwFieldMgr::UpdateCurField(sal_uLong nFormat,
     // setup format before SetPar2 because of NumberFormatter!
     pTmpField->ChangeFormat(nFormat);
 
-    if(bSetPar1)
-        pTmpField->SetPar1( sPar1 );
+    if( bSetPar1 )
+        pTmpField->SetPar1( rPar1 );
     if( bSetPar2 )
         pTmpField->SetPar2( sPar2 );
 

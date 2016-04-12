@@ -233,7 +233,6 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString(aPropertyName);
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions   aAppOpt(pScMod->GetAppOptions());
@@ -242,27 +241,27 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     bool bSaveInp = false;
     // print options aren't loaded until needed
 
-    if (aString == SC_UNONAME_DOAUTOCP)
+    if (aPropertyName == SC_UNONAME_DOAUTOCP)
     {
         aAppOpt.SetAutoComplete( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveApp = true;
     }
-    else if (aString == SC_UNONAME_ENTERED)
+    else if (aPropertyName == SC_UNONAME_ENTERED)
     {
         aInpOpt.SetEnterEdit( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_EXPREF)
+    else if (aPropertyName == SC_UNONAME_EXPREF)
     {
         aInpOpt.SetExpandRefs( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_EXTFMT)
+    else if (aPropertyName == SC_UNONAME_EXTFMT)
     {
         aInpOpt.SetExtendFormat( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_LINKUPD)
+    else if (aPropertyName == SC_UNONAME_LINKUPD)
     {
         sal_Int16 n;
         if (!(aValue >>= n) || n < css::document::LinkUpdateModes::NEVER
@@ -279,47 +278,47 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         aAppOpt.SetLinkMode( static_cast<ScLkUpdMode>(n) );
         bSaveApp = true;
     }
-    else if (aString == SC_UNONAME_MARKHDR)
+    else if (aPropertyName == SC_UNONAME_MARKHDR)
     {
         aInpOpt.SetMarkHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_MOVESEL)
+    else if (aPropertyName == SC_UNONAME_MOVESEL)
     {
         aInpOpt.SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_RANGEFIN)
+    else if (aPropertyName == SC_UNONAME_RANGEFIN)
     {
         aInpOpt.SetRangeFinder( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_USETABCOL)
+    else if (aPropertyName == SC_UNONAME_USETABCOL)
     {
         aInpOpt.SetUseTabCol( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_PRMETRICS)
+    else if (aPropertyName == SC_UNONAME_PRMETRICS)
     {
         aInpOpt.SetTextWysiwyg( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_REPLWARN)
+    else if (aPropertyName == SC_UNONAME_REPLWARN)
     {
         aInpOpt.SetReplaceCellsWarn( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_METRIC)
+    else if (aPropertyName == SC_UNONAME_METRIC)
     {
         aAppOpt.SetAppMetric( (FieldUnit) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
         bSaveApp = true;
     }
-    else if (aString == SC_UNONAME_MOVEDIR)
+    else if (aPropertyName == SC_UNONAME_MOVEDIR)
     {
         aInpOpt.SetMoveDir( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString == SC_UNONAME_SCALE)
+    else if (aPropertyName == SC_UNONAME_SCALE)
     {
         short nVal = ScUnoHelpFunctions::GetInt16FromAny( aValue );
         if ( nVal < 0 )
@@ -340,12 +339,12 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         }
         bSaveApp = true;
     }
-    else if (aString == SC_UNONAME_STBFUNC)
+    else if (aPropertyName == SC_UNONAME_STBFUNC)
     {
         aAppOpt.SetStatusFunc( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
         bSaveApp = true;
     }
-    else if (aString == SC_UNONAME_ULISTS)
+    else if (aPropertyName == SC_UNONAME_ULISTS)
     {
         ScUserList* pUserList = ScGlobal::GetUserList();
         uno::Sequence<OUString> aSeq;
@@ -366,13 +365,13 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             bSaveApp = true;    // Liste wird mit den App-Optionen gespeichert
         }
     }
-    else if (aString == SC_UNONAME_PRALLSH)
+    else if (aPropertyName == SC_UNONAME_PRALLSH)
     {
         ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
         aPrintOpt.SetAllSheets( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         pScMod->SetPrintOptions( aPrintOpt );
     }
-    else if (aString == SC_UNONAME_PREMPTY)
+    else if (aPropertyName == SC_UNONAME_PREMPTY)
     {
         ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
         aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    // reversed
@@ -391,7 +390,6 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString = aPropertyName;
     uno::Any aRet;
 
     ScModule* pScMod = SC_MOD();
@@ -399,21 +397,21 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
     ScInputOptions aInpOpt = pScMod->GetInputOptions();
     // print options aren't loaded until needed
 
-    if (aString == SC_UNONAME_DOAUTOCP)     ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
-    else if (aString == SC_UNONAME_ENTERED ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
-    else if (aString == SC_UNONAME_EXPREF )  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExpandRefs() );
-    else if (aString == SC_UNONAME_EXTFMT )  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExtendFormat() );
-    else if (aString == SC_UNONAME_LINKUPD ) aRet <<= (sal_Int16) aAppOpt.GetLinkMode();
-    else if (aString == SC_UNONAME_MARKHDR ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMarkHeader() );
-    else if (aString == SC_UNONAME_MOVESEL ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMoveSelection() );
-    else if (aString == SC_UNONAME_RANGEFIN ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetRangeFinder() );
-    else if (aString == SC_UNONAME_USETABCOL ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetUseTabCol() );
-    else if (aString == SC_UNONAME_PRMETRICS ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetTextWysiwyg() );
-    else if (aString == SC_UNONAME_REPLWARN ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetReplaceCellsWarn() );
-    else if (aString == SC_UNONAME_METRIC )  aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
-    else if (aString == SC_UNONAME_MOVEDIR ) aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
-    else if (aString == SC_UNONAME_STBFUNC ) aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
-    else if (aString == SC_UNONAME_SCALE )
+    if (aPropertyName == SC_UNONAME_DOAUTOCP)     ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
+    else if (aPropertyName == SC_UNONAME_ENTERED ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
+    else if (aPropertyName == SC_UNONAME_EXPREF )  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExpandRefs() );
+    else if (aPropertyName == SC_UNONAME_EXTFMT )  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExtendFormat() );
+    else if (aPropertyName == SC_UNONAME_LINKUPD ) aRet <<= (sal_Int16) aAppOpt.GetLinkMode();
+    else if (aPropertyName == SC_UNONAME_MARKHDR ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMarkHeader() );
+    else if (aPropertyName == SC_UNONAME_MOVESEL ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMoveSelection() );
+    else if (aPropertyName == SC_UNONAME_RANGEFIN ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetRangeFinder() );
+    else if (aPropertyName == SC_UNONAME_USETABCOL ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetUseTabCol() );
+    else if (aPropertyName == SC_UNONAME_PRMETRICS ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetTextWysiwyg() );
+    else if (aPropertyName == SC_UNONAME_REPLWARN ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetReplaceCellsWarn() );
+    else if (aPropertyName == SC_UNONAME_METRIC )  aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
+    else if (aPropertyName == SC_UNONAME_MOVEDIR ) aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
+    else if (aPropertyName == SC_UNONAME_STBFUNC ) aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
+    else if (aPropertyName == SC_UNONAME_SCALE )
     {
         sal_Int16 nZoomVal = 0;
         switch ( aAppOpt.GetZoomType() )
@@ -429,7 +427,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
         }
         aRet <<= (sal_Int16) nZoomVal;
     }
-    else if (aString == SC_UNONAME_ULISTS )
+    else if (aPropertyName == SC_UNONAME_ULISTS )
     {
         ScUserList* pUserList = ScGlobal::GetUserList();
         if (pUserList)
@@ -445,9 +443,9 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
             aRet <<= aSeq;
         }
     }
-    else if (aString == SC_UNONAME_PRALLSH )
+    else if (aPropertyName == SC_UNONAME_PRALLSH )
         ScUnoHelpFunctions::SetBoolInAny( aRet, pScMod->GetPrintOptions().GetAllSheets() );
-    else if (aString == SC_UNONAME_PREMPTY )
+    else if (aPropertyName == SC_UNONAME_PREMPTY )
         ScUnoHelpFunctions::SetBoolInAny( aRet, !pScMod->GetPrintOptions().GetSkipEmpty() );    // reversed
 
     return aRet;
@@ -620,7 +618,6 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aNameStr(aName);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
@@ -629,7 +626,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             //! Case-insensitiv ???
-            if ( pDesc && pDesc->pFuncName && aNameStr == *pDesc->pFuncName )
+            if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
             {
                 uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
                 lcl_FillSequence( aSeq, *pDesc );
