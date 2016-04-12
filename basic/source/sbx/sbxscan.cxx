@@ -531,7 +531,7 @@ static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUStr
             aTemp.append( *pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
             pFmt++;
         }
-        while( *pFmt != '\\' );
+        while( *pFmt && *pFmt != '\\' );
         aTemp.append(*pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
         pFmt++; break;
     case '&':
