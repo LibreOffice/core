@@ -33,42 +33,42 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-#define _M_E( a, p, l, t, c ) \
+#define M_E_( a, p, l, t, c ) \
     { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFVER_010, false }
 
-#define _M_EV( a, p, l, t, c, v ) \
+#define M_EV_( a, p, l, t, c, v ) \
     { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, v, false }
 
-#define _M_ED( a, p, l, t, c ) \
+#define M_ED_( a, p, l, t, c ) \
     { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFVER_010, false }
 
 // text properties
 #define MT_E( a, p, l, t, c ) \
-    _M_E( a, p, l, (t|XML_TYPE_PROP_TEXT), c )
+    M_E_( a, p, l, (t|XML_TYPE_PROP_TEXT), c )
 #define MT_ED( a, p, l, t, c ) \
-    _M_ED( a, p, l, (t|XML_TYPE_PROP_TEXT), c )
+    M_ED_( a, p, l, (t|XML_TYPE_PROP_TEXT), c )
 
 // paragraph properties
 #define MP_E( a, p, l, t, c ) \
-    _M_E( a, p, l, (t|XML_TYPE_PROP_PARAGRAPH), c )
+    M_E_( a, p, l, (t|XML_TYPE_PROP_PARAGRAPH), c )
 #define MP_ED( a, p, l, t, c ) \
-    _M_ED( a, p, l, (t|XML_TYPE_PROP_PARAGRAPH), c )
+    M_ED_( a, p, l, (t|XML_TYPE_PROP_PARAGRAPH), c )
 
 // graphic properties
 #define MG_E( a, p, l, t, c ) \
-    _M_E( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
+    M_E_( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
 #define MG_ED( a, p, l, t, c ) \
-    _M_ED( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
+    M_ED_( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
 #define MG_EV( a, p, l, t, c, v ) \
-    _M_EV( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c, v )
+    M_EV_( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c, v )
 
 // section properties
 #define MS_E( a, p, l, t, c ) \
-    _M_E( a, p, l, (t|XML_TYPE_PROP_SECTION), c )
+    M_E_( a, p, l, (t|XML_TYPE_PROP_SECTION), c )
 
 // ruby properties
 #define MR_E( a, p, l, t, c ) \
-    _M_E( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
+    M_E_( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
 
 // extensions import/export
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
@@ -79,8 +79,8 @@ using namespace ::xmloff::token;
     { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 //UUUU
-#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
-#define GMAP(name,prefix,token,type,context) _MAP(name,prefix,token,static_cast<sal_Int32>(type|XML_TYPE_PROP_GRAPHIC),context)
+#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+#define GMAP(name,prefix,token,type,context) MAP_(name,prefix,token,static_cast<sal_Int32>(type|XML_TYPE_PROP_GRAPHIC),context)
 
 XMLPropertyMapEntry aXMLParaPropMap[] =
 {
@@ -978,7 +978,7 @@ XMLPropertyMapEntry aXMLTableDefaultsMap[] =
 {
     // RES_COLLAPSING_BORDERS: only occurs in tables, but we need to
     // read/write the default for this item
-    _M_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_PROP_TABLE | XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
+    M_ED_( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_PROP_TABLE | XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
 
     M_END()
 };
@@ -987,7 +987,7 @@ XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
 {
     // RES_ROW_SPLIT: only occurs in table rows, but we need to
     // read/write the default for this item
-    _M_ED( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
+    M_ED_( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
 
     M_END()
 };
