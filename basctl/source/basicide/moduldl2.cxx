@@ -1011,8 +1011,7 @@ void LibPage::InsertLib()
                                                 {
                                                     try
                                                     {
-                                                        OUString _aPassword( aPassword );
-                                                        xPasswd->changeLibraryPassword( aLibName, OUString(), _aPassword );
+                                                        xPasswd->changeLibraryPassword( aLibName, OUString(), aPassword );
                                                     }
                                                     catch (...)
                                                     {
@@ -1101,16 +1100,15 @@ void LibPage::Export()
     OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
 
     // Password verification
-    OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
 
-    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
     {
         bool bOK = true;
 
         // check password
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             OUString aPassword;
             Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
@@ -1139,22 +1137,21 @@ void LibPage::Export()
 void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetURL,
     const Reference< task::XInteractionHandler >& Handler )
 {
-    OUString aOULibName( aLibName );
     Reference< script::XLibraryContainerExport > xModLibContainerExport
         ( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     Reference< script::XLibraryContainerExport > xDlgLibContainerExport
         ( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
     if ( xModLibContainerExport.is() )
-        xModLibContainerExport->exportLibrary( aOULibName, aTargetURL, Handler );
+        xModLibContainerExport->exportLibrary( aLibName, aTargetURL, Handler );
 
     if (!xDlgLibContainerExport.is())
         return;
     Reference<container::XNameAccess> xNameAcc(xDlgLibContainerExport, UNO_QUERY);
     if (!xNameAcc.is())
         return;
-    if (!xNameAcc->hasByName(aOULibName))
+    if (!xNameAcc->hasByName(aLibName))
         return;
-    xDlgLibContainerExport->exportLibrary(aOULibName, aTargetURL, Handler);
+    xDlgLibContainerExport->exportLibrary(aLibName, aTargetURL, Handler);
 }
 
 // Implementation XCommandEnvironment
@@ -1342,11 +1339,10 @@ void LibPage::DeleteCurrent()
 
     // check, if library is link
     bool bIsLibraryLink = false;
-    OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) ) ||
-         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLink( aOULibName ) ) )
+    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryLink( aLibName ) ) ||
+         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
         bIsLibraryLink = true;
     }
@@ -1361,10 +1357,10 @@ void LibPage::DeleteCurrent()
                       SfxCallMode::SYNCHRON, { &aDocItem, &aLibNameItem });
 
         // remove library from module and dialog library containers
-        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-            xModLibContainer->removeLibrary( aOULibName );
-        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
-            xDlgLibContainer->removeLibrary( aOULibName );
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
+            xModLibContainer->removeLibrary( aLibName );
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
+            xDlgLibContainer->removeLibrary( aLibName );
 
         static_cast<SvTreeListBox&>(*m_pLibBox).GetModel()->Remove( pCurEntry );
         MarkDocumentModified( m_aCurDocument );
@@ -1442,14 +1438,13 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
 {
     // check, if library is password protected
     bool bProtected = false;
-    OUString aOULibName( rLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( rLibName ) )
     {
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
         if ( xPasswd.is() )
         {
-            bProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
+            bProtected = xPasswd->isLibraryPasswordProtected( rLibName );
         }
     }
 
@@ -1464,9 +1459,9 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
     }
 
     // check, if library is link
-    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) )
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( rLibName ) && xModLibContainer->isLibraryLink( rLibName ) )
     {
-        OUString aLinkURL = xModLibContainer->getLibraryLinkURL( aOULibName );
+        OUString aLinkURL = xModLibContainer->getLibraryLinkURL( rLibName );
         m_pLibBox->SetEntryText( aLinkURL, pNewEntry, 1 );
     }
 

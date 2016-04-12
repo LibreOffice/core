@@ -345,7 +345,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if ( aWindowTable.find( rTabId.GetValue() ) !=  aWindowTable.end() )
             {
                 BaseWindow* pWin = aWindowTable[ rTabId.GetValue() ];
-                OUString aNewName( rModName.GetValue() );
+                const OUString& aNewName( rModName.GetValue() );
                 OUString aOldName( pWin->GetName() );
                 if ( aNewName != aOldName )
                 {
@@ -431,7 +431,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             uno::Reference< frame::XModel > xModel( rShellItem.GetValue(), UNO_QUERY );
             ScriptDocument aDocument( xModel.is() ? ScriptDocument( xModel ) : ScriptDocument::getApplicationScriptDocument() );
             const SfxStringItem& rLibNameItem = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get( SID_BASICIDE_ARG_LIBNAME ));
-            OUString aLibName( rLibNameItem.GetValue() );
+            const OUString& aLibName( rLibNameItem.GetValue() );
 
             if ( nSlot == SID_BASICIDE_LIBSELECTED )
             {
