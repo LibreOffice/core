@@ -825,7 +825,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
                 sal_Unicode cComma = rData.getNumDecimalSep()[0];
                 sal_Unicode c1000  = rData.getNumThousandSep()[0];
-                OUString aCurrencyStrg = rData.getCurrSymbol();
+                const OUString& aCurrencyStrg = rData.getCurrSymbol();
 
                 // initialize the Basic-formater help object:
                 // get resources for predefined output

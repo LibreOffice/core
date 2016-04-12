@@ -490,15 +490,11 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
         GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
         const Reference< XComponentContext > &rComponentContext )
 {
-    SolarMutexResettableGuard aWriteLock;
-    Reference< XNameAccess > xPersistentWindowState( rPersistentWindowState );
-    aWriteLock.clear();
-
-    if ( xPersistentWindowState.is() )
+    if ( rPersistentWindowState.is() )
     {
         bool bGetSettingsState( false );
 
-        aWriteLock.reset();
+        SolarMutexResettableGuard aWriteLock;
         bool bGlobalSettings( bInGlobalSettings );
         GlobalSettings* pGlobalSettings( nullptr );
         if ( rGlobalSettings == nullptr )
@@ -512,7 +508,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
         try
         {
             Sequence< PropertyValue > aWindowState;
-            if ( xPersistentWindowState->hasByName( aName ) && (xPersistentWindowState->getByName( aName ) >>= aWindowState) )
+            if ( rPersistentWindowState->hasByName( aName ) && (rPersistentWindowState->getByName( aName ) >>= aWindowState) )
             {
                 bool bValue( false );
                 for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )

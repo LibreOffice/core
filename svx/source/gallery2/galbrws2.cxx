@@ -1238,7 +1238,7 @@ OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObje
 {
     OUString          aRet;
 
-    INetURLObject aURL(rObj.GetURL());
+    const INetURLObject& aURL(rObj.GetURL());
 
     if( nItemTextFlags & GALLERY_ITEM_THEMENAME )
     {

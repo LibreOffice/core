@@ -162,13 +162,12 @@ void XMLMarkerStyleExport::exportXML(
         {
             // Name
             bool bEncoded(false);
-            OUString aStrName( rStrName );
 
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, rExport.EncodeStyleName( aStrName, &bEncoded ) );
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, rExport.EncodeStyleName( rStrName, &bEncoded ) );
 
             if( bEncoded )
             {
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, aStrName );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, rStrName );
             }
 
             const basegfx::B2DPolyPolygon aPolyPolygon(

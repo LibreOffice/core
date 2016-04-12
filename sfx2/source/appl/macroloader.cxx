@@ -204,7 +204,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
     // 'macro:///lib.mod.proc(args)' => macro of App-BASIC
     // 'macro://[docname|.]/lib.mod.proc(args)' => macro of current or qualified document
     // 'macro://obj.method(args)' => direct API call, execute it via App-BASIC
-    OUString aMacro( rURL );
+    const OUString& aMacro( rURL );
     sal_Int32 nHashPos = aMacro.indexOf( '/', 8 );
     sal_Int32 nArgsPos = aMacro.indexOf( '(' );
     BasicManager *pAppMgr = SfxApplication::GetBasicManager();

@@ -911,7 +911,7 @@ awt::Point SwXTextViewCursor::getPosition() throw( uno::RuntimeException, std::e
     if(m_pView)
     {
         const SwWrtShell& rSh = m_pView->GetWrtShell();
-        const SwRect aCharRect(rSh.GetCharRect());
+        const SwRect& aCharRect(rSh.GetCharRect());
 
         const SwFrameFormat& rMaster = rSh.GetPageDesc( rSh.GetCurPageDesc() ).GetMaster();
 

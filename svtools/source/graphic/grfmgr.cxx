@@ -1092,8 +1092,8 @@ IMPL_LINK_NOARG_TYPED(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
 
 GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
 {
-    const OUString aURL( rURL ), aPrefix( UNO_NAME_GRAPHOBJ_URLPREFIX );
-    if( aURL.startsWith( aPrefix ) )
+    const OUString aPrefix( UNO_NAME_GRAPHOBJ_URLPREFIX );
+    if( rURL.startsWith( aPrefix ) )
     {
         // graphic manager url
         OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
@@ -1102,9 +1102,9 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
     else
     {
         Graphic     aGraphic;
-        if ( !aURL.isEmpty() )
+        if ( !rURL.isEmpty() )
         {
-            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aURL, StreamMode::READ ));
+            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ ));
             if( pStream )
                 GraphicConverter::Import( *pStream, aGraphic );
         }

@@ -639,9 +639,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //  (handled by AddInitial)
 
         const ScAutoStyleHint& rStlHint = static_cast<const ScAutoStyleHint&>(rHint);
-        ScRange aRange = rStlHint.GetRange();
-        OUString aName1 = rStlHint.GetStyle1();
-        OUString aName2 = rStlHint.GetStyle2();
+        const ScRange& aRange = rStlHint.GetRange();
+        const OUString& aName1 = rStlHint.GetStyle1();
+        const OUString& aName2 = rStlHint.GetStyle2();
         sal_uInt32 nTimeout = rStlHint.GetTimeout();
 
         if (!pAutoStyleList)

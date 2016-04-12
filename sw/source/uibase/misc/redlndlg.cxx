@@ -467,7 +467,7 @@ void SwRedlineAcceptDlg::Activate()
             if (pParent->pTLBParent)
             {
                 // update only comment
-                OUString sComment(rRedln.GetComment());
+                const OUString& sComment(rRedln.GetComment());
                 m_pTable->SetEntryText(sComment.replace('\n', ' '), pParent->pTLBParent, 3);
             }
             pParent->sComment = rRedln.GetComment();
@@ -757,7 +757,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         pRedlineParent = new SwRedlineDataParent;
         pRedlineParent->pData    = pRedlineData;
         pRedlineParent->pNext    = nullptr;
-        OUString sComment(rRedln.GetComment());
+        const OUString& sComment(rRedln.GetComment());
         pRedlineParent->sComment = sComment.replace('\n', ' ');
         m_RedlineParents.insert(m_RedlineParents.begin() + i,
                 std::unique_ptr<SwRedlineDataParent>(pRedlineParent));

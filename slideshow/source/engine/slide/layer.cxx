@@ -226,7 +226,7 @@ namespace slideshow
                 {
                     for( const auto& rViewEntry : maViewEntries )
                     {
-                        ViewLayerSharedPtr pViewLayer = rViewEntry.getViewLayer();
+                        const ViewLayerSharedPtr& pViewLayer = rViewEntry.getViewLayer();
 
                         // set clip to all view layers and
                         pViewLayer->setClip( aClip );

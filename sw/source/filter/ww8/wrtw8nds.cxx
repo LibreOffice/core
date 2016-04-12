@@ -2108,7 +2108,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         AppendWordBookmark( sBkmkName );
     }
 
-    OUString aStr( rNode.GetText() );
+    const OUString& aStr( rNode.GetText() );
 
     sal_Int32 nAktPos = 0;
     sal_Int32 const nEnd = aStr.getLength();

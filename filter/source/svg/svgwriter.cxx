@@ -1668,8 +1668,6 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
 
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
-    OUString sTextContent = rText;
-
     // <a> tag for link should be the innermost tag, inside <tspan>
     if( !mbIsPlaceholderShape && mbIsURLField && !msUrl.isEmpty() )
     {
@@ -1680,16 +1678,16 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
         {
             SvXMLElementExport aSVGAElem( mrExport, XML_NAMESPACE_NONE, aXMLElemA, mbIWS, mbIWS );
-            mrExport.GetDocHandler()->characters( sTextContent );
+            mrExport.GetDocHandler()->characters( rText );
         }
     }
     else
     {
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
-        mrExport.GetDocHandler()->characters( sTextContent );
+        mrExport.GetDocHandler()->characters( rText );
     }
 
-    mnTextWidth += mpVDev->GetTextWidth( sTextContent );
+    mnTextWidth += mpVDev->GetTextWidth( rText );
 }
 
 
@@ -2512,16 +2510,15 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     if( mbIsPlaceholderShape )
     {
-        OUString sTextContent = rText;
-        bIsPlaceholderField = sTextContent.match( sPlaceholderTag );
+        bIsPlaceholderField = rText.match( sPlaceholderTag );
         // for a placeholder text field we export only one <text> svg element
         if( bIsPlaceholderField )
         {
             OUString sCleanTextContent;
             static const sal_Int32 nFrom = sPlaceholderTag.getLength();
-            if( sTextContent.getLength() > nFrom )
+            if( rText.getLength() > nFrom )
             {
-                sCleanTextContent = sTextContent.copy( nFrom );
+                sCleanTextContent = rText.copy( nFrom );
             }
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aPos.X() ) );
@@ -3686,8 +3683,7 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
 
     ReadGDIMetaFile( aMemStm, aMtf );
 
-    const Reference< XDocumentHandler > xDocumentHandler( rxDocHandler );
-    Reference<SVGExport> pWriter(new SVGExport( mxContext, xDocumentHandler, maFilterData ));
+    Reference<SVGExport> pWriter(new SVGExport( mxContext, rxDocHandler, maFilterData ));
     pWriter->writeMtf( aMtf );
 }
 

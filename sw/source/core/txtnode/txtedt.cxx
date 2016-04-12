@@ -1264,7 +1264,6 @@ SwRect SwTextFrame::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos
     }
 
     // a change of data indicates that at least one word has been modified
-    const bool bRedlineChg = (pNode->GetText().getStr() != aOldText.getStr());
 
     sal_Int32 nBegin = 0;
     sal_Int32 nEnd = pNode->GetText().getLength();
@@ -1371,13 +1370,7 @@ SwRect SwTextFrame::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos
                 }
                 else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.getLength() )
                 {
-                    if ( bRedlineChg )
-                    {
-                        OUString rNewWord( rWord );
-                        rACW.InsertWord( rNewWord, *pDoc );
-                    }
-                    else
-                        rACW.InsertWord( rWord, *pDoc );
+                    rACW.InsertWord( rWord, *pDoc );
                 }
             }
         }

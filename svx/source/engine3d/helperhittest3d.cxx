@@ -133,7 +133,7 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
         else
         {
             // build new ViewInformation containing all transforms for the candidate
-            const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
+            const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
 
             o_rViewInformation3D = drawinglayer::geometry::ViewInformation3D(
                 aViewInfo3D.getObjectTransformation() * aInBetweenSceneMatrix,

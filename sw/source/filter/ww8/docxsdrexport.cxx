@@ -770,8 +770,8 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     m_pImpl->m_pDrawingML->SetFS(m_pImpl->m_pSerializer);
     // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
 
-    SwFormatHoriOrient rHoriOri = (rFrameFormat).GetHoriOrient();
-    SwFormatVertOrient rVertOri = (rFrameFormat).GetVertOrient();
+    const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
+    const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
     m_pImpl->m_rExport.VMLExporter().AddSdrObject(*(sdrObj),
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
@@ -879,7 +879,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
 
 void DocxSdrExport::Impl::textFrameShadow(const SwFrameFormat& rFrameFormat)
 {
-    SvxShadowItem aShadowItem = rFrameFormat.GetShadow();
+    const SvxShadowItem& aShadowItem = rFrameFormat.GetShadow();
     if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
         return;
 
@@ -980,7 +980,7 @@ OString lcl_ConvertTransparency(const Color& rColor)
 
 void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
 {
-    SvxShadowItem aShadowItem = rFrameFormat.GetShadow();
+    const SvxShadowItem& aShadowItem = rFrameFormat.GetShadow();
 
     // Output effects
     if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)

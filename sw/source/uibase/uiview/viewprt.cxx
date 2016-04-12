@@ -278,7 +278,7 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
 {
     const IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
-    SwPrintData aPrtData = rIDDA.getPrintData();
+    const SwPrintData& aPrtData = rIDDA.getPrintData();
 
     if( rIDDA.getPrinter( false ) )
     {

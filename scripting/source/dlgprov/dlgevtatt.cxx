@@ -624,17 +624,16 @@ namespace dlgprov
             if( pResMgr )
             {
                 OUString aRes( ResId(STR_ERRUNOEVENTBINDUNG, *pResMgr) );
-                OUString aQuoteChar( "\""  );
+                OUString aQuoteChar( "\"" );
 
-                OUString aOURes = aRes;
-                sal_Int32 nIndex = aOURes.indexOf( '%' );
+                sal_Int32 nIndex = aRes.indexOf( '%' );
 
                 OUString aOUFinal;
-                aOUFinal += aOURes.copy( 0, nIndex );
+                aOUFinal += aRes.copy( 0, nIndex );
                 aOUFinal += aQuoteChar;
                 aOUFinal += aMethodName;
                 aOUFinal += aQuoteChar;
-                aOUFinal += aOURes.copy( nIndex + 2 );
+                aOUFinal += aRes.copy( nIndex + 2 );
 
                 ScopedVclPtrInstance<MessageDialog>::Create(nullptr, aOUFinal)->Execute();
             }

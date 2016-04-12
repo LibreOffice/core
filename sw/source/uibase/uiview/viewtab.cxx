@@ -1049,7 +1049,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             sal_uInt16 nColumnType = 0;
 
             const SwFrameFormat& rMaster = rDesc.GetMaster();
-            SwFormatCol aCol(rMaster.GetCol());
+            const SwFormatCol& aCol(rMaster.GetCol());
             const sal_uInt16 nCols = aCol.GetNumCols();
             if ( nCols == 0 )
             {

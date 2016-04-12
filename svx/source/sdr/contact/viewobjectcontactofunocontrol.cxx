@@ -861,7 +861,7 @@ namespace sdr { namespace contact {
     #endif
 
         ::basegfx::B2DHomMatrix aScaleNormalization;
-        MapMode aCurrentDeviceMapMode( rPageViewDevice.GetMapMode() );
+        const MapMode& aCurrentDeviceMapMode( rPageViewDevice.GetMapMode() );
         aScaleNormalization.set( 0, 0, (double)aCurrentDeviceMapMode.GetScaleX() );
         aScaleNormalization.set( 1, 1, (double)aCurrentDeviceMapMode.GetScaleY() );
         m_aZoomLevelNormalization *= aScaleNormalization;
@@ -1103,7 +1103,7 @@ namespace sdr { namespace contact {
         bool bSuccess = false;
         try
         {
-            const OUString sControlServiceName( _rUnoObject.GetUnoControlTypeName() );
+            const OUString& sControlServiceName( _rUnoObject.GetUnoControlTypeName() );
 
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             _out_rControl = Reference<XControl>( xContext->getServiceManager()->createInstanceWithContext(sControlServiceName, xContext), UNO_QUERY_THROW );

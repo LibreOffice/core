@@ -251,8 +251,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     // 0) Some URLs are dispatched in a generic way (e.g. by the menu) using the default target "".
     //    But they are specified to use her own fix target. Detect such URLs here and use the correct target.
 
-    OUString sTargetName = sTargetFrameName;
-
     // I) handle special cases which not right for using findFrame() first
 
     // I.I) "_blank", "_default"
@@ -261,20 +259,20 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  here. Thats why we must "intercept" here.
 
     if (
-        (sTargetName==SPECIALTARGET_BLANK  ) ||
-        (sTargetName==SPECIALTARGET_DEFAULT)
+        (sTargetFrameName==SPECIALTARGET_BLANK  ) ||
+        (sTargetFrameName==SPECIALTARGET_DEFAULT)
        )
     {
         css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
         if (xParent.is())
-            xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // it's a special target - ignore search flags
+            xDispatcher = xParent->queryDispatch(aURL, sTargetFrameName, 0); // it's a special target - ignore search flags
     }
 
     // I.II) "_beamer"
     //  Special sub frame of a top frame only. Search or create it. ... OK it's currently a little bit HACKI.
     //  Only the sfx (means the controller) can create it.
 
-    else if (sTargetName==SPECIALTARGET_BEAMER)
+    else if (sTargetFrameName==SPECIALTARGET_BEAMER)
     {
         css::uno::Reference< css::frame::XDispatchProvider > xBeamer( xFrame->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::SELF ), css::uno::UNO_QUERY );
         if (xBeamer.is())
@@ -294,7 +292,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     // I.IV) "_parent"
     //  Our parent frame (if it exist) should handle this URL.
 
-    else if (sTargetName==SPECIALTARGET_PARENT)
+    else if (sTargetFrameName==SPECIALTARGET_PARENT)
     {
         css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
         if (xParent.is())
@@ -306,7 +304,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  This request must be forwarded to any parent frame, till we reach a top frame.
     //  If no parent exist, we can handle itself.
 
-    else if (sTargetName==SPECIALTARGET_TOP)
+    else if (sTargetFrameName==SPECIALTARGET_TOP)
     {
         if (xFrame->isTop())
         {
@@ -332,8 +330,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  we load it into the frame by returning specilized dispatch object.
 
     else if (
-             (sTargetName==SPECIALTARGET_SELF)  ||
-             (sTargetName.isEmpty())
+             (sTargetFrameName==SPECIALTARGET_SELF)  ||
+             (sTargetFrameName.isEmpty())
             )
     {
         // There exist a hard coded interception for special URLs.
@@ -396,7 +394,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
                   nRightFlags &= ~css::frame::FrameSearchFlag::CREATE;
 
         // try to find any existing target and ask him for his dispatcher
-        css::uno::Reference< css::frame::XFrame > xFoundFrame = xFrame->findFrame(sTargetName, nRightFlags);
+        css::uno::Reference< css::frame::XFrame > xFoundFrame = xFrame->findFrame(sTargetFrameName, nRightFlags);
         if (xFoundFrame.is())
         {
             // Attention: Found target is our own owner frame!
@@ -423,7 +421,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
             if (xParent.is())
-                xDispatcher = xParent->queryDispatch(aURL, sTargetName, css::frame::FrameSearchFlag::CREATE);
+                xDispatcher = xParent->queryDispatch(aURL, sTargetFrameName, css::frame::FrameSearchFlag::CREATE);
         }
     }
 

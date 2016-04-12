@@ -1786,9 +1786,8 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                       uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString(aPropertyName);
 
-    if ( aString == SC_UNO_FILTERED_RANGE_SELECTION )
+    if ( aPropertyName == SC_UNO_FILTERED_RANGE_SELECTION )
     {
         bFilteredRangeSelection = ScUnoHelpFunctions::GetBoolFromAny(aValue);
         return;
@@ -1801,33 +1800,33 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         const ScViewOptions& rOldOpt = pViewSh->GetViewData().GetOptions();
         ScViewOptions aNewOpt(rOldOpt);
 
-        if ( aString == SC_UNO_COLROWHDR || aString == OLD_UNO_COLROWHDR )
+        if ( aPropertyName == SC_UNO_COLROWHDR || aPropertyName == OLD_UNO_COLROWHDR )
             aNewOpt.SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_HORSCROLL || aString == OLD_UNO_HORSCROLL )
+        else if ( aPropertyName == SC_UNO_HORSCROLL || aPropertyName == OLD_UNO_HORSCROLL )
             aNewOpt.SetOption( VOPT_HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_OUTLSYMB || aString == OLD_UNO_OUTLSYMB )
+        else if ( aPropertyName == SC_UNO_OUTLSYMB || aPropertyName == OLD_UNO_OUTLSYMB )
             aNewOpt.SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHEETTABS || aString == OLD_UNO_SHEETTABS )
+        else if ( aPropertyName == SC_UNO_SHEETTABS || aPropertyName == OLD_UNO_SHEETTABS )
             aNewOpt.SetOption( VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWANCHOR )
+        else if ( aPropertyName == SC_UNO_SHOWANCHOR )
             aNewOpt.SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWFORM )
+        else if ( aPropertyName == SC_UNO_SHOWFORM )
             aNewOpt.SetOption( VOPT_FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWGRID )
+        else if ( aPropertyName == SC_UNO_SHOWGRID )
             aNewOpt.SetOption( VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWHELP )
+        else if ( aPropertyName == SC_UNO_SHOWHELP )
             aNewOpt.SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWNOTES )
+        else if ( aPropertyName == SC_UNO_SHOWNOTES )
             aNewOpt.SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWPAGEBR )
+        else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
             aNewOpt.SetOption( VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWZERO )
+        else if ( aPropertyName == SC_UNO_SHOWZERO )
             aNewOpt.SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_VALUEHIGH || aString == OLD_UNO_VALUEHIGH )
+        else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
             aNewOpt.SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_VERTSCROLL || aString == OLD_UNO_VERTSCROLL )
+        else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
             aNewOpt.SetOption( VOPT_VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNO_SHOWOBJ )
+        else if ( aPropertyName == SC_UNO_SHOWOBJ )
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
@@ -1838,7 +1837,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                 aNewOpt.SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
             }
         }
-        else if ( aString == SC_UNO_SHOWCHARTS )
+        else if ( aPropertyName == SC_UNO_SHOWCHARTS )
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
@@ -1849,7 +1848,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                 aNewOpt.SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
             }
         }
-        else if ( aString == SC_UNO_SHOWDRAW )
+        else if ( aPropertyName == SC_UNO_SHOWDRAW )
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
@@ -1860,19 +1859,19 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                 aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
             }
         }
-        else if ( aString == SC_UNO_GRIDCOLOR )
+        else if ( aPropertyName == SC_UNO_GRIDCOLOR )
         {
             sal_Int32 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 aNewOpt.SetGridColor( nIntVal, OUString() );
         }
-        else if ( aString == SC_UNO_ZOOMTYPE )
+        else if ( aPropertyName == SC_UNO_ZOOMTYPE )
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 SetZoomType(nIntVal);
         }
-        else if ( aString == SC_UNO_ZOOMVALUE )
+        else if ( aPropertyName == SC_UNO_ZOOMVALUE )
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
@@ -1909,10 +1908,9 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
           uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString(aPropertyName);
     uno::Any aRet;
 
-    if ( aString == SC_UNO_FILTERED_RANGE_SELECTION )
+    if ( aPropertyName == SC_UNO_FILTERED_RANGE_SELECTION )
     {
         ScUnoHelpFunctions::SetBoolInAny(aRet, bFilteredRangeSelection);
         return aRet;
@@ -1923,33 +1921,33 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
     {
         const ScViewOptions& rOpt = pViewSh->GetViewData().GetOptions();
 
-        if ( aString == SC_UNO_COLROWHDR || aString == OLD_UNO_COLROWHDR )
+        if ( aPropertyName == SC_UNO_COLROWHDR || aPropertyName == OLD_UNO_COLROWHDR )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HEADER ) );
-        else if ( aString == SC_UNO_HORSCROLL || aString == OLD_UNO_HORSCROLL )
+        else if ( aPropertyName == SC_UNO_HORSCROLL || aPropertyName == OLD_UNO_HORSCROLL )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HSCROLL ) );
-        else if ( aString == SC_UNO_OUTLSYMB || aString == OLD_UNO_OUTLSYMB )
+        else if ( aPropertyName == SC_UNO_OUTLSYMB || aPropertyName == OLD_UNO_OUTLSYMB )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_OUTLINER ) );
-        else if ( aString == SC_UNO_SHEETTABS || aString == OLD_UNO_SHEETTABS )
+        else if ( aPropertyName == SC_UNO_SHEETTABS || aPropertyName == OLD_UNO_SHEETTABS )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_TABCONTROLS ) );
-        else if ( aString == SC_UNO_SHOWANCHOR ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_ANCHOR ) );
-        else if ( aString == SC_UNO_SHOWFORM )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_FORMULAS ) );
-        else if ( aString == SC_UNO_SHOWGRID )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_GRID ) );
-        else if ( aString == SC_UNO_SHOWHELP )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HELPLINES ) );
-        else if ( aString == SC_UNO_SHOWNOTES )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_NOTES ) );
-        else if ( aString == SC_UNO_SHOWPAGEBR ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_PAGEBREAKS ) );
-        else if ( aString == SC_UNO_SHOWZERO )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_NULLVALS ) );
-        else if ( aString == SC_UNO_VALUEHIGH || aString == OLD_UNO_VALUEHIGH )
+        else if ( aPropertyName == SC_UNO_SHOWANCHOR ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_ANCHOR ) );
+        else if ( aPropertyName == SC_UNO_SHOWFORM )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_FORMULAS ) );
+        else if ( aPropertyName == SC_UNO_SHOWGRID )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_GRID ) );
+        else if ( aPropertyName == SC_UNO_SHOWHELP )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HELPLINES ) );
+        else if ( aPropertyName == SC_UNO_SHOWNOTES )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_NOTES ) );
+        else if ( aPropertyName == SC_UNO_SHOWPAGEBR ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_PAGEBREAKS ) );
+        else if ( aPropertyName == SC_UNO_SHOWZERO )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_NULLVALS ) );
+        else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_SYNTAX ) );
-        else if ( aString == SC_UNO_VERTSCROLL || aString == OLD_UNO_VERTSCROLL )
+        else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_VSCROLL ) );
-        else if ( aString == SC_UNO_SHOWOBJ )    aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_OLE ) );
-        else if ( aString == SC_UNO_SHOWCHARTS ) aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
-        else if ( aString == SC_UNO_SHOWDRAW )   aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
-        else if ( aString == SC_UNO_GRIDCOLOR )  aRet <<= (sal_Int32)( rOpt.GetGridColor().GetColor() );
-        else if ( aString == SC_UNO_VISAREA ) aRet <<= GetVisArea();
-        else if ( aString == SC_UNO_ZOOMTYPE ) aRet <<= GetZoomType();
-        else if ( aString == SC_UNO_ZOOMVALUE ) aRet <<= GetZoom();
-        else if ( aString == SC_UNO_VISAREASCREEN )
+        else if ( aPropertyName == SC_UNO_SHOWOBJ )    aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_OLE ) );
+        else if ( aPropertyName == SC_UNO_SHOWCHARTS ) aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
+        else if ( aPropertyName == SC_UNO_SHOWDRAW )   aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
+        else if ( aPropertyName == SC_UNO_GRIDCOLOR )  aRet <<= (sal_Int32)( rOpt.GetGridColor().GetColor() );
+        else if ( aPropertyName == SC_UNO_VISAREA ) aRet <<= GetVisArea();
+        else if ( aPropertyName == SC_UNO_ZOOMTYPE ) aRet <<= GetZoomType();
+        else if ( aPropertyName == SC_UNO_ZOOMVALUE ) aRet <<= GetZoom();
+        else if ( aPropertyName == SC_UNO_VISAREASCREEN )
         {
             ScViewData& rViewData = pViewSh->GetViewData();
             vcl::Window* pActiveWin = rViewData.GetActiveWin();

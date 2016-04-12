@@ -1406,13 +1406,12 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
     bool bShowElement( rElement.m_bVisible && !rElement.m_bMasterHide && implts_isParentWindowVisible() );
     aReadLock.clear();
 
-    uno::Reference< awt::XDockableWindow > xDockWindow( rDockWindow );
-    uno::Reference< awt::XWindow2 >        xWindow( xDockWindow, uno::UNO_QUERY );
+    uno::Reference< awt::XWindow2 >  xWindow( rDockWindow, uno::UNO_QUERY );
 
     vcl::Window*  pWindow( nullptr );
     ToolBox* pToolBox( nullptr );
 
-    if ( xDockWindow.is() && xWindow.is() )
+    if ( rDockWindow.is() && xWindow.is() )
     {
         {
             SolarMutexGuard aGuard;
@@ -1450,7 +1449,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             bool bUndefPos = hasDefaultPosValue( rElement.m_aFloatingData.m_aPos );
             bool bSetSize = ( rElement.m_aFloatingData.m_aSize.Width != 0 &&
                               rElement.m_aFloatingData.m_aSize.Height != 0 );
-            xDockWindow->setFloatingMode( sal_True );
+            rDockWindow->setFloatingMode( sal_True );
             if ( bUndefPos )
             {
                 aPos = implts_findNextCascadeFloatingPos();
@@ -1501,9 +1500,9 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
                 SolarMutexGuard aGuard;
                 pToolBox->SetAlign( ImplConvertAlignment(rElement.m_aDockedData.m_nDockedArea )  );
                 pToolBox->SetLineCount( 1 );
-                xDockWindow->setFloatingMode( sal_False );
+                rDockWindow->setFloatingMode( sal_False );
                 if ( rElement.m_aDockedData.m_bLocked )
-                    xDockWindow->lock();
+                    rDockWindow->lock();
                 aSize = pToolBox->CalcWindowSizePixel();
                 bSetSize = true;
 

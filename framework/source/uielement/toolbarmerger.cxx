@@ -264,11 +264,6 @@ ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
  Processes a merge operation.
 
  @param
-     xFrame
-
-     Must be a valid reference to a frame.
-
- @param
      pToolbar
 
      A valid pointer to the toolbar where the merge
@@ -312,7 +307,6 @@ ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
      false.
 */
 bool ToolBarMerger::ProcessMergeOperation(
-    const uno::Reference< frame::XFrame >& xFrame,
     ToolBox*                               pToolbar,
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
@@ -323,11 +317,11 @@ bool ToolBarMerger::ProcessMergeOperation(
     const AddonToolbarItemContainer&       rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
-        return MergeItems( xFrame, pToolbar, nPos, 1, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        return MergeItems( pToolbar, nPos, 1, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
-        return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        return MergeItems( pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REPLACE )
-        return ReplaceItem( xFrame, pToolbar, nPos, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        return ReplaceItem( pToolbar, nPos, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REMOVE )
         return RemoveItems( pToolbar, nPos, rMergeCommandParameter );
 
@@ -336,11 +330,6 @@ bool ToolBarMerger::ProcessMergeOperation(
 
 /**
  Processes a merge fallback operation.
-
- @param
-     xFrame
-
-     Must be a valid reference to a frame.
 
  @param
      pToolbar
@@ -381,7 +370,6 @@ bool ToolBarMerger::ProcessMergeOperation(
      false.
 */
 bool ToolBarMerger::ProcessMergeFallback(
-    const css::uno::Reference< css::frame::XFrame >& xFrame,
     ToolBox*                         pToolbar,
     sal_uInt16                       /*nPos*/,
     sal_uInt16&                      rItemId,
@@ -401,9 +389,9 @@ bool ToolBarMerger::ProcessMergeFallback(
              ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
         if ( rMergeFallback == MERGEFALLBACK_ADDFIRST )
-            return MergeItems( xFrame, pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+            return MergeItems( pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
         else if ( rMergeFallback == MERGEFALLBACK_ADDLAST )
-            return MergeItems( xFrame, pToolbar, TOOLBOX_APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+            return MergeItems( pToolbar, TOOLBOX_APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
     }
 
     return false;
@@ -411,11 +399,6 @@ bool ToolBarMerger::ProcessMergeFallback(
 
 /**
  Merges (adds) toolbar items into an existing toolbar.
-
- @param
-     xFrame
-
-     Must be a valid reference to a frame.
 
  @param
      pToolbar
@@ -451,7 +434,6 @@ bool ToolBarMerger::ProcessMergeFallback(
      false.
 */
 bool ToolBarMerger::MergeItems(
-    const uno::Reference< frame::XFrame >& rFrame,
     ToolBox*                               pToolbar,
     sal_uInt16                             nPos,
     sal_uInt16                             nModIndex,
@@ -461,8 +443,6 @@ bool ToolBarMerger::MergeItems(
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     const sal_Int32 nSize( rAddonToolbarItems.size() );
-
-    uno::Reference< frame::XFrame > xFrame( rFrame );
 
     sal_uInt16 nIndex( 0 );
     for ( sal_Int32 i = 0; i < nSize; i++ )
@@ -507,11 +487,6 @@ bool ToolBarMerger::MergeItems(
  existing toolbar.
 
  @param
-     xFrame
-
-     Must be a valid reference to a frame.
-
- @param
      pToolbar
 
      A valid pointer to the toolbar where the merge
@@ -545,7 +520,6 @@ bool ToolBarMerger::MergeItems(
      false.
 */
 bool ToolBarMerger::ReplaceItem(
-    const uno::Reference< frame::XFrame >& xFrame,
     ToolBox*                               pToolbar,
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
@@ -554,7 +528,7 @@ bool ToolBarMerger::ReplaceItem(
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     pToolbar->RemoveItem( nPos );
-    return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rAddonToolbarItems );
+    return MergeItems( pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rAddonToolbarItems );
 }
 
 /**

@@ -262,18 +262,16 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
     if (!mpDocTemplates->InsertDir(rName,nRegionId))
         return 0;
 
-    OUString aRegionName = rName;
-
     // Insert to the region cache list and to the thumbnail item list
     TemplateContainerItem* pItem = new TemplateContainerItem( *this, nItemId );
     pItem->mnRegionId = nRegionId;
-    pItem->maTitle = aRegionName;
+    pItem->maTitle = rName;
 
     maRegions.push_back(pItem);
 
     pItem = new TemplateContainerItem(*this, nItemId);
     pItem->mnRegionId = nRegionId;
-    pItem->maTitle = aRegionName;
+    pItem->maTitle = rName;
 
     AppendItem(pItem);
 

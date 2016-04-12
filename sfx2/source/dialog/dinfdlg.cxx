@@ -1185,7 +1185,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, false, &pItem ) )
     {
         // File name
-        OUString aFile( rInfoItem.GetValue() );
+        const OUString& aFile( rInfoItem.GetValue() );
 
         INetURLObject aURL;
         aURL.SetSmartProtocol( INetProtocol::File );

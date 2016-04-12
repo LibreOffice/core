@@ -241,8 +241,8 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             break;
     }
 
-    Fraction aScaleX = rMapMode.GetScaleX();
-    Fraction aScaleY = rMapMode.GetScaleY();
+    const Fraction& aScaleX = rMapMode.GetScaleX();
+    const Fraction& aScaleY = rMapMode.GetScaleY();
 
     // set offset according to MapMode
     Point aOrigin = rMapMode.GetOrigin();

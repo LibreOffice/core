@@ -758,15 +758,11 @@ bool SalGraphics::DrawTransformedBitmap(
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        basegfx::B2DPoint aNull(rNull);
-        basegfx::B2DPoint aX(rX);
-        basegfx::B2DPoint aY(rY);
+        mirror(rNull, pOutDev);
+        mirror(rX, pOutDev);
+        mirror(rY, pOutDev);
 
-        mirror(aNull, pOutDev);
-        mirror(aX, pOutDev);
-        mirror(aY, pOutDev);
-
-        return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap);
+        return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
     }
     else
     {

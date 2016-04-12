@@ -1051,7 +1051,6 @@ namespace cppcanvas
                                            bool                             bIntersect )
         {
             ::cppcanvas::internal::OutDevState& rState( rParms.mrStates.getState() );
-            ::basegfx::B2DPolyPolygon aClipPoly( rClipPoly );
 
             const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
             const bool bEmptyClipPoly( rState.clip.count() == 0 );
@@ -1086,7 +1085,7 @@ namespace cppcanvas
 
                 // AW: Simplified
                 rState.clip = basegfx::tools::clipPolyPolygonOnPolyPolygon(
-                    aClipPoly, rState.clip, true, false);
+                    rClipPoly, rState.clip, true, false);
             }
 
             // by now, our clip resides in the OutDevState::clip

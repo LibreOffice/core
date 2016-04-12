@@ -1527,10 +1527,9 @@ bool OReportDefinition::WriteThroughComponent(
     OSL_ENSURE( nullptr != pServiceName, "Need service name!" );
     try
     {
-        uno::Reference<embed::XStorage> xMyStorage = _xStorageToSaveTo;
         // open stream
         OUString sStreamName = OUString::createFromAscii( pStreamName );
-        uno::Reference<io::XStream> xStream = xMyStorage->openStreamElement( sStreamName,embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+        uno::Reference<io::XStream> xStream = _xStorageToSaveTo->openStreamElement( sStreamName,embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
         if ( !xStream.is() )
             return false;
         uno::Reference<io::XOutputStream> xOutputStream = xStream->getOutputStream();

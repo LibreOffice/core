@@ -87,7 +87,7 @@ sal_Bool NameContainer_Impl::hasByName( const OUString& aName )
 void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
-    Type aAnyType = aElement.getValueType();
+    const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
         throw IllegalArgumentException();
 
@@ -114,7 +114,7 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
 void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
-    Type aAnyType = aElement.getValueType();
+    const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
         throw IllegalArgumentException();
 

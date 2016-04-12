@@ -1520,7 +1520,7 @@ bool ContextMenuSaveInData::Apply()
             css::uno::Reference< css::lang::XSingleComponentFactory > xFactory( xIndexContainer, css::uno::UNO_QUERY );
             ApplyMenu( xIndexContainer, xFactory, pEntry );
 
-            OUString aUrl = pEntry->GetCommand();
+            const OUString& aUrl = pEntry->GetCommand();
             try
             {
                 if ( GetConfigManager()->hasSettings( aUrl ) )

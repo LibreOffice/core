@@ -1109,8 +1109,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if ( aRefPoint.bResult )
                 {
-                    ToolBarMerger::ProcessMergeOperation( m_xFrame,
-                                                          m_pToolBar,
+                    ToolBarMerger::ProcessMergeOperation( m_pToolBar,
                                                           aRefPoint.nPos,
                                                           nItemId,
                                                           m_aCommandMap,
@@ -1121,8 +1120,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 }
                 else
                 {
-                    ToolBarMerger::ProcessMergeFallback( m_xFrame,
-                                                         m_pToolBar,
+                    ToolBarMerger::ProcessMergeFallback( m_pToolBar,
                                                          aRefPoint.nPos,
                                                          nItemId,
                                                          m_aCommandMap,

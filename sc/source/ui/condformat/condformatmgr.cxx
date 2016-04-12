@@ -35,7 +35,7 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rPa
 
 OUString ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat& rFormat)
 {
-    ScRangeList aRange = rFormat.GetRange();
+    const ScRangeList& aRange = rFormat.GetRange();
     OUString aStr;
     aRange.Format(aStr, ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention());
     aStr += "\t";

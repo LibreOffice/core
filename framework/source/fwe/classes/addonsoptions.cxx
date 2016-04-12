@@ -771,16 +771,15 @@ void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
     const OUString aMenuMergeRootName( "AddonUI/OfficeMenuBarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
-    OUString                aAddonMergeNode( aMenuMergeRootName );
 
-    sal_uInt32              nCount = aAddonMergeNodesSeq.getLength();
+    sal_uInt32           nCount = aAddonMergeNodesSeq.getLength();
 
     // Init the property value sequence
     Sequence< OUString > aNodePropNames( 5 );
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
+        OUString aMergeAddonInstructions( aMenuMergeRootName + aAddonMergeNodesSeq[i] );
 
         Sequence< OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
         sal_uInt32           nCountAddons = aAddonInstMergeNodesSeq.getLength();
@@ -849,16 +848,14 @@ void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
     const OUString aToolbarMergeRootName( "AddonUI/OfficeToolbarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
-    OUString                aAddonMergeNode( aToolbarMergeRootName );
-
-    sal_uInt32              nCount = aAddonMergeNodesSeq.getLength();
+    sal_uInt32           nCount = aAddonMergeNodesSeq.getLength();
 
     // Init the property value sequence
     Sequence< OUString > aNodePropNames( 6 );
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
+        OUString aMergeAddonInstructions( aToolbarMergeRootName + aAddonMergeNodesSeq[i] );
 
         Sequence< OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
         sal_uInt32           nCountAddons = aAddonInstMergeNodesSeq.getLength();
@@ -929,14 +926,13 @@ void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
     const ::rtl::OUString aStatusbarMergeRootName( "AddonUI/OfficeStatusbarMerging/" );
 
     Sequence< ::rtl::OUString > aAddonMergeNodesSeq = GetNodeNames( aStatusbarMergeRootName );
-    ::rtl::OUString aAddonMergeNode( aStatusbarMergeRootName );
     sal_uInt32  nCount = aAddonMergeNodesSeq.getLength();
 
     Sequence< ::rtl::OUString > aNodePropNames( 5 );
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        ::rtl::OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
+        ::rtl::OUString aMergeAddonInstructions( aStatusbarMergeRootName + aAddonMergeNodesSeq[i] );
 
         Sequence< ::rtl::OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
         sal_uInt32 nCountAddons = aAddonInstMergeNodesSeq.getLength();

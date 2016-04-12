@@ -425,7 +425,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
         ( rNewProperties.getURL() != getURL() ))
     {
         m_xImpl->m_xCachedSnapshot.clear();
-        OUString const url(rNewProperties.getURL());
+        OUString const& url(rNewProperties.getURL());
         if (url.startsWithIgnoreAsciiCase("vnd.sun.star.Package:"))
         {
             if (   !m_xImpl->m_pTempFile

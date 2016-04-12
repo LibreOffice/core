@@ -468,8 +468,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     if( bCustom )
     {
         uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-        OUString sDocPropertyName( aDocProperty );
-        xProps->setPropertyValue("Name", uno::makeAny( sDocPropertyName ) );
+        xProps->setPropertyValue("Name", uno::makeAny( aDocProperty ) );
     }
 
     return xTextField;

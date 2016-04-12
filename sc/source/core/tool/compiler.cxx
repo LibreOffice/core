@@ -4962,7 +4962,7 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
 bool ScCompiler::HandleColRowName()
 {
     ScSingleRefData& rRef = *mpToken.get()->GetSingleRef();
-    ScAddress aAbs = rRef.toAbs(aPos);
+    const ScAddress aAbs = rRef.toAbs(aPos);
     if (!ValidAddress(aAbs))
     {
         SetError( errNoRef );
@@ -4971,7 +4971,6 @@ bool ScCompiler::HandleColRowName()
     SCCOL nCol = aAbs.Col();
     SCROW nRow = aAbs.Row();
     SCTAB nTab = aAbs.Tab();
-    ScAddress aLook = aAbs;
     bool bColName = rRef.IsColRel();
     SCCOL nMyCol = aPos.Col();
     SCROW nMyRow = aPos.Row();
@@ -4983,7 +4982,7 @@ bool ScCompiler::HandleColRowName()
     for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
     {
         ScRangePair* pR = (*pRL)[i];
-        if ( pR->GetRange(0).In( aLook ) )
+        if ( pR->GetRange(0).In( aAbs ) )
         {
             bInList = bValidName = true;
             aRange = pR->GetRange(1);
@@ -5002,7 +5001,7 @@ bool ScCompiler::HandleColRowName()
     }
     if ( !bInList && pDoc->GetDocOptions().IsLookUpColRowNames() )
     {   // automagically or created by copying and NamePos isn't in list
-        ScRefCellValue aCell(*pDoc, aLook);
+        ScRefCellValue aCell(*pDoc, aAbs);
         bool bString = aCell.hasString();
         if (!bString && aCell.isEmpty())
             bString = true;     // empty cell is ok

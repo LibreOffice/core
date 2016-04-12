@@ -788,10 +788,9 @@ namespace
                             else
                                 aHavingStr += aWork;
 
-                            OUString aTmp = aCriteria;
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
-                            std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                            std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aCriteria,aErrorMsg,xColumn));
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -819,10 +818,9 @@ namespace
 
                             aWhereStr += " ";
                             // aCriteria could have some german numbers so I have to be sure here
-                            OUString aTmp = aCriteria;
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
-                            std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                            std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aCriteria,aErrorMsg,xColumn));
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -888,7 +886,7 @@ namespace
                                     OUString& _rsRet)
     {
         const OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
-        Reference< XConnection> xConnection = rController.getConnection();
+        const Reference< XConnection>& xConnection = rController.getConnection();
         if ( !xConnection.is() )
             return eNoConnection;
 
@@ -964,8 +962,7 @@ namespace
             if ( !aWorkStr.isEmpty() )
             {
                 const sal_Int32 nMaxOrder = xMetaData->getMaxColumnsInOrderBy();
-                OUString sToken(aWorkStr);
-                if ( nMaxOrder && nMaxOrder < comphelper::string::getTokenCount(sToken, ',') )
+                if ( nMaxOrder && nMaxOrder < comphelper::string::getTokenCount(aWorkStr, ',') )
                     eErrorCode = eStatementTooLong;
                 else
                 {
@@ -2239,8 +2236,7 @@ namespace
                         if ( SQL_ISRULE(pColumnRef,general_set_fct) )
                         {
                             aInfo->SetFunctionType(nFunctionType|FKT_AGGREGATE);
-                            OUString aCol(aColumns);
-                            aInfo->SetFunction(comphelper::string::stripEnd(aCol.getToken(0,'('), ' '));
+                            aInfo->SetFunction(comphelper::string::stripEnd(aColumns.getToken(0,'('), ' '));
                         }
                         else
                             aInfo->SetFunctionType(nFunctionType|FKT_OTHER);
@@ -3081,7 +3077,6 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDesc
         }
     }
 
-    OUString sTest(_sCriteria);
     // _rxColumn, if it is a "lookup" column, not a computed column,
     // is guaranteed to be the column taken from the *source* of the column,
     // that is either a table or another query.
@@ -3095,7 +3090,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDesc
     // We are currently treating the entry "C='foo'"
     // Then _rxColumn has Name "C" and RealName "cee". We should *obviously* use "C", not "cee".
     OSQLParseNode* pParseNode = rParser.predicateTree(  _rsErrorMessage,
-                                                        sTest,
+                                                        _sCriteria,
                                                         static_cast<OQueryController&>(getController()).getNumberFormatter(),
                                                         _rxColumn,
                                                         false);

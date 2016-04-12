@@ -1368,7 +1368,6 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     SdPage* pPreviousNotesPage;
     sal_uInt16 nStandardPageNum;
     sal_uInt16 nNotesPageNum;
-    OUString aStandardPageName(sStandardPageName);
     OUString aNotesPageName(sNotesPageName);
 
     // Gather some information about the standard page and the notes page
@@ -1387,7 +1386,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
         nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
         pPreviousNotesPage = static_cast<SdPage*>( GetPage(nStandardPageNum - 1) );
         nNotesPageNum = nStandardPageNum + 1;
-        aNotesPageName = aStandardPageName;
+        aNotesPageName = sStandardPageName;
     }
 
     OSL_ASSERT(nNotesPageNum==nStandardPageNum+1);
@@ -1398,7 +1397,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     SetupNewPage (
         pPreviousStandardPage,
         pStandardPage,
-        aStandardPageName,
+        sStandardPageName,
         nInsertPosition,
         bIsPageBack,
         bIsPageObj);

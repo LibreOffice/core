@@ -582,7 +582,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
 void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
 {
-    OUString aFullName = rFuncData.GetOriginalName();
+    const OUString& aFullName = rFuncData.GetOriginalName();
     sal_Int32 nPos = aFullName.lastIndexOf( (sal_Unicode) '.' );
     if ( nPos > 0 )
     {
@@ -975,7 +975,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
 static void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
 {
-    OUString aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
+    const OUString& aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
 
     sal_uLong nCount = rFunctionList.GetCount();
     for (sal_uLong nPos=0; nPos<nCount; nPos++)
@@ -1509,7 +1509,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
     // Reflection* pRefl = rNewRes.getReflection();
 
     uno::TypeClass eClass = rNewRes.getValueTypeClass();
-    uno::Type aType = rNewRes.getValueType();
+    const uno::Type& aType = rNewRes.getValueType();
     switch (eClass)
     {
         case uno::TypeClass_VOID:

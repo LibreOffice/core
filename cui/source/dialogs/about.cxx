@@ -160,7 +160,7 @@ void AboutDialog::StyleControls()
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    vcl::Font aLabelFont = rStyleSettings.GetLabelFont();
+    const vcl::Font& aLabelFont = rStyleSettings.GetLabelFont();
     vcl::Font aLargeFont = aLabelFont;
     aLargeFont.SetFontSize(Size( 0, aLabelFont.GetFontSize().Height() * 3));
 
