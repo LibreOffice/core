@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_FILEDLGHELPER_HRC
-#define _SFX_FILEDLGHELPER_HRC
+#ifndef INCLUDED_SFX2_INC_FILEDLGHELPER_HRC
+#define INCLUDED_SFX2_INC_FILEDLGHELPER_HRC
 
 #include <sfx2/sfx.hrc>
 

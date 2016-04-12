@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SHUTDOWNICON_HXX__
-#define __SHUTDOWNICON_HXX__
+#ifndef INCLUDED_SFX2_SOURCE_APPL_SHUTDOWNICON_HXX
+#define INCLUDED_SFX2_SOURCE_APPL_SHUTDOWNICON_HXX
 
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>

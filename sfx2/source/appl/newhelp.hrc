@@ -16,15 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_NEWHELP_HRC
-#define _SFX_NEWHELP_HRC
+#ifndef INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HRC
+#define INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HRC
 
 // context menu ids
 #define MID_OPEN                                1
 #define MID_RENAME                              2
 #define MID_DELETE                              3
 
-#endif // #ifndef _SFX_NEWHELP_HRC
+#endif
 
 // ******************************************************************* EOF
 

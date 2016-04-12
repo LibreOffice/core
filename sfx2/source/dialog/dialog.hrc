@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_DIALOG_HRC
-#define _SFX_DIALOG_HRC
+#ifndef INCLUDED_SFX2_SOURCE_DIALOG_DIALOG_HRC
+#define INCLUDED_SFX2_SOURCE_DIALOG_DIALOG_HRC
 
 #include <sfx2/sfx.hrc>
 
@@ -65,6 +65,6 @@
 #define STR_STYLE_ELEMTLIST             ( RC_DIALOG_BEGIN + 125 )
 #define STR_FONT_TABPAGE                ( RC_DIALOG_BEGIN + 126 )
 
-#endif // #ifndef _SFX_DIALOG_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

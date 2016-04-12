@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_SIDEBAR_RESOURCE_DEFINITIONS_HRC
-#define _SFX_SIDEBAR_RESOURCE_DEFINITIONS_HRC
+#ifndef INCLUDED_SFX2_SIDEBAR_RESOURCEDEFINITIONS_HRC
+#define INCLUDED_SFX2_SIDEBAR_RESOURCEDEFINITIONS_HRC
 
 #include <sfx2/sfx.hrc>
 
@@ -55,6 +55,6 @@
 #define POPUPPANEL_MARGIN_LARGE     5
 
 
-#endif /* _SFX_SIDEBAR_RESOURCE_DEFINITIONS_HRC */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

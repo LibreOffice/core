@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_HRC
-#define _SFX_HRC
+#ifndef INCLUDED_SFX2_SFX_HRC
+#define INCLUDED_SFX2_SFX_HRC
 
 #include <svl/solar.hrc>
 #include <svl/memberid.hrc>
@@ -255,6 +255,6 @@
 
 #include <sfx2/sfxsids.hrc>
 
-#endif // #ifndef _SFX_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

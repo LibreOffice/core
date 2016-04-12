@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CNTIDS_HRC
-#define _CNTIDS_HRC
+#ifndef INCLUDED_SFX2_CNTIDS_HRC
+#define INCLUDED_SFX2_CNTIDS_HRC
 
 #include <svl/solar.hrc>
 

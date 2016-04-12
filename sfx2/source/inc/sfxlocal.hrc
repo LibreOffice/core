@@ -19,8 +19,8 @@
 
 // local resources
 
-#ifndef _SFXLOCAL_HRC
-#define _SFXLOCAL_HRC
+#ifndef INCLUDED_SFX2_SOURCE_INC_SFXLOCAL_HRC
+#define INCLUDED_SFX2_SOURCE_INC_SFXLOCAL_HRC
 
 #include <sfx2/sfx.hrc>
 
