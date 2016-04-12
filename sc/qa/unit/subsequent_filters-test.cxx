@@ -3322,8 +3322,8 @@ void ScFiltersTest::testRelFormulaValidationXLS()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    checkValidationFormula(ScAddress(3, 4, 0), rDoc, "Sheet1.C5");
-    checkValidationFormula(ScAddress(5, 8, 0), rDoc, "Sheet1.D7");
+    checkValidationFormula(ScAddress(3, 4, 0), rDoc, "C5");
+    checkValidationFormula(ScAddress(5, 8, 0), rDoc, "D7");
 
     xDocSh->DoClose();
 }
