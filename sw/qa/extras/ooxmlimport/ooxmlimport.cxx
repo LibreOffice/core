@@ -2098,6 +2098,12 @@ DECLARE_OOXMLIMPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     Bitmap::ReleaseAccess(pAccess);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf99135, "tdf99135.docx")
+{
+    // This was 0, crop was ignored on VML import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1825), getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop").Bottom);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

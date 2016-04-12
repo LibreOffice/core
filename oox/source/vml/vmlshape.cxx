@@ -44,6 +44,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
  #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svdtrans.hxx>
@@ -106,6 +107,19 @@ awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectang
     aAbsRect.Width = static_cast< sal_Int32 >( fWidthRatio * rRelRect.Width + 0.5 );
     aAbsRect.Height = static_cast< sal_Int32 >( fHeightRatio * rRelRect.Height + 0.5 );
     return aAbsRect;
+}
+
+/// Count the crop value based on a crop fraction and a reference size.
+sal_Int32 lclConvertCrop(const OUString& rCrop, sal_uInt32 nSize)
+{
+    if (rCrop.endsWith("f"))
+    {
+        // Numeric value is specified in 1/65536-ths.
+        sal_uInt32 nCrop = rCrop.copy(0, rCrop.getLength() - 1).toUInt32();
+        return (nCrop * nSize) / 65536;
+    }
+
+    return 0;
 }
 
 } // namespace
@@ -833,6 +847,25 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
 
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
+
+        if (maTypeModel.moCropBottom.has() || maTypeModel.moCropLeft.has() || maTypeModel.moCropRight.has() || maTypeModel.moCropTop.has())
+        {
+            text::GraphicCrop aGraphicCrop;
+            uno::Reference<graphic::XGraphic> xGraphic;
+            aPropSet.getProperty(xGraphic, PROP_Graphic);
+            awt::Size aOriginalSize = rGraphicHelper.getOriginalSize(xGraphic);
+
+            if (maTypeModel.moCropBottom.has())
+                aGraphicCrop.Bottom = lclConvertCrop(maTypeModel.moCropBottom.get(), aOriginalSize.Height);
+            if (maTypeModel.moCropLeft.has())
+                aGraphicCrop.Left = lclConvertCrop(maTypeModel.moCropLeft.get(), aOriginalSize.Width);
+            if (maTypeModel.moCropRight.has())
+                aGraphicCrop.Right = lclConvertCrop(maTypeModel.moCropRight.get(), aOriginalSize.Width);
+            if (maTypeModel.moCropTop.has())
+                aGraphicCrop.Top = lclConvertCrop(maTypeModel.moCropTop.get(), aOriginalSize.Height);
+
+            aPropSet.setProperty(PROP_GraphicCrop, aGraphicCrop);
+        }
     }
     return xShape;
 }
