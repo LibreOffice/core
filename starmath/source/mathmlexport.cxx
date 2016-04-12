@@ -251,8 +251,8 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 
 /// export through an XML exporter component (output stream version)
 bool SmXMLExportWrapper::WriteThroughComponent(
-    Reference<io::XOutputStream> xOutputStream,
-    Reference<XComponent> xComponent,
+    const Reference<io::XOutputStream>& xOutputStream,
+    const Reference<XComponent>& xComponent,
     Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pComponentName )
@@ -303,7 +303,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 /// export through an XML exporter component (storage version)
 bool SmXMLExportWrapper::WriteThroughComponent(
     const Reference < embed::XStorage >& xStorage,
-    Reference<XComponent> xComponent,
+    const Reference<XComponent>& xComponent,
     const sal_Char* pStreamName,
     Reference<uno::XComponentContext> & rxContext,
     Reference<beans::XPropertySet> & rPropSet,
