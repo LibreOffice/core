@@ -59,7 +59,7 @@ namespace framework {
     private:
         class FactoryManagerMap : public std::unordered_map<OUString,
                                                             OUString,
-                                                            OUStringHash,
+                                                            OUString,
                                                             std::equal_to< OUString > >
         {
         };
