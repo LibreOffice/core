@@ -357,7 +357,7 @@ throw( IllegalArgumentException )
 }
 
 bool ActionTriggerPropertySet::impl_tryToChangeProperty(
-    const Reference< XBitmap >  aCurrentValue   ,
+    const Reference< XBitmap >&  aCurrentValue   ,
     const Any&                  aNewValue       ,
     Any&                        aOldValue       ,
     Any&                        aConvertedValue )
@@ -392,7 +392,7 @@ throw( IllegalArgumentException )
 }
 
 bool ActionTriggerPropertySet::impl_tryToChangeProperty(
-    const Reference< XInterface >   aCurrentValue   ,
+    const Reference< XInterface >&   aCurrentValue   ,
     const Any&                      aNewValue       ,
     Any&                            aOldValue       ,
     Any&                            aConvertedValue )

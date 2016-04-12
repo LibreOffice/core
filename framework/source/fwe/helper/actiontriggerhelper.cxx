@@ -45,7 +45,7 @@ namespace framework
 
 // implementation helper ( menu => ActionTrigger )
 
-bool IsSeparator( Reference< XPropertySet > xPropertySet )
+bool IsSeparator( const Reference< XPropertySet >& xPropertySet )
 {
     Reference< XServiceInfo > xServiceInfo( xPropertySet, UNO_QUERY );
     try
@@ -59,7 +59,7 @@ bool IsSeparator( Reference< XPropertySet > xPropertySet )
     return false;
 }
 
-void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
+void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTriggerPropertySet,
                             OUString& aMenuLabel,
                             OUString& aCommandURL,
                             OUString& aHelpURL,
@@ -95,7 +95,7 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
     }
 }
 
-void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexContainer > xActionTriggerContainer )
+void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< XIndexContainer >& xActionTriggerContainer )
 {
     if ( xActionTriggerContainer.is() )
     {
