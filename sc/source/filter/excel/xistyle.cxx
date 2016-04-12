@@ -495,8 +495,6 @@ void XclImpFont::GuessScriptType()
             // Western fonts
             mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || xFontCharMap->HasChar( 'A' );
         }
-
-        xFontCharMap = nullptr;
     }
 }
 

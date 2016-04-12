@@ -39,8 +39,6 @@ void VclFontCharMapTest::testDefaultFontCharMap()
     CPPUNIT_ASSERT( nStartBMPPlane == 0x0020 );
     CPPUNIT_ASSERT( nStartSupBMPPlane == 0xE000 );
     CPPUNIT_ASSERT( nEndBMPPlane == 0xFFF0-1 );
-
-    xfcmap = nullptr;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontCharMapTest);
