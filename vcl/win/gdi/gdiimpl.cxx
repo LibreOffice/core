@@ -1888,11 +1888,31 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
         {
             const sal_uInt32 nNextIndex((a + 1) % nCount);
             const basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
+            const bool b1stControlPointUsed(bControls && rPolygon.isNextControlPointUsed(a));
+            const bool b2ndControlPointUsed(bControls && rPolygon.isPrevControlPointUsed(nNextIndex));
 
-            if(bControls && (rPolygon.isNextControlPointUsed(a) || rPolygon.isPrevControlPointUsed(nNextIndex)))
+            if(b1stControlPointUsed || b2ndControlPointUsed)
             {
-                const basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
-                const basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
+                basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
+                basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
+
+                // tdf#99165 MS Gdiplus cannot handle creating correct extra geometry for fat lines
+                // with LineCap or LineJoin when a bezier segment starts or ends trivial, e.g. has
+                // no 1st or 2nd control point, despite that these are mathematicaly correct definitions
+                // (basegfx can handle that). To solve, create replacement vectors to thre resp. next
+                // control point with 1/3rd of length (the default control vector for these cases).
+                // Only one of this can happen here, else the is(Next|Prev)ControlPointUsed wopuld have
+                // both been false.
+                // Caution: This error (and it's correction) might be necessary for other graphical
+                // sub-systems in a similar way
+                if(!b1stControlPointUsed)
+                {
+                    aCa = aCurr + ((aCb - aCurr) * 0.3);
+                }
+                else if(!b2ndControlPointUsed)
+                {
+                    aCb = aNext + ((aCa - aNext) * 0.3);
+                }
 
                 rGraphicsPath.AddBezier(
                     static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
@@ -2018,7 +2038,11 @@ bool WinSalGraphicsImpl::drawPolyLine(
                 const Gdiplus::REAL aMiterLimit(15.0);
 
                 aPen.SetMiterLimit(aMiterLimit);
-                aPen.SetLineJoin(Gdiplus::LineJoinMiter);
+                // tdf#99165 MS's LineJoinMiter creates non standard conform miter additional
+                // graphics, somewhere clipped in some distance from the edge point, dependent
+                // of MiterLimit. The more default-like option is LineJoinMiterClipped, so use
+                // that instead
+                aPen.SetLineJoin(Gdiplus::LineJoinMiterClipped);
                 break;
             }
             case basegfx::B2DLineJoin::Round :
