@@ -34,6 +34,24 @@
       "revId": "ad82a36a3fc45a3033b65a6234da832989dc7830",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_3b17f852",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-12T16:51:56Z",
+      "side": 1,
+      "message": "For completeness, I messed this up, both indeed call acquire()/release() on the object\u0027s instance, so returning the pointer wrapped into a new uno::Reference should work; thanks for pointing out.\n\nAnd sorry to Sedak for creating confusion.",
+      "parentUuid": "3aaa91ec_80c84676",
+      "revId": "ad82a36a3fc45a3033b65a6234da832989dc7830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
