@@ -222,7 +222,7 @@ void FilterCache::load(EFillState eRequired)
         impl_getDirectCFGValue(CFGDIRECTKEY_OFFICELOCALE) >>= m_sActLocale;
         if (m_sActLocale.isEmpty())
         {
-            _FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify office locale => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_OFFICELOCALE));
+            FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify office locale => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_OFFICELOCALE));
             m_sActLocale = DEFAULT_OFFICELOCALE;
         }
 
@@ -270,8 +270,8 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
                                        pIt != rList.end()  ;
                                      ++pIt                 )
     {
-        _FILTER_CONFIG_LOG_1_("getMatchingProps for \"%s\"  ...\n",
-                              _FILTER_CONFIG_TO_ASCII_(pIt->first))
+        FILTER_CONFIG_LOG_1_("getMatchingProps for \"%s\"  ...\n",
+                              FILTER_CONFIG_TO_ASCII_(pIt->first))
         if (
             (pIt->second.haveProps(lIProps)    ) &&
             (pIt->second.dontHaveProps(lEProps))
@@ -1560,7 +1560,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
         OUString sMsg("Fallback scenario for filter or type '" + sName + "' and locale '" +
                       sActLocale + "' failed. Please check your filter configuration.");
 
-        OSL_FAIL(_FILTER_CONFIG_TO_ASCII_(sMsg));
+        OSL_FAIL(FILTER_CONFIG_TO_ASCII_(sMsg));
 #endif
         return;
     }
@@ -1766,7 +1766,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
     if (bItemInConfig)
     {
         (*pList)[sItem] = impl_loadItem(xSet, eType, sItem, E_READ_ALL);
-        _FILTER_CONFIG_LOG_2_("impl_loadItemOnDemand(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(sItem).getStr())
+        FILTER_CONFIG_LOG_2_("impl_loadItemOnDemand(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(sItem).getStr())
     }
     else
     {
@@ -2081,7 +2081,7 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
                         if (nOrder > 0)
                         {
                             SAL_WARN( "filter.config", "FilterCache::impl_interpretDataVal4Filter()\nCan not move Order value from filter to type on demand!");
-                            _FILTER_CONFIG_LOG_2_("impl_interpretDataVal4Filter(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(rItem).getStr())
+                            FILTER_CONFIG_LOG_2_("impl_interpretDataVal4Filter(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(rItem).getStr())
                         }
                     }
                     break;

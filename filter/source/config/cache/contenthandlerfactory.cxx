@@ -68,7 +68,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
     OUString sRealHandler = sHandler;
 
-    #ifdef _FILTER_CONFIG_MIGRATION_Q_
+    #ifdef FILTER_CONFIG_MIGRATION_Q_
 
         /* -> TODO - HACK
             check if the given handler name really exists ...
@@ -80,7 +80,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
         if (!cache.hasItem(FilterCache::E_CONTENTHANDLER, sHandler) && cache.hasItem(FilterCache::E_TYPE, sHandler))
         {
-            _FILTER_CONFIG_LOG_("ContentHandlerFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
+            FILTER_CONFIG_LOG_("ContentHandlerFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
             css::uno::Sequence< OUString > lTypes { sHandler };
 
@@ -102,7 +102,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
         /* <- HACK */
 
-    #endif // _FILTER_CONFIG_MIGRATION_Q_
+    #endif // FILTER_CONFIG_MIGRATION_Q_
 
     // search handler on cache
     CacheItem aHandler = cache.getItem(FilterCache::E_CONTENTHANDLER, sRealHandler);

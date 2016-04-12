@@ -22,16 +22,16 @@
 
 #include <rtl/ustring.hxx>
 
-#ifdef _FILTER_CONFIG_TO_ASCII_
+#ifdef FILTER_CONFIG_TO_ASCII_
     #error "who already defined such macro :-("
 #endif
 
-#define _FILTER_CONFIG_TO_ASCII_(UNICODE_STRING)            \
+#define FILTER_CONFIG_TO_ASCII_(UNICODE_STRING)            \
             OUStringToOString(UNICODE_STRING, RTL_TEXTENCODING_UTF8).getStr()
 
-#define _FILTER_CONFIG_LOG_(TEXT)
-#define _FILTER_CONFIG_LOG_1_(FORMAT, ARG1)
-#define _FILTER_CONFIG_LOG_2_(FORMAT, ARG1, ARG2)
+#define FILTER_CONFIG_LOG_(TEXT)
+#define FILTER_CONFIG_LOG_1_(FORMAT, ARG1)
+#define FILTER_CONFIG_LOG_2_(FORMAT, ARG1, ARG2)
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
 

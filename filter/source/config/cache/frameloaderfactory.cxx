@@ -65,7 +65,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
     OUString sRealLoader = sLoader;
 
-    #ifdef _FILTER_CONFIG_MIGRATION_Q_
+    #ifdef FILTER_CONFIG_MIGRATION_Q_
 
         /* -> TODO - HACK
             check if the given loader name really exist ...
@@ -77,7 +77,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
         if (!cache.hasItem(FilterCache::E_FRAMELOADER, sLoader) && cache.hasItem(FilterCache::E_TYPE, sLoader))
         {
-            _FILTER_CONFIG_LOG_("FrameLoaderFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
+            FILTER_CONFIG_LOG_("FrameLoaderFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
             css::uno::Sequence< OUString > lTypes { sLoader };
 
@@ -99,7 +99,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
         /* <- HACK */
 
-    #endif // _FILTER_CONFIG_MIGRATION_Q_
+    #endif // FILTER_CONFIG_MIGRATION_Q_
 
     // search loader on cache
     CacheItem aLoader = cache.getItem(m_eType, sRealLoader);

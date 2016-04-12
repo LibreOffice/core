@@ -84,7 +84,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
     OUString sRealFilter = sFilter;
 
-    #ifdef _FILTER_CONFIG_MIGRATION_Q_
+    #ifdef FILTER_CONFIG_MIGRATION_Q_
 
         /* -> TODO - HACK
             check if the given filter name really exist ...
@@ -97,7 +97,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
         if (!cache.hasItem(FilterCache::E_FILTER, sFilter) && cache.hasItem(FilterCache::E_TYPE, sFilter))
         {
             OSL_FAIL("Who use this deprecated functionality?");
-            _FILTER_CONFIG_LOG_("FilterFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
+            FILTER_CONFIG_LOG_("FilterFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
             css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPE, css::uno::makeAny(sFilter) } };
 
@@ -117,7 +117,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
         /* <- HACK */
 
-    #endif // _FILTER_CONFIG_MIGRATION_Q_
+    #endif // FILTER_CONFIG_MIGRATION_Q_
 
     // search filter on cache
     CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sRealFilter);
