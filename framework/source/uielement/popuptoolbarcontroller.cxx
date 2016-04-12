@@ -328,6 +328,9 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 
+    // XUpdatable
+    virtual void SAL_CALL update() throw ( css::uno::RuntimeException, std::exception ) override;
+
     // XSubToolbarController
     // Ugly HACK to cause ToolBarManager ask our controller for updated image, in case of icon theme change.
     virtual sal_Bool SAL_CALL opensSubToolbar() throw ( css::uno::RuntimeException, std::exception ) override;
@@ -353,15 +356,17 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException ) override;
 
 private:
-    bool m_bSplitButton;
-    TriState m_eModified;
+    bool m_bSaveAsModeAllowed;
+    bool m_bSaveAsModeActive;
+    bool m_bModified;
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
 };
 
 SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : ImplInheritanceHelper( rxContext, ".uno:SaveAsMenu" )
-    , m_bSplitButton( true )
-    , m_eModified( TRISTATE_FALSE )
+    , m_bSaveAsModeAllowed( true )
+    , m_bSaveAsModeActive( false )
+    , m_bModified( false )
 {
 }
 
@@ -374,8 +379,31 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) && pToolBox->GetItemCommand( nId ) != m_aCommandURL )
     {
-        m_bSplitButton = false;
+        m_bSaveAsModeAllowed = false;
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
+    }
+
+    css::uno::Reference< css::frame::XController > xController( m_xFrame->getController(), css::uno::UNO_QUERY );
+    if ( xController.is() )
+        m_xModifiable.set( xController->getModel(), css::uno::UNO_QUERY );
+
+    if ( !m_xModifiable.is() )
+    {
+        // Can be in table/query design.
+        m_bSaveAsModeAllowed = false;
+        m_xModifiable.set( xController, css::uno::UNO_QUERY );
+    }
+}
+
+void SaveToolbarController::update()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    PopupMenuToolbarController::update();
+
+    if ( m_xModifiable.is() )
+    {
+        m_xModifiable->addModifyListener( this );
+        modified( css::lang::EventObject() );
     }
 }
 
@@ -408,11 +436,11 @@ void SaveToolbarController::updateImage()
     bool bLargeIcons = pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE;
     Image aImage;
 
-    if ( m_bSplitButton && m_eModified == TRISTATE_INDET )
+    if ( m_bSaveAsModeActive )
     {
         aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( ".uno:SaveAs", bLargeIcons, m_xFrame );
     }
-    else if ( m_eModified == TRISTATE_TRUE )
+    else if ( m_bModified )
     {
         Image aResImage( bLargeIcons ? FwkResId( IMG_SAVEMODIFIED_LARGE ) : FwkResId( IMG_SAVEMODIFIED_SMALL ) );
         aImage = aResImage;
@@ -433,52 +461,29 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    css::uno::Reference< css::frame::XModel > xModel;
-    css::uno::Reference< css::frame::XController > xController( m_xFrame->getController(), css::uno::UNO_QUERY );
-    if ( xController.is() )
-        xModel.set( xController->getModel(), css::uno::UNO_QUERY );
-
-    if ( !m_xModifiable.is() )
-    {
-        m_xModifiable.set( xModel, css::uno::UNO_QUERY );
-
-        if ( !m_xModifiable.is() )
-            // Can be in table/query design.
-            m_xModifiable.set( xController, css::uno::UNO_QUERY );
-
-        if ( m_xModifiable.is() )
-            m_xModifiable->addModifyListener( this );
-    }
-
-    m_eModified = m_xModifiable.is() && m_xModifiable->isModified() ? TRISTATE_TRUE : TRISTATE_FALSE;
-
-    // xModel is nullptr in table/query design, so use that to exclude them from
-    // the save as only mode, as they disable also the save as command when not in
-    // edit mode, or with empty table/query.
-    if ( m_bSplitButton && xModel.is() )
+    if ( m_bSaveAsModeAllowed )
     {
         pToolBox->SetQuickHelpText( nId,
             vcl::CommandInfoProvider::Instance().GetTooltipForCommand( rEvent.IsEnabled ? m_aCommandURL : OUString( ".uno:SaveAs" ), m_xFrame ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
-        if ( !rEvent.IsEnabled )
-            m_eModified = TRISTATE_INDET;
+        if ( m_bSaveAsModeActive == rEvent.IsEnabled )
+        {
+            m_bSaveAsModeActive = !rEvent.IsEnabled;
+            updateImage();
+        }
     }
     else
         pToolBox->EnableItem( nId, rEvent.IsEnabled );
-
-    updateImage();
 }
 
 void SaveToolbarController::modified( const css::lang::EventObject& /*rEvent*/ )
     throw ( css::uno::RuntimeException, std::exception )
 {
-    TriState eModified = m_xModifiable->isModified() ? TRISTATE_TRUE : TRISTATE_FALSE;
-    if ( eModified != m_eModified && TRISTATE_INDET != m_eModified )
-    {
-        m_eModified = eModified;
+    bool bLastModified = m_bModified;
+    m_bModified = m_xModifiable->isModified();
+    if ( bLastModified != m_bModified )
         updateImage();
-    }
 }
 
 void SaveToolbarController::disposing( const css::lang::EventObject& rEvent )
