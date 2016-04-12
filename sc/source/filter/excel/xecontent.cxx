@@ -602,6 +602,7 @@ private:
     bool                mbStrikeUsed;       /// true = Font strikeout used.
     bool                mbBorderUsed;       /// true = Border attribute used.
     bool                mbPattUsed;         /// true = Pattern attribute used.
+    bool                mbFormula2;
 };
 
 XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority ) :
@@ -619,7 +620,8 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     mbItalicUsed( false ),
     mbStrikeUsed( false ),
     mbBorderUsed( false ),
-    mbPattUsed( false )
+    mbPattUsed( false ),
+    mbFormula2(false)
 {
     /*  Get formatting attributes here, and not in WriteBody(). This is needed to
         correctly insert all colors into the palette. */
@@ -657,22 +659,48 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
 
     // *** mode and comparison operator ***
 
-    bool bFmla2 = false;
     switch( rFormatEntry.GetOperation() )
     {
-        case SC_COND_NONE:          mnType = EXC_CF_TYPE_NONE;                              break;
-        case SC_COND_BETWEEN:       mnOperator = EXC_CF_CMP_BETWEEN;        bFmla2 = true;  break;
-        case SC_COND_NOTBETWEEN:    mnOperator = EXC_CF_CMP_NOT_BETWEEN;    bFmla2 = true;  break;
-        case SC_COND_EQUAL:         mnOperator = EXC_CF_CMP_EQUAL;                          break;
-        case SC_COND_NOTEQUAL:      mnOperator = EXC_CF_CMP_NOT_EQUAL;                      break;
-        case SC_COND_GREATER:       mnOperator = EXC_CF_CMP_GREATER;                        break;
-        case SC_COND_LESS:          mnOperator = EXC_CF_CMP_LESS;                           break;
-        case SC_COND_EQGREATER:     mnOperator = EXC_CF_CMP_GREATER_EQUAL;                  break;
-        case SC_COND_EQLESS:        mnOperator = EXC_CF_CMP_LESS_EQUAL;                     break;
-        case SC_COND_DIRECT:        mnType = EXC_CF_TYPE_FMLA;                              break;
-        default:                    mnType = EXC_CF_TYPE_NONE;
+        case SC_COND_NONE:
+            mnType = EXC_CF_TYPE_NONE;
+        break;
+        case SC_COND_BETWEEN:
+            mnOperator = EXC_CF_CMP_BETWEEN;
+            mbFormula2 = true;
+        break;
+        case SC_COND_NOTBETWEEN:
+            mnOperator = EXC_CF_CMP_NOT_BETWEEN;
+            mbFormula2 = true;
+        break;
+        case SC_COND_EQUAL:
+            mnOperator = EXC_CF_CMP_EQUAL;
+        break;
+        case SC_COND_NOTEQUAL:
+            mnOperator = EXC_CF_CMP_NOT_EQUAL;
+        break;
+        case SC_COND_GREATER:
+            mnOperator = EXC_CF_CMP_GREATER;
+        break;
+        case SC_COND_LESS:
+            mnOperator = EXC_CF_CMP_LESS;
+        break;
+        case SC_COND_EQGREATER:
+            mnOperator = EXC_CF_CMP_GREATER_EQUAL;
+        break;
+        case SC_COND_EQLESS:
+            mnOperator = EXC_CF_CMP_LESS_EQUAL;
+        break;
+        case SC_COND_DIRECT:
+            mnType = EXC_CF_TYPE_FMLA;
+        break;
+        default:
+            mnType = EXC_CF_TYPE_NONE;
             OSL_FAIL( "XclExpCF::WriteBody - unknown condition type" );
     }
+}
+
+void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
+{
 
     // *** formulas ***
 
@@ -681,15 +709,12 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
-    if( bFmla2 )
+    if (mbFormula2)
     {
         xScTokArr.reset( mrFormatEntry.CreateTokenArry( 1 ) );
         mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
     }
-}
 
-void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
-{
     // *** mode and comparison operator ***
 
     rStrm << mnType << mnOperator;
