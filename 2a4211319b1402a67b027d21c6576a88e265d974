@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_3b3a5837",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-12T13:24:02Z",
+      "side": 1,
+      "message": "If a leading equal character confuses some PDF viewers then all occurrences must be stripped. Actually two leading equal characters force a cell to be always recalculated (an obscure but defined feature for formulas containing macro functions with side effects), but even if there are three or more it would be an invalid formula resulting in an error but still a formula.\n\nAnd btw, if aFormula would not start with \u0027\u003d\u0027 then aAnnotation would be empty.\n\nI wonder if it wouldn\u0027t be better to always simply preppend one space character instead, or would that still confuse those readers?",
+      "revId": "2a4211319b1402a67b027d21c6576a88e265d974",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
