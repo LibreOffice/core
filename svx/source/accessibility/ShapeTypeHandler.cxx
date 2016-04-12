@@ -79,7 +79,7 @@ ShapeTypeHandler& ShapeTypeHandler::Instance()
 */
 ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
 {
-    tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
+    tServiceNameToSlotId::const_iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
     {
         return maShapeTypeDescriptorList[I->second].mnShapeTypeId;
@@ -178,7 +178,7 @@ void ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
 
 long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
 {
-    tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
+    tServiceNameToSlotId::const_iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
         return I->second;
     else
