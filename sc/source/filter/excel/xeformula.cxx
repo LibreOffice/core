@@ -1809,7 +1809,7 @@ bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData, bool bCheck3D
         not count as 2D reference. */
 
     // conditional formatting does not allow 3D refs in xls
-    if (this->mxData->mrCfg.meType == EXC_FMLATYPE_CONDFMT)
+    if (mxData && mxData->mrCfg.meType == EXC_FMLATYPE_CONDFMT)
         return true;
 
     if (bCheck3DFlag && rRefData.IsFlag3D())
