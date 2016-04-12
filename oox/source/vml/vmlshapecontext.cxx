@@ -347,6 +347,12 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             bool bHasORelId = rAttribs.hasAttribute( O_TOKEN( relid ) );
             mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, bHasORelId ? O_TOKEN( relid ) : R_TOKEN( id ) );
             mrTypeModel.moGraphicTitle = rAttribs.getString( O_TOKEN( title ) );
+
+            // Get crop attributes.
+            mrTypeModel.moCropBottom = rAttribs.getString(XML_cropbottom);
+            mrTypeModel.moCropLeft = rAttribs.getString(XML_cropleft);
+            mrTypeModel.moCropRight = rAttribs.getString(XML_cropright);
+            mrTypeModel.moCropTop = rAttribs.getString(XML_croptop);
         }
         break;
         case NMSP_vmlWord | XML_wrap:
