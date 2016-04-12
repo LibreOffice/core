@@ -58,9 +58,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
-#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
-#define CMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
-#define RMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
+#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+#define CMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
+#define RMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
 #define MAP_END { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 const XMLPropertyMapEntry* getColumnPropertiesMap()
