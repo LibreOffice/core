@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SCA_DATEFUNC_HRC
-#define _SCA_DATEFUNC_HRC
+#ifndef INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HRC
+#define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HRC
 
 #define DATE_RESOURCE_START                 1000
 
