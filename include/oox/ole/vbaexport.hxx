@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __INCLUDED_INCLUDE_OOX_OLE_VBAEXPORT_HXX__
-#define __INCLUDED_INCLUDE_OOX_OLE_VBAEXPORT_HXX__
+#ifndef INCLUDED_OOX_OLE_VBAEXPORT_HXX
+#define INCLUDED_OOX_OLE_VBAEXPORT_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
 
