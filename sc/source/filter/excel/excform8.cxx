@@ -605,7 +605,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 nCol = aIn.ReaduInt16();
 
                 aSRD.SetRelTab(0);
-                aSRD.SetFlag3D( bRangeNameOrCond );
+                aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
 
@@ -621,8 +621,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 aCRD.Ref1.SetRelTab(0);
                 aCRD.Ref2.SetRelTab(0);
-                aCRD.Ref1.SetFlag3D( bRangeNameOrCond );
-                aCRD.Ref2.SetFlag3D( bRangeNameOrCond );
+                aCRD.Ref1.SetFlag3D( bRangeName );
+                aCRD.Ref2.SetFlag3D( bRangeName );
 
                 nRowFirst = aIn.ReaduInt16();
                 nRowLast = aIn.ReaduInt16();
