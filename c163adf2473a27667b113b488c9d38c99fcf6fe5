@@ -266,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_3b8898e7",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1546,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-12T13:51:16Z",
+      "side": 1,
+      "message": "Yes it would improve performance, but so far all iterators we have exclude empty cells. Excel does not skip empty cells here and includes them in the result, also adding a separator, I guess?\n\nI think for this we could need some ScHorizontalAreaIterator with an optimization to remember column positions, which could also be useful for CSV export and the like. But that is something for later.",
+      "parentUuid": "9ad45d7e_aead6d8a",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_08b0f1f3",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
