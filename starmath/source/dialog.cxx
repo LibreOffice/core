@@ -2311,8 +2311,6 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
     if( bFirst )
         pFontsSubsetLB->SetNoSelection();
     pFontsSubsetLB->Enable( !bFirst );
-
-    xFontCharMap = nullptr;
 }
 
 

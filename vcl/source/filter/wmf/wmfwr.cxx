@@ -961,8 +961,6 @@ void WMFWriter::SetAllAttr()
                 else if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
                     aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
             }
-
-            xFontCharMap = nullptr;
         }
 
         aDstFont = aSrcFont;
