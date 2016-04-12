@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOLAR_H
-#define _SOLAR_H
+#ifndef INCLUDED_TOOLS_SOLAR_H
+#define INCLUDED_TOOLS_SOLAR_H
 
 #include <sal/types.h>
 #include <osl/endian.h>
