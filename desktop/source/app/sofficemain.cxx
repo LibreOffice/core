@@ -142,32 +142,4 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
 }
 
-#if defined(ANDROID) || defined(IOS)
-
-extern "C" void PtylTestEncryptionAndExport(const char *pathname)
-{
-    OUString sUri(pathname, strlen(pathname), RTL_TEXTENCODING_UTF8);
-    sUri = "file://" + sUri;
-
-    css::uno::Reference<css::frame::XComponentLoader> loader(css::frame::Desktop::create(cppu::defaultBootstrap_InitialComponentContext()), css::uno::UNO_QUERY);
-    css::uno::Reference<css::lang::XComponent> component;
-    component.set(loader->loadComponentFromURL(sUri, "_default", 0, {}));
-
-    utl::MediaDescriptor media;
-    media[utl::MediaDescriptor::PROP_FILTERNAME()] <<= OUString("MS Word 2007 XML");
-    OUString password("myPassword");
-    css::uno::Sequence<css::beans::NamedValue> encryptionData { { "OOXPassword", css::uno::makeAny(password) } };
-    media[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= encryptionData;
-
-    css::uno::Reference<css::frame::XModel> model(component, css::uno::UNO_QUERY);
-    css::uno::Reference<css::frame::XStorable2> storable2(model, css::uno::UNO_QUERY);
-    OUString saveAsUri(sUri + ".new.docx");
-    SAL_INFO("desktop.app", "Trying to store as " << saveAsUri);
-    OUString testPathName;
-    osl::File::getSystemPathFromFileURL(saveAsUri+".txt", testPathName);
-    storable2->storeToURL(saveAsUri, media.getAsConstPropertyValueList());
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
