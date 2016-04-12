@@ -31,7 +31,7 @@ namespace svx { namespace sidebar {
 #define SPACING_CLOSE_BY_CLICK_ICON     -1
 #define SPACING_CLOSE_BY_CUS_EDIT       1
 
-#define SIDEBAR_SPACING_GLOBAL_VALUE   "PopupPanal_Spacing"
+#define SIDEBAR_SPACING_GLOBAL_VALUE   "PopupPanel_Spacing"
 
 #define SIDEBAR_SPACE_NORMAL    0
 #define SIDEBAR_SPACE_EXPAND    1
