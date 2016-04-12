@@ -32,7 +32,7 @@
 extern OUString string_encode( const OUString & rText );
 extern OUString string_decode( const OUString & rText );
 
-bool copyStreams( css::uno::Reference< css::io::XInputStream > xIS, css::uno::Reference< css::io::XOutputStream > xOS );
+bool copyStreams( const css::uno::Reference< css::io::XInputStream >& xIS, const css::uno::Reference< css::io::XOutputStream >& xOS );
 bool createDirectory( OUString& rURL );
 
 

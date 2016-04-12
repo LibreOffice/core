@@ -289,8 +289,8 @@ private:
                                                                 const Reference< XPropertySetInfo > & rxPropSetInfo );
     DECL_LINK_TYPED( CalcFieldHdl, EditFieldInfo*, void );
 
-    static bool isStreamGZip(css::uno::Reference<css::io::XInputStream> xInput);
-    static bool isStreamSvg(css::uno::Reference<css::io::XInputStream> xInput);
+    static bool isStreamGZip(const css::uno::Reference<css::io::XInputStream>& xInput);
+    static bool isStreamSvg(const css::uno::Reference<css::io::XInputStream>& xInput);
 
 protected:
 

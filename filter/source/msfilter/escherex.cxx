@@ -1124,7 +1124,7 @@ void EscherPropertyContainer::CreateLineProperties(
     }
 }
 
-static Size lcl_SizeToEmu(Size aPrefSize, MapMode aPrefMapMode)
+static Size lcl_SizeToEmu(Size aPrefSize, const MapMode& aPrefMapMode)
 {
     Size aRetSize;
     if (aPrefMapMode == MAP_PIXEL)

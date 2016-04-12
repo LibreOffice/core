@@ -118,7 +118,7 @@ public:
     {
         pSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", getClassName() );
     }
-    void insertMasterPage( Reference< XDrawPage> xMasterPage )
+    void insertMasterPage( const Reference< XDrawPage>& xMasterPage )
     {
         mMasterPageSet.insert( xMasterPage );
     }
@@ -907,7 +907,7 @@ template< typename TextFieldType >
 OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
                               const TextFieldType & aField,
                               const OUString & sOOOElemField,
-                              Reference< XDrawPage > xMasterPage )
+                              const Reference< XDrawPage >& xMasterPage )
 {
     bool bFound = false;
     sal_Int32 i;

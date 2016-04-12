@@ -303,7 +303,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
     }
 }
 
-bool XMLFilterJarHelper::copyFiles( Reference< XHierarchicalNameAccess > xIfc, filter_info_impl* pFilter )
+bool XMLFilterJarHelper::copyFiles( const Reference< XHierarchicalNameAccess >& xIfc, filter_info_impl* pFilter )
 {
     bool bOk = copyFile( xIfc, pFilter->maExportXSLT, sXSLTPath );
 
@@ -316,7 +316,7 @@ bool XMLFilterJarHelper::copyFiles( Reference< XHierarchicalNameAccess > xIfc, f
     return bOk;
 }
 
-bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OUString& rURL, const OUString& rTargetURL )
+bool XMLFilterJarHelper::copyFile( const Reference< XHierarchicalNameAccess >& xIfc, OUString& rURL, const OUString& rTargetURL )
 {
     if( !rURL.matchIgnoreAsciiCase( sVndSunStarPackage ) )
         return true;
