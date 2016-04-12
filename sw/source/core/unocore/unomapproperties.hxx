@@ -25,7 +25,7 @@
 #define MID_TXT_LMARGIN 11
 #endif
 
-#define _STANDARD_FONT_PROPERTIES \
+#define STANDARD_FONT_PROPERTIES \
     { OUString(UNO_NAME_CHAR_HEIGHT), RES_CHRATR_FONTSIZE  ,  cppu::UnoType<float>::get(),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},      \
     { OUString(UNO_NAME_CHAR_WEIGHT), RES_CHRATR_WEIGHT    ,  cppu::UnoType<float>::get(),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},                    \
     { OUString(UNO_NAME_CHAR_FONT_NAME), RES_CHRATR_FONT,       cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },                  \
@@ -38,7 +38,7 @@
     { OUString(UNO_NAME_CHAR_LOCALE),           RES_CHRATR_LANGUAGE,    cppu::UnoType<css::lang::Locale>::get(),          PropertyAttribute::MAYBEVOID,   MID_LANG_LOCALE }, \
     { OUString(UNO_NAME_CHAR_INTEROP_GRAB_BAG), RES_CHRATR_GRABBAG,     cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),   PROPERTY_NONE,                  0               }, \
 
-#define _CJK_FONT_PROPERTIES \
+#define CJK_FONT_PROPERTIES \
     { OUString(UNO_NAME_CHAR_HEIGHT_ASIAN), RES_CHRATR_CJK_FONTSIZE  ,  cppu::UnoType<float>::get(),           PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},   \
     { OUString(UNO_NAME_CHAR_WEIGHT_ASIAN), RES_CHRATR_CJK_WEIGHT    ,  cppu::UnoType<float>::get(),           PropertyAttribute::MAYBEVOID, MID_WEIGHT},                 \
     { OUString(UNO_NAME_CHAR_FONT_NAME_ASIAN), RES_CHRATR_CJK_FONT,     cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },               \
@@ -49,7 +49,7 @@
     { OUString(UNO_NAME_CHAR_POSTURE_ASIAN), RES_CHRATR_CJK_POSTURE   ,  cppu::UnoType<css::awt::FontSlant>::get(),          PropertyAttribute::MAYBEVOID, MID_POSTURE},                \
     { OUString(UNO_NAME_CHAR_LOCALE_ASIAN), RES_CHRATR_CJK_LANGUAGE ,   cppu::UnoType<css::lang::Locale>::get()  ,        PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 
-#define _CTL_FONT_PROPERTIES \
+#define CTL_FONT_PROPERTIES \
     { OUString(UNO_NAME_CHAR_HEIGHT_COMPLEX), RES_CHRATR_CTL_FONTSIZE  ,  cppu::UnoType<float>::get(),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},\
     { OUString(UNO_NAME_CHAR_WEIGHT_COMPLEX), RES_CHRATR_CTL_WEIGHT    ,  cppu::UnoType<float>::get(),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},              \
     { OUString(UNO_NAME_CHAR_FONT_NAME_COMPLEX), RES_CHRATR_CTL_FONT,       cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },            \
@@ -60,11 +60,11 @@
     { OUString(UNO_NAME_CHAR_POSTURE_COMPLEX), RES_CHRATR_CTL_POSTURE   ,  cppu::UnoType<css::awt::FontSlant>::get(),        PropertyAttribute::MAYBEVOID, MID_POSTURE},             \
     { OUString(UNO_NAME_CHAR_LOCALE_COMPLEX), RES_CHRATR_CTL_LANGUAGE ,   cppu::UnoType<css::lang::Locale>::get()  ,          PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 
-#define _REDLINE_NODE_PROPERTIES \
+#define REDLINE_NODE_PROPERTIES \
     { OUString(UNO_NAME_START_REDLINE), FN_UNO_REDLINE_NODE_START , cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff }, \
     { OUString(UNO_NAME_END_REDLINE), FN_UNO_REDLINE_NODE_END ,     cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),       PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff },
 
-#define _REDLINE_PROPERTIES \
+#define REDLINE_PROPERTIES \
     {OUString(UNO_NAME_REDLINE_AUTHOR), 0, cppu::UnoType<OUString>::get(),                     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {OUString(UNO_NAME_REDLINE_DATE_TIME), 0, cppu::UnoType<css::util::DateTime>::get(),                  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {OUString(UNO_NAME_REDLINE_COMMENT), 0, cppu::UnoType<OUString>::get(),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
@@ -137,9 +137,9 @@
         { OUString(UNO_NAME_PARA_RIGHT_MARGIN),                   RES_LR_SPACE,                  cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_R_MARGIN           | CONVERT_TWIPS }, \
         { OUString(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT),      RES_LR_SPACE,                  cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO                         }, \
         { OUString(UNO_NAME_PARA_FIRST_LINE_INDENT),              RES_LR_SPACE,                  cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT  | CONVERT_TWIPS }, \
-        _STANDARD_FONT_PROPERTIES \
-        _CJK_FONT_PROPERTIES \
-        _CTL_FONT_PROPERTIES \
+        STANDARD_FONT_PROPERTIES \
+        CJK_FONT_PROPERTIES \
+        CTL_FONT_PROPERTIES \
         { OUString(UNO_NAME_CHAR_KERNING),                        RES_CHRATR_KERNING,            cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
         { OUString(UNO_NAME_CHAR_NO_HYPHENATION),                 RES_CHRATR_NOHYPHEN,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { OUString(UNO_NAME_CHAR_SHADOWED),                       RES_CHRATR_SHADOWED,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
@@ -241,7 +241,7 @@
         { OUString(UNO_NAME_NESTED_TEXT_CONTENT), FN_UNO_NESTED_TEXT_CONTENT, cppu::UnoType<css::text::XTextContent>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },\
         TABSTOPS_MAP_ENTRY
 
-#define _BASE_INDEX_PROPERTIES_\
+#define BASE_INDEX_PROPERTIES_\
         { OUString(UNO_NAME_TITLE), WID_IDX_TITLE,  cppu::UnoType<OUString>::get()  , PROPERTY_NONE,     0},\
         { OUString(UNO_NAME_NAME),  WID_IDX_NAME,   cppu::UnoType<OUString>::get()  , PROPERTY_NONE,     0},\
         { OUString(UNO_NAME_CONTENT_SECTION), WID_IDX_CONTENT_SECTION,  cppu::UnoType<css::text::XTextSection>::get()  , PropertyAttribute::READONLY,     0},\
@@ -329,7 +329,7 @@
         ANCHOR_TYPES_PROPERTY\
         { OUString(UNO_NAME_TEXT_WRAP), FN_UNO_TEXT_WRAP,   cppu::UnoType<css::text::WrapTextMode>::get(),                 PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
 
-#define     _PROP_DIFF_FONTHEIGHT \
+#define     PROP_DIFF_FONTHEIGHT \
                     { OUString(UNO_NAME_CHAR_PROP_HEIGHT), RES_CHRATR_FONTSIZE ,            cppu::UnoType<float>::get(),                                           PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
                     { OUString(UNO_NAME_CHAR_DIFF_HEIGHT), RES_CHRATR_FONTSIZE ,            cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF|CONVERT_TWIPS},\
                     { OUString(UNO_NAME_CHAR_PROP_HEIGHT_ASIAN), RES_CHRATR_CJK_FONTSIZE ,          cppu::UnoType<float>::get(),                                           PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
@@ -358,9 +358,9 @@
                     { OUString(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     cppu::UnoType<sal_Int8>::get()  ,          PROPERTY_NONE, MID_ESC_HEIGHT},\
                     { OUString(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
                     { OUString(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
-                    _STANDARD_FONT_PROPERTIES\
-                    _CJK_FONT_PROPERTIES\
-                    _CTL_FONT_PROPERTIES\
+                    STANDARD_FONT_PROPERTIES\
+                    CJK_FONT_PROPERTIES\
+                    CTL_FONT_PROPERTIES\
                     { OUString(UNO_NAME_CHAR_UNDERLINE), RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},\
                     { OUString(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},\
                     { OUString(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},\
@@ -437,7 +437,7 @@
                     { OUString(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE), RES_CHRATR_ROTATE,       cppu::UnoType<bool>::get(),     PROPERTY_NONE,        MID_FITTOLINE  },\
                     { OUString(UNO_NAME_CHAR_SCALE_WIDTH), RES_CHRATR_SCALEW,       cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE,         0 },\
                     { OUString(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE,      MID_RELIEF },\
-                    _PROP_DIFF_FONTHEIGHT\
+                    PROP_DIFF_FONTHEIGHT\
                     { OUString(UNO_NAME_FOLLOW_STYLE), FN_UNO_FOLLOW_STYLE,     cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},\
                     { OUString(UNO_NAME_IS_PHYSICAL), FN_UNO_IS_PHYSICAL,     cppu::UnoType<bool>::get(), PropertyAttribute::READONLY, 0},\
                     { OUString(UNO_NAME_IS_AUTO_UPDATE), FN_UNO_IS_AUTO_UPDATE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},\

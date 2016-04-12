@@ -203,9 +203,9 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         { OUString(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     cppu::UnoType<sal_Int8>::get()  ,          PROPERTY_NONE, MID_ESC_HEIGHT},
         { OUString(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         { OUString(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
-        _STANDARD_FONT_PROPERTIES
-        _CJK_FONT_PROPERTIES
-        _CTL_FONT_PROPERTIES
+        STANDARD_FONT_PROPERTIES
+        CJK_FONT_PROPERTIES
+        CTL_FONT_PROPERTIES
         { OUString(UNO_NAME_CHAR_UNDERLINE), RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
         { OUString(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},
         { OUString(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
@@ -226,7 +226,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         { OUString(UNO_NAME_CHAR_COMBINE_PREFIX), RES_CHRATR_TWO_LINES,             cppu::UnoType<OUString>::get(),    PROPERTY_NONE, MID_START_BRACKET},
         { OUString(UNO_NAME_CHAR_COMBINE_SUFFIX), RES_CHRATR_TWO_LINES,             cppu::UnoType<OUString>::get(),    PROPERTY_NONE, MID_END_BRACKET},
         { OUString(UNO_NAME_CHAR_EMPHASIS), RES_CHRATR_EMPHASIS_MARK,           cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, MID_EMPHASIS},
-        _PROP_DIFF_FONTHEIGHT
+        PROP_DIFF_FONTHEIGHT
         { OUString(UNO_NAME_CHAR_ROTATION), RES_CHRATR_ROTATE,      cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE,    MID_ROTATE      },
         { OUString(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE), RES_CHRATR_ROTATE,       cppu::UnoType<bool>::get(),     PROPERTY_NONE,        MID_FITTOLINE  },
         { OUString(UNO_NAME_CHAR_SCALE_WIDTH), RES_CHRATR_SCALEW,       cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE,         0 },
@@ -264,9 +264,9 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoCharStyleProper
         { OUString(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     cppu::UnoType<sal_Int8>::get()  ,          PROPERTY_NONE, MID_ESC_HEIGHT},
         { OUString(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         { OUString(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
-        _STANDARD_FONT_PROPERTIES
-        _CJK_FONT_PROPERTIES
-        _CTL_FONT_PROPERTIES
+        STANDARD_FONT_PROPERTIES
+        CJK_FONT_PROPERTIES
+        CTL_FONT_PROPERTIES
         { OUString(UNO_NAME_CHAR_UNDERLINE), RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
         { OUString(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},
         { OUString(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
@@ -682,7 +682,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTablePropertyMap()
          { OUString(UNO_NAME_PAGE_STYLE_NAME), RES_PAGEDESC, cppu::UnoType<OUString>::get(),         PROPERTY_NONE, 0},
         // #i29550#
         { OUString(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
-        _REDLINE_NODE_PROPERTIES
+        REDLINE_NODE_PROPERTIES
         { OUString(UNO_NAME_TABLE_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -752,7 +752,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetSectionPropertyMap(
         { OUString(UNO_NAME_PROTECTION_KEY), WID_SECT_PASSWORD,      cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_DONT_BALANCE_TEXT_COLUMNS), RES_COLUMNBALANCE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         COMMON_TEXT_CONTENT_PROPERTIES
-        _REDLINE_NODE_PROPERTIES
+        REDLINE_NODE_PROPERTIES
         { OUString(UNO_NAME_IS_CURRENTLY_VISIBLE), WID_SECT_CURRENTLY_VISIBLE, cppu::UnoType<bool>::get(),          PROPERTY_NONE,     0},
         { OUString(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_SECT_LEFT_MARGIN), RES_LR_SPACE,            cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_L_MARGIN|CONVERT_TWIPS},
@@ -771,7 +771,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFramePropertyMap()
         // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
         // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
         COMMON_FRAME_PROPERTIES
-        _REDLINE_NODE_PROPERTIES
+        REDLINE_NODE_PROPERTIES
         { OUString(UNO_NAME_CHAIN_NEXT_NAME), RES_CHAIN,                cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_NEXTNAME},
         { OUString(UNO_NAME_CHAIN_PREV_NAME), RES_CHAIN,                cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_PREVNAME},
     /*not impl*/    { OUString(UNO_NAME_CLIENT_MAP), RES_URL,               cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_URL_CLIENTMAP         },
@@ -978,7 +978,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextPortionExtensio
         {OUString(UNO_NAME_CONTROL_CHARACTER), FN_UNO_CONTROL_CHARACTER, cppu::UnoType<sal_Int16>::get(),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
         {OUString(UNO_NAME_IS_COLLAPSED), FN_UNO_IS_COLLAPSED, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
         {OUString(UNO_NAME_IS_START), FN_UNO_IS_START, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-        //_REDLINE_PROPERTIES
+        //REDLINE_PROPERTIES
         {OUString(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, cppu::UnoType<OUString>::get(),                        PropertyAttribute::READONLY, 0},
         {OUString(UNO_NAME_META), FN_UNO_META, cppu::UnoType<css::text::XTextContent>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -993,7 +993,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFootnotePropertyMap
     {
         {OUString(UNO_NAME_REFERENCE_ID), 0, cppu::UnoType<sal_Int16>::get(),PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID, 0},
         COMMON_TEXT_CONTENT_PROPERTIES
-        _REDLINE_NODE_PROPERTIES
+        REDLINE_NODE_PROPERTIES
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -1004,8 +1004,8 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePropertyMap(
 {
     static SfxItemPropertyMapEntry const aRedlineMap_Impl[] =
     {
-        _REDLINE_PROPERTIES
-        _REDLINE_NODE_PROPERTIES
+        REDLINE_PROPERTIES
+        REDLINE_NODE_PROPERTIES
         {OUString(UNO_NAME_REDLINE_START), 0, cppu::UnoType<css::uno::XInterface>::get(),  PropertyAttribute::READONLY,    0},
         {OUString(UNO_NAME_REDLINE_END), 0, cppu::UnoType<css::uno::XInterface>::get(),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -1044,7 +1044,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePortionPrope
         {OUString(UNO_NAME_CONTROL_CHARACTER), FN_UNO_CONTROL_CHARACTER, cppu::UnoType<sal_Int16>::get(),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
         {OUString(UNO_NAME_IS_COLLAPSED), FN_UNO_IS_COLLAPSED, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
         {OUString(UNO_NAME_IS_START), FN_UNO_IS_START, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-        _REDLINE_PROPERTIES
+        REDLINE_PROPERTIES
         {OUString(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, cppu::UnoType<OUString>::get(),                        PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

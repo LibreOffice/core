@@ -213,7 +213,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_ROW_SPAN),     FN_UNO_CELL_ROW_SPAN, cppu::UnoType<sal_Int32>::get(),  0, 0 },
                     { OUString(UNO_NAME_CELL_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
-                    _REDLINE_NODE_PROPERTIES
+                    REDLINE_NODE_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aCellMap_Impl;
@@ -346,7 +346,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aTOXIndexMap_Impl[] =
                 {
-                    _BASE_INDEX_PROPERTIES_
+                    BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_USE_ALPHABETICAL_SEPARATORS), WID_USE_ALPHABETICAL_SEPARATORS         ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
@@ -384,7 +384,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aTOXContentMap_Impl[] =
                 {
-                    _BASE_INDEX_PROPERTIES_
+                    BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_LEVEL), WID_LEVEL                               ,  cppu::UnoType<sal_Int16>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_CREATE_FROM_MARKS), WID_CREATE_FROM_MARKS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS), WID_HIDE_TABLEADER_PAGENUMBERS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
@@ -426,7 +426,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aTOXUserMap_Impl[] =
                 {
-                    _BASE_INDEX_PROPERTIES_
+                    BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_CREATE_FROM_MARKS), WID_CREATE_FROM_MARKS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS), WID_HIDE_TABLEADER_PAGENUMBERS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_TAB_IN_TOC), WID_TAB_IN_TOC, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
@@ -472,7 +472,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aTOXTablesMap_Impl[] =
                 {
-                    _BASE_INDEX_PROPERTIES_
+                    BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_CREATE_FROM_LABELS), WID_CREATE_FROM_LABELS                  ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
@@ -497,7 +497,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aTOXObjectsMap_Impl[] =
                 {
-                    _BASE_INDEX_PROPERTIES_
+                    BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_USE_ALPHABETICAL_SEPARATORS), WID_USE_ALPHABETICAL_SEPARATORS         ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
@@ -525,7 +525,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aTOXIllustrationsMap_Impl[] =
                 {
-                    _BASE_INDEX_PROPERTIES_
+                    BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_CREATE_FROM_LABELS), WID_CREATE_FROM_LABELS                  ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
@@ -588,7 +588,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aBibliographyMap_Impl[] =
                 {
-                    _BASE_INDEX_PROPERTIES_
+                    BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_TEXT_COLUMNS), RES_COL,                cppu::UnoType<css::text::XTextColumns>::get(),    PROPERTY_NONE, MID_COLUMNS},
                     { OUString(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
@@ -1406,7 +1406,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aTextMap[] =
                 {
-                    _REDLINE_NODE_PROPERTIES
+                    REDLINE_NODE_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTextMap;
