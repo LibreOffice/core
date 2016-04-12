@@ -111,3 +111,30 @@ cmd/lc_scrolltonext.png cmd/lc_downsearch.png
 cmd/sc_scrolltonext.png cmd/sc_downsearch.png
 cmd/lc_scrolltoprevious.png cmd/lc_upsearch.png
 cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
+
+# Slide command aliases
+cmd/lc_insertslide.png cmd/lc_insertpage.png
+cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
+cmd/lc_deleteslide.png cmd/lc_deletepage.png
+cmd/lc_moveslidefirst.png cmd/lc_movepagefirst.png
+cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
+cmd/lc_moveslideup.png cmd/lc_movepageup.png
+cmd/lc_moveslidedown.png cmd/lc_movepagedown.png
+cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_lastslide.png cmd/lc_lastpage.png
+cmd/lc_previousslide.png cmd/lc_previouspage.png
+cmd/lc_nextslide.png cmd/lc_nextpage.png
+cmd/lc_slidesetup.png cmd/lc_setdocumentproperties.png
+
+cmd/sc_insertslide.png cmd/sc_insertpage.png
+cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
+cmd/sc_deleteslide.png cmd/sc_deletepage.png
+cmd/sc_moveslidefirst.png cmd/sc_movepagefirst.png
+cmd/sc_moveslidelast.png cmd/sc_movepagelast.png
+cmd/sc_moveslideup.png cmd/sc_movepageup.png
+cmd/sc_moveslidedown.png cmd/sc_movepagedown.png
+cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_lastslide.png cmd/sc_lastpage.png
+cmd/sc_previousslide.png cmd/sc_previouspage.png
+cmd/sc_nextslide.png cmd/sc_nextpage.png
+cmd/sc_slidesetup.png cmd/sc_setdocumentproperties.png

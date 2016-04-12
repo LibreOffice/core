@@ -471,9 +471,9 @@
     </menu:menu>
     <menu:menu menu:id=".uno:SlideMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:InsertPage"/>
-            <menu:menuitem menu:id=".uno:DuplicatePage"/>
-            <menu:menuitem menu:id=".uno:DeletePage"/>
+            <menu:menuitem menu:id=".uno:InsertSlide"/>
+            <menu:menuitem menu:id=".uno:DuplicateSlide"/>
+            <menu:menuitem menu:id=".uno:DeleteSlide"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:InsertMasterPage"/>
             <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
@@ -500,7 +500,7 @@
                      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=30"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:PageSetup"/>
+            <menu:menuitem menu:id=".uno:SlideSetup"/>
             <menu:menuitem menu:id=".uno:SelectBackground"/>
             <menu:menuitem menu:id=".uno:SaveBackground"/>
             <menu:menuseparator/>
@@ -511,26 +511,26 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HideSlide"/>
             <menu:menuitem menu:id=".uno:ShowSlide"/>
-            <menu:menuitem menu:id=".uno:RenamePage"/>
+            <menu:menuitem menu:id=".uno:RenameSlide"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SummaryPage"/>
             <menu:menuitem menu:id=".uno:ExpandPage"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:SlideNavigateMenu">
               <menu:menupopup>
-                <menu:menuitem menu:id=".uno:FirstPage"/>
-                <menu:menuitem menu:id=".uno:PreviousPage"/>
-                <menu:menuitem menu:id=".uno:NextPage"/>
-                <menu:menuitem menu:id=".uno:LastPage"/>
+                <menu:menuitem menu:id=".uno:FirstSlide"/>
+                <menu:menuitem menu:id=".uno:PreviousSlide"/>
+                <menu:menuitem menu:id=".uno:NextSlide"/>
+                <menu:menuitem menu:id=".uno:LastSlide"/>
               </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:RestoreEditingView"/>
             <menu:menu menu:id=".uno:SlideMoveMenu">
               <menu:menupopup>
-                <menu:menuitem menu:id=".uno:MovePageFirst"/>
-                <menu:menuitem menu:id=".uno:MovePageUp"/>
-                <menu:menuitem menu:id=".uno:MovePageDown"/>
-                <menu:menuitem menu:id=".uno:MovePageLast"/>
+                <menu:menuitem menu:id=".uno:MoveSlideFirst"/>
+                <menu:menuitem menu:id=".uno:MoveSlideUp"/>
+                <menu:menuitem menu:id=".uno:MoveSlideDown"/>
+                <menu:menuitem menu:id=".uno:MoveSlideLast"/>
               </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>

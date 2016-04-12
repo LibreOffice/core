@@ -829,6 +829,33 @@ cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
 
+# Slide command aliases
+cmd/lc_insertslide.png cmd/lc_insertpage.png
+cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
+cmd/lc_deleteslide.png cmd/lc_deletepage.png
+cmd/lc_moveslidefirst.png cmd/lc_movepagefirst.png
+cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
+cmd/lc_moveslideup.png cmd/lc_upsearch.png
+cmd/lc_moveslidedown.png cmd/lc_downsearch.png
+cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_lastslide.png cmd/lc_lastrecord.png
+cmd/lc_previousslide.png cmd/lc_prevrecord.png
+cmd/lc_nextslide.png cmd/lc_nextrecord.png
+cmd/lc_slidesetup.png cmd/lc_pagesetup.png
+
+cmd/sc_insertslide.png cmd/sc_insertpage.png
+cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
+cmd/sc_deleteslide.png cmd/sc_deletepage.png
+cmd/sc_moveslidefirst.png cmd/sc_movepagefirst.png
+cmd/sc_moveslidelast.png cmd/sc_movepagelast.png
+cmd/sc_moveslideup.png cmd/sc_upsearch.png
+cmd/sc_moveslidedown.png cmd/sc_downsearch.png
+cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_lastslide.png cmd/sc_lastrecord.png
+cmd/sc_previousslide.png cmd/sc_prevrecord.png
+cmd/sc_nextslide.png cmd/sc_nextrecord.png
+cmd/sc_slidesetup.png cmd/sc_pagesetup.png
+
 # database
 # ==============================================
 database/linked_text_table.png cmd/sc_dataimport.png

@@ -26,3 +26,20 @@ cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
+
+# Slide command aliases
+cmd/lc_insertslide.png cmd/lc_insertpage.png
+cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
+cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_lastslide.png cmd/lc_lastpage.png
+cmd/lc_previousslide.png cmd/lc_previouspage.png
+cmd/lc_nextslide.png cmd/lc_nextpage.png
+cmd/lc_slidesetup.png cmd/lc_setdocumentproperties.png
+
+cmd/sc_insertslide.png cmd/sc_insertpage.png
+cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
+cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_lastslide.png cmd/sc_lastpage.png
+cmd/sc_previousslide.png cmd/sc_previouspage.png
+cmd/sc_nextslide.png cmd/sc_nextpage.png
+cmd/sc_slidesetup.png cmd/sc_setdocumentproperties.png

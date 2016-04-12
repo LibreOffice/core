@@ -48,3 +48,8 @@ cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
+
+# Slide command aliases
+cmd/lc_insertslide.png cmd/lc_insertpage.png
+cmd/lc_previousslide.png cmd/lc_previouspage.png
+cmd/lc_nextslide.png cmd/lc_nextpage.png
