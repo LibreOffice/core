@@ -1101,9 +1101,8 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                     sal_Int32 nLen;
                     if (bIsOctetTextEncoding)
                     {
-                        OUString aOUString( aString);
                         OString aOString;
-                        if (!aOUString.convertToString( &aOString, eCharSet,
+                        if (!aString.convertToString( &aOString, eCharSet,
                                     RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                                     RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
                         {
@@ -1112,7 +1111,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                         }
                         nLen = aOString.getLength();
                         if (!bTest)
-                            SAL_WARN("sc", "ScDocShell::DBaseExport encoding error, string with default replacements: ``" << aOUString << "''\n");
+                            SAL_WARN("sc", "ScDocShell::DBaseExport encoding error, string with default replacements: ``" << aString << "''\n");
                     }
                     else
                         nLen = aString.getLength() * sizeof(sal_Unicode);

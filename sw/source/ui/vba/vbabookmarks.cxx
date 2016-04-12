@@ -164,13 +164,12 @@ SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange ) throw (uno:
     }
 
     // remove the exist bookmark
-    OUString aName = rName;
-    if( m_xNameAccess->hasByName( aName ) )
-        removeBookmarkByName( aName );
+    if( m_xNameAccess->hasByName( rName ) )
+        removeBookmarkByName( rName );
 
-    addBookmarkByName( mxModel, aName, xTextRange );
+    addBookmarkByName( mxModel, rName, xTextRange );
 
-    return uno::makeAny( uno::Reference< word::XBookmark >( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
+    return uno::makeAny( uno::Reference< word::XBookmark >( new SwVbaBookmark( getParent(), mxContext, mxModel, rName ) ) );
 }
 
 sal_Int32 SAL_CALL

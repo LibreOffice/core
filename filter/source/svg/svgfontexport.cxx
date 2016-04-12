@@ -47,7 +47,7 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont 
 {
     FontWeight      eWeight( WEIGHT_NORMAL );
     FontItalic      eItalic( ITALIC_NONE );
-    OUString aFontName( rFont.GetFamilyName() );
+    const OUString& aFontName( rFont.GetFamilyName() );
     sal_Int32       nNextTokenPos( 0 );
 
     switch( rFont.GetWeight() )

@@ -365,14 +365,13 @@ XclExpStringRef lclCreateFormattedString(
     const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
 
     // process all script portions
-    OUString aOUText( rText );
     sal_Int32 nPortionPos = 0;
-    sal_Int32 nTextLen = aOUText.getLength();
+    sal_Int32 nTextLen = rText.getLength();
     while( nPortionPos < nTextLen )
     {
         // get script type and end position of next script portion
-        sal_Int16 nScript = xBreakIt->getScriptType( aOUText, nPortionPos );
-        sal_Int32 nPortionEnd = xBreakIt->endOfScript( aOUText, nPortionPos, nScript );
+        sal_Int16 nScript = xBreakIt->getScriptType( rText, nPortionPos );
+        sal_Int32 nPortionEnd = xBreakIt->endOfScript( rText, nPortionPos, nScript );
 
         // reuse previous script for following weak portions
         if( nScript == ApiScriptType::WEAK )
@@ -384,7 +383,7 @@ XclExpStringRef lclCreateFormattedString(
         // Excel start position of this portion
         sal_Int32 nXclPortionStart = xString->Len();
         // add portion text to Excel string
-        XclExpStringHelper::AppendString( *xString, rRoot, aOUText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
+        XclExpStringHelper::AppendString( *xString, rRoot, rText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
         if( nXclPortionStart < xString->Len() )
         {
             // insert font into buffer
@@ -641,14 +640,13 @@ sal_Int16 XclExpStringHelper::GetLeadingScriptType( const XclExpRoot& rRoot, con
 {
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
-    OUString aOUString( rString );
     sal_Int32 nStrPos = 0;
-    sal_Int32 nStrLen = aOUString.getLength();
+    sal_Int32 nStrLen = rString.getLength();
     sal_Int16 nScript = ApiScriptType::WEAK;
     while( (nStrPos < nStrLen) && (nScript == ApiScriptType::WEAK) )
     {
-        nScript = xBreakIt->getScriptType( aOUString, nStrPos );
-        nStrPos = xBreakIt->endOfScript( aOUString, nStrPos, nScript );
+        nScript = xBreakIt->getScriptType( rString, nStrPos );
+        nStrPos = xBreakIt->endOfScript( rString, nStrPos, nScript );
     }
     return (nScript == ApiScriptType::WEAK) ? rRoot.GetDefApiScript() : nScript;
 }

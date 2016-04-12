@@ -191,10 +191,9 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 
 ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const OUString& aName)
 {
-    OUString aString(aName);
     sal_uInt16 nIndex;
     if (lcl_FindAutoFormatIndex(
-            *ScGlobal::GetOrCreateAutoFormat(), aString, nIndex ))
+            *ScGlobal::GetOrCreateAutoFormat(), aName, nIndex ))
         return GetObjectByIndex_Impl(nIndex);
     return nullptr;
 }
@@ -215,14 +214,13 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
         ScAutoFormatObj* pFormatObj = ScAutoFormatObj::getImplementation( xInterface );
         if ( pFormatObj && !pFormatObj->IsInserted() )  // noch nicht eingefuegt?
         {
-            OUString aNameStr(aName);
             ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
             sal_uInt16 nDummy;
-            if (!lcl_FindAutoFormatIndex( *pFormats, aNameStr, nDummy ))
+            if (!lcl_FindAutoFormatIndex( *pFormats, aName, nDummy ))
             {
                 ScAutoFormatData* pNew = new ScAutoFormatData();
-                pNew->SetName( aNameStr );
+                pNew->SetName( aName );
 
                 if (pFormats->insert(pNew))
                 {
@@ -230,7 +228,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
                     pFormats->Save();   // sofort speichern
 
                     sal_uInt16 nNewIndex;
-                    if (lcl_FindAutoFormatIndex( *pFormats, aNameStr, nNewIndex ))
+                    if (lcl_FindAutoFormatIndex( *pFormats, aName, nNewIndex ))
                     {
                         pFormatObj->InitFormat( nNewIndex );    // kann jetzt benutzt werden
                         bDone = true;
@@ -359,10 +357,9 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString(aName);
     sal_uInt16 nDummy;
     return lcl_FindAutoFormatIndex(
-        *ScGlobal::GetOrCreateAutoFormat(), aString, nDummy );
+        *ScGlobal::GetOrCreateAutoFormat(), aName, nDummy );
 }
 
 ScAutoFormatObj::ScAutoFormatObj(sal_uInt16 nIndex) :
@@ -504,7 +501,6 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aNewString(aNewName);
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
     sal_uInt16 nDummy;
@@ -517,7 +513,7 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         ScAutoFormatData* pNew = new ScAutoFormatData(*pData);
-        pNew->SetName( aNewString );
+        pNew->SetName( aNewName );
 
         pFormats->erase(it);
         if (pFormats->insert(pNew))
@@ -565,19 +561,18 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
         ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
-        OUString aPropString(aPropertyName);
         bool bBool;
-        if (aPropString == SC_UNONAME_INCBACK && (aValue >>= bBool))
+        if (aPropertyName == SC_UNONAME_INCBACK && (aValue >>= bBool))
             pData->SetIncludeBackground( bBool );
-        else if (aPropString == SC_UNONAME_INCBORD && (aValue >>= bBool))
+        else if (aPropertyName == SC_UNONAME_INCBORD && (aValue >>= bBool))
             pData->SetIncludeFrame( bBool );
-        else if (aPropString == SC_UNONAME_INCFONT && (aValue >>= bBool))
+        else if (aPropertyName == SC_UNONAME_INCFONT && (aValue >>= bBool))
             pData->SetIncludeFont( bBool );
-        else if (aPropString == SC_UNONAME_INCJUST && (aValue >>= bBool))
+        else if (aPropertyName == SC_UNONAME_INCJUST && (aValue >>= bBool))
             pData->SetIncludeJustify( bBool );
-        else if (aPropString == SC_UNONAME_INCNUM && (aValue >>= bBool))
+        else if (aPropertyName == SC_UNONAME_INCNUM && (aValue >>= bBool))
             pData->SetIncludeValueFormat( bBool );
-        else if (aPropString == SC_UNONAME_INCWIDTH && (aValue >>= bBool))
+        else if (aPropertyName == SC_UNONAME_INCWIDTH && (aValue >>= bBool))
             pData->SetIncludeWidthHeight( bBool );
 
         // else Fehler

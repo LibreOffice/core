@@ -84,7 +84,6 @@ OUString ODsnTypeCollection::getTypeDisplayName(const OUString& _sURL) const
 
 OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
 {
-    OUString sURL( _sURL);
     OUString sRet;
     OUString sOldPattern;
     StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
@@ -99,8 +98,8 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
             //   foo*
             // that is, the very concept of "prefix" applies.
             OUString prefix(comphelper::string::stripEnd(*aIter, '*'));
-            OSL_ENSURE(prefix.getLength() <= sURL.getLength(), "How can A match B when A shorter than B?");
-            sRet = sURL.copy(prefix.getLength());
+            OSL_ENSURE(prefix.getLength() <= _sURL.getLength(), "How can A match B when A shorter than B?");
+            sRet = _sURL.copy(prefix.getLength());
             sOldPattern = *aIter;
         }
     }
@@ -110,7 +109,6 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
 
 OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
 {
-    OUString sURL( _sURL);
     OUString sRet;
     OUString sOldPattern;
     StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
@@ -118,13 +116,13 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(sURL) )
+        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
         {
             // This relies on the fact that all patterns are of the form
             //   foo*
             // that is, the very concept of "prefix" applies.
             sRet = comphelper::string::stripEnd(*aIter, '*');
-            OSL_ENSURE(sRet.getLength() <= sURL.getLength(), "How can A match B when A shorter than B?");
+            OSL_ENSURE(sRet.getLength() <= _sURL.getLength(), "How can A match B when A shorter than B?");
             sOldPattern = *aIter;
         }
     }
@@ -140,7 +138,6 @@ bool ODsnTypeCollection::hasDriver( const sal_Char* _pAsciiPattern ) const
 
 bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
 {
-    OUString sURL( _sURL);
     OUString sRet;
     OUString sOldPattern;
     StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
@@ -148,7 +145,7 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
     for(;aIter != aEnd;++aIter)
     {
         WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(sURL) )
+        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
         {
             sRet = *aIter;
             sOldPattern = *aIter;
@@ -507,14 +504,13 @@ OUString ODsnTypeCollection::getType(const OUString& _sURL) const
 sal_Int32 ODsnTypeCollection::getIndexOf(const OUString& _sURL) const
 {
     sal_Int32 nRet = -1;
-    OUString sURL( _sURL);
     OUString sOldPattern;
     StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
     StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
     for(sal_Int32 i = 0;aIter != aEnd;++aIter,++i)
     {
         WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(sURL) )
+        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
         {
             nRet = i;
             sOldPattern = *aIter;

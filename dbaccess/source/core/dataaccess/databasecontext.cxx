@@ -697,7 +697,7 @@ void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl
 
 void ODatabaseContext::revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl )
 {
-    OUString sURL( _rModelImpl.getURL() );
+    const OUString& sURL( _rModelImpl.getURL() );
     SAL_INFO("dbaccess.core", "DatabaseContext: deregistering " << sURL);
     m_aDatabaseObjects.erase( sURL );
 }

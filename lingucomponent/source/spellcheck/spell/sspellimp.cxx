@@ -494,8 +494,7 @@ Reference< XSpellAlternatives >
         }
 
         // now return an empty alternative for no suggestions or the list of alternatives if some found
-        OUString aTmp(rWord);
-        xRes = SpellAlternatives::CreateSpellAlternatives( aTmp, nLang, SpellFailure::SPELLING_ERROR, aStr );
+        xRes = SpellAlternatives::CreateSpellAlternatives( rWord, nLang, SpellFailure::SPELLING_ERROR, aStr );
         return xRes;
     }
     return xRes;

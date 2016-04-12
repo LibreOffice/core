@@ -1600,7 +1600,7 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         if( USER_FMT & nPoolFormatId )
         {
             // user templates
-            const OUString aNm(rFormat.GetName());
+            const OUString& aNm(rFormat.GetName());
 
             if (aNm == "DD 1" || aNm == "DT 1")
                 rHTMLWrt.m_nDfltBottomMargin = 0;

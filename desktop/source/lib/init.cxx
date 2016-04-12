@@ -1623,7 +1623,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
             const FontMetric& rFontMetric = pList->GetFontName(i);
-            OUString aFontName = rFontMetric.GetFamilyName();
+            const OUString& aFontName = rFontMetric.GetFamilyName();
             if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;
 

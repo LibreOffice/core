@@ -960,7 +960,7 @@ namespace svxform
             // because i want to select all targets (and only them)
             SelectAll(false);
 
-            Sequence< Reference< XInterface > > aControls = _rData.hiddenControls();
+            const Sequence< Reference< XInterface > >& aControls = _rData.hiddenControls();
             sal_Int32 nCount = aControls.getLength();
             const Reference< XInterface >* pControls = aControls.getConstArray();
 

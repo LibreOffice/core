@@ -762,7 +762,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                 if ( m_bStyDef && DisallowInheritingOutlineNumbering(rFormat) )
                 {
                     SfxItemSet aSet( rFormat.GetAttrSet() );
-                    SvxLRSpaceItem aLR(
+                    const SvxLRSpaceItem& aLR(
                         ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
                     aSet.Put( aLR );
                     OutputItemSet( aSet, bPapFormat, bChpFormat,
@@ -1727,7 +1727,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             if ( nSubType == REF_SETREFATTR ||
                  nSubType == REF_BOOKMARK )
             {
-                const OUString aRefName(rRField.GetSetRefName());
+                const OUString& aRefName(rRField.GetSetRefName());
                 aLinkStr = GetBookmarkName( nSubType, &aRefName, 0 );
             }
             else if ( nSubType == REF_FOOTNOTE ||
@@ -2756,7 +2756,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             break;
                     }
                     {
-                        const OUString aRefName(rRField.GetSetRefName());
+                        const OUString& aRefName(rRField.GetSetRefName());
                         sStr = FieldString(eField)
                             + MSWordExportBase::GetBookmarkName(nSubType, &aRefName, 0);
                     }

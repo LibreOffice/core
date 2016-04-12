@@ -1752,14 +1752,12 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 
     // First search for eLang, then primary language of eLang
     // and last in LANGUAGE_UNDETERMINED
-    OUString sTemp(sWord);
 
     if (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() || CreateLanguageFile(aLanguageTag, false))
     {
         //the language is available - so bring it on
         auto const& pList = m_pLangTable->find(aLanguageTag)->second;
-        OUString _sTemp(sWord);
-        if(pList->GetWrdSttExceptList()->find(_sTemp) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWrdSttExceptList()->find(sWord) != pList->GetWrdSttExceptList()->end() )
             return true;
     }
 
@@ -1773,7 +1771,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         auto const& pList = m_pLangTable->find(aLanguageTag)->second;
-        if(pList->GetWrdSttExceptList()->find(sTemp) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWrdSttExceptList()->find(sWord) != pList->GetWrdSttExceptList()->end() )
             return true;
     }
 
@@ -1782,7 +1780,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         auto const& pList = m_pLangTable->find(aLanguageTag)->second;
-        if(pList->GetWrdSttExceptList()->find(sTemp) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWrdSttExceptList()->find(sWord) != pList->GetWrdSttExceptList()->end() )
             return true;
     }
     return false;
@@ -1831,13 +1829,12 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 
     // First search for eLang, then primary language of eLang
     // and last in LANGUAGE_UNDETERMINED
-    OUString sTemp( sWord );
 
     if (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() || CreateLanguageFile(aLanguageTag, false))
     {
         //the language is available - so bring it on
         const SvStringsISortDtor* pList = m_pLangTable->find(aLanguageTag)->second->GetCplSttExceptList();
-        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sTemp) != pList->end() )
+        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sWord) != pList->end() )
             return true;
     }
 
@@ -1851,7 +1848,7 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     {
         //the language is available - so bring it on
         const SvStringsISortDtor* pList = m_pLangTable->find(aLanguageTag)->second->GetCplSttExceptList();
-        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sTemp) != pList->end() )
+        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sWord) != pList->end() )
             return true;
     }
 
@@ -1860,7 +1857,7 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     {
         //the language is available - so bring it on
         const SvStringsISortDtor* pList = m_pLangTable->find(aLanguageTag)->second->GetCplSttExceptList();
-        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sTemp) != pList->end() )
+        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sWord) != pList->end() )
             return true;
     }
     return false;
@@ -1967,12 +1964,11 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
         rpLst = new SvStringsISortDtor;
 
     {
-        OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
-        OUString sTmp( sStrmName );
+        const OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
 
         if( rStg.Is() && rStg->IsStream( sStrmName ) )
         {
-            tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sTmp,
+            tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
                 ( StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE ) );
             if( SVSTREAM_OK != xStrm->GetError())
             {

@@ -352,7 +352,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             }
             else // this is a metafile
             {
-                OUString aDestMimeType( aSourceMimeType );
+                const OUString& aDestMimeType( aSourceMimeType );
                 Reference< XStream > xTempFile( io::TempFile::create(rxContext), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
                 Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxContext ) );

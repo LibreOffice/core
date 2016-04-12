@@ -467,8 +467,7 @@ void deletePathIfPossible(const Reference < XRegistryKey >& xRootKey,
         {
             xRootKey->deleteKey(path);
 
-            OUString tmpPath(path);
-            OUString newPath = tmpPath.copy(0, tmpPath.lastIndexOf('/'));
+            OUString newPath = path.copy(0, path.lastIndexOf('/'));
 
             if (newPath.getLength() > 1)
                 deletePathIfPossible(xRootKey, newPath);
@@ -576,8 +575,7 @@ void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
 
     if (bClean)
     {
-        OUString tmpName(linkName);
-        OUString path = tmpName.copy(0, tmpName.lastIndexOf('/'));
+        OUString path = linkName.copy(0, linkName.lastIndexOf('/'));
         deletePathIfPossible(xRootKey, path);
     }
 }
@@ -1437,14 +1435,12 @@ void ImplementationRegistration::prepareRegister(
     const Reference < XSimpleRegistry > & xReg)
     // throw( CannotRegisterImplementationException, RuntimeException )
 {
-    OUString implLoaderUrl(implementationLoaderUrl);
     OUString activatorName;
 
     if (!implementationLoaderUrl.isEmpty())
     {
-        OUString tmpActivator(implementationLoaderUrl);
         sal_Int32 nIndex = 0;
-        activatorName = tmpActivator.getToken(0, ':', nIndex );
+        activatorName = implementationLoaderUrl.getToken(0, ':', nIndex );
     } else
     {
         // check locationUrl to find out what kind of loader is needed
@@ -1472,7 +1468,7 @@ void ImplementationRegistration::prepareRegister(
 
                 if ( xRegistry.is())
                 {
-                    doRegister(m_xSMgr, m_xCtx, xAct, xRegistry, implLoaderUrl,
+                    doRegister(m_xSMgr, m_xCtx, xAct, xRegistry, implementationLoaderUrl,
                                locationUrl, registeredLocationUrl);
                 }
             }
@@ -1591,9 +1587,8 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 
     if (!implementationLoaderUrl.isEmpty())
     {
-        OUString tmpActivator(implementationLoaderUrl);
         sal_Int32 nIndex = 0;
-        activatorName = tmpActivator.getToken(0, ':', nIndex );
+        activatorName = implementationLoaderUrl.getToken(0, ':', nIndex );
     } else
     {
         // check locationUrl to find out what kind of loader is needed

@@ -1819,17 +1819,16 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                     ::osl::FileBase::RC eErr = ::osl::File::createTempFile( nullptr, nullptr, &aTempFileURL );
                     if( eErr == ::osl::FileBase::E_None )
                     {
-                        OUString aTempDirURL = aTempFileURL;
                         try
                         {
-                            m_xSFA->kill( aTempDirURL );
+                            m_xSFA->kill( aTempFileURL );
                         }
                         catch (const Exception &)
                         {
                         }
-                        m_xSFA->createFolder( aTempDirURL );
+                        m_xSFA->createFolder( aTempFileURL );
 
-                        aZipDir = aTempDirURL;
+                        aZipDir = aTempFileURL;
                         o_rbTemporary = true;
                     }
                 }

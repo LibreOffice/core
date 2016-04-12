@@ -161,9 +161,7 @@ class XmlPortionDumper:public SwPortionHandler
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
-        OUString sText( rText );
-        OString sText8 =OUStringToOString( sText,
-                                                       RTL_TEXTENCODING_UTF8 );
+        OString sText8 = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rText" ),
                                            "%s", sText8.getStr(  ) );
 

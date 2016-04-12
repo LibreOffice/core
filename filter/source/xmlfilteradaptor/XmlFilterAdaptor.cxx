@@ -67,8 +67,8 @@ using namespace ::com::sun::star::task;
 bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
 {
-    OUString udConvertClass=msUserData[0];
-    OUString udImport =msUserData[2];
+    OUString udConvertClass    = msUserData[0];
+    const OUString sXMLImportService = msUserData[2];
     sal_Int32 nSteps= 0;
     sal_Int32 nProgressRange = 4;
 
@@ -80,7 +80,6 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
         xStatusIndicator->start( "Loading :",nProgressRange);
     }
 
-    OUString sXMLImportService (  udImport  );
     Reference < XParser > xSaxParser = Parser::create( mxContext );
 
     Sequence< Any > aAnys(1);

@@ -481,8 +481,7 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )
     PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
     pPropertyVal[0].Name = "DataSourceName";
     OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource->GetSelectEntry() ) );
-    OUString aSelection = aEntry;
-    pPropertyVal[0].Value <<= aSelection;
+    pPropertyVal[0].Value <<= aEntry;
     SendDispatch(nTBC_LB_SOURCE, aPropVal);
 }
 

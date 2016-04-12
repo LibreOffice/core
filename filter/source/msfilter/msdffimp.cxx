@@ -6564,11 +6564,11 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     // If a not applicable MapUnit (device dependent) is used,
     // SV tries to guess a best match for the right value
     Size aSize = rMtf.GetPrefSize();
-    MapMode aMMSrc = rMtf.GetPrefMapMode();
+    const MapMode& aMMSrc = rMtf.GetPrefMapMode();
     MapMode aMMDst( MAP_100TH_MM );
     aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
     aEle.SetSize( aSize );
-     aEle.SetAspect( nAspect );
+    aEle.SetAspect( nAspect );
     aEle.SetAdviseFlags( nAdviseModes );
     aEle.SetMtf( rMtf );
     aEle.Write( *xStm );

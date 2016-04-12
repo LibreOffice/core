@@ -182,11 +182,10 @@ static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, const
     pNewRec->aType = rType;
     //all values are contained as colon-separated 1/100 mm values
     //except for the continuous flag ('C'/'S') and nCols, nRows (sal_Int32)
-    OUString sMeasure(rMeasure);
-    sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sMeasure, ';');
+    sal_uInt16 nTokenCount = comphelper::string::getTokenCount(rMeasure, ';');
     for(sal_uInt16 i = 0; i < nTokenCount; i++)
     {
-        OUString sToken(sMeasure.getToken(i, ';' ));
+        OUString sToken(rMeasure.getToken(i, ';' ));
         int nVal = sToken.toInt32();
         switch(i)
         {

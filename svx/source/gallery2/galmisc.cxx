@@ -273,16 +273,16 @@ bool CreateDir( const INetURLObject& rURL )
         try
         {
             uno::Reference< ucb::XCommandEnvironment >  aCmdEnv;
-            INetURLObject                           aNewFolderURL( rURL );
-            INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
+            INetURLObject                           aParentURL( rURL );
+            aParentURL.removeSegment();
             ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
             aProps[0] = "Title";
-            aValues[0] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
+            aValues[0] = uno::makeAny( OUString( rURL.GetName() ) );
 
-        ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( rURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
         bRet = aParent.insertNewContent( "application/vnd.sun.staroffice.fsys-folder", aProps, aValues, aContent );
         }
         catch( const ucb::ContentCreationException& )

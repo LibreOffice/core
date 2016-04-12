@@ -864,11 +864,10 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
     if (pChild == nullptr || pChild->GetPage() == nullptr)
         return;
 
-    OUString sOldName (rsOldName);
     OUString sNewName (pChild->GetPage()->GetName());
     pChild->FireAccessibleEvent(
         css::accessibility::AccessibleEventId::NAME_CHANGED,
-        makeAny(sOldName),
+        makeAny(rsOldName),
         makeAny(sNewName));
 }
 

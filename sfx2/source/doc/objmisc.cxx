@@ -1561,7 +1561,7 @@ void SfxHeaderAttributes_Impl::SetAttributes()
 
 void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
 {
-    OUString aValue = rKV.GetValue();
+    const OUString& aValue = rKV.GetValue();
     if( rKV.GetKey().equalsIgnoreAsciiCase("refresh") && !rKV.GetValue().isEmpty() )
     {
         sal_uInt32 nTime = aValue.getToken(  0, ';' ).toInt32() ;

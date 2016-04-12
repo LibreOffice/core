@@ -148,7 +148,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         }
 
         SwIndex aIdx( pTNd, nSttCnt );
-        const OUString rNewStr = rData.GetText();
+        const OUString& rNewStr = rData.GetText();
 
         if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
         {

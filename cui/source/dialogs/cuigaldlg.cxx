@@ -831,9 +831,8 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
 
     if ( sRet.indexOf( sAllFilter ) == -1 )
     {
-        OUString sExt = _rExtension;
         sRet += sOpenBracket;
-        sRet += sExt;
+        sRet += _rExtension;
         sRet += sCloseBracket;
     }
     return sRet;

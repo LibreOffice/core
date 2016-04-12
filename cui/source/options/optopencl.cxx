@@ -373,7 +373,7 @@ long SvxOpenCLTabPage::DeleteHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatc
     if (!pListBox->FirstSelected())
         return 0;
 
-    OpenCLConfig::ImplMatcher rEntry(findCurrentEntry(rSet, pListBox));
+    const OpenCLConfig::ImplMatcher& rEntry(findCurrentEntry(rSet, pListBox));
     rSet.erase(rEntry);
     fillListBox(pListBox, rSet);
 

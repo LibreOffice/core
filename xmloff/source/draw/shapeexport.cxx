@@ -1733,7 +1733,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
             if( nFound & FOUND_LIBRARY )
             {
-                OUString sLocation( GetXMLToken(
+                const OUString& sLocation( GetXMLToken(
                     (aStrLibrary.equalsIgnoreAsciiCase("StarOffice") ||
                      aStrLibrary.equalsIgnoreAsciiCase("application") ) ? XML_APPLICATION
                                                                        : XML_DOCUMENT ) );

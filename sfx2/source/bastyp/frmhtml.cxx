@@ -100,7 +100,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             break;
         case HTML_O_FRAMEBORDER:
         {
-            OUString aStr = aOption.GetString();
+            const OUString& aStr = aOption.GetString();
             bool bBorder = true;
             if ( aStr.equalsIgnoreAsciiCase("NO") ||
                  aStr.equalsIgnoreAsciiCase("0") )
@@ -114,7 +114,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
         default:
             if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_READONLY))
             {
-                OUString aStr = aOption.GetString();
+                const OUString& aStr = aOption.GetString();
                 bool bReadonly = true;
                 if ( aStr.equalsIgnoreAsciiCase("FALSE") )
                     bReadonly = false;
@@ -122,7 +122,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             }
             else if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_EDIT))
             {
-                OUString aStr = aOption.GetString();
+                const OUString& aStr = aOption.GetString();
                 bool bEdit = true;
                 if ( aStr.equalsIgnoreAsciiCase("FALSE") )
                     bEdit = false;

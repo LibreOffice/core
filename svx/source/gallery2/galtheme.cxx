@@ -743,8 +743,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                     }
                 }
 
-                INetURLObject aPathURL( rURL );
-                pRet = new GalleryThemeEntry( false, aPathURL, aThemeName,
+                pRet = new GalleryThemeEntry( false, rURL, aThemeName,
                                               bReadOnly, false, nThemeId,
                                               bThemeNameFromResource );
             }

@@ -755,7 +755,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
         OUString sUrl;
-        OUString eType = m_pGeneralPage->GetSelectedType();
+        const OUString eType = m_pGeneralPage->GetSelectedType();
         if ( dbaccess::ODsnTypeCollection::isEmbeddedDatabase(eType) )
         {
             sUrl = eType;
@@ -771,10 +771,9 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
-            OUString sPrefix = eType;
             sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
             xSimpleFileAccess->createFolder(sUrl);
-             sUrl = sPrefix.concat(sUrl);
+            sUrl = eType.concat(sUrl);
         }
         m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
         m_pImpl->saveChanges(*m_pOutSet);

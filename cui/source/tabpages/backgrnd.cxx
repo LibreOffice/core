@@ -1443,8 +1443,8 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
     }
     else
     {
-        const OUString  aStrLink   = rBgdAttr.GetGraphicLink();
-        const OUString  aStrFilter = rBgdAttr.GetGraphicFilter();
+        const OUString&  aStrLink   = rBgdAttr.GetGraphicLink();
+        const OUString&  aStrFilter = rBgdAttr.GetGraphicFilter();
 
         lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_BITMAP);
         ShowBitmapUI_Impl();

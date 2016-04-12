@@ -4201,7 +4201,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         xTextAppend->insertTextContent(xCrsr,xTextContent, sal_True);
                     }
-                    const uno::Reference<uno::XInterface> xContent(xTextContent);
+                    uno::Reference<uno::XInterface> xContent(xTextContent);
                     uno::Reference< text::XFormField> xFormField(xContent, uno::UNO_QUERY);
                     xFormField->setFieldType(aCode);
                     m_bStartGenericField = true;

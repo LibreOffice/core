@@ -1038,11 +1038,9 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                                     makeAny( nTemplateDescription )
                                 );
 
-            OUString sStandardDirTemp = sStandardDir;
-
             aInitArguments[1] <<= NamedValue(
                                     OUString( "StandardDir"  ),
-                                    makeAny( sStandardDirTemp )
+                                    makeAny( sStandardDir )
                                 );
 
             aInitArguments[2] <<= NamedValue(
