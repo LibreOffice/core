@@ -1530,8 +1530,6 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
         if( ! xFontCharMap->HasChar( rStr[i] ) )
             return nIndex;
 
-    xFontCharMap = nullptr;
-
     return -1;
 }
 
