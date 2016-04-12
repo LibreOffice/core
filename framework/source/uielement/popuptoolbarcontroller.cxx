@@ -467,7 +467,7 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
             vcl::CommandInfoProvider::Instance().GetTooltipForCommand( rEvent.IsEnabled ? m_aCommandURL : OUString( ".uno:SaveAs" ), m_xFrame ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
-        if ( m_bSaveAsModeActive == rEvent.IsEnabled )
+        if ( m_bSaveAsModeActive == bool( rEvent.IsEnabled ) )
         {
             m_bSaveAsModeActive = !rEvent.IsEnabled;
             updateImage();
