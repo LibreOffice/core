@@ -66,7 +66,7 @@
 #include <math.h>
 #include <memory>
 
-#define _D_MAX_LONG_  (double) 0x7fffffff
+#define D_MAX_LONG_  (double) 0x7fffffff
 
 extern sal_uInt16 nScFillModeMouseModifier;     // global.cxx
 
@@ -1671,7 +1671,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         bError = true;
                                     break;
                                 case FILL_DATE:
-                                    if (fabs(nVal) > _D_MAX_LONG_)
+                                    if (fabs(nVal) > D_MAX_LONG_)
                                         bError = true;
                                     else
                                         IncDate(nVal, nDayOfMonth, nStepValue, eFillDateCmd);
