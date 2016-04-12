@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_fb51e00f",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-12T04:36:25Z",
+      "side": 1,
+      "message": "This condition is the wrong way around now.\n\nOSL_ENSURE(b, \"\") \u003d\u003e print when b is false\nSAL_WARN_IF(b, \"\", \"\") \u003d\u003e print when b is true",
+      "revId": "77e0b4007522a69a27479130d058ef9f3b900e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5b574c02",
+        "filename": "chart2/source/model/template/BubbleDataInterpreter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-12T04:36:25Z",
+      "side": 1,
+      "message": "I\u0027m not happy that this code is now executed unconditionally.",
+      "revId": "77e0b4007522a69a27479130d058ef9f3b900e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
