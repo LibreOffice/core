@@ -725,7 +725,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             // removing placeholder objects
             std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() );
-            while ( aObjectListIter != aPlaceholderObjectList.end() )
+            std::vector< E3dCompoundObject* >::const_iterator aEnd( aPlaceholderObjectList.end() );
+            while ( aObjectListIter != aEnd )
             {
                 pScene->Remove3DObj( *aObjectListIter );
                 delete *aObjectListIter++;
