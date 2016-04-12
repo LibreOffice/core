@@ -141,9 +141,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     bool                    bArrayFormula = false;
     TokenId                 nMerk0;
     const bool              bCondFormat = eFT == FT_CondFormat;
-    const bool              bRangeName = eFT == FT_RangeName || bCondFormat;
+    const bool              bRangeName = eFT == FT_RangeName;
+    const bool              bRangeNameOrCond = bRangeName || bCondFormat;
     const bool              bSharedFormula = eFT == FT_SharedFormula;
-    const bool              bRNorSF = bRangeName || bSharedFormula;
+    const bool              bRNorSF = bRangeNameOrCond || bSharedFormula;
 
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
@@ -510,9 +511,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 nCol = aIn.ReaduInt16();
 
                 aSRD.SetRelTab(0);
-                aSRD.SetFlag3D( bRangeName && !bCondFormat );
+                aSRD.SetFlag3D( bRangeName );
 
-                ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
+                ExcRelToScRel8( nRow, nCol, aSRD, bRangeNameOrCond );
 
                 switch ( nOp )
                 {
@@ -546,11 +547,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 rSRef1.SetRelTab(0);
                 rSRef2.SetRelTab(0);
-                rSRef1.SetFlag3D( bRangeName && !bCondFormat );
-                rSRef2.SetFlag3D( bRangeName && !bCondFormat );
+                rSRef1.SetFlag3D( bRangeName );
+                rSRef2.SetFlag3D( bRangeName );
 
-                ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
-                ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRangeName );
+                ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRangeNameOrCond );
+                ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRangeNameOrCond );
 
                 if( IsComplColRange( nColFirst, nColLast ) )
                     SetComplCol( aCRD );
@@ -604,7 +605,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 nCol = aIn.ReaduInt16();
 
                 aSRD.SetRelTab(0);
-                aSRD.SetFlag3D( bRangeName );
+                aSRD.SetFlag3D( bRangeNameOrCond );
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
 
@@ -620,8 +621,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 aCRD.Ref1.SetRelTab(0);
                 aCRD.Ref2.SetRelTab(0);
-                aCRD.Ref1.SetFlag3D( bRangeName );
-                aCRD.Ref2.SetFlag3D( bRangeName );
+                aCRD.Ref1.SetFlag3D( bRangeNameOrCond );
+                aCRD.Ref2.SetFlag3D( bRangeNameOrCond );
 
                 nRowFirst = aIn.ReaduInt16();
                 nRowLast = aIn.ReaduInt16();
@@ -799,7 +800,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aSRD.SetAbsTab(nTabFirst);
                 aSRD.SetFlag3D(true);
 
-                ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
+                ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeNameOrCond );
 
                 switch ( nOp )
                 {
@@ -875,8 +876,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 rR1.SetFlag3D(true);
                 rR2.SetFlag3D( nTabFirst != nTabLast );
 
-                ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
-                ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
+                ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeNameOrCond );
+                ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeNameOrCond );
 
                 if( IsComplColRange( nGrbitCol1, nGrbitCol2 ) )
                     SetComplCol( aCRD );
