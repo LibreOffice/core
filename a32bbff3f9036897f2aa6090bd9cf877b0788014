@@ -49,6 +49,23 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_bbe4883b",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-04-12T08:54:26Z",
+      "side": 1,
+      "message": "Wow - what happens to mnCount down this path ? - nothing to do with your patch; but I\u0027d be much happier to see it decremented to pair with \u0027acquire\u0027 \u003d) then again - how can two threads hold the same mutex ? perhaps better just to have an assert(mnThreadId \u003d\u003d nThreadId()) in there (?) \u003d)",
+      "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_d8f182cf",
         "filename": "vcl/win/app/salinst.cxx",
         "patchSetId": 3
@@ -90,6 +107,40 @@
         "endLine": 150,
         "endChar": 12
       },
+      "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5bcaaca2",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-04-12T08:54:26Z",
+      "side": 1,
+      "message": "I love the cleanup - but I think we can now just do the GdiFlush inside this if() and cleanup the flow here ?",
+      "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_1b3794b1",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-04-12T08:54:26Z",
+      "side": 1,
+      "message": "Hopefully the fact that that we cannot reliably wake-up multiple threads waiting on a condition - ( one of the horrors of the condition API we have ) cf. the header:\n\n    /**\n     * Warning: the Condition abstraction is inadequate for any\n     * situation where there may be multiple threads setting,\n     * waiting, and resetting the same condition. It can only be\n     * used to synchronise interactions between two threads\n     * cf. lost wakeups in:\n     *    http://www.cs.wustl.edu/~schmidt/win32-cv-1.html\n     */\n    class Condition\n\nIs not a big issue since we are only waiting in the main thread for this (?)",
       "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -184,6 +235,23 @@
         "endLine": 226,
         "endChar": 83
       },
+      "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_5b58ecfa",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-04-12T08:54:26Z",
+      "side": 1,
+      "message": "This all looks rather beautiful \u003d)\n\nThanks Armin !",
       "revId": "a32bbff3f9036897f2aa6090bd9cf877b0788014",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
