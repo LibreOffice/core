@@ -2775,10 +2775,9 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         }
         else if (sName == SC_ACTIVETABLE)
         {
-            OUString sValue;
-            if(rSettings[i].Value >>= sValue)
+            OUString sTabName;
+            if(rSettings[i].Value >>= sTabName)
             {
-                OUString sTabName(sValue);
                 SCTAB nTab(0);
                 if (GetDocument()->GetTable(sTabName, nTab))
                     nTabNo = nTab;

@@ -112,7 +112,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     if ( nPoly == 1 )
     {
         // #100127# Map to DrawPolygon
-        tools::Polygon aPoly = rPolyPoly.GetObject( 0 );
+        const tools::Polygon& aPoly = rPolyPoly.GetObject( 0 );
         if( aPoly.GetSize() >= 2 )
         {
             GDIMetaFile* pOldMF = mpMetaFile;

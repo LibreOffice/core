@@ -91,7 +91,6 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
         if ( ppFDesc )
         {
             *ppFDesc = nullptr;
-            const OUString sTemp( aFname );
             const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
             for(sal_uInt32 j= 0; j < nCategoryCount && !*ppFDesc; ++j)
             {
@@ -100,7 +99,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
                 for(sal_uInt32 i = 0 ; i < nCount; ++i)
                 {
                     const IFunctionDescription* pCurrent = pCategory->getFunction(i);
-                    if ( pCurrent->getFunctionName().equalsIgnoreAsciiCase(sTemp) )
+                    if ( pCurrent->getFunctionName().equalsIgnoreAsciiCase(aFname) )
                     {
                         *ppFDesc = pCurrent;
                         break;

@@ -913,7 +913,7 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
         if( pInfo && pInfo->IsActive() )
         {
             const SfxStringItem& rStateItem = dynamic_cast<const SfxStringItem&>(*pItem);
-            OUString aPageName = rStateItem.GetValue();
+            const OUString& aPageName = rStateItem.GetValue();
 
             if( !pNavigatorWin->maTlbObjects->HasSelectedChildren( aPageName ) )
             {

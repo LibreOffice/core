@@ -145,7 +145,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
         }
 
         // #i121128# use shortcut to write SVG data in original form (if possible)
-        const SvgDataPtr aSvgDataPtr(rGraphic.getSvgData());
+        const SvgDataPtr& aSvgDataPtr(rGraphic.getSvgData());
 
         if(aSvgDataPtr.get()
             && aSvgDataPtr->getSvgDataArrayLength()

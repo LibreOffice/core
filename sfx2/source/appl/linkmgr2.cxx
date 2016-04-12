@@ -257,16 +257,15 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
             case OBJECT_CLIENT_DDE:
                 {
                     sal_Int32 nTmp = 0;
-                    OUString sCmd( sLNm );
-                    OUString sServer( sCmd.getToken( 0, cTokenSeparator, nTmp ) );
-                    OUString sTopic( sCmd.getToken( 0, cTokenSeparator, nTmp ) );
+                    OUString sServer( sLNm.getToken( 0, cTokenSeparator, nTmp ) );
+                    OUString sTopic( sLNm.getToken( 0, cTokenSeparator, nTmp ) );
 
                     if( pType )
                         *pType = sServer;
                     if( pFile )
                         *pFile = sTopic;
                     if( pLinkStr )
-                        *pLinkStr = nTmp != -1 ? sCmd.copy(nTmp) : OUString();
+                        *pLinkStr = nTmp != -1 ? sLNm.copy(nTmp) : OUString();
                     bRet = true;
                 }
                 break;

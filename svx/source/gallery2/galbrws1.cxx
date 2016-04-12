@@ -290,7 +290,6 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* pDialog, bool bCreat
 
         if( !mpExchangeData->aEditedTitle.isEmpty() && aName != mpExchangeData->aEditedTitle )
         {
-            const OUString      aOldName( aName );
             OUString            aTitle( mpExchangeData->aEditedTitle );
             sal_uInt16          nCount = 0;
 
@@ -301,7 +300,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* pDialog, bool bCreat
                 aTitle += OUString::number( nCount );
             }
 
-            mpGallery->RenameTheme( aOldName, aTitle );
+            mpGallery->RenameTheme( aName, aTitle );
         }
 
         if ( bCreateNew )

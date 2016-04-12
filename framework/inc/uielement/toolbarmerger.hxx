@@ -87,8 +87,7 @@ class ToolBarMerger
         static ReferenceToolbarPathInfo FindReferencePoint( ToolBox* pToolbar,
                                                             const OUString& rReferencePoint );
 
-        static bool       ProcessMergeOperation( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                                                 ToolBox*                  pToolbar,
+        static bool       ProcessMergeOperation( ToolBox*                  pToolbar,
                                                  sal_uInt16                nPos,
                                                  sal_uInt16&               rItemId,
                                                  CommandToInfoMap&         rCommandMap,
@@ -97,8 +96,7 @@ class ToolBarMerger
                                                  const OUString&           rMergeCommandParameter,
                                                  const AddonToolbarItemContainer& rItems );
 
-        static bool       ProcessMergeFallback( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                                                ToolBox*                         pToolbar,
+        static bool       ProcessMergeFallback( ToolBox*                         pToolbar,
                                                 sal_uInt16                       nPos,
                                                 sal_uInt16&                      rItemId,
                                                 CommandToInfoMap&                rCommandMap,
@@ -107,8 +105,7 @@ class ToolBarMerger
                                                 const OUString&           rMergeFallback,
                                                 const AddonToolbarItemContainer& rItems );
 
-        static bool       MergeItems( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                                      ToolBox*                  pToolbar,
+        static bool       MergeItems( ToolBox*                  pToolbar,
                                       sal_uInt16                nPos,
                                       sal_uInt16                nModIndex,
                                       sal_uInt16&               rItemId,
@@ -116,8 +113,7 @@ class ToolBarMerger
                                       const OUString&           rModuleIdentifier,
                                       const AddonToolbarItemContainer& rAddonToolbarItems );
 
-        static bool       ReplaceItem( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                                       ToolBox*                  pToolbar,
+        static bool       ReplaceItem( ToolBox*                  pToolbar,
                                        sal_uInt16                nPos,
                                        sal_uInt16&               rItemId,
                                        CommandToInfoMap&         rCommandMap,

@@ -531,7 +531,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             for(size_t i = 0; i < nMemberCount; ++i)
             {
                 const SwFrameFormat& rTableFormat = pWrtShell->GetTableFrameFormat(i, true);
-                const OUString sTableName( rTableFormat.GetName() );
+                const OUString& sTableName( rTableFormat.GetName() );
 
                 SwContent* pCnt = new SwContent(this, sTableName,
                         rTableFormat.FindLayoutRect(false, &aNullPt).Top() );

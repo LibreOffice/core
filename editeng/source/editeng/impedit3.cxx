@@ -1861,7 +1861,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             if ( ( nWordEnd >= nMaxBreakPos ) && ( nWordLen > 3 ) )
             {
                 // May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
-                OUString aWord = pNode->GetString().copy(nWordStart, nWordLen);
+                const OUString aWord = pNode->GetString().copy(nWordStart, nWordLen);
                 sal_Int32 nMinTrail = nWordEnd-nMaxBreakPos+1; //+1: Before the dickey letter
                 Reference< XHyphenatedWord > xHyphWord;
                 if (xHyphenator.is())
@@ -1882,12 +1882,11 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                         {
                             // TODO: handle all alternative hyphenations (see hyphen-1.2.8/tests/unicode.*)
                             OUString aAlt( xHyphWord->getHyphenatedWord() );
-                            OUString aWord2(aWord);
                             OUString aAltLeft(aAlt.copy(0, _nWordLen));
                             OUString aAltRight(aAlt.copy(_nWordLen));
-                            bAltFullLeft = aWord2.startsWith(aAltLeft);
-                            bAltFullRight = aWord2.endsWith(aAltRight);
-                            nAltDelChar = aWord2.getLength() - aAlt.getLength() + static_cast<int>(!bAltFullLeft) + static_cast<int>(!bAltFullRight);
+                            bAltFullLeft = aWord.startsWith(aAltLeft);
+                            bAltFullRight = aWord.endsWith(aAltRight);
+                            nAltDelChar = aWord.getLength() - aAlt.getLength() + static_cast<int>(!bAltFullLeft) + static_cast<int>(!bAltFullRight);
 
                             // NOTE: improved for other cases, see fdo#63711
 
@@ -1900,7 +1899,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                             // compound words because the Hyphenator separates
                             // all position of the word. [This is not true for libhyphen.]
                             // "Schiffahrtsbrennesseln" -> "Schifffahrtsbrennnesseln"
-                 // We can thus actually not directly connect the index of the
+                            // We can thus actually not directly connect the index of the
                             // AlternativeWord to aWord. The whole issue will be simplified
                             // by a function in the  Hyphenator as soon as AMA builds this in...
                             sal_Int32 nAltStart = _nWordLen - 1;
@@ -1935,7 +1934,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
                             bHyphenated = true;
                             nBreakPos = nWordStart + nTxtStart;
-                            if ( cAlternateReplChar || aAlt.getLength() < aWord2.getLength() || !bAltFullRight) // also for "oma-tje", "re-eel"
+                            if ( cAlternateReplChar || aAlt.getLength() < aWord.getLength() || !bAltFullRight) // also for "oma-tje", "re-eel"
                                 nBreakPos++;
                         }
                     }

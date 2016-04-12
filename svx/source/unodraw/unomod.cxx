@@ -418,14 +418,13 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 
     uno::Reference< uno::XInterface > xRet;
 
-    const OUString aType( aServiceSpecifier );
     const OUString aPackagePrefix( "com.sun.star.presentation." );
-    if( aType.startsWith( aPackagePrefix ) )
+    if( aServiceSpecifier.startsWith( aPackagePrefix ) )
     {
         SvxShape* pShape = nullptr;
 
         sal_uInt16 nType = OBJ_TEXT;
-        OUString aTypeName = aType.copy( aPackagePrefix.getLength() );
+        OUString aTypeName = aServiceSpecifier.copy( aPackagePrefix.getLength() );
         // create a shape wrapper
         if( aTypeName.startsWith("TitleTextShape") )
         {

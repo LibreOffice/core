@@ -566,7 +566,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
 
                 Reference< beans::XPropertySetInfo > xPropInfo = xProps.get()->getPropertySetInfo();
 
-                OUString sImageSourceProperty = GetPropertyName( BASEPROPERTY_IMAGEURL );
+                const OUString& sImageSourceProperty = GetPropertyName( BASEPROPERTY_IMAGEURL );
                 if ( xPropInfo.get()->hasPropertyByName(  sImageSourceProperty ) && ImplHasProperty(BASEPROPERTY_DIALOGSOURCEURL) )
                 {
                     Any aUrl = xProps.get()->getPropertyValue(  sImageSourceProperty );

@@ -678,14 +678,13 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         sal_uInt16 nPageNumber = SDRPAGE_NOTFOUND;
         SdrObject* pObj = nullptr;
 
-        OUString sBookmark( rBookmark );
         const OUString sInteraction( "action?" );
-        if ( sBookmark.match( sInteraction ) )
+        if ( rBookmark.match( sInteraction ) )
         {
             const OUString sJump( "jump=" );
-            if ( sBookmark.match( sJump, sInteraction.getLength() ) )
+            if ( rBookmark.match( sJump, sInteraction.getLength() ) )
             {
-                OUString aDestination( sBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );
+                OUString aDestination( rBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );
                 if ( aDestination.match( "firstslide" ) )
                 {
                     nPageNumber = 1;
@@ -711,15 +710,13 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         }
         else
         {
-            OUString aBookmark( rBookmark );
-
             // Is the bookmark a page?
-            nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+            nPageNumber = mpDoc->GetPageByName( rBookmark, bIsMasterPage );
 
             if (nPageNumber == SDRPAGE_NOTFOUND)
             {
                 // Is the bookmark a object?
-                pObj = mpDoc->GetObj(aBookmark);
+                pObj = mpDoc->GetObj(rBookmark);
 
                 if (pObj)
                 {

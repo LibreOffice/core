@@ -447,10 +447,9 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName
 {
     if ( pDocShell )
     {
-        OUString aNameStr( aName );
-        if ( aNameStr == SC_FAMILYNAME_CELL )
+        if ( aName == SC_FAMILYNAME_CELL )
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PARA );
-        else if ( aNameStr == SC_FAMILYNAME_PAGE )
+        else if ( aName == SC_FAMILYNAME_PAGE )
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
     }
     // no assertion - called directly from getByName
@@ -518,9 +517,7 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
 sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    OUString aNameStr( aName );
-    return aNameStr == SC_FAMILYNAME_CELL || aNameStr == SC_FAMILYNAME_PAGE;
+    return aName == SC_FAMILYNAME_CELL || aName == SC_FAMILYNAME_PAGE;
 }
 
 // style::XStyleLoader
@@ -663,12 +660,10 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell )
     {
-        OUString aString(aName);
-
         ScDocument& rDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
-        if ( pStylePool->Find( aString, eFamily ) )
-            return new ScStyleObj( pDocShell, eFamily, aString );
+        if ( pStylePool->Find( aName, eFamily ) )
+            return new ScStyleObj( pDocShell, eFamily, aName );
     }
     return nullptr;
 }
@@ -1144,15 +1139,14 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
         //! DocFunc-Funktion??
         //! Undo ?????????????
 
-        OUString aString(aNewName);
-        bool bOk = pStyle->SetName( aString );
+        bool bOk = pStyle->SetName( aNewName );
         if (bOk)
         {
-            aStyleName = aString;       //! notify other objects for this style?
+            aStyleName = aNewName;       //! notify other objects for this style?
 
             ScDocument& rDoc = pDocShell->GetDocument();
             if ( eFamily == SFX_STYLE_FAMILY_PARA && !rDoc.IsImportingXML() )
-                rDoc.GetPool()->CellStyleCreated( aString, &rDoc );
+                rDoc.GetPool()->CellStyleCreated( aNewName, &rDoc );
 
             //  Zellvorlagen = 2, Seitenvorlagen = 4
             sal_uInt16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?

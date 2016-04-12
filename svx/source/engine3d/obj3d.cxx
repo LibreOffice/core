@@ -333,7 +333,7 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     {
         // transform pos from 2D world to 3D eye
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
-        const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
+        const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
         basegfx::B2DPoint aScaleCenter2D((double)rRef.X(), (double)rRef.Y());
         basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
 
@@ -395,7 +395,7 @@ void E3dObject::NbcMove(const Size& rSize)
 
         // BoundVolume from 3d world to 3d eye
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
-        const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
+        const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
         basegfx::B3DRange aEyeVol(pScene->GetBoundVolume());
         aEyeVol.transform(aViewInfo3D.getOrientation());
 

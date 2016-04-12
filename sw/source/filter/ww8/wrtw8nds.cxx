@@ -429,7 +429,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
                 if (nWhich == RES_TXTATR_AUTOFMT)
                 {
                     const SwFormatAutoFormat& rAutoFormat = static_cast<const SwFormatAutoFormat&>(pHt->GetAttr());
-                    const std::shared_ptr<SfxItemSet> pSet = rAutoFormat.GetStyleHandle();
+                    const std::shared_ptr<SfxItemSet>& pSet = rAutoFormat.GetStyleHandle();
                     SfxWhichIter aIter( *pSet );
                     const SfxPoolItem* pItem;
                     sal_uInt16 nWhichId = aIter.FirstWhich();
@@ -2108,7 +2108,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         AppendWordBookmark( sBkmkName );
     }
 
-    OUString aStr( rNode.GetText() );
+    const OUString& aStr( rNode.GetText() );
 
     sal_Int32 nAktPos = 0;
     sal_Int32 const nEnd = aStr.getLength();
@@ -2979,7 +2979,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
                 // because we deliver the normal content of the table cell, and no border
                 // ( Flag was deleted above in aSaveData() )
                 m_rWW8Export.m_bOutTable = true;
-                const OUString aName = rFrameFormat.GetName();
+                const OUString& aName = rFrameFormat.GetName();
                 m_rWW8Export.StartCommentOutput(aName);
                 m_rWW8Export.WriteText();
                 m_rWW8Export.EndCommentOutput(aName);

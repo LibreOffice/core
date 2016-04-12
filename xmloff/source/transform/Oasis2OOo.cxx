@@ -1459,12 +1459,10 @@ XMLConfigItemTContext_Impl::~XMLConfigItemTContext_Impl()
 void XMLConfigItemTContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rAttrName = rAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
@@ -1473,7 +1471,7 @@ void XMLConfigItemTContext_Impl::StartElement(
         {
             if ( IsXMLToken( aLocalName, XML_NAME ) )
             {
-                const OUString& rValue = xAttrList->getValueByIndex( i );
+                const OUString& rValue = rAttrList->getValueByIndex( i );
                 if( rValue == "RedlineProtectionKey" )
                     m_bIsRedlineProtectionKey = true;
                 else if( rValue == "CursorPositionX" )
@@ -1486,7 +1484,7 @@ void XMLConfigItemTContext_Impl::StartElement(
         }
     }
 
-    XMLTransformerContext::StartElement( xAttrList );
+    XMLTransformerContext::StartElement( rAttrList );
 }
 
 void XMLConfigItemTContext_Impl::Characters( const OUString& rChars )

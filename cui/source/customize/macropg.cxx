@@ -466,10 +466,9 @@ IconLBoxString::IconLBoxString( const OUString& sText,
 void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::RenderContext& rRenderContext,
                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
-    OUString aTxt(GetText());
-    if (!aTxt.isEmpty())
+    OUString aURL(GetText());
+    if (!aURL.isEmpty())
     {
-        OUString aURL(aTxt);
         sal_Int32 nIndex = aURL.indexOf(aVndSunStarUNO);
         bool bUNO = nIndex == 0;
 

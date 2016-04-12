@@ -348,8 +348,8 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         throw uno::RuntimeException();
 
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName) : nullptr;
-    OUString sShortName(aName);
-    OUString sLongName(aTitle);
+    const OUString& sShortName(aName);
+    const OUString& sLongName(aTitle);
     if (pGlosGroup && !pGlosGroup->GetError())
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);

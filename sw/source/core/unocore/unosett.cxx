@@ -1373,10 +1373,9 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     aPropertyValues.push_back(comphelper::makePropertyValue("Suffix", aUString));
 
     //char style name
-    OUString CharStyleName(rCharFormatName);
 
     aUString.clear();
-    SwStyleNameMapper::FillProgName( CharStyleName, aUString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
+    SwStyleNameMapper::FillProgName( rCharFormatName, aUString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
     aPropertyValues.push_back(comphelper::makePropertyValue("CharStyleName", aUString));
 
     //startvalue

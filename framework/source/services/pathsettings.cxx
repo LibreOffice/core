@@ -840,7 +840,6 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
 
 css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUString& sPath)
 {
-    OUString sOldStyleProp = sPath;
     OUString sInternalProp = sPath+POSTFIX_INTERNAL_PATHS;
     OUString sUserProp     = sPath+POSTFIX_USER_PATHS;
     OUString sWriteProp    = sPath+POSTFIX_WRITE_PATH;
@@ -865,7 +864,7 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
     {
         const css::beans::Property& rProp = m_lPropDesc[i];
 
-        if (rProp.Name.equals(sOldStyleProp))
+        if (rProp.Name.equals(sPath))
             lIDs[IDGROUP_OLDSTYLE] = rProp.Handle;
         else
         if (rProp.Name.equals(sInternalProp))

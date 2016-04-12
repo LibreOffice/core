@@ -899,7 +899,7 @@ void SwXMLImport::endDocument()
             {
                 Sequence< beans::PropertyValue > aXFormsSettings;
 
-                const OUString sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
+                const OUString& sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
                 if ( m_xLateInitSettings.is() && m_xLateInitSettings->hasByName( sXFormsSettingsName ) )
                 {
                     OSL_VERIFY( m_xLateInitSettings->getByName( sXFormsSettingsName ) >>= aXFormsSettings );

@@ -2355,10 +2355,9 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     OUStringToOString( sMark, RTL_TEXTENCODING_UTF8 ).getStr( ) );
         }
 
-        OUString sTarget( rTarget );
-        if ( !sTarget.isEmpty() )
+        if ( !rTarget.isEmpty() )
         {
-            OString soTarget = OUStringToOString( sTarget, RTL_TEXTENCODING_UTF8 );
+            OString soTarget = OUStringToOString( rTarget, RTL_TEXTENCODING_UTF8 );
             m_pHyperlinkAttrList->add(FSNS( XML_w, XML_tgtFrame ), soTarget.getStr());
         }
     }
@@ -6060,12 +6059,11 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                 FSEND );
 
     // text
-    OUString aText( rNumberingString );
-    OUStringBuffer aBuffer( aText.getLength() + WW8ListManager::nMaxLevel );
+    OUStringBuffer aBuffer( rNumberingString.getLength() + WW8ListManager::nMaxLevel );
 
-    const sal_Unicode *pPrev = aText.getStr();
-    const sal_Unicode *pIt = aText.getStr();
-    while ( pIt < aText.getStr() + aText.getLength() )
+    const sal_Unicode *pPrev = rNumberingString.getStr();
+    const sal_Unicode *pIt = rNumberingString.getStr();
+    while ( pIt < rNumberingString.getStr() + rNumberingString.getLength() )
     {
         // convert the level values to %NUMBER form
         // (we don't use pNumLvlPos at all)
@@ -6084,7 +6082,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         aBuffer.append( pPrev, pIt - pPrev );
 
     // If bullet char is empty, set lvlText as empty
-    if ( aText.equals ( OUString(sal_Unicode(0)) ) && nNumberingType == SVX_NUM_CHAR_SPECIAL )
+    if ( rNumberingString.equals ( OUString(sal_Unicode(0)) ) && nNumberingType == SVX_NUM_CHAR_SPECIAL )
     {
         m_pSerializer->singleElementNS( XML_w, XML_lvlText, FSNS( XML_w, XML_val ), "", FSEND );
     }
@@ -6271,7 +6269,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 {
     GetExport().GetId( rFont ); // ensure font info is written to fontTable.xml
-    OUString sFontName(rFont.GetFamilyName());
+    const OUString& sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     if (!sFontNameUtf8.isEmpty())
         AddToAttrList( m_pFontsAttrList, 2,
@@ -6427,7 +6425,7 @@ void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 
 void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 {
-    OUString sFontName(rFont.GetFamilyName());
+    const OUString& sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_eastAsia ), sFontNameUtf8.getStr() );
 }
@@ -6450,10 +6448,9 @@ void DocxAttributeOutput::CharWeightCJK( const SvxWeightItem& rWeight )
 
 void DocxAttributeOutput::CharFontCTL( const SvxFontItem& rFont )
 {
-    OUString sFontName(rFont.GetFamilyName());
+    const OUString& sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_cs ), sFontNameUtf8.getStr() );
-
 }
 
 void DocxAttributeOutput::CharPostureCTL( const SvxPostureItem& rPosture)

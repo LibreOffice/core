@@ -567,14 +567,12 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                 if( pPilotDlg->GetStartType() == ST_OPEN )
                 {
-                    OUString aFileToOpen = aDocPath;
-
-                    DBG_ASSERT( !aFileToOpen.isEmpty(), "The autopilot should have asked for a file itself already!" );
-                    if (!aFileToOpen.isEmpty())
+                    DBG_ASSERT( !aDocPath.isEmpty(), "The autopilot should have asked for a file itself already!" );
+                    if (!aDocPath.isEmpty())
                     {
                         css::uno::Sequence< css::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
 
-                        SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
+                        SfxStringItem aFile( SID_FILE_NAME, aDocPath );
                         SfxStringItem aReferer( SID_REFERER, OUString());
                         SfxUnoAnyItem aPassword( SID_ENCRYPTIONDATA, css::uno::makeAny(aPasswrd) );
 

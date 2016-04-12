@@ -853,7 +853,7 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
     // add in thousands separator (if necessary)
     if( nForComma > 3 )
     {
-        OUString aThoSep( rLoc.getNumThousandSep() );
+        const OUString& aThoSep( rLoc.getNumThousandSep() );
         if ( aThoSep.getLength() > 0 )
         {
             sal_Unicode cTho( aThoSep[0] );

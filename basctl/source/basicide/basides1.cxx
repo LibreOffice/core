@@ -304,7 +304,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     if ( !rInfo.GetModule().isEmpty() || pBasic->GetModules().empty() )
                     {
-                        OUString aModName = rInfo.GetModule();
+                        const OUString& aModName = rInfo.GetModule();
 
                         OUString sModuleCode;
                         if ( aDocument.createModule( aLibName, aModName, false, sModuleCode ) )
@@ -505,9 +505,9 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = static_cast<const SbxItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX ));
-            ScriptDocument aDocument( rSbxItem.GetDocument() );
-            OUString aLibName( rSbxItem.GetLibName() );
-            OUString aName( rSbxItem.GetName() );
+            const ScriptDocument& aDocument( rSbxItem.GetDocument() );
+            const OUString& aLibName( rSbxItem.GetLibName() );
+            const OUString& aName( rSbxItem.GetName() );
             if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 if ( rSbxItem.GetType() == TYPE_MODULE )
@@ -521,7 +521,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = static_cast<const SbxItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX ));
-            ScriptDocument aDocument( rSbxItem.GetDocument() );
+            const ScriptDocument& aDocument( rSbxItem.GetDocument() );
             BaseWindow* pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetType(), true );
             if ( pWin )
                 RemoveWindow( pWin, true );
@@ -531,9 +531,9 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = static_cast<const SbxItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX ));
-            ScriptDocument aDocument( rSbxItem.GetDocument() );
-            OUString aLibName( rSbxItem.GetLibName() );
-            OUString aName( rSbxItem.GetName() );
+            const ScriptDocument& aDocument( rSbxItem.GetDocument() );
+            const OUString& aLibName( rSbxItem.GetLibName() );
+            const OUString& aName( rSbxItem.GetName() );
             SetCurLib( aDocument, aLibName );
             BaseWindow* pWin = nullptr;
             if ( rSbxItem.GetType() == TYPE_DIALOG )

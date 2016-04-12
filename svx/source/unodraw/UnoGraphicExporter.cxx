@@ -1216,16 +1216,14 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
 }
 
 // XMimeTypeInfo
-sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& rMimeTypeName ) throw (RuntimeException, std::exception)
 {
-    const OUString aMimeTypeName( MimeTypeName );
-
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = rFilter.GetExportFormatCount();
     sal_uInt16 nFilter;
     for( nFilter = 0; nFilter < nCount; nFilter++ )
     {
-        if( aMimeTypeName == rFilter.GetExportFormatMediaType( nFilter ) )
+        if( rMimeTypeName == rFilter.GetExportFormatMediaType( nFilter ) )
         {
             return sal_True;
         }

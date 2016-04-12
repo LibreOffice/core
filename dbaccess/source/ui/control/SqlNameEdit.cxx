@@ -38,18 +38,17 @@ namespace dbaui
         bool bCorrected = false;
         if ( m_bCheck )
         {
-            OUString sText = _sToCheck;
             sal_Int32 nMatch = 0;
-            for (sal_Int32 i = nMatch; i < sText.getLength(); ++i)
+            for (sal_Int32 i = nMatch; i < _sToCheck.getLength(); ++i)
             {
-                if ( !isCharOk( sText[i], i == 0, m_bOnlyUpperCase, m_sAllowedChars ) )
+                if ( !isCharOk( _sToCheck[i], i == 0, m_bOnlyUpperCase, m_sAllowedChars ) )
                 {
-                    _rsCorrected += sText.copy(nMatch, i - nMatch);
+                    _rsCorrected += _sToCheck.copy(nMatch, i - nMatch);
                     bCorrected = true;
                     nMatch = i + 1;
                 }
             }
-            _rsCorrected += sText.copy( nMatch, sText.getLength() - nMatch );
+            _rsCorrected += _sToCheck.copy( nMatch, _sToCheck.getLength() - nMatch );
         }
         return bCorrected;
     }

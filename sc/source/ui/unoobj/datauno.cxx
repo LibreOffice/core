@@ -683,29 +683,27 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
     ScSubTotalParam aParam;
     GetData(aParam);
 
-    OUString aString(aPropertyName);
-
     // some old property names are for 5.2 compatibility
 
-    if (aString == SC_UNONAME_CASE || aString == SC_UNONAME_ISCASE )
+    if (aPropertyName == SC_UNONAME_CASE || aPropertyName == SC_UNONAME_ISCASE )
         aParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_FORMATS || aString == SC_UNONAME_BINDFMT )
+    else if (aPropertyName == SC_UNONAME_FORMATS || aPropertyName == SC_UNONAME_BINDFMT )
         aParam.bIncludePattern = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_ENABSORT )
+    else if (aPropertyName == SC_UNONAME_ENABSORT )
         aParam.bDoSort = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_SORTASC )
+    else if (aPropertyName == SC_UNONAME_SORTASC )
         aParam.bAscending = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_INSBRK )
+    else if (aPropertyName == SC_UNONAME_INSBRK )
         aParam.bPagebreak = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_ULIST || aString == SC_UNONAME_ENUSLIST )
+    else if (aPropertyName == SC_UNONAME_ULIST || aPropertyName == SC_UNONAME_ENUSLIST )
         aParam.bUserDef = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_UINDEX || aString == SC_UNONAME_USINDEX )
+    else if (aPropertyName == SC_UNONAME_UINDEX || aPropertyName == SC_UNONAME_USINDEX )
     {
         sal_Int32 nVal = 0;
         if ( aValue >>= nVal )
             aParam.nUserIndex = (sal_uInt16)nVal;
     }
-    else if (aString == SC_UNONAME_MAXFLD )
+    else if (aPropertyName == SC_UNONAME_MAXFLD )
     {
         sal_Int32 nVal = 0;
         if ( (aValue >>= nVal) && nVal > sal::static_int_cast<sal_Int32>(MAXSUBTOTAL) )
@@ -725,26 +723,25 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const OUString& aP
     ScSubTotalParam aParam;
     GetData(aParam);
 
-    OUString aString(aPropertyName);
     uno::Any aRet;
 
     // some old property names are for 5.2 compatibility
 
-    if (aString == SC_UNONAME_CASE || aString == SC_UNONAME_ISCASE )
+    if (aPropertyName == SC_UNONAME_CASE || aPropertyName == SC_UNONAME_ISCASE )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bCaseSens );
-    else if (aString == SC_UNONAME_FORMATS || aString == SC_UNONAME_BINDFMT )
+    else if (aPropertyName == SC_UNONAME_FORMATS || aPropertyName == SC_UNONAME_BINDFMT )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bIncludePattern );
-    else if (aString == SC_UNONAME_ENABSORT )
+    else if (aPropertyName == SC_UNONAME_ENABSORT )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bDoSort );
-    else if (aString == SC_UNONAME_SORTASC )
+    else if (aPropertyName == SC_UNONAME_SORTASC )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bAscending );
-    else if (aString == SC_UNONAME_INSBRK )
+    else if (aPropertyName == SC_UNONAME_INSBRK )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bPagebreak );
-    else if (aString == SC_UNONAME_ULIST || aString == SC_UNONAME_ENUSLIST )
+    else if (aPropertyName == SC_UNONAME_ULIST || aPropertyName == SC_UNONAME_ENUSLIST )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bUserDef );
-    else if (aString == SC_UNONAME_UINDEX || aString == SC_UNONAME_USINDEX )
+    else if (aPropertyName == SC_UNONAME_UINDEX || aPropertyName == SC_UNONAME_USINDEX )
         aRet <<= (sal_Int32) aParam.nUserIndex;
-    else if (aString == SC_UNONAME_MAXFLD )
+    else if (aPropertyName == SC_UNONAME_MAXFLD )
         aRet <<= (sal_Int32) MAXSUBTOTAL;
 
     return aRet;
@@ -1438,25 +1435,24 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
     ScQueryParam aParam;
     GetData(aParam);
 
-    OUString aString(aPropertyName);
-    if (aString == SC_UNONAME_CONTHDR)
+    if (aPropertyName == SC_UNONAME_CONTHDR)
         aParam.bHasHeader = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_COPYOUT)
+    else if (aPropertyName == SC_UNONAME_COPYOUT)
         aParam.bInplace = !(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
-    else if (aString == SC_UNONAME_ISCASE)
+    else if (aPropertyName == SC_UNONAME_ISCASE)
         aParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_MAXFLD)
+    else if (aPropertyName == SC_UNONAME_MAXFLD)
     {
         // silently ignored
     }
-    else if (aString == SC_UNONAME_ORIENT)
+    else if (aPropertyName == SC_UNONAME_ORIENT)
     {
         //! test for correct enum type?
         table::TableOrientation eOrient = (table::TableOrientation)
                                 ScUnoHelpFunctions::GetEnumFromAny( aValue );
         aParam.bByRow = ( eOrient != table::TableOrientation_COLUMNS );
     }
-    else if (aString == SC_UNONAME_OUTPOS)
+    else if (aPropertyName == SC_UNONAME_OUTPOS)
     {
         table::CellAddress aAddress;
         if ( aValue >>= aAddress )
@@ -1466,11 +1462,11 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
             aParam.nDestRow = (SCROW)aAddress.Row;
         }
     }
-    else if (aString == SC_UNONAME_SAVEOUT)
+    else if (aPropertyName == SC_UNONAME_SAVEOUT)
         aParam.bDestPers = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString == SC_UNONAME_SKIPDUP)
+    else if (aPropertyName == SC_UNONAME_SKIPDUP)
         aParam.bDuplicate = !(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
-    else if (aString == SC_UNONAME_USEREGEX)
+    else if (aPropertyName == SC_UNONAME_USEREGEX)
         aParam.eSearchType = ScUnoHelpFunctions::GetBoolFromAny( aValue ) ? utl::SearchParam::SRCH_REGEXP :
             utl::SearchParam::SRCH_NORMAL;
 
@@ -1485,24 +1481,23 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPro
     ScQueryParam aParam;
     GetData(aParam);
 
-    OUString aString(aPropertyName);
     uno::Any aRet;
 
-    if (aString == SC_UNONAME_CONTHDR )
+    if (aPropertyName == SC_UNONAME_CONTHDR )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bHasHeader );
-    else if (aString == SC_UNONAME_COPYOUT )
+    else if (aPropertyName == SC_UNONAME_COPYOUT )
         ScUnoHelpFunctions::SetBoolInAny( aRet, !(aParam.bInplace) );
-    else if (aString == SC_UNONAME_ISCASE )
+    else if (aPropertyName == SC_UNONAME_ISCASE )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bCaseSens );
-    else if (aString == SC_UNONAME_MAXFLD )
+    else if (aPropertyName == SC_UNONAME_MAXFLD )
         aRet <<= (sal_Int32) aParam.GetEntryCount();
-    else if (aString == SC_UNONAME_ORIENT )
+    else if (aPropertyName == SC_UNONAME_ORIENT )
     {
         table::TableOrientation eOrient = aParam.bByRow ? table::TableOrientation_ROWS :
                                                           table::TableOrientation_COLUMNS;
         aRet <<= eOrient;
     }
-    else if (aString == SC_UNONAME_OUTPOS )
+    else if (aPropertyName == SC_UNONAME_OUTPOS )
     {
         table::CellAddress aOutPos;
         aOutPos.Sheet  = aParam.nDestTab;
@@ -1510,11 +1505,11 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPro
         aOutPos.Row    = aParam.nDestRow;
         aRet <<= aOutPos;
     }
-    else if (aString == SC_UNONAME_SAVEOUT )
+    else if (aPropertyName == SC_UNONAME_SAVEOUT )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bDestPers );
-    else if (aString == SC_UNONAME_SKIPDUP )
+    else if (aPropertyName == SC_UNONAME_SKIPDUP )
         ScUnoHelpFunctions::SetBoolInAny( aRet, !(aParam.bDuplicate) );
-    else if (aString == SC_UNONAME_USEREGEX )
+    else if (aPropertyName == SC_UNONAME_USEREGEX )
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.eSearchType == utl::SearchParam::SRCH_REGEXP );
 
     return aRet;
@@ -1699,10 +1694,9 @@ void SAL_CALL ScDatabaseRangeObj::setName( const OUString& aNewName )
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
-        OUString aNewStr(aNewName);
-        bool bOk = aFunc.RenameDBRange( aName, aNewStr );
+        bool bOk = aFunc.RenameDBRange( aName, aNewName );
         if (bOk)
-            aName = aNewStr;
+            aName = aNewName;
     }
 }
 
@@ -2008,14 +2002,13 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         ScDBData aNewData( *pData );
         bool bDo = true;
 
-        OUString aString(aPropertyName);
-        if ( aString == SC_UNONAME_KEEPFORM )
+        if ( aPropertyName == SC_UNONAME_KEEPFORM )
             aNewData.SetKeepFmt( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNONAME_MOVCELLS )
+        else if ( aPropertyName == SC_UNONAME_MOVCELLS )
             aNewData.SetDoSize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNONAME_STRIPDAT )
+        else if ( aPropertyName == SC_UNONAME_STRIPDAT )
             aNewData.SetStripData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if (aString == SC_UNONAME_AUTOFLT )
+        else if (aPropertyName == SC_UNONAME_AUTOFLT )
         {
             bool bAutoFilter(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
             aNewData.SetAutoFilter(bAutoFilter);
@@ -2034,7 +2027,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
             aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
             pDocShell->PostPaint(aPaintRange, PAINT_GRID);
         }
-        else if (aString == SC_UNONAME_USEFLTCRT )
+        else if (aPropertyName == SC_UNONAME_USEFLTCRT )
         {
             if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
             {
@@ -2046,7 +2039,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
             else
                 aNewData.SetAdvancedQuerySource(nullptr);
         }
-        else if (aString == SC_UNONAME_FLTCRT )
+        else if (aPropertyName == SC_UNONAME_FLTCRT )
         {
             table::CellRangeAddress aRange;
             if (aValue >>= aRange)
@@ -2057,11 +2050,11 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
                 aNewData.SetAdvancedQuerySource(&aCoreRange);
             }
         }
-        else if (aString == SC_UNONAME_FROMSELECT )
+        else if (aPropertyName == SC_UNONAME_FROMSELECT )
         {
             aNewData.SetImportSelection(::cppu::any2bool(aValue));
         }
-        else if (aString == SC_UNONAME_REFPERIOD )
+        else if (aPropertyName == SC_UNONAME_REFPERIOD )
         {
             sal_Int32 nRefresh = 0;
             if (aValue >>= nRefresh)
@@ -2075,12 +2068,12 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
                 }
             }
         }
-        else if (aString == SC_UNONAME_CONRES )
+        else if (aPropertyName == SC_UNONAME_CONRES )
         {
         }
-        else if ( aString == SC_UNONAME_TOTALSROW )
+        else if ( aPropertyName == SC_UNONAME_TOTALSROW )
             aNewData.SetTotals( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString == SC_UNONAME_CONTHDR )
+        else if ( aPropertyName == SC_UNONAME_CONTHDR )
             aNewData.SetHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else
             bDo = false;
@@ -2102,40 +2095,39 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
     ScDBData* pData = GetDBData_Impl();
     if ( pData )
     {
-        OUString aString(aPropertyName);
-        if ( aString == SC_UNONAME_KEEPFORM )
+        if ( aPropertyName == SC_UNONAME_KEEPFORM )
             ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsKeepFmt() );
-        else if ( aString == SC_UNONAME_MOVCELLS )
+        else if ( aPropertyName == SC_UNONAME_MOVCELLS )
             ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsDoSize() );
-        else if ( aString == SC_UNONAME_STRIPDAT )
+        else if ( aPropertyName == SC_UNONAME_STRIPDAT )
             ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsStripData() );
-        else if ( aString == SC_UNONAME_ISUSER )
+        else if ( aPropertyName == SC_UNONAME_ISUSER )
         {
             //  all database ranges except "unnamed" are user defined
             ScUnoHelpFunctions::SetBoolInAny(
                 aRet, pData->GetName() != STR_DB_LOCAL_NONAME);
         }
-        else if ( aString == SC_UNO_LINKDISPBIT )
+        else if ( aPropertyName == SC_UNO_LINKDISPBIT )
         {
             //  no target bitmaps for individual entries (would be all equal)
             // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_DBAREA );
         }
-        else if ( aString == SC_UNO_LINKDISPNAME )
+        else if ( aPropertyName == SC_UNO_LINKDISPNAME )
             aRet <<= OUString( aName );
-        else if (aString == SC_UNONAME_AUTOFLT )
+        else if (aPropertyName == SC_UNONAME_AUTOFLT )
         {
             bool bAutoFilter(GetDBData_Impl()->HasAutoFilter());
 
             ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoFilter );
         }
-        else if (aString == SC_UNONAME_USEFLTCRT )
+        else if (aPropertyName == SC_UNONAME_USEFLTCRT )
         {
             ScRange aRange;
             bool bIsAdvancedSource(GetDBData_Impl()->GetAdvancedQuerySource(aRange));
 
             ScUnoHelpFunctions::SetBoolInAny( aRet, bIsAdvancedSource );
         }
-        else if (aString == SC_UNONAME_FLTCRT )
+        else if (aPropertyName == SC_UNONAME_FLTCRT )
         {
             table::CellRangeAddress aRange;
             ScRange aCoreRange;
@@ -2144,30 +2136,30 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
 
             aRet <<= aRange;
         }
-        else if (aString == SC_UNONAME_FROMSELECT )
+        else if (aPropertyName == SC_UNONAME_FROMSELECT )
         {
             ScUnoHelpFunctions::SetBoolInAny( aRet, GetDBData_Impl()->HasImportSelection() );
         }
-        else if (aString == SC_UNONAME_REFPERIOD )
+        else if (aPropertyName == SC_UNONAME_REFPERIOD )
         {
             sal_Int32 nRefresh(GetDBData_Impl()->GetRefreshDelay());
             aRet <<= nRefresh;
         }
-        else if (aString == SC_UNONAME_CONRES )
+        else if (aPropertyName == SC_UNONAME_CONRES )
         {
         }
-        else if (aString == SC_UNONAME_TOKENINDEX )
+        else if (aPropertyName == SC_UNONAME_TOKENINDEX )
         {
             // get index for use in formula tokens (read-only)
             aRet <<= static_cast<sal_Int32>(GetDBData_Impl()->GetIndex());
         }
-        else if (aString == SC_UNONAME_TOTALSROW )
+        else if (aPropertyName == SC_UNONAME_TOTALSROW )
         {
             bool bTotals(GetDBData_Impl()->HasTotals());
 
             ScUnoHelpFunctions::SetBoolInAny( aRet, bTotals );
         }
-        else if (aString == SC_UNONAME_CONTHDR )
+        else if (aPropertyName == SC_UNONAME_CONTHDR )
         {
             bool bHeader(GetDBData_Impl()->HasHeader());
 
@@ -2250,8 +2242,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const OUString& aN
 {
     if ( pDocShell && hasByName(aName) )
     {
-        OUString aString(aName);
-        return new ScDatabaseRangeObj( pDocShell, aString );
+        return new ScDatabaseRangeObj( pDocShell, aName );
     }
     return nullptr;
 }
@@ -2266,10 +2257,9 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
     {
         ScDBDocFunc aFunc(*pDocShell);
 
-        OUString aString(aName);
         ScRange aNameRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
                             (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
-        bDone = aFunc.AddDBRange( aString, aNameRange, true );
+        bDone = aFunc.AddDBRange( aName, aNameRange, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2283,8 +2273,7 @@ void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
-        OUString aString(aName);
-        bDone = aFunc.DeleteDBRange( aString );
+        bDone = aFunc.DeleteDBRange( aName );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified

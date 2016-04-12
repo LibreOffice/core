@@ -646,7 +646,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // No ucb or thread will be necessary then. In case it couldnt be
                 // converted its not an URL nor a system path. Then we can't accept
                 // this parameter and have to throw an exception.
-                OUString sSystemPath(sTemp);
+                const OUString& sSystemPath(sTemp);
                 OUString sFileURL;
                 if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
                     throw css::lang::IllegalArgumentException();

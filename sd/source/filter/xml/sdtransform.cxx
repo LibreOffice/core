@@ -283,7 +283,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt1
         {
             if( ( rAttr.GetAttrLName( nItem ) == msEnableNumbering ) && ( rAttr.GetAttrNamespace( nItem ) == msTextNamespace ) )
             {
-                const OUString sValue( rAttr.GetAttrValue( nItem ) );
+                const OUString& sValue( rAttr.GetAttrValue( nItem ) );
                 rState = sValue.equals(msTrue);
                 return true;
             }

@@ -1190,7 +1190,6 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
                 }
 
                 // look for the object
-                OUString sCommand = _rCommand;
                 sal_Int32 nIndex = 0;
                 do
                 {
@@ -1198,7 +1197,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
                     switch (_nCommandType)
                     {
                     case CommandType::TABLE:
-                        sPath = sCommand;
+                        sPath = _rCommand;
                         nIndex = -1;
                         break;
 
@@ -1206,7 +1205,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
                         assert(false);
                         // in non-debug builds, fall through.
                     case CommandType::QUERY:
-                        sPath = sCommand.getToken( 0, '/', nIndex );
+                        sPath = _rCommand.getToken( 0, '/', nIndex );
                         break;
                     }
                     pObject = m_pTreeView->getListBox().GetEntryPosByName(sPath, pCommandType);
@@ -1218,7 +1217,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
                             DBTreeListUserData* pParentData = static_cast< DBTreeListUserData* >( pObject->GetUserData() );
                             Reference< XNameAccess > xCollection( pParentData->xContainer, UNO_QUERY );
                             sal_Int32 nIndex2 = nIndex;
-                            sPath = sCommand.getToken( 0, '/', nIndex2 );
+                            sPath = _rCommand.getToken( 0, '/', nIndex2 );
                             try
                             {
                                 if ( xCollection->hasByName(sPath) )
