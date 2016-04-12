@@ -112,6 +112,7 @@ public:
     void testBnc822341();
 #endif
     void testTdf80224();
+    void testTdf99224();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testFdo90607);
@@ -148,6 +149,7 @@ public:
     CPPUNIT_TEST(testBnc822341);
 #endif
     CPPUNIT_TEST(testTdf80224);
+    CPPUNIT_TEST(testTdf99224);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1236,6 +1238,16 @@ void SdExportTest::testTdf80224()
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6644396), nCharColor);
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf99224()
+{
+    sd::DrawDocShellRef xShell = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/tdf99224.odp"), ODP);
+    xShell = saveAndReload(xShell, PPTX);
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    // This was 0: the image with text was lost on export.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
+    xShell->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
