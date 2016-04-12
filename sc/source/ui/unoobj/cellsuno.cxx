@@ -4436,13 +4436,12 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
         {
             //  if explicit name is given and already existing, throw exception
 
-            OUString aNamStr(aName);
-            if ( !aNamStr.isEmpty() )
+            if ( !aName.isEmpty() )
             {
                 size_t nNamedCount = m_pImpl->m_aNamedEntries.size();
                 for (size_t n = 0; n < nNamedCount; n++)
                 {
-                    if (m_pImpl->m_aNamedEntries[n].GetName() == aNamStr)
+                    if (m_pImpl->m_aNamedEntries[n].GetName() == aName)
                         throw container::ElementExistException();
                 }
             }
@@ -4460,7 +4459,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
                 //  if a name is given, also insert into list of named entries
                 //  (only possible for a single range)
                 //  name is not in m_pImpl->m_aNamedEntries (tested above)
-                m_pImpl->m_aNamedEntries.push_back(ScNamedEntry( aNamStr, *rAddRanges[ 0 ] ));
+                m_pImpl->m_aNamedEntries.push_back(ScNamedEntry( aName, *rAddRanges[ 0 ] ));
             }
         }
     }
@@ -4552,11 +4551,10 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    OUString aNameStr(aName);
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     size_t nIndex = 0;
-    if ( lcl_FindRangeByName( rRanges, pDocSh, aNameStr, nIndex ) )
+    if ( lcl_FindRangeByName( rRanges, pDocSh, aName, nIndex ) )
     {
         //  einzelnen Range weglassen
         ScRangeList aNew;
@@ -4570,13 +4568,13 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
     {
         //  deselect any ranges (parsed or named entry)
         ScRangeList aDiff;
-        bool bValid = ( aDiff.Parse( aNameStr, &pDocSh->GetDocument() ) & ScRefFlags::VALID )
+        bool bValid = ( aDiff.Parse( aName, &pDocSh->GetDocument() ) & ScRefFlags::VALID )
                                                                        == ScRefFlags::VALID;
         if (!bValid && !m_pImpl->m_aNamedEntries.empty())
         {
             sal_uInt16 nCount = m_pImpl->m_aNamedEntries.size();
             for (sal_uInt16 n=0; n<nCount && !bValid; n++)
-                if (m_pImpl->m_aNamedEntries[n].GetName() == aNameStr)
+                if (m_pImpl->m_aNamedEntries[n].GetName() == aName)
                 {
                     aDiff.RemoveAll();
                     aDiff.Append(m_pImpl->m_aNamedEntries[n].GetRange());
@@ -4604,7 +4602,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
     }
 
     if (!m_pImpl->m_aNamedEntries.empty())
-        lcl_RemoveNamedEntry(m_pImpl->m_aNamedEntries, aNameStr);
+        lcl_RemoveNamedEntry(m_pImpl->m_aNamedEntries, aName);
 
     if (!bDone)
         throw container::NoSuchElementException();      // not found
@@ -4631,12 +4629,11 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    OUString aNameStr(aName);
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     ScRange aRange;
     if (lcl_FindRangeOrEntry(m_pImpl->m_aNamedEntries, rRanges,
-                pDocSh, aNameStr, aRange))
+                pDocSh, aName, aRange))
     {
         uno::Reference<table::XCellRange> xRange;
         if ( aRange.aStart == aRange.aEnd )
@@ -4698,12 +4695,11 @@ sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aNameStr(aName);
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     ScRange aRange;
     return lcl_FindRangeOrEntry(m_pImpl->m_aNamedEntries, rRanges, pDocSh,
-                aNameStr, aRange);
+                aName, aRange);
 }
 
 // XEnumerationAccess
@@ -4971,8 +4967,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
 
         ScRange aCellRange;
         bool bFound = false;
-        OUString aString(aName);
-        ScRefFlags nParse = aCellRange.ParseAny( aString, &rDoc, rDetails );
+        ScRefFlags nParse = aCellRange.ParseAny( aName, &rDoc, rDetails );
         if ( nParse & ScRefFlags::VALID )
         {
             if ( !(nParse & ScRefFlags::TAB_3D) )   // keine Tabelle angegeben -> auf dieser Tabelle
@@ -4985,8 +4980,8 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         else
         {
             ScRangeUtil aRangeUtil;
-            if ( ScRangeUtil::MakeRangeFromName( aString, &rDoc, nTab, aCellRange ) ||
-                 ScRangeUtil::MakeRangeFromName( aString, &rDoc, nTab, aCellRange, RUTL_DBASE ) )
+            if ( ScRangeUtil::MakeRangeFromName( aName, &rDoc, nTab, aCellRange ) ||
+                 ScRangeUtil::MakeRangeFromName( aName, &rDoc, nTab, aCellRange, RUTL_DBASE ) )
                 bFound = true;
         }
 
@@ -6217,20 +6212,19 @@ void ScCellObj::InputEnglishString( const OUString& rText )
     if (!pDocSh)
         return;
 
-    OUString aString(rText);
     ScDocument& rDoc = pDocSh->GetDocument();
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     sal_uInt32 nOldFormat = rDoc.GetNumberFormat( aCellPos );
     if (pFormatter->GetType(nOldFormat) == css::util::NumberFormat::TEXT)
     {
-        SetString_Impl(aString, false, false);      // text cell
+        SetString_Impl(rText, false, false);      // text cell
         return;
     }
 
     ScDocFunc &rFunc = pDocSh->GetDocFunc();
 
     ScInputStringType aRes =
-        ScStringUtil::parseInputString(*pFormatter, aString, LANGUAGE_ENGLISH_US);
+        ScStringUtil::parseInputString(*pFormatter, rText, LANGUAGE_ENGLISH_US);
 
     if (aRes.meType != ScInputStringType::Unknown)
     {
@@ -6262,7 +6256,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
             rFunc.SetStringOrEditCell(aCellPos, aRes.maText, false);
         break;
         default:
-            SetString_Impl(aString, false, false); // probably empty string
+            SetString_Impl(rText, false, false); // probably empty string
     }
 }
 
@@ -6307,12 +6301,11 @@ OUString SAL_CALL ScCellObj::getString() throw(uno::RuntimeException, std::excep
 void SAL_CALL ScCellObj::setString( const OUString& aText ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString(aText);
-    SetString_Impl(aString, false, false);  // immer Text
+    SetString_Impl(aText, false, false);  // immer Text
 
     // don't create pUnoText here if not there
     if (mxUnoText.is())
-        mxUnoText->SetSelection(ESelection( 0,0, 0,aString.getLength() ));
+        mxUnoText->SetSelection(ESelection( 0,0, 0,aText.getLength() ));
 }
 
 void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& xRange,
@@ -6453,8 +6446,7 @@ OUString SAL_CALL ScCellObj::getFormula() throw(uno::RuntimeException, std::exce
 void SAL_CALL ScCellObj::setFormula( const OUString& aFormula ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString(aFormula);
-    SetString_Impl(aString, true, true); // Interpret as English
+    SetString_Impl(aFormula, true, true); // Interpret as English
 }
 
 double SAL_CALL ScCellObj::getValue() throw(uno::RuntimeException, std::exception)
@@ -7157,8 +7149,7 @@ void SAL_CALL ScTableSheetObj::setName( const OUString& aNewName )
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        OUString aString(aNewName);
-        pDocSh->GetDocFunc().RenameTable( GetTab_Impl(), aString, true, true );
+        pDocSh->GetDocFunc().RenameTable( GetTab_Impl(), aNewName, true, true );
     }
 }
 
@@ -7639,7 +7630,6 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
         OUString aFileString = aUrl;
         OUString aFilterString = aFilterName;
         OUString aOptString = aFilterOptions;
-        OUString aSheetString = aSheetName;
 
         aFileString = ScGlobal::GetAbsDocName( aFileString, pDocSh );
         if (aFilterString.isEmpty())
@@ -7656,7 +7646,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
             nLinkMode = ScLinkMode::VALUE;
 
         sal_uLong nRefresh = 0;
-        rDoc.SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetString, nRefresh );
+        rDoc.SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetName, nRefresh );
 
         pDocSh->UpdateLinks();                  // ggf. Link eintragen oder loeschen
         SfxBindings* pBindings = pDocSh->GetViewBindings();
@@ -7899,8 +7889,7 @@ void SAL_CALL ScTableSheetObj::protect( const OUString& aPassword )
     // #i108245# if already protected, don't change anything
     if ( pDocSh && !pDocSh->GetDocument().IsTabProtected( GetTab_Impl() ) )
     {
-        OUString aString(aPassword);
-        pDocSh->GetDocFunc().Protect( GetTab_Impl(), aString, true );
+        pDocSh->GetDocFunc().Protect( GetTab_Impl(), aPassword, true );
     }
 }
 
@@ -7911,8 +7900,7 @@ void SAL_CALL ScTableSheetObj::unprotect( const OUString& aPassword )
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        OUString aString(aPassword);
-        bool bDone = pDocSh->GetDocFunc().Unprotect( GetTab_Impl(), aString, true );
+        bool bDone = pDocSh->GetDocFunc().Unprotect( GetTab_Impl(), aPassword, true );
         if (!bDone)
             throw lang::IllegalArgumentException();
     }

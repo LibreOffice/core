@@ -491,8 +491,7 @@ void TransferDataContainer::CopyString( SotClipboardFormatId nFmt, const OUStrin
     {
         TDataCntnrEntry_Impl aEntry;
         aEntry.nId = nFmt;
-        OUString aStr( rStr );
-        aEntry.aAny <<= aStr;
+        aEntry.aAny <<= rStr;
         pImpl->aFmtList.push_back( aEntry );
          AddFormat( aEntry.nId );
     }

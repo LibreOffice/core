@@ -371,9 +371,7 @@ namespace
 
         if(!rRegion.IsEmpty())
         {
-            vcl::Region aRegion(rRegion);
-
-            aRetval = aRegion.GetAsB2DPolyPolygon();
+            aRetval = rRegion.GetAsB2DPolyPolygon();
         }
 
         return aRetval;

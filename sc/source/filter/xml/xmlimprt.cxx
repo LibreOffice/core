@@ -2480,8 +2480,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
                     OUString sOUName;
                     if (rChangeProps[i].Value >>= sOUName)
                     {
-                        OUString sAuthorName(sOUName);
-                        pViewSettings->SetTheAuthorToShow(sAuthorName);
+                        pViewSettings->SetTheAuthorToShow(sOUName);
                     }
                 }
                 else if (sName == "ShowChangesByComment")
@@ -2491,8 +2490,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
                     OUString sOUComment;
                     if (rChangeProps[i].Value >>= sOUComment)
                     {
-                        OUString sComment(sOUComment);
-                        pViewSettings->SetTheComment(sComment);
+                        pViewSettings->SetTheComment(sOUComment);
                     }
                 }
                 else if (sName == "ShowChangesByRanges")
@@ -3198,10 +3196,9 @@ void SAL_CALL ScXMLImport::endDocument()
                             OUString sName(aSeq[i].Name);
                             if (sName == SC_ACTIVETABLE)
                             {
-                                OUString sValue;
-                                if(aSeq[i].Value >>= sValue)
+                                OUString sTabName;
+                                if(aSeq[i].Value >>= sTabName)
                                 {
-                                    OUString sTabName(sValue);
                                     SCTAB nTab(0);
                                     if (pDoc->GetTable(sTabName, nTab))
                                     {

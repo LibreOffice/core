@@ -593,7 +593,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 uno::Reference< lang::XComponent > xDoc( GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
                                 // Expand the string:
                                 const ModelToViewHelper aConversionMap(*pNd->GetTextNode());
-                                OUString aExpandText = aConversionMap.getViewText();
+                                const OUString& aExpandText = aConversionMap.getViewText();
 
                                 // get XFlatParagraph to use...
                                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNd->GetTextNode(), aExpandText, aConversionMap );

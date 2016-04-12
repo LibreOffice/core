@@ -162,7 +162,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
 {
     bool bAdded = false;
 
-    const OUString aSymbolName( rSymbol.GetName() );
+    const OUString& aSymbolName( rSymbol.GetName() );
     if (aSymbolName.getLength() > 0 && rSymbol.GetSymbolSetName().getLength() > 0)
     {
         const SmSym *pFound = GetSymbolByName( aSymbolName );

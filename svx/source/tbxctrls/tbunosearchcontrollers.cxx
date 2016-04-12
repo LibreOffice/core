@@ -465,11 +465,10 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< c
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
-css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception )
+css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& xParent ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
-    css::uno::Reference< css::awt::XWindow > xParent( Parent );
     vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
@@ -684,11 +683,10 @@ void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< 
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
-css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception )
+css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& xParent ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
-    css::uno::Reference< css::awt::XWindow > xParent( Parent );
     vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
@@ -777,11 +775,10 @@ void SAL_CALL SearchFormattedToolboxController::initialize( const css::uno::Sequ
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
-css::uno::Reference< css::awt::XWindow > SAL_CALL SearchFormattedToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception )
+css::uno::Reference< css::awt::XWindow > SAL_CALL SearchFormattedToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& xParent ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
-    css::uno::Reference< css::awt::XWindow > xParent( Parent );
     vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {

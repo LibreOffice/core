@@ -345,8 +345,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
         xBlkRoot->Commit ( );
     }
     */
-    OUString aFolderName( rPackageName );
-    OUString aStreamName = aFolderName + ".xml";
+    OUString aStreamName = rPackageName + ".xml";
 
     uno::Reference< uno::XComponentContext > xContext =
         comphelper::getProcessComponentContext();
@@ -356,7 +355,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
 
     try
     {
-    xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::WRITE );
+    xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::WRITE );
     uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( aStreamName,
                 embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 

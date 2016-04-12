@@ -501,7 +501,7 @@ namespace pcr
             // the binding for the dialog to work with
             Reference< XPropertySet > xBinding( m_pHelper->getCurrentBinding() );
             // the aspect of the binding which the dialog should modify
-            OUString sFacetName( _rPropertyName );
+            const OUString& sFacetName( _rPropertyName );
 
             OSL_ENSURE( xModel.is() && xBinding.is() && !sFacetName.isEmpty(),
                 "EFormsPropertyHandler::onInteractivePropertySelection: something is missing for the dialog initialization!" );

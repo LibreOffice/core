@@ -612,7 +612,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     }
 
     bool bUseChkStr = !sChkStr.isEmpty();
-    const OUString aName( rType.GetTypeName() );
+    const OUString& aName( rType.GetTypeName() );
     const sal_Int32 nNmLen = aName.getLength();
 
     SwSectionFormats::size_type nNum = 0;

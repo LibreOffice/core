@@ -105,12 +105,11 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     aPath.SetSmartURL( sGraphicsPath );
 
     // fish out the graphic's name
-    OUString aName = rGraphicName;
 
     aDialogHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
     aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
     INetURLObject aURL;
-    aURL.SetSmartURL( aName );
+    aURL.SetSmartURL( rGraphicName );
     aDialogHelper.SetFileName( aURL.GetName() );
 
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();

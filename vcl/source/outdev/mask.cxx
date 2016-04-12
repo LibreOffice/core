@@ -106,7 +106,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 {
     assert(!is_double_buffered_window());
 
-    std::shared_ptr<ImpBitmap> xImpBmp = rMask.ImplGetImpBitmap();
+    const std::shared_ptr<ImpBitmap>& xImpBmp = rMask.ImplGetImpBitmap();
     if (xImpBmp)
     {
         SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),

@@ -161,7 +161,7 @@ double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject)
         {
             // get ViewInformation3D from scene using VC
             const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
-            const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
+            const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
 
             // the scene's object transformation is already part of aViewInfo3D.getObjectTransformation()
             // for historical reasons (see ViewContactOfE3dScene::createViewInformation3D for more info)

@@ -197,7 +197,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
             bSavePersData = bRestPersData = true;
 
         OUString sNumRule;
-        SwNodeIndex aInsPos( rInsPos );
         for( sal_uLong n = 0; n < nSz; n++ )
         {
             SwNode* pNd = &rDelPos.GetNode();
@@ -241,7 +240,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
             RemoveNode( rDelPos.GetIndex(), 1, false ); // move indices
             SwContentNode * pCNd = pNd->GetContentNode();
-            rNds.InsertNode( pNd, aInsPos );
+            rNds.InsertNode( pNd, rInsPos );
 
             if( pCNd )
             {

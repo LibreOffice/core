@@ -1756,8 +1756,7 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
     {
         ModuleRes aModuleRes(STR_QRY_NOSELECT);
         OUString sTmpStr(aModuleRes);
-        OUString sError(sTmpStr);
-        showError(SQLException(sError,nullptr,"S1000",1000,Any()));
+        showError(SQLException(sTmpStr,nullptr,"S1000",1000,Any()));
     }
     else
         sTranslatedStmt = m_sStatement;

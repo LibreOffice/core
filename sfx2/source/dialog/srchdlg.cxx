@@ -84,10 +84,9 @@ void SearchDialog::LoadConfig()
     {
         m_sWinState = OUStringToOString(aViewOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US);
         Any aUserItem = aViewOpt.GetUserItem( "UserItem" );
-        OUString aTemp;
-        if ( aUserItem >>= aTemp )
+        OUString sUserData;
+        if ( aUserItem >>= sUserData )
         {
-            OUString sUserData( aTemp );
             DBG_ASSERT( comphelper::string::getTokenCount(sUserData, ';') == 5, "invalid config data" );
             sal_Int32 nIdx = 0;
             OUString sSearchText = sUserData.getToken( 0, ';', nIdx );

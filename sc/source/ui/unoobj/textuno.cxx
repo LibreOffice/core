@@ -363,11 +363,10 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
 void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aString(aText);
 
     // for pure text, no font info is needed in pool defaults
     ScHeaderEditEngine aEditEngine(EditEngine::CreatePool());
-    aEditEngine.SetText( aString );
+    aEditEngine.SetText( aText );
     aTextData.UpdateData(aEditEngine);
 }
 

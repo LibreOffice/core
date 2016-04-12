@@ -945,7 +945,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     if( GetWhich( rSet, SID_CHAR_DLG_PREVIEW_STRING, nWhich ) )
     {
         const SfxStringItem& rItem = static_cast<const SfxStringItem&>( rSet.Get( nWhich ) );
-        OUString aString = rItem.GetValue();
+        const OUString& aString = rItem.GetValue();
         if( !aString.isEmpty() )
             SetPreviewText( aString );
         else
@@ -1180,7 +1180,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     if (ISITEMSET)
     {
         const SfxStringItem& rItem = static_cast<const SfxStringItem&>( rSet.Get( nWhich ) );
-        OUString aString = rItem.GetValue();
+        const OUString& aString = rItem.GetValue();
         if( !aString.isEmpty() )
             SetPreviewText( aString );
         else

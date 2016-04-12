@@ -1550,10 +1550,10 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         // construct event helper and register StarBasic handler and standard
         // event tables
         mpEventImportHelper = new XMLEventImportHelper();
-        OUString sStarBasic(GetXMLToken(XML_STARBASIC));
+        const OUString& sStarBasic(GetXMLToken(XML_STARBASIC));
         mpEventImportHelper->RegisterFactory(sStarBasic,
                                             new XMLStarBasicContextFactory());
-        OUString sScript(GetXMLToken(XML_SCRIPT));
+        const OUString& sScript(GetXMLToken(XML_SCRIPT));
         mpEventImportHelper->RegisterFactory(sScript,
                                             new XMLScriptContextFactory());
         mpEventImportHelper->AddTranslationTable(aStandardEventTable);

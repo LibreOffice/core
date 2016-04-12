@@ -1460,7 +1460,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
     OString aLineBuf("[InternetShortcut]\r\n");
     sal_uInt64 nWritten = 0;
 
-    OUString aURL( rURL );
+    const OUString& aURL( rURL );
 #ifdef _WIN32
     rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
     if ( rc != osl::FileBase::E_None ) return false;

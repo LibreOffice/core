@@ -289,7 +289,7 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TextPropMap::PARA, true ));
     m_xParaPropMapper = new OSpecialHandleXMLExportPropertyMapper( xPropMapper);
 
-    OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
+    const OUString& sFamily( GetXMLToken(XML_PARAGRAPH) );
     OUString aPrefix( 'P');
     GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               m_xParaPropMapper, aPrefix );

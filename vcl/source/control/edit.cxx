@@ -402,7 +402,7 @@ void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
+    const vcl::Font& aFont = rStyleSettings.GetFieldFont();
     ApplyControlFont(rRenderContext, aFont);
 
     ImplClearLayoutData();

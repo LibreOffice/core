@@ -1557,25 +1557,22 @@ void SdrObjCustomShape::Resize( const Point& rRef, const Fraction& xFact, const 
 
 void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, const Fraction& ryFact )
 {
-    Fraction xFact( rxFact );
-    Fraction yFact( ryFact );
-
     // taking care of handles that should not been changed
     Rectangle aOld( maRect );
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
-    SdrTextObj::NbcResize( rRef, xFact, yFact );
+    SdrTextObj::NbcResize( rRef, rxFact, ryFact );
 
-    if ( ( xFact.GetNumerator() != xFact.GetDenominator() )
-        || ( yFact.GetNumerator()!= yFact.GetDenominator() ) )
+    if ( ( rxFact.GetNumerator() != rxFact.GetDenominator() )
+        || ( ryFact.GetNumerator()!= ryFact.GetDenominator() ) )
     {
-        if ( ( ( xFact.GetNumerator() < 0 ) && ( xFact.GetDenominator() > 0 ) ) ||
-            ( ( xFact.GetNumerator() > 0 ) && ( xFact.GetDenominator() < 0 ) ) )
+        if ( ( ( rxFact.GetNumerator() < 0 ) && ( rxFact.GetDenominator() > 0 ) ) ||
+            ( ( rxFact.GetNumerator() > 0 ) && ( rxFact.GetDenominator() < 0 ) ) )
         {
             SetMirroredX( !IsMirroredX() );
         }
-        if ( ( ( yFact.GetNumerator() < 0 ) && ( yFact.GetDenominator() > 0 ) ) ||
-            ( ( yFact.GetNumerator() > 0 ) && ( yFact.GetDenominator() < 0 ) ) )
+        if ( ( ( ryFact.GetNumerator() < 0 ) && ( ryFact.GetDenominator() > 0 ) ) ||
+            ( ( ryFact.GetNumerator() > 0 ) && ( ryFact.GetDenominator() < 0 ) ) )
         {
             SetMirroredY( !IsMirroredY() );
         }

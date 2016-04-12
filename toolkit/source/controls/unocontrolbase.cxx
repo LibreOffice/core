@@ -34,7 +34,7 @@ using namespace com::sun::star;
 
 bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 {
-    OUString aPropName( GetPropertyName( nPropId ) );
+    const OUString& aPropName( GetPropertyName( nPropId ) );
     return ImplHasProperty( aPropName );
 }
 

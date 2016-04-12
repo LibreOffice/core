@@ -815,22 +815,21 @@ bool SlideSorterView::SetState (
     const PageDescriptor::State eState,
     const bool bStateValue)
 {
-    model::SharedPageDescriptor pDescriptor (rpDescriptor);
-    if ( ! pDescriptor)
+    if ( ! rpDescriptor)
         return false;
 
-    const bool bModified (pDescriptor->SetState(eState, bStateValue));
+    const bool bModified (rpDescriptor->SetState(eState, bStateValue));
     if ( ! bModified)
         return false;
 
     // When the page object is not visible (i.e. not on the screen then
     // nothing has to be painted.
-    if (pDescriptor->HasState(PageDescriptor::ST_Visible))
+    if (rpDescriptor->HasState(PageDescriptor::ST_Visible))
     {
         // For most states a change of that state leads to visible
         // difference and we have to request a repaint.
         if (eState != PageDescriptor::ST_WasSelected)
-            RequestRepaint(pDescriptor);
+            RequestRepaint(rpDescriptor);
     }
 
     return bModified;

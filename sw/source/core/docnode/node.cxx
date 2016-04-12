@@ -1592,8 +1592,7 @@ bool SwContentNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
     sal_uInt16 nDel = 0;
     if( IsModifyLocked() )
     {
-        std::vector<sal_uInt16> aClearWhichIds(rWhichArr);
-        nDel = ClearItemsFromAttrSet( aClearWhichIds );
+        nDel = ClearItemsFromAttrSet( rWhichArr );
     }
     else
     {

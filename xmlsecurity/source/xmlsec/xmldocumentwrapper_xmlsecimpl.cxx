@@ -748,20 +748,19 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::getTree( const cssu::Reference< css
         m_pCurrentElement = m_pRootElement;
 
         m_nCurrentPosition = NODEPOSITION_STARTELEMENT;
-        cssu::Reference< cssxs::XDocumentHandler > xHandler = handler;
 
         while(true)
         {
             switch (m_nCurrentPosition)
             {
             case NODEPOSITION_STARTELEMENT:
-                sendStartElement(nullptr, xHandler, m_pCurrentElement);
+                sendStartElement(nullptr, handler, m_pCurrentElement);
                 break;
             case NODEPOSITION_ENDELEMENT:
-                sendEndElement(nullptr, xHandler, m_pCurrentElement);
+                sendEndElement(nullptr, handler, m_pCurrentElement);
                 break;
             case NODEPOSITION_NORMAL:
-                sendNode(nullptr, xHandler, m_pCurrentElement);
+                sendNode(nullptr, handler, m_pCurrentElement);
                 break;
             }
 

@@ -236,7 +236,7 @@ void XclImpStringHelper::SetToDocument(
     }
     else
     {
-        OUString aStr = rString.GetText();
+        const OUString& aStr = rString.GetText();
         if (aStr.indexOf('\n') != -1 || aStr.indexOf(CHAR_CR) != -1)
         {
             // Multiline content.

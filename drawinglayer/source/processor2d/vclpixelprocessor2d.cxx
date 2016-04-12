@@ -866,7 +866,7 @@ namespace drawinglayer
                     // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
                     // use the faster OutputDevice::DrawTransparent method
                     const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DContainer rContent = rUniTransparenceCandidate.getChildren();
+                    const primitive2d::Primitive2DContainer& rContent = rUniTransparenceCandidate.getChildren();
 
                     if(!rContent.empty())
                     {

@@ -1725,8 +1725,7 @@ void VCLXListBox::selectItem( const OUString& rItemText, sal_Bool bSelect ) thro
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
-        OUString aItemText( rItemText );
-        selectItemPos( pBox->GetEntryPos( aItemText ), bSelect );
+        selectItemPos( pBox->GetEntryPos( rItemText ), bSelect );
     }
 }
 

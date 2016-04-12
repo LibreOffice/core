@@ -532,12 +532,10 @@ void Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
 
         if( pThm )
         {
-            const OUString aOldName( rOldName );
-
             pThemeEntry->SetName( rNewName );
             pThm->ImplWrite();
 
-            Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, aOldName, pThm->GetName() ) );
+            Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, rOldName, pThm->GetName() ) );
             ReleaseTheme( pThm, aListener );
         }
     }

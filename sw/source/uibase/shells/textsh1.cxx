@@ -1797,7 +1797,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
                      uno::Reference <frame::XController> xController = GetView().GetController();
                      const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetAppLanguageTag() ) );
-                     const OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
+                     const OUString& aApplicationName( rSmartTagMgr.GetApplicationName() );
                      const OUString aRangeText = xRange->getString();
 
                      const SvxSmartTagItem aItem( nWhich,

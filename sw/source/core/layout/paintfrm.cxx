@@ -4295,10 +4295,7 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
 
             // OD 06.08.2002 #99657# - paint border before painting background
             // paint border
-            {
-                SwRect aTmp( rRect );
-                PaintBorder( aTmp, pPage, rAttrs );
-            }
+            PaintBorder( rRect, pPage, rAttrs );
 
             rRenderContext.Pop();
         }
@@ -6720,8 +6717,7 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 {
     if ( IS_SUBS || isTableBoundariesEnabled() || IS_SUBS_SECTION || IS_SUBS_FLYS )
     {
-        SwRect aRect( rRect );
-        if ( aRect.HasArea() )
+        if ( rRect.HasArea() )
         {
             //During paint using the root, the array is controlled from there.
             //Otherwise we'll handle it for our self.
@@ -6734,7 +6730,7 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
                 bDelSubs = true;
             }
 
-            RefreshLaySubsidiary( this, aRect );
+            RefreshLaySubsidiary( this, rRect );
 
             if ( bDelSubs )
             {
@@ -7411,15 +7407,14 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
 
         for ( size_t i = 0; i < aRegion.size(); ++i )
         {
-            SwRect &rRetouche = aRegion[i];
+            const SwRect &rRetouche = aRegion[i];
 
             GetUpper()->PaintBaBo( rRetouche, pPage );
 
             //Hell and Heaven need to be refreshed too.
             //To avoid recursion my retouch flag needs to be reset first!
             ResetRetouche();
-            SwRect aRetouchePart( rRetouche );
-            if ( aRetouchePart.HasArea() )
+            if ( rRetouche.HasArea() )
             {
                 const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
                 const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
@@ -7428,11 +7423,11 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
                 // <--
 
                 pSh->Imp()->PaintLayer( rIDDMA.GetHellId(), nullptr,
-                                        aRetouchePart, &aPageBackgrdColor,
+                                        rRetouche, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
                 pSh->Imp()->PaintLayer( rIDDMA.GetHeavenId(), nullptr,
-                                        aRetouchePart, &aPageBackgrdColor,
+                                        rRetouche, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
             }
@@ -7441,7 +7436,7 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
 
             //Because we leave all paint areas, we need to refresh the
             //subsidiary lines.
-            pPage->RefreshSubsidiary( aRetouchePart );
+            pPage->RefreshSubsidiary( rRetouche );
         }
     }
     if ( SwViewShell::IsLstEndAction() )
