@@ -138,7 +138,7 @@ bool ParseURL(
 
     if ( xUrl.is() )
     {
-        OUString aLanguageKey = GetXMLToken( XML_LANGUAGE );
+        const OUString& aLanguageKey = GetXMLToken( XML_LANGUAGE );
         if ( xUrl.is() && xUrl->hasParameter( aLanguageKey ) )
         {
             OUString aLanguage = xUrl->getParameter( aLanguageKey );
@@ -150,7 +150,7 @@ bool ParseURL(
                 OUString tmp =
                     xUrl->getParameter( GetXMLToken( XML_LOCATION ) );
 
-                OUString doc = GetXMLToken( XML_DOCUMENT );
+                const OUString& doc = GetXMLToken( XML_DOCUMENT );
 
                 if ( tmp.equalsIgnoreAsciiCase( doc ) )
                 {

@@ -455,10 +455,10 @@ bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
     // - xforms
 
     bool bSuccess = false;
-    const OUString sURIPrefix = GetXMLToken( XML_URI_W3_PREFIX );
+    const OUString& sURIPrefix = GetXMLToken( XML_URI_W3_PREFIX );
     if( rName.startsWith( sURIPrefix ) )
     {
-        const OUString sURISuffix = GetXMLToken( XML_URI_XFORMS_SUFFIX );
+        const OUString& sURISuffix = GetXMLToken( XML_URI_XFORMS_SUFFIX );
         sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
         if( rName.copy( nCompareFrom ).equals( sURISuffix ) )
         {

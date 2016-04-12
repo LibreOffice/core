@@ -1128,7 +1128,7 @@ void SvXMLExport::ImplExportSettings()
             if ( !settings->aSettings.getLength() )
                 continue;
 
-            OUString sSettingsName( GetXMLToken( settings->eGroupName ) );
+            const OUString& sSettingsName( GetXMLToken( settings->eGroupName ) );
             OUString sQName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOO, sSettingsName );
             aSettingsExportHelper.exportAllSettings( settings->aSettings, sQName );
         }

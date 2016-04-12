@@ -1714,10 +1714,9 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
 
-    Reference< XPropertySet >  xSet(evt.Element, css::uno::UNO_QUERY);
-    addColumnListeners(xSet);
+    Reference< XPropertySet >  xNewColumn(evt.Element, css::uno::UNO_QUERY);
+    addColumnListeners(xNewColumn);
 
-    Reference< XPropertySet >  xNewColumn(xSet);
     OUString aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
     Any aWidth = xNewColumn->getPropertyValue(FM_PROP_WIDTH);
     sal_Int32 nWidth = 0;

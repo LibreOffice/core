@@ -1835,11 +1835,10 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
-        uno::Reference< ucb::XContentIdentifier > xOldId = xIdentifier;
 
         try
         {
-            NeonUri sourceURI( xOldId->getContentIdentifier() );
+            NeonUri sourceURI( xIdentifier->getContentIdentifier() );
             NeonUri targetURI( xNewId->getContentIdentifier() );
             targetURI.SetScheme( sourceURI.GetScheme() );
 

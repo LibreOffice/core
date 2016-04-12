@@ -71,11 +71,10 @@ sal_Int32 SwVbaTableHelper::getTabColumnsMaxCount( ) throw (uno::RuntimeExceptio
     return nRet;
 }
 
-sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& CellName ) throw (uno::RuntimeException)
+sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& rCellName ) throw (uno::RuntimeException)
 {
     sal_Int32 nRet = 0;
-    OUString sCellName(CellName);
-    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTableBox( sCellName ));
+    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTableBox( rCellName ));
     if( !pBox )
         throw uno::RuntimeException();
 
@@ -86,11 +85,10 @@ sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& CellName ) throw (un
     return nRet;
 }
 
-sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& CellName ) throw (uno::RuntimeException)
+sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& rCellName ) throw (uno::RuntimeException)
 {
     sal_Int32 nRet = 0;
-    OUString sCellName(CellName);
-    const SwTableBox* pBox = pTable->GetTableBox( sCellName );
+    const SwTableBox* pBox = pTable->GetTableBox( rCellName );
     if( !pBox )
         throw uno::RuntimeException();
     const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();

@@ -483,9 +483,9 @@ void ScDocShell::CheckConfigOptions()
 
     ScModule* pScMod = SC_MOD();
     const ScFormulaOptions& rOpt=pScMod->GetFormulaOptions();
-    OUString aSepArg = rOpt.GetFormulaSepArg();
-    OUString aSepArrRow = rOpt.GetFormulaSepArrayRow();
-    OUString aSepArrCol = rOpt.GetFormulaSepArrayCol();
+    const OUString& aSepArg = rOpt.GetFormulaSepArg();
+    const OUString& aSepArrRow = rOpt.GetFormulaSepArrayRow();
+    const OUString& aSepArrCol = rOpt.GetFormulaSepArrayCol();
 
     if (aDecSep == aSepArg || aDecSep == aSepArrRow || aDecSep == aSepArrCol)
     {

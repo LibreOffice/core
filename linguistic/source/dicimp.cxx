@@ -514,16 +514,14 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
 
     int nRes = 0;
 
-    OUString    aWord1( rWord1 ),
-                aWord2( rWord2 );
-    sal_Int32       nLen1 = aWord1.getLength(),
-                  nLen2 = aWord2.getLength();
+    sal_Int32     nLen1 = rWord1.getLength(),
+                  nLen2 = rWord2.getLength();
     if (bSimilarOnly)
     {
         const sal_Unicode cChar = '.';
-        if (nLen1  &&  cChar == aWord1[ nLen1 - 1 ])
+        if (nLen1  &&  cChar == rWord1[ nLen1 - 1 ])
             nLen1--;
-        if (nLen2  &&  cChar == aWord2[ nLen2 - 1 ])
+        if (nLen2  &&  cChar == rWord2[ nLen2 - 1 ])
             nLen2--;
     }
 
@@ -543,7 +541,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
     {
         // skip chars to be ignored
         IgnState = false;
-        while (nIdx1 < nLen1  &&  ((cChar1 = aWord1[ nIdx1 ]) == cIgnChar || cChar1 == cIgnBeg || IgnState ))
+        while (nIdx1 < nLen1  &&  ((cChar1 = rWord1[ nIdx1 ]) == cIgnChar || cChar1 == cIgnBeg || IgnState ))
         {
             if ( cChar1 == cIgnBeg )
                 IgnState = true;
@@ -553,7 +551,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
             nNumIgnChar1++;
         }
         IgnState = false;
-        while (nIdx2 < nLen2  &&  ((cChar2 = aWord2[ nIdx2 ]) == cIgnChar || cChar2 == cIgnBeg || IgnState ))
+        while (nIdx2 < nLen2  &&  ((cChar2 = rWord2[ nIdx2 ]) == cIgnChar || cChar2 == cIgnBeg || IgnState ))
         {
             if ( cChar2 == cIgnBeg )
                 IgnState = true;
@@ -584,22 +582,22 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
         IgnState = false;
         while (nIdx1 < nLen1 )
         {
-            if (aWord1[ nIdx1 ] == cIgnBeg)
+            if (rWord1[ nIdx1 ] == cIgnBeg)
                 IgnState = true;
-            if (IgnState || aWord1[ nIdx1 ] == cIgnChar)
+            if (IgnState || rWord1[ nIdx1 ] == cIgnChar)
                 nNumIgnChar1++;
-            if (aWord1[ nIdx1] == cIgnEnd)
+            if (rWord1[ nIdx1] == cIgnEnd)
                 IgnState = false;
             nIdx1++;
         }
         IgnState = false;
         while (nIdx2 < nLen2 )
         {
-            if (aWord2[ nIdx2 ] == cIgnBeg)
+            if (rWord2[ nIdx2 ] == cIgnBeg)
                 IgnState = true;
-            if (IgnState || aWord2[ nIdx2 ] == cIgnChar)
+            if (IgnState || rWord2[ nIdx2 ] == cIgnChar)
                 nNumIgnChar2++;
-            if (aWord2[ nIdx2 ] == cIgnEnd)
+            if (rWord2[ nIdx2 ] == cIgnEnd)
                 IgnState = false;
             nIdx2++;
         }

@@ -465,7 +465,7 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
     {
         const svx::ColorSet& rColorSet = aColorSets[i];
 
-        OUString aName = rColorSet.getName();
+        const OUString& aName = rColorSet.getName();
         BitmapEx aPreview = GenerateColorPreview(rColorSet);
         mpValueSetColors->InsertItem(i, Image(aPreview), aName);
     }

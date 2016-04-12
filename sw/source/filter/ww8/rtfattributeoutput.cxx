@@ -560,9 +560,8 @@ bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FLDINST);
         m_aStyles.append(" HYPERLINK ");
 
-        OUString sURL(rUrl);
         m_aStyles.append("\"");
-        m_aStyles.append(msfilter::rtfutil::OutString(sURL, m_rExport.m_eCurrentEncoding));
+        m_aStyles.append(msfilter::rtfutil::OutString(rUrl, m_rExport.m_eCurrentEncoding));
         m_aStyles.append("\" ");
 
         if (!rTarget.isEmpty())
@@ -1691,7 +1690,7 @@ namespace
 
 void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyProperties, const SwFrameFormat& rFrameFormat)
 {
-    SvxShadowItem aShadowItem = rFrameFormat.GetShadow();
+    const SvxShadowItem& aShadowItem = rFrameFormat.GetShadow();
     if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
         return;
 

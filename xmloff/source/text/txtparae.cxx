@@ -382,7 +382,7 @@ void FieldParamExporter::Export()
     for(const OUString* pCurrent = vParameters.begin(); pCurrent != vParameters.end(); ++pCurrent)
     {
         const Any aValue = m_xFieldParams->getByName(*pCurrent);
-        const Type aValueType = aValue.getValueType();
+        const Type& aValueType = aValue.getValueType();
         if(aValueType == aStringType)
         {
             OUString sValue;
@@ -855,10 +855,10 @@ void XMLTextParagraphExport::exportListChange(
 
         if ( nListLevelsToBeOpened > 0 )
         {
-            const OUString sListStyleName( rNextInfo.GetNumRulesName() );
+            const OUString& sListStyleName( rNextInfo.GetNumRulesName() );
             // Currently only the text documents support <ListId>.
             // Thus, for other document types <sListId> is empty.
-            const OUString sListId( rNextInfo.GetListId() );
+            const OUString& sListId( rNextInfo.GetListId() );
             bool bExportListStyle( true );
             bool bRestartNumberingAtContinuedList( false );
             sal_Int32 nRestartValueForContinuedList( -1 );
@@ -1093,7 +1093,7 @@ void XMLTextParagraphExport::exportListChange(
         if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
              GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
         {
-            const OUString sListStyleName( rNextInfo.GetNumRulesName() );
+            const OUString& sListStyleName( rNextInfo.GetNumRulesName() );
             if ( !mpTextListsHelper->EqualsToTopListStyleOnStack( sListStyleName ) )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,

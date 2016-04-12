@@ -228,8 +228,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
 
     m_pBibMod = OpenBibModul();
 
-    OUString aURLStr( rURL );
-    OUString aPartName = aURLStr.getToken( 1, '/' );
+    OUString aPartName = rURL.getToken( 1, '/' );
     Reference<XPropertySet> xPrSet(rFrame, UNO_QUERY);
     if(xPrSet.is())
     {
@@ -459,11 +458,10 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
         if (!xColumns.is())
             return aRet;
 
-        OUString sIdentifierMapping = pDatMan->GetIdentifierMapping();
-        OUString sId = sIdentifierMapping;
+        const OUString sIdentifierMapping = pDatMan->GetIdentifierMapping();
         Reference< sdb::XColumn >  xColumn;
-        if (xColumns->hasByName(sId))
-            xColumn.set(*static_cast<Reference< XInterface > const *>(xColumns->getByName(sId).getValue()), UNO_QUERY);
+        if (xColumns->hasByName(sIdentifierMapping))
+            xColumn.set(*static_cast<Reference< XInterface > const *>(xColumns->getByName(sIdentifierMapping).getValue()), UNO_QUERY);
         if (xColumn.is())
         {
             do

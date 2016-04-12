@@ -622,20 +622,19 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
 
 void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString& rRequestedFileName )
 {
-    OUString aURLString( rURLStr );
     OUString aPictureStorageName, aPictureStreamName;
-    if( ( maURLSet.find( aURLString ) != maURLSet.end() ) )
+    if( ( maURLSet.find( rURLStr ) != maURLSet.end() ) )
     {
         for (URLPairVector::const_iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() ); aIter != aEnd ; ++aIter)
         {
-            if( aURLString == (*aIter).first )
+            if( rURLStr == (*aIter).first )
             {
                 maGrfURLs[ nInsertPos ].second = (*aIter).second;
                 break;
             }
         }
     }
-    else if( ImplGetStreamNames( aURLString, aPictureStorageName, aPictureStreamName ) )
+    else if( ImplGetStreamNames( rURLStr, aPictureStorageName, aPictureStreamName ) )
     {
         URLPair& rURLPair = maGrfURLs[ nInsertPos ];
 
@@ -657,12 +656,11 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
         }
         else
         {
-            const OUString      aGraphicObjectId( aPictureStreamName );
-            const OString aAsciiObjectID(OUStringToOString(aGraphicObjectId, RTL_TEXTENCODING_ASCII_US));
+            const OString aAsciiObjectID(OUStringToOString(aPictureStreamName, RTL_TEXTENCODING_ASCII_US));
             const GraphicObject aGrfObject( aAsciiObjectID );
             if( aGrfObject.GetType() != GRAPHIC_NONE )
             {
-                OUString        aStreamName( aGraphicObjectId );
+                OUString        aStreamName( aPictureStreamName );
                 Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
                 const GfxLink   aGfxLink( aGraphic.GetLink() );
                 OUString        aExtension;
@@ -744,7 +742,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                 aStreamName += aExtension;
 
                 if( mbDirect && !aStreamName.isEmpty() )
-                    ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId, bUseGfxLink );
+                    ImplWriteGraphic( aPictureStorageName, aStreamName, aPictureStreamName, bUseGfxLink );
 
                 rURLPair.second = sPictures;
                 rURLPair.second += aStreamName;
@@ -760,7 +758,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 #endif
         }
 
-        maURLSet.insert( aURLString );
+        maURLSet.insert( rURLStr );
     }
 }
 

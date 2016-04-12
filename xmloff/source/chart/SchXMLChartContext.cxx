@@ -332,7 +332,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     {
         SAL_WARN("xmloff.chart", "need a charttype to create a diagram" );
         //set a fallback value:
-        OUString aChartClass_Bar( GetXMLToken(XML_BAR ) );
+        const OUString& aChartClass_Bar( GetXMLToken(XML_BAR ) );
         aOldChartTypeName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, true /* bUseOldNames */ );
         maChartTypeServiceName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, false /* bUseOldNames */ );
     }

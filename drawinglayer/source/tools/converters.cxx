@@ -71,7 +71,6 @@ namespace drawinglayer
 
                 const Point aEmptyPoint;
                 const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
-                geometry::ViewInformation2D aViewInformation2D(rViewInformation2D);
                 ScopedVclPtrInstance< VirtualDevice > maContent;
 
                 // prepare vdev
@@ -87,7 +86,7 @@ namespace drawinglayer
                 // not wanted, change after this call as needed
                 processor2d::BaseProcessor2D* pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
                     *maContent.get(),
-                    aViewInformation2D);
+                    rViewInformation2D);
 
                 if(pContentProcessor)
                 {

@@ -3370,15 +3370,13 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exc
     sal_uInt16 nPage;
     SdPage* pPage;
 
-    const OUString aName( rName );
-
     const bool bDraw = mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW;
 
     // standard pages
     for( nPage = 0; nPage < nMaxPages; nPage++ )
     {
         pPage = static_cast<SdPage*>(mpDoc->GetPage( nPage ));
-        if( (pPage->GetName() == aName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
+        if( (pPage->GetName() == rName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }
 
@@ -3386,7 +3384,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exc
     for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
     {
         pPage = static_cast<SdPage*>(mpDoc->GetMasterPage( nPage ));
-        if( (pPage->GetName() == aName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
+        if( (pPage->GetName() == rName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }
 

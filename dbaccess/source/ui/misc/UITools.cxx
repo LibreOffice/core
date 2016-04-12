@@ -1397,10 +1397,9 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
         return false;
 
     Reference<XNameAccess> xNameAccess( _xNames, UNO_QUERY );
-    OUString sName = _sParentFolder;
-    if ( _xNames->hasByHierarchicalName(sName) )
+    if ( _xNames->hasByHierarchicalName(_sParentFolder) )
     {
-        Reference<XChild> xChild(_xNames->getByHierarchicalName(sName),UNO_QUERY);
+        Reference<XChild> xChild(_xNames->getByHierarchicalName(_sParentFolder),UNO_QUERY);
         xNameAccess.set(xChild,UNO_QUERY);
         if ( !xNameAccess.is() && xChild.is() )
             xNameAccess.set(xChild->getParent(),UNO_QUERY);
@@ -1428,7 +1427,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
             sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
 
             // here we have everything needed to create a new query object ...
-            HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
+            HierarchicalNameCheck aNameChecker( _xNames.get(), _sParentFolder );
             // ... ehm, except a new name
             ScopedVclPtrInstance<OSaveAsDlg> aAskForName(
                                    _pParent,

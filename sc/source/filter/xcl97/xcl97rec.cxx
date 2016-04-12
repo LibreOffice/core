@@ -797,7 +797,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         OUString aParaText( rEditObj.GetText( 0 ) );
         if( !aParaText.isEmpty() )
         {
-            SfxItemSet aSet( rEditObj.GetParaAttribs( 0));
+            const SfxItemSet& aSet( rEditObj.GetParaAttribs( 0));
             const SfxPoolItem* pItem = nullptr;
             if( aSet.GetItemState( EE_PARA_JUST, true, &pItem ) == SfxItemState::SET )
             {

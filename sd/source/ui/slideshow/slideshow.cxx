@@ -321,12 +321,10 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
     case ATTR_PRESENT_CUSTOMSHOW:
     {
-        OUString aShow;
-        if( aValue >>= aShow )
+        OUString aShowName;
+        if( aValue >>= aShowName )
         {
             bIllegalArgument = false;
-
-            const OUString aShowName( aShow );
 
             SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList();
             if(pCustomShowList)

@@ -2380,8 +2380,7 @@ void ScViewFunc::InsertTableLink( const OUString& rFile,
 {
     OUString aFilterName = rFilter;
     OUString aOpt = rOptions;
-    OUString aURL = rFile;
-    ScDocumentLoader aLoader( aURL, aFilterName, aOpt );
+    ScDocumentLoader aLoader( rFile, aFilterName, aOpt );
     if (!aLoader.IsError())
     {
         ScDocShell* pSrcSh = aLoader.GetDocShell();

@@ -237,7 +237,7 @@ E3dScene::~E3dScene()
 basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
 {
     const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(GetViewContact());
-    const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
+    const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
     const basegfx::B3DPolyPolygon aCubePolyPolygon(CreateWireframe());
 
     basegfx::B2DPolyPolygon aRetval(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,

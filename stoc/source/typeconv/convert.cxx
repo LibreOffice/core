@@ -486,7 +486,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
 Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType )
     throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception)
 {
-    Type aSourceType = rVal.getValueType();
+    const Type& aSourceType = rVal.getValueType();
     if (aSourceType == aDestType)
         return rVal;
 
@@ -705,7 +705,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             Reference< XInterface >(), (sal_Int16) 1 );
     }
 
-    Type aSourceType = rVal.getValueType();
+    const Type& aSourceType = rVal.getValueType();
     TypeClass aSourceClass = aSourceType.getTypeClass();
     if (aDestinationClass == aSourceClass)
         return rVal;

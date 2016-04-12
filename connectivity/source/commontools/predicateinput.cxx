@@ -279,13 +279,11 @@ namespace dbtools
         OUString sReturn;
         if ( _rxField.is() )
         {
-            OUString sValue( _rPredicateValue );
-
             // The following is mostly stolen from the former implementation in the parameter dialog
             // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
 
             OUString sError;
-            OSQLParseNode* pParseNode = implPredicateTree( sError, sValue, _rxField );
+            OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );
 
             implParseNode(pParseNode, true) >>= sReturn;
         }
@@ -353,13 +351,11 @@ namespace dbtools
 
         if ( _rxField.is() )
         {
-            OUString sValue( _rPredicateValue );
-
             // The following is mostly stolen from the former implementation in the parameter dialog
             // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
 
             OUString sError;
-            OSQLParseNode* pParseNode = implPredicateTree( sError, sValue, _rxField );
+            OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );
 
             return implParseNode(pParseNode, false);
         }

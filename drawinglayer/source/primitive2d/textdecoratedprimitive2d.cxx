@@ -161,7 +161,7 @@ namespace drawinglayer
                 // support for single word mode; split to single word primitives
                 // using TextBreakupHelper
                 const TextBreakupHelper aTextBreakupHelper(*this);
-                const Primitive2DContainer aBroken(aTextBreakupHelper.getResult(BreakupUnit_word));
+                const Primitive2DContainer& aBroken(aTextBreakupHelper.getResult(BreakupUnit_word));
 
                 if(!aBroken.empty())
                 {

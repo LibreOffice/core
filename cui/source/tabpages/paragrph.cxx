@@ -1615,7 +1615,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
             const SvxPageModelItem& rModel =
                 static_cast<const SvxPageModelItem&>(rSet->Get( _nWhich ));
-            OUString aStr( rModel.GetValue() );
+            const OUString& aStr( rModel.GetValue() );
 
             if ( !aStr.isEmpty() &&
                  m_pApplyCollBox->GetEntryPos( aStr ) != LISTBOX_ENTRY_NOTFOUND )

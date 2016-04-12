@@ -38,9 +38,7 @@ FormulaListBox::FormulaListBox( vcl::Window* pParent, WinBits nBits ):
 
 void FormulaListBox::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyEvent aKEvt=rKEvt;
-
-    if(aKEvt.GetCharCode()==' ')
+    if(rKEvt.GetCharCode()==' ')
         DoubleClick();
 }
 

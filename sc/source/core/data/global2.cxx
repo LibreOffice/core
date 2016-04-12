@@ -441,18 +441,17 @@ Label_fallback_to_unambiguous:
             break;
     }
 
-    OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
     // Decimal and group separator 0 => only integer and possibly exponent,
     // stops at first non-digit non-sign.
-    fValue = ::rtl::math::stringToDouble( aStr, 0, 0, &eStatus, &nParseEnd);
+    fValue = ::rtl::math::stringToDouble( rStr, 0, 0, &eStatus, &nParseEnd);
     sal_Int32 nLen;
-    if (eStatus == rtl_math_ConversionStatus_Ok && nParseEnd < (nLen = aStr.getLength()))
+    if (eStatus == rtl_math_ConversionStatus_Ok && nParseEnd < (nLen = rStr.getLength()))
     {
         // Not at string end, check for trailing blanks or switch to date or
         // time parsing or bail out.
-        const sal_Unicode* const pStart = aStr.getStr();
+        const sal_Unicode* const pStart = rStr.getStr();
         const sal_Unicode* p = pStart + nParseEnd;
         const sal_Unicode* const pStop = pStart + nLen;
         switch (*p++)
@@ -472,7 +471,7 @@ Label_fallback_to_unambiguous:
                     const sal_Int32 nLimit[done] = {0,12,31,0,59,59,0};
                     State eState = (bDate ? month : minute);
                     rCurFmtType = (bDate ? css::util::NumberFormat::DATE : css::util::NumberFormat::TIME);
-                    nUnit[eState-1] = aStr.copy( 0, nParseEnd).toInt32();
+                    nUnit[eState-1] = rStr.copy( 0, nParseEnd).toInt32();
                     const sal_Unicode* pLastStart = p;
                     // Ensure there's no preceding sign. Negative dates
                     // currently aren't handled correctly. Also discard
@@ -498,7 +497,7 @@ Label_fallback_to_unambiguous:
                             // We had at least one digit.
                             if (eState < done)
                             {
-                                nUnit[eState] = aStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
+                                nUnit[eState] = rStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
                                 if (nLimit[eState] && nLimit[eState] < nUnit[eState])
                                     rError = nStringNoValueError;
                             }
@@ -569,7 +568,7 @@ Label_fallback_to_unambiguous:
                         // Catch the very last unit at end of string.
                         if (p > pLastStart && eState < done)
                         {
-                            nUnit[eState] = aStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
+                            nUnit[eState] = rStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
                             if (nLimit[eState] && nLimit[eState] < nUnit[eState])
                                 rError = nStringNoValueError;
                         }

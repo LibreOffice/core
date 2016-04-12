@@ -3057,16 +3057,15 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
     {
         SdDrawDocument* pDoc = GetModel()->GetDoc();
         bool bOutDummy;
-        OUString aNewName( rName );
 
         // Slide Name has to be unique
-        if( pDoc && pDoc->GetPageByName( aNewName, bOutDummy ) != SDRPAGE_NOTFOUND )
+        if( pDoc && pDoc->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
             return; // throw Exception ?
 
-        GetPage()->SetName( aNewName );
+        GetPage()->SetName( rName );
 
         if( pDoc )
-            pDoc->RenameLayoutTemplate( GetPage()->GetLayoutName(), aNewName );
+            pDoc->RenameLayoutTemplate( GetPage()->GetLayoutName(), rName );
 
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();

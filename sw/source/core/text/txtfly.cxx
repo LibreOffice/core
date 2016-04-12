@@ -669,7 +669,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                 if ( bInFooterOrHeader )
                 {
-                    SwFormatVertOrient aVert( rFrameFormat.GetVertOrient() );
+                    const SwFormatVertOrient& aVert( rFrameFormat.GetVertOrient() );
                     bool bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
                             aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA;
                     if( bVertPrt )

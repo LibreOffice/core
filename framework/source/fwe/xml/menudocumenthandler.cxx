@@ -362,7 +362,7 @@ throw( SAXException, RuntimeException, std::exception )
             for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
             {
                 OUString aName = xAttrList->getNameByIndex( i );
-                OUString aValue = xAttrList->getValueByIndex( i );
+                const OUString aValue = xAttrList->getValueByIndex( i );
                 if ( aName == ATTRIBUTE_ID )
                     aCommandId = aValue;
                 else if ( aName == ATTRIBUTE_LABEL )
@@ -371,11 +371,10 @@ throw( SAXException, RuntimeException, std::exception )
                     aHelpId = aValue;
                 else if ( aName == ATTRIBUTE_STYLE )
                 {
-                    OUString aTemp( aValue );
                     sal_Int32 nIndex = 0;
                     do
                     {
-                        OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                        OUString aToken = aValue.getToken( 0, '+', nIndex );
                         if ( !aToken.isEmpty() )
                         {
                             if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
@@ -573,7 +572,7 @@ throw( SAXException, RuntimeException, std::exception )
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
             OUString aName = xAttrList->getNameByIndex( i );
-            OUString aValue = xAttrList->getValueByIndex( i );
+            const OUString aValue = xAttrList->getValueByIndex( i );
             if ( aName == ATTRIBUTE_ID )
                 aCommandId = aValue;
             else if ( aName == ATTRIBUTE_LABEL )
@@ -582,11 +581,10 @@ throw( SAXException, RuntimeException, std::exception )
                 aHelpId = aValue;
             else if ( aName == ATTRIBUTE_STYLE )
             {
-                OUString aTemp( aValue );
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                    OUString aToken = aValue.getToken( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
@@ -630,7 +628,7 @@ throw( SAXException, RuntimeException, std::exception )
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
             OUString aName = xAttrList->getNameByIndex( i );
-            OUString aValue = xAttrList->getValueByIndex( i );
+            const OUString aValue = xAttrList->getValueByIndex( i );
             if ( aName == ATTRIBUTE_ID )
                 aCommandId = aValue;
             else if ( aName == ATTRIBUTE_LABEL )
@@ -639,11 +637,10 @@ throw( SAXException, RuntimeException, std::exception )
                 aHelpId = aValue;
             else if ( aName == ATTRIBUTE_STYLE )
             {
-                OUString aTemp( aValue );
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                    OUString aToken = aValue.getToken( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )

@@ -1732,17 +1732,16 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
             }
 
             // check target, maybe we need to force it to text
-            Any aTarget( rTarget );
             sal_Int16 nSubItem = ShapeAnimationSubType::AS_WHOLE;
 
-            if( aTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
+            if( rTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
             {
                 nSubItem = ShapeAnimationSubType::ONLY_TEXT;
             }
             else if( pPreset->isTextOnly() )
             {
                 Reference< XShape > xShape;
-                aTarget >>= xShape;
+                rTarget >>= xShape;
                 if( xShape.is() )
                 {
                     // thats bad, we target a shape here but the effect is only for text
@@ -1754,7 +1753,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
             // now create effect from preset
             pEffect.reset( new CustomAnimationEffect( xNode ) );
             pEffect->setEffectSequence( this );
-            pEffect->setTarget( aTarget );
+            pEffect->setTarget( rTarget );
             pEffect->setTargetSubItem( nSubItem );
             if( fDuration != -1.0 )
                 pEffect->setDuration( fDuration );

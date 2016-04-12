@@ -68,7 +68,7 @@ namespace drawinglayer
                                 {
                                     // polyPolygonMaterialPrimitive3D, check texturing and hatching
                                     const PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
-                                    const basegfx::B3DPolyPolygon aFillPolyPolygon(rPrimitive.getB3DPolyPolygon());
+                                    const basegfx::B3DPolyPolygon& aFillPolyPolygon(rPrimitive.getB3DPolyPolygon());
 
                                     if(maHatch.isFillBackground())
                                     {

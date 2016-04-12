@@ -263,7 +263,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         }
                         else
                         {
-                            OUString aAttrValue( GetXMLToken( bWordMode
+                            const OUString& aAttrValue( GetXMLToken( bWordMode
                                         ? XML_FALSE
                                         : XML_TRUE ) );
                             pAttrList->AddAttribute( aAttrQName, aAttrValue );
@@ -272,7 +272,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_KEEP_WITH_NEXT:
                     {
-                        OUString aAttrValue( GetXMLToken(
+                        const OUString& aAttrValue( GetXMLToken(
                                         IsXMLToken( rAttrValue, XML_ALWAYS )
                                                     ? XML_TRUE
                                                     : XML_FALSE) );
@@ -517,7 +517,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         pAttrList->AddAttribute( rAttrName, aNewAttrValue );
 
                         // create old draw:mirror for drawing graphic objects
-                        OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );
+                        const OUString& aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );
                         pAttrList->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
                                     XML_NAMESPACE_DRAW,
                                     GetXMLToken( XML_MIRROR )), aAttrValue );

@@ -1293,8 +1293,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         // Set image for the addon popup menu item
                         if ( bItemShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))
                         {
-                            Reference< XFrame > xTemp( rFrame );
-                            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aItemCommand, false, xTemp );
+                            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aItemCommand, false, rFrame );
                             if ( !!aImage )
                                    pPopup->SetItemImage( ITEMID_ADDONLIST, aImage );
                         }

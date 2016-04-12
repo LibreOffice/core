@@ -213,7 +213,6 @@ void SwDoc::CorrAbs(
 {
     SwPosition aStart(*rRange.Start());
     SwPosition aEnd(*rRange.End());
-    SwPosition aNewPos(rNewPos);
 
     _DelBookmarks( aStart.nNode, aEnd.nNode, nullptr, &aStart.nContent, &aEnd.nContent );
 

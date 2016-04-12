@@ -3174,7 +3174,7 @@ bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
 
 void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFormObj)
 {
-    uno::Reference< awt::XControlModel > xControlModel =
+    const uno::Reference< awt::XControlModel >& xControlModel =
         rFormObj.GetUnoControlModel();
 
     //Why oh lord do we use so many different units ?

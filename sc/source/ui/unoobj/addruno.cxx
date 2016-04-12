@@ -139,8 +139,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
         throw uno::RuntimeException();
 
     bool bSuccess = false;
-    OUString aNameStr(aPropertyName);
-    if ( aNameStr == SC_UNONAME_ADDRESS )
+    if ( aPropertyName == SC_UNONAME_ADDRESS )
     {
         //  read the cell/range address from API struct
         if ( bIsRange )
@@ -162,7 +161,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             }
         }
     }
-    else if ( aNameStr == SC_UNONAME_REFSHEET )
+    else if ( aPropertyName == SC_UNONAME_REFSHEET )
     {
         //  set the reference sheet
         sal_Int32 nIntVal = 0;
@@ -172,19 +171,18 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             bSuccess = true;
         }
     }
-    else if ( aNameStr == SC_UNONAME_UIREPR )
+    else if ( aPropertyName == SC_UNONAME_UIREPR )
     {
         //  parse the UI representation string
         OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
-            OUString aUIString = sRepresentation;
-            bSuccess = ParseUIString( aUIString );
+            bSuccess = ParseUIString( sRepresentation );
         }
     }
-    else if ( aNameStr == SC_UNONAME_PERSREPR || aNameStr == SC_UNONAME_XLA1REPR )
+    else if ( aPropertyName == SC_UNONAME_PERSREPR || aPropertyName == SC_UNONAME_XLA1REPR )
     {
-        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr == SC_UNONAME_XLA1REPR ?
+        ::formula::FormulaGrammar::AddressConvention eConv = aPropertyName == SC_UNONAME_XLA1REPR ?
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  parse the file format string
@@ -227,8 +225,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
     ScDocument& rDoc = pDocShell->GetDocument();
     uno::Any aRet;
 
-    OUString aNameStr(aPropertyName);
-    if ( aNameStr == SC_UNONAME_ADDRESS )
+    if ( aPropertyName == SC_UNONAME_ADDRESS )
     {
         if ( bIsRange )
         {
@@ -243,11 +240,11 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             aRet <<= aCellAddress;
         }
     }
-    else if ( aNameStr == SC_UNONAME_REFSHEET )
+    else if ( aPropertyName == SC_UNONAME_REFSHEET )
     {
         aRet <<= nRefSheet;
     }
-    else if ( aNameStr == SC_UNONAME_UIREPR )
+    else if ( aPropertyName == SC_UNONAME_UIREPR )
     {
         //  generate UI representation string - include sheet only if different from ref sheet
         OUString aFormatStr;
@@ -260,9 +257,9 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             aFormatStr = aRange.aStart.Format(nFlags, &rDoc);
         aRet <<= aFormatStr;
     }
-    else if ( aNameStr == SC_UNONAME_PERSREPR || aNameStr == SC_UNONAME_XLA1REPR )
+    else if ( aPropertyName == SC_UNONAME_PERSREPR || aPropertyName == SC_UNONAME_XLA1REPR )
     {
-        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr == SC_UNONAME_XLA1REPR ?
+        ::formula::FormulaGrammar::AddressConvention eConv = aPropertyName == SC_UNONAME_XLA1REPR ?
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  generate file format string - always include sheet

@@ -995,8 +995,7 @@ namespace drawinglayer
                         case drawinglayer::primitive2d::FIELD_TYPE_URL :
                         {
                             const OUString& rURL = rFieldPrimitive.getString();
-                            const OUString aOldString(rURL);
-                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(aOldString.getStr()), 2 * aOldString.getLength()));
+                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(rURL.getStr()), 2 * rURL.getLength()));
                             break;
                         }
                     }
@@ -1816,7 +1815,7 @@ namespace drawinglayer
                     // - uses DrawTransparent for single PolyPoylgons directly. Can be detected by
                     //   checking the content for single PolyPolygonColorPrimitive2D
                     const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DContainer rContent = rUniTransparenceCandidate.getChildren();
+                    const primitive2d::Primitive2DContainer& rContent = rUniTransparenceCandidate.getChildren();
 
                     if(!rContent.empty())
                     {

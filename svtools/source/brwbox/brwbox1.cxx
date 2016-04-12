@@ -505,7 +505,6 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
     BrowserColumn *pCol = (*pCols)[ nItemPos ];
     if ( pCol->Title() != rTitle )
     {
-        OUString sNew(rTitle);
         OUString sOld(pCol->Title());
 
         pCol->Title() = rTitle;
@@ -524,7 +523,7 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
         if ( isAccessibleAlive() )
         {
             commitTableEvent(   TABLE_COLUMN_DESCRIPTION_CHANGED,
-                makeAny( sNew ),
+                makeAny( rTitle ),
                 makeAny( sOld )
             );
         }

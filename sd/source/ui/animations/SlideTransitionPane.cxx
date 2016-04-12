@@ -1115,9 +1115,8 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
 
     size_t nPresetOffset = 0;
-    for( const auto& aIter: rPresetList )
+    for( const TransitionPresetPtr& pPreset: rPresetList )
     {
-        TransitionPresetPtr pPreset = aIter;
         const OUString sLabel( pPreset->getSetLabel() );
         if( !sLabel.isEmpty() )
         {

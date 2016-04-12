@@ -259,7 +259,7 @@ namespace drawinglayer
                 }
 
                 // calculate logic render size in world coordinates for usage in renderer
-                const basegfx::B2DHomMatrix aInverseOToV(rViewInformation.getInverseObjectToViewTransformation());
+                const basegfx::B2DHomMatrix& aInverseOToV(rViewInformation.getInverseObjectToViewTransformation());
                 const double fLogicX((aInverseOToV * basegfx::B2DVector(aDiscreteRange.getWidth() * fReduceFactor, 0.0)).getLength());
                 const double fLogicY((aInverseOToV * basegfx::B2DVector(0.0, aDiscreteRange.getHeight() * fReduceFactor)).getLength());
 

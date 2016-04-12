@@ -621,8 +621,6 @@ namespace sfx2
             if ( aServiceName != aCurrentServiceName )
             {   // we reached a new group
 
-                OUString sDocServName = aServiceName;
-
                 // look for the place in _rAllFilters where this ne group belongs - this is determined
                 // by the order of classes in aGlobalClassNames
                 GroupedFilterList::iterator aGroupPos = _rAllFilters.begin();
@@ -633,7 +631,7 @@ namespace sfx2
                 StringArray::iterator aGlobalIter = aGlobalClassNames.begin();
                 while   (   ( aGroupPos != _rAllFilters.end() )
                         &&  ( aGlobalIter != aGlobalClassNames.end() )
-                        &&  ( *aGlobalIter != sDocServName )
+                        &&  ( *aGlobalIter != aServiceName )
                         )
                 {
                     ++aGlobalIter;

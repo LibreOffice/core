@@ -103,7 +103,7 @@ void ExternalToolEditThread::execute()
 void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
 {
     //Get the graphic from the GraphicObject
-    const Graphic aGraphic = pGraphicObject->GetGraphic();
+    const Graphic& aGraphic = pGraphicObject->GetGraphic();
 
     //get the Preferred File Extension for this graphic
     OUString fExtension;

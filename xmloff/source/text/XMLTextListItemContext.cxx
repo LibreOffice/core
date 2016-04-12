@@ -70,7 +70,7 @@ XMLTextListItemContext::XMLTextListItemContext(
         else if ( nPrefix == XML_NAMESPACE_TEXT &&
                   IsXMLToken( aLocalName, XML_STYLE_OVERRIDE ) )
         {
-            const OUString sListStyleOverrideName = rValue;
+            const OUString& sListStyleOverrideName = rValue;
             if ( !sListStyleOverrideName.isEmpty() )
             {
                 OUString sDisplayStyleName(

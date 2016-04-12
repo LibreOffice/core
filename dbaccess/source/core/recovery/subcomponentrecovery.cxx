@@ -562,7 +562,7 @@ namespace dbaccess
         aDesignInput.import( pDocHandler.get() );
 
         const ::comphelper::NamedValueCollection& rSettings( pDocHandler->getSettings() );
-        const Any aCurrentQueryDesign = rSettings.get( sCurrentQueryDesignName );
+        const Any& aCurrentQueryDesign = rSettings.get( sCurrentQueryDesignName );
 #if OSL_DEBUG_LEVEL > 0
         Sequence< PropertyValue > aQueryDesignLayout;
         OSL_VERIFY( aCurrentQueryDesign >>= aQueryDesignLayout );

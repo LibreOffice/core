@@ -683,7 +683,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 OUString sTypeName( rType.getTypeName() );
                 sMessage += OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += "'.\n(Currently handling property '";
-                OUString sPropertyName( GetPropertyName( *it ) );
+                const OUString& sPropertyName( GetPropertyName( *it ) );
                 sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                 sMessage += "'.)";
                 OSL_FAIL( sMessage.getStr() );
@@ -895,7 +895,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                     OUString sTypeName( pType->getTypeName() );
                     sMessage += OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
                     sMessage += "'.\n(Currently handling property '";
-                    OUString sPropertyName( GetPropertyName( nPropId ) );
+                    const OUString& sPropertyName( GetPropertyName( nPropId ) );
                     sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'.)";
                     OSL_FAIL( sMessage.getStr() );

@@ -217,13 +217,12 @@ void XMLGradientStyleExport::exportXML(
             {
                 // Name
                 bool bEncoded = false;
-                OUString aStrName( rStrName );
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
-                                      rExport.EncodeStyleName( aStrName,
+                                      rExport.EncodeStyleName( rStrName,
                                                                 &bEncoded ) );
                 if( bEncoded )
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
-                                            aStrName );
+                                            rStrName );
 
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );

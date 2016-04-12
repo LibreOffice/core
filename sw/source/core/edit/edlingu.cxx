@@ -980,7 +980,7 @@ bool SwEditShell::GetGrammarCorrection(
 
                 // Expand the string:
                 const ModelToViewHelper aConversionMap(*pNode);
-                OUString aExpandText = aConversionMap.getViewText();
+                const OUString& aExpandText = aConversionMap.getViewText();
                 // get XFlatParagraph to use...
                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNode, aExpandText, aConversionMap );
 
@@ -1445,7 +1445,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         if( bGrammarErrorFound )
         {
             const ModelToViewHelper aConversionMap(static_cast<SwTextNode&>(pCursor->GetNode()));
-            OUString aExpandText = aConversionMap.getViewText();
+            const OUString& aExpandText = aConversionMap.getViewText();
             sal_Int32 nSentenceEnd =
                 aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );
             // remove trailing space
