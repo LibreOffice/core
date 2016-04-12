@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------
 #
-#    Copyright (C) 2015 Canonical Ltd.
+#    Copyright (C) 2016 Canonical Ltd.
 #
 #    This Source Code Form is subject to the terms of the Mozilla Public
 #    License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -33,7 +33,7 @@
 @{libreoffice_ext} += [jJ][pP][eE][gG]
 @{libreoffice_ext} += [pP][nN][gG]
 @{libreoffice_ext} += [sS][vV][gG]
-@{libreoffice_ext} += [sS][vV][gG][zZ]
+@{libreoffice_ext} += [sS][vV][gG][zZ]99251
 @{libreoffice_ext} += [tT][iI][fF]
 @{libreoffice_ext} += [tT][iI][fF][fF]
 
@@ -50,7 +50,7 @@
 #Impress/Draw
 @{libreoffice_ext} += [pP][pP][tTsS]{,x,X}
 @{libreoffice_ext} += [pP][oO][tT]{,m,M}
-@{libreoffice_ext} += [sS][wW][fF]
+@{libreoffice_ext} += [sS][wW][fF]  #Flash
 @{libreoffice_ext} += [pP][sS][dD]  #Photoshop
 
 #Math
@@ -122,10 +122,11 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/lib{,32,64}/jvm/**                       r,
   INSTDIR-**                        ra,
   INSTDIR-**.so                     rm,
+  INSTDIR-share/uno_packages/cache/* rw,
   INSTDIR-program/soffice.bin       rmix,
-  INSTDIR-program/xpdfimport        rPx,
+  INSTDIR-program/xpdfimport        rpx,
   /usr/bin/xdg-open                 rPUx,
-  INSTDIR-program/senddoc           rPx,
+  INSTDIR-program/senddoc           rpx,
 
   /usr/share/java/**.jar                r,
   /usr/share/hunspell/                  r,
