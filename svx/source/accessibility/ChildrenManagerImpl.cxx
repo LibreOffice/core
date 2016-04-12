@@ -45,7 +45,7 @@ namespace
 {
 void adjustIndexInParentOfShapes(ChildDescriptorListType& _rList)
 {
-    ChildDescriptorListType::iterator aEnd = _rList.end();
+    ChildDescriptorListType::const_iterator aEnd = _rList.end();
     sal_Int32 i=0;
     for ( ChildDescriptorListType::iterator aIter = _rList.begin(); aIter != aEnd; ++aIter,++i)
         aIter->setIndexAtAccessibleShape(i);
@@ -111,8 +111,8 @@ css::uno::Reference<css::drawing::XShape> ChildrenManagerImpl::GetChildShape(lon
            css::lang::IndexOutOfBoundsException)
 {
     uno::Reference<XAccessible> xAcc = GetChild(nIndex);
-    ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
-    for (I = maVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
+    for (ChildDescriptorListType::iterator I = maVisibleChildren.begin(); I != aEnd; ++I)
     {
         if (I->mxAccessibleShape == xAcc)
             return I->mxShape;
@@ -181,8 +181,8 @@ uno::Reference<XAccessible>
     ChildrenManagerImpl::GetChild (const uno::Reference<drawing::XShape>& xShape)
     throw (uno::RuntimeException)
 {
-    ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
-    for (I = maVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
+    for (ChildDescriptorListType::iterator I = maVisibleChildren.begin(); I != aEnd; ++I)
     {
         if ( I->mxShape.get() == xShape.get() )
             return I->mxAccessibleShape;
@@ -287,8 +287,8 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
     Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
 
     // Add the visible shapes for which the accessible objects already exist.
-    AccessibleShapeList::iterator I,aEnd = maAccessibleShapes.end();
-    for (I=maAccessibleShapes.begin(); I != aEnd; ++I)
+    AccessibleShapeList::const_iterator aEnd = maAccessibleShapes.end();
+    for (AccessibleShapeList::iterator I=maAccessibleShapes.begin(); I != aEnd; ++I)
     {
         if (I->is())
         {
@@ -343,8 +343,8 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
     // Iterate over list of formerly visible children and remove those that
     // are not visible anymore, i.e. member of the new list of visible
     // children.
-    ChildDescriptorListType::iterator I, aEnd = rOldChildList.end();
-    for (I=rOldChildList.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = rOldChildList.end();
+    for (ChildDescriptorListType::iterator I=rOldChildList.begin(); I != aEnd; ++I)
     {
         if (::std::find(rNewChildList.begin(), rNewChildList.end(), *I) == rNewChildList.end())
         {
@@ -372,14 +372,16 @@ void ChildrenManagerImpl::MergeAccessibilityInformation (
     ChildDescriptorListType& raNewChildList)
 {
     ChildDescriptorListType::iterator aOldChildDescriptor;
-    ChildDescriptorListType::iterator I, aEnd = raNewChildList.end();
-    for (I=raNewChildList.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEndVisibleChildren = maVisibleChildren.end();
+
+    ChildDescriptorListType::const_iterator aEnd = raNewChildList.end();
+    for (ChildDescriptorListType::iterator I=raNewChildList.begin(); I != aEnd; ++I)
     {
         aOldChildDescriptor = ::std::find (maVisibleChildren.begin(), maVisibleChildren.end(), *I);
 
         // Copy accessible shape if that exists in the old descriptor.
         bool bRegistrationIsNecessary = true;
-        if (aOldChildDescriptor != maVisibleChildren.end())
+        if (aOldChildDescriptor != aEndVisibleChildren)
             if (aOldChildDescriptor->mxAccessibleShape.is())
             {
                 I->mxAccessibleShape = aOldChildDescriptor->mxAccessibleShape;
@@ -395,8 +397,8 @@ void ChildrenManagerImpl::MergeAccessibilityInformation (
 void ChildrenManagerImpl::SendVisibleAreaEvents (
     ChildDescriptorListType& raNewChildList)
 {
-    ChildDescriptorListType::iterator I,aEnd = raNewChildList.end();
-    for (I=raNewChildList.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = raNewChildList.end();
+    for (ChildDescriptorListType::iterator I=raNewChildList.begin(); I != aEnd; ++I)
     {
         // Tell shape of changed visible area.  To do this, fake a
         // change of the view forwarder.  (Actually we usually get here
@@ -413,9 +415,9 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
 void ChildrenManagerImpl::CreateAccessibilityObjects (
     ChildDescriptorListType& raNewChildList)
 {
-    ChildDescriptorListType::iterator I, aEnd = raNewChildList.end();
+    ChildDescriptorListType::const_iterator aEnd = raNewChildList.end();
     sal_Int32 nPos = 0;
-    for ( I = raNewChildList.begin(); I != aEnd; ++I,++nPos)
+    for ( ChildDescriptorListType::iterator I = raNewChildList.begin(); I != aEnd; ++I,++nPos)
     {
         // Create the associated accessible object when the flag says so and
         // it does not yet exist.
@@ -547,8 +549,8 @@ void ChildrenManagerImpl::ClearAccessibleShapeList()
 
     // Clear the list of visible accessible objects.  Objects not created on
     // demand for XShapes are treated below.
-    ChildDescriptorListType::iterator I,aEnd = aLocalVisibleChildren.end();
-    for (I=aLocalVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = aLocalVisibleChildren.end();
+    for (ChildDescriptorListType::iterator I=aLocalVisibleChildren.begin(); I != aEnd; ++I)
         if ( I->mxAccessibleShape.is() && I->mxShape.is() )
         {
             ::comphelper::disposeComponent(I->mxAccessibleShape);
@@ -556,8 +558,8 @@ void ChildrenManagerImpl::ClearAccessibleShapeList()
         }
 
     // Dispose all objects in the accessible shape list.
-    AccessibleShapeList::iterator J,aEnd2 = aLocalAccessibleShapes.end();
-    for (J=aLocalAccessibleShapes.begin(); J != aEnd2; ++J)
+    AccessibleShapeList::const_iterator aEnd2 = aLocalAccessibleShapes.end();
+    for (AccessibleShapeList::iterator J=aLocalAccessibleShapes.begin(); J != aEnd2; ++J)
         if (J->is())
         {
             // Dispose the object.
@@ -741,8 +743,8 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
     else
     {
         SolarMutexGuard g;
-        ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
-        for (I=maVisibleChildren.begin(); I != aEnd; ++I)
+        ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
+        for (ChildDescriptorListType::iterator I=maVisibleChildren.begin(); I != aEnd; ++I)
         {
             AccessibleShape* pShape = I->GetAccessibleShape();
             if (pShape != nullptr)
@@ -775,8 +777,8 @@ bool ChildrenManagerImpl::ReplaceChild (
     // it.  Otherwise the child to replace is either not in the list or has
     // not ye been created (and is therefore not in the list, too) and a
     // replacement is not necessary.
-    ChildDescriptorListType::iterator I,aEnd = maVisibleChildren.end();
-    for (I=maVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
+    for (ChildDescriptorListType::iterator I=maVisibleChildren.begin(); I != aEnd; ++I)
     {
         if (I->GetAccessibleShape() == pCurrentChild)
         {
@@ -825,8 +827,8 @@ uno::Reference<XAccessible>
     ChildrenManagerImpl::GetAccessibleCaption (const uno::Reference<drawing::XShape>& xShape)
     throw (uno::RuntimeException)
 {
-    ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
-    for (I = maVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
+    for (ChildDescriptorListType::iterator I = maVisibleChildren.begin(); I != aEnd; ++I)
     {
         if ( I->mxShape.get() == xShape.get() )
             return I->mxAccessibleShape;
@@ -869,8 +871,8 @@ void ChildrenManagerImpl::UpdateSelection()
     int nAddSelect=0;
     int nRemoveSelect=0;
     bool bHasSelectedShape=false;
-    ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
-    for (I=maVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
+    for (ChildDescriptorListType::iterator I=maVisibleChildren.begin(); I != aEnd; ++I)
     {
         AccessibleShape* pAccessibleShape = I->GetAccessibleShape();
         if (I->mxAccessibleShape.is() && I->mxShape.is() && pAccessibleShape!=nullptr)
@@ -964,11 +966,7 @@ void ChildrenManagerImpl::UpdateSelection()
         mrContext.CommitChange(AccessibleEventId::SELECTION_CHANGED_WITHIN,uno::Any(),uno::Any());
         nAddSelect =0 ;//not fire selection event
     }
-    //VEC_SHAPE::iterator vi = vecSelect.begin();
-    //for (; vi != vecSelect.end() ;++vi)
-    VEC_SHAPE::reverse_iterator vi = vecSelect.rbegin();
-    for (; vi != vecSelect.rend() ;++vi)
-
+    for (VEC_SHAPE::reverse_iterator vi = vecSelect.rbegin(), aEndVecSelect = vecSelect.rend(); vi != aEndVecSelect ;++vi)
     {
         PAIR_SHAPE &pairShape= *vi;
         Reference< XAccessible > xShape(pairShape.first);

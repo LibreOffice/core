@@ -138,7 +138,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
     if( pObj )
     {
         // see if we already created an XAccessible for the given SdrObject
-        ShapesMapType::iterator iter = mxShapes.find( pObj );
+        ShapesMapType::const_iterator iter = mxShapes.find( pObj );
 
         if( iter != mxShapes.end() )
         {
@@ -669,8 +669,9 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
 
     {
         ShapesMapType::iterator I;
+        ShapesMapType::const_iterator endIt = mxShapes.end();
 
-        for (I=mxShapes.begin(); I!=mxShapes.end(); ++I)
+        for (I=mxShapes.begin(); I!=endIt; ++I)
         {
             rtl::Reference<XAccessible> pAcc((*I).second.get());
             Reference< XComponent > xComp( pAcc.get(), UNO_QUERY );

@@ -1442,10 +1442,9 @@ throw (uno::RuntimeException, std::exception)
     std::sort( vXShapes.begin(), vXShapes.end(), XShapePosCompareHelper() );
 
     //get the index of the selected object in the group
-    std::vector< uno::Reference<drawing::XShape> >::iterator aIter;
     //we start counting position from 1
     sal_Int32 nPos = 1;
-    for ( aIter = vXShapes.begin(); aIter != vXShapes.end(); ++aIter, nPos++ )
+    for ( std::vector< uno::Reference<drawing::XShape> >::const_iterator aIter = vXShapes.begin(); aIter != vXShapes.end(); ++aIter, nPos++ )
     {
         if ( (*aIter).get() == mxShape.get() )
         {
