@@ -41,7 +41,7 @@ namespace connectivity
         using ::com::sun::star::uno::RuntimeException;
         using ::com::sun::star::sdbc::XResultSetMetaData;
 
-        typedef ::cppu::ImplHelper5<    css::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper<    css::sdbc::XPreparedStatement,
                                         css::sdbc::XParameters,
                                         css::sdbc::XPreparedBatchExecution,
                                         css::sdbc::XResultSetMetaDataSupplier,

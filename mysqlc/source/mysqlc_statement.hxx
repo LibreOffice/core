@@ -33,7 +33,7 @@
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <cppconn/statement.h>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <list>
 
 namespace connectivity
@@ -45,7 +45,7 @@ namespace connectivity
         using ::com::sun::star::uno::Any;
         using ::com::sun::star::uno::RuntimeException;
 
-        typedef ::cppu::WeakComponentImplHelper5<   css::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XStatement,
                                                     css::sdbc::XWarningsSupplier,
                                                     css::util::XCancellable,
                                                     css::sdbc::XCloseable,
