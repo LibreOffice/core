@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_SVXIDS_HRC
-#define _SVX_SVXIDS_HRC
+#ifndef INCLUDED_SVX_SVXIDS_HRC
+#define INCLUDED_SVX_SVXIDS_HRC
 
 #include <svl/memberid.hrc>
 #include <svl/solar.hrc>
@@ -1028,7 +1028,7 @@
 #error Resource-Ueberlauf in #line, #file
 #endif
 
-#endif // #ifndef _SVX_SVXIDS_HRC
+#endif
 
 // ******************************************************************* EOF
 

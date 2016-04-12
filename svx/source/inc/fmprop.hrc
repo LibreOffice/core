@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_FMPROP_HRC
-#define _SVX_FMPROP_HRC
+#ifndef INCLUDED_SVX_SOURCE_INC_FMPROP_HRC
+#define INCLUDED_SVX_SOURCE_INC_FMPROP_HRC
 
 // PropertyId's, welche eine Zuordnung zu einen PropertyName haben, das koennten
 // auch in Zukunft WhichIds sein -> Itemset
@@ -146,6 +146,6 @@
 #define FM_PROP_MOUSE_WHEEL_BEHAVIOR         "MouseWheelBehavior"
 #define FM_PROP_DESCRIPTION                  "Description"
 
-#endif // _SVX_FMPROP_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

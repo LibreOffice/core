@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GALLERY_HRC
-#define _SVX_GALLERY_HRC
+#ifndef INCLUDED_SVX_INC_GALLERY_HRC
+#define INCLUDED_SVX_INC_GALLERY_HRC
 
 #include <svx/dialogs.hrc>
 #include "galtheme.hrc"
@@ -85,6 +85,6 @@
 #define MN_PROPERTIES 23
 #define MN_ASSIGN_ID 24
 
-#endif // _SVX_GALLERY_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

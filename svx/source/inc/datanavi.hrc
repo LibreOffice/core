@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DATANAVI_HRC
-#define _SVX_DATANAVI_HRC
+#ifndef INCLUDED_SVX_SOURCE_INC_DATANAVI_HRC
+#define INCLUDED_SVX_SOURCE_INC_DATANAVI_HRC
 
 // class XFormsInstancePage
 
@@ -47,7 +47,6 @@
 #define IID_TEXT                5
 #define IID_OTHER               6
 
-
-#endif //_SVX_DATANAVI_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

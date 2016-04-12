@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVXITEMS_HRC
-#define _SVXITEMS_HRC
+#ifndef INCLUDED_SVX_SVXITEMS_HRC
+#define INCLUDED_SVX_SVXITEMS_HRC
 
 #include <svl/solar.hrc>
 

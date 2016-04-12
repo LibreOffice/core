@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DIALOGS_HRC
-#define _SVX_DIALOGS_HRC
+#ifndef INCLUDED_SVX_DIALOGS_HRC
+#define INCLUDED_SVX_DIALOGS_HRC
 
 #include <svx/svxids.hrc>
 #include <sfx2/dialogs.hrc>

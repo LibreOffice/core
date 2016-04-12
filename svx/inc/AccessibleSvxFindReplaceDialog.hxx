@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ACCESSIBLESVXFINDREPLACEDIALOG_HXX_
-#define _ACCESSIBLESVXFINDREPLACEDIALOG_HXX_
+#ifndef INCLUDED_SVX_INC_ACCESSIBLESVXFINDREPLACEDIALOG_HXX
+#define INCLUDED_SVX_INC_ACCESSIBLESVXFINDREPLACEDIALOG_HXX
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -52,6 +52,6 @@ private:
         return new VCLXAccessibleSvxFindReplaceDialog(this);
     }
 };
-#endif // _ACCESSIBLESVXFINDREPLACEDIALOG_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
