@@ -57,6 +57,8 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testClipPathAndStyle();
     void testi125329();
     void testMaskingPath07b();
+    void test47446();
+    void test47446b();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -84,6 +86,8 @@ public:
     CPPUNIT_TEST(testClipPathAndStyle);
     CPPUNIT_TEST(testi125329);
     CPPUNIT_TEST(testMaskingPath07b);
+    CPPUNIT_TEST(test47446);
+    CPPUNIT_TEST(test47446b);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -481,6 +485,36 @@ void Test::testMaskingPath07b()
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceMaskingPath07b));
 
     CPPUNIT_ASSERT (pDocument);
+
+}
+
+void Test::test47446()
+{
+    //Check that marker's fill attribute is black is not set
+    Primitive2DSequence aSequence47446 = parseSvg("/svgio/qa/cppunit/data/47446.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequence47446.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence47446));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/polypolygoncolor", "color", "#000000");
+
+}
+
+void Test::test47446b()
+{
+    //Check that marker's fill attribute is inherit from def
+    Primitive2DSequence aSequence47446b = parseSvg("/svgio/qa/cppunit/data/47446b.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequence47446b.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence47446b));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/polypolygoncolor", "color", "#ffff00");
 
 }
 
