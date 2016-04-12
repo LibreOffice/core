@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_ACCESSIBILITY_HRC
-#define _SD_ACCESSIBILITY_HRC
+#ifndef INCLUDED_SD_SOURCE_UI_ACCESSIBILITY_ACCESSIBILITY_HRC
+#define INCLUDED_SD_SOURCE_UI_ACCESSIBILITY_ACCESSIBILITY_HRC
 
 #include <sfx2/sfx.hrc>
 
@@ -77,6 +77,7 @@
 #define SID_SD_A11Y_I_PREVIEW_D (SID_SD_A11Y_START + 47)
 #define SID_SD_A11Y_I_PREVIEW_SUFFIX (SID_SD_A11Y_START + 48)
 #define SID_SD_A11Y_D_PRESENTATION_READONLY (SID_SD_A11Y_START + 49)
-#endif /* _SD_ACCESSIBILITY_HRC */
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

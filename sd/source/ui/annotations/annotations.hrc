@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_ANNOTATIONPANE_HRC
-#define _SD_ANNOTATIONPANE_HRC
+#ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONS_HRC
+#define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONS_HRC
 
 #include "glob.hrc"
 
@@ -41,6 +41,6 @@
 #define RID_ANNOTATION_CONTEXTMENU          (RID_ANNOTATIONS_START+0)
 #define RID_ANNOTATION_TAG_CONTEXTMENU      (RID_ANNOTATIONS_START+1)
 
-#endif // _SD_ANNOTATIONPANE_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

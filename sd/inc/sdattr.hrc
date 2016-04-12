@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDATTR_HRC
-#define _SDATTR_HRC
+#ifndef INCLUDED_SD_INC_SDATTR_HRC
+#define INCLUDED_SD_INC_SDATTR_HRC
 
 #include <sfx2/sfx.hrc>
 
@@ -165,6 +165,6 @@
 #define ATTR_NUMBER_NEWSTART_AT         ATTR_PARANUMBERING_START + 1
 #define ATTR_PARANUMBERING_END          ATTR_NUMBER_NEWSTART_AT
 
-#endif // _SDATTR_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

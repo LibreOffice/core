@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDGLOB_HRC
-#define _SDGLOB_HRC
+#ifndef INCLUDED_SD_INC_GLOB_HRC
+#define INCLUDED_SD_INC_GLOB_HRC
 
 #include <sfx2/sfx.hrc>
 
@@ -136,6 +136,7 @@
 
 #define RID_SLIDESORTER_ICONS                   RID_GLOB_START+227
 #define STR_DEAUTHORISE_CLIENT                  RID_GLOB_START+229
-#endif // _SDGLOB_HRC
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_CUSTOMANIMATION_HRC
-#define _SD_CUSTOMANIMATION_HRC
+#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATION_HRC
+#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATION_HRC
 
 #include "glob.hrc"
 
@@ -114,6 +114,6 @@
 #define CM_ITALIC                   2
 #define CM_UNDERLINED               3
 
-#endif // _SD_CUSTOMANIMATION_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
