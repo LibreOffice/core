@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_EDITBROWSEBOX_HRC_
-#define _SVTOOLS_EDITBROWSEBOX_HRC_
+#ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_EDITBROWSEBOX_HRC
+#define INCLUDED_SVTOOLS_SOURCE_BRWBOX_EDITBROWSEBOX_HRC
 
 #define IMG_EBB_CURRENT             1
 #define IMG_EBB_MODIFIED            2
@@ -30,6 +30,6 @@
 #define IMG_EBB_FILTER              8
 #define IMG_EBB_HEADERFOOTER        9
 
-#endif // _SVTOOLS_EDITBROWSEBOX_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

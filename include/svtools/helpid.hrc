@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_HELPID_HRC
-#define _SVT_HELPID_HRC
+#ifndef INCLUDED_SVTOOLS_HELPID_HRC
+#define INCLUDED_SVTOOLS_HELPID_HRC
 
 #define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
 #define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"

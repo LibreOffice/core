@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_ADDRESSTEMPLATE_HRC_
-#define _SVT_ADDRESSTEMPLATE_HRC_
+#ifndef INCLUDED_SVTOOLS_SOURCE_DIALOGS_ADDRESSTEMPLATE_HRC
+#define INCLUDED_SVTOOLS_SOURCE_DIALOGS_ADDRESSTEMPLATE_HRC
 
 #define FIELD_PAIRS_VISIBLE         5
 #define FIELD_CONTROLS_VISIBLE      2 * FIELD_PAIRS_VISIBLE
 
-#endif // _SVT_ADDRESSTEMPLATE_HRC_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
