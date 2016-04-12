@@ -23,10 +23,10 @@ index 5cea654..3dc6452 100644
  
  if SHAREDLIB_HACK
 diff --git a/src/mscrypto/Makefile.in b/src/mscrypto/Makefile.in
-index 83c8f03..866e996 100644
+index 2697d86..56c28ef 100644
 --- a/src/mscrypto/Makefile.in
 +++ b/src/mscrypto/Makefile.in
-@@ -81,7 +81,8 @@ am__DEPENDENCIES_1 =
+@@ -126,7 +126,8 @@ am__DEPENDENCIES_1 =
  am__libxmlsec1_mscrypto_la_SOURCES_DIST = globals.h private.h app.c \
  	certkeys.c ciphers.c crypto.c digests.c hmac.c keysstore.c \
  	kw_aes.c kw_des.c kt_rsa.c signatures.c symkeys.c x509.c \
@@ -36,7 +36,7 @@ index 83c8f03..866e996 100644
  am__objects_1 =
  @SHAREDLIB_HACK_TRUE@am__objects_2 =  \
  @SHAREDLIB_HACK_TRUE@	libxmlsec1_mscrypto_la-strings.lo
-@@ -98,7 +99,8 @@ am_libxmlsec1_mscrypto_la_OBJECTS = libxmlsec1_mscrypto_la-app.lo \
+@@ -143,7 +144,8 @@ am_libxmlsec1_mscrypto_la_OBJECTS = libxmlsec1_mscrypto_la-app.lo \
  	libxmlsec1_mscrypto_la-signatures.lo \
  	libxmlsec1_mscrypto_la-symkeys.lo \
  	libxmlsec1_mscrypto_la-x509.lo \
@@ -46,7 +46,7 @@ index 83c8f03..866e996 100644
  	$(am__objects_2)
  libxmlsec1_mscrypto_la_OBJECTS = $(am_libxmlsec1_mscrypto_la_OBJECTS)
  AM_V_lt = $(am__v_lt_@AM_V@)
-@@ -378,6 +380,7 @@ libxmlsec1_mscrypto_la_CPPFLAGS = \
+@@ -454,6 +456,7 @@ libxmlsec1_mscrypto_la_CPPFLAGS = \
  libxmlsec1_mscrypto_la_SOURCES = globals.h private.h app.c certkeys.c \
  	ciphers.c crypto.c digests.c hmac.c keysstore.c kw_aes.c \
  	kw_des.c kt_rsa.c signatures.c symkeys.c x509.c x509vfy.c \
@@ -54,7 +54,7 @@ index 83c8f03..866e996 100644
  	csp_calg.h csp_oid.h xmlsec-mingw.h $(NULL) $(am__append_1)
  libxmlsec1_mscrypto_la_LIBADD = \
  	$(MSCRYPTO_LIBS) \
-@@ -484,6 +487,7 @@ distclean-compile:
+@@ -565,6 +568,7 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509vfy.Plo@am__quote@
@@ -62,7 +62,7 @@ index 83c8f03..866e996 100644
  
  .c.o:
  @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -513,6 +517,13 @@ libxmlsec1_mscrypto_la-app.lo: app.c
+@@ -594,6 +598,13 @@ libxmlsec1_mscrypto_la-app.lo: app.c
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_mscrypto_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
