@@ -19,7 +19,7 @@
 
 // include PropertyMap.hxx with this define
 // to create the maps
-#ifndef _PROPERTYMAP_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_PROPERTYMAP_HXX
 #define XML_SCH_CREATE_GLOBAL_MAPS
 #include "PropertyMap.hxx"
 #undef XML_SCH_CREATE_GLOBAL_MAPS
