@@ -74,9 +74,9 @@
 #endif
 
 #ifdef DBG_UTIL
-    #define _DEBUG_REDLINE( pDoc ) sw_DebugRedline( pDoc );
+    #define DEBUG_REDLINE( pDoc ) sw_DebugRedline( pDoc );
 #else
-    #define _DEBUG_REDLINE( pDoc )
+    #define DEBUG_REDLINE( pDoc )
 #endif
 
 typedef std::vector<std::shared_ptr<SfxItemSet> > SfxItemSets;
@@ -2438,7 +2438,7 @@ SwUndoTableCpyTable::~SwUndoTableCpyTable()
 void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    _DEBUG_REDLINE( &rDoc )
+    DEBUG_REDLINE( &rDoc )
 
     SwTableNode* pTableNd = nullptr;
     for (size_t n = m_pArr->size(); n; )
@@ -2579,13 +2579,13 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         pInsRowUndo->UndoImpl(rContext);
     }
-    _DEBUG_REDLINE( &rDoc )
+    DEBUG_REDLINE( &rDoc )
 }
 
 void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    _DEBUG_REDLINE( &rDoc )
+    DEBUG_REDLINE( &rDoc )
 
     if( pInsRowUndo )
     {
@@ -2666,7 +2666,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
         pEntry->nOffset = rBox.GetSttIdx() - pEntry->nBoxIdx;
     }
-    _DEBUG_REDLINE( &rDoc )
+    DEBUG_REDLINE( &rDoc )
 }
 
 void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent )
@@ -2678,7 +2678,7 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
     m_pArr->push_back(std::unique_ptr<_UndoTableCpyTable_Entry>(pEntry));
 
     SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
-    _DEBUG_REDLINE( pDoc )
+    DEBUG_REDLINE( pDoc )
     if( bDelContent )
     {
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
@@ -2698,7 +2698,7 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
         delete pEntry->pBoxNumAttr;
         pEntry->pBoxNumAttr = nullptr;
     }
-    _DEBUG_REDLINE( pDoc )
+    DEBUG_REDLINE( pDoc )
 }
 
 void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, bool bDelContent )
@@ -2709,7 +2709,7 @@ void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex
     if( bDelContent )
     {
         SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
-        _DEBUG_REDLINE( pDoc )
+        DEBUG_REDLINE( pDoc )
 
         if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
         {
@@ -2718,7 +2718,7 @@ void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex
         }
         SwNodeIndex aDelIdx( *rBox.GetSttNd(), 1 );
         rBox.GetFrameFormat()->GetDoc()->GetNodes().Delete( aDelIdx );
-        _DEBUG_REDLINE( pDoc )
+        DEBUG_REDLINE( pDoc )
     }
 
     pEntry->nOffset = rBox.GetSttIdx() - pEntry->nBoxIdx;
