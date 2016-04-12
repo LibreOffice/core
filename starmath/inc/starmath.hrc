@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STARMATH_HRC
-#define _STARMATH_HRC
+#ifndef INCLUDED_STARMATH_INC_STARMATH_HRC
+#define INCLUDED_STARMATH_INC_STARMATH_HRC
 
 #include <svl/solar.hrc>
 #include <sfx2/sfxsids.hrc>
