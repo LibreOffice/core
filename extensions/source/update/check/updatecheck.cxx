@@ -1312,7 +1312,7 @@ UpdateCheck::setCheckFailedState()
 }
 
 
-void UpdateCheck::handleMenuBarUI( rtl::Reference< UpdateHandler > rUpdateHandler,
+void UpdateCheck::handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdateHandler,
                                    UpdateState& eState,
                                    bool suppressBubble )
 {

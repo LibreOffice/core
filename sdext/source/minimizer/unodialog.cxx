@@ -129,7 +129,7 @@ void UnoDialog::setVisible( const OUString& rName, bool bVisible )
 }
 
 
-Reference< XButton > UnoDialog::insertButton( const OUString& rName, Reference< XActionListener > xActionListener,
+Reference< XButton > UnoDialog::insertButton( const OUString& rName, const Reference< XActionListener >& xActionListener,
             const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XButton > xButton;

@@ -288,7 +288,7 @@ namespace treeview {
 
     private:
         static css::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
-            ( const css::uno::Reference< css::deployment::XPackage > xPackage,
+            ( const css::uno::Reference< css::deployment::XPackage >& xPackage,
               css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
     protected:
@@ -300,7 +300,7 @@ namespace treeview {
             ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-            css::uno::Reference< css::deployment::XPackage > xPackage );
+            const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
         osl::Mutex                                                                  m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
@@ -339,7 +339,7 @@ namespace treeview {
     private:
         OUString expandURL( const OUString& aURL );
         OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
-            css::uno::Reference< css::deployment::XPackage > xPackage );
+            const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
     }; // end class TreeFileIterator
 

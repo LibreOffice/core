@@ -175,7 +175,7 @@ class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable,
 {
 public:
     OGLTransitionerImpl();
-    bool setTransition( std::shared_ptr<OGLTransitionImpl> pOGLTransition );
+    bool setTransition( const std::shared_ptr<OGLTransitionImpl>& pOGLTransition );
     bool initialize( const Reference< presentation::XSlideShowView >& xView,
             const Reference< rendering::XBitmap >& xLeavingSlide,
             const Reference< rendering::XBitmap >& xEnteringSlide );
@@ -546,7 +546,7 @@ void OGLTransitionerImpl::impl_finishTransition()
         mpTransition->finish();
 }
 
-bool OGLTransitionerImpl::setTransition( std::shared_ptr<OGLTransitionImpl> pTransition )
+bool OGLTransitionerImpl::setTransition( const std::shared_ptr<OGLTransitionImpl>& pTransition )
 {
     if ( mpTransition ) // already initialized
         return true;

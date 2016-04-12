@@ -133,7 +133,7 @@ private:
     DECL_LINK_TYPED(    CertSelectHdl, SvTreeListBox*, void );
     void                Clear();
     SvTreeListEntry*    InsertCert( SvTreeListEntry* _pParent, const OUString& _rName,
-                                    css::uno::Reference< css::security::XCertificate > rxCert,
+                                    const css::uno::Reference< css::security::XCertificate >& rxCert,
                                     bool bValid);
 
 public:

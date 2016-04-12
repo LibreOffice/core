@@ -61,7 +61,7 @@ public:
                              const Link<LinkParamNone*, void>& rStartVerifySignatureElement);
     virtual ~ImplXMLSignatureListener();
 
-    void setNextHandler(css::uno::Reference< css::xml::sax::XDocumentHandler > xNextHandler);
+    void setNextHandler(const css::uno::Reference< css::xml::sax::XDocumentHandler >& xNextHandler);
 
     // css::xml::crypto::sax::XSignatureCreationResultListener
     virtual void SAL_CALL signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus creationResult )

@@ -228,7 +228,7 @@ typedef struct
 } PyUNO;
 
 PyObject* PyUNO_iterator_new (
-    const css::uno::Reference<css::container::XEnumeration> xEnumeration);
+    const css::uno::Reference<css::container::XEnumeration>& xEnumeration);
 
 typedef struct
 {

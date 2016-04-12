@@ -266,7 +266,7 @@ namespace slideshow
              */
             void           commitLayerChanges( std::size_t                    nCurrLayerIndex,
                                                LayerShapeMap::const_iterator  aFirstLayerShape,
-                                               LayerShapeMap::const_iterator  aEndLayerShapes );
+                                               const LayerShapeMap::const_iterator& aEndLayerShapes );
 
             /** Init Shape layers with background layer.
              */

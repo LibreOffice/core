@@ -92,7 +92,7 @@ class Service:
 {
 public:
     explicit Service(
-        css::uno::Reference< css::uno::XComponentContext > const context):
+        const css::uno::Reference< css::uno::XComponentContext >& context):
         ServiceBase(m_aMutex), context_(context), default_(true),
         lock_( lock() )
     {
@@ -100,7 +100,7 @@ public:
     }
 
     Service(
-        css::uno::Reference< css::uno::XComponentContext > const context,
+        const css::uno::Reference< css::uno::XComponentContext >& context,
         OUString const & locale):
         ServiceBase(m_aMutex), context_(context), locale_(locale),
         default_(false),

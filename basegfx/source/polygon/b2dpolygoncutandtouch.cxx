@@ -142,7 +142,7 @@ namespace basegfx
                             while(nNewInd < nTempPointCount && rTempPoints[nNewInd].getIndex() == a)
                             {
                                 const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
-                                const B2DPoint aNewPoint(rTempPoint.getPoint());
+                                const B2DPoint& aNewPoint(rTempPoint.getPoint());
 
                                 // do not add points double
                                 if(!aRetval.getB2DPoint(aRetval.count() - 1L).equal(aNewPoint))

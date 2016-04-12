@@ -194,7 +194,7 @@ public:
     void getGroupByName(const OUString& Name, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup);
     css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> > getControlModels();
 
-    static OUString GetGroupName( css::uno::Reference< css::beans::XPropertySet> xComponent );
+    static OUString GetGroupName( const css::uno::Reference< css::beans::XPropertySet>& xComponent );
 };
 
 

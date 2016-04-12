@@ -565,7 +565,7 @@ bool ImpOptimizer::Optimize()
     return true;
 }
 
-static void DispatchURL( Reference< XComponentContext > xContext, const OUString& sURL, Reference< XFrame > xFrame )
+static void DispatchURL( const Reference< XComponentContext >& xContext, const OUString& sURL, const Reference< XFrame >& xFrame )
 {
     try
     {

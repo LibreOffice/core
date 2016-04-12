@@ -71,7 +71,7 @@ void OptimizationStats::InitializeStatusValues( const uno::Sequence< PropertyVal
 }
 
 
-void OptimizationStats::InitializeStatusValuesFromDocument( Reference< XModel > rxModel )
+void OptimizationStats::InitializeStatusValuesFromDocument( const Reference< XModel >& rxModel )
 {
     try
     {

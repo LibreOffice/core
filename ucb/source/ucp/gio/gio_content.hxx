@@ -101,8 +101,8 @@ private:
 
     void destroy( bool bDeletePhysical ) throw( css::uno::Exception, std::exception );
 
-    static void copyData( css::uno::Reference< css::io::XInputStream > xIn,
-        css::uno::Reference< css::io::XOutputStream > xOut );
+    static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
+        const css::uno::Reference< css::io::XOutputStream >& xOut );
 
     css::uno::Sequence< css::uno::Any >
         setPropertyValues( const css::uno::Sequence<
@@ -110,7 +110,7 @@ private:
             const css::uno::Reference<
             css::ucb::XCommandEnvironment >& xEnv );
 
-    bool feedSink( css::uno::Reference< css::uno::XInterface> aSink,
+    bool feedSink( const css::uno::Reference< css::uno::XInterface>& aSink,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     bool exchangeIdentity(const css::uno::Reference< css::ucb::XContentIdentifier >&  xNewId);
