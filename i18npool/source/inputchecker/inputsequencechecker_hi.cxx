@@ -35,24 +35,24 @@ InputSequenceChecker_hi::~InputSequenceChecker_hi()
 {
 }
 /* Non-Defined Class type */
-#define __ND        0
+#define ND_        0
 
 /*
  * Devanagari character type definitions
  */
-#define __UP  1  // ChandraBindu & Anuswar
-#define __NP  2  // Visarg
-#define __IV    3  // Independent Vowels
-#define __CN    4  // Consonants except _CK & _RC
-#define __CK    5  // Consonants that can be followed by Nukta
-#define __RC    6  // Ra
-#define __NM    7  // Matra
-#define __RM    8  // Ra + HAL
-#define __IM    9  // Choti I Matra
-#define __HL    10 // HAL
-#define __NK    11 // Nukta
-#define __VD    12 // Vedic
-#define __HD    13 // Hindu Numerals
+#define UP_  1  // ChandraBindu & Anuswar
+#define NP_  2  // Visarg
+#define IV_    3  // Independent Vowels
+#define CN_    4  // Consonants except _CK & _RC
+#define CK_    5  // Consonants that can be followed by Nukta
+#define RC_    6  // Ra
+#define NM_    7  // Matra
+#define RM_    8  // Ra + HAL
+#define IM_    9  // Choti I Matra
+#define HL_    10 // HAL
+#define NK_    11 // Nukta
+#define VD_    12 // Vedic
+#define HD_    13 // Hindu Numerals
 
 /*
  * Devanagari character type table
@@ -60,22 +60,22 @@ InputSequenceChecker_hi::~InputSequenceChecker_hi()
 static const sal_uInt16 devaCT[128] = {
 /*         0,    1,    2,    3,    4,    5,    6,    7,
            8,    9,    A,    B,    C,    D,    E,    F, */
-/* 0900 */ __ND, __UP, __UP, __NP, __ND, __IV, __IV, __IV,
-           __IV, __IV, __IV, __IV, __IV, __IV, __IV, __IV,
-/* 0910 */ __IV, __IV, __IV, __IV, __IV, __CK, __CK, __CK,
-           __CN, __CN, __CN, __CN, __CK, __CN, __CN, __CN,
-/* 0920 */ __CN, __CK, __CK, __CN, __CN, __CN, __CN, __CN,
-           __CN, __CN, __CN, __CK, __CN, __CN, __CN, __CN,
-/* 0930 */ __RC, __CN, __CN, __CN, __CN, __CN, __CN, __CN,
-           __CN, __CN, __ND, __ND, __NK, __VD, __NM, __IM,
-/* 0940 */ __RM, __NM, __NM, __NM, __NM, __RM, __RM, __RM,
-           __RM, __RM, __RM, __RM, __RM, __HL, __ND, __ND,
-/* 0950 */ __ND, __VD, __VD, __VD, __VD, __ND, __ND, __ND,
-           __CN, __CN, __CN, __CN, __CN, __CN, __CN, __CN,
-/* 0960 */ __IV, __IV, __NM, __NM, __ND, __ND, __HD, __HD,
-           __HD, __HD, __HD, __HD, __HD, __HD, __HD, __HD,
-/* 0970 */ __ND, __ND, __ND, __ND, __ND, __ND, __ND, __ND,
-           __ND, __ND, __ND, __ND, __ND, __ND, __ND, __ND,
+/* 0900 */ ND_, UP_, UP_, NP_, ND_, IV_, IV_, IV_,
+           IV_, IV_, IV_, IV_, IV_, IV_, IV_, IV_,
+/* 0910 */ IV_, IV_, IV_, IV_, IV_, CK_, CK_, CK_,
+           CN_, CN_, CN_, CN_, CK_, CN_, CN_, CN_,
+/* 0920 */ CN_, CK_, CK_, CN_, CN_, CN_, CN_, CN_,
+           CN_, CN_, CN_, CK_, CN_, CN_, CN_, CN_,
+/* 0930 */ RC_, CN_, CN_, CN_, CN_, CN_, CN_, CN_,
+           CN_, CN_, ND_, ND_, NK_, VD_, NM_, IM_,
+/* 0940 */ RM_, NM_, NM_, NM_, NM_, RM_, RM_, RM_,
+           RM_, RM_, RM_, RM_, RM_, HL_, ND_, ND_,
+/* 0950 */ ND_, VD_, VD_, VD_, VD_, ND_, ND_, ND_,
+           CN_, CN_, CN_, CN_, CN_, CN_, CN_, CN_,
+/* 0960 */ IV_, IV_, NM_, NM_, ND_, ND_, HD_, HD_,
+           HD_, HD_, HD_, HD_, HD_, HD_, HD_, HD_,
+/* 0970 */ ND_, ND_, ND_, ND_, ND_, ND_, ND_, ND_,
+           ND_, ND_, ND_, ND_, ND_, ND_, ND_, ND_,
 };
 
 /*
@@ -105,7 +105,7 @@ sal_Bool DEV_Composible[2][2] = {
 };
 
 #define getCharType(x) \
-    ((x >= 0x0900 && x < 0x097f) ? devaCT[x - 0x0900] : __ND)
+    ((x >= 0x0900 && x < 0x097f) ? devaCT[x - 0x0900] : ND_)
 
 sal_Bool SAL_CALL
 InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
