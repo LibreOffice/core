@@ -83,10 +83,9 @@ T lcl_getProperty(
     T aResult;
     if( rMediaDescriptor.getLength())
     {
-        OUString aPropName( rPropName );
         const beans::PropertyValue * pIt = rMediaDescriptor.getConstArray();
         const beans::PropertyValue * pEndIt = pIt +  + rMediaDescriptor.getLength();
-        pIt = ::std::find_if( pIt, pEndIt, lcl_PropNameEquals( aPropName ));
+        pIt = ::std::find_if( pIt, pEndIt, lcl_PropNameEquals( rPropName ));
         if( pIt != pEndIt )
             (*pIt).Value >>= aResult;
     }

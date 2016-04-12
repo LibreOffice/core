@@ -136,7 +136,7 @@ void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOut
 }
 
 void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                 , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                 , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.push_back( new WrappedScaleTextProperty( spChart2ModelContact ) );
 }

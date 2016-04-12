@@ -88,7 +88,7 @@ chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
 }
 
 void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
                                     , tSeriesOrDiagramPropertyType ePropertyType )
 {
     //if !spChart2ModelContact.get() is then the created properties do belong to a single series or single datapoint
@@ -110,13 +110,13 @@ void WrappedDataCaptionProperties::addProperties( std::vector< Property > & rOut
 }
 
 void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
 void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }

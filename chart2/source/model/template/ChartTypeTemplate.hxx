@@ -253,8 +253,8 @@ private:
                           css::uno::Sequence<
                               css::uno::Reference<
                                   css::chart2::XDataSeries > > > & aSeriesSeq,
-                      css::uno::Reference<
-                          css::chart2::data::XLabeledDataSequence > xCategories,
+                      const css::uno::Reference<
+                          css::chart2::data::XLabeledDataSequence >& xCategories,
                       const css::uno::Sequence<
                               css::uno::Reference<
                                   css::chart2::XChartType > > & aOldChartTypesSeq,

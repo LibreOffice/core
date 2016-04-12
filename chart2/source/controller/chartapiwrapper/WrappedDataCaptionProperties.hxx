@@ -35,9 +35,9 @@ class WrappedDataCaptionProperties
 public:
     static void addProperties( ::std::vector< css::beans::Property > & rOutProperties );
     static void addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
     static void addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
 } //namespace wrapper

@@ -501,7 +501,7 @@ bool lcl_isXYChart( const Reference< chart2::XDiagram >& rDiagram )
 
 sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
                 sal_Int32 nOldAPIIndex
-                , Reference< chart2::XDiagram > xDiagram )
+                , const Reference< chart2::XDiagram >& xDiagram )
 {
     sal_Int32 nNewAPIIndex = nOldAPIIndex;
 

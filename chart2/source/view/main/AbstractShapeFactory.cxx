@@ -79,7 +79,7 @@ osl::Module* getOpenGLModule()
 extern "C" opengl::OpenglShapeFactory* getOpenglShapeFactory();
 #endif
 
-AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Reference< lang::XMultiServiceFactory> xFactory)
+AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(const uno::Reference< lang::XMultiServiceFactory>& xFactory)
 {
     static AbstractShapeFactory* pShapeFactory = nullptr;
 

@@ -775,7 +775,7 @@ sal_Int32 ChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
 void ChartTypeTemplate::FillDiagram(
     const Reference< XDiagram >& xDiagram,
     const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
-    Reference< data::XLabeledDataSequence > xCategories,
+    const Reference< data::XLabeledDataSequence >& xCategories,
     const Sequence< Reference< XChartType > >& aOldChartTypesSeq,
     bool /* bCreate */ )
 {

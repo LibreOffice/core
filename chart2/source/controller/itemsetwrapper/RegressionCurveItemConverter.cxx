@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 namespace
 {
 template <class T, class D>
-bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Reference<beans::XPropertySet> xProperties, const OUString& aPropertyID)
+bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
@@ -59,7 +59,7 @@ bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, un
 }
 
 template <class T, class D>
-void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Reference<beans::XPropertySet> xProperties, const OUString& aPropertyID)
+void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
@@ -72,7 +72,7 @@ void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Referen
     }
 }
 
-void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Reference<beans::XPropertySet> xProperties, const OUString& aPropertyID)
+void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )

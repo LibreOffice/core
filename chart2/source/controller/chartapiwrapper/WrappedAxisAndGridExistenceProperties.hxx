@@ -35,21 +35,21 @@ class WrappedAxisAndGridExistenceProperties
 {
 public:
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
 class WrappedAxisTitleExistenceProperties
 {
 public:
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
 class WrappedAxisLabelExistenceProperties
 {
 public:
    static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-       , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+       , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
 } //namespace wrapper

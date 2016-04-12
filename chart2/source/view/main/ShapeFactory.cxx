@@ -824,7 +824,7 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
             double fUnitCircleInnerRadius
             , double fUnitCircleOuterRadius
             , double fStartAngleRadian, double fWidthAngleRadian
-            , ::basegfx::B2DHomMatrix aTransformationFromUnitCircle
+            , const ::basegfx::B2DHomMatrix& aTransformationFromUnitCircle
             , const double fAngleSubdivisionRadian )
 {
     drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();

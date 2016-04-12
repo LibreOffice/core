@@ -206,7 +206,7 @@ void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutPro
 }
 
 void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.push_back( new WrappedSplineTypeProperty( spChart2ModelContact ) );
     rList.push_back(

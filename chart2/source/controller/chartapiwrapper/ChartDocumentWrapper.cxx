@@ -1134,7 +1134,7 @@ uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::impl_getDrawPage() co
 
 namespace {
 
-uno::Reference< lang::XMultiServiceFactory > getShapeFactory(uno::Reference<uno::XInterface> xChartView)
+uno::Reference< lang::XMultiServiceFactory > getShapeFactory(const uno::Reference<uno::XInterface>& xChartView)
 {
     Reference< lang::XUnoTunnel> xUnoTunnel(xChartView,uno::UNO_QUERY);
     if(xUnoTunnel.is())

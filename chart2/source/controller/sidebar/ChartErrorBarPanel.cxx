@@ -52,12 +52,12 @@ enum class ErrorBarDirection
 };
 
 css::uno::Reference<css::beans::XPropertySet> getErrorBarPropSet(
-        css::uno::Reference<css::frame::XModel> xModel, const OUString& rCID)
+        const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
 {
     return ObjectIdentifier::getObjectPropertySet(rCID, xModel);
 }
 
-bool showPositiveError(css::uno::Reference<css::frame::XModel> xModel,
+bool showPositiveError(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -76,7 +76,7 @@ bool showPositiveError(css::uno::Reference<css::frame::XModel> xModel,
     return bShow;
 }
 
-bool showNegativeError(css::uno::Reference<css::frame::XModel> xModel,
+bool showNegativeError(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -95,7 +95,7 @@ bool showNegativeError(css::uno::Reference<css::frame::XModel> xModel,
     return bShow;
 }
 
-void setShowPositiveError(css::uno::Reference<css::frame::XModel> xModel,
+void setShowPositiveError(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID, bool bShow)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -107,7 +107,7 @@ void setShowPositiveError(css::uno::Reference<css::frame::XModel> xModel,
     xPropSet->setPropertyValue("ShowPositiveError", css::uno::makeAny(bShow));
 }
 
-void setShowNegativeError(css::uno::Reference<css::frame::XModel> xModel,
+void setShowNegativeError(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID, bool bShow)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -135,7 +135,7 @@ ErrorBarTypeMap aErrorBarType[] = {
     { 6, css::chart::ErrorBarStyle::ERROR_MARGIN },
 };
 
-sal_Int32 getTypePos(css::uno::Reference<css::frame::XModel> xModel,
+sal_Int32 getTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -161,7 +161,7 @@ sal_Int32 getTypePos(css::uno::Reference<css::frame::XModel> xModel,
     return 0;
 }
 
-void setTypePos(css::uno::Reference<css::frame::XModel> xModel,
+void setTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID, sal_Int32 nPos)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -180,7 +180,7 @@ void setTypePos(css::uno::Reference<css::frame::XModel> xModel,
     xPropSet->setPropertyValue("ErrorBarStyle", css::uno::makeAny(nApi));
 }
 
-double getValue(css::uno::Reference<css::frame::XModel> xModel,
+double getValue(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID, ErrorBarDirection eDir)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -204,7 +204,7 @@ double getValue(css::uno::Reference<css::frame::XModel> xModel,
     return nVal;
 }
 
-void setValue(css::uno::Reference<css::frame::XModel> xModel,
+void setValue(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID, double nVal, ErrorBarDirection eDir)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -220,7 +220,7 @@ void setValue(css::uno::Reference<css::frame::XModel> xModel,
     xPropSet->setPropertyValue(aName, css::uno::makeAny(nVal));
 }
 
-OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
+OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);

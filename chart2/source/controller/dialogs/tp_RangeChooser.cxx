@@ -386,6 +386,7 @@ void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
 {
     //user has selected a new range
 
+    // rNewRange becomes invalid after removing the listener
     OUString aRange( rNewRange );
 
     m_rDialogModel.startControllerLockTimer();

@@ -282,7 +282,7 @@ bool ChartController::TheModelRef::is() const
 namespace {
 
 css::uno::Reference<css::chart2::XChartType> getChartType(
-        css::uno::Reference<css::chart2::XChartDocument> xChartDoc)
+        const css::uno::Reference<css::chart2::XChartDocument>& xChartDoc)
 {
     Reference <chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
 
@@ -394,7 +394,7 @@ uno::Sequence< OUString > ChartController::getSupportedServiceNames_Static()
 
 namespace {
 
-uno::Reference<ui::XSidebar> getSidebarFromModel(uno::Reference<frame::XModel> xModel)
+uno::Reference<ui::XSidebar> getSidebarFromModel(const uno::Reference<frame::XModel>& xModel)
 {
     uno::Reference<container::XChild> xChild(xModel, uno::UNO_QUERY);
     if (!xChild.is())

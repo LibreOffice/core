@@ -278,7 +278,7 @@ void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProp
 }
 
 void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     rList.push_back( new WrappedVolumeProperty( spChart2ModelContact ) );
     rList.push_back( new WrappedUpDownProperty( spChart2ModelContact ) );

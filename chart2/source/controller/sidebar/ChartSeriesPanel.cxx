@@ -56,7 +56,7 @@ namespace chart { namespace sidebar {
 
 namespace {
 
-bool isDataLabelVisible(css::uno::Reference<css::frame::XModel> xModel, const OUString& rCID)
+bool isDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
@@ -67,7 +67,7 @@ bool isDataLabelVisible(css::uno::Reference<css::frame::XModel> xModel, const OU
     return DataSeriesHelper::hasDataLabelsAtSeries(xSeries);
 }
 
-void setDataLabelVisible(css::uno::Reference<css::frame::XModel> xModel, const OUString& rCID, bool bVisible)
+void setDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID, bool bVisible)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
@@ -96,7 +96,7 @@ LabelPlacementMap aLabelPlacementMap[] = {
     { 5, css::chart::DataLabelPlacement::NEAR_ORIGIN }
 };
 
-sal_Int32 getDataLabelPlacement(css::uno::Reference<css::frame::XModel> xModel,
+sal_Int32 getDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::beans::XPropertySet > xSeries(
@@ -121,7 +121,7 @@ sal_Int32 getDataLabelPlacement(css::uno::Reference<css::frame::XModel> xModel,
     return 0;
 }
 
-void setDataLabelPlacement(css::uno::Reference<css::frame::XModel> xModel,
+void setDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID, sal_Int32 nPos)
 {
     css::uno::Reference< css::beans::XPropertySet > xSeries(
@@ -143,7 +143,7 @@ void setDataLabelPlacement(css::uno::Reference<css::frame::XModel> xModel,
     xSeries->setPropertyValue("LabelPlacement", css::uno::makeAny(nApi));
 }
 
-bool isTrendlineVisible(css::uno::Reference<css::frame::XModel> xModel,
+bool isTrendlineVisible(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
@@ -155,7 +155,7 @@ bool isTrendlineVisible(css::uno::Reference<css::frame::XModel> xModel,
     return xRegressionCurveContainer->getRegressionCurves().getLength() != 0;
 }
 
-void setTrendlineVisible(css::uno::Reference<css::frame::XModel>
+void setTrendlineVisible(const css::uno::Reference<css::frame::XModel>&
         xModel, const OUString& rCID, bool bVisible)
 {
     css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
@@ -179,8 +179,8 @@ void setTrendlineVisible(css::uno::Reference<css::frame::XModel>
 
 }
 
-bool isErrorBarVisible(css::uno::Reference<css::frame::XModel>
-        xModel, const OUString& rCID, bool bYError)
+bool isErrorBarVisible(const css::uno::Reference<css::frame::XModel>& xModel,
+                       const OUString& rCID, bool bYError)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
@@ -191,7 +191,7 @@ bool isErrorBarVisible(css::uno::Reference<css::frame::XModel>
     return StatisticsHelper::hasErrorBars(xSeries, bYError);
 }
 
-void setErrorBarVisible(css::uno::Reference<css::frame::XModel>
+void setErrorBarVisible(const css::uno::Reference<css::frame::XModel>&
         xModel, const OUString& rCID, bool bYError, bool bVisible)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries(
@@ -212,7 +212,7 @@ void setErrorBarVisible(css::uno::Reference<css::frame::XModel>
     }
 }
 
-bool isPrimaryAxis(css::uno::Reference<css::frame::XModel>
+bool isPrimaryAxis(const css::uno::Reference<css::frame::XModel>&
         xModel, const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries(
@@ -224,7 +224,7 @@ bool isPrimaryAxis(css::uno::Reference<css::frame::XModel>
     return DataSeriesHelper::getAttachedAxisIndex(xSeries) == 0;
 }
 
-void setAttachedAxisType(css::uno::Reference<css::frame::XModel>
+void setAttachedAxisType(const css::uno::Reference<css::frame::XModel>&
         xModel, const OUString& rCID, bool bPrimary)
 {
     css::uno::Reference< css::beans::XPropertySet > xSeries(
@@ -238,7 +238,7 @@ void setAttachedAxisType(css::uno::Reference<css::frame::XModel>
 }
 
 css::uno::Reference<css::chart2::XChartType> getChartType(
-        css::uno::Reference<css::frame::XModel> xModel)
+        const css::uno::Reference<css::frame::XModel>& xModel)
 {
     css::uno::Reference<css::chart2::XChartDocument> xChartDoc (xModel, css::uno::UNO_QUERY);
     css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
@@ -249,7 +249,7 @@ css::uno::Reference<css::chart2::XChartType> getChartType(
     return xChartTypeSequence[0];
 }
 
-OUString getSeriesLabel(css::uno::Reference<css::frame::XModel> xModel, const OUString& rCID)
+OUString getSeriesLabel(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
@@ -261,7 +261,7 @@ OUString getSeriesLabel(css::uno::Reference<css::frame::XModel> xModel, const OU
     return DataSeriesHelper::getDataSeriesLabel(xSeries, xChartType->getRoleOfSequenceForSeriesLabel());
 }
 
-OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
+OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);

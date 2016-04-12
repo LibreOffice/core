@@ -34,7 +34,7 @@ class WrappedSceneProperty
 {
 public:
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
 class WrappedD3DTransformMatrixProperty : public WrappedProperty

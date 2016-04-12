@@ -67,7 +67,7 @@ public:
     void setShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> xFactory)
         { m_xShapeFactory = xFactory; }
 
-    static AbstractShapeFactory* getOrCreateShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> xFactory);
+    static AbstractShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
 
     virtual ~AbstractShapeFactory() {};
 
