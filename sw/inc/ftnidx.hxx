@@ -30,7 +30,7 @@ class SwSectionNode;
 // Everywhere where NodeIndex is used, the header files missing here
 // are already included. Therefore put here as defines only and
 // not as inline methods (saves compile time).
-#define _SwTextFootnote_GetIndex( pFIdx ) (pFIdx->GetTextNode().GetIndex())
+#define SwTextFootnote_GetIndex( pFIdx ) (pFIdx->GetTextNode().GetIndex())
 
 struct CompareSwFootnoteIdxs
 {

@@ -439,7 +439,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTextFootnote* pTextFootnote, sal_u
 SwHistorySetFootnote::SwHistorySetFootnote( const SwTextFootnote &rTextFootnote )
     : SwHistoryHint( HSTRY_SETFTNHNT )
     , m_FootnoteNumber( rTextFootnote.GetFootnote().GetNumStr() )
-    , m_nNodeIndex( _SwTextFootnote_GetIndex( (&rTextFootnote) ) )
+    , m_nNodeIndex( SwTextFootnote_GetIndex( (&rTextFootnote) ) )
     , m_nStart( rTextFootnote.GetStart() )
     , m_bEndNote( rTextFootnote.GetFootnote().IsEndNote() )
 {

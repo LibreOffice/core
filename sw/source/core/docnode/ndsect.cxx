@@ -758,7 +758,7 @@ void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 
         // Delete all succeeding Footnotes
         while( nPos < rFootnoteArr.size() &&
-            _SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) <= nEnd )
+            SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) <= nEnd )
         {
             // If the Nodes are not deleted, they need to deregister at the Pages
             // (delete Frames) or else they will remain there (Undo does not delete them!)
@@ -767,7 +767,7 @@ void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
         }
 
         while( nPos-- &&
-            _SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) >= nStt )
+            SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) >= nStt )
         {
             // If the Nodes are not deleted, they need to deregister at the Pages
             // (delete Frames) or else they will remain there (Undo does not delete them!)

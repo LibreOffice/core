@@ -31,8 +31,8 @@
 
 bool CompareSwFootnoteIdxs::operator()(SwTextFootnote* const& lhs, SwTextFootnote* const& rhs) const
 {
-    sal_uLong nIdxLHS = _SwTextFootnote_GetIndex( lhs );
-    sal_uLong nIdxRHS = _SwTextFootnote_GetIndex( rhs );
+    sal_uLong nIdxLHS = SwTextFootnote_GetIndex( lhs );
+    sal_uLong nIdxRHS = SwTextFootnote_GetIndex( rhs );
     return ( nIdxLHS == nIdxRHS && lhs->GetStart() < rhs->GetStart() ) || nIdxLHS < nIdxRHS;
 }
 
@@ -256,7 +256,7 @@ SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFnd
         while( nU <= nO )
         {
             const size_t nM = nU + ( nO - nU ) / 2;
-            sal_uLong nNdIdx = _SwTextFootnote_GetIndex( (*this)[ nM ] );
+            sal_uLong nNdIdx = SwTextFootnote_GetIndex( (*this)[ nM ] );
             if( nNdIdx == nIdx )
             {
                 if( pFndPos )

@@ -417,7 +417,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     bool bTypeChgd = false;
     const size_t nPosSave = nPos;
     while( nPos < rFootnoteArr.size() &&
-            (( nIdx = _SwTextFootnote_GetIndex((pTextFootnote = rFootnoteArr[ nPos++ ] )))
+            (( nIdx = SwTextFootnote_GetIndex((pTextFootnote = rFootnoteArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
                 nEndCnt >= pTextFootnote->GetStart() )) )
         if( nIdx > nSttNd || ( nIdx == nSttNd &&
@@ -447,7 +447,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
 
     nPos = nPosSave;       // There are more in the front!
     while( nPos &&
-            (( nIdx = _SwTextFootnote_GetIndex((pTextFootnote = rFootnoteArr[ --nPos ] )))
+            (( nIdx = SwTextFootnote_GetIndex((pTextFootnote = rFootnoteArr[ --nPos ] )))
                 > nSttNd || ( nIdx == nSttNd &&
                 nSttCnt <= pTextFootnote->GetStart() )) )
         if( nIdx < nEndNd || ( nIdx == nEndNd &&
