@@ -56,6 +56,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testClipPathAndParentStyle();
     void testClipPathAndStyle();
     void testi125329();
+    void testMaskingPath07b();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testClipPathAndParentStyle);
     CPPUNIT_TEST(testClipPathAndStyle);
     CPPUNIT_TEST(testi125329);
+    CPPUNIT_TEST(testMaskingPath07b);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -466,7 +468,19 @@ void Test::testi125329()
     assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "maxy", "45");
     assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "color", "#008000"); // rect stroke color
     assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", "width", "1"); // rect stroke width
+}
 
+void Test::testMaskingPath07b()
+{
+    //For the time being, check that masking-path-07-b.svg can be imported and it doesn't hang on loading
+    //it used to hang after d5649ae7b76278cb3155f951d6327157c7c92b65
+    Primitive2DSequence aSequenceMaskingPath07b = parseSvg("/svgio/qa/cppunit/data/masking-path-07-b.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceMaskingPath07b.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceMaskingPath07b));
+
+    CPPUNIT_ASSERT (pDocument);
 
 }
 
