@@ -46,31 +46,7 @@ $(eval $(call gb_Module_add_targets,sw,\
 endif
 
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
-	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
-		CppunitTest_sw_uwriter) \
-    CppunitTest_sw_docbookexport \
-    CppunitTest_sw_htmlexport \
-    CppunitTest_sw_htmlimport \
-    CppunitTest_sw_macros_test \
-    CppunitTest_sw_ooxmlexport \
-    CppunitTest_sw_ooxmlexport2 \
-    CppunitTest_sw_ooxmlexport3 \
-    CppunitTest_sw_ooxmlexport4 \
-    CppunitTest_sw_ooxmlexport5 \
-    CppunitTest_sw_ooxmlexport6 \
-    CppunitTest_sw_ooxmlexport7 \
-    CppunitTest_sw_ooxmlfieldexport \
-    CppunitTest_sw_ooxmlw14export \
-    CppunitTest_sw_ooxmlimport \
-    CppunitTest_sw_ww8export \
-    CppunitTest_sw_ww8import \
-    CppunitTest_sw_rtfexport \
-    CppunitTest_sw_rtfimport \
-    CppunitTest_sw_odfexport \
-    CppunitTest_sw_odfimport \
-    CppunitTest_sw_uiwriter \
-    CppunitTest_sw_mailmerge \
-    CppunitTest_sw_globalfilter \
+    CppunitTest_sw_check_indeterminate_state \
 ))
 
 ifeq ($(OS),LINUX)
