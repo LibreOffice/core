@@ -754,7 +754,7 @@ public:
 
     void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
 
-    void    SetColorList( XColorListRef pColList );
+    void    SetColorList( const XColorListRef& pColList );
     XColorListRef GetColorList() { return pColorList; }
     void    SaveToViewFrame( SfxViewFrame *pViewFrame );
     void    SetupForViewFrame( SfxViewFrame *pViewFrame );

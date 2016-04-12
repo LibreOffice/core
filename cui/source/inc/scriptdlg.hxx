@@ -167,7 +167,7 @@ protected:
     static css::uno::Reference< css::script::browse::XBrowseNode >
                 getBrowseNode( SvTreeListEntry* pEntry );
     static css::uno::Reference< css::frame::XModel > getModel( SvTreeListEntry* pEntry );
-    OUString    getListOfChildren( css::uno::Reference< css::script::browse::XBrowseNode > node, int depth );
+    OUString    getListOfChildren( const css::uno::Reference< css::script::browse::XBrowseNode >& node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
 

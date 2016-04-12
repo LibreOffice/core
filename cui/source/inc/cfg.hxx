@@ -635,7 +635,7 @@ public:
     void            SetSystemStyle( const OUString& rResourceURL, sal_Int32 nStyle );
 
     void            SetSystemStyle(
-        css::uno::Reference< css::frame::XFrame > xFrame,
+        const css::uno::Reference< css::frame::XFrame >& xFrame,
         const OUString& rResourceURL, sal_Int32 nStyle );
 
     SvxEntries*     GetEntries() override;

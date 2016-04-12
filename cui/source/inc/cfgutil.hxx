@@ -134,7 +134,7 @@ class SfxConfigGroupListBox : public SvTreeListBox
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
 
     Image GetImage(
-        css::uno::Reference< css::script::browse::XBrowseNode > node,
+        const css::uno::Reference< css::script::browse::XBrowseNode >& node,
         css::uno::Reference< css::uno::XComponentContext > xCtx,
         bool bIsRootNode
     );

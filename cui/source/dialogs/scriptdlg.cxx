@@ -1140,7 +1140,7 @@ bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xPro
     return result;
 }
 
-OUString SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode > node, int depth )
+OUString SvxScriptOrgDialog::getListOfChildren( const Reference< browse::XBrowseNode >& node, int depth )
 {
     OUString result = "\n";
     for( int i=0;i<=depth;i++ )

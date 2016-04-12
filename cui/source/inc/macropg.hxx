@@ -79,7 +79,7 @@ protected:
 
     void                        EnableButtons();
     static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
-    static ::std::pair< OUString, OUString > GetPairFromAny( css::uno::Any aAny );
+    static ::std::pair< OUString, OUString > GetPairFromAny( const css::uno::Any& aAny );
 
 public:
 
@@ -87,7 +87,7 @@ public:
     virtual void                dispose() override;
     void                        InitResources();
 
-    void                        InitAndSetHandler( css::uno::Reference< css::container::XNameReplace > xAppEvents, css::uno::Reference< css::container::XNameReplace > xDocEvents, css::uno::Reference< css::util::XModifiable > xModifiable );
+    void                        InitAndSetHandler( const css::uno::Reference< css::container::XNameReplace >& xAppEvents, const css::uno::Reference< css::container::XNameReplace >& xDocEvents, const css::uno::Reference< css::util::XModifiable >& xModifiable );
     virtual bool                FillItemSet( SfxItemSet* rSet ) override;
 
     virtual void                Reset( const SfxItemSet* ) override;

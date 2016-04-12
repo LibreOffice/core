@@ -88,14 +88,14 @@ public:
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetText( const OUString& rStr ) override;
 
-    bool            MarkNextError( bool bIgnoreCurrentError, css::uno::Reference<css::linguistic2::XSpellChecker1> );
+    bool            MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker1>& );
     void            ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage);
     void            MoveErrorMarkTo(sal_uInt16 nErrorStart, sal_uInt16 nErrorEnd, bool bGrammar);
     OUString        GetErrorText() const;
     void            RestoreCurrentError();
 
     void            SetAlternatives(
-                        css::uno::Reference<css::linguistic2::XSpellAlternatives> );
+                        const css::uno::Reference<css::linguistic2::XSpellAlternatives>& );
 
     const SpellErrorDescription* GetAlternatives();
 

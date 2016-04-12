@@ -1465,7 +1465,7 @@ namespace svx
 
     namespace
     {
-        bool GetConversions(    Reference< XConversionDictionary >  _xDict,
+        bool GetConversions(    const Reference< XConversionDictionary >&  _xDict,
                                 const OUString& _rOrg,
                                 Sequence< OUString >& _rEntries )
         {

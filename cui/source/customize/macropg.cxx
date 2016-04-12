@@ -712,7 +712,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 
 // pass in the XNameReplace.
 // can remove the 3rd arg once issue ?? is fixed
-void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xAppEvents, Reference< container::XNameReplace> xDocEvents, Reference< util::XModifiable > xModifiable )
+void _SvxMacroTabPage::InitAndSetHandler( const Reference< container::XNameReplace>& xAppEvents, const Reference< container::XNameReplace>& xDocEvents, const Reference< util::XModifiable >& xModifiable )
 {
     m_xAppEvents = xAppEvents;
     m_xDocEvents = xDocEvents;
@@ -799,7 +799,7 @@ Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eve
 
 // converts the Any returned by GetByName into a pair which can be stored in
 // the EventHash
-::std::pair< OUString, OUString  > _SvxMacroTabPage::GetPairFromAny( Any aAny )
+::std::pair< OUString, OUString  > _SvxMacroTabPage::GetPairFromAny( const Any& aAny )
 {
     Sequence< beans::PropertyValue > props;
     OUString type, url;
