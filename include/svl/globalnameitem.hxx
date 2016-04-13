@@ -36,7 +36,7 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    SvGlobalName            GetValue() const { return m_aName; }
+    const SvGlobalName&     GetValue() const { return m_aName; }
 
     virtual bool            PutValue  ( const css::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) override;
