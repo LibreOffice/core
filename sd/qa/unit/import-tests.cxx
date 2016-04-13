@@ -42,6 +42,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -64,6 +65,9 @@
 #include <com/sun/star/table/XTableRows.hpp>
 
 #include <stlpool.hxx>
+#include <comphelper/processfactory.hxx>
+#include <vcl/pngread.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -112,6 +116,7 @@ public:
     void testTdf93830();
     void testTdf93097();
     void testTdf62255();
+    void testTdf93124();
     void testTdf89927();
     void testTdf93868();
     void testTdf95932();
@@ -160,6 +165,7 @@ public:
     CPPUNIT_TEST(testTdf93830);
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf62255);
+    CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf95932);
@@ -1256,6 +1262,51 @@ void SdImportTest::testTdf62255()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, aFillStyle);
     }
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf93124()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf93124.ppt"), PPT);
+    uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
+
+    uno::Sequence< beans::PropertyValue > aFilterData(2);
+    aFilterData[0].Name = "PixelWidth";
+    aFilterData[0].Value <<= (sal_Int32)(320);
+    aFilterData[1].Name = "PixelHeight";
+    aFilterData[1].Value <<= (sal_Int32)(180);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence< beans::PropertyValue > aDescriptor(3);
+    aDescriptor[0].Name = "URL";
+    aDescriptor[0].Value <<= aTempFile.GetURL();
+    aDescriptor[1].Name = "FilterName";
+    aDescriptor[1].Value <<= OUString("PNG");
+    aDescriptor[2].Name = "FilterData";
+    aDescriptor[2].Value <<= aFilterData;
+
+    uno::Reference< lang::XComponent > xPage(getPage(0, xDocShRef), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xPage);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PNGReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.Read();
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    BitmapReadAccess* pRead = aBMP.AcquireReadAccess();
+    int nNonWhiteCount = 0;
+    // The word "Top" should be in rectangle 34,4 - 76,30. If text alignment is wrong, the rectangle will be white.
+    for (long nX = 34; nX < (34 + 43); ++nX)
+        for (long nY = 4; nY < (4 + 26); ++nY)
+        {
+            const Color aColor = pRead->GetColor(nY, nX);
+            if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
+                ++nNonWhiteCount;
+        }
+    CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>100);
     xDocShRef->DoClose();
 }
 
