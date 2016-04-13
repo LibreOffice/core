@@ -59,7 +59,7 @@ public:
 
     const css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
-    OUString GetCurrentPersistName() const { return aName; }
+    const OUString& GetCurrentPersistName() const { return aName; }
     OUString GetStyleString();
     bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
 };
@@ -133,7 +133,7 @@ public:
     // #i99665#
     bool IsChart() const;
 
-    OUString GetChartTableName() const { return sChartTableName; }
+    const OUString& GetChartTableName() const { return sChartTableName; }
     void SetChartTableName( const OUString& rNm ) { sChartTableName = rNm; }
 };
 

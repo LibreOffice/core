@@ -3046,7 +3046,7 @@ void SwDBManager::setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDo
         pImpl->m_xDataSourceRemovedListener = new SwDataSourceRemovedListener(*this);
 }
 
-OUString SwDBManager::getEmbeddedName() const
+const OUString& SwDBManager::getEmbeddedName() const
 {
     return m_sEmbeddedName;
 }

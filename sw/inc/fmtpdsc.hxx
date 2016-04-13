@@ -67,7 +67,7 @@ public:
           SwPageDesc *GetPageDesc() { return static_cast<SwPageDesc*>(GetRegisteredIn()); }
     const SwPageDesc *GetPageDesc() const { return static_cast<const SwPageDesc*>(GetRegisteredIn()); }
 
-    ::boost::optional<sal_uInt16>  GetNumOffset() const        { return oNumOffset; }
+    const ::boost::optional<sal_uInt16>&  GetNumOffset() const        { return oNumOffset; }
     void    SetNumOffset( const ::boost::optional<sal_uInt16>& oNum ) { oNumOffset = oNum; }
 
     /// Query / set where attribute is anchored.

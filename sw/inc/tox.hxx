@@ -100,17 +100,17 @@ public:
     OUString                GetText() const;
 
     inline bool             IsAlternativeText() const;
-    inline OUString         GetAlternativeText() const;
+    inline const OUString&  GetAlternativeText() const;
 
     inline void             SetAlternativeText( const OUString& rAlt );
 
     // content or user defined index
     inline void             SetLevel(sal_uInt16 nLevel);
-    inline sal_uInt16           GetLevel() const;
+    inline sal_uInt16       GetLevel() const;
     inline void             SetBookmarkName( const OUString& bName);
-    inline OUString         GetBookmarkName() const;
+    inline const OUString&  GetBookmarkName() const;
     inline void             SetEntryTypeName( const OUString& sName);
-    inline OUString         GetEntryTypeName() const;
+    inline const OUString&  GetEntryTypeName() const;
 
     // for alphabetical index only
     inline void             SetPrimaryKey(const OUString& rStr );
@@ -155,7 +155,7 @@ public:
     // @@@ public copy ctor, but no copy assignment?
     SwTOXType(const SwTOXType& rCopy);
 
-    inline OUString         GetTypeName() const;
+    inline const OUString&  GetTypeName() const;
     inline TOXTypes         GetType() const;
 
 private:
@@ -438,7 +438,7 @@ public:
 
     sal_uInt16          GetCreateType() const;      // creation types
 
-    OUString            GetTOXName() const {return m_aName;}
+    const OUString&     GetTOXName() const {return m_aName;}
     void                SetTOXName(const OUString& rSet) {m_aName = rSet;}
 
     // for record the TOC field expression of MS Word binary format
@@ -447,8 +447,8 @@ public:
     void                EnableKeepExpression() {mbKeepExpression = true;}
     void                DisableKeepExpression() {mbKeepExpression = false;}
 
-    OUString            GetTitle() const;           // Title
-    OUString         GetBookmarkName() const;
+    const OUString&     GetTitle() const;           // Title
+    const OUString&     GetBookmarkName() const;
     OUString            GetTypeName() const;        // Name
     const SwForm&       GetTOXForm() const;         // description of the lines
 
@@ -459,11 +459,11 @@ public:
 
     TOXTypes            GetType() const;
 
-    OUString            GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
+    const OUString&     GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
     void                SetMainEntryCharStyle(const OUString& rSet)  {m_sMainEntryCharStyle = rSet;}
 
     // for record the Index field expression of MS Word
-    OUString         GetEntryTypeName() const;
+    const OUString&     GetEntryTypeName() const;
     void  SetEntryTypeName(const OUString& sName);
 
     // content index only
@@ -502,7 +502,7 @@ public:
     bool                    IsProtected() const { return m_bProtected; }
     void                    SetProtected(bool bSet) { m_bProtected = bSet; }
 
-    OUString                GetSequenceName() const {return m_sSequenceName;}
+    const OUString&         GetSequenceName() const {return m_sSequenceName;}
     void                    SetSequenceName(const OUString& rSet) {m_sSequenceName = rSet;}
 
     SwCaptionDisplay        GetCaptionDisplay() const { return m_eCaptionDisplay;}
@@ -516,7 +516,7 @@ public:
     LanguageType    GetLanguage() const {return m_eLanguage;}
     void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
 
-    OUString        GetSortAlgorithm()const {return m_sSortAlgorithm;}
+    const OUString&         GetSortAlgorithm()const {return m_sSortAlgorithm;}
     void            SetSortAlgorithm(const OUString& rSet) {m_sSortAlgorithm = rSet;}
     // #i21237#
     void AdjustTabStops( SwDoc & rDoc )
@@ -530,13 +530,13 @@ public:
 
 //SwTOXMark
 
-inline OUString SwTOXMark::GetAlternativeText() const
+inline const OUString& SwTOXMark::GetAlternativeText() const
     {   return m_aAltText;    }
 
-inline OUString SwTOXMark::GetBookmarkName() const
+inline const OUString& SwTOXMark::GetBookmarkName() const
     {   return m_aBookmarkName;    }
 
-inline OUString SwTOXMark::GetEntryTypeName() const
+inline const OUString& SwTOXMark::GetEntryTypeName() const
     {   return m_aEntryTypeName;    }
 
 inline const SwTOXType* SwTOXMark::GetTOXType() const
@@ -663,7 +663,7 @@ inline sal_uInt16 SwForm::GetFormMax() const
 
 //SwTOXType
 
-inline OUString SwTOXType::GetTypeName() const
+inline const OUString& SwTOXType::GetTypeName() const
     {   return m_aName;   }
 
 inline TOXTypes SwTOXType::GetType() const
@@ -677,13 +677,13 @@ inline const SwTOXType* SwTOXBase::GetTOXType() const
 inline sal_uInt16 SwTOXBase::GetCreateType() const
     { return m_nCreateType; }
 
-inline OUString SwTOXBase::GetTitle() const
+inline const OUString& SwTOXBase::GetTitle() const
     { return m_aTitle; }
 
-inline OUString SwTOXBase::GetBookmarkName() const
+inline const OUString& SwTOXBase::GetBookmarkName() const
     { return m_aBookmarkName; }
 
-inline OUString SwTOXBase::GetEntryTypeName() const
+inline const OUString& SwTOXBase::GetEntryTypeName() const
     { return m_aEntryTypeName; }
 
 inline OUString SwTOXBase::GetTypeName() const

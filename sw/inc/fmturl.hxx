@@ -63,13 +63,13 @@ public:
     void SetURL(const OUString &rURL, bool bServerMap);
     void SetMap( const ImageMap *pM );  ///< Pointer will be copied.
 
-    OUString GetTargetFrameName()const { return sTargetFrameName; }
-    OUString GetURL()            const { return sURL; }
+    const OUString& GetTargetFrameName()const { return sTargetFrameName; }
+    const OUString& GetURL()            const { return sURL; }
           bool      IsServerMap()       const { return bIsServerMap; }
     const ImageMap *GetMap()            const { return pMap; }
           ImageMap *GetMap()                  { return pMap; }
 
-    OUString GetName() const                { return sName; }
+    const OUString& GetName() const                { return sName; }
     void SetName( const OUString& rNm )     { sName = rNm; }
 };
 

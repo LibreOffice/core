@@ -71,16 +71,16 @@ public:
     inline sal_uInt8 GetLevel() const;
     inline void SetLevel(sal_uInt8);
 
-    inline OUString      GetNumber() const;
-    inline OUString      GetTitle() const;
+    inline const OUString& GetNumber() const;
+    inline const OUString& GetTitle() const;
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }
 inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
-inline OUString SwChapterField::GetNumber() const { return sNumber; }
-inline OUString SwChapterField::GetTitle() const { return sTitle; }
+inline const OUString& SwChapterField::GetNumber() const { return sNumber; }
+inline const OUString& SwChapterField::GetTitle() const { return sTitle; }
 
 #endif // INCLUDED_SW_INC_CHPFLD_HXX
 

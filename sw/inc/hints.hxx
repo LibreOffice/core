@@ -255,7 +255,7 @@ class SwStringMsgPoolItem : public SwMsgPoolItem
     OUString m_sStr;
 public:
 
-    OUString GetString() const { return m_sStr; }
+    const OUString& GetString() const { return m_sStr; }
 
     SwStringMsgPoolItem( sal_uInt16 nId, const OUString& rStr )
         : SwMsgPoolItem( nId ), m_sStr( rStr )

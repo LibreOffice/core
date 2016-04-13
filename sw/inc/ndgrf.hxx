@@ -180,7 +180,7 @@ public:
     bool IsGrfLink() const                  { return refLink.Is(); }
     bool IsLinkedFile() const;
     bool IsLinkedDDE() const;
-    tools::SvRef<sfx2::SvBaseLink> GetLink() const    { return refLink; }
+    const tools::SvRef<sfx2::SvBaseLink>& GetLink() const    { return refLink; }
     bool GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const;
     void ReleaseLink();
 

@@ -132,7 +132,7 @@ public:
     bool IsValid() const                    { return m_bValidValue; }
     void ChgValid( bool bNew )              { m_bValidValue = bNew; }
 
-    OUString GetFormula() const             { return m_sFormula; }
+    const OUString& GetFormula() const             { return m_sFormula; }
     void SetFormula( const OUString& rNew )
     {
         m_sFormula = rNew;

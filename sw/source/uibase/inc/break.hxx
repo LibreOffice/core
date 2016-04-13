@@ -67,9 +67,9 @@ public:
     virtual ~SwBreakDlg();
     virtual void dispose() override;
 
-    OUString    GetTemplateName() { return aTemplate; }
+    const OUString& GetTemplateName() { return aTemplate; }
     sal_uInt16  GetKind() { return nKind; }
-    ::boost::optional<sal_uInt16>  GetPageNumber() { return oPgNum; }
+    const ::boost::optional<sal_uInt16>&  GetPageNumber() { return oPgNum; }
 };
 
 #endif

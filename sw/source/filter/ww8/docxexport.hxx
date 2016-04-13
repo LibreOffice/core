@@ -268,7 +268,7 @@ public:
     /// Set the document default tab stop.
     void setDefaultTabStop( int stop ) { m_aSettings.defaultTabStop = stop; }
 
-    ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
+    const ::sax_fastparser::FSHelperPtr& GetFS() { return mpFS; }
 
     void SetFS(::sax_fastparser::FSHelperPtr mpFS);
 

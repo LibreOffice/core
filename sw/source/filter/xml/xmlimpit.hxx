@@ -71,7 +71,7 @@ public:
                           SvXMLUnitConverter const& rUnitConverter) const;
 
     virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
-    inline SvXMLItemMapEntriesRef getMapEntries() const;
+    inline const SvXMLItemMapEntriesRef& getMapEntries() const;
 
     /** This method is called for every item that should be set based
         upon an XML attribute value. */
@@ -82,7 +82,7 @@ public:
         const SvXMLUnitConverter& rUnitConverter );
 };
 
-inline SvXMLItemMapEntriesRef
+inline const SvXMLItemMapEntriesRef&
 SvXMLImportItemMapper::getMapEntries() const
 {
     return mrMapEntries;

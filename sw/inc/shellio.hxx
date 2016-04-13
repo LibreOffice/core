@@ -67,7 +67,7 @@ class SW_DLLPUBLIC SwAsciiOptions
 
 public:
 
-    OUString GetFontName() const { return sFont; }
+    const OUString& GetFontName() const { return sFont; }
     void SetFontName( const OUString& rFont ) { sFont = rFont; }
 
     rtl_TextEncoding GetCharSet() const { return eCharSet; }
@@ -167,7 +167,7 @@ public:
     bool HasGlossaries( const Reader& );
     bool ReadGlossaries( const Reader&, SwTextBlocks&, bool bSaveRelFiles );
 
-    OUString            GetBaseURL() const { return sBaseURL;}
+    const OUString&     GetBaseURL() const { return sBaseURL;}
 
 protected:
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
@@ -251,8 +251,8 @@ public:
     virtual size_t GetSectionList( SfxMedium& rMedium,
                                    std::vector<OUString*>& rStrings ) const;
 
-    tools::SvRef<SotStorage> getSotStorageRef() { return pStg; };
-    void setSotStorageRef(tools::SvRef<SotStorage> pStgRef) { pStg = pStgRef; };
+    const tools::SvRef<SotStorage>& getSotStorageRef() { return pStg; };
+    void setSotStorageRef(const tools::SvRef<SotStorage>& pStgRef) { pStg = pStgRef; };
 
 private:
     virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;
@@ -276,7 +276,7 @@ class SW_DLLPUBLIC StgReader : public Reader
 
 public:
     virtual int GetReaderType() override;
-    OUString GetFltName() { return aFltName; }
+    const OUString& GetFltName() { return aFltName; }
     virtual void SetFltName( const OUString& r ) override;
 };
 
@@ -421,7 +421,7 @@ public:
     const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
     void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }
 
-    OUString GetBaseURL() const { return sBaseURL;}
+    const OUString& GetBaseURL() const { return sBaseURL;}
 
     // Look up next bookmark position from bookmark-table.
     sal_Int32 FindPos_Bkmk( const SwPosition& rPos ) const;

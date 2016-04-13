@@ -266,7 +266,7 @@ public:
     const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;
 
     void SetName( const OUString& rNew ) { m_aName = rNew; nStrResId = USHRT_MAX; }
-    OUString GetName() const { return m_aName; }
+    const OUString& GetName() const { return m_aName; }
 
     enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,

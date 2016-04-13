@@ -351,7 +351,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to the current relative position (relative to anchor
         // position of anchor frame)
-        const Point GetCurrRelPos() const { return maRelPos;}
+        const Point& GetCurrRelPos() const { return maRelPos;}
         void SetCurrRelPos( Point _aRelPos );
 
         // accessors to the format

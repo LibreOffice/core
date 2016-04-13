@@ -44,7 +44,7 @@ class ConstCustomShape : public SwDrawBase
 
     virtual void Activate(const sal_uInt16 nSlotId) override;    // activate function
 
-    OUString GetShapeType() const;
+    const OUString& GetShapeType() const;
     static OUString GetShapeTypeFromRequest( SfxRequest& rReq );
 
     virtual void CreateDefaultObject() override;

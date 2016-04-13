@@ -949,7 +949,7 @@ public:
     void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer );
 
     /// Occasionally need to use this serializer from the outside
-    ::sax_fastparser::FSHelperPtr GetSerializer( ) { return m_pSerializer; }
+    const ::sax_fastparser::FSHelperPtr& GetSerializer( ) { return m_pSerializer; }
 
     /// Do we have any footnotes?
     bool HasFootnotes() const;

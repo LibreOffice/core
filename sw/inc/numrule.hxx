@@ -194,7 +194,7 @@ public:
     {
         msDefaultListId = sDefaultListId;
     }
-    inline OUString GetDefaultListId() const
+    const OUString& GetDefaultListId() const
     {
         return msDefaultListId;
     }
@@ -224,7 +224,7 @@ public:
        and copies them if appropriate. */
     void CheckCharFormats( SwDoc* pDoc );
 
-    OUString GetName() const { return msName; }
+    const OUString& GetName() const { return msName; }
 
     void SetName( const OUString& rNm,
                   IDocumentListsAccess& rDocListAccess );

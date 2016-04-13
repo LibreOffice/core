@@ -69,7 +69,7 @@ public:
     virtual ~SwInsFootNoteDlg();
     virtual void dispose() override;
 
-    OUString        GetFontName() { return m_aFontName; }
+    const OUString& GetFontName() { return m_aFontName; }
     bool            IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
     OUString        GetStr()
                     {

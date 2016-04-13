@@ -53,8 +53,8 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    void SetStyleHandle( std::shared_ptr<SfxItemSet> pHandle ) { mpHandle = pHandle; }
-    const std::shared_ptr<SfxItemSet> GetStyleHandle() const { return mpHandle; }
+    void SetStyleHandle( const std::shared_ptr<SfxItemSet>& pHandle ) { mpHandle = pHandle; }
+    const std::shared_ptr<SfxItemSet>& GetStyleHandle() const { return mpHandle; }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

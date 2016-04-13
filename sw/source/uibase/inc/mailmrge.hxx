@@ -135,7 +135,7 @@ public:
     OUString GetTargetURL() const;
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}
-    inline const css::uno::Sequence< css::uno::Any > GetSelection() const { return m_aSelection; }
+    const css::uno::Sequence< css::uno::Any >& GetSelection() const { return m_aSelection; }
     css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const;
 
 };

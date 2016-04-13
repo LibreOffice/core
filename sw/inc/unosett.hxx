@@ -204,7 +204,7 @@ public:
 
     static bool             isInvalidStyle(const OUString &rName);
     void    Invalidate()    {pDocShell = nullptr;}
-    OUString                GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
+    const OUString&   GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
 
     static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(
             const SwNumFormat& rFormat, OUString const& rCharFormatName,

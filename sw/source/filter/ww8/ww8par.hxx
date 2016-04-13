@@ -557,7 +557,7 @@ namespace sw
             explicit Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
-            SwNodeIndex GetPtNode() { return maPtNode; };
+            const SwNodeIndex& GetPtNode() { return maPtNode; };
             sal_Int32 GetPtContent() { return mnPtContent; };
         };
     }
@@ -583,8 +583,8 @@ class WW8FieldEntry
         SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
         sal_Int32 GetPtContent() { return maStartPos.GetPtContent(); };
 
-        OUString GetBookmarkName() { return msBookmarkName;}
-        OUString GetBookmarkCode() { return msMarkCode;}
+        const OUString& GetBookmarkName() { return msBookmarkName;}
+        const OUString& GetBookmarkCode() { return msMarkCode;}
         void SetBookmarkName(const OUString& bookmarkName);
         void SetBookmarkType(const OUString& bookmarkType);
         void SetBookmarkCode(const OUString& bookmarkCode);

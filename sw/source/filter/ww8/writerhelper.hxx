@@ -189,7 +189,7 @@ namespace ww8
          @return
          the best size to use to export to word
         */
-        const Size GetSize() const { return maSize; }
+        const Size& GetSize() const { return maSize; }
 
         /** The layout size of the contained element
 
@@ -197,7 +197,7 @@ namespace ww8
 
             @return layout size
         */
-        const Size GetLayoutSize() const
+        const Size& GetLayoutSize() const
         {
             return maLayoutSize;
         }
