@@ -622,7 +622,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     Printer::PrintJob( GetPrinterController(), aJobSetup );
 }
 
-std::shared_ptr< vcl::PrinterController > SfxViewShell::GetPrinterController() const
+const std::shared_ptr< vcl::PrinterController >& SfxViewShell::GetPrinterController() const
 {
     return pImp->m_xPrinterController;
 }

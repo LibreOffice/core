@@ -143,7 +143,7 @@ public:
     void                GetTargetList( TargetList& ) const;
     void                UpdateDescriptor( SfxObjectShell *pDoc );
     void                Resize();
-    css::uno::Reference< css::frame::XFrame >
+    const css::uno::Reference< css::frame::XFrame >&
                         GetFrameInterface() const;
     void                Appear();
     void                AppearWithUpdate();
@@ -234,7 +234,7 @@ class SFX2_DLLPUBLIC SfxUsrAnyItem : public SfxPoolItem
 public:
                                 static SfxPoolItem* CreateDefault();
                                 SfxUsrAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
-    css::uno::Any  GetValue() const
+    const css::uno::Any&        GetValue() const
                                 { return aValue; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;

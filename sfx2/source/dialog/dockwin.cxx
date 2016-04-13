@@ -1724,7 +1724,7 @@ void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 }
 
 /** Set the minimum size which is returned.*/
-Size SfxDockingWindow::GetMinOutputSizePixel() const
+const Size& SfxDockingWindow::GetMinOutputSizePixel() const
 {
     return pImp->aMinSize;
 }

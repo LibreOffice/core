@@ -2677,7 +2677,7 @@ void SfxMedium::SetFilter( const std::shared_ptr<const SfxFilter>& pFilter )
     pImp->m_pFilter = pFilter;
 }
 
-std::shared_ptr<const SfxFilter> SfxMedium::GetFilter() const
+const std::shared_ptr<const SfxFilter>& SfxMedium::GetFilter() const
 {
     return pImp->m_pFilter;
 }

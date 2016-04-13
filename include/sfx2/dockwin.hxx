@@ -97,11 +97,11 @@ public:
     sal_uInt16              GetType() const                         { return pMgr->GetType(); }
     SfxChildAlignment   GetAlignment() const                    { return pMgr->GetAlignment(); }
     void                SetAlignment(SfxChildAlignment eAlign)  { pMgr->SetAlignment(eAlign); }
-    Size                GetFloatingSize() const                 { return aFloatSize; }
+    const Size&         GetFloatingSize() const                 { return aFloatSize; }
     void                SetFloatingSize(const Size& rSize)      { aFloatSize=rSize; }
 
     void                SetMinOutputSizePixel( const Size& rSize );
-    Size                GetMinOutputSizePixel() const;
+    const Size&         GetMinOutputSizePixel() const;
     virtual bool        Notify( NotifyEvent& rNEvt ) override;
     DECL_LINK_TYPED(TimerHdl, Idle *, void);
 

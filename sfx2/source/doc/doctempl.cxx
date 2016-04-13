@@ -231,9 +231,9 @@ public:
 
     bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
     bool            InsertRegion( RegionData_Impl *pData, size_t nPos = size_t(-1) );
-    OUString            GetRootURL() const { return maRootURL; }
+    const OUString& GetRootURL() const { return maRootURL; }
 
-    uno::Reference< XDocumentTemplates >     getDocTemplates() { return mxTemplates; }
+    const uno::Reference< XDocumentTemplates >& getDocTemplates() { return mxTemplates; }
 };
 
 
