@@ -90,8 +90,8 @@ namespace canvas
 
         // Sprite
         bool isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const;
-        ::basegfx::B2DPoint  getPosPixel() const { return maPosition; }
-        ::basegfx::B2DVector getSizePixel() const { return maSize; }
+        const ::basegfx::B2DPoint& getPosPixel() const { return maPosition; }
+        const ::basegfx::B2DVector& getSizePixel() const { return maSize; }
         ::basegfx::B2DRange  getUpdateArea() const;
         double               getPriority() const { return mfPriority; }
 

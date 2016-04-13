@@ -77,7 +77,7 @@ namespace vclcanvas
         css::uno::Reference<
             css::rendering::XColorSpace > getColorSpace() const;
 
-        OutDevProviderSharedPtr getOutDev() const { return mpOutDev; }
+        const OutDevProviderSharedPtr& getOutDev() const { return mpOutDev; }
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.

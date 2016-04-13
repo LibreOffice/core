@@ -41,7 +41,7 @@ namespace canvas
         // accelerated page, e.g. OpenGL texture.
         ::basegfx::B2ISize getPageSize() const;
 
-        canvas::IRenderModuleSharedPtr getRenderModule() const { return mpRenderModule; }
+        const canvas::IRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
 
         FragmentSharedPtr allocateSpace( const ::basegfx::B2ISize& rSize );
         void              free( const FragmentSharedPtr& pFragment );

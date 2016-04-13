@@ -159,7 +159,7 @@ namespace canvas
             }
         }
 
-        css::uno::Reference< css::awt::XWindow2 > getWindow() const
+        const css::uno::Reference< css::awt::XWindow2 >& getWindow() const
         {
             return mxWindow;
         }
