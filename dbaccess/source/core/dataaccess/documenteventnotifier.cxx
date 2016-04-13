@@ -70,42 +70,42 @@ namespace dbaccess
         virtual void SAL_CALL acquire() throw () override;
         virtual void SAL_CALL release() throw () override;
 
-        void addLegacyEventListener( const Reference< document::XEventListener >& _Listener )
+        void addLegacyEventListener( const Reference< document::XEventListener >& Listener )
         {
-            m_aLegacyEventListeners.addInterface( _Listener );
+            m_aLegacyEventListeners.addInterface( Listener );
         }
 
-        void removeLegacyEventListener( const Reference< document::XEventListener >& _Listener )
+        void removeLegacyEventListener( const Reference< document::XEventListener >& Listener )
         {
-            m_aLegacyEventListeners.removeInterface( _Listener );
+            m_aLegacyEventListeners.removeInterface( Listener );
         }
 
-        void addDocumentEventListener( const Reference< XDocumentEventListener >& _Listener )
+        void addDocumentEventListener( const Reference< XDocumentEventListener >& Listener )
         {
-            m_aDocumentEventListeners.addInterface( _Listener );
+            m_aDocumentEventListeners.addInterface( Listener );
         }
 
-        void removeDocumentEventListener( const Reference< XDocumentEventListener >& _Listener )
+        void removeDocumentEventListener( const Reference< XDocumentEventListener >& Listener )
         {
-            m_aDocumentEventListeners.removeInterface( _Listener );
+            m_aDocumentEventListeners.removeInterface( Listener );
         }
 
         void disposing();
 
         void onDocumentInitialized();
 
-        void    notifyDocumentEvent( const OUString& _EventName, const Reference< XController2 >& _ViewController,
-                    const Any& _Supplement )
+        void    notifyDocumentEvent( const OUString& EventName, const Reference< XController2 >& ViewController,
+                    const Any& Supplement )
         {
             impl_notifyEvent_nothrow( DocumentEvent(
-                m_rDocument, _EventName, _ViewController, _Supplement ) );
+                m_rDocument, EventName, ViewController, Supplement ) );
         }
 
-        void    notifyDocumentEventAsync( const OUString& _EventName, const Reference< XController2 >& _ViewController,
-                    const Any& _Supplement )
+        void    notifyDocumentEventAsync( const OUString& EventName, const Reference< XController2 >& ViewController,
+                    const Any& Supplement )
         {
             impl_notifyEventAsync_nothrow( DocumentEvent(
-                m_rDocument, _EventName, _ViewController, _Supplement ) );
+                m_rDocument, EventName, ViewController, Supplement ) );
         }
 
     protected:
@@ -243,36 +243,36 @@ namespace dbaccess
         m_pImpl->onDocumentInitialized();
     }
 
-    void DocumentEventNotifier::addLegacyEventListener( const Reference< document::XEventListener >& _Listener )
+    void DocumentEventNotifier::addLegacyEventListener( const Reference< document::XEventListener >& Listener )
     {
-        m_pImpl->addLegacyEventListener( _Listener );
+        m_pImpl->addLegacyEventListener( Listener );
     }
 
-    void DocumentEventNotifier::removeLegacyEventListener( const Reference< document::XEventListener >& _Listener )
+    void DocumentEventNotifier::removeLegacyEventListener( const Reference< document::XEventListener >& Listener )
     {
-        m_pImpl->removeLegacyEventListener( _Listener );
+        m_pImpl->removeLegacyEventListener( Listener );
     }
 
-    void DocumentEventNotifier::addDocumentEventListener( const Reference< XDocumentEventListener >& _Listener )
+    void DocumentEventNotifier::addDocumentEventListener( const Reference< XDocumentEventListener >& Listener )
     {
-        m_pImpl->addDocumentEventListener( _Listener );
+        m_pImpl->addDocumentEventListener( Listener );
     }
 
-    void DocumentEventNotifier::removeDocumentEventListener( const Reference< XDocumentEventListener >& _Listener )
+    void DocumentEventNotifier::removeDocumentEventListener( const Reference< XDocumentEventListener >& Listener )
     {
-        m_pImpl->removeDocumentEventListener( _Listener );
+        m_pImpl->removeDocumentEventListener( Listener );
     }
 
-    void DocumentEventNotifier::notifyDocumentEvent( const OUString& _EventName,
-        const Reference< XController2 >& _ViewController, const Any& _Supplement )
+    void DocumentEventNotifier::notifyDocumentEvent( const OUString& EventName,
+        const Reference< XController2 >& ViewController, const Any& Supplement )
     {
-        m_pImpl->notifyDocumentEvent( _EventName, _ViewController, _Supplement );
+        m_pImpl->notifyDocumentEvent( EventName, ViewController, Supplement );
     }
 
-    void DocumentEventNotifier::notifyDocumentEventAsync( const OUString& _EventName,
-        const Reference< XController2 >& _ViewController, const Any& _Supplement )
+    void DocumentEventNotifier::notifyDocumentEventAsync( const OUString& EventName,
+        const Reference< XController2 >& ViewController, const Any& Supplement )
     {
-        m_pImpl->notifyDocumentEventAsync( _EventName, _ViewController, _Supplement );
+        m_pImpl->notifyDocumentEventAsync( EventName, ViewController, Supplement );
     }
 
 } // namespace dbaccess

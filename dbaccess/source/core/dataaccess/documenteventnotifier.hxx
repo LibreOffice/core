@@ -42,10 +42,10 @@ namespace dbaccess
         DocumentEventNotifier( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex );
         ~DocumentEventNotifier();
 
-        void addLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& _Listener );
-        void removeLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& _Listener );
-        void addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener );
-        void removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener );
+        void addLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& Listener );
+        void removeLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& Listener );
+        void addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener );
+        void removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener );
 
         /** disposes the instance
             @precond
@@ -70,9 +70,9 @@ namespace dbaccess
                 ->onDocumentInitialized has been called
         */
         void    notifyDocumentEvent(
-                    const OUString& _EventName,
+                    const OUString& EventName,
                     const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
-                    const css::uno::Any& _Supplement = css::uno::Any()
+                    const css::uno::Any& Supplement = css::uno::Any()
                 );
 
         /** notifies a document event, described by the given parameters, asynchronously
@@ -83,9 +83,9 @@ namespace dbaccess
                 the mutex is locked
         */
         void    notifyDocumentEventAsync(
-                    const OUString& _EventName,
-                    const css::uno::Reference< css::frame::XController2 >& _ViewController = nullptr,
-                    const css::uno::Any& _Supplement = css::uno::Any()
+                    const OUString& EventName,
+                    const css::uno::Reference< css::frame::XController2 >& ViewController = nullptr,
+                    const css::uno::Any& Supplement = css::uno::Any()
                 );
 
         /** notifies a document event to all registered listeners

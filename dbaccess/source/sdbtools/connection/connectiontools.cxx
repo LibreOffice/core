@@ -102,9 +102,9 @@ namespace sdbtools
         return getImplementationName_static();
     }
 
-    sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & _ServiceName) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & ServiceName) throw (RuntimeException, std::exception)
     {
-        return cppu::supportsService(this, _ServiceName);
+        return cppu::supportsService(this, ServiceName);
     }
 
     Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException, std::exception)

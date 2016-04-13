@@ -262,9 +262,9 @@ namespace
         {
         }
 
-        void operator()( const Reference< XContainerApproveListener >& _Listener ) const
+        void operator()( const Reference< XContainerApproveListener >& Listener ) const
         {
-            Reference< XVeto > xVeto = (_Listener.get()->*m_pMethod)( m_rEvent );
+            Reference< XVeto > xVeto = (Listener.get()->*m_pMethod)( m_rEvent );
             if ( !xVeto.is() )
                 return;
 
@@ -278,7 +278,7 @@ namespace
             if ( eVetoDetails >>= aWrappedError )
                 throw aWrappedError;
 
-            throw WrappedTargetException( xVeto->getReason(), _Listener.get(), eVetoDetails );
+            throw WrappedTargetException( xVeto->getReason(), Listener.get(), eVetoDetails );
         }
     };
 }
@@ -337,16 +337,16 @@ void SAL_CALL ODefinitionContainer::removeContainerListener( const Reference< XC
         m_aContainerListeners.removeInterface(_rxListener);
 }
 
-void SAL_CALL ODefinitionContainer::addContainerApproveListener( const Reference< XContainerApproveListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODefinitionContainer::addContainerApproveListener( const Reference< XContainerApproveListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    if ( _Listener.is() )
-        m_aApproveListeners.addInterface( _Listener );
+    if ( Listener.is() )
+        m_aApproveListeners.addInterface( Listener );
 }
 
-void SAL_CALL ODefinitionContainer::removeContainerApproveListener( const Reference< XContainerApproveListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODefinitionContainer::removeContainerApproveListener( const Reference< XContainerApproveListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    if ( _Listener.is() )
-        m_aApproveListeners.removeInterface( _Listener );
+    if ( Listener.is() )
+        m_aApproveListeners.removeInterface( Listener );
 }
 
 // XElementAccess

@@ -69,7 +69,7 @@ namespace sdbtools
         virtual OUString SAL_CALL getNameForSelect() throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getTable() throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, sal_Bool _Quote ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, sal_Bool Quote ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:

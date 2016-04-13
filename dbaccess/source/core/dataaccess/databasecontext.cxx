@@ -540,9 +540,9 @@ void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, Ru
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
 
-sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
-    return m_xDatabaseRegistrations->hasRegisteredDatabase( _Name );
+    return m_xDatabaseRegistrations->hasRegisteredDatabase( Name );
 }
 
 Sequence< OUString > SAL_CALL ODatabaseContext::getRegistrationNames() throw (RuntimeException, std::exception)
@@ -550,39 +550,39 @@ Sequence< OUString > SAL_CALL ODatabaseContext::getRegistrationNames() throw (Ru
     return m_xDatabaseRegistrations->getRegistrationNames();
 }
 
-OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
+OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
-    return m_xDatabaseRegistrations->getDatabaseLocation( _Name );
+    return m_xDatabaseRegistrations->getDatabaseLocation( Name );
 }
 
-void SAL_CALL ODatabaseContext::registerDatabaseLocation( const OUString& _Name, const OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException, std::exception)
+void SAL_CALL ODatabaseContext::registerDatabaseLocation( const OUString& Name, const OUString& Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException, std::exception)
 {
-    m_xDatabaseRegistrations->registerDatabaseLocation( _Name, _Location );
+    m_xDatabaseRegistrations->registerDatabaseLocation( Name, Location );
 }
 
-void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
+void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
 {
-    m_xDatabaseRegistrations->revokeDatabaseLocation( _Name );
+    m_xDatabaseRegistrations->revokeDatabaseLocation( Name );
 }
 
-void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& _Name, const OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
+void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
 {
-    m_xDatabaseRegistrations->changeDatabaseLocation( _Name, _NewLocation );
+    m_xDatabaseRegistrations->changeDatabaseLocation( Name, NewLocation );
 }
 
-sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
-    return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( _Name );
+    return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( Name );
 }
 
-void SAL_CALL ODatabaseContext::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODatabaseContext::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_xDatabaseRegistrations->addDatabaseRegistrationsListener( _Listener );
+    m_xDatabaseRegistrations->addDatabaseRegistrationsListener( Listener );
 }
 
-void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_xDatabaseRegistrations->removeDatabaseRegistrationsListener( _Listener );
+    m_xDatabaseRegistrations->removeDatabaseRegistrationsListener( Listener );
 }
 
 // css::container::XElementAccess

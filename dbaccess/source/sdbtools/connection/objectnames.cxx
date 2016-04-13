@@ -372,21 +372,21 @@ namespace sdbtools
     {
     }
 
-    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 _CommandType, const OUString& _BaseName ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
+    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 CommandType, const OUString& BaseName ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), _CommandType, getConnection() ) );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), CommandType, getConnection() ) );
 
-        OUString sBaseName( _BaseName );
+        OUString sBaseName( BaseName );
         if ( sBaseName.isEmpty() )
         {
-            if ( _CommandType == CommandType::TABLE )
+            if ( CommandType == CommandType::TABLE )
                 sBaseName = OUString( SdbtRes( STR_BASENAME_TABLE ) );
             else
                 sBaseName = OUString( SdbtRes( STR_BASENAME_QUERY ) );
         }
-        else if( _CommandType == CommandType::QUERY )
+        else if( CommandType == CommandType::QUERY )
         {
             sBaseName=sBaseName.replace('/', '_');
         }
@@ -408,31 +408,31 @@ namespace sdbtools
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
 
-    sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 _CommandType, const OUString& _Name ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), _CommandType, getConnection()) );
-        return !pNameCheck->validateName( _Name );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), CommandType, getConnection()) );
+        return !pNameCheck->validateName( Name );
     }
 
-    sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 _CommandType, const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createValidityCheck( getContext(), _CommandType, getConnection()) );
-        return pNameCheck->validateName( _Name );
+        PNameValidation pNameCheck( NameCheckFactory::createValidityCheck( getContext(), CommandType, getConnection()) );
+        return pNameCheck->validateName( Name );
     }
 
-    void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 _CommandType, const OUString& _Name ) throw (SQLException, RuntimeException, std::exception)
+    void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name ) throw (SQLException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), _CommandType, getConnection() ) );
-        pNameCheck->validateName_throw( _Name );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), CommandType, getConnection() ) );
+        pNameCheck->validateName_throw( Name );
 
-        pNameCheck = NameCheckFactory::createValidityCheck( getContext(), _CommandType, getConnection() );
-        pNameCheck->validateName_throw( _Name );
+        pNameCheck = NameCheckFactory::createValidityCheck( getContext(), CommandType, getConnection() );
+        pNameCheck->validateName_throw( Name );
     }
 
 } // namespace sdbtools

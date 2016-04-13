@@ -73,13 +73,13 @@ namespace dbaccess
         virtual ~DatabaseRegistrations();
 
     public:
-        virtual sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) throw (IllegalArgumentException, RuntimeException, std::exception) override;
         virtual Sequence< OUString > SAL_CALL getRegistrationNames() throw (RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL registerDatabaseLocation( const OUString& _Name, const OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL revokeDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception) override;
+        virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException, std::exception) override;
+        virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception) override;
         virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception) override;
         virtual void SAL_CALL addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) throw (RuntimeException, std::exception) override;
         virtual void SAL_CALL removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) throw (RuntimeException, std::exception) override;
 
@@ -236,10 +236,10 @@ namespace dbaccess
             throw IllegalArgumentException( OUString(), *this, 2 );
     }
 
-    sal_Bool SAL_CALL DatabaseRegistrations::hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL DatabaseRegistrations::hasRegisteredDatabase( const OUString& Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::utl::OConfigurationNode aNodeForName = impl_getNodeForName_nothrow( _Name );
+        ::utl::OConfigurationNode aNodeForName = impl_getNodeForName_nothrow( Name );
         return aNodeForName.isValid();
     }
 
@@ -265,11 +265,11 @@ namespace dbaccess
         return aDisplayNames;
     }
 
-    OUString SAL_CALL DatabaseRegistrations::getDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
+    OUString SAL_CALL DatabaseRegistrations::getDatabaseLocation( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw_must_exist(_Name);
+        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw_must_exist(Name);
 
         OUString sLocation;
         OSL_VERIFY( aNodeForName.getNodeValue( getLocationNodeName() ) >>= sLocation );
@@ -278,30 +278,30 @@ namespace dbaccess
         return sLocation;
     }
 
-    void SAL_CALL DatabaseRegistrations::registerDatabaseLocation( const OUString& _Name, const OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException, std::exception)
+    void SAL_CALL DatabaseRegistrations::registerDatabaseLocation( const OUString& Name, const OUString& Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException, std::exception)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         // check
-        impl_checkValidLocation_throw( _Location );
-        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_not_exist(_Name);
+        impl_checkValidLocation_throw( Location );
+        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_not_exist(Name);
 
         // register
-        aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( _Location ) );
+        aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( Location ) );
         m_aConfigurationRoot.commit();
 
         // notify
-        DatabaseRegistrationEvent aEvent( *this, _Name, OUString(), _Location );
+        DatabaseRegistrationEvent aEvent( *this, Name, OUString(), Location );
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::registeredDatabaseLocation, aEvent );
     }
 
-    void SAL_CALL DatabaseRegistrations::revokeDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
+    void SAL_CALL DatabaseRegistrations::revokeDatabaseLocation( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         // check
-        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw_must_exist(_Name);
+        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw_must_exist(Name);
 
         // obtain properties for notification
         OUString sLocation;
@@ -316,18 +316,18 @@ namespace dbaccess
         m_aConfigurationRoot.commit();
 
         // notify
-        DatabaseRegistrationEvent aEvent( *this, _Name, sLocation, OUString() );
+        DatabaseRegistrationEvent aEvent( *this, Name, sLocation, OUString() );
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::revokedDatabaseLocation, aEvent );
     }
 
-    void SAL_CALL DatabaseRegistrations::changeDatabaseLocation( const OUString& _Name, const OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
+    void SAL_CALL DatabaseRegistrations::changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         // check
-        impl_checkValidLocation_throw( _NewLocation );
-        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(_Name);
+        impl_checkValidLocation_throw( NewLocation );
+        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(Name);
 
         if  ( aDataSourceRegistration.isReadonly() )
             throw IllegalAccessException( OUString(), *this );
@@ -337,32 +337,32 @@ namespace dbaccess
         OSL_VERIFY( aDataSourceRegistration.getNodeValue( getLocationNodeName() ) >>= sOldLocation );
 
         // change
-        aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( _NewLocation ) );
+        aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( NewLocation ) );
         m_aConfigurationRoot.commit();
 
         // notify
-        DatabaseRegistrationEvent aEvent( *this, _Name, sOldLocation, _NewLocation );
+        DatabaseRegistrationEvent aEvent( *this, Name, sOldLocation, NewLocation );
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::changedDatabaseLocation, aEvent );
     }
 
-    sal_Bool SAL_CALL DatabaseRegistrations::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL DatabaseRegistrations::isDatabaseRegistrationReadOnly( const OUString& Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(_Name);
+        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(Name);
         return aDataSourceRegistration.isReadonly();
     }
 
-    void SAL_CALL DatabaseRegistrations::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL DatabaseRegistrations::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) throw (RuntimeException, std::exception)
     {
-        if ( _Listener.is() )
-            m_aRegistrationListeners.addInterface( _Listener );
+        if ( Listener.is() )
+            m_aRegistrationListeners.addInterface( Listener );
     }
 
-    void SAL_CALL DatabaseRegistrations::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL DatabaseRegistrations::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) throw (RuntimeException, std::exception)
     {
-        if ( _Listener.is() )
-            m_aRegistrationListeners.removeInterface( _Listener );
+        if ( Listener.is() )
+            m_aRegistrationListeners.removeInterface( Listener );
     }
 
     // DatabaseRegistrations - factory

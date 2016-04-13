@@ -790,13 +790,13 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     }
 }
 
-Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& _TableName, ::sal_Int32 _ColorMode ) throw (RuntimeException, std::exception)
+Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) throw (RuntimeException, std::exception)
 {
     Reference< XGraphic > xReturn;
 
     // ask our aggregate
     if ( m_xTableUIProvider.is() )
-        xReturn = m_xTableUIProvider->getTableIcon( _TableName, _ColorMode );
+        xReturn = m_xTableUIProvider->getTableIcon( TableName, ColorMode );
 
     // ask ourself
     // well, we don't have own functionality here ...
@@ -806,13 +806,13 @@ Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& _Table
     return xReturn;
 }
 
-Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     Reference< XInterface > xReturn;
 
     // ask our aggregate
     if ( m_xTableUIProvider.is() )
-        xReturn = m_xTableUIProvider->getTableEditor( _DocumentUI, _TableName );
+        xReturn = m_xTableUIProvider->getTableEditor( DocumentUI, TableName );
 
     // ask ourself
     // well, we don't have own functionality here ...

@@ -208,25 +208,25 @@ namespace sdbtools
         }
     }
 
-    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 Type, sal_Bool Quote ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
         return composeTableName(
             getConnection()->getMetaData(),
-            m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName, _Quote,
-            lcl_translateCompositionType_throw( _Type ) );
+            m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName, Quote,
+            lcl_translateCompositionType_throw( Type ) );
     }
 
-    void SAL_CALL TableName::setComposedName( const OUString& _ComposedName, ::sal_Int32 _Type ) throw (RuntimeException, std::exception)
+    void SAL_CALL TableName::setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
         qualifiedNameComponents(
             getConnection()->getMetaData(),
-            _ComposedName,
+            ComposedName,
             m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName,
-            lcl_translateCompositionType_throw( _Type ) );
+            lcl_translateCompositionType_throw( Type ) );
     }
 
 } // namespace sdbtools
