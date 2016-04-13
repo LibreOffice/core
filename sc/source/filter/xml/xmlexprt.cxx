@@ -1429,6 +1429,8 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
         bool bFiltered = false;
         sal_Int32 nEqualRows(1);
         sal_Int32 nEndRow(nStartRow + nRepeatRow);
+        sal_Int32 nEndRowHidden = nStartRow - 1;
+        sal_Int32 nEndRowFiltered = nStartRow - 1;
         sal_Int32 nRow;
         for (nRow = nStartRow; nRow < nEndRow; ++nRow)
         {
@@ -1437,17 +1439,22 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                 nPrevIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
                 if (pDoc)
                 {
-                    bPrevHidden = rRowAttr.rowHidden(nTable, nRow);
-                    bPrevFiltered = rRowAttr.rowFiltered(nTable, nRow);
+                    if (nRow > nEndRowHidden)
+                        bPrevHidden = rRowAttr.rowHidden(nTable, nRow, nEndRowHidden);
+                    if (nRow > nEndRowFiltered)
+                        bPrevFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
                 }
+
             }
             else
             {
                 nIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
                 if (pDoc)
                 {
-                    bHidden = rRowAttr.rowHidden(nTable, nRow);
-                    bFiltered = rRowAttr.rowFiltered(nTable, nRow);
+                    if (nRow > nEndRowHidden)
+                        bHidden = rRowAttr.rowHidden(nTable, nRow, nEndRowHidden);
+                    if (nRow > nEndRowFiltered)
+                        bFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
                 }
                 if (nIndex == nPrevIndex && bHidden == bPrevHidden && bFiltered == bPrevFiltered &&
                     !(bHasRowHeader && ((nRow == aRowHeaderRange.StartRow) || (nRow - 1 == aRowHeaderRange.EndRow))) &&
@@ -1481,8 +1488,10 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
         bool bFiltered = false;
         if (pDoc)
         {
-            bHidden = rRowAttr.rowHidden(nTable, nStartRow);
-            bFiltered = rRowAttr.rowFiltered(nTable, nStartRow);
+            sal_Int32 nEndRowHidden;
+            sal_Int32 nEndRowFiltered;
+            bHidden = rRowAttr.rowHidden(nTable, nStartRow, nEndRowHidden);
+            bFiltered = rRowAttr.rowFiltered(nTable, nStartRow, nEndRowFiltered);
         }
         OpenNewRow(nIndex, nStartRow, 1, bHidden, bFiltered);
     }
