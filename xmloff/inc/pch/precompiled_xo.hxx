@@ -44,7 +44,6 @@
 #include <utility>
 #include <vector>
 #include <boost/iterator_adaptors.hpp>
-#include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>

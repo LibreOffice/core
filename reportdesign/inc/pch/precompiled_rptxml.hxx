@@ -27,7 +27,6 @@
 #include <unordered_set>
 #include <vector>
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/math.hxx>

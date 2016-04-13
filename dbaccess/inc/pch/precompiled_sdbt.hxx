@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

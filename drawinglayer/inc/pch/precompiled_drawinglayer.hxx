@@ -32,7 +32,6 @@
 #include <string.h>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>

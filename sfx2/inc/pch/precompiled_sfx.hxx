@@ -44,7 +44,6 @@
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/logic/tribool.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
