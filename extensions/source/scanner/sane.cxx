@@ -475,7 +475,7 @@ enum FrameStyleType {
 
 #define BYTE_BUFFER_SIZE 32768
 
-static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
+static inline sal_uInt8 ReadValue( FILE* fp, int depth )
 {
     if( depth == 16 )
     {
@@ -799,7 +799,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 {
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
-                        sal_uInt8 nGray = _ReadValue( pFrame, aParams.depth );
+                        sal_uInt8 nGray = ReadValue( pFrame, aParams.depth );
                         aConverter.WriteUChar( nGray );
                     }
                 }
@@ -808,9 +808,9 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
                         sal_uInt8 nRed, nGreen, nBlue;
-                        nRed    = _ReadValue( pFrame, aParams.depth );
-                        nGreen  = _ReadValue( pFrame, aParams.depth );
-                        nBlue   = _ReadValue( pFrame, aParams.depth );
+                        nRed    = ReadValue( pFrame, aParams.depth );
+                        nGreen  = ReadValue( pFrame, aParams.depth );
+                        nBlue   = ReadValue( pFrame, aParams.depth );
                         aConverter.WriteUChar( nBlue );
                         aConverter.WriteUChar( nGreen );
                         aConverter.WriteUChar( nRed );
@@ -820,7 +820,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 {
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
-                        sal_uInt8 nValue = _ReadValue( pFrame, aParams.depth );
+                        sal_uInt8 nValue = ReadValue( pFrame, aParams.depth );
                         switch( aParams.format )
                         {
                             case SANE_FRAME_RED:
