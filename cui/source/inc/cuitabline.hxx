@@ -68,15 +68,15 @@ public:
 
     void                SetNewDashList( XDashListRef pInLst)
                         { pNewDashList = pInLst; }
-    XDashListRef        GetNewDashList() const { return pNewDashList; }
+    const XDashListRef& GetNewDashList() const { return pNewDashList; }
 
     void                SetNewLineEndList( XLineEndListRef pInLst)
                         { pNewLineEndList = pInLst; }
-    XLineEndListRef     GetNewLineEndList() const { return pNewLineEndList; }
+    const XLineEndListRef& GetNewLineEndList() const { return pNewLineEndList; }
 
     void                SetNewColorList( XColorListRef pColTab ) { mpNewColorList = pColTab; }
-    XColorListRef       GetNewColorList() const { return mpNewColorList; }
-    XColorListRef       GetColorList() const { return pColorList; }
+    const XColorListRef& GetNewColorList() const { return mpNewColorList; }
+    const XColorListRef& GetColorList() const { return pColorList; }
 };
 
 /*************************************************************************/

@@ -48,7 +48,7 @@ protected:
         const OUString& rUIXMLDescription,
         const css::uno::Reference < css::embed::XStorage >& xStorage);
 public:
-    css::uno::Reference < css::embed::XEmbeddedObject > GetObject()
+    const css::uno::Reference < css::embed::XEmbeddedObject >& GetObject()
                         { return m_xObj; }
     virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
     virtual bool IsCreateNew() const;

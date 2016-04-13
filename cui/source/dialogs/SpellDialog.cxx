@@ -145,7 +145,7 @@ public:
     bool                    IsErrorLanguageSelected() const {return m_bIsErrorLanguageSelected;}
 
     void                    SetDictionary(const Reference<XDictionary>& xDict) { m_xDictionary = xDict; }
-    Reference<XDictionary>  GetDictionary() const {return m_xDictionary;}
+    const Reference<XDictionary>& GetDictionary() const { return m_xDictionary; }
     void                    SetAddedWord(const OUString& rWord) {m_sAddedWord = rWord;}
     const OUString&         GetAddedWord() const { return m_sAddedWord;}
 

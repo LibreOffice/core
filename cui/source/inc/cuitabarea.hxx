@@ -79,22 +79,22 @@ public:
 
     void                SetNewColorList( XColorListRef pColorList )
                             { mpNewColorList = pColorList; }
-    XColorListRef         GetNewColorList() const { return mpNewColorList; }
-    const XColorListRef   GetColorList() const { return mpColorList; }
+    const XColorListRef&  GetNewColorList() const { return mpNewColorList; }
+    const XColorListRef&  GetColorList() const { return mpColorList; }
 
-    void                SetNewGradientList( XGradientListRef pGrdLst)
+    void                  SetNewGradientList( XGradientListRef pGrdLst)
                             { mpNewGradientList = pGrdLst; }
-    XGradientListRef       GetNewGradientList() const
+    const XGradientListRef&  GetNewGradientList() const
                             { return mpNewGradientList; }
 
-    void                 SetNewHatchingList( XHatchListRef pHtchLst)
+    void                  SetNewHatchingList( XHatchListRef pHtchLst)
                             { mpNewHatchingList = pHtchLst; }
-    XHatchListRef          GetNewHatchingList() const
+    const XHatchListRef&  GetNewHatchingList() const
                             { return mpNewHatchingList; }
 
-    void                 SetNewBitmapList( XBitmapListRef pBmpLst)
+    void                  SetNewBitmapList( XBitmapListRef pBmpLst)
                             { mpNewBitmapList = pBmpLst; }
-    XBitmapListRef         GetNewBitmapList() const { return mpNewBitmapList; }
+    const XBitmapListRef& GetNewBitmapList() const { return mpNewBitmapList; }
 };
 
 /************************************************************************/
@@ -755,7 +755,7 @@ public:
     void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
 
     void    SetColorList( const XColorListRef& pColList );
-    XColorListRef GetColorList() { return pColorList; }
+    const XColorListRef& GetColorList() { return pColorList; }
     void    SaveToViewFrame( SfxViewFrame *pViewFrame );
     void    SetupForViewFrame( SfxViewFrame *pViewFrame );
 
