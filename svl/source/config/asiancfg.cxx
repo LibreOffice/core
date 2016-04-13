@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -55,11 +54,14 @@ OUString toString(css::lang::Locale const & locale) {
 
 }
 
-struct SvxAsianConfig::Impl: private boost::noncopyable {
+struct SvxAsianConfig::Impl {
     Impl():
         context(comphelper::getProcessComponentContext()),
         batch(comphelper::ConfigurationChanges::create(context))
     {}
+
+    Impl(const Impl&) = delete;
+    Impl& operator=(const Impl&) = delete;
 
     css::uno::Reference< css::uno::XComponentContext > context;
 

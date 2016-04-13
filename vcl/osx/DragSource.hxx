@@ -30,8 +30,6 @@
 #include <osl/thread.h>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
@@ -72,12 +70,13 @@ class AquaSalFrame;
 class DragSource : public ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper< css::datatransfer::dnd::XDragSource,
                                                             css::lang::XInitialization,
-                                                            css::lang::XServiceInfo >,
-                   private ::boost::noncopyable
+                                                            css::lang::XServiceInfo >
 {
 public:
   DragSource();
   virtual ~DragSource();
+  DragSource(const DragSource&) = delete;
+  DragSource& operator=(const DragSource&) = delete;
 
   // XInitialization
   virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )

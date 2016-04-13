@@ -42,8 +42,6 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
-#include <boost/noncopyable.hpp>
-
 using namespace css;
 using namespace css::uno;
 using namespace svx::sidebar;
@@ -60,13 +58,14 @@ typedef ::cppu::WeakComponentImplHelper< css::ui::XUIElementFactory, css::lang::
     PanelFactoryInterfaceBase;
 
 class PanelFactory
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public PanelFactoryInterfaceBase
 {
 public:
     PanelFactory();
     virtual ~PanelFactory();
+    PanelFactory(const PanelFactory&) = delete;
+    PanelFactory& operator=(const PanelFactory&) = delete;
 
     // XUIElementFactory
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (

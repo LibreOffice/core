@@ -21,7 +21,6 @@
 
 #include <map>
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -34,9 +33,12 @@
 
 namespace {
 
-class ResMgrMap: private boost::noncopyable {
+class ResMgrMap {
 public:
+    ResMgrMap() = default;
     ~ResMgrMap();
+    ResMgrMap(const ResMgrMap&) = delete;
+    ResMgrMap& operator=(const ResMgrMap&) = delete;
 
     SimpleResMgr * get(LanguageTag const & locale);
 

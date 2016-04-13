@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
@@ -95,7 +94,7 @@ static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiProp
 }
 
 
-class VclListenerLock: private boost::noncopyable
+class VclListenerLock
 {
 private:
     VCLXWindow*  m_pLockWindow;
@@ -112,6 +111,8 @@ public:
         if ( m_pLockWindow )
             m_pLockWindow->resumeVclEventListening( );
     }
+    VclListenerLock(const VclListenerLock&) = delete;
+    VclListenerLock& operator=(const VclListenerLock&) = delete;
 };
 
 typedef ::std::map< OUString, sal_Int32 >    MapString2Int;

@@ -34,8 +34,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
@@ -77,12 +75,13 @@ class DropTarget: public cppu::BaseMutex,
                                                          css::datatransfer::dnd::XDropTarget,
                                                          css::datatransfer::dnd::XDropTargetDragContext,
                                                          css::datatransfer::dnd::XDropTargetDropContext,
-                                                         css::lang::XServiceInfo >,
-                  private boost::noncopyable
+                                                         css::lang::XServiceInfo >
 {
 public:
   DropTarget();
   virtual ~DropTarget();
+  DropTarget(const DropTarget&) = delete;
+  DropTarget& operator=(const DropTarget&) = delete;
 
   // Overrides WeakComponentImplHelper::disposing which is called by
   // WeakComponentImplHelper::dispose

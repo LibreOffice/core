@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -42,11 +41,13 @@ namespace {
 
 class Translator:
     public cppu::WeakImplHelper<
-        css::lang::XServiceInfo, css::uri::XExternalUriReferenceTranslator>,
-    private boost::noncopyable
+        css::lang::XServiceInfo, css::uri::XExternalUriReferenceTranslator>
 {
 public:
     Translator() {}
+
+    Translator(const Translator&) = delete;
+    Translator& operator=(const Translator&) = delete;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;

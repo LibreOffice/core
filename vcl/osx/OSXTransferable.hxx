@@ -31,12 +31,10 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 
-class OSXTransferable : public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>,
-                        private ::boost::noncopyable
+class OSXTransferable : public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
 public:
   explicit OSXTransferable(css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
@@ -44,6 +42,8 @@ public:
                            NSPasteboard* pasteboard);
 
   virtual ~OSXTransferable();
+  OSXTransferable(const OSXTransferable&) = delete;
+  OSXTransferable& operator=(const OSXTransferable&) = delete;
 
   // XTransferable
 

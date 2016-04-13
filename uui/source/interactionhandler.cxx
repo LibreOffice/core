@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,8 +36,7 @@ namespace {
 class UUIInteractionHandler:
     public cppu::WeakImplHelper< css::lang::XServiceInfo,
                                   css::lang::XInitialization,
-                                  css::task::XInteractionHandler2 >,
-    private boost::noncopyable
+                                  css::task::XInteractionHandler2 >
 {
 private:
     UUIInteractionHelper * m_pImpl;
@@ -47,6 +45,9 @@ public:
     explicit UUIInteractionHandler(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
     virtual ~UUIInteractionHandler();
+
+    UUIInteractionHandler(const UUIInteractionHandler&) = delete;
+    UUIInteractionHandler& operator=(const UUIInteractionHandler&) = delete;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;

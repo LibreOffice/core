@@ -19,8 +19,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
-
 #include "storcach.hxx"
 
 #include "sal/log.hxx"

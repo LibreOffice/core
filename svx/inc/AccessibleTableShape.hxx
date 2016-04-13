@@ -34,8 +34,6 @@
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <cppuhelper/compbase.hxx>
 
-#include <boost/noncopyable.hpp>
-
 namespace sdr { namespace table {
     class SvxTableController;
 } }
@@ -51,11 +49,13 @@ namespace accessibility
                                           > AccessibleTableShape_Base;
 /** @descr
 */
-class AccessibleTableShape : private boost::noncopyable, public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
+class AccessibleTableShape : public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
 {
 public:
     AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo );
     virtual ~AccessibleTableShape( );
+    AccessibleTableShape(const AccessibleTableShape&) = delete;
+    AccessibleTableShape& operator=(const AccessibleTableShape&) = delete;
 
     virtual void Init() override;
 
@@ -159,14 +159,15 @@ typedef ::cppu::WeakImplHelper<
             css::accessibility::XAccessibleTableSelection >
             AccessibleTableHeaderShape_BASE;
 
-class AccessibleTableHeaderShape : private boost::noncopyable,
-    public MutexOwner,
+class AccessibleTableHeaderShape : public MutexOwner,
     public AccessibleTableHeaderShape_BASE
 {
 public:
     // bRow, true means rowheader, false means columnheader
     AccessibleTableHeaderShape( AccessibleTableShape* pTable, bool bRow );
     virtual ~AccessibleTableHeaderShape();
+    AccessibleTableHeaderShape(const AccessibleTableHeaderShape&) = delete;
+    AccessibleTableHeaderShape& operator=(const AccessibleTableHeaderShape&) = delete;
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext( ) throw(css::uno::RuntimeException, std::exception) override;

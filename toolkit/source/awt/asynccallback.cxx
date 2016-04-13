@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <vcl/svapp.hxx>
 #include "osl/mutex.hxx"
 #include "cppuhelper/factory.hxx"
@@ -36,11 +35,12 @@ namespace {
 class AsyncCallback:
     public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
-        css::awt::XRequestCallback>,
-    private boost::noncopyable
+        css::awt::XRequestCallback>
 {
 public:
     AsyncCallback() {}
+    AsyncCallback(const AsyncCallback&) = delete;
+    AsyncCallback& operator=(const AsyncCallback&) = delete;
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;

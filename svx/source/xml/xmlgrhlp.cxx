@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <comphelper/string.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -74,7 +73,7 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
 }
 
 class SvXMLGraphicInputStream:
-    public cppu::WeakImplHelper<XInputStream>, private boost::noncopyable
+    public cppu::WeakImplHelper<XInputStream>
 {
 private:
 
@@ -93,6 +92,8 @@ public:
 
     explicit                        SvXMLGraphicInputStream( const OUString& rGraphicId );
     virtual                         ~SvXMLGraphicInputStream();
+                                    SvXMLGraphicInputStream(const SvXMLGraphicInputStream&) = delete;
+    SvXMLGraphicInputStream&        operator=(const SvXMLGraphicInputStream&) = delete;
 
     bool                            Exists() const { return mxStmWrapper.is(); }
 };
@@ -200,7 +201,7 @@ void SAL_CALL SvXMLGraphicInputStream::closeInput() throw( NotConnectedException
 }
 
 class SvXMLGraphicOutputStream:
-    public cppu::WeakImplHelper<XOutputStream>, private boost::noncopyable
+    public cppu::WeakImplHelper<XOutputStream>
 {
 private:
 
@@ -221,6 +222,8 @@ public:
 
                                     SvXMLGraphicOutputStream();
     virtual                         ~SvXMLGraphicOutputStream();
+                                    SvXMLGraphicOutputStream(const SvXMLGraphicOutputStream&) = delete;
+    SvXMLGraphicOutputStream&       operator=(const SvXMLGraphicOutputStream&) = delete;
 
     bool                            Exists() const { return mxStmWrapper.is(); }
     const GraphicObject&            GetGraphicObject();

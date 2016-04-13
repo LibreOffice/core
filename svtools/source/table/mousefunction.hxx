@@ -25,8 +25,6 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <boost/noncopyable.hpp>
-
 class MouseEvent;
 
 
@@ -51,10 +49,12 @@ namespace svt { namespace table
 
     //= MouseFunction
 
-    class MouseFunction : public ::salhelper::SimpleReferenceObject, public ::boost::noncopyable
+    class MouseFunction : public ::salhelper::SimpleReferenceObject
     {
     public:
         MouseFunction() {}
+        MouseFunction(const MouseFunction&) = delete;
+        MouseFunction& operator=(const MouseFunction&) = delete;
         virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) = 0;
         virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) = 0;
         virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) = 0;

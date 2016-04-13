@@ -30,7 +30,6 @@
 #include <cmath>
 
 #include <boost/rational.hpp>
-#include <boost/noncopyable.hpp>
 
 template<typename T>
 static boost::rational<T> rational_FromDouble(double dVal);
@@ -38,10 +37,14 @@ static boost::rational<T> rational_FromDouble(double dVal);
 template<typename T>
 static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits);
 
-struct Fraction::Impl : boost::noncopyable
+struct Fraction::Impl
 {
     bool                        valid;
     boost::rational<sal_Int64>  value;
+
+    Impl() = default;
+    Impl(const Impl&) = delete;
+    Impl& operator=(const Impl&) = delete;
 };
 
 Fraction::Fraction() : mpImpl(new Impl)

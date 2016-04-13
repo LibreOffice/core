@@ -56,8 +56,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 
-#include <boost/noncopyable.hpp>
-
 /*
 
 Form controls (more precise: UNO Controls) in the drawing layer are ... prone to breakage, since they have some
@@ -500,8 +498,7 @@ namespace sdr { namespace contact {
                                         >   ViewObjectContactOfUnoControl_Impl_Base;
 
     class SVX_DLLPRIVATE ViewObjectContactOfUnoControl_Impl:
-        public ViewObjectContactOfUnoControl_Impl_Base,
-        private boost::noncopyable
+        public ViewObjectContactOfUnoControl_Impl_Base
     {
     private:
         // fdo#41935 note that access to members is protected with SolarMutex;
@@ -541,6 +538,8 @@ namespace sdr { namespace contact {
 
     public:
         explicit ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl );
+        ViewObjectContactOfUnoControl_Impl(const ViewObjectContactOfUnoControl_Impl&) = delete;
+        ViewObjectContactOfUnoControl_Impl& operator=(const ViewObjectContactOfUnoControl_Impl&) = delete;
 
         /** disposes the instance, which is nonfunctional afterwards
         */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -45,13 +44,15 @@ namespace {
 
 class Factory:
     public cppu::WeakImplHelper<
-        css::lang::XServiceInfo, css::uri::XVndSunStarPkgUrlReferenceFactory>,
-    private boost::noncopyable
+        css::lang::XServiceInfo, css::uri::XVndSunStarPkgUrlReferenceFactory>
 {
 public:
     explicit Factory(
         css::uno::Reference< css::uno::XComponentContext > const & context):
         m_context(context) {}
+
+    Factory(const Factory&) = delete;
+    Factory& operator=(const Factory&) = delete;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;

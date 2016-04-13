@@ -61,7 +61,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
-#include <boost/noncopyable.hpp>
 
 using ::com::sun::star::ucb::XAnyCompare;
 
@@ -490,7 +489,6 @@ static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 #define MAX_COMBINED_CHARACTERS 6
 
 struct XMLTextImportHelper::Impl
-    : private ::boost::noncopyable
 {
     std::unique_ptr<SvXMLTokenMap> m_xTextElemTokenMap;
     std::unique_ptr<SvXMLTokenMap> m_xTextPElemTokenMap;
@@ -596,6 +594,8 @@ struct XMLTextImportHelper::Impl
         ,   m_bInsideDeleteContext( false )
     {
     }
+    Impl(const Impl&) = delete;
+    Impl& operator=(const Impl&) = delete;
 
     void InitOutlineStylesCandidates()
     {

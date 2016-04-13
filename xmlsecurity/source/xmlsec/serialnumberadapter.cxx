@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/XSerialNumberAdapter.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -40,11 +39,12 @@ namespace {
 
 class Service:
     public cppu::WeakImplHelper<
-        css::lang::XServiceInfo, css::security::XSerialNumberAdapter >,
-    private boost::noncopyable
+        css::lang::XServiceInfo, css::security::XSerialNumberAdapter >
 {
 public:
     Service() {}
+    Service(const Service&) = delete;
+    Service& operator=(const Service&) = delete;
 
 private:
     virtual ~Service() {}

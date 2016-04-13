@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <boost/noncopyable.hpp>
 
 
 namespace svt { namespace table
@@ -91,10 +90,11 @@ namespace svt { namespace table
     typedef ::cppu::WeakImplHelper <   XGridColumnListener
                                     >   ColumnChangeMultiplexer_Base;
     class ColumnChangeMultiplexer   :public ColumnChangeMultiplexer_Base
-                                    ,public ::boost::noncopyable
     {
     public:
         explicit ColumnChangeMultiplexer( UnoGridColumnFacade& i_colImpl );
+        ColumnChangeMultiplexer(const ColumnChangeMultiplexer&) = delete;
+        ColumnChangeMultiplexer& operator=(const ColumnChangeMultiplexer&) = delete;
 
         void dispose();
 

@@ -20,7 +20,6 @@
 #include <string>
 #include <iostream>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "cppuhelper/exc_hlp.hxx"
@@ -44,12 +43,15 @@ std::string convert(OUString const & s16) {
         s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));
 }
 
-class Prot : public CppUnit::Protector, private boost::noncopyable
+class Prot : public CppUnit::Protector
 {
 public:
     Prot() {}
 
     virtual ~Prot() {}
+
+    Prot(const Prot&) = delete;
+    Prot& operator=(const Prot&) = delete;
 
     virtual bool protect(
         CppUnit::Functor const & functor,

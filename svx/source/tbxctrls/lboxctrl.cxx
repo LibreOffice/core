@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <tools/debug.hxx>
 #include <sal/types.h>
 #include <vcl/lstbox.hxx>

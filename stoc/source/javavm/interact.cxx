@@ -20,7 +20,6 @@
 
 #include "interact.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/java/JavaDisabledException.hpp>
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -34,11 +33,12 @@ using stoc_javavm::InteractionRequest;
 namespace {
 
 class AbortContinuation:
-    public cppu::WeakImplHelper<css::task::XInteractionAbort>,
-    private boost::noncopyable
+    public cppu::WeakImplHelper<css::task::XInteractionAbort>
 {
 public:
     inline AbortContinuation() {}
+    AbortContinuation(const AbortContinuation&) = delete;
+    AbortContinuation& operator=(const AbortContinuation&)= delete;
 
     virtual void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) override {}
 
@@ -49,11 +49,12 @@ private:
 }
 
 class InteractionRequest::RetryContinuation:
-    public cppu::WeakImplHelper<css::task::XInteractionRetry>,
-    private boost::noncopyable
+    public cppu::WeakImplHelper<css::task::XInteractionRetry>
 {
 public:
     inline RetryContinuation(): m_bSelected(false) {}
+    RetryContinuation(const RetryContinuation&) = delete;
+    RetryContinuation& operator=(const RetryContinuation&) = delete;
 
     virtual void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) override;
 

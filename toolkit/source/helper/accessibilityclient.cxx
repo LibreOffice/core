@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
-
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <osl/module.h>
 #include <osl/diagnose.h>
@@ -51,10 +49,12 @@ namespace toolkit
     //= AccessibleDummyFactory
 
     class AccessibleDummyFactory:
-        public IAccessibleFactory, private boost::noncopyable
+        public IAccessibleFactory
     {
     public:
         AccessibleDummyFactory();
+        AccessibleDummyFactory(const AccessibleDummyFactory&) = delete;
+        AccessibleDummyFactory& operator=(const AccessibleDummyFactory&) = delete;
 
     protected:
         virtual ~AccessibleDummyFactory();
