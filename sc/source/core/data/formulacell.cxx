@@ -45,6 +45,7 @@
 #include "chgtrack.hxx"
 #include "tokenarray.hxx"
 
+#include <config_features.h>
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
 #include <svl/intitem.hxx>
@@ -55,12 +56,15 @@
 #include "types.hxx"
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
-#include <opencl/openclwrapper.hxx>
 #include <tokenstringcontext.hxx>
 #include <refhint.hxx>
 #include <listenerquery.hxx>
 #include <listenerqueryids.hxx>
 #include <grouparealistener.hxx>
+
+#if HAVE_FEATURE_OPENCL
+#include <opencl/openclwrapper.hxx>
+#endif
 
 #include <memory>
 #include <map>
