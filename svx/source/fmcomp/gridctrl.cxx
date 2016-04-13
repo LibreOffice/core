@@ -3652,7 +3652,7 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
         return;
     }
 
-    ColumnFieldValueListeners::iterator aPos = pListeners->find(_nId);
+    ColumnFieldValueListeners::const_iterator aPos = pListeners->find(_nId);
     if (aPos == pListeners->end())
     {
         OSL_FAIL("DbGridControl::FieldListenerDisposing : invalid call (did not find the listener) !");

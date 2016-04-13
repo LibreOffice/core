@@ -1921,18 +1921,19 @@ namespace svxform
             // This may be a frequently used code ( at every change in mark of the view!),
             // so i use latter one
             SvTreeListEntry* pLoop = First();
-            while( pLoop )
+            FmEntryDataArray::const_iterator aEnd = arredToSelect.end();
+            while(pLoop)
             {
                 FmEntryData* pCurEntryData = static_cast<FmEntryData*>(pLoop->GetUserData());
                 FmEntryDataArray::iterator it = arredToSelect.find(pCurEntryData);
-                if ( it != arredToSelect.end() )
+                if (it != aEnd)
                 {
                     Select(pLoop);
                     MakeVisible(pLoop);
                     SetCursor(pLoop, true);
                 }
 
-                pLoop = Next( pLoop );
+                pLoop = Next(pLoop);
             }
         }
         UnlockSelectionHandling();
