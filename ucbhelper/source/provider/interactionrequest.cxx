@@ -901,8 +901,7 @@ void SAL_CALL InteractionAuthFallback::setCode( const OUString& code )
     m_aCode = code;
 }
 
-// virtual
-OUString SAL_CALL InteractionAuthFallback::getCode( )
+const OUString& SAL_CALL InteractionAuthFallback::getCode( )
     throw ( uno::RuntimeException, std::exception )
 {
     return m_aCode;
