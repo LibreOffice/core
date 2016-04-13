@@ -15,8 +15,6 @@ $(eval $(call gb_Library_set_include,sdbt,\
 	-I$(SRCDIR)/dbaccess/source/sdbtools/inc \
 ))
 
-$(eval $(call gb_Library_use_external,sdbt,boost_headers))
-
 $(eval $(call gb_Library_set_precompiled_header,sdbt,$(SRCDIR)/dbaccess/inc/pch/precompiled_sdbt))
 
 $(eval $(call gb_Library_use_sdk_api,sdbt))

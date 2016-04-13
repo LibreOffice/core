@@ -59,7 +59,6 @@
 #include <vector>
 #include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/noncopyable.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>

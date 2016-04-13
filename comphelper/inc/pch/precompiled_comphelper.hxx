@@ -38,7 +38,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>

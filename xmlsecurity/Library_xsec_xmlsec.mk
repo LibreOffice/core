@@ -49,7 +49,6 @@ $(eval $(call gb_Library_use_packages,xsec_xmlsec,\
 	xmlsec \
 ))
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
-	boost_headers \
 	libxml2 \
 	nss3 \
 ))

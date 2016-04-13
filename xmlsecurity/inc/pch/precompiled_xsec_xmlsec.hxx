@@ -35,7 +35,6 @@
 #include <string.h>
 #include <string>
 #include <utility>
-#include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/file.h>

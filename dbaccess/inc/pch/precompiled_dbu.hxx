@@ -33,7 +33,6 @@
 #include <vector>
 #include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
