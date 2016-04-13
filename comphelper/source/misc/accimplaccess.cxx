@@ -58,7 +58,7 @@ namespace comphelper
     }
 
 
-    Reference< XAccessible > OAccessibleImplementationAccess::implGetForeignControlledParent( ) const
+    const Reference< XAccessible >& OAccessibleImplementationAccess::implGetForeignControlledParent( ) const
     {
         return m_pImpl->m_xAccParent;
     }
