@@ -59,7 +59,6 @@
 #include <boost/checked_delete.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/log1p.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <osl/conditn.h>

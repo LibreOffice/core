@@ -29,7 +29,6 @@
 #include <stddef.h>
 #include <string.h>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
