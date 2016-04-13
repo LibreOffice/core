@@ -2071,7 +2071,10 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
                 if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
                     if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
+                    {
                         pNewDim = it.get();     // use this one
+                        break;
+                    }
                     else
                         ++nFound;               // count existing non-hidden occurrences
                 }
