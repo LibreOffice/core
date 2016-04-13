@@ -46,7 +46,7 @@ public:
 
     void tearDown();
 
-    css::uno::Reference< css::uno::XComponentContext >
+    const css::uno::Reference< css::uno::XComponentContext >&
     getComponentContext() const { return context_;}
 
     // Must not be called before setUp or after tearDown:
