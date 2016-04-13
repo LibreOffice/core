@@ -56,6 +56,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -97,6 +98,7 @@ public:
     void testBnc584721_4();
     void testBnc904423();
     void testShapeLineStyle();
+    void testTableBorderLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
 #if ENABLE_PDFIMPORT
@@ -143,6 +145,7 @@ public:
     CPPUNIT_TEST(testBnc584721_4);
     CPPUNIT_TEST(testBnc904423);
     CPPUNIT_TEST(testShapeLineStyle);
+    CPPUNIT_TEST(testTableBorderLineStyle);
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
 #if ENABLE_PDFIMPORT
@@ -1019,6 +1022,51 @@ void SdImportTest::testShapeLineStyle()
         const XLineWidthItem& rWidthItem = dynamic_cast<const XLineWidthItem&>(
                 pObj->GetMergedItem(XATTR_LINEWIDTH));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(176), rWidthItem.GetValue());
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTableBorderLineStyle()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tableBorderLineStyle.pptx"), PPTX );
+
+    // TODO: If you are working on improvement of table border line style
+    // support, then expect this unit test to fail.
+
+    const sal_Int16 nObjBorderLineStyles[] =
+        {
+            ::table::BorderLineStyle::DASHED,
+            ::table::BorderLineStyle::DASH_DOT_DOT,
+            ::table::BorderLineStyle::DASH_DOT,
+            ::table::BorderLineStyle::DOTTED,
+            ::table::BorderLineStyle::DASHED,
+            ::table::BorderLineStyle::DOTTED,
+            ::table::BorderLineStyle::DASHED,
+            ::table::BorderLineStyle::DASH_DOT,
+            ::table::BorderLineStyle::DASH_DOT,
+            ::table::BorderLineStyle::SOLID,
+            ::table::BorderLineStyle::NONE
+        };
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(nObjBorderLineStyles), pPage->GetObjCount());
+
+    sdr::table::SdrTableObj *pTableObj;
+    uno::Reference< table::XCellRange > xTable;
+    uno::Reference< beans::XPropertySet > xCell;
+    table::BorderLine2 aBorderLine;
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(nObjBorderLineStyles); i++)
+    {
+        pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(i));
+        CPPUNIT_ASSERT( pTableObj );
+        xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+        xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+        xCell->getPropertyValue("TopBorder") >>= aBorderLine;
+        if (aBorderLine.LineWidth > 0) {
+            CPPUNIT_ASSERT_EQUAL(nObjBorderLineStyles[i], aBorderLine.LineStyle);
+        }
     }
 
     xDocShRef->DoClose();
