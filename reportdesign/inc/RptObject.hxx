@@ -109,10 +109,10 @@ public:
 
     bool        supportsService( const OUString& _sServiceName ) const;
 
-    css::uno::Reference< css::report::XReportComponent> getReportComponent() const { return m_xReportComponent;}
+    const css::uno::Reference< css::report::XReportComponent>& getReportComponent() const { return m_xReportComponent;}
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent();
     css::uno::Reference< css::report::XSection> getSection() const;
-    inline const OUString getServiceName() const { return m_sComponentName; }
+    const OUString& getServiceName() const { return m_sComponentName; }
 
     /** releases the reference to our UNO shape (m_xKeepShapeAlive)
     */

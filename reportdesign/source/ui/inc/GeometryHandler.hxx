@@ -51,7 +51,7 @@ namespace rptui
         bool                                          m_bPreEvaluated;
         bool                                          m_bDeepTraversing;
 
-        inline OUString getName() const { return m_sName; }
+        const OUString& getName() const { return m_sName; }
     } ;
 
     class OPropertyInfoService;

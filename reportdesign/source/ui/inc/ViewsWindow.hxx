@@ -183,7 +183,7 @@ namespace rptui
         inline bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
-        OUString   GetInsertObjString() const { return m_sShapeType;}
+        const OUString& GetInsertObjString() const { return m_sShapeType;}
         /** copies the current selection in this section
         */
         void Copy();
@@ -257,7 +257,7 @@ namespace rptui
         *
         * \return \member m_sShapeType
         */
-        inline OUString getShapeType() const { return m_sShapeType; }
+        const OUString& getShapeType() const { return m_sShapeType; }
 
         /** returns the current position in the list
         */

@@ -392,7 +392,7 @@ namespace rptui
         /** gives access to the report definition
         * \return the report definition object, may be <NULL/>
         */
-        inline css::uno::Reference< css::report::XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
+        const css::uno::Reference< css::report::XReportDefinition>& getReportDefinition() const { return m_xReportDefinition; }
 
         // css::frame::XController
         virtual css::uno::Reference< css::frame::XModel >  SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) override;
@@ -435,15 +435,15 @@ namespace rptui
 
         /** returns the number formatter
         */
-        css::uno::Reference< css::util::XNumberFormatter >    getReportNumberFormatter() const { return m_xFormatter;}
+        const css::uno::Reference< css::util::XNumberFormatter >& getReportNumberFormatter() const { return m_xFormatter;}
 
         /** return the SdrModel of the real model
         *
         * \return
         */
-        std::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_aReportModel;}
+        const std::shared_ptr<rptui::OReportModel>& getSdrModel() const { return m_aReportModel;}
 
-        inline css::uno::Reference< css::uno::XComponentContext >  getContext() const { return m_xContext; }
+        const css::uno::Reference< css::uno::XComponentContext >&  getContext() const { return m_xContext; }
         inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }
         inline void         resetZoomType()         { m_eZoomType = SvxZoomType::PERCENT; }
 

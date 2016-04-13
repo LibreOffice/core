@@ -83,7 +83,7 @@ public:
     */
     void insertObject(const css::uno::Reference< css::report::XReportComponent >& _xObject);
 
-    css::uno::Reference< css::report::XSection > getSection() const { return m_xSection;}
+    const css::uno::Reference< css::report::XSection >& getSection() const { return m_xSection;}
 };
 }
 #endif // INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
