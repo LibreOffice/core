@@ -95,7 +95,7 @@ public:
     /**
        Return properties of the cell.
      */
-    TablePropertyMapPtr getProperties() { return mpProps; }
+    const TablePropertyMapPtr& getProperties() { return mpProps; }
 
     bool isOpen() const { return mbOpen; }
 };
@@ -230,7 +230,7 @@ public:
     /**
        Return properties of the row.
      */
-    TablePropertyMapPtr getProperties()
+    const TablePropertyMapPtr& getProperties()
     {
         return mpProperties;
     }
@@ -362,7 +362,7 @@ public:
         return mRows[i];
     }
 
-    const RowPointer_t getCurrentRow() const
+    const RowPointer_t& getCurrentRow() const
     {
         return mpRow;
     }

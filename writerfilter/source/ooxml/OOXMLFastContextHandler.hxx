@@ -132,7 +132,7 @@ public:
     void setDefine(Id nDefine);
     Id getDefine() const { return mnDefine;}
 
-    OOXMLParserState::Pointer_t getParserState() const { return mpParserState;}
+    const OOXMLParserState::Pointer_t& getParserState() const { return mpParserState;}
 
     void sendTableDepth() const;
     void setHandle();
@@ -220,7 +220,7 @@ protected:
     void startAction(Token_t Element);
     void endAction(Token_t Element);
 
-    css::uno::Reference< css::uno::XComponentContext > getComponentContext() { return m_xContext;}
+    const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
 
     bool inPositionV;
 
@@ -245,7 +245,7 @@ public:
 
     virtual ResourceEnum_t getResource() const override { return STREAM; }
 
-    OOXMLPropertySet::Pointer_t getPropertySetAttrs() const { return mpPropertySetAttrs;}
+    const OOXMLPropertySet::Pointer_t& getPropertySetAttrs() const { return mpPropertySetAttrs;}
 
     virtual void newProperty(const Id & rId, const OOXMLValue::Pointer_t& pVal) override;
     void sendProperty(Id nId);

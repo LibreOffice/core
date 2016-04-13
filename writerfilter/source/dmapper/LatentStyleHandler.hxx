@@ -33,7 +33,7 @@ public:
     LatentStyleHandler();
     virtual ~LatentStyleHandler();
 
-    std::vector<css::beans::PropertyValue> getAttributes() const;
+    const std::vector<css::beans::PropertyValue>& getAttributes() const;
 };
 
 } // namespace dmapper

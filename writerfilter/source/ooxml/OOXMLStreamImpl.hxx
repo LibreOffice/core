@@ -80,7 +80,7 @@ public:
     virtual css::uno::Reference<css::xml::sax::XFastTokenHandler> getFastTokenHandler() override;
 
     // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
-    css::uno::Reference<css::io::XStream> accessDocumentStream() { return mxDocumentStream;}
+    const css::uno::Reference<css::io::XStream>& accessDocumentStream() { return mxDocumentStream;}
 };
 }}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLSTREAMIMPL_HXX
