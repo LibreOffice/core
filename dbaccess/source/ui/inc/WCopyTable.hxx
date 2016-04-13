@@ -335,8 +335,8 @@ namespace dbaui
 
         // returns a vector where the position of a column and if the column is in the selection
         // when not the value is COLUMN_POSITION_NOT_FOUND == (sal_uInt32)-1
-        ODatabaseExport::TPositions GetColumnPositions()    const { return m_vColumnPos; }
-        ::std::vector<sal_Int32>    GetColumnTypes()        const { return m_vColumnTypes; }
+        const ODatabaseExport::TPositions& GetColumnPositions()    const { return m_vColumnPos; }
+        const ::std::vector<sal_Int32>&    GetColumnTypes()        const { return m_vColumnTypes; }
         bool                        UseHeaderLine()         const { return m_bUseHeaderLine; }
         void                        setUseHeaderLine(bool _bUseHeaderLine) { m_bUseHeaderLine = _bUseHeaderLine; }
 
@@ -367,22 +367,22 @@ namespace dbaui
             @return
                 The name of the primary key.
         */
-        OUString getPrimaryKeyName() const { return m_aKeyName; }
+        const OUString& getPrimaryKeyName() const { return m_aKeyName; }
 
         const OTypeInfoMap& getTypeInfo()                       const { return m_aTypeInfo; }
 
         TOTypeInfoSP        getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap& getDestTypeInfo()                   const { return m_aDestTypeInfo; }
 
-        css::lang::Locale  GetLocale() const { return m_aLocale; }
-        css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const { return m_xFormatter; }
-        css::uno::Reference< css::uno::XComponentContext> GetComponentContext() const { return m_xContext; }
+        const css::lang::Locale&  GetLocale() const { return m_aLocale; }
+        const css::uno::Reference< css::util::XNumberFormatter >& GetFormatter() const { return m_xFormatter; }
+        const css::uno::Reference< css::uno::XComponentContext>& GetComponentContext() const { return m_xContext; }
 
         const ODatabaseExport::TColumns&        getSourceColumns() const{ return m_vSourceColumns; }
         const ODatabaseExport::TColumnVector&   getSrcVector() const    { return m_vSourceVec; }
         ODatabaseExport::TColumns&              getDestColumns()        { return m_vDestColumns; }
         const ODatabaseExport::TColumnVector&   getDestVector() const   { return m_aDestVec; }
-        OUString getName() const { return m_sName; }
+        const OUString& getName() const { return m_sName; }
 
         /** clears the dest vectors
         */

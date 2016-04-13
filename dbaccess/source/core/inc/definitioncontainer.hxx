@@ -137,7 +137,7 @@ protected:
         given here.
     */
     void                setElementApproval( PContainerApprove _pElementApproval ) { m_pElementApproval = _pElementApproval; }
-    PContainerApprove   getElementApproval() const { return m_pElementApproval; }
+    const PContainerApprove& getElementApproval() const { return m_pElementApproval; }
 
 protected:
     virtual ~ODefinitionContainer();

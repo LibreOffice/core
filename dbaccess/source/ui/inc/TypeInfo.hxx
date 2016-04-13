@@ -100,7 +100,7 @@ const sal_uInt16 TYPE_BIT       = 31;
                 ,bCaseSensitive(false)
                 ,bUnsigned(false)
         {}
-        inline OUString  getDBName() const { return aTypeName; }
+        const OUString& getDBName() const { return aTypeName; }
 
     };
 

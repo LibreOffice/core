@@ -145,7 +145,7 @@ namespace dbaui
 
         ::std::vector< ::std::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
-        ::std::shared_ptr<OTableRow>         GetActRow(){ return pActRow; }
+        const ::std::shared_ptr<OTableRow>& GetActRow(){ return pActRow; }
         void CellModified( long nRow, sal_uInt16 nColId );
         void SetReadOnly( bool bRead=true );
 

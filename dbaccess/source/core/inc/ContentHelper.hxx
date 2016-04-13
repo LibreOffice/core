@@ -180,7 +180,7 @@ namespace dbaccess
 
         const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_aContext; }
 
-        inline TContentPtr getImpl() const { return m_pImpl; }
+        const TContentPtr& getImpl() const { return m_pImpl; }
 
     protected:
         virtual OUString determineContentType() const = 0;

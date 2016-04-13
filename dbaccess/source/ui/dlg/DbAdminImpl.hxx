@@ -90,7 +90,7 @@ namespace dbaui
         /// clear the password in the current data source's item set
         void        clearPassword();
 
-        inline css::uno::Reference< css::uno::XComponentContext > getORB() const { return m_xContext; }
+        const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext; }
 
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */

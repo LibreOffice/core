@@ -43,7 +43,7 @@ public:
     OTableIndex( const OTableIndex& _rSource) : aIndexFileName(_rSource.aIndexFileName) { }
     explicit OTableIndex( const OUString& rFileName ) : aIndexFileName( rFileName ) { }
 
-    OUString GetIndexFileName() const { return aIndexFileName; }
+    const OUString& GetIndexFileName() const { return aIndexFileName; }
 };
 
 typedef ::std::list< OTableIndex >  TableIndexList;

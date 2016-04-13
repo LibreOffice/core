@@ -281,8 +281,8 @@ public:
 
     void dispose();
 
-    inline OUString getURL() const               { return m_sDocumentURL;     }
-    inline OUString getDocFileLocation() const   { return m_sDocFileLocation; }
+    const OUString& getURL() const               { return m_sDocumentURL;     }
+    const OUString& getDocFileLocation() const   { return m_sDocFileLocation; }
 
     css::uno::Reference< css::embed::XStorage >
             getStorage( const ObjectType _eType );

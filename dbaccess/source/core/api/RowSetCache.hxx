@@ -152,7 +152,7 @@ namespace dbaccess
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
 
     // css::sdbc::XResultSetMetaDataSupplier
-        css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) { return m_xMetaData;}
+        const css::uno::Reference< css::sdbc::XResultSetMetaData >& getMetaData(  ) { return m_xMetaData;}
 
     // css::sdbcx::XRowLocate
         css::uno::Any getBookmark(  );

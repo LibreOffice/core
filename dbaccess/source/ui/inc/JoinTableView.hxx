@@ -167,7 +167,7 @@ namespace dbaui
 
         bool ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars );
         sal_uLong GetTabWinCount();
-        Point GetScrollOffset() const { return m_aScrollOffset; }
+        const Point& GetScrollOffset() const { return m_aScrollOffset; }
 
         OJoinDesignView* getDesignView() const { return m_pView; }
         OTableWindow* GetTabWindow( const OUString& rName );
@@ -257,7 +257,7 @@ namespace dbaui
         */
         bool isMovementAllowed(const Point& _rPoint,const Size& _rSize);
 
-        Size getRealOutputSize() const { return m_aOutputSize; }
+        const Size& getRealOutputSize() const { return m_aOutputSize; }
 
         virtual void EnsureVisible(const OTableWindow* _pWin);
         void EnsureVisible(const Point& _rPoint,const Size& _rSize);

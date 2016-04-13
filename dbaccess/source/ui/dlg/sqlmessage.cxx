@@ -86,7 +86,7 @@ namespace
         {
         }
 
-        OUString  getLabel() const
+        const OUString&  getLabel() const
         {
             return m_label;
         }
