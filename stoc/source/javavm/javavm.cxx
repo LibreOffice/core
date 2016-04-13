@@ -78,7 +78,6 @@
 #include <time.h>
 #include <memory>
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 // Properties of the javavm can be put
 // as a komma separated list in this
@@ -117,8 +116,7 @@ class NoJavaIniException: public css::uno::Exception
 };
 
 class SingletonFactory:
-    private cppu::WeakImplHelper< css::lang::XEventListener >,
-    private boost::noncopyable
+    private cppu::WeakImplHelper< css::lang::XEventListener >
 {
 public:
     static css::uno::Reference< css::uno::XInterface > getSingleton(
@@ -128,6 +126,9 @@ private:
     inline SingletonFactory() {}
 
     virtual inline ~SingletonFactory() {}
+
+    SingletonFactory(const SingletonFactory&) = delete;
+    SingletonFactory& operator=(const SingletonFactory&) = delete;
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
         throw (css::uno::RuntimeException, std::exception) override;
@@ -530,7 +531,7 @@ void initVMConfiguration(
     setTimeZone(pjvm);
 }
 
-class DetachCurrentThread: private boost::noncopyable {
+class DetachCurrentThread {
 public:
     explicit DetachCurrentThread(JavaVM * jvm): m_jvm(jvm) {}
 
@@ -539,6 +540,9 @@ public:
             OSL_ASSERT(false);
         }
     }
+
+    DetachCurrentThread(const DetachCurrentThread&) = delete;
+    DetachCurrentThread& operator=(const DetachCurrentThread&) = delete;
 
 private:
     JavaVM * m_jvm;

@@ -19,7 +19,6 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/aeitem.hxx>
-#include <boost/noncopyable.hpp>
 
 #include <vector>
 

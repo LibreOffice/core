@@ -39,7 +39,6 @@
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <boost/assign/list_of.hpp>
 #include <memory>
 #include <set>
@@ -140,7 +139,7 @@ namespace svxform
     };
 
     class FormScriptingEnvironment:
-        public IFormScriptingEnvironment, private boost::noncopyable
+        public IFormScriptingEnvironment
     {
     private:
         typedef rtl::Reference<FormScriptListener> ListenerImplementation;
@@ -154,6 +153,8 @@ namespace svxform
     public:
         explicit FormScriptingEnvironment( FmFormModel& _rModel );
         virtual ~FormScriptingEnvironment();
+        FormScriptingEnvironment(const FormScriptingEnvironment&) = delete;
+        FormScriptingEnvironment& operator=(const FormScriptingEnvironment&) = delete;
 
         // callback for FormScriptListener
         void doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSynchronousResult );

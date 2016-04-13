@@ -33,7 +33,6 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
 
@@ -57,7 +56,7 @@ using namespace ::ooo::vba;
 typedef ::std::pair< OUString, ::std::pair< double, double > > VbaTimerInfo;
 
 // ====VbaTimer==================================
-class VbaTimer: private boost::noncopyable
+class VbaTimer
 {
     Timer m_aTimer;
     VbaTimerInfo m_aTimerInfo;
@@ -71,6 +70,9 @@ public:
     {
         m_aTimer.Stop();
     }
+
+    VbaTimer(const VbaTimer&) = delete;
+    VbaTimer& operator=(const VbaTimer&) = delete;
 
     static double GetNow()
     {

@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -29,7 +28,7 @@
 
 namespace {
 
-class Protector: public CppUnit::Protector, private boost::noncopyable {
+class Protector: public CppUnit::Protector {
 public:
     Protector() {
         // Force locale (and resource files loaded) to en-US:
@@ -45,6 +44,8 @@ public:
         }
         Application::setDeInitHook(LINK(this, Protector, deinitHook));
     }
+    Protector(const Protector&) = delete;
+    Protector& operator=(const Protector&) = delete;
 
 private:
     virtual ~Protector() {

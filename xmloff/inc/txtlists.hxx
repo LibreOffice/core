@@ -25,7 +25,6 @@
 #include <stack>
 #include <tuple>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <xmloff/xmlictxt.hxx>
 
@@ -34,11 +33,13 @@ class XMLTextListBlockContext;
 class XMLTextListItemContext;
 class XMLNumberedParaContext;
 
-class XMLTextListsHelper : private boost::noncopyable
+class XMLTextListsHelper
 {
     public:
         XMLTextListsHelper();
         ~XMLTextListsHelper();
+        XMLTextListsHelper(const XMLTextListsHelper&) = delete;
+        XMLTextListsHelper& operator=(const XMLTextListsHelper&) = delete;
 
         /// list stack for importing:
 

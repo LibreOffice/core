@@ -22,7 +22,6 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <limits>
 #include <memory>
 #include <unordered_map>
@@ -41,11 +40,13 @@ namespace packages = com::sun::star::packages;
 namespace
 {
 
-class PositionHolder : private boost::noncopyable
+class PositionHolder
 {
 public:
     explicit PositionHolder(const Reference<XSeekable> &rxSeekable);
     ~PositionHolder();
+    PositionHolder(const PositionHolder&) = delete;
+    PositionHolder& operator=(const PositionHolder&) = delete;
 
 private:
     const Reference<XSeekable> mxSeekable;

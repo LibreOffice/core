@@ -26,7 +26,6 @@
 #include "store/types.h"
 #include "storbase.hxx"
 #include "object.hxx"
-#include "boost/noncopyable.hpp"
 
 namespace store
 {
@@ -40,8 +39,7 @@ struct Entry;
  *======================================================================*/
 
 class PageCache :
-    public store::OStoreObject,
-    private boost::noncopyable
+    public store::OStoreObject
 {
     // Representation
     static size_t const theTableSize = 32;
@@ -72,6 +70,9 @@ class PageCache :
 public:
     // Construction
     explicit PageCache (sal_uInt16 nPageSize);
+
+    PageCache(const PageCache&) = delete;
+    PageCache& operator=(const PageCache&) = delete;
 
     /** load.
      */

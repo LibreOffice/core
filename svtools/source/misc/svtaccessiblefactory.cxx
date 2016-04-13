@@ -21,7 +21,6 @@
 
 #include "svtaccessiblefactory.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <osl/module.h>
 
 namespace svt
@@ -44,10 +43,12 @@ namespace svt
         //= AccessibleDummyFactory
 
         class AccessibleDummyFactory:
-            public IAccessibleFactory, private boost::noncopyable
+            public IAccessibleFactory
         {
         public:
             AccessibleDummyFactory();
+            AccessibleDummyFactory(const AccessibleDummyFactory&) = delete;
+            AccessibleDummyFactory& operator=(const AccessibleDummyFactory&) = delete;
 
         protected:
             virtual ~AccessibleDummyFactory();

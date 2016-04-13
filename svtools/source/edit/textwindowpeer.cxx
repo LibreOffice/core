@@ -21,7 +21,6 @@
 
 #include <svtaccessiblefactory.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -33,11 +32,14 @@
 
 namespace {
 
-class TextWindowPeer: public VCLXWindow, private boost::noncopyable {
+class TextWindowPeer: public VCLXWindow {
 public:
     explicit TextWindowPeer(TextView & view);
 
     virtual ~TextWindowPeer() {}
+
+    TextWindowPeer(const TextWindowPeer&) = delete;
+    TextWindowPeer& operator=(const TextWindowPeer&) = delete;
 
 private:
     virtual css::uno::Reference<css::accessibility::XAccessibleContext>

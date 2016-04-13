@@ -21,7 +21,6 @@
 #include <string>
 #include <iostream>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 
 #include <cppuhelper/bootstrap.hxx>
@@ -56,12 +55,15 @@ using namespace com::sun::star;
 //the first dispose. So lets setup the default context once before
 //all tests are run, and tear it down once after all have finished
 
-class Prot : public CppUnit::Protector, private boost::noncopyable
+class Prot : public CppUnit::Protector
 {
 public:
     Prot();
 
     virtual ~Prot();
+
+    Prot(const Prot&) = delete;
+    Prot& operator=(const Prot&) = delete;
 
     virtual bool protect(
         CppUnit::Functor const & functor,

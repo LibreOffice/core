@@ -19,7 +19,6 @@
 
 #include "lockbyte.hxx"
 
-#include "boost/noncopyable.hpp"
 #include "sal/types.h"
 #include "osl/diagnose.h"
 #include "osl/file.h"
@@ -278,8 +277,7 @@ struct FileHandle
 
 class FileLockBytes :
     public store::OStoreObject,
-    public store::ILockBytes,
-    private boost::noncopyable
+    public store::ILockBytes
 {
     /** Representation.
      */
@@ -308,6 +306,9 @@ public:
     /** Construction.
      */
     explicit FileLockBytes (FileHandle & rFile);
+
+    FileLockBytes(const FileLockBytes&) = delete;
+    FileLockBytes& operator=(const FileLockBytes&) = delete;
 
 protected:
     /** Destruction.
@@ -500,8 +501,7 @@ struct FileMapping
 class MappedLockBytes :
     public store::OStoreObject,
     public store::PageData::Allocator,
-    public store::ILockBytes,
-    private boost::noncopyable
+    public store::ILockBytes
 {
     /** Representation.
      */
@@ -534,6 +534,9 @@ public:
     /** Construction.
      */
     explicit MappedLockBytes (FileMapping & rMapping);
+
+    MappedLockBytes(const MappedLockBytes&) = delete;
+    MappedLockBytes& operator=(const MappedLockBytes&) = delete;
 
 protected:
     /* Destruction.
@@ -642,8 +645,7 @@ namespace store
 
 class MemoryLockBytes :
     public store::OStoreObject,
-    public store::ILockBytes,
-    private boost::noncopyable
+    public store::ILockBytes
 {
     /** Representation.
      */
@@ -670,6 +672,9 @@ public:
     /** Construction.
      */
     MemoryLockBytes();
+
+    MemoryLockBytes(const MemoryLockBytes&) = delete;
+    MemoryLockBytes& operator=(const MemoryLockBytes&) = delete;
 
 protected:
     /** Destruction.

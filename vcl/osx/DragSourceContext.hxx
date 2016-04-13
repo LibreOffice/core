@@ -24,8 +24,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <boost/noncopyable.hpp>
-
 // This class fires events to XDragSourceListener implementations.
 // Of that interface only dragDropEnd and dropActionChanged are called.
 // The functions dragEnter, dragExit and dragOver are not supported
@@ -33,12 +31,13 @@
 // An instance of SourceContext only lives as long as the drag and drop
 // operation lasts.
 class DragSourceContext: public cppu::BaseMutex,
-                     public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSourceContext>,
-                     private ::boost::noncopyable
+                     public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSourceContext>
 {
 public:
   DragSourceContext();
   virtual ~DragSourceContext();
+  DragSourceContext(const DragSourceContext&) = delete;
+  DragSourceContext& operator=(const DragSourceContext&) = delete;
 
   virtual sal_Int32 SAL_CALL getCurrentCursor(  )
     throw( css::uno::RuntimeException, std::exception) override;

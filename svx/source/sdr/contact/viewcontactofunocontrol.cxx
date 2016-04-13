@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <sdr/contact/viewcontactofunocontrol.hxx>
 #include <sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <sdr/contact/objectcontactofpageview.hxx>

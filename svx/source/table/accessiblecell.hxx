@@ -38,8 +38,6 @@
 
 #include "cell.hxx"
 
-#include <boost/noncopyable.hpp>
-
 
 namespace accessibility
 {
@@ -48,11 +46,15 @@ class AccessibleShapeTreeInfo;
 
 typedef ::cppu::ImplInheritanceHelper< AccessibleContextBase, css::accessibility::XAccessibleExtendedComponent > AccessibleCellBase;
 
-class AccessibleCell : private boost::noncopyable, public AccessibleCellBase, public AccessibleComponentBase, public IAccessibleViewForwarderListener
+class AccessibleCell : public AccessibleCellBase
+                     , public AccessibleComponentBase
+                     , public IAccessibleViewForwarderListener
 {
 public:
     AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessibleCell();
+    AccessibleCell(const AccessibleCell&) = delete;
+    AccessibleCell& operator=(const AccessibleCell&) = delete;
 
     void Init();
 
@@ -127,10 +129,6 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     AccessibleTableShape *pAccTable;
-
-private:
-    AccessibleCell(const AccessibleCell&) = delete;
-    AccessibleCell& operator=(const AccessibleCell&) = delete;
 };
 
 } // end of namespace accessibility

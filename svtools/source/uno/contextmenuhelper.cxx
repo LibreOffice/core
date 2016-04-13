@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <svtools/contextmenuhelper.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -56,14 +55,15 @@ namespace svt
 
 // internal helper class to retrieve status updates
 class StateEventHelper : public css::frame::XStatusListener,
-                         public ::cppu::OWeakObject,
-                         private boost::noncopyable
+                         public ::cppu::OWeakObject
 {
     public:
         StateEventHelper( const uno::Reference< frame::XDispatchProvider >& xDispatchProvider,
                           const uno::Reference< util::XURLTransformer >& xURLTransformer,
                           const OUString& aCommandURL );
         virtual ~StateEventHelper();
+        StateEventHelper(const StateEventHelper&) = delete;
+        StateEventHelper& operator=(const StateEventHelper&) = delete;
 
         bool isCommandEnabled();
 

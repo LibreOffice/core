@@ -34,8 +34,6 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
 
-#include <boost/noncopyable.hpp>
-
 class SvXMLAutoStylePoolP;
 class XMLAutoStylePoolParent;
 struct XMLAutoStyleFamily;
@@ -102,7 +100,7 @@ public:
 
 // Implementationclass for stylefamily-information
 
-struct XMLAutoStyleFamily : boost::noncopyable
+struct XMLAutoStyleFamily
 {
     typedef std::set<std::unique_ptr<XMLAutoStylePoolParent>,
         comphelper::UniquePtrValueLess<XMLAutoStylePoolParent>> ParentSetType;
@@ -125,6 +123,9 @@ struct XMLAutoStyleFamily : boost::noncopyable
 
     explicit XMLAutoStyleFamily( sal_Int32 nFamily );
     ~XMLAutoStyleFamily();
+
+    XMLAutoStyleFamily(const XMLAutoStyleFamily&) = delete;
+    XMLAutoStyleFamily& operator=(const XMLAutoStyleFamily&) = delete;
 
     friend bool operator<(const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2);
 

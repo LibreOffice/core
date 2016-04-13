@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlprmap.hxx>
@@ -118,7 +117,7 @@ using ::std::vector;
 
 // class SchXMLExportHelper_Impl
 
-class SchXMLExportHelper_Impl: private boost::noncopyable
+class SchXMLExportHelper_Impl
 {
 public:
     // first: data sequence for label, second: data sequence for values.
@@ -131,6 +130,9 @@ public:
                         SvXMLAutoStylePoolP& rASPool );
 
     virtual ~SchXMLExportHelper_Impl();
+
+    SchXMLExportHelper_Impl(const SchXMLExportHelper_Impl&) = delete;
+    SchXMLExportHelper_Impl& operator=(const SchXMLExportHelper_Impl&) = delete;
 
     // auto-styles
     /// parse chart and collect all auto-styles used in current pool

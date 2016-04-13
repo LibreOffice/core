@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/drawing/ColorTable.hpp"
@@ -38,9 +37,11 @@
 
 namespace {
 
-class ColorNameMap: private boost::noncopyable {
+class ColorNameMap {
 public:
     ColorNameMap();
+    ColorNameMap(const ColorNameMap&) = delete;
+    ColorNameMap& operator=(const ColorNameMap&) = delete;
 
     OUString lookUp(long color) const;
 

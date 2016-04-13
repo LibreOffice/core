@@ -25,7 +25,6 @@
 #include <exception>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -93,8 +92,7 @@ sal_Int32 parseScheme(OUString const & uriReference) {
 }
 
 class UriReference:
-    public cppu::WeakImplHelper<css::uri::XUriReference>,
-    private boost::noncopyable
+    public cppu::WeakImplHelper<css::uri::XUriReference>
 {
 public:
     UriReference(
@@ -105,6 +103,9 @@ public:
             scheme, bIsHierarchical, bHasAuthority, authority, path, bHasQuery,
             query)
     {}
+
+    UriReference(const UriReference&) = delete;
+    UriReference& operator=(const UriReference&) = delete;
 
     virtual OUString SAL_CALL getUriReference()
         throw (css::uno::RuntimeException, std::exception) override
@@ -258,13 +259,15 @@ void processSegments(
 
 class Factory:
     public cppu::WeakImplHelper<
-        css::lang::XServiceInfo, css::uri::XUriReferenceFactory>,
-    private boost::noncopyable
+        css::lang::XServiceInfo, css::uri::XUriReferenceFactory>
 {
 public:
     explicit Factory(
         css::uno::Reference< css::uno::XComponentContext > const & context):
         m_context(context) {}
+
+    Factory(const Factory&) = delete;
+    Factory& operator=(const Factory&) = delete;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;

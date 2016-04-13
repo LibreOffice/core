@@ -29,8 +29,6 @@
 
 #include <rtl/ref.hxx>
 
-#include <boost/noncopyable.hpp>
-
 
 namespace svt { namespace table
 {
@@ -41,7 +39,6 @@ namespace svt { namespace table
     class ColumnChangeMultiplexer;
     class UnoControlTableModel;
     class UnoGridColumnFacade   :public IColumnModel
-                                ,public ::boost::noncopyable
     {
     public:
         UnoGridColumnFacade(
@@ -49,6 +46,8 @@ namespace svt { namespace table
             css::uno::Reference< css::awt::grid::XGridColumn > const & i_gridColumn
         );
         virtual ~UnoGridColumnFacade();
+        UnoGridColumnFacade(const UnoGridColumnFacade&) = delete;
+        UnoGridColumnFacade& operator=(const UnoGridColumnFacade&) = delete;
 
         // IColumnModel overridables
         virtual OUString        getName() const override;

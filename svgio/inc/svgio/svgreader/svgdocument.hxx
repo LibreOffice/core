@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 #define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 
-#include <boost/noncopyable.hpp>
 #include <svgio/svgreader/svgnode.hxx>
 #include <unordered_map>
 
@@ -28,7 +27,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgDocument : private boost::noncopyable
+        class SvgDocument
         {
         private:
             /// the document hierarchy with all root nodes
@@ -49,8 +48,11 @@ namespace svgio
             IdStyleTokenMapper      maIdStyleTokenMapperList;
 
         public:
-            SvgDocument(const OUString& rAbsolutePath);
+            explicit SvgDocument(const OUString& rAbsolutePath);
             ~SvgDocument();
+
+            SvgDocument(const SvgDocument&) = delete;
+            SvgDocument& operator=(const SvgDocument&) = delete;
 
             /// append another root node, ownership changes
             void appendNode(SvgNode* pNode);

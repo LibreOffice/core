@@ -36,7 +36,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <list>
 
 #include <premac.h>
@@ -65,8 +64,7 @@ class AquaClipboard;
 class AquaClipboard : public ::cppu::BaseMutex,
                       public ::cppu::WeakComponentImplHelper< css::datatransfer::clipboard::XSystemClipboard,
                                                                css::datatransfer::clipboard::XFlushableClipboard,
-                                                               css::lang::XServiceInfo >,
-                      private ::boost::noncopyable
+                                                               css::lang::XServiceInfo >
 {
 public:
   /* Create a clipboard instance.
@@ -84,6 +82,8 @@ public:
                 bool bUseSystemClipboard = true);
 
   virtual ~AquaClipboard();
+  AquaClipboard(const AquaClipboard&) = delete;
+  AquaClipboard& operator=(const AquaClipboard&) = delete;
 
   // XClipboard
 
