@@ -51,10 +51,10 @@ namespace canvas
             member/method access is performed by operator-> instead of
             the non-existing "operator.".
          */
-        template< class _Wrappee > class VCLObject
+        template< class Wrappee_ > class VCLObject
         {
         public:
-            typedef _Wrappee Wrappee;
+            typedef Wrappee_ Wrappee;
 
             VCLObject() :
                 mpWrappee( new Wrappee() )
