@@ -52,7 +52,7 @@ public:
     SbStdPicture();
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
-    Graphic GetGraphic() const { return aGraphic; }
+    const Graphic& GetGraphic() const { return aGraphic; }
     void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
 };
 
@@ -93,7 +93,7 @@ public:
     void     SetSize( sal_uInt16 nS ) { nSize = nS; }
     sal_uInt16 GetSize() const { return nSize; }
     void     SetFontName( const OUString& rName ) { aName = rName; }
-    OUString GetFontName() const { return aName; }
+    const OUString& GetFontName() const { return aName; }
 };
 
 // class SbStdClipboard
