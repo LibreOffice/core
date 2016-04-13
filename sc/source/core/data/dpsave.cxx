@@ -1041,10 +1041,10 @@ ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(sal_uInt16 nOrientation)
     // return the innermost dimension for the given orientation,
     // excluding data layout dimension
 
-    for (auto const& iter : m_DimList)
+    for (auto iter = m_DimList.rbegin(); iter != m_DimList.rend(); ++iter)
     {
-        if (iter->GetOrientation() == nOrientation && !iter->IsDataLayout())
-            return &(*iter);
+        if ((*iter)->GetOrientation() == nOrientation && !(*iter)->IsDataLayout())
+            return iter->get();
     }
 
     return nullptr;
