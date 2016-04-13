@@ -42,7 +42,8 @@ bool Plugin::ignoreLocation( SourceLocation loc )
         return true;
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
     if( bufferName == NULL
-        || strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0 )
+        || strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0
+        || strncmp( bufferName, SRCDIR "/external/", strlen( SRCDIR "/external/" )) == 0 )
         return true;
     if( strncmp( bufferName, BUILDDIR, strlen( BUILDDIR )) == 0
         || strncmp( bufferName, SRCDIR, strlen( SRCDIR )) == 0 )
