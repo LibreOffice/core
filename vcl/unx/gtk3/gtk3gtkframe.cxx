@@ -2439,6 +2439,8 @@ gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
     aHelpArea.y = pThis->m_aHelpArea.Top();
     aHelpArea.width = pThis->m_aHelpArea.GetWidth();
     aHelpArea.height = pThis->m_aHelpArea.GetHeight();
+    if (AllSettings::GetLayoutRTL())
+        aHelpArea.x = pThis->maGeometry.nWidth-aHelpArea.width-1-aHelpArea.x;
     gtk_tooltip_set_tip_area(tooltip, &aHelpArea);
     return true;
 }
