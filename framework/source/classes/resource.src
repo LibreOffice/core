@@ -116,7 +116,7 @@ String STR_CLEAR_RECENT_FILES_HELP
 
 String STR_OPEN_REMOTE
 {
-    Text [ en-US ] = "Open remote file";
+    Text [ en-US ] = "Open Remote File";
 };
 
 String STR_REMOTE_TITLE
