@@ -370,7 +370,7 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
     ::std::vector<OOperand*>::iterator aEnd = aOperands.end();
     for (; aIter != aEnd; ++aIter)
     {
-        if (typeid(OOperandResult) != typeid(*(*aIter)))
+        if (typeid(OOperandResult) == typeid(*(*aIter)))
             delete *aIter;
     }
 }
