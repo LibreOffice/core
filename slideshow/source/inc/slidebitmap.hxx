@@ -68,7 +68,7 @@ namespace slideshow
             void                move( const ::basegfx::B2DPoint& rNewPos );
             void                clip( const ::basegfx::B2DPolyPolygon& rClipPoly );
 
-            css::uno::Reference< css::rendering::XBitmap >    getXBitmap();
+            const css::uno::Reference< css::rendering::XBitmap >&  getXBitmap();
 
         private:
             ::basegfx::B2DPoint                                     maOutputPos;

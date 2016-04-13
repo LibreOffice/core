@@ -64,7 +64,7 @@ namespace slideshow
 
             /** Query the associated view layer of this shape
              */
-            ViewLayerSharedPtr getViewLayer() const;
+            const ViewLayerSharedPtr& getViewLayer() const;
 
             bool render( const GDIMetaFileSharedPtr& rMtf ) const;
 

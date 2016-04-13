@@ -87,7 +87,7 @@ namespace slideshow
                 return static_cast< bool >(mpAttributeLayer);
             }
 
-            ShapeAttributeLayerSharedPtr get() const
+            const ShapeAttributeLayerSharedPtr& get() const
             {
                 return mpAttributeLayer;
             }

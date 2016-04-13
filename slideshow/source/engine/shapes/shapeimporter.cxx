@@ -580,7 +580,7 @@ bool ShapeImporter::isImportDone() const
     return maShapesStack.empty();
 }
 
-PolyPolygonVector ShapeImporter::getPolygons()
+const PolyPolygonVector& ShapeImporter::getPolygons()
 {
     return maPolygons;
 }

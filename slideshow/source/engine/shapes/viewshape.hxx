@@ -63,7 +63,7 @@ namespace slideshow
 
             /** Query the associated view layer of this shape
              */
-            ViewLayerSharedPtr getViewLayer() const;
+            const ViewLayerSharedPtr& getViewLayer() const;
 
             /** Query dimension of a safety border around the shape for AA
 
@@ -222,7 +222,7 @@ namespace slideshow
                 {
                 }
 
-                ::cppcanvas::CanvasSharedPtr getDestinationCanvas() const
+                const ::cppcanvas::CanvasSharedPtr& getDestinationCanvas() const
                 {
                     return mpDestinationCanvas;
                 }
