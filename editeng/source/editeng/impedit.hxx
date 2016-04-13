@@ -650,7 +650,7 @@ private:
     const ParaPortion*  GetNextVisPortion( const ParaPortion* pCurPortion ) const;
 
     void                SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
-    Color               GetBackgroundColor() const { return maBackgroundColor; }
+    const Color&        GetBackgroundColor() const { return maBackgroundColor; }
 
     long                CalcVertLineSpacing(Point& rStartPos) const;
 
@@ -832,7 +832,7 @@ public:
     bool            IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
-    Link<LinkParamNone*,void> GetModifyHdl() const { return aModifyHdl; }
+    const Link<LinkParamNone*,void>& GetModifyHdl() const { return aModifyHdl; }
 
     bool            IsInSelectionMode() { return bInSelection; }
 
@@ -848,10 +848,10 @@ public:
     EditSelection*  SelectParagraph( sal_Int32 nPara );
 
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink ) { aStatusHdlLink = rLink; }
-    Link<EditStatus&,void> GetStatusEventHdl() const               { return aStatusHdlLink; }
+    const Link<EditStatus&,void>& GetStatusEventHdl() const               { return aStatusHdlLink; }
 
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink )     { aNotifyHdl = rLink; }
-    Link<EENotify&,void>   GetNotifyHdl() const            { return aNotifyHdl; }
+    const Link<EENotify&,void>&   GetNotifyHdl() const            { return aNotifyHdl; }
 
     void            FormatAndUpdate( EditView* pCurView = nullptr );
     inline void     IdleFormatAndUpdate( EditView* pCurView = nullptr );
@@ -902,7 +902,7 @@ public:
                         GetSpeller();
     void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpl )
                             { xSpeller = xSpl; }
-    css::uno::Reference< css::linguistic2::XHyphenator >
+    const css::uno::Reference< css::linguistic2::XHyphenator >&
                         GetHyphenator() const { return xHyphenator; }
     void                SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator >  &xHyph )
                             { xHyphenator = xHyph; }
@@ -1012,11 +1012,11 @@ public:
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void                SetBeginDropHdl( const Link<EditView*,void>& rLink ) { maBeginDropHdl = rLink; }
-    Link<EditView*,void>  GetBeginDropHdl() const { return maBeginDropHdl; }
+    const Link<EditView*,void>&  GetBeginDropHdl() const { return maBeginDropHdl; }
 
     /** sets a link that is called at the end of a drag operation at an edit view */
     void            SetEndDropHdl( const Link<EditView*,void>& rLink ) { maEndDropHdl = rLink; }
-    Link<EditView*,void>  GetEndDropHdl() const { return maEndDropHdl; }
+    const Link<EditView*,void>&  GetEndDropHdl() const { return maEndDropHdl; }
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize )  { bFirstWordCapitalization = bCapitalize; }

@@ -98,7 +98,7 @@ public:
     inline bool     IsAllRight()        { return bAllRight; }
 
 protected:
-    css::uno::Reference< css::uno::XInterface >
+    const css::uno::Reference< css::uno::XInterface >&
                      GetLast()      { return xLast; }
     void             SetLast(const css::uno::Reference< css::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
