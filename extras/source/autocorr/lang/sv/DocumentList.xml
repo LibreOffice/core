@@ -109,9 +109,12 @@
   <block-list:block block-list:abbreviated-name="ädnå" block-list:name="ändå"/>
   <block-list:block block-list:abbreviated-name="övritg" block-list:name="övrigt"/>
   <block-list:block block-list:abbreviated-name=":äktenskap:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":alembic:" block-list:name="⚗"/>
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":alpha:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":andreaskors:" block-list:name="☓"/>
   <block-list:block block-list:abbreviated-name=":ankare:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":ankh:" block-list:name="☥"/>
   <block-list:block block-list:abbreviated-name=":återställningstecken:" block-list:name="♮"/>
   <block-list:block block-list:abbreviated-name=":återvinning2:" block-list:name="♻"/>
   <block-list:block block-list:abbreviated-name=":återvinning:" block-list:name="♲"/>
@@ -119,6 +122,7 @@
   <block-list:block block-list:abbreviated-name=":atom:" block-list:name="⚛"/>
   <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":balansvåg:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":baseboll:" block-list:name="⚾"/>
   <block-list:block block-list:abbreviated-name=":baspunkt:" block-list:name="‱"/>
   <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
   <block-list:block block-list:abbreviated-name=":Beta:" block-list:name="Β"/>
@@ -150,6 +154,7 @@
   <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
   <block-list:block block-list:abbreviated-name=":Chi:" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name=":chi rho:" block-list:name="☧"/>
   <block-list:block block-list:abbreviated-name=":cirkel2:" block-list:name="●"/>
   <block-list:block block-list:abbreviated-name=":cirkel:" block-list:name="○"/>
   <block-list:block block-list:abbreviated-name=":copyright:" block-list:name="©"/>
@@ -180,6 +185,7 @@
   <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
   <block-list:block block-list:abbreviated-name=":för alla:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":försiktig:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":fotboll:" block-list:name="⚽"/>
   <block-list:block block-list:abbreviated-name=":fransk lilja:" block-list:name="⚜"/>
   <block-list:block block-list:abbreviated-name=":fred:" block-list:name="☮"/>
   <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
@@ -189,10 +195,15 @@
   <block-list:block block-list:abbreviated-name=":grundmängd:" block-list:name="⊃"/>
   <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":hacka:" block-list:name="⛏"/>
   <block-list:block block-list:abbreviated-name=":halvhög punkt:" block-list:name="·"/>
   <block-list:block block-list:abbreviated-name=":hammare och hacka:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":hammare och skära:" block-list:name="☭"/>
   <block-list:block block-list:abbreviated-name=":hand:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":häroldsstav:" block-list:name="⚚"/>
   <block-list:block block-list:abbreviated-name=":hav:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":heta källor:" block-list:name="♨"/>
+  <block-list:block block-list:abbreviated-name=":hjälm:" block-list:name="⛑"/>
   <block-list:block block-list:abbreviated-name=":hjärter2:" block-list:name="♡"/>
   <block-list:block block-list:abbreviated-name=":hjärter:" block-list:name="♥"/>
   <block-list:block block-list:abbreviated-name=":höger3:" block-list:name="☛"/>
@@ -216,6 +227,7 @@
   <block-list:block block-list:abbreviated-name=":jota:" block-list:name="ι"/>
   <block-list:block block-list:abbreviated-name=":Jungfrun:" block-list:name="♍"/>
   <block-list:block block-list:abbreviated-name=":Jupiter:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":kaducé:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":kaffe:" block-list:name="☕"/>
   <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="κ"/>
   <block-list:block block-list:abbreviated-name=":Kappa:" block-list:name="Κ"/>
@@ -227,6 +239,7 @@
   <block-list:block block-list:abbreviated-name=":kors:" block-list:name="†"/>
   <block-list:block block-list:abbreviated-name=":korsförtecken:" block-list:name="♯"/>
   <block-list:block block-list:abbreviated-name=":Kräftan:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":kryckkors:" block-list:name="☩"/>
   <block-list:block block-list:abbreviated-name=":kryssruta2:" block-list:name="☑"/>
   <block-list:block block-list:abbreviated-name=":kryssruta3:" block-list:name="☒"/>
   <block-list:block block-list:abbreviated-name=":kryssruta:" block-list:name="☐"/>
@@ -239,6 +252,7 @@
   <block-list:block block-list:abbreviated-name=":kvinna:" block-list:name="♀"/>
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
   <block-list:block block-list:abbreviated-name=":Lambda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":ledsen:" block-list:name="☹"/>
   <block-list:block block-list:abbreviated-name=":leende2:" block-list:name="☻"/>
   <block-list:block block-list:abbreviated-name=":leende:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":Lejonet:" block-list:name="♌"/>
@@ -252,6 +266,7 @@
   <block-list:block block-list:abbreviated-name=":liten stjärna2:" block-list:name="⭑"/>
   <block-list:block block-list:abbreviated-name=":liten stjärna:" block-list:name="⭒"/>
   <block-list:block block-list:abbreviated-name=":lota:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":Lothringenkors:" block-list:name="☨"/>
   <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":man:" block-list:name="♂"/>
@@ -291,6 +306,7 @@
   <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":omikron:" block-list:name="ο"/>
   <block-list:block block-list:abbreviated-name=":Omikron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":ormbäraren:" block-list:name="⛎"/>
   <block-list:block block-list:abbreviated-name=":ÖV2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":ÖV:" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name=":Oxen:" block-list:name="♉"/>
@@ -303,6 +319,7 @@
   <block-list:block block-list:abbreviated-name=":paraply:" block-list:name="☂"/>
   <block-list:block block-list:abbreviated-name=":partiell:" block-list:name="∂"/>
   <block-list:block block-list:abbreviated-name=":permanent papper:" block-list:name="♾"/>
+  <block-list:block block-list:abbreviated-name=":Persiska:" block-list:name="☫"/>
   <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
   <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":Pi:" block-list:name="Π"/>
@@ -328,10 +345,12 @@
   <block-list:block block-list:abbreviated-name=":rupie:" block-list:name="₹"/>
   <block-list:block block-list:abbreviated-name=":ruter2:" block-list:name="♢"/>
   <block-list:block block-list:abbreviated-name=":ruter:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":ryskt kors:" block-list:name="☦"/>
   <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
   <block-list:block block-list:abbreviated-name=":Saturnus:" block-list:name="♄"/>
   <block-list:block block-list:abbreviated-name=":S:" block-list:name="↓"/>
   <block-list:block block-list:abbreviated-name=":segelbåt:" block-list:name="⛵"/>
+  <block-list:block block-list:abbreviated-name=":Shakti:" block-list:name="☬"/>
   <block-list:block block-list:abbreviated-name=":shekel:" block-list:name="₪"/>
   <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
   <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
@@ -339,6 +358,7 @@
   <block-list:block block-list:abbreviated-name=":skilsmässa:" block-list:name="⚮"/>
   <block-list:block block-list:abbreviated-name=":Skorpionen:" block-list:name="♏"/>
   <block-list:block block-list:abbreviated-name=":Skytten:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":slirande bil:" block-list:name="⛐"/>
   <block-list:block block-list:abbreviated-name=":snitt:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":snögubbe2:" block-list:name="⛄"/>
   <block-list:block block-list:abbreviated-name=":snögubbe:" block-list:name="☃"/>
@@ -354,6 +374,7 @@
   <block-list:block block-list:abbreviated-name=":Stenbocken:" block-list:name="♑"/>
   <block-list:block block-list:abbreviated-name=":stjärna2:" block-list:name="☆"/>
   <block-list:block block-list:abbreviated-name=":stjärna:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":stjärna och månskära:" block-list:name="☪"/>
   <block-list:block block-list:abbreviated-name=":stoppur:" block-list:name="⏱"/>
   <block-list:block block-list:abbreviated-name=":stor cirkel2:" block-list:name="⬤"/>
   <block-list:block block-list:abbreviated-name=":stor cirkel:" block-list:name="◯"/>
@@ -399,6 +420,7 @@
   <block-list:block block-list:abbreviated-name=":union:" block-list:name="∪"/>
   <block-list:block block-list:abbreviated-name=":upp:" block-list:name="☝"/>
   <block-list:block block-list:abbreviated-name=":Uranus:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":urna:" block-list:name="⚱"/>
   <block-list:block block-list:abbreviated-name=":V2:" block-list:name="⇐"/>
   <block-list:block block-list:abbreviated-name=":väckarklocka:" block-list:name="⏰"/>
   <block-list:block block-list:abbreviated-name=":Väduren:" block-list:name="♈"/>
