@@ -251,6 +251,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
     switch( nServiceId )
     {
     case text::textfield::Type::DATE:
+        SAL_WARN( "editeng", "got Type::DATE ( id " << nServiceId << " )" );
         mpImpl->mbBoolean2 = true;
         mpImpl->mnInt32 = SVXDATEFORMAT_STDSMALL;
         mpImpl->mbBoolean1 = false;
@@ -258,31 +259,37 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 
     case text::textfield::Type::EXTENDED_TIME:
     case text::textfield::Type::TIME:
+        SAL_WARN( "editeng", "got Type::TIME or Type::EXTENDED_TIME ( id " << nServiceId << " )" );
         mpImpl->mbBoolean2 = false;
         mpImpl->mbBoolean1 = false;
         mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
         break;
 
     case text::textfield::Type::URL:
+        SAL_WARN( "editeng", "got Type::URL ( id " << nServiceId << " )" );
         mpImpl->mnInt16 = SVXURLFORMAT_REPR;
         break;
 
     case text::textfield::Type::EXTENDED_FILE:
+        SAL_WARN( "editeng", "got Type::EXTENDED_FILE ( id " << nServiceId << " )" );
         mpImpl->mbBoolean1 = false;
         mpImpl->mnInt16 = text::FilenameDisplayFormat::FULL;
         break;
 
     case text::textfield::Type::AUTHOR:
+        SAL_WARN( "editeng", "got Type::AUTHOR ( id " << nServiceId << " )" );
         mpImpl->mnInt16 = SVXAUTHORFORMAT_FULLNAME;
         mpImpl->mbBoolean1 = false;
         mpImpl->mbBoolean2 = true;
         break;
 
     case text::textfield::Type::MEASURE:
+        SAL_WARN( "editeng", "got Type::MEASURE ( id " << nServiceId << " )" );
         mpImpl->mnInt16 = SDRMEASUREFIELD_VALUE;
         break;
 
     default:
+        SAL_WARN( "editeng", "given type ( id " << nServiceId << " ) is unknown" );
         mpImpl->mbBoolean1 = false;
         mpImpl->mbBoolean2 = false;
         mpImpl->mnInt32 = 0;
@@ -298,23 +305,21 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
 ,   mnServiceId(text::textfield::Type::UNSPECIFIED)
 ,   mpImpl( new SvxUnoFieldData_Impl )
 {
-    DBG_ASSERT(pData, "pFieldData == NULL! [CL]" );
-
     mpImpl->msPresentation = rPresentation;
 
-    if(pData)
+    if( pData )
     {
         mnServiceId = pData->GetClassId();
-        DBG_ASSERT(mnServiceId != text::textfield::Type::UNSPECIFIED, "unknown SvxFieldData! [CL]");
-        if (mnServiceId != text::textfield::Type::UNSPECIFIED)
+        if ( mnServiceId != text::textfield::Type::UNSPECIFIED )
         {
-            // extract field properties from data class
+            // extract properties from data class
             switch( mnServiceId )
             {
             case text::textfield::Type::DATE:
+                SAL_WARN( "editeng", "got Type::DATE ( id " << mnServiceId << " )" );
                 {
                     mpImpl->mbBoolean2 = true;
-                    // #i35416# for variable date field, don't use invalid "0000-00-00" date,
+                    // #i35416# for variable date field, it's not "0000-00-00" date,
                     // use current date instead
                     bool bFixed = static_cast<const SvxDateField*>(pData)->GetType() == SVXDATETYPE_FIX;
                     mpImpl->maDateTime = getDate( bFixed ?
@@ -326,12 +331,14 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                 break;
 
             case text::textfield::Type::TIME:
+                SAL_WARN( "editeng", "got Type::TIME ( id " << mnServiceId << " )" );
                 mpImpl->mbBoolean2 = false;
                 mpImpl->mbBoolean1 = false;
                 mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
                 break;
 
             case text::textfield::Type::EXTENDED_TIME:
+                SAL_WARN( "editeng", "got Type::EXTENDED_TIME ( id " << mnServiceId << " )" );
                 mpImpl->mbBoolean2 = false;
                 mpImpl->maDateTime = getTime( static_cast<const SvxExtTimeField*>(pData)->GetFixTime() );
                 mpImpl->mbBoolean1 = static_cast<const SvxExtTimeField*>(pData)->GetType() == SVXTIMETYPE_FIX;
@@ -339,6 +346,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                 break;
 
             case text::textfield::Type::URL:
+                SAL_WARN( "editeng", "got Type::URL ( id " << mnServiceId << " )" );
                 mpImpl->msString1 = static_cast<const SvxURLField*>(pData)->GetRepresentation();
                 mpImpl->msString2 = static_cast<const SvxURLField*>(pData)->GetTargetFrame();
                 mpImpl->msString3 = static_cast<const SvxURLField*>(pData)->GetURL();
@@ -347,12 +355,14 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                 break;
 
             case text::textfield::Type::EXTENDED_FILE:
+                SAL_WARN( "editeng", "got Type::EXTENDED_FILE ( id " << mnServiceId << " )" );
                 mpImpl->msString1 = static_cast<const SvxExtFileField*>(pData)->GetFile();
                 mpImpl->mbBoolean1 = static_cast<const SvxExtFileField*>(pData)->GetType() == SVXFILETYPE_FIX;
                 mpImpl->mnInt16 = getFileNameDisplayFormat(static_cast<const SvxExtFileField*>(pData)->GetFormat());
                 break;
 
             case text::textfield::Type::AUTHOR:
+                SAL_WARN( "editeng", "got Type::AUTHOR ( id " << mnServiceId << " )" );
                 mpImpl->msString1  = static_cast<const SvxAuthorField*>(pData)->GetFormatted();
                 mpImpl->msString2  = static_cast<const SvxAuthorField*>(pData)->GetFormatted();
                 mpImpl->mnInt16    = sal::static_int_cast< sal_Int16 >(
@@ -362,17 +372,26 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                 break;
 
             case text::textfield::Type::MEASURE:
+                SAL_WARN( "editeng", "got Type::MEASURE ( id " << mnServiceId << " )" );
                 mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(static_cast<const SdrMeasureField*>(pData)->GetMeasureFieldKind());
                 break;
 
             default:
-                SAL_WARN("editeng", "Id service unknown: " << mnServiceId);
+                SAL_WARN( "editeng", "given type ( id " << mnServiceId << " ) is unknown" );
                 break;
             }
         }
+        else
+        {
+            SAL_WARN( "editeng", "got Type::UNSPECIFIED ( id " << mnServiceId << " SvxFieldData is unknown )" );
+        }
+    }
+    else
+    {
+        SAL_WARN( "editeng", "pData is nil" );
     }
 
-    mpPropSet = ImplGetFieldItemPropertySet(mnServiceId);
+    mpPropSet = ImplGetFieldItemPropertySet( mnServiceId );
 }
 
 SvxUnoTextField::~SvxUnoTextField() throw()
