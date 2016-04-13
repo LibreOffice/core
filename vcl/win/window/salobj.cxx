@@ -489,7 +489,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
             aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcA;
             aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEA;
             if ( RegisterClassExA( &aWndClassEx ) )
-                pSalData->mbObjClassInit = TRUE;
+                pSalData->mbObjClassInit = true;
         }
     }
 

@@ -363,8 +363,6 @@ SalData::SalData()
     mbInPalChange = false;      // is in WM_QUERYNEWPALETTE
     mnAppThreadId = 0;          // Id from Applikation-Thread
     mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
-    mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == not available)
-    mpSageEnableProc = 0;       // funktion to deactivate the system agent
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
     mbThemeChanged = false;     // true if visual theme was changed: throw away theme handles
@@ -372,8 +370,6 @@ SalData::SalData()
 
     // init with NULL
     gdiplusToken = 0;
-    maDwmLib     = 0;
-    mpDwmIsCompositionEnabled = 0;
 
     initKeyCodeMap();
 

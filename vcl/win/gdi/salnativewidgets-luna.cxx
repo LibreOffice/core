@@ -206,8 +206,6 @@ void SalData::deInitNWF()
         ++iter;
     }
     aThemeMap.clear();
-    if( maDwmLib )
-        osl_unloadModule( maDwmLib );
 }
 
 static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
@@ -216,7 +214,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
     {
         // throw away invalid theme handles
         GetSalData()->deInitNWF();
-        GetSalData()->mbThemeChanged = FALSE;
+        GetSalData()->mbThemeChanged = false;
     }
 
     ThemeMap::iterator iter;
@@ -1563,7 +1561,7 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
         pSVData->maNWFData.mnMenuFormatBorderX = 2;
         pSVData->maNWFData.mnMenuFormatBorderY = 2;
         pSVData->maNWFData.maMenuBarHighlightTextColor = aMenuBarTextColor;
-        GetSalData()->mbThemeMenuSupport = TRUE;
+        GetSalData()->mbThemeMenuSupport = true;
     }
 
     rSettings.SetStyleSettings( aStyleSettings );

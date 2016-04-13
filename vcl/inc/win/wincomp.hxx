@@ -198,11 +198,6 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 #endif
 
 
-#define ENABLE_AGENT            1
-#define DISABLE_AGENT           2
-#define GET_AGENT_STATUS        3
-typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
-
 // - 5.0-Erweiterungen -
 
 #ifndef COLOR_GRADIENTACTIVECAPTION
