@@ -880,8 +880,6 @@ WinSalFrame::WinSalFrame()
     // get data, when making 1st frame
     if ( !pSalData->mpFirstFrame )
     {
-        if ( !aSalShlData.mnWheelMsgId )
-            aSalShlData.mnWheelMsgId = RegisterWindowMessage( MSH_MOUSEWHEEL );
         if ( !aSalShlData.mnWheelScrollLines )
             aSalShlData.mnWheelScrollLines = ImplSalGetWheelScrollLines();
         if ( !aSalShlData.mnWheelScrollChars )
@@ -5890,40 +5888,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 rDef = FALSE;
             }
             break;
-    }
-
-    // catch WheelMouse-Message
-    if ( rDef && (nMsg == aSalShlData.mnWheelMsgId) && aSalShlData.mnWheelMsgId )
-    {
-        // protect against recursion, in case the message is returned
-        // by IE or the external window
-        if ( !bInWheelMsg )
-        {
-            bInWheelMsg++;
-            // First dispatch the message; and then give the SystemWindow a turn
-            WORD nKeyState = 0;
-            if ( GetKeyState( VK_SHIFT ) & 0x8000 )
-                nKeyState |= MK_SHIFT;
-            if ( GetKeyState( VK_CONTROL ) & 0x8000 )
-                nKeyState |= MK_CONTROL;
-            // Mutex handling is inside from this call
-            rDef = !ImplHandleWheelMsg( hWnd,
-                                        WM_MOUSEWHEEL,
-                                        MAKEWPARAM( nKeyState, (WORD)wParam ),
-                                        lParam );
-            if ( rDef )
-            {
-                HWND hWheelWnd = ::GetFocus();
-                if ( hWheelWnd && (hWheelWnd != hWnd) )
-                {
-                    nRet = SendMessageW( hWheelWnd, nMsg, wParam, lParam );
-                    rDef = FALSE;
-                }
-                else
-                    rDef = ImplSalWheelMousePos( hWnd, nMsg, wParam, lParam, nRet );
-            }
-            bInWheelMsg--;
-        }
     }
 
     if( bCheckTimers )

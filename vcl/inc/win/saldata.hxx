@@ -135,7 +135,6 @@ struct SalShlData
     HINSTANCE               mhInst;                 // Instance of SAL-DLL
     UINT                    mnWheelScrollLines;     // WheelScrollLines
     UINT                    mnWheelScrollChars;     // WheelScrollChars
-    UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     BOOL                    mbWXP;                  // Windows XP
     BOOL                    mbWVista;               // Windows Vista
     BOOL                    mbW7;                   // Windows 7
