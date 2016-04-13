@@ -93,7 +93,7 @@ namespace sax
         {
             m_handler = delegate;
         }
-        css::uno::Reference< css::xml::sax::XDocumentHandler > SAL_CALL
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& SAL_CALL
         getDelegate()
         {
             return m_handler;
@@ -215,7 +215,7 @@ namespace sax
         {
             m_handler = delegate;
         }
-        css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > SAL_CALL
+        const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >& SAL_CALL
         getDelegate()
         {
             return m_handler;
