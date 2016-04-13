@@ -50,7 +50,7 @@ private:
 public:
     MediaDescriptorHelper( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
-    css::uno::Sequence< css::beans::PropertyValue > getReducedForModel() { return m_aModelProperties;}
+    const css::uno::Sequence< css::beans::PropertyValue >& getReducedForModel() { return m_aModelProperties;}
 
 public:
     //all properties given in the constructor are stored in the following three sequences

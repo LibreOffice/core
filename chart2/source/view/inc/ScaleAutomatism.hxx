@@ -96,8 +96,8 @@ public:
                             ExplicitScaleData& rExplicitScale,
                             ExplicitIncrementData& rExplicitIncrement ) const;
 
-    css::chart2::ScaleData getScale() const { return m_aSourceScale;}
-    Date getNullDate() const { return m_aNullDate;}
+    const css::chart2::ScaleData& getScale() const { return m_aSourceScale;}
+    const Date& getNullDate() const { return m_aNullDate;}
 
 private:
     /** Fills the passed scale data and increment data for category scaling. */

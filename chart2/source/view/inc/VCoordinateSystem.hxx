@@ -60,7 +60,7 @@ public:
     void setParticle( const OUString& rCooSysParticle );
 
     void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix );
-    css::drawing::HomogenMatrix getTransformationSceneToScreen() { return m_aMatrixSceneToScreen;}
+    const css::drawing::HomogenMatrix& getTransformationSceneToScreen() { return m_aMatrixSceneToScreen;}
 
     //better performance for big data
     virtual css::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize
@@ -103,8 +103,7 @@ public:
 
     void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
-    css::uno::Reference<
-        css::chart2::XCoordinateSystem >
+    const css::uno::Reference< css::chart2::XCoordinateSystem >&
         getModel() const { return m_xCooSysModel;}
 
     /**

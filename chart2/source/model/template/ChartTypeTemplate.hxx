@@ -230,7 +230,7 @@ protected:
     virtual void adaptAxes(
         const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys );
 
-    css::uno::Reference< css::uno::XComponentContext >
+    const css::uno::Reference< css::uno::XComponentContext >&
         GetComponentContext() const { return m_xContext;}
 
     static void copyPropertiesFromOldToNewCoordinateSystem(

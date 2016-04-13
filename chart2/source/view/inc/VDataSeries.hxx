@@ -65,7 +65,7 @@ public:
     VDataSeries(const VDataSeries&) = delete;
     const VDataSeries& operator=(const VDataSeries&) = delete;
 
-    css::uno::Reference<css::chart2::XDataSeries> getModel() const;
+    const css::uno::Reference<css::chart2::XDataSeries>& getModel() const;
 
     void setCategoryXAxis();
     void setXValues( const css::uno::Reference<css::chart2::data::XDataSequence>& xValues );
@@ -147,12 +147,12 @@ public:
     //this is here for deep stacking:
     double m_fLogicZPos;//from 0 to series count -1
 
-    OUString       getCID() const { return m_aCID;}
-    OUString       getSeriesParticle() const { return m_aSeriesParticle;}
-    OUString       getPointCID_Stub() const { return m_aPointCID_Stub;}
+    const OUString& getCID() const { return m_aCID;}
+    const OUString& getSeriesParticle() const { return m_aSeriesParticle;}
+    const OUString& getPointCID_Stub() const { return m_aPointCID_Stub;}
     OUString       getErrorBarsCID( bool bYError ) const;
     OUString       getLabelsCID() const;
-    OUString       getLabelCID_Stub() const { return m_aLabelCID_Stub;}
+    const OUString& getLabelCID_Stub() const { return m_aLabelCID_Stub;}
     OUString       getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const;
 
     css::chart2::DataPointLabel* getDataPointLabelIfLabel( sal_Int32 index ) const;
