@@ -207,7 +207,7 @@ public:
             bool bEnglish );
 
     /** Get current OpCodeMap in effect. */
-    inline OpCodeMapPtr GetCurrentOpCodeMap() const { return mxSymbols; }
+    const OpCodeMapPtr& GetCurrentOpCodeMap() const { return mxSymbols; }
 
     /** Get OpCode for English symbol.
         Used in XFunctionAccess to create token array.
