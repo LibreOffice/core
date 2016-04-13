@@ -16,6 +16,24 @@
       "revId": "43109b751bf5fd36318de56b2fb686acc724673f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_b673ff4c",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-13T07:17:40Z",
+      "side": 1,
+      "message": "Apparently covered meanwhile by f088a556ca17658b442da6ad9ddd52be138750ef \"Remove an useless check I had added\".",
+      "parentUuid": "9ad45d7e_b8000eac",
+      "revId": "43109b751bf5fd36318de56b2fb686acc724673f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
