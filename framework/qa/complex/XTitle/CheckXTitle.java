@@ -34,9 +34,9 @@ import org.openoffice.test.OfficeConnection;
 import org.openoffice.test.OfficeFileUrl;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.Desktop;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFrame2;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XTitle;
@@ -45,6 +45,7 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.URLTransformer;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.util.URL;
@@ -90,18 +91,11 @@ public class CheckXTitle
         /* points to the global uno service manager. */
         m_xMSF = getMSF();
 
-        // create desktop instance
-        /* provides XComponentLoader interface. */
-        XFrame xDesktop = UnoRuntime.queryInterface(XFrame.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
-
         // define default loader
-        m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
-        assertNotNull("Desktop service doesn't support needed component loader interface.", m_xLoader);
+        m_xLoader = Desktop.create(connection.getComponentContext());
 
         // get URL parser
-        m_xParser = UnoRuntime.queryInterface(XURLTransformer.class, m_xMSF.createInstance("com.sun.star.util.URLTransformer"));
-        assertNotNull("Could not obtain URL parser instance", m_xParser);
-
+        m_xParser = URLTransformer.create(connection.getComponentContext());
     }
 
     /** @short  close the environment.
