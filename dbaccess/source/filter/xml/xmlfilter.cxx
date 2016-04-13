@@ -71,9 +71,6 @@ extern "C" void SAL_CALL createRegistryInfo_ODBFilter( )
 
 namespace dbaxml
 {
-    sal_Char const sXML_np__db[] = "_db";
-    sal_Char const sXML_np___db[] = "__db";
-
     using namespace ::com::sun::star::util;
     /// read a component (file + filter version)
 sal_Int32 ReadThroughComponent(
@@ -210,11 +207,11 @@ ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
 
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( sXML_np__db,
+    GetNamespaceMap().Add( "_db",
                         GetXMLToken(XML_N_DB),
                         XML_NAMESPACE_DB );
 
-    GetNamespaceMap().Add( sXML_np___db,
+    GetNamespaceMap().Add( "__db",
                         GetXMLToken(XML_N_DB_OASIS),
                         XML_NAMESPACE_DB );
 }
