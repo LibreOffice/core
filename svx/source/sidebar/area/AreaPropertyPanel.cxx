@@ -122,31 +122,39 @@ void AreaPropertyPanel::setFillStyle(const XFillStyleItem& rItem)
 }
 
 void AreaPropertyPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
-        const XFillColorItem& aColorItem)
+        const XFillColorItem& rColorItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_COLOR,
-            SfxCallMode::RECORD, { &aColorItem, pStyleItem });
+        SfxCallMode::RECORD, (pStyleItem)
+            ? std::initializer_list<SfxPoolItem const*>({ &rColorItem, pStyleItem })
+            : std::initializer_list<SfxPoolItem const*>({ &rColorItem }));
 }
 
 void AreaPropertyPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
         const XFillGradientItem& rGradientItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_GRADIENT,
-            SfxCallMode::RECORD, { &rGradientItem, pStyleItem });
+        SfxCallMode::RECORD, (pStyleItem)
+            ? std::initializer_list<SfxPoolItem const*>({ &rGradientItem, pStyleItem })
+            : std::initializer_list<SfxPoolItem const*>({ &rGradientItem }));
 }
 
 void AreaPropertyPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
         const XFillHatchItem& rHatchItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_HATCH,
-            SfxCallMode::RECORD, { &rHatchItem, pStyleItem });
+        SfxCallMode::RECORD, (pStyleItem)
+            ? std::initializer_list<SfxPoolItem const*>({ &rHatchItem, pStyleItem })
+            : std::initializer_list<SfxPoolItem const*>({ &rHatchItem }));
 }
 
 void AreaPropertyPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
         const XFillBitmapItem& rBitmapItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_BITMAP,
-            SfxCallMode::RECORD, { &rBitmapItem, pStyleItem });
+        SfxCallMode::RECORD, (pStyleItem)
+            ? std::initializer_list<SfxPoolItem const*>({ &rBitmapItem, pStyleItem })
+            : std::initializer_list<SfxPoolItem const*>({ &rBitmapItem }));
 }
 
 } } // end of namespace svx::sidebar
