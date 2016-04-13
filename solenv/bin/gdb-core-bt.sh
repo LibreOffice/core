@@ -22,7 +22,7 @@ then
         echo "It looks like ${EXECUTABLE} generated a core file at ${COREFILE}"
         echo "Backtraces:"
         GDBCOMMANDFILE=$(mktemp)
-        echo "thread apply all backtrace full" > "$GDBCOMMANDFILE"
+        printf "info registers\nthread apply all backtrace full\n" > "$GDBCOMMANDFILE"
         gdb -x "$GDBCOMMANDFILE" --batch "$EXECUTABLE" "$COREFILE"
         rm "$GDBCOMMANDFILE"
         echo
