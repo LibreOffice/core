@@ -52,7 +52,7 @@ public:
 
     void setMSOCommandMap( MSOCommandConvertor* pCnvtr ) { pMSOCmdConvertor.reset( pCnvtr ); }
     css::uno::Reference< css::ui::XUIConfigurationManager > getCfgManager();
-    css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager() { return m_xAppCfgMgr;}
+    const css::uno::Reference< css::ui::XUIConfigurationManager >& getAppCfgManager() { return m_xAppCfgMgr;}
 
 
     static css::uno::Any createCommandFromMacro( const OUString& sCmd );
@@ -108,7 +108,7 @@ public:
     WString(){};
     virtual ~WString(){};
     bool Read(SvStream &rS) override;
-    OUString getString(){ return sString; }
+    const OUString& getString(){ return sString; }
 };
 
 class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
