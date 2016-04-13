@@ -158,7 +158,7 @@ namespace connectivity
             ONDXPagePtr& GetChild(ODbaseIndex* pIndex = nullptr);
 
             // Parent does not need to be reloaded
-            ONDXPagePtr GetParent();
+            const ONDXPagePtr& GetParent();
             ODbaseIndex& GetIndex() {return rIndex;}
             const ODbaseIndex& GetIndex() const {return rIndex;}
 
@@ -217,7 +217,7 @@ namespace connectivity
         inline bool ONDXPage::IsLeaf() const {return !aChild.HasPage();}
         inline bool ONDXPage::IsModified() const {return bModified;}
         inline bool ONDXPage::HasParent() {return aParent.Is();}
-        inline ONDXPagePtr ONDXPage::GetParent() {return aParent;}
+        inline const ONDXPagePtr& ONDXPage::GetParent() {return aParent;}
 
         inline void ONDXPage::SetParent(ONDXPagePtr aPa = ONDXPagePtr())
         {

@@ -34,7 +34,7 @@ namespace connectivity
             profileName = aProfileName;
             profilePath = aProfilePath;
         }
-        OUString ProfileStruct::getProfilePath()
+        const OUString& ProfileStruct::getProfilePath()
         {
             return profilePath;
         }

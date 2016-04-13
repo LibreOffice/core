@@ -105,7 +105,7 @@ namespace dbtools
         CharsetIteratorDerefHelper(const CharsetIteratorDerefHelper& _rSource);
 
         rtl_TextEncoding    getEncoding() const { return m_eEncoding; }
-        OUString     getIanaName() const { return m_aIanaName; }
+        const OUString&     getIanaName() const { return m_aIanaName; }
 
     protected:
         CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, const OUString& _rIanaName );

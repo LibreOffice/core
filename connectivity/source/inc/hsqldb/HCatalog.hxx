@@ -52,7 +52,7 @@ namespace connectivity
 
             inline sdbcx::OCollection*      getPrivateTables()  const { return m_pTables;}
             inline sdbcx::OCollection*      getPrivateViews()   const { return m_pViews; }
-            inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() const { return m_xConnection; }
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& getConnection() const { return m_xConnection; }
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
             // ::cppu::OComponentHelper
