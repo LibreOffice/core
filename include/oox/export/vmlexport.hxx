@@ -84,7 +84,7 @@ public:
                         VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport = nullptr );
     virtual             ~VMLExport();
 
-    ::sax_fastparser::FSHelperPtr
+    const ::sax_fastparser::FSHelperPtr&
                         GetFS() { return m_pSerializer; }
 
     void SetFS(const ::sax_fastparser::FSHelperPtr& pSerializer);

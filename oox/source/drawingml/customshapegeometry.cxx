@@ -596,7 +596,7 @@ ContextHandlerRef GeomGuideListContext::onCreateContext( sal_Int32 aElementToken
     return this;
 }
 
-static const OUString GetGeomGuideName( const OUString& rValue )
+static const OUString& GetGeomGuideName( const OUString& rValue )
 {
     return rValue;
 }

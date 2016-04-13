@@ -262,7 +262,7 @@ class Diagram
 {
 public:
     void setData( const DiagramDataPtr & );
-    DiagramDataPtr getData() const
+    const DiagramDataPtr& getData() const
         {
             return mpData;
         }

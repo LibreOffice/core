@@ -129,7 +129,7 @@ public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = nullptr, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
         : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
-    ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
+    const ::sax_fastparser::FSHelperPtr& GetFS() { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
     DocumentType GetDocumentType() { return meDocumentType; }
     /// The application-specific text exporter callback, if there is one.
