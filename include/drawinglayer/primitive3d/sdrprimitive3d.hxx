@@ -72,7 +72,7 @@ namespace drawinglayer
             const basegfx::B3DHomMatrix& getTransform() const { return maTransform; }
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
             const attribute::SdrLineFillShadowAttribute3D& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
-            const attribute::Sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
+            const attribute::Sdr3DObjectAttribute& getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
