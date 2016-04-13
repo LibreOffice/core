@@ -69,9 +69,6 @@ public class CheckXTitle
 
     // members
 
-    /** provides XComponentLoader interface */
-    private XFrame m_xFrame = null;
-
     /** will be set to xDesktop OR xFrame. */
     private XComponentLoader m_xLoader = null;
 
@@ -97,11 +94,6 @@ public class CheckXTitle
         /* provides XComponentLoader interface. */
         XFrame xDesktop = UnoRuntime.queryInterface(XFrame.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
 
-        // create frame instance
-        m_xFrame = xDesktop.findFrame("testFrame_titleChecker",
-                                        FrameSearchFlag.TASKS | FrameSearchFlag.CREATE);
-        assertNotNull("Couldn't create test frame.", m_xFrame);
-
         // define default loader
         m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
         assertNotNull("Desktop service doesn't support needed component loader interface.", m_xLoader);
@@ -116,10 +108,6 @@ public class CheckXTitle
      */
     @After public void after() throws Exception
     {
-        XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, m_xFrame);
-        xClose.close(false);
-
-        m_xFrame  = null;
         m_xLoader = null;
         m_xParser = null;
         m_xMSF    = null;
@@ -223,11 +211,9 @@ public class CheckXTitle
 
         // close document
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
-        // todo: execute this on a new thread using executorservice and terminate it after some time
         try{
                 prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_DOC );
         } catch( Exception e ) {
-        // cr: there is no exception being thrown when there should be one
             fail(e.toString());
         }
 
