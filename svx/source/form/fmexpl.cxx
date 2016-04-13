@@ -137,8 +137,9 @@ FmEntryDataList::~FmEntryDataList()
 
 FmEntryData* FmEntryDataList::remove( FmEntryData* pItem )
 {
+    FmEntryDataBaseList::const_iterator aEnd = maEntryDataList.end();
     for ( FmEntryDataBaseList::iterator it = maEntryDataList.begin();
-          it != maEntryDataList.end();
+          it != aEnd;
           ++it
         )
     {
