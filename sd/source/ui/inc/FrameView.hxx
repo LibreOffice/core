@@ -81,7 +81,7 @@ public:
 
     void SetVisArea(const Rectangle& rVisArea)
                  { maVisArea = rVisArea; }
-    const Rectangle GetVisArea() { return maVisArea; }
+    const Rectangle& GetVisArea() { return maVisArea; }
 
     void SetPageKind(PageKind eKind) { mePageKind = eKind; }
     PageKind GetPageKind() const { return mePageKind; }

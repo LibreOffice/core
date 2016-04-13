@@ -231,7 +231,7 @@ public:
     bool        IsScaleObjects() const              { return mbScaleObjects; }
 
     void        SetSoundFile(const OUString& rStr)    { maSoundFile = rStr; }
-    OUString    GetSoundFile() const                { return maSoundFile; }
+    const OUString& GetSoundFile() const                { return maSoundFile; }
 
     void        SetLoopSound( bool bLoopSound ) { mbLoopSound = bLoopSound; }
     bool        IsLoopSound() const                 { return mbLoopSound; }
@@ -261,9 +261,9 @@ public:
     virtual OUString GetLayoutName() const override       { return maLayoutName; }
 
     void            SetFileName(const OUString& aName) { maFileName = aName; }
-    OUString        GetFileName() const       { return maFileName; }
+    const OUString& GetFileName() const       { return maFileName; }
     void            SetBookmarkName(const OUString& aName) { maBookmarkName = aName; }
-    OUString        GetBookmarkName() const       { return maBookmarkName; }
+    const OUString& GetBookmarkName() const       { return maBookmarkName; }
 
     void            ConnectLink();
     void            DisconnectLink();

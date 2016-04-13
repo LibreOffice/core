@@ -115,8 +115,8 @@ public:
     /// the maximum size of each tile, also position independent, in window coordinate system
     Size GetGridMaxSize();
 
-    Image GetTransitionEffectIcon() const { return maTransitionEffectIcon;}
-    Image GetCustomAnimationEffectIcon() const { return maCustomAnimationEffectIcon;}
+    const Image& GetTransitionEffectIcon() const { return maTransitionEffectIcon;}
+    const Image& GetCustomAnimationEffectIcon() const { return maCustomAnimationEffectIcon;}
 
 private:
     Rectangle GetBoundingBox (

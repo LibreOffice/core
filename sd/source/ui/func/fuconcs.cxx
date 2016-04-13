@@ -246,7 +246,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
     }
 }
 
-OUString FuConstructCustomShape::GetShapeType() const
+const OUString& FuConstructCustomShape::GetShapeType() const
 {
     return aCustomShape;
 }

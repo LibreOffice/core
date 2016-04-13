@@ -51,11 +51,11 @@ public:
     sal_Int32 GetAccessTime() const { return mnLastAccessTime; }
     void SetAccessTime (sal_Int32 nAccessTime) { mnLastAccessTime = nAccessTime; }
 
-    Bitmap GetPreview() const { return maPreview; }
+    const Bitmap& GetPreview() const { return maPreview; }
     inline void SetPreview (const Bitmap& rPreview);
     bool HasPreview() const;
 
-    Bitmap GetMarkedPreview() const { return maMarkedPreview; }
+    const Bitmap& GetMarkedPreview() const { return maMarkedPreview; }
     inline void SetMarkedPreview (const Bitmap& rMarkePreview);
 
     bool HasReplacement() const { return (mpReplacement.get() != nullptr); }
