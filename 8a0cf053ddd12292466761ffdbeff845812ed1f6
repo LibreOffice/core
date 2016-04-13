@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_96cebb81",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-04-13T05:55:43Z",
+      "side": 1,
+      "message": "This subject is confusing. I had no idea what this change is about, before I checked the code. May be:\n\n  Fix linking of 64 bit artifacts in 32 bit build",
+      "revId": "8a0cf053ddd12292466761ffdbeff845812ed1f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_76cb4773",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-04-13T05:55:43Z",
+      "side": 1,
+      "message": "Can you elaborate here? I\u0027ve never seen a mismatch here, that why, I re-used already exposed variables. What environment? Can you post what is Windows SDK location and UCRT SDK location on those environment?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 10
+      },
+      "revId": "8a0cf053ddd12292466761ffdbeff845812ed1f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
