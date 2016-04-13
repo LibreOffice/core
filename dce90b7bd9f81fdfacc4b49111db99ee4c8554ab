@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_9626bb14",
+        "filename": "basic/source/comp/parser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-13T11:39:06Z",
+      "side": 1,
+      "message": "it looks like the old code created a copy of the parser, while the new one does not and so the Next() actually modifies the parser state in \"this\" - are you sure that is correct here?",
+      "revId": "dce90b7bd9f81fdfacc4b49111db99ee4c8554ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
