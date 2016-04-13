@@ -310,7 +310,7 @@ public:
     inline rtl::Reference< ::xmloff::OFormLayerXMLImport > GetFormImport();
 
     // get XPropertySet with import information
-    inline css::uno::Reference< css::beans::XPropertySet > getImportInfo() const { return mxImportInfo; }
+    const css::uno::Reference< css::beans::XPropertySet >& getImportInfo() const { return mxImportInfo; }
 
     // get import helper for events
     XMLEventImportHelper& GetEventImport();

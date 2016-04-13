@@ -155,7 +155,7 @@ public:
     void exportChart( css::uno::Reference< css::chart::XChartDocument > rChartDoc,
                       bool bIncludeTable );
 
-    rtl::Reference<XMLPropertySetMapper> GetPropertySetMapper() const;
+    const rtl::Reference<XMLPropertySetMapper>& GetPropertySetMapper() const;
 
     void SetChartRangeAddress( const OUString& rAddress )
         { msChartAddress = rAddress; }
@@ -993,7 +993,7 @@ void SchXMLExportHelper::SetDestinationShellID( const OUString& rShellID )
     m_pImpl->maDestShellID = rShellID;
 }
 
-rtl::Reference< XMLPropertySetMapper > SchXMLExportHelper_Impl::GetPropertySetMapper() const
+const rtl::Reference< XMLPropertySetMapper >& SchXMLExportHelper_Impl::GetPropertySetMapper() const
 {
     return mxPropertySetMapper;
 }
