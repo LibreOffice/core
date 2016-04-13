@@ -19,7 +19,6 @@
 
 #include <sal/types.h>
 #include <chrono>
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/awt/AsyncCallback.hpp"
 #include "com/sun/star/awt/XCallback.hpp"
 #include "com/sun/star/beans/PropertyState.hpp"
@@ -56,10 +55,13 @@
 
 namespace {
 
-struct Result: private boost::noncopyable {
+struct Result {
     osl::Condition condition;
     bool success;
     OUString result;
+    Result() = default;
+    Result(const Result&) = delete;
+    Result& operator=(const Result&) = delete;
 };
 
 class Listener:

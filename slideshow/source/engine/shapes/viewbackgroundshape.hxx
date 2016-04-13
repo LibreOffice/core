@@ -28,7 +28,6 @@
 #include <cppcanvas/spritecanvas.hxx>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 #include "gdimtftools.hxx"
 #include "viewlayer.hxx"
@@ -44,7 +43,7 @@ namespace slideshow
             The class is able to render the associated background on
             View implementations.
          */
-        class ViewBackgroundShape : private boost::noncopyable
+        class ViewBackgroundShape
         {
         public:
             /** Create a ViewBackgroundShape for the given View
@@ -58,6 +57,10 @@ namespace slideshow
              */
             ViewBackgroundShape( const ViewLayerSharedPtr&      rViewLayer,
                                  const ::basegfx::B2DRectangle& rShapeBounds );
+            /// Forbid copy construction
+            ViewBackgroundShape(const ViewBackgroundShape&) = delete;
+            /// Forbid copy assignment
+            ViewBackgroundShape& operator=(const ViewBackgroundShape&) = delete;
 
             /** Query the associated view layer of this shape
              */

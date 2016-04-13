@@ -27,7 +27,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 /** base class for sub components of an SfxBaseModel, which share their ref count and lifetime with the SfxBaseModel
 */
@@ -104,13 +103,14 @@ namespace sfx2
     struct DocumentUndoManager_Impl;
     class DocumentUndoManager   :public DocumentUndoManager_Base
                                 ,public SfxModelSubComponent
-                                ,public ::boost::noncopyable
     {
         friend struct DocumentUndoManager_Impl;
 
     public:
         DocumentUndoManager( SfxBaseModel& i_document );
         virtual ~DocumentUndoManager();
+        DocumentUndoManager(const DocumentUndoManager&) = delete;
+        DocumentUndoManager& operator=(const DocumentUndoManager&) = delete;
 
         // SfxModelSubComponent overridables
         virtual void    disposing() override;

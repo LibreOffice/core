@@ -36,7 +36,6 @@
 #include "screenupdater.hxx"
 #include "vieweventhandler.hxx"
 
-#include <boost/noncopyable.hpp>
 #include "slide.hxx"
 #include "cursormanager.hxx"
 

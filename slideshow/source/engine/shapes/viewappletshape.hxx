@@ -23,7 +23,6 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/awt/Point.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 #include "viewlayer.hxx"
@@ -50,7 +49,7 @@ namespace slideshow
             The class is able to render the associated applet on View
             implementations.
          */
-        class ViewAppletShape : private boost::noncopyable
+        class ViewAppletShape
         {
         public:
             /** Create a ViewAppletShape for the given View
@@ -82,6 +81,11 @@ namespace slideshow
             /** destroy the object
              */
             virtual ~ViewAppletShape();
+
+            /// Forbid copy construction
+            ViewAppletShape(const ViewAppletShape&) = delete;
+            /// Forbid copy assignment
+            ViewAppletShape& operator=(const ViewAppletShape&) = delete;
 
             /** Query the associated view layer of this shape
              */

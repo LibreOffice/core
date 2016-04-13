@@ -26,8 +26,6 @@
 #include "view.hxx"
 #include "animatableshape.hxx"
 
-#include <boost/noncopyable.hpp>
-
 #include <vector>
 #include <memory>
 
@@ -58,11 +56,15 @@ namespace slideshow
             be called from the LayerManager. Normally, it shouldn't be
             possible to get hold of an instance of this class at all.
          */
-        class Layer : public std::enable_shared_from_this<Layer>,
-                      private boost::noncopyable
+        class Layer : public std::enable_shared_from_this<Layer>
         {
         public:
             typedef std::shared_ptr<LayerEndUpdate> EndUpdater;
+
+            /// Forbid copy construction
+            Layer(const Layer&) = delete;
+            /// Forbid copy assignment
+            Layer& operator=(const Layer&) = delete;
 
             /** Create background layer
 
@@ -213,7 +215,7 @@ namespace slideshow
                 Dummy parameter, to disambiguate from normal layer
                 constructor
              */
-            Layer( Dummy                    eFlag );
+            explicit Layer( Dummy                    eFlag );
 
             /** Create non-background layer
 

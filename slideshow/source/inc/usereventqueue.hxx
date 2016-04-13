@@ -26,8 +26,6 @@
 #include "eventqueue.hxx"
 #include "shape.hxx"
 
-#include <boost/noncopyable.hpp>
-
 /* Definition of UserEventQueue class */
 
 namespace slideshow {
@@ -57,7 +55,7 @@ class MouseLeaveHandler;
     this object are fired and then all references to them are
     removed.
 */
-class UserEventQueue : private ::boost::noncopyable
+class UserEventQueue
 {
 public:
     /** Create a user event queue
@@ -82,6 +80,8 @@ public:
                     EventQueue&         rEventQueue,
                     CursorManager&      rCursorManager );
     ~UserEventQueue();
+    UserEventQueue(const UserEventQueue&) = delete;
+    UserEventQueue& operator=(const UserEventQueue&) = delete;
 
     /** Clear all registered events.
 

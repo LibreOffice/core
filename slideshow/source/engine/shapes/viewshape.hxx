@@ -26,8 +26,6 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include "tools.hxx"
 #include "shapeattributelayer.hxx"
 #include "animatedsprite.hxx"
@@ -48,7 +46,7 @@ namespace slideshow
             The class is able to render the associated XShape on
             View implementations.
          */
-        class ViewShape : private boost::noncopyable
+        class ViewShape
         {
         public:
             /** Create a ViewShape for the given View
@@ -57,6 +55,11 @@ namespace slideshow
                 The associated View object.
              */
             explicit ViewShape( const ViewLayerSharedPtr& rViewLayer );
+
+            ///Forbid copy construction
+            ViewShape(const ViewShape&) = delete;
+            /// Forbid copy assignment
+            ViewShape& operator=(const ViewShape&) = delete;
 
             /** Query the associated view layer of this shape
              */

@@ -30,7 +30,6 @@
 #include "soundplayer.hxx"
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 
 namespace cppcanvas
@@ -49,10 +48,12 @@ namespace internal {
     implement the perform() method.
 */
 class SlideChangeBase : public ViewEventHandler,
-                        public NumberAnimation,
-                        private ::boost::noncopyable
+                        public NumberAnimation
 {
 public:
+    SlideChangeBase(const SlideChangeBase&) = delete;
+    SlideChangeBase& operator=(const SlideChangeBase&) = delete;
+
     // NumberAnimation
     virtual bool operator()( double x ) override;
     virtual double getUnderlyingValue() const override;

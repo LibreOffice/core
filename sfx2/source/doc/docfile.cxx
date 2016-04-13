@@ -121,7 +121,6 @@
 #include "sfxacldetect.hxx"
 #include <officecfg/Office/Common.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -166,7 +165,7 @@ bool IsLockingUsed()
 
 } // anonymous namespace
 
-class SfxMedium_Impl : private boost::noncopyable
+class SfxMedium_Impl
 {
 public:
     StreamMode m_nStorOpenMode;
@@ -240,6 +239,8 @@ public:
 
     explicit SfxMedium_Impl();
     ~SfxMedium_Impl();
+    SfxMedium_Impl(const SfxMedium_Impl&) = delete;
+    SfxMedium_Impl& operator=(const SfxMedium_Impl&) = delete;
 
     OUString getFilterMimeType()
         { return !m_pFilter ? OUString() : m_pFilter->GetMimeType(); }

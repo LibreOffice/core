@@ -31,8 +31,6 @@
 #include <config_lgpl.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <GL/glew.h>
 
 #include <memory>
@@ -133,10 +131,13 @@ private:
 
     It holds Primitives and Operations on those primitives.
 */
-class OGLTransitionImpl : private boost::noncopyable
+class OGLTransitionImpl
 {
 public:
     virtual ~OGLTransitionImpl();
+
+    OGLTransitionImpl(const OGLTransitionImpl&) = delete;
+    OGLTransitionImpl& operator=(const OGLTransitionImpl&) = delete;
 
     /** Prepare transition.
       */
@@ -273,11 +274,13 @@ std::shared_ptr<OGLTransitionImpl> makeDiamond();
 std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly();
 std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack();
 
-class SceneObject : private boost::noncopyable
+class SceneObject
 {
 public:
     SceneObject();
     virtual ~SceneObject();
+    SceneObject(const SceneObject&) = delete;
+    SceneObject& operator=(const SceneObject&) = delete;
 
     virtual void prepare(GLuint /* program */) {}
     virtual void display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const;

@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -126,12 +125,13 @@ typedef ::cppu::WeakComponentImplHelper<
 
 class SfxDocumentMetaData:
     private ::cppu::BaseMutex,
-    public SfxDocumentMetaData_Base,
-    private boost::noncopyable
+    public SfxDocumentMetaData_Base
 {
 public:
     explicit SfxDocumentMetaData(
         css::uno::Reference< css::uno::XComponentContext > const & context);
+    SfxDocumentMetaData(const SfxDocumentMetaData&) = delete;
+    SfxDocumentMetaData& operator=(const SfxDocumentMetaData&) = delete;
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()

@@ -25,8 +25,6 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 
-#include <boost/noncopyable.hpp>
-
 
 /* Definition of SmilFunctionParser class */
 
@@ -34,9 +32,13 @@ namespace slideshow
 {
     namespace internal
     {
-        class SmilFunctionParser : private boost::noncopyable
+        class SmilFunctionParser
         {
         public:
+            SmilFunctionParser() = delete;
+            SmilFunctionParser(const SmilFunctionParser&) = delete;
+            SmilFunctionParser& operator=(const SmilFunctionParser&) = delete;
+
             /** Parse a string containing a SMIL value.
 
                 This method parses a string representing
@@ -144,10 +146,6 @@ namespace slideshow
             static ExpressionNodeSharedPtr parseSmilFunction( const OUString&            rSmilFunction,
                                                               const ::basegfx::B2DRectangle&    rRelativeShapeBounds ); // throw ParseError
 
-        private:
-            // disabled constructor/destructor, since this is
-            // supposed to be a singleton
-            SmilFunctionParser();
         };
     }
 }

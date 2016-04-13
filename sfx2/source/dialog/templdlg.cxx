@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 #include <vcl/menu.hxx>
@@ -178,7 +177,7 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 #define MAX_FILTER_ENTRIES          14
 
 
-class SfxCommonTemplateDialog_Impl::DeletionWatcher : private boost::noncopyable
+class SfxCommonTemplateDialog_Impl::DeletionWatcher
 {
     typedef void (DeletionWatcher::* bool_type)();
 
@@ -194,6 +193,9 @@ public:
         if (m_pDialog)
             m_pDialog->impl_setDeletionWatcher(m_pPrevious);
     }
+
+    DeletionWatcher(const DeletionWatcher&) = delete;
+    DeletionWatcher& operator=(const DeletionWatcher&) = delete;
 
     // Signal that the dialog was deleted
     void signal()

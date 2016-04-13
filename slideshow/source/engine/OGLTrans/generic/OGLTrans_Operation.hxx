@@ -31,16 +31,16 @@
 #include <config_lgpl.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 
 /** This class is to be derived to make any operation (transform) you may need in order to construct your transitions
 */
-class Operation : private boost::noncopyable
+class Operation
 {
 public:
     virtual ~Operation(){}
+    Operation(const Operation&) = delete;
+    Operation& operator=(const Operation&) = delete;
 
 protected:
     /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to mnT0 to being completely transformed from t = mnT1 to 1. If FALSE, the transform will be ineffectual from t = 0 to mnT0, and completely transformed from t = mnT0 to 1.

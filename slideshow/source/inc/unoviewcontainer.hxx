@@ -22,8 +22,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <vector>
 #include <memory>
 
@@ -43,10 +41,12 @@ namespace slideshow
     {
         /** Contains UnoViews
          */
-        class UnoViewContainer : private boost::noncopyable
+        class UnoViewContainer
         {
         public:
             UnoViewContainer();
+            UnoViewContainer(const UnoViewContainer&) = delete;
+            UnoViewContainer& operator=(const UnoViewContainer&) = delete;
 
             /** Add a view to this container
 

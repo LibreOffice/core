@@ -28,7 +28,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -57,10 +56,12 @@ namespace slideshow
             Slide::getFinalSlideBitmap must also be adapted (they no
             longer need a Canvas ptr, which is actually a hack now).
          */
-        class SlideBitmap : private boost::noncopyable
+        class SlideBitmap
         {
         public:
-            SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap );
+            explicit SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap );
+            SlideBitmap(const SlideBitmap&) = delete;
+            SlideBitmap& operator=(const SlideBitmap&) = delete;
 
             bool                draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const;
             ::basegfx::B2ISize  getSize() const;

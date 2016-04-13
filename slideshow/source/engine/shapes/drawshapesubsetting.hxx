@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 
-#include <boost/noncopyable.hpp>
-
 #include "doctreenode.hxx"
 #include "attributableshape.hxx"
 
@@ -35,7 +33,7 @@ namespace slideshow
         /** This class encapsulates the subsetting aspects of a
             DrawShape.
          */
-        class DrawShapeSubsetting : private boost::noncopyable
+        class DrawShapeSubsetting
         {
         public:
             /** Create empty shape subset handling.
@@ -62,6 +60,12 @@ namespace slideshow
              */
             DrawShapeSubsetting( const DocTreeNode&                         rShapeSubset,
                                  const ::std::shared_ptr< GDIMetaFile >&  rMtf );
+
+            /// Forbid copy copstruction
+            DrawShapeSubsetting(const DrawShapeSubsetting&) = delete;
+
+            /// Forbid copy assignment
+            DrawShapeSubsetting& operator=(const DrawShapeSubsetting&) = delete;
 
             /** Reset metafile.
 

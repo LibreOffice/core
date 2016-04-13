@@ -21,8 +21,6 @@
 
 #include "event.hxx"
 
-#include <boost/noncopyable.hpp>
-
 #include <functional>
 
 namespace slideshow {
@@ -30,7 +28,7 @@ namespace internal {
 
 /** Event, which delays the functor call the given amount of time
  */
-class Delay : public Event, private ::boost::noncopyable
+class Delay : public Event
 {
 public:
     typedef ::std::function<void ()> FunctorT;
@@ -49,6 +47,8 @@ public:
         mnTimeout(nTimeout),
         maFunc(func),
         mbWasFired(false) {}
+    Delay(const Delay&) = delete;
+    Delay& operator=(const Delay&) = delete;
 
     // Event:
     virtual bool fire() override;

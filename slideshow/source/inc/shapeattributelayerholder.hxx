@@ -23,8 +23,6 @@
 #include "attributableshape.hxx"
 #include "shapeattributelayer.hxx"
 
-#include <boost/noncopyable.hpp>
-
 namespace slideshow
 {
     namespace internal
@@ -39,7 +37,7 @@ namespace slideshow
             process that is required for shape and attribute layer
             interaction).
          */
-        class ShapeAttributeLayerHolder : private boost::noncopyable
+        class ShapeAttributeLayerHolder
         {
         public:
             /** Create a ShapeAttributeLayerHolder instance.
@@ -59,6 +57,9 @@ namespace slideshow
                 reset(); // ensures that the last attribute layer is
                          // correctly deregistered from the shape.
             }
+
+            ShapeAttributeLayerHolder(const ShapeAttributeLayerHolder&) = delete;
+            ShapeAttributeLayerHolder& operator=(const ShapeAttributeLayerHolder&) = delete;
 
             void reset()
             {

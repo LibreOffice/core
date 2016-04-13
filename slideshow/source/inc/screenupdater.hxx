@@ -22,7 +22,6 @@
 
 #include "viewupdate.hxx"
 #include "unoviewcontainer.hxx"
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 /* Definition of ScreenUpdater class */
@@ -42,11 +41,13 @@ namespace slideshow
             objects report any pending update, commitUpdates() does
             nothing.
          */
-        class ScreenUpdater : private boost::noncopyable
+        class ScreenUpdater
         {
         public:
             explicit ScreenUpdater( UnoViewContainer const& rViewContainer );
             ~ScreenUpdater();
+            ScreenUpdater(const ScreenUpdater&) = delete;
+            ScreenUpdater& operator=(const ScreenUpdater&) = delete;
 
             /** Notify screen update
 

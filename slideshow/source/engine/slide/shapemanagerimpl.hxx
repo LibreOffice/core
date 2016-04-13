@@ -35,7 +35,6 @@
 #include "shapelistenereventhandler.hxx"
 #include "mouseeventhandler.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <set>
 #include <map>
 #include <memory>
@@ -53,8 +52,7 @@ class ShapeManagerImpl : public SubsettableShapeManager,
                          public ShapeListenerEventHandler,
                          public MouseEventHandler,
                          public ViewUpdate,
-                         public std::enable_shared_from_this<ShapeManagerImpl>,
-                         private boost::noncopyable
+                         public std::enable_shared_from_this<ShapeManagerImpl>
 {
 public:
     /** Create a shape event broadcaster
@@ -68,6 +66,12 @@ public:
                       CursorManager&               rCursorManager,
                       const ShapeEventListenerMap& rGlobalListenersMap,
                       const ShapeCursorMap&        rGlobalCursorMap );
+
+    /// Forbid copy construction
+    ShapeManagerImpl(const ShapeManagerImpl&) = delete;
+
+    /// Forbid copy assignment
+    ShapeManagerImpl& operator=(const ShapeManagerImpl&) = delete;
 
     /** Enables event listening.
 

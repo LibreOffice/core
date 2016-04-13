@@ -28,7 +28,6 @@
 
 #include "viewlayer.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <set>
 #include <vector>
@@ -52,10 +51,13 @@ namespace slideshow
             slide's shape, providing bound rect, underlying XShape and
             basic paint methods.
          */
-        class Shape : private boost::noncopyable
+        class Shape
         {
         public:
+            Shape() = default;
             virtual ~Shape() {}
+            Shape(const Shape&) = delete;
+            Shape& operator=(const Shape&) = delete;
 
             /** Get the associated XShape of this shape.
 

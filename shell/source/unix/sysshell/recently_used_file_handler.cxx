@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
 #include "osl/process.h"
 #include "rtl/ustring.hxx"
 #include "rtl/string.hxx"
@@ -212,7 +211,7 @@ namespace /* private */ {
     class unknown_xml_format_exception {};
 
     class recently_used_file_filter:
-        public i_xml_parser_event_handler, private boost::noncopyable
+        public i_xml_parser_event_handler
     {
     public:
         explicit recently_used_file_filter(recently_used_item_list_t& item_list) :
@@ -228,6 +227,9 @@ namespace /* private */ {
             named_command_map_[TAG_GROUPS]       = &recently_used_item::set_nothing;
             named_command_map_[TAG_GROUP]        = &recently_used_item::set_groups;
         }
+
+        recently_used_file_filter(const recently_used_file_filter&) = delete;
+        recently_used_file_filter& operator=(const recently_used_file_filter&) = delete;
 
         virtual void start_element(
             const string_t& /*raw_name*/,
