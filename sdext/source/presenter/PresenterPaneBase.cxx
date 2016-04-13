@@ -116,12 +116,12 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-OUString PresenterPaneBase::GetTitle() const
+const OUString& PresenterPaneBase::GetTitle() const
 {
     return msTitle;
 }
 
-Reference<drawing::framework::XPaneBorderPainter>
+const Reference<drawing::framework::XPaneBorderPainter>&
     PresenterPaneBase::GetPaneBorderPainter() const
 {
     return mxBorderPainter;
@@ -156,7 +156,7 @@ void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-awt::Point PresenterPaneBase::GetCalloutAnchor() const
+const awt::Point& PresenterPaneBase::GetCalloutAnchor() const
 {
     return maCalloutAnchor;
 }
@@ -337,7 +337,7 @@ void PresenterPaneBase::CreateWindows (
     }
 }
 
-Reference<awt::XWindow> PresenterPaneBase::GetBorderWindow() const
+const Reference<awt::XWindow>& PresenterPaneBase::GetBorderWindow() const
 {
     return mxBorderWindow;
 }

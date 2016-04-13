@@ -57,7 +57,7 @@ public:
 
     using PresenterPaneBase::disposing;
 
-    std::shared_ptr<PresenterSprite> GetSprite();
+    const std::shared_ptr<PresenterSprite>& GetSprite();
 
     // XPane
 

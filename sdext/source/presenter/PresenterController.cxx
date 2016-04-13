@@ -450,43 +450,43 @@ PresenterTheme::SharedFontDescriptor
     return PresenterTheme::SharedFontDescriptor();
 }
 
-std::shared_ptr<PresenterTheme> PresenterController::GetTheme() const
+const std::shared_ptr<PresenterTheme>& PresenterController::GetTheme() const
 {
     return mpTheme;
 }
 
-::rtl::Reference<PresenterWindowManager> PresenterController::GetWindowManager() const
+const ::rtl::Reference<PresenterWindowManager>& PresenterController::GetWindowManager() const
 {
     return mpWindowManager;
 }
 
-Reference<presentation::XSlideShowController>
+const Reference<presentation::XSlideShowController>&
     PresenterController::GetSlideShowController() const
 {
     return mxSlideShowController;
 }
 
-rtl::Reference<PresenterPaneContainer> PresenterController::GetPaneContainer() const
+const rtl::Reference<PresenterPaneContainer>& PresenterController::GetPaneContainer() const
 {
     return mpPaneContainer;
 }
 
-::rtl::Reference<PresenterPaneBorderPainter> PresenterController::GetPaneBorderPainter() const
+const ::rtl::Reference<PresenterPaneBorderPainter>& PresenterController::GetPaneBorderPainter() const
 {
     return mpPaneBorderPainter;
 }
 
-std::shared_ptr<PresenterCanvasHelper> PresenterController::GetCanvasHelper() const
+const std::shared_ptr<PresenterCanvasHelper>& PresenterController::GetCanvasHelper() const
 {
     return mpCanvasHelper;
 }
 
-Reference<drawing::XPresenterHelper> PresenterController::GetPresenterHelper() const
+const Reference<drawing::XPresenterHelper>& PresenterController::GetPresenterHelper() const
 {
     return mxPresenterHelper;
 }
 
-std::shared_ptr<PresenterPaintManager> PresenterController::GetPaintManager() const
+const std::shared_ptr<PresenterPaintManager>& PresenterController::GetPaintManager() const
 {
     return mpPaintManager;
 }
@@ -568,13 +568,13 @@ util::URL PresenterController::CreateURLFromString (const OUString& rsURL) const
     return aURL;
 }
 
-Reference<drawing::framework::XConfigurationController>
+const Reference<drawing::framework::XConfigurationController>&
     PresenterController::GetConfigurationController() const
 {
     return mxConfigurationController;
 }
 
-Reference<drawing::XDrawPage> PresenterController::GetCurrentSlide() const
+const Reference<drawing::XDrawPage>& PresenterController::GetCurrentSlide() const
 {
     return mxCurrentSlide;
 }

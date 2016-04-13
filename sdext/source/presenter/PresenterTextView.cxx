@@ -394,7 +394,7 @@ void PresenterTextView::Paint (
     }
 }
 
-SharedPresenterTextCaret PresenterTextView::GetCaret() const
+const SharedPresenterTextCaret& PresenterTextView::GetCaret() const
 {
     return mpCaret;
 }
@@ -792,7 +792,7 @@ sal_Unicode PresenterTextParagraph::GetCharacter (
     }
 }
 
-OUString PresenterTextParagraph::GetText() const
+const OUString& PresenterTextParagraph::GetText() const
 {
     return msParagraphText;
 }
@@ -1166,7 +1166,7 @@ void PresenterTextCaret::SetCaretMotionBroadcaster (
     maBroadcaster = rBroadcaster;
 }
 
-css::awt::Rectangle PresenterTextCaret::GetBounds() const
+const css::awt::Rectangle& PresenterTextCaret::GetBounds() const
 {
     return maCaretBounds;
 }

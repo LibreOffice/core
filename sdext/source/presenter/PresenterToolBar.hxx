@@ -99,8 +99,8 @@ public:
 
     void RequestLayout();
     css::geometry::RealSize2D GetMinimalSize();
-    ::rtl::Reference<PresenterController> GetPresenterController() const;
-    css::uno::Reference<css::uno::XComponentContext> GetComponentContext() const;
+    const ::rtl::Reference<PresenterController>& GetPresenterController() const;
+    const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
 
     // lang::XEventListener
 
@@ -234,7 +234,7 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    ::rtl::Reference<PresenterToolBar> GetPresenterToolBar() const;
+    const ::rtl::Reference<PresenterToolBar>& GetPresenterToolBar() const;
 
     // XPaintListener
 
