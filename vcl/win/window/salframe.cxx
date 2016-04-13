@@ -1936,31 +1936,6 @@ void WinSalFrame::StartPresentation( bool bStart )
     SalData* pSalData = GetSalData();
     if ( bStart )
     {
-        if ( !pSalData->mpSageEnableProc )
-        {
-            if ( pSalData->mnSageStatus != DISABLE_AGENT )
-            {
-                OFSTRUCT aOS;
-                OpenFile( "SAGE.DLL", &aOS, OF_EXIST );
-
-                if ( !aOS.nErrCode )
-                {
-                    OUString aLibraryName( OUString::createFromAscii( aOS.szPathName ) );
-                    oslModule mhSageInst = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-                    pSalData->mpSageEnableProc = (SysAgt_Enable_PROC)osl_getAsciiFunctionSymbol( mhSageInst, "System_Agent_Enable" );
-                }
-                else
-                    pSalData->mnSageStatus = DISABLE_AGENT;
-            }
-        }
-
-        if ( pSalData->mpSageEnableProc )
-        {
-            pSalData->mnSageStatus = pSalData->mpSageEnableProc( GET_AGENT_STATUS );
-            if ( pSalData->mnSageStatus == ENABLE_AGENT )
-                pSalData->mpSageEnableProc( DISABLE_AGENT );
-        }
-
         // turn off screen-saver when in Presentation mode
         SystemParametersInfo( SPI_GETSCREENSAVEACTIVE, 0,
                               &(pSalData->mbScrSvrEnabled), 0 );
@@ -1972,10 +1947,6 @@ void WinSalFrame::StartPresentation( bool bStart )
         // turn on screen-saver
         if ( pSalData->mbScrSvrEnabled )
             SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, pSalData->mbScrSvrEnabled, 0, 0 );
-
-        // re-activate system agents
-        if ( pSalData->mnSageStatus == ENABLE_AGENT )
-            pSalData->mpSageEnableProc( pSalData->mnSageStatus );
     }
 }
 
@@ -2698,7 +2669,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     pSVData->maNWFData.mnMenuFormatBorderX = 0;
     pSVData->maNWFData.mnMenuFormatBorderY = 0;
     pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
-    GetSalData()->mbThemeMenuSupport = FALSE;
+    GetSalData()->mbThemeMenuSupport = false;
     if (officecfg::Office::Common::Accessibility::AutoDetectSystemHC::get())
     {
         aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
@@ -4216,7 +4187,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     bool                bStdDC;
     bool                bUpdate;
 
-    pSalData->mbInPalChange = TRUE;
+    pSalData->mbInPalChange = true;
 
     // reset all palettes in VirDevs and Frames
     pTempVD = pSalData->mpFirstVD;
@@ -4313,7 +4284,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         }
     }
 
-    pSalData->mbInPalChange = FALSE;
+    pSalData->mbInPalChange = false;
 
     if ( bReleaseMutex )
         ImplSalYieldMutexRelease();
@@ -5793,7 +5764,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_THEMECHANGED:
-            GetSalData()->mbThemeChanged = TRUE;
+            GetSalData()->mbThemeChanged = true;
             break;
 
         case SAL_MSG_USEREVENT:
