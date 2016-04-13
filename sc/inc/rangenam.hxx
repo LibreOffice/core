@@ -109,10 +109,10 @@ public:
     void            GetName( OUString& rName ) const  { rName = aName; }
     const OUString&   GetName() const           { return aName; }
     const OUString&   GetUpperName() const      { return aUpperName; }
-    ScAddress       GetPos() const                  { return aPos; }
+    const ScAddress&  GetPos() const                  { return aPos; }
     // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
-    sal_uInt16    GetIndex() const                { return nIndex; }
+    sal_uInt16      GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
     SC_DLLPUBLIC void   SetCode( ScTokenArray& );
     const ScTokenArray* GetCode() const             { return pCode; }

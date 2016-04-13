@@ -55,13 +55,13 @@ public:
     bool GetWriteCalcConfig() const { return mbWriteCalcConfig; }
 
     void SetFormulaSepArg(const OUString& rSep) { aFormulaSepArg = rSep; }
-    OUString GetFormulaSepArg() const { return aFormulaSepArg; }
+    const OUString& GetFormulaSepArg() const { return aFormulaSepArg; }
 
     void SetFormulaSepArrayRow(const OUString& rSep) { aFormulaSepArrayRow = rSep; }
-    OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
+    const OUString& GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
 
     void SetFormulaSepArrayCol(const OUString& rSep) { aFormulaSepArrayCol = rSep; }
-    OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
+    const OUString& GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
 
     void SetOOXMLRecalcOptions( ScRecalcOptions eOpt ) { meOOXMLRecalc = eOpt; }
     ScRecalcOptions GetOOXMLRecalcOptions() const { return meOOXMLRecalc; }

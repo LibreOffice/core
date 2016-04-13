@@ -146,7 +146,7 @@ public:
     inline sal_uInt8    GetMaxParamCount() const { return mrFuncInfo.mnMaxParamCount; }
     inline sal_uInt8    GetParamCount() const { return static_cast< sal_uInt8 >( mxOperands->size() ); }
     void                FinishParam( sal_uInt16 nTokPos );
-    inline XclExpOperandListRef GetOperandList() const { return mxOperands; }
+    const XclExpOperandListRef& GetOperandList() const { return mxOperands; }
 
     inline ScfUInt16Vec& GetAttrPosVec() { return maAttrPosVec; }
     inline void         AppendAttrPos( sal_uInt16 nPos ) { maAttrPosVec.push_back( nPos ); }

@@ -141,7 +141,7 @@ public:
 
     long    GetPageNo() const   { return nPageNo; }
     sal_uInt16  GetZoom() const     { return nZoom; }
-    Point   GetOffset() const   { return aOffset; }
+    const Point& GetOffset() const   { return aOffset; }
 
     SCTAB   GetTab()            { if (!bValid) { CalcPages(); RecalcPages(); } return nTab; }
     long    GetTotalPages()     { if (!bValid) { CalcPages(); RecalcPages(); } return nTotalPages; }

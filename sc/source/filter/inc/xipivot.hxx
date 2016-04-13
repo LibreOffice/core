@@ -301,7 +301,7 @@ public:
 
     // cache/field access, misc. ----------------------------------------------
 
-    inline XclImpPivotCacheRef GetPivotCache() const { return mxPCache; }
+    const XclImpPivotCacheRef& GetPivotCache() const { return mxPCache; }
     inline const ScfStringVec& GetVisFieldNames() const { return maVisFieldNames; }
 
     sal_uInt16          GetFieldCount() const;

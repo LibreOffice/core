@@ -382,7 +382,7 @@ public:
      * Turn a non-grouped cell into the top of a grouped cell.
      */
     ScFormulaCellGroupRef CreateCellGroup( SCROW nLen, bool bInvariant );
-    ScFormulaCellGroupRef GetCellGroup() const { return mxGroup;}
+    const ScFormulaCellGroupRef& GetCellGroup() const { return mxGroup;}
     void SetCellGroup( const ScFormulaCellGroupRef &xRef );
 
     CompareState CompareByTokenArray( ScFormulaCell& rOther ) const;

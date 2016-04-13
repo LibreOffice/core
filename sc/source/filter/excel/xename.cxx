@@ -67,7 +67,7 @@ public:
     inline sal_Unicode  GetBuiltInName() const { return mcBuiltIn; }
 
     /** Returns the token array for this defined name. */
-    inline XclTokenArrayRef GetTokenArray() const { return mxTokArr; }
+    const XclTokenArrayRef& GetTokenArray() const { return mxTokArr; }
 
     /** Returns true, if this is a document-global defined name. */
     inline bool         IsGlobal() const { return mnXclTab == EXC_NAME_GLOBAL; }

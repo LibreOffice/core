@@ -134,7 +134,7 @@ public:
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     inline bool         isWorkbookFile() const { return mbWorkbook; }
     /** Returns the VBA project storage. */
-    inline StorageRef   getVbaProjectStorage() const { return mxVbaPrjStrg; }
+    const StorageRef&   getVbaProjectStorage() const { return mxVbaPrjStrg; }
     /** Returns the index of the current Calc sheet, if filter currently processes a sheet. */
     inline sal_Int16    getCurrentSheetIndex() const { return mnCurrSheet; }
 
@@ -155,7 +155,7 @@ public:
     ScDocumentImport& getDocImport();
 
     /** Returns a reference to the source/target spreadsheet document model. */
-    inline Reference< XSpreadsheetDocument > getDocument() const { return mxDoc; }
+    const Reference< XSpreadsheetDocument >& getDocument() const { return mxDoc; }
     /** Returns the cell or page styles container from the Calc document. */
     Reference< XNameContainer > getStyleFamily( bool bPageStyles ) const;
     /** Returns the specified cell or page style from the Calc document. */

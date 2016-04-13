@@ -64,7 +64,7 @@ public:
     ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart );
 
     // Non-interface
-    css::uno::Reference< css::beans::XPropertySet > xDiagramPropertySet() const { return mxDiagramPropertySet; }
+    const css::uno::Reference< css::beans::XPropertySet >& xDiagramPropertySet() const { return mxDiagramPropertySet; }
     bool is3D() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
     // Methods
