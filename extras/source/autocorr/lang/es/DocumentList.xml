@@ -1043,7 +1043,6 @@
   <block-list:block block-list:abbreviated-name=":guardaequipajes:" block-list:name="🛅"/>
   <block-list:block block-list:abbreviated-name=":guardia:" block-list:name="💂"/>
   <block-list:block block-list:abbreviated-name=":guiño:" block-list:name="😉"/>
-  <block-list:block block-list:abbreviated-name=":guión:" block-list:name="💨"/>
   <block-list:block block-list:abbreviated-name=":guitarra:" block-list:name="🎸"/>
   <block-list:block block-list:abbreviated-name=":Halloween:" block-list:name="🎃"/>
   <block-list:block block-list:abbreviated-name=":hamburguesa:" block-list:name="🍔"/>
@@ -1626,6 +1625,7 @@
   <block-list:block block-list:abbreviated-name=":victoria:" block-list:name="✌"/>
   <block-list:block block-list:abbreviated-name=":videocámara:" block-list:name="📹"/>
   <block-list:block block-list:abbreviated-name=":videojuego:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":viento:" block-list:name="💨"/>
   <block-list:block block-list:abbreviated-name=":viñeta2:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":viñeta3:" block-list:name="◦"/>
   <block-list:block block-list:abbreviated-name=":viñeta:" block-list:name="•"/>
