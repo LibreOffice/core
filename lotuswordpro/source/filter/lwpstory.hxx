@@ -111,7 +111,7 @@ public:
     bool GetDropcapFlag() { return m_bDropcap; }
     LwpPageLayout* GetCurrentLayout() { return m_pCurrentLayout; }
     inline LwpMiddleLayout* GetTabLayout();//for register tab style
-    OUString GetSectionName() { return m_CurrSectionName; }
+    const OUString& GetSectionName() { return m_CurrSectionName; }
     LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr; }
 
     inline bool IsPMModified() { return m_bPMModified; }

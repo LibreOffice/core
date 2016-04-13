@@ -76,7 +76,7 @@ public:
     void Read(LwpObjectStream *pStrm);
     void ReadPathAtom(LwpObjectStream *pStrm);
     void Skip(LwpObjectStream *pStrm);
-    OUString str(){return m_String;}
+    const OUString& str() const {return m_String;}
     inline bool HasValue();
 };
 inline bool LwpAtomHolder::HasValue()

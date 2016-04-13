@@ -81,8 +81,8 @@ public:
     virtual void Parse(IXFStream* pOutputStream) override;
     sal_Int32 GetWidth() { return m_nWidth; }
     sal_Int32 GetHeight() { return m_nHeight; }
-    LwpPoint GetOrigin() { return m_Origin; }
-    LwpPoint GetAbsoluteOrigin() { return m_AbsoluteOrigin; }
+    const LwpPoint& GetOrigin() { return m_Origin; }
+    const LwpPoint& GetAbsoluteOrigin() { return m_AbsoluteOrigin; }
     sal_uInt8 GetContentOrientation(){ return m_ContentOrientation;}
 
 protected:

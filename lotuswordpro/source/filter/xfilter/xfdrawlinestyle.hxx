@@ -125,7 +125,7 @@ public:
 
     double  GetWidth();
 
-    XFColor GetColor();
+    const XFColor& GetColor() const;
 
     sal_Int32   GetTransparency();
 
@@ -200,7 +200,7 @@ inline double XFDrawLineStyle::GetWidth()
     return m_fWidth;
 }
 
-inline XFColor XFDrawLineStyle::GetColor()
+inline const XFColor& XFDrawLineStyle::GetColor() const
 {
     return m_aColor;
 }

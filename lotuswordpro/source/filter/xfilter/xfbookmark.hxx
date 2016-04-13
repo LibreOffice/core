@@ -74,9 +74,9 @@ public:
         m_bStart = isStart;
     }
 
-    OUString GetDivision(){return m_strDivision;}
+    const OUString& GetDivision(){return m_strDivision;}
     void SetDivision(const OUString& sDivName){m_strDivision = sDivName;}
-    OUString GetName(){return m_strName;}
+    const OUString& GetName(){return m_strName;}
 
 public:
     /**

@@ -181,7 +181,7 @@ public:
 
     void Read(LwpObjectStream* pStrm) override;
 
-    inline LwpObjectID GetSilverBullet() const;
+    inline const LwpObjectID& GetSilverBullet() const;
 
     void Override(LwpBulletOverride* pOther);
 
@@ -222,7 +222,7 @@ private:
     bool m_bIsNull;
 };
 
-inline LwpObjectID LwpBulletOverride::GetSilverBullet() const
+inline const LwpObjectID& LwpBulletOverride::GetSilverBullet() const
 {
     return m_SilverBullet;
 }

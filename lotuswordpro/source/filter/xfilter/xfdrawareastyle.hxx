@@ -84,7 +84,7 @@ public:
 
     enumXFAreaStyle GetAreaStyle();
 
-    XFColor GetBackColor();
+    const XFColor& GetBackColor();
 
     virtual enumXFStyle GetStyleFamily() override;
 
@@ -134,7 +134,7 @@ inline enumXFAreaStyle  XFDrawAreaStyle::GetAreaStyle()
     return m_eAreaStyle;
 }
 
-inline XFColor XFDrawAreaStyle::GetBackColor()
+inline const XFColor& XFDrawAreaStyle::GetBackColor()
 {
     return m_aBackColor;
 }
