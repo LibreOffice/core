@@ -893,7 +893,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             eTHA = SDRTEXTHORZADJUST_LEFT;
                         break;
                     }
-                    // if there is a 100% use of following attributes, the textbox can been aligned also in vertical direction
                     switch ( eTextAnchor )
                     {
                         case mso_anchorTopCentered :
@@ -903,18 +902,16 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         case mso_anchorBottomCenteredBaseline:
                         {
                             // check if it is sensible to use the centered alignment
-                            sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                            if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
-                                eTVA = SDRTEXTVERTADJUST_CENTER;    // the text has to be displayed using the full width;
-                        }
-                        break;
-
-                        default :
-                        {
-                            if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
-                                eTVA = SDRTEXTVERTADJUST_TOP;
-                            else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
-                                eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                            const sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
+                            switch (nTextFlags & nMask)
+                            {
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT:
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER:
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT:
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK:
+                                eTVA = SDRTEXTVERTADJUST_CENTER;    // If the textobject has only one type of alignment, then the text has not to be displayed using the full width;
+                                break;
+                            }
                         }
                         break;
                     }
@@ -949,7 +946,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             eTVA = SDRTEXTVERTADJUST_BOTTOM;
                         break;
                     }
-                    // if there is a 100% usage of following attributes, the textbox can be aligned also in horizontal direction
                     switch ( eTextAnchor )
                     {
                         case mso_anchorTopCentered :
@@ -959,18 +955,16 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         case mso_anchorBottomCenteredBaseline:
                         {
                             // check if it is sensible to use the centered alignment
-                            sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                            if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
-                                eTHA = SDRTEXTHORZADJUST_CENTER;    // the text has to be displayed using the full width;
-                        }
-                        break;
-
-                        default :
-                        {
-                            if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
-                                eTHA = SDRTEXTHORZADJUST_LEFT;
-                            else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
-                                eTHA = SDRTEXTHORZADJUST_RIGHT;
+                            const sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
+                            switch (nTextFlags & nMask)
+                            {
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT:
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER:
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT:
+                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK:
+                                eTHA = SDRTEXTHORZADJUST_CENTER;    // If the textobject has only one type of alignment, then the text has not to be displayed using the full width;
+                                break;
+                            }
                         }
                         break;
                     }
