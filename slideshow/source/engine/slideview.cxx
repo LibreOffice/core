@@ -51,8 +51,6 @@
 
 #include <com/sun/star/presentation/XSlideShow.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 #include <vector>
 #include <iterator>
@@ -377,8 +375,7 @@ public:
     the layer priority changes, the sprites change z order together
     with their parent.
  */
-class SlideViewLayer : public ViewLayer,
-                       private boost::noncopyable
+class SlideViewLayer : public ViewLayer
 {
     /// Smart container for all sprites issued by this layer
     mutable LayerSpriteContainer             maSpriteContainer;
@@ -441,6 +438,9 @@ public:
         mpParentView(pParentView)
     {
     }
+
+    SlideViewLayer(const SlideViewLayer&) = delete;
+    SlideViewLayer& operator=(const SlideViewLayer&) = delete;
 
     void updateView( const basegfx::B2DHomMatrix& rMatrix,
                      const basegfx::B2DSize&      rUserSize )

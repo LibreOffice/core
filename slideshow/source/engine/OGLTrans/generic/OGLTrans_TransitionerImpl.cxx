@@ -65,8 +65,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/window.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include "OGLTrans_TransitionImpl.hxx"
 
 #if defined( UNX ) && !defined( MACOSX )
@@ -171,10 +169,12 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
  * slideshow. This class is implicitly
  * constructed from XTransitionFactory.
 */
-class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable, public OGLTransitionerImplBase
+class OGLTransitionerImpl : private cppu::BaseMutex, public OGLTransitionerImplBase
 {
 public:
     OGLTransitionerImpl();
+    OGLTransitionerImpl(const OGLTransitionerImpl&) = delete;
+    OGLTransitionerImpl& operator=(const OGLTransitionerImpl&) = delete;
     bool setTransition( std::shared_ptr<OGLTransitionImpl> pOGLTransition );
     bool initialize( const Reference< presentation::XSlideShowView >& xView,
             const Reference< rendering::XBitmap >& xLeavingSlide,

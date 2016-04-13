@@ -30,8 +30,6 @@
 #include "intrinsicanimationeventhandler.hxx"
 #include "tools.hxx"
 
-#include <boost/noncopyable.hpp>
-
 
 using namespace ::com::sun::star;
 
@@ -41,14 +39,14 @@ namespace slideshow
     namespace internal
     {
         class ExternalShapeBase::ExternalShapeBaseListener : public ViewEventHandler,
-                                                             public IntrinsicAnimationEventHandler,
-                                                             private boost::noncopyable
+                                                             public IntrinsicAnimationEventHandler
         {
         public:
             explicit ExternalShapeBaseListener( ExternalShapeBase& rBase ) :
                 mrBase( rBase )
             {}
-
+            ExternalShapeBaseListener(const ExternalShapeBaseListener&) = delete;
+            ExternalShapeBaseListener& operator=(const ExternalShapeBaseListener&) = delete;
 
         private:
             // ViewEventHandler

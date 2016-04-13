@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
@@ -34,7 +33,7 @@
 
 class CntItemPool;
 
-class CntStaticPoolDefaults_Impl: private boost::noncopyable
+class CntStaticPoolDefaults_Impl
 {
     sal_uInt32        m_nItems;
     SfxPoolItem** m_ppDefaults;
@@ -46,6 +45,8 @@ private:
 public:
     explicit CntStaticPoolDefaults_Impl( CntItemPool* pPool );
     ~CntStaticPoolDefaults_Impl();
+    CntStaticPoolDefaults_Impl(const CntStaticPoolDefaults_Impl&) = delete;
+    CntStaticPoolDefaults_Impl& operator=(const CntStaticPoolDefaults_Impl&) = delete;
 
     SfxPoolItem**      GetDefaults() const  { return m_ppDefaults; }
     const SfxItemInfo* GetItemInfos() const { return m_pItemInfos; }

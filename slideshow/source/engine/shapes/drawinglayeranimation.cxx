@@ -53,7 +53,6 @@
 #include "intrinsicanimationactivity.hxx"
 #include "intrinsicanimationeventhandler.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 #include <memory>
 
@@ -129,8 +128,7 @@ double ScrollTextAnimNode::GetStateAtRelativeTime(
     }
 }
 
-class ActivityImpl : public Activity,
-                     private boost::noncopyable
+class ActivityImpl : public Activity
 {
 public:
     virtual ~ActivityImpl();
@@ -139,6 +137,9 @@ public:
         SlideShowContext const& rContext,
         std::shared_ptr<WakeupEvent> const& pWakeupEvent,
         std::shared_ptr<DrawShape> const& pDrawShape );
+
+    ActivityImpl(const ActivityImpl&) = delete;
+    ActivityImpl& operator=(const ActivityImpl&) = delete;
 
     bool enableAnimations();
 
@@ -241,13 +242,15 @@ private:
 };
 
 
-class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
-                                   private boost::noncopyable
+class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler
 {
 public:
     explicit IntrinsicAnimationListener( ActivityImpl& rActivity ) :
         mrActivity( rActivity )
     {}
+
+    IntrinsicAnimationListener(const IntrinsicAnimationListener&) = delete;
+    IntrinsicAnimationListener& operator=(const IntrinsicAnimationListener&) = delete;
 
 private:
 

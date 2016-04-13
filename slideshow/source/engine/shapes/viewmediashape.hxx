@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/Point.hpp>
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <vcl/vclptr.hxx>
 
 #include "viewlayer.hxx"
@@ -56,7 +55,7 @@ namespace slideshow
             The class is able to render the associated media shape on
             View implementations.
          */
-        class ViewMediaShape : private boost::noncopyable
+        class ViewMediaShape
         {
         public:
             /** Create a ViewMediaShape for the given View
@@ -71,6 +70,11 @@ namespace slideshow
             /** destroy the object
              */
             virtual ~ViewMediaShape();
+
+            /// Forbid copy construction
+            ViewMediaShape(const ViewMediaShape&) = delete;
+            /// Forbid copy assignment
+            ViewMediaShape& operator=(const ViewMediaShape&) = delete;
 
             /** Query the associated view layer of this shape
              */

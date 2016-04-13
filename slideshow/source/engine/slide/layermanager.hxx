@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX
 
-#include <boost/noncopyable.hpp>
-
 #include <cppcanvas/spritecanvas.hxx>
 
 #include "unoview.hxx"
@@ -59,7 +57,7 @@ namespace slideshow
             @see Layer
             @see Shape
          */
-        class LayerManager : private boost::noncopyable
+        class LayerManager
         {
         public:
             /** Create a new layer manager for the given page bounds
@@ -78,6 +76,12 @@ namespace slideshow
             LayerManager( const UnoViewContainer&    rViews,
                           const ::basegfx::B2DRange& rPageBounds,
                           bool                       bDisableAnimationZOrder );
+
+            /// Forbid copy construction
+            LayerManager(const LayerManager&) = delete;
+
+            /// Forbid copy assignment
+            LayerManager& operator=(const LayerManager&) = delete;
 
             /** Activate the LayerManager
 

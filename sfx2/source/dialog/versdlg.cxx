@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
@@ -63,7 +62,7 @@ struct SfxVersionInfo
                             SfxVersionInfo();
 };
 
-class SfxVersionTableDtor: private boost::noncopyable
+class SfxVersionTableDtor
 {
 private:
     std::vector< SfxVersionInfo* >  aTableList;
@@ -72,6 +71,8 @@ public:
     explicit                SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );
                             ~SfxVersionTableDtor()
                             { DelDtor(); }
+                            SfxVersionTableDtor(const SfxVersionTableDtor&) = delete;
+    SfxVersionTableDtor&    operator=(const SfxVersionTableDtor&) = delete;
 
     void                    DelDtor();
 

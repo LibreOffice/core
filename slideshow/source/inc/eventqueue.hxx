@@ -25,7 +25,6 @@
 
 #include "event.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <functional>
 #include <queue>
 #include <vector>
@@ -40,7 +39,7 @@ namespace slideshow
         /** This class handles events in a presentation. Events are
             time instants where e.g. effects start.
          */
-        class EventQueue : private ::boost::noncopyable
+        class EventQueue
         {
         public:
             EventQueue(
@@ -48,6 +47,9 @@ namespace slideshow
                 const & pPresTimer );
 
             ~EventQueue();
+
+            EventQueue(const EventQueue&) = delete;
+            EventQueue& operator=(const EventQueue&) = delete;
 
             /** Add the given event to the queue. The event is fired
                 at, or shortly after, its Event::getActivationTime instant.

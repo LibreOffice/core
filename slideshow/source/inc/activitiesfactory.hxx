@@ -37,7 +37,6 @@
 #include "pairanimation.hxx"
 
 #include <boost/optional.hpp>
-#include <boost/noncopyable.hpp>
 
 /* Definition of ActivitiesFactory class */
 

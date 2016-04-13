@@ -25,7 +25,6 @@
 #include "unoview.hxx"
 #include "rgbcolor.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 
@@ -47,7 +46,7 @@ namespace slideshow
             listening for mouse clicks and moves. When the mouse is
             dragged, a hand sketching in the selected color is shown.
         */
-        class UserPaintOverlay : private boost::noncopyable
+        class UserPaintOverlay
         {
         public:
             /** Create a UserPaintOverlay
@@ -64,6 +63,8 @@ namespace slideshow
                                                      const PolyPolygonVector& rPolygons,
                                                      bool                     bActive);
             ~UserPaintOverlay();
+            UserPaintOverlay(const UserPaintOverlay&) = delete;
+            UserPaintOverlay& operator=(const UserPaintOverlay&) = delete;
             PolyPolygonVector getPolygons();
             void drawPolygons();
 

@@ -23,7 +23,6 @@
 #include "activity.hxx"
 
 #include <basegfx/range/b2drange.hxx>
-#include <boost/noncopyable.hpp>
 
 #include <vector>
 #include <utility>
@@ -45,8 +44,7 @@ struct SlideShowContext;
 class EventMultiplexer;
 class ScreenUpdater;
 class RehearseTimingsActivity : public Activity,
-                                public ViewEventHandler,
-                                private ::boost::noncopyable
+                                public ViewEventHandler
 {
 public:
     /** Creates the activity.
@@ -55,6 +53,8 @@ public:
         const SlideShowContext& rContext );
 
     virtual ~RehearseTimingsActivity();
+    RehearseTimingsActivity(const RehearseTimingsActivity&) = delete;
+    RehearseTimingsActivity& operator=(const RehearseTimingsActivity&) = delete;
 
     /** Starts and shows the timer; adds to activity queue.
      */

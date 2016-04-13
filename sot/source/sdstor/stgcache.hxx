@@ -25,7 +25,6 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <stgelem.hxx>
-#include <boost/noncopyable.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <unordered_map>
 #include <functional>
@@ -95,7 +94,7 @@ public:
     void Clear();                           // clear the cache
 };
 
-class StgPage : public salhelper::SimpleReferenceObject, private boost::noncopyable
+class StgPage : public salhelper::SimpleReferenceObject
 {
     const sal_Int32 mnPage;                // page index
     sal_uInt8*      mpData;                // nSize bytes
@@ -103,6 +102,8 @@ class StgPage : public salhelper::SimpleReferenceObject, private boost::noncopya
              StgPage( short nData, sal_Int32 nPage );
     virtual ~StgPage();
 public:
+             StgPage(const StgPage&) = delete;
+    StgPage& operator=(const StgPage&) = delete;
     static rtl::Reference< StgPage > Create( short nData, sal_Int32 nPage );
 
     sal_Int32 GetPage()  { return mnPage; }

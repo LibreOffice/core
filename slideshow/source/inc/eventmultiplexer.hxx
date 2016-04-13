@@ -26,7 +26,6 @@
 #include "shapelistenereventhandler.hxx"
 #include "vieweventhandler.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -133,7 +132,7 @@ typedef ::std::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPt
     after the user action occurred, but only after the given
     timeout. Which is actually a feature.
 */
-class EventMultiplexer : private ::boost::noncopyable
+class EventMultiplexer
 {
 public:
     /** Create an event multiplexer
@@ -158,6 +157,8 @@ public:
     EventMultiplexer( EventQueue&             rEventQueue,
                       UnoViewContainer const& rViewContainer );
     ~EventMultiplexer();
+    EventMultiplexer(const EventMultiplexer&) = delete;
+    EventMultiplexer& operator=(const EventMultiplexer&) = delete;
 
     // Management methods
 

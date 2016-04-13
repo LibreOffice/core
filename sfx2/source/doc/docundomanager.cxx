@@ -32,7 +32,6 @@
 #include <tools/diagnose_ex.h>
 #include <framework/undomanagerhelper.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <stack>
 
 
@@ -181,7 +180,6 @@ namespace sfx2
     //= UndoManagerGuard
 
     class UndoManagerGuard  :public ::framework::IMutexGuard
-                            ,public ::boost::noncopyable
     {
     public:
         explicit UndoManagerGuard( DocumentUndoManager& i_undoManager )
@@ -193,6 +191,9 @@ namespace sfx2
         virtual ~UndoManagerGuard()
         {
         }
+
+        UndoManagerGuard(const UndoManagerGuard&) = delete;
+        UndoManagerGuard& operator=(const UndoManagerGuard&) = delete;
 
         virtual void clear() override
         {

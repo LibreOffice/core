@@ -37,7 +37,6 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -259,7 +258,7 @@ bool isMainSequenceRootNode_(
 
 /** state transition handling
  */
-class BaseNode::StateTransition : private boost::noncopyable
+class BaseNode::StateTransition
 {
 public:
     enum Options { NONE, FORCE };
@@ -270,6 +269,9 @@ public:
     ~StateTransition() {
         clear();
     }
+
+    StateTransition(const StateTransition&) = delete;
+    StateTransition& operator=(const StateTransition&) = delete;
 
     bool enter( NodeState eToState, int options = NONE )
     {

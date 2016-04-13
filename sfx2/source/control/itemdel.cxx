@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include "itemdel.hxx"
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
@@ -28,7 +27,7 @@
 
 #include <svl/itempool.hxx>
 
-class SfxItemDisruptor_Impl: private boost::noncopyable
+class SfxItemDisruptor_Impl
 {
     SfxPoolItem *           pItem;
     Link<Application*,void> aLink;
@@ -40,6 +39,8 @@ public:
     explicit SfxItemDisruptor_Impl(SfxPoolItem *pItemToDesrupt);
     void LaunchDeleteOnIdle();
     ~SfxItemDisruptor_Impl();
+    SfxItemDisruptor_Impl(const SfxItemDisruptor_Impl&) = delete;
+    SfxItemDisruptor_Impl& operator=(const SfxItemDisruptor_Impl&) = delete;
 };
 
 SfxItemDisruptor_Impl::SfxItemDisruptor_Impl( SfxPoolItem *pItemToDesrupt ):

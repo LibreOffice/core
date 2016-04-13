@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <sfx2/querystatus.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
@@ -46,13 +45,14 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
 class SfxQueryStatus_Impl:
-    public cppu::WeakImplHelper<css::frame::XStatusListener>,
-    private boost::noncopyable
+    public cppu::WeakImplHelper<css::frame::XStatusListener>
 {
     public:
 
         SfxQueryStatus_Impl( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         virtual ~SfxQueryStatus_Impl();
+        SfxQueryStatus_Impl(const SfxQueryStatus_Impl&) = delete;
+        SfxQueryStatus_Impl& operator=(const SfxQueryStatus_Impl&) = delete;
 
         // Query method
         SfxItemState QueryState( SfxPoolItem*& pPoolItem );

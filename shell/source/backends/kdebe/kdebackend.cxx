@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
@@ -66,11 +65,12 @@ css::uno::Sequence< OUString > SAL_CALL getServiceSupportedServiceNames() {
 
 class Service:
     public cppu::WeakImplHelper<
-        css::lang::XServiceInfo, css::beans::XPropertySet >,
-    private boost::noncopyable
+        css::lang::XServiceInfo, css::beans::XPropertySet >
 {
 public:
     Service();
+    Service(const Service&) = delete;
+    Service& operator=(const Service&) = delete;
 
 private:
     virtual ~Service() {}

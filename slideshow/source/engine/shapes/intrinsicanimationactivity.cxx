@@ -27,7 +27,6 @@
 #include "intrinsicanimationactivity.hxx"
 #include "intrinsicanimationeventhandler.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace slideshow
@@ -41,8 +40,7 @@ namespace slideshow
             animations directly within a shape, e.g. drawing layer
             animations, or GIF animations.
          */
-        class IntrinsicAnimationActivity : public Activity,
-                                           private boost::noncopyable
+        class IntrinsicAnimationActivity : public Activity
         {
         public:
             /** Create an IntrinsicAnimationActivity.
@@ -69,6 +67,8 @@ namespace slideshow
                                         const ::std::vector<double>&    rTimeouts,
                                         ::std::size_t                   nNumLoops,
                                         CycleMode                       eCycleMode );
+            IntrinsicAnimationActivity(const IntrinsicAnimationActivity&) = delete;
+            IntrinsicAnimationActivity& operator=(const IntrinsicAnimationActivity&) = delete;
 
             virtual void dispose() override;
             virtual double calcTimeLag() const override;
@@ -93,13 +93,14 @@ namespace slideshow
         };
 
 
-        class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
-                                           private boost::noncopyable
+        class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler
         {
         public:
             explicit IntrinsicAnimationListener( IntrinsicAnimationActivity& rActivity ) :
                 mrActivity( rActivity )
             {}
+            IntrinsicAnimationListener(const IntrinsicAnimationListener&) = delete;
+            IntrinsicAnimationListener& operator=(const IntrinsicAnimationListener&) = delete;
 
         private:
 

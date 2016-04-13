@@ -27,7 +27,6 @@
 #include "slideshowcontext.hxx"
 #include "shapesubset.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 
 namespace slideshow {
@@ -74,13 +73,14 @@ class BaseContainerNode;
     file-private accessor methods.
 */
 class BaseNode : public AnimationNode,
-                 public  ::osl::DebugBase<BaseNode>,
-                 private ::boost::noncopyable
+                 public  ::osl::DebugBase<BaseNode>
 {
 public:
     BaseNode( css::uno::Reference<css::animations::XAnimationNode> const& xNode,
               ::std::shared_ptr<BaseContainerNode> const&        pParent,
               NodeContext const&                                   rContext );
+    BaseNode(const BaseNode&) = delete;
+    BaseNode& operator=(const BaseNode&) = delete;
 
     /** Provide the node with a shared_ptr to itself.
 
