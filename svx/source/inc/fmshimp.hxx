@@ -382,7 +382,7 @@ public:
     SAL_DLLPRIVATE bool    setCurrentSelectionFromMark(const SdrMarkList& rMarkList);
 
     /// returns the currently selected form, or the form which all currently selected controls belong to, or <NULL/>
-    SAL_DLLPRIVATE css::uno::Reference< css::form::XForm >
+    SAL_DLLPRIVATE const css::uno::Reference< css::form::XForm >&
                 getCurrentForm() const { return m_xCurrentForm; }
     SAL_DLLPRIVATE void        forgetCurrentForm();
     /// returns whether the last known marking contained only controls
@@ -556,7 +556,7 @@ class SearchableControlIterator : public ::comphelper::IndexAccessIterator
         // der aktuelle Wert der ControlSource-css::beans::Property
 
 public:
-    OUString     getCurrentValue() const { return m_sCurrentValue; }
+    const OUString& getCurrentValue() const { return m_sCurrentValue; }
 
 public:
     SearchableControlIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint);

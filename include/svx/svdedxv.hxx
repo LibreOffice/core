@@ -258,7 +258,7 @@ public:
 
     virtual void MarkListHasChanged() override;
 
-    rtl::Reference< sdr::SelectionController > getSelectionController() const { return mxSelectionController; }
+    const rtl::Reference< sdr::SelectionController >& getSelectionController() const { return mxSelectionController; }
 
     /** returns true if the shape identified by its inventor and identifier supports format paint brush operation */
     static bool SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier );

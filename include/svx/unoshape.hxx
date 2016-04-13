@@ -896,7 +896,7 @@ public:
     SvxDummyShapeContainer( css::uno::Reference< css::drawing::XShapes > xWrappedObject );
     virtual ~SvxDummyShapeContainer() throw();
 
-    css::uno::Reference< css::drawing::XShapes > getWrappedShape()
+    const css::uno::Reference< css::drawing::XShapes >& getWrappedShape()
             { return m_xDummyObject; }
 
 };

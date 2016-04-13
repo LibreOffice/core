@@ -494,7 +494,7 @@ public:
     */
     void        ForceHideScrollbars();
 
-    css::uno::Reference< css::uno::XComponentContext >
+    const css::uno::Reference< css::uno::XComponentContext >&
         getContext() const { return m_xContext; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard

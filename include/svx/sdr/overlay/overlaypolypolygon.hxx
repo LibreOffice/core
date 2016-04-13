@@ -44,7 +44,7 @@ namespace sdr
             virtual ~OverlayPolyPolygonStripedAndFilled();
 
             // change geometry
-            basegfx::B2DPolyPolygon getLinePolyPolygon() const { return maLinePolyPolygon; }
+            const basegfx::B2DPolyPolygon& getLinePolyPolygon() const { return maLinePolyPolygon; }
 
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged() override;

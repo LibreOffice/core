@@ -76,7 +76,7 @@ public:
 
     virtual SdrObjUserData* Clone( SdrObject * ) const override { return new IMapUserData( *this ); }
 
-    const IMapObjectPtr     GetObject() const { return mpObj; }
+    const IMapObjectPtr&    GetObject() const { return mpObj; }
     void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
 };
 

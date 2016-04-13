@@ -270,7 +270,7 @@ public:
 
     bool IsUseLuminance() const { return bUseLuminance; }
 
-    Color GetColor() const { return aMarkerColor; }
+    const Color& GetColor() const { return aMarkerColor; }
     void SetColor(Color aNew, bool bCallLink = false);
 
     void SetSize(const Size& rNew);

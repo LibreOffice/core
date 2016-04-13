@@ -72,7 +72,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet> SAL_CALL getAccessibleStateSet() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getAccessibleName() throw (css::uno::RuntimeException, std::exception) override;
-    sdr::table::CellRef getCellRef() { return mxCell;}
+    const sdr::table::CellRef& getCellRef() { return mxCell;}
     void UpdateChildren();
     static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow );
 

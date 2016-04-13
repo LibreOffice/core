@@ -1530,7 +1530,7 @@ bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
 bool GalleryTheme::IsModified() const { return pThm->IsModified(); }
 
-tools::SvRef<SotStorage> GalleryTheme::GetSvDrawStorage() const
+const tools::SvRef<SotStorage>& GalleryTheme::GetSvDrawStorage() const
 {
     return aSvDrawStorageRef;
 }
