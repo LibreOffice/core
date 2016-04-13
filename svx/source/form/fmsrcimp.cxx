@@ -398,7 +398,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(bool _bSearchForNull
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
-    FieldCollection::iterator iterInitialField = iterFieldLoop;
+    FieldCollection::const_iterator iterInitialField = iterFieldLoop;
 
 
     bool bFound(false);
@@ -463,7 +463,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
-    FieldCollection::iterator iterInitialField = iterFieldLoop;
+    FieldCollection::const_iterator iterInitialField = iterFieldLoop;
 
     WildCard aSearchExpression(strExpression);
 
@@ -546,7 +546,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
-    FieldCollection::iterator iterInitialField = iterFieldLoop;
+    FieldCollection::const_iterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
     SearchOptions2 aParam;
@@ -769,8 +769,9 @@ bool FmSearchEngine::GetCaseSensitive() const
 
 void FmSearchEngine::clearControlTexts()
 {
+    ControlTextSuppliers::const_iterator aEnd = m_aControlTexts.end();
     for (   ControlTextSuppliers::iterator aIter = m_aControlTexts.begin();
-            aIter < m_aControlTexts.end();
+            aIter != aEnd;
             ++aIter
         )
     {

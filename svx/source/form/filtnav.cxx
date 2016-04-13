@@ -708,9 +708,10 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
 void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 {
     // insert the condition behind the last filter items
+    ::std::vector<FmFilterData*>::const_reverse_iterator aEnd = _rFormItem.GetChildren().rend();
     ::std::vector<FmFilterData*>::reverse_iterator iter;
     for (   iter = _rFormItem.GetChildren().rbegin();
-            iter != _rFormItem.GetChildren().rend();
+            iter != aEnd;
             ++iter
         )
     {
@@ -884,7 +885,7 @@ void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const OUString& rText)
 {
     ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChildren();
-    ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
+    ::std::vector<FmFilterData*>::const_iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
     sal_Int32 nParentPos = i - rItems.begin();
 
     FmFilterAdapter::setText(nParentPos, pItem, rText);
@@ -951,9 +952,10 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
     // checks whether for each form there's one free level for input
     ::std::vector< FmFilterData* >& rChildren = _rItem.GetChildren();
     bool bAppendLevel = dynamic_cast<const FmFormItem*>(&_rItem) !=  nullptr;
+    ::std::vector<FmFilterData*>::const_iterator aEnd = rChildren.end();
 
     for (   ::std::vector<FmFilterData*>::iterator i = rChildren.begin();
-            i != rChildren.end();
+            i != aEnd;
             ++i
         )
     {

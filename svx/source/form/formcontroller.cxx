@@ -324,8 +324,9 @@ namespace
 
 void ColumnInfoCache::deinitializeControls()
 {
+    ColumnInfos::const_iterator aEnd = m_aColumns.end();
     for (   ColumnInfos::iterator col = m_aColumns.begin();
-            col != m_aColumns.end();
+            col != aEnd;
             ++col
         )
     {
@@ -338,9 +339,10 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
 {
     try
     {
+        ColumnInfos::const_iterator aEnd = m_aColumns.end();
         // for every of our known columns, find the controls which are bound to this column
         for (   ColumnInfos::iterator col = m_aColumns.begin();
-                col != m_aColumns.end();
+                col != aEnd;
                 ++col
             )
         {
@@ -1130,8 +1132,9 @@ void SAL_CALL FormController::disposing(const EventObject& e) throw( RuntimeExce
 
 void FormController::disposeAllFeaturesAndDispatchers()
 {
+    DispatcherContainer::const_iterator aEnd = m_aFeatureDispatchers.end();
     for ( DispatcherContainer::iterator aDispatcher = m_aFeatureDispatchers.begin();
-          aDispatcher != m_aFeatureDispatchers.end();
+          aDispatcher != aEnd;
           ++aDispatcher
         )
     {
@@ -3075,8 +3078,9 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         Reference< XNameAccess > xQueryColumns =
             Reference< XColumnsSupplier >( m_xComposer, UNO_QUERY_THROW )->getColumns();
 
+        ::std::vector<FmFieldInfo>::const_iterator aEnd = rFieldInfos.end();
         for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
-            iter != rFieldInfos.end(); ++iter)
+            iter != aEnd; ++iter)
         {
             if ( xQueryColumns->hasByName((*iter).aFieldName) )
             {
@@ -3157,8 +3161,8 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                 }
 
                 // find the text component
-                for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
-                    iter != rFieldInfos.end(); ++iter)
+                for (::std::vector<FmFieldInfo>::const_iterator iter = rFieldInfos.begin();
+                    iter != aEnd; ++iter)
                 {
                     // we found the field so insert a new entry to the filter row
                     if ((*iter).xField == xField)
@@ -3205,8 +3209,8 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
     }
 
     // now set the filter controls
-    for (   ::std::vector<FmFieldInfo>::iterator field = rFieldInfos.begin();
-            field != rFieldInfos.end();
+    for (   ::std::vector<FmFieldInfo>::const_iterator field = rFieldInfos.begin(), aEnd = rFieldInfos.end();
+            field != aEnd;
             ++field
         )
     {
@@ -4210,16 +4214,17 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // search the interceptor responsible for the given object
+    Interceptors::const_iterator aEnd = m_aControlDispatchInterceptors.end();
     Interceptors::iterator aIter;
     for (   aIter = m_aControlDispatchInterceptors.begin();
-            aIter != m_aControlDispatchInterceptors.end();
+            aIter != aEnd;
             ++aIter
         )
     {
         if ((*aIter)->getIntercepted() == _xInterception)
             break;
     }
-    if (aIter == m_aControlDispatchInterceptors.end())
+    if (aIter == aEnd)
     {
         return;
     }

@@ -1121,8 +1121,9 @@ namespace svx
         OSL_PRECOND( isControllerListening(), "FmTextControlShell::stopControllerListening: inconsistence!" );
 
         // dispose all listeners associated with the controls of the active controller
+        FocusListenerAdapters::const_iterator aEnd = m_aControlObservers.end();
         for (   FocusListenerAdapters::iterator aLoop = m_aControlObservers.begin();
-                aLoop != m_aControlObservers.end();
+                aLoop != aEnd;
                 ++aLoop
             )
         {
@@ -1139,8 +1140,9 @@ namespace svx
     void FmTextControlShell::implClearActiveControlRef()
     {
         // no more features for this control
+        ControlFeatures::const_iterator aEnd = m_aControlFeatures.end();
         for (   ControlFeatures::iterator aLoop = m_aControlFeatures.begin();
-                aLoop != m_aControlFeatures.end();
+                aLoop != aEnd;
                 ++aLoop
             )
         {
