@@ -439,47 +439,88 @@ css::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
     return comphelper::containerToSequence(aVec);
 }
 
-OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
+static OUString GetShortNameForFactory( SvtModuleOptions::EFactory eFactory )
 {
-    return m_lFactories[eFactory].getFactory();
-}
-
-OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFactory)
-{
-    // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
-    //            But it's good to plan further possibilities!
-
-    //return m_lFactories[eFactory].sShortName;
+#if OSL_DEBUG_LEVEL > 0
+    sal_Int32 nFactory = static_cast< sal_Int32 >( eFactory );
+    OUString stringOfnumber = OUString::number( nFactory );
+#endif
 
     OUString sShortName;
     switch( eFactory )
     {
         case SvtModuleOptions::EFactory::WRITER   :  sShortName = "swriter";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::WRITER ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::WRITERWEB:  sShortName = "swriter/web";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::WRITERWEB ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::WRITERGLOBAL:  sShortName = "swriter/GlobalDocument";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::WRITERGLOBAL ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::CALC     :  sShortName = "scalc";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::CALC ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::DRAW     :  sShortName = "sdraw";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::DRAW ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::IMPRESS  :  sShortName = "simpress";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::IMPRESS ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::MATH     :  sShortName = "smath";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::MATH ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::CHART    :  sShortName = "schart";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::CHART ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::BASIC    :  sShortName = "sbasic";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::BASIC ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         case SvtModuleOptions::EFactory::DATABASE :  sShortName = "sdatabase";
+                                                #if OSL_DEBUG_LEVEL > 0
+                                                       SAL_WARN( "unotools.config", "got EFactory::DATABASE ( " << stringOfnumber << " )" );
+                                                #endif
                                                        break;
         default:
-            OSL_FAIL( "unknown factory" );
+        #if OSL_DEBUG_LEVEL > 0
+            SAL_WARN( "unotools.config", "got factory ( " << stringOfnumber << " ) which is not known" );
+        #endif
             break;
     }
 
     return sShortName;
+}
+
+OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
+{
+    OUString factoryName = m_lFactories[ eFactory ].getFactory();
+    SAL_WARN( "unotools.config", "\"" << factoryName << "\" is the factory for " << GetShortNameForFactory( eFactory ) << " ( " << OUString::number( static_cast< sal_Int32 >( eFactory ) ) << " )" );
+    return factoryName;
+}
+
+OUString SvtModuleOptions::GetFactoryShortName( SvtModuleOptions::EFactory eFactory )
+{
+    //return m_lFactories[eFactory].sShortName;
+
+    return GetShortNameForFactory( eFactory );
 }
 
 OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
@@ -489,36 +530,72 @@ OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EF
 
 OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory )
 {
-    // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
-    //            But it's good to plan further possibilities!
+    // Hard configured yet ... because it's not fine to make changes possible by xml file
 
     //return m_lFactories[eFactory].getEmptyDocumentURL();
+
+#if OSL_DEBUG_LEVEL > 0
+    sal_Int32 nFactory = static_cast< sal_Int32 >( eFactory );
+    OUString stringOfnumber = OUString::number( nFactory );
+#endif
 
     OUString sURL;
     switch( eFactory )
     {
         case SvtModuleOptions::EFactory::WRITER        :  sURL = "private:factory/swriter";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::WRITER ( " << stringOfnumber << " ) url private:factory/swriter" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::WRITERWEB     :  sURL = "private:factory/swriter/web";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::WRITERWEB ( " << stringOfnumber << " ) url private:factory/swriter/web" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::WRITERGLOBAL  :  sURL = "private:factory/swriter/GlobalDocument";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::WRITERGLOBAL ( " << stringOfnumber << " ) url private:factory/swriter/GlobalDocument" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::CALC          :  sURL = "private:factory/scalc";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::CALC ( " << stringOfnumber << " ) url private:factory/scalc" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::DRAW          :  sURL = "private:factory/sdraw";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::DRAW ( " << stringOfnumber << " ) url private:factory/sdraw" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::IMPRESS       :  sURL = "private:factory/simpress?slot=6686";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::IMPRESS ( " << stringOfnumber << " ) url private:factory/simpress?slot=6686" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::MATH          :  sURL = "private:factory/smath";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::MATH ( " << stringOfnumber << " ) url private:factory/smath" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::CHART         :  sURL = "private:factory/schart";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::CHART ( " << stringOfnumber << " ) url private:factory/schart" );
+                                                  #endif
                                                   break;
         case SvtModuleOptions::EFactory::BASIC         :  sURL = "private:factory/sbasic";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::BASIC ( " << stringOfnumber << " ) url private:factory/sbasic" );
+                                                  #endif
                                                   break;
-        case SvtModuleOptions::EFactory::DATABASE     :  sURL = "private:factory/sdatabase?Interactive";
+        case SvtModuleOptions::EFactory::DATABASE      :  sURL = "private:factory/sdatabase?Interactive";
+                                                  #if OSL_DEBUG_LEVEL > 0
+                                                          SAL_WARN( "unotools.config", "got EFactory::DATABASE ( " << stringOfnumber << " ) url private:factory/sdatabase?Interactive" );
+                                                  #endif
                                                   break;
         default:
-            OSL_FAIL( "unknown factory" );
+        #if OSL_DEBUG_LEVEL > 0
+            SAL_WARN( "unotools.config", "no empty document URL for unknown factory ( " << stringOfnumber << " )" );
+        #endif
             break;
     }
     return sURL;
@@ -526,7 +603,9 @@ OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EF
 
 OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
 {
-    return m_lFactories[eFactory].getDefaultFilter();
+    OUString filterName = m_lFactories[ eFactory ].getDefaultFilter();
+    SAL_WARN( "unotools.config", "\"" << filterName << "\" is default filter for " << GetShortNameForFactory( eFactory ) << " ( " << OUString::number( static_cast< sal_Int32 >( eFactory ) ) << " )" );
+    return filterName;
 }
 
 bool SvtModuleOptions_Impl::IsDefaultFilterReadonly( SvtModuleOptions::EFactory eFactory   ) const
