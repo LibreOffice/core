@@ -607,21 +607,41 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
     @onerror    We return a null reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFromURL( const OUString&                                 sURL            ,
-                                                                                     const OUString&                                 sTargetFrameName,
-                                                                                           sal_Int32                                        nSearchFlags    ,
-                                                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments      ) throw(    css::io::IOException                ,
-                                                                                                                                                                        css::lang::IllegalArgumentException ,
-                                                                                                                                                                        css::uno::RuntimeException, std::exception          )
+css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFromURL( const OUString& sURL            ,
+                                                                                     const OUString& sTargetFrameName,
+                                                                                           sal_Int32 nSearchFlags    ,
+                                                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+    throw(  css::io::IOException
+          , css::lang::IllegalArgumentException
+          , css::uno::RuntimeException, std::exception )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-    SAL_INFO( "fwk.desktop", "loadComponentFromURL" );
+    SAL_WARN( "fwk.desktop", "Desktop::loadComponentFromURL( sURL \"" << sURL << "\", sTargetFrameName \"" << sTargetFrameName << "\" )" );
 
-    css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XComponent > xComponent;
 
-    return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
+    css::uno::Reference< css::frame::XComponentLoader > xThis( static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY );
+    if ( xThis.is() )
+    {
+        xComponent = LoadEnv::loadComponentFromURL( xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments );
+    }
+    else
+    {
+        SAL_WARN( "fwk.desktop", "oops there's no XComponentLoader" );
+    }
+
+    if ( xComponent.is() )
+    {
+        SAL_WARN( "fwk.desktop", "done loading of component" );
+    }
+    else
+    {
+        SAL_WARN( "fwk.desktop", "component is nil" );
+    }
+
+    return xComponent;
 }
 
 /*-************************************************************************************************************

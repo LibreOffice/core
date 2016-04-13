@@ -139,16 +139,18 @@ LoadEnv::~LoadEnv()
 {
 }
 
-css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
-                                                                           const css::uno::Reference< css::uno::XComponentContext >&     xContext  ,
-                                                                           const OUString&                                        sURL   ,
-                                                                           const OUString&                                        sTarget,
-                                                                                 sal_Int32                                               nFlags ,
-                                                                           const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
+css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >& xLoader,
+                                                                           const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                                                                           const OUString& sURL   ,
+                                                                           const OUString& sTarget,
+                                                                                 sal_Int32 nFlags ,
+                                                                           const css::uno::Sequence< css::beans::PropertyValue >& lArgs  )
     throw(css::lang::IllegalArgumentException,
           css::io::IOException               ,
           css::uno::RuntimeException         )
 {
+    SAL_WARN( "fwk.loadenv", "LoadEnv::loadComponentFromURL( sURL \"" << sURL << "\", sTarget \"" << sTarget << "\" )" );
+
     css::uno::Reference< css::lang::XComponent > xComponent;
 
     try
@@ -157,42 +159,51 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 
         aEnv.initializeLoading(sURL,
                                lArgs,
-                               css::uno::Reference< css::frame::XFrame >(xLoader, css::uno::UNO_QUERY),
+                               css::uno::Reference< css::frame::XFrame >( xLoader, css::uno::UNO_QUERY ),
                                sTarget,
                                nFlags);
         aEnv.startLoading();
-        aEnv.waitWhileLoading(); // wait for ever!
+        aEnv.waitWhileLoading(); // wait for ever
 
         xComponent = aEnv.getTargetComponent();
     }
     catch(const LoadEnvException& ex)
     {
-        switch(ex.m_nID)
+        SAL_WARN( "fwk.loadenv",
+                  "caught LoadEnvException " << +ex.m_nID << " \""
+                  << ex.m_sMessage << "\""
+                  << ( ex.m_exOriginal.has< css::uno::Exception >()
+                        ? ( ", " + ex.m_exOriginal.getValueTypeName()
+                           + " \""
+                           + ( ex.m_exOriginal.get<css::uno::Exception>().Message )
+                           + "\"")
+                        : OUString() )
+                    << " while loading <" << sURL << ">");
+
+        switch( ex.m_nID )
         {
             case LoadEnvException::ID_INVALID_MEDIADESCRIPTOR:
                 throw css::lang::IllegalArgumentException(
-                    "Optional list of arguments seem to be corrupted.", xLoader, 4);
+                    "Optional list of arguments seem to be corrupted", xLoader, 4 );
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
                 throw css::lang::IllegalArgumentException(
                     "Unsupported URL <" + sURL + ">: \"" + ex.m_sMessage + "\"",
-                    xLoader, 1);
+                    xLoader, 1 );
 
             default:
-                SAL_WARN(
-                    "fwk.loadenv",
-                    "caught LoadEnvException " << +ex.m_nID << " \""
-                        << ex.m_sMessage << "\""
-                        << (ex.m_exOriginal.has<css::uno::Exception>()
-                            ? (", " + ex.m_exOriginal.getValueTypeName() + " \""
-                               + (ex.m_exOriginal.get<css::uno::Exception>().
-                                  Message)
-                               + "\"")
-                            : OUString())
-                        << " while loading <" << sURL << ">");
                 xComponent.clear();
                 break;
         }
+    }
+
+    if ( xComponent.is() )
+    {
+        SAL_WARN( "fwk.loadenv", "done loading of component" );
+    }
+    else
+    {
+        SAL_WARN( "fwk.loadenv", "component is nil" );
     }
 
     return xComponent;

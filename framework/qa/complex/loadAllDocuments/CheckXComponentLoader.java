@@ -133,7 +133,7 @@ public class CheckXComponentLoader
         assertNotNull("Couldn't create test frame.", m_xFrame);
 
         // define default loader for testing
-        // TODO think about using of bot loader instances!
+        // TODO think about using of bot loader instances
         m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
         assertNotNull("Desktop service doesn't support needed component loader interface.", m_xLoader);
 
@@ -143,7 +143,6 @@ public class CheckXComponentLoader
         // m_sTempPath = "."+fs_sys;
 
         // get all files from the given directory
-        // TODO URLHelper should ignore directories!
         m_lTestFiles = new ArrayList<String>();
         final String sTestDocURL = OfficeFileUrl.getAbsolute(new File("testdocuments"));
         m_sTestDocPath = graphical.FileHelper.getSystemPathFromFileURL(sTestDocURL);
@@ -411,8 +410,8 @@ public class CheckXComponentLoader
             XInputStream xStream = m_xStreamProvider.openFileRead(sURL);
             lProps[1].Value = xStream;
 
-            // check different version of "private:stream" URL!
-            loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream" , "_blank", 0, lProps);
+            // check different version of "private:stream" URL
+            loadURL( m_xLoader, RESULT_VALID_DOC, "private:stream" , "_blank", 0, lProps );
         }
     }
 
