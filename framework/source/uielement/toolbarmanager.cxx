@@ -1307,6 +1307,9 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
         return;
 
     ::PopupMenu *pMenu = pToolBar->GetMenu();
+    if (pMenu == nullptr) {
+        return;
+    }
 
     // remove config entries from menu, so we have a clean menu to start with
     // remove submenu first

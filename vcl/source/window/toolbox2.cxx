@@ -1772,7 +1772,7 @@ bool ToolBox::IsMenuEnabled() const
 
 PopupMenu* ToolBox::GetMenu() const
 {
-    return mpData->mpMenu;
+    return mpData == nullptr ? nullptr : mpData->mpMenu;
 }
 
 void ToolBox::SetMenuButtonHdl( const Link<ToolBox *, void>& rLink )
