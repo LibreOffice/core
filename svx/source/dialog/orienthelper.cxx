@@ -71,7 +71,8 @@ void OrientationHelper_Impl::AddDependentWindow( vcl::Window& rWindow, TriState 
 
 void OrientationHelper_Impl::EnableDependentWindows()
 {
-    for( WindowVec::iterator aIt = maWinVec.begin(), aEnd = maWinVec.end(); aIt != aEnd; ++aIt )
+    WindowVec::const_iterator aEnd = maWinVec.end();
+    for( WindowVec::iterator aIt = maWinVec.begin(); aIt != aEnd; ++aIt )
         EnableWindow( *aIt->first, aIt->second );
 }
 
@@ -91,7 +92,8 @@ void OrientationHelper_Impl::EnableWindow( vcl::Window& rWindow, TriState eDisab
 
 void OrientationHelper_Impl::ShowDependentWindows()
 {
-    for( WindowVec::iterator aIt = maWinVec.begin(), aEnd = maWinVec.end(); aIt != aEnd; ++aIt )
+    WindowVec::const_iterator aEnd = maWinVec.end();
+    for( WindowVec::iterator aIt = maWinVec.begin(); aIt != aEnd; ++aIt )
         aIt->first->Show( mbVisible );
 }
 

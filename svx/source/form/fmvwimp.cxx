@@ -577,8 +577,9 @@ void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
     // - der Control-Container fuer ein Window entfernt wird, waehrend
     //   der aktive Modus eingeschaltet ist.
 
+    PageWindowAdapterList::const_iterator aEnd = m_aPageWindowAdapters.end();
     for (   PageWindowAdapterList::iterator i = m_aPageWindowAdapters.begin();
-            i != m_aPageWindowAdapters.end();
+            i != aEnd;
             ++i
         )
     {
