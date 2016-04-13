@@ -951,7 +951,7 @@ namespace cairocanvas
 
         bool bOpToDo = false;
         cairo_matrix_t aOrigMatrix, aIdentityMatrix;
-        double nX, nY, nBX, nBY, nAX, nAY, nLastX, nLastY;
+        double nX, nY, nBX, nBY, nAX, nAY, nLastX(0.0), nLastY(0.0);
 
         cairo_get_matrix( pCairo, &aOrigMatrix );
         cairo_matrix_init_identity( &aIdentityMatrix );
