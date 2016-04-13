@@ -121,12 +121,12 @@ public:
                             SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage );
                             ~SvxIconChoiceCtrlEntry () {}
 
-    Image                   GetImage () const { return aImage; }
+    const Image&            GetImage () const { return aImage; }
     void                    SetText ( const OUString& rText ) { aText = rText; }
-    OUString                GetText () const { return aText; }
+    const OUString&         GetText () const { return aText; }
     OUString SVT_DLLPUBLIC  GetDisplayText() const;
     void                    SetQuickHelpText( const OUString& rText ) { aQuickHelpText = rText; }
-    OUString                GetQuickHelpText() const { return aQuickHelpText; }
+    const OUString&         GetQuickHelpText() const { return aQuickHelpText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
     void*                   GetUserData () { return pUserData; }
 

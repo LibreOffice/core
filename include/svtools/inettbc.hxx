@@ -87,7 +87,7 @@ public:
                                         { bIsAutoCompleteEnabled = _bEnable; }
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
                                         { aPlaceHolder = sPlaceHolder; }
-    OUString                        GetPlaceHolder() { return aPlaceHolder; }
+    const OUString&                 GetPlaceHolder() { return aPlaceHolder; }
     bool                            MatchesPlaceHolder( const OUString& sToMatch ) const
                                         { return ( !aPlaceHolder.isEmpty() ) && ( aPlaceHolder == sToMatch ); }
 };

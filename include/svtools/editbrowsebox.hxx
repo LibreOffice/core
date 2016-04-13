@@ -600,7 +600,7 @@ namespace svt
         virtual void RemoveRows();
         virtual void Dispatch(sal_uInt16 nId);
 
-        CellControllerRef Controller() const { return aController; }
+        const CellControllerRef& Controller() const { return aController; }
         EditBrowseBoxFlags  GetBrowserFlags() const { return m_nBrowserFlags; }
         void                SetBrowserFlags(EditBrowseBoxFlags nFlags);
 

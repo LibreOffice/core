@@ -677,7 +677,7 @@ public:
     static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
     void            SetCheckButtonHdl( const Link<SvTreeListBox*,void>& rLink )  { aCheckButtonHdl=rLink; }
-    Link<SvTreeListBox*,void>          GetCheckButtonHdl() const { return aCheckButtonHdl; }
+    const Link<SvTreeListBox*,void>& GetCheckButtonHdl() const { return aCheckButtonHdl; }
     virtual void    CheckButtonHdl();
 
     void            SetSublistOpenWithReturn();      // open/close sublist with return/enter

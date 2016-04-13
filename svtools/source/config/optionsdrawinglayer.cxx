@@ -176,8 +176,8 @@ public:
 
     bool        IsOverlayBuffer() const { return m_bOverlayBuffer;}
     bool        IsPaintBuffer() const { return m_bPaintBuffer;}
-    Color       GetStripeColorA() const { return m_bStripeColorA;}
-    Color       GetStripeColorB() const { return m_bStripeColorB;}
+    const Color& GetStripeColorA() const { return m_bStripeColorA;}
+    const Color& GetStripeColorB() const { return m_bStripeColorB;}
     sal_uInt16  GetStripeLength() const { return m_nStripeLength;}
 
     // #i73602#

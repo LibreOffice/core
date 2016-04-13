@@ -113,7 +113,7 @@ public:
     void SetMarked( bool IsMarked ) { bIsMarked = IsMarked; }
 
     void SetBackColor( const Color& aColor ) { maBackColor = aColor; }
-    Color GetBackColor() const { return maBackColor; }
+    const Color& GetBackColor() const { return maBackColor; }
 };
 
 #endif

@@ -115,7 +115,7 @@ public:
                               SvTreeListEntry* pEntry,
                               SvViewDataItem* pViewData) override;
 
-    OUString GetText() const
+    const OUString& GetText() const
     {
         return maText;
     }

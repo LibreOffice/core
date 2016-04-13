@@ -335,7 +335,7 @@ public:
     inline void     SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
 
     void            SetColor( const Color& rColor );
-    Color           GetColor() const { return aColor; }
+    const Color&    GetColor() const { return aColor; }
 
 protected:
 
