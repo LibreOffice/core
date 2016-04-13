@@ -33,7 +33,7 @@ public:
 
     virtual SAL_DLLPRIVATE ~NoSuchFileException() throw ();
 
-    rtl::OUString getUri() const { return uri_; }
+    const rtl::OUString& getUri() const { return uri_; }
 
 private:
     void operator =(NoSuchFileException) = delete;
@@ -54,9 +54,9 @@ public:
 
     virtual SAL_DLLPRIVATE ~FileFormatException() throw ();
 
-    rtl::OUString getUri() const { return uri_; }
+    const rtl::OUString& getUri() const { return uri_; }
 
-    rtl::OUString getDetail() const { return detail_; }
+    const rtl::OUString& getDetail() const { return detail_; }
 
 private:
     void operator =(FileFormatException) = delete;
@@ -199,7 +199,7 @@ public:
         directBase_(directBase), directMembers_(directMembers)
     {}
 
-    rtl::OUString getDirectBase() const { return directBase_; }
+    const rtl::OUString& getDirectBase() const { return directBase_; }
 
     std::vector< Member > const & getDirectMembers() const
     { return directMembers_; }
@@ -278,7 +278,7 @@ public:
         directBase_(directBase), directMembers_(directMembers)
     {}
 
-    rtl::OUString getDirectBase() const { return directBase_; }
+    const rtl::OUString& getDirectBase() const { return directBase_; }
 
     std::vector< Member > const & getDirectMembers() const
     { return directMembers_; }
@@ -398,7 +398,7 @@ public:
         PublishableEntity(SORT_TYPEDEF, published, annotations), type_(type)
     {}
 
-    rtl::OUString getType() const { return type_; }
+    const rtl::OUString& getType() const { return type_; }
 
 private:
     virtual SAL_DLLPRIVATE ~TypedefEntity() throw ();
@@ -535,7 +535,7 @@ public:
         base_(base), constructors_(constructors)
     {}
 
-    rtl::OUString getBase() const { return base_; }
+    const rtl::OUString& getBase() const { return base_; }
 
     std::vector< Constructor > const & getConstructors() const
     { return constructors_; }
@@ -639,7 +639,7 @@ public:
         base_(base)
     {}
 
-    rtl::OUString getBase() const { return base_; }
+    const rtl::OUString& getBase() const { return base_; }
 
 private:
     virtual SAL_DLLPRIVATE ~InterfaceBasedSingletonEntity() throw ();
@@ -657,7 +657,7 @@ public:
         base_(base)
     {}
 
-    rtl::OUString getBase() const { return base_; }
+    const rtl::OUString& getBase() const { return base_; }
 
 private:
     virtual SAL_DLLPRIVATE ~ServiceBasedSingletonEntity() throw ();
