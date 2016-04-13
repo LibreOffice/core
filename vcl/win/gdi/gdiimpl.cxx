@@ -1151,6 +1151,7 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
             aPolyPoints.reserve( 1024 );
             std::vector< INT > aPolyCounts( nCount, 0 );
             basegfx::B2DHomMatrix aExpand;
+            sal_uInt32 nTargetCount(0);
             static bool bExpandByOneInXandY(true);
 
             if(bExpandByOneInXandY)
@@ -1167,26 +1168,45 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
                         aPolyPolygon.getB2DPolygon(a),
                         1));
                 const sal_uInt32 nPoints(aPoly.count());
-                aPolyCounts[a] = nPoints;
 
-                for( sal_uInt32 b = 0; b < nPoints; b++ )
+                // tdf#40863 For CustomShapes there is a hack (see
+                // f64ef72743e55389e446e0d4bc6febd475011023) that adds polygons
+                // with a single point in top-left and bottom-right corner
+                // of the BoundRect to be able to determine the correct BoundRect
+                // in the slideshow. Unfortunately, CreatePolyPolygonRgn below
+                // fails with polygons containing a single pixel, so clipping is
+                // lost. For now, use only polygons with more than two points - the
+                // ones that may have an area.
+                // Note: polygons with one point which are curves may have an area,
+                // but the polygon is already subdivided here, so no need to test
+                // this.
+                if(nPoints > 2)
                 {
-                    basegfx::B2DPoint aPt(aPoly.getB2DPoint(b));
+                    aPolyCounts[nTargetCount] = nPoints;
+                    nTargetCount++;
 
-                    if(bExpandByOneInXandY)
+                    for( sal_uInt32 b = 0; b < nPoints; b++ )
                     {
-                        aPt = aExpand * aPt;
-                    }
+                        basegfx::B2DPoint aPt(aPoly.getB2DPoint(b));
 
-                    POINT aPOINT;
-                    // #i122149# do correct rounding
-                    aPOINT.x = basegfx::fround(aPt.getX());
-                    aPOINT.y = basegfx::fround(aPt.getY());
-                    aPolyPoints.push_back( aPOINT );
+                        if(bExpandByOneInXandY)
+                        {
+                            aPt = aExpand * aPt;
+                        }
+
+                        POINT aPOINT;
+                        // #i122149# do correct rounding
+                        aPOINT.x = basegfx::fround(aPt.getX());
+                        aPOINT.y = basegfx::fround(aPt.getY());
+                        aPolyPoints.push_back( aPOINT );
+                    }
                 }
             }
 
-            mrParent.mhRegion = CreatePolyPolygonRgn( &aPolyPoints[0], &aPolyCounts[0], nCount, ALTERNATE );
+            if(nTargetCount)
+            {
+                mrParent.mhRegion = CreatePolyPolygonRgn( &aPolyPoints[0], &aPolyCounts[0], nTargetCount, ALTERNATE );
+            }
         }
     }
     else
