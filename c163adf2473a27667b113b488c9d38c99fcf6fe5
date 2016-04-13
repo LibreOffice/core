@@ -284,6 +284,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_76a06791",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1546,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-13T07:41:49Z",
+      "side": 1,
+      "message": "I think there is a way to improve performance within the function:\nWhen I reverse the stack order, I know whether empty cells are to be included before I start reading all the strings to be joined.\nAlso, I can add the strings directly to a OUStringBuf (as in ScConcat_MS()) and won\u0027t need an std::stack.\n\nI will change the code and upload another patch set.",
+      "parentUuid": "9ad45d7e_3b8898e7",
+      "revId": "c163adf2473a27667b113b488c9d38c99fcf6fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_08b0f1f3",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
