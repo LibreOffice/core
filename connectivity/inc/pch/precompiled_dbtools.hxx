@@ -37,7 +37,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/type_traits.hpp>
 #include <osl/diagnose.h>

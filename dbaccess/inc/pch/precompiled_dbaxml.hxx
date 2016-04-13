@@ -23,7 +23,6 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

@@ -24,7 +24,6 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <boost/optional/optional.hpp>
 #include <osl/process.h>
 #include <osl/thread.h>
