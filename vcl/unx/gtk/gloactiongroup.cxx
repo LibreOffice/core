@@ -153,6 +153,15 @@ g_lo_action_group_query_action (GActionGroup        *group,
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GLOAction* action;
 
+    if (enabled)
+    {
+        GtkSalFrame* pFrame = lo_group->priv->frame;
+        if (pFrame) {
+            pFrame->EnsureDbusMenuSynced();
+        }
+    }
+
+    // note: EnsureDbusMenuSynced could have deleted the action!
     action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
     if (action == nullptr)
@@ -160,10 +169,6 @@ g_lo_action_group_query_action (GActionGroup        *group,
 
     if (enabled)
     {
-        GtkSalFrame* pFrame = lo_group->priv->frame;
-        if (pFrame) {
-            pFrame->EnsureDbusMenuSynced();
-        }
         *enabled = action->enabled;
     }
 
