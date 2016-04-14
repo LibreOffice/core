@@ -731,7 +731,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
 {
     // Get Wrt Shell
     SwWrtShell *pSh = dynamic_cast<SwWrtShell*>( GetFlyFrame()->getRootFrame()->GetCurrShell() );
-    if (!pSh || dynamic_cast<const SwWrtShell*>( pSh) ==  nullptr)
+    if (!pSh)
         return;
 
     // Compute old and new rect. This will give us the deformation to apply to
