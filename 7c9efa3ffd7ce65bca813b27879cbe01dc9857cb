@@ -16,6 +16,24 @@
       "revId": "7c9efa3ffd7ce65bca813b27879cbe01dc9857cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_51f3ad0a",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-14T08:08:21Z",
+      "side": 1,
+      "message": "Yes, thanks, changed ;-)",
+      "parentUuid": "9ad45d7e_719351a4",
+      "revId": "7c9efa3ffd7ce65bca813b27879cbe01dc9857cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
