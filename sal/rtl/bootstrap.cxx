@@ -270,8 +270,9 @@ static OUString & getIniFileName_Impl()
 #ifdef MACOSX
             // We keep only executables in the MacOS folder, and all
             // rc files in LIBO_ETC_FOLDER (typically "Resources").
-            sal_Int32 p = fileName.lastIndexOf( "/MacOS/" );
-            fileName = fileName.replaceAt( p+1, strlen("MacOS"), LIBO_ETC_FOLDER );
+            sal_Int32 off = fileName.lastIndexOf( "/MacOS/" );
+            if ( off != -1 )
+                fileName = fileName.replaceAt( off + 1, strlen("MacOS"), LIBO_ETC_FOLDER );
 #endif
         }
 #endif
