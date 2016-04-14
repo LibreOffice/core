@@ -71,8 +71,8 @@
       <menu:menuitem menu:id=".uno:Print"/>
       <menu:menuitem menu:id=".uno:PrinterSetup"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menuitem menu:id=".uno:Signature"/>
+      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Quit"/>
     </menu:menupopup>
@@ -87,6 +87,7 @@
       <menu:menuitem menu:id=".uno:Copy"/>
       <menu:menuitem menu:id=".uno:Paste"/>
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
+      <menu:menuitem menu:id=".uno:PasteUnformatted"/>
       <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menu menu:id=".uno:SelectionModeMenu">
         <menu:menupopup>
@@ -104,13 +105,16 @@
       <menu:menu menu:id=".uno:ChangesMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:TrackChanges"/>
-          <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
           <menu:menuitem menu:id=".uno:ShowTrackedChanges"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:AcceptTrackedChanges"/>
-          <menu:menuitem menu:id=".uno:CommentChangeTracking"/>
-          <menu:menuitem menu:id=".uno:NextTrackedChange"/>
           <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
+          <menu:menuitem menu:id=".uno:NextTrackedChange"/>
+          <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
+          <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:CommentChangeTracking"/>
+          <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:CompareDocuments"/>
           <menu:menuitem menu:id=".uno:MergeDocuments"/>
@@ -168,6 +172,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:HideWhitespace"/>
+      <menu:menuitem menu:id=".uno:ViewTrackChanges"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
@@ -213,7 +218,6 @@
               <menu:menuitem menu:id=".uno:TwainTransfer"/>
             </menu:menupopup>
           </menu:menu>
-          <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
         </menu:menupopup>
       </menu:menu>
@@ -242,6 +246,7 @@
           <menu:menuitem menu:id=".uno:SymbolShapes"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawText"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
@@ -254,9 +259,13 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
-      <menu:menuitem menu:id=".uno:InsertBookmark"/>
-      <menu:menuitem menu:id=".uno:InsertReferenceField"/>
+      <menu:menu menu:id=".uno:InsertLinkMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
+          <menu:menuitem menu:id=".uno:InsertBookmark"/>
+          <menu:menuitem menu:id=".uno:InsertReferenceField"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
       <menu:menu menu:id=".uno:FormattingMarkMenu">
@@ -353,19 +362,16 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
           <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
+          <menu:menuitem menu:id=".uno:ChangeCaseRotateCase"/>
           <menu:menuseparator/>
-          <menu:menu menu:id=".uno:TransliterateMenu">
-            <menu:menupopup>
-              <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
-              <menu:menuseparator/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
-              <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
-            </menu:menupopup>
-          </menu:menu>
+          <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
+          <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
+          <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
+          <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
+          <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
+          <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:FormatSpacingMenu">
@@ -417,6 +423,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
       <menu:menuitem menu:id=".uno:ResetAttributes"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FontDialog"/>
@@ -697,11 +704,12 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:RunMacro"/>
           <menu:menuitem menu:id=".uno:MacroRecorder"/>
+          <menu:menuitem menu:id=".uno:RunMacro"/>
+          <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
           <menu:menu menu:id=".uno:ScriptOrganizer"/>
-          <menu:menuitem menu:id=".uno:MacroSignature"/>
           <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:MacroSignature"/>
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
