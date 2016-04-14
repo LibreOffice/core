@@ -76,6 +76,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 	sc/uiconfig/scalc/toolbar/mediaobjectbar \
 	sc/uiconfig/scalc/toolbar/moreformcontrols \
 	sc/uiconfig/scalc/toolbar/previewbar \
+	sc/uiconfig/scalc/toolbar/singlemode \
 	sc/uiconfig/scalc/toolbar/standardbar \
 	sc/uiconfig/scalc/toolbar/starshapes \
 	sc/uiconfig/scalc/toolbar/symbolshapes \
