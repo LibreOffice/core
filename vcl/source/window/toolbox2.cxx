@@ -1732,7 +1732,9 @@ long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
 
 void ToolBox::SetDropdownClickHdl( const Link<ToolBox *, void>& rLink )
 {
-    mpData->maDropdownClickHdl = rLink;
+    if (mpData != nullptr) {
+        mpData->maDropdownClickHdl = rLink;
+    }
 }
 
 void ToolBox::SetMenuType( sal_uInt16 aType )
