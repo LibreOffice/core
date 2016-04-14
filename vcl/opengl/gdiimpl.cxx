@@ -39,7 +39,6 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
-#include <glm/gtx/compatibility.hpp>
 
 #include <stdlib.h>
 
@@ -869,7 +868,7 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
 
             if (eLineJoin == basegfx::B2DLineJoin::Miter)
             {
-                float angle = glm::atan2(previousLineVector.x * nextLineVector.y - previousLineVector.y * nextLineVector.x,
+                float angle = std::atan2(previousLineVector.x * nextLineVector.y - previousLineVector.y * nextLineVector.x,
                                          previousLineVector.x * nextLineVector.x + previousLineVector.y * nextLineVector.y);
 
                 angle = (F_PI - std::fabs(angle)) / F_PI180;
