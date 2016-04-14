@@ -113,7 +113,7 @@ public:
     void EndExecute( sal_uInt16 nSelectId );
 
     PopupMenu* GetActivePopup() const  { return pActivePopup; }
-    void KillActivePopup( PopupMenu* pThisOnly = nullptr );
+    void FreeActivePopup( PopupMenu* pThisOnly = nullptr );
 
     void ChangeHighlightItem(sal_uInt16 n, bool bStartPopupTimer);
     sal_uInt16 GetHighlightedItem() const { return nHighlightedItem; }

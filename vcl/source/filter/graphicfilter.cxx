@@ -131,7 +131,7 @@ static bool DirEntryExists( const INetURLObject& rObj )
     return bExists;
 }
 
-static void KillDirEntry( const OUString& rMainUrl )
+static void DeleteDirEntry( const OUString& rMainUrl )
 {
     try
     {
@@ -1811,7 +1811,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
         xStream.reset();
 
         if( ( GRFILTER_OK != nRetValue ) && !bAlreadyExists )
-            KillDirEntry( aMainUrl );
+            DeleteDirEntry( aMainUrl );
     }
     return nRetValue;
 #endif

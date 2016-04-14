@@ -2074,7 +2074,7 @@ public:
         assert(pContext != mpA && pContext != mpB);
         (void)pContext; (void)pContext2;
 
-        // Kill the parent we free-ride on ...
+        // release the parent we free-ride on ...
         xTempWin.disposeAndClear();
 
         // This appears to continue working; fun.

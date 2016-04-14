@@ -224,7 +224,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
                             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
                             bAllowNewPopup = pData && ( pData->pSubMenu != pActivePopup );
                             if ( bAllowNewPopup )
-                                KillActivePopup();
+                                FreeActivePopup();
                         }
 
                         if ( bPopupArea && bAllowNewPopup )
@@ -267,7 +267,7 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
         if ( pActivePopup )
         {
             //DBG_ASSERT( !pActivePopup->ImplGetWindow(), "PopupEnd, obwohl pActivePopup MIT Window!" );
-            KillActivePopup(); // should be ok to just remove it
+            FreeActivePopup(); // should be ok to just remove it
             //pActivePopup->bCanceled = true;
         }
         bInExecute = false;
@@ -302,7 +302,7 @@ IMPL_LINK_TYPED( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
         {
             FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
             SetPopupModeFlags( GetPopupModeFlags() | FloatWinPopupFlags::NoAppFocusClose );
-            KillActivePopup();
+            FreeActivePopup();
             SetPopupModeFlags( nOldFlags );
         }
         if ( pItemData->bEnabled && pItemData->pSubMenu && pItemData->pSubMenu->GetItemCount() && ( pItemData->pSubMenu != pActivePopup ) )
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, SubmenuClose, Timer *, void)
     {
         MenuFloatingWindow* pWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->GetWindow());
         if( pWin )
-            pWin->KillActivePopup();
+            pWin->FreeActivePopup();
     }
 }
 
@@ -415,14 +415,14 @@ void MenuFloatingWindow::StopExecute( VclPtr<vcl::Window> xFocusId )
     bInExecute = false;
     if ( pActivePopup )
     {
-        KillActivePopup();
+        FreeActivePopup();
     }
     // notify parent, needed for accessibility
     if( pMenu && pMenu->pStartedFrom )
         pMenu->pStartedFrom->ImplCallEventListeners( VCLEVENT_MENU_SUBMENUDEACTIVATE, nPosInParent );
 }
 
-void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
+void MenuFloatingWindow::FreeActivePopup( PopupMenu* pThisOnly )
 {
     if ( pActivePopup && ( !pThisOnly || ( pThisOnly == pActivePopup ) ) )
     {
@@ -567,7 +567,7 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
 void MenuFloatingWindow::ImplScroll( bool bUp )
 {
-    KillActivePopup();
+    FreeActivePopup();
     Update();
 
     if (!pMenu)
@@ -575,7 +575,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
 
     Invalidate();
 
-    pMenu->ImplKillLayoutData();
+    pMenu->ImplBinLayoutData();
 
     if ( bScrollUp && bUp )
     {
@@ -670,7 +670,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
     //         otherwise the menus are difficult to operate.
     //  MenuItemData* pNextData = pMenu->pItemList->GetDataFromPos( n );
     //  if ( pActivePopup && pNextData && ( pActivePopup != pNextData->pSubMenu ) )
-    //      KillActivePopup();
+    //      FreeActivePopup();
 
     aSubmenuCloseTimer.Stop();
     if( ! pMenu )
@@ -996,7 +996,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 if ( !pMenu->pStartedFrom )
                 {
                     StopExecute();
-                    KillActivePopup();
+                    FreeActivePopup();
                 }
                 else if (pMenu->pStartedFrom->IsMenuBar())
                 {
@@ -1008,7 +1008,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                     PopupMenu* pPopupMenu = static_cast<PopupMenu*>(pMenu->pStartedFrom);
                     MenuFloatingWindow* pFloat = pPopupMenu->ImplGetFloatingWindow();
                     pFloat->GrabFocus();
-                    pFloat->KillActivePopup();
+                    pFloat->FreeActivePopup();
                     pPopupMenu->ImplCallHighlight(pFloat->nHighlightedItem);
                 }
             }
@@ -1027,7 +1027,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 {
                     MenuFloatingWindow* pFloat = static_cast<PopupMenu*>(pMenu->pStartedFrom)->ImplGetFloatingWindow();
                     pFloat->GrabFocus();
-                    pFloat->KillActivePopup();
+                    pFloat->FreeActivePopup();
                     sal_uInt16 highlightItem = pFloat->GetHighlightedItem();
                     pFloat->ChangeHighlightItem(highlightItem, false);
                 }

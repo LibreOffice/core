@@ -129,7 +129,7 @@ public:
 
     void    SetMenu(MenuBar* pMenu);
     void    SetHeight(long nHeight);
-    void    KillActivePopup();
+    void    FreeActivePopup();
     void    PopupClosed(Menu* pMenu);
     sal_uInt16 GetHighlightedItem() const { return nHighlightedItem; }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
