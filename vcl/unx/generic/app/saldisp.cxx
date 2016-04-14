@@ -737,7 +737,8 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
     // return an empty string for keysyms that are not bound to
     // any key code
     KeyCode aKeyCode = XKeysymToKeycode( GetDisplay(), nKeySym );
-    if( aKeyCode != 0 && aKeyCode != NoSymbol )
+    static_assert(NoSymbol == 0, "X11 inconsistency");
+    if( aKeyCode != NoSymbol )
     {
         if( !nKeySym )
             aRet = "???";
