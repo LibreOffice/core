@@ -51,6 +51,7 @@ public:
         if (   type.Class("Image").GlobalNamespace()
             || type.Class("Bitmap").GlobalNamespace()
             || type.Class("BitmapEx").GlobalNamespace()
+            || type.Class("VclPtr").GlobalNamespace()
            )
         {
             return std::make_pair(true, chain);
@@ -143,6 +144,22 @@ public:
                     // sd/source/ui/tools/IconCache.cxx, leaked
                ) // these variables appear unproblematic
             {
+                return true;
+            }
+            // TODO: check these VclPtr<> static fields
+            if (   name == "xPreviousWindow"    // vcl/source/window/winproc.cxx
+                || name == "vDev"               // sdext/source/pdfimport/wrapper/wrapper.cxx
+                || name == "s_xEmptyController" // svx/source/fmcomp/gridcell.cxx
+                || name == "xCell"              // svx/source/table/svdotable.cxx
+                || name == "pPixOut"            // sw/source/core/txtnode/fntcache.cxx
+                || name == "mpCareWindow"       // sw/source/core/view/viewsh.cxx
+               )
+            {
+                return true;
+            }
+            // ignore pointers, nothing happens to them on shutdown
+            QualType const pCanonical(pVarDecl->getType().getUnqualifiedType().getCanonicalType());
+            if (pCanonical->isPointerType()) {
                 return true;
             }
             std::vector<FieldDecl const*> pad;
