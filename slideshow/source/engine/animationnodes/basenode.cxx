@@ -355,16 +355,14 @@ void BaseNode::dispose()
 sal_Int16 BaseNode::getRestartMode()
 {
     const sal_Int16 nTmp( mxAnimationNode->getRestart() );
-    return (nTmp != animations::AnimationRestart::DEFAULT &&
-            nTmp != animations::AnimationRestart::INHERIT)
+    return nTmp != animations::AnimationRestart::DEFAULT
         ? nTmp : getRestartDefaultMode();
 }
 
 sal_Int16 BaseNode::getFillMode()
 {
     const sal_Int16 nTmp( mxAnimationNode->getFill() );
-    const sal_Int16 nFill((nTmp != animations::AnimationFill::DEFAULT &&
-                           nTmp != animations::AnimationFill::INHERIT)
+    const sal_Int16 nFill(nTmp != animations::AnimationFill::DEFAULT
                           ? nTmp : getFillDefaultMode());
 
     // For AUTO fill mode, SMIL specifies that fill mode is FREEZE,

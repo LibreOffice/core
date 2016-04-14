@@ -286,8 +286,7 @@ sal_Int16 AnimationExporter::GetFillMode( const Reference< XAnimationNode >& xNo
             return nFill;
     }
 
-    if ( ( nFill == AnimationFill::DEFAULT ) ||
-        ( nFill == AnimationFill::INHERIT ) )
+    if ( nFill == AnimationFill::DEFAULT )
     {
         if ( nFill != AnimationFill::AUTO )
             nFill = nFillDefault;
