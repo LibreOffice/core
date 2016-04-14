@@ -94,9 +94,7 @@ bool WinSalSystem::initMonitors()
         int w = GetSystemMetrics( SM_CXSCREEN );
         int h = GetSystemMetrics( SM_CYSCREEN );
         m_aMonitors.push_back( DisplayMonitor( OUString(),
-                                               OUString(),
-                                               Rectangle( Point(), Size( w, h ) ),
-                                               0 ) );
+                                               Rectangle( Point(), Size( w, h ) ) ) );
         m_aDeviceNameToMonitor[ OUString() ] = 0;
         m_nPrimary = 0;
     }
@@ -121,9 +119,7 @@ bool WinSalSystem::initMonitors()
                     aDeviceStringCount[ aDeviceString ]++;
                 m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
                 m_aMonitors.push_back( DisplayMonitor( aDeviceString,
-                                                       aDeviceName,
-                                                       Rectangle(),
-                                                       aDev.StateFlags ) );
+                                                       Rectangle() ) );
             }
         }
         HDC aDesktopRC = GetDC( NULL );
