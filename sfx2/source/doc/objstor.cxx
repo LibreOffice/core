@@ -1587,8 +1587,6 @@ bool SfxObjectShell::SaveTo_Impl
 
                 if ( !aScriptSignName.isEmpty() )
                 {
-                    pMedium->Close();
-
                     // target medium is still not committed, it should not be closed
                     // commit the package storage and close it, but leave the streams open
                     rMedium.StorageCommit_Impl();
@@ -1646,7 +1644,6 @@ bool SfxObjectShell::SaveTo_Impl
             {
             }
 
-            pMedium->Close();
             rMedium.CloseZipStorage_Impl();
         }
 
