@@ -58,7 +58,10 @@
       </node>
       <node oor:name=".uno:FontworkGalleryFloater" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fontwork Gallery...</value>
+          <value xml:lang="en-US">Fontwork Style</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Fontwork...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -400,7 +403,7 @@
       </node>
       <node oor:name=".uno:SymbolShapes.forbidden" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">"Prohibited" Symbol</value>
+          <value xml:lang="en-US">Prohibited</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2414,7 +2417,10 @@
       </node>
       <node oor:name=".uno:ChangeCaseRotateCase" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Rotate case (Title Case, UPPERCASE, lowercase)</value>
+          <value xml:lang="en-US">Cycle Case (Title Case, UPPERCASE, lowercase)</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Cycle Case</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToHalfWidth" oor:op="replace">
@@ -3248,6 +3254,14 @@
       <node oor:name=".uno:InsertFrameMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Frame</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertLinkMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Link</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4726,7 +4740,10 @@
       </node>
       <node oor:name=".uno:Gallery" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Clip Art ~Gallery</value>
+          <value xml:lang="en-US">Media ~Gallery</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Gallery</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
