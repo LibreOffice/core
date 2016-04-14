@@ -662,7 +662,7 @@ rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
     if ( CharClass::isAsciiNumeric( rCharSet ) )
     {
         sal_Int32 nVal = rCharSet.toInt32();
-        if ( !nVal || nVal == RTL_TEXTENCODING_DONTKNOW )
+        if ( nVal == RTL_TEXTENCODING_DONTKNOW )
             return osl_getThreadTextEncoding();
         return (rtl_TextEncoding) nVal;
     }
