@@ -170,8 +170,8 @@ private:
                 const css::uno::Reference< css::embed::XStorage >& xNewParentStorage,
                 const OUString& aNewName );
 
-    OUString GetDocumentServiceName() const { return m_aDocServiceName; }
-    OUString GetPresetFilterName() const { return m_aPresetFilterName; }
+    const OUString& GetDocumentServiceName() const { return m_aDocServiceName; }
+    const OUString& GetPresetFilterName() const { return m_aPresetFilterName; }
 
     css::uno::Reference< css::io::XInputStream >
         StoreDocumentToTempStream_Impl( sal_Int32 nStorageFormat,

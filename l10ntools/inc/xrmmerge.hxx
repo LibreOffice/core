@@ -55,7 +55,7 @@ protected:
         const OString &rCloseTag
     )=0;
 
-    OString GetGID() { return sGID; }
+    const OString& GetGID() { return sGID; }
 
 public:
     XRMResParser();

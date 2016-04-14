@@ -49,10 +49,10 @@ public:
     virtual             ~GenPoEntry();
                         // Default copy constructor and copy operator work well
 
-    OString     getReference() const    { return m_sReference; }
-    OString     getMsgCtxt() const      { return m_sMsgCtxt; }
-    OString     getMsgId() const        { return m_sMsgId; }
-    OString     getMsgStr() const       { return m_sMsgStr; }
+    const OString& getReference() const    { return m_sReference; }
+    const OString& getMsgCtxt() const      { return m_sMsgCtxt; }
+    const OString& getMsgId() const        { return m_sMsgId; }
+    const OString& getMsgStr() const       { return m_sMsgStr; }
     bool        isFuzzy() const         { return m_bFuzzy; }
     bool        isNull() const          { return m_bNull; }
 

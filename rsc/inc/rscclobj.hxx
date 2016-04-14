@@ -38,7 +38,7 @@ public:
                 ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey );
     ObjNode *   DelObjNode( RscTop * pClass, sal_uLong lFileKey );
     sal_uInt32  GetId() const override;
-    RscId       GetRscId() const { return aRscId; }
+    const RscId& GetRscId() const { return aRscId; }
     sal_uLong   GetFileKey() const { return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const //< search the index in the b-tree
                     {

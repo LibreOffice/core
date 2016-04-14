@@ -351,8 +351,8 @@ public:
              const css::uno::Sequence< css::uno::Type > & types );
 
     static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-    PyRef getWrappedObject() { return mWrappedObject; }
-    css::uno::Sequence< css::uno::Type > getWrappedTypes() { return mTypes; }
+    const PyRef& getWrappedObject() const { return mWrappedObject; }
+    const css::uno::Sequence< css::uno::Type >& getWrappedTypes() const { return mTypes; }
     virtual ~Adapter();
 
     // XInvocation

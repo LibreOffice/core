@@ -62,8 +62,8 @@ public:
     )
     : m_sName( rName ), m_sValue( rValue ) {}
 
-    OString GetName() const { return m_sName; }
-    OString GetValue() const { return m_sValue; }
+    const OString& GetName() const { return m_sName; }
+    const OString& GetValue() const { return m_sValue; }
 
     void setValue( const OString &rValue ){ m_sValue = rValue; }
 };
@@ -171,7 +171,7 @@ public:
     virtual XMLNodeType GetNodeType() const override { return XMLNodeType::XFILE; }
 
     /// returns file name
-    OString GetName() const { return m_sFileName; }
+    const OString& GetName() const { return m_sFileName; }
     void SetName( const OString &rFilename ) { m_sFileName = rFilename; }
     const std::vector<OString>& getOrder() const { return m_vOrder; }
 
@@ -229,7 +229,7 @@ public:
     virtual XMLNodeType GetNodeType() const override { return XMLNodeType::ELEMENT; }
 
     /// returns element name
-    OString GetName() const { return m_sElementName; }
+    const OString& GetName() const { return m_sElementName; }
 
     /// returns list of attributes of this element
     XMLAttributeList *GetAttributeList() { return m_pAttributes.get(); }
@@ -247,7 +247,7 @@ public:
     void SetPos             ( int nPos )                    { m_nPos = nPos; }
     void SetOldRef          ( OString const & sOldRef )     { m_sOldRef = sOldRef; }
 
-    OString GetOldref() const       { return m_sOldRef;      }
+    const OString& GetOldref() const       { return m_sOldRef;      }
 };
 
 /** Holds character data
@@ -270,7 +270,7 @@ public:
     virtual XMLNodeType GetNodeType() const override { return XMLNodeType::DATA; }
 
     /// returns the data
-    OString GetData() const { return m_sData; }
+    const OString& GetData() const { return m_sData; }
 
     /// adds new character data to the existing one
     void AddData( const OString &rData ) { m_sData += rData; }
@@ -296,7 +296,7 @@ public:
     virtual XMLNodeType GetNodeType() const override { return XMLNodeType::COMMENT; }
 
     /// returns the comment
-    OString GetComment() const { return m_sComment; }
+    const OString& GetComment() const { return m_sComment; }
 };
 
 /** Holds additional file content like those for which no handler exists
@@ -319,7 +319,7 @@ public:
     virtual XMLNodeType GetNodeType() const override { return XMLNodeType::DEFAULT; }
 
     /// returns the comment
-    OString GetDefault() const { return m_sDefault; }
+    const OString& GetDefault() const { return m_sDefault; }
 };
 
 /** struct for error information, used by class SimpleXMLParser

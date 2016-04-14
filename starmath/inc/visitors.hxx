@@ -145,7 +145,7 @@ public:
     virtual ~SmCaretPos2LineVisitor() {}
     void Visit( SmTextNode* pNode ) override;
     using SmDefaultingVisitor::Visit;
-    SmCaretLine GetResult( ){
+    const SmCaretLine& GetResult( ) {
         return maLine;
     }
 private:

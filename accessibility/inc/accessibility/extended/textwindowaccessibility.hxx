@@ -392,7 +392,7 @@ public:
     Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
              ::TextView & rView);
 
-    inline css::uno::Reference< css::accessibility::XAccessible >
+    const css::uno::Reference< css::accessibility::XAccessible >&
     getAccessible() { return m_xAccessible; }
 
     // Must be called only after init has been called.

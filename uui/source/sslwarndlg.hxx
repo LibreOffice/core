@@ -42,7 +42,7 @@ public:
         const css::uno::Reference< css::security::XCertificate >& rXCert,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; }
+    const css::uno::Reference< css::security::XCertificate >& getCert() { return m_rXCert; }
 
     virtual void response(short nResponseId) override;
 

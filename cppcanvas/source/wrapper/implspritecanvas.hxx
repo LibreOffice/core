@@ -64,7 +64,7 @@ namespace cppcanvas
                 TransformationArbiter();
 
                 void                        setTransformation( const ::basegfx::B2DHomMatrix& rViewTransform );
-                ::basegfx::B2DHomMatrix     getTransformation() const {  return maTransformation; }
+                const ::basegfx::B2DHomMatrix& getTransformation() const {  return maTransformation; }
 
             private:
                 ::basegfx::B2DHomMatrix     maTransformation;

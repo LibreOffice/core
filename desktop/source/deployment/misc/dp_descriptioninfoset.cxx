@@ -124,7 +124,7 @@ public:
 
     ~ExtensionDescription();
 
-    css::uno::Reference<css::xml::dom::XNode> getRootElement() const
+    const css::uno::Reference<css::xml::dom::XNode>& getRootElement() const
     {
         return m_xRoot;
     }

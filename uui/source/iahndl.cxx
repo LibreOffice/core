@@ -973,13 +973,13 @@ UUIInteractionHelper::getParentProperty()
     return nullptr;
 }
 
-uno::Reference< awt::XWindow>
+const uno::Reference< awt::XWindow>&
 UUIInteractionHelper::getParentXWindow() const
 {
     return m_xWindowParam;
 }
 
-OUString
+const OUString&
 UUIInteractionHelper::getContextProperty()
 {
     return m_aContextParam;
