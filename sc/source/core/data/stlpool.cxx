@@ -327,37 +327,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_STD );
 
-    // distance to header/footer for the sheet
-    pHFSetItem = new SvxSetItem( static_cast<const SvxSetItem&>(pSet->Get( ATTR_PAGE_HEADERSET ) ) );
-    pSet->Put( *pHFSetItem, ATTR_PAGE_HEADERSET );
-    pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
-    delete pHFSetItem;
+    // tdf#99296 No header/footer default content
 
-    // Header:
-    // [empty][\sheet\][empty]
-
-    pEdEngine->SetText(EMPTY_OUSTRING);
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
-    pTxtObj = pEdEngine->CreateTextObject();
-    pHeaderItem->SetLeftArea  ( *pEmptyTxtObj );
-    pHeaderItem->SetCenterArea( *pTxtObj );
-    pHeaderItem->SetRightArea ( *pEmptyTxtObj );
-    pSet->Put( *pHeaderItem );
-    delete pTxtObj;
-
-    // Footer:
-    // [empty][Page \STR_PAGE\][empty]
-
-    aStr = SCSTR( STR_PAGE ) + " ";
-    pEdEngine->SetText( aStr );
-    nStrLen = aStr.getLength();
-    pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
-    pTxtObj = pEdEngine->CreateTextObject();
-    pFooterItem->SetLeftArea  ( *pEmptyTxtObj );
-    pFooterItem->SetCenterArea( *pTxtObj );
-    pFooterItem->SetRightArea ( *pEmptyTxtObj );
-    pSet->Put( *pFooterItem );
-    delete pTxtObj;
 
     // 2. Report
 
