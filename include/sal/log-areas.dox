@@ -59,10 +59,13 @@ certain functionality.
 
 @li @c chart2
 @li @c chart2.3dopengl
+@li @c chart2.accessibility
 @li @c chart2.areachart
+@li @c chart2.main
 @li @c chart2.opengl
 @li @c chart2.pie.label.bestfit
 @li @c chart2.pie.label.bestfit.inside
+@li @c chart2.template
 @li @c chart2.tools
 
 @section connectivity
