@@ -80,56 +80,56 @@ struct SignalAction
     void (*Handler)(int);
 } Signals[] =
 {
-    { SIGHUP,    ACT_HIDE, nullptr },    /* hangup */
-    { SIGINT,    ACT_EXIT,   nullptr },    /* interrupt (rubout) */
-    { SIGQUIT,   ACT_EXIT,  nullptr },    /* quit (ASCII FS) */
-    { SIGILL,    ACT_SYSTEM,  nullptr },    /* illegal instruction (not reset when caught) */
+    { SIGHUP,    ACT_HIDE, SIG_DFL },    /* hangup */
+    { SIGINT,    ACT_EXIT,   SIG_DFL },    /* interrupt (rubout) */
+    { SIGQUIT,   ACT_EXIT,  SIG_DFL },    /* quit (ASCII FS) */
+    { SIGILL,    ACT_SYSTEM,  SIG_DFL },    /* illegal instruction (not reset when caught) */
 /* changed from ACT_ABOUT to ACT_SYSTEM to try and get collector to run*/
-    { SIGTRAP,   ACT_ABORT,  nullptr },    /* trace trap (not reset when caught) */
+    { SIGTRAP,   ACT_ABORT,  SIG_DFL },    /* trace trap (not reset when caught) */
 #if ( SIGIOT != SIGABRT )
-    { SIGIOT,    ACT_ABORT,  NULL },    /* IOT instruction */
+    { SIGIOT,    ACT_ABORT,  SIG_DFL },    /* IOT instruction */
 #endif
-    { SIGABRT,   ACT_ABORT,  nullptr },    /* used by abort, replace SIGIOT in the future */
+    { SIGABRT,   ACT_ABORT,  SIG_DFL },    /* used by abort, replace SIGIOT in the future */
 #ifdef SIGEMT
-    { SIGEMT,    ACT_SYSTEM,  nullptr },    /* EMT instruction */
+    { SIGEMT,    ACT_SYSTEM,  SIG_DFL },    /* EMT instruction */
 /* changed from ACT_ABORT to ACT_SYSTEM to remove handler*/
 /* SIGEMT may also be used by the profiler - so it is probably not a good
 plan to have the new handler use this signal*/
 #endif
-    { SIGFPE,    ACT_ABORT,  nullptr },    /* floating point exception */
-    { SIGKILL,   ACT_SYSTEM, nullptr },    /* kill (cannot be caught or ignored) */
-    { SIGBUS,    ACT_ABORT,  nullptr },    /* bus error */
-    { SIGSEGV,   ACT_ABORT,  nullptr },    /* segmentation violation */
+    { SIGFPE,    ACT_ABORT,  SIG_DFL },    /* floating point exception */
+    { SIGKILL,   ACT_SYSTEM, SIG_DFL },    /* kill (cannot be caught or ignored) */
+    { SIGBUS,    ACT_ABORT,  SIG_DFL },    /* bus error */
+    { SIGSEGV,   ACT_ABORT,  SIG_DFL },    /* segmentation violation */
 #ifdef SIGSYS
-    { SIGSYS,    ACT_ABORT,  nullptr },    /* bad argument to system call */
+    { SIGSYS,    ACT_ABORT,  SIG_DFL },    /* bad argument to system call */
 #endif
-    { SIGPIPE,   ACT_HIDE,   nullptr },    /* write on a pipe with no one to read it */
-    { SIGALRM,   ACT_EXIT,   nullptr },    /* alarm clock */
-    { SIGTERM,   ACT_EXIT,   nullptr },    /* software termination signal from kill */
-    { SIGUSR1,   ACT_SYSTEM, nullptr },    /* user defined signal 1 */
-    { SIGUSR2,   ACT_SYSTEM, nullptr },    /* user defined signal 2 */
-    { SIGCHLD,   ACT_SYSTEM, nullptr },    /* child status change */
+    { SIGPIPE,   ACT_HIDE,   SIG_DFL },    /* write on a pipe with no one to read it */
+    { SIGALRM,   ACT_EXIT,   SIG_DFL },    /* alarm clock */
+    { SIGTERM,   ACT_EXIT,   SIG_DFL },    /* software termination signal from kill */
+    { SIGUSR1,   ACT_SYSTEM, SIG_DFL },    /* user defined signal 1 */
+    { SIGUSR2,   ACT_SYSTEM, SIG_DFL },    /* user defined signal 2 */
+    { SIGCHLD,   ACT_SYSTEM, SIG_DFL },    /* child status change */
 #ifdef SIGPWR
-    { SIGPWR,    ACT_IGNORE, nullptr },    /* power-fail restart */
+    { SIGPWR,    ACT_IGNORE, SIG_DFL },    /* power-fail restart */
 #endif
-    { SIGWINCH,  ACT_IGNORE, nullptr },    /* window size change */
-    { SIGURG,    ACT_EXIT,   nullptr },    /* urgent socket condition */
+    { SIGWINCH,  ACT_IGNORE, SIG_DFL },    /* window size change */
+    { SIGURG,    ACT_EXIT,   SIG_DFL },    /* urgent socket condition */
 #ifdef SIGPOLL
-    { SIGPOLL,   ACT_EXIT,   nullptr },    /* pollable event occurred */
+    { SIGPOLL,   ACT_EXIT,   SIG_DFL },    /* pollable event occurred */
 #endif
-    { SIGSTOP,   ACT_SYSTEM, nullptr },    /* stop (cannot be caught or ignored) */
-    { SIGTSTP,   ACT_SYSTEM, nullptr },    /* user stop requested from tty */
-    { SIGCONT,   ACT_SYSTEM, nullptr },    /* stopped process has been continued */
-    { SIGTTIN,   ACT_SYSTEM, nullptr },    /* background tty read attempted */
-    { SIGTTOU,   ACT_SYSTEM, nullptr },    /* background tty write attempted */
-    { SIGVTALRM, ACT_EXIT,   nullptr },    /* virtual timer expired */
-    { SIGPROF,   ACT_SYSTEM,   nullptr },    /* profiling timer expired */
+    { SIGSTOP,   ACT_SYSTEM, SIG_DFL },    /* stop (cannot be caught or ignored) */
+    { SIGTSTP,   ACT_SYSTEM, SIG_DFL },    /* user stop requested from tty */
+    { SIGCONT,   ACT_SYSTEM, SIG_DFL },    /* stopped process has been continued */
+    { SIGTTIN,   ACT_SYSTEM, SIG_DFL },    /* background tty read attempted */
+    { SIGTTOU,   ACT_SYSTEM, SIG_DFL },    /* background tty write attempted */
+    { SIGVTALRM, ACT_EXIT,   SIG_DFL },    /* virtual timer expired */
+    { SIGPROF,   ACT_SYSTEM,   SIG_DFL },    /* profiling timer expired */
 /*Change from ACT_EXIT to ACT_SYSTEM for SIGPROF is so that profiling signals do
 not get taken by the new handler - the new handler does not pass on context
 information which causes 'collect' to crash. This is a way of avoiding
 what looks like a bug in the new handler*/
-    { SIGXCPU,   ACT_ABORT,  nullptr },    /* exceeded cpu limit */
-    { SIGXFSZ,   ACT_ABORT,  nullptr }     /* exceeded file size limit */
+    { SIGXCPU,   ACT_ABORT,  SIG_DFL },    /* exceeded cpu limit */
+    { SIGXFSZ,   ACT_ABORT,  SIG_DFL }     /* exceeded file size limit */
 };
 const int NoSignals = sizeof(Signals) / sizeof(struct SignalAction);
 
@@ -319,8 +319,7 @@ void callSystemHandler(int signal)
 
     if (i < NoSignals)
     {
-        if ((Signals[i].Handler == nullptr)    ||
-            (Signals[i].Handler == SIG_DFL) ||
+        if ((Signals[i].Handler == SIG_DFL) ||
             (Signals[i].Handler == SIG_IGN) ||
              (Signals[i].Handler == SIG_ERR))
         {
