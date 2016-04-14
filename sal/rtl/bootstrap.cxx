@@ -253,7 +253,8 @@ static OUString & getIniFileName_Impl()
         {
             osl_getExecutableFile(&(fileName.pData));
 
-            // get rid of a potential executable extension
+#ifdef WNT
+            // prune executable extensions
             OUString progExt = ".bin";
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
@@ -263,6 +264,7 @@ static OUString & getIniFileName_Impl()
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
+#endif
 
             // append config file suffix
             fileName += SAL_CONFIGFILE("");
