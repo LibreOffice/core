@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac969e8_869fcab3",
+        "filename": "external/firebird/firebird-cygwin-msvc.patch.1",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-04-14T18:45:49Z",
+      "side": 1,
+      "message": "After fixing snprintf re-definition, the next bug on MSVC 2015 was here: [1].\n\n* [1] http://paste.openstack.org/show/494116",
+      "revId": "68a641cb4003655f085c0e78f5056c14fc3cce99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
