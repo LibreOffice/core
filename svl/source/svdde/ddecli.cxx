@@ -26,7 +26,7 @@
 
 #include <osl/thread.h>
 #include <tools/debug.hxx>
-#include <tools/solarmutex.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <osl/mutex.hxx>
 
 namespace {
@@ -333,10 +333,14 @@ const OUString DdeTransaction::GetName() const
 
 void DdeTransaction::Data( const DdeData* p )
 {
-    if ( ::tools::SolarMutex::Acquire() )
+    comphelper::SolarMutex *pSolarMutex = comphelper::SolarMutex::get();
+    if ( pSolarMutex )
     {
+        pSolarMutex->acquire();
         aData.Call( p );
-        ::tools::SolarMutex::Release();
+        pSolarMutex = comphelper::SolarMutex::get();
+        if ( pSolarMutex )
+            pSolarMutex->release();
     }
 }
 
