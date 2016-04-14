@@ -185,7 +185,7 @@ bool PassStuffByRef::isFat(QualType type) {
         && compiler.getASTContext().getTypeSizeInChars(t2).getQuantity() > 64;
 }
 
-loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref", false);
+loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref");
 
 }
 
