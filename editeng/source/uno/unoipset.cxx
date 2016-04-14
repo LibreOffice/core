@@ -205,7 +205,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     uno::Any aVal;
     SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
 
-    if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
+    if( (pMap->nWID < OWN_ATTR_VALUE_START) || (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
         // Get Default from ItemPool
         if(SfxItemPool::IsWhich(pMap->nWID))
