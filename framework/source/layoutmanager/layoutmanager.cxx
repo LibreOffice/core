@@ -2328,7 +2328,19 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
     awt::Rectangle aCurrBorderSpace( m_aDockingArea );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< awt::XTopWindow2 > xContainerTopWindow( m_xContainerTopWindow );
-    Reference< awt::XWindow > xComponentWindow( m_xFrame->getComponentWindow() );
+    Reference< awt::XWindow > xComponentWindow;
+    try {
+        xComponentWindow = m_xFrame->getComponentWindow();
+    } catch (css::lang::DisposedException &) {
+        // There can be a race between one thread calling Frame::dispose
+        // (framework/source/services/frame.cxx) -> Frame::disableLayoutManager
+        // -> LayoutManager::attachFrame(null) setting m_xFrame to null, and
+        // the main thread firing the timer-triggered
+        // LayoutManager::AsyncLayoutHdl -> LayoutManager::implts_doLayout and
+        // calling into the in-dispose m_xFrame here, so silently ignore a
+        // DisposedException here:
+        return false;
+    }
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor( m_xDockingAreaAcceptor );
     aReadLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
