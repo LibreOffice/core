@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_312b9932",
+        "filename": "svl/source/svdde/ddecli.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-14T10:21:13Z",
+      "side": 1,
+      "message": "uhm what? why \"\u0026\" now?\n\nthat will evaluate both sides strictly, so will crash if the pointer is null.\n\nbetter move the acquire into the if body?",
+      "revId": "342d95c86cd1461a5f78359aa8d5e18993220183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
