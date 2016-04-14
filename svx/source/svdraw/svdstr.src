@@ -849,15 +849,15 @@ String STR_EditImportMtf
 };
 String STR_EditImportSGV
 {
-    Text = "StarDraw Dos Zeichnung importieren" ;
+    Text = "Import StarDraw Dos Drawing" ;
 };
 String STR_EditImportHPGL
 {
-    Text = "HPGL importieren" ;
+    Text = "Import HPGL" ;
 };
 String STR_EditImportDXF
 {
-    Text = "DXF importieren" ;
+    Text = "Import DXF" ;
 };
 String STR_ExchangePaste
 {
