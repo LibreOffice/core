@@ -59,6 +59,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testMaskingPath07b();
     void test47446();
     void test47446b();
+    void testMaskText();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testMaskingPath07b);
     CPPUNIT_TEST(test47446);
     CPPUNIT_TEST(test47446b);
+    CPPUNIT_TEST(testMaskText);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -516,6 +518,21 @@ void Test::test47446b()
 
     assertXPath(pDocument, "/primitive2D/transform/transform/transform/polypolygoncolor", "color", "#ffff00");
 
+}
+
+void Test::testMaskText()
+{
+    //Check that mask is applied on text
+    Primitive2DSequence aSequenceMaskText = parseSvg("/svgio/qa/cppunit/data/maskText.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceMaskText.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceMaskText));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "text", "Black White");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
