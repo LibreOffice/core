@@ -1247,8 +1247,7 @@ void SmParser::DoSubSup(sal_uLong nActiveGroup)
                 SAL_WARN( "starmath", "unknown case");
         }
         nIndex++;
-        OSL_ENSURE(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,
-                   "SmParser::Power() : sub-/supscript index falsch");
+        assert(1 <= nIndex  &&  nIndex <= SUBSUP_NUM_ENTRIES);
 
         // set sub-/supscript if not already done
         if (aSubNodes[nIndex] != nullptr)
