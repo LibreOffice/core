@@ -84,6 +84,9 @@ public:
     static void addFallbackMenuItem( NSMenuItem* NewItem );
     static void removeFallbackMenuItem( NSMenuItem* pOldItem );
 
+    bool IsSeparatorAt( unsigned nPos );
+    static bool IsItemSeparator( AquaSalMenuItem * pAquaSalMenuItem );
+
     const std::vector< MenuBarButtonEntry >& getButtons() const { return maButtons; }
 
     bool                    mbMenuBar;          // true - Menubar, false - Menu

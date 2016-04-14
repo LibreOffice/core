@@ -599,7 +599,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
 
     Invalidate();
 
-    pMenu->ImplKillLayoutData();
+    pMenu->ImplBinLayoutData();
 
     if ( bScrollUp && bUp )
     {

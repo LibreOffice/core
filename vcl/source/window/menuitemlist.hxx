@@ -97,14 +97,13 @@ struct MenuItemData
 class MenuItemList
 {
 private:
-    typedef ::std::vector< MenuItemData* > MenuItemDataList_impl;
-    MenuItemDataList_impl maItemList;
+    ::std::vector< MenuItemData* > maItemList;
 
 public:
                     MenuItemList() {}
                     ~MenuItemList();
 
-    MenuItemData*   Insert(
+    MenuItemData*   InsertMenuItem(
                         sal_uInt16 nId,
                         MenuItemType eType,
                         MenuItemBits nBits,
@@ -114,8 +113,9 @@ public:
                         size_t nPos,
                         const OString &rIdent
                     );
-    void            InsertSeparator(const OString &rIdent, size_t nPos);
-    void            Remove( size_t nPos );
+    MenuItemData*   InsertSeparator(const OString &rIdent, size_t nPos);
+    void            RemoveMenuItem( size_t nPos );
+    bool            PeelSeparators( bool bLastOneToo = false );
 
     MenuItemData*   GetData( sal_uInt16 nSVId, size_t& rPos ) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const

@@ -2477,6 +2477,8 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
 
 void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
 {
+    SAL_WARN( "vcl.window", "handleMenu" );
+
     VclPtr<PopupMenu> pCurrentMenu = VclPtr<PopupMenu>::Create();
 
     int nLevel = 1;
@@ -2522,6 +2524,8 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
 
 void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader)
 {
+    SAL_WARN( "vcl.window", "handleMenuChild" );
+
     xmlreader::Span name;
     int nsId;
 
@@ -2719,14 +2723,17 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
     if (rClass == "GtkMenuItem")
     {
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        SAL_WARN( "vcl.window", "going to InsertItem with position " << nNewId << " & label \"" << sLabel << "\" & id \"" << rID << "\" @ insertMenuObject" );
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
     }
     else if (rClass == "GtkSeparatorMenuItem")
     {
+        SAL_WARN( "vcl.window", "going to InsertSeparator with id \"" << rID << "\" @ insertMenuObject" );
         pParent->InsertSeparator(rID);
     }
+    SAL_WARN( "vcl.window", "done insert @ insertMenuObject" );
 
-    SAL_WARN_IF(nOldCount == pParent->GetItemCount(), "vcl.layout", "probably need to implement " << rClass.getStr());
+    SAL_WARN_IF(nOldCount == pParent->GetItemCount(), "vcl", "probably need to implement " << rClass.getStr());
 
     if (nOldCount != pParent->GetItemCount())
     {
@@ -2746,7 +2753,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
             else if (rKey == "has-default" && toBool(rValue))
                 pParent->SetSelectedEntry(nNewId);
             else
-                SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
+                SAL_INFO( "vcl", "unhandled property \"" << rKey.getStr() << "\"" );
         }
 
         for (stringmap::iterator aI = rAccels.begin(), aEnd = rAccels.end(); aI != aEnd; ++aI)
@@ -2757,7 +2764,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
             if (rSignal == "activate")
                 pParent->SetAccelKey(nNewId, makeKeyCode(rValue));
             else
-                SAL_INFO("vcl.layout", "unhandled accelerator for: " << rSignal.getStr());
+                SAL_INFO( "vcl", "unhandled accelerator for \"" << rSignal.getStr() << "\"" );
         }
     }
 

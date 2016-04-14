@@ -211,7 +211,12 @@ protected:
     virtual void MenuBarKeyInput(const KeyEvent& rEvent);
 
 public:
-    SAL_DLLPRIVATE void ImplKillLayoutData() const;
+    OUString& GetText()
+    {
+        return aTitleText;
+    }
+
+    SAL_DLLPRIVATE void ImplBinLayoutData() const;
 
     SAL_DLLPRIVATE vcl::Window* ImplGetWindow() const { return pWindow; }
 #if defined(MACOSX)

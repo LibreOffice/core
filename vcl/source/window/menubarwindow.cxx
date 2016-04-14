@@ -984,7 +984,7 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
     }
     else if(pMenu)
     {
-        pMenu->ImplKillLayoutData();
+        pMenu->ImplBinLayoutData();
     }
 }
 
@@ -1010,7 +1010,7 @@ void MenuBarWindow::LayoutChanged()
     Invalidate();
     Resize();
 
-    pMenu->ImplKillLayoutData();
+    pMenu->ImplBinLayoutData();
 }
 
 void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)

@@ -302,6 +302,8 @@ NewMenuController::~NewMenuController()
 // private function
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
+    SAL_WARN( "framework", "fillPopupMenu()" );
+
     VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pVCLPopupMenu = nullptr;
 
@@ -348,11 +350,17 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
                 continue;
 
             if ( aURL == "private:separator" )
+            {
+                SAL_WARN( "framework", "separator" );
                 pVCLPopupMenu->InsertSeparator();
+            }
             else
             {
+                SAL_WARN( "framework", "item ( aTitle \"" << aTitle << "\", aURL \"" << aURL << "\", nItemId " << OUString::number( nItemId ) << " )" );
+
                 pVCLPopupMenu->InsertItem( nItemId, aTitle );
                 pVCLPopupMenu->SetItemCommand( nItemId, aURL );
+                //pVCLPopupMenu->DoSomethingCool();
 
                 sal_uIntPtr nAttributePtr = MenuAttributes::CreateAttribute( aTargetFrame, aImageId );
                 pVCLPopupMenu->SetUserValue( nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute );
