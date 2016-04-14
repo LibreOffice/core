@@ -995,8 +995,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         const ScFormulaOptions& rOpt = static_cast<const ScTpFormulaItem*>(pItem)->GetFormulaOptions();
 
         if (!pFormulaCfg || (*pFormulaCfg != rOpt))
+        {
             // Formula options have changed. Repaint the column headers.
             bRepaint = true;
+            bCalcAll = true;
+        }
 
         if (pFormulaCfg && pFormulaCfg->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName())
         {
@@ -1271,7 +1274,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     if ( pDoc && bCalcAll )
     {
         WaitObject aWait( ScDocShell::GetActiveDialogParent() );
-        pDoc->CalcAll();
+        pDocSh->DoHardRecalc(true);
         if ( pViewSh )
             pViewSh->UpdateCharts( true );
         else

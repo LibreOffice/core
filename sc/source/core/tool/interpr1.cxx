@@ -7232,7 +7232,8 @@ void ScInterpreter::ScAddressFunc()
     if( nParamCount >= 5 )
         sTabStr = GetString().getString();
 
-    FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;      // default
+    FormulaGrammar::AddressConvention eConv = pDok->GetAddressConvention();
+
     if( nParamCount >= 4 && 0.0 == ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0)))
         eConv = FormulaGrammar::CONV_XL_R1C1;
 
@@ -7303,7 +7304,7 @@ void ScInterpreter::ScAddressFunc()
             ScCompiler::CheckTabQuotes( sTabStr, eConv);
         if (!aDoc.isEmpty())
             sTabStr = aDoc + sTabStr;
-        sTabStr += eConv == FormulaGrammar::CONV_XL_R1C1 ? OUString("!") : OUString(".");
+        sTabStr += (eConv == FormulaGrammar::CONV_XL_R1C1) || (eConv == FormulaGrammar::CONV_XL_A1) ? OUString("!") : OUString(".");
         sTabStr += aRefStr;
         PushString( sTabStr );
     }
