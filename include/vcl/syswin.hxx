@@ -214,7 +214,7 @@ public:
     bool            IsRollUp() const { return mbRollUp; }
 
     void            SetRollUpOutputSizePixel( const Size& rSize ) { maRollUpOutSize = rSize; }
-    Size            GetRollUpOutputSizePixel() const { return maRollUpOutSize; }
+    const Size&     GetRollUpOutputSizePixel() const { return maRollUpOutSize; }
 
     void            SetMinOutputSizePixel( const Size& rSize );
     const Size&     GetMinOutputSizePixel() const { return maMinOutSize; }

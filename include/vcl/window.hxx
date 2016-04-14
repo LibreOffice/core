@@ -931,13 +931,13 @@ public:
 
     void SetControlForeground();
     void SetControlForeground(const Color& rColor);
-    Color GetControlForeground() const;
+    const Color& GetControlForeground() const;
     bool IsControlForeground() const;
     void ApplyControlForeground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
 
     void SetControlBackground();
     void SetControlBackground( const Color& rColor );
-    Color GetControlBackground() const;
+    const Color& GetControlBackground() const;
     bool IsControlBackground() const;
     void ApplyControlBackground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
 
@@ -1516,7 +1516,7 @@ public:
      */
     void add_mnemonic_label(FixedText *pLabel);
     void remove_mnemonic_label(FixedText *pLabel);
-    std::vector<VclPtr<FixedText> > list_mnemonic_labels() const;
+    const std::vector<VclPtr<FixedText> >& list_mnemonic_labels() const;
 
     /*
      * Move this widget to be the nNewPosition'd child of its parent

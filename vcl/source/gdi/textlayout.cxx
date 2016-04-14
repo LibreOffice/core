@@ -95,7 +95,7 @@ namespace vcl
         {
             m_aCompleteTextRect.SetEmpty();
         }
-        Rectangle onEndDrawText()
+        const Rectangle& onEndDrawText()
         {
             return m_aCompleteTextRect;
         }

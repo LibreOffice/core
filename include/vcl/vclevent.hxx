@@ -238,7 +238,7 @@ class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
 public:
     VclAccessibleEvent( sal_uLong n, const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible );
     virtual ~VclAccessibleEvent();
-    css::uno::Reference< css::accessibility::XAccessible > GetAccessible() const { return mxAccessible;}
+    const css::uno::Reference< css::accessibility::XAccessible >& GetAccessible() const { return mxAccessible;}
 
 private:
     css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
