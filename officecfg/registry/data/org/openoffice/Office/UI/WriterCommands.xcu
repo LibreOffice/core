@@ -267,6 +267,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ViewTrackChanges" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Track Changes</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:ShowTrackedChanges</value>
+        </prop>
+      </node>
       <node oor:name=".uno:GotoPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Go t~o Page</value>

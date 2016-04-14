@@ -283,7 +283,7 @@ void Test::testSetSetMemberName()
                     ".uno:FontworkShapeType",
             "Label") >>=
         s);
-    CPPUNIT_ASSERT( s == "Fontwork Gallery..." );
+    CPPUNIT_ASSERT( s == "Fontwork Style" );
 }
 
 void Test::testInsertSetMember() {
