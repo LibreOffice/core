@@ -21,7 +21,7 @@
 #include <tools/rcid.h>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
-#include <tools/solarmutex.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <basic/sbx.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
@@ -107,7 +107,9 @@ DocBasicItem::~DocBasicItem()
     // tdf#90969 HACK: don't use SolarMutexGuard - there is a horrible global
     // map GaDocBasicItems holding instances, and these get deleted from exit
     // handlers, when the SolarMutex is already dead
-    tools::SolarMutex::Acquire();
+    comphelper::SolarMutex *pSolarMutex = comphelper::SolarMutex::get();
+    if ( pSolarMutex )
+        pSolarMutex->acquire();
 
     try
     {
@@ -119,7 +121,9 @@ DocBasicItem::~DocBasicItem()
         assert(false);
     }
 
-    tools::SolarMutex::Release();
+    pSolarMutex = comphelper::SolarMutex::get();
+    if ( pSolarMutex )
+        pSolarMutex->release();
 }
 
 void DocBasicItem::clearDependingVarsOnDelete( StarBASIC& rDeletedBasic )
