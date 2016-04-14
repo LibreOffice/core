@@ -983,6 +983,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     // i, ii, ...
                     pSectionContext->SetPageNumberType(style::NumberingType::ROMAN_LOWER);
                 break;
+                case NS_ooxml::LN_Value_ST_NumberFormat_upperRoman:
+                    // I, II, ...
+                    pSectionContext->SetPageNumberType(style::NumberingType::ROMAN_UPPER);
+                break;
                 }
             }
         break;

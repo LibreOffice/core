@@ -941,6 +941,12 @@ DECLARE_RTFEXPORT_TEST(testPgnlcrm, "pgnlcrm.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::ROMAN_LOWER, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
 }
 
+DECLARE_RTFEXPORT_TEST(testPgnucrm, "pgnucrm.rtf")
+{
+    // The second page's numbering type: this was style::NumberingType::ARABIC.
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ROMAN_UPPER, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
