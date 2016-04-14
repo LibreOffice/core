@@ -171,8 +171,6 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 }
 
 
-#define MSH_MOUSEWHEEL "MSWHEEL_ROLLMSG"
-
 #define MOUSEZ_CLASSNAME  "MouseZ"            // wheel window class
 #define MOUSEZ_TITLE      "Magellan MSWHEEL"  // wheel window title
 
