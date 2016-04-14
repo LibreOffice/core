@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_719351a4",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-14T07:53:57Z",
+      "side": 1,
+      "message": "I think you meant to say\n\"For now, only consider polygons with more than two points\"\n??",
+      "revId": "7c9efa3ffd7ce65bca813b27879cbe01dc9857cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
