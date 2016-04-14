@@ -430,7 +430,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
         global_list = []
-        for lib in self.gbuildparser.libs:
+        for lib in set(self.gbuildparser.libs):
             entries = []
             for file in lib.cxxobjects:
                 filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
