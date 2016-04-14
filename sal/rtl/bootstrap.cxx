@@ -253,7 +253,8 @@ static OUString & getIniFileName_Impl()
         {
             osl_getExecutableFile(&(fileName.pData));
 
-            // get rid of a potential executable extension
+#  ifndef MACOSX
+            // prune executable extensions
             OUString progExt = ".bin";
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
@@ -263,17 +264,17 @@ static OUString & getIniFileName_Impl()
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
+#  endif
 
             // append config file suffix
             fileName += SAL_CONFIGFILE("");
 
-#ifdef MACOSX
-            // We keep only executables in the MacOS folder, and all
-            // rc files in LIBO_ETC_FOLDER (typically "Resources").
+#  ifdef MACOSX
+            // executables are in the "MacOS" folder, and rc files are in LIBO_ETC_FOLDER, typically "Resources"
             sal_Int32 off = fileName.lastIndexOf( "/MacOS/" );
             if ( off != -1 )
                 fileName = fileName.replaceAt( off + 1, strlen("MacOS"), LIBO_ETC_FOLDER );
-#endif
+#  endif
         }
 #endif
 
@@ -334,21 +335,22 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
       _base_ini( nullptr ),
       _iniName (rIniName)
 {
-    OUString base_ini( getIniFileName_Impl() );
+    SAL_WARN( "sal.rtl", "ctor Bootstrap_Impl( rIniName \"" << rIniName << "\" )" );
+
+    OUString defaultName( getIniFileName_Impl() );
     // normalize path
     FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
-    if (DirectoryItem::get( base_ini, dirItem ) == DirectoryItem::E_None &&
-        dirItem.getFileStatus( status ) == DirectoryItem::E_None)
+    if (DirectoryItem::E_None == DirectoryItem::get( defaultName, dirItem ) &&
+        DirectoryItem::E_None == dirItem.getFileStatus( status ))
     {
-        base_ini = status.getFileURL();
-        if (! rIniName.equals( base_ini ))
+        defaultName = status.getFileURL();
+        if (! rIniName.equals( defaultName ))
         {
             _base_ini = static_cast< Bootstrap_Impl * >(
-                rtl_bootstrap_args_open( base_ini.pData ) );
+                rtl_bootstrap_args_open( defaultName.pData ) );
         }
     }
-    SAL_INFO("sal.bootstrap", "Bootstrap_Impl(): sFile=" << _iniName);
     oslFileHandle handle;
     if (!_iniName.isEmpty() &&
         osl_openFile(_iniName.pData, &handle, osl_File_OpenFlag_Read) == osl_File_E_None)
@@ -367,7 +369,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                 nameValue.sValue = OStringToOUString(
                     line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
 
-                SAL_INFO("sal.bootstrap", "pushing: name=" << nameValue.sName << " value=" << nameValue.sValue);
+                SAL_WARN( "sal.bootstrap", "pushing name \"" << nameValue.sName << "\" & value \"" << nameValue.sValue << "\"" );
 
                 _nameValueList.push_back(nameValue);
             }
@@ -376,7 +378,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     }
     else
     {
-        SAL_WARN( "sal.bootstrap", "couldn't open file: " <<  _iniName );
+        SAL_WARN( "sal.bootstrap", "couldn't open file \"" <<  _iniName << "\"" );
     }
 }
 
