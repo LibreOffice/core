@@ -59,7 +59,7 @@ public:
     }
     Pixmap          GetDrawable() const { return hDrawable_; }
     sal_uInt16      GetDepth() const { return nDepth_; }
-    SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }
+    const SalX11Screen&     GetXScreenNumber() const { return m_nXScreen; }
 
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;

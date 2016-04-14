@@ -590,7 +590,7 @@ void ServerFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& xF
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-std::shared_ptr<FontConfigFontOptions> ServerFont::GetFontOptions() const
+const std::shared_ptr<FontConfigFontOptions>& ServerFont::GetFontOptions() const
 {
     return mxFontOptions;
 }

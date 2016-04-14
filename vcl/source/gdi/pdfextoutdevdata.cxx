@@ -533,7 +533,7 @@ PDFExtOutDevData::~PDFExtOutDevData()
     delete mpGlobalSyncData;
 }
 
-Graphic PDFExtOutDevData::GetCurrentGraphic() const
+const Graphic& PDFExtOutDevData::GetCurrentGraphic() const
 {
     return mpPageSyncData->mCurrentGraphic;
 }

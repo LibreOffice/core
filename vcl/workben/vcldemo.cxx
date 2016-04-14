@@ -158,7 +158,7 @@ public:
 
     Size maSize;
     void SetSizePixel(const Size &rSize) { maSize = rSize; }
-    Size GetSizePixel() const            { return maSize;  }
+    const Size& GetSizePixel() const            { return maSize;  }
 
 
 // more of a 'Window' concept - push upwards ?
