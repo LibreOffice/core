@@ -140,6 +140,12 @@ void ScFiltersTest::testCVEs()
     testDir("MS Excel 97",
         m_directories.getURLFromSrc("/sc/qa/unit/data/xls/"));
 
+    testDir("Calc Office Open XML",
+        m_directories.getURLFromSrc("/sc/qa/unit/data/xlsx/"), OUString(), XLSX_FORMAT_TYPE);
+
+    testDir("Calc Office Open XML",
+        m_directories.getURLFromSrc("/sc/qa/unit/data/xlsm/"), OUString(), XLSX_FORMAT_TYPE);
+
     testDir("dBase",
         m_directories.getURLFromSrc("/sc/qa/unit/data/dbf/"));
 
