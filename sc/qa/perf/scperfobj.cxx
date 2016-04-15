@@ -596,7 +596,7 @@ void ScPerfObj::testFixedSum()
     for( sal_Int32 i = 0; i < 1000; ++i )
     {
         uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(1, i);
-        ASSERT_DOUBLES_EQUAL(50206.0, xCell->getValue());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(50206.0, xCell->getValue(), 1e-12);
     }
 }
 
