@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac969e8_86098ae0",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-04-15T06:56:10Z",
+      "side": 1,
+      "message": "Does WNT really cover all windows versions ?",
+      "revId": "dfde2384947224f5982815d0afe16151a20d69e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
