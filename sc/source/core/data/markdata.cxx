@@ -512,20 +512,29 @@ bool ScMarkData::HasAnyMultiMarks() const
 
 void ScMarkData::InsertTab( SCTAB nTab )
 {
-    std::set<SCTAB> tabMarked(maTabMarked.begin(), maTabMarked.upper_bound(nTab));
-    std::set<SCTAB>::iterator it = maTabMarked.upper_bound(nTab);
-    for (; it != maTabMarked.end(); ++it)
-        tabMarked.insert(*it + 1);
+    std::set<SCTAB> tabMarked;
+    for (auto itr = maTabMarked.begin(), itrEnd = maTabMarked.end();
+            itr != itrEnd; ++itr)
+    {
+        if (*itr < nTab)
+            tabMarked.insert(*itr);
+        else if (*itr >= nTab)
+            tabMarked.insert(*itr + 1);
+    }
     maTabMarked.swap(tabMarked);
 }
 
 void ScMarkData::DeleteTab( SCTAB nTab )
 {
-    std::set<SCTAB> tabMarked(maTabMarked.begin(), maTabMarked.find(nTab));
-    tabMarked.erase( nTab );
-    std::set<SCTAB>::iterator it = maTabMarked.find(nTab);
-    for (; it != maTabMarked.end(); ++it)
-        tabMarked.insert(*it + 1);
+    std::set<SCTAB> tabMarked;
+    for (auto itr = maTabMarked.begin(), itrEnd = maTabMarked.end();
+            itr != itrEnd; ++itr)
+    {
+        if (*itr < nTab)
+            tabMarked.insert(*itr);
+        else if (*itr > nTab)
+            tabMarked.insert(*itr - 1);
+    }
     maTabMarked.swap(tabMarked);
 }
 
