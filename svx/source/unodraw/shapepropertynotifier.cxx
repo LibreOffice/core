@@ -33,9 +33,9 @@ namespace
 
     struct ShapePropertyHash
     {
-        size_t operator()( svx::ShapeProperty __x ) const
+        size_t operator()( svx::ShapeProperty x ) const
         {
-            return size_t( __x );
+            return size_t( x );
         }
     };
 }
