@@ -11,10 +11,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_mark_test))
 
 $(eval $(call gb_CppunitTest_use_externals,sc_mark_test, \
 	boost_headers \
-    icu_headers \
-    icui18n \
-    icuuc \
-	libxml2 \
 	mdds_headers \
 ))
 
@@ -23,38 +19,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_mark_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_mark_test, \
-    basegfx \
-    comphelper \
-    cppu \
-    cppuhelper \
-    drawinglayer \
-    editeng \
-    for \
-    forui \
-    i18nlangtag \
-    msfilter \
-    oox \
     sal \
-    salhelper \
-    sax \
-    sb \
-    sc \
+	sc \
 	scqahelper \
-    sfx \
-    sot \
-    svl \
-    svt \
-    svx \
-    svxcore \
 	test \
-    tk \
-    tl \
-    ucbhelper \
 	unotest \
-    utl \
-    vbahelper \
-    vcl \
-    xo \
 	$(gb_UWINAPI) \
 ))
 
@@ -65,55 +34,13 @@ $(eval $(call gb_CppunitTest_set_include,sc_mark_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sc_mark_test,\
-    offapi \
-    oovbaapi \
-    udkapi \
+	offapi \
+	oovbaapi \
+	udkapi \
 ))
+
 
 $(eval $(call gb_CppunitTest_use_ure,sc_mark_test))
-$(eval $(call gb_CppunitTest_use_vcl,sc_mark_test))
-
-$(eval $(call gb_CppunitTest_use_components,sc_mark_test,\
-    basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    embeddedobj/util/embobj \
-    eventattacher/source/evtatt \
-    filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scaddins/source/analysis/analysis \
-    scaddins/source/datefunc/date \
-    scripting/source/basprov/basprov \
-    scripting/util/scriptframe \
-    sc/util/sc \
-    sc/util/scd \
-    sc/util/scfilt \
-    $(call gb_Helper_optional,SCRIPTING, \
-	    sc/util/vbaobj) \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/source/fsstor/fsstorage \
-    svl/util/svl \
-    svx/util/svx \
-    svx/util/svxcore \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    xmloff/util/xo \
-))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_mark_test))
 
