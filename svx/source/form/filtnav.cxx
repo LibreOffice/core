@@ -261,9 +261,9 @@ public:
     virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException, std::exception ) override;
 
 // XFilterControllerListener
-    virtual void SAL_CALL predicateExpressionChanged( const FilterEvent& _Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disjunctiveTermRemoved( const FilterEvent& _Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disjunctiveTermAdded( const FilterEvent& _Event ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL predicateExpressionChanged( const FilterEvent& Event ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disjunctiveTermRemoved( const FilterEvent& Event ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disjunctiveTermAdded( const FilterEvent& Event ) throw (RuntimeException, std::exception) override;
 
 // helpers
     void dispose() throw( RuntimeException );
@@ -373,7 +373,7 @@ namespace
 
 // XFilterControllerListener
 
-void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) throw( RuntimeException, std::exception )
+void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& Event ) throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -381,8 +381,8 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
         return;
 
     // the controller which sent the event
-    Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
-    Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XFormController > xController( Event.Source, UNO_QUERY_THROW );
+    Reference< XFilterController > xFilterController( Event.Source, UNO_QUERY_THROW );
     Reference< XForm > xForm( xController->getModel(), UNO_QUERY_THROW );
 
     FmFormItem* pFormItem = m_pModel->Find( m_pModel->m_aChildren, xForm );
@@ -394,12 +394,12 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
 
     FmFilterData* pData = pFormItem->GetChildren()[nActiveTerm];
     FmFilterItems& rFilter = dynamic_cast<FmFilterItems&>(*pData);
-    FmFilterItem* pFilterItem = rFilter.Find( _Event.FilterComponent );
+    FmFilterItem* pFilterItem = rFilter.Find( Event.FilterComponent );
     if ( pFilterItem )
     {
-        if ( !_Event.PredicateExpression.isEmpty())
+        if ( !Event.PredicateExpression.isEmpty())
         {
-            pFilterItem->SetText( _Event.PredicateExpression );
+            pFilterItem->SetText( Event.PredicateExpression );
             // UI benachrichtigen
             FmFilterTextChangedHint aChangeHint(pFilterItem);
             m_pModel->Broadcast( aChangeHint );
@@ -413,9 +413,9 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
     else
     {
         // searching the component by field name
-        OUString aFieldName( lcl_getLabelName_nothrow( xFilterController->getFilterComponent( _Event.FilterComponent ) ) );
+        OUString aFieldName( lcl_getLabelName_nothrow( xFilterController->getFilterComponent( Event.FilterComponent ) ) );
 
-        pFilterItem = new FmFilterItem(&rFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent);
+        pFilterItem = new FmFilterItem(&rFilter, aFieldName, Event.PredicateExpression, Event.FilterComponent);
         m_pModel->Insert(rFilter.GetChildren().end(), pFilterItem);
     }
 
@@ -424,12 +424,12 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
 }
 
 
-void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event ) throw (RuntimeException, std::exception)
+void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
-    Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XFormController > xController( Event.Source, UNO_QUERY_THROW );
+    Reference< XFilterController > xFilterController( Event.Source, UNO_QUERY_THROW );
     Reference< XForm > xForm( xController->getModel(), UNO_QUERY_THROW );
 
     FmFormItem* pFormItem = m_pModel->Find( m_pModel->m_aChildren, xForm );
@@ -438,13 +438,13 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
         return;
 
     ::std::vector< FmFilterData* >& rTermItems = pFormItem->GetChildren();
-    const bool bValidIndex = ( _Event.DisjunctiveTerm >= 0 ) && ( (size_t)_Event.DisjunctiveTerm < rTermItems.size() );
+    const bool bValidIndex = ( Event.DisjunctiveTerm >= 0 ) && ( (size_t)Event.DisjunctiveTerm < rTermItems.size() );
     OSL_ENSURE( bValidIndex, "FmFilterAdapter::disjunctiveTermRemoved: invalid term index!" );
     if ( !bValidIndex )
         return;
 
     // if the first term was removed, then the to-be first term needs its text updated
-    if ( _Event.DisjunctiveTerm == 0 )
+    if ( Event.DisjunctiveTerm == 0 )
     {
         rTermItems[1]->SetText( SVX_RESSTR(RID_STR_FILTER_FILTER_FOR));
         FmFilterTextChangedHint aChangeHint( rTermItems[1] );
@@ -452,19 +452,19 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
     }
 
     // finally remove the entry from the model
-    m_pModel->Remove( rTermItems.begin() + _Event.DisjunctiveTerm );
+    m_pModel->Remove( rTermItems.begin() + Event.DisjunctiveTerm );
 
     // ensure there's one empty term in the filter, just in case the currently removed one was the last empty one
     m_pModel->EnsureEmptyFilterRows( *pFormItem );
 }
 
 
-void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event ) throw (RuntimeException, std::exception)
+void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
-    Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XFormController > xController( Event.Source, UNO_QUERY_THROW );
+    Reference< XFilterController > xFilterController( Event.Source, UNO_QUERY_THROW );
     Reference< XForm > xForm( xController->getModel(), UNO_QUERY_THROW );
 
     FmFormItem* pFormItem = m_pModel->Find( m_pModel->m_aChildren, xForm );
@@ -472,7 +472,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     if ( !pFormItem )
         return;
 
-    const sal_Int32 nInsertPos = _Event.DisjunctiveTerm;
+    const sal_Int32 nInsertPos = Event.DisjunctiveTerm;
     bool bValidIndex = ( nInsertPos >= 0 ) && ( (size_t)nInsertPos <= pFormItem->GetChildren().size() );
     if ( !bValidIndex )
     {

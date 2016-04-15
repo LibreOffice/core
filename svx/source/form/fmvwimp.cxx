@@ -246,11 +246,11 @@ Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( Inde
     return aElement;
 }
 
-void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException, std::exception)
+void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl >& Control ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
-    Reference< XWindow >  xWindow( _Control, UNO_QUERY );
+    Reference< XWindow >  xWindow( Control, UNO_QUERY );
     if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )
     {
         awt::Rectangle aRect = xWindow->getPosSize();

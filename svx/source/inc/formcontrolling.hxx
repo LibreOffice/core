@@ -188,7 +188,7 @@ namespace svx
         virtual void SAL_CALL invalidateAllFeatures() throw (css::uno::RuntimeException, std::exception) override;
 
         // XSQLErrorListener
-        virtual void SAL_CALL errorOccured( const css::sdb::SQLErrorEvent& _Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL errorOccured( const css::sdb::SQLErrorEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;

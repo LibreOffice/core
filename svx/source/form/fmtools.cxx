@@ -317,13 +317,13 @@ FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 
 // css::lang::XEventListener
 
-void FmXDisposeMultiplexer::disposing(const css::lang::EventObject& _Source) throw( RuntimeException, std::exception )
+void FmXDisposeMultiplexer::disposing(const css::lang::EventObject& Source) throw( RuntimeException, std::exception )
 {
     Reference< css::lang::XEventListener> xPreventDelete(this);
 
     if (m_pListener)
     {
-        m_pListener->disposing(_Source, m_nId);
+        m_pListener->disposing(Source, m_nId);
         m_pListener->setAdapter(nullptr);
         m_pListener = nullptr;
     }

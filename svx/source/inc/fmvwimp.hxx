@@ -109,10 +109,10 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _Index) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XFormControllerContext
-    virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& _Control ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) throw (css::uno::RuntimeException, std::exception) override;
 
     const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
 

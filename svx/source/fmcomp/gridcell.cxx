@@ -3263,14 +3263,9 @@ void FmXGridCell::setLock(sal_Bool _bLock) throw( RuntimeException, std::excepti
 }
 
 
-void SAL_CALL FmXGridCell::setPosSize( ::sal_Int32 _XX, ::sal_Int32 _Y, ::sal_Int32 _Width, ::sal_Int32 _Height, ::sal_Int16 _Flags ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXGridCell::setPosSize( ::sal_Int32, ::sal_Int32, ::sal_Int32, ::sal_Int32, ::sal_Int16 ) throw (RuntimeException, std::exception)
 {
     OSL_FAIL( "FmXGridCell::setPosSize: not implemented" );
-    (void)_XX;
-    (void)_Y;
-    (void)_Width;
-    (void)_Height;
-    (void)_Flags;
     // not allowed to tamper with this for a grid cell
 }
 
@@ -3282,18 +3277,16 @@ awt::Rectangle SAL_CALL FmXGridCell::getPosSize(  ) throw (RuntimeException, std
 }
 
 
-void SAL_CALL FmXGridCell::setVisible( sal_Bool _Visible ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXGridCell::setVisible( sal_Bool ) throw (RuntimeException, std::exception)
 {
     OSL_FAIL( "FmXGridCell::setVisible: not implemented" );
-    (void)_Visible;
     // not allowed to tamper with this for a grid cell
 }
 
 
-void SAL_CALL FmXGridCell::setEnable( sal_Bool _Enable ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXGridCell::setEnable( sal_Bool ) throw (RuntimeException, std::exception)
 {
     OSL_FAIL( "FmXGridCell::setEnable: not implemented" );
-    (void)_Enable;
     // not allowed to tamper with this for a grid cell
 }
 
@@ -3769,15 +3762,15 @@ void SAL_CALL FmXEditCell::setMaxTextLen( sal_Int16 nLen ) throw( RuntimeExcepti
 }
 
 
-void SAL_CALL FmXEditCell::addChangeListener( const Reference< form::XChangeListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXEditCell::addChangeListener( const Reference< form::XChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aChangeListeners.addInterface( _Listener );
+    m_aChangeListeners.addInterface( Listener );
 }
 
 
-void SAL_CALL FmXEditCell::removeChangeListener( const Reference< form::XChangeListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXEditCell::removeChangeListener( const Reference< form::XChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aChangeListeners.removeInterface( _Listener );
+    m_aChangeListeners.removeInterface( Listener );
 }
 
 
@@ -3926,32 +3919,32 @@ void SAL_CALL FmXCheckBoxCell::enableTriState( sal_Bool b ) throw( RuntimeExcept
 }
 
 
-void SAL_CALL FmXCheckBoxCell::addActionListener( const Reference< awt::XActionListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXCheckBoxCell::addActionListener( const Reference< awt::XActionListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aActionListeners.addInterface( _Listener );
+    m_aActionListeners.addInterface( Listener );
 }
 
 
-void SAL_CALL FmXCheckBoxCell::removeActionListener( const Reference< awt::XActionListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXCheckBoxCell::removeActionListener( const Reference< awt::XActionListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aActionListeners.removeInterface( _Listener );
+    m_aActionListeners.removeInterface( Listener );
 }
 
 
-void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& _Label ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& Label ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pColumn )
     {
         DbGridControl& rGrid( m_pColumn->GetParent() );
-        rGrid.SetColumnTitle( rGrid.GetColumnId( m_pColumn->GetFieldPos() ), _Label );
+        rGrid.SetColumnTitle( rGrid.GetColumnId( m_pColumn->GetFieldPos() ), Label );
     }
 }
 
 
-void SAL_CALL FmXCheckBoxCell::setActionCommand( const OUString& _Command ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXCheckBoxCell::setActionCommand( const OUString& Command ) throw (RuntimeException, std::exception)
 {
-    m_aActionCommand = _Command;
+    m_aActionCommand = Command;
 }
 
 
@@ -4409,37 +4402,37 @@ void SAL_CALL FmXComboBoxCell::removeActionListener(const Reference< awt::XActio
 }
 
 
-void SAL_CALL FmXComboBoxCell::addItem( const OUString& _Item, sal_Int16 _Pos ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXComboBoxCell::addItem( const OUString& Item, sal_Int16 Pos ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pComboBox )
-        m_pComboBox->InsertEntry( _Item, _Pos );
+        m_pComboBox->InsertEntry( Item, Pos );
 }
 
 
-void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& _Items, sal_Int16 _Pos ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& Items, sal_Int16 Pos ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pComboBox )
     {
-        sal_uInt16 nP = _Pos;
-        for ( sal_Int32 n = 0; n < _Items.getLength(); n++ )
+        sal_uInt16 nP = Pos;
+        for ( sal_Int32 n = 0; n < Items.getLength(); n++ )
         {
-            m_pComboBox->InsertEntry( _Items.getConstArray()[n], nP );
-            if ( _Pos != -1 )
+            m_pComboBox->InsertEntry( Items.getConstArray()[n], nP );
+            if ( Pos != -1 )
                 nP++;
         }
     }
 }
 
 
-void SAL_CALL FmXComboBoxCell::removeItems( sal_Int16 _Pos, sal_Int16 _Count ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXComboBoxCell::removeItems( sal_Int16 Pos, sal_Int16 Count ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pComboBox )
     {
-        for ( sal_uInt16 n = _Count; n; )
-            m_pComboBox->RemoveEntryAt( _Pos + (--n) );
+        for ( sal_uInt16 n = Count; n; )
+            m_pComboBox->RemoveEntryAt( Pos + (--n) );
     }
 }
 
@@ -4451,10 +4444,10 @@ sal_Int16 SAL_CALL FmXComboBoxCell::getItemCount() throw( RuntimeException, std:
 }
 
 
-OUString SAL_CALL FmXComboBoxCell::getItem( sal_Int16 _Pos ) throw( RuntimeException, std::exception )
+OUString SAL_CALL FmXComboBoxCell::getItem( sal_Int16 Pos ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_pComboBox ? OUString(m_pComboBox->GetEntry(_Pos)) : OUString();
+    return m_pComboBox ? OUString(m_pComboBox->GetEntry(Pos)) : OUString();
 }
 
 Sequence< OUString > SAL_CALL FmXComboBoxCell::getItems() throw( RuntimeException, std::exception )

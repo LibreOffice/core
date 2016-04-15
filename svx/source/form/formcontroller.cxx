@@ -888,15 +888,15 @@ void FormController::fillProperties(
 
 // XFilterController
 
-void SAL_CALL FormController::addFilterControllerListener( const Reference< XFilterControllerListener >& _Listener ) throw( RuntimeException, std::exception )
+void SAL_CALL FormController::addFilterControllerListener( const Reference< XFilterControllerListener >& Listener ) throw( RuntimeException, std::exception )
 {
-    m_aFilterListeners.addInterface( _Listener );
+    m_aFilterListeners.addInterface( Listener );
 }
 
 
-void SAL_CALL FormController::removeFilterControllerListener( const Reference< XFilterControllerListener >& _Listener ) throw( RuntimeException, std::exception )
+void SAL_CALL FormController::removeFilterControllerListener( const Reference< XFilterControllerListener >& Listener ) throw( RuntimeException, std::exception )
 {
-    m_aFilterListeners.removeInterface( _Listener );
+    m_aFilterListeners.removeInterface( Listener );
 }
 
 
@@ -918,34 +918,34 @@ void SAL_CALL FormController::removeFilterControllerListener( const Reference< X
 }
 
 
-void SAL_CALL FormController::setPredicateExpression( ::sal_Int32 _Component, ::sal_Int32 _Term, const OUString& _PredicateExpression ) throw( RuntimeException, IndexOutOfBoundsException, std::exception )
+void SAL_CALL FormController::setPredicateExpression( ::sal_Int32 Component, ::sal_Int32 Term, const OUString& PredicateExpression ) throw( RuntimeException, IndexOutOfBoundsException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    if ( ( _Component < 0 ) || ( _Component >= getFilterComponents() ) || ( _Term < 0 ) || ( _Term >= getDisjunctiveTerms() ) )
+    if ( ( Component < 0 ) || ( Component >= getFilterComponents() ) || ( Term < 0 ) || ( Term >= getDisjunctiveTerms() ) )
         throw IndexOutOfBoundsException( OUString(), *this );
 
-    Reference< XTextComponent > xText( m_aFilterComponents[ _Component ] );
-    xText->setText( _PredicateExpression );
+    Reference< XTextComponent > xText( m_aFilterComponents[ Component ] );
+    xText->setText( PredicateExpression );
 
-    FmFilterRow& rFilterRow = m_aFilterRows[ _Term ];
-    if ( !_PredicateExpression.isEmpty() )
-        rFilterRow[ xText ] = _PredicateExpression;
+    FmFilterRow& rFilterRow = m_aFilterRows[ Term ];
+    if ( !PredicateExpression.isEmpty() )
+        rFilterRow[ xText ] = PredicateExpression;
     else
         rFilterRow.erase( xText );
 }
 
 
-Reference< XControl > FormController::getFilterComponent( ::sal_Int32 _Component ) throw( RuntimeException, IndexOutOfBoundsException, std::exception )
+Reference< XControl > FormController::getFilterComponent( ::sal_Int32 Component ) throw( RuntimeException, IndexOutOfBoundsException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    if ( ( _Component < 0 ) || ( _Component >= getFilterComponents() ) )
+    if ( ( Component < 0 ) || ( Component >= getFilterComponents() ) )
         throw IndexOutOfBoundsException( OUString(), *this );
 
-    return Reference< XControl >( m_aFilterComponents[ _Component ], UNO_QUERY );
+    return Reference< XControl >( m_aFilterComponents[ Component ], UNO_QUERY );
 }
 
 
@@ -982,17 +982,17 @@ Sequence< Sequence< OUString > > FormController::getPredicateExpressions() throw
 }
 
 
-void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 Term ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     // SYNCHRONIZED -->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    if ( ( _Term < 0 ) || ( _Term >= getDisjunctiveTerms() ) )
+    if ( ( Term < 0 ) || ( Term >= getDisjunctiveTerms() ) )
         throw IndexOutOfBoundsException( OUString(), *this );
 
     // if the to-be-deleted row is our current row, we need to shift
-    if ( _Term == m_nCurrentFilterPosition )
+    if ( Term == m_nCurrentFilterPosition )
     {
         if ( m_nCurrentFilterPosition < sal_Int32( m_aFilterRows.size() - 1 ) )
             ++m_nCurrentFilterPosition;
@@ -1000,11 +1000,11 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
             --m_nCurrentFilterPosition;
     }
 
-    FmFilterRows::iterator pos = m_aFilterRows.begin() + _Term;
+    FmFilterRows::iterator pos = m_aFilterRows.begin() + Term;
     m_aFilterRows.erase( pos );
 
     // adjust m_nCurrentFilterPosition if the removed row preceded it
-    if ( _Term < m_nCurrentFilterPosition )
+    if ( Term < m_nCurrentFilterPosition )
         --m_nCurrentFilterPosition;
 
     SAL_WARN_IF( !( ( m_nCurrentFilterPosition < 0 ) != ( m_aFilterRows.empty() ) ),
@@ -1015,7 +1015,7 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
 
     FilterEvent aEvent;
     aEvent.Source = *this;
-    aEvent.DisjunctiveTerm = _Term;
+    aEvent.DisjunctiveTerm = Term;
     aGuard.clear();
     // <-- SYNCHRONIZED
 
@@ -1043,18 +1043,18 @@ void SAL_CALL FormController::appendEmptyDisjunctiveTerm() throw (RuntimeExcepti
 }
 
 
-void SAL_CALL FormController::setActiveTerm( ::sal_Int32 _ActiveTerm ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+void SAL_CALL FormController::setActiveTerm( ::sal_Int32 ActiveTerm ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    if ( ( _ActiveTerm < 0 ) || ( _ActiveTerm >= getDisjunctiveTerms() ) )
+    if ( ( ActiveTerm < 0 ) || ( ActiveTerm >= getDisjunctiveTerms() ) )
         throw IndexOutOfBoundsException( OUString(), *this );
 
-    if ( _ActiveTerm == getActiveTerm() )
+    if ( ActiveTerm == getActiveTerm() )
         return;
 
-    m_nCurrentFilterPosition = _ActiveTerm;
+    m_nCurrentFilterPosition = ActiveTerm;
     impl_setTextOnAllFilter_throw();
 }
 
@@ -2965,17 +2965,17 @@ void SAL_CALL FormController::removeActivateListener(const Reference< XFormContr
 }
 
 
-void SAL_CALL FormController::addChildController( const Reference< XFormController >& _ChildController ) throw( RuntimeException, IllegalArgumentException, std::exception )
+void SAL_CALL FormController::addChildController( const Reference< XFormController >& ChildController ) throw( RuntimeException, IllegalArgumentException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    if ( !_ChildController.is() )
+    if ( !ChildController.is() )
         throw IllegalArgumentException( OUString(), *this, 1 );
         // TODO: (localized) error message
 
     // the parent of our (to-be-)child must be our own model
-    Reference< XFormComponent > xFormOfChild( _ChildController->getModel(), UNO_QUERY );
+    Reference< XFormComponent > xFormOfChild( ChildController->getModel(), UNO_QUERY );
     if ( !xFormOfChild.is() )
         throw IllegalArgumentException( OUString(), *this, 1 );
         // TODO: (localized) error message
@@ -2984,8 +2984,8 @@ void SAL_CALL FormController::addChildController( const Reference< XFormControll
         throw IllegalArgumentException( OUString(), *this, 1 );
         // TODO: (localized) error message
 
-    m_aChildren.push_back( _ChildController );
-    _ChildController->setParent( *this );
+    m_aChildren.push_back( ChildController );
+    ChildController->setParent( *this );
 
     // search the position of the model within the form
     sal_uInt32 nPos = m_xModelAsIndex->getCount();
@@ -2995,7 +2995,7 @@ void SAL_CALL FormController::addChildController( const Reference< XFormControll
         m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
         if ( xFormOfChild == xTemp )
         {
-            m_xModelAsManager->attach( nPos, Reference<XInterface>( _ChildController, UNO_QUERY ), makeAny( _ChildController) );
+            m_xModelAsManager->attach( nPos, Reference<XInterface>( ChildController, UNO_QUERY ), makeAny( ChildController) );
             break;
         }
     }
@@ -4027,11 +4027,11 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
 }
 
 
-void SAL_CALL FormController::invalidateFeatures( const Sequence< ::sal_Int16 >& _Features ) throw (RuntimeException, std::exception)
+void SAL_CALL FormController::invalidateFeatures( const Sequence< ::sal_Int16 >& Features ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // for now, just copy the ids of the features, because ....
-    ::std::copy( _Features.begin(), _Features.end(),
+    ::std::copy( Features.begin(), Features.end(),
         ::std::insert_iterator< ::std::set< sal_Int16 > >( m_aInvalidFeatures, m_aInvalidFeatures.begin() )
     );
 

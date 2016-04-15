@@ -155,9 +155,9 @@ namespace svx
 
         struct FormFeatureToSlotId : public ::std::unary_function< sal_Int16, sal_Int32 >
         {
-            sal_Int32 operator()( sal_Int16 _FormFeature )
+            sal_Int32 operator()( sal_Int16 FormFeature )
             {
-                return FeatureSlotTranslation::getSlotIdForFormFeature( _FormFeature );
+                return FeatureSlotTranslation::getSlotIdForFormFeature( FormFeature );
             }
         };
     }
@@ -385,16 +385,16 @@ namespace svx
     }
 
 
-    void SAL_CALL FormControllerHelper::invalidateFeatures( const Sequence< ::sal_Int16 >& _Features ) throw (RuntimeException, std::exception)
+    void SAL_CALL FormControllerHelper::invalidateFeatures( const Sequence< ::sal_Int16 >& Features ) throw (RuntimeException, std::exception)
     {
         if ( !m_pInvalidationCallback )
             // nobody's interested in ...
             return;
 
-        ::std::vector< sal_Int32 > aFeatures( _Features.getLength() );
+        ::std::vector< sal_Int32 > aFeatures( Features.getLength() );
         ::std::transform(
-            _Features.getConstArray(),
-            _Features.getConstArray() + _Features.getLength(),
+            Features.getConstArray(),
+            Features.getConstArray() + Features.getLength(),
             aFeatures.begin(),
             FormFeatureToSlotId()
         );
@@ -446,10 +446,10 @@ namespace svx
     }
 
 
-    void SAL_CALL FormControllerHelper::errorOccured( const SQLErrorEvent& _Event ) throw (RuntimeException, std::exception)
+    void SAL_CALL FormControllerHelper::errorOccured( const SQLErrorEvent& Event ) throw (RuntimeException, std::exception)
     {
         OSL_ENSURE( !m_aOperationError.hasValue(), "FormControllerHelper::errorOccurred: two errors during one operation?" );
-        m_aOperationError = _Event.Reason;
+        m_aOperationError = Event.Reason;
     }
 
 

@@ -252,15 +252,15 @@ namespace svxform
         // XFilterController
         virtual ::sal_Int32 SAL_CALL getFilterComponents() throw (css::uno::RuntimeException, std::exception) override;
         virtual ::sal_Int32 SAL_CALL getDisjunctiveTerms() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addFilterControllerListener( const css::uno::Reference< css::form::runtime::XFilterControllerListener >& _Listener ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL removeFilterControllerListener( const css::uno::Reference< css::form::runtime::XFilterControllerListener >& _Listener ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL setPredicateExpression( ::sal_Int32 _Component, ::sal_Int32 _Term, const OUString& _PredicateExpression ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::awt::XControl > SAL_CALL getFilterComponent( ::sal_Int32 _Component ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addFilterControllerListener( const css::uno::Reference< css::form::runtime::XFilterControllerListener >& Listener ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL removeFilterControllerListener( const css::uno::Reference< css::form::runtime::XFilterControllerListener >& Listener ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL setPredicateExpression( ::sal_Int32 Component, ::sal_Int32 Term, const OUString& PredicateExpression ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::awt::XControl > SAL_CALL getFilterComponent( ::sal_Int32 Component ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL getPredicateExpressions() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeDisjunctiveTerm( ::sal_Int32 Term ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL appendEmptyDisjunctiveTerm() throw (css::uno::RuntimeException, std::exception) override;
         virtual ::sal_Int32 SAL_CALL getActiveTerm() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setActiveTerm( ::sal_Int32 _ActiveTerm ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setActiveTerm( ::sal_Int32 ActiveTerm ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) override;
@@ -331,7 +331,7 @@ namespace svxform
         virtual css::uno::Reference< css::awt::XControl> SAL_CALL getCurrentControl() throw( css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL addActivateListener(const css::uno::Reference< css::form::XFormControllerListener>& l) throw( css::uno::RuntimeException, std::exception ) override;
         virtual void SAL_CALL removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener>& l) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& _ChildController ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+        virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& ChildController ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
 
         virtual css::uno::Reference< css::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) throw (css::uno::RuntimeException, std::exception) override;
