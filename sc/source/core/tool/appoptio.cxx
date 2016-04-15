@@ -255,6 +255,14 @@ static void lcl_GetSortList( Any& rDest )
 #define SCCOMPATOPT_KEY_BINDING     0
 #define SCCOMPATOPT_COUNT           1
 
+// Default value of Layout/Other/StatusbarMultiFunction
+#define SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL         514
+// Default value of Layout/Other/StatusbarFunction
+#define SCLAYOUTOPT_STATUSBAR_DEFAULTVAL              1
+// Legacy default value of Layout/Other/StatusbarFunction
+// prior to multiple statusbar functions feature addition
+#define SCLAYOUTOPT_STATUSBAR_DEFAULTVAL_LEGACY       9
+
 static sal_uInt32 lcl_ConvertStatusBarFuncSetToSingle( sal_uInt32 nFuncSet )
 {
     if ( !nFuncSet )
@@ -401,8 +409,9 @@ ScAppCfg::ScAppCfg() :
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        bool bStatusBarFuncSingleFound = false;
-        bool bStatusBarFuncMultiFound = false;
+        sal_uInt32 nStatusBarFuncSingle = 0;
+        sal_uInt32 nStatusBarFuncMulti = 0;
+        sal_uInt32 nUIntValTmp = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
@@ -414,10 +423,12 @@ ScAppCfg::ScAppCfg() :
                         if (pValues[nProp] >>= nIntVal) SetAppMetric( (FieldUnit) nIntVal );
                         break;
                     case SCLAYOUTOPT_STATUSBAR:
-                        bStatusBarFuncSingleFound = true;
+                        if ( pValues[SCLAYOUTOPT_STATUSBAR] >>= nUIntValTmp )
+                            nStatusBarFuncSingle = nUIntValTmp;
                         break;
                     case SCLAYOUTOPT_STATUSBARMULTI:
-                        bStatusBarFuncMultiFound = true;
+                        if ( pValues[SCLAYOUTOPT_STATUSBARMULTI] >>= nUIntValTmp )
+                            nStatusBarFuncMulti = nUIntValTmp;
                         break;
                     case SCLAYOUTOPT_ZOOMVAL:
                         if (pValues[nProp] >>= nIntVal) SetZoom( (sal_uInt16) nIntVal );
@@ -432,22 +443,18 @@ ScAppCfg::ScAppCfg() :
             }
         }
 
-        sal_uInt32 nUIntVal = 0;
-        if ( bStatusBarFuncMultiFound )
+        if ( nStatusBarFuncMulti != SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL )
+            SetStatusFunc( nStatusBarFuncMulti );
+        else if ( nStatusBarFuncSingle != SCLAYOUTOPT_STATUSBAR_DEFAULTVAL &&
+                  nStatusBarFuncSingle != SCLAYOUTOPT_STATUSBAR_DEFAULTVAL_LEGACY )
         {
-            if ( pValues[SCLAYOUTOPT_STATUSBARMULTI] >>= nUIntVal )
-                SetStatusFunc( nUIntVal );
+            if ( nStatusBarFuncSingle )
+                SetStatusFunc( 1 << nStatusBarFuncSingle );
+            else
+                SetStatusFunc( 0 );
         }
-        else if ( bStatusBarFuncSingleFound )
-        {
-            if ( pValues[SCLAYOUTOPT_STATUSBAR] >>= nUIntVal )
-            {
-                if ( nUIntVal )
-                    SetStatusFunc( 1 << nUIntVal );
-                else
-                    SetStatusFunc( 0 );
-            }
-        }
+        else
+            SetStatusFunc( SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL );
     }
     aLayoutItem.SetCommitLink( LINK( this, ScAppCfg, LayoutCommitHdl ) );
 
