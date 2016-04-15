@@ -50,6 +50,24 @@
       "revId": "c75fc7fc580c8df857264373dd9d2d73bd7c8995",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_e56dd6cd",
+        "filename": "sc/source/ui/app/scmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-15T21:07:59Z",
+      "side": 1,
+      "message": "We could introduce another ScRecalcMode to flag expressions that use ADDRESS() or INDIRECT(), e.g. ScRecalcMode::ONCONVCHANGE or some such, similar to ScRecalcMode::ONREFMOVE, and then set/broadcast only cells dirty that are flagged that way. See formula/source/core/api/FormulaCompiler.cxx FormulaCompiler::Factor() where \nSetRecalcModeOnRefMove() is used.",
+      "parentUuid": "7ac969e8_c6b8a2e8",
+      "revId": "c75fc7fc580c8df857264373dd9d2d73bd7c8995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
