@@ -1232,7 +1232,12 @@ namespace drawinglayer
                         static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate);
 
                     if (!tryDrawBorderLinePrimitive2DDirect(rBorder))
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    {
+                        if (rBorder.getStyle() == table::BorderLineStyle::DOUBLE)
+                            process(rBorder.createDecomposition(getViewInformation2D(), true));
+                        else
+                            process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
 
                     mpOutputDevice->SetAntialiasing(nAntiAliasing);
                     break;
