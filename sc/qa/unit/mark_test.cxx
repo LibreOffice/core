@@ -8,13 +8,19 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include "helper/qahelper.hxx"
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
 
 #include "markdata.hxx"
 #include "../../source/core/data/markarr.cxx"
 #include "../../source/core/data/markmulti.cxx"
 #include "../../source/core/data/segmenttree.cxx"
+
+#include "helper/qahelper.hxx"
 
 #include <utility>
 
