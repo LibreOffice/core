@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include "attarray.hxx"
 #include "column.hxx"
 #include "colcontainer.hxx"
 #include "sortparam.hxx"
@@ -205,7 +206,10 @@ private:
     bool            mbPageBreaksValid:1;
     bool            mbForceBreaks:1;
 
+    ScAttrArray     aNextColAttrArray;
+
 friend class ScDocument;                    // for FillInfo
+friend class ScColumn;
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;

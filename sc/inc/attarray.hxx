@@ -96,12 +96,13 @@ friend class ScHorizontalAttrIterator;
 
     void RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
                               const ScPatternAttr* pPattern, ScEditDataArray* pDataArray );
+    void SetDefaultIfNotInit();
 
     ScAttrArray(const ScAttrArray&) = delete;
     ScAttrArray& operator=(const ScAttrArray&) = delete;
 
 public:
-            ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc );
+            ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pNextColAttrArray = nullptr, bool bCreateEmpty = false );
             ~ScAttrArray();
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
@@ -202,23 +203,30 @@ public:
 class ScAttrIterator
 {
     const ScAttrArray*  pArray;
+    const ScPatternAttr* pDefPattern;
     SCSIZE              nPos;
     SCROW               nRow;
     SCROW               nEndRow;
 public:
-    inline              ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd );
+    inline              ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd, const ScPatternAttr* pDefaultPattern );
     inline const ScPatternAttr* Next( SCROW& rTop, SCROW& rBottom );
     inline const ScPatternAttr* Resync( SCROW nRow, SCROW& rTop, SCROW& rBottom );
     SCROW               GetNextRow() const { return nRow; }
 };
 
-inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd ) :
+inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd, const ScPatternAttr* pDefaultPattern ) :
     pArray( pNewArray ),
+    pDefPattern( pDefaultPattern ),
     nRow( nStart ),
     nEndRow( nEnd )
 {
-    if ( nStart > 0 )
-        pArray->Search( nStart, nPos );
+    if ( pArray->nCount )
+    {
+        if ( nStart > 0 )
+            pArray->Search( nStart, nPos );
+        else
+            nPos = 0;
+    }
     else
         nPos = 0;
 }
@@ -226,6 +234,21 @@ inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStar
 inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
 {
     const ScPatternAttr* pRet;
+    if ( !pArray->nCount )
+    {
+        if ( !nPos )
+        {
+            ++nPos;
+            if ( nRow > MAXROW )
+                return nullptr;
+            rTop = nRow;
+            rBottom = std::min( nEndRow, MAXROW );
+            nRow = rBottom + 1;
+            return pDefPattern;
+        }
+        return nullptr;
+    }
+
     if ( nPos < pArray->nCount && nRow <= nEndRow )
     {
         rTop = nRow;
@@ -242,6 +265,11 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
 inline const ScPatternAttr* ScAttrIterator::Resync( SCROW nRowP, SCROW& rTop, SCROW& rBottom )
 {
     nRow = nRowP;
+    if ( !pArray->nCount )
+    {
+        nPos = 0;
+        return Next( rTop, rBottom );
+    }
     // Chances are high that the pattern changed on nRowP introduced a span
     // starting right there. Assume that Next() was called so nPos already
     // advanced. Another high chance is that the change extended a previous or
