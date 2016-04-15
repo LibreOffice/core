@@ -1890,6 +1890,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                             aDescription,
                                                                             OUString(),
                                                                             boost::bind(&ORowSet::getInsertValue, this, _1));
+//                            [this] (sal_Int32 const column) { return this->getInsertValue(column); });
                         aColumnMap.insert(std::make_pair(sName,0));
                         aColumns->get().push_back(pColumn);
                         pColumn->setName(sName);
@@ -1992,6 +1993,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                         aDescription,
                                                                         sParseLabel,
                                                                         boost::bind(&ORowSet::getInsertValue, this, _1));
+//                        [this] (sal_Int32 const column) { return this->getInsertValue(column); });
                     aColumns->get().push_back(pColumn);
 
                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i) != rKeyColumns.end()));
@@ -2821,6 +2823,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
                                                                 aDescription,
                                                                 sParseLabel,
                                                                 boost::bind(&ORowSetClone::getValue, this, _1));
+//                [this] (sal_Int32 const column) /*-> ORowSetValue const&*/ { auto const& x(this->getValue(column)); SAL_DE BUG(" XXX " << &x); return x; });
             aColumns->get().push_back(pColumn);
             pColumn->setName(*pIter);
             aNames.push_back(*pIter);

@@ -182,6 +182,8 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
     const ORowSetValue &value(m_pGetValue(m_nPos));
+SAL_DE BUG(" XXX _rOldValue " << & _rOldValue);
+SAL_DE BUG(" XXX value " << & value);
     if ( value != _rOldValue)
     {
         sal_Int32 nHandle(PROPERTY_ID_VALUE);
