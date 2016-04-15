@@ -50,7 +50,7 @@ namespace chart {
 
 namespace {
 
-typedef opengl::OpenglShapeFactory* (*__getOpenglShapeFactory)(void);
+typedef opengl::OpenglShapeFactory* (*getOpenglShapeFactory_)(void);
 
 #ifndef DISABLE_DYNLOADING
 
@@ -96,7 +96,7 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(const uno::R
             if(fn)
             {
 
-                pShapeFactory = reinterpret_cast<__getOpenglShapeFactory>(fn)();
+                pShapeFactory = reinterpret_cast<getOpenglShapeFactory_>(fn)();
                 pShapeFactory->setShapeFactory(xFactory);
             }
         }
