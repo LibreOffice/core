@@ -270,7 +270,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "CopyArea",
-        [&] (OutputDevice * pDev) { return pDev->CopyArea(aPt1, aPt3, aRect2.GetSize(), false); } );
+        [&] (OutputDevice * pDev) { return pDev->CopyArea(aPt1, aPt3, aRect2.GetSize()); } );
 
 #ifdef NEEDS_QUALIY_PARAMTER
     /* void DrawBitmap( const Point& rDestPt,
