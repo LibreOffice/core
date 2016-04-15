@@ -92,12 +92,21 @@ public:
     void testMultiMark_FourRanges();
     void testMultiMark_NegativeMarking();
 
+    void testInsertTabBeforeSelected();
+    void testInsertTabAfterSelected();
+    void testDeleteTabBeforeSelected();
+    void testDeleteTabAfterSelected();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimpleMark_Simple);
     CPPUNIT_TEST(testSimpleMark_Column);
     CPPUNIT_TEST(testSimpleMark_Row);
     CPPUNIT_TEST(testMultiMark_FourRanges);
     CPPUNIT_TEST(testMultiMark_NegativeMarking);
+    CPPUNIT_TEST(testInsertTabBeforeSelected);
+    CPPUNIT_TEST(testInsertTabAfterSelected);
+    CPPUNIT_TEST(testDeleteTabBeforeSelected);
+    CPPUNIT_TEST(testDeleteTabAfterSelected);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -801,7 +810,41 @@ void Test::testMultiMark_NegativeMarking()
     testMultiMark( aData );
 }
 
+void Test::testInsertTabBeforeSelected()
+{
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    aMark.InsertTab(0);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetFirstSelected());
+}
 
+void Test::testInsertTabAfterSelected()
+{
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    aMark.InsertTab(1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aMark.GetFirstSelected());
+}
+
+void Test::testDeleteTabBeforeSelected()
+{
+    ScMarkData aMark;
+    aMark.SelectOneTable(1);
+    aMark.DeleteTab(0);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aMark.GetFirstSelected());
+}
+
+void Test::testDeleteTabAfterSelected()
+{
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    aMark.DeleteTab(1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aMark.GetFirstSelected());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
