@@ -46,7 +46,6 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
 
-class TransparencePrimitive2D;
 using namespace com::sun::star;
 
 
@@ -54,6 +53,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+
+        class TransparencePrimitive2D;
+
         Primitive2DReference createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const attribute::SdrFillAttribute& rFill,

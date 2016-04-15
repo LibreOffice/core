@@ -23,10 +23,9 @@
 #include "drawview.hxx"
 #include "sdpage.hxx"
 
-class DrawDocShell;
-
 namespace sd {
 
+class DrawDocShell;
 class DrawViewShell;
 
 /**

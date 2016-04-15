@@ -49,7 +49,6 @@
 #include <unotools/configmgr.hxx>
 
 class SdrOutliner;
-class XSpellChecker1;
 
 namespace sw
 {

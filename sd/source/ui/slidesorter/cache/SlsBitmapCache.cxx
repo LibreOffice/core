@@ -75,7 +75,6 @@ private:
     // compactor.
     bool mbIsPrecious;
 };
-class CacheEntry;
 
 class CacheHash {
 public:
