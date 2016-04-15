@@ -57,18 +57,17 @@ namespace frm
         const IFeatureDispatcher*       m_pDispatcher;
         const std::shared_ptr< const ICommandImageProvider >
                                         m_pImageProvider;
-        const std::shared_ptr< const ICommandDescriptionProvider >
-                                        m_pDescriptionProvider;
         ImageSize                       m_eImageSize;
         VclPtr<ImplNavToolBar>          m_pToolbar;
         ::std::vector< VclPtr<vcl::Window> > m_aChildWins;
+        const OUString                  m_sModuleId;
 
     public:
         NavigationToolBar(
             vcl::Window* _pParent,
             WinBits _nStyle,
             const std::shared_ptr< const ICommandImageProvider >& _pImageProvider,
-            const std::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
+            const OUString sModuleId
         );
         virtual ~NavigationToolBar( );
         virtual void dispose() override;

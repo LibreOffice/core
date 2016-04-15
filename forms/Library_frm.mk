@@ -95,7 +95,6 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/component/scrollbar \
     forms/source/component/spinbutton \
     forms/source/component/Time \
-    forms/source/helper/commanddescriptionprovider \
     forms/source/helper/commandimageprovider \
     forms/source/helper/controlfeatureinterception \
     forms/source/helper/formnavigation \
