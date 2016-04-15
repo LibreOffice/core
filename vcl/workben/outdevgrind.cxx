@@ -44,8 +44,6 @@
 
 #include <osl/time.h>
 
-#include <boost/bind.hpp>
-
 #include <functional>
 
 #include <stdio.h>
@@ -152,10 +150,9 @@ void setupMethodStubs( functor_vector_type& res )
 #ifdef FIXME_NEEDS_LOVE
     add(res,
         "DrawTextArray",
-        boost::bind(
-            &OutputDevice::DrawTextArray,
-            _1,
-            aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.getLength() ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawTextArray(aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.getLength());
+        });
 #endif
 
     /* void DrawPixel( const Point& rPt, const Color& rColor ); */
@@ -250,15 +247,10 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawOutDev(foreign source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&, const Size&,
-                                     const Point&, const Size&,
-                                     const OutputDevice& ))(
-                &OutputDevice::DrawOutDev),
-            _1,
-            aRect2.TopLeft(), aRect2.GetSize(),
-            aRect.TopLeft(),  aRect.GetSize(),
-            boost::cref(aVDevBW) ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawOutDev(aRect2.TopLeft(), aRect2.GetSize(),
+                aRect.TopLeft(), aRect.GetSize(), aVDevBW);
+        });
 
     /* void DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPt,  const Size& rSrcSize,
@@ -266,15 +258,10 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawOutDev(foreign source, scaled)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&, const Size&,
-                                     const Point&, const Size&,
-                                     const OutputDevice& ))(
-                &OutputDevice::DrawOutDev),
-            _1,
-            aRect2.TopLeft(), aRect2.GetSize(),
-            aRect.TopLeft(),  aRect.GetSize(),
-            boost::cref(aVDev) ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawOutDev(aRect2.TopLeft(), aRect2.GetSize(),
+                aRect.TopLeft(), aRect.GetSize(), aVDev);
+        });
 #endif
 
     /* void CopyArea( const Point& rDestPt,
@@ -283,10 +270,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "CopyArea",
-        boost::bind(
-            &OutputDevice::CopyArea,
-            _1,
-            aPt1, aPt3, aRect2.GetSize(), false ));
+        [&] (OutputDevice * pDev) { return pDev->CopyArea(aPt1, aPt3, aRect2.GetSize(), false); } );
 
 #ifdef NEEDS_QUALIY_PARAMTER
     /* void DrawBitmap( const Point& rDestPt,
@@ -294,50 +278,32 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Bitmap& ))(
-                &OutputDevice::DrawBitmap),
-            _1,
-            aPt1,aBitmapAlien ));
+        [&] (OutputDevice * pDev) { return pDev->DrawBitmap(aPt1, aBitmapAlien); });
 
     /* void DrawBitmap( const Point& rDestPt,
                                     const Bitmap& rBitmap );
     */
     add(res,
         "DrawBitmap",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Bitmap& ))(
-                &OutputDevice::DrawBitmap),
-            _1,
-            aPt1,aBitmap ));
+        [&] (OutputDevice * pDev) { return pDev->DrawBitmap(aPt1, aBitmap); });
 
     /* void DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Bitmap& rBitmap );
     */
     add(res,
         "DrawBitmap(scaled,alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Bitmap& ))(
-                &OutputDevice::DrawBitmap),
-            _1,
-            aPt1,aRect.GetSize(),aBitmapAlien ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmap(aPt1, aRect.GetSize(), aBitmapAlien);
+        });
 
     /* void DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Bitmap& rBitmap );
     */
     add(res,
         "DrawBitmap(scaled)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Bitmap& ))(
-                &OutputDevice::DrawBitmap),
-            _1,
-            aPt1,aRect.GetSize(),aBitmap ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmap(aPt1, aRect.GetSize(), aBitmap);
+        });
 
 #if 0
     /* void DrawBitmap( const Point& rDestPt, const Size& rDestSize,
@@ -346,15 +312,10 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(scaled subset,alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const Bitmap& ))(
-                &OutputDevice::DrawBitmap),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmapAlien ));
+        [&] (OutputDevice * pDev) {
+                return pDev->DrawBitmap(aPt1, aRect.GetSize(), aPt3,
+                        aRect2.GetSize(), aBitmapAlien);
+            });
 #endif
 
     /* void DrawBitmap( const Point& rDestPt, const Size& rDestSize,
@@ -363,115 +324,73 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(scaled subset)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const Bitmap& ))(
-                &OutputDevice::DrawBitmap),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmap ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmap(aPt1, aRect.GetSize(), aPt3, aRect2.GetSize(), aBitmap);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx(alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aBitmapExAlien ));
+        [&] (OutputDevice * pDev) { return pDev->DrawBitmapEx(aPt1, aBitmapExAlien); });
 
     /* void DrawBitmapEx( const Point& rDestPt,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aBitmapEx ));
+        [&] (OutputDevice * pDev) { return pDev->DrawBitmapEx(aPt1, aBitmapEx); });
 
     /* void DrawBitmapEx( const Point& rDestPt,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx(alpha)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aBitmapExAlpha ));
+        [&] (OutputDevice * pDev) { return pDev->DrawBitmapEx(aPt1, aBitmapExAlpha); });
 
     /* void DrawBitmapEx( const Point& rDestPt,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx(alpha, alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aBitmapExAlphaAlien ));
+        [&] (OutputDevice * pDev) { return pDev->DrawBitmapEx(aPt1, aBitmapExAlphaAlien); });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx(scaled,alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aBitmapExAlien ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aBitmapExAlien);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx(scaled)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aBitmapEx ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aBitmapEx);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx(scaled alpha)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aBitmapExAlpha ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aBitmapExAlpha);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );
     */
     add(res,
         "DrawBitmapEx(scaled alpha, alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aBitmapExAlphaAlien ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aBitmapExAlphaAlien);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -479,15 +398,9 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset,alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmapExAlien ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aPt3, aRect2.GetSize(), aBitmapExAlien);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -495,15 +408,9 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmapEx ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aPt3, aRect2.GetSize(), aBitmapEx);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -511,15 +418,9 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset, alpha)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmapExAlpha ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aPt3, aRect2.GetSize(), aBitmapExAlpha);
+        });
 
     /* void DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -527,69 +428,45 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset, alpha alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const BitmapEx& ))(
-                &OutputDevice::DrawBitmapEx),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmapExAlphaAlien ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawBitmapEx(aPt1, aRect.GetSize(), aPt3, aRect2.GetSize(), aBitmapExAlphaAlien);
+        });
 
     /* void DrawMask( const Point& rDestPt,
                                   const Bitmap& rBitmap, const Color& rMaskColor );
     */
     add(res,
         "DrawMask(alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Bitmap&,
-                                     const Color& ))(
-                &OutputDevice::DrawMask),
-            _1,
-            aPt1,aBitmapAlien,aBlackColor ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawMask(aPt1, aBitmapAlien, aBlackColor);
+        });
 
     /* void DrawMask( const Point& rDestPt,
                                   const Bitmap& rBitmap, const Color& rMaskColor );
     */
     add(res,
         "DrawMask",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Bitmap&,
-                                     const Color& ))(
-                &OutputDevice::DrawMask),
-            _1,
-            aPt1,aBitmap,aBlackColor ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawMask(aPt1, aBitmap, aBlackColor);
+        });
 
     /* void DrawMask( const Point& rDestPt, const Size& rDestSize,
                                   const Bitmap& rBitmap, const Color& rMaskColor );
     */
     add(res,
         "DrawMask(scaled,alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Bitmap&,
-                                     const Color& ))(
-                &OutputDevice::DrawMask),
-            _1,
-            aPt1,aRect.GetSize(),aBitmapAlien, aBlackColor ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawMask(aPt1, aRect.GetSize(), aBitmapAlien, aBlackColor);
+        });
 
     /* void DrawMask( const Point& rDestPt, const Size& rDestSize,
                                   const Bitmap& rBitmap, const Color& rMaskColor );
     */
     add(res,
         "DrawMask(scaled)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Bitmap&,
-                                     const Color& ))(
-                &OutputDevice::DrawMask),
-            _1,
-            aPt1,aRect.GetSize(),aBitmap,aBlackColor ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawMask(aPt1, aRect.GetSize(), aBitmap, aBlackColor);
+        });
 
     /* void DrawMask( const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -597,16 +474,10 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask(scaled subset,alien source)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const Bitmap&,
-                                     const Color& ))(
-                &OutputDevice::DrawMask),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmapAlien,aBlackColor ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawMask(aPt1, aRect.GetSize(), aPt3, aRect2.GetSize(),
+                    aBitmapAlien, aBlackColor);
+        });
 
     /* void DrawMask( const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -614,108 +485,82 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask(scaled subset)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Point&,
-                                     const Size&,
-                                     const Bitmap&,
-                                     const Color& ))(
-                &OutputDevice::DrawMask),
-            _1,
-            aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmap,aBlackColor ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawMask(aPt1, aRect.GetSize(), aPt3, aRect2.GetSize(), aBitmap, aBlackColor);
+        });
 
     /* void DrawImage( const Point& rPos,
                                    const Image& rImage, sal_uInt16 nStyle = 0 );
     */
     add(res,
         "DrawImage",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Image&,
-                                     sal_uInt16 nStyle ))(
-                &OutputDevice::DrawImage),
-            _1,
-            aPt1,aImage,(sal_uInt16)0 ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawImage(aPt1, aImage, static_cast<sal_uInt16>(0));
+        });
 
     /* void DrawImage( const Point& rPos, const Size& rSize,
                                    const Image& rImage, sal_uInt16 nStyle = 0 );
     */
     add(res,
         "DrawImage(scaled)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&,
-                                     const Size&,
-                                     const Image&,
-                                     sal_uInt16 nStyle ))(
-                &OutputDevice::DrawImage),
-            _1,
-            aPt1,aRect.GetSize(),aImage,(sal_uInt16)0 ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawImage(aPt1, aRect.GetSize(), aImage, static_cast<sal_uInt16>(0)));
+        });
 
 #endif // NEEDS_QUALITY_PARAMATER
 
     /* void DrawGradient( const Rectangle& rRect, const Gradient& rGradient ); */
     add(res,
         "DrawGradient",
-        boost::bind(
-            (void (OutputDevice::*)( const Rectangle&, const Gradient& ))(
-                &OutputDevice::DrawGradient),
-            _1,
-            aRect,aGradient ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawGradient(aRect, aGradient);
+        });
 
     /* void DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient ); */
     add(res,
         "DrawGradient(polygon)",
-        boost::bind(
-            (void (OutputDevice::*)( const tools::PolyPolygon&, const Gradient& ))(
-                &OutputDevice::DrawGradient),
-            _1,
-            aPoly3,aGradient ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawGradient(aPoly3, aGradient);
+        });
 
     /* void DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch ); */
     add(res,
         "DrawHatch",
-        boost::bind(
-            &OutputDevice::DrawHatch,
-            _1,
-            aPoly3,aHatch ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawHatch(aPoly3, aHatch);
+        });
 
     /* void DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper ); */
     add(res,
         "DrawWallpaper",
-        boost::bind(
-            &OutputDevice::DrawWallpaper,
-            _1,
-            aRect2,aWallpaper ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawWallpaper(aRect2, aWallpaper);
+        });
 
 #ifdef FIXME_HAVE_WAVE_NORMAL
     /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle ); */
     add(res,
         "DrawWaveLine",
-        boost::bind(
-            &OutputDevice::DrawWaveLine,
-            _1,
-            aPt1,aPt2,(sal_uInt16)WAVE_NORMAL ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawWaveLine(aPt1, aPt2, (sal_uInt16)WAVE_NORMAL);
+        });
 #endif
 
     /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags ); */
     add(res,
         "DrawGrid",
-        boost::bind(
-            &OutputDevice::DrawGrid,
-            _1,
-            aRect,Size(10,20),DrawGridFlags::HorzLines|DrawGridFlags::VertLines ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawGrid(aRect, Size(10,20), DrawGridFlags::HorzLines|DrawGridFlags::VertLines);
+        });
 
     /* void DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                          sal_uInt16 nTransparencePercent );
     */
     add(res,
         "DrawTransparent",
-        boost::bind(
-            (void (OutputDevice::*)( const tools::PolyPolygon&, sal_uInt16 ))(
-                &OutputDevice::DrawTransparent),
-            _1,
-            aPoly3,(sal_uInt16)50 ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawTransparent(aPoly3, (sal_uInt16)50);
+        });
 
     /* void DrawTransparent( const GDIMetaFile& rMtf,
                                          const Point& rPos, const Size& rSize,
@@ -723,21 +568,14 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawTransparent(metafile)",
-        boost::bind(
-            (void (OutputDevice::*)( const GDIMetaFile&,
-                                     const Point&,
-                                     const Size&,
-                                     const Gradient& ))(
-                &OutputDevice::DrawTransparent),
-            _1,
-            aMtf,aPt1,aRect.GetSize(),aGradient ));
+        [&] (OutputDevice * pDev) {
+            return pDev->DrawTransparent(aMtf, aPt1, aRect.GetSize(), aGradient);
+        });
 
     /* void Erase(); */
     add(res,
         "Erase",
-        boost::bind(
-            &OutputDevice::Erase,
-            _1 ));
+        [] (OutputDevice * pDev) { return pDev->Erase(); } );
 
 }
 
