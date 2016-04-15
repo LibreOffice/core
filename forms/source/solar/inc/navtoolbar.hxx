@@ -67,7 +67,7 @@ namespace frm
             vcl::Window* _pParent,
             WinBits _nStyle,
             const std::shared_ptr< const ICommandImageProvider >& _pImageProvider,
-            const OUString sModuleId
+            const OUString & sModuleId
         );
         virtual ~NavigationToolBar( );
         virtual void dispose() override;

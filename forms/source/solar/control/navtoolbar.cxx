@@ -133,7 +133,7 @@ namespace frm
 
     NavigationToolBar::NavigationToolBar( vcl::Window* _pParent, WinBits _nStyle,
                                           const PCommandImageProvider& _pImageProvider,
-                                          const OUString sModuleId )
+                                          const OUString & sModuleId )
         :Window( _pParent, _nStyle )
         ,m_pDispatcher( nullptr )
         ,m_pImageProvider( _pImageProvider )
