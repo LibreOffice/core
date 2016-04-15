@@ -2375,6 +2375,15 @@ void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
     rR = nIndex - rC*nRowSize;
 }
 
+namespace {
+
+size_t get_index(SCSIZE nMaxRow, SCSIZE /*nMaxCol*/, size_t nRow, size_t nCol, size_t nRowOffset, size_t nColOffset)
+{
+    return nMaxRow * (nCol + nColOffset) + nRow + nRowOffset;
+}
+
+}
+
 void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter)
 {
@@ -2398,13 +2407,13 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             sal_uInt16 nErr = GetDoubleErrorValue(nVal);
             if (nErr)
             {
-                aValid[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = false;
-                nErrors[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = nErr;
+                aValid[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = false;
+                nErrors[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = nErr;
                 return;
             }
             OUString aStr;
             rFormatter.GetInputLineString( nVal, nKey, aStr);
-            aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] + aStr;
+            aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
     std::function<void(size_t, size_t, bool)> aBoolFunc =
@@ -2412,13 +2421,13 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         {
             OUString aStr;
             rFormatter.GetInputLineString( nVal, nKey, aStr);
-            aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] = aString[nMaxCol * (nRow + nRowOffset) + nCol + nColOffset] + aStr;
+            aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
     std::function<void(size_t, size_t, svl::SharedString)> aStringFunc =
         [&](size_t nRow, size_t nCol, svl::SharedString aStr)
         {
-            aString[(nRow + nRowOffset) * nMaxCol + nCol + nColOffset] = aString[(nRow + nRowOffset) * nMaxCol + nCol + nColOffset] + aStr.getString();
+            aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString();
         };
 
     if (nC1 == 1 || nR1 == 1)
@@ -2466,11 +2475,11 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         {
             if (aValid[nMaxCol * j + i])
             {
-                pos = maMat.set(pos, aString[nMaxCol * j + i]);
+                pos = maMat.set(pos, aString[nMaxRow * i + j]);
             }
             else
             {
-                pos = maMat.set(pos, CreateDoubleError(nErrors[nMaxCol * j + i]));
+                pos = maMat.set(pos, CreateDoubleError(nErrors[nMaxRow * i + j]));
             }
             pos = MatrixImplType::next_position(pos);
         }
