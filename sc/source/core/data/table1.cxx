@@ -277,7 +277,8 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     bPrintEntireSheet(true),
     bActiveScenario(false),
     mbPageBreaksValid(false),
-    mbForceBreaks(false)
+    mbForceBreaks(false),
+    aNextColAttrArray(static_cast<SCCOL>(-1), nNewTab, pDoc, nullptr, true)
 {
 
     if (bColInfo)
@@ -318,7 +319,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     }
 
     for (SCCOL k=0; k<=MAXCOL; k++)
-        aCol[k].Init( k, nTab, pDocument );
+        aCol[k].Init( k, nTab, pDocument, true );
 }
 
 ScTable::~ScTable()
