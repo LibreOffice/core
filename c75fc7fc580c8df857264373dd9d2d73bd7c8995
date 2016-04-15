@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac969e8_c6b8a2e8",
+        "filename": "sc/source/ui/app/scmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-15T08:45:59Z",
+      "side": 1,
+      "message": "I guess I need a second opinion here. \n\nI wish there was a more elegant way (i.e. not a hard recalculation of everything) to make cells affected by changes in formula settings update their content. Sadly, I don\u0027t know of any ...\n\nThen again, changing formula settings is not something one does every day.",
+      "revId": "c75fc7fc580c8df857264373dd9d2d73bd7c8995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
