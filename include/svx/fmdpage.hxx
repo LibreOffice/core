@@ -39,7 +39,7 @@ protected:
 
     // The following method is called when a SvxShape object should be created.
     // Derived classes can create a derivation or an object aggregating SvxShape.
-    virtual css::uno::Reference< css::drawing::XShape >  _CreateShape( SdrObject *pObj ) const
+    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const
         throw (css::uno::RuntimeException, std::exception) override;
 
 public:

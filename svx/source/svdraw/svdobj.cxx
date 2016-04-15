@@ -2895,7 +2895,7 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
                 if( pDrawPage )
                 {
                     // create one
-                    xShape = pDrawPage->_CreateShape( this );
+                    xShape = pDrawPage->CreateShape( this );
                     impl_setUnoShape( xShape );
                 }
             }

@@ -55,12 +55,12 @@ SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XSha
     return SvxDrawPage::CreateSdrObject_( xDescr );
 }
 
-uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pObj ) const
+uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj ) const
     throw (uno::RuntimeException, std::exception)
 {
     OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
     if ( !pBaseObj )
-        return SvxDrawPage::_CreateShape( pObj );
+        return SvxDrawPage::CreateShape( pObj );
 
     uno::Reference< report::XSection> xSection = m_xSection;
     uno::Reference< lang::XMultiServiceFactory> xFactory;
@@ -130,7 +130,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         }
 
         if ( !xShape.is() )
-            xShape.set( SvxDrawPage::_CreateShape( pObj ) );
+            xShape.set( SvxDrawPage::CreateShape( pObj ) );
 
         try
         {

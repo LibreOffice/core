@@ -33,7 +33,7 @@ namespace reportdesign
     protected:
         virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xShape )
             throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const throw (css::uno::RuntimeException, std::exception) override;
     public:
         OReportDrawPage(SdrPage* pPage,const css::uno::Reference< css::report::XSection >& _xSection);
         virtual ~OReportDrawPage() throw(){}

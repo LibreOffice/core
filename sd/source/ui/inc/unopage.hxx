@@ -108,7 +108,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     // SvxFmDrawPage
-    virtual css::uno::Reference<css::drawing::XShape>  _CreateShape(SdrObject *pObj) const
+    virtual css::uno::Reference<css::drawing::XShape>  CreateShape(SdrObject *pObj) const
         throw (css::uno::RuntimeException, std::exception) override;
 
     // XInterface

@@ -785,7 +785,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
         }
         default: // unknown inventor
         {
-            OSL_FAIL("AW: Unknown Inventor in SvxDrawPage::_CreateShape()");
+            OSL_FAIL("AW: Unknown Inventor in SvxDrawPage::CreateShape()");
             break;
         }
     }
@@ -821,7 +821,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
     return pRet;
 }
 
-Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
+Reference< drawing::XShape >  SvxDrawPage::CreateShape( SdrObject *pObj ) const
     throw (css::uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),

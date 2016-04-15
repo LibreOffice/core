@@ -33,10 +33,10 @@ ScPageObj::~ScPageObj() throw()
 {
 }
 
-uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) const
+uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
     throw (css::uno::RuntimeException, std::exception)
 {
-    uno::Reference<drawing::XShape> xShape(SvxFmDrawPage::_CreateShape( pObj ));
+    uno::Reference<drawing::XShape> xShape(SvxFmDrawPage::CreateShape( pObj ));
 
     new ScShapeObj( xShape );       // aggregates object and modifies xShape
 

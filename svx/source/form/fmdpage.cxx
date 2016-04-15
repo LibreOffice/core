@@ -79,7 +79,7 @@ SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::draw
 
 }
 
-css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::_CreateShape( SdrObject *pObj ) const
+css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::CreateShape( SdrObject *pObj ) const
     throw (css::uno::RuntimeException, std::exception)
 {
     if( FmFormInventor == pObj->GetObjInventor() )
@@ -88,7 +88,7 @@ css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::_CreateShape( SdrObj
         return xShape;
     }
     else
-        return SvxDrawPage::_CreateShape( pObj );
+        return SvxDrawPage::CreateShape( pObj );
 }
 
 // XFormsSupplier

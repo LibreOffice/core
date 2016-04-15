@@ -300,7 +300,7 @@ SdrObject* SwFmDrawPage::CreateSdrObject_( const uno::Reference< drawing::XShape
     return SvxFmDrawPage::CreateSdrObject_( xShape );
 }
 
-uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) const
+uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) const
     throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< drawing::XShape >  xRet;
@@ -336,7 +336,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
             }
             else
             {
-                OSL_FAIL( "<SwFmDrawPage::_CreateShape(..)> - could not retrieve type. Thus, no shape created." );
+                OSL_FAIL( "<SwFmDrawPage::CreateShape(..)> - could not retrieve type. Thus, no shape created." );
                 return xRet;
             }
         }
@@ -346,7 +346,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
         // own block - temporary object has to be destroyed before
         // the delegator is set #81670#
         {
-            xRet = SvxFmDrawPage::_CreateShape( pObj );
+            xRet = SvxFmDrawPage::CreateShape( pObj );
         }
         uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
         //don't create an SwXShape if it already exists

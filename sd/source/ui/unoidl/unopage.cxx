@@ -1408,11 +1408,11 @@ void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUSt
 {
 }
 
-Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) const
+Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) const
     throw (RuntimeException, std::exception)
 {
-    DBG_ASSERT( GetPage(), "SdGenericDrawPage::_CreateShape(), can't create shape for disposed page!" );
-    DBG_ASSERT( pObj, "SdGenericDrawPage::_CreateShape(), invalid call with pObj == 0!" );
+    DBG_ASSERT( GetPage(), "SdGenericDrawPage::CreateShape(), can't create shape for disposed page!" );
+    DBG_ASSERT( pObj, "SdGenericDrawPage::CreateShape(), invalid call with pObj == 0!" );
 
     if (!pObj)
         return Reference< drawing::XShape >();
@@ -1452,7 +1452,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) c
         Reference< drawing::XShape >  xShape( pShape );
 
         if(!xShape.is())
-            xShape = SvxFmDrawPage::_CreateShape( pObj );
+            xShape = SvxFmDrawPage::CreateShape( pObj );
 
         if( eKind != PRESOBJ_NONE )
         {
@@ -1535,7 +1535,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) c
     }
     else
     {
-        return SvxFmDrawPage::_CreateShape( pObj );
+        return SvxFmDrawPage::CreateShape( pObj );
     }
 
 }

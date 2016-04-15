@@ -30,7 +30,7 @@ public:
     ScPageObj(SdrPage* pPage);
     virtual ~ScPageObj() throw();
 
-    virtual css::uno::Reference<css::drawing::XShape> _CreateShape(SdrObject *pObj) const
+    virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject *pObj) const
         throw (css::uno::RuntimeException, std::exception) override;
 
                             // XServiceInfo
