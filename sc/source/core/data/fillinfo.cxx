@@ -507,12 +507,24 @@ void ScDocument::FillInfo(
 
                     SCROW nThisRow;
                     SCSIZE nIndex;
-                    (void) pThisAttrArr->Search( nCurRow, nIndex );
+                    if ( pThisAttrArr->nCount )
+                        (void) pThisAttrArr->Search( nCurRow, nIndex );
+                    else
+                        nIndex = 0;
 
                     do
                     {
-                        nThisRow=pThisAttrArr->pData[nIndex].nRow;              // End of range
-                        const ScPatternAttr* pPattern=pThisAttrArr->pData[nIndex].pPattern;
+                        const ScPatternAttr* pPattern = nullptr;
+                        if ( pThisAttrArr->nCount )
+                        {
+                            nThisRow = pThisAttrArr->pData[nIndex].nRow;              // End of range
+                            pPattern = pThisAttrArr->pData[nIndex].pPattern;
+                        }
+                        else
+                        {
+                            nThisRow = MAXROW;
+                            pPattern = GetDefPattern();
+                        }
 
                         const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(
                                                         &pPattern->GetItem(ATTR_BACKGROUND));
