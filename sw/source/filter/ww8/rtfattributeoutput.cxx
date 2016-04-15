@@ -520,7 +520,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     }
     aStr += "(\\s\\up ";
 
-    if (g_pBreakIt->GetBreakIter().is())
+    if (g_pBreakIt->GetBreakIter().is() && pRubyText)
         nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rNode.GetText(),
                       pRubyText->GetStart());
     else
