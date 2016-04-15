@@ -478,9 +478,9 @@ index f1c874d..3ad1b3f 100644
 -                UChar32 uc;
 -                int32_t chars = 0;
 -                for (;;) {
--                    int32_t pcIndex = utext_getNativeIndex(text);
+-                    int32_t pcIndex = (int32_t)utext_getNativeIndex(text);
 -                    pc = utext_next32(text);
--                    int32_t pcSize = utext_getNativeIndex(text) - pcIndex;
+-                    int32_t pcSize = (int32_t)utext_getNativeIndex(text) - pcIndex;
 -                    chars += pcSize;
 -                    remaining -= pcSize;
 -                    if (remaining <= 0) {
@@ -1000,10 +1000,10 @@ index cb594c6..82f2e77 100644
 +                            int32_t *prefix, UnicodeSet const* ignoreSet, int32_t minLength) const {
  
      UCharsTrie uct(characters);
-     int32_t startingTextIndex = utext_getNativeIndex(text);
+     int32_t startingTextIndex = (int32_t)utext_getNativeIndex(text);
 @@ -53,7 +53,13 @@ int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t
          UStringTrieResult result = (codePointsMatched == 0) ? uct.first(c) : uct.next(c);
-         int32_t lengthMatched = utext_getNativeIndex(text) - startingTextIndex;
+         int32_t lengthMatched = (int32_t)utext_getNativeIndex(text) - startingTextIndex;
          codePointsMatched += 1;
 +        if (ignoreSet != NULL && ignoreSet->contains(c)) {
 +            continue;
@@ -1022,11 +1022,11 @@ index cb594c6..82f2e77 100644
 -                            int32_t *prefix) const {
 +                            int32_t *prefix, UnicodeSet const* ignoreSet, int32_t minLength) const {
      BytesTrie bt(characters);
-     int32_t startingTextIndex = utext_getNativeIndex(text);
+     int32_t startingTextIndex = (int32_t)utext_getNativeIndex(text);
      int32_t wordCount = 0;
 @@ -120,7 +126,13 @@ int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t
          UStringTrieResult result = (codePointsMatched == 0) ? bt.first(transform(c)) : bt.next(transform(c));
-         int32_t lengthMatched = utext_getNativeIndex(text) - startingTextIndex;
+         int32_t lengthMatched = (int32_t)utext_getNativeIndex(text) - startingTextIndex;
          codePointsMatched += 1;
 +        if (ignoreSet != NULL && ignoreSet->contains(c)) {
 +            continue;
@@ -1081,7 +1081,7 @@ diff --git a/source/data/Makefile.in b/source/data/Makefile.in
 index 816c82d..c637d70 100644
 --- misc/icu/source/data/Makefile.in
 +++ build/icu/source/data/Makefile.in
-@@ -179,7 +179,7 @@ endif
+@@ -181,7 +181,7 @@ endif
  endif
  endif
  
@@ -1090,17 +1090,17 @@ index 816c82d..c637d70 100644
  ifneq ($(ENABLE_STATIC),)
  ifeq ($(PKGDATA_MODE),dll)
  	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-@@ -563,8 +563,14 @@ $(BRKBLDDIR)/burmesedict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
- 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1000 -c -i $(BUILDDIR) $(BRKSRCDIR)/burmesedict.txt $(BRKBLDDIR)/burmesedict.dict
+@@ -564,8 +564,14 @@ $(BRKBLDDIR)/burmesedict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
+ 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1000 -c -i $(BUILDDIR) $(DICTSRCDIR)/burmesedict.txt $(BRKBLDDIR)/burmesedict.dict
 
  # TODO: figure out why combining characters are here?
 -$(BRKBLDDIR)/khmerdict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
--	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(BRKSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
+-	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(DICTSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
 +#$(BRKBLDDIR)/khmerdict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
-+#	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(BRKSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
++#	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(DICTSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
 +
 +#$(MAINBUILDDIR)/khmerdict.stamp: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(BRKSRCDIR)/khmerdict.txt build-local
-+# 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(BRKSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
++# 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(DICTSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
 +$(MAINBUILDDIR)/khmerdict.stamp: $(BRKSRCDIR)/khmerdict.dict build-local
 +	cp $< $(BRKBLDDIR)
 +	echo "timestamp" > $@
