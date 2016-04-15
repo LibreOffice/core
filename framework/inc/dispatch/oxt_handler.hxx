@@ -56,11 +56,7 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
                                     css::document::XExtendedFilterDetection >
 {
 
-    //  public methods
-
     public:
-
-        //  constructor / destructor
 
                  Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~Oxt_Handler(                                                                        );
@@ -88,15 +84,6 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
         //  XExtendedFilterDetection
         virtual OUString SAL_CALL detect     (        css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    //  protected methods
-
-    protected:
-
-    private:
-
-    //  variables
-    //  (should be private everyway!)
-
     private:
         osl::Mutex m_mutex;
 
@@ -104,9 +91,9 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
         css::uno::Reference< css::uno::XInterface >                m_xSelfHold;   /// we must protect us against dying during async(!) dispatch() call!
         css::uno::Reference< css::frame::XDispatchResultListener > m_xListener;
 
-};      //  class Oxt_Handler
+};
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_OXT_HANDLER_HXX
 
