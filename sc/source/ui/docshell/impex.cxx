@@ -53,6 +53,8 @@
 #include "globstr.hrc"
 #include <vcl/svapp.hxx>
 
+#include <osl/security.h>
+
 //========================================================================
 
 // We don't want to end up with 2GB read in one line just because of malformed
@@ -448,9 +450,32 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_
                 aDocName = pShell->GetTitle( SFX_TITLE_FULLNAME );
         }
 
+
         OSL_ENSURE( aDocName.Len(), "ClipBoard document has no name! :-/" );
         if( aDocName.Len() )
         {
+#ifdef UNX
+            if( nFmt == SOT_FORMATSTR_ID_LINK_DDE )
+            {
+                String Home;
+                rtl_uString *pcHome = NULL;
+                oslSecurity Sec = osl_getCurrentSecurity();
+
+                if(osl_getHomeDir(Sec, &pcHome))
+                {
+                     Home = pcHome->buffer;
+                     rtl_uString_release( pcHome );
+                     // remove the file://
+                     Home.Erase(0, String((sal_Char*) "file://", RTL_TEXTENCODING_UTF8).Len());
+                     Home.Append( String((sal_Char*) "/", RTL_TEXTENCODING_UTF8) );
+
+                    if (Home.Len())
+                        aDocName.SearchAndReplace(Home, String((sal_Char *)("~/"), RTL_TEXTENCODING_UTF8));
+                }
+
+                osl_freeSecurityHandle(Sec);
+            }
+#endif
             // Always use Calc A1 syntax for paste link.
             String aRefName;
             sal_uInt16 nFlags = SCA_VALID | SCA_TAB_3D;

@@ -692,7 +692,7 @@ bool ScViewFunc::PasteLink( sal_uLong nFormatId,
     if (aStrs.size() > 3)
         pExtra = &aStrs[3];
 
-    if ( pExtra && *pExtra == "calc:extref" && nFormatId == 0 ) // DDE workaround for LO 4.1.6 V3
+    if ( pExtra && *pExtra == "calc:extref" )
     {
         // Paste this as an external reference.  Note that paste link always
         // uses Calc A1 syntax even when another formula syntax is specified

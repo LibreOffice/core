@@ -202,6 +202,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SOT_FORMATSTR_ID_HTML );
             AddFormat( SOT_FORMATSTR_ID_SYLK );
             AddFormat( SOT_FORMATSTR_ID_LINK );
+            AddFormat( SOT_FORMATSTR_ID_LINK_DDE );
             AddFormat( SOT_FORMATSTR_ID_DIF );
             AddFormat( SOT_FORMAT_STRING );
             AddFormat( SOT_FORMAT_RTF );
