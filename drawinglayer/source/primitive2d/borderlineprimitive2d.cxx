@@ -63,7 +63,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
     const basegfx::B2DVector& rVector, const basegfx::BColor& rColor, double fLineWidth, double fGap)
 {
     const basegfx::B2DVector aPerpendicular = basegfx::getPerpendicular(rVector);
-    const basegfx::B2DVector aLineWidthOffset = ((fLineWidth + 1.0) * 0.5) * aPerpendicular;
+    const basegfx::B2DVector aLineWidthOffset = (fLineWidth * 0.5) * aPerpendicular;
 
     basegfx::B2DPolygon aPolygon;
     aPolygon.append(rStart + aLineWidthOffset);
@@ -163,6 +163,11 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
 
         Primitive2DSequence BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
+            return createDecomposition(rViewInformation, false);
+        }
+
+        Primitive2DSequence BorderLinePrimitive2D::createDecomposition(const geometry::ViewInformation2D& rViewInformation, bool bPixelCorrection) const
+        {
             Primitive2DSequence xRetval;
 
             if(!getStart().equal(getEnd()) && ( isInsideUsed() || isOutsideUsed() ) )
@@ -199,8 +204,11 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                         xRetval[0] = makeHairLinePrimitive(
                             getStart(), getEnd(), aVector, getRGBColorLeft(), 0.0);
                     else
+                    {
+                        double fWidth = bPixelCorrection ? std::round(fLeftWidth) : fLeftWidth;
                         xRetval[0] = makeSolidLinePrimitive(
-                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorLeft(), fLeftWidth, -fLeftWidth/2.0);
+                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorLeft(), fWidth, -fLeftWidth/2.0);
+                    }
 
                     // "outside" line
 
@@ -208,8 +216,11 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                         xRetval[1] = makeHairLinePrimitive(
                             getStart(), getEnd(), aVector, getRGBColorRight(), fLeftWidth+mfDistance);
                     else
+                    {
+                        double fWidth = bPixelCorrection ? std::round(fRightWidth) : fRightWidth;
                         xRetval[1] = makeSolidLinePrimitive(
-                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorRight(), fRightWidth, mfDistance+fRightWidth/2.0);
+                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorRight(), fWidth, mfDistance+fRightWidth/2.0);
+                    }
                 }
                 else
                 {
