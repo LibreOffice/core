@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "7ac969e8_0692ba57",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7237,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-15T10:03:27Z",
+      "side": 1,
+      "message": "In this particular case, it\u0027s not necessary to change this line (if it ain\u0027t broken, don\u0027t fix it)",
+      "revId": "c75fc7fc580c8df857264373dd9d2d73bd7c8995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac969e8_669f2e60",
+        "filename": "sc/source/ui/app/scmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-15T10:03:27Z",
+      "side": 1,
+      "message": "Please remove this line, after (as mentioned in real life conversation) you have modified tpformula.cxx NOT to tag document options as modified, when they haven\u0027t been modified.\n\nThat way, we\u0027ll prevent resetting bCalcAll here",
+      "revId": "c75fc7fc580c8df857264373dd9d2d73bd7c8995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac969e8_c6b8a2e8",
         "filename": "sc/source/ui/app/scmod.cxx",
         "patchSetId": 1
