@@ -24,13 +24,13 @@
 #include "componenttools.hxx"
 #include "navtoolbar.hxx"
 #include "commandimageprovider.hxx"
-#include "commanddescriptionprovider.hxx"
 
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
@@ -223,11 +223,14 @@ namespace frm
 
         // the VCL control for the peer
         Reference< XModel > xContextDocument( getXModel( _rxModel ) );
+        Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rxORB) );
+        OUString sModuleID = xModuleManager->identify( xContextDocument );
+
         VclPtrInstance<NavigationToolBar> pNavBar(
             _pParentWindow,
             lcl_getWinBits_nothrow( _rxModel ),
             createDocumentCommandImageProvider( _rxORB, xContextDocument ),
-            createDocumentCommandDescriptionProvider( _rxORB, xContextDocument )
+            sModuleID
         );
 
         // some knittings

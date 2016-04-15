@@ -480,14 +480,13 @@ OUString CommandInfoProvider::GetCommandProperty(const OUString& rsProperty, con
     return OUString();
 }
 
-OUString CommandInfoProvider::GetCommandPropertyFromModule( const sal_Char* pCommandURL, const OUString& rModuleName )
+OUString CommandInfoProvider::GetCommandPropertyFromModule( const OUString& rCommandName, const OUString& rModuleName )
 {
     OUString sLabel;
-    if ( !pCommandURL || !*pCommandURL )
+    if ( rCommandName.isEmpty() )
         return sLabel;
 
     Sequence<beans::PropertyValue> aProperties;
-    OUString sCommandURL = OUString::createFromAscii( pCommandURL );
     try
     {
         if( rModuleName.getLength() > 0)
@@ -495,7 +494,7 @@ OUString CommandInfoProvider::GetCommandPropertyFromModule( const sal_Char* pCom
             Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
-                xUICommandLabels->getByName(sCommandURL) >>= aProperties;
+                xUICommandLabels->getByName(rCommandName) >>= aProperties;
 
             for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
             {
