@@ -591,19 +591,17 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         }
 
         // remove all entries with set flag
-        for ( size_t i = 0; i < aObjectList.size(); )
+        GalleryObjectList::const_iterator aEnd = aObjectList.end();
+        for ( GalleryObjectList::iterator it = aObjectList.begin(); it != aEnd ; /* increment is in the body ofloop */)
         {
-            pEntry = aObjectList[ i ];
-            if( pEntry->mbDelete )
+            if( (*it)->mbDelete )
             {
-                Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
-                Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uLong >( pEntry ) ) );
-                GalleryObjectList::iterator it = aObjectList.begin();
-                ::std::advance( it, i );
-                aObjectList.erase( it );
-                delete pEntry;
+                Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( *it ) ) );
+                Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uLong >( *it ) ) );
+                delete *it;
+                it = aObjectList.erase( it );
             }
-            else ++i;
+            else ++it;
         }
 
         // update theme
