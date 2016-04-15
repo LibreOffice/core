@@ -63,7 +63,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
     const basegfx::B2DVector& rVector, const basegfx::BColor& rColor, double fLineWidth, double fGap)
 {
     const basegfx::B2DVector aPerpendicular = basegfx::getPerpendicular(rVector);
-    const basegfx::B2DVector aLineWidthOffset = ((fLineWidth + 1.0) * 0.5) * aPerpendicular;
+    const basegfx::B2DVector aLineWidthOffset = (fLineWidth * 0.5) * aPerpendicular;
 
     basegfx::B2DPolygon aPolygon;
     aPolygon.append(rStart + aLineWidthOffset);
