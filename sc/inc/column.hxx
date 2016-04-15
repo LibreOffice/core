@@ -186,7 +186,7 @@ public:
                 ScColumn();
                 ~ScColumn();
 
-    void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc);
+    void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray = false);
 
     ScDocument& GetDoc() { return *pDocument;}
     const ScDocument& GetDoc() const { return *pDocument;}
