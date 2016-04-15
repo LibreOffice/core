@@ -48,8 +48,8 @@ namespace connectivity
 
             virtual void refreshColumns() override;
 
-            OUString getTableName() const { return m_Name; }
-            OUString getSchema() const { return m_SchemaName; }
+            OUString const & getTableName() const { return m_Name; }
+            OUString const & getSchema() const { return m_SchemaName; }
         };
     }
 }
