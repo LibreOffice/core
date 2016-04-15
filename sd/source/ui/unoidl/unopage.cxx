@@ -388,7 +388,7 @@ SdXImpressDocument* SdGenericDrawPage::GetModel() const
 }
 
 // this is called whenever a SdrObject must be created for a empty api shape wrapper
-SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShape >& xShape )
+SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShape >& xShape )
     throw (css::uno::RuntimeException, std::exception)
 {
     if( nullptr == SvxFmDrawPage::mpPage || !xShape.is() )
@@ -398,7 +398,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     const OUString aPrefix( "com.sun.star.presentation." );
     if( !aType.startsWith( aPrefix ) )
     {
-        SdrObject* pObj = SvxFmDrawPage::_CreateSdrObject( xShape );
+        SdrObject* pObj = SvxFmDrawPage::CreateSdrObject_( xShape );
         if( pObj && ( (pObj->GetObjInventor() != SdrInventor) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
         {
             SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
@@ -510,7 +510,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     SdrObject *pPresObj = nullptr;
     if( (eObjKind == PRESOBJ_TABLE) || (eObjKind == PRESOBJ_MEDIA) )
     {
-        pPresObj = SvxFmDrawPage::_CreateSdrObject( xShape );
+        pPresObj = SvxFmDrawPage::CreateSdrObject_( xShape );
         if( pPresObj )
         {
             SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());

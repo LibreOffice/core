@@ -293,11 +293,11 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
     return xShape;
 }
 
-SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape > & xShape )
+SdrObject* SwFmDrawPage::CreateSdrObject_( const uno::Reference< drawing::XShape > & xShape )
     throw (uno::RuntimeException, std::exception)
 {
     //FIXME: just a redirect call - can this method be deleted?
-    return SvxFmDrawPage::_CreateSdrObject( xShape );
+    return SvxFmDrawPage::CreateSdrObject_( xShape );
 }
 
 uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) const

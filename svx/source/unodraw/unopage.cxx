@@ -487,7 +487,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
         mpModel->SetChanged();
 }
 
-SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xShape)
+SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
     throw (css::uno::RuntimeException, std::exception)
 {
     sal_uInt16 nType = 0;
@@ -833,7 +833,7 @@ Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
 
 SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) throw()
 {
-    SdrObject* pObj = _CreateSdrObject( xShape );
+    SdrObject* pObj = CreateSdrObject_( xShape );
     if( pObj)
     {
         pObj->SetModel(mpModel);

@@ -46,7 +46,7 @@ protected:
 
     // Create a SdrObject according to a description. Can be used by derived classes to
     // support own css::drawing::Shapes (e.g. controls).
-    virtual SdrObject *_CreateSdrObject( const css::uno::Reference< css::drawing::XShape > & xShape )
+    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xShape )
         throw (css::uno::RuntimeException, std::exception) override;
 
 public:

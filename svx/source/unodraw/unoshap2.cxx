@@ -198,7 +198,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
 
     SdrObject* pSdrShape = pShape->GetSdrObject();
     if( pSdrShape == nullptr )
-        pSdrShape = mxPage->_CreateSdrObject( xShape );
+        pSdrShape = mxPage->CreateSdrObject_( xShape );
 
     if( pSdrShape->IsInserted() )
         pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );

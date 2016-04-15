@@ -129,7 +129,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     if(!mpObj.is() || !mxPage.is() || pShape == nullptr || nullptr != pShape->GetSdrObject() )
         throw uno::RuntimeException();
 
-    SdrObject* pSdrShape = mxPage->_CreateSdrObject( xShape );
+    SdrObject* pSdrShape = mxPage->CreateSdrObject_( xShape );
     if( dynamic_cast<const E3dObject* >(pSdrShape) !=  nullptr )
     {
         mpObj->GetSubList()->NbcInsertObject( pSdrShape );

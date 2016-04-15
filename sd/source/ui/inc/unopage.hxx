@@ -104,7 +104,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
     // this is called whenever a SdrObject must be created for a empty api shape wrapper
-    virtual SdrObject *_CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape )
+    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape )
         throw (css::uno::RuntimeException, std::exception) override;
 
     // SvxFmDrawPage

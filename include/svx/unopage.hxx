@@ -93,7 +93,7 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
 
     // Creating a SdrObject using it's Description.
     // Can be used by derived classes to support their owen Shapes (e.g. Controls).
-    virtual SdrObject *_CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape )
+    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape )
         throw (css::uno::RuntimeException, std::exception);
 
     static SvxShape* CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj = nullptr, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() ) throw (css::uno::RuntimeException);

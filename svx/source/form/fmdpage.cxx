@@ -65,7 +65,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  ) throw(
     return aTypes;
 }
 
-SdrObject *SvxFmDrawPage::_CreateSdrObject( const css::uno::Reference< css::drawing::XShape > & xDescr )
+SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xDescr )
     throw (css::uno::RuntimeException, std::exception)
 {
     OUString aShapeType( xDescr->getShapeType() );
@@ -75,7 +75,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const css::uno::Reference< css::draw
         )
         return new FmFormObj();
     else
-        return SvxDrawPage::_CreateSdrObject( xDescr );
+        return SvxDrawPage::CreateSdrObject_( xDescr );
 
 }
 
