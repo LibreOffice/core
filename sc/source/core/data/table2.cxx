@@ -1936,8 +1936,13 @@ bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
         OSL_FAIL("ScTable::ExtendMerge: invalid column number");
         return false;
     }
+    if ( nStartCol >= aCol.size() )
+    {
+        OSL_FAIL("ScTable::ExtendMerge: invalid nStartCol");
+        return false;
+    }
     bool bFound = false;
-    SCCOL nOldEndX = rEndCol;
+    SCCOL nOldEndX = std::min( rEndCol, static_cast<SCCOL>(aCol.size()-1) );
     SCROW nOldEndY = rEndRow;
     for (SCCOL i=nStartCol; i<=nOldEndX; i++)
         bFound |= aCol[i].ExtendMerge( i, nStartRow, nOldEndY, rEndCol, rEndRow, bRefresh );
