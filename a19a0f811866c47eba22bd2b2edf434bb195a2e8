@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac969e8_66fc4e3f",
+        "filename": "dbaccess/source/core/api/RowSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-15T15:16:24Z",
+      "side": 1,
+      "message": "the problem here is that the return type of the lambda is implicitly \"ORowSetValue\" instead of \"ORowSetValue const\u0026\" as x is, so on return the x is copied, the copy is immediately destroyed, and then a null pointer is returned (with g++).  MSVC at least warns about the impeding desaster.",
+      "revId": "a19a0f811866c47eba22bd2b2edf434bb195a2e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
