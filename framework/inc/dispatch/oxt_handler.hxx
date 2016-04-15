@@ -56,8 +56,6 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
                                     css::document::XExtendedFilterDetection >
 {
 
-    //  public methods
-
     public:
 
         //  constructor / destructor
@@ -87,15 +85,6 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
 
         //  XExtendedFilterDetection
         virtual OUString SAL_CALL detect     (        css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException, std::exception ) override;
-
-    //  protected methods
-
-    protected:
-
-    private:
-
-    //  variables
-    //  (should be private everyway!)
 
     private:
         osl::Mutex m_mutex;
