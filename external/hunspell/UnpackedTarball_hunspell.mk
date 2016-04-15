@@ -13,8 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,hunspell,$(HUNSPELL_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,hunspell,\
 	external/hunspell/hunspell-solaris.patch \
-	external/hunspell/hunspell-windows.patch \
-	external/hunspell/ubsan.patch.0 \
 ))
 
 ifeq ($(COM),MSC)
