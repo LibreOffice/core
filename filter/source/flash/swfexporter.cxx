@@ -321,9 +321,9 @@ sal_uInt16 FlashExporter::exportBackgrounds( const Reference< XDrawPage >& xDraw
         return ret;
 
     if (bExportObjects)
-        mpWriter->placeShape( maPagesMap[nPage].mnObjectsID, _uInt16(1), 0, 0 );
+        mpWriter->placeShape( maPagesMap[nPage].mnObjectsID, uInt16_(1), 0, 0 );
     else
-        mpWriter->placeShape( maPagesMap[nPage].mnBackgroundID, _uInt16(0), 0, 0 );
+        mpWriter->placeShape( maPagesMap[nPage].mnBackgroundID, uInt16_(0), 0, 0 );
 
     mpWriter->storeTo( xOutputStream );
 
@@ -629,7 +629,7 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
 
 //          pPageInfo->addShape( pShapeInfo );
 
-            mpWriter->placeShape( pShapeInfo->mnID, _uInt16(nPlaceDepth++), pShapeInfo->mnX, pShapeInfo->mnY );
+            mpWriter->placeShape( pShapeInfo->mnID, uInt16_(nPlaceDepth++), pShapeInfo->mnX, pShapeInfo->mnY );
     }
     catch( const Exception& )
     {

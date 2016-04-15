@@ -140,7 +140,7 @@ void Tag::write( SvStream &out )
     {
         bool bLarge = nSz > 62;
 
-        sal_uInt16 nCode = ( mnTagId << 6 ) | ( bLarge ? 0x3f : _uInt16(nSz) );
+        sal_uInt16 nCode = ( mnTagId << 6 ) | ( bLarge ? 0x3f : uInt16_(nSz) );
 
         out.WriteUChar( nCode );
         out.WriteUChar( nCode >> 8 );
@@ -367,7 +367,7 @@ void Sprite::write( SvStream& out )
 
     Tag aTag( TAG_DEFINESPRITE );
     aTag.addUI16( mnId );
-    aTag.addUI16( _uInt16( mnFrames ) );
+    aTag.addUI16( uInt16_( mnFrames ) );
     aTag.addStream( aTmp );
     aTag.write( out );
 }
@@ -433,7 +433,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
     tools::PolyPolygon aPolyPoly;
     pVDev->GetTextOutline( aPolyPoly, OUString(sal_Unicode(nChar)) );
 
-    maGlyphOffsets.push_back( _uInt16( maGlyphData.getOffset() ) );
+    maGlyphOffsets.push_back( uInt16_( maGlyphData.getOffset() ) );
 
     // Number of fill and line index bits set to 1
     maGlyphData.writeUB( 0x11, 8 );
@@ -474,7 +474,7 @@ void FlashFont::write( SvStream& out )
 
     aTag.addUI16( mnId );
 
-    sal_uInt16 nGlyphs = _uInt16( maGlyphOffsets.size() );
+    sal_uInt16 nGlyphs = uInt16_( maGlyphOffsets.size() );
     sal_uInt16 nOffset = nGlyphs * sizeof( sal_uInt16 );
 
     for(vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); ++i)

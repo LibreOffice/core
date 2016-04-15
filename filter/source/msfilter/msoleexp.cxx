@@ -124,11 +124,11 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
     SvGlobalName aObjName( rObj->getClassID() );
     std::shared_ptr<const SfxFilter> pExpFilter;
     {
-        static struct _ObjExpType {
+        static struct ObjExpType {
             sal_uInt32 nFlag;
             const char* pFilterNm;
             // GlobalNameId
-            struct _GlobalNameIds {
+            struct GlobalNameIds {
                 sal_uInt32 n1;
                 sal_uInt16 n2, n3;
                 sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
@@ -159,11 +159,11 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
                 {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50}}}
         };
 
-        for( const _ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
+        for( const ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
         {
             for ( int n = 0; n < 4; ++n )
             {
-                const _ObjExpType::_GlobalNameIds& rId = pArr->aGlNmIds[ n ];
+                const ObjExpType::GlobalNameIds& rId = pArr->aGlNmIds[ n ];
                 SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
                             rId.b8, rId.b9, rId.b10, rId.b11,
                             rId.b12, rId.b13, rId.b14, rId.b15 );

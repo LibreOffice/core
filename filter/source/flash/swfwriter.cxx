@@ -163,7 +163,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
     aHeader.addUI8( 0 );
     aHeader.addUI8( 12 );
 
-    aHeader.addUI16( _uInt16(mnFrames) );
+    aHeader.addUI16( uInt16_(mnFrames) );
 
     const sal_uInt32 nSize = aHeader.Tell() + mpFontsStream->Tell() + mpMovieStream->Tell();
 
@@ -227,8 +227,8 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
 
     // #i73264#
     const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
-        _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)),
-        _Int16(static_cast<long>(map100thmm(y)*mnDocYScale))));
+        Int16_(static_cast<long>(map100thmm(x)*mnDocXScale)),
+        Int16_(static_cast<long>(map100thmm(y)*mnDocYScale))));
     mpTag->addMatrix( aMatrix );        // transformation matrix
 
     endTag();
@@ -416,7 +416,7 @@ void Writer::stop()
 
 void Writer::waitOnClick( sal_uInt16 nDepth )
 {
-    placeShape( _uInt16( mnPageButtonId ), nDepth, 0, 0 );
+    placeShape( uInt16_( mnPageButtonId ), nDepth, 0, 0 );
     stop();
     showFrame();
     removeShape( nDepth );

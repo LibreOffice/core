@@ -6870,7 +6870,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         sStarName = OUString::createFromAscii( pName );
     else if ( nConvertFlags )
     {
-        static struct _ObjImpType
+        static struct ObjImpType
         {
             sal_uInt32 nFlag;
             const char* pFactoryNm;
@@ -6896,7 +6896,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
               0, 0, 0, 0, 0, 0, 0, 0 }
         };
 
-        for( const _ObjImpType* pArr = aArr; pArr->nFlag; ++pArr )
+        for( const ObjImpType* pArr = aArr; pArr->nFlag; ++pArr )
         {
             if( nConvertFlags & pArr->nFlag )
             {

@@ -114,7 +114,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, boo
 {
     Point aLastPoint( rPoly[0] );
 
-    Impl_addShapeRecordChange( rBits, _Int16(aLastPoint.X()),_Int16(aLastPoint.Y()), bFilled );
+    Impl_addShapeRecordChange( rBits, Int16_(aLastPoint.X()),Int16_(aLastPoint.Y()), bFilled );
 
     sal_uInt16 i = 0, nSize = rPoly.GetSize();
 
@@ -148,7 +148,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, boo
         const Point aPolyPoint( rPoly[ i ] );
         if( aPolyPoint != aLastPoint )
         {
-            Impl_addStraightEdgeRecord( rBits, _Int16(aPolyPoint.X() - aLastPoint.X()),_Int16(aPolyPoint.Y() - aLastPoint.Y()));
+            Impl_addStraightEdgeRecord( rBits, Int16_(aPolyPoint.X() - aLastPoint.X()),Int16_(aPolyPoint.Y() - aLastPoint.Y()));
             aLastPoint = aPolyPoint;
         }
     }
@@ -158,7 +158,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, boo
         const Point aPolyPoint( rPoly[ 0 ] );
         if( aPolyPoint != aLastPoint )
         {
-            Impl_addStraightEdgeRecord( rBits, _Int16(aPolyPoint.X() - aLastPoint.X()),_Int16(aPolyPoint.Y() - aLastPoint.Y()));
+            Impl_addStraightEdgeRecord( rBits, Int16_(aPolyPoint.X() - aLastPoint.X()),Int16_(aPolyPoint.Y() - aLastPoint.Y()));
         }
     }
 }
@@ -599,7 +599,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         m.translate( double(aPt.X() / scale), double(aPt.Y()) );
         m.scale( scale, scale );
 
-        sal_Int16 nHeight = _Int16( map( Size( 0, aFont.GetFontHeight() ) ).Height() );
+        sal_Int16 nHeight = Int16_( map( Size( 0, aFont.GetFontHeight() ) ).Height() );
 
         startTag( TAG_DEFINETEXT );
 
@@ -619,7 +619,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         mpTag->addUI8( 0x8c );
         mpTag->addUI16( rFlashFont.getID() );
         mpTag->addRGB( aTextColor );
-        mpTag->addUI16( _uInt16( nHeight ) );
+        mpTag->addUI16( uInt16_( nHeight ) );
 
         DBG_ASSERT( nLen <= 127, "TODO: handle text with more than 127 characters" );
 
@@ -643,7 +643,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             }
 
             aBits.writeUB( rFlashFont.getGlyph(rText[i],mpVDev), nGlyphBits );
-            aBits.writeSB( _Int16(map( Size( (long)( nAdvance / scale ), 0 ) ).Width() ), nAdvanceBits );
+            aBits.writeSB( Int16_(map( Size( (long)( nAdvance / scale ), 0 ) ).Width() ), nAdvanceBits );
         }
 
         mpTag->addBits( aBits );
@@ -960,8 +960,8 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
 
     mpTag->addUI16( nBitmapId );
     mpTag->addUI8( 5 );
-    mpTag->addUI16( _uInt16(width) );
-    mpTag->addUI16( _uInt16(height) );
+    mpTag->addUI16( uInt16_(width) );
+    mpTag->addUI16( uInt16_(height) );
 
     mpTag->Write( pCompressed, compressed_size );
 
@@ -1820,7 +1820,7 @@ void Writer::Impl_addStraightLine( BitStream& rBits, Point& rLastPoint,
 {
     Point aPoint( FRound(P2x), FRound(P2y) );
 
-    Impl_addStraightEdgeRecord( rBits, _Int16(aPoint.X() - rLastPoint.X()),_Int16(aPoint.Y() - rLastPoint.Y()));
+    Impl_addStraightEdgeRecord( rBits, Int16_(aPoint.X() - rLastPoint.X()),Int16_(aPoint.Y() - rLastPoint.Y()));
     rLastPoint = aPoint;
 
 }
@@ -1835,8 +1835,8 @@ void Writer::Impl_addQuadBezier( BitStream& rBits, Point& rLastPoint,
     Point aAnchorPoint( FRound(P3x), FRound(P3y) );
 
     Impl_addCurvedEdgeRecord( rBits,
-                                _Int16(aControlPoint.X() - rLastPoint.X()),_Int16(aControlPoint.Y() - rLastPoint.Y()),
-                                _Int16(aAnchorPoint.X() - aControlPoint.X()),_Int16(aAnchorPoint.Y() - aControlPoint.Y()) );
+                                Int16_(aControlPoint.X() - rLastPoint.X()),Int16_(aControlPoint.Y() - rLastPoint.Y()),
+                                Int16_(aAnchorPoint.X() - aControlPoint.X()),Int16_(aAnchorPoint.Y() - aControlPoint.Y()) );
     rLastPoint = aAnchorPoint;
 }
 

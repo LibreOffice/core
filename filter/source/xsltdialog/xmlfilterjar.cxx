@@ -101,7 +101,7 @@ static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, 
     return xFolder;
 }
 
-static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, Reference< XInputStream >& xInput, const OUString& aName ) throw( Exception )
+static void addFile_( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, Reference< XInputStream >& xInput, const OUString& aName ) throw( Exception )
 {
     Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
     Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
@@ -133,7 +133,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
 
         SvFileStream* pStream = new SvFileStream(aFileURL, StreamMode::READ );
         Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( pStream, true ) );
-        _addFile( xRootFolder, xFactory, xInput, aName );
+        addFile_( xRootFolder, xFactory, xInput, aName );
     }
 }
 
@@ -215,7 +215,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
             Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( new SvFileStream(aTempFileURL, StreamMode::READ ), true ) );
             OUString szTypeDetection( "TypeDetection.xcu" );
-            _addFile( xRootFolder, xFactory,  XIS, szTypeDetection );
+            addFile_( xRootFolder, xFactory,  XIS, szTypeDetection );
 
             Reference< XChangesBatch > xBatch( xIfc, UNO_QUERY );
             if( xBatch.is() )
