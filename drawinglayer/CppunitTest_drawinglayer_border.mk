@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_use_api,drawinglayer_border,\
 $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_border, \
 	basegfx \
 	cppu \
+	cppuhelper \
 	sal \
 	salhelper \
 	drawinglayer \
