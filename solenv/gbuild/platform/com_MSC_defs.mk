@@ -75,6 +75,8 @@ gb_AFLAGS := $(AFLAGS)
 # cleaning away from the code, to avoid warnings when building with
 # gcc or Clang and -Wall -Werror.
 
+# C4091: 'typedef ': ignored on left of '' when no variable is declared
+
 # C4100: 'identifier' : unreferenced formal parameter
 
 # C4127: conditional expression is constant
@@ -149,6 +151,7 @@ gb_CFLAGS := \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
+	-wd4091 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
@@ -190,6 +193,7 @@ gb_CXXFLAGS := \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
+	-wd4091 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
