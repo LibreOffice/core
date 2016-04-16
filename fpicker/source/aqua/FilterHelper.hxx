@@ -55,8 +55,8 @@ public:
 
     FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
 
-    OUString       getTitle() const { return m_sTitle; }
-    OUStringList    getFilterSuffixList() const { return m_sFilterSuffixList; }
+    OUString const & getTitle() const { return m_sTitle; }
+    OUStringList const & getFilterSuffixList() const { return m_sFilterSuffixList; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
     bool        hasSubFilters( ) const;
