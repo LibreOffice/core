@@ -20,13 +20,12 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGCONTROL_HXX
 
 #include "svx/sidebar/PopupControl.hxx"
-#include "svx/sidebar/ValueSetWithTextControl.hxx"
 #include <sfx2/bindings.hxx>
-#include "TextPropertyPanel.hxx"
 #include <vcl/fixed.hxx>
+#include <vcl/field.hxx>
+#include <sfx2/tbxctrl.hxx>
 
-
-namespace svx { namespace sidebar {
+namespace svx {
 #define SPACING_NOCUSTOM                0
 #define SPACING_CLOSE_BY_CLICK_ICON     -1
 #define SPACING_CLOSE_BY_CUS_EDIT       1
@@ -37,60 +36,44 @@ namespace svx { namespace sidebar {
 #define SIDEBAR_SPACE_EXPAND    1
 #define SIDEBAR_SPACE_CONDENSED 2
 
-class TextCharacterSpacingControl:public svx::sidebar::PopupControl
+class TextCharacterSpacingControl : public SfxPopupWindow
 {
 public:
-    TextCharacterSpacingControl (
-        vcl::Window* pParent,
-        svx::sidebar::TextPropertyPanel& rPanel,
-        SfxBindings* pBindings);
+    TextCharacterSpacingControl(sal_uInt16 nId);
     virtual ~TextCharacterSpacingControl();
     virtual void dispose() override;
-    void Rearrange(bool bLBAvailable,bool bAvailable, long nKerning);
-    //virtual void Paint(const Rectangle& rect);
 
-    //add
     short GetLastCustomState() { return mnLastCus;}
     long  GetLastCustomValue() { return mnCustomKern;}
-    //add end
 
 private:
-    svx::sidebar::TextPropertyPanel&     mrTextPropertyPanel;
-    SfxBindings*        mpBindings;
-
-    VclPtr<ValueSetWithTextControl> maVSSpacing;
-
-    VclPtr<FixedText>   maLastCus;
-
     VclPtr<FixedText>   maFTSpacing;
     VclPtr<ListBox>     maLBKerning;
     VclPtr<FixedText>   maFTBy;
     VclPtr<MetricField> maEditKerning;
 
-    Image*              mpImg;
-    Image*              mpImgSel;
-    OUString*           mpStr;
-    OUString*           mpStrTip;
+    VclPtr<PushButton> maNormal;
+    VclPtr<PushButton> maVeryTight;
+    VclPtr<PushButton> maTight;
+    VclPtr<PushButton> maVeryLoose;
+    VclPtr<PushButton> maLoose;
+    VclPtr<PushButton> maLastCustom;
 
-    Image               maImgCus;
-    Image               maImgCusGrey;
-    OUString            maStrCus;
-    OUString            maStrCusE;
-    OUString            maStrCusC;
-    OUString            maStrCusN;
-    OUString            maStrUnit;
-
+    sal_uInt16          mnId;
     long                mnCustomKern;
     short               mnLastCus;
-    bool                mbCusEnable;
-    bool                mbVS;
 
-    void initial();
-    DECL_LINK_TYPED(VSSelHdl, ValueSet*, void);
+    void Initialize();
+    void ExecuteCharacterSpacing(long nValue, bool bClose = true);
+
+    DECL_LINK_TYPED(PredefinedValuesHdl, Button*, void);
     DECL_LINK_TYPED(KerningSelectHdl, ListBox&, void);
     DECL_LINK_TYPED(KerningModifyHdl, Edit&, void);
+
+    SfxMapUnit GetCoreMetric() const;
+    long GetSelFontSize() const;
 };
-}}
+}
 
 #endif
 

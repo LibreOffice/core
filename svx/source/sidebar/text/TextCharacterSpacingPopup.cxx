@@ -16,53 +16,35 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "TextCharacterSpacingPopup.hxx"
+#include <svx/TextCharacterSpacingPopup.hxx>
 #include "TextCharacterSpacingControl.hxx"
 #include <unotools/viewoptions.hxx>
+#include <vcl/toolbox.hxx>
+#include <editeng/kernitem.hxx>
 
-namespace svx { namespace sidebar {
+using namespace svx;
 
-TextCharacterSpacingPopup::TextCharacterSpacingPopup (
-    vcl::Window* pParent,
-    const ::std::function<VclPtr<PopupControl>(PopupContainer*)>& rControlCreator)
-    : Popup(
-        pParent,
-        rControlCreator,
-        OUString( "Character Spacing"))
+SFX_IMPL_TOOLBOX_CONTROL(TextCharacterSpacingPopup, SvxKerningItem);
+
+TextCharacterSpacingPopup::TextCharacterSpacingPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-    SetPopupModeEndHandler([this] () { return this->PopupModeEndCallback(); });
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
 TextCharacterSpacingPopup::~TextCharacterSpacingPopup()
 {
 }
 
-void TextCharacterSpacingPopup::Rearrange (bool bLBAvailable,bool bAvailable, long nKerning)
+VclPtr<SfxPopupWindow> TextCharacterSpacingPopup::CreatePopupWindow()
 {
-    ProvideContainerAndControl();
+    VclPtr<TextCharacterSpacingControl> pControl = VclPtr<TextCharacterSpacingControl>::Create(GetSlotId());
 
-    TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mxControl.get());
-    if (pControl != nullptr)
-        pControl->Rearrange(bLBAvailable,bAvailable,nKerning);
+    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
+
+    SetPopupWindow(pControl);
+
+    return pControl;
 }
-
-void TextCharacterSpacingPopup::PopupModeEndCallback()
-{
-    ProvideContainerAndControl();
-    TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mxControl.get());
-    if (pControl == nullptr)
-        return;
-
-    if( pControl->GetLastCustomState() == SPACING_CLOSE_BY_CUS_EDIT)
-    {
-        SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE );
-        css::uno::Sequence < css::beans::NamedValue > aSeq
-            { { "Spacing", css::uno::makeAny(OUString::number(pControl->GetLastCustomValue())) } };
-        aWinOpt.SetUserData( aSeq );
-
-    }
-}
-
-} } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

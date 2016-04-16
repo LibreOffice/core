@@ -69,6 +69,7 @@
 #include <svx/fontwork.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
+#include <svx/TextCharacterSpacingPopup.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
@@ -227,6 +228,7 @@ void SdDLL::RegisterControllers()
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
+    svx::TextCharacterSpacingPopup::RegisterControl(SID_ATTR_CHAR_KERNING, pMod);
 
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
