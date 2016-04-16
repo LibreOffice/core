@@ -65,48 +65,6 @@
 
 #define STR_WITHOUT             50
 
-//POPUP WINDOW OF SPACING
-#define VS_SPACING                  1
-
-#define CT_BORDER                   7
-#define LB_KERNING                  8
-#define ED_KERNING                  9
-
-#define FT_SPACING                  18
-#define FT_BY                       19
-#define FT_LASTCUSTOM               20
-
-#define IMG_NORMAL                  31
-#define IMG_VERY_TIGHT              32
-#define IMG_TIGHT                   33
-#define IMG_LOOSE                   34
-#define IMG_VERY_LOOSE              35
-#define IMG_CUSTOM                  36
-#define IMG_CUSTOM_GRAY             37
-
-#define IMG_NORMAL_S                51
-#define IMG_VERY_TIGHT_S            52
-#define IMG_TIGHT_S                 53
-#define IMG_LOOSE_S                 54
-#define IMG_VERY_LOOSE_S            55
-
-#define STR_VERY_TIGHT              61
-#define STR_TIGHT                   62
-#define STR_NORMAL                  63
-#define STR_LOOSE                   64
-#define STR_VERY_LOOSE              65
-#define STR_CUSTOM                  66
-
-#define STR_VERY_TIGHT_TIP          67
-#define STR_TIGHT_TIP               68
-#define STR_NORMAL_TIP              69
-#define STR_LOOSE_TIP               70
-#define STR_VERY_LOOSE_TIP          71
-
-#define STR_CUSTOM_C_TIP            72
-#define STR_CUSTOM_E_TIP            73
-#define STR_PT                      74
-
 //help ids
 #define HID_UNDERLINE_BTN               "SVX_HID_UNDERLINE_BTN"
 #define HID_SPACING_CB_KERN             "SVX_HID_SPACING_CB_KERN"
