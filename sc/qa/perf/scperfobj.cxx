@@ -683,7 +683,7 @@ void ScPerfObj::testMatConcatLarge()
     uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
 
     callgrindStart();
-    xArrayFormulaRange->setArrayFormula("=A:A&B:B");
+    xArrayFormulaRange->setArrayFormula("=A1:A30000&B1:B30000");
     xCalculatable->calculate();
     callgrindDump("sc:mat_concat");
 }
