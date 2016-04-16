@@ -27,6 +27,7 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 #include <svl/sharedstring.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include <functional>
 #include <memory>
@@ -407,7 +408,7 @@ public:
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const = 0;
 
     virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter) = 0;
+            SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool) = 0;
 
 #if DEBUG_MATRIX
     virtual void Dump() const = 0;
@@ -619,7 +620,7 @@ public:
     ScFullMatrix& operator+= ( const ScFullMatrix& r );
 
     virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter) override;
+            SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool) override;
 
 #if DEBUG_MATRIX
     virtual void Dump() const override;
@@ -833,7 +834,7 @@ public:
     ScVectorRefMatrix& operator+=(const ScVectorRefMatrix& r);
 
     virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter) override;
+            SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool) override;
 
 #if DEBUG_MATRIX
     virtual void Dump() const override
