@@ -56,10 +56,10 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
 class DialogWindow: public BaseWindow
 {
 private:
-    DialogWindowLayout& rLayout;
-    std::unique_ptr<DlgEditor> pEditor;
-    std::unique_ptr<SfxUndoManager> pUndoMgr; // never nullptr
-    OUString            aCurPath;
+    DialogWindowLayout& m_rLayout;
+    std::unique_ptr<DlgEditor> m_pEditor;
+    std::unique_ptr<SfxUndoManager> m_pUndoMgr; // never nullptr
+    OUString            m_sCurPath;
 
 protected:
     virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
@@ -85,7 +85,7 @@ public:
 
     virtual void        ExecuteCommand( SfxRequest& rReq ) override;
     virtual void        GetState( SfxItemSet& ) override;
-    DlgEditor&          GetEditor() const   { return *pEditor; }
+    DlgEditor&          GetEditor() const   { return *m_pEditor; }
     css::uno::Reference< css::container::XNameContainer > GetDialog() const;
     DlgEdModel&         GetModel() const;
     DlgEdPage&          GetPage() const;

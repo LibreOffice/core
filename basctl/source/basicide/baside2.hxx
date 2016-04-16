@@ -300,13 +300,13 @@ public:
 class ModulWindow: public BaseWindow
 {
 private:
-    ModulWindowLayout&  rLayout;
-    StarBASICRef        xBasic;
-    short               nValid;
-    VclPtr<ComplexEditorWindow> aXEditorWindow;
-    BasicStatus         aStatus;
-    SbModuleRef         xModule;
-    OUString            aCurPath;
+    ModulWindowLayout&  m_rLayout;
+    StarBASICRef        m_xBasic;
+    short               m_nValid;
+    VclPtr<ComplexEditorWindow> m_aXEditorWindow;
+    BasicStatus         m_aStatus;
+    SbModuleRef         m_xModule;
+    OUString            m_sCurPath;
     OUString            m_aModule;
 
     void                CheckCompileBasic();
@@ -345,10 +345,10 @@ public:
     virtual void    SetReadOnly (bool bReadOnly) override;
     virtual bool    IsReadOnly() override;
 
-    StarBASIC*      GetBasic() { XModule(); return xBasic; }
+    StarBASIC*      GetBasic() { XModule(); return m_xBasic; }
 
-    SbModule*       GetSbModule() { return xModule; }
-    void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
+    SbModule*       GetSbModule() { return m_xModule; }
+    void            SetSbModule( SbModule* pModule ) { m_xModule = pModule; }
     OUString        GetSbModuleName();
 
     void            CompileBasic();
@@ -375,7 +375,7 @@ public:
 
     void            ToggleBreakPoint( sal_uLong nLine );
 
-    BasicStatus&    GetBasicStatus() { return aStatus; }
+    BasicStatus&    GetBasicStatus() { return m_aStatus; }
 
     virtual bool    IsModified () override;
     virtual bool    IsPasteAllowed () override;
@@ -385,14 +385,14 @@ public:
     virtual SearchOptionFlags GetSearchOptions() override;
     virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false) override;
 
-    EditorWindow&       GetEditorWindow()       { return aXEditorWindow->GetEdtWindow(); }
-    BreakPointWindow&   GetBreakPointWindow()   { return aXEditorWindow->GetBrkWindow(); }
-    LineNumberWindow&   GetLineNumberWindow()   { return aXEditorWindow->GetLineNumberWindow(); }
-    ScrollBar&          GetEditVScrollBar()     { return aXEditorWindow->GetEWVScrollBar(); }
+    EditorWindow&       GetEditorWindow()       { return m_aXEditorWindow->GetEdtWindow(); }
+    BreakPointWindow&   GetBreakPointWindow()   { return m_aXEditorWindow->GetBrkWindow(); }
+    LineNumberWindow&   GetLineNumberWindow()   { return m_aXEditorWindow->GetLineNumberWindow(); }
+    ScrollBar&          GetEditVScrollBar()     { return m_aXEditorWindow->GetEWVScrollBar(); }
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
     ExtTextView*        GetEditView()           { return GetEditorWindow().GetEditView(); }
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }
-    ModulWindowLayout&  GetLayout ()            { return rLayout; }
+    ModulWindowLayout&  GetLayout ()            { return m_rLayout; }
 
     virtual void        BasicStarted() override;
     virtual void        BasicStopped() override;
