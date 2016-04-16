@@ -88,7 +88,7 @@ namespace connectivity
                 MacabHeader *getHeader() const;
 
                 void setName(const OUString& _sName);
-                OUString getName() const;
+                OUString const & getName() const;
 
                 MacabRecord *insertRecord(MacabRecord *_newRecord, const sal_Int32 _location);
                 void insertRecord(MacabRecord *_newRecord);

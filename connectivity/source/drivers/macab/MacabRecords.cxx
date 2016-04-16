@@ -1196,7 +1196,7 @@ void MacabRecords::setName(const OUString& _sName)
 }
 
 
-OUString MacabRecords::getName() const
+OUString const & MacabRecords::getName() const
 {
     return m_sName;
 }
