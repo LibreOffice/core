@@ -65,6 +65,7 @@ private:
 
     VclPtr<ListBox>    pInsTypeCombo;
     VclPtr<CheckBox>   pASRCheck;
+    VclPtr<CheckBox>   pFILLCheck;
     VclPtr<CheckBox>   pCapCheck;
 
     SdDrawDocument* pDoc;
@@ -84,6 +85,7 @@ private:
         const Reference< drawing::XDrawPages >& xDrawPages);
 
     static awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
+    static awt::Size createFILLSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
     void createCaption(const awt::Size& aPageSize);
     static Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
         const Reference< graphic::XGraphicProvider>& xProvider);
