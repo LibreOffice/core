@@ -1150,7 +1150,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 {
                     BaseWindow* pDlgWin = pShell->FindDlgWin( rDocument, aLibName, aNewDlgName, false, true );
                     if( pDlgWin != nullptr )
-                        pShell->RemoveWindow( pDlgWin, true );
+                        pShell->RemoveWindow( pDlgWin, false );
                     MarkDocumentModified( rDocument );
                 }
                 else
