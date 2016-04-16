@@ -201,7 +201,7 @@ void SwXMLExport::ExportAutoStyles_()
     if( !(getExportFlags() & SvXMLExportFlags::STYLES) )
         GetTextParagraphExport()->exportUsedDeclarations();
 
-    // exported in _ExportContent
+    // exported in ExportContent_
     if( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         GetTextParagraphExport()->exportTrackedChanges( true );
