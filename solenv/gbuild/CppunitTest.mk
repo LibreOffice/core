@@ -31,6 +31,9 @@ endif
 
 ifneq ($(strip $(VALGRIND)),)
 gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50 --error-exitcode=1 --trace-children=yes --trace-children-skip='*/java,*/gij'
+ifneq ($(strip $(VALGRIND_GDB)),)
+gb_CppunitTest_VALGRINDTOOL += --vgdb=yes --vgdb-error=0
+endif
 ifeq ($(strip $(VALGRIND)),memcheck)
 G_SLICE := always-malloc
 GLIBCXX_FORCE_NEW := 1
