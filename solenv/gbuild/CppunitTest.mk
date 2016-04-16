@@ -40,6 +40,9 @@ endif
 ifneq (,$(filter perfcheck,$(MAKECMDGOALS)))
 $(if $(ENABLE_VALGRIND),,$(call gb_Output_error,Running performance tests with empty $$(ENABLE_VALGRIND) does not make sense))
 gb_CppunitTest_VALGRINDTOOL := valgrind --tool=callgrind --dump-instr=yes --instr-atstart=no --simulate-cache=yes --dump-instr=yes --collect-bus=yes --branch-sim=yes
+ifneq ($(strip $(VALGRIND_GDB)),)
+gb_CppunitTest_VALGRINDTOOL += --vgdb=yes --vgdb-error=0
+endif
 endif
 
 # defined by platform

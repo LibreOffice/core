@@ -44,8 +44,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 3
-
 class ScPerfObj : public CalcUnoApiTest
 {
 public:
@@ -135,13 +133,10 @@ void ScPerfObj::setUp()
 
 void ScPerfObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
+    if (mxComponent.is())
     {
-        if (mxComponent.is())
-        {
-            closeDocument(mxComponent);
-            mxComponent.clear();
-        }
+        closeDocument(mxComponent);
+        mxComponent.clear();
     }
     CalcUnoApiTest::tearDown();
 }
