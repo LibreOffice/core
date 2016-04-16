@@ -74,7 +74,8 @@ public:
     CPPUNIT_TEST(testLoadingFileWithSingleBigSheet);
     CPPUNIT_TEST(testFixedSum);
     CPPUNIT_TEST(testVariableSum);
-    CPPUNIT_TEST(testMatConcat);
+    CPPUNIT_TEST(testMatConcatSmall);
+    CPPUNIT_TEST(testMatConcatLarge);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -99,7 +100,8 @@ private:
     void testLoadingFileWithSingleBigSheet();
     void testFixedSum();
     void testVariableSum();
-    void testMatConcat();
+    void testMatConcatSmall();
+    void testMatConcatLarge();
 };
 
 sal_Int32 ScPerfObj::nTest = 0;
@@ -630,7 +632,35 @@ void ScPerfObj::testVariableSum()
     callgrindDump("sc:sum_with_variable_array_formula");
 }
 
-void ScPerfObj::testMatConcat()
+void ScPerfObj::testMatConcatSmall()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("empty.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName("Sheet1");
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+
+    // query for the XCellRange interface
+    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
+    // query the cell range
+    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByName("C1");
+
+    uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
+
+    callgrindStart();
+    xArrayFormulaRange->setArrayFormula("=A1:A20&B1:B20");
+    xCalculatable->calculate();
+    callgrindDump("sc:mat_concat_small");
+}
+
+void ScPerfObj::testMatConcatLarge()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("empty.ods"), UNO_QUERY_THROW);
 
