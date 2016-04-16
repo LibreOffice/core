@@ -23,7 +23,6 @@ $(eval $(call gb_StaticLibrary_add_defs,hunspell,\
 $(eval $(call gb_StaticLibrary_add_generated_cxxobjects,hunspell,\
 	UnpackedTarball/hunspell/src/hunspell/affentry \
 	UnpackedTarball/hunspell/src/hunspell/affixmgr \
-	UnpackedTarball/hunspell/src/hunspell/dictmgr \
 	UnpackedTarball/hunspell/src/hunspell/csutil \
 	UnpackedTarball/hunspell/src/hunspell/hashmgr \
 	UnpackedTarball/hunspell/src/hunspell/suggestmgr \
