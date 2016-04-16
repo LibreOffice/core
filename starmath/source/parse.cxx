@@ -370,9 +370,9 @@ void SmParser::NextToken()
 
     // user-defined char continuing characters may be any alphanumeric or dot.
     static const sal_Int32 coUserDefinedCharContFlags =
-        ((KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::IGNORE_LEADING_WS | KParseTokens::ASC_DOT)
-         & ~KParseTokens::IGNORE_LEADING_WS)
-        | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
+        KParseTokens::ANY_LETTER_OR_NUMBER |
+        KParseTokens::ASC_DOT |
+        KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
     // First character for numbers, may be any numeric or dot
     static const sal_Int32 coNumStartFlags =
