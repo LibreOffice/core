@@ -1170,7 +1170,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
-        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, *pFormatter);
+        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, *pFormatter, pDok->GetSharedStringPool());
     }
     return xResMat;
 }

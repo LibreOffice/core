@@ -309,7 +309,7 @@ public:
     std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter);
+            SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
 
 #if DEBUG_MATRIX
     void Dump() const;
@@ -2385,7 +2385,7 @@ size_t get_index(SCSIZE nMaxRow, SCSIZE /*nMaxCol*/, size_t nRow, size_t nCol, s
 }
 
 void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter)
+            SvNumberFormatter& rFormatter, svl::SharedStringPool& rStringPool)
 {
     SCSIZE nC1, nC2;
     SCSIZE nR1, nR2;
@@ -2430,6 +2430,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString();
         };
 
+
     if (nC1 == 1 || nR1 == 1)
     {
         size_t nRowRep = nR1 == 1 ? nMaxRow : 1;
@@ -2448,6 +2449,38 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     else
         xMat1->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1), aDoubleFunc, aBoolFunc, aStringFunc);
 
+    std::vector<svl::SharedString> aSharedString(nMaxCol*nMaxRow);
+
+    std::function<void(size_t, size_t, double)> aDoubleFunc2 =
+        [&](size_t nRow, size_t nCol, double nVal)
+        {
+            sal_uInt16 nErr = GetDoubleErrorValue(nVal);
+            if (nErr)
+            {
+                aValid[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = false;
+                nErrors[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = nErr;
+                return;
+            }
+            OUString aStr;
+            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr);
+        };
+
+    std::function<void(size_t, size_t, bool)> aBoolFunc2 =
+        [&](size_t nRow, size_t nCol, double nVal)
+        {
+            OUString aStr;
+            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr);
+        };
+
+    std::function<void(size_t, size_t, svl::SharedString)> aStringFunc2 =
+        [&](size_t nRow, size_t nCol, svl::SharedString aStr)
+        {
+            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] =
+                rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString());
+        };
+
     nRowOffset = 0;
     nColOffset = 0;
     if (nC2 == 1 || nR2 == 1)
@@ -2461,21 +2494,39 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             for (size_t j = 0; j < nColRep; ++j)
             {
                 nColOffset = j;
-                xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(std::min(nR2, nMaxRow) - 1, std::min(nC2, nMaxCol) - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+                xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(std::min(nR2, nMaxRow) - 1, std::min(nC2, nMaxCol) - 1), aDoubleFunc2, aBoolFunc2, aStringFunc2);
             }
         }
     }
     else
-        xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+        xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1), aDoubleFunc2, aBoolFunc2, aStringFunc2);
+
+    aString.clear();
 
     MatrixImplType::position_type pos = maMat.position(0, 0);
     for (SCSIZE i = 0; i < nMaxCol; ++i)
     {
-        for (SCSIZE j = 0; j < nMaxRow; ++j)
+        for (SCSIZE j = 0; j < nMaxRow && i < nMaxCol; ++j)
         {
-            if (aValid[nMaxCol * j + i])
+            if (aValid[nMaxRow * i + j])
             {
-                pos = maMat.set(pos, aString[nMaxRow * i + j]);
+                auto itr = aValid.begin();
+                std::advance(itr, nMaxRow * i + j);
+                auto itrEnd = std::find(itr, aValid.end(), false);
+                size_t nSteps = std::distance(itr, itrEnd);
+                auto itrStr = aSharedString.begin();
+                std::advance(itrStr, nMaxRow * i + j);
+                auto itrEndStr = itrStr;
+                std::advance(itrEndStr, nSteps);
+                pos = maMat.set(pos, itrStr, itrEndStr);
+                size_t nColSteps = nSteps / nMaxRow;
+                i += nColSteps;
+                j += nSteps % nMaxRow;
+                if (j >= nMaxRow)
+                {
+                    j -= nMaxRow;
+                    ++i;
+                }
             }
             else
             {
@@ -3878,16 +3929,16 @@ void ScVectorRefMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStart
 }
 
 void ScFullMatrix::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow,
-        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, SvNumberFormatter& rFormatter)
+        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool)
 {
-    pImpl->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rFormatter);
+    pImpl->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rFormatter, rPool);
 }
 
 void ScVectorRefMatrix::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow,
-        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, SvNumberFormatter& rFormatter)
+        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool)
 {
     ensureFullMatrix();
-    mpFullMatrix->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rFormatter);
+    mpFullMatrix->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rFormatter, rPool);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
