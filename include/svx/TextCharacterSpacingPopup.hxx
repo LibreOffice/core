@@ -16,30 +16,28 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGPOPUP_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGPOPUP_HXX
+#ifndef INCLUDED_SVX_TEXTCHARACTERSPACINGPOPUP_HXX
+#define INCLUDED_SVX_TEXTCHARACTERSPACINGPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
+#include <sfx2/tbxctrl.hxx>
+#include <svx/svxdllapi.h>
 
 #include <functional>
 
-namespace svx { namespace sidebar {
+namespace svx {
 
-class TextCharacterSpacingPopup
-    : public Popup
+class SVX_DLLPUBLIC TextCharacterSpacingPopup : public SfxToolBoxControl
 {
 public:
-    TextCharacterSpacingPopup (
-        vcl::Window* pParent,
-        const ::std::function<VclPtr<PopupControl> (PopupContainer*)>& rControlCreator);
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    TextCharacterSpacingPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~TextCharacterSpacingPopup();
 
-    void Rearrange (bool bLBAvailable,bool bAvailable, long nKerning);
-private:
-    void PopupModeEndCallback();
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx
 
 #endif
 

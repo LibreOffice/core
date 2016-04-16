@@ -28,7 +28,6 @@
 
 #include <vcl/toolbox.hxx>
 #include "TextCharacterSpacingControl.hxx"
-#include "TextCharacterSpacingPopup.hxx"
 #include "TextUnderlineControl.hxx"
 #include "TextUnderlinePopup.hxx"
 #include <svx/sidebar/PopupContainer.hxx>
@@ -37,28 +36,13 @@
 using namespace css;
 using namespace css::uno;
 
-const char UNO_SPACING[] = ".uno:Spacing";
 const char UNO_UNDERLINE[] = ".uno:Underline";
 
 namespace svx { namespace sidebar {
 
-VclPtr<PopupControl> TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
-{
-    return VclPtrInstance<TextCharacterSpacingControl>(pParent, *this, mpBindings);
-}
-
 VclPtr<PopupControl> TextPropertyPanel::CreateUnderlinePopupControl (PopupContainer* pParent)
 {
     return VclPtrInstance<TextUnderlineControl>(pParent, *this, mpBindings);
-}
-
-long TextPropertyPanel::GetSelFontSize()
-{
-    long nH = 240;
-    SfxMapUnit eUnit = maSpacingControl.GetCoreMetric();
-    if (mpHeightItem)
-        nH = LogicToLogic(  mpHeightItem->GetHeight(), (MapUnit)eUnit, MAP_TWIP );
-    return nH;
 }
 
 VclPtr<vcl::Window> TextPropertyPanel::Create (
@@ -85,9 +69,7 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
         maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
         maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),
-        maSpacingControl    (SID_ATTR_CHAR_KERNING,     *pBindings, *this, OUString("Spacing"),      rxFrame),
 
-        maCharSpacePopup(this, [this] (PopupContainer *const pContainer) { return this->CreateCharacterSpacingControl(pContainer); }),
         maUnderlinePopup(this, [this] (PopupContainer *const pContainer) { return this->CreateUnderlinePopupControl(pContainer); }),
         maContext(),
         mpBindings(pBindings)
@@ -102,15 +84,11 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     //toolbox
     SetupToolboxItems();
     InitToolBoxFont();
-    InitToolBoxSpacing();
 
     //init state
     mpHeightItem = nullptr;
     meUnderline = LINESTYLE_NONE;
     meUnderlineColor = COL_AUTO;
-    mbKernAvailable = true;
-    mbKernLBAvailable = true;
-    mlKerning = 0;
 }
 
 TextPropertyPanel::~TextPropertyPanel()
@@ -128,9 +106,7 @@ void TextPropertyPanel::dispose()
 
     maFontSizeControl.dispose();
     maUnderlineControl.dispose();
-    maSpacingControl.dispose();
 
-    maCharSpacePopup.dispose();
     maUnderlinePopup.dispose();
 
     PanelLayout::dispose();
@@ -192,11 +168,6 @@ void TextPropertyPanel::DataChanged (const DataChangedEvent& /*rEvent*/)
     SetupToolboxItems();
 }
 
-void TextPropertyPanel::EndSpacingPopupMode()
-{
-    maCharSpacePopup.Hide();
-}
-
 void TextPropertyPanel::EndUnderlinePopupMode()
 {
     maUnderlinePopup.Hide();
@@ -208,20 +179,9 @@ void TextPropertyPanel::InitToolBoxFont()
     mpToolBoxFont->SetDropdownClickHdl(aLink);
 }
 
-void TextPropertyPanel::InitToolBoxSpacing()
-{
-    const sal_uInt16 nId = mpToolBoxSpacing->GetItemId(UNO_SPACING);
-    mpToolBoxSpacing->SetItemBits(nId, mpToolBoxSpacing->GetItemBits(nId) | ToolBoxItemBits::DROPDOWNONLY);
-
-    Link<ToolBox *, void> aLink = LINK(this, TextPropertyPanel, SpacingClickHdl);
-    mpToolBoxSpacing->SetDropdownClickHdl ( aLink );
-    mpToolBoxSpacing->SetSelectHdl( aLink );
-}
-
 void TextPropertyPanel::SetupToolboxItems()
 {
     maUnderlineControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_UNDERLINE));
-    maSpacingControl.SetupToolBoxItem(*mpToolBoxSpacing, mpToolBoxSpacing->GetItemId(UNO_SPACING));
 }
 
 IMPL_LINK_TYPED(TextPropertyPanel, UnderlineClickHdl, ToolBox*, pToolBox, void)
@@ -234,19 +194,6 @@ IMPL_LINK_TYPED(TextPropertyPanel, UnderlineClickHdl, ToolBox*, pToolBox, void)
         pToolBox->SetItemDown( nId, true );
         maUnderlinePopup.Rearrange(meUnderline);
         maUnderlinePopup.Show(*pToolBox);
-    }
-}
-
-IMPL_LINK_TYPED(TextPropertyPanel, SpacingClickHdl, ToolBox*, pToolBox, void)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
-
-    if (aCommand == UNO_SPACING)
-    {
-        pToolBox->SetItemDown( nId, true );
-        maCharSpacePopup.Rearrange(mbKernLBAvailable,mbKernAvailable,mlKerning);
-        maCharSpacePopup.Show(*pToolBox);
     }
 }
 
@@ -280,34 +227,6 @@ void TextPropertyPanel::NotifyItemUpdate (
         break;
     case SID_ATTR_CHAR_KERNING:
         {
-            if ( SfxItemState::DEFAULT == eState )
-            {
-                mbKernLBAvailable = true;
-
-                if(dynamic_cast<const SvxKerningItem*>( pState) !=  nullptr)
-                {
-                    const SvxKerningItem* pKerningItem = static_cast<const SvxKerningItem*>(pState);
-                    mlKerning = (long)pKerningItem->GetValue();
-                    mbKernAvailable = true;
-                }
-                else
-                {
-                    mlKerning = 0;
-                    mbKernAvailable =false;
-                }
-            }
-            else if (SfxItemState::DISABLED == eState)
-            {
-                mbKernLBAvailable = false;
-                mbKernAvailable = false;
-                mlKerning = 0;
-            }
-            else
-            {
-                mbKernLBAvailable = true;
-                mbKernAvailable = false;
-                mlKerning = 0;
-            }
             mpToolBoxSpacing->Enable(bIsEnabled);
         }
         break;
