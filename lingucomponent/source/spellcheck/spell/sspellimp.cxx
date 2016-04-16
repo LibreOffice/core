@@ -31,7 +31,6 @@
 
 #include <lingutil.hxx>
 #include <hunspell.hxx>
-#include <dictmgr.hxx>
 #include <sspellimp.hxx>
 
 #include <linguistic/lngprops.hxx>
