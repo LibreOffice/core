@@ -398,7 +398,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException
 }
 
 void DocumentDigitalSignatures::showCertificate(
-    const Reference< css::security::XCertificate >& _Certificate ) throw (RuntimeException, std::exception)
+    const Reference< css::security::XCertificate >& Certificate ) throw (RuntimeException, std::exception)
 {
     XMLSignatureHelper aSignatureHelper( mxCtx );
 
@@ -408,7 +408,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        ScopedVclPtrInstance< CertificateViewer > aViewer( nullptr, aSignatureHelper.GetSecurityEnvironment(), _Certificate, false );
+        ScopedVclPtrInstance< CertificateViewer > aViewer( nullptr, aSignatureHelper.GetSecurityEnvironment(), Certificate, false );
         aViewer->Execute();
     }
 
