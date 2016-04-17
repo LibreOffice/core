@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5ac665da_65060622",
+        "filename": "svx/source/sidebar/text/TextCharacterSpacingControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-04-17T15:31:33Z",
+      "side": 1,
+      "message": "For .ui based widgets, we use just \"clear\" instead of \"disposeAndClear\".",
+      "revId": "e3a75de90e8d45df4d9feda4cc8694d9cbc7d84d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac665da_a55f5e74",
         "filename": "svx/source/sidebar/text/TextCharacterSpacingControl.cxx",
         "patchSetId": 1
