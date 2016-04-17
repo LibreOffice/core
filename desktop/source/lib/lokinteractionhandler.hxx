@@ -103,7 +103,7 @@ public:
     virtual void SAL_CALL handle(com::sun::star::uno::Reference<com::sun::star::task::XInteractionRequest> const & rRequest)
         throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
-    virtual sal_Bool SAL_CALL handleInteractionRequest(const ::com::sun::star::uno::Reference<::com::sun::star::task::XInteractionRequest>& _Request)
+    virtual sal_Bool SAL_CALL handleInteractionRequest(const ::com::sun::star::uno::Reference<::com::sun::star::task::XInteractionRequest>& Request)
         throw (com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
