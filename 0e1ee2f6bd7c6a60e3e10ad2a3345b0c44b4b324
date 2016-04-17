@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_256d2e33",
+        "filename": "vcl/opengl/gdiimpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2016-04-17T11:50:39Z",
+      "side": 1,
+      "message": "fMiterMinimumAngle is in radians, therefore angle has to be in radians too. In the old version, constMiterMinimumAngle has been in degrees, therefore /F_PI180 was necessary. But now it has to be angle \u003d F_PI - std::fabs(angle);",
+      "range": {
+        "startLine": 872,
+        "startChar": 16,
+        "endLine": 872,
+        "endChar": 21
+      },
+      "revId": "0e1ee2f6bd7c6a60e3e10ad2a3345b0c44b4b324",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
