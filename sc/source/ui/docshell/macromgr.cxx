@@ -33,7 +33,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
 using ::std::list;
-using ::std::for_each;
 using ::std::pair;
 
 /**

@@ -10,7 +10,6 @@
 #include <comphelper/string.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <sfx2/objsh.hxx>
@@ -33,7 +32,6 @@
 
 using namespace css;
 using namespace css::uno;
-using sfx2::sidebar::Theme;
 
 namespace {
 

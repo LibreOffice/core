@@ -23,9 +23,6 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/gdimtf.hxx>
@@ -53,10 +50,6 @@ using com::sun::star::beans::PropertyValue;
 using com::sun::star::container::XIndexAccess;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::lang::XComponent;
-using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::document::XExporter;
-using com::sun::star::document::XFilter;
-using com::sun::star::frame::XModel;
 using com::sun::star::lang::XServiceInfo;
 
 

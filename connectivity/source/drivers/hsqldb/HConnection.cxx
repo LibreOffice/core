@@ -24,10 +24,8 @@
 
 #include <connectivity/dbtools.hxx>
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -59,11 +57,8 @@ using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
 using ::com::sun::star::sdbcx::XTablesSupplier;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::lang::WrappedTargetException;
-using ::com::sun::star::lang::ServiceNotRegisteredException;
 using ::com::sun::star::sdbc::XDriver;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::GraphicProvider;
 using ::com::sun::star::graphic::XGraphicProvider;

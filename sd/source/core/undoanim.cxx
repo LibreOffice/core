@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include "CustomAnimationCloner.hxx"
 
@@ -32,7 +31,6 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::util::XCloneable;
 using namespace ::com::sun::star::animations;
 
 namespace sd

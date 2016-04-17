@@ -25,16 +25,13 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
-using ::osl::MutexGuard;
 
 namespace chart
 {

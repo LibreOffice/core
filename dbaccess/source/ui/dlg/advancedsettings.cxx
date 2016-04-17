@@ -41,7 +41,6 @@ namespace dbaui
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;

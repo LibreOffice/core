@@ -47,11 +47,8 @@ using com::sun::star::uno::Type;
 using com::sun::star::uno::RuntimeException;
 
 using com::sun::star::sdbc::SQLException;
-using com::sun::star::sdbc::XResultSet;
 using com::sun::star::sdbc::XResultSetUpdate;
 using com::sun::star::sdbc::XRowUpdate;
-using com::sun::star::sdbc::XRow;
-using com::sun::star::sdbc::XStatement;
 
 namespace pq_sdbc_driver
 {

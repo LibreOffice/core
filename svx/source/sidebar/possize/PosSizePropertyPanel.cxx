@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "PosSizePropertyPanel.hxx"
 #include <svx/sidebar/SidebarDialControl.hxx>
@@ -41,7 +40,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::sfx2::sidebar::Theme;
 
 const char UNO_FLIPHORIZONTAL[] = ".uno:FlipHorizontal";
 const char UNO_FLIPVERTICAL[]   = ".uno:FlipVertical";

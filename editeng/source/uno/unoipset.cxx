@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 
-using ::std::vector;
 
 struct SvxIDPropertyCombine
 {

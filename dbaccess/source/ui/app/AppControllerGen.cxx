@@ -86,7 +86,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 
-using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::ui::XContextMenuInterceptor;
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;

@@ -32,9 +32,6 @@
 
 using vcl::Kernel;
 using vcl::Lanczos3Kernel;
-using vcl::BicubicKernel;
-using vcl::BilinearKernel;
-using vcl::BoxKernel;
 
 bool OpenGLSalBitmap::ImplScaleFilter(
     const rtl::Reference< OpenGLContext > &xContext,

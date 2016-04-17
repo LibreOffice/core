@@ -48,7 +48,6 @@
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <comphelper/propertysetinfo.hxx>
@@ -64,20 +63,15 @@ using xforms::MIP;
 using xforms::Model;
 using xforms::getResource;
 using xforms::EvaluationContext;
-using com::sun::star::beans::PropertyVetoException;
-using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::beans::XPropertySet;
-using com::sun::star::container::XSet;
 using com::sun::star::container::XNameAccess;
 using com::sun::star::form::binding::IncompatibleTypesException;
 using com::sun::star::form::binding::InvalidBindingStateException;
 using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::lang::EventObject;
-using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::lang::IndexOutOfBoundsException;
 using com::sun::star::lang::NoSupportException;
 using com::sun::star::lang::NullPointerException;
-using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Reference;

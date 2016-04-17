@@ -41,7 +41,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
 
 using ::com::sun::star::beans::Property;
-using ::osl::MutexGuard;
 
 namespace
 {

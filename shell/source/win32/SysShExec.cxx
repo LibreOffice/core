@@ -46,11 +46,8 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XInterface;
-using com::sun::star::lang::EventObject;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::IllegalArgumentException;
-using osl::Mutex;
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
 

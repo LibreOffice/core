@@ -44,14 +44,11 @@ namespace dbaui
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::container::XHierarchicalNameAccess;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::sdbcx::XTablesSupplier;
-    using ::com::sun::star::sdb::XQueriesSupplier;
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::sdb::tools::XConnectionTools;
     using ::com::sun::star::uno::UNO_QUERY;

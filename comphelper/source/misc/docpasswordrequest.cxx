@@ -39,7 +39,6 @@ using ::com::sun::star::task::PasswordRequestMode;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionContinuation;
 using ::com::sun::star::task::XInteractionPassword2;
-using ::com::sun::star::task::XInteractionRequest;
 
 namespace comphelper {
 

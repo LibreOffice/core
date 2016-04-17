@@ -61,7 +61,6 @@ namespace svt
     using ::com::sun::star::ucb::CommandAbortedException;
     using ::com::sun::star::ucb::XContentAccess;
     using ::com::sun::star::ucb::XCommandEnvironment;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::document::DocumentProperties;
     using ::ucbhelper::ResultSetInclude;

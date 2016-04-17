@@ -30,7 +30,6 @@
 #include <svx/sdrpagewindow.hxx>
 #include "svx/sdrpaintwindow.hxx"
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -114,7 +113,6 @@ namespace sdr { namespace contact {
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::awt::XControl;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::awt::XWindow;
@@ -122,10 +120,8 @@ namespace sdr { namespace contact {
     using ::com::sun::star::awt::XWindowListener;
     using ::com::sun::star::awt::PosSize::POSSIZE;
     using ::com::sun::star::awt::XView;
-    using ::com::sun::star::awt::XGraphics;
     using ::com::sun::star::awt::WindowEvent;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::beans::XPropertyChangeListener;

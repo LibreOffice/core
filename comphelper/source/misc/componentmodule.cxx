@@ -33,9 +33,6 @@ namespace comphelper
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::registry::XRegistryKey;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::XInterface;
 
     typedef ::std::vector< ComponentDescription >   ComponentDescriptions;

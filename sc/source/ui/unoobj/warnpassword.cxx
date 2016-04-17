@@ -32,11 +32,9 @@
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::task::InteractionClassification_QUERY;
 using ::com::sun::star::task::XInteractionHandler;
-using ::com::sun::star::task::XInteractionRequest;
 using ::com::sun::star::ucb::InteractiveAppException;
 
 bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )

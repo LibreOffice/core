@@ -20,7 +20,6 @@
 #include "propeventtranslation.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/NullPointerException.hpp>
 
 
 namespace pcr
@@ -34,7 +33,6 @@ namespace pcr
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::lang::NullPointerException;
 
 
     //= PropertyEventTranslation

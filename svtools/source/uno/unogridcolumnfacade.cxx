@@ -43,7 +43,6 @@ namespace svt { namespace table
     using css::uno::RuntimeException;
     using css::uno::UNO_QUERY_THROW;
     using css::awt::grid::XGridColumn;
-    using css::uno::XInterface;
     using css::uno::Exception;
     using css::awt::grid::XGridColumnListener;
     using css::lang::EventObject;

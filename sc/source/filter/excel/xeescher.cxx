@@ -26,14 +26,11 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 
 #include <set>
 #include <rtl/ustrbuf.h>
@@ -88,17 +85,13 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::frame::XModel;
-using ::com::sun::star::embed::XEmbeddedObject;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::form::binding::XBindableValue;
-using ::com::sun::star::form::binding::XValueBinding;
 using ::com::sun::star::form::binding::XListEntrySink;
-using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::container::XNamed;
 using ::oox::drawingml::DrawingML;
 using ::oox::drawingml::ChartExport;
 using namespace oox;

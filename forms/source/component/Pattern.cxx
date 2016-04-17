@@ -21,12 +21,10 @@
 #include "comphelper/processfactory.hxx"
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::makeAny;

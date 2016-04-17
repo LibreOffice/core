@@ -31,7 +31,6 @@
 
 using sdr::overlay::OverlayObject;
 using sdr::overlay::OverlayManager;
-using ::drawinglayer::primitive2d::Primitive2DSequence;
 
 #define DASH_UPDATE_INTERVAL 180    // in msec
 

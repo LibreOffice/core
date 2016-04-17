@@ -49,7 +49,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -79,13 +78,9 @@ using namespace ::com::sun::star::awt::FontFamily;
 using namespace ::com::sun::star::awt::FontPitch;
 using namespace ::com::sun::star::presentation;
 
-using ::com::sun::star::awt::FontDescriptor;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
-using ::com::sun::star::drawing::XDrawPagesSupplier;
-using ::com::sun::star::drawing::XMasterPagesSupplier;
-using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::drawing::XMasterPageTarget;
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::frame::XModel;

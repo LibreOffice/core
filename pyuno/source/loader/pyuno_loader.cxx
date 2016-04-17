@@ -52,7 +52,6 @@ using pyuno::NOT_NULL;
 using pyuno::Runtime;
 using pyuno::PyThreadAttach;
 
-using com::sun::star::registry::XRegistryKey;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Sequence;

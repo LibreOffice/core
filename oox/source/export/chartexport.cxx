@@ -66,8 +66,6 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -76,7 +74,6 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/AddressConvention.hpp>
 
@@ -103,18 +100,11 @@ using namespace css;
 using namespace css::uno;
 using namespace css::drawing;
 using namespace ::oox::core;
-using css::beans::PropertyState;
 using css::beans::PropertyValue;
 using css::beans::XPropertySet;
-using css::beans::XPropertyState;
-using css::container::XEnumeration;
-using css::container::XEnumerationAccess;
-using css::container::XIndexAccess;
 using css::container::XNamed;
-using css::io::XOutputStream;
 using css::table::CellAddress;
 using css::sheet::XFormulaParser;
-using css::sheet::XFormulaTokens;
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 

@@ -21,7 +21,6 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -39,15 +38,12 @@ namespace comphelper {
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XTitle;
     using ::com::sun::star::frame::XController;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::document::XDocumentPropertiesSupplier;
     using ::com::sun::star::document::XDocumentProperties;
     using ::com::sun::star::frame::XStorable;
-    using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::frame::XFrame;
 

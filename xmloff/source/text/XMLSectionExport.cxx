@@ -24,20 +24,17 @@
 #include <vector>
 
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
@@ -64,13 +61,10 @@ using namespace ::xmloff::token;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::PropertyValues;
-using ::com::sun::star::beans::PropertyState;
 using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
-using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::lang::Locale;
-using ::com::sun::star::uno::XInterface;
 
 
 XMLSectionExport::XMLSectionExport(

@@ -56,14 +56,11 @@ using com::sun::star::lang::WrappedTargetRuntimeException;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::reflection::theCoreReflection;
-using com::sun::star::reflection::XIdlReflection;
 using com::sun::star::reflection::InvocationTargetException;
 using com::sun::star::script::Converter;
 using com::sun::star::script::XTypeConverter;
-using com::sun::star::script::XInvocationAdapterFactory2;
 using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
-using com::sun::star::beans::XIntrospection;
 using com::sun::star::beans::theIntrospection;
 
 #include <vector>

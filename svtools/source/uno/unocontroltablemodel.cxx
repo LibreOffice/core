@@ -41,21 +41,14 @@ namespace svt { namespace table
 
 
     using css::uno::Reference;
-    using css::uno::RuntimeException;
     using css::uno::Sequence;
     using css::uno::UNO_QUERY_THROW;
     using css::uno::UNO_QUERY;
     using css::awt::grid::XGridColumn;
-    using css::uno::XInterface;
     using css::uno::Exception;
-    using css::awt::grid::XGridColumnListener;
-    using css::lang::EventObject;
-    using css::awt::grid::GridColumnEvent;
     using css::awt::grid::XGridDataModel;
     using css::awt::grid::XGridColumnModel;
     using css::uno::Any;
-    using css::style::HorizontalAlignment_LEFT;
-    using css::style::HorizontalAlignment;
     using css::style::VerticalAlignment_TOP;
     using css::style::VerticalAlignment;
     using css::uno::WeakReference;

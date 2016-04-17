@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <tools/diagnose_ex.h>
 
@@ -40,15 +39,12 @@ namespace basctl { namespace docs {
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::frame::Desktop;
     using ::com::sun::star::frame::XDesktop2;
-    using ::com::sun::star::container::XEnumerationAccess;
     using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::frame::XModel;
-    using ::com::sun::star::frame::XFramesSupplier;
     using ::com::sun::star::frame::XFrames;
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::frame::XModel2;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::frame::XFrame;
 

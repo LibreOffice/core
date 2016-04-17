@@ -41,8 +41,6 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -54,8 +52,6 @@
 
 
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::io::XInputStream;
-using com::sun::star::io::XActiveDataSink;
 using com::sun::star::io::TextInputStream;
 using com::sun::star::io::XTextInputStream2;
 using com::sun::star::container::XEnumeration;

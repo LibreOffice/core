@@ -52,7 +52,6 @@
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -66,20 +65,16 @@
 
 #include <algorithm>
 
-using ::std::map;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::container::XChild;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;

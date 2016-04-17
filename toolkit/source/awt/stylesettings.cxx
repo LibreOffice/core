@@ -36,8 +36,6 @@ namespace toolkit
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::EventObject;

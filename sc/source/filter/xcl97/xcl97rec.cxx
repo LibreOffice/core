@@ -84,7 +84,6 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::oox::drawingml::DrawingML;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;

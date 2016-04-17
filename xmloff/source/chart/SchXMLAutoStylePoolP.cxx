@@ -25,8 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
-using ::xmloff::token::GetXMLToken;
-using ::xmloff::token::XML_CDATA;
 
 SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :
         SvXMLAutoStylePoolP( rSchXMLExport ),

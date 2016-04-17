@@ -27,14 +27,10 @@ namespace dbaccess
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::io::TextOutputStream;
     using ::com::sun::star::io::XTextOutputStream2;
-    using ::com::sun::star::io::XActiveDataSource;
 
     // StorageTextOutputStream_Data
     struct StorageTextOutputStream_Data

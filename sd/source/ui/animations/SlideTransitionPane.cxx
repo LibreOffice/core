@@ -46,7 +46,6 @@
 #include "undoanim.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"
-#include "framework/FrameworkHelper.hxx"
 
 #include <sfx2/sidebar/Theme.hxx>
 
@@ -55,9 +54,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
 
-using ::sd::framework::FrameworkHelper;
 
 namespace sd
 {
