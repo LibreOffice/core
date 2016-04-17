@@ -66,10 +66,6 @@ const long LONG_MAX=2147483647;
 //01-01-70 was a Thursday
 const long BASE_DOW = 4;
 
-long _lpdays[] = {-1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
-
-long _days[] = {-1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364};
-
 bool LtgGmTime(long rtime,LtTm& rtm)
 {
     if (rtime < 0)
@@ -129,14 +125,18 @@ bool LtgGmTime(long rtime,LtTm& rtm)
 
     //Determine months since January (0 - 11) and day of month (1 - 31)
 
-    long* mdays;
+    long const * mdays;
     if ( islpyr )
     {
-        mdays = _lpdays;
+        static long const lpdays[] =
+            {-1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+        mdays = lpdays;
     }
     else
     {
-        mdays = _days;
+        static long const days[] =
+            {-1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364};
+        mdays = days;
     }
 
     for ( tmptim = 1 ; mdays[tmptim] < rtm.tm_yday ; tmptim++ ) ;
