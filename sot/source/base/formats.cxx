@@ -29,8 +29,8 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-using namespace::com::sun::star::uno;
-using namespace::com::sun::star::datatransfer;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::datatransfer;
 
 struct SotAction_Impl
 {

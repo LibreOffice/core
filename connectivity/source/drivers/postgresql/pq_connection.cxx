@@ -61,14 +61,12 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/script/Converter.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 
 using osl::MutexGuard;
 
 using com::sun::star::container::XNameAccess;
 
 using com::sun::star::lang::XComponent;
-using com::sun::star::lang::XInitialization;
 using com::sun::star::lang::IllegalArgumentException;
 
 using com::sun::star::script::Converter;
@@ -84,14 +82,9 @@ using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::Any;
 
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::beans::XPropertySet;
 
-using com::sun::star::sdbc::XConnection;
-using com::sun::star::sdbc::XResultSet;
-using com::sun::star::sdbc::XRow;
 using com::sun::star::sdbc::XCloseable;
 using com::sun::star::sdbc::SQLException;
-using com::sun::star::sdbc::XWarningsSupplier;
 using com::sun::star::sdbc::XPreparedStatement;
 using com::sun::star::sdbc::XStatement;
 using com::sun::star::sdbc::XDatabaseMetaData;

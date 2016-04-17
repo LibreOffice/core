@@ -28,7 +28,6 @@
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/anytostring.hxx>
@@ -45,9 +44,7 @@ namespace svx
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::form::runtime::XFormController;
-    using ::com::sun::star::form::XForm;
     using ::com::sun::star::form::runtime::FormOperations;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::sdbc::XRowSet;
@@ -59,7 +56,6 @@ namespace svx
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdbc::SQLException;
-    using ::com::sun::star::sdb::XSQLErrorBroadcaster;
     using ::com::sun::star::sdb::SQLErrorEvent;
     using ::com::sun::star::lang::EventObject;
 

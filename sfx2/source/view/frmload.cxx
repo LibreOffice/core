@@ -41,7 +41,6 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
@@ -79,12 +78,8 @@ using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::document::XTypeDetection;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XLoadable;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
-using ::com::sun::star::task::XInteractionRequest;
-using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
@@ -97,7 +92,6 @@ using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::frame::XController2;
-using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XModel2;
 
 namespace {

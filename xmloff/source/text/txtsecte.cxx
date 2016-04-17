@@ -24,18 +24,10 @@
 
 #include <vector>
 
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/families.hxx>
@@ -54,12 +46,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::std;
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::PropertyValues;
-using ::com::sun::star::beans::PropertyState;
-using ::com::sun::star::container::XIndexReplace;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::lang::XServiceInfo;
 
 void XMLTextParagraphExport::exportListAndSectionChange(
     Reference<XTextSection> & rPrevSection,

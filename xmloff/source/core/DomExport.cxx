@@ -24,7 +24,6 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XAttr.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
@@ -44,7 +43,6 @@
 #include <vector>
 
 
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using std::vector;

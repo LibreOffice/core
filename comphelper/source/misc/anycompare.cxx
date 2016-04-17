@@ -26,9 +26,6 @@
 namespace comphelper
 {
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::TypeClass_CHAR;
     using ::com::sun::star::uno::TypeClass_BOOLEAN;

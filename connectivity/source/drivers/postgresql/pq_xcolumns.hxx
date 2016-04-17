@@ -39,6 +39,7 @@
 
 #include "pq_xcontainer.hxx"
 #include "pq_xbase.hxx"
+#include <com/sun/star/sdbc/XRow.hpp>
 
 namespace pq_sdbc_driver
 {

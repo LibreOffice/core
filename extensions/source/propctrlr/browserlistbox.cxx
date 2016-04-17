@@ -53,7 +53,6 @@ namespace pcr
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::graphic::XGraphic;
 
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
 

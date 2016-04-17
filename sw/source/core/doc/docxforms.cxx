@@ -20,7 +20,6 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/xforms/Model.hpp>
@@ -34,11 +33,9 @@
 using namespace ::com::sun::star;
 
 using uno::Reference;
-using uno::XInterface;
 using uno::UNO_QUERY;
 using uno::makeAny;
 using uno::Exception;
-using container::XNameContainer;
 using xforms::XModel2;
 using frame::XModule;
 using xforms::XFormsUIHelper1;

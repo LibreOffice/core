@@ -37,7 +37,6 @@ using namespace com::sun::star::uno;
 
 
 using sc::HMMToTwips;
-using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
 static sal_uInt16 lcl_GetDefaultTabDist()

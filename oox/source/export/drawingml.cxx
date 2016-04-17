@@ -54,7 +54,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -98,7 +97,6 @@ using namespace ::css::uno;
 using namespace ::css::container;
 using namespace ::css::text;
 
-using ::css::geometry::IntegerRectangle2D;
 using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;

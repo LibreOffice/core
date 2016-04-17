@@ -19,7 +19,6 @@
 
 
 #include <com/sun/star/table/XMergeableCell.hpp>
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
 
 #include <tools/gen.hxx>
 
@@ -39,7 +38,6 @@
 #include "svdglob.hxx"
 
 using ::editeng::SvxBorderLine;
-using ::com::sun::star::awt::XLayoutConstrains;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;

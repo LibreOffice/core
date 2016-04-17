@@ -33,7 +33,6 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::inspection::XPropertyHandler;

@@ -35,7 +35,6 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
-using com::sun::star::beans::XPropertySet;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;

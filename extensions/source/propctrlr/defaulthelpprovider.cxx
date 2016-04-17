@@ -25,7 +25,6 @@
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -56,7 +55,6 @@ namespace pcr
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::awt::XWindow;
-    using ::com::sun::star::awt::XVclWindowPeer;
 
     DefaultHelpProvider::DefaultHelpProvider()
         :m_bConstructed( false )

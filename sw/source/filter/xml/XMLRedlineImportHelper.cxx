@@ -28,7 +28,6 @@
 #include "poolfmt.hxx"
 #include "unoredline.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -36,7 +35,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::frame::XModel;
 using ::com::sun::star::text::XTextCursor;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::text::XText;

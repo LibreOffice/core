@@ -24,7 +24,6 @@
 #include "XMLPropertyBackpatcher.hxx"
 #include <xmloff/txtimp.hxx>
 
-using ::std::vector;
 using ::std::map;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

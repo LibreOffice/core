@@ -28,17 +28,11 @@
 #include "fmtinfmt.hxx"
 #include <svl/macitem.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-using ::com::sun::star::container::NoSuchElementException;
 using ::com::sun::star::container::XNameReplace;
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::lang::WrappedTargetException;
-using ::com::sun::star::lang::XServiceInfo;
-using ::com::sun::star::beans::PropertyValue;
 
 // tables of allowed events for specific objects
 

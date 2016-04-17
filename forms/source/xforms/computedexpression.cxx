@@ -23,16 +23,10 @@
 #include "evaluationcontext.hxx"
 #include "NameContainer.hxx"
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
-#include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XPathExtension.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 
 #include <osl/diagnose.h>
@@ -40,17 +34,11 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 
-using com::sun::star::beans::NamedValue;
 using namespace com::sun::star::uno;
-using com::sun::star::lang::XInitialization;
-using com::sun::star::lang::XMultiServiceFactory;
-using com::sun::star::xml::dom::XNode;
-using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::xpath::XPathAPI;
 using com::sun::star::xml::xpath::XXPathAPI;
 using com::sun::star::xml::xpath::XPathExtension;
 using com::sun::star::xml::xpath::XXPathExtension;
-using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
 using com::sun::star::util::SearchOptions2;
 

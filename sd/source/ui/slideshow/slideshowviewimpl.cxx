@@ -31,16 +31,11 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
-using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::presentation::XSlideShow;
 using ::com::sun::star::presentation::XSlideShowView;
-using ::com::sun::star::presentation::XShapeEventListener;
-using ::com::sun::star::presentation::XSlideShowListener;
 
 using namespace ::com::sun::star;
 

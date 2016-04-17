@@ -27,13 +27,10 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 
 #include <tools/diagnose_ex.h>
@@ -59,12 +56,9 @@ namespace dbtools
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::sdbcx::XUsersSupplier;
     using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
-    using ::com::sun::star::sdbc::XDriverAccess;
     using ::com::sun::star::sdbc::DriverManager;
     using ::com::sun::star::sdbc::XDriverManager2;
     using ::com::sun::star::uno::UNO_SET_THROW;

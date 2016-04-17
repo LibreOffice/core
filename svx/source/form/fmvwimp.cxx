@@ -44,8 +44,6 @@
 #include "svx/xmlexchg.hxx"
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/style/VerticalAlignment.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -66,7 +64,6 @@
 #include <com/sun/star/awt/XTabController.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -106,7 +103,6 @@ using namespace ::dbtools;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::form::FormButtonType_SUBMIT;
     using ::com::sun::star::form::binding::XValueBinding;
     using ::com::sun::star::form::binding::XBindableValue;
@@ -117,11 +113,8 @@ using namespace ::dbtools;
     using ::com::sun::star::script::XEventAttacherManager;
     using ::com::sun::star::awt::XTabControllerModel;
     using ::com::sun::star::container::XChild;
-    using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::task::XInteractionHandler;
-    using ::com::sun::star::lang::XInitialization;
     using ::com::sun::star::awt::XTabController;
-    using ::com::sun::star::lang::XUnoTunnel;
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::form::XFormComponent;
@@ -131,7 +124,6 @@ using namespace ::dbtools;
     using ::com::sun::star::container::XContainer;
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::sdb::SQLErrorEvent;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::beans::XPropertySet;
@@ -143,8 +135,6 @@ using namespace ::dbtools;
     using ::com::sun::star::container::XIndexContainer;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::sdb::SQLContext;
-    using ::com::sun::star::sdbc::SQLWarning;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::XNumberFormats;

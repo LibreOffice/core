@@ -19,7 +19,6 @@
 
 #include "clipparam.hxx"
 
-using ::std::vector;
 
 ScClipParam::ScClipParam() :
     meDirection(Unspecified),

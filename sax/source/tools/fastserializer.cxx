@@ -34,7 +34,6 @@
 
 using ::std::vector;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::xml::Attribute;
 using ::com::sun::star::io::XOutputStream;
 
 #define HAS_NAMESPACE(x) ((x & 0xffff0000) != 0)

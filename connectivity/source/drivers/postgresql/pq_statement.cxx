@@ -82,26 +82,21 @@ using com::sun::star::uno::UNO_QUERY;
 
 using com::sun::star::lang::IllegalArgumentException;
 
-using com::sun::star::sdbc::XWarningsSupplier;
 using com::sun::star::sdbc::XCloseable;
 using com::sun::star::sdbc::XStatement;
 using com::sun::star::sdbc::XPreparedStatement;
 using com::sun::star::sdbc::XParameters;
 using com::sun::star::sdbc::XRow;
 using com::sun::star::sdbc::XResultSet;
-using com::sun::star::sdbc::XGeneratedResultSet;
 using com::sun::star::sdbc::XConnection;
 using com::sun::star::sdbc::SQLException;
 
 using com::sun::star::sdbcx::XColumnsSupplier;
-using com::sun::star::sdbcx::XTablesSupplier;
 using com::sun::star::sdbcx::XKeysSupplier;
 
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::beans::XPropertySet;
-using com::sun::star::beans::XFastPropertySet;
-using com::sun::star::beans::XMultiPropertySet;
 
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::XEnumerationAccess;

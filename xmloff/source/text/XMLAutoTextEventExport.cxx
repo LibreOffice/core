@@ -19,7 +19,6 @@
 
 #include "XMLAutoTextEventExport.hxx"
 #include "facreg.hxx"
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -43,12 +42,9 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 using ::std::set;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
-using ::com::sun::star::frame::XModel;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;

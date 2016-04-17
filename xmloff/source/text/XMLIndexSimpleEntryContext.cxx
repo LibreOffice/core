@@ -28,7 +28,6 @@
 #include <xmloff/xmluconv.hxx>
 
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::PropertyValues;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;

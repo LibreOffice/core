@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -38,7 +37,6 @@ namespace dbaccess
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::sdbc::SQLException;
 
     namespace CommandType = com::sun::star::sdb::CommandType;
 

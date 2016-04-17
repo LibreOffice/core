@@ -29,15 +29,12 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include <svtools/localresaccess.hxx>
@@ -50,7 +47,6 @@ namespace pcr
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiComponentFactory;
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::frame::XFrame;
@@ -64,17 +60,13 @@ namespace pcr
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::frame::XComponentLoader;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::frame::XController;
     using ::com::sun::star::frame::XTitle;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::frame::XFramesSupplier;
     using ::com::sun::star::frame::XFrames;
     using ::com::sun::star::util::XCloseable;
-    using ::com::sun::star::uno::TypeClass_STRING;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::frame::XDispatch;

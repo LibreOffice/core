@@ -41,9 +41,6 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XParameters.hpp>
-
 #include "pq_xtable.hxx"
 #include "pq_xtables.hxx"
 #include "pq_xviews.hxx"
@@ -62,29 +59,18 @@ using com::sun::star::container::ElementExistException;
 using com::sun::star::container::NoSuchElementException;
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Exception;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::RuntimeException;
 
-using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::lang::IndexOutOfBoundsException;
 
-using com::sun::star::beans::XPropertySetInfo;
-using com::sun::star::beans::XFastPropertySet;
-using com::sun::star::beans::XMultiPropertySet;
 using com::sun::star::beans::XPropertySet;
-using com::sun::star::beans::Property;
 
-using com::sun::star::sdbc::XResultSet;
-using com::sun::star::sdbc::XPreparedStatement;
 using com::sun::star::sdbc::XStatement;
-using com::sun::star::sdbc::XParameters;
-using com::sun::star::sdbc::XRow;
 using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver

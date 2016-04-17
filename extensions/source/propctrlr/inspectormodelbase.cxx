@@ -36,14 +36,12 @@ namespace pcr
 #define MODEL_PROPERTY_ID_IS_READ_ONLY          2003
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::inspection::PropertyCategoryDescriptor;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::beans::Property;
 

@@ -25,7 +25,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <xmloff/xmltoken.hxx>
@@ -54,7 +53,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::drawing::PointSequenceSequence;
 using ::com::sun::star::document::XEventsSupplier;
 
 

@@ -43,7 +43,6 @@ using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
-using ::com::sun::star::beans::XPropertySet;
 
 namespace oox {
 namespace drawingml {

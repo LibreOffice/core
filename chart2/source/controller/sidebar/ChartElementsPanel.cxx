@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
@@ -49,7 +48,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::sfx2::sidebar::Theme;
 
 namespace chart { namespace sidebar {
 

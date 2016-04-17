@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "NumberFormatPropertyPanel.hxx"
 #include <NumberFormatPropertyPanel.hrc>
@@ -36,7 +35,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::sfx2::sidebar::Theme;
 
 namespace sc { namespace sidebar {
 

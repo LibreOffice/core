@@ -29,23 +29,10 @@
 #include "dpitemdata.hxx"
 
 #include <osl/diagnose.h>
-#include <com/sun/star/i18n/LocaleDataItem.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 using ::std::vector;
-using ::std::pair;
-using ::com::sun::star::i18n::LocaleDataItem;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::sheet::DataPilotFieldFilter;
 
 ScDPFilteredCache::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
     maItem(rItem) {}

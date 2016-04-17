@@ -592,7 +592,6 @@ namespace sw
             }
             ubidi_close(pBidi);
 
-            using sw::types::writer_cast;
 
             if (g_pBreakIt && g_pBreakIt->GetBreakIter().is())
             {

@@ -56,7 +56,6 @@
 #include <helpwin.hxx>
 #include "dndlistenercontainer.hxx"
 
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
@@ -79,7 +78,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-using ::com::sun::star::awt::XTopWindow;
 
 namespace vcl {
 

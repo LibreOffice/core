@@ -57,8 +57,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::frame::XComponentLoader;
 
 

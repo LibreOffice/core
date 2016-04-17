@@ -56,7 +56,6 @@ extern bool bDrawIsInUndo; // somewhere as member!
 using namespace com::sun::star;
 using ::std::unique_ptr;
 using ::std::vector;
-using std::shared_ptr;
 
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,

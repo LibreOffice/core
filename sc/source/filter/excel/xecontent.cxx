@@ -21,8 +21,6 @@
 
 #include <list>
 #include <algorithm>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <comphelper/string.hxx>
@@ -52,9 +50,6 @@ using namespace ::oox;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::frame::XModel;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::XAreaLinks;
 using ::com::sun::star::sheet::XAreaLink;

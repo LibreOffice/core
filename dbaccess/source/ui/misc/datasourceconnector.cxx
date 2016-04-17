@@ -54,7 +54,6 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
     using namespace ::dbtools;
-    using ::svt::OFileNotation;
 
     // ODatasourceConnector
     ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, vcl::Window* _pMessageParent)

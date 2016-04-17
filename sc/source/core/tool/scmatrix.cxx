@@ -50,8 +50,6 @@ using std::endl;
 #endif
 
 using ::std::pair;
-using ::std::for_each;
-using ::std::count_if;
 using ::std::advance;
 using ::std::unary_function;
 

@@ -67,29 +67,21 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::UNO_QUERY;
 
 using com::sun::star::lang::IllegalArgumentException;
 
-using com::sun::star::sdbc::XWarningsSupplier;
 using com::sun::star::sdbc::XCloseable;
-using com::sun::star::sdbc::XPreparedStatement;
-using com::sun::star::sdbc::XParameters;
 using com::sun::star::sdbc::XResultSet;
 using com::sun::star::sdbc::XRef;
 using com::sun::star::sdbc::XBlob;
 using com::sun::star::sdbc::XClob;
 using com::sun::star::sdbc::XArray;
 using com::sun::star::sdbc::XConnection;
-using com::sun::star::sdbc::XGeneratedResultSet;
 using com::sun::star::sdbc::SQLException;
 
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySetInfo;
-using com::sun::star::beans::XPropertySet;
-using com::sun::star::beans::XMultiPropertySet;
-using com::sun::star::beans::XFastPropertySet;
 
 using namespace dbtools;
 

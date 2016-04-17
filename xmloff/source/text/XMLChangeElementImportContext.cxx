@@ -29,7 +29,6 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_P;
 using ::xmloff::token::XML_CHANGE_INFO;
 
 
