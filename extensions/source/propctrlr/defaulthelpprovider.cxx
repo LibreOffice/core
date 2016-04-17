@@ -86,14 +86,14 @@ namespace pcr
     }
 
 
-    void SAL_CALL DefaultHelpProvider::focusGained( const Reference< XPropertyControl >& _Control ) throw (RuntimeException, std::exception)
+    void SAL_CALL DefaultHelpProvider::focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception)
     {
         if ( !m_xInspectorUI.is() )
             throw RuntimeException( OUString(), *this );
 
         try
         {
-            m_xInspectorUI->setHelpSectionText( impl_getHelpText_nothrow( _Control ) );
+            m_xInspectorUI->setHelpSectionText( impl_getHelpText_nothrow( Control ) );
         }
         catch( const Exception& )
         {
@@ -102,7 +102,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL DefaultHelpProvider::valueChanged( const Reference< XPropertyControl >& /*_Control*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL DefaultHelpProvider::valueChanged( const Reference< XPropertyControl >& ) throw (RuntimeException, std::exception)
     {
         // not interested in
     }

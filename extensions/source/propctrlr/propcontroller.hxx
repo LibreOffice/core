@@ -201,8 +201,8 @@ namespace pcr
         virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) override;
 
         // IPropertyControlObserver
-        virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) override;
-        virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) override;
+        virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
+        virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
 
         // IPropertyExistenceCheck
         virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (css::uno::RuntimeException) override;
@@ -215,8 +215,8 @@ namespace pcr
         virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
         // XObjectInspector

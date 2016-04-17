@@ -760,7 +760,7 @@ namespace pcr
     }
 
 
-    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, sal_Bool _CreateReadOnly ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -770,8 +770,8 @@ namespace pcr
         WinBits nWinBits = WB_BORDER;
 
         // read-only-ness
-        _CreateReadOnly |= impl_isReadOnlyModel_throw() ? 1 : 0;
-        if ( _CreateReadOnly )
+        CreateReadOnly |= impl_isReadOnlyModel_throw() ? 1 : 0;
+        if ( CreateReadOnly )
             nWinBits |= WB_READONLY;
 
         switch ( ControlType )
@@ -1428,15 +1428,15 @@ namespace pcr
     }
 
 
-    void OPropertyBrowserController::focusGained( const Reference< XPropertyControl >& _Control )
+    void OPropertyBrowserController::focusGained( const Reference< XPropertyControl >& Control )
     {
-        m_aControlObservers.notifyEach( &XPropertyControlObserver::focusGained, _Control );
+        m_aControlObservers.notifyEach( &XPropertyControlObserver::focusGained, Control );
     }
 
 
-    void OPropertyBrowserController::valueChanged( const Reference< XPropertyControl >& _Control )
+    void OPropertyBrowserController::valueChanged( const Reference< XPropertyControl >& Control )
     {
-        m_aControlObservers.notifyEach( &XPropertyControlObserver::valueChanged, _Control );
+        m_aControlObservers.notifyEach( &XPropertyControlObserver::valueChanged, Control );
     }
 
 
@@ -1687,15 +1687,15 @@ namespace pcr
     }
 
 
-    void SAL_CALL OPropertyBrowserController::registerControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException, std::exception)
+    void SAL_CALL OPropertyBrowserController::registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception)
     {
-        m_aControlObservers.addInterface( _Observer );
+        m_aControlObservers.addInterface( Observer );
     }
 
 
-    void SAL_CALL OPropertyBrowserController::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException, std::exception)
+    void SAL_CALL OPropertyBrowserController::revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception)
     {
-        m_aControlObservers.removeInterface( _Observer );
+        m_aControlObservers.removeInterface( Observer );
     }
 
 

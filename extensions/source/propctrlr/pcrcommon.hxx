@@ -112,13 +112,13 @@ namespace pcr
     { \
     baseclass::WeakComponentImplHelperBase::dispose(); \
     } \
-    void SAL_CALL classname::addEventListener( const css::uno::Reference< css::lang::XEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) \
     { \
-        baseclass::WeakComponentImplHelperBase::addEventListener( _Listener ); \
+        baseclass::WeakComponentImplHelperBase::addEventListener( Listener ); \
     } \
-    void SAL_CALL classname::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) \
     { \
-        baseclass::WeakComponentImplHelperBase::removeEventListener( _Listener ); \
+        baseclass::WeakComponentImplHelperBase::removeEventListener( Listener ); \
     } \
 
 

@@ -227,9 +227,9 @@ namespace pcr
     }
 
 
-    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool _IsReadOnly ) throw (css::uno::RuntimeException, std::exception)
+    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool IsReadOnly ) throw (css::uno::RuntimeException, std::exception)
     {
-        setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( _IsReadOnly ) );
+        setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( IsReadOnly ) );
     }
 
     sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)

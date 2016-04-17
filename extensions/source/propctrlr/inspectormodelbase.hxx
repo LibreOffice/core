@@ -77,7 +77,7 @@ namespace pcr
         virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (css::uno::RuntimeException, std::exception) override;
         virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL getIsReadOnly() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setIsReadOnly( sal_Bool _IsReadOnly ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setIsReadOnly( sal_Bool IsReadOnly ) throw (css::uno::RuntimeException, std::exception) override;
 
         // css::lang::XServiceInfo
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
