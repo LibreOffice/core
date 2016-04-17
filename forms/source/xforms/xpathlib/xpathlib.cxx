@@ -213,8 +213,6 @@ void xforms_indexFunction(xmlXPathParserContextPtr /*ctxt*/, int /*nargs*/)
 }
 
 // String Functions
-static const char* _version = "1.0";
-static const char* _conformance = "conformance";
 void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
@@ -222,9 +220,9 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     OUString aString(reinterpret_cast<char*>(pString), strlen(reinterpret_cast<char*>(pString)), RTL_TEXTENCODING_UTF8);
     if (aString.equalsIgnoreAsciiCase("version"))
-        xmlXPathReturnString(ctxt, reinterpret_cast<xmlChar *>(const_cast<char *>(_version)));
+        xmlXPathReturnString(ctxt, reinterpret_cast<xmlChar *>(const_cast<char *>("1.0")));
     else if (aString.equalsIgnoreAsciiCase("conformance-level"))
-        xmlXPathReturnString(ctxt, reinterpret_cast<xmlChar *>(const_cast<char *>(_conformance)));
+        xmlXPathReturnString(ctxt, reinterpret_cast<xmlChar *>(const_cast<char *>("conformance")));
     else
         xmlXPathReturnEmptyString(ctxt);
 }

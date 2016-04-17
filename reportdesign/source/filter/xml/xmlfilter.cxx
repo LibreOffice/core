@@ -77,10 +77,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace xmloff;
 using namespace ::com::sun::star::util;
 
-    sal_Char const sXML_np__rpt[] = "_report";
-    sal_Char const sXML_np___rpt[] = "__report";
-
-
 class RptMLMasterStylesContext_Impl:
     public XMLTextMasterStylesContext
 {
@@ -357,11 +353,11 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, S
 {
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( sXML_np__rpt,
+    GetNamespaceMap().Add( "_report",
                         GetXMLToken(XML_N_RPT),
                         XML_NAMESPACE_REPORT );
 
-    GetNamespaceMap().Add( sXML_np___rpt,
+    GetNamespaceMap().Add( "__report",
                         GetXMLToken(XML_N_RPT_OASIS),
                         XML_NAMESPACE_REPORT );
 

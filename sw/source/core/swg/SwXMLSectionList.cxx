@@ -25,21 +25,18 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// TODO: verify if these should match the same-name constants
-//       in xmloff/source/core/xmlimp.cxx ("_office" and "_office")
-sal_Char const sXML_np__office[] = "_ooffice";
-sal_Char const sXML_np__text[] = "_otext";
-
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< uno::XComponentContext >& rContext,
     std::vector<OUString*> &rNewSectionList)
 :   SvXMLImport( rContext, "" ),
     rSectionList ( rNewSectionList )
 {
-    GetNamespaceMap().Add( sXML_np__office,
+    // TODO: verify if these should match the same-name constants
+    //       in xmloff/source/core/xmlimp.cxx ("_office" and "_office")
+    GetNamespaceMap().Add( "_ooffice",
                             GetXMLToken(XML_N_OFFICE_OOO),
                             XML_NAMESPACE_OFFICE );
-    GetNamespaceMap().Add( sXML_np__text,
+    GetNamespaceMap().Add( "_otext",
                             GetXMLToken(XML_N_TEXT_OOO),
                             XML_NAMESPACE_TEXT );
 }
