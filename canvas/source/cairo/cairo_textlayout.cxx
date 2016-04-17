@@ -349,8 +349,7 @@ namespace cairocanvas
 
         //Pull all the fonts we need to render the text
         typedef std::pair<SystemFontData,int> FontLevel;
-        typedef std::vector<FontLevel> FontLevelVector;
-        FontLevelVector aFontData;
+        std::vector<FontLevel> aFontData;
         SystemGlyphDataVector::const_iterator aGlyphIter=aSysLayoutData.rGlyphData.begin();
         const SystemGlyphDataVector::const_iterator aGlyphEnd=aSysLayoutData.rGlyphData.end();
         for( ; aGlyphIter != aGlyphEnd; ++aGlyphIter )
@@ -402,8 +401,8 @@ namespace cairocanvas
          **/
 
         // Loop through the fonts used and render the matching glyphs for each
-        FontLevelVector::const_iterator aFontDataIter = aFontData.begin();
-        const FontLevelVector::const_iterator aFontDataEnd = aFontData.end();
+        std::vector<FontLevel>::const_iterator aFontDataIter = aFontData.begin();
+        const std::vector<FontLevel>::const_iterator aFontDataEnd = aFontData.end();
         for( ; aFontDataIter != aFontDataEnd; ++aFontDataIter )
         {
             const SystemFontData &rSysFontData = aFontDataIter->first;
