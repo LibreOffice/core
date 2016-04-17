@@ -42,7 +42,10 @@ struct Fraction::Impl
     bool                        valid;
     boost::rational<sal_Int64>  value;
 
-    Impl() = default;
+    Impl()
+        : valid(false)
+    {
+    }
     Impl(const Impl&) = delete;
     Impl& operator=(const Impl&) = delete;
 };
