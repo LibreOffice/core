@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_a55f5e74",
+        "filename": "svx/source/sidebar/text/TextCharacterSpacingControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2016-04-17T12:22:32Z",
+      "side": 1,
+      "message": "Please especially take a look at last two methods, because I\u0027m not familiar with ItemPools etc. I\u0027ve tried to achieve the same effect like:\nhttp://opengrok.libreoffice.org/xref/core/svx/source/sidebar/text/TextPropertyPanel.cxx#55",
+      "revId": "e3a75de90e8d45df4d9feda4cc8694d9cbc7d84d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
