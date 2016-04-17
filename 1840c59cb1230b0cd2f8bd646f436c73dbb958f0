@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_454b0ab1",
+        "filename": "sot/source/base/formats.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-04-17T13:24:09Z",
+      "side": 1,
+      "message": "added spaces because it confused my script\nit is bad style and might confuse parsers",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 47
+      },
+      "revId": "1840c59cb1230b0cd2f8bd646f436c73dbb958f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
