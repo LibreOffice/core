@@ -87,8 +87,7 @@ private:
 
     SyntaxHighlighter   aHighlighter;
     Idle                aSyntaxIdle;
-    typedef std::set<sal_uInt16> SyntaxLineSet;
-    SyntaxLineSet       aSyntaxLineTable;
+    std::set<sal_uInt16>       aSyntaxLineTable;
     DECL_LINK_TYPED(SyntaxTimerHdl, Idle *, void);
 
     // progress bar
