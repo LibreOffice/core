@@ -79,9 +79,9 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
 
     // check for snapping points:
     sal_uInt16 nCount = 0;
-    std::vector< long >::iterator aSnappingPointIter;
-    for ( aSnappingPointIter = mxImpl->maSnappingPointOffsets.begin();
-          aSnappingPointIter != mxImpl->maSnappingPointOffsets.end();
+    for ( std::vector< long >::const_iterator aSnappingPointIter = mxImpl->maSnappingPointOffsets.begin(),
+           aEnd = mxImpl->maSnappingPointOffsets.end();
+          aSnappingPointIter != aEnd;
           ++aSnappingPointIter )
     {
         const long nCurrent = *aSnappingPointIter;
@@ -223,10 +223,10 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         }
 
         // remove snapping points that are to close to each other:
-        std::set< sal_uInt16 >::iterator aSnappingPointIter;
         long nLastOffset = 0;
 
-        for ( aSnappingPointIter = aTmpSnappingPoints.begin(); aSnappingPointIter != aTmpSnappingPoints.end(); ++aSnappingPointIter )
+        for ( std::set< sal_uInt16 >::const_iterator aSnappingPointIter = aTmpSnappingPoints.begin(),
+              aEnd = aTmpSnappingPoints.end(); aSnappingPointIter != aEnd; ++aSnappingPointIter )
         {
             const sal_uInt16 nCurrent = *aSnappingPointIter;
             const long nCurrentOffset = Zoom2Offset( nCurrent );
@@ -270,9 +270,9 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
 
 
     // draw snapping points:
-    std::vector< long >::iterator aSnappingPointIter;
-    for ( aSnappingPointIter = mxImpl->maSnappingPointOffsets.begin();
-          aSnappingPointIter != mxImpl->maSnappingPointOffsets.end();
+    for ( std::vector< long >::const_iterator aSnappingPointIter = mxImpl->maSnappingPointOffsets.begin(),
+            aEnd = mxImpl->maSnappingPointOffsets.end();
+          aSnappingPointIter != aEnd;
           ++aSnappingPointIter )
     {
         long nSnapPosX = aRect.Left() + *aSnappingPointIter;

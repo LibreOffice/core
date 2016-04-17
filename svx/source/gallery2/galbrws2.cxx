@@ -299,8 +299,9 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         GalleryBrowser2::GetFrame(), css::uno::UNO_QUERY );
     css::uno::Reference< css::util::XURLTransformer > xTransformer(
         mpBrowser->GetURLTransformer() );
+    CommandInfoMap::const_iterator aEnd = m_aCommandInfo.end();
     for ( CommandInfoMap::iterator it = m_aCommandInfo.begin();
-         it != m_aCommandInfo.end(); ++it )
+         it != aEnd; ++it )
     {
         try
         {

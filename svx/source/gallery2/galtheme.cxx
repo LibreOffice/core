@@ -592,7 +592,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
         // remove all entries with set flag
         GalleryObjectList::const_iterator aEnd = aObjectList.end();
-        for ( GalleryObjectList::iterator it = aObjectList.begin(); it != aEnd ; /* increment is in the body ofloop */)
+        for ( GalleryObjectList::iterator it = aObjectList.begin(); it != aEnd ; /* increment is in the body of loop */)
         {
             if( (*it)->mbDelete )
             {

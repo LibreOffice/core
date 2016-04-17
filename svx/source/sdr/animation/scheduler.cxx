@@ -190,8 +190,9 @@ namespace sdr
                 }
 
                 // execute events from the vector
+                ::std::vector< Event* >::const_iterator aEnd = EventPointerVector.end();
                 for(::std::vector< Event* >::iterator aCandidate = EventPointerVector.begin();
-                    aCandidate != EventPointerVector.end(); ++aCandidate)
+                    aCandidate != aEnd; ++aCandidate)
                 {
                     // trigger event. This may re-insert the event to the scheduler again
                     (*aCandidate)->Trigger(mnTime);

@@ -786,9 +786,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
     if(nCurCategory!=css::util::NumberFormat::ALL)
     {
-        SvNumberFormatTable::iterator it = pCurFmtTable->begin();
-
-        while ( it != pCurFmtTable->end() )
+        for( SvNumberFormatTable::const_iterator it = pCurFmtTable->begin(), aEnd = pCurFmtTable->end(); it != aEnd; ++it )
         {
             sal_uInt32 nKey = it->first;
             const SvNumberformat* pNumEntry   = it->second;
@@ -821,7 +819,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
                     aCurEntryList.push_back( nKey );
                 }
             }
-            ++it;
         }
     }
     return nSelPos;
@@ -887,8 +884,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
         rShortSymbol = pTmpCurrencyEntry->BuildSymbolString(bTmpBanking,true);
     }
 
-    SvNumberFormatTable::iterator it = pCurFmtTable->begin();
-    while ( it != pCurFmtTable->end() )
+    for ( SvNumberFormatTable::const_iterator it = pCurFmtTable->begin(), aEnd = pCurFmtTable->end(); it != aEnd; ++it )
     {
         sal_uInt32 nKey = it->first;
         const SvNumberformat* pNumEntry = it->second;
@@ -938,7 +934,6 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
                 }
             }
         }
-        ++it;
     }
 
     NfWSStringsDtor aWSStringsDtor;
@@ -1040,8 +1035,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
     bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&
                                     nCurCategory != css::util::NumberFormat::ALL);
 
-    SvNumberFormatTable::iterator it = pCurFmtTable->begin();
-    while ( it != pCurFmtTable->end() )
+    for( SvNumberFormatTable::const_iterator it = pCurFmtTable->begin(), aEnd = pCurFmtTable->end(); it != aEnd; ++it )
     {
         sal_uInt32 nKey = it->first;
         const SvNumberformat* pNumEntry = it->second;
@@ -1071,7 +1065,6 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
                 }
             }
         }
-        ++it;
     }
     return nSelPos;
 }
