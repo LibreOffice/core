@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_e86dabcd",
+        "filename": "connectivity/source/drivers/postgresql/pq_xcolumns.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-04-17T18:57:12Z",
+      "side": 1,
+      "message": "No idea why this was needed now, as I only changed cxx files.\nThe only reason I can think of, somewhere is a using declaration before an include. But I didn\u0027t find one.\n\n[build CXX] connectivity/source/drivers/postgresql/pq_xtables.cxx\nIn file included from /home/joni/lo/core/connectivity/source/drivers/postgresql/pq_xtable.cxx:49:0:\n/home/joni/lo/core/connectivity/source/drivers/postgresql/pq_xcolumns.hxx:55:66: error: ‘XRow’ is not a member of ‘com::sun::star::sdbc’\n     ReflectionBase *pBase, const com::sun::star::uno::Reference\u003c com::sun::star::sdbc::XRow \u003e \u0026xRow );\n                                                                  ^\n/home/joni/lo/core/connectivity/source/drivers/postgresql/pq_xcolumns.hxx:55:66: error: ‘XRow’ is not a member of ‘com::sun::star::sdbc’\n/home/joni/lo/core/connectivity/source/drivers/postgresql/pq_xcolumns.hxx:55:93: error: template argument 1 is invalid\n     ReflectionBase *pBase, const com::sun::star::uno::Reference\u003c com::sun::star::sdbc::XRow \u003e \u0026xRow );",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 37
+      },
+      "revId": "fed710042d312274ba4fb844c703ec4161cad42f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_c8726fad",
+        "filename": "sd/source/ui/framework/factories/PresentationFactory.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-04-17T18:57:12Z",
+      "side": 1,
+      "message": "previously included by FrameworkHelper.hxx",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 51
+      },
+      "revId": "fed710042d312274ba4fb844c703ec4161cad42f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
