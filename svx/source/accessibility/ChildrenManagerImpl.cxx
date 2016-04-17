@@ -367,17 +367,17 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
     }
 }
 
-
 void ChildrenManagerImpl::MergeAccessibilityInformation (
     ChildDescriptorListType& raNewChildList)
 {
-    ChildDescriptorListType::iterator aOldChildDescriptor;
+    ChildDescriptorListType::const_iterator aStartVisibleChildren = maVisibleChildren.begin();
     ChildDescriptorListType::const_iterator aEndVisibleChildren = maVisibleChildren.end();
 
     ChildDescriptorListType::const_iterator aEnd = raNewChildList.end();
     for (ChildDescriptorListType::iterator I=raNewChildList.begin(); I != aEnd; ++I)
     {
-        aOldChildDescriptor = ::std::find (maVisibleChildren.begin(), maVisibleChildren.end(), *I);
+        ChildDescriptorListType::const_iterator aOldChildDescriptor =
+            std::find(aStartVisibleChildren, aEndVisibleChildren, *I);
 
         // Copy accessible shape if that exists in the old descriptor.
         bool bRegistrationIsNecessary = true;
@@ -392,7 +392,6 @@ void ChildrenManagerImpl::MergeAccessibilityInformation (
             RegisterAsDisposeListener (I->mxShape);
     }
 }
-
 
 void ChildrenManagerImpl::SendVisibleAreaEvents (
     ChildDescriptorListType& raNewChildList)
