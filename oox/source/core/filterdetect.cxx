@@ -47,7 +47,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uri;
 
 using utl::MediaDescriptor;
-using comphelper::SequenceAsHashMap;
 using comphelper::IDocPasswordVerifier;
 using comphelper::DocPasswordVerifierResult;
 

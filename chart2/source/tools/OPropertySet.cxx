@@ -40,7 +40,6 @@ using ::osl::MutexGuard;
 // needed for MS compiler
 using ::cppu::OBroadcastHelper;
 using ::cppu::OPropertySetHelper;
-using ::cppu::OWeakObject;
 
 namespace property
 {

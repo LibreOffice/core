@@ -65,8 +65,6 @@ extern "C" {
                               {    return new opengl::OpenglShapeFactory();}
     }
 
-using dummy::DummyXShape;
-using dummy::DummyXShapes;
 using dummy::DummyCylinder;
 using dummy::DummyRectangle;
 using dummy::DummyPyramid;

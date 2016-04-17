@@ -129,7 +129,6 @@ using namespace ::svt;
 using ::com::sun::star::ucb::InteractiveIOException;
 using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
-using ::com::sun::star::frame::XModel;
 
 SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
                                      const Reference< css::container::XNameAccess >& _xDatabaseContext,

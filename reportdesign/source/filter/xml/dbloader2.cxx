@@ -37,7 +37,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::ui::dialogs;
-using ::com::sun::star::awt::XWindow;
 
 
 ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xContext)

@@ -54,8 +54,6 @@ namespace dbaui
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::frame::XController2;
-    using ::com::sun::star::frame::XFramesSupplier;
-    using ::com::sun::star::sdb::XOfficeDatabaseDocument;
     using ::com::sun::star::awt::XTopWindow;
     using ::com::sun::star::awt::XTopWindowListener;
     using ::com::sun::star::awt::XWindow2;

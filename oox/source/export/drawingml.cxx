@@ -98,7 +98,6 @@ using namespace ::css::uno;
 using namespace ::css::container;
 using namespace ::css::text;
 
-using ::css::geometry::IntegerRectangle2D;
 using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;

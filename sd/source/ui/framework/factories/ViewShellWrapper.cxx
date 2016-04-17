@@ -49,8 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::com::sun::star::awt::XWindow;
-using ::com::sun::star::rendering::XCanvas;
-using ::com::sun::star::lang::DisposedException;
 
 namespace sd { namespace framework {
 

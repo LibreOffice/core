@@ -98,7 +98,6 @@ public:
         throw (deployment::DeploymentException,
                uno::RuntimeException, std::exception) override;
 
-    using PackageRegistryBackend::disposing;
 };
 
 

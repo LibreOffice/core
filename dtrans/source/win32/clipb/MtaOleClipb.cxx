@@ -56,8 +56,6 @@
 
 //  namespace directives
 
-using osl::Condition;
-using osl::Mutex;
 using osl::MutexGuard;
 using osl::ClearableMutexGuard;
 

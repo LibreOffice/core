@@ -42,7 +42,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace utl;
     using namespace comphelper;
-    using ::accessibility::AccessibleBrowseBox;
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::accessibility::XAccessible;
     using namespace ::com::sun::star::accessibility;

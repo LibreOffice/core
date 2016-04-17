@@ -28,7 +28,6 @@
 
 #include <systools/win32/comtools.hxx>
 
-using osl::Condition;
 
 const sal_uInt32 MSG_BROWSEFORFOLDER = WM_USER + 1;
 const sal_uInt32 MSG_SHUTDOWN        = WM_USER + 2;

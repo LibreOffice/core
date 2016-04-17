@@ -57,8 +57,6 @@ using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::container::XIndexAccess;
-using ::osl::FileBase;
-using ::com::sun::star::frame::XModel;
 
 namespace swf {
 

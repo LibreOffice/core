@@ -26,8 +26,6 @@
 namespace dbmm
 {
 
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
 
     // ProgressCapture_Data

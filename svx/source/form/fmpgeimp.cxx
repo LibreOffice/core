@@ -57,7 +57,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
-using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::container::XMap;
 using ::com::sun::star::container::EnumerableMap;

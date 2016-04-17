@@ -76,8 +76,6 @@ namespace svxform
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::awt::TextEvent;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySet;
@@ -93,7 +91,6 @@ namespace svxform
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::XNumberFormatter;
-    using ::com::sun::star::util::XNumberFormatter2;
     using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::lang::Locale;
@@ -102,7 +99,6 @@ namespace svxform
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::awt::XTextComponent;
     using ::com::sun::star::uno::Sequence;
 
 

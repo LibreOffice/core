@@ -22,7 +22,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 namespace lang = ::com::sun::star::lang;
-using ::com::sun::star::i18n::LocaleDataItem;
 
 
 ScFormulaOptions::ScFormulaOptions()

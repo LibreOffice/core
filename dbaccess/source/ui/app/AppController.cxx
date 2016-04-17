@@ -149,7 +149,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::task;
 using ::com::sun::star::document::XEmbeddedScripts;
 using ::com::sun::star::document::XDocumentEventBroadcaster;
-using ::com::sun::star::document::DocumentEvent;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;

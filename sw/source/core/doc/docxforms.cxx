@@ -34,11 +34,9 @@
 using namespace ::com::sun::star;
 
 using uno::Reference;
-using uno::XInterface;
 using uno::UNO_QUERY;
 using uno::makeAny;
 using uno::Exception;
-using container::XNameContainer;
 using xforms::XModel2;
 using frame::XModule;
 using xforms::XFormsUIHelper1;

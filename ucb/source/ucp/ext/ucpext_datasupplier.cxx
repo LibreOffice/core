@@ -41,24 +41,19 @@ namespace ucb { namespace ucp { namespace ext
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::sdbc::XRow;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::ucb::IllegalIdentifierException;
     using ::com::sun::star::ucb::ResultSetException;
     using ::com::sun::star::deployment::PackageInformationProvider;
     using ::com::sun::star::deployment::XPackageInformationProvider;
-    using ::com::sun::star::beans::Property;
     using ::com::sun::star::sdbc::XResultSet;
-    using ::com::sun::star::ucb::XCommandEnvironment;
 
 
     //= ResultListEntry

@@ -54,7 +54,6 @@
 #include "unopage.hxx"
 
 using ::com::sun::star::presentation::XSlideShowController;
-using ::com::sun::star::container::XIndexAccess;
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::awt::XWindow;
 using namespace ::sd;

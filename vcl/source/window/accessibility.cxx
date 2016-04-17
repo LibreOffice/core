@@ -103,7 +103,6 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;
 
-using ::com::sun::star::awt::XTopWindow;
 
 ImplAccessibleInfos::ImplAccessibleInfos()
 {

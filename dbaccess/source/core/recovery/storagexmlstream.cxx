@@ -35,19 +35,12 @@ namespace dbaccess
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::xml::sax::XDocumentHandler;
-    using ::com::sun::star::xml::sax::XAttributeList;
     using ::com::sun::star::xml::sax::XWriter;
     using ::com::sun::star::xml::sax::Writer;
-    using ::com::sun::star::io::XStream;
-    using ::com::sun::star::io::XOutputStream;
-    using ::com::sun::star::io::XActiveDataSource;
     using ::com::sun::star::xml::sax::Parser;
     using ::com::sun::star::xml::sax::XParser;
     using ::com::sun::star::xml::sax::InputSource;

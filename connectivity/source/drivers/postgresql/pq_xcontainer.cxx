@@ -68,13 +68,6 @@ using com::sun::star::lang::XEventListener;
 
 using com::sun::star::lang::WrappedTargetException;
 
-using com::sun::star::sdbc::XRow;
-using com::sun::star::sdbc::XCloseable;
-using com::sun::star::sdbc::XStatement;
-using com::sun::star::sdbc::XResultSet;
-using com::sun::star::sdbc::XParameters;
-using com::sun::star::sdbc::XPreparedStatement;
-using com::sun::star::sdbcx::XDataDescriptorFactory;
 
 namespace pq_sdbc_driver
 {

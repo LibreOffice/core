@@ -32,9 +32,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
-using ::osl::MutexGuard;
 
 namespace chart
 {

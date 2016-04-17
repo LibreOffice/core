@@ -110,7 +110,6 @@ namespace svxform
 
     using ::com::sun::star::sdb::XColumn;
     using ::com::sun::star::awt::XControl;
-    using ::com::sun::star::awt::XTabController;
     using ::com::sun::star::awt::TabController;
     using ::com::sun::star::awt::XToolkit;
     using ::com::sun::star::awt::XWindowPeer;
@@ -134,7 +133,6 @@ namespace svxform
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::frame::XDispatch;
     using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::uno::XAggregation;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::sdbc::XConnection;
@@ -163,7 +161,6 @@ namespace svxform
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::form::validation::XValidatableFormComponent;
     using ::com::sun::star::form::XLoadable;
-    using ::com::sun::star::script::XEventAttacherManager;
     using ::com::sun::star::form::XBoundControl;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::awt::TextEvent;
@@ -185,7 +182,6 @@ namespace svxform
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::Locale;
-    using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::sdb::RowChangeEvent;
     using ::com::sun::star::frame::XStatusListener;

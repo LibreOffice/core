@@ -54,7 +54,6 @@
 
 using namespace ::osl;
 
-using ::com::sun::star::uno::XInterface;
 
 
 // SvxTextEditSourceImpl

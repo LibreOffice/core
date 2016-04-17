@@ -48,7 +48,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
-using mysqlc_sdbc_driver::getStringFromAny;
 
 
 static inline char * my_i_to_a(char * buf, size_t buf_size, int a)

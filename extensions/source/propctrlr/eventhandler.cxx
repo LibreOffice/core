@@ -82,7 +82,6 @@ namespace pcr
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::TypeClass_STRING;
     using ::com::sun::star::uno::Type;
@@ -124,7 +123,6 @@ namespace pcr
     using ::com::sun::star::inspection::InteractiveSelectionResult_Cancelled;
     using ::com::sun::star::inspection::InteractiveSelectionResult_Success;
     using ::com::sun::star::inspection::XObjectInspectorUI;
-    using ::com::sun::star::util::XModifiable;
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::frame::XModel;

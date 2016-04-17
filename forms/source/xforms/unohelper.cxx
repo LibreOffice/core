@@ -37,8 +37,6 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Exception;
-using com::sun::star::uno::XInterface;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;

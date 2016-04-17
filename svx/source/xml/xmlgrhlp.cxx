@@ -52,7 +52,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"

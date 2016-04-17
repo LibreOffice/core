@@ -105,12 +105,9 @@ using namespace ::css::container;
 using namespace ::css::document;
 using namespace ::css::text;
 
-using ::css::graphic::XGraphic;
 using ::css::io::XOutputStream;
-using ::css::lang::XComponent;
 using ::css::chart2::XChartDocument;
 using ::css::frame::XModel;
-using ::css::sheet::XSpreadsheetDocument;
 
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;

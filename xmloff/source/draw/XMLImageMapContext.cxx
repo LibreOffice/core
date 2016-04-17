@@ -54,7 +54,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::drawing::PointSequenceSequence;
 using ::com::sun::star::document::XEventsSupplier;
 
 

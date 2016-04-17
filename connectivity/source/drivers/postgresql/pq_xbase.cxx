@@ -52,8 +52,6 @@ using com::sun::star::uno::RuntimeException;
 
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySetInfo;
-using com::sun::star::beans::XMultiPropertySet;
-using com::sun::star::beans::XFastPropertySet;
 using com::sun::star::beans::XPropertySet;
 
 namespace pq_sdbc_driver

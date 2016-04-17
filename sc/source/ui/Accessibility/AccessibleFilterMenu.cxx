@@ -45,10 +45,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
-using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
 using ::std::for_each;
-using ::std::vector;
 
 namespace {
 

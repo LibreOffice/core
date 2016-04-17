@@ -54,12 +54,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::std;
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::PropertyValues;
-using ::com::sun::star::beans::PropertyState;
-using ::com::sun::star::container::XIndexReplace;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::lang::XServiceInfo;
 
 void XMLTextParagraphExport::exportListAndSectionChange(
     Reference<XTextSection> & rPrevSection,

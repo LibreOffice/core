@@ -45,8 +45,6 @@ namespace sdr { namespace contact {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::awt::XControlModel;
-    using ::com::sun::star::awt::XWindow2;
-    using ::com::sun::star::uno::Exception;
 
 
     //= ViewContactOfUnoControl

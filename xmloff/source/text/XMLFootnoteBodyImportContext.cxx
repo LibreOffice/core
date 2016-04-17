@@ -27,7 +27,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 

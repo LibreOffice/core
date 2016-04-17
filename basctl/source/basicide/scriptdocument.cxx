@@ -70,7 +70,6 @@ namespace basctl
     using ::com::sun::star::script::XLibraryContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::container::NoSuchElementException;
@@ -78,7 +77,6 @@ namespace basctl
     using ::com::sun::star::task::XStatusIndicator;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::script::XLibraryContainer2;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uri::UriReferenceFactory;
     using ::com::sun::star::uri::XUriReferenceFactory;
     using ::com::sun::star::uri::XUriReference;
@@ -96,14 +94,7 @@ namespace basctl
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::frame::XDispatch;
     using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::frame::XDesktop;
-    using ::com::sun::star::container::XEnumerationAccess;
-    using ::com::sun::star::container::XEnumeration;
-    using ::com::sun::star::frame::XModel2;
     using ::com::sun::star::awt::XWindow2;
-    using ::com::sun::star::document::XEventListener;
-    using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::document::XEmbeddedScripts;
     using ::com::sun::star::script::ModuleInfo;
     using ::com::sun::star::script::vba::XVBACompatibility;

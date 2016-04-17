@@ -55,22 +55,17 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::RuntimeException;
 
-using com::sun::star::container::NoSuchElementException;
 using com::sun::star::container::XEnumerationAccess;
 using com::sun::star::container::XEnumeration;
 
-using com::sun::star::lang::WrappedTargetException;
 
 using com::sun::star::sdbcx::XColumnsSupplier;
 
 using com::sun::star::sdbc::XRow;
-using com::sun::star::sdbc::XCloseable;
-using com::sun::star::sdbc::XStatement;
 using com::sun::star::sdbc::XResultSet;
 using com::sun::star::sdbc::XParameters;
 using com::sun::star::sdbc::XPreparedStatement;

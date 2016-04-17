@@ -59,12 +59,9 @@ namespace dbtools
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::sdbcx::XUsersSupplier;
     using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
-    using ::com::sun::star::sdbc::XDriverAccess;
     using ::com::sun::star::sdbc::DriverManager;
     using ::com::sun::star::sdbc::XDriverManager2;
     using ::com::sun::star::uno::UNO_SET_THROW;

@@ -60,9 +60,7 @@ namespace basic
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::script::XPersistentLibraryContainer;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::document::XStorageBasedDocument;
     using ::com::sun::star::lang::XComponent;

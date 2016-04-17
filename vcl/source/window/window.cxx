@@ -79,7 +79,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-using ::com::sun::star::awt::XTopWindow;
 
 namespace vcl {
 

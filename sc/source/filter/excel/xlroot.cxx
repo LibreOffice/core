@@ -61,8 +61,6 @@ using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::DeviceInfo;
 using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::frame::XFramesSupplier;
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 using namespace ::com::sun::star;
 

@@ -32,7 +32,6 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::util::XCloneable;
 using namespace ::com::sun::star::animations;
 
 namespace sd

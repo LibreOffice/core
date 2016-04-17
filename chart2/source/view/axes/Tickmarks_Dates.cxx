@@ -27,7 +27,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
-using ::basegfx::B2DVector;
 using ::com::sun::star::chart::TimeUnit::DAY;
 using ::com::sun::star::chart::TimeUnit::MONTH;
 using ::com::sun::star::chart::TimeUnit::YEAR;

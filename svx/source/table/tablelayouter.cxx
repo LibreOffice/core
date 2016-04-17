@@ -39,7 +39,6 @@
 #include "svdglob.hxx"
 
 using ::editeng::SvxBorderLine;
-using ::com::sun::star::awt::XLayoutConstrains;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;

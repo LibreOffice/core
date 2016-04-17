@@ -32,7 +32,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
-using ::osl::MutexGuard;
 
 namespace
 {

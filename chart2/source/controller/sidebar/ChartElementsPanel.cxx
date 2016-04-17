@@ -49,7 +49,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::sfx2::sidebar::Theme;
 
 namespace chart { namespace sidebar {
 

@@ -24,8 +24,6 @@
 #include "columninfo.hxx"
 #ifdef __MINGW32__
 #include <algorithm>
-using ::std::max;
-using ::std::min;
 #endif
 #include "thumbviewer.hxx"
 #include "shlxthdl.hxx"

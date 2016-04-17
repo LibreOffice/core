@@ -94,7 +94,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::task::XInteractionContinuation;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionApprove;
-using ::com::sun::star::task::XInteractionAskLater;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::uno::UNO_QUERY_THROW;

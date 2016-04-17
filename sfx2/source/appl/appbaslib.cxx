@@ -34,8 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::embed;
-using ::osl::MutexGuard;
-using ::osl::Mutex;
 
 
 SfxBasicManagerHolder::SfxBasicManagerHolder()

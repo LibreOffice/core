@@ -36,7 +36,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::frame::XModel;
 using ::com::sun::star::text::XTextCursor;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::text::XText;

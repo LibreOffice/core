@@ -49,8 +49,6 @@ using namespace ::svxform;
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::container::XChild;
-using com::sun::star::container::XNameContainer;
 
 
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)

@@ -62,11 +62,6 @@ namespace pcr
     using ::com::sun::star::util::VetoException;
     using ::com::sun::star::beans::PropertyVetoException;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::form::XGridColumnFactory;
-    using ::com::sun::star::form::XForm;
-    using ::com::sun::star::container::XChild;
-    using ::com::sun::star::frame::XFrame;
-    using ::com::sun::star::awt::XWindow;
 
     namespace PropertyAttribute = css::beans::PropertyAttribute;
 
