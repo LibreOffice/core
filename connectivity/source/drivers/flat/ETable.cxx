@@ -890,14 +890,61 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
             return false;
 
         QuotedTokenizedString sLine = m_aCurrentLine; // check if the string continues on next line
-        while( (comphelper::string::getTokenCount(sLine.GetString(), m_cStringDelimiter) % 2) != 1 )
+        sal_Int32 nLastOffset = 0;
+        bool isQuoted = false;
+        bool isFieldStarting = true;
+        while (true)
         {
-            m_pFileStream->ReadByteStringLine(sLine,nEncoding);
-            if ( !m_pFileStream->IsEof() )
+            bool wasQuote = false;
+            const sal_Unicode *p = sLine.GetString().getStr() + nLastOffset;
+            while (*p)
             {
-                OUString aStr = m_aCurrentLine.GetString() + "\n" + sLine.GetString();
-                m_aCurrentLine.SetString(aStr);
-                sLine = m_aCurrentLine;
+                if (isQuoted)
+                {
+                    if (*p == m_cStringDelimiter)
+                        wasQuote = !wasQuote;
+                    else
+                    {
+                        if (wasQuote)
+                        {
+                            wasQuote = false;
+                            isQuoted = false;
+                            if (*p == m_cFieldDelimiter)
+                                isFieldStarting = true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (isFieldStarting)
+                    {
+                        isFieldStarting = false;
+                        if (*p == m_cStringDelimiter)
+                            isQuoted = true;
+                        else if (*p == m_cFieldDelimiter)
+                            isFieldStarting = true;
+                    }
+                    else if (*p == m_cFieldDelimiter)
+                        isFieldStarting = true;
+                }
+                ++p;
+            }
+
+            if (wasQuote)
+                isQuoted = false;
+
+            if (isQuoted)
+            {
+                nLastOffset = sLine.Len();
+                m_pFileStream->ReadByteStringLine(sLine,nEncoding);
+                if ( !m_pFileStream->IsEof() )
+                {
+                    OUString aStr = m_aCurrentLine.GetString() + "\n" + sLine.GetString();
+                    m_aCurrentLine.SetString(aStr);
+                    sLine = m_aCurrentLine;
+                }
+                else
+                    break;
             }
             else
                 break;
