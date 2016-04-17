@@ -910,7 +910,7 @@ sal_Bool OFlatTable::readLine(QuotedTokenizedString& line, sal_Int32& _rnCurrent
     xub_StrLen nLastOffset = 0;
     bool isQuoted = false;
     bool isFieldStarting = true;
-    while (true)
+    while (sLine.Len() < STRING_MAXLEN)
     {
         bool wasQuote = false;
         const sal_Unicode *p;
