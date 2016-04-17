@@ -385,11 +385,11 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
     }
 }
 
-float SAL_CALL VbaApplicationBase::CentimetersToPoints( float _Centimeters ) throw (uno::RuntimeException, std::exception)
+float SAL_CALL VbaApplicationBase::CentimetersToPoints( float Centimeters ) throw (uno::RuntimeException, std::exception)
 {
     // i cm = 28.35 points
     static const float rate = 28.35f;
-    return ( _Centimeters * rate );
+    return ( Centimeters * rate );
 }
 
 uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException, std::exception)
