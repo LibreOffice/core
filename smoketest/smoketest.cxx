@@ -59,7 +59,10 @@ struct Result {
     osl::Condition condition;
     bool success;
     OUString result;
-    Result() = default;
+    Result()
+        : success(false)
+    {
+    }
     Result(const Result&) = delete;
     Result& operator=(const Result&) = delete;
 };
