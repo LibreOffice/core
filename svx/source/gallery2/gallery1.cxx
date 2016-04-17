@@ -570,7 +570,8 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
             KillFile( aStrURL );
         }
 
-        for ( GalleryThemeList::iterator it = aThemeList.begin(); it != aThemeList.end(); ++it )
+        GalleryThemeList::const_iterator aEnd = aThemeList.end();
+        for ( GalleryThemeList::iterator it = aThemeList.begin(); it != aEnd; ++it )
         {
             if ( pThemeEntry == *it ) {
                 delete pThemeEntry;
@@ -641,7 +642,8 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
 void Gallery::ImplDeleteCachedTheme( GalleryTheme* pTheme )
 {
-    for (GalleryCacheThemeList::iterator it = aThemeCache.begin(); it != aThemeCache.end(); ++it)
+    GalleryCacheThemeList::const_iterator aEnd = aThemeCache.end();
+    for (GalleryCacheThemeList::iterator it = aThemeCache.begin(); it != aEnd; ++it)
     {
         if (pTheme == (*it)->GetTheme())
         {

@@ -94,7 +94,8 @@ namespace sdr
 
             if(nSize)
             {
-                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); ++aIter)
+                OverlayObjectVector::const_iterator aEnd(maOverlayObjects.end());
+                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != aEnd; ++aIter)
                 {
                     OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
                     OverlayObject& rCandidate = **aIter;
@@ -223,7 +224,8 @@ namespace sdr
 
             if(nSize)
             {
-                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); ++aIter)
+                OverlayObjectVector::const_iterator aEnd = maOverlayObjects.end();
+                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != aEnd; ++aIter)
                 {
                     OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
                     OverlayObject& rCandidate = **aIter;

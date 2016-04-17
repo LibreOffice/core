@@ -461,7 +461,7 @@ namespace sdr
                                     std::vector<EECharAttrib> aAttribs;
                                     pEditEngine->GetCharAttribs(nPara, aAttribs);
 
-                                    for(std::vector<EECharAttrib>::iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
+                                    for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(), aEnd = aAttribs.end(); i != aEnd; ++i)
                                     {
                                         if(EE_FEATURE_FIELD == i->pAttr->Which())
                                         {
@@ -490,7 +490,7 @@ namespace sdr
 
                                         ESelection aSel(nPara, 0);
 
-                                        for(std::vector<EECharAttrib>::iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
+                                        for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(), aEnd = aAttribs.end(); i != aEnd; ++i)
                                         {
                                             if(EE_FEATURE_FIELD == i->pAttr->Which())
                                             {

@@ -362,8 +362,8 @@ namespace sdr
                             SfxStyleSheetBase* pLastSheet = nullptr;
                             SfxStyleSheetBase* pForThisObject = nullptr;
 
-                            std::vector<SfxStyleSheetBase*>::iterator iter;
-                            for (iter = aStyleList.begin(); iter != aStyleList.end(); ++iter)
+                            for (std::vector<SfxStyleSheetBase*>::const_iterator iter = aStyleList.begin(), aEnd = aStyleList.end()
+                                ; iter != aEnd; ++iter)
                             {
                                 pNewSheet = &pNewPool->Make((*iter)->GetName(), (*iter)->GetFamily(), (*iter)->GetMask());
                                 pNewSheet->GetItemSet().Put((*iter)->GetItemSet(), false);
