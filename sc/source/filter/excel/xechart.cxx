@@ -105,7 +105,6 @@ using ::com::sun::star::chart2::XFormattedString;
 using ::com::sun::star::chart2::XLegend;
 using ::com::sun::star::chart2::XRegressionCurve;
 using ::com::sun::star::chart2::XRegressionCurveContainer;
-using ::com::sun::star::chart2::XScaling;
 using ::com::sun::star::chart2::XTitle;
 using ::com::sun::star::chart2::XTitled;
 
@@ -113,7 +112,6 @@ using ::com::sun::star::chart2::data::XDataSequence;
 using ::com::sun::star::chart2::data::XDataSource;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
 
-using ::formula::FormulaGrammar;
 using ::formula::FormulaToken;
 
 namespace cssc = ::com::sun::star::chart;

@@ -40,7 +40,6 @@
 #include <sal/log.hxx>
 
 #include "MtaOleClipb.hxx"
-#include <osl/conditn.hxx>
 #include <osl/thread.h>
 
 #include <wchar.h>
@@ -56,8 +55,6 @@
 
 //  namespace directives
 
-using osl::Condition;
-using osl::Mutex;
 using osl::MutexGuard;
 using osl::ClearableMutexGuard;
 

@@ -39,7 +39,6 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-using ::std::vector;
 
 // struct ScImportParam:
 

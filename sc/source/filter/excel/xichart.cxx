@@ -104,7 +104,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::drawing::XDrawPage;
@@ -121,9 +120,6 @@ using ::com::sun::star::chart2::data::XLabeledDataSequence;
 using ::com::sun::star::chart2::data::LabeledDataSequence;
 
 using ::formula::FormulaToken;
-using ::formula::StackVar;
-using ::std::shared_ptr;
-using ::std::pair;
 using ::std::unique_ptr;
 
 namespace cssc = ::com::sun::star::chart;

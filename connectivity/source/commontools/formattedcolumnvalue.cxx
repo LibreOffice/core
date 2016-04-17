@@ -45,7 +45,6 @@ namespace dbtools
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::beans::XPropertySet;
@@ -59,7 +58,6 @@ namespace dbtools
     using ::com::sun::star::util::XNumberFormatTypes;
     using ::com::sun::star::sdb::XColumn;
     using ::com::sun::star::sdb::XColumnUpdate;
-    using ::com::sun::star::lang::XComponent;
 
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;

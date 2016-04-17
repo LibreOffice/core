@@ -58,9 +58,6 @@ using osl::MutexGuard;
 
 
 using com::sun::star::beans::XPropertySetInfo;
-using com::sun::star::beans::XPropertySet;
-using com::sun::star::beans::XMultiPropertySet;
-using com::sun::star::beans::XFastPropertySet;
 
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
@@ -73,16 +70,9 @@ using com::sun::star::uno::XInterface;
 
 using com::sun::star::lang::IllegalArgumentException;
 
-using com::sun::star::sdbc::XWarningsSupplier;
-using com::sun::star::sdbc::XCloseable;
-using com::sun::star::sdbc::XStatement;
-using com::sun::star::sdbc::XResultSet;
-using com::sun::star::sdbc::XConnection;
 using com::sun::star::sdbc::SQLException;
 using com::sun::star::sdbc::XRow;
-using com::sun::star::sdbc::XColumnLocate;
 using com::sun::star::sdbc::XResultSetMetaData;
-using com::sun::star::sdbc::XResultSetMetaDataSupplier;
 
 
 using com::sun::star::beans::Property;

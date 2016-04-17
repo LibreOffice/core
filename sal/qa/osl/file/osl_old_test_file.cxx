@@ -79,8 +79,6 @@ const char * const aSource2[ ] =
 #endif
 
 using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 void oldtestfile::test_file_001()
 {

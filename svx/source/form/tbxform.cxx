@@ -38,12 +38,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/imagemgr.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using ::com::sun::star::beans::XPropertySet;
 
 SvxFmAbsRecWin::SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController )
     :NumericField( _pParent, WB_BORDER )

@@ -19,7 +19,6 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 
@@ -54,7 +53,6 @@
 #include "unopage.hxx"
 
 using ::com::sun::star::presentation::XSlideShowController;
-using ::com::sun::star::container::XIndexAccess;
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::awt::XWindow;
 using namespace ::sd;

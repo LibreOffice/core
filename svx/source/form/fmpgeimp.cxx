@@ -31,7 +31,6 @@
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/container/EnumerableMap.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/Forms.hpp>
@@ -57,7 +56,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
-using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::container::XMap;
 using ::com::sun::star::container::EnumerableMap;

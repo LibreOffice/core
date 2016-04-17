@@ -38,7 +38,6 @@
 
 #include <doc.hxx>
 
-using ::com::sun::star::frame::XFrame;
 
 SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 {

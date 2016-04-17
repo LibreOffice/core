@@ -65,7 +65,6 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include "TypeInfo.hxx"
 #include "FieldDescriptions.hxx"
 #include <comphelper/processfactory.hxx>
@@ -129,7 +128,6 @@ using namespace ::svt;
 using ::com::sun::star::ucb::InteractiveIOException;
 using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
-using ::com::sun::star::frame::XModel;
 
 SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
                                      const Reference< css::container::XNameAccess >& _xDatabaseContext,

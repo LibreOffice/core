@@ -73,7 +73,6 @@
 // e.g.  the first cell, or when being in read-only mode
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 using namespace ::svt;

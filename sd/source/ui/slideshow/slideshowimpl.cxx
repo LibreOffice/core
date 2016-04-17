@@ -80,7 +80,6 @@
 
 #include <boost/mem_fn.hpp>
 
-using ::comphelper::OInterfaceContainerHelper2;
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationListener;
 using ::com::sun::star::awt::XWindow;

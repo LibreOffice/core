@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
@@ -46,7 +45,6 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameAccess;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::xforms::XFormsSupplier;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::Model;

@@ -50,9 +50,7 @@ using namespace osl;
 using namespace com::sun::star::uno;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 using ::rtl::OUStringHash;
-using ::rtl::OString;
 
 namespace cppu
 {

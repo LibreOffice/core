@@ -21,7 +21,6 @@
 #include <svtools/inettbc.hxx>
 #include <svtools/imagemgr.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
@@ -61,7 +60,6 @@ namespace svt
     using ::com::sun::star::ucb::CommandAbortedException;
     using ::com::sun::star::ucb::XContentAccess;
     using ::com::sun::star::ucb::XCommandEnvironment;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::document::DocumentProperties;
     using ::ucbhelper::ResultSetInclude;

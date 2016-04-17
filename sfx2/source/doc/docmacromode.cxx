@@ -28,7 +28,6 @@
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <framework/interaction.hxx>
@@ -48,19 +47,14 @@ namespace sfx2
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::task::XInteractionContinuation;
-    using ::com::sun::star::task::XInteractionRequest;
     using ::com::sun::star::task::DocumentMacroConfirmationRequest;
     using ::com::sun::star::task::ErrorCodeRequest;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::security::DocumentDigitalSignatures;
     using ::com::sun::star::security::XDocumentDigitalSignatures;
-    using ::com::sun::star::security::DocumentSignatureInformation;
     using ::com::sun::star::embed::XStorage;
-    using ::com::sun::star::task::InteractionClassification_QUERY;
     using ::com::sun::star::document::XEmbeddedScripts;
     using ::com::sun::star::script::XLibraryContainer;
-    using ::com::sun::star::script::XLibraryQueryExecutable;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
 

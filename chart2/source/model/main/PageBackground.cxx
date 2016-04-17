@@ -36,7 +36,6 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
-using ::osl::MutexGuard;
 
 namespace
 {

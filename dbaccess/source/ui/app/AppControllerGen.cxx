@@ -47,7 +47,6 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -86,7 +85,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 
-using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::ui::XContextMenuInterceptor;
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;

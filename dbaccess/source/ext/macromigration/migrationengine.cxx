@@ -28,19 +28,13 @@
 #include "progresscapture.hxx"
 #include "progressmixer.hxx"
 
-#include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -88,25 +82,18 @@ namespace dbmm
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdb::XOfficeDatabaseDocument;
-    using ::com::sun::star::sdb::XFormDocumentsSupplier;
-    using ::com::sun::star::sdb::XReportDocumentsSupplier;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::util::XCloseable;
-    using ::com::sun::star::util::CloseVetoException;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::frame::XModel;
-    using ::com::sun::star::frame::XComponentLoader;
     using ::com::sun::star::ucb::XCommandProcessor;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::Command;
-    using ::com::sun::star::embed::XComponentSupplier;
     using ::com::sun::star::task::XStatusIndicator;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::document::XStorageBasedDocument;
     using ::com::sun::star::embed::XTransactedObject;
     using ::com::sun::star::frame::XStorable;
-    using ::com::sun::star::embed::XEmbedPersist;
     using ::com::sun::star::script::DocumentDialogLibraryContainer;
     using ::com::sun::star::script::DocumentScriptLibraryContainer;
     using ::com::sun::star::script::XStorageBasedLibraryContainer;

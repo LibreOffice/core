@@ -44,8 +44,6 @@ using std::cout;
 using std::endl;
 #endif
 
-using css::sheet::DataPilotFieldReference;
-using std::vector;
 
 
 // ScDPName

@@ -20,7 +20,6 @@
 #include "drawingml/textparagraphpropertiescontext.hxx"
 
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <svx/unopage.hxx>
@@ -33,7 +32,6 @@
 #include "texttabstoplistcontext.hxx"
 
 using namespace ::oox::core;
-using ::com::sun::star::awt::FontDescriptor;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;

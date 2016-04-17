@@ -44,7 +44,6 @@ namespace svt
 
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::util::XNumberFormatter;
-    using ::com::sun::star::util::XNumberFormatter2;
     using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::NumberFormatsSupplier;

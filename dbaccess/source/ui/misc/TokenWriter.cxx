@@ -73,7 +73,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
-using ::com::sun::star::frame::XModel;
 
 const static char sMyBegComment[]   = "<!-- ";
 const static char sMyEndComment[]   = " -->";

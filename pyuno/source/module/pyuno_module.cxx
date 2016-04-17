@@ -42,7 +42,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 
@@ -51,7 +50,6 @@ using osl::Module;
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
@@ -59,7 +57,6 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::container::NoSuchElementException;
-using com::sun::star::reflection::XIdlReflection;
 using com::sun::star::reflection::XIdlClass;
 using com::sun::star::script::XInvocation2;
 

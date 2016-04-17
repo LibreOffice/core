@@ -21,7 +21,6 @@
 
 #include <osl/thread.h>
 #include <string.h>
-#include <oox/core/filterbase.hxx>
 #include "biffinputstream.hxx"
 
 namespace oox {
@@ -30,7 +29,6 @@ namespace xls {
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-using ::oox::core::FilterBase;
 
 BiffDecoderBase::BiffDecoderBase() :
     mbValid( false )

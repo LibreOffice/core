@@ -35,9 +35,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/xml/xpath/XXPathObject.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
@@ -66,9 +63,7 @@ using com::sun::star::task::XInteractionRequest;
 using com::sun::star::task::XInteractionContinuation;
 using com::sun::star::xforms::XModel;
 using com::sun::star::xforms::InvalidDataOnSubmitException;
-using com::sun::star::container::XNameAccess;
 using com::sun::star::xml::xpath::XXPathObject;
-using com::sun::star::xml::xpath::XPathObjectType;
 using com::sun::star::frame::XFrame;
 using xforms::Submission;
 using xforms::Model;

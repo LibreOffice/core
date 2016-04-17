@@ -20,7 +20,6 @@
 
 #include "accessibility/extended/AccessibleGridControlTableCell.hxx"
 #include <svtools/accessibletable.hxx>
-#include "accessibility/extended/AccessibleGridControl.hxx"
 #include <tools/gen.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -40,7 +39,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace utl;
     using namespace comphelper;
-    using ::accessibility::AccessibleGridControl;
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::accessibility::XAccessible;
     using namespace ::com::sun::star::accessibility;

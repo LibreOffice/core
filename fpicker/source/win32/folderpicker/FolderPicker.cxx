@@ -20,7 +20,6 @@
 #include <osl/diagnose.h>
 
 #include "FolderPicker.hxx"
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include "WinFOPImpl.hxx"
 
@@ -31,10 +30,8 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XInterface;
 using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::lang::XServiceInfo;
-using com::sun::star::lang::DisposedException;
 using com::sun::star::lang::IllegalArgumentException;
 using osl::MutexGuard;
 

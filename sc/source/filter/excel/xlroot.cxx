@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -61,8 +60,6 @@ using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::DeviceInfo;
 using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::frame::XFramesSupplier;
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 using namespace ::com::sun::star;
 

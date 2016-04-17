@@ -22,7 +22,6 @@
 #include "module_sdbt.hxx"
 #include "sdbtstrings.hrc"
 
-#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/sdb/tools/CompositionType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 
@@ -34,7 +33,6 @@ namespace sdbtools
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::XPropertySet;

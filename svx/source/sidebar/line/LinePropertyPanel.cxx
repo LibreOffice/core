@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <LinePropertyPanel.hxx>
 #include <LinePropertyPanel.hrc>
@@ -51,7 +50,6 @@
 
 using namespace css;
 using namespace css::uno;
-using sfx2::sidebar::Theme;
 
 namespace svx { namespace sidebar {
 

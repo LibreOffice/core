@@ -42,7 +42,6 @@
 
 #include <sal/macros.h>
 
-using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
 
 #if defined(_WIN32)
