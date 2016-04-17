@@ -43,8 +43,6 @@
 
 #include <limits>
 
-#define ERRORBOX(rid)   ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(rid))->Execute()
-
 #define QUERY_ENTRY_COUNT 4
 #define INVALID_HEADER_POS std::numeric_limits<size_t>::max()
 
@@ -719,7 +717,7 @@ IMPL_LINK_TYPED( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
                 if (!pExpander->get_expanded())
                   pExpander->set_expanded(true);
 
-                ERRORBOX( STR_INVALID_TABREF );
+                ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(STR_INVALID_TABREF))->Execute();
                 pEdCopyArea->GrabFocus();
                 bAreaInputOk = false;
             }
