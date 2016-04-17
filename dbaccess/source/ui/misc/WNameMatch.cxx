@@ -334,9 +334,9 @@ class OColumnString : public SvLBoxString
 {
     bool m_bReadOnly;
 public:
-    OColumnString( const OUString& rStr, bool _RO )
+    OColumnString( const OUString& rStr, bool RO )
         :SvLBoxString(rStr)
-        ,m_bReadOnly(_RO)
+        ,m_bReadOnly(RO)
     {
     }
 

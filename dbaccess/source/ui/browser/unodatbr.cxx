@@ -3714,22 +3714,22 @@ Reference< XEmbeddedScripts > SAL_CALL SbaTableQueryBrowser::getScriptContainer(
     return xScripts;
 }
 
-void SAL_CALL SbaTableQueryBrowser::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaTableQueryBrowser::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor ) throw (RuntimeException, std::exception)
 {
-    if ( _Interceptor.is() )
-        m_aContextMenuInterceptors.addInterface( _Interceptor );
+    if ( Interceptor.is() )
+        m_aContextMenuInterceptors.addInterface( Interceptor );
 }
 
-void SAL_CALL SbaTableQueryBrowser::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaTableQueryBrowser::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor ) throw (RuntimeException, std::exception)
 {
-    if ( _Interceptor.is() )
-        m_aContextMenuInterceptors.removeInterface( _Interceptor );
+    if ( Interceptor.is() )
+        m_aContextMenuInterceptors.removeInterface( Interceptor );
 }
 
-void SAL_CALL SbaTableQueryBrowser::registeredDatabaseLocation( const DatabaseRegistrationEvent& _Event ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaTableQueryBrowser::registeredDatabaseLocation( const DatabaseRegistrationEvent& Event ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    implAddDatasource( _Event.Name, SharedConnection() );
+    implAddDatasource( Event.Name, SharedConnection() );
 }
 
 void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const OUString& _rDataSourceName )
@@ -3781,24 +3781,24 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const OUString& _rDataSo
     m_pTreeModel->Remove( pDataSourceEntry );
 }
 
-void SAL_CALL SbaTableQueryBrowser::revokedDatabaseLocation( const DatabaseRegistrationEvent& _Event ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaTableQueryBrowser::revokedDatabaseLocation( const DatabaseRegistrationEvent& Event ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    impl_cleanupDataSourceEntry( _Event.Name );
+    impl_cleanupDataSourceEntry( Event.Name );
 
     // maybe the object which is part of the document data source has been removed
     checkDocumentDataSource();
 }
 
-void SAL_CALL SbaTableQueryBrowser::changedDatabaseLocation( const DatabaseRegistrationEvent& _Event ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaTableQueryBrowser::changedDatabaseLocation( const DatabaseRegistrationEvent& Event ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     // in case the data source was expanded, and connected, we need to clean it up
     // for simplicity, just do as if the data source were completely removed and re-added
-    impl_cleanupDataSourceEntry( _Event.Name );
-    implAddDatasource( _Event.Name, SharedConnection() );
+    impl_cleanupDataSourceEntry( Event.Name );
+    implAddDatasource( Event.Name, SharedConnection() );
 }
 
 }   // namespace dbaui

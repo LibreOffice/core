@@ -144,12 +144,12 @@ namespace
 typedef Reference< XResultSet > (SAL_CALL XDatabaseMetaData::*FGetMetaStrings)();
 
 void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxConnection,
-                        FGetMetaStrings _GetAll, const OUString& _rCurrent )
+                        FGetMetaStrings GetAll, const OUString& _rCurrent )
 {
     try {
         Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_QUERY_THROW );
 
-        Reference< XResultSet > xRes = (xMetaData.get()->*_GetAll)();
+        Reference< XResultSet > xRes = (xMetaData.get()->*GetAll)();
         Reference< XRow > xRow( xRes, UNO_QUERY_THROW );
         OUString sValue;
         while ( xRes->next() ) {

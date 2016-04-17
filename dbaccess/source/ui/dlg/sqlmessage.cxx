@@ -402,10 +402,10 @@ struct SQLMessageBox_Impl
 
 namespace
 {
-    void lcl_positionInAppFont( const vcl::Window& _rParent, vcl::Window& _rChild, long _nX, long _nY, long _Width, long _Height )
+    void lcl_positionInAppFont( const vcl::Window& _rParent, vcl::Window& _rChild, long _nX, long _nY, long Width, long Height )
     {
         Point aPos = _rParent.LogicToPixel( Point( _nX, _nY ), MAP_APPFONT );
-        Size aSize = _rParent.LogicToPixel( Size( _Width, _Height ), MAP_APPFONT );
+        Size aSize = _rParent.LogicToPixel( Size( Width, Height ), MAP_APPFONT );
         _rChild.SetPosSizePixel( aPos, aSize );
     }
 

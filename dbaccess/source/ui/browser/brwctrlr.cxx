@@ -165,7 +165,7 @@ public:
     virtual css::uno::Reference< css::awt::XControl >  SAL_CALL getCurrentControl() throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL addActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& _ChildController ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+    virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& ChildController ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
     virtual css::uno::Reference< css::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (css::uno::RuntimeException, std::exception) override;
@@ -224,7 +224,7 @@ public:
     // XTabController, base of XFormController
     virtual void SAL_CALL setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Reference< css::awt::XTabControllerModel >  SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setContainer(const css::uno::Reference< css::awt::XControlContainer > & _Container) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setContainer(const css::uno::Reference< css::awt::XControlContainer > & Container) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Reference< css::awt::XControlContainer >  SAL_CALL getContainer() throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl >  > SAL_CALL getControls() throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL autoTabOrder() throw( css::uno::RuntimeException, std::exception ) override;
@@ -275,7 +275,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListe
     m_aActivateListeners.removeInterface(l);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& /*_ChildController*/ ) throw( RuntimeException, IllegalArgumentException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& ) throw( RuntimeException, IllegalArgumentException, std::exception )
 {
     // not supported
     throw IllegalArgumentException( OUString(), *this, 1 );
@@ -449,7 +449,7 @@ Reference< css::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowserController::
     return Reference< XTabControllerModel >(m_pOwner->getRowSet(), UNO_QUERY);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< css::awt::XControlContainer > & /*_Container*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< css::awt::XControlContainer > &) throw( RuntimeException, std::exception )
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
@@ -1054,10 +1054,10 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
     SbaXDataBrowserController_Base::OGenericUnoController::disposing( Source );
 }
 
-void SAL_CALL SbaXDataBrowserController::setIdentifier( const OUString& _Identifier ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::setIdentifier( const OUString& Identifier ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    m_sModuleIdentifier = _Identifier;
+    m_sModuleIdentifier = Identifier;
 }
 
 OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  ) throw (RuntimeException, std::exception)

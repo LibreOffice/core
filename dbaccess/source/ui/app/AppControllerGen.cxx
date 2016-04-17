@@ -440,26 +440,26 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
         throw NoSuchElementException( *i_rObjectName, *this );
 }
 
-Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 _ObjectType,
-    const OUString& _ObjectName, sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
+Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 ObjectType,
+    const OUString& ObjectName, sal_Bool ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
 {
-    return loadComponentWithArguments( _ObjectType, _ObjectName, _ForEditing, Sequence< PropertyValue >() );
+    return loadComponentWithArguments( ObjectType, ObjectName, ForEditing, Sequence< PropertyValue >() );
 }
 
-Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
-    const OUString& _ObjectName, sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
+Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 ObjectType,
+    const OUString& ObjectName, sal_Bool ForEditing, const Sequence< PropertyValue >& Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    impl_validateObjectTypeAndName_throw( _ObjectType, _ObjectName );
+    impl_validateObjectTypeAndName_throw( ObjectType, ObjectName );
 
     Reference< XComponent > xComponent( openElementWithArguments(
-        _ObjectName,
-        lcl_objectType2ElementType( _ObjectType ),
-        _ForEditing ? E_OPEN_DESIGN : E_OPEN_NORMAL,
-        _ForEditing ? SID_DB_APP_EDIT : SID_DB_APP_OPEN,
-        ::comphelper::NamedValueCollection( _Arguments )
+        ObjectName,
+        lcl_objectType2ElementType( ObjectType ),
+        ForEditing ? E_OPEN_DESIGN : E_OPEN_NORMAL,
+        ForEditing ? SID_DB_APP_EDIT : SID_DB_APP_OPEN,
+        ::comphelper::NamedValueCollection( Arguments )
     ) );
 
     return xComponent;
@@ -486,15 +486,15 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArgu
     return xComponent;
 }
 
-void SAL_CALL OApplicationController::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException, std::exception)
+void SAL_CALL OApplicationController::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor ) throw (RuntimeException, std::exception)
 {
-    if ( _Interceptor.is() )
-        m_aContextMenuInterceptors.addInterface( _Interceptor );
+    if ( Interceptor.is() )
+        m_aContextMenuInterceptors.addInterface( Interceptor );
 }
 
-void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException, std::exception)
+void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor ) throw (RuntimeException, std::exception)
 {
-    m_aContextMenuInterceptors.removeInterface( _Interceptor );
+    m_aContextMenuInterceptors.removeInterface( Interceptor );
 }
 
 void OApplicationController::previewChanged( sal_Int32 _nMode )

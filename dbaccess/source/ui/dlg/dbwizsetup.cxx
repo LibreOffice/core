@@ -422,9 +422,9 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
     return m_pImpl->getDriver();
 }
 
-::dbaccess::DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const
+::dbaccess::DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE DatabaseType) const
 {
-    ::dbaccess::DATASOURCE_TYPE LocDatabaseType = _DatabaseType;
+    ::dbaccess::DATASOURCE_TYPE LocDatabaseType = DatabaseType;
     if ((LocDatabaseType ==  ::dbaccess::DST_MYSQL_JDBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_ODBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_NATIVE))
     {
         if (m_pMySQLIntroPage != nullptr)

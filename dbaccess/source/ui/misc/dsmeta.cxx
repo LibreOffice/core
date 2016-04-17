@@ -41,8 +41,8 @@ namespace dbaui
         {
         }
 
-        explicit FeatureSupport(AuthenticationMode _Auth)
-            :eAuthentication( _Auth )
+        explicit FeatureSupport(AuthenticationMode Auth)
+            :eAuthentication( Auth )
         {
         }
     };

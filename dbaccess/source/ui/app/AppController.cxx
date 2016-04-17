@@ -199,14 +199,14 @@ public:
     SelectionNotifier(const SelectionNotifier&) = delete;
     const SelectionNotifier& operator=(const SelectionNotifier&) = delete;
 
-    void addListener( const Reference< XSelectionChangeListener >& _Listener )
+    void addListener( const Reference< XSelectionChangeListener >& Listener )
     {
-        m_aSelectionListeners.addInterface( _Listener );
+        m_aSelectionListeners.addInterface( Listener );
     }
 
-    void removeListener( const Reference< XSelectionChangeListener >& _Listener )
+    void removeListener( const Reference< XSelectionChangeListener >& Listener )
     {
-        m_aSelectionListeners.removeInterface( _Listener );
+        m_aSelectionListeners.removeInterface( Listener );
     }
 
     void disposing()
@@ -2745,14 +2745,14 @@ OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandT
     return sName;
 }
 
-void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_pSelectionNotifier->addListener( _Listener );
+    m_pSelectionNotifier->addListener( Listener );
 }
 
-void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_pSelectionNotifier->removeListener( _Listener );
+    m_pSelectionNotifier->removeListener( Listener );
 }
 
 sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)

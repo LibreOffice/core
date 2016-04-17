@@ -162,7 +162,7 @@ private:
     OUString createUniqueFileName(const INetURLObject& rURL);
     void CreateDatabase();
     void createUniqueFolderName(INetURLObject* pURL);
-    ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const;
+    ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE DatabaseType) const;
 
     void updateTypeDependentStates();
     bool callSaveAsDialog();
