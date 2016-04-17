@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_253fee26",
+        "filename": "sd/uiconfig/simpress/ui/photoalbum.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-04-17T01:35:11Z",
+      "side": 1,
+      "message": "If you want to remove a widget, just do precisely that — don’t comment it out.",
+      "revId": "ab61b8606edb949201fa87dce75462add1567445",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
