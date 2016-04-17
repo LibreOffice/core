@@ -61,7 +61,6 @@ namespace svt
 
     using namespace ::com::sun::star::uno;
     using namespace com::sun::star::accessibility::AccessibleEventId;
-    using  com::sun::star::accessibility::XAccessible;
 
 
     IEditImplementation::~IEditImplementation()

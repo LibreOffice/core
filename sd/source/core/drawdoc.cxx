@@ -112,7 +112,6 @@ using namespace ::com::sun::star::linguistic2;
 using namespace com::sun::star::xml::dom;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::beans::PropertyValue;
 
 
 SdDrawDocument* SdDrawDocument::s_pDocLockedInsertingLinks = nullptr;

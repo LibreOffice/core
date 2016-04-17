@@ -35,8 +35,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::i18n::LocaleDataItem;
 
 ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs) :
     SfxTabPage(pParent, "OptFormula", "modules/scalc/ui/optformula.ui", &rCoreAttrs),

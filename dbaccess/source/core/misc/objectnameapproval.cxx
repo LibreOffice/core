@@ -38,7 +38,6 @@ namespace dbaccess
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::sdbc::SQLException;
 
     namespace CommandType = com::sun::star::sdb::CommandType;
 

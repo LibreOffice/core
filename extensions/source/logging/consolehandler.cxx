@@ -44,7 +44,6 @@ namespace logging
     using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::logging::LogRecord;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::NamedValue;

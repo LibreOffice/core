@@ -50,7 +50,6 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::lang::XMultiComponentFactory;
-    using ::com::sun::star::awt::XToolkit;
     using ::com::sun::star::awt::WindowDescriptor;
     using ::com::sun::star::awt::WindowClass_SIMPLE;
     using ::com::sun::star::awt::Rectangle;

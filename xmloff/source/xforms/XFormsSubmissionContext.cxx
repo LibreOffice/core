@@ -37,8 +37,6 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
-using com::sun::star::beans::XPropertySet;
-using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xforms::XModel2;
 

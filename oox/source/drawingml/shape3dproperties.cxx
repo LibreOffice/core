@@ -37,8 +37,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
 
-using ::com::sun::star::uno::Exception;
-using ::oox::core::XmlFilterBase;
 
 namespace oox {
 namespace drawingml {

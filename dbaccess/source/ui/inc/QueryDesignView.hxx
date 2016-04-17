@@ -154,7 +154,6 @@ namespace dbaui
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
 
     private:
-        using OQueryView::SaveTabWinUIConfig;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYDESIGNVIEW_HXX

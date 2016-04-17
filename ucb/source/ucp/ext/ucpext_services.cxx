@@ -26,10 +26,6 @@ namespace ucb { namespace ucp { namespace ext
 {
 
 
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::lang::XSingleComponentFactory;
 
 
     //= descriptors for the services implemented in this component

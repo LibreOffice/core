@@ -41,7 +41,6 @@
 
 
 using com::sun::star::xml::sax::XAttributeList;
-using com::sun::star::beans::XPropertySet;
 using com::sun::star::util::XUpdatable;
 using namespace com::sun::star::uno;
 using namespace xmloff::token;

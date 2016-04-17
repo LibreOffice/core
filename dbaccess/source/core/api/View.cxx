@@ -36,15 +36,9 @@ namespace dbaccess
 {
 
     using namespace ::com::sun::star::uno;
-    using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::sdbc::XResultSet;
-    using ::com::sun::star::sdbc::XStatement;
-    using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::sdbc::XRow;
 
     OUString lcl_getServiceNameForSetting(const Reference< css::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
     {

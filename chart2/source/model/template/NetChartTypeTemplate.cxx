@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::osl::MutexGuard;
 
 namespace chart
 {

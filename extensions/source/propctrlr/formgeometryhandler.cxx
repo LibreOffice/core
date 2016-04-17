@@ -85,7 +85,6 @@ namespace pcr
     using ::com::sun::star::table::XColumnRowRange;
     using ::com::sun::star::table::XTableColumns;
     using ::com::sun::star::table::XTableRows;
-    using ::com::sun::star::table::XCellRange;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::form::XGridColumnFactory;

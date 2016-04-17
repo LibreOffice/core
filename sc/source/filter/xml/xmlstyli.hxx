@@ -117,7 +117,6 @@ public:
     void ApplyCondFormat( const css::uno::Sequence<css::table::CellRangeAddress>& xCellRanges );
 
 private:
-    using XMLPropStyleContext::SetStyle;
 };
 
 class XMLTableStylesContext : public SvXMLStylesContext

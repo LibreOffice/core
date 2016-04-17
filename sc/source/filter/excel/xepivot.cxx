@@ -45,7 +45,6 @@
 using namespace ::oox;
 
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
-using ::com::sun::star::sheet::DataPilotFieldOrientation_HIDDEN;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_ROW;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_COLUMN;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_PAGE;

@@ -29,7 +29,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::xforms;
 using namespace com::sun::star::xml::xpath;
 using namespace com::sun::star::beans;
-using com::sun::star::xml::dom::XNode;
 
 Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHandle() throw (RuntimeException, std::exception)
 {

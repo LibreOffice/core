@@ -41,7 +41,6 @@
 using namespace com::sun::star::accessibility::AccessibleEventId;
 using namespace com::sun::star::accessibility::AccessibleTableModelChangeType;
 using com::sun::star::accessibility::AccessibleTableModelChange;
-using com::sun::star::lang::XComponent;
 using namespace ::com::sun::star::uno;
 using namespace svt;
 

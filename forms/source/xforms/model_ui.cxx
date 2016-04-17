@@ -54,8 +54,6 @@
 
 
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::io::XInputStream;
-using com::sun::star::io::XActiveDataSink;
 using com::sun::star::io::TextInputStream;
 using com::sun::star::io::XTextInputStream2;
 using com::sun::star::container::XEnumeration;

@@ -67,8 +67,6 @@ using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::form::XForm;
-using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XFormsSupplier;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::script::ScriptEventDescriptor;

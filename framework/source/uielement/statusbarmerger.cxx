@@ -19,7 +19,6 @@
 #include <uielement/statusbarmerger.hxx>
 
 using rtl::OUString;
-using com::sun::star::frame::XFrame;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::uno::Sequence;
 

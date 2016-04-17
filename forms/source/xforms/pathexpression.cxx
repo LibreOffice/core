@@ -41,13 +41,6 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::dom::XNode;
 using com::sun::star::xml::dom::XNodeList;
-using com::sun::star::xml::dom::events::XEventListener;
-using com::sun::star::xml::dom::events::XEventTarget;
-using com::sun::star::container::XNameContainer;
-using com::sun::star::xml::xpath::XXPathObject;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::xml::dom::NodeType_TEXT_NODE;
-using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
 using namespace std;
 
 

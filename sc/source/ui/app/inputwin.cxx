@@ -84,9 +84,6 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 
 using com::sun::star::frame::XLayoutManager;
-using com::sun::star::frame::XModel;
-using com::sun::star::frame::XFrame;
-using com::sun::star::frame::XController;
 using com::sun::star::beans::XPropertySet;
 
 enum ScNameInputType

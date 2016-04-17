@@ -24,8 +24,6 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
 #ifdef SAL_UNX

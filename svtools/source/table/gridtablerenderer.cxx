@@ -43,11 +43,9 @@ namespace svt { namespace table
     using ::css::uno::TypeClass_INTERFACE;
     using ::css::graphic::XGraphic;
     using ::css::style::HorizontalAlignment;
-    using ::css::style::HorizontalAlignment_LEFT;
     using ::css::style::HorizontalAlignment_CENTER;
     using ::css::style::HorizontalAlignment_RIGHT;
     using ::css::style::VerticalAlignment;
-    using ::css::style::VerticalAlignment_TOP;
     using ::css::style::VerticalAlignment_MIDDLE;
     using ::css::style::VerticalAlignment_BOTTOM;
 

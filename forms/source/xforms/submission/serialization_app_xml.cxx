@@ -44,7 +44,6 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
@@ -53,7 +52,6 @@ using ::com::sun::star::xml::dom::XNode;
 using ::com::sun::star::xml::dom::XDocument;
 using ::com::sun::star::xml::sax::XSAXSerializable;
 using ::com::sun::star::beans::StringPair;
-using ::com::sun::star::io::XActiveDataSource;
 using ::com::sun::star::xml::dom::NodeType_DOCUMENT_NODE;
 using ::com::sun::star::xml::dom::NodeType_ELEMENT_NODE;
 using ::com::sun::star::xml::dom::XDocumentBuilder;

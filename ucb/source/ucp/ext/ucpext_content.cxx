@@ -55,7 +55,6 @@ namespace ucb { namespace ucp { namespace ext
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
@@ -63,9 +62,7 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::ucb::XContentIdentifier;
-    using ::com::sun::star::ucb::IllegalIdentifierException;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XCommandEnvironment;
     using ::com::sun::star::ucb::Command;
@@ -75,11 +72,6 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::ucb::OpenCommandArgument2;
     using ::com::sun::star::ucb::XDynamicResultSet;
-    using ::com::sun::star::ucb::UnsupportedOpenModeException;
-    using ::com::sun::star::io::XOutputStream;
-    using ::com::sun::star::io::XActiveDataSink;
-    using ::com::sun::star::io::XInputStream;
-    using ::com::sun::star::ucb::UnsupportedDataSinkException;
     using ::com::sun::star::ucb::UnsupportedCommandException;
     using ::com::sun::star::sdbc::XRow;
     using ::com::sun::star::beans::XPropertySet;

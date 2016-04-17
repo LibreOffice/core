@@ -120,15 +120,12 @@ namespace dbaui
     using ::com::sun::star::sdbc::XParameters;
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::sdbc::XRow;
-    using ::com::sun::star::sdbc::XBlob;
-    using ::com::sun::star::sdbc::XClob;
     using ::com::sun::star::sdbcx::XRowLocate;
     using ::com::sun::star::sdbc::XResultSetMetaDataSupplier;
     using ::com::sun::star::sdbc::XResultSetMetaData;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdb::SQLContext;
     using ::com::sun::star::sdbc::ConnectionPool;
-    using ::com::sun::star::sdbc::XConnectionPool;
     using ::com::sun::star::sdbc::XDriverManager;
     using ::com::sun::star::sdbc::DriverManager;
     using ::com::sun::star::beans::PropertyValue;

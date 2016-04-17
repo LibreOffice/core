@@ -47,7 +47,6 @@
 
 using rtl::OUString;
 using rtl::OString;
-using rtl::OStringBuffer;
 
 #include <registry/registry.hxx>
 #include <xmlreader/xmlreader.hxx>

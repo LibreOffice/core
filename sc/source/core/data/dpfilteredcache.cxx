@@ -40,12 +40,8 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 using ::std::vector;
-using ::std::pair;
-using ::com::sun::star::i18n::LocaleDataItem;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::sheet::DataPilotFieldFilter;
 
 ScDPFilteredCache::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
     maItem(rItem) {}

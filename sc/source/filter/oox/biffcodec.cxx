@@ -30,7 +30,6 @@ namespace xls {
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-using ::oox::core::FilterBase;
 
 BiffDecoderBase::BiffDecoderBase() :
     mbValid( false )

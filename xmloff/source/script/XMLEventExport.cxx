@@ -38,7 +38,6 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::container::XNameAccess;
-using ::xmloff::token::GetXMLToken;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
 

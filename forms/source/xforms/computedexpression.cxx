@@ -40,17 +40,11 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 
-using com::sun::star::beans::NamedValue;
 using namespace com::sun::star::uno;
-using com::sun::star::lang::XInitialization;
-using com::sun::star::lang::XMultiServiceFactory;
-using com::sun::star::xml::dom::XNode;
-using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::xpath::XPathAPI;
 using com::sun::star::xml::xpath::XXPathAPI;
 using com::sun::star::xml::xpath::XPathExtension;
 using com::sun::star::xml::xpath::XXPathExtension;
-using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
 using com::sun::star::util::SearchOptions2;
 

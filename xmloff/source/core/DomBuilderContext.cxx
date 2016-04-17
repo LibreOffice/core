@@ -40,14 +40,12 @@
 #include <comphelper/processfactory.hxx>
 
 
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::xml::dom::DocumentBuilder;
-using com::sun::star::xml::dom::XAttr;
 using com::sun::star::xml::dom::XDocument;
 using com::sun::star::xml::dom::XDocumentBuilder;
 using com::sun::star::xml::dom::XNode;

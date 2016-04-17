@@ -44,11 +44,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <memory>
 
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::util::XChangesBatch;
-using ::com::sun::star::uno::Exception;
 
 namespace {
 

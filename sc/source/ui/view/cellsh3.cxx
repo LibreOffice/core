@@ -53,7 +53,6 @@
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
 using sc::HMMToTwips;
-using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
 void ScCellShell::Execute( SfxRequest& rReq )

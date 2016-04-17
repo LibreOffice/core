@@ -51,7 +51,6 @@
 
 using namespace css;
 using namespace css::uno;
-using sfx2::sidebar::Theme;
 
 const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
 

@@ -49,9 +49,7 @@ namespace pcr
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::inspection::PropertyCategoryDescriptor;
-    using ::com::sun::star::beans::UnknownPropertyException;
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
 

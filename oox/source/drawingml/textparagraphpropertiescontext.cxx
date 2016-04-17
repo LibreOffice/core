@@ -33,7 +33,6 @@
 #include "texttabstoplistcontext.hxx"
 
 using namespace ::oox::core;
-using ::com::sun::star::awt::FontDescriptor;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;

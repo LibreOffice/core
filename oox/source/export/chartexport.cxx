@@ -103,18 +103,11 @@ using namespace css;
 using namespace css::uno;
 using namespace css::drawing;
 using namespace ::oox::core;
-using css::beans::PropertyState;
 using css::beans::PropertyValue;
 using css::beans::XPropertySet;
-using css::beans::XPropertyState;
-using css::container::XEnumeration;
-using css::container::XEnumerationAccess;
-using css::container::XIndexAccess;
 using css::container::XNamed;
-using css::io::XOutputStream;
 using css::table::CellAddress;
 using css::sheet::XFormulaParser;
-using css::sheet::XFormulaTokens;
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 

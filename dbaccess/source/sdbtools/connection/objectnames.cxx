@@ -41,12 +41,10 @@ namespace sdbtools
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdbc::XDatabaseMetaData;
-    using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdbcx::XTablesSupplier;

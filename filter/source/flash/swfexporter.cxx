@@ -53,10 +53,6 @@ using com::sun::star::beans::PropertyValue;
 using com::sun::star::container::XIndexAccess;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::lang::XComponent;
-using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::document::XExporter;
-using com::sun::star::document::XFilter;
-using com::sun::star::frame::XModel;
 using com::sun::star::lang::XServiceInfo;
 
 

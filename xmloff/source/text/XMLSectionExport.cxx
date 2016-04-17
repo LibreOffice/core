@@ -64,13 +64,10 @@ using namespace ::xmloff::token;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::PropertyValues;
-using ::com::sun::star::beans::PropertyState;
 using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
-using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::lang::Locale;
-using ::com::sun::star::uno::XInterface;
 
 
 XMLSectionExport::XMLSectionExport(
