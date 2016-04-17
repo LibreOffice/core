@@ -907,14 +907,64 @@ sal_Bool OFlatTable::readLine(QuotedTokenizedString& line, sal_Int32& _rnCurrent
         return sal_False;
 
     QuotedTokenizedString sLine = line; // check if the string continues on next line
-    while( (sLine.GetString().GetTokenCount(m_cStringDelimiter) % 2) != 1 )
+    xub_StrLen nLastOffset = 0;
+    bool isQuoted = false;
+    bool isFieldStarting = true;
+    while (true)
     {
-        m_pFileStream->ReadByteStringLine(sLine,nEncoding);
-        if ( !m_pFileStream->IsEof() )
+        bool wasQuote = false;
+        const sal_Unicode *p;
+        p = sLine.GetString().GetBuffer();
+        p += nLastOffset;
+
+        while (*p)
         {
-            line.GetString().Append('\n');
-            line.GetString() += sLine.GetString();
-            sLine = line;
+            if (isQuoted)
+            {
+                if (*p == m_cStringDelimiter)
+                    wasQuote = !wasQuote;
+                else
+                {
+                    if (wasQuote)
+                    {
+                        wasQuote = false;
+                        isQuoted = false;
+                        if (*p == m_cFieldDelimiter)
+                            isFieldStarting = true;
+                    }
+                }
+            }
+            else
+            {
+                if (isFieldStarting)
+                {
+                    isFieldStarting = false;
+                    if (*p == m_cStringDelimiter)
+                        isQuoted = true;
+                    else if (*p == m_cFieldDelimiter)
+                        isFieldStarting = true;
+                }
+                else if (*p == m_cFieldDelimiter)
+                    isFieldStarting = true;
+            }
+            ++p;
+        }
+
+        if (wasQuote)
+            isQuoted = false;
+
+        if (isQuoted)
+        {
+            nLastOffset = sLine.Len();
+            m_pFileStream->ReadByteStringLine(sLine,nEncoding);
+            if ( !m_pFileStream->IsEof() )
+            {
+                line.GetString().Append('\n');
+                line.GetString() += sLine.GetString();
+                sLine = line;
+            }
+            else
+                break;
         }
         else
             break;

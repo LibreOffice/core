@@ -1128,38 +1128,59 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
     {
         const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
         xub_StrLen nLastOffset = 0;
-        xub_StrLen nQuotes = 0;
+        bool isQuoted = false;
+        bool isFieldStarting = true;
         while (!IsEof() && rStr.Len() < STRING_MAXLEN)
         {
+            bool wasQuote = false;
             bool bBackslashEscaped = false;
-            const sal_Unicode *p, *pStart;
-            p = pStart = rStr.GetBuffer();
+            const sal_Unicode *p;
+            p = rStr.GetBuffer();
             p += nLastOffset;
             while (*p)
             {
-                if (nQuotes)
+                if (isQuoted)
                 {
                     if (*p == cFieldQuote && !bBackslashEscaped)
-                        ++nQuotes;
-                    else if (bAllowBackslashEscape)
+                        wasQuote = !wasQuote;
+                    else
                     {
-                        if (*p == '\\')
-                            bBackslashEscaped = !bBackslashEscaped;
-                        else
-                            bBackslashEscaped = false;
+                        if (bAllowBackslashEscape)
+                        {
+                            if (*p == '\\')
+                                bBackslashEscaped = !bBackslashEscaped;
+                            else
+                                bBackslashEscaped = false;
+                        }
+                        if (wasQuote)
+                        {
+                            wasQuote = false;
+                            isQuoted = false;
+                            if (lcl_UnicodeStrChr( pSeps, *p ))
+                                isFieldStarting = true;
+                        }
                     }
                 }
-                else if (*p == cFieldQuote && (p == pStart ||
-                            lcl_UnicodeStrChr( pSeps, p[-1])))
-                    nQuotes = 1;
-                // A quote character inside a field content does not start
-                // a quote.
+                else
+                {
+                    if (isFieldStarting)
+                    {
+                        isFieldStarting = false;
+                        if (*p == cFieldQuote)
+                            isQuoted = true;
+                        else if (lcl_UnicodeStrChr( pSeps, *p ))
+                            isFieldStarting = true;
+                    }
+                    else if (lcl_UnicodeStrChr( pSeps, *p ))
+                        isFieldStarting = true;
+                }
                 ++p;
             }
 
-            if (nQuotes % 2 == 0)
-                break;
-            else
+            if (wasQuote)
+                isQuoted = false;
+
+            if (isQuoted)
             {
                 nLastOffset = rStr.Len();
                 String aNext;
@@ -1167,6 +1188,8 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
                 rStr += sal_Unicode(_LF);
                 rStr += aNext;
             }
+            else
+                break;
         }
     }
     return nError == SVSTREAM_OK;
