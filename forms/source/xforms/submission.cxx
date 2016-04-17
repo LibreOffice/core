@@ -514,7 +514,7 @@ void SAL_CALL Submission::removeSubmissionVetoListener( const Reference< XSubmis
     throw NoSupportException();
 }
 
-static bool _isIgnorable(const Reference< XNode >& aNode)
+static bool isIgnorable(const Reference< XNode >& aNode)
 {
     // ignore whitespace-only textnodes
     if (aNode->getNodeType() == NodeType_TEXT_NODE)
@@ -527,7 +527,7 @@ static bool _isIgnorable(const Reference< XNode >& aNode)
 }
 
 // recursively copy relevant nodes from A to B
-static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, const Reference< XNode >& source, bool bRemoveWSNodes)
+static void cloneNodes(Model& aModel, const Reference< XNode >& dstParent, const Reference< XNode >& source, bool bRemoveWSNodes)
 {
     if (!source.is()) return;
 
@@ -539,13 +539,13 @@ static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, cons
     {
         //  is this node relevant?
         MIP mip = aModel.queryMIP(cur);
-        if(mip.isRelevant() && !(bRemoveWSNodes && _isIgnorable(cur)))
+        if(mip.isRelevant() && !(bRemoveWSNodes && isIgnorable(cur)))
         {
             imported = dstDoc->importNode(cur, false);
             imported = dstParent->appendChild(imported);
             // append source children to new imported parent
             for( cur = cur->getFirstChild(); cur.is(); cur = cur->getNextSibling() )
-                _cloneNodes(aModel, imported, cur, bRemoveWSNodes);
+                cloneNodes(aModel, imported, cur, bRemoveWSNodes);
         }
     }
 }
@@ -582,7 +582,7 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
             if (aListItem->getNodeType()==NodeType_DOCUMENT_NODE)
                 aListItem.set( (Reference< XDocument >(aListItem, UNO_QUERY))->getDocumentElement(), UNO_QUERY);
             // copy relevant nodes from instance into fragment
-            _cloneNodes(*getModelImpl(), aFragment, aListItem, bRemoveWSNodes);
+            cloneNodes(*getModelImpl(), aFragment, aListItem, bRemoveWSNodes);
         }
     }
     return aFragment;

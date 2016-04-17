@@ -734,15 +734,15 @@ css::uno::Sequence<OUString>  OImageControlControl::getSupportedServiceNames() t
 }
 
 
-void SAL_CALL OImageControlControl::addModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OImageControlControl::addModifyListener( const Reference< XModifyListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aModifyListeners.addInterface( _Listener );
+    m_aModifyListeners.addInterface( Listener );
 }
 
 
-void SAL_CALL OImageControlControl::removeModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OImageControlControl::removeModifyListener( const Reference< XModifyListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aModifyListeners.removeInterface( _Listener );
+    m_aModifyListeners.removeInterface( Listener );
 }
 
 
@@ -755,9 +755,9 @@ void SAL_CALL OImageControlControl::disposing()
 }
 
 
-void SAL_CALL OImageControlControl::disposing( const EventObject& _Event ) throw(RuntimeException, std::exception)
+void SAL_CALL OImageControlControl::disposing( const EventObject& Event ) throw(RuntimeException, std::exception)
 {
-    OBoundControl::disposing( _Event );
+    OBoundControl::disposing( Event );
 }
 
 

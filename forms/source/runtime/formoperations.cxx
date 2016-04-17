@@ -168,9 +168,9 @@ namespace frm
         return getImplementationName_Static();
     }
 
-    sal_Bool SAL_CALL FormOperations::supportsService( const OUString& _ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL FormOperations::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
     {
-        return cppu::supportsService(this, _ServiceName);
+        return cppu::supportsService(this, ServiceName);
     }
 
     Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
@@ -428,9 +428,9 @@ namespace frm
         }
 
         template < typename TYPE >
-        TYPE lcl_safeGetPropertyValue_throw( const Reference< XPropertySet >& _rxProperties, const OUString& _rPropertyName, TYPE _Default )
+        TYPE lcl_safeGetPropertyValue_throw( const Reference< XPropertySet >& _rxProperties, const OUString& _rPropertyName, TYPE Default )
         {
-            TYPE value( _Default );
+            TYPE value( Default );
             OSL_PRECOND( _rxProperties.is(), "FormOperations::<foo>: no cursor (already disposed?)!" );
             if ( _rxProperties.is() )
                 OSL_VERIFY( _rxProperties->getPropertyValue( _rPropertyName ) >>= value );
