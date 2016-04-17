@@ -1284,7 +1284,7 @@ IMPL_LINK_NOARG_TYPED(EditorWindow, SyntaxTimerHdl, Idle *, void)
     //pEditEngine->SetUpdateMode(false);
 
     bHighlightning = true;
-    for ( SyntaxLineSet::const_iterator it = aSyntaxLineTable.begin();
+    for ( std::set<sal_uInt16>::const_iterator it = aSyntaxLineTable.begin();
           it != aSyntaxLineTable.end(); ++it )
     {
         sal_uInt16 nLine = *it;

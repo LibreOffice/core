@@ -59,8 +59,6 @@ public:
 
 };
 
-typedef std::set<sal_uInt16> SyntaxLineSet;
-
 class SwSrcEditWindow : public vcl::Window, public SfxListener
 {
 private:
@@ -88,7 +86,7 @@ private:
     bool            bHighlighting;
 
     Idle            aSyntaxIdle;
-    SyntaxLineSet   aSyntaxLineTable;
+    std::set<sal_uInt16>   aSyntaxLineTable;
 
     void            ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff );
 
