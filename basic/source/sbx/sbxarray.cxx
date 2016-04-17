@@ -124,7 +124,7 @@ SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
     }
     while( mpVarEntries->size() <= nIdx )
     {
-        mpVarEntries->push_back(SbxVarEntry());
+        mpVarEntries->emplace_back();
     }
     return (*mpVarEntries)[nIdx].mpVar;
 }
@@ -141,7 +141,7 @@ SbxVariableRef& SbxArray::GetRef( sal_uInt16 nIdx )
     }
     while( mpVarEntries->size() <= nIdx )
     {
-        mpVarEntries->push_back(SbxVarEntry());
+        mpVarEntries->emplace_back();
     }
     return (*mpVarEntries)[nIdx].mpVar;
 }
@@ -198,22 +198,7 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
 
 void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
 {
-    if( !CanWrite() )
-        SetError( ERRCODE_SBX_PROP_READONLY );
-    else
-    {
-        if( pVar )
-            if( eType != SbxVARIANT )
-                // Convert no objects
-                if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
-                    pVar->Convert( eType );
-        SbxVariableRef& rRef = GetRef( nIdx );
-        if( static_cast<SbxVariable*>(rRef) != pVar )
-        {
-            rRef = pVar;
-            SetFlag( SbxFlagBits::Modified );
-        }
-    }
+    Put32(pVar, nIdx);
 }
 
 OUString SbxArray::GetAlias( sal_uInt16 nIdx )
@@ -294,11 +279,7 @@ void SbxArray::Remove32( sal_uInt32 nIdx )
 
 void SbxArray::Remove( sal_uInt16 nIdx )
 {
-    if( nIdx < mpVarEntries->size() )
-    {
-        mpVarEntries->erase( mpVarEntries->begin() + nIdx );
-        SetFlag( SbxFlagBits::Modified );
-    }
+    Remove32(nIdx);
 }
 
 void SbxArray::Remove( SbxVariable* pVar )
