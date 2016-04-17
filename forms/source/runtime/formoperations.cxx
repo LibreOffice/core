@@ -107,7 +107,6 @@ namespace frm
     using ::com::sun::star::beans::XMultiPropertySet;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::lang::WrappedTargetException;
-    using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::ui::dialogs::XExecutableDialog;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::util::XRefreshable;

@@ -42,7 +42,6 @@
 using namespace osl;
 
 using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
 /** print last error of pipe system.

@@ -39,7 +39,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
@@ -53,7 +52,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
-#include <com/sun/star/xsd/XDataType.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -71,12 +69,10 @@ using com::sun::star::container::XNameContainer;
 using com::sun::star::container::XEnumerationAccess;
 using com::sun::star::container::XEnumeration;
 using com::sun::star::xml::dom::XDocument;
-using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::form::binding::XBindableValue;
 using com::sun::star::form::binding::XListEntrySink;
 using com::sun::star::form::submission::XSubmissionSupplier;
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::xsd::XDataType;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::XFormsSupplier;
 using com::sun::star::util::Duration;

@@ -23,7 +23,6 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/form/XForm.hpp>
 
 #include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
@@ -67,8 +66,6 @@ using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::form::XForm;
-using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XFormsSupplier;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::script::ScriptEventDescriptor;

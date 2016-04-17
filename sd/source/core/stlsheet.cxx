@@ -58,7 +58,6 @@
 
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
-using ::comphelper::OInterfaceContainerHelper2;
 using ::com::sun::star::table::BorderLine;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

@@ -45,9 +45,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 using ::rtl::OUString;
-using ::rtl::OString;
 using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 
 MacSpellChecker::MacSpellChecker() :
     aEvtListeners( GetLinguMutex() )

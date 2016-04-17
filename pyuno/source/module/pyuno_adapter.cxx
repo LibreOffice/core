@@ -27,7 +27,6 @@
 
 
 using com::sun::star::beans::XIntrospectionAccess;
-using com::sun::star::beans::XIntrospection;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Reference;
@@ -42,7 +41,6 @@ using com::sun::star::script::CannotConvertException;
 using com::sun::star::reflection::InvocationTargetException;
 using com::sun::star::reflection::XIdlMethod;
 using com::sun::star::reflection::ParamInfo;
-using com::sun::star::reflection::XIdlClass;
 
 #define TO_ASCII(x) OUStringToOString( x , RTL_TEXTENCODING_ASCII_US).getStr()
 

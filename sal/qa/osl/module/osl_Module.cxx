@@ -24,8 +24,6 @@
 using namespace osl;
 
 using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 /** get dll file URL.
 */

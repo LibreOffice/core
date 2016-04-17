@@ -32,8 +32,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/container/XElementAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -56,15 +54,11 @@ using com::sun::star::uno::TypeClass;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
-using com::sun::star::uno::XComponentContext;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::XTypeProvider;
 using com::sun::star::lang::XUnoTunnel;
-using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocation2;
-using com::sun::star::beans::XMaterialHolder;
-using com::sun::star::container::XElementAccess;
 using com::sun::star::container::XEnumeration;
 using com::sun::star::container::XEnumerationAccess;
 using com::sun::star::container::XIndexAccess;

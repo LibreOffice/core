@@ -25,7 +25,6 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
@@ -43,12 +42,9 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Sequence;
 using com::sun::star::xforms::XModel2;
-using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::xml::sax::XAttributeList;
 
-using xmloff::token::IsXMLToken;
-using xmloff::token::XML_INSTANCE;
 using xmloff::token::XML_SRC;
 using xmloff::token::XML_ID;
 

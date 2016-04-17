@@ -37,10 +37,8 @@
 #include "drawingmanager.hxx"
 
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 
 using ::com::sun::star::text::XText;
-using ::com::sun::star::text::XTextRange;
 
 namespace oox {
 namespace xls {

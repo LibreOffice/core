@@ -21,7 +21,6 @@
 #include "wizardpagecontroller.hxx"
 #include "wizardshell.hxx"
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -33,14 +32,11 @@ namespace svt { namespace uno
 
 
     using css::uno::Reference;
-    using css::uno::XInterface;
     using css::uno::UNO_QUERY_THROW;
     using css::uno::UNO_SET_THROW;
     using css::uno::Exception;
-    using css::uno::RuntimeException;
     using css::ui::dialogs::XWizardController;
     using css::awt::XWindow;
-    using css::lang::XComponent;
     using css::awt::XControl;
 
     using namespace ::com::sun::star;

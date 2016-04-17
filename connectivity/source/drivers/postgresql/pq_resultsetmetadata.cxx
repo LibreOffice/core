@@ -47,7 +47,6 @@
 
 #include <string.h>
 
-using osl::Mutex;
 using osl::MutexGuard;
 
 
@@ -55,10 +54,8 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::UNO_QUERY;
 
-using com::sun::star::lang::IllegalArgumentException;
 
 using com::sun::star::sdbc::SQLException;
 using com::sun::star::sdbc::XStatement;

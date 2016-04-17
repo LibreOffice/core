@@ -36,7 +36,6 @@ using namespace ::com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
-using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::packages::zip::ZipIOException;
 
 XUnbufferedStream::XUnbufferedStream(

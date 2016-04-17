@@ -41,7 +41,6 @@ namespace comphelper
     using ::com::sun::star::logging::XLogger;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::logging::XLogHandler;
     using ::com::sun::star::resource::XResourceBundle;
     using ::com::sun::star::resource::XResourceBundleLoader;
 

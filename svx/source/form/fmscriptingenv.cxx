@@ -24,8 +24,6 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -58,8 +56,6 @@ namespace svxform
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::reflection::InvocationTargetException;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::container::XHierarchicalNameAccess;
-    using ::com::sun::star::reflection::XInterfaceMethodTypeDescription;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::RuntimeException;

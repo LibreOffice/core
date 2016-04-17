@@ -26,7 +26,6 @@ using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-using ::rtl::ByteSequence;
 
 namespace xmlscript
 {

@@ -1017,7 +1017,6 @@ public:
             using ::boost::spirit::range_p;
             using ::boost::spirit::lexeme_d;
             using ::boost::spirit::real_parser;
-            using ::boost::spirit::chseq_p;
 
             identifier =
                             str_p( "pi"         )[ EnumFunctor(ENUM_FUNC_PI,        self.getContext() ) ]

@@ -22,7 +22,6 @@
 #include "moduledbu.hxx"
 #include "dbustrings.hrc"
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
@@ -37,7 +36,6 @@ namespace dbaui
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::graphic::XGraphic;
     using ::com::sun::star::sdb::application::XTableUIProvider;
     using ::com::sun::star::uno::UNO_QUERY;

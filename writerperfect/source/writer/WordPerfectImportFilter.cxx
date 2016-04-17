@@ -12,10 +12,7 @@
 #include <rtl/tencinfo.h>
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -34,7 +31,6 @@
 
 #include "WordPerfectImportFilter.hxx"
 
-using ::ucbhelper::Content;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
@@ -44,16 +40,11 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XFilter;
 using com::sun::star::document::XExtendedFilterDetection;
-using com::sun::star::ucb::XCommandEnvironment;
 
 using com::sun::star::io::XInputStream;
 using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::InputSource;
-using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
 
 using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;

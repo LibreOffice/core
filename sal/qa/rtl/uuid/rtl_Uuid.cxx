@@ -35,9 +35,6 @@
 #include <time.h>
 #endif
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 namespace rtl_Uuid
 {

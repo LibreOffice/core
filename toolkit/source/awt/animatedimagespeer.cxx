@@ -58,7 +58,6 @@ namespace toolkit
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::awt::XAnimatedImages;
     using ::com::sun::star::awt::Size;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::graphic::XGraphicProvider;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::graphic::XGraphic;

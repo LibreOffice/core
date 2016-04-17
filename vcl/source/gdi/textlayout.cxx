@@ -38,7 +38,6 @@
 namespace vcl
 {
 
-    using ::com::sun::star::uno::Exception;
     namespace ScriptDirection = ::com::sun::star::i18n::ScriptDirection;
 
     DefaultTextLayout::~DefaultTextLayout()

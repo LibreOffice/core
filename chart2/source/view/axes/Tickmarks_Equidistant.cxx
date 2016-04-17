@@ -28,7 +28,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
-using ::basegfx::B2DVector;
 
 //static
 double EquidistantTickFactory::getMinimumAtIncrement( double fMin, const ExplicitIncrementData& rIncrement )

@@ -19,7 +19,6 @@
 
 #include "WinFOPImpl.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/lang/EventObject.hpp>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include "FopEvtDisp.hxx"
@@ -32,7 +31,6 @@
 
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::lang::EventObject;
 
 using namespace com::sun::star::ui::dialogs;
 using osl::FileBase;

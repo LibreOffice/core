@@ -68,7 +68,6 @@ using com::sun::star::sdbc::XRow;
 
 using com::sun::star::sdbcx::XColumnsSupplier;
 
-using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::uno::Reference;

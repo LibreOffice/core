@@ -48,7 +48,6 @@
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
 
-using osl::FileBase;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

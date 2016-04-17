@@ -42,9 +42,7 @@
 #include <algorithm>
 
 // UNO classes
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XCharacterData.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
@@ -55,15 +53,11 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::beans::PropertyVetoException;
-using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::util::VetoException;
 using com::sun::star::lang::WrappedTargetException;
-using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::ucb::XSimpleFileAccess3;
 using com::sun::star::ucb::SimpleFileAccess;
 using com::sun::star::io::XInputStream;

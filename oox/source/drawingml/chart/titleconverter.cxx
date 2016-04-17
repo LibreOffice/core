@@ -46,7 +46,6 @@ using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-using ::oox::core::XmlFilterBase;
 
 TextConverter::TextConverter( const ConverterRoot& rParent, TextModel& rModel ) :
     ConverterBase< TextModel >( rParent, rModel )

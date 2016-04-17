@@ -56,10 +56,8 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -105,12 +103,9 @@ using namespace ::css::container;
 using namespace ::css::document;
 using namespace ::css::text;
 
-using ::css::graphic::XGraphic;
 using ::css::io::XOutputStream;
-using ::css::lang::XComponent;
 using ::css::chart2::XChartDocument;
 using ::css::frame::XModel;
-using ::css::sheet::XSpreadsheetDocument;
 
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;

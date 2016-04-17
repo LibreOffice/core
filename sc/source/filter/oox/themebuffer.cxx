@@ -24,7 +24,6 @@
 namespace oox {
 namespace xls {
 
-using ::oox::drawingml::ClrScheme;
 
 ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

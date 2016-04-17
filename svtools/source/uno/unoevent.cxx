@@ -31,7 +31,6 @@ using css::container::NoSuchElementException;
 using css::container::XNameReplace;
 using css::lang::IllegalArgumentException;
 using css::lang::WrappedTargetException;
-using css::lang::XServiceInfo;
 using css::beans::PropertyValue;
 
 

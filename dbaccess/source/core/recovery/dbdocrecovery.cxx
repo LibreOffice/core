@@ -26,13 +26,8 @@
 
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -44,29 +39,20 @@ namespace dbaccess
 {
 
     using css::uno::Reference;
-    using css::uno::XInterface;
     using css::uno::UNO_QUERY;
     using css::uno::UNO_QUERY_THROW;
     using css::uno::UNO_SET_THROW;
     using css::uno::Exception;
-    using css::uno::RuntimeException;
     using css::uno::Sequence;
     using css::uno::XComponentContext;
     using css::embed::XStorage;
     using css::frame::XController;
     using css::sdb::application::XDatabaseDocumentUI;
     using css::lang::XComponent;
-    using css::document::XStorageBasedDocument;
-    using css::beans::PropertyValue;
     using css::io::XStream;
-    using css::io::XTextOutputStream;
-    using css::io::XActiveDataSource;
     using css::io::TextInputStream;
     using css::io::XTextInputStream2;
-    using css::io::XActiveDataSink;
-    using css::frame::XModel;
     using css::util::XModifiable;
-    using css::beans::XPropertySet;
 
     namespace ElementModes = css::embed::ElementModes;
 

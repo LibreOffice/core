@@ -36,7 +36,6 @@ namespace rptui
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::report::XReportDefinition;
     using ::com::sun::star::report::XFormattedField;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::sdb::XSingleSelectQueryComposer;

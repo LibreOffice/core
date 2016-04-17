@@ -55,7 +55,6 @@ namespace dbaccess
     using css::uno::Any;
     using css::uno::Sequence;
     using css::uno::XComponentContext;
-    using css::lang::XMultiServiceFactory;
     using css::embed::XStorage;
     using css::sdb::application::XDatabaseDocumentUI;
     using css::beans::Pair;

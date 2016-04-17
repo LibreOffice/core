@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/XInterface.hpp>
 #include <vcl/svapp.hxx>
 
 #include <svx/unoshtxt.hxx>
@@ -54,7 +53,6 @@
 
 using namespace ::osl;
 
-using ::com::sun::star::uno::XInterface;
 
 
 // SvxTextEditSourceImpl

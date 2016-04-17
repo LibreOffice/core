@@ -75,10 +75,6 @@
 
 #include "com/sun/star/accessibility/XAccessible.hpp"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
-#include "com/sun/star/awt/XWindowPeer.hpp"
-#include "com/sun/star/awt/XTopWindow.hpp"
-#include "com/sun/star/awt/XWindow.hpp"
-#include "com/sun/star/awt/XDisplayConnection.hpp"
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
@@ -86,9 +82,6 @@
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XServiceName.hpp"
-#include "com/sun/star/rendering/CanvasFactory.hpp"
-#include "com/sun/star/rendering/XCanvas.hpp"
-#include "com/sun/star/rendering/XSpriteCanvas.hpp"
 #include "comphelper/processfactory.hxx"
 
 #include <sal/macros.h>
@@ -103,7 +96,6 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;
 
-using ::com::sun::star::awt::XTopWindow;
 
 ImplAccessibleInfos::ImplAccessibleInfos()
 {

@@ -22,7 +22,6 @@
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -35,7 +34,6 @@ namespace sd { namespace colortoolpanel
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
@@ -47,11 +45,9 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::drawing::framework::XPane;
     using ::com::sun::star::awt::XWindow;
-    using ::com::sun::star::rendering::XCanvas;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::lang::XMultiComponentFactory;
-    using ::com::sun::star::awt::XToolkit;
     using ::com::sun::star::awt::WindowDescriptor;
     using ::com::sun::star::awt::WindowClass_SIMPLE;
     using ::com::sun::star::awt::Rectangle;

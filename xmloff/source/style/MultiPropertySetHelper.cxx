@@ -22,20 +22,14 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-
-#include <algorithm>
 
 
 using ::com::sun::star::beans::XMultiPropertySet;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
-using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::std::sort;
 
 
 MultiPropertySetHelper::MultiPropertySetHelper(

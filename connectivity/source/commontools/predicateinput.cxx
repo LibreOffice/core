@@ -41,7 +41,6 @@ namespace dbtools
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::NumberFormatter;
-    using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;
@@ -50,7 +49,6 @@ namespace dbtools
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::i18n::LocaleData;
-    using ::com::sun::star::i18n::XLocaleData;
     using ::com::sun::star::i18n::LocaleDataItem;
     using ::com::sun::star::uno::Any;
 

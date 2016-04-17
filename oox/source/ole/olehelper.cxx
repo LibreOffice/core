@@ -32,11 +32,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/form/XFormsSupplier.hpp>
-#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
 #include <tools/globname.hxx>
@@ -47,24 +43,15 @@ namespace oox {
 namespace ole {
 
 using ::com::sun::star::form::XFormComponent;
-using ::com::sun::star::form::XForm;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::awt::Size;
 using ::com::sun::star::frame::XModel;
-using ::com::sun::star::form::XFormsSupplier;
-using ::com::sun::star::drawing::XDrawPage;
-using ::com::sun::star::drawing::XDrawPageSupplier;
-using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XComponentContext;
-using ::com::sun::star::container::XIndexContainer;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XServiceInfo;
 
 using namespace ::com::sun::star::form;

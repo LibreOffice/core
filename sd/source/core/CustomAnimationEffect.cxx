@@ -40,7 +40,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
@@ -86,15 +85,11 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XChild;
-using ::com::sun::star::container::XElementAccess;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::lang::XInitialization;
-using ::com::sun::star::drawing::XShapes;
-using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::util::XChangesNotifier;

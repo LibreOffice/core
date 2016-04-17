@@ -26,7 +26,6 @@
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
@@ -76,8 +75,6 @@ namespace svxform
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::awt::TextEvent;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySet;
@@ -93,7 +90,6 @@ namespace svxform
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::XNumberFormatter;
-    using ::com::sun::star::util::XNumberFormatter2;
     using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::lang::Locale;
@@ -102,7 +98,6 @@ namespace svxform
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::awt::XTextComponent;
     using ::com::sun::star::uno::Sequence;
 
 
