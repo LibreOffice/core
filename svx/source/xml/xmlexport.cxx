@@ -150,7 +150,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 
 bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent, const char* pImportService  )
 {
-    sal_uInt32  nRet = 0;
+    bool bRet = true;
 
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = nullptr;
@@ -188,43 +188,38 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             xObjectResolver = pObjectHelper;
         }
 
+        // parse
+        // prepare ParserInputSrouce
+        xml::sax::InputSource aParserInput;
+        aParserInput.aInputStream = xInputStream;
 
-        if( 0 == nRet )
+        // get parser
+        Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
+
+        // prepare filter arguments
+        Sequence<Any> aFilterArgs( 2 );
+        Any *pArgs = aFilterArgs.getArray();
+        *pArgs++ <<= xGraphicResolver;
+        *pArgs++ <<= xObjectResolver;
+
+        // get filter
+        Reference< xml::sax::XDocumentHandler > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext), UNO_QUERY );
+        DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+
+        bRet = false;
+        if( xParser.is() && xFilter.is() )
         {
+            // connect parser and filter
+            xParser->setDocumentHandler( xFilter );
 
-            // parse
-            // prepare ParserInputSrouce
-            xml::sax::InputSource aParserInput;
-            aParserInput.aInputStream = xInputStream;
+            // connect model and filter
+            uno::Reference < document::XImporter > xImporter( xFilter, UNO_QUERY );
+            xImporter->setTargetDocument( xTargetDocument );
 
-            // get parser
-            Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
+            // finally, parser the stream
+            xParser->parseStream( aParserInput );
 
-            // prepare filter arguments
-            Sequence<Any> aFilterArgs( 2 );
-            Any *pArgs = aFilterArgs.getArray();
-            *pArgs++ <<= xGraphicResolver;
-            *pArgs++ <<= xObjectResolver;
-
-            // get filter
-            Reference< xml::sax::XDocumentHandler > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext), UNO_QUERY );
-            DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
-
-            nRet = 1;
-            if( xParser.is() && xFilter.is() )
-            {
-                // connect parser and filter
-                xParser->setDocumentHandler( xFilter );
-
-                // connect model and filter
-                uno::Reference < document::XImporter > xImporter( xFilter, UNO_QUERY );
-                xImporter->setTargetDocument( xTargetDocument );
-
-                // finally, parser the stream
-                xParser->parseStream( aParserInput );
-
-                nRet = 0;
-            }
+            bRet = true;
         }
     }
     catch( uno::Exception& )
@@ -243,7 +238,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     if ( xTargetModel.is() )
         xTargetModel->unlockControllers();
 
-    return nRet == 0;
+    return bRet;
 }
 
 bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream )
