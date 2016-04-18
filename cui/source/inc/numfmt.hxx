@@ -105,6 +105,7 @@ private:
     VclPtr<FixedText>              m_pFtLeadZeroes;
     VclPtr<NumericField>           m_pEdLeadZeroes;
     VclPtr<CheckBox>               m_pBtnThousand;
+    VclPtr<CheckBox>               m_pBtnEngineering;
 
     VclPtr<VclContainer>           m_pFormatCodeFrame;
     VclPtr<Edit>                   m_pEdFormat;
@@ -127,8 +128,6 @@ private:
     short                   nFixedCategory;
 
     OUString sAutomaticEntry;
-    OUString sThousandSeparator;
-    OUString sEngineeringNotation;
 
     VclPtr<vcl::Window>            pLastActivWindow;
 
@@ -137,7 +136,7 @@ private:
     void    FillFormatListBox_Impl( std::vector<OUString>& rEntries );
     void    UpdateOptions_Impl( bool bCheckCatChange );
     void    UpdateFormatListBox_Impl( bool bCat, bool bUpdateEdit );
-    void    UpdateThousandEngineeringText();
+    void    UpdateThousandEngineeringCheckBox();
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );

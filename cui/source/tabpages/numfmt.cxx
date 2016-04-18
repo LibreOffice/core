@@ -238,8 +238,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     , pNumFmtShell(nullptr)
     , nInitFormat(ULONG_MAX)
     , sAutomaticEntry(CUI_RES(RID_SVXSTR_AUTO_ENTRY))
-    , sThousandSeparator(CUI_RES(RID_SVXSTR_THOUSAND_SEP))
-    , sEngineeringNotation(CUI_RES(RID_SVXSTR_ENGINEERING))
     , pLastActivWindow(nullptr)
 {
     get(m_pFtCategory, "categoryft");
@@ -261,6 +259,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     get(m_pFtLeadZeroes, "leadzerosft");
     get(m_pEdLeadZeroes, "leadzerosed");
     get(m_pBtnThousand, "thousands");
+    get(m_pBtnEngineering, "engineering");
     get(m_pFormatCodeFrame, "formatcode");
     get(m_pEdFormat, "formatted");
     get(m_pIbAdd, "add");
@@ -305,6 +304,7 @@ void SvxNumberFormatTabPage::dispose()
     m_pFtLeadZeroes.clear();
     m_pEdLeadZeroes.clear();
     m_pBtnThousand.clear();
+    m_pBtnEngineering.clear();
     m_pFormatCodeFrame.clear();
     m_pEdFormat.clear();
     m_pIbAdd.clear();
@@ -345,14 +345,16 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     m_pEdDecimals->SetModifyHdl( aLink );
     m_pEdLeadZeroes->SetModifyHdl( aLink );
+
     m_pBtnNegRed->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
     m_pBtnThousand->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
+    m_pBtnEngineering->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
     m_pLbFormat->SetDoubleClickHdl( HDL( DoubleClickHdl_Impl ) );
     m_pEdFormat->SetModifyHdl( HDL( EditModifyHdl_Impl ) );
     m_pIbAdd->SetClickHdl( HDL( ClickHdl_Impl ) );
     m_pIbRemove->SetClickHdl( HDL( ClickHdl_Impl ) );
     m_pIbInfo->SetClickHdl( HDL( ClickHdl_Impl ) );
-    UpdateThousandEngineeringText();
+    UpdateThousandEngineeringCheckBox();
 
     m_pEdComment->SetLoseFocusHdl( LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl) );
     aResetWinTimer.SetTimeoutHdl(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
@@ -631,6 +633,7 @@ void SvxNumberFormatTabPage::Obstructing()
 
     m_pBtnNegRed->Disable();
     m_pBtnThousand->Disable();
+    m_pBtnEngineering->Disable();
     m_pFtLeadZeroes->Disable();
     m_pFtDecimals->Disable();
     m_pEdLeadZeroes->Disable();
@@ -640,6 +643,7 @@ void SvxNumberFormatTabPage::Obstructing()
     m_pEdLeadZeroes->SetText( OUString() );
     m_pBtnNegRed->Check( false );
     m_pBtnThousand->Check( false );
+    m_pBtnEngineering->Check( false );
     m_pWndPreview->NotifyChange( OUString() );
 
     m_pLbCategory->SelectEntryPos( 0 );
@@ -673,6 +677,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_pEdLeadZeroes->Enable( bEnable );
     m_pBtnNegRed->Enable( bEnable );
     m_pBtnThousand->Enable( bEnable );
+    m_pBtnEngineering->Enable( bEnable );
     m_pFtOptions->Enable( bEnable );
     m_pFormatCodeFrame->Enable( bEnable );
     m_pLbFormat->Invalidate(); // #i43322#
@@ -956,6 +961,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         nCategory=nFixedCategory;
     }
 
+    UpdateThousandEngineeringCheckBox();
     switch ( nCategory )
     {
         case CAT_SCIENTIFIC: // bThousand is for Engineering notation
@@ -965,6 +971,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
                     bThousand = true;
                 else
                     bThousand = false;
+                m_pBtnEngineering->Enable();
+                m_pBtnEngineering->Check( bThousand );
             }
             // fallthru
         case CAT_NUMBER:
@@ -976,14 +984,17 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_pFtLeadZeroes->Enable();
             m_pEdLeadZeroes->Enable();
             m_pBtnNegRed->Enable();
-            m_pBtnThousand->Enable();
             if ( nCategory == CAT_NUMBER && m_pLbFormat->GetSelectEntryPos() == 0 )
                 m_pEdDecimals->SetText( "" ); //General format tdf#44399
             else
                 m_pEdDecimals->SetText( OUString::number( nDecimals ) );
             m_pEdLeadZeroes->SetText( OUString::number( nZeroes ) );
             m_pBtnNegRed->Check( bNegRed );
-            m_pBtnThousand->Check( bThousand );
+            if ( nCategory != CAT_SCIENTIFIC )
+            {
+                m_pBtnThousand->Enable();
+                m_pBtnThousand->Check( bThousand );
+            }
             break;
 
         case CAT_ALL:
@@ -1001,12 +1012,13 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_pEdLeadZeroes->Disable();
             m_pBtnNegRed->Disable();
             m_pBtnThousand->Disable();
+            m_pBtnEngineering->Disable();
             m_pEdDecimals->SetText( OUString::number( 0 ) );
             m_pEdLeadZeroes->SetText( OUString::number( 0 ) );
             m_pBtnNegRed->Check( false );
             m_pBtnThousand->Check( false );
+            m_pBtnEngineering->Check( false );
     }
-    UpdateThousandEngineeringText();
 }
 
 
@@ -1118,11 +1130,11 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 
 
 /*************************************************************************
-#*  Method:        UpdateThousandEngineeringText
+#*  Method:        UpdateThousandEngineeringCheckBox
 #*------------------------------------------------------------------------
 #*
 #*  Class:      SvxNumberFormatTabPage
-#*  Function:   Updates the text of Thousands separator checkbox
+#*  Function:   Change visible checkbox according to category format
 #*              if scientific format "Engineering notation"
 #*              else "Thousands separator"
 #*  Input:      ---
@@ -1130,12 +1142,11 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::UpdateThousandEngineeringText()
+void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
 {
-    if ( m_pLbCategory->GetSelectEntryPos() == CAT_SCIENTIFIC )
-        m_pBtnThousand->SetText(sEngineeringNotation);
-    else
-        m_pBtnThousand->SetText(sThousandSeparator);
+    bool bIsScientific = m_pLbCategory->GetSelectEntryPos() == CAT_SCIENTIFIC;
+    m_pBtnThousand->Show( !bIsScientific );
+    m_pBtnEngineering->Show( bIsScientific );
 }
 
 
@@ -1579,19 +1590,19 @@ void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
     if (   (pOptCtrl == m_pEdLeadZeroes)
         || (pOptCtrl == m_pEdDecimals)
         || (pOptCtrl == m_pBtnNegRed)
-        || (pOptCtrl == m_pBtnThousand) )
+        || (pOptCtrl == m_pBtnThousand)
+        || (pOptCtrl == m_pBtnEngineering) )
     {
         OUString          aFormat;
-        bool          bThousand     =    m_pBtnThousand->IsEnabled()
-                                      && m_pBtnThousand->IsChecked();
-        bool          bNegRed       =    m_pBtnNegRed->IsEnabled()
-                                      && m_pBtnNegRed->IsChecked();
-        sal_uInt16        nPrecision    = (m_pEdDecimals->IsEnabled())
-                                        ? (sal_uInt16)m_pEdDecimals->GetValue()
-                                        : (sal_uInt16)0;
-        sal_uInt16        nLeadZeroes   = (m_pEdLeadZeroes->IsEnabled())
-                                        ? (sal_uInt16)m_pEdLeadZeroes->GetValue()
-                                        : (sal_uInt16)0;
+        bool          bThousand  = ( m_pBtnThousand->IsVisible() && m_pBtnThousand->IsEnabled() && m_pBtnThousand->IsChecked() )
+                                || ( m_pBtnEngineering->IsVisible() && m_pBtnEngineering->IsEnabled() && m_pBtnEngineering->IsChecked() );
+        bool          bNegRed    =   m_pBtnNegRed->IsEnabled() && m_pBtnNegRed->IsChecked();
+        sal_uInt16    nPrecision = (m_pEdDecimals->IsEnabled())
+                                 ? (sal_uInt16)m_pEdDecimals->GetValue()
+                                 : (sal_uInt16)0;
+        sal_uInt16    nLeadZeroes = (m_pEdLeadZeroes->IsEnabled())
+                                 ? (sal_uInt16)m_pEdLeadZeroes->GetValue()
+                                 : (sal_uInt16)0;
         if ( pNumFmtShell->GetStandardName() == m_pEdFormat->GetText() )
         {
             m_pEdDecimals->SetValue( nPrecision );
