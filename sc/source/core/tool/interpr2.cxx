@@ -2452,8 +2452,8 @@ void ScInterpreter::ScDde()
         //  temporary documents (ScFunctionAccess) have no DocShell
         //  and no LinkManager -> abort
 
-        sfx2::LinkManager* pLinkMgr = pDok->GetLinkManager();
-        if (!pLinkMgr)
+        //sfx2::LinkManager* pLinkMgr = pDok->GetLinkManager();
+        if (!mpLinkManager)
         {
             PushNoValue();
             return;
@@ -2471,7 +2471,7 @@ void ScInterpreter::ScDde()
 
             // Get/ Create link object
 
-        ScDdeLink* pLink = lcl_GetDdeLink( pLinkMgr, aAppl, aTopic, aItem, nMode );
+        ScDdeLink* pLink = lcl_GetDdeLink( mpLinkManager, aAppl, aTopic, aItem, nMode );
 
         //TODO: Save Dde-links (in addition) more efficient at document !!!!!
         //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
@@ -2481,8 +2481,8 @@ void ScInterpreter::ScDde()
         if (!pLink)
         {
             pLink = new ScDdeLink( pDok, aAppl, aTopic, aItem, nMode );
-            pLinkMgr->InsertDDELink( pLink, aAppl, aTopic, aItem );
-            if ( pLinkMgr->GetLinks().size() == 1 )                    // erster ?
+            mpLinkManager->InsertDDELink( pLink, aAppl, aTopic, aItem );
+            if ( mpLinkManager->GetLinks().size() == 1 )                    // erster ?
             {
                 SfxBindings* pBindings = pDok->GetViewBindings();
                 if (pBindings)
@@ -2530,7 +2530,7 @@ void ScInterpreter::ScDde()
             PushNA();
 
         pDok->EnableIdle(bOldEnabled);
-        pLinkMgr->CloseCachedComps();
+        mpLinkManager->CloseCachedComps();
     }
 }
 

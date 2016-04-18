@@ -3461,6 +3461,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     , aPos(rPos)
     , rArr(r)
     , pDok(pDoc)
+    , mpLinkManager(pDok->GetLinkManager())
     , mrStrPool(pDoc->GetSharedStringPool())
     , pJumpMatrix(nullptr)
     , pTokenMatrixMap(nullptr)
