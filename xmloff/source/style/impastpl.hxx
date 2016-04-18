@@ -106,14 +106,13 @@ struct XMLAutoStyleFamily : boost::noncopyable
 {
     typedef std::set<std::unique_ptr<XMLAutoStylePoolParent>,
         comphelper::UniquePtrValueLess<XMLAutoStylePoolParent>> ParentSetType;
-    typedef std::set<OUString> NameSetType;
 
     sal_uInt32 mnFamily;
     OUString maStrFamilyName;
     rtl::Reference<SvXMLExportPropertyMapper> mxMapper;
 
     ParentSetType m_ParentSet;
-    NameSetType maNameSet;
+    std::set<OUString> maNameSet;
     sal_uInt32 mnCount;
     sal_uInt32 mnName;
     OUString maStrPrefix;
