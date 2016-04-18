@@ -946,6 +946,9 @@ static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / siz
 OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
                                 throw(RuntimeException, std::exception)
 {
+    if (index < 0 || index >= nSupported_NumberingTypes)
+        throw RuntimeException();
+
     if (aSupportedTypes[index].cSymbol)
         return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
     else {
