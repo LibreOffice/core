@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_8bbeb1d2",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-18T16:02:38Z",
+      "side": 0,
+      "message": "this is only \"\u003e\", not \"\u003e\u003d\"",
+      "revId": "d13dce772ef2529751465be4a97b6c52a0fdd64f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
