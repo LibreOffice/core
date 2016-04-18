@@ -388,32 +388,28 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
 
         if (nSdrObjKind == OBJ_OLE2)
         {
-            bool bIsInplaceOle = false;
-            if (!bIsInplaceOle)
+            SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
+            if (pOleObj && pOleObj->GetObjRef().is())
             {
-                SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
-                if (pOleObj && pOleObj->GetObjRef().is())
+                if (m_rView.IsTextEdit())
                 {
-                    if (m_rView.IsTextEdit())
-                    {
-                        m_rView.SdrEndTextEdit();
-                    }
+                    m_rView.SdrEndTextEdit();
+                }
 
-                    pOleObj->AddOwnLightClient();
-                    pOleObj->SetWindow(VCLUnoHelper::GetInterface(m_pParent));
-                    try
-                    {
-                        pOleObj->GetObjRef()->changeState( embed::EmbedStates::UI_ACTIVE );
-                        m_bUiActive = true;
-                        OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
-                        m_bShowPropertyBrowser = rController.isCommandChecked(SID_SHOW_PROPERTYBROWSER);
-                        if ( m_bShowPropertyBrowser )
-                            rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
-                    }
-                    catch( uno::Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
+                pOleObj->AddOwnLightClient();
+                pOleObj->SetWindow(VCLUnoHelper::GetInterface(m_pParent));
+                try
+                {
+                    pOleObj->GetObjRef()->changeState( embed::EmbedStates::UI_ACTIVE );
+                    m_bUiActive = true;
+                    OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
+                    m_bShowPropertyBrowser = rController.isCommandChecked(SID_SHOW_PROPERTYBROWSER);
+                    if ( m_bShowPropertyBrowser )
+                        rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
+                }
+                catch( uno::Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }
