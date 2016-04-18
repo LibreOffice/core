@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_6b909596",
+        "filename": "sc/source/core/data/simpleformulacalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-18T13:49:39Z",
+      "side": 1,
+      "message": "Please combine the two statements.",
+      "revId": "96bb26911162845fed28f99aa66ad3c438736a73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_4b8dd97a",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-18T13:49:39Z",
+      "side": 1,
+      "message": "No need to include the header file. Just forward declare it.",
+      "revId": "96bb26911162845fed28f99aa66ad3c438736a73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_abe8cd17",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-18T13:49:39Z",
+      "side": 1,
+      "message": "The if statement is unnecessary. just make it an unconditional assignment.",
+      "revId": "96bb26911162845fed28f99aa66ad3c438736a73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
