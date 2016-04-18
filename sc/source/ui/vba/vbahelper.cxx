@@ -527,12 +527,11 @@ ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, cons
 {
     sal_Int32 a = _nStartSuffix;
     OUString scompname = _sElementName;
-    bool bElementexists = true;
     sal_Int32 nLen = _slist.getLength();
     if ( nLen == 0 )
         return _sElementName;
 
-    while (bElementexists == true)
+    while (true)
     {
         for (sal_Int32 i = 0; i < nLen; i++)
         {
