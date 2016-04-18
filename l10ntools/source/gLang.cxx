@@ -260,7 +260,7 @@ void handler::run()
 void handler::loadL10MEM(bool onlyTemplates)
 {
     string sLoad = msPoDir + "templates/";
-    vector<string>::iterator siLang;
+//FIX    vector<string>::iterator siLang;
 
     // no convert
     mcMemory.setConvert(false, false);
@@ -296,7 +296,7 @@ void handler::loadL10MEM(bool onlyTemplates)
 void handler::runConvert()
 {
     vector<string>::iterator siSource;
-    vector<string>::iterator siLang;
+//FIX    vector<string>::iterator siLang;
 
 
     // convert

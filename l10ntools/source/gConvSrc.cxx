@@ -159,7 +159,7 @@ void convert_src::setList(char *syyText)
 void convert_src::setNL(char *syyText, bool bMacro)
 {
     int         nL;
-    string sKey, x;
+    string sKey;
 
     copySource(syyText);
 
