@@ -109,10 +109,9 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
 
     ShowLastAuthor(aAuthorStr, aDateStr);
 
-    //lock to initial .ui placeholder size before replacing contents
-    Size aSize(m_pEditED->get_preferred_size());
-    m_pEditED->set_width_request(aSize.Width());
-    m_pEditED->set_height_request(aSize.Height());
+    //lock to an initial size before replacing contents
+    m_pEditED->set_width_request(m_pEditED->approximate_char_width() * 40);
+    m_pEditED->set_height_request(m_pEditED->GetTextHeight() * 10);
 
     m_pEditED->SetText(convertLineEnd(aTextStr, GetSystemLineEnd()));
 
