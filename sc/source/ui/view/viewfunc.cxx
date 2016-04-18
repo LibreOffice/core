@@ -188,12 +188,10 @@ bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrC
 }
 
 void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                   bool bAttrChanged, bool bAddUndo )
+                                   bool bAttrChanged )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    if (bAddUndo && !rDoc.IsUndoEnabled())
-        bAddUndo = false;
 
     const ScPatternAttr* pSource = rDoc.GetPattern(
                             aFormatSource.Col(), aFormatSource.Row(), nTab );
@@ -555,7 +553,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     bool bAutoFormat = TestFormatArea(nCol, nRow, nTab, bNumFmtChanged);
 
     if (bAutoFormat)
-        DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged, bRecord);
+        DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged);
 
     pDocSh->UpdateOle(&GetViewData());
 

@@ -412,8 +412,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     rSet.DisableItem( SID_THES );
                 }
-                //! avoid putting the same item as SfxBoolItem at the end of this function
-                nSlotId = 0;
             }
             break;
 

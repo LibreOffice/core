@@ -167,16 +167,12 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 {
     // setup new Format
     sal_uInt8       nL, nH; // Low-/High-Nibble
-    sal_uInt8       nForm = nFormat;
-    OUString          aFormString;
+    OUString        aFormString;
     sal_Int16       eType = css::util::NumberFormat::ALL;
     sal_uInt32      nIndex1;
     sal_uInt32      nHandle;
     NfIndexTableOffset eIndexTableOffset = NF_NUMERIC_START;
-    bool        bDefault = false;
-
-    if( nForm == 0xFF ) // Default-Format?
-        nForm = nDefaultFormat;
+    bool            bDefault = false;
 
     // split into Low and High byte
     nL = nFormat & 0x0F;
@@ -233,7 +229,6 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                 css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL);
-            nIndex1 = 0;
             break;
         case 0x07:  // Special format
             switch( nL )

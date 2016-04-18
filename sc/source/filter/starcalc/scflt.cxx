@@ -1700,7 +1700,6 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         return;
 
     SCROW nStart;
-    SCROW nEnd;
     sal_uInt16 i;
     sal_uInt16 nLimit;
     sal_uInt16 nValue1;
@@ -1708,12 +1707,11 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Font (Name, Size)
     nStart = 0;
-    nEnd = 0;
     nLimit = aFont.Count;
     pColData = aFont.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        nEnd = static_cast<SCROW>(pColData->Row);
+        SCROW nEnd = static_cast<SCROW>(pColData->Row);
         if ((nStart <= nEnd) && (pColData->Value))
         {
             FontFamily eFam = FAMILY_DONTKNOW;
@@ -1742,12 +1740,11 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Font color
     nStart = 0;
-    nEnd = 0;
     nLimit = aColor.Count;
     pColData = aColor.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        nEnd = static_cast<SCROW>(pColData->Row);
+        SCROW nEnd = static_cast<SCROW>(pColData->Row);
         if ((nStart <= nEnd) && (pColData->Value))
         {
             Color TextColor(COL_BLACK);
@@ -1761,12 +1758,11 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Font attributes (Bold, Italic...)
     nStart = 0;
-    nEnd = 0;
     nLimit = aAttr.Count;
     pColData = aAttr.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        nEnd = static_cast<SCROW>(pColData->Row);
+        SCROW nEnd = static_cast<SCROW>(pColData->Row);
         nValue1 = pColData->Value;
         if ((nStart <= nEnd) && (nValue1))
         {
@@ -1786,12 +1782,11 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Cell alignment
     nStart = 0;
-    nEnd = 0;
     nLimit = aJustify.Count;
     pColData = aJustify.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        nEnd = static_cast<SCROW>(pColData->Row);
+        SCROW nEnd = static_cast<SCROW>(pColData->Row);
         nValue1 = pColData->Value;
         if ((nStart <= nEnd) && (nValue1))
         {
@@ -1854,10 +1849,10 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     sal_uInt16          nColorIndexOld = nColorIndex;
     sal_uInt16          nFrameIndexOld = nColorIndex;
 
-    nEnd = 0;
     nStart = 0;
     while( !bEnd && nHelpMe )
     {
+        SCROW nEnd = 0;
         pColData = &aFrame.pData[ nFrameIndex ];
 
         sal_uInt16  nValue  = pColData->Value;
@@ -1973,7 +1968,6 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     sal_uInt16      nRasterIndex = 0;
     bEnd        = false;
     nColorIndex = 0;
-    nEnd        = 0;
     nStart      = 0;
 
     // Special Fix...
@@ -1982,6 +1976,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     while( !bEnd && nHelpMe )
     {
+        SCROW nEnd = 0;
         sal_uInt16  nBColor = ( aColor.pData[ nColorIndex ].Value & 0x00F0 ) >> 4;
         sal_uInt16  nRColor = ( aColor.pData[ nColorIndex ].Value & 0x0F00 ) >> 8;
         Color   aBColor( COL_BLACK );
@@ -2059,12 +2054,11 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Number format
     nStart = 0;
-    nEnd = 0;
     nLimit = aValue.Count;
     pColData = aValue.pData;
     for (i=0; i<nLimit; i++, pColData++)
     {
-        nEnd = static_cast<SCROW>(pColData->Row);
+        SCROW nEnd = static_cast<SCROW>(pColData->Row);
         nValue1 = pColData->Value;
         if ((nStart <= nEnd) && (nValue1))
         {
@@ -2081,10 +2075,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Cell attributes (protected, hidden...)
     nStart = 0;
-    nEnd = 0;
     for (i=0; i<aFlag.Count; i++)
     {
-        nEnd = static_cast<SCROW>(aFlag.pData[i].Row);
+        SCROW nEnd = static_cast<SCROW>(aFlag.pData[i].Row);
         if ((nStart <= nEnd) && (aFlag.pData[i].Value != 0))
         {
             bool bProtect  = ((aFlag.pData[i].Value & paProtect) == paProtect);
@@ -2100,11 +2093,10 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Cell style
     nStart = 0;
-    nEnd = 0;
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     for (i=0; i<aPattern.Count; i++)
     {
-        nEnd = static_cast<SCROW>(aPattern.pData[i].Row);
+        SCROW nEnd = static_cast<SCROW>(aPattern.pData[i].Row);
         if ((nStart <= nEnd) && (aPattern.pData[i].Value != 0))
         {
             sal_uInt16 nPatternIndex = (aPattern.pData[i].Value & 0x00FF) - 1;

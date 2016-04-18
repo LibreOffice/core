@@ -2152,7 +2152,6 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         default:
             OSL_ENSURE( false, "unknown SlotId!" );
             bInsert = true;
-            nSlotId = SID_INSERTDOC;
             break;
     }
 

@@ -703,7 +703,6 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
 
         SwFormatCol aFormatCol;
-        nPrcWidth = 100;
 
         aFormatCol.Init( nCols, nGutter, USHRT_MAX );
         aFrameItemSet.Put( aFormatCol );

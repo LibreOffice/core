@@ -784,8 +784,6 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                         {
                             // the recursion may have damaged our font size
                             SetPropFont( nOldProp );
-                            if ( !nOldProp )
-                                nOldProp = 100;
                             GetInfo().GetFont()->SetProportion( 100 );
 
                             if ( m_pCurr == &static_cast<SwMultiPortion*>(pPor)->GetRoot() )
@@ -1715,8 +1713,6 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                 if( bChgNodeInner && pTmp->Frame().IsInside( aTmpPoint ) &&
                     !( pTmp->IsProtected() ) )
                 {
-                    nLength = static_cast<SwFlyCntPortion*>(pPor)->
-                              GetFlyCursorOfst( nX, aTmpPoint, pPos, pCMS );
                     // After a change of the frame, our font must be still
                     // available for/in the OutputDevice.
                     // For comparison: Paint and new SwFlyCntPortion !

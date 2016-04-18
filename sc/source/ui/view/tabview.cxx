@@ -976,7 +976,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
             const Fraction& rOldY = aViewData.GetZoomY();
             long nOld = (long)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
-            long nNew = nOld;
+            long nNew;
             if ( pData->GetMode() == CommandWheelMode::ZOOM_SCALE )
             {
                 nNew = 100 * (long) ((nOld / 100.0) * (pData->GetDelta() / 100.0));
