@@ -64,12 +64,12 @@ namespace basegfx
 
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
-    struct SfxViewFrame_Impl*   pImp;
+    struct SfxViewFrame_Impl*   m_pImp;
 
-    SfxObjectShellRef           xObjSh;
-    SfxDispatcher*              pDispatcher;
-    SfxBindings*                pBindings;
-    sal_uInt16                      nAdjustPosPixelLock;
+    SfxObjectShellRef           m_xObjSh;
+    SfxDispatcher*              m_pDispatcher;
+    SfxBindings*                m_pBindings;
+    sal_uInt16                  m_nAdjustPosPixelLock;
 
 private:
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh=nullptr );
@@ -113,20 +113,20 @@ public:
     SfxViewFrame*           GetParentViewFrame() const;
 
     using SfxShell::GetDispatcher;
-    SfxDispatcher*          GetDispatcher() { return pDispatcher; }
-    SfxBindings&            GetBindings() { return *pBindings; }
-    const SfxBindings&      GetBindings() const  { return *pBindings; }
+    SfxDispatcher*          GetDispatcher() { return m_pDispatcher; }
+    SfxBindings&            GetBindings() { return *m_pBindings; }
+    const SfxBindings&      GetBindings() const  { return *m_pBindings; }
     vcl::Window&            GetWindow() const;
 
     SfxProgress*            GetProgress() const;
 
     SfxObjectShell*         GetObjectShell() const
-                            { return xObjSh; }
+                            { return m_xObjSh; }
 
     void                    LockAdjustPosSizePixel()
-                            { nAdjustPosPixelLock++; }
+                            { m_nAdjustPosPixelLock++; }
     void                    UnlockAdjustPosSizePixel()
-                            { nAdjustPosPixelLock--; }
+                            { m_nAdjustPosPixelLock--; }
     void                    DoAdjustPosSizePixel( SfxViewShell * pSh,
                                         const Point &rPos, const Size &rSize );
     void                    Show();
