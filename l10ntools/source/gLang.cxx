@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
         handler::showUsage(myErr);
         exit(-1);
     }
-    catch(string sErr) {
+    catch(const string& sErr) {
         handler::showUsage(sErr);
         exit(-1);
     }
@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
         handler::showRunTimeError(myErr);
         exit(-1);
     }
-    catch(string sErr) {
+    catch(const string& sErr) {
         handler::showRunTimeError(sErr);
         exit(-1);
     }
