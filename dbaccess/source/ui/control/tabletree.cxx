@@ -315,7 +315,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 {
                     SvTreeListEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
                     if ( !pFolder )
-                        pFolder = InsertEntry( *folder, pRootEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                        InsertEntry( *folder, pRootEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
                 }
             }
         }

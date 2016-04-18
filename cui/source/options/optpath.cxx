@@ -490,7 +490,6 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
     sUser = pPathImpl->sUserPath;
     sWritable = pPathImpl->sWritablePath;
-    sal_uInt16 nPos = pPathImpl->nRealId;
 
     // old path is an URL?
     INetURLObject aObj( sWritable );
@@ -512,7 +511,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     if ( bChanged )
     {
         pPathBox->SetEntryText( Convert_Impl( sNewPathStr ), pEntry, 1 );
-        nPos = (sal_uInt16)pPathBox->GetModel()->GetAbsPos( pEntry );
+        sal_uInt16 nPos = (sal_uInt16)pPathBox->GetModel()->GetAbsPos( pEntry );
         pPathImpl = static_cast<PathUserData_Impl*>(pPathBox->GetEntry(nPos)->GetUserData());
         pPathImpl->eState = SfxItemState::SET;
         pPathImpl->sWritablePath = sNewPathStr;

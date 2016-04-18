@@ -806,7 +806,6 @@ void ServerFont::ApplyGlyphTransform( int nGlyphFlags,
         {
             // apply non-orthogonal or stretch transformations
             FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
-            nAngle = 0;
         }
     }
     else

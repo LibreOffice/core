@@ -190,14 +190,13 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
     ScAddress aEnd   = mInputRange.aEnd;
 
     SCTAB outTab = mOutputAddress.Tab();
-    SCCOL outCol = mOutputAddress.Col();
     SCROW outRow = mOutputAddress.Row();
 
     sal_Int64 aPeriod = mpPeriod->GetValue();
 
     for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
     {
-        outCol = mOutputAddress.Col();
+        SCCOL outCol = mOutputAddress.Col();
         for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
         {
             sal_Int64 i = 0;
@@ -226,7 +225,6 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
     ScAddress aEnd   = mInputRange.aEnd;
 
     SCTAB outTab = mOutputAddress.Tab();
-    SCCOL outCol = mOutputAddress.Col();
     SCROW outRow = mOutputAddress.Row();
 
     SCROW inRow;
@@ -235,7 +233,7 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
 
     for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
     {
-        outCol = mOutputAddress.Col();
+        SCCOL outCol = mOutputAddress.Col();
         for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
         {
             SCROW aPopulationSize = (aEnd.Row() - aStart.Row()) + 1;

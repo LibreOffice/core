@@ -1957,7 +1957,6 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
                 rNearest = nNext;
             else
                 rNearest = std::min( rNearest, nNext );
-            bHasAnnotationMark = true;
         }
     }
 }

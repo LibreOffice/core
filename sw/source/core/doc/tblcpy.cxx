@@ -815,8 +815,6 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 
     SwTableNumFormatMerge aTNFM( *pCpyDoc, *pDoc );
 
-    SwTableBox *pSttBox = rSelBoxes[0];
-
     _FndLine *pFLine, *pInsFLine = nullptr;
     _FndBox aFndBox( nullptr, nullptr );
     // Find all Boxes/Lines
@@ -858,7 +856,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 // See if the Box count is high enough for the Lines
                 SwTableLine* pLastLn = GetTabLines().back();
 
-                pSttBox = pFLine->GetBoxes()[0]->GetBox();
+                SwTableBox* pSttBox = pFLine->GetBoxes()[0]->GetBox();
                 const SwTableBoxes::size_type nSttBox = pFLine->GetLine()->GetTabBoxes().GetPos( pSttBox );
                 for( SwTableLines::size_type n = rCpyTable.GetTabLines().size() - nNewLns;
                         n < rCpyTable.GetTabLines().size(); ++n )
@@ -902,7 +900,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
             // We have enough rows, so check the Boxes per row
             pFLine = aFndBox.GetLines()[ nLn % nFndCnt ].get();
             SwTableLine* pLine = pFLine->GetLine();
-            pSttBox = pFLine->GetBoxes()[0]->GetBox();
+            SwTableBox* pSttBox = pFLine->GetBoxes()[0]->GetBox();
             const SwTableBoxes::size_type nSttBox = pLine->GetTabBoxes().GetPos( pSttBox );
             if( nLn >= nFndCnt )
             {

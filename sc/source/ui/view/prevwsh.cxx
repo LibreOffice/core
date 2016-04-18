@@ -287,18 +287,14 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
             aWindowSize.Height() += aWidthOffSet;
         }
     }
-    // recalculate any needed scrollbars
-    bHori = false;
-    bVert = false;
 
+    // recalculate any needed scrollbars
     long nMaxWidthPos = aPageSize.Width() - aWindowSize.Width();
     if ( nMaxWidthPos<0 )
         bHori = false;
     else
         bHori = true;
-
     long nMaxHeightPos = aPageSize.Height() - aWindowSize.Height();
-
     if ( nMaxHeightPos < 0 )
         bVert = false;
     else
@@ -491,7 +487,7 @@ bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
     if ( pData && pData->GetMode() == CommandWheelMode::ZOOM )
     {
         long nOld = pPreview->GetZoom();
-        long nNew = nOld;
+        long nNew;
         if ( pData->GetDelta() < 0 )
             nNew = std::max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
         else

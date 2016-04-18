@@ -1703,7 +1703,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             bDisable |= bHtmlMode;
                             //no contour available whenn no wrap or wrap through is set
                             bDisable |= (nSurround == SURROUND_NONE || nSurround == SURROUND_THROUGHT);
-                            bSet = rWrap.IsContour();
                             if( !bDisable )
                             {
                                 int nSel = rSh.GetSelectionType();

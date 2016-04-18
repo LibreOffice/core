@@ -1300,7 +1300,6 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                     pAction = pAction->GetPrev();
                 }
             }
-            nEndOwn = pThisTrack->GetActionMax();
         }
         else
         {

@@ -107,7 +107,6 @@ sal_Int32 OStartMarker::getMinHeight() const
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
     Size aSize(GetOutputSizePixel());
-    long nSize = aSize.Width();
     const long nCornerWidth = long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
 
     if (isCollapsed())
@@ -117,7 +116,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
     else
     {
         const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
-        nSize = aSize.Width() - nVRulerWidth;
+        long nSize = aSize.Width() - nVRulerWidth;
         aSize.Width() += nCornerWidth;
         rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(Rectangle(Point(),
                                                                              Size(nSize, aSize.Height())))));

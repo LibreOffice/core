@@ -787,7 +787,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         bOk = false;
     else if ( nEndX == nCol2 )                  // to up / down
     {
-        nEndX = nCol2 = nCol1;                  // use only first column
+        nCol2 = nCol1;                          // use only first column
         nSrcCount = nRow2 - nRow1 + 1;
         nIndex = ((long)nEndY) - nRow1;         // can be negative
         if ( nEndY >= nRow1 )

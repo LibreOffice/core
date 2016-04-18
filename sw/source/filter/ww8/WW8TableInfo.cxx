@@ -1279,8 +1279,6 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells(RowEndInners_t &rLastRowEnds)
         pRow->setTableBoxVector(pTableBoxes);
         pRow->setWidths(pWidths);
 
-        nShadows = 0;
-
         ++aTopsIt;
         nRow++;
     }

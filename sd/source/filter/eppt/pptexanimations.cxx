@@ -1607,7 +1607,6 @@ void AnimationExporter::exportAnimate( SvStream& rStrm, const Reference< XAnimat
             sal_uInt32 nBits = 0x38;
             sal_Int16 nTmp = xAnimate->getCalcMode();
             sal_uInt32 nCalcMode = /* (nTmp == AnimationCalcMode::FORMULA) ? 2 : */ (nTmp == AnimationCalcMode::LINEAR) ? 1 : 0;
-            nTmp = xAnimate->getValueType();
             sal_uInt32 nValueType = GetValueTypeForAttributeName( xAnimate->getAttributeName() );
 
             if ( aBy.hasValue() )

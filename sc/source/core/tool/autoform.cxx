@@ -1055,8 +1055,6 @@ void ScAutoFormat::Load()
                     insert(pData);
                 }
             }
-            else
-                bRet = false;
         }
     }
     mbSaveLater = false;

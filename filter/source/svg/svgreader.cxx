@@ -1380,15 +1380,14 @@ void annotateStyles( StatePool&                                        rStatePoo
                             const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
                             std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
-    bool maGradientNotFound = false;
-    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector, maGradientNotFound);
+    bool bGradientNotFound = false;
+    AnnotatingVisitor aVisitor(rStatePool, rStateMap, rInitialState, xDocHdl, rUseElementVector, bGradientNotFound);
     visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
 
     //Sometimes, xlink:href in gradients refers to another gradient which hasn't been parsed yet.
     // if that happens, we'll need to parse the styles again, so everything gets referred.
-    if( maGradientNotFound )
+    if( bGradientNotFound )
     {
-        maGradientNotFound = false;
         visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
     }
 }

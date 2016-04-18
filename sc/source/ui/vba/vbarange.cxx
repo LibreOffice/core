@@ -3030,9 +3030,6 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
     const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
     SvxSearchItem newOptions( globalSearchOptions );
 
-    sal_Int16 nLook =  globalSearchOptions.GetWordOnly() ?  excel::XlLookAt::xlPart : excel::XlLookAt::xlWhole;
-    sal_Int16 nSearchOrder = globalSearchOptions.GetRowDirection() ? excel::XlSearchOrder::xlByRows : excel::XlSearchOrder::xlByColumns;
-
     uno::Reference< util::XReplaceable > xReplace( mxRange, uno::UNO_QUERY );
     if ( xReplace.is() )
     {
@@ -3045,7 +3042,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         if ( LookAt.hasValue() )
         {
             // sets SearchWords ( true is Cell match )
-            nLook =  ::comphelper::getINT16( LookAt );
+            sal_Int16 nLook =  ::comphelper::getINT16( LookAt );
             bool bSearchWords = false;
             if ( nLook == excel::XlLookAt::xlPart )
                 bSearchWords = false;
@@ -3061,7 +3058,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         // sets SearchByRow ( true for Rows )
         if ( SearchOrder.hasValue() )
         {
-            nSearchOrder =  ::comphelper::getINT16( SearchOrder );
+            sal_Int16 nSearchOrder =  ::comphelper::getINT16( SearchOrder );
             bool bSearchByRow = false;
             if ( nSearchOrder == excel::XlSearchOrder::xlByColumns )
                 bSearchByRow = false;
@@ -3143,8 +3140,6 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
     SvxSearchItem newOptions( globalSearchOptions );
 
-    sal_Int16 nSearchOrder = globalSearchOptions.GetRowDirection() ? excel::XlSearchOrder::xlByRows : excel::XlSearchOrder::xlByColumns;
-
     uno::Reference< util::XSearchable > xSearch( mxRange, uno::UNO_QUERY );
     if( xSearch.is() )
     {
@@ -3209,7 +3204,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         // SearchOrder
         if ( SearchOrder.hasValue() )
         {
-            nSearchOrder =  ::comphelper::getINT16( SearchOrder );
+            sal_Int16 nSearchOrder =  ::comphelper::getINT16( SearchOrder );
             bool bSearchByRow = false;
             if ( nSearchOrder == excel::XlSearchOrder::xlByColumns )
                 bSearchByRow = false;
@@ -4359,7 +4354,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
 }
 
 void SAL_CALL
-ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const uno::Any& Operator, const uno::Any& Criteria2, const uno::Any& VisibleDropDown )
+ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const uno::Any& Operator, const uno::Any& Criteria2, const uno::Any& /*VisibleDropDown*/ )
     throw (uno::RuntimeException, std::exception)
 {
     // Is there an existing autofilter
@@ -4444,11 +4439,6 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     OUString sCriteria1;
     sal_Int32 nOperator = excel::XlAutoFilterOperator::xlAnd;
 
-    bool bVisible = true;
-    VisibleDropDown >>= bVisible;
-
-    if ( bVisible == bHasAuto ) // dropdown is displayed/notdisplayed as required
-        bVisible = false;
     sheet::FilterConnection nConn = sheet::FilterConnection_AND;
     double nCriteria1 = 0;
 

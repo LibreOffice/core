@@ -667,13 +667,11 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         Sequence< OUString > aParamList = m_pParamDlg->GetParameters();
         sal_Int32 i, nSize = aParamList.getLength();
         rtl_uString** pParamArr = static_cast<rtl_uString**>(rtl_allocateMemory( sizeof(rtl_uString*) * nSize ));
-        rtl_uString** pParamArrIter = pParamArr;
         const OUString* pList = aParamList.getConstArray();
         for ( i = 0; i < nSize; ++i )
             pParamArr[i] = pList[i].pData;
-        eErr = jfw_setVMParameters( pParamArrIter, nSize );
+        eErr = jfw_setVMParameters( pParamArr, nSize );
         SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters"); (void)eErr;
-        pParamArrIter = pParamArr;
         rtl_freeMemory( pParamArr );
         bModified = true;
     }

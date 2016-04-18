@@ -568,8 +568,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     sal_uInt32 nKey;
                     double  fTmpVal;
 
-                    bDoIt=false;
-
                     if( pReqArgs->HasItem( FID_FILL_SERIES, &pItem ) )
                         aFillDir = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
@@ -2244,7 +2242,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScViewData* pData  = GetViewData();
                 ScDocument* pDoc   = pData->GetDocument();
                 ScMarkData& rMark  = pData->GetMarkData();
-                bool bDone = false;
 
                 if (!rMark.IsMarked() && !rMark.IsMultiMarked())
                 {
@@ -2253,12 +2250,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pDoc->GetNote(aPos) )
                     {
                         pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
-                        bDone = true;
                     }
                 }
                 else
                 {
                     // Check selection range
+                    bool bDone = false;
                     ScRangeListRef aRangesRef;
                     pData->GetMultiArea(aRangesRef);
                     ScRangeList aRanges = *aRangesRef;

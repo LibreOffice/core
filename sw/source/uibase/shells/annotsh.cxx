@@ -759,7 +759,6 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     if( !pAdjust || IsInvalidItem( pAdjust ))
                     {
                         rSet.InvalidateItem( nSlotId );
-                        nSlotId = 0;
                     }
                     else
                     {
@@ -790,7 +789,6 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     if( !pLSpace || IsInvalidItem( pLSpace ))
                     {
                         rSet.InvalidateItem( nSlotId );
-                        nSlotId = 0;
                     }
                     else
                     {

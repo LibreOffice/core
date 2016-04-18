@@ -830,19 +830,18 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     const OUString* pIter = aDestColumnNames.getConstArray();
     ::std::vector< OUString> aInsertList;
     aInsertList.resize(aDestColumnNames.getLength()+1);
-    sal_Int32 i = 0;
-    for(size_t j=0; j < aInsertList.size() ;++i,++j)
+    for(size_t j=0; j < aInsertList.size(); ++j)
     {
         ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
-            [i] (const ODatabaseExport::TPositions::value_type& tPos) { return tPos.second == i+1; });
+            [j] (const ODatabaseExport::TPositions::value_type& tPos)
+                { return tPos.second == (sal_Int32)(j+1); });
         if ( _rvColumns.end() != aFind && aFind->second != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) && aFind->first != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) )
         {
             OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");
-            aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pIter+i));
+            aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pIter+j));
         }
     }
 
-    i = 1;
     // create the sql string
     ::std::vector< OUString>::const_iterator aInsertEnd = aInsertList.end();
     for (::std::vector< OUString>::const_iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
