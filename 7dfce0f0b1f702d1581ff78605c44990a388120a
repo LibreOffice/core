@@ -33,6 +33,57 @@
       "revId": "7dfce0f0b1f702d1581ff78605c44990a388120a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_eb564505",
+        "filename": "ucb/source/ucp/cmis/cmis_content.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-18T12:51:47Z",
+      "side": 1,
+      "message": "this string literal should better be spelled out in its sole place of use, instead of resorting to a macro",
+      "revId": "7dfce0f0b1f702d1581ff78605c44990a388120a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_cb5b892d",
+        "filename": "ucb/source/ucp/cmis/cmis_repo_content.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-18T12:51:47Z",
+      "side": 1,
+      "message": "this string literal should better be spelled out in its sole place of use, instead of resorting to a macro",
+      "revId": "7dfce0f0b1f702d1581ff78605c44990a388120a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_2b417d3a",
+        "filename": "uui/source/ids.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-18T12:51:47Z",
+      "side": 1,
+      "message": "this would require an addition to uui/source/ids.src, too",
+      "revId": "7dfce0f0b1f702d1581ff78605c44990a388120a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
