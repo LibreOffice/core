@@ -21,6 +21,9 @@ $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_border, \
 	sal \
 	salhelper \
 	drawinglayer \
+	vcl \
+	test \
+	tl \
 	$(gb_UWINAPI) \
 ))
 
@@ -32,5 +35,18 @@ $(eval $(call gb_CppunitTest_use_externals,drawinglayer_border,\
 $(eval $(call gb_CppunitTest_add_exception_objects,drawinglayer_border, \
 	drawinglayer/qa/unit/border \
 ))
+
+$(eval $(call gb_CppunitTest_use_ure,drawinglayer_border))
+
+$(eval $(call gb_CppunitTest_use_vcl,drawinglayer_border))
+
+$(eval $(call gb_CppunitTest_use_components,drawinglayer_border,\
+    configmgr/source/configmgr \
+    i18npool/util/i18npool \
+    ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
+))
+
+$(eval $(call gb_CppunitTest_use_configuration,drawinglayer_border))
 
 # vim: set noet sw=4 ts=4:
