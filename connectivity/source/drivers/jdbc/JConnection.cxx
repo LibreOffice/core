@@ -810,14 +810,10 @@ bool java_sql_Connection::construct(const OUString& url,
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
         // Java-Call
-        jmethodID mID = nullptr;
-        if ( !mID )
-        {
-            // initialize temporary Variable
-            static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
-            static const char * cMethodName = "connect";
-            mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
-        }
+        static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
+        static const char * cMethodName = "connect";
+        jmethodID mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
+
         if ( mID )
         {
             jvalue args[2];
