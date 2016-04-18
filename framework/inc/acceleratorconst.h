@@ -26,8 +26,6 @@ namespace framework{
 
 #define ATTRIBUTE_TYPE_CDATA            "CDATA"
 
-#define XMLNS_XLINK                     "xlink"
-
 // same items with a name space alias
 #define AL_ELEMENT_ACCELERATORLIST      "accel:acceleratorlist"
 #define AL_ELEMENT_ITEM                 "accel:item"
