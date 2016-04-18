@@ -1934,8 +1934,6 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
 
 void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
 {
-    bool bHasAnnotationMark = false;
-
     if ( !m_rSortedAnnotationMarksStart.empty() )
     {
         IMark* pMarkStart = m_rSortedAnnotationMarksStart.front();
@@ -1943,7 +1941,6 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
         if( !bNextPositionOnly || (nNext > nAktPos ))
         {
             rNearest = nNext;
-            bHasAnnotationMark = true;
         }
     }
 
@@ -1953,11 +1950,7 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
         const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
         if( !bNextPositionOnly || nNext > nAktPos )
         {
-            if ( !bHasAnnotationMark )
-                rNearest = nNext;
-            else
-                rNearest = std::min( rNearest, nNext );
-            bHasAnnotationMark = true;
+            rNearest = nNext;
         }
     }
 }

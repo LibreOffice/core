@@ -166,7 +166,7 @@ void SvBaseLinksDlg::dispose()
 *************************************************************************/
 IMPL_LINK_TYPED( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void )
 {
-    sal_uLong nSelectionCount = pSvTabListBox ?
+    const sal_uLong nSelectionCount = pSvTabListBox ?
         pSvTabListBox->GetSelectionCount() : 0;
     if(nSelectionCount > 1)
     {
@@ -180,7 +180,6 @@ IMPL_LINK_TYPED( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox,
         {
             pSvTabListBox->SelectAll(false);
             pSvTabListBox->Select(pEntry);
-            nSelectionCount = 1;
         }
         else
         {
@@ -277,9 +276,6 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, ManualClickHdl, Button*, void )
 IMPL_LINK_NOARG_TYPED(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
 {
     SvTabListBox& rListBox = *m_pTbLinks;
-    sal_uLong nSelCnt = rListBox.GetSelectionCount();
-    if( 255 < nSelCnt )
-        nSelCnt = 255;
 
     std::vector< SvBaseLink* > aLnkArr;
     std::vector< sal_Int16 > aPosArr;

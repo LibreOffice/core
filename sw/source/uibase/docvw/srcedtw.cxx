@@ -191,7 +191,6 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                     aTextPortion.eType = eFoundType;
                     aPortionList.push_back( aTextPortion );
                     nInsert++;
-                    eFoundType = svtools::HTMLUNKNOWN;
                 }
 
             }

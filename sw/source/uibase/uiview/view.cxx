@@ -300,7 +300,6 @@ void SwView::SelectShell()
         if ( !( m_nSelectionType & nsSelectionType::SEL_FOC_FRM_CTRL ) )
             rDispatcher.Push( *m_pFormShell );
 
-        eShellMode = SHELL_MODE_NAVIGATION;
         m_pShell = new SwNavigationShell( *this );
         rDispatcher.Push( *m_pShell );
 

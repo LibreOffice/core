@@ -347,7 +347,7 @@ private:
     void            StartFormatArea();
     bool            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrChanged );
     void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                        bool bAttrChanged, bool bAddUndo );
+                                        bool bAttrChanged );
 
     void            MarkAndJumpToRanges(const ScRangeList& rRanges);
     void            CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,

@@ -336,7 +336,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         DataSourceInfoConverter::convert(getORB(), m_pCollection,sOld,m_sURL,m_pImpl->getCurrentDataSource());
         ::dbaccess::DATASOURCE_TYPE eType = VerifyDataSourceType(m_pCollection->determineType(m_sURL));
         if (eType ==  ::dbaccess::DST_UNKNOWN)
-            eType = m_pCollection->determineType(m_sOldURL);
+            m_pCollection->determineType(m_sOldURL);
 
         activatePath( static_cast<PathId>(m_pCollection->getIndexOf(m_sURL) + 1), true);
         updateTypeDependentStates();

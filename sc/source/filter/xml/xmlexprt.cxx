@@ -2931,7 +2931,6 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         ExportFormatRanges(0, 0, pSharedData->GetLastColumn(nTable), pSharedData->GetLastRow(nTable), nTable);
 
     CloseRow(pSharedData->GetLastRow(nTable));
-    nEqualCells = 0;
 
     if (pDoc)
     {

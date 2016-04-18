@@ -757,7 +757,7 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
                     }
 
                     if (meMode == SEARCH)
-                        nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+                        pOutlinerView->StartSearchAndReplace(*mpSearchItem);
                 }
             }
         }

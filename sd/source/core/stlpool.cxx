@@ -1169,36 +1169,6 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
                 setDefaultOutlineNumberFormatBulletAndIndent(i, aNumberFormat);
-
-                sal_uLong nFontSize = 20;
-                switch(i)
-                {
-                    case 0:
-                    {
-                        nFontSize = 32;
-                    }
-                    break;
-
-                    case 1:
-                    {
-                        nFontSize = 32;
-                    }
-                    break;
-
-                    case 2:
-                    {
-                        nFontSize = 28;
-                    }
-                    break;
-
-                    case 3:
-                    {
-                        nFontSize = 24;
-                    }
-                    break;
-                }
-
-                nFontSize = (sal_uInt16)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
                 rBulletFont.SetFontSize(Size(0,846));       // 24 pt
                 aNumberFormat.SetBulletFont(&rBulletFont);
                 aNumRule.SetLevel( i, aNumberFormat );

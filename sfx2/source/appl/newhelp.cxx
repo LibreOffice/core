@@ -643,10 +643,6 @@ void IndexTabPage_Impl::InitializeIndex()
                         {
                             aIndex = aTempString;
                             it = aInfo.insert(sfx2::KeywordInfo::value_type(aTempString, 0)).first;
-                            if ( (tmp = it->second++) != 0)
-                                nPos = m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
-                            else
-                                nPos = m_pIndexCB->InsertEntry(aTempString);
                         }
                     }
                     else

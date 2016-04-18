@@ -451,7 +451,6 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
                 return eStringId;
             }
         }
-        nIndex = 0;
         for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
         {
             if(aVertIds[nIndex].eHori == eStringId)
@@ -1193,9 +1192,6 @@ IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
     aVal.nHeight = nHeight;
 
     m_aValidateLink.Call(aVal);
-
-    nWidth = aVal.nWidth;
-    nHeight = aVal.nHeight;
 
     // minimum width also for style
     m_pHeightMF->SetMin(m_pHeightMF->Normalize(aVal.nMinHeight), FUNIT_TWIP);
