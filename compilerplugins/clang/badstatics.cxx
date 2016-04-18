@@ -146,13 +146,9 @@ public:
             {
                 return true;
             }
-            // TODO: check these VclPtr<> static fields
-            if (   name == "xPreviousWindow"    // vcl/source/window/winproc.cxx
-                || name == "vDev"               // sdext/source/pdfimport/wrapper/wrapper.cxx
-                || name == "s_xEmptyController" // svx/source/fmcomp/gridcell.cxx
+            // these two are fairly harmless because they're both empty objects
+            if (   name == "s_xEmptyController" // svx/source/fmcomp/gridcell.cxx
                 || name == "xCell"              // svx/source/table/svdotable.cxx
-                || name == "pPixOut"            // sw/source/core/txtnode/fntcache.cxx
-                || name == "mpCareWindow"       // sw/source/core/view/viewsh.cxx
                )
             {
                 return true;

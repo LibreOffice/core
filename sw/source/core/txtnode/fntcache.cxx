@@ -28,6 +28,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/lazydelete.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <breakit.hxx>
@@ -68,7 +69,7 @@ Color *pWaveCol = nullptr;
 
 long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = nullptr;
-VclPtr<OutputDevice> SwFntObj::pPixOut;
+static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut( new VclPtr<OutputDevice> );
 
 namespace
 {
@@ -889,10 +890,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     Point aTextOriginPos( rInf.GetPos() );
     if( !bPrt )
     {
-        if( rInf.GetpOut() != pPixOut || rInf.GetOut().GetMapMode() != *pPixMap )
+        if( rInf.GetpOut() != *s_pFntObjPixOut.get() || rInf.GetOut().GetMapMode() != *pPixMap )
         {
             *pPixMap = rInf.GetOut().GetMapMode();
-            pPixOut = rInf.GetpOut();
+            (*s_pFntObjPixOut.get()) = rInf.GetpOut();
             Size aTmp( 1, 1 );
             nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
         }

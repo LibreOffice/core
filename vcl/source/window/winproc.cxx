@@ -36,6 +36,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/lazydelete.hxx>
 #include <touch/touch.h>
 
 #include <svdata.hxx>
@@ -1473,7 +1474,7 @@ public:
 bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 {
     static SalWheelMouseEvent aPreviousEvent;
-    static VclPtr<vcl::Window> xPreviousWindow;
+    static vcl::DeleteOnDeinit< VclPtr<vcl::Window> > xPreviousWindow( new VclPtr<vcl::Window> );
 
     if (!Setup())
         return false;
@@ -1483,16 +1484,17 @@ bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
     // avoid the problem that scrolling via wheel to this point brings a widget
     // under the mouse that also accepts wheel commands, so stick with the old
     // widget if the time gap is very small
-    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(xPreviousWindow))
+    VclPtr<vcl::Window> tmp = *xPreviousWindow.get();
+    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(tmp))
     {
-        xMouseWindow = xPreviousWindow.get();
+        xMouseWindow = tmp;
     }
 
     aPreviousEvent = rEvt;
 
-    xPreviousWindow = Dispatch(xMouseWindow);
+    (*xPreviousWindow.get()) = Dispatch(xMouseWindow);
 
-    return xPreviousWindow;
+    return *xPreviousWindow.get();
 }
 
 class HandleGestureEvent : public HandleGestureEventBase

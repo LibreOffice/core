@@ -78,7 +78,6 @@ class SwFntObj : public SwCacheObj
 
     static long nPixWidth;
     static MapMode *pPixMap;
-    static VclPtr<OutputDevice> pPixOut;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
