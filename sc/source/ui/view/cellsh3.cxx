@@ -345,7 +345,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     rReq.Done();
                 }
-                else if ( pReqArgs == nullptr )
+                else
                 {
                     pTabViewShell->ExecuteCellFormatDlg( rReq );
                 }

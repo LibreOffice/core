@@ -518,7 +518,7 @@ void ScMarkData::InsertTab( SCTAB nTab )
     {
         if (*itr < nTab)
             tabMarked.insert(*itr);
-        else if (*itr >= nTab)
+        else
             tabMarked.insert(*itr + 1);
     }
     maTabMarked.swap(tabMarked);

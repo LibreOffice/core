@@ -388,8 +388,6 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
 
         if (nSdrObjKind == OBJ_OLE2)
         {
-            bool bIsInplaceOle = false;
-            if (!bIsInplaceOle)
             {
                 SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
                 if (pOleObj && pOleObj->GetObjRef().is())

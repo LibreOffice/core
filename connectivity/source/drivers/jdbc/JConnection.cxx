@@ -811,7 +811,6 @@ bool java_sql_Connection::construct(const OUString& url,
     {
         // Java-Call
         jmethodID mID = nullptr;
-        if ( !mID )
         {
             // initialize temporary Variable
             static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";

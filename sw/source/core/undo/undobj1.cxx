@@ -171,7 +171,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         const_cast<SwFormatContent&>(rContent).SetNewContentIdx( nullptr );
     }
     // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
-    else if ( RES_DRAWFRMFMT == pFrameFormat->Which() )
+    else
     {
         SwDrawContact* pDrawContact =
             static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());

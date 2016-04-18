@@ -2129,7 +2129,7 @@ void Document::handleParagraphNotifications()
                     // 4,1 -> 4,7;
                     return 5;
                 }
-                else if (Oep >= Osp)
+                else
                 {
                     // 1, 2 -> 1, 3; 4,4->4,5;
                     return 6;
@@ -2143,7 +2143,7 @@ void Document::handleParagraphNotifications()
                     // 4,1 -> 4,2,
                     return 7;
                 }
-                else if (Oep >= Osp)
+                else
                 {
                     // no such condition. Oep > Osp = Nsp > Nep
                 }
@@ -2159,7 +2159,7 @@ void Document::handleParagraphNotifications()
                 {
                     //no such condition, Oep<Osp=Nsp <= Nep
                 }
-                else if (Oep > Osp)
+                else
                 {
                     // 4,7 ->4,6
                     return 8;
@@ -2173,7 +2173,7 @@ void Document::handleParagraphNotifications()
                     // 3,2 -> 3,1; 4,4->4,3
                     return 9;
                 }
-                else if (Oep > Osp)
+                else
                 {
                     // 4,7 -> 4,1
                     return 10;
