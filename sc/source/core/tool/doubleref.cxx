@@ -336,7 +336,6 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     SCTAB nDBTab1 = s.Tab();
     SCCOL nDBCol2 = e.Col();
 
-    SCCOL   nField = nDBCol1;
     bool bFound = false;
 
     OUString aCellStr;
@@ -351,7 +350,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
         if (!bFound)
             aLook.IncCol();
     }
-    nField = aLook.Col();
+    SCCOL nField = aLook.Col();
 
     return bFound ? nField : -1;
 }

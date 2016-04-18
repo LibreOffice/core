@@ -569,17 +569,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                             const OUString *pCaption, bool bTopCaption,
                             sal_uInt16 nHSpace, sal_uInt16 nVSpace ) const
 {
-    // Wert fuer FRAME bestimmen
-    sal_uInt16 nFrameMask = 15;
-    if( !(aRows.front())->bTopBorder )
-        nFrameMask &= ~1;
-    if( !(aRows.back())->bBottomBorder )
-        nFrameMask &= ~2;
-    if( !(aCols.front())->bLeftBorder )
-        nFrameMask &= ~4;
-    if( !(aCols.back())->bRightBorder )
-        nFrameMask &= ~8;
-
     // Wert fur RULES bestimmen
     bool bRowsHaveBorder = false;
     bool bRowsHaveBorderOnly = true;

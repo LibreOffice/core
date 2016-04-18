@@ -1843,7 +1843,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                         case presentation::ClickAction_NEXTPAGE:
                         {
-                            sal_uLong nPage = nSdPage;
+                            sal_uLong nPage;
                             if (nSdPage == mnSdPageCount - 1)
                                 nPage = mnSdPageCount - 1;
                             else

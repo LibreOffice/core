@@ -1787,7 +1787,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
             pScMod->SetInputMode( SC_INPUT_TABLE );
             bEEMouse = true;
-            bEditMode = pEditView->MouseButtonDown( rMEvt );
+            pEditView->MouseButtonDown( rMEvt );
             return;
         }
     }

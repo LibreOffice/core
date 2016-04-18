@@ -698,8 +698,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     bool                bDone = false;
                     const SfxPoolItem*  pItem;
                     Color               aColor;
-                    if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
-                        nTabNr = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
                     if( pReqArgs->HasItem( nSlot, &pItem ) )
                         aColor = static_cast<const SvxColorItem*>(pItem)->GetValue();

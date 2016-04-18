@@ -332,10 +332,9 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
 
 void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 {
-    sal_uInt16 nIdx = USHRT_MAX;
     if( pImp && !pImp->bInPutMuchBlocks )
     {
-        pImp->nCur = nIdx;
+        pImp->nCur = USHRT_MAX;
         OUString aNew;
         OUString aLong;
         if( s )
@@ -367,8 +366,6 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
         }
         pImp->CloseFile();
         pImp->Touch();
-        if( !nErr )
-            nIdx = pImp->GetIndex( aNew );
     }
 }
 

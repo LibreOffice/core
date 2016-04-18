@@ -336,7 +336,7 @@ void CommandToolBox::Select( sal_uInt16 nSelId )
     if ( nSelId == IID_ZOOMOUT || nSelId == IID_SCENARIOS )
     {
         NavListMode eOldMode = rDlg.eListMode;
-        NavListMode eNewMode = eOldMode;
+        NavListMode eNewMode;
 
         if ( nSelId == IID_SCENARIOS )
         {

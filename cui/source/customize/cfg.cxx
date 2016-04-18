@@ -3463,10 +3463,10 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
 
                 bNeedsApply = true;
             }
-               catch ( uno::Exception& )
-               {
+            catch ( uno::Exception& )
+            {
                 OSL_TRACE("Error restoring image");
-               }
+            }
             break;
         }
         case ID_BEGIN_GROUP:

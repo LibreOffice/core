@@ -782,7 +782,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
                                 pNodeTmp = pTemp->getChild(1);
                                 OSQLParseNode::compress(pNodeTmp);
-                                pNodeTmp = pTemp->getChild(1);
                             }
                             OUString sTemp;
                             pNode->parseNodeToStr(sTemp,getConnection());

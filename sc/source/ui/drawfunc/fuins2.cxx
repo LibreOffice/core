@@ -213,7 +213,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
     OUString aIconMediaType;
     uno::Reference< io::XInputStream > xIconMetaFile;
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
@@ -224,7 +224,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
     {
         if ( SvtModuleOptions().IsMath() )
         {
-            nSlot = SID_INSERT_OBJECT;
             xObj = pViewShell->GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SM_CLASSID_60 ).GetByteSequence(), aName );
             rReq.AppendItem( SfxGlobalNameItem( SID_INSERT_OBJECT, SvGlobalName( SO3_SM_CLASSID_60 ) ) );
         }

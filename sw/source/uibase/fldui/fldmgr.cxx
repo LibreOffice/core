@@ -1222,7 +1222,6 @@ bool SwFieldMgr::InsertField(
             SwSetExpField* pExpField = new SwSetExpField(pTyp, rData.m_sPar2, nFormatId);
             bExp = true;
             pField = pExpField;
-            nSubType = nsSwGetSetExpType::GSE_SEQ;
             break;
         }
 
@@ -1649,7 +1648,6 @@ void SwFieldMgr::SetMacroPath(const OUString& rPath)
 
 sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter)
 {
-    double fValue;
     short  nDefFormat;
 
     switch (nTypeId)
@@ -1657,18 +1655,6 @@ sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumbe
         case TYP_TIMEFLD:
         case TYP_DATEFLD:
         {
-            Date aDate( Date::SYSTEM );
-            Date* pNullDate = pFormatter->GetNullDate();
-
-            fValue = aDate - *pNullDate;
-
-            tools::Time aTime( tools::Time::SYSTEM );
-
-            sal_uLong nNumFormatTime = (sal_uLong)aTime.GetSec() + (sal_uLong)aTime.GetMin() * 60L +
-                          (sal_uLong)aTime.GetHour() * 3600L;
-
-            fValue += (double)nNumFormatTime / 86400.0;
-
             nDefFormat = (nTypeId == TYP_DATEFLD) ? css::util::NumberFormat::DATE : css::util::NumberFormat::TIME;
         }
         break;
@@ -1676,12 +1662,10 @@ sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumbe
         default:
             if (bIsText)
             {
-                fValue = 0.0;
                 nDefFormat = css::util::NumberFormat::TEXT;
             }
             else
             {
-                fValue = 0.0;
                 nDefFormat = css::util::NumberFormat::ALL;
             }
             break;
