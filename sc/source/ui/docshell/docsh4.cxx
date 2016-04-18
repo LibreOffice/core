@@ -1534,10 +1534,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
         case SID_STATUS_PAGESTYLE:  // Click auf StatusBar-Control
         case SID_FORMATPAGE:
             {
-                if ( pReqArgs != nullptr )
-                {
-                }
-                else if ( pReqArgs == nullptr )
+                if ( pReqArgs == nullptr )
                 {
                     OUString aOldName = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
@@ -1608,10 +1605,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
         case SID_HFEDIT:
             {
-                if ( pReqArgs != nullptr )
-                {
-                }
-                else if ( pReqArgs == nullptr )
+                if ( pReqArgs == nullptr )
                 {
                     OUString aStr( aDocument.GetPageStyle( nCurTab ) );
 
