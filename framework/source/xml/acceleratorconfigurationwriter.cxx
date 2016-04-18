@@ -60,7 +60,9 @@ void AcceleratorConfigurationWriter::flush()
     // generate xml
     xExtendedCFG->startDocument();
 
-    xExtendedCFG->unknown(DOCTYPE_ACCELERATORS);
+    xExtendedCFG->unknown(
+        "<!DOCTYPE accel:acceleratorlist PUBLIC \"-//OpenOffice.org//DTD"
+        " OfficeDocument 1.0//EN\" \"accelerator.dtd\">");
     xExtendedCFG->ignorableWhitespace(OUString());
 
     xExtendedCFG->startElement(AL_ELEMENT_ACCELERATORLIST, xAttribs);

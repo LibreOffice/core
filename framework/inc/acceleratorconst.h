@@ -24,8 +24,6 @@
 
 namespace framework{
 
-#define DOCTYPE_ACCELERATORS            "<!DOCTYPE accel:acceleratorlist PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"accelerator.dtd\">"
-
 #define ATTRIBUTE_TYPE_CDATA            "CDATA"
 
 #define XMLNS_XLINK                     "xlink"
