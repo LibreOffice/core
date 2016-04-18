@@ -720,16 +720,13 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case FN_SET_SUPER_SCRIPT:
             case FN_SET_SUB_SCRIPT:
             {
-                sal_uInt16 nEsc = 0;
-                const SfxPoolItem *pEscItem = nullptr;
+                sal_uInt16 nEsc;
                 if (nWhich==FN_SET_SUPER_SCRIPT)
                     nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
                 else
                     nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
 
-                if( !pEscItem )
-                    pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
-
+                const SfxPoolItem *pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
                 if( nEsc == static_cast<const SvxEscapementItem*>(pEscItem)->GetEnumValue() )
                     rSet.Put( SfxBoolItem( nWhich, true ));
                 else
@@ -741,9 +738,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_ADJUST_CENTER:
             case SID_ATTR_PARA_ADJUST_BLOCK:
                 {
-                    const SfxPoolItem *pAdjust = nullptr;
                     int eAdjust = 0;
-
                     if (nWhich==SID_ATTR_PARA_ADJUST_LEFT)
                         eAdjust = SVX_ADJUST_LEFT;
                     else if (nWhich==SID_ATTR_PARA_ADJUST_RIGHT)
@@ -753,8 +748,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else if (nWhich==SID_ATTR_PARA_ADJUST_BLOCK)
                         eAdjust = SVX_ADJUST_BLOCK;
 
-                    if( !pAdjust )
-                        aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
+                    const SfxPoolItem *pAdjust = nullptr;
+                    aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
 
                     if( !pAdjust || IsInvalidItem( pAdjust ))
                     {
@@ -774,9 +769,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_LINESPACE_15:
             case SID_ATTR_PARA_LINESPACE_20:
                 {
-                    const SfxPoolItem *pLSpace = nullptr;
                     int nLSpace = 0;
-
                     if (nWhich==SID_ATTR_PARA_LINESPACE_10)
                         nLSpace = 100;
                     else if (nWhich==SID_ATTR_PARA_LINESPACE_15)
@@ -784,8 +777,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else if (nWhich==SID_ATTR_PARA_LINESPACE_20)
                         nLSpace = 200;
 
-                    if( !pLSpace )
-                        aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
+                    const SfxPoolItem *pLSpace = nullptr;
+                    aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
 
                     if( !pLSpace || IsInvalidItem( pLSpace ))
                     {
