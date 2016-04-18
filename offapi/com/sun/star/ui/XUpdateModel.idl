@@ -19,6 +19,7 @@ module com { module sun { module star { module ui {
 
 /** Internal interface to update the used css::frame::XModel
     </p>
+    @since LibreOffice 5.1
 */
 
 interface XUpdateModel : com::sun::star::uno::XInterface
