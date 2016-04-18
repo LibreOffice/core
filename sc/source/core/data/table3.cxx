@@ -3113,7 +3113,6 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         return false;
 
     bool bValid;
-    bool bFound;
     OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = nRow1;
@@ -3149,7 +3148,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // Second column field name
         if ((nIndex < 1) || bValid)
         {
-            bFound = false;
+            bool bFound = false;
             GetUpperCellString(nCol1 + 1, nRow, aCellStr);
             for (SCCOL i=rQueryParam.nCol1; (i <= nDBCol2) && (!bFound); i++)
             {
@@ -3171,7 +3170,6 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // Third column operator =<>...
         if (bValid)
         {
-            bFound = false;
             GetUpperCellString(nCol1 + 2, nRow, aCellStr);
             if (aCellStr.startsWith("<"))
             {

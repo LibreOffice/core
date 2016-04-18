@@ -513,7 +513,6 @@ namespace svt
 
         // get the next state
         nCurrentState = nNextState;
-        nNextState = determineNextState(nCurrentState);
 
         // show the (n+1)th page
         if (!ShowPage(nCurrentState))

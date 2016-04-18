@@ -692,7 +692,6 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                     nAttrEnd < nPaMEnd)
                         {
                             aCharStyles.realloc(0);
-                            eNewState = PropertyState_AMBIGUOUS_VALUE;
                             break;
                         }
                         else

@@ -198,7 +198,6 @@ bool SwpHints::Check(bool bPortionsMerged) const
         // 3b) Stimmt die End-Sortierung?
         nIdx = *pHtEnd->GetAnyEnd();
         CHECK_ERR( nIdx >= nLastEnd, "HintsCheck: ends are unsorted" );
-        nLastEnd = nIdx;
 
         // 4b) IsLessEnd-Konsistenz
         if( pLastEnd )

@@ -1771,8 +1771,6 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             // it wasn't a storage, but maybe it's a useful stream
         }
-
-        nFormat = nId;
     }
 
     if( pRead )
@@ -1801,7 +1799,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         }
         else
         {
-            if( rData.HasFormat( nFormat = SotClipboardFormatId::OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFormat, aObjDesc ) )
+            if( rData.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFormat, aObjDesc ) )
              {
                 xStrm = rData.GetInputStream(SotClipboardFormatId::EMBED_SOURCE_OLE, OUString());
                 if (!xStrm.is())

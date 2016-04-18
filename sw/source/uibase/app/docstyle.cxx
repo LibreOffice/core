@@ -893,7 +893,6 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                                 {
                                     aItemPresentation = SW_RESSTR(STR_WESTERN_FONT) + aItemPresentation;
                                     bHasWesternFontPrefix = true;
-                                    bIsDefault = true;
                                 }
                                 // no break;
                                 default:

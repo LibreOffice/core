@@ -1587,8 +1587,8 @@ void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
             sal::static_int_cast< sal_Int32 >( eCaseMap ) );
     else
     {
+        // not mapped
         m_pEffectsLB->SetNoSelection();
-        eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     }
 
     UpdatePreview_Impl();
