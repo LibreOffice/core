@@ -2121,8 +2121,6 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
     // Ausserdem noch die Hoehe merken
     if( nCellHeight && 1==nRowSpan )
     {
-        if( nCellHeight < MINLAY )
-            nCellHeight = MINLAY;
         (*m_pRows)[nCurRow]->SetHeight(static_cast<sal_uInt16>(aTwipSz.Height()));
     }
 
@@ -2666,8 +2664,6 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
                 sal_uInt16 nWidth2, nDummy;
                 pLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
-                nWidth2 = nWidth2 - pLayoutInfo->GetLeftCellSpace( nCol, nColSpan );
-                nWidth2 = nWidth2 - pLayoutInfo->GetRightCellSpace( nCol, nColSpan );
                 nWidth2 = static_cast< sal_uInt16 >(((long)nWidth * nPrcWidth) / 100);
 
                 SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );

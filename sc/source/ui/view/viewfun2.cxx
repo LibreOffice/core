@@ -2587,8 +2587,6 @@ void ScViewFunc::MoveTable(
 
     pDestDoc = &pDestShell->GetDocument();
 
-    SCTAB nTab = GetViewData().GetTabNo();
-
     if (pDestDoc != pDoc)
     {
         if (bNewDoc)
@@ -2847,7 +2845,7 @@ void ScViewFunc::MoveTable(
             // No need to keep this around when we are not renaming.
             pTabNames.reset();
 
-        nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().GetTabNo();
 
         if (bUndo)
         {

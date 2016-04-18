@@ -331,7 +331,7 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
                 nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
             else
             {
-                eProtocolTyp = INetProtocol::NotValid;
+                // not valid
                 nPageId = GetCurPageId();
             }
             break;

@@ -3466,20 +3466,11 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
         nullptr != (pSmartTagList = pNode->GetSmartTags()) &&
         !pNode->IsInProtectSect() )
     {
-        sal_Int32 nCurrent = aPos.nContent.GetIndex();
-        sal_Int32 nBegin = nCurrent;
+        sal_Int32 nBegin = aPos.nContent.GetIndex();
         sal_Int32 nLen = 1;
 
         if( pSmartTagList->InWrongWord( nBegin, nLen ) && !pNode->IsSymbol(nBegin) )
         {
-            const sal_uInt16 nIndex = pSmartTagList->GetWrongPos( nBegin );
-            const SwWrongList* pSubList = pSmartTagList->SubList( nIndex );
-            if ( pSubList )
-            {
-                pSmartTagList = pSubList;
-                nCurrent = eTmpState.m_pSpecialPos->nCharOfst;
-            }
-
             // get smarttag word
             OUString aText( pNode->GetText().copy(nBegin, nLen) );
 

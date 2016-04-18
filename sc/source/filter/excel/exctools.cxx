@@ -213,8 +213,6 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
         n--;
     }
 
-    n = nCref;
-
     std::vector<ExcScenarioCell>::iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
         iter->SetValue(rIn.ReadUniString());

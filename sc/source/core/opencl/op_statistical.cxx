@@ -1141,9 +1141,8 @@ void OpExponDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp = 0,tmp0=0,tmp1=0,tmp2=0;\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double rx,rlambda,rkum;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -1231,9 +1230,8 @@ void OpFdist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp = 0,tmp0=0,tmp1=0,tmp2=0;\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double rF1,rF2,rX;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -3185,9 +3183,8 @@ void OpNegbinomdist::GenSlidingWindowFunction(
     ss << "{\n\t";
     ss << "double f,s,p,tmp0,tmp1,tmp2;\n";
     ss << " int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -3683,9 +3680,8 @@ void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    double sigma = " << GetBottom() <<";\n";
     ss << "    double size = " << GetBottom() <<";\n";
     ss << "    double tmp0,tmp1,tmp2;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -3758,9 +3754,8 @@ void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    double p = " << GetBottom() <<";\n";
     ss << "    double alpha = " << GetBottom() <<";\n";
     ss << "    double tmp0 = 0.0,tmp1 = 0.0,tmp2 = 0.0;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -3967,9 +3962,8 @@ void OpChiInv::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double tmp0,tmp1,tmp;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n    ";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -4052,9 +4046,8 @@ void OpNormdist::GenSlidingWindowFunction(
     ss << "    double x,mue,sigma,c;\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp0,tmp1,tmp2,tmp3;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n    ";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -4129,9 +4122,8 @@ void OpNormsdist::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double x = 0,tmp0 = 0;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n    ";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -4189,9 +4181,8 @@ void OpPermut::GenSlidingWindowFunction(
     ss <<"    double inB;\n";
     ss <<"    double tmp0,tmp1;\n";
     ss <<"    double tmp = 1 ;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -4301,9 +4292,8 @@ void OpPhi::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double x,tmp0;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -4361,9 +4351,8 @@ void OpNorminv::GenSlidingWindowFunction(
     ss <<"    double x,mue,sigma;\n";
     ss <<"    double tmp0,tmp1,tmp2;\n";
     ss <<"    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -4574,9 +4563,8 @@ void OpNormsinv:: GenSlidingWindowFunction
     ss << "{\n";
     ss << "    double q,t,z,x,tmp0;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -5183,8 +5171,7 @@ void OpLogInv:: GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
-    size_t i = vSubArguments.size();
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -5540,8 +5527,7 @@ void OpLogNormDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
-    size_t i = vSubArguments.size();
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -5655,9 +5641,8 @@ void OpGammaDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
-    size_t i = vSubArguments.size();
 
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -5751,9 +5736,8 @@ void OpChiDist::GenSlidingWindowFunction(
     ss << "    double fx,fDF,tmp=0,tmp0=0,tmp1=0;\n";
     ss << "    int gid0=get_global_id(0);\n";
 
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -5860,11 +5844,10 @@ void OpBinomdist::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double tmp0,tmp1,tmp2,tmp3;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
 
     ss <<"\n    ";
     //while (i-- > 1)
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -6028,9 +6011,8 @@ vSubArguments)
             ss << "    int tmp2  = 1;\n";
         }
     }
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -6116,9 +6098,8 @@ vSubArguments)
     {
         GenTmpVariables(ss,vSubArguments);
         CheckAllSubArgumentIsNan(ss,vSubArguments);
-        size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -6191,9 +6172,8 @@ void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2;\n";
-    size_t i = vSubArguments.size();
 
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -6384,9 +6364,8 @@ void OpFInv::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2;\n";
-    size_t i = vSubArguments.size();
 
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -6670,8 +6649,7 @@ void OpB::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double min = 2.22507e-308;\n";
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
-    size_t i = vSubArguments.size();
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -6826,9 +6804,8 @@ void OpPoisson::GenSlidingWindowFunction(
     ss << "    double x,lambda,tmp,tmp0,tmp1,tmp2;\n";
     ss << "    int bCumulative;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n    ";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -7219,9 +7196,8 @@ void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3,arg4,arg5;\n";
-    size_t i = vSubArguments.size();
 
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -7352,10 +7328,8 @@ void OpBetainv::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double tmp0,tmp1,tmp2,tmp3,tmp4;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    size_t i = vSubArguments.size();
     ss <<"\n    ";
-    //while (i-- > 1)
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -7633,9 +7607,8 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
-    size_t i = vSubArguments.size();
 
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -7759,9 +7732,8 @@ void OpMinA::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp0 = 1.79769e+308;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -7909,10 +7881,9 @@ vSubArguments)
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double nCount = 0.0;\n";
-    size_t i = vSubArguments.size();
 
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -8049,10 +8020,9 @@ vSubArguments)
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp0 = 2.22507e-308;\n";
-    size_t i = vSubArguments.size();
 
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
@@ -8201,9 +8171,8 @@ vSubArguments)
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp0 = 0.0;\n";
     ss << "    double nCount = 0.0;\n";
-    size_t i = vSubArguments.size();
     ss <<"\n";
-    for (i = 0; i < vSubArguments.size(); i++)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);

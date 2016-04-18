@@ -1339,11 +1339,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
         SvTreeListEntry* pEntry=pTheView->GetHdlEntry();
         if(pEntry!=nullptr)
         {
-            ScChangeAction* pScChangeAction=nullptr;
-
             ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-            if(pEntryData!=nullptr)
-                pScChangeAction=static_cast<ScChangeAction*>(pEntryData->pData);
 
             if(pEntry->HasChildrenOnDemand())
             {
@@ -1355,7 +1351,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
 
                 if(pEntryData!=nullptr)
                 {
-                    pScChangeAction=static_cast<ScChangeAction*>(pEntryData->pData);
+                    ScChangeAction* pScChangeAction=static_cast<ScChangeAction*>(pEntryData->pData);
 
                     GetDependents( pScChangeAction, aActionMap, pEntry );
 
@@ -1525,7 +1521,6 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
 
     SvTreeListEntry* pEntry=pTheView->First();
-    SvTreeListEntry* pNextEntry = (pEntry ? SvTreeListBox::NextSibling(pEntry) : nullptr);
     SvTreeListEntry* pLastEntry=nullptr;
     while(pEntry!=nullptr)
     {
@@ -1541,6 +1536,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
             if(nStartAction<=nAction && nAction<=nEndAction) bRemove=true;
         }
 
+        SvTreeListEntry* pNextEntry;
         if(bRemove)
         {
             nPos=pEntry->GetChildListPos();

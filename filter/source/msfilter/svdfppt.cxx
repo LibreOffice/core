@@ -867,7 +867,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( bVerticalText )
                 {
                     eTVA = SDRTEXTVERTADJUST_BLOCK;
-                    eTHA = SDRTEXTHORZADJUST_CENTER;
 
                     // read text anchor
                     MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
@@ -922,7 +921,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 else
                 {
-                    eTVA = SDRTEXTVERTADJUST_CENTER;
                     eTHA = SDRTEXTHORZADJUST_BLOCK;
 
                     // read text anchor
