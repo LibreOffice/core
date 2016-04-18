@@ -17,16 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_DISPATCHCOMMANDS_H
-#define INCLUDED_FRAMEWORK_INC_DISPATCHCOMMANDS_H
+#ifndef INCLUDED_FRAMEWORK_SOURCE_DISPATCH_ISSTARTMODULEDISPATCH_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_DISPATCH_ISSTARTMODULEDISPATCH_HXX
 
+namespace framework {
 
-namespace framework{
+inline bool isStartModuleDispatch(css::util::URL const & url) {
+    return url.Complete == ".uno:ShowStartModule";
+}
 
-#define CMD_UNO_SHOWSTARTMODULE ".uno:ShowStartModule"
+}
 
-}       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_DISPATCHCOMMANDS_H
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

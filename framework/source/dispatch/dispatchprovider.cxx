@@ -26,11 +26,11 @@
 
 #include <pattern/window.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <dispatchcommands.h>
 #include <protocols.h>
 #include <services.h>
 #include <targets.h>
 #include <general.h>
+#include <isstartmoduledispatch.hxx>
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -146,11 +146,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
     return lDispatcher;
 }
 
-bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
-{
-    return aURL.Complete == CMD_UNO_SHOWSTARTMODULE;
-}
-
 /**
     @short      helper for queryDispatch()
     @descr      Every member of the frame tree (frame, desktop) must handle such request
@@ -197,7 +192,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         if (implts_isLoadableContent(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER, xDesktop );
 
-        if (lcl_isStartModuleDispatch(aURL))
+        if (isStartModuleDispatch(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_STARTMODULEDISPATCHER, xDesktop );
     }
 
