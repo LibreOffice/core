@@ -860,10 +860,6 @@ void WorksheetGlobals::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLast
     {
         const StylesBuffer& rStyles = getStyles();
 
-        // Set cell styles via UNO API.  We should move these to the direct API.
-        PropertySet aPropSet( getCellRange( aRange ) );
-        rStyles.writeCellXfToPropertySet(aPropSet, nXfId);
-
         // Set cell styles via direct API - the preferred approach.
         ScDocumentImport& rDoc = getDocImport();
         rStyles.writeCellXfToDoc(rDoc, aRange, nXfId);
