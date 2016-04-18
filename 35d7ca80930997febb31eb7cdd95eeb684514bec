@@ -16,6 +16,24 @@
       "revId": "35d7ca80930997febb31eb7cdd95eeb684514bec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_28f8637c",
+        "filename": "extensions/source/scanner/sanedlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-18T08:24:55Z",
+      "side": 1,
+      "message": "Done\naddressed by \u003chttps://gerrit.libreoffice.org/#/c/24188/\u003e",
+      "parentUuid": "9ad45d7e_1bddd414",
+      "revId": "35d7ca80930997febb31eb7cdd95eeb684514bec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
