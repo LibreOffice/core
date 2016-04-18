@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_28d183fc",
+        "filename": "basic/source/sbx/sbxarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-18T08:20:27Z",
+      "side": 1,
+      "message": "Are you sure that this is sound?  Put used to call GetRef, while Put32 calls GetRef32, and the two have different behavior, comparing nIdx \u003e SBX_MAXINDEX vs. SBX_MAXINDEX32.",
+      "revId": "0fa6c88007f61176ac707cb5d77fd35cf1521123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
