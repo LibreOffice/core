@@ -46,6 +46,10 @@ void ScSimpleFormulaCalculator::Calculate()
 
     mbCalculated = true;
     ScInterpreter aInt(nullptr, mpDoc, maAddr, *mpCode.get());
+
+    std::unique_ptr<sfx2::LinkManager> pNewLinkMgr( new sfx2::LinkManager(mpDoc->GetDocumentShell()) );
+    aInt.SetLinkManager( pNewLinkMgr.get() );
+
     if (mbMatrixFormula)
         aInt.AssertFormulaMatrix();
 
