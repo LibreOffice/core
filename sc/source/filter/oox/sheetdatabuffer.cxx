@@ -501,8 +501,9 @@ void SheetDataBuffer::finalizeImport()
     for ( ColStyles::iterator col = maStylesPerColumn.begin(), col_end = maStylesPerColumn.end(); col != col_end; ++col )
     {
         RowStyles& rRowStyles = col->second;
-        Xf::AttrList aAttrs;
         SCCOL nScCol = static_cast< SCCOL >( col->first );
+        const ScPatternAttr* pDefPattern = rDoc.getDoc().GetPattern(nScCol, 0, getSheetIndex());
+        Xf::AttrList aAttrs(pDefPattern);
         for ( RowStyles::iterator rRows = rRowStyles.begin(), rRows_end = rRowStyles.end(); rRows != rRows_end; ++rRows )
         {
              Xf* pXf = rStyles.getCellXf( rRows->mnNumFmt.first ).get();
@@ -514,7 +515,7 @@ void SheetDataBuffer::finalizeImport()
         {
             ScAttrEntry aEntry;
             aEntry.nRow = MAXROW;
-            aEntry.pPattern = rDoc.getDoc().GetPattern(nScCol, 0, getSheetIndex());
+            aEntry.pPattern = pDefPattern;
             rDoc.getDoc().GetPool()->Put(*aEntry.pPattern);
             aAttrs.maAttrs.push_back(aEntry);
 

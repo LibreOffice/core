@@ -2051,7 +2051,10 @@ XfModel::XfModel() :
 {
 }
 
-Xf::AttrList::AttrList() : mbLatinNumFmtOnly(true) {}
+Xf::AttrList::AttrList(const ScPatternAttr* pDefPattern):
+    mbLatinNumFmtOnly(true),
+    mpDefPattern(pDefPattern)
+{}
 
 Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2181,7 +2184,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             // Fill this gap with the default pattern.
             ScAttrEntry aEntry;
             aEntry.nRow = nRow1 - 1;
-            aEntry.pPattern = rDoc.GetDefPattern();
+            aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(*rAttrs.mpDefPattern));
             rAttrs.maAttrs.push_back(aEntry);
 
             // Check if the default pattern is 'General'.
