@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ac665da_48731f4e",
+        "filename": "connectivity/source/drivers/postgresql/pq_xcolumns.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-18T07:25:35Z",
+      "side": 1,
+      "message": "So looks like all .cxx happened to include XRow.hpp before pq_xcolumns.hxx, so it got unnoticed that pq_xcolumns.hxx missed a declaration of XRow.  But it should be sufficient to add a (forward) declaration of XRow here, not include full XRow.hpp.",
+      "parentUuid": "5ac665da_e86dabcd",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 37
+      },
+      "revId": "fed710042d312274ba4fb844c703ec4161cad42f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac665da_c8726fad",
         "filename": "sd/source/ui/framework/factories/PresentationFactory.cxx",
         "patchSetId": 4
