@@ -219,16 +219,11 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
 /**
  * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ * @returns true if a KeyEvent is being processed, false otherwise
  */
 bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    bool bReturn = false;
-
-    if ( !bReturn )
-        bReturn = FuDraw::KeyInput(rKEvt);
-
-    return bReturn;
+    return FuDraw::KeyInput(rKEvt);;
 }
 
 void FuConstruct::Activate()

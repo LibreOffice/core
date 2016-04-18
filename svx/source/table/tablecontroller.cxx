@@ -1567,7 +1567,6 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
             break;
         }
 
-        if( !bTextMove )
         {
             OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
             if( pOLV )

@@ -727,8 +727,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 else
                     nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
 
-                if( !pEscItem )
-                    pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
+                pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
 
                 if( nEsc == static_cast<const SvxEscapementItem*>(pEscItem)->GetEnumValue() )
                     rSet.Put( SfxBoolItem( nWhich, true ));
@@ -753,8 +752,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else if (nWhich==SID_ATTR_PARA_ADJUST_BLOCK)
                         eAdjust = SVX_ADJUST_BLOCK;
 
-                    if( !pAdjust )
-                        aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
+                    aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
 
                     if( !pAdjust || IsInvalidItem( pAdjust ))
                     {
@@ -784,8 +782,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else if (nWhich==SID_ATTR_PARA_LINESPACE_20)
                         nLSpace = 200;
 
-                    if( !pLSpace )
-                        aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
+                    aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
 
                     if( !pLSpace || IsInvalidItem( pLSpace ))
                     {

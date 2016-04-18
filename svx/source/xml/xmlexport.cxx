@@ -150,7 +150,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 
 bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent, const char* pImportService  )
 {
-    sal_uInt32  nRet = 0;
+    bool bRet = false;
 
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = nullptr;
@@ -188,8 +188,6 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             xObjectResolver = pObjectHelper;
         }
 
-
-        if( 0 == nRet )
         {
 
             // parse
@@ -210,7 +208,6 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             Reference< xml::sax::XDocumentHandler > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext), UNO_QUERY );
             DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
 
-            nRet = 1;
             if( xParser.is() && xFilter.is() )
             {
                 // connect parser and filter
@@ -223,7 +220,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
                 // finally, parser the stream
                 xParser->parseStream( aParserInput );
 
-                nRet = 0;
+                bRet = true;
             }
         }
     }
@@ -243,7 +240,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     if ( xTargetModel.is() )
         xTargetModel->unlockControllers();
 
-    return nRet == 0;
+    return bRet;
 }
 
 bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream )

@@ -327,11 +327,7 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
         }
         else
         {
-            if ( children[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
-            {
-                insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
-
-            }
+            insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
         }
     }
 }

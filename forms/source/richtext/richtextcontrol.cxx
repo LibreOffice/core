@@ -509,8 +509,7 @@ namespace frm
         default:
         {
             // is it a supported slot?
-            bool bSupportedSlot = false;
-            if ( !bSupportedSlot )
+            bool bSupportedSlot;
             {
                 const SfxItemPool& rPool = *pRichTextControl->getView().GetEmptyItemSet().GetPool();
                 bSupportedSlot = rPool.IsInRange( rPool.GetWhich( _nSlotId ) );

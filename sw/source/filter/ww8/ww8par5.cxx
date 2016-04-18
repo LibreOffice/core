@@ -3424,12 +3424,10 @@ eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* /*pF*/, OUString& /*rStr*/)
 eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr )
 {
     OUString sURL, sTarget, sMark;
-    bool bDataImport = false;
     //HYPERLINK "filename" [switches]
 
     rStr = comphelper::string::stripEnd(rStr, 1);
 
-    if (!bDataImport)
     {
         bool bOptions = false;
         WW8ReadFieldParams aReadParam( rStr );
