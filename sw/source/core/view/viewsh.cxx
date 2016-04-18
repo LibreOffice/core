@@ -88,7 +88,7 @@
 
 bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = nullptr;
-VclPtr<vcl::Window> SwViewShell::mpCareWindow = nullptr;
+vcl::DeleteOnDeinit< VclPtr<vcl::Window> > SwViewShell::mpCareWindow(new VclPtr<vcl::Window>);
 
 bool bInSizeNotify = false;
 
@@ -2425,7 +2425,7 @@ ShellResource* SwViewShell::GetShellRes()
 
 void SwViewShell::SetCareWin( vcl::Window* pNew )
 {
-    mpCareWindow = pNew;
+    (*mpCareWindow.get()) = pNew;
 }
 
 sal_uInt16 SwViewShell::GetPageCount() const

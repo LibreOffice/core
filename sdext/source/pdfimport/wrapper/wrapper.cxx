@@ -59,6 +59,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <memory>
 #include <unordered_map>
@@ -655,13 +656,13 @@ void Parser::readFont()
 
     }
 
-    static VclPtr<VirtualDevice> vDev;
-    if (!vDev)
-        vDev = VclPtr<VirtualDevice>::Create();
+    static vcl::DeleteOnDeinit< VclPtr<VirtualDevice> > vDev( new VclPtr<VirtualDevice> );
+    if (!vDev.get()->get())
+        (*vDev.get()) = VclPtr<VirtualDevice>::Create();
 
     vcl::Font font(aResult.familyName, Size(0, 1000));
-    vDev->SetFont(font);
-    FontMetric metric(vDev->GetFontMetric());
+    (*vDev.get())->SetFont(font);
+    FontMetric metric((*vDev.get())->GetFontMetric());
     aResult.ascent = metric.GetAscent() / 1000.0;
 
     m_aFontMap[nFontID] = aResult;

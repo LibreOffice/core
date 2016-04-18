@@ -30,6 +30,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -180,7 +181,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
 protected:
     static ShellResource*      mpShellRes;      ///< Resources for the Shell.
-    static VclPtr<vcl::Window> mpCareWindow;    ///< Avoid this window.
+    static vcl::DeleteOnDeinit< VclPtr<vcl::Window> > mpCareWindow;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     SwDoc                   *mpDoc;          ///< The document; never 0.
@@ -438,7 +439,7 @@ public:
 
     static void           SetCareWin( vcl::Window* pNew );
     static vcl::Window*   GetCareWin(SwViewShell& rVSh)
-                          { return mpCareWindow ? mpCareWindow.get() : CareChildWin(rVSh); }
+                          { return (*mpCareWindow.get()) ? mpCareWindow.get()->get() : CareChildWin(rVSh); }
     static vcl::Window*   CareChildWin(SwViewShell& rVSh);
 
     inline SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }

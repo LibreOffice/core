@@ -36,6 +36,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/lazydelete.hxx>
 #include <touch/touch.h>
 
 #include <svdata.hxx>
