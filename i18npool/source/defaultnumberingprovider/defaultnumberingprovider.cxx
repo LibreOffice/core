@@ -948,7 +948,6 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
 {
     if (aSupportedTypes[index].cSymbol)
         return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
-    //            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
     else {
         OUString result;
         Locale aLocale(OUString("en"), OUString(), OUString());
