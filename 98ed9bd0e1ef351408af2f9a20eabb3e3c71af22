@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac665da_8b2a317d",
+        "filename": "sc/source/ui/app/scmod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-18T12:17:44Z",
+      "side": 1,
+      "message": "Let\u0027s then fix this issue ...",
+      "parentUuid": "5ac665da_25688eba",
+      "revId": "98ed9bd0e1ef351408af2f9a20eabb3e3c71af22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac665da_455f8a0e",
         "filename": "sc/source/ui/app/scmod.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-04-15T21:07:30Z",
       "side": 1,
       "message": "Calling both, ScDocument::CalcAll() and ScDocShell::DoHardRecalc() isn\u0027t good as the latter also calls the former and we would calculate everything twice..\n\nCalling ScDocShell::DoHardRecalc() looks like the right thing as it also notifies event listeners which we likely want. There are some caveats though that prevent it from being used here. The GetDocFunc().DetectiveRefresh() call within there creates its own undo (which the German comment also states) but we do not want that in this context, so a parameter would have be provided to suppress that. It also calls ScTabViewShell::UpdateCharts() which we also do below here. And it unconditionally calls PostPaintGridAll().\n\nAll together does make it a bad candidate for the functionality we want.",
+      "revId": "98ed9bd0e1ef351408af2f9a20eabb3e3c71af22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_eb1f6559",
+        "filename": "sc/source/ui/app/scmod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-18T12:17:44Z",
+      "side": 1,
+      "message": "... and make a separate commit out of doing the recalculation (of only affected cells) properly",
+      "parentUuid": "5ac665da_455f8a0e",
       "revId": "98ed9bd0e1ef351408af2f9a20eabb3e3c71af22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
