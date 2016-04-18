@@ -36,6 +36,12 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
 {
     ::std::wstring ws8601DateTime(isoDate);
 
+    //Get rid of the optional milliseconds part if it exists.
+    if (ws8601DateTime.length() > 19)
+    {
+      ws8601DateTime.erase(19, ::std::basic_string::npos);
+    }
+
     if ( ws8601DateTime.length() == 19 )
     {
         std::string asDateTime = WStringToString( ws8601DateTime );
