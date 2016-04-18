@@ -1552,7 +1552,6 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
     case awt::Key::RIGHT:
     case awt::Key::NUM6:
     {
-        bool bTextMove = false;
 
         if( !bMod1 && bMod2 )
         {
@@ -1567,20 +1566,18 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
             break;
         }
 
-        if( !bTextMove )
+        bool bTextMove = false;
+        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+        if( pOLV )
         {
-            OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
-            if( pOLV )
+            RemoveSelection();
+            // during text edit, check if we navigate out of the cell
+            ESelection aOldSelection = pOLV->GetSelection();
+            pOLV->PostKeyEvent(rKEvt);
+            bTextMove = pOLV && ( aOldSelection.IsEqual(pOLV->GetSelection()) );
+            if( !bTextMove )
             {
-                RemoveSelection();
-                // during text edit, check if we navigate out of the cell
-                ESelection aOldSelection = pOLV->GetSelection();
-                pOLV->PostKeyEvent(rKEvt);
-                bTextMove = pOLV && ( aOldSelection.IsEqual(pOLV->GetSelection()) );
-                if( !bTextMove )
-                {
-                    nAction = ACTION_NONE;
-                }
+                nAction = ACTION_NONE;
             }
         }
 
