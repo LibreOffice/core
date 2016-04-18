@@ -198,7 +198,22 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
 
 void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
 {
-    Put32(pVar, nIdx);
+    if( !CanWrite() )
+        SetError( ERRCODE_SBX_PROP_READONLY );
+    else
+    {
+        if( pVar )
+            if( eType != SbxVARIANT )
+                // Convert no objects
+                if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
+                    pVar->Convert( eType );
+        SbxVariableRef& rRef = GetRef( nIdx );
+        if( static_cast<SbxVariable*>(rRef) != pVar )
+        {
+            rRef = pVar;
+            SetFlag( SbxFlagBits::Modified );
+        }
+    }
 }
 
 OUString SbxArray::GetAlias( sal_uInt16 nIdx )
