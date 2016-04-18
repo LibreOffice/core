@@ -610,8 +610,8 @@ static HANDLE hThreadID = 0;
 static unsigned __stdcall _threadmain( void *pArgs )
 {
     OleInitialize( nullptr );
-    ((WorkerThreadData*)pArgs)->pWorker( ((WorkerThreadData*)pArgs)->pThreadData );
-    delete (WorkerThreadData*)pArgs;
+    static_cast<WorkerThreadData*>(pArgs)->pWorker( static_cast<WorkerThreadData*>(pArgs)->pThreadData );
+    delete static_cast<WorkerThreadData*>(pArgs);
     OleUninitialize();
     hThreadID = 0;
     return 0;
