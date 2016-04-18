@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac665da_48ee7fed",
+        "filename": "sw/source/uibase/shells/annotsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-04-18T07:16:43Z",
+      "side": 1,
+      "message": "not knowing what the code here does, nor what it\u0027s supposed to do. I think GetItemState is the wrong call here.\n\nGetItemState never changes \u0026pAdjust if its a nullptr,\ndefault third parameter of GetItemState is nullptr\nthis would mean the next else is dead code.\n\nguess it should be Get or GetItem",
+      "range": {
+        "startLine": 755,
+        "startChar": 20,
+        "endLine": 755,
+        "endChar": 75
+      },
+      "revId": "1e8dda28ad3c9b3777381f6cfcbc5d38e01717b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac665da_c8b8afe8",
+        "filename": "sw/source/uibase/shells/annotsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-04-18T07:16:43Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 785,
+        "startChar": 20,
+        "endLine": 785,
+        "endChar": 75
+      },
+      "revId": "1e8dda28ad3c9b3777381f6cfcbc5d38e01717b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
