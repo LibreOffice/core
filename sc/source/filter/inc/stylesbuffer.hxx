@@ -624,8 +624,9 @@ public:
     {
         std::list<ScAttrEntry> maAttrs;
         bool mbLatinNumFmtOnly;
+        const ScPatternAttr* mpDefPattern;
 
-        AttrList();
+        AttrList(const ScPatternAttr* pDefPatternAttr);
     };
 
     explicit            Xf( const WorkbookHelper& rHelper );
