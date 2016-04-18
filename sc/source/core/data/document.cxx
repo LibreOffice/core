@@ -2593,6 +2593,14 @@ void ScDocument::CopyBlockFromClip(
                         SetInsertingFromOtherDoc( true);
                         aRefCxt.meMode = URM_MOVE;
                         UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
+
+                        // For URM_MOVE group listeners may have been removed,
+                        // re-establish them.
+                        /* TODO: actually only those in
+                         * sc::RefUpdateContext::maRegroupCols are affected,
+                         * come up with a start listeners that takes such. */
+                        StartNeededListeners();
+
                         SetInsertingFromOtherDoc( bOldInserting);
                     }
                 }
