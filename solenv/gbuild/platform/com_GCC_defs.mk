@@ -87,6 +87,20 @@ gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
 gb_COMPILEROPTFLAGS := -O0
 endif
 
+ifeq ($(shell expr '$(GCC_VERSION)' '>=' 600),1)
+gb_CFLAGS_COMMON += \
+    -Wduplicated-cond \
+    -Wlogical-op \
+    -Wnull-dereference \
+    -Wshift-overflow=2
+gb_CXXFLAGS_COMMON += \
+    -Wduplicated-cond \
+    -Wlogical-op \
+    -Wnull-dereference \
+    -Wshift-overflow=2 \
+    -Wunused-const-variable=1
+endif
+
 
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE
