@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5ac665da_eb25a55c",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-18T15:50:12Z",
+      "side": 1,
+      "message": "We are not doing that in the header file. Of course the one source file that needs to create a LinkManager needs to include that header file but we doN#t need to force it on all the other source files that don\u0027t need that include.\n\nThis is just one small way to help compile time. It might not matter for one file but it quickly becomes a problem with all the potential header files.",
+      "parentUuid": "5ac665da_0bf641d7",
+      "revId": "96bb26911162845fed28f99aa66ad3c438736a73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac665da_abe8cd17",
         "filename": "sc/source/core/inc/interpre.hxx",
         "patchSetId": 1
