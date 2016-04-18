@@ -3424,68 +3424,64 @@ eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* /*pF*/, OUString& /*rStr*/)
 eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr )
 {
     OUString sURL, sTarget, sMark;
-    bool bDataImport = false;
-    //HYPERLINK "filename" [switches]
 
+    //HYPERLINK "filename" [switches]
     rStr = comphelper::string::stripEnd(rStr, 1);
 
-    if (!bDataImport)
+    bool bOptions = false;
+    WW8ReadFieldParams aReadParam( rStr );
+    for (;;)
     {
-        bool bOptions = false;
-        WW8ReadFieldParams aReadParam( rStr );
-        for (;;)
+        const sal_Int32 nRet = aReadParam.SkipToNextToken();
+        if ( nRet==-1 )
+            break;
+        switch( nRet )
         {
-            const sal_Int32 nRet = aReadParam.SkipToNextToken();
-            if ( nRet==-1 )
+            case -2:
+                if (sURL.isEmpty() && !bOptions)
+                    sURL = ConvertFFileName(aReadParam.GetResult());
                 break;
-            switch( nRet )
-            {
-                case -2:
-                    if (sURL.isEmpty() && !bOptions)
-                        sURL = ConvertFFileName(aReadParam.GetResult());
-                    break;
 
-                case 'n':
-                    sTarget = "_blank";
-                    bOptions = true;
-                    break;
+            case 'n':
+                sTarget = "_blank";
+                bOptions = true;
+                break;
 
-                case 'l':
-                    bOptions = true;
-                    if ( aReadParam.SkipToNextToken()==-2 )
+            case 'l':
+                bOptions = true;
+                if ( aReadParam.SkipToNextToken()==-2 )
+                {
+                    sMark = aReadParam.GetResult();
+                    if( sMark.endsWith("\""))
                     {
-                        sMark = aReadParam.GetResult();
-                        if( sMark.endsWith("\""))
-                        {
-                            sMark = sMark.copy( 0, sMark.getLength() - 1 );
-                        }
-                        // #120879# add cross reference bookmark name prefix, if it matches internal TOC bookmark naming convention
-                        if ( IsTOCBookmarkName( sMark ) )
-                        {
-                            sMark = EnsureTOCBookmarkName(sMark);
-                            // track <sMark> as referenced TOC bookmark.
-                            m_pReffedStck->aReferencedTOCBookmarks.insert( sMark );
-                        }
-
-                        if (m_bLoadingTOXCache)
-                        {
-                            m_bLoadingTOXHyperlink = true; //on loading a TOC field nested hyperlink field
-                        }
+                        sMark = sMark.copy( 0, sMark.getLength() - 1 );
                     }
-                    break;
-                case 't':
-                    bOptions = true;
-                    if ( aReadParam.SkipToNextToken()==-2 )
-                        sTarget = aReadParam.GetResult();
-                    break;
-                case 'h':
-                case 'm':
-                    OSL_ENSURE( false, "Auswertung fehlt noch - Daten unbekannt" );
-                    //fall-through
-                case 's':   //worthless fake anchor option
-                    bOptions = true;
-                    break;
-            }
+                    // #120879# add cross reference bookmark name prefix, if it matches internal TOC bookmark naming convention
+                    if ( IsTOCBookmarkName( sMark ) )
+                    {
+                        sMark = EnsureTOCBookmarkName(sMark);
+                        // track <sMark> as referenced TOC bookmark.
+                        m_pReffedStck->aReferencedTOCBookmarks.insert( sMark );
+                    }
+
+                    if (m_bLoadingTOXCache)
+                    {
+                        m_bLoadingTOXHyperlink = true; //on loading a TOC field nested hyperlink field
+                    }
+                }
+                break;
+            case 't':
+                bOptions = true;
+                if ( aReadParam.SkipToNextToken()==-2 )
+                    sTarget = aReadParam.GetResult();
+                break;
+            case 'h':
+            case 'm':
+                OSL_ENSURE( false, "Auswertung fehlt noch - Daten unbekannt" );
+                //fall-through
+            case 's':   //worthless fake anchor option
+                bOptions = true;
+                break;
         }
     }
 
