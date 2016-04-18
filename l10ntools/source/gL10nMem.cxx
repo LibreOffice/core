@@ -34,7 +34,7 @@ l10nMem *myMem;
 class l10nMem_lang_list_entry
 {
     public:
-        l10nMem_lang_list_entry(const string& sName)
+        explicit l10nMem_lang_list_entry(const string& sName)
                                : msName(sName),
                                  mbChanged(false)
         {}

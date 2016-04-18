@@ -77,7 +77,7 @@ namespace bib
         virtual ~OComponentAdapterBase();
 
     public:
-        OComponentAdapterBase(
+        explicit OComponentAdapterBase(
             const css::uno::Reference< css::lang::XComponent >& _rxComp
         );
 

@@ -68,7 +68,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
     public:
-        MSFltrSimpleTable(SvSimpleTableContainer& rParent)
+        explicit MSFltrSimpleTable(SvSimpleTableContainer& rParent)
             : SvSimpleTable(rParent, 0)
         {
         }

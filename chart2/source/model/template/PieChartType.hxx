@@ -27,7 +27,7 @@ namespace chart
 class PieChartType : public ChartType
 {
 public:
-    PieChartType(
+    explicit PieChartType(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
     virtual ~PieChartType();
 
