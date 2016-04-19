@@ -36,6 +36,7 @@ static int help()
     fprintf(stderr, "--background-color <color>: Set custom background color, e.g. 'yellow'.\n");
     fprintf(stderr, "--hide-page-shadow: Hide page/slide shadow.\n");
     fprintf(stderr, "--hide-whitespace: Hide whitespace between pages in text documents.\n");
+    fprintf(stderr, "--user-profile: Path to a custom user profile.\n");
     return 1;
 }
 
@@ -529,7 +530,15 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 /// Creates a new model, i.e. LOK init and document load, one view implicitly.
 static void createModelAndView(const char* pLOPath, const char* pDocPath, const std::vector<std::string>& rArguments)
 {
-    GtkWidget* pDocView = lok_doc_view_new(pLOPath, nullptr, nullptr);
+    std::string aUserProfile;
+    for (size_t i = 0; i < rArguments.size(); ++i)
+    {
+        const std::string& rArgument = rArguments[i];
+        if (rArgument == "--user-profile" && i + 1 < rArguments.size())
+            aUserProfile = std::string("file://") + rArguments[i + 1].c_str();
+    }
+    const gchar* pUserProfile = aUserProfile.empty() ? nullptr : aUserProfile.c_str();
+    GtkWidget* pDocView = lok_doc_view_new_from_user_profile(pLOPath, pUserProfile, nullptr, nullptr);
 
     setupWidgetAndCreateWindow(pDocView);
 
