@@ -411,10 +411,8 @@ bool DataSupplier::getData()
                 aPath = NeonUri::unescape( aPath );
                 bool bFoundParent = false;
 
-                for ( size_t n = 0; n < resources.size(); ++n )
+                for (DAVResource & rRes : resources)
                 {
-                    const DAVResource & rRes = resources[ n ];
-
                     // Filter parent, which is contained somewhere(!) in
                     // the vector.
                     if ( !bFoundParent )

@@ -60,9 +60,9 @@ const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart()
             // good guid
             sal_uInt8 ar[16];
             ::rtl_getGlobalProcessId( ar );
-            for ( sal_Int32 i = 0; i < 16; ++i )
+            for (unsigned char i : ar)
             {
-                aRet.append( (sal_Int32)ar[i], 16 );
+                aRet.append( (sal_Int32)i, 16 );
             }
 #if (defined(__GNUC__) && defined(__APPLE__))
             s_pStaticOidPart = new OUString( aRet.makeStringAndClear() );

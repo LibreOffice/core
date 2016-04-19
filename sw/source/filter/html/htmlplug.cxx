@@ -309,9 +309,8 @@ void SwHTMLParser::InsertEmbed()
     // Die Optionen werden vorwaerts gelesen, weil die Plugins sie in
     // dieser Reihenfolge erwarten. Trotzdem darf immer nur der erste
     // Wert einer Option beruecksichtigt werden.
-    for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
+    for (const auto & rOption : rHTMLOptions)
     {
-        const HTMLOption& rOption = rHTMLOptions[i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -837,9 +836,8 @@ void SwHTMLParser::InsertFloatingFrame()
     const HTMLOptions& rHTMLOptions = GetOptions();
 
     // Erstmal die Optionen f?r das Writer-Frame-Format holen
-    for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
+    for (const auto & rOption : rHTMLOptions)
     {
-        const HTMLOption& rOption = rHTMLOptions[i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:

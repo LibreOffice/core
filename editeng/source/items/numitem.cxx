@@ -716,8 +716,8 @@ void SvxNumRule::Store( SvStream &rStream )
 
 SvxNumRule::~SvxNumRule()
 {
-    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
-        delete aFmts[i];
+    for(SvxNumberFormat* aFmt : aFmts)
+        delete aFmt;
     if(!--nRefCount)
     {
         DELETEZ(pStdNumFmt);

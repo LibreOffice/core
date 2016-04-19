@@ -71,10 +71,9 @@ static void lcl_FillSvxColumn(const SwFormatCol& rCol,
     if( bOrtho )
     {
         nInnerWidth = nTotalWidth;
-        for ( size_t i = 0; i < rCols.size(); ++i )
+        for (const auto & i : rCols)
         {
-            const SwColumn* pCol = &rCols[i];
-            nInnerWidth -= pCol->GetLeft() + pCol->GetRight();
+            nInnerWidth -= i.GetLeft() + i.GetRight();
         }
         if( nInnerWidth < 0 )
             nInnerWidth = 0;
@@ -193,9 +192,9 @@ void ResizeFrameCols(SwFormatCol& rCol,
         // If the desired width is getting too large, then all values
         // must be scaled appropriately.
         long nScale = (0xffffl << 8)/ nNewWishWidth;
-        for(size_t i = 0; i < rArr.size(); ++i)
+        for(SwColumn & i : rArr)
         {
-            SwColumn* pCol = &rArr[i];
+            SwColumn* pCol = &i;
             long nVal = pCol->GetWishWidth();
             lcl_Scale(nVal, nScale);
             pCol->SetWishWidth((sal_uInt16) nVal);

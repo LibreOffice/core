@@ -146,9 +146,9 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
         {
             // update screens
             bool bNotify = false;
-            for( size_t i = 0; i < m_aScreens.size(); i++ )
+            for(ScreenData & m_aScreen : m_aScreens)
             {
-                if( m_aScreens[i].m_bInit )
+                if( m_aScreen.m_bInit )
                 {
                     XRRScreenConfiguration *pConfig = nullptr;
                     XRRScreenSize *pSizes = nullptr;
@@ -156,16 +156,16 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
                     Rotation nRot = 0;
                     SizeID nId = 0;
 
-                    pConfig = pWrapper->XRRGetScreenInfo( GetDisplay(), m_aScreens[i].m_aRoot );
+                    pConfig = pWrapper->XRRGetScreenInfo( GetDisplay(), m_aScreen.m_aRoot );
                     nId = pWrapper->XRRConfigCurrentConfiguration( pConfig, &nRot );
                     pSizes = pWrapper->XRRConfigSizes( pConfig, &nSizes );
                     XRRScreenSize *pTargetSize = pSizes + nId;
 
                     bNotify = bNotify ||
-                              m_aScreens[i].m_aSize.Width() != pTargetSize->width ||
-                              m_aScreens[i].m_aSize.Height() != pTargetSize->height;
+                              m_aScreen.m_aSize.Width() != pTargetSize->width ||
+                              m_aScreen.m_aSize.Height() != pTargetSize->height;
 
-                    m_aScreens[i].m_aSize = Size( pTargetSize->width, pTargetSize->height );
+                    m_aScreen.m_aSize = Size( pTargetSize->width, pTargetSize->height );
 
                     pWrapper->XRRFreeScreenConfigInfo( pConfig );
 

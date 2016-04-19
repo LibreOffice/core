@@ -313,15 +313,15 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     if (eDestUnit != eSrcUnit)
     {
         sal_uInt16 aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aFntHeightIems); ++i)
+        for (unsigned short aFntHeightIem : aFntHeightIems)
         {
-            if (SfxItemState::SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], false, &pItem ))
+            if (SfxItemState::SET == rSet.GetAttrSet().GetItemState( aFntHeightIem, false, &pItem ))
             {
                 sal_uInt32 nHeight  = static_cast<const SvxFontHeightItem*>(pItem)->GetHeight();
                 long nNewHeight;
                 nNewHeight = OutputDevice::LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
 
-                SvxFontHeightItem aFntHeightItem( nNewHeight, 100, aFntHeightIems[i] );
+                SvxFontHeightItem aFntHeightItem( nNewHeight, 100, aFntHeightIem );
                 aFntHeightItem.SetProp(
                     static_cast<const SvxFontHeightItem*>(pItem)->GetProp(),
                     static_cast<const SvxFontHeightItem*>(pItem)->GetPropUnit());

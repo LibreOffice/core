@@ -206,9 +206,9 @@ void PDFIProcessor::processGlyphLine()
     double spaceDetectBoundary = 0.0;
 
     // Try to find space glyph and its width
-    for (size_t i = 0; i < m_GlyphsList.size(); i++)
+    for (CharGlyph & i : m_GlyphsList)
     {
-        OUString& glyph = m_GlyphsList[i].getGlyph();
+        OUString& glyph = i.getGlyph();
 
         sal_Unicode ch = '\0';
         if (!glyph.isEmpty())
@@ -216,7 +216,7 @@ void PDFIProcessor::processGlyphLine()
 
         if ((ch == 0x20) || (ch == 0xa0))
         {
-            double spaceWidth = m_GlyphsList[i].getWidth();
+            double spaceWidth = i.getWidth();
             spaceDetectBoundary = spaceWidth * 0.5;
             break;
         }
@@ -226,8 +226,8 @@ void PDFIProcessor::processGlyphLine()
     if (spaceDetectBoundary == 0.0)
     {
         double avgGlyphWidth = 0.0;
-        for (size_t i = 0; i < m_GlyphsList.size(); i++)
-            avgGlyphWidth += m_GlyphsList[i].getWidth();
+        for (CharGlyph & i : m_GlyphsList)
+            avgGlyphWidth += i.getWidth();
         avgGlyphWidth /= m_GlyphsList.size();
         spaceDetectBoundary = avgGlyphWidth * 0.2;
     }

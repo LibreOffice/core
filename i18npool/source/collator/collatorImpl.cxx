@@ -40,8 +40,8 @@ CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) :
 CollatorImpl::~CollatorImpl()
 {
     // Clear lookuptable
-    for (size_t l = 0; l < lookupTable.size(); l++)
-        delete lookupTable[l];
+    for (lookupTableItem* p : lookupTable)
+        delete p;
     lookupTable.clear();
 }
 
@@ -170,8 +170,8 @@ void SAL_CALL
 CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
     throw(RuntimeException)
 {
-    for (size_t i = 0; i < lookupTable.size(); i++) {
-        cachedItem = lookupTable[i];
+    for (lookupTableItem* i : lookupTable) {
+        cachedItem = i;
         if (cachedItem->equals(rLocale, rSortAlgorithm)) {
             return;
         }

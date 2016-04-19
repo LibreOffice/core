@@ -140,11 +140,11 @@ void HWPInfo::Read(HWPFile & hwpf)
     hwpf.Read1b(&fnchar, 1);
     hwpf.Read1b(&fnlinetype, 1);
 // border layout
-    for (int ii = 0; ii < 4; ++ii)
+    for (int & ii : bordermargin)
     {
         if (!hwpf.Read2b(tmp16))
             return;
-        bordermargin[ii] = tmp16;
+        ii = tmp16;
     }
     hwpf.Read2b(&borderline, 1);
 
@@ -217,13 +217,13 @@ void ParaShape::Read(HWPFile & hwpf)
 
     hwpf.Read1b(&condense, 1);
     hwpf.Read1b(&arrange_type, 1);
-    for (int ii = 0; ii < MAXTABS; ii++)
+    for (TabSet & tab : tabs)
     {
-        hwpf.Read1b(&tabs[ii].type, 1);
-        hwpf.Read1b(&tabs[ii].dot_continue, 1);
+        hwpf.Read1b(&tab.type, 1);
+        hwpf.Read1b(&tab.dot_continue, 1);
         if (!hwpf.Read2b(tmp16))
             return;
-        tabs[ii].position = tmp16;
+        tab.position = tmp16;
     }
     hwpf.Read1b(&coldef.ncols, 1);
     hwpf.Read1b(&coldef.separator, 1);

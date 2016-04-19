@@ -446,8 +446,8 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
     WW8_PIC_SHADOW aPicS;
     pDataStream->Read( &aPicS, sizeof( aPicS ) );
     WW8PicShadowToReal( &aPicS, pPic );
-    for (int i=0;i<4;i++)
-        pDataStream->Read( &pPic->rgbrc[i], bVer67 ? 2 : 4);
+    for (WW8_BRC & i : pPic->rgbrc)
+        pDataStream->Read( &i, bVer67 ? 2 : 4);
     pDataStream->ReadInt16( pPic->dxaOrigin );
     pDataStream->ReadInt16( pPic->dyaOrigin );
     if (!bVer67)

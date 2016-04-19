@@ -56,9 +56,8 @@ VCLXAccessibleTabControl::~VCLXAccessibleTabControl()
 
 void VCLXAccessibleTabControl::UpdateFocused()
 {
-    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for (Reference<XAccessible>& xChild : m_aAccessibleChildren)
     {
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
         {
             VCLXAccessibleTabPage* pVCLXAccessibleTabPage = static_cast< VCLXAccessibleTabPage* >( xChild.get() );
@@ -234,9 +233,9 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
                 m_pTabControl = nullptr;
 
                 // dispose all tab pages
-                for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+                for (Reference<XAccessible>& i : m_aAccessibleChildren)
                 {
-                    Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
+                    Reference< XComponent > xComponent( i, UNO_QUERY );
                     if ( xComponent.is() )
                         xComponent->dispose();
                 }
@@ -314,9 +313,9 @@ void VCLXAccessibleTabControl::disposing()
         m_pTabControl = nullptr;
 
         // dispose all tab pages
-        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for (Reference<XAccessible>& i : m_aAccessibleChildren)
         {
-            Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
+            Reference< XComponent > xComponent( i, UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
         }

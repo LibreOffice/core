@@ -103,8 +103,8 @@ void MoreButton::Click()
     {
         // Show window
         if ( mpMBData->mpItemList ) {
-            for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
-                (*mpMBData->mpItemList)[ i ]->Show();
+            for (VclPtr<Window> & i : *mpMBData->mpItemList) {
+                i->Show();
             }
         }
 
@@ -133,8 +133,8 @@ void MoreButton::Click()
 
         // Hide window(s) again
         if ( mpMBData->mpItemList ) {
-            for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
-                (*mpMBData->mpItemList)[ i ]->Hide();
+            for (VclPtr<Window> & i : *mpMBData->mpItemList) {
+                i->Hide();
             }
         }
     }

@@ -1161,12 +1161,12 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     };
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("markManager"));
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aContainers); ++i)
+    for (const auto & aContainer : aContainers)
     {
-        if (!aContainers[i].pContainer->empty())
+        if (!aContainer.pContainer->empty())
         {
-            xmlTextWriterStartElement(pWriter, BAD_CAST(aContainers[i].pName));
-            for (const_iterator_t it = aContainers[i].pContainer->begin(); it != aContainers[i].pContainer->end(); ++it)
+            xmlTextWriterStartElement(pWriter, BAD_CAST(aContainer.pName));
+            for (const_iterator_t it = aContainer.pContainer->begin(); it != aContainer.pContainer->end(); ++it)
                 (*it)->dumpAsXml(pWriter);
             xmlTextWriterEndElement(pWriter);
         }
@@ -1330,11 +1330,9 @@ void _DelBookmarks(
     // which holds all position information as offset.
     // Assignement happens after moving.
     SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-    for(SwRedlineTable::size_type nCnt = 0; nCnt < rTable.size(); ++nCnt )
+    for(SwRangeRedline* pRedl : rTable)
     {
         // Is at position?
-        SwRangeRedline* pRedl = rTable[ nCnt ];
-
         SwPosition *const pRStt = pRedl->Start();
         SwPosition *const pREnd = pRedl->End();
 

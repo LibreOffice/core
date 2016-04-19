@@ -961,17 +961,14 @@ bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet* )
         std::vector<SvxAutocorrWord> aDeleteWords;
         std::vector<SvxAutocorrWord> aNewWords;
 
-        for (size_t i = 0; i < rStringChangeList.aDeletedEntries.size(); i++)
+        for (DoubleString & deleteEntry : rStringChangeList.aDeletedEntries)
         {
-            DoubleString& deleteEntry = rStringChangeList.aDeletedEntries[i];
             SvxAutocorrWord aDeleteWord( deleteEntry.sShort, deleteEntry.sLong );
             aDeleteWords.push_back( aDeleteWord );
         }
 
-        for (size_t i = 0; i < rStringChangeList.aNewEntries.size(); i++)
+        for (DoubleString & newEntry : rStringChangeList.aNewEntries)
         {
-            DoubleString& newEntry = rStringChangeList.aNewEntries[i];
-
             //fdo#67697 if the user data is set then we want to retain the
             //source formatting of the entry, so don't use the optimized
             //text-only MakeCombinedChanges for this entry
@@ -1034,9 +1031,8 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     if( aDoubleStringTable.find(eLang) != aDoubleStringTable.end() )
     {
         DoubleStringArray& rArray = aDoubleStringTable[eNewLanguage];
-        for( size_t i = 0; i < rArray.size(); i++ )
+        for(DoubleString & rDouble : rArray)
         {
-            DoubleString& rDouble = rArray[i];
             bool bTextOnly = nullptr == rDouble.pUserData;
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)

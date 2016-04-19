@@ -104,9 +104,8 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
     }
     else if( pEndArr )
     {
-        for ( size_t i = 0; i < pEndArr->size(); ++i )
+        for (SwFootnoteFrame* pEndFootnote : *pEndArr)
         {
-            SwFootnoteFrame *pEndFootnote = (*pEndArr)[i];
             if( pEndFootnote->GetAttr() == pFootnote->GetAttr() )
             {
                 SwFrame::DestroyFrame(pFootnote);

@@ -2646,9 +2646,9 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     {
         if ( m_xDataSource.is() )
         {
-            for ( size_t i=0; i < SAL_N_ELEMENTS( aPropertyNames ); ++i )
+            for (const auto & aPropertyName : aPropertyNames)
             {
-                m_xDataSource->removePropertyChangeListener( aPropertyNames[i], this );
+                m_xDataSource->removePropertyChangeListener( aPropertyName, this );
             }
         }
 
@@ -2669,9 +2669,9 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     {
         if ( m_xDataSource.is() )
         {
-            for ( size_t i=0; i < SAL_N_ELEMENTS( aPropertyNames ); ++i )
+            for (const auto & aPropertyName : aPropertyNames)
             {
-                m_xDataSource->addPropertyChangeListener( aPropertyNames[i], this );
+                m_xDataSource->addPropertyChangeListener( aPropertyName, this );
             }
         }
 

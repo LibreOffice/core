@@ -85,10 +85,10 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     get( m_vResultList[7], "result8" );
     get( m_vResultList[8], "result9" );
 
-    for (sal_Int32 nIndex = 0; nIndex < 9; ++nIndex)
+    for (VclPtr<PushButton> & nIndex : m_vResultList)
     {
-        m_vResultList[nIndex]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-        m_vResultList[nIndex]->Disable();
+        nIndex->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+        nIndex->Disable();
     }
 }
 
@@ -129,11 +129,11 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
         searchTerm = m_pEdit->GetText();
     else
     {
-        for( sal_Int32 nIndex = 0; nIndex < 5; nIndex++ )
+        for(VclPtr<PushButton> & m_vSearchSuggestion : m_vSearchSuggestions)
         {
-            if( pButton == m_vSearchSuggestions[nIndex] )
+            if( pButton == m_vSearchSuggestion )
             {
-                searchTerm = m_vSearchSuggestions[nIndex]->GetDisplayText();
+                searchTerm = m_vSearchSuggestion->GetDisplayText();
                 break;
             }
         }
@@ -235,10 +235,10 @@ void SelectPersonaDialog::ClearSearchResults()
 {
     m_vPersonaSettings.clear();
     m_aSelectedPersona.clear();
-    for( sal_Int32 nIndex = 0; nIndex < 9; nIndex++ )
+    for(VclPtr<PushButton> & nIndex : m_vResultList)
     {
-        m_vResultList[nIndex]->Disable();
-        m_vResultList[nIndex]->SetModeImage(Image());
+        nIndex->Disable();
+        nIndex->SetModeImage(Image());
     }
 }
 
@@ -286,8 +286,8 @@ void SvxPersonalizationTabPage::dispose()
     m_pDefaultPersona.clear();
     m_pOwnPersona.clear();
     m_pSelectPersona.clear();
-    for (int i=0; i<3; ++i)
-        m_vDefaultPersonaImages[i].clear();
+    for (VclPtr<PushButton> & m_vDefaultPersonaImage : m_vDefaultPersonaImages)
+        m_vDefaultPersonaImage.clear();
     m_pExtensionPersonaPreview.clear();
     m_pPersonaList.clear();
     m_pExtensionLabel.clear();

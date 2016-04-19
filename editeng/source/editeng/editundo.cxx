@@ -538,9 +538,9 @@ void EditUndoSetAttribs::Undo()
         pEE->RemoveCharAttribs(nPara, 0, true);
         DBG_ASSERT( pEE->GetEditDoc().GetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
         ContentNode* pNode = pEE->GetEditDoc().GetObject( nPara );
-        for (size_t nAttr = 0; nAttr < rInf.GetPrevCharAttribs().size(); ++nAttr)
+        for (const auto & nAttr : rInf.GetPrevCharAttribs())
         {
-            const EditCharAttrib& rX = *rInf.GetPrevCharAttribs()[nAttr].get();
+            const EditCharAttrib& rX = *nAttr.get();
             // is automatically "poolsized"
             pEE->GetEditDoc().InsertAttrib(pNode, rX.GetStart(), rX.GetEnd(), *rX.GetItem());
             if (rX.Which() == EE_FEATURE_FIELD)
