@@ -226,9 +226,8 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
         if ( pStartFrame->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pStartFrame->GetDrawObjs();
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                SwAnchoredObject* pAnchoredObj = rObjs[i];
                 SwRect aRect( pAnchoredObj->GetObjRect() );
 
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr ||

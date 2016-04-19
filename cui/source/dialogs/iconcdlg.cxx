@@ -220,10 +220,8 @@ void IconChoiceDialog::dispose()
     //aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
     //aTabDlgOpt.SetPageID( mnCurrentPageId );
 
-    for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
+    for (IconChoicePageData* pData : maPageList)
     {
-        IconChoicePageData* pData = maPageList[ i ];
-
         if ( pData->pPage )
         {
             OUString aPageData(pData->pPage->GetUserData());
@@ -529,9 +527,8 @@ void IconChoiceDialog::DeActivatePageImpl ()
         {
             RefreshInputSet();
             // flag all pages to be newly initialized
-            for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
+            for (IconChoicePageData* pObj : maPageList)
             {
-                IconChoicePageData* pObj = maPageList[ i ];
                 if ( pObj->pPage.get() != pPage )
                     pObj->bRefresh = true;
                 else
@@ -668,9 +665,8 @@ void IconChoiceDialog::Start()
 bool IconChoiceDialog::QueryClose()
 {
     bool bRet = true;
-    for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
+    for (IconChoicePageData* pData : maPageList)
     {
-        IconChoicePageData* pData = maPageList[i ];
         if ( pData->pPage && !pData->pPage->QueryClose() )
         {
             bRet = false;
@@ -700,9 +696,8 @@ void IconChoiceDialog::RefreshInputSet()
 IconChoicePageData* IconChoiceDialog::GetPageData ( sal_uInt16 nId )
 {
     IconChoicePageData *pRet = nullptr;
-    for ( size_t i=0; i < maPageList.size(); i++ )
+    for (IconChoicePageData* pData : maPageList)
     {
-        IconChoicePageData* pData = maPageList[ i ];
         if ( pData->nId == nId )
         {
             pRet = pData;

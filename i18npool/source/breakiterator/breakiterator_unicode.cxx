@@ -52,8 +52,8 @@ BreakIterator_Unicode::~BreakIterator_Unicode()
     delete character.aBreakIterator;
     delete sentence.aBreakIterator;
     delete line.aBreakIterator;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(words); i++)
-        delete words[i].aBreakIterator;
+    for (BI_Data & word : words)
+        delete word.aBreakIterator;
 }
 
 /*

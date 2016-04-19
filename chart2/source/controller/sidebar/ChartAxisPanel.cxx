@@ -100,10 +100,10 @@ sal_Int32 getLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel
 
     css::chart::ChartAxisLabelPosition ePos;
     aAny >>= ePos;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aLabelPosMap); ++i)
+    for (AxisLabelPosMap & i : aLabelPosMap)
     {
-        if (aLabelPosMap[i].ePos == ePos)
-            return aLabelPosMap[i].nPos;
+        if (i.ePos == ePos)
+            return i.nPos;
     }
 
     return 0;
@@ -119,10 +119,10 @@ void setLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel,
         return;
 
     css::chart::ChartAxisLabelPosition ePos;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aLabelPosMap); ++i)
+    for (AxisLabelPosMap & i : aLabelPosMap)
     {
-        if (aLabelPosMap[i].nPos == nPos)
-            ePos = aLabelPosMap[i].ePos;
+        if (i.nPos == nPos)
+            ePos = i.ePos;
     }
 
     xAxis->setPropertyValue("LabelPosition", css::uno::makeAny(ePos));

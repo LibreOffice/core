@@ -2118,8 +2118,8 @@ public:
     void     push_back( XclExpRow *pRow ) { maRows.push_back( pRow ); }
     virtual void doWork() override
     {
-        for (size_t i = 0; i < maRows.size(); i++ )
-            maRows[ i ]->Finalize( mrColXFIndexes, mbProgress );
+        for (XclExpRow* p : maRows)
+            p->Finalize( mrColXFIndexes, mbProgress );
     }
 };
 

@@ -374,9 +374,9 @@ OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno
 
     aStack.push_back( ManifestScopeEntry( aConvertedName, aNamespaces ) );
 
-    for ( size_t nInd = 0; nInd < aAttribsStrs.size(); nInd++ ) {
+    for (const std::pair<OUString,OUString> & rAttribsStr : aAttribsStrs) {
         // convert the attribute names on filling
-        o_aConvertedAttribs[ConvertName( aAttribsStrs[nInd].first )] = aAttribsStrs[nInd].second;
+        o_aConvertedAttribs[ConvertName( rAttribsStr.first )] = rAttribsStr.second;
     }
 
     return aConvertedName;

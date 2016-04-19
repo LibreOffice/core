@@ -1369,15 +1369,15 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     {
                         nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
 
-                        for ( sal_uLong j = 0; j < 4; j++ )
+                        for (sal_uInt8*& j : pMap)
                         {
                             try
                             {
-                                pMap[ j ] = new sal_uInt8[ nBytesPerRow ];
+                                j = new sal_uInt8[ nBytesPerRow ];
                             }
                             catch (const std::bad_alloc &)
                             {
-                                pMap[ j ] = nullptr;
+                                j = nullptr;
                                 bStatus = false;
                                 break;
                             }

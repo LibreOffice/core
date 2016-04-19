@@ -93,8 +93,8 @@ void SvTreeList::Broadcast(
 
 void SvTreeList::InsertView( SvListView* pView )
 {
-    for ( sal_uLong i = 0, n = aViewList.size(); i < n; ++i ) {
-        if ( aViewList[ i ] == pView ) {
+    for (SvListView* i : aViewList) {
+        if ( i == pView ) {
             return;
         }
     }

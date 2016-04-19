@@ -835,10 +835,10 @@ void LwpDrawEllipse::Read()
 {
     ReadClosedObjStyle();
 
-    for (sal_uInt8 nC = 0; nC < 13; nC++)
+    for (SdwPoint & nC : m_aVector)
     {
-        m_pStream->ReadInt16( m_aVector[nC].x );
-        m_pStream->ReadInt16( m_aVector[nC].y );
+        m_pStream->ReadInt16( nC.x );
+        m_pStream->ReadInt16( nC.y );
     }
 }
 
@@ -914,10 +914,10 @@ void LwpDrawArc::Read()
     m_pStream->ReadUChar( m_aArcRec.aPenColor.unused );
     m_pStream->ReadUChar( m_aArcRec.nLineEnd );
 
-    for (sal_uInt8 nC = 0; nC < 4; nC++)
+    for (SdwPoint & nC : m_aVector)
     {
-        m_pStream->ReadInt16( m_aVector[nC].x );
-        m_pStream->ReadInt16( m_aVector[nC].y );
+        m_pStream->ReadInt16( nC.x );
+        m_pStream->ReadInt16( nC.y );
     }
 }
 
@@ -1194,10 +1194,10 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
 
 void LwpDrawTextArt::Read()
 {
-    for (sal_uInt8 nC = 0; nC < 4; nC++)
+    for (SdwPoint & nC : m_aVector)
     {
-        m_pStream->ReadInt16( m_aVector[nC].x );
-        m_pStream->ReadInt16( m_aVector[nC].y );
+        m_pStream->ReadInt16( nC.x );
+        m_pStream->ReadInt16( nC.y );
     }
 
     ReadClosedObjStyle();

@@ -819,8 +819,8 @@ namespace
             sal_uInt8 ar[16];
             ::rtl_getGlobalProcessId( ar );
             aRet.append( ';' );
-            for ( sal_Int32 i = 0; i < 16; ++i )
-                aRet.append( (sal_Int32)ar[i], 16 );
+            for (unsigned char i : ar)
+                aRet.append( (sal_Int32)i, 16 );
 
             m_sOidPart = aRet.makeStringAndClear();
         }

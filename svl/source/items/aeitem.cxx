@@ -180,8 +180,8 @@ bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
 {
     if ( pDisabledValues )
     {
-        for ( size_t i=0; i<pDisabledValues->size(); i++ )
-            if ( (*pDisabledValues)[i] == nValue )
+        for (unsigned short pDisabledValue : *pDisabledValues)
+            if ( pDisabledValue == nValue )
                 return false;
     }
 

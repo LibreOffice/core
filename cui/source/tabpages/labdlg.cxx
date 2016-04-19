@@ -390,8 +390,8 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 
         case AZ_HORIZONTAL:
         m_pLB_ANSATZ_REL->Clear();
-        for (size_t i = 0 ; i < m_aStrHorzList.size(); ++i)
-            m_pLB_ANSATZ_REL->InsertEntry(m_aStrHorzList[i]);
+        for (OUString & i : m_aStrHorzList)
+            m_pLB_ANSATZ_REL->InsertEntry(i);
         m_pLB_ANSATZ_REL->SelectEntryPos(nAnsatzRelPos);
 
         m_pMF_ANSATZ->Hide();
@@ -403,8 +403,8 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 
         case AZ_VERTIKAL:
         m_pLB_ANSATZ_REL->Clear();
-        for (size_t i = 0 ; i < m_aStrVertList.size(); ++i)
-            m_pLB_ANSATZ_REL->InsertEntry(m_aStrVertList[i]);
+        for (OUString & i : m_aStrVertList)
+            m_pLB_ANSATZ_REL->InsertEntry(i);
         m_pLB_ANSATZ_REL->SelectEntryPos(nAnsatzRelPos);
 
         m_pMF_ANSATZ->Hide();

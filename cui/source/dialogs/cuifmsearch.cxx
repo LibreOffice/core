@@ -120,8 +120,8 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == (sal_Int32)fmscInitial.arrFields.size(),
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-    for (sal_Int32 i=0; i<(sal_Int32)fmscInitial.arrFields.size(); ++i)
-        DBG_ASSERT(fmscInitial.arrFields.at(i).is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
+    for (Reference<XInterface> & arrField : fmscInitial.arrFields)
+        DBG_ASSERT(arrField.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
     for (   ::std::vector< OUString >::const_iterator context = _rContexts.begin();
@@ -245,8 +245,8 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
         RID_STR_SEARCH_END,
         RID_STR_SEARCH_WHOLE
     };
-    for ( size_t i=0; i<SAL_N_ELEMENTS(nResIds); ++i )
-        m_plbPosition->InsertEntry( OUString( CUI_RES( nResIds[i] ) ) );
+    for (unsigned short nResId : nResIds)
+        m_plbPosition->InsertEntry( OUString( CUI_RES( nResId ) ) );
     m_plbPosition->SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
@@ -446,14 +446,14 @@ IMPL_LINK_TYPED(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
     else if ((&rBox == m_pcbApprox) || (&rBox == m_pcbRegular) || (&rBox == m_pcbWildCard))
     {
         CheckBox* pBoxes[] = { m_pcbWildCard, m_pcbRegular, m_pcbApprox };
-        for (sal_uInt32 i=0; i< SAL_N_ELEMENTS(pBoxes); ++i)
+        for (CheckBox* pBoxe : pBoxes)
         {
-            if (pBoxes[i] != &rBox)
+            if (pBoxe != &rBox)
             {
                 if (bChecked)
-                    pBoxes[i]->Disable();
+                    pBoxe->Disable();
                 else
-                    pBoxes[i]->Enable();
+                    pBoxe->Enable();
             }
         }
 
@@ -659,16 +659,16 @@ void FmSearchDialog::EnableControlPaint(bool bEnable)
         m_pbSearchAgain, m_pbClose };
 
     if (!bEnable)
-        for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(pAffectedControls); ++i)
+        for (Control* pAffectedControl : pAffectedControls)
         {
-            pAffectedControls[i]->SetUpdateMode(bEnable);
-            pAffectedControls[i]->EnablePaint(bEnable);
+            pAffectedControl->SetUpdateMode(bEnable);
+            pAffectedControl->EnablePaint(bEnable);
         }
     else
-        for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(pAffectedControls); ++i)
+        for (Control* pAffectedControl : pAffectedControls)
         {
-            pAffectedControls[i]->EnablePaint(bEnable);
-            pAffectedControls[i]->SetUpdateMode(bEnable);
+            pAffectedControl->EnablePaint(bEnable);
+            pAffectedControl->SetUpdateMode(bEnable);
         }
 }
 

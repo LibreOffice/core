@@ -143,10 +143,10 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
     const OUString aCopyProperties[] = {
         OUString(PROPERTY_FONT), OUString(PROPERTY_ROW_HEIGHT), OUString(PROPERTY_TEXTCOLOR),OUString(PROPERTY_TEXTLINECOLOR),OUString(PROPERTY_TEXTEMPHASIS),OUString(PROPERTY_TEXTRELIEF)
     };
-    for ( size_t i=0; i < SAL_N_ELEMENTS( aCopyProperties ); ++i )
+    for (const auto & aCopyPropertie : aCopyProperties)
     {
-        if ( m_xObjectPSI->hasPropertyByName( aCopyProperties[i] ) )
-            _rxObject->setPropertyValue( aCopyProperties[i], m_xObject->getPropertyValue( aCopyProperties[i] ) );
+        if ( m_xObjectPSI->hasPropertyByName( aCopyPropertie ) )
+            _rxObject->setPropertyValue( aCopyPropertie, m_xObject->getPropertyValue( aCopyPropertie ) );
     }
 }
 
@@ -165,19 +165,19 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
 
         OUString sStatement = "SELECT * FROM " + sTargetName + " WHERE 0=1";
 
-        for ( size_t i=0; i < SAL_N_ELEMENTS(aProperties); ++i )
+        for (const std::pair<OUString,OUString> & aPropertie : aProperties)
         {
-            if ( m_xObjectPSI->hasPropertyByName( aProperties[i].first ) )
+            if ( m_xObjectPSI->hasPropertyByName( aPropertie.first ) )
             {
                 OUString sFilter;
-                m_xObject->getPropertyValue( aProperties[i].first ) >>= sFilter;
+                m_xObject->getPropertyValue( aPropertie.first ) >>= sFilter;
                 if ( !sFilter.isEmpty() )
                 {
-                    sStatement += aProperties[i].second;
+                    sStatement += aPropertie.second;
                     OUString sReplace = sFilter;
                     sReplace = sReplace.replaceFirst(sSourceName,sTargetNameTemp);
                     sFilter = sReplace;
-                    _rxObject->setPropertyValue( aProperties[i].first, makeAny(sFilter) );
+                    _rxObject->setPropertyValue( aPropertie.first, makeAny(sFilter) );
                     sStatement += sFilter;
                 }
             }

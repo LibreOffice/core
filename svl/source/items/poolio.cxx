@@ -155,10 +155,9 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     // VersionMaps
     {
         SfxMultiVarRecordWriter aVerRec( &rStream, SFX_ITEMPOOL_REC_VERSIONMAP );
-        for ( size_t nVerNo = 0; nVerNo < pImp->aVersions.size(); ++nVerNo )
+        for (std::shared_ptr<SfxPoolVersion_Impl>& pVer : pImp->aVersions)
         {
             aVerRec.NewContent();
-            SfxPoolVersion_ImplPtr pVer = pImp->aVersions[nVerNo];
             rStream.WriteUInt16( pVer->_nVer ).WriteUInt16( pVer->_nStart ).WriteUInt16( pVer->_nEnd );
             sal_uInt16 nCount = pVer->_nEnd - pVer->_nStart + 1;
             sal_uInt16 nNewWhich = 0;
@@ -1078,9 +1077,8 @@ sal_uInt16 SfxItemPool::GetNewWhich
     else if ( nDiff < 0 )
     {
         // Map step by step from the top version down to the file version
-        for ( size_t nMap = 0; nMap < pImp->aVersions.size(); ++nMap )
+        for (std::shared_ptr<SfxPoolVersion_Impl>& pVerInfo : pImp->aVersions)
         {
-            SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap];
             if ( pVerInfo->_nVer > pImp->nLoadingVersion )
             {
                 if (nFileWhich >= pVerInfo->_nStart &&
