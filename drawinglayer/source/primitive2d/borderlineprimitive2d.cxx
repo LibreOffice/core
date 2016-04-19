@@ -45,7 +45,7 @@ namespace std
 template<typename T>
 T round(T x)
 {
-    return round(x);
+    return ::round(x);
 }
 }
 #endif
