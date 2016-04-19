@@ -232,9 +232,8 @@ void OAccessibleMenuBaseComponent::UpdateFocused( sal_Int32 i, bool bFocused )
 void OAccessibleMenuBaseComponent::UpdateVisible()
 {
     SetVisible( IsVisible() );
-    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for (Reference<XAccessible>& xChild : m_aAccessibleChildren)
     {
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
         {
             OAccessibleMenuBaseComponent* pComp = static_cast< OAccessibleMenuBaseComponent* >( xChild.get() );
@@ -462,9 +461,8 @@ bool OAccessibleMenuBaseComponent::IsChildHighlighted()
 {
     bool bChildHighlighted = false;
 
-    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for (Reference<XAccessible>& xChild : m_aAccessibleChildren)
     {
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
         {
             OAccessibleMenuBaseComponent* pComp = static_cast< OAccessibleMenuBaseComponent* >( xChild.get() );
@@ -628,9 +626,9 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
                 m_pMenu = nullptr;
 
                 // dispose all menu items
-                for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+                for (Reference<XAccessible>& i : m_aAccessibleChildren)
                 {
-                    Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
+                    Reference< XComponent > xComponent( i, UNO_QUERY );
                     if ( xComponent.is() )
                         xComponent->dispose();
                 }
@@ -672,9 +670,9 @@ void OAccessibleMenuBaseComponent::disposing()
         m_pMenu = nullptr;
 
         // dispose all menu items
-        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for (Reference<XAccessible>& i : m_aAccessibleChildren)
         {
-            Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
+            Reference< XComponent > xComponent( i, UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
         }

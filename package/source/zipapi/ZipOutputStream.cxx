@@ -179,10 +179,10 @@ void ZipOutputStream::finish()
     consumeAllScheduledThreadEntries();
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
-    for (size_t i = 0; i < m_aZipList.size(); i++)
+    for (ZipEntry* p : m_aZipList)
     {
-        writeCEN( *m_aZipList[i] );
-        delete m_aZipList[i];
+        writeCEN( *p );
+        delete p;
     }
     writeEND( nOffset, static_cast < sal_Int32 > (m_aChucker.GetPosition()) - nOffset);
     m_xStream->flush();

@@ -146,11 +146,11 @@ void ScPrintAreasDlg::dispose()
     // Extra-Data an ListBox-Entries abraeumen
     ListBox* aLb[3] = { pLbPrintArea, pLbRepeatRow, pLbRepeatCol };
 
-    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aLb); ++i)
+    for (ListBox* i : aLb)
     {
-        const sal_Int32 nCount = aLb[i]->GetEntryCount();
+        const sal_Int32 nCount = i->GetEntryCount();
         for ( sal_Int32 j=0; j<nCount; j++ )
-            delete static_cast<OUString*>(aLb[i]->GetEntryData(j));
+            delete static_cast<OUString*>(i->GetEntryData(j));
     }
     pLbPrintArea.clear();
     pEdPrintArea.clear();

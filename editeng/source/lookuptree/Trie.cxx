@@ -41,9 +41,9 @@ TrieNode::TrieNode(sal_Unicode aCharacter) :
     mCharacter(aCharacter),
     mMarker(false)
 {
-    for (int i=0; i<LATIN_ARRAY_SIZE; i++)
+    for (TrieNode* & i : mLatinArray)
     {
-        mLatinArray[i] = nullptr;
+        i = nullptr;
     }
 }
 
@@ -55,9 +55,9 @@ TrieNode::~TrieNode()
         delete *iNode;
     }
 
-    for (int i=0; i<LATIN_ARRAY_SIZE; i++)
+    for (TrieNode* i : mLatinArray)
     {
-        delete mLatinArray[i];
+        delete i;
     }
 }
 
@@ -102,9 +102,8 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
 void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSuggestionList)
 {
     // first traverse nodes for alphabet characters
-    for (int i=0; i<LATIN_ARRAY_SIZE; i++)
+    for (TrieNode* pCurrent : mLatinArray)
     {
-        TrieNode* pCurrent = mLatinArray[i];
         if (pCurrent != nullptr)
             collectSuggestionsForCurrentNode(pCurrent, sPath, rSuggestionList);
     }

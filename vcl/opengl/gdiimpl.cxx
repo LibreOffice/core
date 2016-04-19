@@ -1339,8 +1339,8 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     // draw tesselation result
     if( aB2DTrapVector.size())
     {
-        for( size_t i = 0; i < aB2DTrapVector.size(); ++i )
-            DrawTrapezoid( aB2DTrapVector[ i ], blockAA );
+        for(basegfx::B2DTrapezoid & i : aB2DTrapVector)
+            DrawTrapezoid( i, blockAA );
     }
 }
 
@@ -1359,16 +1359,16 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
     aVertices.push_back(GLfloat(pt.X())); \
     aVertices.push_back(GLfloat(pt.Y()));
 
-    for( size_t i = 0; i < aRects.size(); ++i )
+    for(Rectangle & aRect : aRects)
     {
-        aRects[i].Bottom() += 1;
-        aRects[i].Right() += 1;
-        ADD_VERTICE( aRects[i].TopLeft() );
-        ADD_VERTICE( aRects[i].TopRight() );
-        ADD_VERTICE( aRects[i].BottomLeft() );
-        ADD_VERTICE( aRects[i].BottomLeft() );
-        ADD_VERTICE( aRects[i].TopRight() );
-        ADD_VERTICE( aRects[i].BottomRight() );
+        aRect.Bottom() += 1;
+        aRect.Right() += 1;
+        ADD_VERTICE( aRect.TopLeft() );
+        ADD_VERTICE( aRect.TopRight() );
+        ADD_VERTICE( aRect.BottomLeft() );
+        ADD_VERTICE( aRect.BottomLeft() );
+        ADD_VERTICE( aRect.TopRight() );
+        ADD_VERTICE( aRect.BottomRight() );
     }
 #undef ADD_VERTICE
 
@@ -2046,8 +2046,8 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     {
         basegfx::B2DTrapezoidVector aB2DTrapVector;
         basegfx::tools::createLineTrapezoidFromB2DPolyPolygon( aB2DTrapVector, rPolyPolygon );
-        for( size_t i = 0; i < aB2DTrapVector.size(); ++i )
-            DrawTrapezoid( aB2DTrapVector[ i ] );
+        for(basegfx::B2DTrapezoid & i : aB2DTrapVector)
+            DrawTrapezoid( i );
     }
 
     PostDraw();

@@ -471,9 +471,8 @@ SfxObjectShell* SfxObjectShell::GetFirst
     SfxObjectShellArr_Impl &rDocs = SfxGetpApp()->GetObjectShells_Impl();
 
     // search for a SfxDocument of the specified type
-    for ( size_t nPos = 0; nPos < rDocs.size(); ++nPos )
+    for (SfxObjectShell* pSh : rDocs)
     {
-        SfxObjectShell* pSh = rDocs[ nPos ];
         if ( bOnlyVisible && pSh->IsPreview() && pSh->IsReadOnly() )
             continue;
 

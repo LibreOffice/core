@@ -194,11 +194,11 @@ namespace dbmm
                 LanguageMapping( "Python",     ePython ),          // TODO: is this correct?
                 LanguageMapping( "Basic",      eBasic )
             };
-            for ( size_t i=0; i < SAL_N_ELEMENTS( aLanguageMapping ); ++i )
+            for (const LanguageMapping& i : aLanguageMapping)
             {
-                if ( _rLanguage.equalsAscii( aLanguageMapping[i].pAsciiLanguage ) )
+                if ( _rLanguage.equalsAscii( i.pAsciiLanguage ) )
                 {
-                    _out_rScriptType = aLanguageMapping[i].eScriptType;
+                    _out_rScriptType = i.eScriptType;
                     return true;
                 }
             }
@@ -1195,8 +1195,8 @@ namespace dbmm
             const ScriptType aKnownStorageBasedTypes[] = {
                 eBeanShell, eJavaScript, ePython, eJava
             };
-            for ( size_t i=0; i<SAL_N_ELEMENTS( aKnownStorageBasedTypes ); ++i )
-                aElementNames.erase( lcl_getScriptsSubStorageName( aKnownStorageBasedTypes[i] ) );
+            for (ScriptType aKnownStorageBasedType : aKnownStorageBasedTypes)
+                aElementNames.erase( lcl_getScriptsSubStorageName( aKnownStorageBasedType ) );
 
             if ( !aElementNames.empty() )
             {

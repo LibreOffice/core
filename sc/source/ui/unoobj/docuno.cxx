@@ -328,10 +328,10 @@ void ScPrintUIOptions::SetDefaults()
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
     bool bSuppress = rPrintOpt.GetSkipEmpty();
 
-    for (size_t nUIPos=0; nUIPos<m_aUIProperties.size(); ++nUIPos)
+    for (beans::PropertyValue & rPropValue : m_aUIProperties)
     {
         uno::Sequence<beans::PropertyValue> aUIProp;
-        if ( m_aUIProperties[nUIPos].Value >>= aUIProp )
+        if ( rPropValue.Value >>= aUIProp )
         {
             for (sal_Int32 nPropPos=0; nPropPos<aUIProp.getLength(); ++nPropPos)
             {
@@ -354,7 +354,7 @@ void ScPrintUIOptions::SetDefaults()
                     }
                 }
             }
-            m_aUIProperties[nUIPos].Value <<= aUIProp;
+            rPropValue.Value <<= aUIProp;
         }
     }
 }

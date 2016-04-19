@@ -441,10 +441,9 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
 
                 std::unique_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(aShortName));
                 assert(pDlg && "Dialog creation failed!");
-                for(size_t i = 0; i < aFoundArr.size(); ++i)
+                for(TextBlockInfo_Impl & i : aFoundArr)
                 {
-                    TextBlockInfo_Impl* pData = &aFoundArr[i];
-                    pDlg->InsertGlos(pData->sTitle, pData->sLongName);
+                    pDlg->InsertGlos(i.sTitle, i.sLongName);
                 }
                 pDlg->SelectEntryPos(0);
                 const sal_Int32 nRet = RET_OK == pDlg->Execute()?

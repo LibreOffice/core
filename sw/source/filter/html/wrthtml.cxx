@@ -488,8 +488,8 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     ClearNextNumInfo();
 
-    for( int i=0; i<MAXLEVEL; ++i )
-        m_aBulletGrfs[i].clear();
+    for(OUString & s : m_aBulletGrfs)
+        s.clear();
 
     m_aNonConvertableCharacters.clear();
 

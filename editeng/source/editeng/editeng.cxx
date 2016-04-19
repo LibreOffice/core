@@ -397,9 +397,8 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
     bool bAutoPageSize = pImpEditEngine->GetStatus().AutoPageSize();
     if ( bAutoPageSize || ( aNewSize.Width() != aOldSize.Width() ) )
     {
-        for (size_t nView = 0; nView < pImpEditEngine->aEditViews.size(); ++nView)
+        for (EditView* pView : pImpEditEngine->aEditViews)
         {
-            EditView* pView = pImpEditEngine->aEditViews[nView];
             if ( bAutoPageSize )
                 pView->pImpEditView->RecalcOutputArea();
             else if ( pView->pImpEditView->DoAutoSize() )

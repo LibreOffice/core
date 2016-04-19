@@ -1388,10 +1388,8 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
     pCurRedline = nullptr;
 
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
-    for( size_t nRedlinePos = 0; nRedlinePos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nRedlinePos )
+    for(SwRangeRedline* pRedl : m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable())
     {
-        const SwRangeRedline* pRedl = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nRedlinePos ];
-
         const SwPosition* pCheckedStt = pRedl->Start();
 
         if( pCheckedStt->nNode == rNd )

@@ -501,8 +501,8 @@ SvxThesaurusDialog::SvxThesaurusDialog(
         aLangVec.push_back( SvtLanguageTable::GetLanguageString( nLang ) );
     }
     std::sort( aLangVec.begin(), aLangVec.end() );
-    for (size_t i = 0;  i < aLangVec.size();  ++i)
-        m_pLangLB->InsertEntry( aLangVec[i] );
+    for (OUString & i : aLangVec)
+        m_pLangLB->InsertEntry( i );
 
     std::vector< OUString >::iterator aI = std::find(aLangVec.begin(), aLangVec.end(),
             SvtLanguageTable::GetLanguageString(nLanguage));

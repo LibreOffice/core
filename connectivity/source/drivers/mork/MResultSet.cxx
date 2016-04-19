@@ -1248,12 +1248,12 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                 {
                     OValueRow aSearchRow = new OValueVector( m_aRow->get().size() );
 
-                    for( OKeySet::Vector::size_type i = 0; i < m_pKeySet->get().size(); i++ )
+                    for(sal_Int32 i : m_pKeySet->get())
                     {
-                        fetchRow( (m_pKeySet->get())[i] );        // Fills m_aRow
+                        fetchRow( i );        // Fills m_aRow
                         if ( matchRow( m_aRow, aSearchRow ) )
                         {
-                            (m_pKeySet->get())[i] = 0;   // Marker for later to be removed
+                            i = 0;   // Marker for later to be removed
                         }
                         else
                         {

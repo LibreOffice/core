@@ -180,11 +180,11 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
         uno::Sequence< beans::StringPair > aHeaders
             = xDav->getUserRequestHeaders( aPseudoURL, ucb::WebDAVHTTPMethod(0) );
 
-        for ( auto i = aHeaders.begin(); i != aHeaders.end(); ++i )
+        for (css::beans::StringPair & aHeader : aHeaders)
         {
-            if ( i->First == "User-Agent" )
+            if ( aHeader.First == "User-Agent" )
             {
-                OUString aText = i->Second;
+                OUString aText = aHeader.Second;
                 aText = aText.replaceAll(";", ";\n");
                 aText = aText.replaceAll("(", "\n(");
                 m_pUserAgentLabel->SetText( aText );

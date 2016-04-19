@@ -102,9 +102,9 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     }
 
     // insert View into Outliner
-    for (sal_uInt16 nView = 0; nView < MAX_OUTLINERVIEWS; nView++)
+    for (OutlinerView* & rp : mpOutlinerView)
     {
-        mpOutlinerView[nView] = nullptr;
+        rp = nullptr;
     }
 
     mpOutlinerView[0] = new OutlinerView(&mrOutliner, pWindow);
@@ -168,13 +168,13 @@ OutlineView::~OutlineView()
     delete mpProgress;
 
     // unregister OutlinerViews and destroy them
-    for (sal_uInt16 nView = 0; nView < MAX_OUTLINERVIEWS; nView++)
+    for (OutlinerView* & rpView : mpOutlinerView)
     {
-        if (mpOutlinerView[nView] != nullptr)
+        if (rpView != nullptr)
         {
-            mrOutliner.RemoveView( mpOutlinerView[nView] );
-            delete mpOutlinerView[nView];
-            mpOutlinerView[nView] = nullptr;
+            mrOutliner.RemoveView( rpView );
+            delete rpView;
+            rpView = nullptr;
         }
     }
 
@@ -295,13 +295,13 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
 OutlinerView* OutlineView::GetViewByWindow (vcl::Window* pWin) const
 {
     OutlinerView* pOlView = nullptr;
-    for (sal_uInt16 nView = 0; nView < MAX_OUTLINERVIEWS; nView++)
+    for (OutlinerView* pView : mpOutlinerView)
     {
-        if (mpOutlinerView[nView] != nullptr)
+        if (pView != nullptr)
         {
-            if ( pWin == mpOutlinerView[nView]->GetWindow() )
+            if ( pWin == pView->GetWindow() )
             {
-                pOlView = mpOutlinerView[nView];
+                pOlView = pView;
             }
         }
     }
