@@ -38,6 +38,7 @@ static int help()
     fprintf(stderr, "--background-color <color>: Set custom background color, e.g. 'yellow'.\n");
     fprintf(stderr, "--hide-page-shadow: Hide page/slide shadow.\n");
     fprintf(stderr, "--hide-whitespace: Hide whitespace between pages in text documents.\n");
+    fprintf(stderr, "--user-profile: Path to a custom user profile.\n");
     return 1;
 }
 
