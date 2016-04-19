@@ -64,8 +64,8 @@ URLDlg::URLDlg( vcl::Window* pWindow, const OUString& rURL, const OUString& rAlt
     m_pEdtDescription->SetText( rDescription );
     m_pEdtName->SetText( rName );
 
-    for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
-        m_pCbbTargets->InsertEntry( rTargetList[ i ] );
+    for(OUString & i : rTargetList)
+        m_pCbbTargets->InsertEntry( i );
 
     if( rTarget.isEmpty() )
         m_pCbbTargets->SetText( "_self");

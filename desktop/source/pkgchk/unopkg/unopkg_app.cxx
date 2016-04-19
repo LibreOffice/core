@@ -364,9 +364,8 @@ extern "C" int unopkg_main()
 
         if ( subcmd_add || subCommand == "remove" )
         {
-            for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
+            for (OUString & cmdPackage : cmdPackages)
             {
-                OUString const & cmdPackage = cmdPackages[ pos ];
                 if (subcmd_add)
                 {
                     beans::NamedValue nvSuppress(
@@ -449,18 +448,18 @@ extern "C" int unopkg_main()
             {
                 //The user provided the names (ids or file names) of the extensions
                 //which shall be listed
-                for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
+                for (OUString & cmdPackage : cmdPackages)
                 {
                     Reference<deployment::XPackage> extension;
                     try
                     {
                         extension = xExtensionManager->getDeployedExtension(
-                            repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
+                            repository, cmdPackage, cmdPackage, xCmdEnv );
                     }
                     catch (const lang::IllegalArgumentException &)
                     {
                         extension = findPackage(repository,
-                            xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
+                            xExtensionManager, xCmdEnv, cmdPackage );
                     }
 
                     //Now look if the requested extension has an unaccepted license
@@ -470,7 +469,7 @@ extern "C" int unopkg_main()
                         ::std::vector<Reference<deployment::XPackage> >::const_iterator
                             i = ::std::find_if(
                                 vecExtUnaccepted.begin(),
-                                vecExtUnaccepted.end(), ExtensionName(cmdPackages[pos]));
+                                vecExtUnaccepted.end(), ExtensionName(cmdPackage));
                         if (i != vecExtUnaccepted.end())
                         {
                             extension = *i;
@@ -487,7 +486,7 @@ extern "C" int unopkg_main()
                     else
                         throw lang::IllegalArgumentException(
                             "There is no such extension deployed: " +
-                            cmdPackages[pos],nullptr,-1);
+                            cmdPackage,nullptr,-1);
                 }
 
             }
@@ -501,18 +500,18 @@ extern "C" int unopkg_main()
                 vecExtUnaccepted, xExtensionManager->getExtensionsWithUnacceptedLicenses(
                     repository, xCmdEnv));
 
-            for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
+            for (OUString & cmdPackage : cmdPackages)
             {
                 Reference<deployment::XPackage> extension;
                 try
                 {
                     extension = xExtensionManager->getDeployedExtension(
-                        repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
+                        repository, cmdPackage, cmdPackage, xCmdEnv );
                 }
                 catch (const lang::IllegalArgumentException &)
                 {
                     extension = findPackage(
-                        repository, xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
+                        repository, xExtensionManager, xCmdEnv, cmdPackage );
                 }
 
                 if (!extension.is())
@@ -520,7 +519,7 @@ extern "C" int unopkg_main()
                     ::std::vector<Reference<deployment::XPackage> >::const_iterator
                         i = ::std::find_if(
                             vecExtUnaccepted.begin(),
-                            vecExtUnaccepted.end(), ExtensionName(cmdPackages[pos]));
+                            vecExtUnaccepted.end(), ExtensionName(cmdPackage));
                     if (i != vecExtUnaccepted.end())
                     {
                         extension = *i;

@@ -1625,9 +1625,8 @@ void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
     ScRangePairList* pLists[2];
     pLists[0] = GetColNameRanges();
     pLists[1] = GetRowNameRanges();
-    for (sal_uInt16 nListNo=0; nListNo<2; nListNo++)
+    for (ScRangePairList* pList : pLists)
     {
-        ScRangePairList* pList = pLists[ nListNo ];
         if (!pList)
             continue;
 

@@ -398,8 +398,8 @@ SvxMSDffSolverContainer::SvxMSDffSolverContainer()
 
 SvxMSDffSolverContainer::~SvxMSDffSolverContainer()
 {
-    for( size_t i = 0, n = aCList.size(); i < n; ++i ) {
-        delete aCList[ i ];
+    for(SvxMSDffConnectorRule* i : aCList) {
+        delete i;
     }
     aCList.clear();
 }

@@ -133,9 +133,8 @@ void PageBordersHandler::lcl_sprm( Sprm& rSprm )
 
 void PageBordersHandler::SetBorders( SectionPropertyMap* pSectContext )
 {
-    for ( int i = 0, length = m_aBorders.size( ); i < length; i++ )
+    for (_PgBorder aBorder : m_aBorders)
     {
-        _PgBorder aBorder = m_aBorders[i];
         pSectContext->SetBorder( aBorder.m_ePos, aBorder.m_nDistance, aBorder.m_rLine, aBorder.m_bShadow );
     }
 }

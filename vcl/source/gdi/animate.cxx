@@ -84,8 +84,8 @@ Animation::Animation( const Animation& rAnimation ) :
     mbIsWaiting         ( rAnimation.mbIsWaiting )
 {
 
-    for( size_t i = 0, nCount = rAnimation.maList.size(); i < nCount; i++ )
-        maList.push_back( new AnimationBitmap( *rAnimation.maList[ i ] ) );
+    for(const AnimationBitmap* i : rAnimation.maList)
+        maList.push_back( new AnimationBitmap( *i ) );
 
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
@@ -97,19 +97,19 @@ Animation::~Animation()
     if( mbIsInAnimation )
         Stop();
 
-    for( size_t i = 0, n = maList.size(); i < n; ++i )
-        delete maList[ i ];
+    for(AnimationBitmap* i : maList)
+        delete i;
 
-    for( size_t i = 0, n = maViewList.size(); i < n; ++i )
-        delete maViewList[ i ];
+    for(ImplAnimView* i : maViewList)
+        delete i;
 }
 
 Animation& Animation::operator=( const Animation& rAnimation )
 {
     Clear();
 
-    for( size_t i = 0, nCount = rAnimation.maList.size(); i < nCount; i++ )
-        maList.push_back( new AnimationBitmap( *rAnimation.maList[ i ] ) );
+    for(const AnimationBitmap* i : rAnimation.maList)
+        maList.push_back( new AnimationBitmap( *i ) );
 
     maGlobalSize = rAnimation.maGlobalSize;
     maBitmapEx = rAnimation.maBitmapEx;
@@ -156,12 +156,12 @@ void Animation::Clear()
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
 
-    for( size_t i = 0, n = maList.size(); i < n; ++i )
-        delete maList[ i ];
+    for(AnimationBitmap* i : maList)
+        delete i;
     maList.clear();
 
-    for( size_t i = 0, n = maViewList.size(); i < n; ++i )
-        delete maViewList[ i ];
+    for(ImplAnimView* i : maViewList)
+        delete i;
     maViewList.clear();
 }
 
@@ -175,10 +175,8 @@ bool Animation::IsTransparent() const
     // we need to be transparent, in order to be displayed correctly
     // as the application (?) does not invalidate on non-transparent
     // graphics due to performance reasons.
-    for( size_t i = 0, nCount = maList.size(); i < nCount; i++ )
+    for(const AnimationBitmap* pAnimBmp : maList)
     {
-        const AnimationBitmap* pAnimBmp = maList[ i ];
-
         if(  DISPOSE_BACK == pAnimBmp->eDisposal
           && Rectangle( pAnimBmp->aPosPix, pAnimBmp->aSizePix ) != aRect
           )
@@ -198,9 +196,8 @@ sal_uLong Animation::GetSizeBytes() const
 {
     sal_uLong nSizeBytes = GetBitmapEx().GetSizeBytes();
 
-    for( size_t i = 0, nCount = maList.size(); i < nCount; i++ )
+    for(const AnimationBitmap* pAnimBmp : maList)
     {
-        const AnimationBitmap* pAnimBmp = maList[ i ];
         nSizeBytes += pAnimBmp->aBmpEx.GetSizeBytes();
     }
 
@@ -225,9 +222,9 @@ BitmapChecksum Animation::GetChecksum() const
     UInt32ToSVBT32( (long) meCycleMode, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    for( size_t i = 0, nCount = maList.size(); i < nCount; i++ )
+    for(const AnimationBitmap* i : maList)
     {
-        BCToBCOA( maList[ i ]->GetChecksum(), aBCOA );
+        BCToBCOA( i->GetChecksum(), aBCOA );
         nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
 
@@ -366,15 +363,14 @@ IMPL_LINK_NOARG_TYPED(Animation, ImplTimeoutHdl, Timer *, void)
         if( maNotifyLink.IsSet() )
         {
             // create AInfo-List
-            for( size_t i = 0, n = maViewList.size(); i < n; ++i )
-                aAInfoList.push_back( maViewList[ i ]->createAInfo() );
+            for(ImplAnimView* i : maViewList)
+                aAInfoList.push_back( i->createAInfo() );
 
             maNotifyLink.Call( this );
 
             // set view state from AInfo structure
-            for( size_t i = 0, n = aAInfoList.size(); i < n; ++i )
+            for(AInfo* pAInfo : aAInfoList)
             {
-                AInfo* pAInfo = aAInfoList[ i ];
                 if( !pAInfo->pViewData )
                 {
                     pView = new ImplAnimView( this, pAInfo->pOutDev,
@@ -390,8 +386,8 @@ IMPL_LINK_NOARG_TYPED(Animation, ImplTimeoutHdl, Timer *, void)
             }
 
             // delete AInfo structures
-            for( size_t i = 0, n = aAInfoList.size(); i < n; ++i )
-                delete aAInfoList[ i ];
+            for(AInfo* i : aAInfoList)
+                delete i;
             aAInfoList.clear();
 
             // delete all unmarked views and reset marked state

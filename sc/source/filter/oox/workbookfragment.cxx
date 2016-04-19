@@ -299,8 +299,8 @@ public:
     }
     virtual void Invoke() override
     {
-        for( size_t i = 0; i < aSegments.size(); i++)
-            static_cast< ProgressWrapper *>( aSegments[ i ].get() )->UpdateBar();
+        for(std::shared_ptr<ISegmentProgressBar> & aSegment : aSegments)
+            static_cast< ProgressWrapper *>( aSegment.get() )->UpdateBar();
     }
 };
 

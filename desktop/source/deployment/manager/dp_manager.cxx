@@ -211,9 +211,8 @@ void PackageManagerImpl::initActivationLayer(
             }
 
             bool bShared = (m_context == "shared");
-            for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
+            for (OUString & tempEntry : tempEntries)
             {
-                OUString const & tempEntry = tempEntries[ pos ];
                 const MatchTempDir match( tempEntry );
                 if (::std::none_of( id2temp.begin(), id2temp.end(), match ))
                 {

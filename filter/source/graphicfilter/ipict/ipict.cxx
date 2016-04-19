@@ -90,10 +90,10 @@ namespace PictReaderInternal {
 
     // count the no of bits in pattern which are set to 1:
     nBitCount=0;
-    for (short ny=0; ny<8; ny++) {
-      stream.ReadChar( reinterpret_cast<char&>(nbyte[ny]) );
+    for (unsigned char & ny : nbyte) {
+      stream.ReadChar( reinterpret_cast<char&>(ny) );
       for (short nx=0; nx<8; nx++) {
-    if ( (nbyte[ny] & (1<<nx)) != 0 ) nBitCount++;
+    if ( (ny & (1<<nx)) != 0 ) nBitCount++;
       }
     }
 

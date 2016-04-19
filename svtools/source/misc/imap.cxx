@@ -611,8 +611,8 @@ ImageMap::~ImageMap()
 
 void ImageMap::ClearImageMap()
 {
-    for( size_t i = 0, n = maList.size(); i < n; ++i )
-        delete maList[ i ];
+    for(IMapObject* i : maList)
+        delete i;
     maList.clear();
 
     aName.clear();
@@ -788,9 +788,9 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
 
     // walk over all objects and execute HitTest
     IMapObject* pObj = nullptr;
-    for( size_t i = 0, n = maList.size(); i < n; ++i ) {
-        if ( maList[ i ]->IsHit( aRelPoint ) ) {
-            pObj = maList[ i ];
+    for(IMapObject* i : maList) {
+        if ( i->IsHit( aRelPoint ) ) {
+            pObj = i;
             break;
         }
     }

@@ -908,9 +908,9 @@ ScGridWindow* ScTabView::GetActiveWin()
 
 void ScTabView::SetActivePointer( const Pointer& rPointer )
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i])
-            pGridWin[i]->SetPointer( rPointer );
+    for (VclPtr<ScGridWindow> & i : pGridWin)
+        if (i)
+            i->SetPointer( rPointer );
 }
 
 void ScTabView::ActiveGrabFocus()
@@ -1516,12 +1516,12 @@ void ScTabView::UpdateShow()
 bool ScTabView::UpdateVisibleRange()
 {
     bool bChanged = false;
-    for (int i = 0; i < 4; ++i)
+    for (VclPtr<ScGridWindow> & i : pGridWin)
     {
-        if (!pGridWin[i] || !pGridWin[i]->IsVisible())
+        if (!i || !i->IsVisible())
             continue;
 
-        if (pGridWin[i]->UpdateVisibleRange())
+        if (i->UpdateVisibleRange())
             bChanged = true;
     }
 
@@ -1602,9 +1602,9 @@ void ScTabView::DoHSplit(long nSplitPos)
 
         // Form Layer needs to know the visible part of all windows
         // that is why MapMode must already be correct here
-        for (sal_uInt16 i=0; i<4; i++)
-            if (pGridWin[i])
-                pGridWin[i]->SetMapMode( pGridWin[i]->GetDrawMapMode() );
+        for (VclPtr<ScGridWindow> & i : pGridWin)
+            if (i)
+                i->SetMapMode( i->GetDrawMapMode() );
         SetNewVisArea();
 
         PaintGrid();
@@ -1674,9 +1674,9 @@ void ScTabView::DoVSplit(long nSplitPos)
 
         // Form Layer needs to know the visible part of all windows
         // that is why MapMode must already be correct here
-        for (sal_uInt16 i=0; i<4; i++)
-            if (pGridWin[i])
-                pGridWin[i]->SetMapMode( pGridWin[i]->GetDrawMapMode() );
+        for (VclPtr<ScGridWindow> & i : pGridWin)
+            if (i)
+                i->SetMapMode( i->GetDrawMapMode() );
         SetNewVisArea();
 
         PaintGrid();
@@ -2058,9 +2058,9 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
 
     // Form Layer needs to know the visible part of all windows
     // that is why MapMode must already be correct here
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i])
-            pGridWin[i]->SetMapMode( pGridWin[i]->GetDrawMapMode() );
+    for (VclPtr<ScGridWindow> & i : pGridWin)
+        if (i)
+            i->SetMapMode( i->GetDrawMapMode() );
     SetNewVisArea();
 
     RepeatResize(false);
@@ -2258,12 +2258,12 @@ void ScTabView::EnableRefInput(bool bFlag)
 bool ScTabView::ContinueOnlineSpelling()
 {
     bool bChanged = false;
-    for (int i = 0; i < 4; ++i)
+    for (VclPtr<ScGridWindow> & i : pGridWin)
     {
-        if (!pGridWin[i] || !pGridWin[i]->IsVisible())
+        if (!i || !i->IsVisible())
             continue;
 
-        if (pGridWin[i]->ContinueOnlineSpelling())
+        if (i->ContinueOnlineSpelling())
             bChanged = true;
     }
 
@@ -2272,34 +2272,34 @@ bool ScTabView::ContinueOnlineSpelling()
 
 void ScTabView::EnableAutoSpell( bool bEnable )
 {
-    for (int i = 0; i < 4; ++i)
+    for (VclPtr<ScGridWindow> & i : pGridWin)
     {
-        if (!pGridWin[i])
+        if (!i)
             continue;
 
-        pGridWin[i]->EnableAutoSpell(bEnable);
+        i->EnableAutoSpell(bEnable);
     }
 }
 
 void ScTabView::ResetAutoSpell()
 {
-    for (int i = 0; i < 4; ++i)
+    for (VclPtr<ScGridWindow> & i : pGridWin)
     {
-        if (!pGridWin[i])
+        if (!i)
             continue;
 
-        pGridWin[i]->ResetAutoSpell();
+        i->ResetAutoSpell();
     }
 }
 
 void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges )
 {
-    for (int i = 0; i < 4; ++i)
+    for (VclPtr<ScGridWindow> & i : pGridWin)
     {
-        if (!pGridWin[i])
+        if (!i)
             continue;
 
-        pGridWin[i]->SetAutoSpellData(nPosX, nPosY, pRanges);
+        i->SetAutoSpellData(nPosX, nPosY, pRanges);
     }
 }
 

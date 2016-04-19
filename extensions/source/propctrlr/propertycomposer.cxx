@@ -397,12 +397,9 @@ namespace pcr
         {
             // TODO: make this cheaper (cache it?)
             const StlSyntaxSequence< OUString > aThisHandlersActuatingProps( (*loop)->getActuatingProperties() );
-            for (   StlSyntaxSequence< OUString >::const_iterator loopProps = aThisHandlersActuatingProps.begin();
-                    loopProps != aThisHandlersActuatingProps.end();
-                    ++loopProps
-                )
+            for (const auto & aThisHandlersActuatingProp : aThisHandlersActuatingProps)
             {
-                if ( *loopProps == _rActuatingPropertyName )
+                if ( aThisHandlersActuatingProp == _rActuatingPropertyName )
                 {
                     (*loop)->actuatingPropertyChanged( _rActuatingPropertyName, _rNewValue, _rOldValue,
                         m_pUIRequestComposer->getUIForPropertyHandler( *loop ),

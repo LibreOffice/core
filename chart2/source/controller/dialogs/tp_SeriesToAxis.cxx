@@ -199,9 +199,8 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
             m_pRB_AssumeZero->Enable(false);
             m_pRB_ContinueLine->Enable(false);
 
-            for( size_t nN =0; nN<aMissingValueTreatments.size(); nN++ )
+            for(int nVal : aMissingValueTreatments)
             {
-                sal_Int32 nVal = aMissingValueTreatments[nN];
                 if(nVal==css::chart::MissingValueTreatment::LEAVE_GAP)
                     m_pRB_DontPaint->Enable();
                 else if(nVal==css::chart::MissingValueTreatment::USE_ZERO)

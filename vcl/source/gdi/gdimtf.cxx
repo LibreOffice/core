@@ -257,8 +257,8 @@ void GDIMetaFile::Clear()
     if( bRecord )
         Stop();
 
-    for( size_t i = 0, n = aList.size(); i < n; ++i )
-        aList[ i ]->Delete();
+    for(MetaAction* i : aList)
+        i->Delete();
     aList.clear();
 }
 

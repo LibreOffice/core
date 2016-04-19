@@ -1001,19 +1001,16 @@ namespace pcr
 
                 // append these properties to our "all properties" array
                 aProperties.reserve( aProperties.size() + aThisHandlersProperties.size() );
-                for (   StlSyntaxSequence< Property >::const_iterator copyProperty = aThisHandlersProperties.begin();
-                        copyProperty != aThisHandlersProperties.end();
-                        ++copyProperty
-                    )
+                for (const auto & aThisHandlersPropertie : aThisHandlersProperties)
                 {
                     ::std::vector< Property >::const_iterator previous = ::std::find_if(
                         aProperties.begin(),
                         aProperties.end(),
-                        FindPropertyByName( copyProperty->Name )
+                        FindPropertyByName( aThisHandlersPropertie.Name )
                     );
                     if ( previous == aProperties.end() )
                     {
-                        aProperties.push_back( *copyProperty );
+                        aProperties.push_back( aThisHandlersPropertie );
                         continue;
                     }
 
@@ -1026,21 +1023,18 @@ namespace pcr
                     // which means it can give it a completely different meaning than the previous
                     // handler for this property is prepared for.
                     ::std::pair< PropertyHandlerMultiRepository::iterator, PropertyHandlerMultiRepository::iterator >
-                        aDepHandlers = m_aDependencyHandlers.equal_range( copyProperty->Name );
+                        aDepHandlers = m_aDependencyHandlers.equal_range( aThisHandlersPropertie.Name );
                     m_aDependencyHandlers.erase( aDepHandlers.first, aDepHandlers.second );
                 }
 
                 // determine the superseded properties
                 StlSyntaxSequence< OUString > aSupersededByThisHandler( (*aHandler)->getSupersededProperties() );
-                for (   StlSyntaxSequence< OUString >::const_iterator superseded = aSupersededByThisHandler.begin();
-                        superseded != aSupersededByThisHandler.end();
-                        ++superseded
-                    )
+                for (const auto & superseded : aSupersededByThisHandler)
                 {
                     ::std::vector< Property >::iterator existent = ::std::find_if(
                         aProperties.begin(),
                         aProperties.end(),
-                        FindPropertyByName( *superseded )
+                        FindPropertyByName( superseded )
                     );
                     if ( existent != aProperties.end() )
                         // one of the properties superseded by this handler was supported by a previous
@@ -1053,25 +1047,19 @@ namespace pcr
 
                 // remember this handler for every of the properties which it is responsible
                 // for
-                for (   StlSyntaxSequence< Property >::const_iterator remember = aThisHandlersProperties.begin();
-                        remember != aThisHandlersProperties.end();
-                        ++remember
-                    )
+                for (const auto & aThisHandlersPropertie : aThisHandlersProperties)
                 {
-                    m_aPropertyHandlers[ remember->Name ] = *aHandler;
+                    m_aPropertyHandlers[ aThisHandlersPropertie.Name ] = *aHandler;
                     // note that this implies that if two handlers support the same property,
                     // the latter wins
                 }
 
                 // see if the handler expresses interest in any actuating properties
                 StlSyntaxSequence< OUString > aInterestingActuations( (*aHandler)->getActuatingProperties() );
-                for (   StlSyntaxSequence< OUString >::const_iterator aLoop = aInterestingActuations.begin();
-                        aLoop != aInterestingActuations.end();
-                        ++aLoop
-                    )
+                for (const auto & aInterestingActuation : aInterestingActuations)
                 {
                     m_aDependencyHandlers.insert( PropertyHandlerMultiRepository::value_type(
-                        *aLoop, *aHandler ) );
+                        aInterestingActuation, *aHandler ) );
                 }
 
                 ++aHandler;

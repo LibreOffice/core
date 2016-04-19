@@ -2293,9 +2293,9 @@ void CustomAnimationTextGroup::reset()
     mfGroupingAuto = -1.0;
     mnLastPara = -1; // used to check for TextReverse
 
-    for (int i = 0; i < PARA_LEVELS; ++i)
+    for (signed char & mnDepthFlag : mnDepthFlags)
     {
-        mnDepthFlags[i] = 0;
+        mnDepthFlag = 0;
     }
 
     maEffects.clear();

@@ -424,9 +424,9 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
             pNode->GetCharAttribs().OptimizeRanges(const_cast<SfxItemPool&>(rPool));
 
             const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-            for (size_t nAttr = 0; nAttr < rAttrs.size(); ++nAttr)
+            for (const auto & nAttr : rAttrs)
             {
-                const EditCharAttrib& rAttr = *rAttrs[nAttr].get();
+                const EditCharAttrib& rAttr = *nAttr.get();
 
                 if ( nStart == nEnd )
                 {
@@ -538,9 +538,9 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
                     if ( nSpecial == ATTRSPECIAL_EDGE )
                     {
                         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
-                        for (size_t i = 0, n = rAttribs.size(); i < n; ++i)
+                        for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
                         {
-                            EditCharAttrib& rAttr = *rAttribs[i].get();
+                            EditCharAttrib& rAttr = *rAttrib.get();
                             if (rAttr.GetStart() > nEndPos)
                                 break;
 
@@ -726,9 +726,9 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
     {
         rLst.reserve(pNode->GetCharAttribs().Count());
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for (size_t i = 0; i < rAttrs.size(); ++i)
+        for (const auto & i : rAttrs)
         {
-            const EditCharAttrib& rAttr = *rAttrs[i].get();
+            const EditCharAttrib& rAttr = *i.get();
             EECharAttrib aEEAttr;
             aEEAttr.pAttr = rAttr.GetItem();
             aEEAttr.nPara = nPara;

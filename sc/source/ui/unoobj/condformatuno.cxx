@@ -769,11 +769,11 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
             sal_Int32 nVal;
             if (aValue >>= nVal)
             {
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aConditionEntryMap); ++i)
+                for (ConditionEntryApiMap & i : aConditionEntryMap)
                 {
-                    if (aConditionEntryMap[i].nApiMode == nVal)
+                    if (i.nApiMode == nVal)
                     {
-                        getCoreObject()->SetOperation(aConditionEntryMap[i].eMode);
+                        getCoreObject()->SetOperation(i.eMode);
                         break;
                     }
                 }
@@ -819,11 +819,11 @@ uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aProper
         case Operator:
         {
             ScConditionMode eMode = getCoreObject()->GetOperation();
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aConditionEntryMap); ++i)
+            for (ConditionEntryApiMap & i : aConditionEntryMap)
             {
-                if (aConditionEntryMap[i].eMode == eMode)
+                if (i.eMode == eMode)
                 {
-                    aAny <<= aConditionEntryMap[i].nApiMode;
+                    aAny <<= i.nApiMode;
                     break;
                 }
             }
@@ -909,11 +909,11 @@ void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorS
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aColorScaleEntryTypeMap); ++i)
+    for (ColorScaleEntryTypeApiMap & i : aColorScaleEntryTypeMap)
     {
-        if (aColorScaleEntryTypeMap[i].nApiType == nApiType)
+        if (i.nApiType == nApiType)
         {
-            eType = aColorScaleEntryTypeMap[i].eType;
+            eType = i.eType;
             bFound = true;
             break;
         }
@@ -1080,11 +1080,11 @@ sal_Int32 ScColorScaleEntryObj::getType()
     throw(uno::RuntimeException, std::exception)
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aColorScaleEntryTypeMap); ++i)
+    for (ColorScaleEntryTypeApiMap & i : aColorScaleEntryTypeMap)
     {
-        if (aColorScaleEntryTypeMap[i].eType == pEntry->GetType())
+        if (i.eType == pEntry->GetType())
         {
-            return aColorScaleEntryTypeMap[i].nApiType;
+            return i.nApiType;
         }
     }
 
@@ -1095,11 +1095,11 @@ void ScColorScaleEntryObj::setType(sal_Int32 nType)
     throw(uno::RuntimeException, std::exception)
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aColorScaleEntryTypeMap); ++i)
+    for (ColorScaleEntryTypeApiMap & i : aColorScaleEntryTypeMap)
     {
-        if (aColorScaleEntryTypeMap[i].nApiType == nType)
+        if (i.nApiType == nType)
         {
-            pEntry->SetType(aColorScaleEntryTypeMap[i].eType);
+            pEntry->SetType(i.eType);
             return;
         }
     }
@@ -1182,11 +1182,11 @@ void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEn
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarEntryTypeMap); ++i)
+    for (DataBarEntryTypeApiMap & i : aDataBarEntryTypeMap)
     {
-        if (aDataBarEntryTypeMap[i].nApiType == nApiType)
+        if (i.nApiType == nApiType)
         {
-            eType = aDataBarEntryTypeMap[i].eType;
+            eType = i.eType;
             bFound = true;
             break;
         }
@@ -1232,12 +1232,12 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             sal_Int32 nVal;
             if (aValue >>= nVal)
             {
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarAxisMap); ++i)
+                for (DataBarAxisApiMap & i : aDataBarAxisMap)
                 {
-                    if (aDataBarAxisMap[i].nApiPos == nVal)
+                    if (i.nApiPos == nVal)
                     {
                         getCoreObject()->GetDataBarData()->meAxisPosition =
-                            aDataBarAxisMap[i].ePos;
+                            i.ePos;
                         break;
                     }
                 }
@@ -1362,11 +1362,11 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
         {
             databar::ScAxisPosition ePos = getCoreObject()->GetDataBarData()->meAxisPosition;
             sal_Int32 nApiPos = sheet::DataBarAxis::AXIS_NONE;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarAxisMap); ++i)
+            for (DataBarAxisApiMap & i : aDataBarAxisMap)
             {
-                if (aDataBarAxisMap[i].ePos == ePos)
+                if (i.ePos == ePos)
                 {
-                    nApiPos = aDataBarAxisMap[i].nApiPos;
+                    nApiPos = i.nApiPos;
                 }
             }
 
@@ -1480,11 +1480,11 @@ sal_Int32 ScDataBarEntryObj::getType()
     throw(uno::RuntimeException, std::exception)
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarEntryTypeMap); ++i)
+    for (DataBarEntryTypeApiMap & i : aDataBarEntryTypeMap)
     {
-        if (aDataBarEntryTypeMap[i].eType == pEntry->GetType())
+        if (i.eType == pEntry->GetType())
         {
-            return aDataBarEntryTypeMap[i].nApiType;
+            return i.nApiType;
         }
     }
 
@@ -1495,11 +1495,11 @@ void ScDataBarEntryObj::setType(sal_Int32 nType)
     throw(uno::RuntimeException, std::exception)
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarEntryTypeMap); ++i)
+    for (DataBarEntryTypeApiMap & i : aDataBarEntryTypeMap)
     {
-        if (aDataBarEntryTypeMap[i].nApiType == nType)
+        if (i.nApiType == nType)
         {
-            pEntry->SetType(aDataBarEntryTypeMap[i].eType);
+            pEntry->SetType(i.eType);
             return;
         }
     }
@@ -1583,11 +1583,11 @@ void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEnt
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
+    for (IconSetEntryTypeApiMap & i : aIconSetEntryTypeMap)
     {
-        if (aIconSetEntryTypeMap[i].nApiType == nApiType)
+        if (i.nApiType == nApiType)
         {
-            eType = aIconSetEntryTypeMap[i].eType;
+            eType = i.eType;
             bFound = true;
             break;
         }
@@ -1648,11 +1648,11 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
             aValue >>= nApiType;
             ScIconSetType eType = IconSet_3Arrows;
             bool bFound = false;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetApiMap); ++i)
+            for (const IconSetTypeApiMap & i : aIconSetApiMap)
             {
-                if (aIconSetApiMap[i].nApiType == nApiType)
+                if (i.nApiType == nApiType)
                 {
-                    eType = aIconSetApiMap[i].eType;
+                    eType = i.eType;
                     bFound = true;
                     break;
                 }
@@ -1713,11 +1713,11 @@ uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropert
         case Icons:
         {
             ScIconSetType eType = getCoreObject()->GetIconSetData()->eIconSetType;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetApiMap); ++i)
+            for (const IconSetTypeApiMap & i : aIconSetApiMap)
             {
-                if (aIconSetApiMap[i].eType == eType)
+                if (i.eType == eType)
                 {
-                    aAny <<= aIconSetApiMap[i].nApiType;
+                    aAny <<= i.nApiType;
                     break;
                 }
             }
@@ -1800,11 +1800,11 @@ sal_Int32 ScIconSetEntryObj::getType()
     if (mnPos == 0)
         return sheet::IconSetFormatEntry::ICONSET_MIN;
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
+    for (IconSetEntryTypeApiMap & i : aIconSetEntryTypeMap)
     {
-        if (aIconSetEntryTypeMap[i].eType == pEntry->GetType())
+        if (i.eType == pEntry->GetType())
         {
-            return aIconSetEntryTypeMap[i].nApiType;
+            return i.nApiType;
         }
     }
 
@@ -1819,11 +1819,11 @@ void ScIconSetEntryObj::setType(sal_Int32 nType)
         return;
 
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetEntryTypeMap); ++i)
+    for (IconSetEntryTypeApiMap & i : aIconSetEntryTypeMap)
     {
-        if (aIconSetEntryTypeMap[i].nApiType == nType)
+        if (i.nApiType == nType)
         {
-            pEntry->SetType(aIconSetEntryTypeMap[i].eType);
+            pEntry->SetType(i.eType);
             return;
         }
     }
@@ -1930,11 +1930,11 @@ void SAL_CALL ScCondDateFormatObj::setPropertyValue(
             if (!(aValue >>= nApiType))
                 throw lang::IllegalArgumentException();
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aDateTypeApiMap); ++i)
+            for (DateTypeApiMap & i : aDateTypeApiMap)
             {
-                if (aDateTypeApiMap[i].nApiType == nApiType)
+                if (i.nApiType == nApiType)
                 {
-                    getCoreObject()->SetDateType(aDateTypeApiMap[i].eType);
+                    getCoreObject()->SetDateType(i.eType);
                     break;
                 }
             }
@@ -1969,11 +1969,11 @@ uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aProper
         case DateType:
         {
             condformat::ScCondFormatDateType eType = getCoreObject()->GetDateType();
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aDateTypeApiMap); ++i)
+            for (DateTypeApiMap & i : aDateTypeApiMap)
             {
-                if (aDateTypeApiMap[i].eType == eType)
+                if (i.eType == eType)
                 {
-                    aAny <<= aDateTypeApiMap[i].nApiType;
+                    aAny <<= i.nApiType;
                     break;
                 }
             }

@@ -875,9 +875,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     }
 
                     bool bFound = false;
-                    for ( size_t nProt=0; nProt<aProtocols.size(); nProt++ )
+                    for (OUString & aProtocol : aProtocols)
                     {
-                        WildCard aPattern(aProtocols[nProt]);
+                        WildCard aPattern(aProtocol);
                         if ( aPattern.Matches( aURL.Complete ) )
                         {
                             bFound = true;

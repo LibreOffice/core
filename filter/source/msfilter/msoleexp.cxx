@@ -161,9 +161,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
 
         for( const ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
         {
-            for ( int n = 0; n < 4; ++n )
+            for (const ObjExpType::GlobalNameIds& rId : pArr->aGlNmIds)
             {
-                const ObjExpType::GlobalNameIds& rId = pArr->aGlNmIds[ n ];
                 SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
                             rId.b8, rId.b9, rId.b10, rId.b11,
                             rId.b12, rId.b13, rId.b14, rId.b15 );
