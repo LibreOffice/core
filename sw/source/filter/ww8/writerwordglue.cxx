@@ -708,14 +708,14 @@ namespace sw
                     { RTL_TEXTENCODING_MS_950, 0x88 }, // Big5
                     { RTL_TEXTENCODING_MS_949, 0x81 }, // EUC-KR
                 };
-                for (size_t i = 0; i < SAL_N_ELEMENTS(s_fallbacks); ++i)
+                for (const auto & i : s_fallbacks)
                 {
                     // fall back to a charset that can at least encode the
                     // font's name
-                    if (CanEncode(rFontName, s_fallbacks[i].enc)
-                        && CanEncode(rAltName, s_fallbacks[i].enc))
+                    if (CanEncode(rFontName, i.enc)
+                        && CanEncode(rAltName, i.enc))
                     {
-                        return s_fallbacks[i].charset;
+                        return i.charset;
                     }
                 }
                 SAL_INFO("sw.rtf", "no fallback charset found for font: "

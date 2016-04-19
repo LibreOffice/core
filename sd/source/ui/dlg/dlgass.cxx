@@ -1573,11 +1573,11 @@ void AssistentDlgImpl::SavePassword( const SfxObjectShellLock& xDoc, const OUStr
           {
 
             PasswordEntry* pEntry = nullptr;
-            for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
+            for (PasswordEntry& i : maPasswordList)
             {
-                if ( maPasswordList[ i ].maPath == rPath )
+                if ( i.maPath == rPath )
                 {
-                    pEntry = &maPasswordList[ i ];
+                    pEntry = &i;
                     break;
                 }
             }
@@ -1605,11 +1605,10 @@ void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const OUString& rPath 
 
 uno::Sequence < beans::NamedValue > AssistentDlgImpl::GetPassword( const OUString& rPath )
 {
-    for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
+    for (PasswordEntry & i : maPasswordList)
     {
-        PasswordEntry* pEntry = &maPasswordList[ i ];
-        if(pEntry->maPath == rPath)
-            return pEntry->aEncryptionData;
+        if(i.maPath == rPath)
+            return i.aEncryptionData;
     }
     return uno::Sequence < beans::NamedValue > ();
 }

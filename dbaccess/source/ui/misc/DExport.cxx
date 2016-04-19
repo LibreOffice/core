@@ -112,8 +112,8 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 {
     m_nRows += nRows;
     sal_Int32 nCount = 0;
-    for(sal_Int32 j=0;j < (sal_Int32)m_vColumns.size();++j)
-        if ( m_vColumns[j].first != COLUMN_POSITION_NOT_FOUND )
+    for(const std::pair<sal_Int32,sal_Int32> & rPair : m_vColumns)
+        if ( rPair.first != COLUMN_POSITION_NOT_FOUND )
             ++nCount;
 
     m_vColumnSize.resize(nCount);
@@ -345,11 +345,11 @@ void ODatabaseExport::insertValueIntoColumn()
                                     ,NumberFormat::NUMBER
                                     ,NumberFormat::LOGICAL
                                 };
-                                for (size_t i = 0; i < SAL_N_ELEMENTS(nFormats); ++i)
+                                for (short nFormat : nFormats)
                                 {
                                     try
                                     {
-                                        nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(nFormats[i],m_aLocale),m_sTextToken);
+                                        nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(nFormat,m_aLocale),m_sTextToken);
                                         break;
                                     }
                                     catch(Exception&)

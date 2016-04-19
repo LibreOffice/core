@@ -105,9 +105,9 @@ public:
 
     void setClosed(bool bNew)
     {
-        for(size_t a(0); a < maPolygons.size(); a++)
+        for(basegfx::B2DPolygon & maPolygon : maPolygons)
         {
-            maPolygons[a].setClosed(bNew);
+            maPolygon.setClosed(bNew);
         }
     }
 

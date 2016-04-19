@@ -565,12 +565,12 @@ SfxWorkWindow::~SfxWorkWindow()
 {
 
     // Delete SplitWindows
-    for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+    for (VclPtr<SfxSplitWindow> & n : pSplit)
     {
-        VclPtr<SfxSplitWindow> p = pSplit[n];
+        VclPtr<SfxSplitWindow> p = n;
         if (p->GetWindowCount())
             ReleaseChild_Impl(*p);
-        pSplit[n].disposeAndClear();
+        n.disposeAndClear();
     }
 
     // Delete help structure for Child-Windows
@@ -669,12 +669,12 @@ void SfxWorkWindow::DeleteControllers_Impl()
 
         // Delete ObjectBars (this is done last, so that aChildren does not
         // receive dead Pointers)
-        for ( size_t i = 0; i < aObjBarList.size(); i++ )
+        for (SfxObjectBar_Impl & i : aObjBarList)
         {
             // Not every position must be occupied
-            sal_uInt16 nId = aObjBarList[i].nId;
+            sal_uInt16 nId = i.nId;
             if ( nId )
-                aObjBarList[i].nId = 0;
+                i.nId = 0;
         }
     }
 
@@ -758,9 +758,9 @@ SvBorder SfxWorkWindow::Arrange_Impl()
     Size aSize;
     Rectangle aTmp( aClientArea );
 
-    for ( size_t n=0; n<aSortedList.size(); ++n )
+    for (unsigned short n : aSortedList)
     {
-        SfxChild_Impl* pCli = aChildren[aSortedList[n]];
+        SfxChild_Impl* pCli = aChildren[n];
         if ( !pCli->pWin )
             continue;
 
@@ -885,9 +885,8 @@ SvBorder SfxWorkWindow::Arrange_Impl()
 
 bool SfxWorkWindow::PrepareClose_Impl()
 {
-    for (size_t n=0; n<aChildWins.size(); n++)
+    for (SfxChildWin_Impl* pCW : aChildWins)
     {
-        SfxChildWin_Impl *pCW  = aChildWins[n];
         SfxChildWindow *pChild = pCW->pWin;
         if ( pChild && !pChild->QueryClose() )
             return false;
@@ -964,18 +963,15 @@ void SfxWorkWindow::ShowChildren_Impl()
 
     bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
 
-    for ( size_t nPos = 0; nPos < aChildren.size(); ++nPos )
+    for (SfxChild_Impl* pCli : aChildren)
     {
         SfxChildWin_Impl* pCW = nullptr;
-        SfxChild_Impl *pCli = aChildren[nPos];
-
         if ( pCli && pCli->pWin )
         {
             // We have to find the SfxChildWin_Impl to retrieve the
             // SFX_CHILDWIN flags that can influence visibility.
-            for (size_t n=0; n<aChildWins.size(); n++)
+            for (SfxChildWin_Impl* pCWin : aChildWins)
             {
-                SfxChildWin_Impl* pCWin = aChildWins[n];
                 SfxChild_Impl*    pChild  = pCWin->pCli;
                 if ( pChild == pCli )
                 {
@@ -1049,11 +1045,11 @@ void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, sal_uInt32 nResId,
     aObjBar.nPos = nRealPos;
     aObjBar.nMode = (nPos & SFX_VISIBILITY_MASK);
 
-    for ( size_t n=0; n<aObjBarList.size(); n++ )
+    for (SfxObjectBar_Impl & n : aObjBarList)
     {
-        if ( aObjBarList[n].nId == aObjBar.nId )
+        if ( n.nId == aObjBar.nId )
         {
-            aObjBarList[n] = aObjBar;
+            n = aObjBar;
             return;
         }
     }
@@ -1074,9 +1070,9 @@ bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
     if ( pParent && IsAppWorkWinToolbox_Impl( nRealPos ) )
         return pParent->KnowsObjectBar_Impl( nPos );
 
-    for ( size_t n=0; n<aObjBarList.size(); n++ )
+    for (const SfxObjectBar_Impl& n : aObjBarList)
     {
-        if ( aObjBarList[n].nPos == nRealPos )
+        if ( n.nPos == nRealPos )
             return true;
     }
 
@@ -1296,9 +1292,8 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 void SfxWorkWindow::UpdateChildWindows_Impl()
 {
     // any current or in the context available Childwindows
-    for ( size_t n=0; n<aChildWins.size(); n++ )
+    for (SfxChildWin_Impl* pCW : aChildWins)
     {
-        SfxChildWin_Impl *pCW = aChildWins[n];
         SfxChildWindow *pChildWin = pCW->pWin;
         bool bCreate = false;
         if ( pCW->nId && !pCW->bDisabled  && (pCW->aInfo.nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE || IsVisible_Impl( pCW->nVisibility ) ) )
@@ -1534,9 +1529,9 @@ bool SfxWorkWindow::IsVisible_Impl()
 
 void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
 {
-    for ( size_t n = 0; n < aChildWins.size(); ++n )
+    for (SfxChildWin_Impl* & aChildWin : aChildWins)
     {
-        SfxChildWindow *pCW = aChildWins[n]->pWin;
+        SfxChildWindow *pCW = aChildWin->pWin;
         if (pCW && pCW->GetAlignment() == SfxChildAlignment::NOALIGNMENT && pCW->GetType() != nId)
         {
             vcl::Window *pWin = pCW->GetWindow();
@@ -1572,9 +1567,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
         return;
 
     // configure direct childwindow
-    for (size_t n=0; n<aChildWins.size(); n++)
+    for (SfxChildWin_Impl* pChildWin : aChildWins)
     {
-        pCW = aChildWins[n];
+        pCW = pChildWin;
         SfxChildWindow *pChild = pCW->pWin;
         if ( pChild )
         {
@@ -1663,9 +1658,8 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
             // The current affected window is included in the calculation of
             // the inner rectangle!
-            for ( size_t m=0; m<aSortedList.size(); ++m )
+            for (unsigned short i : aSortedList)
             {
-                sal_uInt16 i=aSortedList[m];
                 SfxChild_Impl* pCli = aChildren[i];
 
                 if ( pCli && pCli->nVisible == SfxChildVisibility::VISIBLE && pCli->pWin )
@@ -2223,10 +2217,10 @@ SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(sal_uInt16 nId)
 
 void SfxWorkWindow::ResetChildWindows_Impl()
 {
-    for ( size_t n = 0; n < aChildWins.size(); ++n )
+    for (SfxChildWin_Impl* pChildWin : aChildWins)
     {
-        aChildWins[n]->nId = 0;
-        aChildWins[n]->bEnable = false;
+        pChildWin->nId = 0;
+        pChildWin->bEnable = false;
     }
 }
 
@@ -2383,9 +2377,9 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
     {
         if ( !bSorted )
             Sort_Impl();
-        for ( size_t n=0; n<aSortedList.size(); ++n )
+        for (unsigned short n : aSortedList)
         {
-            SfxChild_Impl* pCli = aChildren[aSortedList[n]];
+            SfxChild_Impl* pCli = aChildren[n];
             if ( (pCli->eAlign == SfxChildAlignment::NOALIGNMENT) || (IsDockingAllowed() && bInternalDockingAllowed) )
                 pCli->nVisible |= SfxChildVisibility::ACTIVE;
         }
@@ -2394,9 +2388,9 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
     {
         if ( !bSorted )
             Sort_Impl();
-        for ( size_t n=0; n<aSortedList.size(); ++n )
+        for (unsigned short n : aSortedList)
         {
-            SfxChild_Impl* pCli = aChildren[aSortedList[n]];
+            SfxChild_Impl* pCli = aChildren[n];
             pCli->nVisible &= ~SfxChildVisibility::ACTIVE;
         }
     }
@@ -2404,9 +2398,9 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
 
 bool SfxWorkWindow::IsAutoHideMode( const SfxSplitWindow *pSplitWin )
 {
-    for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+    for (VclPtr<SfxSplitWindow> & n : pSplit)
     {
-        if ( pSplit[n].get() != pSplitWin && pSplit[n]->IsAutoHide( true ) )
+        if ( n.get() != pSplitWin && n->IsAutoHide( true ) )
             return true;
     }
     return false;
@@ -2418,9 +2412,9 @@ void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
     if ( pParent )
         pParent->EndAutoShow_Impl( aPos );
 
-    for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+    for (VclPtr<SfxSplitWindow> & n : pSplit)
     {
-        SfxSplitWindow *p = pSplit[n];
+        SfxSplitWindow *p = n;
         if ( p && p->IsAutoHide() )
         {
             Point aLocalPos = p->ScreenToOutputPixel( aPos );

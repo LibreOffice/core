@@ -141,9 +141,9 @@ namespace logging
                 Variable( RTL_CONSTASCII_USTRINGPARAM( "$(pid)" ), aPID )
             };
 
-            for ( size_t i = 0; i < SAL_N_ELEMENTS( aVariables ); ++i )
+            for (Variable & aVariable : aVariables)
             {
-                OUString sPattern( aVariables[i].pVariablePattern, aVariables[i].nPatternLength, aVariables[i].eEncoding );
+                OUString sPattern( aVariable.pVariablePattern, aVariable.nPatternLength, aVariable.eEncoding );
                 sal_Int32 nVariableIndex = _inout_rFileURL.indexOf( sPattern );
                 if  (   ( nVariableIndex == 0 )
                     ||  (   ( nVariableIndex > 0 )
@@ -152,7 +152,7 @@ namespace logging
                     )
                 {
                     // found an (unescaped) variable
-                    _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, sPattern.getLength(), aVariables[i].sVariableValue );
+                    _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, sPattern.getLength(), aVariable.sVariableValue );
                 }
             }
         }

@@ -70,9 +70,9 @@ std::size_t SfxLokHelper::getViews()
 
     SfxObjectShell* pObjectShell = SfxViewFrame::Current()->GetObjectShell();
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-    for (std::size_t i = 0; i < rViewArr.size(); ++i)
+    for (SfxViewShell* i : rViewArr)
     {
-        if (rViewArr[i]->GetObjectShell() == pObjectShell)
+        if (i->GetObjectShell() == pObjectShell)
             ++nRet;
     }
 

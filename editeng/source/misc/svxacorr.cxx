@@ -2475,9 +2475,8 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
 
     if( bRet )
     {
-        for ( size_t i=0; i < aDeleteEntries.size(); i++ )
+        for (SvxAutocorrWord & aWordToDelete : aDeleteEntries)
         {
-            SvxAutocorrWord aWordToDelete = aDeleteEntries[i];
             SvxAutocorrWord *pFoundEntry = pAutocorr_List->FindAndRemove( &aWordToDelete );
             if( pFoundEntry )
             {
@@ -2499,9 +2498,9 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
             }
         }
 
-        for ( size_t i=0; i < aNewEntries.size(); i++ )
+        for (SvxAutocorrWord & aNewEntrie : aNewEntries)
         {
-            SvxAutocorrWord *pWordToAdd = new SvxAutocorrWord( aNewEntries[i].GetShort(), aNewEntries[i].GetLong(), true );
+            SvxAutocorrWord *pWordToAdd = new SvxAutocorrWord( aNewEntrie.GetShort(), aNewEntrie.GetLong(), true );
             SvxAutocorrWord *pRemoved = pAutocorr_List->FindAndRemove( pWordToAdd );
             if( pRemoved )
             {

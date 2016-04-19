@@ -59,9 +59,8 @@ void SfxFrameHTMLParser::ParseFrameOptions(
     // We will not mimic that bug !
     bool bMarginWidth = false, bMarginHeight = false;
 
-    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+    for (const auto & aOption : rOptions)
     {
-        const HTMLOption& aOption = rOptions[i];
         switch( aOption.GetToken() )
         {
         case HTML_O_BORDERCOLOR:

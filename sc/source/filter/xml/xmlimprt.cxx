@@ -2113,11 +2113,11 @@ ScXMLImport::ScXMLImport(
         { XML_CURRENCY,     util::NumberFormat::CURRENCY },
         { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
     };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aCellTypePairs); ++i)
+    for (const auto & aCellTypePair : aCellTypePairs)
     {
         aCellTypeMap.insert(
             CellTypeMap::value_type(
-                GetXMLToken(aCellTypePairs[i]._token), aCellTypePairs[i]._type));
+                GetXMLToken(aCellTypePair._token), aCellTypePair._type));
     }
 }
 

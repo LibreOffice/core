@@ -184,8 +184,8 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
 {
     try
     {
-        for( tAxisVecVecType::size_type nN=0; nN<m_aAllAxis.size(); nN++ )
-            ModifyListenerHelper::removeListenerFromAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );
+        for(tAxisVecVecType::value_type & m_aAllAxi : m_aAllAxis)
+            ModifyListenerHelper::removeListenerFromAllElements( m_aAllAxi, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
     }
     catch( const uno::Exception & ex )
