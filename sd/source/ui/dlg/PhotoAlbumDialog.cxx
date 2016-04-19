@@ -54,7 +54,8 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
     get(pImg, "preview_img");
 
     get(pInsTypeCombo, "opt_combo");
-    get(pASRCheck, "asr_check");
+
+    get(pFILLCheck, "fill_check");
     get(pCapCheck, "cap_check");
     pCancelBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CancelHdl));
     pCreateBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CreateHdl));
@@ -90,7 +91,7 @@ void SdPhotoAlbumDialog::dispose()
     pImagesLst.clear();
     pImg.clear();
     pInsTypeCombo.clear();
-    pASRCheck.clear();
+    pFILLCheck.clear();
     pCapCheck.clear();
     ModalDialog::dispose();
 }
@@ -151,17 +152,15 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                 ::awt::Point aPicPos;
 
-                if(pASRCheck->IsChecked())
+                if (pFILLCheck->IsChecked())
                 {
-                    // Resize the image, with keeping ASR
-                    aPicSize = createASRSize(aPicSize, aPageSize);
+                    aPicSize = createFILLSize(aPicSize, aPageSize);
                 }
                 else
                 {
                     aPicSize.Width = aPageSize.Width;
                     aPicSize.Height = aPageSize.Height;
                 }
-
                 xShape->setSize(aPicSize);
                 aPicPos.X = (aPageSize.Width - aPicSize.Width)/2;
                 aPicPos.Y = (aPageSize.Height - aPicSize.Height)/2;
@@ -219,16 +218,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
-                    {
+
                         // Resize the image, with keeping ASR
-                        aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
-                    }
-                    else
-                    {
-                        aPicSize.Width = aPageSize.Width/2 - 100;
-                        aPicSize.Height = aPageSize.Height/2 - 100;
-                    }
+                    aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
+
                     xShape->setSize(aPicSize);
                     aPicPos.X = (aPageSize.Width/4 - aPicSize.Width/2);
                     aPicPos.Y = aPageSize.Height/2 - aPicSize.Height/2;
@@ -254,16 +247,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
-                    {
-                        // Resize the image, with keeping ASR
-                        aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
-                    }
-                    else
-                    {
-                        aPicSize.Width = aPageSize.Width/2 - 100;
-                        aPicSize.Height = aPageSize.Height/2 - 100;
-                    }
+
+                    aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
+
+
                     xShape->setSize(aPicSize);
                     aPicPos.X = (aPageSize.Width/4 - aPicSize.Width/2) + aPageSize.Width/2;
                     aPicPos.Y = aPageSize.Height/2 - aPicSize.Height/2;
@@ -334,16 +321,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
-                    {
+
                         // Resize the image, with keeping ASR
-                        aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
-                    }
-                    else
-                    {
-                        aPicSize.Width = aPageSize.Width/2 - 100;
-                        aPicSize.Height = aPageSize.Height/2 - 100;
-                    }
+                    aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
+
                     xShape->setSize(aPicSize);
                     aPicPos.X = (aPageSize.Width/4 - aPicSize.Width/2);
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2;
@@ -368,16 +349,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
-                    {
+
                         // Resize the image, with keeping ASR
-                        aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
-                    }
-                    else
-                    {
-                        aPicSize.Width = aPageSize.Width/2 - 100;
-                        aPicSize.Height = aPageSize.Height/2 - 100;
-                    }
+                    aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
+
                     xShape->setSize(aPicSize);
                     aPicPos.X = (aPageSize.Width/4 - aPicSize.Width/2) + aPageSize.Width/2;
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2;
@@ -403,16 +378,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
-                    {
+
                         // Resize the image, with keeping ASR
-                        aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
-                    }
-                    else
-                    {
-                        aPicSize.Width = aPageSize.Width/2 - 100;
-                        aPicSize.Height = aPageSize.Height/2 - 100;
-                    }
+                    aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
+
                     xShape->setSize(aPicSize);
                     aPicPos.X = (aPageSize.Width/4 - aPicSize.Width/2);
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2 + aPageSize.Height/2;
@@ -437,16 +406,9 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     ::awt::Point aPicPos;
 
-                    if(pASRCheck->IsChecked())
-                    {
-                        // Resize the image, with keeping ASR
-                        aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
-                    }
-                    else
-                    {
-                        aPicSize.Width = aPageSize.Width/2 - 100;
-                        aPicSize.Height = aPageSize.Height/2 - 100;
-                    }
+                      // Resize the image, with keeping ASR
+                    aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
+
                     xShape->setSize(aPicSize);
                     aPicPos.X = (aPageSize.Width/4 - aPicSize.Width/2) + aPageSize.Width/2;
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2 + aPageSize.Height/2;
@@ -667,6 +629,58 @@ awt::Size SdPhotoAlbumDialog::createASRSize(const awt::Size& aPicSize, const awt
     }
     return awt::Size(resizeWidth, resizeHeight);
 }
+
+
+awt::Size SdPhotoAlbumDialog::createFILLSize(const awt::Size& aPicSize, const awt::Size& aMaxSize)
+{
+    double picWidth = aPicSize.Width;
+    double picHeight = aPicSize.Height;
+    double aspect = picWidth/picHeight;
+    double sliWidth = aMaxSize.Width;
+    double sliHeight = aMaxSize.Height;
+    //std::ofstream file;
+    int diffW = 0;
+    int diffH = 0;
+
+    if ((picWidth != sliWidth) || (picHeight != sliHeight))
+    {
+      diffW = sliWidth - picWidth;
+      diffH = sliHeight - picHeight;
+
+      if ((diffW > 0) || (diffH > 0))
+      {
+
+        if (diffW > diffH)
+        {
+
+          picWidth = sliWidth;
+          picHeight = picWidth/aspect;
+        }
+        else
+        {
+
+          picHeight = sliHeight;
+          picWidth = picHeight * aspect;
+        }
+      }
+      if ((diffW < 0) && (diffH < 0))
+      {
+        if (abs(diffW) < abs(diffH))
+        {
+
+          picWidth = sliWidth;
+          picHeight = picWidth/aspect;
+        }
+        else{
+
+          picHeight = sliHeight;
+          picWidth = picHeight * aspect;
+        }
+      }
+    }
+    return awt::Size(picWidth, picHeight);
+}
+
 
 void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
 {
