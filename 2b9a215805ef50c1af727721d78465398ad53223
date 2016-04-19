@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_63aa821b",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 0,
+      "message": "this was a misleading error message - it refers to python 2 \u0027s string, and actually means \"bytes\" (which did not exist before 2.6)",
+      "revId": "2b9a215805ef50c1af727721d78465398ad53223",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_834e9e94",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 0,
+      "message": "i have no idea what this \"typeOf\" thing was, let\u0027s hope nobody needs that",
+      "revId": "2b9a215805ef50c1af727721d78465398ad53223",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

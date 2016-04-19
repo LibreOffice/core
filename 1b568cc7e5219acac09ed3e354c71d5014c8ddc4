@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_23b08a8b",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 1,
+      "message": "this was always required to be unicode, so we shouldn\u0027t allow non-unicode python 2 \"str\" now",
+      "revId": "1b568cc7e5219acac09ed3e354c71d5014c8ddc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_6358c257",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "1b568cc7e5219acac09ed3e354c71d5014c8ddc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_03ad8e31",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 1,
+      "message": "no, we definitely don\u0027t want to encode python2\u0027s unicode  type here - the reason why the old code checks \"str\" here is that in Python 2 it was used both as a string and as a sequence-of-bytes type.\n\nsince in python 2.6 already \"bytes\" is actually a synonym for \"str\", this branch is actually unnecessary and unreachable in python2.\n\nnow we have the problem that as written it accepts python3\u0027s \"str\" as well, which is an accident - perhaps we can get away with removing that.\n\nthis was a mistake in commit a38b59265c08276fce6d73ce541cadb41aa6d347",
+      "revId": "1b568cc7e5219acac09ed3e354c71d5014c8ddc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_235eca45",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "1b568cc7e5219acac09ed3e354c71d5014c8ddc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_035bce55",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "1b568cc7e5219acac09ed3e354c71d5014c8ddc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_a362ba14",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 1,
+      "message": "to be consistent with the existing naming convention here for private stuff this should have a _ prefix",
+      "revId": "1b568cc7e5219acac09ed3e354c71d5014c8ddc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_03746ecd",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-19T13:41:08Z",
+      "side": 1,
+      "message": "so... what happens if it doesn\u0027t exist? we get a module?\n\n\u003e\u003e\u003e from com.sun.star.uno import DoesNotExist\n\u003e\u003e\u003e DoesNotExist\n\u003cmodule \u0027com.sun.star.uno.DoesNotExist\u0027 (\u003cuno.Importer object at 0x7fdb79a44400\u003e)\u003e\n\n\n... i\u0027m afraid this will not do, we really need an exception here.",
+      "revId": "1b568cc7e5219acac09ed3e354c71d5014c8ddc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
