@@ -24,12 +24,16 @@
 #include <FactoryIds.hxx>
 #include <sdmod.hxx>
 #include <tools/shl.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
+#include <sfx2/request.hxx>
+#include <svx/svxids.hrc>
 #include <ImpressViewShellBase.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
 #include <controller/SlsPageSelector.hxx>
+#include <undo/undomanager.hxx>
 #include <chrono>
 
 using namespace ::com::sun::star;
@@ -40,10 +44,12 @@ class SdMiscTest : public SdModelTestBase
 public:
     void testTdf96206();
     void testTdf96708();
+    void testTdf99396();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
     CPPUNIT_TEST(testTdf96708);
+    CPPUNIT_TEST(testTdf99396);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -131,6 +137,29 @@ void SdMiscTest::testTdf96708()
     xSSController.GetClipboard().DoPaste();
     const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
     CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
+
+    xDocSh->DoClose();
+}
+
+void SdMiscTest::testTdf99396()
+{
+    // Load the document and select the table.
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf99396.odp"), ODP);
+    sd::ViewShell *pViewShell = xDocSh->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+
+    // Make sure that the undo stack is empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+
+    // Set the vertical alignment of the cells to bottom.
+    sdr::table::SvxTableController* pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+    SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
+    pTableController->Execute(aRequest);
+    // This was 0, it wasn't possible to undo a vertical alignment change.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
 
     xDocSh->DoClose();
 }
