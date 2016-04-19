@@ -215,11 +215,11 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 
 typedef LibreOfficeKit *(LokHookFunction)( const char *install_path);
 
-typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char *user_profile_path );
+typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char *user_profile_url );
 
-typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_path );
+typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_url );
 
-static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_path )
+static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_url )
 {
     char *imp_lib;
     void *dlhandle;
@@ -233,7 +233,7 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     pSym2 = (LokHookFunction2 *) lok_dlsym(dlhandle, "libreofficekit_hook_2");
     if (!pSym2)
     {
-        if (user_profile_path != NULL)
+        if (user_profile_url != NULL)
         {
             fprintf( stderr, "the LibreOffice version in '%s' does not support passing a user profile to the hook function\n",
                      imp_lib );
@@ -258,7 +258,7 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     free( imp_lib );
     // dlhandle is "leaked"
     // coverity[leaked_storage]
-    return pSym2( install_path, user_profile_path );
+    return pSym2( install_path, user_profile_url );
 }
 
 static

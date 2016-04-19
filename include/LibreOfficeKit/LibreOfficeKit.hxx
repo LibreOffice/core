@@ -562,9 +562,9 @@ public:
 };
 
 /// Factory method to create a lok::Office instance.
-inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfilePath = NULL)
+inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
-    LibreOfficeKit* pThis = lok_init_2(pInstallPath, pUserProfilePath);
+    LibreOfficeKit* pThis = lok_init_2(pInstallPath, pUserProfileUrl);
     if (pThis == NULL || pThis->pClass->nSize == 0)
         return NULL;
     return new ::lok::Office(pThis);

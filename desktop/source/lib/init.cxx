@@ -2158,7 +2158,7 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
-static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfilePath)
+static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
 {
     enum {
         PRE_INIT,     // setup shared data in master process
@@ -2191,8 +2191,23 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (eStage != PRE_INIT)
         comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
-    if (eStage != SECOND_INIT && pUserProfilePath)
-        rtl::Bootstrap::set(OUString("UserInstallation"), OUString(pUserProfilePath, strlen(pUserProfilePath), RTL_TEXTENCODING_UTF8));
+    if (eStage != SECOND_INIT && pUserProfileUrl)
+    {
+        OUString url(
+            pUserProfileUrl, strlen(pUserProfileUrl), RTL_TEXTENCODING_UTF8);
+        OUString path;
+        if (url.startsWithIgnoreAsciiCase("vnd.sun.star.pathname:", &path))
+        {
+            OUString url2;
+            osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(
+                path, url2);
+            if (e == osl::FileBase::E_None)
+                url = url2;
+            else
+                SAL_WARN("lok", "resolving <" << url << "> failed with " << +e);
+        }
+        rtl::Bootstrap::set("UserInstallation", url);
+    }
 
     OUString aAppPath;
     if (pAppPath)

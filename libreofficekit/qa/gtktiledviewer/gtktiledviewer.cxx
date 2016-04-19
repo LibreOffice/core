@@ -505,7 +505,8 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
     {
         const std::string& rArgument = rArguments[i];
         if (rArgument == "--user-profile" && i + 1 < rArguments.size())
-            aUserProfile = std::string("file://") + rArguments[i + 1].c_str();
+            aUserProfile = std::string("vnd.sun.star.pathname:")
+                + rArguments[i + 1].c_str();
     }
     const gchar* pUserProfile = aUserProfile.empty() ? nullptr : aUserProfile.c_str();
     GtkWidget* pDocView = lok_doc_view_new_from_user_profile(pLOPath, pUserProfile, nullptr, nullptr);
