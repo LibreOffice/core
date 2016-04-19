@@ -16,6 +16,24 @@
       "revId": "0fa6c88007f61176ac707cb5d77fd35cf1521123",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_838cde36",
+        "filename": "basic/source/sbx/sbxarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-19T07:42:49Z",
+      "side": 1,
+      "message": "Done\naddressed with \u003chttps://gerrit.libreoffice.org/#/c/24223/\u003e",
+      "parentUuid": "5ac665da_28d183fc",
+      "revId": "0fa6c88007f61176ac707cb5d77fd35cf1521123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
