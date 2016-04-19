@@ -39,6 +39,17 @@ T round(T x)
 }
 #endif
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+T round(T x)
+{
+    return round(x);
+}
+}
+#endif
+
 namespace drawinglayer {
 
 namespace {
