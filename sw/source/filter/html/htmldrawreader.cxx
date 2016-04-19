@@ -266,9 +266,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     Color aBGColor;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
-    for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
+    for (const auto & rOption : rHTMLOptions)
     {
-        const HTMLOption& rOption = rHTMLOptions[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ID:

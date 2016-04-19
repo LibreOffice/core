@@ -110,10 +110,10 @@ sal_Int32 getDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& x
     sal_Int32 nPlacement = 0;
     aAny >>= nPlacement;
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aLabelPlacementMap); ++i)
+    for (LabelPlacementMap & i : aLabelPlacementMap)
     {
-        if (aLabelPlacementMap[i].nApi == nPlacement)
-            return aLabelPlacementMap[i].nPos;
+        if (i.nApi == nPlacement)
+            return i.nPos;
     }
 
     return 0;
@@ -129,11 +129,11 @@ void setDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel
         return;
 
     sal_Int32 nApi = 0;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aLabelPlacementMap); ++i)
+    for (LabelPlacementMap & i : aLabelPlacementMap)
     {
-        if (aLabelPlacementMap[i].nPos == nPos)
+        if (i.nPos == nPos)
         {
-            nApi = aLabelPlacementMap[i].nApi;
+            nApi = i.nApi;
             break;
         }
     }

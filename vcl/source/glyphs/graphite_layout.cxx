@@ -595,9 +595,9 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
         // even though they may have been reordered in which case they will have
         // been placed in a bigger cluster for other purposes.
         int nClusterCount = 0;
-        for (size_t j = 0; j < mvGlyphs.size(); j++)
+        for (GlyphItem & mvGlyph : mvGlyphs)
         {
-            if (mvGlyphs[j].IsClusterStart() && !mvGlyphs[j].IsDiacritic())
+            if (mvGlyph.IsClusterStart() && !mvGlyph.IsDiacritic())
             {
                 ++nClusterCount;
             }
@@ -657,9 +657,9 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
             iGlyph->maLinearPos.X() = static_cast<int>(static_cast<float>(iGlyph->maLinearPos.X()) * fXFactor);
             ++iGlyph;
         }
-        for (size_t i = 0; i < mvCharDxs.size(); i++)
+        for (int & mvCharDx : mvCharDxs)
         {
-            mvCharDxs[i] = static_cast<int>(fXFactor * static_cast<float>(mvCharDxs[i]));
+            mvCharDx = static_cast<int>(fXFactor * static_cast<float>(mvCharDx));
         }
     }
     mnWidth = rArgs.mnLayoutWidth;
@@ -782,8 +782,8 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     if (bRtl)
     {
         int diff = mvGlyphs[0].maLinearPos.X();
-        for (size_t i = 0; i < mvGlyphs.size(); ++i)
-            mvGlyphs[i].maLinearPos.X() -= diff;
+        for (GlyphItem & mvGlyph : mvGlyphs)
+            mvGlyph.maLinearPos.X() -= diff;
     }
 }
 

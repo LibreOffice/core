@@ -507,13 +507,13 @@ void CuiAboutConfigTabPage::AddToModifiedVector( const std::shared_ptr< Prop_Imp
 {
     bool isModifiedBefore = false;
     //Check if value modified before
-    for( size_t nInd = 0; nInd < m_vectorOfModified.size() ; ++nInd )
+    for(std::shared_ptr<Prop_Impl> & nInd : m_vectorOfModified)
     {
-        if( rProp->Name == m_vectorOfModified[nInd]->Name && rProp->Property == m_vectorOfModified[nInd]->Property )
+        if( rProp->Name == nInd->Name && rProp->Property == nInd->Property )
         {
             //property modified before. Assign reference to the modified value
             //do your changes on this object. They will be saved later.
-            m_vectorOfModified[nInd] = rProp;
+            nInd = rProp;
             isModifiedBefore = true;
             break;
         }

@@ -422,11 +422,11 @@ static OUString lcl_AddProperty(const Reference< XNameAccess >&  xColumns,
     OUString sColumnName(rColumnName);
     if(pMapping)
     {
-        for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
+        for(const auto & aColumnPair : pMapping->aColumnPairs)
         {
-            if(pMapping->aColumnPairs[nEntry].sLogicalColumnName == rColumnName)
+            if(aColumnPair.sLogicalColumnName == rColumnName)
             {
-                sColumnName = pMapping->aColumnPairs[nEntry].sRealColumnName;
+                sColumnName = aColumnPair.sRealColumnName;
                 break;
             }
         }

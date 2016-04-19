@@ -684,8 +684,8 @@ void SfxBindings::InvalidateAll
     pImp->bMsgDirty = pImp->bMsgDirty || pImp->bAllMsgDirty || bWithMsg;
     pImp->bAllDirty = true;
 
-    for ( size_t n = 0; n < pImp->pCaches->size(); ++n )
-        (*pImp->pCaches)[n]->Invalidate(bWithMsg);
+    for (SfxStateCache* pCache : *pImp->pCaches)
+        pCache->Invalidate(bWithMsg);
 
     pImp->nMsgPos = 0;
     if ( !nRegLevel )
@@ -783,9 +783,8 @@ void SfxBindings::InvalidateShell
     sal_uInt16 nLevel = pDispatcher->GetShellLevel(rSh);
     if ( nLevel != USHRT_MAX )
     {
-        for ( size_t n = 0; n < pImp->pCaches->size(); ++n )
+        for (SfxStateCache* pCache : *pImp->pCaches)
         {
-            SfxStateCache *pCache = (*pImp->pCaches)[n];
             const SfxSlotServer *pMsgServer =
                 pCache->GetSlotServer(*pDispatcher, pImp->xProv);
             if ( pMsgServer && pMsgServer->GetShellLevel() == nLevel )
@@ -1275,9 +1274,8 @@ void SfxBindings::UpdateSlotServer_Impl()
             pImp->bContextChanged = true;
     }
 
-    for (size_t i = 0, nCount = pImp->pCaches->size(); i < nCount; ++i)
+    for (SfxStateCache* pCache : *pImp->pCaches)
     {
-        SfxStateCache *pCache = (*pImp->pCaches)[i];
         //GetSlotServer can modify pImp->pCaches
         pCache->GetSlotServer(*pDispatcher, pImp->xProv);
     }

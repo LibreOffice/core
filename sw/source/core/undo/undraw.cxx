@@ -457,10 +457,9 @@ SwUndoDrawUnGroupConnectToLayout::~SwUndoDrawUnGroupConnectToLayout()
 void
 SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
 {
-    for ( std::vector< SdrObject >::size_type i = 0;
-          i < aDrawFormatsAndObjs.size(); ++i )
+    for (const std::pair< SwDrawFrameFormat*, SdrObject* > & rPair : aDrawFormatsAndObjs)
     {
-        SdrObject* pObj( aDrawFormatsAndObjs[i].second );
+        SdrObject* pObj( rPair.second );
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(pObj->GetUserCall()) );
         OSL_ENSURE( pDrawContact,
                 "<SwUndoDrawUnGroupConnectToLayout::Undo(..)> -- missing SwDrawContact instance" );
@@ -477,11 +476,10 @@ SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
 void
 SwUndoDrawUnGroupConnectToLayout::RedoImpl(::sw::UndoRedoContext &)
 {
-    for ( std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >::size_type i = 0;
-          i < aDrawFormatsAndObjs.size(); ++i )
+    for (const std::pair< SwDrawFrameFormat*, SdrObject* > & rPair : aDrawFormatsAndObjs)
     {
-        SwDrawFrameFormat* pFormat( aDrawFormatsAndObjs[i].first );
-        SdrObject* pObj( aDrawFormatsAndObjs[i].second );
+        SwDrawFrameFormat* pFormat( rPair.first );
+        SdrObject* pObj( rPair.second );
         SwDrawContact *pContact = new SwDrawContact( pFormat, pObj );
         pContact->ConnectToLayout();
         pContact->MoveObjToVisibleLayer( pObj );

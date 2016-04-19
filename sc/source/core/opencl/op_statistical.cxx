@@ -3440,14 +3440,14 @@ void OpGeoMean::GenSlidingWindowFunction(
     ss << "    int offset;\n";
     ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
 
-    for(size_t i=0;i<vSubArguments.size();i++)
+    for(DynamicKernelArgumentRef & rArg : vSubArguments)
     {
-        assert(vSubArguments[i]->GetFormulaToken());
+        assert(rArg->GetFormulaToken());
 
-        if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+        if(rArg->GetFormulaToken()->GetType() ==
         formula::svDoubleVectorRef)
         {
-            FormulaToken *tmpCur = vSubArguments[i]->GetFormulaToken();
+            FormulaToken *tmpCur = rArg->GetFormulaToken();
                 const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
                      formula::DoubleVectorRefToken *>(tmpCur);
                 size_t nCurWindowSize = pCurDVR->GetArrayLength() <
@@ -3478,7 +3478,7 @@ void OpGeoMean::GenSlidingWindowFunction(
             std::string p2 = "p2";
 
             ss << "        tmp0 =";
-            vSubArguments[i]->GenDeclRef(ss);
+            rArg->GenDeclRef(ss);
             ss << "["<<p1.c_str()<<"];\n";
             ss << "        if(!isNan(tmp0))\n";
             ss << "       {\n";
@@ -3487,7 +3487,7 @@ void OpGeoMean::GenSlidingWindowFunction(
             ss << "       }\n";
 
             ss << "        tmp0 =";
-            vSubArguments[i]->GenDeclRef(ss);
+            rArg->GenDeclRef(ss);
             ss << "["<<p2.c_str()<<"];\n";
             ss << "        if(!isNan(tmp0))\n";
             ss << "       {\n";
@@ -3499,7 +3499,7 @@ void OpGeoMean::GenSlidingWindowFunction(
             ss << "        else if (p1 < min(arrayLength, offset + windowSize)) {\n";
 
             ss << "        tmp0 =";
-            vSubArguments[i]->GenDeclRef(ss);
+            rArg->GenDeclRef(ss);
             ss << "["<<p1.c_str()<<"];\n";
             ss << "        if(!isNan(tmp0))\n";
             ss << "        {\n";
@@ -3534,15 +3534,14 @@ void OpGeoMean::GenSlidingWindowFunction(
             ss << "    if (lidx == 0)\n";
             ss << "    {\n";
             ss << "        tmp0 =";
-            if(vSubArguments[i]->GetFormulaToken()->GetType() ==
-     formula::svSingleVectorRef)
+            if(rArg->GetFormulaToken()->GetType() == formula::svSingleVectorRef)
             {
-                vSubArguments[i]->GenDeclRef(ss);
+                rArg->GenDeclRef(ss);
                 ss << "[writePos];\n";
             }
             else
             {
-                vSubArguments[i]->GenDeclRef(ss);
+                rArg->GenDeclRef(ss);
                 ss <<";\n";
                 //ss <<"printf(\"\\n********************tmp0 is %f\",tmp0);\n";
             }
@@ -4777,9 +4776,9 @@ void OpMedian::GenSlidingWindowFunction(
     ss << "    unsigned int startFlag = 0;\n";
     ss << "    unsigned int endFlag = 0;\n";
     ss << "    double dataIna;\n";
-    for (size_t i = 0; i < vSubArguments.size(); i++)
+    for (DynamicKernelArgumentRef & rArg : vSubArguments)
     {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        FormulaToken *pCur = rArg->GetFormulaToken();
         assert(pCur);
         if (const formula::DoubleVectorRefToken* pCurDVR =
             dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))

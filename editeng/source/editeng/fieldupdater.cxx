@@ -29,13 +29,13 @@ public:
     {
         SfxItemPool* pPool = mrObj.GetPool();
         EditTextObjectImpl::ContentInfosType& rContents = mrObj.GetContents();
-        for (size_t i = 0; i < rContents.size(); ++i)
+        for (std::unique_ptr<ContentInfo> & i : rContents)
         {
-            ContentInfo& rContent = *rContents[i].get();
+            ContentInfo& rContent = *i.get();
             ContentInfo::XEditAttributesType& rAttribs = rContent.GetAttribs();
-            for (size_t j = 0; j < rAttribs.size(); ++j)
+            for (std::unique_ptr<XEditAttribute> & rAttrib : rAttribs)
             {
-                XEditAttribute& rAttr = *rAttribs[j].get();
+                XEditAttribute& rAttr = *rAttrib.get();
                 const SfxPoolItem* pItem = rAttr.GetItem();
                 if (pItem->Which() != EE_FEATURE_FIELD)
                     // This is not a field item.

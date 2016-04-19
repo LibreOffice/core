@@ -152,27 +152,27 @@ void ScTabView::FakeButtonUp( ScSplitPos eWhich )
 
 void ScTabView::HideAllCursors()
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i])
-            if (pGridWin[i]->IsVisible())
+    for (VclPtr<ScGridWindow> & i : pGridWin)
+        if (i)
+            if (i->IsVisible())
             {
-                vcl::Cursor* pCur = pGridWin[i]->GetCursor();
+                vcl::Cursor* pCur = i->GetCursor();
                 if (pCur)
                     if (pCur->IsVisible())
                         pCur->Hide();
-                pGridWin[i]->HideCursor();
+                i->HideCursor();
             }
 }
 
 void ScTabView::ShowAllCursors()
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i])
-            if (pGridWin[i]->IsVisible())
+    for (VclPtr<ScGridWindow> & i : pGridWin)
+        if (i)
+            if (i->IsVisible())
             {
-                pGridWin[i]->ShowCursor();
+                i->ShowCursor();
 
-                pGridWin[i]->CursorChanged();
+                i->CursorChanged();
             }
 }
 
@@ -652,9 +652,9 @@ void ScTabView::TestHintWindow()
     else
         mpInputHintWindow.disposeAndClear();
 
-    for ( sal_uInt16 i=0; i<4; i++ )
-        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-            pGridWin[i]->UpdateListValPos( bListValButton, aListValPos );
+    for (VclPtr<ScGridWindow> & i : pGridWin)
+        if ( i && i->IsVisible() )
+            i->UpdateListValPos( bListValButton, aListValPos );
 }
 
 bool ScTabView::HasHintWindow() const
@@ -1710,9 +1710,9 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
         if ( bRefMode )     // hide EditView if necessary (after aViewData.SetTabNo !)
         {
-            for (sal_uInt16 i = 0; i < 4; ++i)
-                if (pGridWin[i] && pGridWin[i]->IsVisible())
-                    pGridWin[i]->UpdateEditViewPos();
+            for (VclPtr<ScGridWindow> & i : pGridWin)
+                if (i && i->IsVisible())
+                    i->UpdateEditViewPos();
         }
 
         TabChanged(bSameTabButMoved);                                       // DrawView
@@ -1774,9 +1774,9 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
         // Form Layer must know the visible area of the new sheet
         // that is why MapMode must already be correct here
-        for (sal_uInt16 i=0; i<4; i++)
-            if (pGridWin[i])
-                pGridWin[i]->SetMapMode( pGridWin[i]->GetDrawMapMode() );
+        for (VclPtr<ScGridWindow> & i : pGridWin)
+            if (i)
+                i->SetMapMode( i->GetDrawMapMode() );
         SetNewVisArea();
 
         PaintGrid();
@@ -2584,9 +2584,9 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
 void ScTabView::HideListBox()
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i])
-            pGridWin[i]->ClickExtern();
+    for (VclPtr<ScGridWindow> & i : pGridWin)
+        if (i)
+            i->ClickExtern();
 }
 
 void ScTabView::UpdateInputContext()
@@ -2686,8 +2686,8 @@ void ScTabView::CheckNeedsRepaint()
 
 bool ScTabView::NeedsRepaint()
 {
-    for (size_t i = 0; i < 4; i++)
-        if (pGridWin[i] && pGridWin[i]->IsVisible() && pGridWin[i]->NeedsRepaint())
+    for (VclPtr<ScGridWindow> & i : pGridWin)
+        if (i && i->IsVisible() && i->NeedsRepaint())
             return true;
     return false;
 }

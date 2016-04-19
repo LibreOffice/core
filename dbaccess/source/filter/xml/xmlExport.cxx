@@ -364,14 +364,14 @@ void ODBExport::exportDataSource()
             };
 
             bool bIsXMLDefault = false;
-            for ( size_t i=0; i < SAL_N_ELEMENTS( aTokens ); ++i )
+            for (const auto & aToken : aTokens)
             {
-                if ( pProperties->Name == aTokens[i].sPropertyName )
+                if ( pProperties->Name == aToken.sPropertyName )
                 {
-                    eToken = aTokens[i].eAttributeToken;
+                    eToken = aToken.eAttributeToken;
 
-                    if  (   !!aTokens[i].aXMLDefault
-                        &&  ( sValue == *aTokens[i].aXMLDefault )
+                    if  (   !!aToken.aXMLDefault
+                        &&  ( sValue == *aToken.aXMLDefault )
                         )
                     {
                         bIsXMLDefault = true;
@@ -498,9 +498,9 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
         ,XML_MAX_ROW_COUNT
         ,XML_SUPPRESS_VERSION_COLUMNS
     };
-    for (size_t i = 0; i< SAL_N_ELEMENTS(pSettings); ++i)
+    for (::xmloff::token::XMLTokenEnum pSetting : pSettings)
     {
-        TSettingsMap::const_iterator aFind = _aSettings.find(pSettings[i]);
+        TSettingsMap::const_iterator aFind = _aSettings.find(pSetting);
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
@@ -531,9 +531,9 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
         ,XML_IS_FIRST_ROW_HEADER_LINE
         ,XML_PARAMETER_NAME_SUBSTITUTION
     };
-    for (size_t i = 0; i< SAL_N_ELEMENTS(pSettings); ++i)
+    for (::xmloff::token::XMLTokenEnum pSetting : pSettings)
     {
-        TSettingsMap::const_iterator aFind = _aSettings.find(pSettings[i]);
+        TSettingsMap::const_iterator aFind = _aSettings.find(pSetting);
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
@@ -1132,11 +1132,11 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         };
 
         ::std::vector< XMLPropertyState > aPropertyStates;
-        for (size_t i = 0 ; i < SAL_N_ELEMENTS(pExportHelper); ++i)
+        for (const auto & i : pExportHelper)
         {
-            aPropertyStates = pExportHelper[i].first->Filter(_xProp);
+            aPropertyStates = i.first->Filter(_xProp);
             if ( !aPropertyStates.empty() )
-                pExportHelper[i].second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( pExportHelper[i].second.second, aPropertyStates )));
+                i.second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( i.second.second, aPropertyStates )));
         }
 
         Reference< XNameAccess > xCollection;
@@ -1177,14 +1177,14 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
              TExportPropMapperPair(m_xColumnExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_COLUMN ))
             ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
         };
-        for (size_t i = 0 ; i < SAL_N_ELEMENTS(pExportHelper); ++i)
+        for (const auto & i : pExportHelper)
         {
-            ::std::vector< XMLPropertyState > aPropStates = pExportHelper[i].first->Filter( _xProp );
+            ::std::vector< XMLPropertyState > aPropStates = i.first->Filter( _xProp );
             if ( !aPropStates.empty() )
             {
                 ::std::vector< XMLPropertyState >::iterator aItr = aPropStates.begin();
                 ::std::vector< XMLPropertyState >::const_iterator aEnd = aPropStates.end();
-                const rtl::Reference < XMLPropertySetMapper >& pStyle = pExportHelper[i].first->getPropertySetMapper();
+                const rtl::Reference < XMLPropertySetMapper >& pStyle = i.first->getPropertySetMapper();
                 while ( aItr != aEnd )
                 {
                     if ( aItr->mnIndex != -1 )
@@ -1208,10 +1208,10 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                 }
 
             }
-            if ( XML_STYLE_FAMILY_TABLE_CELL == pExportHelper[i].second.second )
+            if ( XML_STYLE_FAMILY_TABLE_CELL == i.second.second )
                 ::std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), ::std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )
-                pExportHelper[i].second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( pExportHelper[i].second.second, aPropStates )));
+                i.second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( i.second.second, aPropStates )));
         }
     }
 }

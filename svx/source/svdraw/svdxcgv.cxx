@@ -687,13 +687,10 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
             rObjVector1.push_back( pMark );
     }
 
-    for( size_t n = 0, nCount = aObjVectors.size(); n < nCount; ++n )
+    for(std::vector<SdrMark*> & rObjVector : aObjVectors)
     {
-        ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
-
-        for( size_t i = 0; i < rObjVector.size(); ++i )
+        for(SdrMark* pMark : rObjVector)
         {
-            SdrMark*    pMark = rObjVector[ i ];
             aRetval.push_back(pMark->GetMarkedSdrObj());
         }
     }
@@ -734,9 +731,8 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
 
-        for( size_t i(0); i < aSdrObjects.size(); i++ )
+        for(SdrObject* pObj : aSdrObjects)
         {
-            const SdrObject*    pObj = aSdrObjects[i];
             SdrObject*          pNeuObj;
 
             if( dynamic_cast<const SdrPageObj*>( pObj) !=  nullptr )

@@ -188,14 +188,14 @@ static void SetCharFormatAttrs( SwCharFormat *pCharFormat, SfxItemSet& rItemSet 
     const SfxPoolItem *pItem;
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
-       for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
+       for(unsigned short aWhichId : aWhichIds)
     {
-        if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,
+        if( SfxItemState::SET == rItemSet.GetItemState( aWhichId, false,
                                                    &pItem ) &&
             static_cast<const SvxFontHeightItem *>(pItem)->GetProp() != 100)
         {
             // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
-            rItemSet.ClearItem( aWhichIds[i] );
+            rItemSet.ClearItem( aWhichId );
         }
     }
 
@@ -319,14 +319,14 @@ static void SetTextCollAttrs( SwTextFormatColl *pColl, SfxItemSet& rItemSet,
 
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
-       for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
+       for(unsigned short aWhichId : aWhichIds)
     {
-        if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,
+        if( SfxItemState::SET == rItemSet.GetItemState( aWhichId, false,
                                                    &pItem ) &&
             static_cast<const SvxFontHeightItem *>(pItem)->GetProp() != 100)
         {
             // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
-            rItemSet.ClearItem( aWhichIds[i] );
+            rItemSet.ClearItem( aWhichId );
         }
     }
 
@@ -423,9 +423,9 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     {
         static sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
                                      RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
-        for( size_t i=0; i<SAL_N_ELEMENTS(aPoolIds); i++ )
+        for(unsigned short aPoolId : aPoolIds)
         {
-            const SwPageDesc *pPageDesc = GetPageDesc( aPoolIds[i], false );
+            const SwPageDesc *pPageDesc = GetPageDesc( aPoolId, false );
             if( pPageDesc )
             {
                 SwPageDesc aNewPageDesc( *pPageDesc );
@@ -2293,16 +2293,16 @@ static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc )
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                    RES_CHRATR_CTL_FONT };
     const SfxPoolItem *pItem;
-    for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
+    for(unsigned short aWhichId : aWhichIds)
     {
-        if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,&pItem ) )
+        if( SfxItemState::SET == rItemSet.GetItemState( aWhichId, false,&pItem ) )
         {
             const SvxFontItem& rFont = *static_cast<const SvxFontItem *>(pItem);
             if( RTL_TEXTENCODING_SYMBOL != rFont.GetCharSet() )
             {
                 SvxFontItem aFont( rFont.GetFamily(), rFont.GetFamilyName(),
                                    rFont.GetStyleName(), rFont.GetPitch(),
-                                   eEnc, aWhichIds[i]);
+                                   eEnc, aWhichId);
                 rFormat.SetFormatAttr( aFont );
             }
         }
@@ -2318,15 +2318,15 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
             // Set new encoding as pool default
             static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                            RES_CHRATR_CTL_FONT };
-            for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
+            for(unsigned short aWhichId : aWhichIds)
             {
                 const SvxFontItem& rDfltFont =
-                    static_cast<const SvxFontItem&>(pDoc->GetDefault( aWhichIds[i]));
+                    static_cast<const SvxFontItem&>(pDoc->GetDefault( aWhichId));
                 SvxFontItem aFont( rDfltFont.GetFamily(),
                                    rDfltFont.GetFamilyName(),
                                    rDfltFont.GetStyleName(),
                                    rDfltFont.GetPitch(),
-                                   eEnc, aWhichIds[i] );
+                                   eEnc, aWhichId );
                 pDoc->SetDefault( aFont );
             }
 

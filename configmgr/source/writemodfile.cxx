@@ -459,13 +459,11 @@ void writeModifications(
         OUString pathRep(
             parentPathRepresentation + "/" +
             Data::createSegment(node->getTemplateName(), nodeName));
-        for (Modifications::Node::Children::const_iterator i(
-                 modifications.children.begin());
-             i != modifications.children.end(); ++i)
+        for (const auto & i : modifications.children)
         {
             writeModifications(
-                components, handle, pathRep, node, i->first,
-                node->getMember(i->first), i->second);
+                components, handle, pathRep, node, i.first,
+                node->getMember(i.first), i.second);
         }
     }
 }

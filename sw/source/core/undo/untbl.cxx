@@ -1787,12 +1787,12 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // do this _after_ deleting Frames because disposing SwAccessible requires
     // connection to the nodes, see SwAccessibleChild::IsAccessible()
-    for (size_t i = 0; i < aDelNodes.size(); ++i)
+    for (const std::pair<SwTableBox *, sal_uLong> & rDelNode : aDelNodes)
     {
         // first disconnect box from node, otherwise ~SwTableBox would
         // access pBox->pSttNd, deleted by DeleteSection
-        aDelNodes[i].first->RemoveFromTable();
-        rDoc.getIDocumentContentOperations().DeleteSection(rDoc.GetNodes()[ aDelNodes[i].second ]);
+        rDelNode.first->RemoveFromTable();
+        rDoc.getIDocumentContentOperations().DeleteSection(rDoc.GetNodes()[ rDelNode.second ]);
     }
 
     // Remove boxes from table structure

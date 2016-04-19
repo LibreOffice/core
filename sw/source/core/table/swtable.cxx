@@ -293,9 +293,8 @@ static void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
         ::lcl_ModifyBoxes( rLines[i]->GetTabBoxes(), nOld, nNew, rFormatArr );
     if( bCheckSum )
     {
-        for( size_t i = 0; i < rFormatArr.size(); ++i )
+        for(SwFormat* pFormat : rFormatArr)
         {
-            SwFormat* pFormat = rFormatArr[i];
             const SwTwips nBox = lcl_MulDiv64<SwTwips>(pFormat->GetFrameSize().GetWidth(), nNew, nOld);
             SwFormatFrameSize aNewBox( ATT_VAR_SIZE, nBox, 0 );
             pFormat->LockModify();

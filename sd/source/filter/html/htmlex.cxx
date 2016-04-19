@@ -1681,9 +1681,8 @@ bool HtmlExport::CreateHtmlForPresPages()
         {
             aStr.append("<map name=\"map0\">\r\n");
 
-            for (sal_uInt32 nObject = 0, n = aClickableObjects.size(); nObject < n; nObject++)
+            for (SdrObject* pObject : aClickableObjects)
             {
-                SdrObject* pObject = aClickableObjects[nObject];
                 SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
                 SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
 
@@ -2939,9 +2938,9 @@ static const char * ASP_Scripts[] = { "common.inc", "webcast.asp", "show.asp", "
 /** creates and saves the ASP scripts for WebShow */
 bool HtmlExport::CreateASPScripts()
 {
-    for( sal_uInt16 n = 0; n < SAL_N_ELEMENTS(ASP_Scripts); n++ )
+    for(const char * p : ASP_Scripts)
     {
-        OUString aScript = OUString::createFromAscii(ASP_Scripts[n]);
+        OUString aScript = OUString::createFromAscii(p);
 
         if(!CopyScript(maExportPath, aScript, aScript))
             return false;
@@ -2958,9 +2957,9 @@ static const char *PERL_Scripts[] = { "webcast.pl", "common.pl", "editpic.pl", "
 // creates and saves the PERL scripts for WebShow
 bool HtmlExport::CreatePERLScripts()
 {
-    for( sal_uInt16 n = 0; n < SAL_N_ELEMENTS(PERL_Scripts); n++ )
+    for(const char * p : PERL_Scripts)
     {
-        OUString aScript = OUString::createFromAscii(PERL_Scripts[n]);
+        OUString aScript = OUString::createFromAscii(p);
 
         if(!CopyScript(maExportPath, aScript, aScript, true))
             return false;
