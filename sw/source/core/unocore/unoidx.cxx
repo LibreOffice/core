@@ -936,9 +936,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     SwSections aSectArr;
                     pSectionFormat->GetChildSections(aSectArr,
                             SORTSECT_NOT, false);
-                    for(size_t i = 0; i < aSectArr.size(); ++i)
+                    for(SwSection* pSect : aSectArr)
                     {
-                        SwSection* pSect = aSectArr[i];
                         if(pSect->GetType() == TOX_HEADER_SECTION)
                         {
                             const uno::Reference <text::XTextSection> xHeader =

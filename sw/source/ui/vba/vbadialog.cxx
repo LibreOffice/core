@@ -40,9 +40,8 @@ static const WordDialogTable aWordDialogTable[] =
 OUString
 SwVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aWordDialogTable); ++i)
+    for (const WordDialogTable & rTable : aWordDialogTable)
     {
-        const WordDialogTable& rTable = aWordDialogTable[i];
         if( nIndex == rTable.wdDialog )
         {
             return OUString::createFromAscii( rTable.ooDialog );

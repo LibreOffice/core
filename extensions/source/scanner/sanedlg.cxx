@@ -1413,10 +1413,10 @@ void SaneDlg::SaveState()
         "br-x",
         "br-y"
     };
-    for( size_t i = 0; i < SAL_N_ELEMENTS(pSaveOptions); ++i )
+    for(const char * pSaveOption : pSaveOptions)
     {
-        OString aOption = pSaveOptions[i];
-        int nOption = mrSane.GetOptionByName( pSaveOptions[i] );
+        OString aOption = pSaveOption;
+        int nOption = mrSane.GetOptionByName( pSaveOption );
         if( nOption > -1 )
         {
             SANE_Value_Type nType = mrSane.GetOptionType( nOption );

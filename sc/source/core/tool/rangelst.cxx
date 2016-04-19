@@ -1270,9 +1270,8 @@ void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
         SCROW nRow2;
         SCTAB nTab2;
         rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        for ( size_t i = 0, nPairs = maPairs.size(); i < nPairs; ++i )
+        for (ScRangePair* pR : maPairs)
         {
-            ScRangePair* pR = maPairs[ i ];
             for ( sal_uInt16 j=0; j<2; j++ )
             {
                 ScRange& rRange = pR->GetRange(j);
@@ -1319,9 +1318,8 @@ void ScRangePairList::DeleteOnTab( SCTAB nTab )
 
 ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
 {
-    for ( size_t j = 0, nListCount = maPairs.size(); j < nListCount; j++ )
+    for (ScRangePair* pR : maPairs)
     {
-        ScRangePair* pR = maPairs[ j ];
         if ( pR->GetRange(0).In( rAdr ) )
             return pR;
     }
@@ -1330,9 +1328,8 @@ ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
 
 ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 {
-    for ( size_t j = 0, nListCount = maPairs.size(); j < nListCount; j++ )
+    for (ScRangePair* pR : maPairs)
     {
-        ScRangePair* pR = maPairs[ j ];
         if ( pR->GetRange(0) == rRange )
             return pR;
     }
@@ -1342,9 +1339,9 @@ ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 ScRangePairList* ScRangePairList::Clone() const
 {
     ScRangePairList* pNew = new ScRangePairList;
-    for ( size_t j = 0, nListCount = maPairs.size(); j < nListCount; j++ )
+    for (const ScRangePair* pR : maPairs)
     {
-        pNew->Append( *maPairs[ j ] );
+        pNew->Append( *pR );
     }
     return pNew;
 }

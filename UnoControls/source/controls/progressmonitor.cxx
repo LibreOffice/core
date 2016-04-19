@@ -741,9 +741,8 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( size_t n = 0; n < maTextlist_Top.size(); ++n )
+        for (IMPL_TextlistItem* pSearchItem : maTextlist_Top)
         {
-            IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sTopic;
             aCollectString  +=  "\n";
         }
@@ -758,9 +757,8 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( size_t n = 0; n < maTextlist_Top.size(); ++n )
+        for (IMPL_TextlistItem* pSearchItem : maTextlist_Top)
         {
-            IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sText;
             aCollectString  +=  "\n";
         }
@@ -777,9 +775,8 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( size_t n = 0; n < maTextlist_Bottom.size(); ++n )
+        for (IMPL_TextlistItem* pSearchItem : maTextlist_Bottom)
         {
-            IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sTopic;
             aCollectString  +=  "\n";
         }
@@ -794,9 +791,8 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( size_t n = 0; n < maTextlist_Bottom.size(); ++n )
+        for (IMPL_TextlistItem* pSearchItem : maTextlist_Bottom)
         {
-            IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sText;
             aCollectString  +=  "\n";
         }
@@ -813,16 +809,14 @@ void ProgressMonitor::impl_cleanMemory ()
 
     // Delete all of lists.
 
-    for ( size_t nPosition = 0; nPosition < maTextlist_Top.size(); ++nPosition )
+    for (IMPL_TextlistItem* pSearchItem : maTextlist_Top)
     {
-        IMPL_TextlistItem* pSearchItem = maTextlist_Top[ nPosition ];
         delete pSearchItem;
     }
     maTextlist_Top.clear();
 
-    for ( size_t nPosition = 0; nPosition < maTextlist_Bottom.size(); ++nPosition )
+    for (IMPL_TextlistItem* pSearchItem : maTextlist_Bottom)
     {
-        IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ nPosition ];
         delete pSearchItem;
     }
     maTextlist_Bottom.clear();

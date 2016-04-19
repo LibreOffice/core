@@ -475,12 +475,12 @@ namespace vcl_sal {
     // translate keycodes, used within the displayed menu shortcuts
     OUString getKeysymReplacementName( const OUString& pLang, KeySym nSymbol )
     {
-        for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
+        for(const auto & aKeyboard : aKeyboards)
         {
-            if( pLang.equalsAscii( aKeyboards[n].pLangName ) )
+            if( pLang.equalsAscii( aKeyboard.pLangName ) )
             {
-                const struct KeysymNameReplacement* pRepl = aKeyboards[n].pReplacements;
-                for( int m = aKeyboards[n].nReplacements ; m ; )
+                const struct KeysymNameReplacement* pRepl = aKeyboard.pReplacements;
+                for( int m = aKeyboard.nReplacements ; m ; )
                 {
                     if( nSymbol == pRepl[--m].aSymbol )
                         return OUString( pRepl[m].pName, strlen(pRepl[m].pName), RTL_TEXTENCODING_UTF8 );

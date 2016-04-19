@@ -253,10 +253,8 @@ void RtfExport::WriteRevTab()
     // RTF always seems to use Unknown as the default first entry
     GetRedline(OUString("Unknown"));
 
-    for (std::size_t i = 0; i < m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++i)
+    for (SwRangeRedline* pRedl : m_pDoc->getIDocumentRedlineAccess().GetRedlineTable())
     {
-        const SwRangeRedline* pRedl = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ i ];
-
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }
 
@@ -394,13 +392,13 @@ void RtfExport::WriteMainText()
         std::vector< std::pair<OString, OString> > aProperties;
         aProperties.push_back(std::make_pair<OString, OString>("shapeType", "1"));
         aProperties.push_back(std::make_pair<OString, OString>("fillColor", OString::number(msfilter::util::BGRToRGB(oBrush->GetColor().GetColor()))));
-        for (std::size_t i = 0; i < aProperties.size(); ++i)
+        for (std::pair<OString,OString> & rPair : aProperties)
         {
             Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
             Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
-            Strm().WriteCharPtr(aProperties[i].first.getStr());
+            Strm().WriteCharPtr(rPair.first.getStr());
             Strm().WriteCharPtr("}{" OOO_STRING_SVTOOLS_RTF_SV " ");
-            Strm().WriteCharPtr(aProperties[i].second.getStr());
+            Strm().WriteCharPtr(rPair.second.getStr());
             Strm().WriteCharPtr("}}");
         }
         Strm().WriteChar('}'); // shpinst

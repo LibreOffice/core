@@ -190,10 +190,10 @@ void OSelectionBrowseBox::initialize()
         OUString sGroup = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';') - 1, ';');
         m_aFunctionStrings = m_aFunctionStrings.getToken(0, ';');
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(eFunctions); ++i)
+        for (IParseContext::InternationalKeyCode eFunction : eFunctions)
         {
             m_aFunctionStrings += ";";
-            m_aFunctionStrings += OStringToOUString(rContext.getIntlKeywordAscii(eFunctions[i]),
+            m_aFunctionStrings += OStringToOUString(rContext.getIntlKeywordAscii(eFunction),
                 RTL_TEXTENCODING_UTF8);
         }
         m_aFunctionStrings += ";";
@@ -341,9 +341,9 @@ void OSelectionBrowseBox::Init()
     Size aHeight;
     const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
 
-    for (sal_Size i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
+    for (const Control* pControl : pControls)
     {
-        const Size aTemp(pControls[i]->GetOptimalSize());
+        const Size aTemp(pControl->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
     }

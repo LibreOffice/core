@@ -1514,9 +1514,8 @@ static PropertyValue const* lcl_FindProperty(
     const char* cName, std::vector<PropertyValue const*> const& rPropertyValues)
 {
     const OUString sCmp = OUString::createFromAscii(cName);
-    for(size_t i = 0; i < rPropertyValues.size(); ++i)
+    for(const PropertyValue* pTemp : rPropertyValues)
     {
-        PropertyValue const*const pTemp = rPropertyValues[i];
         if (sCmp == pTemp->Name)
             return pTemp;
     }

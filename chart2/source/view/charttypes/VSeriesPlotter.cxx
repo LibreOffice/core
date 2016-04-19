@@ -1406,13 +1406,12 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
     double fMinimum, fMaximum;
     ::rtl::math::setInf(&fMinimum, false);
     ::rtl::math::setInf(&fMaximum, true);
-    for(size_t nZ =0; nZ<m_aZSlots.size();nZ++ )
+    for(std::vector<VDataSeriesGroup> & rXSlots : m_aZSlots)
     {
-        ::std::vector< VDataSeriesGroup >& rXSlots = m_aZSlots[nZ];
-        for(size_t nN =0; nN<rXSlots.size();nN++ )
+        for(VDataSeriesGroup & rXSlot : rXSlots)
         {
             double fLocalMinimum, fLocalMaximum;
-            rXSlots[nN].calculateYMinAndMaxForCategoryRange(
+            rXSlot.calculateYMinAndMaxForCategoryRange(
                                 static_cast<sal_Int32>(fMinimumX-1.0) //first category (index 0) matches with real number 1.0
                                 , static_cast<sal_Int32>(fMaximumX-1.0) //first category (index 0) matches with real number 1.0
                                 , isSeparateStackingForDifferentSigns( 1 )
@@ -1440,13 +1439,12 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
     double fMinimum, fMaximum;
     ::rtl::math::setInf(&fMinimum, false);
     ::rtl::math::setInf(&fMaximum, true);
-    for(size_t nZ =0; nZ<m_aZSlots.size();nZ++ )
+    for( std::vector< VDataSeriesGroup > & rXSlots : m_aZSlots)
     {
-        ::std::vector< VDataSeriesGroup >& rXSlots = m_aZSlots[nZ];
-        for(size_t nN =0; nN<rXSlots.size();nN++ )
+        for(VDataSeriesGroup & rXSlot : rXSlots)
         {
             double fLocalMinimum, fLocalMaximum;
-            rXSlots[nN].calculateYMinAndMaxForCategoryRange(
+            rXSlot.calculateYMinAndMaxForCategoryRange(
                                 static_cast<sal_Int32>(fMinimumX-1.0) //first category (index 0) matches with real number 1.0
                                 , static_cast<sal_Int32>(fMaximumX-1.0) //first category (index 0) matches with real number 1.0
                                 , isSeparateStackingForDifferentSigns( 1 )

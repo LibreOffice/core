@@ -871,8 +871,8 @@ HTMLTableColumn::HTMLTableColumn():
     eAdjust(SVX_ADJUST_END), eVertOri(text::VertOrientation::TOP),
     bLeftBorder(false)
 {
-    for( sal_uInt16 i=0; i<6; i++ )
-        aFrameFormats[i] = nullptr;
+    for(SwFrameFormat* & rp : aFrameFormats)
+        rp = nullptr;
 }
 
 inline void HTMLTableColumn::SetWidth( sal_uInt16 nWdth, bool bRelWdth )
@@ -3556,8 +3556,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         // verschoben. Deshalb entfernen wir alle harten
                         // Attribute des Absatzes
 
-                        for( size_t i=0; i<m_aParaAttrs.size(); i++ )
-                            m_aParaAttrs[i]->Invalidate();
+                        for(_HTMLAttr* i : m_aParaAttrs)
+                            i->Invalidate();
                     }
 
                     m_aParaAttrs.clear();
@@ -3856,9 +3856,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         // erste Option immer gewinnt.
                         bool bNeedsSection = false;
                         const HTMLOptions& rHTMLOptions = GetOptions();
-                        for (size_t i = 0; i < rHTMLOptions.size(); ++i)
+                        for (const auto & rOption : rHTMLOptions)
                         {
-                            const HTMLOption& rOption = rHTMLOptions[i];
                             if( HTML_O_ALIGN==rOption.GetToken() )
                             {
                                 SvxAdjust eAdjust =

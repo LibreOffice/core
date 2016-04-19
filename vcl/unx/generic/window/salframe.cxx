@@ -200,9 +200,8 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
     const int sizes[ 3 ] = { 48, 32, 16 };
     netwm_icon.resize( 48 * 48 + 32 * 32 + 16 * 16 + 3 * 2 );
     int pos = 0;
-    for( int i = 0; i < 3; ++i )
+    for(int size : sizes)
     {
-        int size = sizes[ i ];
         sal_uInt16 nIconSizeOffset;
         if( size >= 48 )
             nIconSizeOffset = SV_ICON_SIZE48_START;
@@ -507,11 +506,11 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                                    &aRoot, &aChild,
                                    &root_x, &root_y, &lx, &ly, &mask );
                     const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-                    for( size_t i = 0; i < rScreens.size(); i++ )
-                        if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
+                    for(const auto & rScreen : rScreens)
+                        if( rScreen.IsInside( Point( root_x, root_y ) ) )
                         {
-                            x = rScreens[i].Left();
-                            y = rScreens[i].Top();
+                            x = rScreen.Left();
+                            y = rScreen.Top();
                             break;
                         }
                 }
@@ -1453,13 +1452,13 @@ void X11SalFrame::Center( )
                            &x, &y,
                            &mask );
         const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-        for( size_t i = 0; i < rScreens.size(); i++ )
-            if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
+        for(const auto & rScreen : rScreens)
+            if( rScreen.IsInside( Point( root_x, root_y ) ) )
             {
-                nScreenX            = rScreens[i].Left();
-                nScreenY            = rScreens[i].Top();
-                nRealScreenWidth    = rScreens[i].GetWidth();
-                nRealScreenHeight   = rScreens[i].GetHeight();
+                nScreenX            = rScreen.Left();
+                nScreenY            = rScreen.Top();
+                nRealScreenWidth    = rScreen.GetWidth();
+                nRealScreenHeight   = rScreen.GetHeight();
                 break;
             }
     }

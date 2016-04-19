@@ -1434,9 +1434,9 @@ void RTFDocumentImpl::replayRowBuffer(
         rCellsSrpms.pop_front();
         rCellsAttributes.pop_front();
     }
-    for (std::size_t i = 0; i < rBuffer.size(); ++i)
+    for (Buf_t & i : rBuffer)
     {
-        SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(rBuffer[i]),
+        SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(i),
                     "writerfilter.rtf", "dropping table cell!");
     }
     assert(0 == rCellsSrpms.size());
@@ -1815,9 +1815,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_DPTXBXTEXT:
         {
             bool bPictureFrame = false;
-            for (std::size_t i = 0; i < m_aStates.top().aShape.aProperties.size(); ++i)
+            for (std::pair<OUString,OUString> & rProperty : m_aStates.top().aShape.aProperties)
             {
-                std::pair<OUString, OUString>& rProperty = m_aStates.top().aShape.aProperties[i];
                 if (rProperty.first == "shapeType" && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
                 {
                     bPictureFrame = true;
@@ -3447,10 +3446,10 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
             std::vector<beans::PropertyValue> aDefaults = RTFSdrImport::getTextFrameDefaults(false);
-            for (std::size_t i = 0; i < aDefaults.size(); ++i)
+            for (beans::PropertyValue & rDefault : aDefaults)
             {
-                if (!lcl_findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, aDefaults[i].Name))
-                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
+                if (!lcl_findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, rDefault.Name))
+                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(rDefault);
             }
             checkFirstRun();
             Mapper().startShape(m_aStates.top().aDrawingObject.xShape);

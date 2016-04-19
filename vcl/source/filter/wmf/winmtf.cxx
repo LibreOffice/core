@@ -884,8 +884,8 @@ WinMtfOutput::~WinMtfOutput()
     else
         mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
 
-    for ( size_t i = 0; i < vGDIObj.size(); i++ )
-        delete vGDIObj[ i ];
+    for (GDIObj* i : vGDIObj)
+        delete i;
 }
 
 void WinMtfOutput::UpdateClipRegion()

@@ -663,14 +663,14 @@ PrintFontManager::PrintFontManager()
     , m_nNextDirAtom( 1 )
     , m_pFontCache( nullptr )
 {
-    for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAdobeCodes ); i++ )
+    for(const AdobeEncEntry& aAdobeCode : aAdobeCodes)
     {
-        m_aUnicodeToAdobename.insert( std::unordered_multimap< sal_Unicode, OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
-        m_aAdobenameToUnicode.insert( std::unordered_multimap< OString, sal_Unicode, OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
-        if( aAdobeCodes[i].aAdobeStandardCode )
+        m_aUnicodeToAdobename.insert( std::unordered_multimap< sal_Unicode, OString >::value_type( aAdobeCode.aUnicode, aAdobeCode.pAdobename ) );
+        m_aAdobenameToUnicode.insert( std::unordered_multimap< OString, sal_Unicode, OStringHash >::value_type( aAdobeCode.pAdobename, aAdobeCode.aUnicode ) );
+        if( aAdobeCode.aAdobeStandardCode )
         {
-            m_aUnicodeToAdobecode.insert( std::unordered_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].aAdobeStandardCode ) );
-            m_aAdobecodeToUnicode.insert( std::unordered_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
+            m_aUnicodeToAdobecode.insert( std::unordered_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCode.aUnicode, aAdobeCode.aAdobeStandardCode ) );
+            m_aAdobecodeToUnicode.insert( std::unordered_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCode.aAdobeStandardCode, aAdobeCode.aUnicode ) );
         }
     }
 
@@ -789,11 +789,11 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
         // first look for an adjacent file
         static const char* pSuffix[] = { ".afm", ".AFM" };
 
-        for( unsigned int i = 0; i < SAL_N_ELEMENTS(pSuffix); i++ )
+        for(const char* i : pSuffix)
         {
             OString aName = OStringBuffer(
                 rFontFile.copy(0, rFontFile.getLength() - 4)).
-                append(pSuffix[i]).makeStringAndClear();
+                append(i).makeStringAndClear();
 
             OStringBuffer aFilePath(aDir);
             aFilePath.append('/').append(aName);

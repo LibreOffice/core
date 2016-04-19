@@ -162,9 +162,8 @@ std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwNode& rNod
         const SwSortedObjs* pSortedObjs = pContentFrame->GetDrawObjs();
         if (pSortedObjs)
         {
-            for (std::size_t i = 0; i < pSortedObjs->size(); ++i)
+            for (SwAnchoredObject* pAnchoredObject : *pSortedObjs)
             {
-                SwAnchoredObject* pAnchoredObject = (*pSortedObjs)[i];
                 SwFrameFormat* pTextBox = findTextBox(&pAnchoredObject->GetFrameFormat());
                 if (pTextBox)
                     aRet.insert(pTextBox);

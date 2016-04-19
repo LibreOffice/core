@@ -149,9 +149,9 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
 
 void AccessibleDialogWindow::UpdateFocused()
 {
-    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for (ChildDescriptor & i : m_aAccessibleChildren)
     {
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i].rxAccessible );
+        Reference< XAccessible > xChild( i.rxAccessible );
         if ( xChild.is() )
         {
             AccessibleDialogControlShape* pShape = static_cast< AccessibleDialogControlShape* >( xChild.get() );
@@ -166,9 +166,9 @@ void AccessibleDialogWindow::UpdateSelected()
 {
     NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
-    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for (ChildDescriptor & i : m_aAccessibleChildren)
     {
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i].rxAccessible );
+        Reference< XAccessible > xChild( i.rxAccessible );
         if ( xChild.is() )
         {
             AccessibleDialogControlShape* pShape = static_cast< AccessibleDialogControlShape* >( xChild.get() );
@@ -181,9 +181,9 @@ void AccessibleDialogWindow::UpdateSelected()
 
 void AccessibleDialogWindow::UpdateBounds()
 {
-    for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+    for (ChildDescriptor & i : m_aAccessibleChildren)
     {
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i].rxAccessible );
+        Reference< XAccessible > xChild( i.rxAccessible );
         if ( xChild.is() )
         {
             AccessibleDialogControlShape* pShape = static_cast< AccessibleDialogControlShape* >( xChild.get() );
@@ -413,9 +413,9 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
                 m_pDlgEdModel = nullptr;
 
                 // dispose all children
-                for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+                for (ChildDescriptor & i : m_aAccessibleChildren)
                 {
-                    Reference< XComponent > xComponent( m_aAccessibleChildren[i].rxAccessible, UNO_QUERY );
+                    Reference< XComponent > xComponent( i.rxAccessible, UNO_QUERY );
                     if ( xComponent.is() )
                         xComponent->dispose();
                 }
@@ -562,9 +562,9 @@ void AccessibleDialogWindow::disposing()
         m_pDlgEdModel = nullptr;
 
         // dispose all children
-        for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
+        for (ChildDescriptor & i : m_aAccessibleChildren)
         {
-            Reference< XComponent > xComponent( m_aAccessibleChildren[i].rxAccessible, UNO_QUERY );
+            Reference< XComponent > xComponent( i.rxAccessible, UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
         }
