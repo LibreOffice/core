@@ -98,6 +98,7 @@
 #include "../ui/inc/ViewShell.hxx"
 #include "../ui/inc/optsitem.hxx"
 #include "../ui/inc/FrameView.hxx"
+#include <undo/undomanager.hxx>
 
 #include <tools/tenccvt.hxx>
 #include <vcl/settings.hxx>
@@ -1101,7 +1102,14 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdDrawDocument"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
     FmFormModel::dumpAsXml(pWriter);
+    if (GetUndoManager())
+        GetUndoManager()->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
     if (bOwns)
     {
         xmlTextWriterEndDocument(pWriter);

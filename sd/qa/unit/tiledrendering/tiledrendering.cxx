@@ -793,7 +793,7 @@ void SdTiledRenderingTest::testResizeTableColumn()
 
     // Remember the original cell widths.
     xmlDocPtr pXmlDoc = parseXmlDump();
-    OString aPrefix = "/sdrModel/sdPage/sdrObjList/sdrTableObj/sdrTableObjImpl/tableLayouter/columns/";
+    OString aPrefix = "/sdDrawDocument/sdrModel/sdPage/sdrObjList/sdrTableObj/sdrTableObjImpl/tableLayouter/columns/";
     sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "layout[1]", "size").toInt32();
     sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "layout[2]", "size").toInt32();
     xmlFreeDoc(pXmlDoc);
