@@ -2352,7 +2352,13 @@ Size SdXImpressDocument::getDocumentSize()
     if (!pViewSh)
         return Size();
 
-    SdrPageView* pCurPageView = pViewSh->GetView()->GetSdrPageView();
+    SdrView *pSdrView = pViewSh->GetView();
+    if (!pSdrView)
+        return Size();
+
+    SdrPageView* pCurPageView = pSdrView->GetSdrPageView();
+    if (!pCurPageView)
+        return Size();
 
     Size aSize = pCurPageView->GetPageRect().GetSize();
     // Convert the size in 100th mm to TWIP
