@@ -111,6 +111,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/servicedecl \
     comphelper/source/misc/serviceinfohelper \
     comphelper/source/misc/sharedmutex \
+    comphelper/source/misc/simplefileaccessinteraction \
     comphelper/source/misc/solarmutex \
     comphelper/source/misc/stillreadwriteinteraction \
     comphelper/source/misc/anycompare \
