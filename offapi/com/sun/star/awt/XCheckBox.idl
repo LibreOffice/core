@@ -45,11 +45,15 @@ published interface XCheckBox: com::sun::star::uno::XInterface
 
 
     /** returns the state of the check box.
+
+        @see com::sun::star::awt::UnoControlCheckBoxModel::State
      */
     short getState();
 
 
     /** sets the state of the check box.
+
+        @see com::sun::star::awt::UnoControlCheckBoxModel::State
      */
     void setState( [in] short n );
 
