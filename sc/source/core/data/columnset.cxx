@@ -52,6 +52,16 @@ void ColumnSet::getColumns(SCTAB nTab, std::vector<SCCOL>& rCols) const
     rCols.swap(aCols);
 }
 
+bool ColumnSet::hasTab(SCTAB nTab) const
+{
+    return maTabs.find(nTab) != maTabs.end();
+}
+
+bool ColumnSet::empty() const
+{
+    return maTabs.empty();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
