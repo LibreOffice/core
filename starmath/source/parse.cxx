@@ -948,8 +948,6 @@ void SmParser::NextToken()
 
 void SmParser::DoTable()
 {
-    SmNodeArray  LineArray;
-
     DoLine();
     while (m_aCurToken.eType == TNEWLINE)
     {
@@ -960,15 +958,12 @@ void SmParser::DoTable()
     if (m_aCurToken.eType != TEND)
         Error(PE_UNEXPECTED_CHAR);
 
-    auto n = m_aNodeStack.size();
-
-    LineArray.resize(n);
-
-    for (size_t i = 0; i < n; i++)
+    SmNodeArray  LineArray;
+    while (!m_aNodeStack.empty())
     {
-        auto pNode = std::move(m_aNodeStack.front());
-        m_aNodeStack.pop_front();
-        LineArray[n - (i + 1)] = pNode.release();
+        auto pNode = std::move(m_aNodeStack.back());
+        m_aNodeStack.pop_back();
+        LineArray.push_back(pNode.release());
     }
 
     std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
