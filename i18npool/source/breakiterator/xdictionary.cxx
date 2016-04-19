@@ -115,18 +115,18 @@ xdictionary::xdictionary(const sal_Char *lang) :
 
 #endif
 
-    for (sal_Int32 i = 0; i < CACHE_MAX; i++)
-        cache[i].size = 0;
+    for (WordBreakCache & i : cache)
+        i.size = 0;
 
     japaneseWordBreak = false;
 }
 
 xdictionary::~xdictionary()
 {
-    for (sal_Int32 i = 0; i < CACHE_MAX; i++) {
-        if (cache[i].size > 0) {
-            delete [] cache[i].contents;
-            delete [] cache[i].wordboundary;
+    for (WordBreakCache & i : cache) {
+        if (i.size > 0) {
+            delete [] i.contents;
+            delete [] i.wordboundary;
         }
     }
 }
@@ -147,11 +147,11 @@ void xdictionary::initDictionaryData(const sal_Char *pLang)
     static std::vector< datacache > aLoadedCache;
 
     osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-    for( size_t i = 0; i < aLoadedCache.size(); ++i )
+    for(datacache & i : aLoadedCache)
     {
-        if( !strcmp( pLang, aLoadedCache[ i ].maLang.getStr() ) )
+        if( !strcmp( pLang, i.maLang.getStr() ) )
         {
-            data = aLoadedCache[ i ].maData;
+            data = i.maData;
             return;
         }
     }

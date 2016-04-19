@@ -200,10 +200,10 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
         { OUString(PROPERTY_TABLENAME),        PROPERTY_ID_TABLENAME },
         { OUString(PROPERTY_REALNAME),         PROPERTY_ID_REALNAME }
     };
-    for ( size_t i=0; i < SAL_N_ELEMENTS( aProps ); ++i )
+    for (const auto & aProp : aProps)
     {
-        if ( xPSI->hasPropertyByName( aProps[i].sName ) )
-            setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _rxParserColumn->getPropertyValue( aProps[i].sName ) );
+        if ( xPSI->hasPropertyByName( aProp.sName ) )
+            setFastPropertyValue_NoBroadcast( aProp.nHandle, _rxParserColumn->getPropertyValue( aProp.sName ) );
     }
 
     // determine the table column we're based on

@@ -3854,15 +3854,14 @@ EscherPersistTable::EscherPersistTable()
 
 EscherPersistTable::~EscherPersistTable()
 {
-    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
-        delete maPersistTable[ i ];
+    for(EscherPersistEntry* i : maPersistTable) {
+        delete i;
     }
 }
 
 bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 {
-    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
-        EscherPersistEntry* pPtr = maPersistTable[ i ];
+    for(EscherPersistEntry* pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             return true;
         }
@@ -3890,8 +3889,7 @@ void EscherPersistTable::PtDelete( sal_uInt32 nID )
 
 sal_uInt32 EscherPersistTable::PtGetOffsetByID( sal_uInt32 nID )
 {
-    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
-        EscherPersistEntry* pPtr = maPersistTable[ i ];
+    for(EscherPersistEntry* pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             return pPtr->mnOffset;
         }
@@ -3901,8 +3899,7 @@ sal_uInt32 EscherPersistTable::PtGetOffsetByID( sal_uInt32 nID )
 
 void EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
-        EscherPersistEntry* pPtr = maPersistTable[ i ];
+    for(EscherPersistEntry* pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             pPtr->mnOffset = nOfs;
             return;
@@ -3912,8 +3909,7 @@ void EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 
 void EscherPersistTable::PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
-        EscherPersistEntry* pPtr = maPersistTable[ i ];
+    for(EscherPersistEntry* pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             pPtr->mnOffset = nOfs;
             return;
@@ -4731,11 +4727,11 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
 EscherSolverContainer::~EscherSolverContainer()
 {
-    for( size_t i = 0, n = maShapeList.size(); i < n; ++i ) {
-        delete maShapeList[ i ];
+    for(EscherShapeListEntry* i : maShapeList) {
+        delete i;
     }
-    for( size_t i = 0, n = maConnectorList.size(); i < n; ++i ) {
-        delete maConnectorList[ i ];
+    for(EscherConnectorListEntry* i : maConnectorList) {
+        delete i;
     }
 }
 
@@ -4757,11 +4753,10 @@ void EscherSolverContainer::AddConnector(
 
 sal_uInt32 EscherSolverContainer::GetShapeId( const css::uno::Reference< css::drawing::XShape > & rXShape ) const
 {
-    for ( size_t i = 0, n = maShapeList.size(); i < n; ++i )
+    for (EscherShapeListEntry* pPtr : maShapeList)
     {
-        EscherShapeListEntry* pPtr = maShapeList[ i ];
         if ( rXShape == pPtr->aXShape )
-            return ( pPtr->n_EscherId );
+            return pPtr->n_EscherId;
     }
     return 0;
 }
@@ -4780,9 +4775,8 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 
         EscherConnectorRule aConnectorRule;
         aConnectorRule.nRuleId = 2;
-        for ( size_t i = 0, n = maConnectorList.size(); i < n; ++i )
+        for (EscherConnectorListEntry* pPtr : maConnectorList)
         {
-            EscherConnectorListEntry* pPtr = maConnectorList[ i ];
             aConnectorRule.ncptiA  = aConnectorRule.ncptiB = 0xffffffff;
             aConnectorRule.nShapeC = GetShapeId( pPtr->mXConnector );
             aConnectorRule.nShapeA = GetShapeId( pPtr->mXConnectToA );
@@ -5025,8 +5019,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     sal_uInt32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
 
     // adjust persist table
-    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
-        EscherPersistEntry* pPtr = maPersistTable[ i ];
+    for(EscherPersistEntry* pPtr : maPersistTable) {
         sal_uInt32 nOfs = pPtr->mnOffset;
         if ( nOfs >= nCurPos ) {
             pPtr->mnOffset += nBytes;

@@ -226,14 +226,14 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException, s
     buf.append( " ) VALUES ( " );
 
     columns = 0;
-    for( UpdateableFieldVector::size_type i = 0 ; i < m_updateableField.size() ; i ++ )
+    for(UpdateableField & i : m_updateableField)
     {
-        if( m_updateableField[i].isTouched )
+        if( i.isTouched )
         {
             if( columns > 0 )
                 buf.append( " , " );
             columns ++;
-            bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
+            bufferQuoteAnyConstant( buf, i.value, *m_ppSettings );
 
 //             OUString val;
 //             m_updateableField[i].value >>= val;

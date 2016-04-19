@@ -155,8 +155,8 @@ void BrowseBox::dispose()
     aHScroll.disposeAndClear();
 
     // free columns-space
-    for ( size_t i = 0, n = pCols->size(); i < n; ++i )
-        delete (*pCols)[ i ];
+    for (BrowserColumn* pCol : *pCols)
+        delete pCol;
     pCols->clear();
     delete pCols;
     delete pColSel;

@@ -349,9 +349,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 }
 
                 std::vector<OString> v;
-                for (size_t i = 0; i < aRectangles.size(); ++i)
+                for (Rectangle & rRectangle : aRectangles)
                 {
-                    Rectangle& rRectangle = aRectangles[i];
                     if (bMm100ToTwip)
                         rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
                     rRectangle.Move(aOrigin.getX(), aOrigin.getY());

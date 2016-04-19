@@ -1316,11 +1316,11 @@ BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
 {
     sal_Int32 nBitmap = -1;
 
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aBitmapMap); ++i)
+    for(const ScIconSetBitmapMap & i : aBitmapMap)
     {
-        if(aBitmapMap[i].eType == eType)
+        if(i.eType == eType)
         {
-            nBitmap = *(aBitmapMap[i].nBitmaps + nIndex);
+            nBitmap = *(i.nBitmaps + nIndex);
             break;
         }
     }
@@ -1341,9 +1341,9 @@ BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
 void ScIconSetFormat::EnsureSize()
 {
     ScIconSetType eType = mpFormatData->eIconSetType;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetMap); ++i)
+    for (ScIconSetMap & i : aIconSetMap)
     {
-        if (aIconSetMap[i].eType == eType)
+        if (i.eType == eType)
         {
             // size_t nElements = aIconSetMap[i].nElements;
             // TODO: implement

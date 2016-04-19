@@ -1746,11 +1746,11 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
             OUString(PROPERTY_ALIGN), OUString(PROPERTY_RELATIVEPOSITION), OUString(PROPERTY_WIDTH), OUString(PROPERTY_HIDDEN), OUString(PROPERTY_CONTROLMODEL),
             OUString(PROPERTY_HELPTEXT), OUString(PROPERTY_CONTROLDEFAULT)
         };
-        for ( size_t i=0; i<SAL_N_ELEMENTS( aPropertyNames ); ++i )
+        for (const auto & aPropertyName : aPropertyNames)
         {
-            if ( xInfo->hasPropertyByName( aPropertyNames[i] ) )
+            if ( xInfo->hasPropertyByName( aPropertyName ) )
             {
-                _rxRowSetColumn->setPropertyValue( aPropertyNames[i], _rxTemplateColumn->getPropertyValue( aPropertyNames[i] ) );
+                _rxRowSetColumn->setPropertyValue( aPropertyName, _rxTemplateColumn->getPropertyValue( aPropertyName ) );
                 bHaveAnyColumnSetting = true;
             }
         }

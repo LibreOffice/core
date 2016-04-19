@@ -126,8 +126,8 @@ XPropertyList::XPropertyList(
 XPropertyList::~XPropertyList()
 {
 //    fprintf (stderr, "Destroy type %d count %d\n", (int)meType, --count);
-    for( size_t i = 0, n = maList.size(); i < n; ++i )
-        delete maList[ i ];
+    for(XPropertyEntry* p : maList)
+        delete p;
 
     maList.clear();
 }
@@ -386,10 +386,10 @@ static struct {
 
 OUString XPropertyList::GetDefaultExt( XPropertyListType t )
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS (pExtnMap); i++)
+    for (const auto & i : pExtnMap)
     {
-        if( pExtnMap[i].t == t )
-            return OUString::createFromAscii( pExtnMap[ i ].pExt );
+        if( i.t == t )
+            return OUString::createFromAscii( i.pExt );
     }
     return OUString();
 }

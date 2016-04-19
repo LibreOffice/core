@@ -365,12 +365,12 @@ MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMa
     const Mapping* pMapping = pConfig->GetMapping(aDesc);
     if(pMapping)
     {
-        for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
+        for(const auto & aColumnPair : pMapping->aColumnPairs)
         {
-            sal_uInt16 nListBoxIndex = lcl_FindLogicalName( pConfig, pMapping->aColumnPairs[nEntry].sLogicalColumnName);
+            sal_uInt16 nListBoxIndex = lcl_FindLogicalName( pConfig, aColumnPair.sLogicalColumnName);
             if(nListBoxIndex < COLUMN_COUNT)
             {
-                aListBoxes[nListBoxIndex]->SelectEntry(pMapping->aColumnPairs[nEntry].sRealColumnName);
+                aListBoxes[nListBoxIndex]->SelectEntry(aColumnPair.sRealColumnName);
             }
         }
     }
@@ -425,10 +425,10 @@ IMPL_LINK_TYPED(MappingDialog_Impl, ListBoxSelectHdl, ListBox&, rListBox, void)
     const sal_Int32 nEntryPos = rListBox.GetSelectEntryPos();
     if(0 < nEntryPos)
     {
-        for(sal_uInt16 i = 0; i < COLUMN_COUNT; i++)
+        for(VclPtr<ListBox> & aListBoxe : aListBoxes)
         {
-            if(&rListBox != aListBoxes[i] && aListBoxes[i]->GetSelectEntryPos() == nEntryPos)
-                aListBoxes[i]->SelectEntryPos(0);
+            if(&rListBox != aListBoxe && aListBoxe->GetSelectEntryPos() == nEntryPos)
+                aListBoxe->SelectEntryPos(0);
         }
     }
     SetModified();
@@ -1578,11 +1578,11 @@ const OUString& BibDataManager::GetIdentifierMapping()
         sIdentifierMapping = pConfig->GetDefColumnName(IDENTIFIER_POS);
         if(pMapping)
         {
-            for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
+            for(const auto & aColumnPair : pMapping->aColumnPairs)
             {
-                if(pMapping->aColumnPairs[nEntry].sLogicalColumnName == sIdentifierMapping)
+                if(aColumnPair.sLogicalColumnName == sIdentifierMapping)
                 {
-                    sIdentifierMapping = pMapping->aColumnPairs[nEntry].sRealColumnName;
+                    sIdentifierMapping = aColumnPair.sRealColumnName;
                     break;
                 }
             }

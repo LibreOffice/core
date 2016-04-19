@@ -144,8 +144,8 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             throw BootstrapException( "random pool error!" );
         rtl_random_destroyPool( hPool );
         ::rtl::OUStringBuffer buf("uno");
-        for ( sal_uInt32 i = 0; i < ARLEN( bytes ); ++i )
-            buf.append( static_cast< sal_Int32 >( bytes[ i ] ) );
+        for (unsigned char byte : bytes)
+            buf.append( static_cast< sal_Int32 >( byte ) );
         OUString sPipeName( buf.makeStringAndClear() );
 
         // arguments

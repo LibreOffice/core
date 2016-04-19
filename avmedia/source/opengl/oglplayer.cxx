@@ -83,9 +83,8 @@ bool OGLPlayer::create( const OUString& rURL )
     }
 
     // Load external resources
-    for( size_t i = 0; i < m_vInputFiles.size(); ++i )
+    for(glTFFile & rFile : m_vInputFiles)
     {
-        glTFFile& rFile = m_vInputFiles[i];
         if( !rFile.filename.empty() )
         {
             const OUString sFilesURL =

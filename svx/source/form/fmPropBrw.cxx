@@ -271,8 +271,8 @@ void FmPropBrw::dispose()
                                              , OUString( "DialogParentWindow" )
                                              , OUString( "ControlContext" )
                                              , OUString( "ControlShapeAccess" ) };
-            for ( size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i )
-                xName->removeByName( pProps[i] );
+            for (const auto & pProp : pProps)
+                xName->removeByName( pProp );
         }
     }
     catch (const Exception& )

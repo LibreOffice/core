@@ -961,11 +961,11 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
     m_pFieldExpression->set_vexpand(true);
 
     Control* pControlsLst[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst, m_pGroupIntervalEd};
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst); ++i)
+    for (Control* i : pControlsLst)
     {
-        pControlsLst[i]->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
-        pControlsLst[i]->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
-        pControlsLst[i]->Show();
+        i->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
+        i->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
+        i->Show();
     }
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst) - 1; ++i)
@@ -1072,8 +1072,8 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         xGroup->setSortAscending( m_pOrderLst->GetSelectEntryPos() == 0 );
 
     ListBox* pControls[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst};
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
-        pControls[i]->SaveValue();
+    for (ListBox* pControl : pControls)
+        pControl->SaveValue();
 }
 
 
@@ -1305,13 +1305,13 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
     m_pOrderLst->SelectEntryPos(_xGroup->getSortAscending() ? 0 : 1);
 
     ListBox* pControls[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst};
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
-        pControls[i]->SaveValue();
+    for (ListBox* pControl : pControls)
+        pControl->SaveValue();
 
     ListBox* pControlsLst2[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst};
     bool bReadOnly = !m_pController->isEditable();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst2); ++i)
-        pControlsLst2[i]->SetReadOnly(bReadOnly);
+    for (ListBox* i : pControlsLst2)
+        i->SetReadOnly(bReadOnly);
     m_pGroupIntervalEd->SetReadOnly(bReadOnly);
 }
 
