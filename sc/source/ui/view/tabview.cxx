@@ -896,9 +896,7 @@ long ScTabView::GetTabBarWidth() const
 
 double ScTabView::GetRelTabBarWidth() const
 {
-    if( long nFrameWidth = pFrameWin->GetSizePixel().Width() )
-        return static_cast< double >( GetTabBarWidth() ) / nFrameWidth;
-    return 0.0;
+    return 0.5;
 }
 
 ScGridWindow* ScTabView::GetActiveWin()
