@@ -54,8 +54,11 @@ void AcceleratorConfigurationWriter::flush()
     ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
     css::uno::Reference< css::xml::sax::XAttributeList > xAttribs(static_cast< css::xml::sax::XAttributeList* >(pAttribs), css::uno::UNO_QUERY);
 
-    pAttribs->AddAttribute(AL_XMLNS_ACCEL, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_ACCEL);
-    pAttribs->AddAttribute(AL_XMLNS_XLINK, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_XLINK);
+    pAttribs->AddAttribute(
+        "xmlns:accel", ATTRIBUTE_TYPE_CDATA,
+        "http://openoffice.org/2001/accel");
+    pAttribs->AddAttribute(
+        "xmlns:xlink", ATTRIBUTE_TYPE_CDATA, "http://www.w3.org/1999/xlink");
 
     // generate xml
     xExtendedCFG->startDocument();
@@ -102,20 +105,20 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
     OUString sKey = KeyMapping::get().mapCodeToIdentifier(aKey.KeyCode);
     // TODO check if key is empty!
 
-    pAttribs->AddAttribute(AL_ATTRIBUTE_KEYCODE, ATTRIBUTE_TYPE_CDATA, sKey    );
-    pAttribs->AddAttribute(AL_ATTRIBUTE_URL    , ATTRIBUTE_TYPE_CDATA, sCommand);
+    pAttribs->AddAttribute("accel:code", ATTRIBUTE_TYPE_CDATA, sKey    );
+    pAttribs->AddAttribute("xlink:href", ATTRIBUTE_TYPE_CDATA, sCommand);
 
     if ((aKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_SHIFT, ATTRIBUTE_TYPE_CDATA, "true");
+        pAttribs->AddAttribute("accel:shift", ATTRIBUTE_TYPE_CDATA, "true");
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD1) == css::awt::KeyModifier::MOD1)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD1, ATTRIBUTE_TYPE_CDATA, "true");
+        pAttribs->AddAttribute("accel:mod1", ATTRIBUTE_TYPE_CDATA, "true");
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD2) == css::awt::KeyModifier::MOD2)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, "true");
+        pAttribs->AddAttribute("accel:mod2", ATTRIBUTE_TYPE_CDATA, "true");
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD3) == css::awt::KeyModifier::MOD3)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD3, ATTRIBUTE_TYPE_CDATA, "true");
+        pAttribs->AddAttribute("accel:mod3", ATTRIBUTE_TYPE_CDATA, "true");
 
     xConfig->ignorableWhitespace(OUString());
     xConfig->startElement(AL_ELEMENT_ITEM, xAttribs);
