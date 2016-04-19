@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_c387f6d5",
+        "filename": "cui/source/inc/cuires.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "This is not so ideal (no sudden jumps in numbering, principle of least surprise) \n\nEither move this line to the very end, or shift the numbering of the following two lines. It doesn\u0027t matter in this particular case really",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_036aae1a",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "Not your fault (it already was like that), but bad coding style still -- please use m_vSearchSuggestions.size() as the upper bound of the loop",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_e3595290",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "Use ready-made MnemonicGenerator::EraseAllMnemonicChars to remove all ~ chars from the string",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_c35ed675",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "Any reason to use mutex here?",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_23540a53",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "Better and more consistent style: initialize here \n\nm_bDirectURL( bDirectURL )",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_03510e63",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "Where does \u00279\u0027 come from? Maybe better define it as some constant ...",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_434b06b1",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "Please merge those two statements into one",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_634e02c3",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "Better: aPersonaSetting.isEmpty()",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_a3c63a14",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "I see lot of duplicated code between this block and the one above -- can you try to reduce the duplication wherever possible?",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_236d2a33",
+        "filename": "cui/source/options/personalization.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-19T10:10:27Z",
+      "side": 1,
+      "message": "bDirectURL (b for boolean)",
+      "revId": "f5f1d8e7ddae6fced035d489d8f39fec0d9f9c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
