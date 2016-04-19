@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_63772203",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-19T09:52:21Z",
+      "side": 0,
+      "message": "that looks like a problem as MouseButtonDown should have side effects",
+      "revId": "8869a456c88c205afbd828103a9fa3bb908c5cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
