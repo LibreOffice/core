@@ -430,7 +430,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 #endif
     ConfigurationClassifier aClassifier (rxNewConfiguration, xCurrentConfiguration);
     aClassifier.Partition();
-#if OSL_DEBUG_LEVEL >=2
+#if DEBUG_SD_CONFIGURATION_TRACE
     aClassifier.TraceResourceIdVector(
         "requested but not current resources:\n", aClassifier.GetC1minusC2());
     aClassifier.TraceResourceIdVector(

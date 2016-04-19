@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCLASSIFIER_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCLASSIFIER_HXX
 
+#include "debugtrace.hxx"
+
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 
 #include <vector>
@@ -72,6 +74,23 @@ public:
             ConfigurationClassifier object stays alive.
     */
     const ResourceIdVector& GetC2minusC1() const { return maC2minusC1;}
+
+#if DEBUG_SD_CONFIGURATION_TRACE
+
+    /** Return the resources that belong to both the configurations that
+        where given to the constructor.
+        @return
+            A reference to the, possibly empty, list of resources is
+            returned.  This reference remains valid as long as the called
+            ConfigurationClassifier object stays alive.
+    */
+    const ResourceIdVector& GetC1andC2() const { return maC1andC2;}
+
+    static void TraceResourceIdVector (
+        const sal_Char* pMessage,
+        const ResourceIdVector& rResources);
+
+#endif
 
 private:
     css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration1;

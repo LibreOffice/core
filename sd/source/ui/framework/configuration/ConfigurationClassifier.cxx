@@ -162,6 +162,24 @@ void ConfigurationClassifier::CopyResources (
     }
 }
 
+#if DEBUG_SD_CONFIGURATION_TRACE
+
+void ConfigurationClassifier::TraceResourceIdVector (
+    const sal_Char* pMessage,
+    const ResourceIdVector& rResources)
+{
+
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << pMessage);
+    ResourceIdVector::const_iterator iResource;
+    for (iResource=rResources.begin(); iResource!=rResources.end(); ++iResource)
+    {
+        OUString sResource (FrameworkHelper::ResourceIdToString(*iResource));
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " <<
+            OUStringToOString(sResource, RTL_TEXTENCODING_UTF8).getStr());
+    }
+}
+
+#endif
 
 } } // end of namespace sd::framework
 

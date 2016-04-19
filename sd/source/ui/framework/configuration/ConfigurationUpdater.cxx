@@ -141,7 +141,7 @@ void ConfigurationUpdater::UpdateConfiguration()
         ConfigurationClassifier aClassifier(mxRequestedConfiguration, mxCurrentConfiguration);
         if (aClassifier.Partition())
         {
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
             SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationUpdater::UpdateConfiguration(");
             ConfigurationTracer::TraceConfiguration(
                 mxRequestedConfiguration, "requested configuration");
@@ -174,7 +174,7 @@ void ConfigurationUpdater::UpdateConfiguration()
         else
         {
             SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": nothing to do");
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
             ConfigurationTracer::TraceConfiguration(
                 mxRequestedConfiguration, "requested configuration");
             ConfigurationTracer::TraceConfiguration(
@@ -236,7 +236,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
 {
     try
     {
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
         rClassifier.TraceResourceIdVector(
             "requested but not current resources:", rClassifier.GetC1minusC2());
         rClassifier.TraceResourceIdVector(
@@ -252,7 +252,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         mpResourceManager->DeactivateResources(rClassifier.GetC2minusC1(), mxCurrentConfiguration);
         mpResourceManager->ActivateResources(rClassifier.GetC1minusC2(), mxCurrentConfiguration);
 
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::UpdateConfiguration)");
         ConfigurationTracer::TraceConfiguration(
             mxRequestedConfiguration, "requested configuration");

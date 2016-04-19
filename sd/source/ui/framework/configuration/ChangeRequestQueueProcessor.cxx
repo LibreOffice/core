@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "debugtrace.hxx"
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationTracer.hxx"
 
@@ -34,7 +35,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace {
 
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
 
 void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 {
@@ -80,7 +81,7 @@ void ChangeRequestQueueProcessor::AddRequest (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
     if (maQueue.empty())
     {
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Adding requests to empty queue");
@@ -140,7 +141,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
         // Execute the change request.
         if (xRequest.is())
         {
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
             TraceRequest(xRequest);
 #endif
             xRequest->execute(mxConfiguration);
@@ -153,7 +154,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
             // its state.
             if (mpConfigurationUpdater.get() != nullptr)
             {
-#if OSL_DEBUG_LEVEL >= 2
+#if DEBUG_SD_CONFIGURATION_TRACE
                 ConfigurationTracer::TraceConfiguration (
                     mxConfiguration, "updating to configuration");
 #endif
