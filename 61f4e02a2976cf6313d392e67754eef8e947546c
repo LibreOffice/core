@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_a3d2ba32",
+        "filename": "shell/source/win32/shlxthandler/util/iso8601_converter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-04-19T06:24:24Z",
+      "side": 1,
+      "message": "And how do I know the magic number 19 is correct ?\n\nThere should at the very least, be a comment, showing the structure, to explain why to cut off at exactly 19.\n\nRight now I wonder if this string is identical in all parts of the world.",
+      "revId": "61f4e02a2976cf6313d392e67754eef8e947546c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
