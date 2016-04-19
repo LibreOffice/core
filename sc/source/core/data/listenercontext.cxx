@@ -25,7 +25,7 @@ void StartListeningContext::setColumnSet( std::shared_ptr<const ColumnSet>& rpCo
     mpColSet = rpColSet;
 }
 
-std::shared_ptr<const ColumnSet> StartListeningContext::getColumnSet() const
+const std::shared_ptr<const ColumnSet>& StartListeningContext::getColumnSet() const
 {
     return mpColSet;
 }

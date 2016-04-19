@@ -35,7 +35,7 @@ public:
     StartListeningContext(ScDocument& rDoc);
     StartListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet);
     void setColumnSet( std::shared_ptr<const ColumnSet>& pColSet );
-    std::shared_ptr<const ColumnSet> getColumnSet() const;
+    const std::shared_ptr<const ColumnSet>& getColumnSet() const;
     ScDocument& getDoc() { return mrDoc;}
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
