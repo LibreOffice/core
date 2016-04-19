@@ -396,7 +396,7 @@ class StartNeededListenersHandler : public std::unary_function<ScTable*, void>
     std::shared_ptr<sc::StartListeningContext> mpCxt;
 public:
     explicit StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
-    explicit StartNeededListenersHandler( ScDocument& rDoc, std::shared_ptr<const sc::ColumnSet>& rpColSet ) :
+    explicit StartNeededListenersHandler( ScDocument& rDoc, const std::shared_ptr<const sc::ColumnSet>& rpColSet ) :
         mpCxt(new sc::StartListeningContext(rDoc))
     {
         mpCxt->setColumnSet( rpColSet);
@@ -416,7 +416,7 @@ void ScDocument::StartNeededListeners()
     std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
 }
 
-void ScDocument::StartNeededListeners( std::shared_ptr<const sc::ColumnSet>& rpColSet )
+void ScDocument::StartNeededListeners( const std::shared_ptr<const sc::ColumnSet>& rpColSet )
 {
     std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this, rpColSet));
 }

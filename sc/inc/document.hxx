@@ -1981,7 +1981,7 @@ public:
     void                SetHardRecalcState( HardRecalcState eVal ) { eHardRecalcState = eVal; }
     void                StartAllListeners();
     void                StartNeededListeners();
-    void                StartNeededListeners( std::shared_ptr<const sc::ColumnSet>& rpColSet );
+    void                StartNeededListeners( const std::shared_ptr<const sc::ColumnSet>& rpColSet );
     void                StartAllListeners( const ScRange& rRange );
 
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }

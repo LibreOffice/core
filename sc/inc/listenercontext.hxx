@@ -34,7 +34,7 @@ public:
     const StartListeningContext& operator=(const StartListeningContext&) = delete;
     StartListeningContext(ScDocument& rDoc);
     StartListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet);
-    void setColumnSet( std::shared_ptr<const ColumnSet>& pColSet );
+    void setColumnSet( const std::shared_ptr<const ColumnSet>& pColSet );
     const std::shared_ptr<const ColumnSet>& getColumnSet() const;
     ScDocument& getDoc() { return mrDoc;}
 

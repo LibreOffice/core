@@ -20,7 +20,7 @@ StartListeningContext::StartListeningContext(
     ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet) :
     mrDoc(rDoc), mpSet(pSet) {}
 
-void StartListeningContext::setColumnSet( std::shared_ptr<const ColumnSet>& rpColSet )
+void StartListeningContext::setColumnSet( const std::shared_ptr<const ColumnSet>& rpColSet )
 {
     mpColSet = rpColSet;
 }
