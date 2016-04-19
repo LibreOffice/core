@@ -155,7 +155,7 @@ public:
             }
             else
             {
-                it++;
+                ++it;
             }
         }
     }
