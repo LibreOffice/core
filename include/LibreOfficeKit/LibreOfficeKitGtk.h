@@ -58,8 +58,9 @@ GtkWidget*                     lok_doc_view_new                    (const gchar*
  * lok_doc_view_new_from_user_profile:
  * @pPath: (nullable): LibreOffice install path. Pass null to set it to default
  * path which in most cases would be $libdir/libreoffice/program
- * @pUserProfile: (nullable): User profile URL. Pass non-null to be able to
- * use this widget and LibreOffice itself in parallel.
+ * @pUserProfile: (nullable): User profile URL. Must be either a file URL or a
+ * special vnd.sun.star.pathname URL. Pass non-null to be able to use this
+ * widget and LibreOffice itself in parallel.
  * @cancellable: The cancellable object that you can use to cancel this
  * operation.
  * @error: The error that will be set if the object fails to initialize.
