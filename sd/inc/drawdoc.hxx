@@ -570,7 +570,7 @@ public:
         languages set at this document */
     SAL_DLLPRIVATE void getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont );
 
-    SAL_DLLPRIVATE sd::UndoManager* GetUndoManager() const;
+    sd::UndoManager* GetUndoManager() const;
 
     /** converts the given western font height to a corresponding ctl font height, depending on the system language */
     SAL_DLLPRIVATE static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );

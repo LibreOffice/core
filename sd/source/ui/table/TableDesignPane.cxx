@@ -807,7 +807,15 @@ short TableDesignDialog::Execute()
 
 VclPtr<vcl::Window> createTableDesignPanel( vcl::Window* pParent, ViewShellBase& rBase )
 {
-    return VclPtr<TableDesignPane>::Create( pParent, rBase );
+    VclPtr<TableDesignPane> pRet = nullptr;
+    try
+    {
+        pRet = VclPtr<TableDesignPane>::Create( pParent, rBase );
+    }
+    catch (const uno::Exception& rException)
+    {
+    }
+    return pRet;
 }
 
 void showTableDesignDialog( vcl::Window* pParent, ViewShellBase& rBase )
