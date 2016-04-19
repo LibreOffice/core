@@ -30,6 +30,8 @@ class ColumnSet
 public:
     void set(SCTAB nTab, SCCOL nCol);
     void getColumns(SCTAB nTab, std::vector<SCCOL>& rCols) const;
+    bool hasTab( SCTAB nTab ) const;
+    bool empty() const;
 };
 
 }

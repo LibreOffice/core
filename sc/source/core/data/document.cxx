@@ -2596,10 +2596,14 @@ void ScDocument::CopyBlockFromClip(
 
                         // For URM_MOVE group listeners may have been removed,
                         // re-establish them.
-                        /* TODO: actually only those in
-                         * sc::RefUpdateContext::maRegroupCols are affected,
-                         * come up with a start listeners that takes such. */
-                        StartNeededListeners();
+                        if (!aRefCxt.maRegroupCols.empty())
+                        {
+                            /* TODO: holding the ColumnSet in a shared_ptr at
+                             * RefUpdateContext would eliminate the need of
+                             * copying it here. */
+                            std::shared_ptr<const sc::ColumnSet> pColSet( new sc::ColumnSet( aRefCxt.maRegroupCols));
+                            StartNeededListeners( pColSet);
+                        }
 
                         SetInsertingFromOtherDoc( bOldInserting);
                     }

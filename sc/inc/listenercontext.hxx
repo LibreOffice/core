@@ -22,16 +22,20 @@ namespace sc {
 
 struct ColumnBlockPosition;
 class ColumnBlockPositionSet;
+class ColumnSet;
 
 class StartListeningContext
 {
     ScDocument& mrDoc;
     std::shared_ptr<ColumnBlockPositionSet> mpSet;
+    std::shared_ptr<const ColumnSet> mpColSet;
 public:
     StartListeningContext(const StartListeningContext&) = delete;
     const StartListeningContext& operator=(const StartListeningContext&) = delete;
     StartListeningContext(ScDocument& rDoc);
     StartListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet);
+    void setColumnSet( std::shared_ptr<const ColumnSet>& pColSet );
+    std::shared_ptr<const ColumnSet> getColumnSet() const;
     ScDocument& getDoc() { return mrDoc;}
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);

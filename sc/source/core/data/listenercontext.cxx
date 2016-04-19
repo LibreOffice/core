@@ -20,6 +20,16 @@ StartListeningContext::StartListeningContext(
     ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet) :
     mrDoc(rDoc), mpSet(pSet) {}
 
+void StartListeningContext::setColumnSet( std::shared_ptr<const ColumnSet>& rpColSet )
+{
+    mpColSet = rpColSet;
+}
+
+std::shared_ptr<const ColumnSet> StartListeningContext::getColumnSet() const
+{
+    return mpColSet;
+}
+
 ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
     return mpSet->getBlockPosition(nTab, nCol);
