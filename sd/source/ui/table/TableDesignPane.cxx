@@ -812,7 +812,7 @@ VclPtr<vcl::Window> createTableDesignPanel( vcl::Window* pParent, ViewShellBase&
     {
         pRet = VclPtr<TableDesignPane>::Create( pParent, rBase );
     }
-    catch (const uno::Exception& rException)
+    catch (const uno::Exception&)
     {
     }
     return pRet;
