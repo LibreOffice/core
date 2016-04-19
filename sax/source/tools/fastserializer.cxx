@@ -255,11 +255,11 @@ namespace sax_fastparser {
 #ifdef DBG_UTIL
         ::std::set<OString> DebugAttributes;
 #endif
-        for (size_t j = 0; j < maTokenValues.size(); j++)
+        for (const TokenValue & rTokenValue : maTokenValues)
         {
             writeBytes(sSpace, N_CHARS(sSpace));
 
-            sal_Int32 nToken = maTokenValues[j].nToken;
+            sal_Int32 nToken = rTokenValue.nToken;
             writeId(nToken);
 
 #ifdef DBG_UTIL
@@ -271,7 +271,7 @@ namespace sax_fastparser {
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
 
-            write(maTokenValues[j].pValue, -1, true);
+            write(rTokenValue.pValue, -1, true);
 
             writeBytes(sQuote, N_CHARS(sQuote));
         }

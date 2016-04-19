@@ -497,8 +497,8 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
 
 SwNumRule::~SwNumRule()
 {
-    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-        delete maFormats[ n ];
+    for(SwNumFormat* p : maFormats)
+        delete p;
 
     if (mpNumRuleMap)
     {
@@ -531,17 +531,17 @@ SwNumRule::~SwNumRule()
 
 void SwNumRule::CheckCharFormats( SwDoc* pDoc )
 {
-    for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
+    for(SwNumFormat*& pNumFormat : maFormats)
     {
         SwCharFormat* pFormat;
-        if( maFormats[ n ] && nullptr != ( pFormat = maFormats[ n ]->GetCharFormat() ) &&
+        if( pNumFormat && nullptr != ( pFormat = pNumFormat->GetCharFormat() ) &&
             pFormat->GetDoc() != pDoc )
         {
             // copy
-            SwNumFormat* pNew = new SwNumFormat( *maFormats[ n ] );
+            SwNumFormat* pNew = new SwNumFormat( *pNumFormat );
             pNew->SetCharFormat( pDoc->CopyCharFormat( *pFormat ) );
-            delete maFormats[ n ];
-            maFormats[ n ] = pNew;
+            delete pNumFormat;
+            pNumFormat = pNew;
         }
     }
 }

@@ -56,9 +56,9 @@ namespace HelperNotifyChanges
         {
             ScRangeList aChangeRanges;
 
-            for (size_t i = 0, n = rOldValues.size(); i < n; ++i)
+            for (const auto & rOldValue : rOldValues)
             {
-                aChangeRanges.Append( ScRange(rPos.Col(), rPos.Row(), rOldValues[i].mnTab));
+                aChangeRanges.Append( ScRange(rPos.Col(), rPos.Row(), rOldValue.mnTab));
             }
 
             Notify(*pModelObj, aChangeRanges, "cell-change");
@@ -199,8 +199,8 @@ OUString ScUndoEnterData::GetComment() const
 void ScUndoEnterData::DoChange() const
 {
     // only when needed (old or new Edit cell, or Attribute)?
-    for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
-        pDocShell->AdjustRowHeight(maPos.Row(), maPos.Row(), maOldValues[i].mnTab);
+    for (const auto & i : maOldValues)
+        pDocShell->AdjustRowHeight(maPos.Row(), maPos.Row(), i.mnTab);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -219,13 +219,13 @@ void ScUndoEnterData::SetChangeTrack()
     {
         mnEndChangeAction = pChangeTrack->GetActionMax() + 1;
         ScAddress aPos(maPos);
-        for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
+        for (Value & rOldValue : maOldValues)
         {
-            aPos.SetTab(maOldValues[i].mnTab);
+            aPos.SetTab(rOldValue.mnTab);
             sal_uLong nFormat = 0;
-            if (maOldValues[i].mbHasFormat)
-                nFormat = maOldValues[i].mnFormat;
-            pChangeTrack->AppendContent(aPos, maOldValues[i].maCell, nFormat);
+            if (rOldValue.mbHasFormat)
+                nFormat = rOldValue.mnFormat;
+            pChangeTrack->AppendContent(aPos, rOldValue.maCell, nFormat);
         }
         if ( mnEndChangeAction > pChangeTrack->GetActionMax() )
             mnEndChangeAction = 0;       // nothing is appended
@@ -239,9 +239,8 @@ void ScUndoEnterData::Undo()
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
+    for (Value & rVal : maOldValues)
     {
-        Value& rVal = maOldValues[i];
         ScCellValue aNewCell;
         aNewCell.assign(rVal.maCell, rDoc, SC_CLONECELL_STARTLISTENING);
         ScAddress aPos = maPos;
@@ -276,9 +275,9 @@ void ScUndoEnterData::Redo()
     BeginRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
+    for (Value & rOldValue : maOldValues)
     {
-        SCTAB nTab = maOldValues[i].mnTab;
+        SCTAB nTab = rOldValue.mnTab;
         if (mpNewEditData)
         {
             ScAddress aPos = maPos;

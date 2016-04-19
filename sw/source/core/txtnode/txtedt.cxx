@@ -1195,11 +1195,11 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
         } while (!bFound && aIter.Next());  /* loop while nothing was found and still sth is left to be searched */
 
         // Apply implicit changes, if any, now that aIter is no longer used
-        for (size_t i = 0; i < aImplicitChanges.size(); ++i)
+        for (const std::pair<int,int> & rImplicitChange : aImplicitChanges)
         {
-            SwPaM aPaM( *this, aImplicitChanges[i].first );
+            SwPaM aPaM( *this, rImplicitChange.first );
             aPaM.SetMark();
-            aPaM.GetPoint()->nContent = aImplicitChanges[i].second;
+            aPaM.GetPoint()->nContent = rImplicitChange.second;
             SetLanguageAndFont( aPaM, rArgs.nConvTargetLang, RES_CHRATR_CJK_LANGUAGE, rArgs.pTargetFont, RES_CHRATR_CJK_FONT );
         }
 

@@ -152,15 +152,15 @@ FormCache::FormCache( ScDocument* pDoc1, sal_uInt8 nNewDefaultFormat )
 {   // Default format is 'Default'
     nDefaultFormat = nNewDefaultFormat;
     pFormTable = pDoc1->GetFormatTable();
-    for( sal_uInt16 nC = 0 ; nC < nSize_ ; nC++ )
-        bValid[ nC ] = false;
+    for(bool & rb : bValid)
+        rb = false;
     eLanguage = ScGlobal::eLnge;
 }
 
 FormCache::~FormCache()
 {
-    for( sal_uInt16 nC = 0 ; nC < nSize_ ; nC++ )
-        delete aIdents[ nC ].GetAttr();
+    for(FormIdent & rIdent : aIdents)
+        delete rIdent.GetAttr();
 }
 
 SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )

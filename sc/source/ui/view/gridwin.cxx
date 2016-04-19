@@ -6023,9 +6023,8 @@ void ScGridWindow::UpdateCursorOverlay()
                 std::vector< basegfx::B2DRange > aRanges;
                 const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-                for(size_t a(0); a < aPixelRects.size(); a++)
+                for(Rectangle & aRA : aPixelRects)
                 {
-                    const Rectangle aRA(aPixelRects[a]);
                     basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
@@ -6087,9 +6086,8 @@ void ScGridWindow::UpdateSelectionOverlay()
             SCTAB nTab = pViewData->GetTabNo();
             bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-            for(size_t a(0); a < aPixelRects.size(); a++)
+            for(Rectangle & aRA : aPixelRects)
             {
-                const Rectangle aRA(aPixelRects[a]);
                 if (bLayoutRTL)
                 {
                     basegfx::B2DRange aRB(aRA.Left(), aRA.Top() - 1, aRA.Right() + 1, aRA.Bottom());
@@ -6324,9 +6322,8 @@ void ScGridWindow::UpdateDragRectOverlay()
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-            for(size_t a(0); a < aPixelRects.size(); a++)
+            for(Rectangle & aRA : aPixelRects)
             {
-                const Rectangle aRA(aPixelRects[a]);
                 basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
                 aRB.transform(aTransform);
                 aRanges.push_back(aRB);

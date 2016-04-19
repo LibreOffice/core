@@ -475,9 +475,9 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         } // if (aVec.size() < nCount)
 
         FormulaOpCodeMapEntry aEntry;
-        for (size_t i=0; i < nCount; ++i)
+        for (auto& i : aMap)
         {
-            size_t nIndex = static_cast< size_t >( aMap[i].nOff );
+            size_t nIndex = static_cast< size_t >( i.nOff );
             if (aVec.size() <= nIndex)
             {
                 // The offsets really should be aligned with the size, so if
@@ -487,7 +487,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 aEntry.Token.OpCode = getOpCodeUnknown();
                 aVec.resize( nIndex + 1, aEntry );
             }
-            aEntry.Token.OpCode = aMap[i].eOp;
+            aEntry.Token.OpCode = i.eOp;
             aVec[nIndex] = aEntry;
         }
     }

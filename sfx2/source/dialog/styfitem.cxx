@@ -75,8 +75,8 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
 {
-    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i )
-        delete aFilterList[ i ];
+    for (SfxFilterTupel* i : aFilterList)
+        delete i;
     aFilterList.clear();
 }
 
@@ -105,8 +105,8 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
 
 SfxStyleFamilies::~SfxStyleFamilies()
 {
-    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
-        delete aEntryList[ i ];
+    for (SfxStyleFamilyItem* i : aEntryList)
+        delete i;
     aEntryList.clear();
 }
 

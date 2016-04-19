@@ -491,10 +491,10 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     }
     if ( pFlyFrame->GetDrawObjs() )
     {
-        for ( size_t i = 0; i < pFlyFrame->GetDrawObjs()->size(); ++i)
+        for (SwAnchoredObject* i : *pFlyFrame->GetDrawObjs())
         {
             // #i28701# - consider type of objects in sorted object list.
-            SdrObject* pObj = (*pFlyFrame->GetDrawObjs())[i]->DrawObj();
+            SdrObject* pObj = i->DrawObj();
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
             pContact->MoveObjToVisibleLayer( pObj );
         }
@@ -526,10 +526,10 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     pFlyFrame->DeleteCnt();
     if ( pFlyFrame->GetDrawObjs() )
     {
-        for ( size_t i = 0; i < pFlyFrame->GetDrawObjs()->size(); ++i)
+        for (SwAnchoredObject* i : *pFlyFrame->GetDrawObjs())
         {
             // #i28701# - consider type of objects in sorted object list.
-            SdrObject* pObj = (*pFlyFrame->GetDrawObjs())[i]->DrawObj();
+            SdrObject* pObj = i->DrawObj();
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
             pContact->MoveObjToInvisibleLayer( pObj );
         }

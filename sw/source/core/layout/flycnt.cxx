@@ -145,9 +145,9 @@ void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
             {
                 SwFrameFormat* pMyFlyFrameFormat( &GetFrameFormat() );
                 SwSortedObjs &rObjs = *pContent->GetDrawObjs();
-                for( size_t i = 0; i < rObjs.size(); ++i)
+                for(SwAnchoredObject* rObj : rObjs)
                 {
-                    SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(rObjs[i]);
+                    SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(rObj);
                     if ( pFlyFrame &&
                          &(pFlyFrame->GetFrameFormat()) == pMyFlyFrameFormat )
                     {

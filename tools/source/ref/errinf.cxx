@@ -63,8 +63,8 @@ EDcrData::EDcrData()
     , bIsWindowDsp(false)
     , nNextDcr(0)
 {
-    for(sal_uInt16 n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
-        ppDcr[n]=nullptr;
+    for(DynamicErrorInfo*& rp : ppDcr)
+        rp = nullptr;
 }
 
 void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)

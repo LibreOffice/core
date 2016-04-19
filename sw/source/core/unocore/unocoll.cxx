@@ -485,9 +485,9 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
     uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     sal_uInt16 n = 0;
-    for(sal_uInt16 i = 0; i < nEntries; i++)
+    for(const ProvNamesId_Type & i : aProvNamesId)
     {
-        OUString sProv(OUString::createFromAscii(aProvNamesId[i].pName));
+        OUString sProv(OUString::createFromAscii(i.pName));
         if(!sProv.isEmpty())
         {
             pArray[n] = sProv;
@@ -501,11 +501,10 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 
 sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
 {
-    const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
-    for(sal_uInt16 i = 0; i < nEntries; i++ )
+    for(const ProvNamesId_Type & i : aProvNamesId)
     {
-        if (rServiceName.equalsAscii(aProvNamesId[i].pName))
-            return aProvNamesId[i].nType;
+        if (rServiceName.equalsAscii(i.pName))
+            return i.nType;
     }
     return SW_SERVICE_INVALID;
 }

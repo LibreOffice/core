@@ -326,9 +326,9 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     const ::std::vector<OUString>& rFramePoolArr(
             SwStyleNameMapper::GetFrameFormatUINameArray());
-    for( size_t i = 0; i < rFramePoolArr.size(); ++i )
+    for(const auto & i : rFramePoolArr)
     {
-        aFormats.push_back(rFramePoolArr[i]);
+        aFormats.push_back(i);
     }
 
     std::sort(aFormats.begin(), aFormats.end());

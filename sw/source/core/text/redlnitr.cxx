@@ -363,9 +363,9 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
     // If the underlining or the escapement is caused by redlining,
     // we always apply the SpecialUnderlining, i.e. the underlining
     // below the base line
-    for (size_t i = 0; i < m_Hints.size(); ++i)
+    for (SwTextAttr* pHint : m_Hints)
     {
-        const sal_uInt16 nWhich = m_Hints[i]->Which();
+        const sal_uInt16 nWhich = pHint->Which();
         if( RES_CHRATR_UNDERLINE == nWhich ||
             RES_CHRATR_ESCAPEMENT == nWhich )
             return true;

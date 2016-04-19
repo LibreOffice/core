@@ -114,8 +114,8 @@ uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames() throw( 
 
 sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( uno::RuntimeException, std::exception )
 {
-    for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
-        if ( aNames[i] == aName )
+    for (const auto & i : aNames)
+        if ( i == aName )
             return true;
     return false;
 }

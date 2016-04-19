@@ -680,11 +680,11 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
         OSL_FAIL( "Row/Col invalid, using first slot!" );
         return 0;
     }
-    for (size_t i=0; i < aSlotDistribution.size(); ++i)
+    for (ScSlotData & i : aSlotDistribution)
     {
-        if (nRow < aSlotDistribution[i].nStopRow)
+        if (nRow < i.nStopRow)
         {
-            const ScSlotData& rSD = aSlotDistribution[i];
+            const ScSlotData& rSD = i;
             return rSD.nCumulated +
                 (static_cast<SCSIZE>(nRow - rSD.nStartRow)) / rSD.nSlice +
                 static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * nBcaSlotsRow;

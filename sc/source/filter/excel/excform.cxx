@@ -1940,10 +1940,8 @@ void ExcelToSc::ReadExtensions( const ExtensionTypeVec& rExtensions,
 {
     unsigned int nArray = 0;
 
-    for( size_t i = 0 ; i < rExtensions.size() ; i++ )
+    for(int eType : rExtensions)
     {
-        ExtensionType eType = rExtensions[i];
-
         switch( eType )
         {
             case EXTENSION_ARRAY:

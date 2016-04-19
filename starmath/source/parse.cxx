@@ -297,11 +297,11 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
     const SmTokenTableEntry * pRes = nullptr;
     if (!rName.isEmpty())
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aTokenTable); ++i)
+        for (const auto & i : aTokenTable)
         {
-            if (rName.equalsIgnoreAsciiCase( OUString::createFromAscii(aTokenTable[i].pIdent) ))
+            if (rName.equalsIgnoreAsciiCase( OUString::createFromAscii(i.pIdent) ))
             {
-                pRes = &aTokenTable[i];
+                pRes = &i;
                 break;
             }
         }

@@ -1877,13 +1877,13 @@ struct ShapeWritingVisitor
                       boost::bind(&basegfx::B2DPolyPolygon::transform,
                                   _1,boost::cref(aState.maCTM)));
 
-        for( size_t i=0; i<aPolys.size(); ++i )
+        for(basegfx::B2DPolyPolygon & aPoly : aPolys)
         {
             const basegfx::B2DRange aBounds(
-                aPolys[i].areControlPointsUsed() ?
+                aPoly.areControlPointsUsed() ?
                 basegfx::tools::getRange(
-                    basegfx::tools::adaptiveSubdivideByAngle(aPolys[i])) :
-                basegfx::tools::getRange(aPolys[i]));
+                    basegfx::tools::adaptiveSubdivideByAngle(aPoly)) :
+                basegfx::tools::getRange(aPoly));
             fillShapeProperties(xAttrs,
                                 xElem,
                                 aBounds,
@@ -1896,10 +1896,10 @@ struct ShapeWritingVisitor
             basegfx::B2DHomMatrix aNormalize;
             aNormalize.translate(-aBounds.getMinX(),-aBounds.getMinY());
             aNormalize.scale(2540.0/72.0,2540.0/72.0);
-            aPolys[i].transform(aNormalize);
+            aPoly.transform(aNormalize);
 
             xAttrs->AddAttribute( "svg:d", basegfx::tools::exportToSvgD(
-                aPolys[i],
+                aPoly,
                 false,   // no relative coords. causes rounding errors
                 false,   // no quad bezier detection. crashes older versions.
                 false ));

@@ -826,11 +826,11 @@ XFBorders* LwpMiddleLayout::GetXFBorders()
         LwpBorderStuff::BorderType pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
             LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
 
-        for (sal_uInt8 nC = 0; nC < 4; nC++)
+        for (LwpBorderStuff::BorderType & nC : pType)
         {
-            if (pBorderStuff->HasSide(pType[nC]))
+            if (pBorderStuff->HasSide(nC))
             {
-                LwpParaStyle::ApplySubBorder(pBorderStuff, pType[nC], pXFBorders);
+                LwpParaStyle::ApplySubBorder(pBorderStuff, nC, pXFBorders);
             }
         }
         return pXFBorders;

@@ -1909,9 +1909,9 @@ bool ScTable::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) co
 {
     std::vector<sc::ColRowSpan> aSpans = rMark.GetMarkedColSpans();
 
-    for (size_t i = 0; i < aSpans.size(); ++i)
+    for (sc::ColRowSpan & aSpan : aSpans)
     {
-        for (SCCOLROW j = aSpans[i].mnStart; j < aSpans[i].mnEnd; ++j)
+        for (SCCOLROW j = aSpan.mnStart; j < aSpan.mnEnd; ++j)
         {
             if (aCol[j].HasAttribSelection(rMark, nMask))
               return true;
@@ -2187,9 +2187,9 @@ bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 {
     std::vector<sc::ColRowSpan> aSpans = rMark.GetMarkedColSpans();
 
-    for ( size_t i=0; i<aSpans.size(); i++ )
+    for (sc::ColRowSpan & aSpan : aSpans)
     {
-        for ( SCCOLROW j=aSpans[i].mnStart; j<aSpans[i].mnEnd; j++ )
+        for ( SCCOLROW j=aSpan.mnStart; j<aSpan.mnEnd; j++ )
         {
             if ( aCol[j].HasSelectionMatrixFragment(rMark) )
                 return true;

@@ -173,8 +173,8 @@ void FuMorph::DoExecute( SfxRequest& )
                     mpView->EndUndo();
                 }
 
-                for( size_t i = 0, n = aPolyPolyList.size(); i < n; ++i ) {
-                    delete aPolyPolyList[ i ];
+                for(basegfx::B2DPolyPolygon * p : aPolyPolyList) {
+                    delete p;
                 }
             }
         }

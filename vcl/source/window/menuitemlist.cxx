@@ -46,8 +46,8 @@ MenuItemData::~MenuItemData()
 
 MenuItemList::~MenuItemList()
 {
-    for( size_t i = 0, n = maItemList.size(); i < n; ++i )
-        delete maItemList[ i ];
+    for(MenuItemData* i : maItemList)
+        delete i;
 }
 
 MenuItemData* MenuItemList::Insert(

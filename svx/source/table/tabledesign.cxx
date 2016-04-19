@@ -390,8 +390,8 @@ void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any&
 
 void SAL_CALL TableDesignStyle::disposing()
 {
-    for( sal_Int32 nIndex = 0; nIndex < style_count; nIndex++ )
-        maCellStyles[nIndex].clear();
+    for(Reference<XStyle> & rCellStyle : maCellStyles)
+        rCellStyle.clear();
 }
 
 

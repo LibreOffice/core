@@ -39,8 +39,8 @@ BreakIteratorImpl::BreakIteratorImpl()
 BreakIteratorImpl::~BreakIteratorImpl()
 {
     // Clear lookuptable
-    for (size_t l = 0; l < lookupTable.size(); l++)
-        delete lookupTable[l];
+    for (lookupTableItem* p : lookupTable)
+        delete p;
     lookupTable.clear();
 }
 
@@ -526,8 +526,7 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName) throw( RuntimeException )
 {
     // to share service between same Language but different Country code, like zh_CN and zh_TW
-    for (size_t l = 0; l < lookupTable.size(); l++) {
-        lookupTableItem *listItem = lookupTable[l];
+    for (lookupTableItem* listItem : lookupTable) {
         if (aLocaleName == listItem->aLocale.Language) {
             xBI = listItem->xBI;
             return true;
@@ -555,8 +554,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
     else if (m_xContext.is()) {
         aLocale = rLocale;
 
-        for (size_t i = 0; i < lookupTable.size(); i++) {
-            lookupTableItem *listItem = lookupTable[i];
+        for (lookupTableItem* listItem : lookupTable) {
             if (rLocale == listItem->aLocale)
                 return xBI = listItem->xBI;
         }

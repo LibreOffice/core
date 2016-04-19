@@ -141,11 +141,11 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
             pHeaderBar->SetZoom(GetZoom());
 
         // let the columns calculate their new widths and adjust the header bar
-        for ( size_t nPos = 0; nPos < pCols->size(); ++nPos )
+        for (BrowserColumn* pCol : *pCols)
         {
-            (*pCols)[ nPos ]->ZoomChanged(GetZoom());
+            pCol->ZoomChanged(GetZoom());
             if ( pHeaderBar )
-                pHeaderBar->SetItemSize( (*pCols)[ nPos ]->GetId(), (*pCols)[ nPos ]->Width() );
+                pHeaderBar->SetItemSize( pCol->GetId(), pCol->Width() );
         }
 
         // all our controls have to be repositioned
@@ -409,9 +409,9 @@ sal_uInt16 BrowseBox::GetColumnPos( sal_uInt16 nId ) const
 bool BrowseBox::IsFrozen( sal_uInt16 nColumnId ) const
 {
 
-    for ( size_t nPos = 0; nPos < pCols->size(); ++nPos )
-        if ( (*pCols)[ nPos ]->GetId() == nColumnId )
-            return (*pCols)[ nPos ]->IsFrozen();
+    for (BrowserColumn* pCol : *pCols)
+        if ( pCol->GetId() == nColumnId )
+            return pCol->IsFrozen();
     return false;
 }
 

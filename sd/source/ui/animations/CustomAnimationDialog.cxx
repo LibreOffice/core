@@ -1508,9 +1508,8 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
 
     mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_NO_SOUND) );
     mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND) );
-    for( size_t i = 0; i < maSoundList.size(); i++ )
+    for(OUString & aString : maSoundList)
     {
-        OUString aString = maSoundList[ i ];
         INetURLObject aURL( aString );
         mpLBSound->InsertEntry( aURL.GetBase() );
     }

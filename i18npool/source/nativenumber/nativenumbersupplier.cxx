@@ -615,9 +615,9 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
 sal_Unicode SAL_CALL NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw(css::uno::RuntimeException)
 {
     if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
-        for (sal_Int16 i = 0; i < NumberChar_Count; i++)
+        for (const auto & i : NumberChar)
             for (sal_Int16 j = 0; j < 10; j++)
-                if (inChar == NumberChar[i][j])
+                if (inChar == i[j])
                     return j;
         return inChar;
     }

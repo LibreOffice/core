@@ -425,10 +425,10 @@ void FormulaBuffer::finalizeImport()
                 xThread->launch();
             }
 
-            for (size_t i = 0, n = aThreads.size(); i < n; ++i)
+            for (rtl::Reference<WorkerThread> & aThread : aThreads)
             {
-                if (aThreads[i].is())
-                    aThreads[i]->join();
+                if (aThread.is())
+                    aThread->join();
             }
 
             aThreads.clear();

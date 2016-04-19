@@ -1997,8 +1997,8 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
                 } // if not equal Column
             } // if not all equal
 
-            for (sal_uInt8 j = 0; j < 16; ++j)
-                delete pPatternAttrs[j];
+            for (ScPatternAttr* pPatternAttr : pPatternAttrs)
+                delete pPatternAttr;
         } // if AutoFormatData != NULL
     } // if ValidColRow
 }

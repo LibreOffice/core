@@ -606,40 +606,40 @@ void SwPostItMgr::LayoutPostIts()
         // - place SwPostIts on their initial position
         // - calculate necessary height for all PostIts together
         bool bUpdate = false;
-        for (unsigned long n=0;n<mPages.size();n++)
+        for (SwPostItPageItem* pPage : mPages)
         {
             // only layout if there are notes on this page
-            if (mPages[n]->mList->size()>0)
+            if (pPage->mList->size()>0)
             {
                 std::list<SwSidebarWin*>    aVisiblePostItList;
                 unsigned long           lNeededHeight = 0;
                 long                    mlPageBorder = 0;
                 long                    mlPageEnd = 0;
 
-                for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i != mPages[n]->mList->end(); ++i)
+                for(SwSidebarItem_iterator i = pPage->mList->begin(); i != pPage->mList->end(); ++i)
                 {
                     SwSidebarItem* pItem = (*i);
                     SwSidebarWin* pPostIt = pItem->pPostIt;
 
-                    if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
+                    if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
                     {
                         // x value for notes positioning
-                        mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
+                        mlPageBorder = mpEditWin->LogicToPixel( Point( pPage->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
                         //bending point
                         mlPageEnd =
                             mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
                             ? pItem->maLayoutInfo.mPagePrtArea.Left()
-                            : mPages[n]->mPageRect.Left() + 350;
+                            : pPage->mPageRect.Left() + 350;
                     }
-                    else if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
+                    else if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
                     {
                         // x value for notes positioning
-                        mlPageBorder = mpEditWin->LogicToPixel( Point(mPages[n]->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
+                        mlPageBorder = mpEditWin->LogicToPixel( Point(pPage->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
                         //bending point
                         mlPageEnd =
                             mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
                             ? pItem->maLayoutInfo.mPagePrtArea.Right() :
-                            mPages[n]->mPageRect.Right() - 350;
+                            pPage->mPageRect.Right() - 350;
                     }
 
                     if (pItem->bShow)
@@ -666,7 +666,7 @@ void SwPostItMgr::LayoutPostIts()
                         pPostIt->SetChangeTracking(
                             pItem->mLayoutStatus,
                             GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
-                        pPostIt->SetSidebarPosition(mPages[n]->eSidebarPosition);
+                        pPostIt->SetSidebarPosition(pPage->eSidebarPosition);
                         pPostIt->SetFollow(pPostIt->CalcFollow());
                         aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
                                           ? pPostIt->GetMinimumSizeWithoutMeta()
@@ -699,25 +699,25 @@ void SwPostItMgr::LayoutPostIts()
 
                 if ((!aVisiblePostItList.empty()) && ShowNotes())
                 {
-                    bool bOldScrollbar = mPages[n]->bScrollbar;
+                    bool bOldScrollbar = pPage->bScrollbar;
                     if (ShowNotes())
-                        mPages[n]->bScrollbar = LayoutByPage(aVisiblePostItList, mPages[n]->mPageRect.SVRect(), lNeededHeight);
+                        pPage->bScrollbar = LayoutByPage(aVisiblePostItList, pPage->mPageRect.SVRect(), lNeededHeight);
                     else
-                        mPages[n]->bScrollbar = false;
-                    if (!mPages[n]->bScrollbar)
+                        pPage->bScrollbar = false;
+                    if (!pPage->bScrollbar)
                     {
-                        mPages[n]->lOffset = 0;
+                        pPage->lOffset = 0;
                     }
                     else
                     {
                         //when we changed our zoom level, the offset value can be to big, so lets check for the largest possible zoom value
-                        long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,mPages[n]->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
+                        long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,pPage->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
                         long lOffset = -1 * GetScrollSize() * (aVisiblePostItList.size() - aAvailableHeight / GetScrollSize());
-                        if (mPages[n]->lOffset < lOffset)
-                            mPages[n]->lOffset = lOffset;
+                        if (pPage->lOffset < lOffset)
+                            pPage->lOffset = lOffset;
                     }
-                    bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
-                    const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
+                    bUpdate = (bOldScrollbar != pPage->bScrollbar) || bUpdate;
+                    const long aSidebarheight = pPage->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
                     /*
                                        TODO
                                        - enlarge all notes till GetNextBorder(), as we resized to average value before
@@ -725,36 +725,36 @@ void SwPostItMgr::LayoutPostIts()
                     //lets hide the ones which overlap the page
                     for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
                     {
-                        if (mPages[n]->lOffset != 0)
-                            (*i)->TranslateTopPosition(mPages[n]->lOffset);
+                        if (pPage->lOffset != 0)
+                            (*i)->TranslateTopPosition(pPage->lOffset);
 
-                        bool bBottom  = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y()+(*i)->VirtualSize().Height())).Y() <= (mPages[n]->mPageRect.Bottom()-aSidebarheight);
-                        bool bTop = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() >= (mPages[n]->mPageRect.Top()+aSidebarheight);
+                        bool bBottom  = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y()+(*i)->VirtualSize().Height())).Y() <= (pPage->mPageRect.Bottom()-aSidebarheight);
+                        bool bTop = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() >= (pPage->mPageRect.Top()+aSidebarheight);
                         if ( bBottom && bTop )
                         {
                             (*i)->ShowNote();
                         }
                         else
                         {
-                            if (mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() < (mPages[n]->mPageRect.Top()+aSidebarheight))
+                            if (mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() < (pPage->mPageRect.Top()+aSidebarheight))
                             {
-                                if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
-                                    (*i)->ShowAnchorOnly(Point( mPages[n]->mPageRect.Left(),
-                                                                mPages[n]->mPageRect.Top()));
-                                else if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
-                                    (*i)->ShowAnchorOnly(Point( mPages[n]->mPageRect.Right(),
-                                                                mPages[n]->mPageRect.Top()));
+                                if ( pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
+                                    (*i)->ShowAnchorOnly(Point( pPage->mPageRect.Left(),
+                                                                pPage->mPageRect.Top()));
+                                else if ( pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
+                                    (*i)->ShowAnchorOnly(Point( pPage->mPageRect.Right(),
+                                                                pPage->mPageRect.Top()));
                             }
                             else
                             {
-                                if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
-                                    (*i)->ShowAnchorOnly(Point(mPages[n]->mPageRect.Left(),
-                                                               mPages[n]->mPageRect.Bottom()));
-                                else if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
-                                    (*i)->ShowAnchorOnly(Point(mPages[n]->mPageRect.Right(),
-                                                               mPages[n]->mPageRect.Bottom()));
+                                if ( pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
+                                    (*i)->ShowAnchorOnly(Point(pPage->mPageRect.Left(),
+                                                               pPage->mPageRect.Bottom()));
+                                else if ( pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
+                                    (*i)->ShowAnchorOnly(Point(pPage->mPageRect.Right(),
+                                                               pPage->mPageRect.Bottom()));
                             }
-                            OSL_ENSURE(mPages[n]->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
+                            OSL_ENSURE(pPage->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
                         }
                     }
                 }
@@ -763,17 +763,17 @@ void SwPostItMgr::LayoutPostIts()
                     for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
                                                             (*i)->SetPosAndSize();
 
-                                                    bool bOldScrollbar = mPages[n]->bScrollbar;
-                                                    mPages[n]->bScrollbar = false;
-                                                    bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
+                                                    bool bOldScrollbar = pPage->bScrollbar;
+                                                    pPage->bScrollbar = false;
+                                                    bUpdate = (bOldScrollbar != pPage->bScrollbar) || bUpdate;
                 }
                 aVisiblePostItList.clear();
             }
             else
             {
-                if (mPages[n]->bScrollbar)
+                if (pPage->bScrollbar)
                     bUpdate = true;
-                mPages[n]->bScrollbar = false;
+                pPage->bScrollbar = false;
             }
         }
 
@@ -1584,24 +1584,24 @@ SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
 
 long SwPostItMgr::GetNextBorder()
 {
-    for (unsigned long n=0;n<mPages.size();n++)
+    for (SwPostItPageItem* pPage : mPages)
     {
-        for(SwSidebarItem_iterator b = mPages[n]->mList->begin(); b!= mPages[n]->mList->end(); ++b)
+        for(SwSidebarItem_iterator b = pPage->mList->begin(); b!= pPage->mList->end(); ++b)
         {
             if ((*b)->pPostIt == mpActivePostIt)
             {
                 SwSidebarItem_iterator aNext = b;
                 ++aNext;
-                bool bFollow = (aNext != mPages[n]->mList->end()) && (*aNext)->pPostIt->IsFollow();
-                if ( mPages[n]->bScrollbar || bFollow )
+                bool bFollow = (aNext != pPage->mList->end()) && (*aNext)->pPostIt->IsFollow();
+                if ( pPage->bScrollbar || bFollow )
                 {
                     return -1;
                 }
                 else
                 {
                     //if this is the last item, return the bottom border otherwise the next item
-                    if (aNext == mPages[n]->mList->end())
-                        return mpEditWin->LogicToPixel(Point(0,mPages[n]->mPageRect.Bottom())).Y() - GetSpaceBetween();
+                    if (aNext == pPage->mList->end())
+                        return mpEditWin->LogicToPixel(Point(0,pPage->mPageRect.Bottom())).Y() - GetSpaceBetween();
                     else
                         return (*aNext)->pPostIt->GetPosPixel().Y() - GetSpaceBetween();
                 }
@@ -1830,14 +1830,14 @@ void SwPostItMgr::CorrectPositions()
     {
         long aAnchorPosX = 0;
         long aAnchorPosY = 0;
-        for (unsigned long n=0;n<mPages.size();n++)
+        for (SwPostItPageItem* pPage : mPages)
         {
-            for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i != mPages[n]->mList->end(); ++i)
+            for(SwSidebarItem_iterator i = pPage->mList->begin(); i != pPage->mList->end(); ++i)
             {
                 // check, if anchor overlay object exists.
                 if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )
                 {
-                    aAnchorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
+                    aAnchorPosX = pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
                         ? mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
                         : mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
                     aAnchorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;

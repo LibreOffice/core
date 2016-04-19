@@ -308,9 +308,9 @@ basegfx::B2DRange SdrDragMethod::getCurrentRange() const
 
 void SdrDragMethod::clearSdrDragEntries()
 {
-    for(size_t a(0); a < maSdrDragEntries.size(); a++)
+    for(SdrDragEntry* p : maSdrDragEntries)
     {
-        delete maSdrDragEntries[a];
+        delete p;
     }
 
     maSdrDragEntries.clear();

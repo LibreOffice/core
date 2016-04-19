@@ -3586,10 +3586,10 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
       IStyleAccess::AUTO_STYLE_CHAR,
       IStyleAccess::AUTO_STYLE_PARA
     };
-    for (int i = 0; i < 2; ++i)
+    for (IStyleAccess::SwAutoStyleFamily i : aFam)
     {
         std::vector< SfxItemSet_Pointer_t > rStyles;
-        pDoc->GetIStyleAccess().getAllStyles(rStyles, aFam[i]);
+        pDoc->GetIStyleAccess().getAllStyles(rStyles, i);
         while (!rStyles.empty())
         {
             SfxItemSet_Pointer_t pStyle = rStyles.back();

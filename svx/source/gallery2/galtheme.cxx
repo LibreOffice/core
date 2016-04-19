@@ -77,9 +77,8 @@ GalleryTheme::~GalleryTheme()
 {
     ImplWrite();
 
-    for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+    for (GalleryObject* pEntry : aObjectList)
     {
-        GalleryObject* pEntry = aObjectList[ i ];
         Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         delete pEntry;
@@ -221,9 +220,9 @@ void GalleryTheme::ImplWrite()
 
 const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rURL )
 {
-    for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
-        if ( aObjectList[ i ]->aURL == rURL )
-            return aObjectList[ i ];
+    for (GalleryObject* i : aObjectList)
+        if ( i->aURL == rURL )
+            return i;
     return nullptr;
 }
 
@@ -294,8 +293,8 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
 
             bExists = false;
 
-            for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
-                if ( aObjectList[ i ]->aURL == aNewURL )
+            for (GalleryObject* p : aObjectList)
+                if ( p->aURL == aNewURL )
                 {
                     bExists = true;
                     break;
@@ -616,9 +615,9 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
         if( pIStm && pTmpStm )
         {
-            for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+            for (GalleryObject* i : aObjectList)
             {
-                pEntry = aObjectList[ i ];
+                pEntry = i;
                 std::unique_ptr<SgaObject> pObj;
 
                 switch( pEntry->eObjKind )
@@ -1397,9 +1396,9 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         sal_uInt32      nId1, nId2;
         bool            bRel;
 
-        for( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+        for(GalleryObject* i : aObjectList)
         {
-            pObj = aObjectList[ i ];
+            pObj = i;
             Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
             Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pObj ) ) );
             delete pObj;

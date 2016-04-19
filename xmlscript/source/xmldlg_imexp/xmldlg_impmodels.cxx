@@ -1195,9 +1195,8 @@ void TitledBoxElement::endElement()
     }
 
     // create radios AFTER group box!
-    for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
+    for (Reference<XElement>& xRadio : _radios)
     {
-        Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
         Reference< xml::input::XAttributes > xAttributes( xRadio->getAttributes() );
 
         ControlImportContext ctx( _pImport, getControlId( xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlRadioButtonModel", xAttributes ) );
@@ -1291,9 +1290,8 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
 void RadioGroupElement::endElement()
     throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
-    for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
+    for (Reference<XElement>& xRadio : _radios)
     {
-        Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
         Reference< xml::input::XAttributes > xAttributes(
             xRadio->getAttributes() );
 

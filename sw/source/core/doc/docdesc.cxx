@@ -579,11 +579,11 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         }
     }
 
-    for (SwPageDescs::size_type j = 0; j < m_PageDescs.size(); ++j)
+    for (std::unique_ptr<SwPageDesc> & rpPageDesc : m_PageDescs)
     {
-        if (m_PageDescs[j]->GetFollow() == pDel)
+        if (rpPageDesc->GetFollow() == pDel)
         {
-            m_PageDescs[j]->SetFollow(nullptr);
+            rpPageDesc->SetFollow(nullptr);
             if( bHasLayout )
             {
                 for( auto aLayout : GetAllLayouts() )
