@@ -79,8 +79,8 @@ protected:
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
     {}
 
-   // For recognition of changes (especially TableBoxAttribute).
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
+    // For recognition of changes (especially TableBoxAttribute).
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
 

@@ -71,7 +71,7 @@ private:
     SwFormatDrop & operator= (const SwFormatDrop &) = delete;
 
 protected:
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
 
