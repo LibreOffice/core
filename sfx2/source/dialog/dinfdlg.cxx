@@ -287,10 +287,10 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , m_bUseUserData( rItem.m_bUseUserData )
     , m_bUseThumbnailSave( rItem.m_bUseThumbnailSave )
 {
-    for ( size_t i = 0; i < rItem.m_aCustomProperties.size(); i++ )
+    for (const CustomProperty* pOtherProp : rItem.m_aCustomProperties)
     {
-        CustomProperty* pProp = new CustomProperty( rItem.m_aCustomProperties[i]->m_sName,
-                                                    rItem.m_aCustomProperties[i]->m_aValue );
+        CustomProperty* pProp = new CustomProperty( pOtherProp->m_sName,
+                                                    pOtherProp->m_aValue );
         m_aCustomProperties.push_back( pProp );
     }
 
@@ -405,12 +405,12 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
             }
         }
 
-        for ( size_t k = 0; k < m_aCustomProperties.size(); ++k )
+        for (const CustomProperty* pProp : m_aCustomProperties)
         {
             try
             {
-                xContainer->addProperty( m_aCustomProperties[k]->m_sName,
-                    beans::PropertyAttribute::REMOVABLE, m_aCustomProperties[k]->m_aValue );
+                xContainer->addProperty( pProp->m_sName,
+                    beans::PropertyAttribute::REMOVABLE, pProp->m_aValue );
             }
             catch ( Exception& )
             {
@@ -444,10 +444,10 @@ void SfxDocumentInfoItem::SetUseThumbnailSave( bool bSet )
 std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
 {
     std::vector< CustomProperty* > aRet;
-    for ( size_t i = 0; i < m_aCustomProperties.size(); i++ )
+    for (CustomProperty* pOtherProp : m_aCustomProperties)
     {
-        CustomProperty* pProp = new CustomProperty( m_aCustomProperties[i]->m_sName,
-                                                    m_aCustomProperties[i]->m_aValue );
+        CustomProperty* pProp = new CustomProperty( pOtherProp->m_sName,
+                                                    pOtherProp->m_aValue );
         aRet.push_back( pProp );
     }
 
@@ -456,8 +456,8 @@ std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
 
 void SfxDocumentInfoItem::ClearCustomProperties()
 {
-    for ( size_t i = 0; i < m_aCustomProperties.size(); i++ )
-        delete m_aCustomProperties[i];
+    for (CustomProperty* pProp : m_aCustomProperties)
+        delete pProp;
     m_aCustomProperties.clear();
 }
 
@@ -2256,9 +2256,9 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_pPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = static_cast<const SfxDocumentInfoItem &>(rItemSet->Get(SID_DOCINFO));
     std::vector< CustomProperty* > aCustomProps = rInfoItem.GetCustomProperties();
-    for ( size_t i = 0; i < aCustomProps.size(); i++ )
+    for (CustomProperty* pCustomProp : aCustomProps)
     {
-        m_pPropertiesCtrl->AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue, false );
+        m_pPropertiesCtrl->AddLine( pCustomProp->m_sName, pCustomProp->m_aValue, false );
     }
 }
 

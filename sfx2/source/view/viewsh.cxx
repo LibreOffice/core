@@ -725,9 +725,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             SfxInPlaceClientList *pClients = pView->pImp->GetIPClientList_Impl(false);
                             if ( pClients )
                             {
-                                for ( size_t n = 0; n < pClients->size(); n++)
+                                for (SfxInPlaceClient* pIPClient : *pClients)
                                 {
-                                    SfxInPlaceClient* pIPClient = pClients->at( n );
                                     if ( pIPClient )
                                         pView->CheckIPClient_Impl( pIPClient, aVisArea );
                                 }
@@ -886,9 +885,8 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
 
     if( !pObjParentWin )
         pObjParentWin = GetWindow();
-    for ( size_t n = 0; n < pClients->size(); n++)
+    for (SfxInPlaceClient* pIPClient : *pClients)
     {
-        SfxInPlaceClient *pIPClient = pClients->at( n );
         if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
             return pIPClient;
     }
@@ -910,9 +908,8 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
     if ( !pClients )
         return nullptr;
 
-    for ( size_t n = 0; n < pClients->size(); n++)
+    for (SfxInPlaceClient* pIPClient : *pClients)
     {
-        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsUIActive() )
             return pIPClient;
     }
@@ -926,9 +923,8 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
     if ( !pClients )
         return nullptr;
 
-    for ( size_t n = 0; n < pClients->size(); n++)
+    for (SfxInPlaceClient* pIPClient : *pClients)
     {
-        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsObjectUIActive() )
             return pIPClient;
     }
@@ -1418,17 +1414,15 @@ SfxViewShell* SfxViewShell::GetFirst
     // search for a SfxViewShell of the specified type
     SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
     SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
-    for ( size_t nPos = 0; nPos < rShells.size(); ++nPos )
+    for (SfxViewShell* pShell : rShells)
     {
-        SfxViewShell *pShell = rShells[nPos];
         if ( pShell )
         {
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
             // these ViewShells shouldn't be accessible anymore
             // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for ( size_t n=0; n<rFrames.size(); ++n )
+            for (SfxViewFrame* pFrame : rFrames)
             {
-                SfxViewFrame *pFrame = rFrames[n];
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
@@ -1468,9 +1462,8 @@ SfxViewShell* SfxViewShell::GetNext
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
             // these ViewShells shouldn't be accessible anymore
             // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for ( size_t n=0; n<rFrames.size(); ++n )
+            for (SfxViewFrame* pFrame : rFrames)
             {
-                SfxViewFrame *pFrame = rFrames[n];
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
@@ -1500,9 +1493,8 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                 {
                     // avoid access to dangling ViewShells
                     SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
-                    for ( size_t n=0; n<rFrames.size(); ++n )
+                    for (SfxViewFrame* frame : rFrames)
                     {
-                        SfxViewFrame *frame = rFrames[n];
                         if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
                         {
                             SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
@@ -1599,9 +1591,8 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
     if ( !pClients )
         return;
 
-    for ( size_t n = 0; n < pClients->size(); n++ )
+    for (SfxInPlaceClient* pIPClient : *pClients)
     {
-        SfxInPlaceClient* pIPClient = pClients->at( n );
         if( pIPClient != pIP )
             pIPClient->ResetObject();
     }
@@ -1631,9 +1622,8 @@ void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
     if ( !pClients )
         return;
 
-    for ( size_t n = 0; n < pClients->size(); n++)
+    for (SfxInPlaceClient* pIPClient : *pClients)
     {
-        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsObjectInPlaceActive() )
             // client is active, notify client that the VisArea might have changed
             pIPClient->VisAreaChanged();

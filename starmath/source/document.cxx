@@ -320,9 +320,8 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
         aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
         aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
 
-        for (int i = 0;  i < 3;  ++i)
+        for (FontDta & rFntDta : aTable)
         {
-            const FontDta &rFntDta = aTable[i];
             LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
                     rFntDta.nFallbackLang : rFntDta.nLang;
             vcl::Font aFont = OutputDevice::GetDefaultFont(

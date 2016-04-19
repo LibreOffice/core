@@ -61,8 +61,7 @@ OUString getInstalledLocale(
         }
     }
     ::std::vector<OUString> fallbacks( LanguageTag( locale).getFallbackStrings( false));
-    for (size_t f=0; f < fallbacks.size(); ++f) {
-        const OUString& rf = fallbacks[f];
+    for (OUString & rf : fallbacks) {
         for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
             if (installed[i] == rf) {
                 return installed[i];

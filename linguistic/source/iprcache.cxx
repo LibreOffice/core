@@ -63,10 +63,10 @@ static void lcl_AddAsPropertyChangeListener(
 {
     if (xListener.is() && rPropSet.is())
     {
-        for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
+        for (auto& aFlushPropertie : aFlushProperties)
         {
             rPropSet->addPropertyChangeListener(
-                    OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
+                    OUString::createFromAscii(aFlushPropertie.pPropName), xListener );
         }
     }
 }
@@ -78,10 +78,10 @@ static void lcl_RemoveAsPropertyChangeListener(
 {
     if (xListener.is() && rPropSet.is())
     {
-        for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
+        for (auto& aFlushPropertie : aFlushProperties)
         {
             rPropSet->removePropertyChangeListener(
-                    OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
+                    OUString::createFromAscii(aFlushPropertie.pPropName), xListener );
         }
     }
 }

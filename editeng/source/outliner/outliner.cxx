@@ -1072,9 +1072,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
 void Outliner::InvalidateBullet(sal_Int32 nPara)
 {
     long nLineHeight = (long)pEditEngine->GetLineHeight(nPara );
-    for ( size_t i = 0, n = aViewList.size(); i < n; ++i )
+    for (OutlinerView* pView : aViewList)
     {
-        OutlinerView* pView = aViewList[ i ];
         Point aPos( pView->pEditView->GetWindowPosTopLeft(nPara ) );
         Rectangle aRect( pView->GetOutputArea() );
         aRect.Right() = aPos.X();

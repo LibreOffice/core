@@ -346,10 +346,10 @@ UpdateCheckConfig::clearLocalFileName()
     const sal_uInt8 nItems = 2;
     const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
 
-    for( sal_uInt8 i=0; i < nItems; ++i )
+    for(const auto & i : aNameList)
     {
-        if( m_xContainer->hasByName(aNameList[i]) )
-            m_xContainer->removeByName(aNameList[i]);
+        if( m_xContainer->hasByName(i) )
+            m_xContainer->removeByName(i);
     }
 
     commitChanges();
@@ -413,9 +413,9 @@ UpdateCheckConfig::clearUpdateFound()
 {
     OUString aName;
 
-    for( sal_uInt32 n=0; n < nUpdateEntryProperties; ++n )
+    for(const char* aUpdateEntryPropertie : aUpdateEntryProperties)
     {
-        aName = OUString::createFromAscii(aUpdateEntryProperties[n]);
+        aName = OUString::createFromAscii(aUpdateEntryPropertie);
 
         try {
             if( m_xContainer->hasByName(aName) )

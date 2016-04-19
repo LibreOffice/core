@@ -298,8 +298,8 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
 void PptSlideLayoutAtom::Clear()
 {
     eLayout = PptSlideLayout::TITLESLIDE;
-    for ( sal_uInt16 i = 0; i < 8; i++ )
-        aPlaceholderId[ i ] = PptPlaceholder::NONE;
+    for (PptPlaceholder & i : aPlaceholderId)
+        i = PptPlaceholder::NONE;
 }
 
 SvStream& ReadPptSlideLayoutAtom( SvStream& rIn, PptSlideLayoutAtom& rAtom )
@@ -529,8 +529,8 @@ SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString&
 
 SdrEscherImport::~SdrEscherImport()
 {
-    for ( size_t i = 0, n = aOleObjectList.size(); i < n; ++i )
-        delete aOleObjectList[ i ];
+    for (PPTOleEntry* i : aOleObjectList)
+        delete i;
     aOleObjectList.clear();
     delete m_pFonts;
 }
@@ -1242,9 +1242,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
         if ( rPersistEntry.pSolverContainer )
         {
-            for ( size_t i = 0; i < rPersistEntry.pSolverContainer->aCList.size(); ++i )
+            for (SvxMSDffConnectorRule* pPtr : rPersistEntry.pSolverContainer->aCList)
             {
-                SvxMSDffConnectorRule* pPtr = rPersistEntry.pSolverContainer->aCList[ i ];
                 if ( rObjData.nShapeId == pPtr->nShapeC )
                     pPtr->pCObj = pRet;
                 else
@@ -1649,8 +1648,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
 SdrPowerPointImport::~SdrPowerPointImport()
 {
-    for ( size_t i = 0, n = aHyperList.size(); i < n; ++i ) {
-        delete aHyperList[ i ];
+    for (SdHyperlinkEntry* i : aHyperList) {
+        delete i;
     }
     aHyperList.clear();
     delete m_pMasterPages;
@@ -1813,10 +1812,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
         }
     }
 
-    PPTOleEntry* pOe;
-    for ( size_t i = 0; i < const_cast<SdrPowerPointImport*>(this)->aOleObjectList.size(); ++i )
+    for (PPTOleEntry* pOe : const_cast<SdrPowerPointImport*>(this)->aOleObjectList)
     {
-        pOe = const_cast<SdrPowerPointImport*>(this)->aOleObjectList[ i ];
         if ( pOe->nId != (sal_uInt32)nOLEId )
             continue;
 
@@ -3168,9 +3165,9 @@ bool PPTExtParaProv::GetGraphic( sal_uInt32 nInstance, Graphic& rGraph ) const
     }
     if ( !bRetValue )
     {
-        for (size_t i = 0; i < aBuGraList.size(); i++ )
+        for (PPTBuGraEntry* i : aBuGraList)
         {
-            pPtr = aBuGraList[ i ];
+            pPtr = i;
             if ( pPtr->nInstance == nInstance )
             {
                 bRetValue = true;
@@ -3333,8 +3330,8 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 
 PPTExtParaProv::~PPTExtParaProv()
 {
-    for ( size_t i = 0, n = aBuGraList.size(); i < n; ++i )
-        delete aBuGraList[ i ];
+    for (PPTBuGraEntry* i : aBuGraList)
+        delete i;
     aBuGraList.clear();
 }
 
@@ -3766,15 +3763,15 @@ PPTCharSheet::PPTCharSheet( sal_uInt32 nInstance )
             nFontHeight = 24;
         break;
     }
-    for ( sal_uInt32 nDepth = 0; nDepth < 5; nDepth++ )
+    for (PPTCharLevel & nDepth : maCharLevel)
     {
-        maCharLevel[ nDepth ].mnFlags = 0;
-        maCharLevel[ nDepth ].mnFont = 0;
-        maCharLevel[ nDepth ].mnAsianOrComplexFont = 0xffff;
-        maCharLevel[ nDepth ].mnFontHeight = nFontHeight;
-        maCharLevel[ nDepth ].mnFontColor = nColor;
-        maCharLevel[ nDepth ].mnFontColorInStyleSheet = Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
-        maCharLevel[ nDepth ].mnEscapement = 0;
+        nDepth.mnFlags = 0;
+        nDepth.mnFont = 0;
+        nDepth.mnAsianOrComplexFont = 0xffff;
+        nDepth.mnFontHeight = nFontHeight;
+        nDepth.mnFontColor = nColor;
+        nDepth.mnFontColorInStyleSheet = Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
+        nDepth.mnEscapement = 0;
     }
 }
 
@@ -3855,22 +3852,22 @@ PPTParaSheet::PPTParaSheet( sal_uInt32 nInstance )
             nUpperDist = 0x1e;
         break;
     }
-    for ( sal_uInt32 i = 0; i < 5; i++ )
+    for (PPTParaLevel & i : maParaLevel)
     {
-        maParaLevel[ i ].mnBuFlags = nBuFlags;
-        maParaLevel[ i ].mnBulletChar = 0x2022;
-        maParaLevel[ i ].mnBulletFont = 0;
-        maParaLevel[ i ].mnBulletHeight = 100;
-        maParaLevel[ i ].mnBulletColor = nBulletColor;
-        maParaLevel[ i ].mnAdjust = 0;
-        maParaLevel[ i ].mnLineFeed = 100;
-        maParaLevel[ i ].mnLowerDist = 0;
-        maParaLevel[ i ].mnUpperDist = nUpperDist;
-        maParaLevel[ i ].mnTextOfs = 0;
-        maParaLevel[ i ].mnBulletOfs = 0;
-        maParaLevel[ i ].mnDefaultTab = 0x240;
-        maParaLevel[ i ].mnAsianLineBreak = 0;
-        maParaLevel[ i ].mnBiDi = 0;
+        i.mnBuFlags = nBuFlags;
+        i.mnBulletChar = 0x2022;
+        i.mnBulletFont = 0;
+        i.mnBulletHeight = 100;
+        i.mnBulletColor = nBulletColor;
+        i.mnAdjust = 0;
+        i.mnLineFeed = 100;
+        i.mnLowerDist = 0;
+        i.mnUpperDist = nUpperDist;
+        i.mnTextOfs = 0;
+        i.mnBulletOfs = 0;
+        i.mnDefaultTab = 0x240;
+        i.mnAsianLineBreak = 0;
+        i.mnBiDi = 0;
     }
 }
 
@@ -4831,8 +4828,8 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
 
 PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
 {
-    for ( size_t i = 0, n = aList.size(); i < n; ++i ) {
-        delete aList[ i ];
+    for (PPTTextSpecInfo* i : aList) {
+        delete i;
     }
     aList.clear();
 }
@@ -6382,9 +6379,9 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
 sal_uInt32 PPTParagraphObj::GetTextSize()
 {
     sal_uInt32 nCount, nRetValue = 0;
-    for (size_t i = 0; i < m_PortionList.size(); i++)
+    for (std::unique_ptr<PPTPortionObj> & i : m_PortionList)
     {
-        PPTPortionObj const& rPortionObj = *m_PortionList[i];
+        PPTPortionObj const& rPortionObj = *i;
         nCount = rPortionObj.Count();
         if ((!nCount) && rPortionObj.mpFieldItem)
             nCount++;
@@ -6701,10 +6698,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         &(rSdrPowerPointImport.pPPTStyleSheet->maTxSI) ) )
                                 {
                                     sal_uInt32  nI = 0;
-                                    PPTTextSpecInfo* pSpecInfo;
-                                    for ( size_t i = 0; i < aTextSpecInfoAtomInterpreter.aList.size(); ++i)
+                                    for (PPTTextSpecInfo* pSpecInfo : aTextSpecInfoAtomInterpreter.aList)
                                     {
-                                        pSpecInfo = aTextSpecInfoAtomInterpreter.aList[ i ];
                                         sal_uInt32 nCharIdx = pSpecInfo->nCharIdx;
 
                                         // portions and text have to been splitted in some cases
@@ -6884,9 +6879,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         {
                                             PptInteractiveInfoAtom aInteractiveInfoAtom;
                                             ReadPptInteractiveInfoAtom( rIn, aInteractiveInfoAtom );
-                                            for ( size_t i = 0; i < rSdrPowerPointImport.aHyperList.size(); ++i )
+                                            for (SdHyperlinkEntry* pHyperlink : rSdrPowerPointImport.aHyperList)
                                             {
-                                                SdHyperlinkEntry* pHyperlink = rSdrPowerPointImport.aHyperList[ i ];
                                                 if ( pHyperlink->nIndex == aInteractiveInfoAtom.nExHyperlinkId )
                                                 {
                                                     aTextHd.SeekToEndOfRecord( rIn );
@@ -7092,8 +7086,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     }
                                     n--;
                                 }
-                                for( size_t j = 0, n2 = FieldList.size(); j < n2; ++j ) {
-                                    delete FieldList[ j ];
+                                for(PPTFieldEntry* j : FieldList) {
+                                    delete j;
                                 }
                             }
                             mpImplTextObj->mpParagraphList = new PPTParagraphObj*[ nParagraphs ];
@@ -7696,10 +7690,8 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 // possibly connections to the group object have to be removed.
                 if ( pSolverContainer )
                 {
-                    for ( size_t i = 0; i < pSolverContainer->aCList.size(); ++i )
+                    for (SvxMSDffConnectorRule* pPtr : pSolverContainer->aCList)
                     {
-                        SvxMSDffConnectorRule* pPtr = pSolverContainer->aCList[ i ];
-
                         // check connections to the group object
                         if ( pPtr->pAObj == pGroup )
                             pPtr->pAObj = nullptr;

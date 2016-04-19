@@ -180,9 +180,8 @@ PreparedStatement::PreparedStatement(
 
     splitSQL( m_stmt, m_splittedStatement );
     int elements = 0;
-    for( int i = 0, max = m_splittedStatement.size(); i < max ; i ++ )
+    for(OString & str : m_splittedStatement)
     {
-        const OString &str = m_splittedStatement[i];
         // ignore quoted strings ....
         if( ! isQuoted( str ) )
         {
@@ -329,13 +328,13 @@ sal_Bool PreparedStatement::execute( )
     OStringBuffer buf( m_stmt.getLength() *2 );
 
     OStringVector::size_type vars = 0;
-    for( OStringVector::size_type i = 0 ; i < m_splittedStatement.size() ; ++i )
+    for(OString & str : m_splittedStatement)
     {
         // LEM TODO: instead of this manual mucking with SQL
         // could we use PQexecParams / PQExecPrepared / ...?
         // Only snafu is giving the types of the parameters and
         // that it needs $1, $2, etc instead of "?"
-        const OString &str = m_splittedStatement[i];
+
 //         printf( "Splitted %d %s\n" , i , str.getStr() );
         if( isQuoted( str ) )
         {

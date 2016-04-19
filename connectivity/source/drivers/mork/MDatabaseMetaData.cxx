@@ -109,14 +109,14 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     aRow[18] = new ORowSetValueDecorator(OUString("YES"));
 
     // Iterate over all tables
-    for(size_t j = 0; j < tables.size(); j++ ) {
-        if(match(tableNamePattern, tables[j],'\0')) {
+    for(OUString & table : tables) {
+        if(match(tableNamePattern, table,'\0')) {
             // TABLE_NAME
-            aRow[3] = new ORowSetValueDecorator( tables[j] );
+            aRow[3] = new ORowSetValueDecorator( table );
 
             const OColumnAlias& colNames = m_pConnection->getColumnAlias();
 
-            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
+            SAL_INFO("connectivity.mork", "\tTableName = : " << table);
             // Iterate over all collumns in the table.
             for (   OColumnAlias::AliasMap::const_iterator compare = colNames.begin();
                     compare != colNames.end();
@@ -853,13 +853,12 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     Reference< XResultSet > xRef = pResult;
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    const sal_Int32  nSize = sizeof(sTableTypes) / sizeof(OUString);
     ODatabaseMetaDataResultSet::ORows aRows;
-    for(sal_Int32 i=0;i < nSize;++i)
+    for(const auto & sTableType : sTableTypes)
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(sTableTypes[i]));
+        aRow.push_back(new ORowSetValueDecorator(sTableType));
         // bound row
         aRows.push_back(aRow);
     }
@@ -975,13 +974,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
 
     // Iterate over all tables
-    for(size_t j = 0; j < tables.size(); j++ ) {
-       if(match(tableNamePattern, tables[j],'\0'))
+    for(OUString & table : tables) {
+       if(match(tableNamePattern, table,'\0'))
            {
             // TABLE_NAME
-            aRow[2] = new ORowSetValueDecorator( tables[j] );
+            aRow[2] = new ORowSetValueDecorator( table );
 
-            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
+            SAL_INFO("connectivity.mork", "\tTableName = : " << table);
 
                 aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getSelectValue();
                 aRows.push_back(aRow);

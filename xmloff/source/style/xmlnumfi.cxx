@@ -1257,10 +1257,8 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
                 SvXMLDateElementAttributes eMins, SvXMLDateElementAttributes eSecs,
                 bool bSystem )
 {
-    static const sal_uInt16 nCount = sizeof(aDefaultDateFormats) / sizeof(SvXMLDefaultDateFormat);
-    for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
+    for (const auto & rEntry : aDefaultDateFormats)
     {
-        const SvXMLDefaultDateFormat& rEntry = aDefaultDateFormats[nPos];
         if ( bSystem == rEntry.bSystem &&
             ( eDOW   == rEntry.eDOW   || ( rEntry.eDOW   == XML_DEA_ANY && eDOW   != XML_DEA_NONE ) ) &&
             ( eDay   == rEntry.eDay   || ( rEntry.eDay   == XML_DEA_ANY && eDay   != XML_DEA_NONE ) ) &&

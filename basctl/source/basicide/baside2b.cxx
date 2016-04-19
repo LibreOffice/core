@@ -890,9 +890,9 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     // clear the listbox
     pCodeCompleteWnd->ClearListBox();
     // fill the listbox
-    for(size_t l = 0; l < aEntryVect.size(); ++l)
+    for(const auto & l : aEntryVect)
     {
-        pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
+        pCodeCompleteWnd->InsertEntry( l );
     }
     // show it
     pCodeCompleteWnd->Show();

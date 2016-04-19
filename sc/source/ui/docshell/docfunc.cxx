@@ -3432,10 +3432,10 @@ bool ScDocFunc::SetWidthOrHeight(
     bool bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
     bool bOutline = false;
 
-    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    for (const sc::ColRowSpan& rRange : rRanges)
     {
-        SCCOLROW nStartNo = rRanges[i].mnStart;
-        SCCOLROW nEndNo   = rRanges[i].mnEnd;
+        SCCOLROW nStartNo = rRange.mnStart;
+        SCCOLROW nEndNo   = rRange.mnEnd;
 
         if ( !bWidth )                      // Hoehen immer blockweise
         {

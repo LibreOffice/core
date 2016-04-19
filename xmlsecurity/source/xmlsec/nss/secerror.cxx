@@ -48,11 +48,10 @@ const char *
 getCertError(PRErrorCode errNum)
 {
     static const char sEmpty[] = "";
-    const int numDesc = SAL_N_ELEMENTS(allDesc);
-    for (int i = 0; i < numDesc; i++)
+    for (const ErrDesc& i : allDesc)
     {
-        if (allDesc[i].errNum == errNum)
-            return  allDesc[i].errString;
+        if (i.errNum == errNum)
+            return i.errString;
     }
 
     return sEmpty;

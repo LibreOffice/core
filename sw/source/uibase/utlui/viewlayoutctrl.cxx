@@ -59,11 +59,11 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
                         mpImpl->maImageAutomatic, mpImpl->maImageAutomatic_Active,
                         mpImpl->maImageBookMode, mpImpl->maImageBookMode_Active};
 
-        for (int i = 0; i < 6; i++)
+        for (Image & i : arr)
         {
-            BitmapEx aBitmap = arr[i].GetBitmapEx();
+            BitmapEx aBitmap = i.GetBitmapEx();
             aBitmap.Scale(nScaleFactor, nScaleFactor, BmpScaleFlag::Fast);
-            arr[i] = Image(aBitmap);
+            i = Image(aBitmap);
         }
 
         mpImpl->maImageSingleColumn = arr[0];

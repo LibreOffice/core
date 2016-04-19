@@ -1384,9 +1384,8 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 const SfxItemPool& rPool = mpDoc->GetPool();
                 const SfxPoolItem* pItem;
 
-                for( sal_uInt16 i=0; i<3; i++ )
+                for(unsigned short nWhichId : aWhichIds)
                 {
-                    sal_uInt16 nWhichId = aWhichIds[i];
                     sal_uInt32 nItems = rPool.GetItemCount2( nWhichId );
 
                     aSeq.realloc( aSeq.getLength() + nItems*5 + 5 );

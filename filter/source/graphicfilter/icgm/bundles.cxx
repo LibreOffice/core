@@ -114,9 +114,8 @@ CGMFList& CGMFList::operator=( CGMFList& rSource )
     nFontsAvailable = rSource.nFontsAvailable;
     nFontNameCount  = rSource.nFontNameCount;
     nCharSetCount   = rSource.nCharSetCount;
-    for ( size_t i = 0, n = rSource.aFontEntryList.size(); i < n; ++i )
+    for (FontEntry* pPtr : rSource.aFontEntryList)
     {
-        FontEntry* pPtr = rSource.aFontEntryList[ i ];
         FontEntry* pCFontEntry = new FontEntry;
         if ( pPtr->pFontName )
         {
@@ -248,8 +247,8 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_
 
 void CGMFList::ImplDeleteList()
 {
-    for ( size_t i = 0, n = aFontEntryList.size(); i < n; ++i )
-        delete aFontEntryList[ i ];
+    for (FontEntry* i : aFontEntryList)
+        delete i;
     aFontEntryList.clear();
 }
 

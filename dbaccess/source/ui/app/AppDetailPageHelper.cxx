@@ -212,8 +212,8 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
     SetUniqueId(UID_APP_DETAILPAGE_HELPER);
-    for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
-        m_pLists[i] = nullptr;
+    for (VclPtr<DBTreeListBox> & m_pList : m_pLists)
+        m_pList = nullptr;
     ImplInitSettings();
 }
 
@@ -235,14 +235,14 @@ void OAppDetailPageHelper::dispose()
         OSL_FAIL("Exception thrown while disposing preview frame!");
     }
 
-    for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
+    for (VclPtr<DBTreeListBox> & m_pList : m_pLists)
     {
-        if ( m_pLists[i] )
+        if ( m_pList )
         {
-            m_pLists[i]->clearCurrentSelection();
-            m_pLists[i]->Hide();
-            m_pLists[i]->clearCurrentSelection();   // why a second time?
-            m_pLists[i].disposeAndClear();
+            m_pList->clearCurrentSelection();
+            m_pList->Hide();
+            m_pList->clearCurrentSelection();   // why a second time?
+            m_pList.disposeAndClear();
         }
     }
     m_aMenu.reset();
@@ -764,10 +764,10 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
 void OAppDetailPageHelper::clearPages()
 {
     showPreview(nullptr);
-    for (size_t i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
+    for (VclPtr<DBTreeListBox> & m_pList : m_pLists)
     {
-        if ( m_pLists[i] )
-            m_pLists[i]->Clear();
+        if ( m_pList )
+            m_pList->Clear();
     }
 }
 
@@ -1156,9 +1156,9 @@ IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
                             , SID_DB_APP_VIEW_DOCINFO_PREVIEW
     };
 
-    for(size_t i=0; i < SAL_N_ELEMENTS(pActions);++i)
+    for(unsigned short pAction : pActions)
     {
-        aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
+        aMenu->CheckItem(pAction,m_aMenu->IsItemChecked(pAction));
     }
     aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
 

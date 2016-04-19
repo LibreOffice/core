@@ -402,11 +402,11 @@ void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int 
             sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 48)));
             sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 64)));
         }
-        for (size_t i = 0; i < sTextureAtlases.size(); i++)
+        for (std::unique_ptr<FixedTextureAtlasManager> & sTextureAtlase : sTextureAtlases)
         {
-            if (nWidth == sTextureAtlases[i]->GetSubtextureSize())
+            if (nWidth == sTextureAtlase->GetSubtextureSize())
             {
-                rTexture = sTextureAtlases[i]->InsertBuffer(nWidth, nHeight, nFormat, nType, pData);
+                rTexture = sTextureAtlase->InsertBuffer(nWidth, nHeight, nFormat, nType, pData);
                 return;
             }
         }

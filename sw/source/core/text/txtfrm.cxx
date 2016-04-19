@@ -575,16 +575,16 @@ void SwTextFrame::HideAndShowObjects()
         if ( IsHiddenNow() )
         {
             // complete paragraph is hidden. Thus, hide all objects
-            for ( size_t i = 0; i < GetDrawObjs()->size(); ++i )
+            for (SwAnchoredObject* i : *GetDrawObjs())
             {
-                SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
+                SdrObject* pObj = i->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 const sal_Int32 nObjAnchorPos = pContact->GetContentAnchorIndex().GetIndex();
                 if ((eAnchorType != FLY_AT_CHAR) ||
                     sw_HideObj( *this, eAnchorType, nObjAnchorPos,
-                                 (*GetDrawObjs())[i] ))
+                                 i ))
                 {
                     pContact->MoveObjToInvisibleLayer( pObj );
                 }
@@ -602,9 +602,9 @@ void SwTextFrame::HideAndShowObjects()
             // Thus, show all objects, which are anchored at paragraph and
             // hide/show objects, which are anchored at/as character, according
             // to the visibility of the anchor character.
-            for ( size_t i = 0; i < GetDrawObjs()->size(); ++i )
+            for (SwAnchoredObject* i : *GetDrawObjs())
             {
-                SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
+                SdrObject* pObj = i->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
                 // Determine anchor type only once
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
@@ -622,7 +622,7 @@ void SwTextFrame::HideAndShowObjects()
                     SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd );
                     // Under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
-                         sw_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
+                         sw_HideObj( *this, eAnchorType, nObjAnchorPos, i ) )
                         pContact->MoveObjToInvisibleLayer( pObj );
                     else
                         pContact->MoveObjToVisibleLayer( pObj );

@@ -178,9 +178,9 @@ namespace drawinglayer
 
         AnimationEntryList::~AnimationEntryList()
         {
-            for(size_t a(0); a < maEntries.size(); a++)
+            for(AnimationEntry* maEntrie : maEntries)
             {
-                delete maEntries[a];
+                delete maEntrie;
             }
         }
 
@@ -188,9 +188,9 @@ namespace drawinglayer
         {
             AnimationEntryList* pNew = new AnimationEntryList();
 
-            for(size_t a(0); a < maEntries.size(); a++)
+            for(AnimationEntry* maEntrie : maEntries)
             {
-                pNew->append(*maEntries[a]);
+                pNew->append(*maEntrie);
             }
 
             return pNew;
@@ -281,9 +281,9 @@ namespace drawinglayer
         {
             AnimationEntryLoop* pNew = new AnimationEntryLoop(mnRepeat);
 
-            for(size_t a(0); a < maEntries.size(); a++)
+            for(AnimationEntry* maEntrie : maEntries)
             {
-                pNew->append(*maEntries[a]);
+                pNew->append(*maEntrie);
             }
 
             return pNew;
