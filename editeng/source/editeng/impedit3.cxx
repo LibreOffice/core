@@ -1076,7 +1076,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
-                pPortion->SetRightToLeft( GetRightToLeft( nPara, nTmpPos+1 ) );
+                pPortion->SetRightToLeftLevel( GetRightToLeft( nPara, nTmpPos+1 ) );
 
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
                 {
@@ -3341,7 +3341,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                     // StripPortions() data callback
                                     GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray,
-                                        aTmpFont, n, rTextPortion.GetRightToLeft(),
+                                        aTmpFont, n, rTextPortion.GetRightToLeftLevel(),
                                         aWrongSpellVector.size() ? &aWrongSpellVector : nullptr,
                                         pFieldData,
                                         bEndOfLine, bEndOfParagraph, // support for EOL/EOP TEXT comments
@@ -3571,7 +3571,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         GetEditEnginePtr()->DrawingTab( aTmpPos,
                                             rTextPortion.GetSize().Width(),
                                             OUString(rTextPortion.GetExtraValue()),
-                                            aTmpFont, n, rTextPortion.GetRightToLeft(),
+                                            aTmpFont, n, rTextPortion.GetRightToLeftLevel(),
                                             bEndOfLine, bEndOfParagraph,
                                             aOverlineColor, aTextLineColor);
                                     }

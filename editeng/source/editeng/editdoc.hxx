@@ -377,7 +377,7 @@ private:
     sal_Int32           nLen;
     Size                aOutSz;
     PortionKind         nKind;
-    sal_uInt8           nRightToLeft;
+    sal_uInt8           nRightToLeftLevel;
     sal_Unicode         nExtraValue;
 
 
@@ -386,7 +386,7 @@ private:
                 , nLen( 0 )
                 , aOutSz()
                 , nKind( PortionKind::TEXT )
-                , nRightToLeft( sal_False )
+                , nRightToLeftLevel( 0 )
                 , nExtraValue( 0 )
                 {
                 }
@@ -397,7 +397,7 @@ public:
                 , nLen( nL )
                 , aOutSz( -1, -1 )
                 , nKind( PortionKind::TEXT )
-                , nRightToLeft( sal_False )
+                , nRightToLeftLevel( 0 )
                 , nExtraValue( 0 )
                 {
                 }
@@ -407,7 +407,7 @@ public:
                 , nLen( r.nLen )
                 , aOutSz( r.aOutSz )
                 , nKind( r.nKind )
-                , nRightToLeft( r.nRightToLeft )
+                , nRightToLeftLevel( r.nRightToLeftLevel )
                 , nExtraValue( r.nExtraValue )
                 {
                 }
@@ -422,9 +422,9 @@ public:
     PortionKind&   GetKind()                   { return nKind; }
     PortionKind    GetKind() const             { return nKind; }
 
-    void           SetRightToLeft( sal_uInt8 b )    { nRightToLeft = b; }
-    sal_uInt8      GetRightToLeft() const      { return nRightToLeft; }
-    bool           IsRightToLeft() const       { return (nRightToLeft&1); }
+    void           SetRightToLeftLevel( sal_uInt8 n ) { nRightToLeftLevel = n; }
+    sal_uInt8      GetRightToLeftLevel() const { return nRightToLeftLevel; }
+    bool           IsRightToLeft() const       { return (nRightToLeftLevel&1); }
 
     sal_Unicode    GetExtraValue() const       { return nExtraValue; }
     void           SetExtraValue( sal_Unicode n )  { nExtraValue = n; }

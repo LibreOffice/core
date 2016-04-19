@@ -949,7 +949,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         sal_Int32 nTmp;
         sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, true );
         const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
-        sal_Int32 nRTLLevel = rTextPortion.GetRightToLeft();
+        sal_Int32 nRTLLevel = rTextPortion.GetRightToLeftLevel();
         bool bPortionRTL = (nRTLLevel%2) != 0;
 
         if ( bStart )
@@ -1015,7 +1015,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
 
         bool bPortionBoundary = ( aPaM.GetIndex() == nPortionStart ) || ( aPaM.GetIndex() == (nPortionStart+rTextPortion.GetLen()) );
-        sal_uInt16 nRTLLevel = rTextPortion.GetRightToLeft();
+        sal_uInt16 nRTLLevel = rTextPortion.GetRightToLeftLevel();
 
         // Portion boundary doesn't matter if both have same RTL level
         sal_Int32 nRTLLevelNextPortion = -1;
@@ -1024,7 +1024,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
             sal_Int32 nTmp;
             sal_Int32 nNextTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex()+1, nTmp, !bLogicalBackward );
             const TextPortion& rNextTextPortion = pParaPortion->GetTextPortions()[nNextTextPortion];
-            nRTLLevelNextPortion = rNextTextPortion.GetRightToLeft();
+            nRTLLevelNextPortion = rNextTextPortion.GetRightToLeftLevel();
         }
 
         if ( !bPortionBoundary || ( nRTLLevel == nRTLLevelNextPortion ) )
@@ -1092,7 +1092,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
             sal_Int32 nPortionStart;
             sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, bBeforePortion );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
-            bool bRTLPortion = (rTextPortion.GetRightToLeft() % 2) != 0;
+            bool bRTLPortion = (rTextPortion.GetRightToLeftLevel() % 2) != 0;
 
             // -1: We are 'behind' the character
             long nVisPos = (long)ubidi_getVisualIndex( pBidi, bWasBehind ? nPosInLine-1 : nPosInLine, &nError );
@@ -1119,9 +1119,9 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
                 // sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, !bRTLPortion );
                 sal_Int32 _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, true );
                 const TextPortion& _rTextPortion = pParaPortion->GetTextPortions()[_nTextPortion];
-                if ( bVisualToLeft && !bRTLPortion && ( _rTextPortion.GetRightToLeft() % 2 ) )
+                if ( bVisualToLeft && !bRTLPortion && ( _rTextPortion.GetRightToLeftLevel() % 2 ) )
                     aPaM.SetIndex( aPaM.GetIndex()+1 );
-                else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(_rTextPortion.GetRightToLeft() % 2 )) )
+                else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(_rTextPortion.GetRightToLeftLevel() % 2 )) )
                     aPaM.SetIndex( aPaM.GetIndex()+1 );
 
                 pEditView->pImpEditView->SetCursorBidiLevel( _nPortionStart );
@@ -1963,7 +1963,7 @@ bool ImpEditEngine::HasDifferentRTLLevels( const ContentNode* pNode )
     for ( sal_Int32 n = 0; n < (sal_Int32)pParaPortion->GetTextPortions().Count(); n++ )
     {
         const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
-        if ( rTextPortion.GetRightToLeft() != nRTLLevel )
+        if ( rTextPortion.GetRightToLeftLevel() != nRTLLevel )
         {
             bHasDifferentRTLLevels = true;
             break;
@@ -3815,14 +3815,14 @@ long ImpEditEngine::GetPortionXOffset(
     const TextPortion& rDestPortion = pParaPortion->GetTextPortions()[nTextPortion];
     if ( rDestPortion.GetKind() != PortionKind::TAB )
     {
-        if ( !bR2LPara && rDestPortion.GetRightToLeft() )
+        if ( !bR2LPara && rDestPortion.GetRightToLeftLevel() )
         {
             // Portions behind must be added, visual before this portion
             sal_Int32 nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
                 const TextPortion& rNextTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
-                if ( rNextTextPortion.GetRightToLeft() && ( rNextTextPortion.GetKind() != PortionKind::TAB ) )
+                if ( rNextTextPortion.GetRightToLeftLevel() && ( rNextTextPortion.GetKind() != PortionKind::TAB ) )
                     nX += rNextTextPortion.GetSize().Width();
                 else
                     break;
@@ -3834,7 +3834,7 @@ long ImpEditEngine::GetPortionXOffset(
             {
                 --nTmpPortion;
                 const TextPortion& rPrevTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
-                if ( rPrevTextPortion.GetRightToLeft() && ( rPrevTextPortion.GetKind() != PortionKind::TAB ) )
+                if ( rPrevTextPortion.GetRightToLeftLevel() && ( rPrevTextPortion.GetKind() != PortionKind::TAB ) )
                     nX -= rPrevTextPortion.GetSize().Width();
                 else
                     break;
