@@ -1871,9 +1871,8 @@ void UCBStorage_Impl::SetError( ErrCode nError )
 sal_Int32 UCBStorage_Impl::GetObjectCount()
 {
     sal_Int32 nCount = m_aChildrenList.size();
-    for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
+    for (UCBStorageElement_Impl* pElement : m_aChildrenList)
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
             nCount += pElement->m_xStorage->GetObjectCount();
@@ -1928,9 +1927,8 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
         // the "FullPath" of a child always starts without '/'
         aPath.clear();
 
-    for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
+    for (UCBStorageElement_Impl* pElement : m_aChildrenList)
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
             pElement->m_xStorage->SetProps( rSequence, aPath );
@@ -1980,9 +1978,8 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         aPath.clear();
 
     // now the properties of my elements
-    for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
+    for (UCBStorageElement_Impl* pElement : m_aChildrenList)
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
             // storages add there properties by themselves ( see above )
@@ -2004,8 +2001,8 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
 UCBStorage_Impl::~UCBStorage_Impl()
 {
     // first delete elements!
-    for ( size_t i = 0, n = m_aChildrenList.size(); i < n; ++i )
-        delete m_aChildrenList[ i ];
+    for (UCBStorageElement_Impl* i : m_aChildrenList)
+        delete i;
     m_aChildrenList.clear();
 
     delete m_pContent;
@@ -2444,9 +2441,8 @@ OUString UCBStorage::GetUserName()
 void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
 {
     // put information in childrenlist into StorageInfoList
-    for ( size_t i = 0; i < pImp->GetChildrenList().size(); ++i )
+    for (UCBStorageElement_Impl* pElement : pImp->GetChildrenList())
     {
-        UCBStorageElement_Impl* pElement = pImp->GetChildrenList()[ i ];
         if ( !pElement->m_bIsRemoved )
         {
             // problem: what about the size of a substorage ?!
@@ -2540,9 +2536,8 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
 UCBStorageElement_Impl* UCBStorage::FindElement_Impl( const OUString& rName ) const
 {
     DBG_ASSERT( !rName.isEmpty(), "Name is empty!" );
-    for ( size_t i = 0, n = pImp->GetChildrenList().size(); i < n; ++i )
+    for (UCBStorageElement_Impl* pElement : pImp->GetChildrenList())
     {
-        UCBStorageElement_Impl* pElement = pImp->GetChildrenList()[ i ];
         if ( pElement->m_aName == rName && !pElement->m_bIsRemoved )
             return pElement;
     }

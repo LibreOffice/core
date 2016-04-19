@@ -73,14 +73,14 @@ void SwChapterNumRules::Save()
 
 SwChapterNumRules::~SwChapterNumRules()
 {
-    for( sal_uInt16 i = 0; i < nMaxRules; ++i )
-        delete pNumRules[i];
+    for(SwNumRulesWithName* pNumRule : pNumRules)
+        delete pNumRule;
 }
 
 void  SwChapterNumRules::Init()
 {
-    for(sal_uInt16 i = 0; i < nMaxRules; ++i )
-        pNumRules[i] = nullptr;
+    for(SwNumRulesWithName* & rpNumRule : pNumRules)
+        rpNumRule = nullptr;
 
     OUString sNm(CHAPTER_FILENAME);
     SvtPathOptions aOpt;
@@ -136,8 +136,8 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRulesWithName& rCopy )
 
 SwNumRulesWithName::~SwNumRulesWithName()
 {
-    for( int n = 0; n < MAXLEVEL; ++n )
-        delete aFormats[ n ];
+    for(SwNumFormatGlobal* p : aFormats)
+        delete p;
 }
 
 const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCopy)

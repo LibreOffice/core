@@ -292,9 +292,8 @@ SvXMLStylesContext_Impl::~SvXMLStylesContext_Impl()
 {
     delete pIndices;
 
-    for ( size_t i = 0, n = aStyles.size(); i < n; ++i )
+    for (SvXMLStyleContext* pStyle : aStyles)
     {
-        SvXMLStyleContext *pStyle = aStyles[ i ];
         pStyle->ReleaseRef();
     }
     aStyles.clear();
@@ -312,9 +311,8 @@ void SvXMLStylesContext_Impl::Clear()
 {
     FlushIndex();
 
-    for ( size_t i = 0, n = aStyles.size(); i < n; ++i )
+    for (SvXMLStyleContext* pStyle : aStyles)
     {
-        SvXMLStyleContext *pStyle = aStyles[ i ];
         pStyle->ReleaseRef();
     }
     aStyles.clear();

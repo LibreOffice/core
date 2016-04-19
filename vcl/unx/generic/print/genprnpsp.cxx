@@ -1263,10 +1263,10 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     // clean up the temporary PDF files
     if( ! i_pFileName || bAborted )
     {
-        for( size_t i = 0; i < aPDFFiles.size(); i++ )
+        for(PDFPrintFile & rPDFFile : aPDFFiles)
         {
-            osl_removeFile( aPDFFiles[i].maTmpURL.pData );
-            OSL_TRACE( "removed print PDF file %s", OUStringToOString( aPDFFiles[i].maTmpURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+            osl_removeFile( rPDFFile.maTmpURL.pData );
+            OSL_TRACE( "removed print PDF file %s", OUStringToOString( rPDFFile.maTmpURL, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 

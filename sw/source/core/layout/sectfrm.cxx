@@ -1105,10 +1105,8 @@ class ExtraFormatToPositionObjs
                 SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
                 if ( pObjs )
                 {
-                    for ( size_t i = 0; i < pObjs->size(); ++i )
+                    for (SwAnchoredObject* pAnchoredObj : *pObjs)
                     {
-                        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-
                         if ( mpSectFrame->IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
                         {
                             pAnchoredObj->SetKeepPosLocked( false );
@@ -1124,10 +1122,8 @@ class ExtraFormatToPositionObjs
             SwSortedObjs* pObjs = rFrame.GetDrawObjs();
             if ( pObjs )
             {
-                for ( size_t i = 0; i < pObjs->size(); ++i )
+                for (SwAnchoredObject* pAnchoredObj : *pObjs)
                 {
-                    SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-
                     pAnchoredObj->UnlockPosition();
                     pAnchoredObj->SetClearedEnvironment( false );
                 }
@@ -1199,10 +1195,8 @@ class ExtraFormatToPositionObjs
                 SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
                 if ( pObjs )
                 {
-                    for ( size_t i = 0; i < pObjs->size(); ++i )
+                    for (SwAnchoredObject* pAnchoredObj : *pObjs)
                     {
-                        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-
                         if ( mpSectFrame->IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
                         {
                             pAnchoredObj->SetKeepPosLocked( true );

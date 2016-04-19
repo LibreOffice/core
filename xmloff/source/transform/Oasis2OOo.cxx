@@ -1937,14 +1937,14 @@ Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
     GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
 
-    for( sal_uInt16 i=0; i<MAX_OASIS_ACTIONS; ++i )
-        m_aActions[i] = nullptr;
+    for(XMLTransformerActions* & rp : m_aActions)
+        rp = nullptr;
 }
 
 Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
 {
-    for( sal_uInt16 i=0; i<MAX_OASIS_ACTIONS; ++i )
-        delete m_aActions[i];
+    for(XMLTransformerActions* p : m_aActions)
+        delete p;
     XMLEventOASISTransformerContext::FlushEventMap( m_pEventMap );
     XMLEventOASISTransformerContext::FlushEventMap( m_pFormEventMap );
 }

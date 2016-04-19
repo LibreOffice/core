@@ -257,9 +257,9 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 OUString aCode = pItem->GetValue();
                 sal_Int32 nIndex = 0;
                 sal_Int32 aFormat[4] = {0};
-                for (size_t i=0; i<SAL_N_ELEMENTS(aFormat); ++i)
+                for (sal_Int32 & rn : aFormat)
                 {
-                    aFormat[i] = aCode.getToken(0, ',', nIndex).toInt32();
+                    rn = aCode.getToken(0, ',', nIndex).toInt32();
                     if (nIndex<0)
                         break;
                 }

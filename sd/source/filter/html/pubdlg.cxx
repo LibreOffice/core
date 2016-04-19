@@ -1329,8 +1329,8 @@ void SdPublishingDlg::LoadPreviewButtons()
         };
 
         std::vector< OUString > aButtonNames;
-        for( int i = 0; i < nButtonCount; ++i )
-            aButtonNames.push_back( OUString::createFromAscii( pButtonNames[i] ) );
+        for(const char * p : pButtonNames)
+            aButtonNames.push_back( OUString::createFromAscii( p ) );
 
         int nSetCount = mpButtonSet->getCount();
 

@@ -1150,11 +1150,11 @@ void SystemQueueInfo::run()
     std::list< OString > aLines;
 
     /* Discover which command we can use to get a list of all printer queues */
-    for( unsigned int i = 0; i < SAL_N_ELEMENTS(aParms); i++ )
+    for(const auto & rParm : aParms)
     {
         aLines.clear();
         OStringBuffer aCmdLine( 128 );
-        aCmdLine.append( aParms[i].pQueueCommand );
+        aCmdLine.append( rParm.pQueueCommand );
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
         #endif
@@ -1167,11 +1167,11 @@ void SystemQueueInfo::run()
             if( ! pclose( pPipe ) )
             {
                 std::list< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;
-                aParms[i].pHandler( aLines, aSysPrintQueues, &(aParms[i]) );
+                rParm.pHandler( aLines, aSysPrintQueues, &rParm );
                 MutexGuard aGuard( m_aMutex );
                 m_bChanged  = true;
                 m_aQueues   = aSysPrintQueues;
-                m_aCommand  = OUString::createFromAscii( aParms[i].pPrintCommand );
+                m_aCommand  = OUString::createFromAscii( rParm.pPrintCommand );
                 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "success\n" );
                 #endif

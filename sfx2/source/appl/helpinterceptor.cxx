@@ -50,8 +50,8 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
 {
     if ( m_pHistory )
     {
-        for ( size_t i = 0, n = m_pHistory->size(); i < n; ++i )
-            delete m_pHistory->at( i );
+        for (HelpHistoryEntry_Impl* p : *m_pHistory)
+            delete p;
         delete m_pHistory;
     }
 }

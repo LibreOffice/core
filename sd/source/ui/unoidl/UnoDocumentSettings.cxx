@@ -278,20 +278,20 @@ static struct {
 
 static XPropertyListType getTypeOfName( const OUString &aName )
 {
-    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
-        if( aName.equalsAscii( aURLPropertyNames[i].pName ) )
-            return aURLPropertyNames[i].t;
+    for(const auto & rURLPropertyName : aURLPropertyNames) {
+        if( aName.equalsAscii( rURLPropertyName.pName ) )
+            return rURLPropertyName.t;
     }
     return UNKNOWN_XPROPERTYLISTTYPE;
 }
 
 static OUString getNameOfType( XPropertyListType t )
 {
-    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
-        if( t == aURLPropertyNames[i].t )
-            return OUString( aURLPropertyNames[i].pName,
-                                  strlen( aURLPropertyNames[i].pName ) - 3,
-                                  RTL_TEXTENCODING_UTF8 );
+    for(const auto & rURLPropertyName : aURLPropertyNames) {
+        if( t == rURLPropertyName.t )
+            return OUString( rURLPropertyName.pName,
+                                  strlen( rURLPropertyName.pName ) - 3,
+                                  RTL_TEXTENCODING_ASCII_US );
     }
     return OUString();
 }

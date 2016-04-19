@@ -217,10 +217,8 @@ namespace
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);
 
-            for(size_t a(0); a < rTextPortions.size(); a++)
+            for(const impPathTextPortion* pCandidate : rTextPortions)
             {
-                const impPathTextPortion* pCandidate = rTextPortions[a];
-
                 if(pCandidate && pCandidate->getTextLength())
                 {
                     aTextLayouter.setFont(pCandidate->getFont());
@@ -593,9 +591,9 @@ namespace
     {
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aNewPrimitives;
 
-        for(size_t a(0); a < rSource.size(); a++)
+        for(drawinglayer::primitive2d::BasePrimitive2D* a : rSource)
         {
-            const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pTextCandidate = dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(rSource[a]);
+            const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pTextCandidate = dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(a);
 
             if(pTextCandidate)
             {
@@ -720,10 +718,8 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 // filter text portions for this paragraph
                 ::std::vector< const impPathTextPortion* > aParagraphTextPortions;
 
-                for(size_t b(0); b < rPathTextPortions.size(); b++)
+                for(const auto & rCandidate : rPathTextPortions)
                 {
-                    const impPathTextPortion& rCandidate = rPathTextPortions[b];
-
                     if(static_cast<sal_uInt32>(rCandidate.getParagraph()) == a)
                     {
                         aParagraphTextPortions.push_back(&rCandidate);

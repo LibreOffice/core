@@ -498,10 +498,10 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
             FSNS( XML_m, XML_val ), mathSymbolToString( pNode->ClosingBrace()).getStr(), FSEND );
 
     m_pSerializer->endElementNS( XML_m, XML_dPr );
-    for( size_t i = 0; i < subnodes.size(); ++i )
+    for(const SmNode* subnode : subnodes)
     {
         m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
-        HandleNode( subnodes[ i ], nLevel + 1 );
+        HandleNode( subnode, nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_e );
     }
     m_pSerializer->endElementNS( XML_m, XML_d );

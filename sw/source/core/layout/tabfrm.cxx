@@ -275,10 +275,8 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
         }
         if ( pLowerFrame->GetDrawObjs() )
         {
-            for ( size_t i = 0; i < pLowerFrame->GetDrawObjs()->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *pLowerFrame->GetDrawObjs())
             {
-                SwAnchoredObject* pAnchoredObj = (*pLowerFrame->GetDrawObjs())[i];
-
                 // invalidate position of anchored object
                 pAnchoredObj->SetTmpConsiderWrapInfluence( false );
                 pAnchoredObj->SetConsiderForTextWrap( false );
@@ -3676,13 +3674,12 @@ long CalcHeightWithFlys( const SwFrame *pFrame )
         }
         if ( pObjs )
         {
-            for ( size_t i = 0; i < pObjs->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *pObjs)
             {
-                const SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 // #i26945# - if <pTmp> is follow, the
                 // anchor character frame has to be <pTmp>.
                 if ( bIsFollow &&
-                     const_cast<SwAnchoredObject*>(pAnchoredObj)->FindAnchorCharFrame() != pTmp )
+                     pAnchoredObj->FindAnchorCharFrame() != pTmp )
                 {
                     continue;
                 }
@@ -4891,9 +4888,8 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         if ( pPg->GetSortedObjs() )
         {
             SwRect aRect( Prt() ); aRect += Frame().Pos();
-            for ( size_t i = 0; i < pPg->GetSortedObjs()->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *pPg->GetSortedObjs())
             {
-                const SwAnchoredObject* pAnchoredObj = (*pPg->GetSortedObjs())[i];
                 SwRect aTmp( pAnchoredObj->GetObjRect() );
                 if ( aTmp.IsOver( aRect ) )
                 {

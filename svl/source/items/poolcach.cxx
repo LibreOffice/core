@@ -48,9 +48,9 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
 
 SfxItemPoolCache::~SfxItemPoolCache()
 {
-    for ( size_t nPos = 0; nPos < pCache->size(); ++nPos ) {
-        pPool->Remove( *(*pCache)[nPos].pPoolItem );
-        pPool->Remove( *(*pCache)[nPos].pOrigItem );
+    for (SfxItemModifyImpl & rImpl : *pCache) {
+        pPool->Remove( *rImpl.pPoolItem );
+        pPool->Remove( *rImpl.pOrigItem );
     }
     delete pCache; pCache = nullptr;
 
@@ -66,9 +66,8 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
                 "original not in pool" );
 
     // Find whether this Transformations ever occurred
-    for ( size_t nPos = 0; nPos < pCache->size(); ++nPos )
+    for (SfxItemModifyImpl & rMapEntry : *pCache)
     {
-        SfxItemModifyImpl &rMapEntry = (*pCache)[nPos];
         if ( rMapEntry.pOrigItem == &rOrigItem )
         {
             // Did anything change at all?

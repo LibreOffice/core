@@ -977,30 +977,30 @@ void ScTabView::ExpandBlockArea(SCsCOL nMovX, SCsROW nMovY)
 
 void ScTabView::UpdateCopySourceOverlay()
 {
-    for (sal_uInt8 i = 0; i < 4; ++i)
-        if (pGridWin[i] && pGridWin[i]->IsVisible())
-            pGridWin[i]->UpdateCopySourceOverlay();
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if (pWin && pWin->IsVisible())
+            pWin->UpdateCopySourceOverlay();
 }
 
 void ScTabView::UpdateSelectionOverlay()
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-            pGridWin[i]->UpdateSelectionOverlay();
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if ( pWin && pWin->IsVisible() )
+            pWin->UpdateSelectionOverlay();
 }
 
 void ScTabView::UpdateShrinkOverlay()
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-            pGridWin[i]->UpdateShrinkOverlay();
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if ( pWin && pWin->IsVisible() )
+            pWin->UpdateShrinkOverlay();
 }
 
 void ScTabView::UpdateAllOverlays()
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-            pGridWin[i]->UpdateAllOverlays();
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if ( pWin && pWin->IsVisible() )
+            pWin->UpdateAllOverlays();
 }
 
 //!
@@ -1384,9 +1384,9 @@ void ScTabView::StopMarking()
 
 void ScTabView::HideNoteMarker()
 {
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i] && pGridWin[i]->IsVisible())
-            pGridWin[i]->HideNoteMarker();
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if (pWin && pWin->IsVisible())
+            pWin->HideNoteMarker();
 }
 
 void ScTabView::MakeDrawLayer()
@@ -1398,11 +1398,11 @@ void ScTabView::MakeDrawLayer()
         // pDrawView is set per Notify
         OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer does not work");
 
-        for(sal_uInt16 a(0); a < 4; a++)
+        for(VclPtr<ScGridWindow> & pWin : pGridWin)
         {
-            if(pGridWin[a])
+            if(pWin)
             {
-                pGridWin[a]->DrawLayerCreated();
+                pWin->DrawLayerCreated();
             }
         }
     }

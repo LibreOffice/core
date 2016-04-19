@@ -1903,10 +1903,8 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
     // #i21478# - keep last inserted footnote in order to
     // format the content of the following one.
     SwFootnoteFrame* pLastInsertedFootnote = nullptr;
-    for ( size_t i = 0; i < rFootnoteArr.size(); ++i )
+    for (SwFootnoteFrame* pFootnote : rFootnoteArr)
     {
-        SwFootnoteFrame *pFootnote = rFootnoteArr[i];
-
         SwFootnoteBossFrame* pRefBoss = pFootnote->GetRef()->FindFootnoteBossFrame( true );
         if( pRefBoss != this )
         {

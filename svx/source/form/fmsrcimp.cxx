@@ -785,9 +785,9 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 {
     clearControlTexts();
     Reference< XInterface >  xCurrent;
-    for (size_t i=0; i<arrFields.size(); ++i)
+    for (const auto & rField : arrFields)
     {
-        xCurrent = arrFields.at(i);
+        xCurrent = rField;
         DBG_ASSERT(xCurrent.is(), "FmSearchEngine::fillControlTexts : invalid field interface !");
         // check which type of control this is
         Reference< css::awt::XTextComponent >  xAsText(xCurrent, UNO_QUERY);
@@ -1246,12 +1246,12 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, bool bForce)
     if (nFieldIndex == -1)
     {
         Reference< css::container::XIndexAccess >  xFields;
-        for (size_t i=0; i<m_arrFieldMapping.size(); ++i)
+        for (sal_Int32 i : m_arrFieldMapping)
         {
             Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
             DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
             xFields.set(xSupplyCols->getColumns(), UNO_QUERY);
-            BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[i]);
+            BuildAndInsertFieldInfo(xFields, i);
         }
     }
     else

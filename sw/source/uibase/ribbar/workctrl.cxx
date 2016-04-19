@@ -56,8 +56,6 @@
 #error SwScrollNaviPopup-CTOR static array wrong size. Are new IDs added?
 #endif
 
-#define ZOOM_ENTRIES 9
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -304,9 +302,8 @@ void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
 void SwScrollNaviPopup::ApplyImageList()
 {
     ImageList& rImgLst = aIList;
-    for(sal_uInt16 i = 0; i < NID_COUNT; i++)
+    for(sal_uInt16 nNaviId : aNavigationInsertIds)
     {
-        sal_uInt16 nNaviId = aNavigationInsertIds[i];
         m_pToolBox->SetItemImage(nNaviId, rImgLst.GetImage(nNaviId));
     }
 }
@@ -413,9 +410,9 @@ SwZoomBox_Impl::SwZoomBox_Impl(
       RID_SVXSTR_ZOOM_150 , RID_SVXSTR_ZOOM_200 ,
       RID_SVXSTR_ZOOM_WHOLE_PAGE, RID_SVXSTR_ZOOM_PAGE_WIDTH ,
       RID_SVXSTR_ZOOM_OPTIMAL_VIEW };
-    for(sal_uInt16 i = 0; i < ZOOM_ENTRIES ; i++)
+    for(sal_uInt16 aZoomValue : aZoomValues)
     {
-        OUString sEntry = SVX_RESSTR( aZoomValues[i] );
+        OUString sEntry = SVX_RESSTR( aZoomValue );
         InsertEntry(sEntry);
     }
 

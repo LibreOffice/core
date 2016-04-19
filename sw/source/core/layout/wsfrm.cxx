@@ -1518,9 +1518,8 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         {
             const SwSortedObjs &rObjs = *pBoss->GetDrawObjs();
             OSL_ENSURE( pBoss->IsPageFrame(), "Header/Footer out of page?" );
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                 {
                     SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
@@ -1882,9 +1881,8 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             const SwSortedObjs* pSorted = pPage ? pPage->GetSortedObjs() : nullptr;
             if( pSorted )
             {
-                for ( size_t i = 0; i < pSorted->size(); ++i )
+                for (SwAnchoredObject* pAnchoredObj : *pSorted)
                 {
-                    const SwAnchoredObject* pAnchoredObj = (*pSorted)[i];
                     const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
 
                     if( aBound.Left() > aRect.Right() )
@@ -3059,9 +3057,8 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
 static void InvaPercentFlys( SwFrame *pFrame, SwTwips nDiff )
 {
     OSL_ENSURE( pFrame->GetDrawObjs(), "Can't find any Objects" );
-    for ( size_t i = 0; i < pFrame->GetDrawObjs()->size(); ++i )
+    for (SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())
     {
-        SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
         if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
         {
             SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
@@ -3315,10 +3312,8 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
         if ( pObjs )
         {
-            for ( size_t i = 0; i < pObjs->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *pObjs)
             {
-                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-
                 if ( IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
                 {
                     pAnchoredObj->SetTmpConsiderWrapInfluence( false );
@@ -3511,10 +3506,8 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     SwSortedObjs* pTmpObjs = pTmpPageFrame ? pTmpPageFrame->GetSortedObjs() : nullptr;
                     if ( pTmpObjs )
                     {
-                        for ( size_t i = 0; i < pTmpObjs->size(); ++i )
+                        for (SwAnchoredObject* pAnchoredObj : *pTmpObjs)
                         {
-                            SwAnchoredObject* pAnchoredObj = (*pTmpObjs)[i];
-
                             if ( IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
                             {
                                 pAnchoredObj->SetTmpConsiderWrapInfluence( false );
@@ -3666,9 +3659,8 @@ static void lcl_InvalidateContent( SwContentFrame *pCnt, SwInvalidateFlags nInv 
 static void lcl_InvalidateAllContent( SwContentFrame *pCnt, SwInvalidateFlags nInv )
 {
     SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-    for ( size_t i = 0; i < rObjs.size(); ++i )
+    for (SwAnchoredObject* pAnchoredObj : rObjs)
     {
-        SwAnchoredObject* pAnchoredObj = rObjs[i];
         if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
         {
             SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
@@ -3698,9 +3690,8 @@ void SwRootFrame::InvalidateAllContent( SwInvalidateFlags nInv )
         if ( pPage->GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                 {
                     SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
@@ -3740,9 +3731,8 @@ void SwRootFrame::InvalidateAllObjPos()
         if ( pPageFrame->GetSortedObjs() )
         {
             const SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                SwAnchoredObject* pAnchoredObj = rObjs[i];
                 const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
                 if ((rAnch.GetAnchorId() != FLY_AT_PARA) &&
                     (rAnch.GetAnchorId() != FLY_AT_CHAR))

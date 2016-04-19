@@ -1357,8 +1357,8 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
                 OUString("VertOrient"),
                 OUString("VertOrientPosition")
             };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pProperties); ++i)
-                xOLEProperties->setPropertyValue(pProperties[i], xReplacementProperties->getPropertyValue(pProperties[i]));
+            for (const OUString & s : pProperties)
+                xOLEProperties->setPropertyValue(s, xReplacementProperties->getPropertyValue(s));
         }
         else
             // mimic the treatment of graphics here.. it seems anchoring as character
@@ -2167,11 +2167,11 @@ style::NumberingType::
     CHARS_CYRILLIC_LOWER_LETTER_N_SR*/
 
         };
-        for( sal_uInt32 nNum = 0; nNum < SAL_N_ELEMENTS(aNumberingPairs); ++nNum)
+        for(const NumberingPairs& rNumberingPair : aNumberingPairs)
         {
-            if( /*sCommand*/sNumber.equalsAscii(aNumberingPairs[nNum].cWordName ))
+            if( /*sCommand*/sNumber.equalsAscii(rNumberingPair.cWordName ))
             {
-                nRet = aNumberingPairs[nNum].nType;
+                nRet = rNumberingPair.nType;
                 break;
             }
         }

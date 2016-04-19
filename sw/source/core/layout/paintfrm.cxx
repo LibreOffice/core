@@ -4613,9 +4613,8 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     pOut->SetDrawMode( nOldDrawMode );
 
-    for ( size_t i = 0; i < aRegion.size(); ++i )
+    for (SwRect & rOut : aRegion)
     {
-        SwRect &rOut = aRegion[i];
         aOut = rOut;
         if ( rRect.IsOver( aOut ) && aOut.Height() > 0 && aOut.Width() > 0 )
         {
@@ -6766,9 +6765,8 @@ void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
             else if ( pLow->GetDrawObjs() )
             {
                 const SwSortedObjs& rObjs = *(pLow->GetDrawObjs());
-                for ( size_t i = 0; i < rObjs.size(); ++i )
+                for (SwAnchoredObject* pAnchoredObj : rObjs)
                 {
-                    const SwAnchoredObject* pAnchoredObj = rObjs[i];
                     if ( pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) &&
                          dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
@@ -7248,9 +7246,8 @@ void SwPageFrame::RefreshExtraData( const SwRect &rRect ) const
         SwLayoutFrame::RefreshExtraData( aRect );
 
         if ( bLineInFly && GetSortedObjs() )
-            for ( size_t i = 0; i < GetSortedObjs()->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
             {
-                const SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                 {
                     const SwFlyFrame *pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
@@ -7283,9 +7280,8 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
             static_cast<const SwTextFrame*>(pCnt)->PaintExtraData( rRect );
         }
         if ( bLineInFly && pCnt->GetDrawObjs() )
-            for ( size_t i = 0; i < pCnt->GetDrawObjs()->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *pCnt->GetDrawObjs())
             {
-                const SwAnchoredObject* pAnchoredObj = (*pCnt->GetDrawObjs())[i];
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                 {
                     const SwFlyFrame *pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);

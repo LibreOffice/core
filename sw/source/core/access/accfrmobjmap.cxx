@@ -66,9 +66,9 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
         const SwSortedObjs *pObjs = pPgFrame->GetSortedObjs();
         if ( pObjs )
         {
-            for( size_t i=0; i<pObjs->size(); ++i )
+            for(const SwAnchoredObject* pObj : *pObjs)
             {
-                aLower = (*pObjs)[i]->GetDrawObj();
+                aLower = pObj->GetDrawObj();
                 if ( aLower.GetBox( rAccMap ).IsOver( rVisArea ) )
                 {
                     insert( aLower.GetDrawObject(), aLower );
@@ -81,9 +81,9 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
         const SwSortedObjs *pObjs = rFrame.GetDrawObjs();
         if ( pObjs )
         {
-            for( size_t i=0; i<pObjs->size(); ++i )
+            for(const SwAnchoredObject* pObj : *pObjs)
             {
-                aLower = (*pObjs)[i]->GetDrawObj();
+                aLower = pObj->GetDrawObj();
                 if ( aLower.IsBoundAsChar() &&
                      ( !bVisibleChildrenOnly ||
                        aLower.AlwaysIncludeAsChild() ||

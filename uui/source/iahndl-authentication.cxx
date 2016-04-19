@@ -449,10 +449,10 @@ executeMasterPasswordDialog(
                       1000);
 
     OUStringBuffer aBuffer;
-    for (int i = 0; i < RTL_DIGEST_LENGTH_MD5; ++i)
+    for (sal_uInt8 i : aKey)
     {
-        aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] >> 4)));
-        aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] & 15)));
+        aBuffer.append(static_cast< sal_Unicode >('a' + (i >> 4)));
+        aBuffer.append(static_cast< sal_Unicode >('a' + (i & 15)));
     }
     rInfo.SetPassword(aBuffer.makeStringAndClear());
 }

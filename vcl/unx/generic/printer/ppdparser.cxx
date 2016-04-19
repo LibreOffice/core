@@ -398,8 +398,6 @@ void PPDParser::scanPPDDir( const OUString& rDir )
     } const pSuffixes[] =
     { { ".PS", 3 },  { ".PPD", 4 }, { ".PS.GZ", 6 }, { ".PPD.GZ", 7 } };
 
-    const int nSuffixes = SAL_N_ELEMENTS(pSuffixes);
-
     PPDCache &rPPDCache = thePPDCache::get();
 
     osl::Directory aDir( rDir );
@@ -425,13 +423,13 @@ void PPDParser::scanPPDDir( const OUString& rDir )
                         aPPDFile.Append( aFileName );
 
                         // match extension
-                        for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
+                        for(const suffix_t & rSuffix : pSuffixes)
                         {
-                            if( aFileName.getLength() > pSuffixes[nSuffix].nSuffixLen )
+                            if( aFileName.getLength() > rSuffix.nSuffixLen )
                             {
-                                if( aFileName.endsWithIgnoreAsciiCaseAsciiL( pSuffixes[nSuffix].pSuffix, pSuffixes[nSuffix].nSuffixLen ) )
+                                if( aFileName.endsWithIgnoreAsciiCaseAsciiL( rSuffix.pSuffix, rSuffix.nSuffixLen ) )
                                 {
-                                (*rPPDCache.pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
+                                (*rPPDCache.pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - rSuffix.nSuffixLen ) ] = aPPDFile.PathToFileName();
                                     break;
                                 }
                             }

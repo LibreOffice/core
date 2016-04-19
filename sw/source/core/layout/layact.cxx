@@ -419,9 +419,8 @@ static void unlockPositionOfObjects( SwPageFrame *pPageFrame )
     SwSortedObjs* pObjs = pPageFrame->GetSortedObjs();
     if ( pObjs )
     {
-        for ( size_t i = 0; i < pObjs->size(); ++i )
+        for (SwAnchoredObject* pObj : *pObjs)
         {
-            SwAnchoredObject* pObj = (*pObjs)[i];
             pObj->UnlockPosition();
         }
     }
@@ -914,9 +913,8 @@ static const SwFrame *lcl_FindFirstInvaContent( const SwLayoutFrame *pLay, long 
         if ( pCnt->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pObj : rObjs)
             {
-                const SwAnchoredObject* pObj = rObjs[i];
                 if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
                 {
                     const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pObj);
@@ -950,9 +948,8 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrame* _pPage,
 {
     OSL_ENSURE( _pPage->GetSortedObjs(), "FindFirstInvaObj, no Objs" );
 
-    for ( size_t i = 0; i < _pPage->GetSortedObjs()->size(); ++i )
+    for (SwAnchoredObject* pObj : *_pPage->GetSortedObjs())
     {
-        const SwAnchoredObject* pObj = (*_pPage->GetSortedObjs())[i];
         if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
         {
             const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pObj);
@@ -1158,9 +1155,8 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
                         static_cast<SwPageFrame*>(prPage->GetPrev())->GetSortedObjs();
                     if ( pObjs )
                     {
-                        for ( size_t i = 0; i < pObjs->size(); ++i )
+                        for (SwAnchoredObject* pObj : *pObjs)
                         {
-                            SwAnchoredObject* pObj = (*pObjs)[i];
                             if ( pObj->GetAnchorFrameContainingAnchPos() == pContent )
                             {
                                 bRet = false;
@@ -1971,9 +1967,8 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
     if ( pCnt->GetDrawObjs() )
     {
         const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-        for ( size_t i = 0; i < rObjs.size(); ++i )
+        for (SwAnchoredObject* pObj : rObjs)
         {
-            SwAnchoredObject* pObj = rObjs[i];
             if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
             {
                 SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);

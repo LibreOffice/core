@@ -1188,8 +1188,8 @@ IMPL_LINK_TYPED( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
     }
     if (rBox.GetSelectEntry().isEmpty())
     {
-        for(int i = 0; i < AUTH_FIELD_END; i++)
-            m_sFields[i].clear();
+        for(OUString & s : m_sFields)
+            s.clear();
     }
     m_pAuthorFI->SetText(m_sFields[AUTH_FIELD_AUTHOR]);
     m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);
@@ -1223,9 +1223,9 @@ IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
 
         SwFieldMgr aMgr(pSh);
         OUString sFields;
-        for(int i = 0; i < AUTH_FIELD_END; i++)
+        for(OUString & s : m_sFields)
         {
-            sFields += m_sFields[i] + OUStringLiteral1<TOX_STYLE_DELIMITER>();
+            sFields += s + OUStringLiteral1<TOX_STYLE_DELIMITER>();
         }
         if(bNewEntry)
         {
@@ -1343,8 +1343,8 @@ IMPL_LINK_TYPED(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
         {
             std::vector<OUString> aIds;
             pFType->GetAllEntryIdentifiers( aIds );
-            for(size_t n = 0; n < aIds.size(); ++n)
-                m_pEntryLB->InsertEntry(aIds[n]);
+            for(const OUString & i : aIds)
+                m_pEntryLB->InsertEntry(i);
         }
         if(!m_sCreatedEntry[AUTH_FIELD_IDENTIFIER].isEmpty())
             m_pEntryLB->InsertEntry(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER]);
@@ -1486,8 +1486,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
             {
                 std::vector<OUString> aIds;
                 pFType->GetAllEntryIdentifiers( aIds );
-                for(size_t n = 0; n < aIds.size(); ++n)
-                    pIdentifierBox->InsertEntry(aIds[n]);
+                for(const OUString & i : aIds)
+                    pIdentifierBox->InsertEntry(i);
             }
             pIdentifierBox->SetText(pFields[aCurInfo.nToxField]);
             pIdentifierBox->set_grid_left_attach(1);

@@ -56,8 +56,8 @@ namespace treeview {
 
         ~TVDom()
         {
-            for( size_t i = 0; i < children.size(); ++i )
-                delete children[i];
+            for(TVDom* p : children)
+                delete p;
         }
 
         TVDom* newChild()
@@ -468,8 +468,9 @@ void TVChildTarget::Check(TVDom* tvDom)
             {
                 TVDom* p = tvDom->children[tvDom->children.size()-1];
 
-                for(size_t k=0; k<p->children.size(); ++k)
-                    if (!SearchAndInsert(p->children[k], tvDom->children[i]))       tvDom->children[i]->newChild(p->children[k]);
+                for(TVDom* k : p->children)
+                    if (!SearchAndInsert(k, tvDom->children[i]))
+                        tvDom->children[i]->newChild(k);
 
                 tvDom->children.pop_back();
                 h = true;

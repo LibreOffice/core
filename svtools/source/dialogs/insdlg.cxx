@@ -57,20 +57,20 @@ struct OleObjectDescriptor
 
 const SvObjectServer * SvObjectServerList::Get( const OUString & rHumanName ) const
 {
-    for( size_t i = 0; i < aObjectServerList.size(); i++ )
+    for(const auto & i : aObjectServerList)
     {
-        if( rHumanName == aObjectServerList[ i ].GetHumanName() )
-            return &aObjectServerList[ i ];
+        if( rHumanName == i.GetHumanName() )
+            return &i;
     }
     return nullptr;
 }
 
 const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
 {
-    for( size_t i = 0; i < aObjectServerList.size(); i++ )
+    for(const auto & i : aObjectServerList)
     {
-        if( rName == aObjectServerList[ i ].GetClassName() )
-            return &aObjectServerList[ i ];
+        if( rName == i.GetClassName() )
+            return &i;
     }
     return nullptr;
 }

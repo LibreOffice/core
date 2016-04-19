@@ -611,8 +611,8 @@ SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
     , m_aKeepWithNextPara( false, RES_KEEP )
     , m_aShadow( RES_SHADOW )
 {
-    for( sal_uInt8 n = 0; n < 16; ++n )
-        aBoxAutoFormat[ n ] = nullptr;
+    for(SwBoxAutoFormat* & rp : aBoxAutoFormat)
+        rp = nullptr;
     *this = rNew;
 }
 

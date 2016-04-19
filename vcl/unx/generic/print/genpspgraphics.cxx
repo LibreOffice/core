@@ -262,8 +262,8 @@ GenPspGraphics::GenPspGraphics()
       m_bFontVertical( false ),
       m_pInfoPrinter( nullptr )
 {
-    for( int i = 0; i < MAX_FALLBACK; i++ )
-        m_pServerFont[i] = nullptr;
+    for(ServerFont* & rp : m_pServerFont)
+        rp = nullptr;
 }
 
 void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx,

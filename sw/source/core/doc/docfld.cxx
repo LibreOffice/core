@@ -701,9 +701,9 @@ OUString SwDoc::ReplaceUsedDBs( const std::vector<OUString>& rUsedDBNames,
     const OUString sNewName( lcl_CutOffDBCommandType(rNewName) );
     OUString sFormula(rFormula);
 
-    for( size_t i = 0; i < rUsedDBNames.size(); ++i )
+    for(const auto & rUsedDBName : rUsedDBNames)
     {
-        const OUString sDBName( lcl_CutOffDBCommandType(rUsedDBNames[i]) );
+        const OUString sDBName( lcl_CutOffDBCommandType(rUsedDBName) );
 
         if (sDBName!=sNewName)
         {
@@ -1176,8 +1176,8 @@ SwDocUpdateField::~SwDocUpdateField()
 {
     delete pFieldSortLst;
 
-    for( int n = 0; n < TBLSZ; ++n )
-        delete aFieldTypeTable[n];
+    for(SwCalcFieldType* p : aFieldTypeTable)
+        delete p;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -261,10 +261,10 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
     {
         std::vector< OUString > aRangeStrings;
         ScChartHelper::GetChartRanges( xChartDoc, aRangeStrings );
-        for( size_t nN=0; nN<aRangeStrings.size(); nN++ )
+        for(const OUString & aRangeString : aRangeStrings)
         {
             ScRangeList aRanges;
-            aRanges.Parse( aRangeStrings[nN], pSheetNameDoc, ScRefFlags::VALID, pSheetNameDoc->GetAddressConvention() );
+            aRanges.Parse( aRangeString, pSheetNameDoc, ScRefFlags::VALID, pSheetNameDoc->GetAddressConvention() );
             rRangesVector.push_back(aRanges);
         }
     }

@@ -290,10 +290,10 @@ SvxRuler::SvxRuler(
 
         mpIndents.resize(5 + INDENT_GAP);
 
-        for(size_t nIn = 0; nIn < mpIndents.size(); nIn++)
+        for(RulerIndent & rIndent : mpIndents)
         {
-            mpIndents[nIn].nPos = 0;
-            mpIndents[nIn].nStyle = RULER_STYLE_DONTKNOW;
+            rIndent.nPos = 0;
+            rIndent.nStyle = RULER_STYLE_DONTKNOW;
         }
 
         mpIndents[0].nStyle = RULER_STYLE_DONTKNOW;

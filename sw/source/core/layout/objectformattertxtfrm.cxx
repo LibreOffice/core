@@ -769,9 +769,8 @@ bool SwObjectFormatterTextFrame::AtLeastOneObjIsTmpConsiderWrapInfluence()
     const SwSortedObjs* pObjs = GetAnchorFrame().GetDrawObjs();
     if ( pObjs && pObjs->size() > 1 )
     {
-        for ( size_t i = 0; i < pObjs->size(); ++i )
+        for (SwAnchoredObject* pAnchoredObj : *pObjs)
         {
-            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
             {
                 bRet = true;

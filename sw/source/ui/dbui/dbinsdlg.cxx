@@ -1446,10 +1446,10 @@ void SwInsertDBColAutoPilot::SetTabSet()
         SvxBrushItem aBrush( RES_BACKGROUND );
         static const sal_uInt16 aIds[3] =
             { RES_BACKGROUND, SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE };
-        for( int i = 0; i < 3; ++i )
-            if( SfxItemState::SET == pTableSet->GetItemState( aIds[ i ],
+        for(sal_uInt16 i : aIds)
+            if( SfxItemState::SET == pTableSet->GetItemState( i,
                 false, &pItem ) && *pItem == aBrush )
-                pTableSet->ClearItem( aIds[ i ] );
+                pTableSet->ClearItem( i );
     }
 
     if( SfxItemState::SET == pTableSet->GetItemState( FN_PARAM_TABLE_NAME, false,

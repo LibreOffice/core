@@ -61,9 +61,9 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     LanguageTag aLanguageTag( *pLoc);
 
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
-    for (size_t i=0; i < aFallbacks.size(); ++i)
+    for (const OUString & aFallback : aFallbacks)
     {
-        if (tryLoadPng( aBaseDir, aBaseName + "-" + aFallbacks[i] + aPng, rBitmap))
+        if (tryLoadPng( aBaseDir, aBaseName + "-" + aFallback + aPng, rBitmap))
             return true;
     }
 

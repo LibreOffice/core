@@ -6023,10 +6023,9 @@ void ScGridWindow::UpdateCursorOverlay()
                 std::vector< basegfx::B2DRange > aRanges;
                 const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-                for(size_t a(0); a < aPixelRects.size(); a++)
+                for(const Rectangle & rRA : aPixelRects)
                 {
-                    const Rectangle aRA(aPixelRects[a]);
-                    basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
+                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }
@@ -6087,18 +6086,17 @@ void ScGridWindow::UpdateSelectionOverlay()
             SCTAB nTab = pViewData->GetTabNo();
             bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-            for(size_t a(0); a < aPixelRects.size(); a++)
+            for(const Rectangle & rRA : aPixelRects)
             {
-                const Rectangle aRA(aPixelRects[a]);
                 if (bLayoutRTL)
                 {
-                    basegfx::B2DRange aRB(aRA.Left(), aRA.Top() - 1, aRA.Right() + 1, aRA.Bottom());
+                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top() - 1, rRA.Right() + 1, rRA.Bottom());
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }
                 else
                 {
-                    basegfx::B2DRange aRB(aRA.Left() - 1, aRA.Top() - 1, aRA.Right(), aRA.Bottom());
+                    basegfx::B2DRange aRB(rRA.Left() - 1, rRA.Top() - 1, rRA.Right(), rRA.Bottom());
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }
@@ -6324,10 +6322,9 @@ void ScGridWindow::UpdateDragRectOverlay()
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-            for(size_t a(0); a < aPixelRects.size(); a++)
+            for(const Rectangle & rRA : aPixelRects)
             {
-                const Rectangle aRA(aPixelRects[a]);
-                basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
+                basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
                 aRB.transform(aTransform);
                 aRanges.push_back(aRB);
             }

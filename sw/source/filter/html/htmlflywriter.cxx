@@ -1104,11 +1104,11 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
         do
         {
             bFound = false;
-            for (size_t i = 0; i < rHTMLWrt.m_aImgMapNames.size(); ++i)
+            for (const OUString & rImgMapName : rHTMLWrt.m_aImgMapNames)
             {
                 // TODO: Unicode: Comparison is case insensitive for ASCII
                 // characters only now!
-                if (aIMapName.equalsIgnoreAsciiCase(rHTMLWrt.m_aImgMapNames[i]))
+                if (aIMapName.equalsIgnoreAsciiCase(rImgMapName))
                 {
                     bFound = true;
                     break;

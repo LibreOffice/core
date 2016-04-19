@@ -535,10 +535,9 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
 
 void EventList::Clear()
 {
-    for ( std::deque< ListAction* >::size_type i = 0;
-          i < maData.size(); ++i )
+    for (ListAction* p : maData)
     {
-        delete maData[i];
+        delete p;
     }
 
     maData.clear();

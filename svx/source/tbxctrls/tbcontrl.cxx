@@ -358,8 +358,8 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     , m_aMenu ( SVX_RES( RID_SVX_STYLE_MENU ) )
 {
     m_aMenu.SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
-    for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
-        m_pButtons[i] = nullptr;
+    for(VclPtr<MenuButton> & rpButton : m_pButtons)
+        rpButton = nullptr;
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     SetOptimalSize();
     EnableAutocomplete( true );
@@ -377,9 +377,9 @@ void SvxStyleBox_Impl::dispose()
 {
     RemoveEventListener(LINK(this, SvxStyleBox_Impl, CalcOptimalExtraUserWidth));
 
-    for (int i = 0; i < MAX_STYLES_ENTRIES; i++)
+    for (VclPtr<MenuButton>& rButton : m_pButtons)
     {
-        m_pButtons[i].disposeAndClear();
+        rButton.disposeAndClear();
     }
 
     ComboBox::dispose();
@@ -2147,11 +2147,11 @@ struct SvxStyleToolBoxControl::Impl
                 };
                 Reference<container::XNameAccess> xCellStyles;
                 xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
-                for( sal_uInt32 nStyle = 0; nStyle < SAL_N_ELEMENTS(aCalcStyles); ++nStyle )
+                for(const char* pCalcStyle : aCalcStyles)
                 {
                     try
                     {
-                        const OUString sStyleName( OUString::createFromAscii( aCalcStyles[nStyle] ) );
+                        const OUString sStyleName( OUString::createFromAscii( pCalcStyle ) );
                         if( xCellStyles->hasByName( sStyleName ) )
                         {
                             Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
@@ -2262,8 +2262,8 @@ void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException, std::exc
     SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>(GetToolBox().GetItemWindow( GetId() ));
     if ( pBox->IsVisible() )
     {
-        for ( int i=0; i<MAX_FAMILIES; i++ )
-            pBoundItems [i]->ReBind();
+        for (SfxStyleControllerItem_Impl* pBoundItem : pBoundItems)
+            pBoundItem->ReBind();
 
         bindListener();
     }
@@ -2487,15 +2487,15 @@ IMPL_LINK_NOARG_TYPED(SvxStyleToolBoxControl, VisibilityNotification, SvxStyleBo
 
     if ( pBox && pBox->IsVisible() && !isBound() )
     {
-        for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
-            pBoundItems [i]->ReBind();
+        for (SfxStyleControllerItem_Impl* pBoundItem : pBoundItems)
+            pBoundItem->ReBind();
 
         bindListener();
     }
     else if ( (!pBox || !pBox->IsVisible()) && isBound() )
     {
-        for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
-            pBoundItems[i]->UnBind();
+        for (SfxStyleControllerItem_Impl* pBoundItem : pBoundItems)
+            pBoundItem->UnBind();
         unbindListener();
     }
 }

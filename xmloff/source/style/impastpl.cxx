@@ -189,9 +189,8 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
             }
 
         // Create a name based on the properties used
-        for( size_t i = 0, n = maProperties.size(); i < n; ++i )
+        for(XMLPropertyState & rState : maProperties)
             {
-                XMLPropertyState& rState = maProperties[i];
                 if (rState.mnIndex == -1)
                     continue;
                 OUString sXMLName(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryXMLName(rState.mnIndex));
@@ -250,9 +249,9 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
 
 #if OSL_DEBUG_LEVEL > 0
     std::set<sal_Int32> DebugProperties;
-    for (size_t i = 0; i < maProperties.size(); ++i)
+    for (XMLPropertyState & rPropState : maProperties)
     {
-        sal_Int32 const property(maProperties[i].mnIndex);
+        sal_Int32 const property(rPropState.mnIndex);
         // serious bug: will cause duplicate attributes to be exported
         assert(DebugProperties.find(property) == DebugProperties.end());
         if (-1 != property)
@@ -361,9 +360,9 @@ OUString XMLAutoStylePoolParent::Find( const XMLAutoStyleFamily& rFamilyData, co
 {
     OUString sName;
     vector< XMLPropertyState>::size_type nItems = rProperties.size();
-    for (size_t i = 0, n = m_PropertiesList.size(); i < n; ++i)
+    for (const auto & i : m_PropertiesList)
     {
-        const XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
+        const XMLAutoStylePoolProperties *const pIS = i.get();
         if( nItems > pIS->GetProperties().size() )
         {
             continue;

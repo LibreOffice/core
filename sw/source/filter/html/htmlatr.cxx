@@ -358,9 +358,9 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
             for( int i=0; i<4; ++i )
             {
                 const SfxPoolItem& rRef = pFormat->GetFormatAttr( aWhichIds[nRef][i] );
-                for( size_t j=0; j<SAL_N_ELEMENTS(aSets); ++j )
+                for(sal_uInt16 nSet : aSets)
                 {
-                    const SfxPoolItem& rSet = pFormat->GetFormatAttr( aWhichIds[aSets[j]][i] );
+                    const SfxPoolItem& rSet = pFormat->GetFormatAttr( aWhichIds[nSet][i] );
                     if( rSet != rRef )
                     {
                         if( !pItemSet )
@@ -402,12 +402,12 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         static const sal_uInt16 aWhichIds[3] =
             { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
                 RES_CHRATR_CTL_LANGUAGE };
-        for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
+        for(sal_uInt16 i : aWhichIds)
         {
-            if( aWhichIds[i] != nWhichId )
+            if( i != nWhichId )
             {
                 const SvxLanguageItem& rTmpLang =
-                    static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr(aWhichIds[i]));
+                    static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr(i));
                 if( rTmpLang.GetLanguage() != eLang )
                 {
                     if( !pItemSet )
@@ -825,14 +825,14 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     {
         static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
 
-        for( size_t i=0; i<SAL_N_ELEMENTS(aWhichIds); ++i )
+        for(sal_uInt16 i : aWhichIds)
         {
             // export language if it differs from the default language only.
             const SfxPoolItem *pTmpItem;
-            if( SfxItemState::SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
+            if( SfxItemState::SET == rInfo.pItemSet->GetItemState( i,
                         true, &pTmpItem ) &&
                 static_cast<const SvxLanguageItem *>(pTmpItem)->GetLanguage() == eLang )
-                rInfo.pItemSet->ClearItem( aWhichIds[i] );
+                rInfo.pItemSet->ClearItem( i );
         }
     }
 

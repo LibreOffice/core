@@ -3022,9 +3022,9 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     // now handle meta-fields, which are not SwFields
     const ::std::vector< uno::Reference<text::XTextField> > MetaFields(
            m_pImpl->m_pDoc->GetMetaFieldManager().getMetaFields() );
-    for (size_t i = 0; i < MetaFields.size(); ++i)
+    for (const auto & rMetaField : MetaFields)
     {
-        m_pImpl->m_Items.push_back( MetaFields[i] );
+        m_pImpl->m_Items.push_back( rMetaField );
     }
 }
 

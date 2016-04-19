@@ -46,8 +46,8 @@
 CairoTextRender::CairoTextRender()
     : mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
 {
-    for( int i = 0; i < MAX_FALLBACK; ++i )
-        mpServerFont[i] = nullptr;
+    for(ServerFont* & rp : mpServerFont)
+        rp = nullptr;
 
 #if ENABLE_GRAPHITE
     // check if graphite fonts have been disabled

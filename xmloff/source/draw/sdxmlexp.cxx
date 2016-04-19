@@ -691,8 +691,8 @@ SdXMLExport::~SdXMLExport()
 
     if(mpPageMasterInfoList)
     {
-        for ( size_t i = 0, n = mpPageMasterInfoList->size(); i < n; ++i )
-            delete mpPageMasterInfoList->at( i );
+        for (ImpXMLEXPPageMasterInfo* p : *mpPageMasterInfoList)
+            delete p;
         mpPageMasterInfoList->clear();
         delete mpPageMasterInfoList;
         mpPageMasterInfoList = nullptr;
@@ -701,8 +701,8 @@ SdXMLExport::~SdXMLExport()
     // clear auto-layout infos
     if(mpAutoLayoutInfoList)
     {
-        for ( size_t i = 0, n = mpAutoLayoutInfoList->size(); i < n; ++i )
-            delete mpAutoLayoutInfoList->at( i );
+        for (ImpXMLAutoLayoutInfo* p : *mpAutoLayoutInfoList)
+            delete p;
         mpAutoLayoutInfoList->clear();
         delete mpAutoLayoutInfoList;
         mpAutoLayoutInfoList = nullptr;
@@ -812,9 +812,8 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
 {
     if( !mpAutoLayoutInfoList->empty() )
     {
-        for(size_t nCnt = 0; nCnt < mpAutoLayoutInfoList->size(); nCnt++)
+        for(ImpXMLAutoLayoutInfo* pInfo : *mpAutoLayoutInfoList)
         {
-            ImpXMLAutoLayoutInfo* pInfo = mpAutoLayoutInfoList->at( nCnt );
             if(pInfo)
             {
                 // prepare presentation-page layout attributes, style-name
@@ -1389,9 +1388,8 @@ ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString&
 {
     if(!rName.isEmpty() && !mpPageMasterInfoList->empty())
     {
-        for( size_t nCnt = 0; nCnt < mpPageMasterInfoList->size(); nCnt++)
+        for(ImpXMLEXPPageMasterInfo* pInfo : *mpPageMasterInfoList)
         {
-            ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterInfoList->at(nCnt);
             if(pInfo)
             {
                 if(!pInfo->GetMasterPageName().isEmpty() && rName.equals(pInfo->GetMasterPageName()))

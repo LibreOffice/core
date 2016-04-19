@@ -137,10 +137,10 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
     bool bDouble = false;
 
-    for (size_t nRecPos = 0; nRecPos < m_pRecs->size(); ++nRecPos)
+    for (std::unique_ptr<SwLabRec> & i : *m_pRecs)
     {
-        if (pRec->aMake == (*m_pRecs)[nRecPos]->aMake &&
-            pRec->aType == (*m_pRecs)[nRecPos]->aType)
+        if (pRec->aMake == i->aMake &&
+            pRec->aType == i->aType)
         {
             bDouble = true;
             break;

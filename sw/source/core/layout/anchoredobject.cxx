@@ -455,9 +455,8 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOfOtherObjs() const
     const SwSortedObjs* pObjs = GetAnchorFrame()->GetDrawObjs();
     if ( pObjs->size() > 1 )
     {
-        for ( size_t i = 0; i < pObjs->size(); ++i )
+        for (SwAnchoredObject* pAnchoredObj : *pObjs)
         {
-            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             if ( pAnchoredObj != this &&
                  pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
             {
@@ -630,9 +629,8 @@ void SwAnchoredObject::UpdateObjInSortedList()
             {
                 const SwSortedObjs* pObjs = GetAnchorFrame()->GetDrawObjs();
                 // determine start index
-                for ( size_t i = 0; i < pObjs->size(); ++i )
+                for (SwAnchoredObject* pAnchoredObj : *pObjs)
                 {
-                    SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                     if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
                         pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
                     else
@@ -757,9 +755,8 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs()
     const SwSortedObjs* pObjs = GetAnchorFrame()->GetDrawObjs();
     if ( pObjs->size() > 1 )
     {
-        for ( size_t i = 0; i < pObjs->size(); ++i )
+        for (SwAnchoredObject* pAnchoredObj : *pObjs)
         {
-            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             if ( pAnchoredObj != this )
             {
                 pAnchoredObj->SetTmpConsiderWrapInfluence( true/*bTmpConsiderWrapInfluence*/ );

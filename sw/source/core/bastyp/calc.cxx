@@ -364,8 +364,8 @@ SwCalc::SwCalc( SwDoc& rD )
 
 SwCalc::~SwCalc()
 {
-    for( sal_uInt16 n = 0; n < TBLSZ; ++n )
-        delete VarTable[n];
+    for(SwHash* p : VarTable)
+        delete p;
 
     if( pLclData != m_aSysLocale.GetLocaleDataPtr() )
         delete pLclData;

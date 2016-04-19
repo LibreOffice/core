@@ -244,13 +244,13 @@ bool FTPContentProvider::forHost( const OUString& host,
                                   OUString& account)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    for(size_t i = 0; i < m_ServerInfo.size(); ++i)
-        if(host == m_ServerInfo[i].host &&
-           port == m_ServerInfo[i].port &&
-           username == m_ServerInfo[i].username )
+    for(ServerInfo & i : m_ServerInfo)
+        if(host == i.host &&
+           port == i.port &&
+           username == i.username )
         {
-            password = m_ServerInfo[i].password;
-            account = m_ServerInfo[i].account;
+            password = i.password;
+            account = i.account;
             return true;
         }
 
@@ -272,14 +272,14 @@ bool  FTPContentProvider::setHost( const OUString& host,
 
     bool present(false);
     osl::MutexGuard aGuard(m_aMutex);
-    for(size_t i = 0; i < m_ServerInfo.size(); ++i)
-        if(host == m_ServerInfo[i].host &&
-           port == m_ServerInfo[i].port &&
-           username == m_ServerInfo[i].username)
+    for(ServerInfo & i : m_ServerInfo)
+        if(host == i.host &&
+           port == i.port &&
+           username == i.username)
         {
             present = true;
-            m_ServerInfo[i].password = password;
-            m_ServerInfo[i].account = account;
+            i.password = password;
+            i.account = account;
         }
 
     if(!present)

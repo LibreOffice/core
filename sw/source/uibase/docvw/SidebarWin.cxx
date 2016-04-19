@@ -917,10 +917,9 @@ void SwSidebarWin::SetPosAndSize()
 
                 pTmpCursorForAnnotationTextRange->FillRects();
                 SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
-                for( size_t a(0); a < pRects->size(); ++a )
+                for(SwRect & rNextRect : *pRects)
                 {
-                    const SwRect aNextRect((*pRects)[a]);
-                    const Rectangle aPntRect(aNextRect.SVRect());
+                    const Rectangle aPntRect(rNextRect.SVRect());
 
                     aAnnotationTextRanges.push_back(basegfx::B2DRange(
                         aPntRect.Left(), aPntRect.Top(),

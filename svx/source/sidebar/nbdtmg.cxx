@@ -516,10 +516,9 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr()
 GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr)
 {
-    for (size_t i=0, n = aTypeMgr.aGrfDataLst.size(); i < n; ++i)
+    for (const GrfBulDataRelation* pSrcEntry : aTypeMgr.aGrfDataLst)
     {
         GrfBulDataRelation* pEntry = new GrfBulDataRelation(eNBType::GRAPHICBULLETS);
-        GrfBulDataRelation* pSrcEntry = aTypeMgr.aGrfDataLst[i];
         if (pSrcEntry)
         {
             pEntry->bIsCustomized = pSrcEntry->bIsCustomized;
@@ -536,8 +535,8 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTy
 
 GraphyicBulletsTypeMgr::~GraphyicBulletsTypeMgr()
 {
-    for (size_t i = 0; i < aGrfDataLst.size(); ++i)
-        delete aGrfDataLst[i];
+    for (const GrfBulDataRelation* p : aGrfDataLst)
+        delete p;
 }
 
 class theGraphyicBulletsTypeMgr : public rtl::Static<GraphyicBulletsTypeMgr, theGraphyicBulletsTypeMgr> {};
@@ -593,9 +592,8 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
     if ( pGrf )
     {
         Graphic aGraphic;
-        for (size_t i=0; i < aGrfDataLst.size(); ++i)
+        for (const GrfBulDataRelation* pEntry : aGrfDataLst)
         {
-            GrfBulDataRelation* pEntry = aGrfDataLst[i];
             bool bExist = false;
             if ( pEntry)
                 bExist = GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, pEntry->nGallaryIndex,&aGraphic);

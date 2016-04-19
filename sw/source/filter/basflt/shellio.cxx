@@ -628,9 +628,9 @@ void Reader::ResetFrameFormats( SwDoc& rDoc )
     sal_uInt16 const s_ids[3] = {
         RES_POOLFRM_FRAME, RES_POOLFRM_GRAPHIC, RES_POOLFRM_OLE
     };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(s_ids); ++i)
+    for (sal_uInt16 i : s_ids)
     {
-        SwFrameFormat *const pFrameFormat = rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( s_ids[i] );
+        SwFrameFormat *const pFrameFormat = rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( i );
 
         pFrameFormat->ResetFormatAttr( RES_LR_SPACE );
         pFrameFormat->ResetFormatAttr( RES_UL_SPACE );

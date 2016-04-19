@@ -44,9 +44,9 @@ Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nInde
 
 void XMLElement::dumpSubElements( Reference< xml::sax::XDocumentHandler > const & xOut )
 {
-    for ( size_t nPos = 0; nPos < _subElems.size(); ++nPos )
+    for (Reference<XAttributeList> & _subElem : _subElems)
     {
-        XMLElement * pElem = static_cast< XMLElement * >( _subElems[ nPos ].get() );
+        XMLElement * pElem = static_cast< XMLElement * >( _subElem.get() );
         pElem->dump( xOut );
     }
 }

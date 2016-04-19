@@ -120,16 +120,16 @@ namespace
             { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT },
             { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT }
         };
-        for( sal_uInt16 n = 0; n < 3; ++n )
+        for(const auto & n : aArr)
         {
             sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
-                                aArr[n].nResLngId )).GetLanguage();
+                                n.nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
 
             rSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
                                 OUString(), aFnt.GetPitch(),
-                                aFnt.GetCharSet(), aArr[n].nResFntId ));
+                                aFnt.GetCharSet(), n.nResFntId ));
         }
     }
 
@@ -149,16 +149,16 @@ namespace
         aArr[1].nFntType = nCJKFntType;
         aArr[2].nFntType = nCTLFntType;
 
-        for( sal_uInt16 n = 0; n < 3; ++n )
+        for(const auto & n : aArr)
         {
             sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
-                                aArr[n].nResLngId )).GetLanguage();
-            vcl::Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
+                                n.nResLngId )).GetLanguage();
+            vcl::Font aFnt( OutputDevice::GetDefaultFont( n.nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
 
             rSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
                                 OUString(), aFnt.GetPitch(),
-                                aFnt.GetCharSet(), aArr[n].nResFntId ));
+                                aFnt.GetCharSet(), n.nResFntId ));
         }
     }
 

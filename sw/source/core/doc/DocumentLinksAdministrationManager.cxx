@@ -64,9 +64,9 @@ namespace
 
     ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks )
     {
-        for( ::sfx2::SvBaseLinks::size_type n = 0; n < rLinks.size(); ++n )
+        for(const auto & rLink : rLinks)
         {
-            ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
+            ::sfx2::SvBaseLink* pLnk = &(*rLink);
             if( pLnk &&
                 ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
                   OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&

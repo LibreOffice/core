@@ -432,10 +432,10 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
     m_pBuffer->append(mathSymbolToString(pNode->ClosingBrace(), m_nEncoding));
     m_pBuffer->append("}"); // mendChr
     m_pBuffer->append("}"); // mdPr
-    for (std::size_t i = 0; i < subnodes.size(); ++i)
+    for (const SmNode* subnode : subnodes)
     {
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
-        HandleNode(subnodes[ i ], nLevel + 1);
+        HandleNode(subnode, nLevel + 1);
         m_pBuffer->append("}"); // me
     }
     m_pBuffer->append("}"); // md

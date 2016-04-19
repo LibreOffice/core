@@ -337,10 +337,10 @@ void ZCodec::InitDecompress(SvStream & inStream)
     if ( mbStatus &&  mbGzLib )
     {
         sal_uInt8 n1, n2, j, nMethod, nFlags;
-        for ( int i = 0; i < 2; i++ )   // gz - magic number
+        for (int i : gz_magic)   // gz - magic number
         {
             inStream.ReadUChar( j );
-            if ( j != gz_magic[ i ] )
+            if ( j != i )
                 mbStatus = false;
         }
         inStream.ReadUChar( nMethod );

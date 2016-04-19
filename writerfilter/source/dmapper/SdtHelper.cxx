@@ -29,9 +29,9 @@ awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet, OUString& r
 {
     OUString aLongest = rDefault;
     sal_Int32 nHeight = 0;
-    for (std::size_t i = 0; i < rItems.size(); ++i)
-        if (rItems[i].getLength() > aLongest.getLength())
-            aLongest = rItems[i];
+    for (const OUString & rItem : rItems)
+        if (rItem.getLength() > aLongest.getLength())
+            aLongest = rItem;
 
     MapMode aMap(MAP_100TH_MM);
     OutputDevice* pOut = Application::GetDefaultDevice();
@@ -190,8 +190,8 @@ sal_Int32 SdtHelper::getInteropGrabBagSize()
 
 bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
 {
-    for (std::size_t i=0; i < m_aGrabBag.size(); ++i)
-        if (m_aGrabBag[i].Name == rValueName)
+    for (beans::PropertyValue & i : m_aGrabBag)
+        if (i.Name == rValueName)
             return true;
 
     return false;

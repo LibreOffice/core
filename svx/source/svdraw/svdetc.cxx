@@ -155,9 +155,8 @@ void OLEObjCache::UnloadOnDemand()
                 uno::Reference< frame::XModel > xUnloadModel( xUnloadObj->getComponent(), uno::UNO_QUERY );
                 if ( xUnloadModel.is() )
                 {
-                    for (size_t nCheckInd = 0; nCheckInd < maObjs.size(); nCheckInd++)
+                    for (SdrOle2Obj* pCacheObj : maObjs)
                     {
-                        SdrOle2Obj* pCacheObj = maObjs[nCheckInd];
                         if ( pCacheObj && pCacheObj != pUnloadObj )
                         {
                             uno::Reference< frame::XModel > xParentModel = pCacheObj->GetParentXModel();

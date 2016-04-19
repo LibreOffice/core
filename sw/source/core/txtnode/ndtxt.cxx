@@ -1036,9 +1036,8 @@ void SwTextNode::Update(
     if ( !bNegative && !bDelete )
     {
         const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-        for ( size_t i = 0; i < rTable.size(); ++i )
+        for (SwRangeRedline* pRedl : rTable)
         {
-            SwRangeRedline *const pRedl = rTable[ i ];
             if ( pRedl->HasMark() )
             {
                 SwPosition* const pEnd = pRedl->End();
@@ -1873,16 +1872,15 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 
     // nur falls im Array Attribute stehen (kann nur beim Kopieren
     // sich selbst passieren!!)
-    for ( size_t i = 0; i < aArr.size(); ++i )
+    for (SwTextAttr* i : aArr)
     {
-        InsertHint( aArr[ i ], SetAttrMode::NOTXTATRCHR );
+        InsertHint( i, SetAttrMode::NOTXTATRCHR );
     }
 
     if( pDest->GetpSwpHints() )
     {
-        for ( size_t i = 0; i < aRefMrkArr.size(); ++i )
+        for (SwTextAttr* pNewHt : aRefMrkArr)
         {
-            SwTextAttr * const pNewHt = aRefMrkArr[i];
             if( pNewHt->GetEnd() )
             {
                 pDest->GetpSwpHints()->Delete( pNewHt );
@@ -2216,9 +2214,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         }
         Update( rStart, nLen, true, true );
 
-        for (size_t n = 0; n < aArr.size(); ++n)
+        for (SwTextAttr* pHt : aArr)
         {
-            SwTextAttr * const pHt = aArr[ n ];
             pHt->GetStart() = *pHt->GetEnd() = rStart.GetIndex();
             InsertHint( pHt );
         }

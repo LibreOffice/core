@@ -878,8 +878,8 @@ void SdrEditView::DistributeMarkedObjects()
                     }
 
                     // clear list
-                    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
-                        delete aEntryList[ i ];
+                    for (ImpDistributeEntry* p : aEntryList)
+                        delete p;
                     aEntryList.clear();
                 }
 
@@ -973,8 +973,8 @@ void SdrEditView::DistributeMarkedObjects()
                     }
 
                     // clear list
-                    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
-                        delete aEntryList[ i ];
+                    for (ImpDistributeEntry* p : aEntryList)
+                        delete p;
                     aEntryList.clear();
                 }
 

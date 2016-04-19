@@ -49,8 +49,8 @@ GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize
 
 GraphicManager::~GraphicManager()
 {
-    for( size_t i = 0, n = maObjList.size(); i < n; ++i )
-        maObjList[ i ]->GraphicManagerDestroyed();
+    for(GraphicObject* i : maObjList)
+        i->GraphicManagerDestroyed();
 
     delete mpCache;
 }

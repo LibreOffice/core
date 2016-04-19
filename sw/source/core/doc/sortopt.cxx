@@ -59,9 +59,9 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     bTable( rOpt.bTable ),
     bIgnoreCase( rOpt.bIgnoreCase )
 {
-    for( size_t i=0; i < rOpt.aKeys.size(); ++i )
+    for(SwSortKey* pKey : rOpt.aKeys)
     {
-        SwSortKey* pNew = new SwSortKey(*rOpt.aKeys[i]);
+        SwSortKey* pNew = new SwSortKey(*pKey);
         aKeys.push_back( pNew );
     }
 }

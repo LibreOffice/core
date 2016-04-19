@@ -121,10 +121,10 @@ static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, bool bZoomIn)
     }
     else
     {
-        for(int i = 0; i < nZoomArrSize; ++i)
+        for(sal_uInt16 i : aZoomArr)
         {
-            if(nCurrentZoom < aZoomArr[i])
-                return aZoomArr[i];
+            if(nCurrentZoom < i)
+                return i;
         }
     }
     return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;

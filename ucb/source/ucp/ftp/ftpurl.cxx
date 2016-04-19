@@ -612,9 +612,9 @@ FTPDirentry FTPURL::direntry() const
 
         std::vector<FTPDirentry> aList = aURL.list(OpenMode::ALL);
 
-        for(size_t i = 0; i < aList.size(); ++i) {
-            if(aList[i].m_aName == nettitle) { // the relevant file is found
-                aDirentry = aList[i];
+        for(FTPDirentry & d : aList) {
+            if(d.m_aName == nettitle) { // the relevant file is found
+                aDirentry = d;
                 break;
             }
         }
@@ -774,12 +774,14 @@ void FTPURL::del() const
 
     if(aDirentry.m_nMode & INETCOREFTP_FILEMODE_ISDIR) {
         std::vector<FTPDirentry> vec = list(sal_Int16(OpenMode::ALL));
-        for( size_t i = 0; i < vec.size(); ++i )
+        for(const FTPDirentry & i : vec)
+        {
             try {
-                FTPURL url(vec[i].m_aURL,m_pFCP);
+                FTPURL url(i.m_aURL,m_pFCP);
                 url.del();
             } catch(const curl_exception&) {
             }
+        }
         dele = OString("RMD ") + dele;
     }
     else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)

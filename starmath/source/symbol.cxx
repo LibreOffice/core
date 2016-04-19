@@ -288,12 +288,12 @@ void SmSymbolManager::Save()
 
         SymbolPtrVec_t aTmp( GetSymbols() );
         std::vector< SmSym > aSymbols;
-        for (size_t i = 0; i < aTmp.size(); ++i)
+        for (const SmSym* i : aTmp)
         {
             // skip symbols from iGreek set since those symbols always get added
             // by computational means in SmSymbolManager::Load
-            if (aTmp[i]->GetSymbolSetName() != aSymbolSetName)
-                aSymbols.push_back( *aTmp[i] );
+            if (i->GetSymbolSetName() != aSymbolSetName)
+                aSymbols.push_back( *i );
         }
         rCfg.SetSymbols( aSymbols );
 

@@ -1635,20 +1635,20 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
         ImpCopyNumberformat( *pFormat );
         // Reset values taken over from Formatter/Scanner
         // pColor still points to table in temporary Formatter/Scanner
-        for ( sal_uInt16 i = 0; i < 4; i++ )
+        for (ImpSvNumFor & rFormatter : NumFor)
         {
-            OUString aColorName = NumFor[i].GetColorName();
+            OUString aColorName = rFormatter.GetColorName();
             Color* pColor = rScan.GetColor( aColorName );
-            NumFor[i].SetColor( pColor, aColorName );
+            rFormatter.SetColor( pColor, aColorName );
         }
     }
 }
 
 bool SvNumberformat::HasNewCurrency() const
 {
-    for ( sal_uInt16 j=0; j<4; j++ )
+    for (const auto & j : NumFor)
     {
-        if ( NumFor[j].HasNewCurrency() )
+        if ( j.HasNewCurrency() )
         {
             return true;
         }
@@ -1659,9 +1659,9 @@ bool SvNumberformat::HasNewCurrency() const
 bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
                                            OUString& rExtension ) const
 {
-    for ( sal_uInt16 j=0; j<4; j++ )
+    for (const auto & j : NumFor)
     {
-        if ( NumFor[j].GetNewCurrencySymbol( rSymbol, rExtension ) )
+        if ( j.GetNewCurrencySymbol( rSymbol, rExtension ) )
         {
             return true;
         }

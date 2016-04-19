@@ -1543,12 +1543,12 @@ sal_Size SvStream::CryptAndWriteBuffer( const void* pStart, sal_Size nLen)
         nLen -= nBufCount;
         memcpy( pTemp, pDataPtr, (sal_uInt16)nBufCount );
         // **** Verschluesseln *****
-        for ( sal_uInt16 n=0; n < CRYPT_BUFSIZE; n++ )
+        for (unsigned char & rn : pTemp)
         {
-            unsigned char aCh = pTemp[n];
+            unsigned char aCh = rn;
             aCh ^= nMask;
             SWAPNIBBLES(aCh)
-            pTemp[n] = aCh;
+            rn = aCh;
         }
         // *************************
         nCount += PutData( pTemp, nBufCount );

@@ -205,11 +205,11 @@ void ShareControlFile::SetUsersDataAndStore( const std::vector< LockFileEntry >&
     m_xSeekable->seek( 0 );
 
     OUStringBuffer aBuffer;
-    for ( size_t nInd = 0; nInd < aUsersData.size(); nInd++ )
+    for (const auto & rData : aUsersData)
     {
         for ( LockFileComponent nEntryInd : o3tl::enumrange<LockFileComponent>() )
         {
-            aBuffer.append( EscapeCharacters( aUsersData[nInd][nEntryInd] ) );
+            aBuffer.append( EscapeCharacters( rData[nEntryInd] ) );
             if ( nEntryInd < LockFileComponent::LAST )
                 aBuffer.append( ',' );
             else
@@ -237,11 +237,11 @@ LockFileEntry ShareControlFile::InsertOwnEntry()
 
     bool bExists = false;
     sal_Int32 nNewInd = 0;
-    for ( size_t nInd = 0; nInd < m_aUsersData.size(); nInd++ )
+    for (LockFileEntry & rEntry : m_aUsersData)
     {
-        if ( m_aUsersData[nInd][LockFileComponent::LOCALHOST] == aNewEntry[LockFileComponent::LOCALHOST]
-             && m_aUsersData[nInd][LockFileComponent::SYSUSERNAME] == aNewEntry[LockFileComponent::SYSUSERNAME]
-             && m_aUsersData[nInd][LockFileComponent::USERURL] == aNewEntry[LockFileComponent::USERURL] )
+        if ( rEntry[LockFileComponent::LOCALHOST] == aNewEntry[LockFileComponent::LOCALHOST]
+             && rEntry[LockFileComponent::SYSUSERNAME] == aNewEntry[LockFileComponent::SYSUSERNAME]
+             && rEntry[LockFileComponent::USERURL] == aNewEntry[LockFileComponent::USERURL] )
         {
             if ( !bExists )
             {
@@ -251,7 +251,7 @@ LockFileEntry ShareControlFile::InsertOwnEntry()
         }
         else
         {
-            aNewData[nNewInd] = m_aUsersData[nInd];
+            aNewData[nNewInd] = rEntry;
         }
 
         nNewInd++;
@@ -278,11 +278,11 @@ bool ShareControlFile::HasOwnEntry()
     GetUsersData();
     LockFileEntry aEntry = GenerateOwnEntry();
 
-    for ( size_t nInd = 0; nInd < m_aUsersData.size(); ++nInd )
+    for (LockFileEntry & rEntry : m_aUsersData)
     {
-        if ( m_aUsersData[nInd][LockFileComponent::LOCALHOST] == aEntry[LockFileComponent::LOCALHOST] &&
-             m_aUsersData[nInd][LockFileComponent::SYSUSERNAME] == aEntry[LockFileComponent::SYSUSERNAME] &&
-             m_aUsersData[nInd][LockFileComponent::USERURL] == aEntry[LockFileComponent::USERURL] )
+        if ( rEntry[LockFileComponent::LOCALHOST] == aEntry[LockFileComponent::LOCALHOST] &&
+             rEntry[LockFileComponent::SYSUSERNAME] == aEntry[LockFileComponent::SYSUSERNAME] &&
+             rEntry[LockFileComponent::USERURL] == aEntry[LockFileComponent::USERURL] )
         {
             return true;
         }
@@ -308,13 +308,13 @@ void ShareControlFile::RemoveEntry( const LockFileEntry& aEntry )
 
     std::vector< LockFileEntry > aNewData;
 
-    for ( size_t nInd = 0; nInd < m_aUsersData.size(); nInd++ )
+    for (LockFileEntry & rEntry : m_aUsersData)
     {
-        if ( m_aUsersData[nInd][LockFileComponent::LOCALHOST] != aEntry[LockFileComponent::LOCALHOST]
-             || m_aUsersData[nInd][LockFileComponent::SYSUSERNAME] != aEntry[LockFileComponent::SYSUSERNAME]
-             || m_aUsersData[nInd][LockFileComponent::USERURL] != aEntry[LockFileComponent::USERURL] )
+        if ( rEntry[LockFileComponent::LOCALHOST] != aEntry[LockFileComponent::LOCALHOST]
+             || rEntry[LockFileComponent::SYSUSERNAME] != aEntry[LockFileComponent::SYSUSERNAME]
+             || rEntry[LockFileComponent::USERURL] != aEntry[LockFileComponent::USERURL] )
         {
-            aNewData.push_back( m_aUsersData[nInd] );
+            aNewData.push_back( rEntry );
         }
     }
 

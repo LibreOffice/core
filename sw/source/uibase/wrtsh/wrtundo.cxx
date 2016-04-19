@@ -129,10 +129,10 @@ void SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
     }
 
     OUString buf;
-    for (size_t i = 0; i < comments.size(); ++i)
+    for (const OUString & comment : comments)
     {
-        OSL_ENSURE(!comments[i].isEmpty(), "no Undo/Redo Text set");
-        buf += comments[i] + "\n";
+        OSL_ENSURE(!comment.isEmpty(), "no Undo/Redo Text set");
+        buf += comment + "\n";
     }
     rStrs.SetString(buf);
 }

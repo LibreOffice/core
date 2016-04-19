@@ -305,9 +305,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
         pDrawView->SdrEndTextEdit();
         pDrawView->UnmarkAll();
 
-        for (size_t i = 0; i < sdrObjects.size(); ++i)
+        for (SdrObject* pSdrObject : sdrObjects)
         {
-            SdrObject *const pSdrObject(sdrObjects[i]);
             // GetSelectableFromAny did not check pSdrObject is in right doc!
             if (pPV && pSdrObject->GetPage() == pPV->GetPage())
             {

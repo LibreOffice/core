@@ -254,11 +254,11 @@ bool X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     sal_uInt8 nSalColorGreen = SALCOLOR_GREEN ( nSalColor );
     sal_uInt8 nSalColorBlue  = SALCOLOR_BLUE  ( nSalColor );
 
-    for( int nY = 0; nY < 8; nY++ )
+    for(auto & nY : nOrdDither8Bit)
     {
         for( int nX = 0; nX < 8; nX++ )
         {
-            short nMagic = nOrdDither8Bit[nY][nX];
+            short nMagic = nY[nX];
             sal_uInt8 nR   = P_DELTA * DMAP( nSalColorRed,   nMagic );
             sal_uInt8 nG   = P_DELTA * DMAP( nSalColorGreen, nMagic );
             sal_uInt8 nB   = P_DELTA * DMAP( nSalColorBlue,  nMagic );

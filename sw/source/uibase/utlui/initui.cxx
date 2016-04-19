@@ -78,9 +78,9 @@ inline void SetCachedString(CachedStringID id, const OUString& sStr)
 
 void ClearStringCache()
 {
-    for (int i=0; i<CachedStrings; ++i)
+    for (OUString* p : StringCache)
     {
-        delete StringCache[i];
+        delete p;
     }
 }
 

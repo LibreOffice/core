@@ -725,9 +725,8 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
         }
     }
 
-    for ( size_t i = 0; i < aPortionList.size(); i++ )
+    for (TextPortion & r : aPortionList)
     {
-        TextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
             continue;
         if(r.eType !=  svtools::HTMLSGML    &&

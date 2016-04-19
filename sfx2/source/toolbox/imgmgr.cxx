@@ -110,8 +110,8 @@ SfxImageManager_Impl::SfxImageManager_Impl(SfxModule& rModule)
 {
     m_nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
 
-    for ( sal_uInt32 i = 0; i < IMAGELIST_COUNT; i++ )
-        m_pImageList[i] = nullptr;
+    for (ImageList* & rp : m_pImageList)
+        rp = nullptr;
 
     m_aOpt.AddListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
@@ -124,8 +124,8 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
     m_aOpt.RemoveListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     if (m_bAppEventListener)
         Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
-    for ( size_t i = 0; i < m_aToolBoxes.size(); i++ )
-        delete m_aToolBoxes[i];
+    for (ToolBoxInf_Impl* p : m_aToolBoxes)
+        delete p;
 }
 
 
@@ -159,9 +159,8 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
         m_nSymbolsSize = nNewSymbolsSize;
         bool bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
 
-        for ( size_t n=0; n < m_aToolBoxes.size(); n++ )
+        for (ToolBoxInf_Impl* pInf : m_aToolBoxes)
         {
-            ToolBoxInf_Impl *pInf = m_aToolBoxes[n];
             if ( pInf->nFlags & SfxToolboxFlags::CHANGESYMBOLSET )
             {
                 ToolBox *pBox       = pInf->pToolBox;

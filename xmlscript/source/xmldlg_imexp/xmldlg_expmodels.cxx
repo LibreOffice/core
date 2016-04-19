@@ -1229,9 +1229,9 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
     }
     if (! all_elements.empty())
     {
-        for ( std::size_t n = 0; n < all_elements.size(); ++n )
+        for (ElementDescriptor* p : all_elements)
         {
-            addSubElement( all_elements[ n ] );
+            addSubElement( p );
         }
     }
 }

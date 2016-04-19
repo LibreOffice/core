@@ -285,9 +285,9 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
     else
         boxX = nControlWidth / perLine;
 
-    for (size_t i = 0; i < maElementList.size() ; i++)
+    for (std::unique_ptr<SmElement> & i : maElementList)
     {
-        SmElement* element = maElementList[i].get();
+        SmElement* element = i.get();
         if (element->isSeparator())
         {
             if (mbVerticalMode)
@@ -397,9 +397,9 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
         if (!rHEvt.KeyboardActivated())
         {
             Point aHelpEventPos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-            for (size_t i = 0; i < maElementList.size() ; i++)
+            for (std::unique_ptr<SmElement> & i : maElementList)
             {
-                SmElement* pElement = maElementList[i].get();
+                SmElement* pElement = i.get();
                 Rectangle aRect(pElement->mBoxLocation, pElement->mBoxSize);
                 if (aRect.IsInside(aHelpEventPos))
                 {
@@ -439,9 +439,9 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
     mpCurrentElement = nullptr;
     if (Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
-        for (size_t i = 0; i < maElementList.size() ; i++)
+        for (std::unique_ptr<SmElement> & i : maElementList)
         {
-            SmElement* element = maElementList[i].get();
+            SmElement* element = i.get();
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
@@ -465,9 +465,9 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 
     if (rMouseEvent.IsLeft() && Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
     {
-        for (size_t i = 0; i < maElementList.size() ; i++)
+        for (std::unique_ptr<SmElement> & i : maElementList)
         {
-            SmElement* element = maElementList[i].get();
+            SmElement* element = i.get();
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
@@ -709,9 +709,9 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     mpElementListBox->SetDropDownLineCount( SAL_N_ELEMENTS(aCategories) );
 
-    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aCategories) ; i++)
+    for (sal_uInt16 nCategory : aCategories)
     {
-        mpElementListBox->InsertEntry(SM_RESSTR(aCategories[i]));
+        mpElementListBox->InsertEntry(SM_RESSTR(nCategory));
     }
 
     mpElementListBox->SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
@@ -766,9 +766,8 @@ IMPL_LINK_TYPED(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElemen
 
 IMPL_LINK_TYPED( SmElementsDockingWindow, ElementSelectedHandle, ListBox&, rList, void)
 {
-    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aCategories) ; i++)
+    for (sal_uInt16 aCurrentCategory : aCategories)
     {
-        sal_uInt16 aCurrentCategory = aCategories[i];
         OUString aCurrentCategoryString = SM_RESSTR(aCurrentCategory);
         if (aCurrentCategoryString == rList.GetSelectEntry())
         {

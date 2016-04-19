@@ -126,9 +126,8 @@ Filters::Filters()
 Filters::~Filters()
 {
     // kill Readers
-    for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+    for(SwReaderWriterEntry & rEntry : aReaderWriter)
     {
-        SwReaderWriterEntry& rEntry = aReaderWriter[n];
         if( rEntry.bDelReader && rEntry.pReader )
         {
             delete rEntry.pReader;

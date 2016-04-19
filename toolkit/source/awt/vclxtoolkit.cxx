@@ -1787,10 +1787,10 @@ void VCLXToolkit::callTopWindowListeners(
         {
             css::lang::EventObject aAwtEvent(
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
-            for (::sal_Int32 i = 0; i < (sal_Int32)aListeners.size(); ++i)
+            for (css::uno::Reference<XInterface> & i : aListeners)
             {
                 css::uno::Reference< css::awt::XTopWindowListener >
-                      xListener(aListeners[i], css::uno::UNO_QUERY);
+                      xListener(i, css::uno::UNO_QUERY);
                 try
                 {
                     (xListener.get()->*pFn)(aAwtEvent);
@@ -1833,10 +1833,10 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
             sal::static_int_cast< sal_Int16 >(
                 pKeyEvent->GetKeyCode().GetFunction()));
-        for (::sal_Int32 i = 0; i < (sal_Int32)aHandlers.size(); ++i)
+        for (css::uno::Reference<XInterface> & i : aHandlers)
         {
             css::uno::Reference< css::awt::XKeyHandler > xHandler(
-                aHandlers[i], css::uno::UNO_QUERY);
+                i, css::uno::UNO_QUERY);
             try
             {
                 if ((bPressed ? xHandler->keyPressed(aAwtEvent)
@@ -1883,10 +1883,10 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
                 static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
                 xNext, false);
-            for (::sal_Int32 i = 0; i < (sal_Int32)aListeners.size(); ++i)
+            for (css::uno::Reference<XInterface> & i : aListeners)
             {
                 css::uno::Reference< css::awt::XFocusListener > xListener(
-                    aListeners[i], css::uno::UNO_QUERY);
+                    i, css::uno::UNO_QUERY);
                 try
                 {
                     bGained ? xListener->focusGained(aAwtEvent)

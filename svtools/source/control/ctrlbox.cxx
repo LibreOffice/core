@@ -751,11 +751,8 @@ LineListBox::~LineListBox()
 
 void LineListBox::dispose()
 {
-    for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
-        if ( (*pLineList)[ i ] ) {
-            delete (*pLineList)[ i ];
-        }
-    }
+    for (ImpLineListData* p : *pLineList)
+        delete p;
     pLineList->clear();
     delete pLineList;
     ListBox::dispose();
@@ -1217,9 +1214,9 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 USCRIPT_GREEK
             };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aScripts); ++i)
+            for (const UScriptCode& rScript : aScripts)
             {
-                OUString sText = makeShortRepresentativeTextForScript(aScripts[i]);
+                OUString sText = makeShortRepresentativeTextForScript(rScript);
                 if (!sText.isEmpty())
                 {
                     bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));
@@ -1237,9 +1234,9 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 USCRIPT_GREEK
             };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aMinimalScripts); ++i)
+            for (const UScriptCode& rMinimalScript : aMinimalScripts)
             {
-                OUString sText = makeShortMinimalTextForScript(aMinimalScripts[i]);
+                OUString sText = makeShortMinimalTextForScript(rMinimalScript);
                 if (!sText.isEmpty())
                 {
                     bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));

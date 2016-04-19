@@ -433,10 +433,9 @@ void SwSelPaintRects::HighlightInputField()
 
             pCursorForInputTextField->FillRects();
             SwRects* pRects = static_cast<SwRects*>(pCursorForInputTextField.get());
-            for (size_t a(0); a < pRects->size(); ++a)
+            for (const SwRect & rNextRect : *pRects)
             {
-                const SwRect aNextRect((*pRects)[a]);
-                const Rectangle aPntRect(aNextRect.SVRect());
+                const Rectangle aPntRect(rNextRect.SVRect());
 
                 aInputFieldRanges.push_back(basegfx::B2DRange(
                     aPntRect.Left(), aPntRect.Top(),
@@ -607,9 +606,8 @@ void SwShellCursor::Show()
     if (comphelper::LibreOfficeKit::isActive())
     {
         std::vector<OString> aRect;
-        for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
+        for (const OString & rSelectionRectangle : aSelectionRectangles)
         {
-            const OString& rSelectionRectangle = aSelectionRectangles[i];
             if (rSelectionRectangle.isEmpty())
                 continue;
             aRect.push_back(rSelectionRectangle);

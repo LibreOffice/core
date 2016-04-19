@@ -2781,8 +2781,8 @@ void SwXMLTableContext::MakeTable()
     pFrameFormat->SetFormatAttr( aSize );
     pFrameFormat->UnlockModify();
 
-    for (size_t i = 0; i < m_pRows->size(); i++)
-        (*m_pRows)[i]->Dispose();
+    for (std::unique_ptr<SwXMLTableRow_Impl> & rRow : *m_pRows)
+        rRow->Dispose();
 
     // now that table is complete, change into DDE table (if appropriate)
     if (nullptr != m_pDDESource)
@@ -2822,10 +2822,10 @@ void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
 
     MakeTable_( pBox );
 
-    for (size_t i = 0; i < m_pRows->size(); ++i)
+    for (std::unique_ptr<SwXMLTableRow_Impl> & rpRow : *m_pRows)
     {
         // i#113600, to break the cyclic reference to SwXMLTableContext object
-        (*m_pRows)[i]->Dispose();
+        rpRow->Dispose();
     }
 }
 

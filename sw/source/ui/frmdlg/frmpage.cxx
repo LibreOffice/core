@@ -514,11 +514,11 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
-        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
+        for(const StringIdPair_Impl & rHoriId : aHoriIds)
         {
-            if(aHoriIds[nIndex].eHori == eStringId)
+            if(rHoriId.eHori == eStringId)
             {
-                eStringId = aHoriIds[nIndex].eVert;
+                eStringId = rHoriId.eVert;
                 return eStringId;
             }
         }
@@ -552,12 +552,11 @@ static sal_uLong lcl_GetLBRelationsForRelations( const sal_Int16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
-    const size_t nRelMapSize = SAL_N_ELEMENTS(aRelationMap);
-    for ( size_t nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
+    for (RelationMap & i : aRelationMap)
     {
-        if ( aRelationMap[nRelMapPos].nRelation == _nRel )
+        if ( i.nRelation == _nRel )
         {
-            nLBRelations |= aRelationMap[nRelMapPos].nLBRelation;
+            nLBRelations |= i.nLBRelation;
         }
     }
 
@@ -792,12 +791,12 @@ void SwFramePage::setOptimalFrameWidth()
     };
 
     std::vector<SvxSwFramePosString::StringId> aFrames;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aMaps); ++i)
+    for (const FrameMaps & rMap : aMaps)
     {
-        for (size_t j = 0; j < aMaps[i].nCount; ++j)
+        for (size_t j = 0; j < rMap.nCount; ++j)
         {
-            aFrames.push_back(aMaps[i].pMap[j].eStrId);
-            aFrames.push_back(aMaps[i].pMap[j].eMirrorStrId);
+            aFrames.push_back(rMap.pMap[j].eStrId);
+            aFrames.push_back(rMap.pMap[j].eMirrorStrId);
         }
     }
 
@@ -833,12 +832,12 @@ void SwFramePage::setOptimalRelWidth()
     };
 
     std::vector<SvxSwFramePosString::StringId> aRels;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aMaps); ++i)
+    for (const RelationMaps & rMap : aMaps)
     {
-        for (size_t j = 0; j < aMaps[i].nCount; ++j)
+        for (size_t j = 0; j < rMap.nCount; ++j)
         {
-            aRels.push_back(aMaps[i].pMap[j].eStrId);
-            aRels.push_back(aMaps[i].pMap[j].eMirrorStrId);
+            aRels.push_back(rMap.pMap[j].eStrId);
+            aRels.push_back(rMap.pMap[j].eMirrorStrId);
         }
     }
 
@@ -1464,7 +1463,6 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
         if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
             const OUString sOldEntry(_rLB.GetSelectEntry());
-            const size_t nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
             SvxSwFramePosString::StringId eStrId = _pMap[_nLBSelPos].eStrId;
 
             for (size_t nMapPos = 0; nMapPos < nMapCount; nMapPos++)
@@ -1472,11 +1470,11 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
                 if (_pMap[nMapPos].eStrId == eStrId)
                 {
                     nLBRelations = _pMap[nMapPos].nLBRelations;
-                    for (size_t nRelPos = 0; nRelPos < nRelCount; ++nRelPos)
+                    for (RelationMap & rCharMap : aAsCharRelationMap)
                     {
-                        if (nLBRelations & aAsCharRelationMap[nRelPos].nLBRelation)
+                        if (nLBRelations & rCharMap.nLBRelation)
                         {
-                            SvxSwFramePosString::StringId sStrId1 = aAsCharRelationMap[nRelPos].eStrId;
+                            SvxSwFramePosString::StringId sStrId1 = rCharMap.eStrId;
 
                             // --> OD 2009-08-31 #mongolianlayout#
                             sStrId1 =
@@ -1486,7 +1484,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
                                                                 m_bIsInRightToLeft);
                             const OUString sEntry = m_aFramePosString.GetString(sStrId1);
                             sal_Int32 nPos = _rLB.InsertEntry(sEntry);
-                            _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
+                            _rLB.SetEntryData(nPos, &rCharMap);
                             if (_pMap[nMapPos].nAlign == _nAlign)
                                 sSelEntry = sEntry;
                             break;
@@ -1531,18 +1529,16 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
                 nLBRelations = _pMap[_nLBSelPos].nLBRelations;
             }
 
-            const size_t nRelCount = SAL_N_ELEMENTS(aRelationMap);
-
             for (sal_uLong nBit = 1; nBit < 0x80000000; nBit <<= 1)
             {
                 if (nLBRelations & nBit)
                 {
-                    for (size_t nRelPos = 0; nRelPos < nRelCount; ++nRelPos)
+                    for (RelationMap & rMap : aRelationMap)
                     {
-                        if (aRelationMap[nRelPos].nLBRelation == nBit)
+                        if (rMap.nLBRelation == nBit)
                         {
                             SvxSwFramePosString::StringId eStrId1 = m_pMirrorPagesCB->IsChecked() ?
-                                            aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
+                                            rMap.eMirrorStrId : rMap.eStrId;
                             // --> OD 2009-08-31 #mongolianlayout#
                             eStrId1 =
                                 lcl_ChangeResIdToVerticalOrRTL( eStrId1,
@@ -1551,8 +1547,8 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
                                                                 m_bIsInRightToLeft);
                             const OUString sEntry = m_aFramePosString.GetString(eStrId1);
                             sal_Int32 nPos = _rLB.InsertEntry(sEntry);
-                            _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
-                            if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == _nRel)
+                            _rLB.SetEntryData(nPos, &rMap);
+                            if (sSelEntry.isEmpty() && rMap.nRelation == _nRel)
                                 sSelEntry = sEntry;
                         }
                     }
@@ -1866,10 +1862,10 @@ void SwFramePage::RangeModifyHdl()
         const SwFormatCol& rCol = static_cast<const SwFormatCol&>(GetTabDialog()->GetExampleSet()->Get(RES_COL));
         if ( rCol.GetColumns().size() > 1 )
         {
-            for ( size_t i = 0; i < rCol.GetColumns().size(); ++i )
+            for (const SwColumn & i : rCol.GetColumns())
             {
-                aVal.nMinWidth += rCol.GetColumns()[i].GetLeft() +
-                                  rCol.GetColumns()[i].GetRight() +
+                aVal.nMinWidth += i.GetLeft() +
+                                  i.GetRight() +
                                   MINFLY;
             }
             aVal.nMinWidth -= MINFLY;//one was already in there!
@@ -2170,9 +2166,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
             } aGlbNmIds[4] = { { SO3_SM_CLASSID_60 }, { SO3_SM_CLASSID_50 },
                                { SO3_SM_CLASSID_40 }, { SO3_SM_CLASSID_30 } };
 
-            for ( int i = 0; i < 4; ++i ) {
-                const GlobalNameId& rId = aGlbNmIds[ i ];
-
+            for (const GlobalNameId & rId : aGlbNmIds) {
                 SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
                                      rId.b8, rId.b9, rId.b10, rId.b11,
                                      rId.b12, rId.b13, rId.b14, rId.b15 );

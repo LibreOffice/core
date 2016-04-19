@@ -887,10 +887,8 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand(gchar* aCommand, int& rDupsToSkip,
 {
     SolarMutexGuard aGuard;
     GtkSalMenu* pMenu = nullptr;
-    for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
+    for (GtkSalMenuItem* pSalItem : maItems)
     {
-        GtkSalMenuItem *pSalItem = maItems[ nPos ];
-
         OUString aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
         // Do not join the following two lines, or the OString will be destroyed
         // immediately, and the gchar* pointed to by aItemCommandStr will be
@@ -956,9 +954,8 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
 {
     pMenuBar->HandleMenuActivateEvent(mpVCLMenu);
     pMenuBar->HandleMenuDeActivateEvent(mpVCLMenu);
-    for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
+    for (GtkSalMenuItem* pSalItem : maItems)
     {
-        GtkSalMenuItem *pSalItem = maItems[ nPos ];
         if ( pSalItem->mpSubMenu != nullptr )
         {
             pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);

@@ -283,9 +283,8 @@ void FrameStatusListener::bindListener()
     {
         try
         {
-            for ( size_t i = 0; i < aDispatchVector.size(); i++ )
+            for (Listener & rListener : aDispatchVector)
             {
-                Listener& rListener = aDispatchVector[i];
                 if ( rListener.xDispatch.is() )
                     rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
             }

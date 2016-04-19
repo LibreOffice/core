@@ -1749,9 +1749,9 @@ bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int3
 
 bool SwScriptInfo::IsKashidaValid(sal_Int32 nKashPos) const
 {
-    for ( size_t i = 0; i < aKashidaInvalid.size(); ++i )
+    for (sal_Int32 i : aKashidaInvalid)
     {
-        if ( aKashidaInvalid [ i ] == nKashPos )
+        if ( i == nKashPos )
             return false;
     }
     return true;

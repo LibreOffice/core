@@ -1038,8 +1038,8 @@ void SdStyleSheetPool::UpdateStdNames()
     if (!aEraseList.empty())
     {
         // styles that could not be renamed, must be removed
-        for ( size_t i = 0, n = aEraseList.size(); i < n; ++i )
-            Remove( aEraseList[ i ] );
+        for (SfxStyleSheetBase* p : aEraseList)
+            Remove( p );
         Reindex();
     }
 }

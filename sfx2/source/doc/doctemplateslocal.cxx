@@ -70,12 +70,12 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     xWriterHandler->startDocument();
     xWriterHandler->startElement( aGroupListElement, xRootAttrList );
 
-    for ( size_t nInd = 0; nInd < aSequence.size(); nInd++ )
+    for (const auto & i : aSequence)
     {
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
         uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
-        pAttrList->AddAttribute( aNameAttr, aCDATAString, aSequence[nInd].First );
-        pAttrList->AddAttribute( aUINameAttr, aCDATAString, aSequence[nInd].Second );
+        pAttrList->AddAttribute( aNameAttr, aCDATAString, i.First );
+        pAttrList->AddAttribute( aUINameAttr, aCDATAString, i.Second );
 
         xWriterHandler->startElement( aGroupElement, xAttrList );
         xWriterHandler->ignorableWhitespace( aWhiteSpace );

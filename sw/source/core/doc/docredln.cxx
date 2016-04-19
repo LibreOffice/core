@@ -1122,9 +1122,8 @@ void SwRangeRedline::MoveToSection()
             // In order to not move other Redlines' indices, we set them
             // to the end (is exclusive)
             const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-            for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
+            for(SwRangeRedline* pRedl : rTable)
             {
-                SwRangeRedline* pRedl = rTable[ n ];
                 if( pRedl->GetBound() == *pStt )
                     pRedl->GetBound() = *pEnd;
                 if( pRedl->GetBound(false) == *pStt )
@@ -1270,9 +1269,8 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
             // In order to not move other Redlines' indices, we set them
             // to the end (is exclusive)
             const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-            for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
+            for(SwRangeRedline* pRedl : rTable)
             {
-                SwRangeRedline* pRedl = rTable[ n ];
                 if( pRedl->GetBound() == *pStt )
                     pRedl->GetBound() = *pEnd;
                 if( pRedl->GetBound(false) == *pStt )

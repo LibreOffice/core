@@ -114,9 +114,9 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
         if(!aDotDashArray.empty())
         {
-            for(size_t a(0); a < aDotDashArray.size(); a++)
+            for(double & a : aDotDashArray)
             {
-                aDotDashArray[a] *= fScaleValue;
+                a *= fScaleValue;
             }
 
             fFullDotDashLen *= fScaleValue;

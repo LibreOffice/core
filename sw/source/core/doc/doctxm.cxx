@@ -228,9 +228,8 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     SwTOXMarks aMarks;
     SwTOXMark::InsertTOXMarks( aMarks, *pType );
 
-    for( size_t nMark=0; nMark<aMarks.size(); ++nMark )
+    for(SwTOXMark* pTOXMark : aMarks)
     {
-        const SwTOXMark* pTOXMark = aMarks[nMark];
         if ( pTOXMark == &rCurTOXMark )
             continue;
 
@@ -1359,9 +1358,8 @@ static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 
     long nRet = 0;
     for( const SoObjType* pArr = aArr; !nRet && pArr->nFlag; ++pArr )
-        for ( int n = 0; n < 4; ++n )
+        for (auto & rId : pArr->aGlNmIds)
         {
-            const SoObjType::GlobalNameIds& rId = pArr->aGlNmIds[ n ];
             if( !rId.n1 )
                 break;
             SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,

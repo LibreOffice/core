@@ -1352,10 +1352,10 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     unsigned int nStreamObjects = m_aStreamObjects.size();
     if( nStreamObjects > 1 )
         aLine.append( '[' );
-    for( size_t i = 0; i < m_aStreamObjects.size(); i++ )
+    for(sal_Int32 i : m_aStreamObjects)
     {
         aLine.append( ' ' );
-        aLine.append( m_aStreamObjects[i] );
+        aLine.append( i );
         aLine.append( " 0 R" );
     }
     if( nStreamObjects > 1 )
@@ -3041,7 +3041,7 @@ static bool getPfbSegmentLengths( const unsigned char* pFontBytes, int nByteLen,
     const unsigned char* pPtr = pFontBytes;
     const unsigned char* pEnd = pFontBytes + nByteLen;
 
-    for( int i = 0; i < 3; ++i) {
+    for(int & rSegmentLength : rSegmentLengths) {
         // read segment1 header
         if( pPtr+6 >= pEnd )
             return false;
@@ -3050,7 +3050,7 @@ static bool getPfbSegmentLengths( const unsigned char* pFontBytes, int nByteLen,
         const int nLen = (pPtr[5]<<24) + (pPtr[4]<<16) + (pPtr[3]<<8) + pPtr[2];
         if( nLen <= 0)
             return false;
-        rSegmentLengths[i] = nLen;
+        rSegmentLength = nLen;
         pPtr += nLen + 6;
     }
 
@@ -8013,8 +8013,8 @@ bool PDFWriterImpl::emitTrailer()
     {
         sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
         rtl_digest_getMD5( m_aDocDigest, nMD5Sum, sizeof(nMD5Sum) );
-        for( unsigned int i = 0; i < RTL_DIGEST_LENGTH_MD5; i++ )
-            appendHex( nMD5Sum[i], aDocChecksum );
+        for(sal_uInt8 i : nMD5Sum)
+            appendHex( i, aDocChecksum );
     }
     // document id set in setDocInfo method
     // emit trailer
@@ -8063,12 +8063,12 @@ bool PDFWriterImpl::emitTrailer()
     if( m_aAdditionalStreams.size() > 0 )
     {
         aLine.append( "/AdditionalStreams [" );
-        for( size_t i = 0; i < m_aAdditionalStreams.size(); i++ )
+        for(const PDFAddStream & rAdditionalStream : m_aAdditionalStreams)
         {
             aLine.append( "/" );
-            appendName( m_aAdditionalStreams[i].m_aMimeType, aLine );
+            appendName( rAdditionalStream.m_aMimeType, aLine );
             aLine.append( " " );
-            aLine.append( m_aAdditionalStreams[i].m_nStreamObject );
+            aLine.append( rAdditionalStream.m_nStreamObject );
             aLine.append( " 0 R\n" );
         }
         aLine.append( "]\n" );

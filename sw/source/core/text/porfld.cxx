@@ -1089,8 +1089,8 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     }
     else
     {
-        for( int i = 0; i < 6; ++i )
-            aScrType[i] = SwFontScript::Latin;
+        for(SwFontScript & rn : aScrType)
+            rn = SwFontScript::Latin;
     }
     memset( &aWidth, 0, sizeof(aWidth) );
 }

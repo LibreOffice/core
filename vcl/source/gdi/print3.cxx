@@ -1387,10 +1387,10 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
     for( int i = 0; i < i_rMergeList.getLength(); i++ )
         aResult[i] = i_rMergeList[i];
     int nCur = i_rMergeList.getLength();
-    for( size_t i = 0; i < mpImplData->maUIProperties.size(); i++ )
+    for(css::beans::PropertyValue & rPropVal : mpImplData->maUIProperties)
     {
-        if( aMergeSet.find( mpImplData->maUIProperties[i].Name ) == aMergeSet.end() )
-            aResult[nCur++] = mpImplData->maUIProperties[i];
+        if( aMergeSet.find( rPropVal.Name ) == aMergeSet.end() )
+            aResult[nCur++] = rPropVal;
     }
     // append IsFirstPage
     if( aMergeSet.find( OUString( "IsFirstPage" ) ) == aMergeSet.end() )

@@ -44,8 +44,8 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
                        const std::vector<FTPDirentry>&  dirvec)
     : ResultSetBase(rxContext,xProvider,seqProp)
 {
-    for( size_t i = 0; i < dirvec.size(); ++i)
-        m_aPath.push_back(dirvec[i].m_aURL);
+    for(const auto & i : dirvec)
+        m_aPath.push_back(i.m_aURL);
 
     // m_aIdents holds the content identifiers
 

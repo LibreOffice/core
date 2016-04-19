@@ -305,10 +305,10 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     { // fix the Redlines
         SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
         SwPosition aNewPos(rNewPos);
-        for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
+        for(SwRangeRedline* p : rTable)
         {
             // lies on the position ??
-            lcl_PaMCorrRel1( rTable[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
+            lcl_PaMCorrRel1( p, &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
         }
 
         // To-Do - need to add here 'SwExtraRedlineTable' also ?

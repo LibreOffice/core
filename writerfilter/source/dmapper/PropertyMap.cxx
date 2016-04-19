@@ -1101,10 +1101,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // Text area width is known at the end of a section: decide if tables should be converted or not.
     std::vector<FloatingTableInfo>& rPendingFloatingTables = rDM_Impl.m_aPendingFloatingTables;
     uno::Reference<text::XTextAppendAndConvert> xBodyText( rDM_Impl.GetBodyText(), uno::UNO_QUERY );
-    for (size_t i = 0; i < rPendingFloatingTables.size(); ++i)
+    for (FloatingTableInfo & rInfo : rPendingFloatingTables)
     {
-        FloatingTableInfo& rInfo = rPendingFloatingTables[i];
-
         if (FloatingTableConversion(rInfo))
             xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
     }
@@ -1437,15 +1435,15 @@ void SectionPropertyMap::ApplyProperties_(
                 vValues.push_back(pIter->Value);
             }
         }
-        for (beans::PropertyValue* iter = vCharVals.begin(); iter!=vCharVals.end(); ++iter)
+        for (beans::PropertyValue & v : vCharVals)
         {
-            vNames.push_back(iter->Name);
-            vValues.push_back(iter->Value);
+            vNames.push_back(v.Name);
+            vValues.push_back(v.Value);
         }
-        for (beans::PropertyValue* iter = vParaVals.begin(); iter!=vParaVals.end(); ++iter)
+        for (beans::PropertyValue & v : vParaVals)
         {
-            vNames.push_back(iter->Name);
-            vValues.push_back(iter->Value);
+            vNames.push_back(v.Name);
+            vValues.push_back(v.Value);
         }
     }
     if (xMultiSet.is())

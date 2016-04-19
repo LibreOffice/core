@@ -849,8 +849,8 @@ const UHashMapImpl& GetUHashImpl()
             { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
         };
 
-        for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aInit); i++)
-            aImpl[OUString( aInit[i].name, aInit[i].length, RTL_TEXTENCODING_ASCII_US ) ] = aInit[i].id;
+        for (const auto& i : aInit)
+            aImpl[OUString( i.name, i.length, RTL_TEXTENCODING_ASCII_US ) ] = i.id;
         bInited = true;
     }
 
@@ -910,8 +910,8 @@ SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 
 SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
 {
-    for(sal_uInt16 i=0;i<SVXMAP_END; i++)
-        delete aSetArr[i];
+    for(SvxItemPropertySet* p : aSetArr)
+        delete p;
 }
 
 

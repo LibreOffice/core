@@ -487,14 +487,14 @@ char const * XmlReader::handleReference(char const * position, char const * end)
               RTL_CONSTASCII_STRINGPARAM("'") },
             { RTL_CONSTASCII_STRINGPARAM("quot;"),
               RTL_CONSTASCII_STRINGPARAM("\"") } };
-        for (std::size_t i = 0; i < SAL_N_ELEMENTS(refs); ++i) {
+        for (const auto & ref : refs) {
             if (rtl_str_shortenedCompare_WithLength(
-                    position, end - position, refs[i].inBegin, refs[i].inLength,
-                    refs[i].inLength) ==
+                    position, end - position, ref.inBegin, ref.inLength,
+                    ref.inLength) ==
                 0)
             {
-                position += refs[i].inLength;
-                pad_.add(refs[i].outBegin, refs[i].outLength);
+                position += ref.inLength;
+                pad_.add(ref.outBegin, ref.outLength);
                 return position;
             }
         }

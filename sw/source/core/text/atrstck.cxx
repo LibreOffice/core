@@ -411,8 +411,8 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
 
 void SwAttrHandler::Reset( )
 {
-    for ( sal_uInt16 i = 0; i < NUM_ATTRIBUTE_STACKS; i++ )
-        aAttrStack[ i ].Reset();
+    for (SwAttrStack & i : aAttrStack)
+        i.Reset();
 }
 
 void SwAttrHandler::PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt )

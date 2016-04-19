@@ -340,8 +340,8 @@ void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxIte
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 {
-    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
-        aBorderInfos[i] = nullptr;
+    for(SvxCSS1BorderInfo* & rp : aBorderInfos)
+        rp = nullptr;
 
     Clear();
 }
@@ -387,10 +387,10 @@ SvxCSS1PropertyInfo::~SvxCSS1PropertyInfo()
 
 void SvxCSS1PropertyInfo::DestroyBorderInfos()
 {
-    for( size_t i=0; i<SAL_N_ELEMENTS(aBorderInfos); ++i )
+    for(SvxCSS1BorderInfo* & rp : aBorderInfos)
     {
-        delete aBorderInfos[i];
-        aBorderInfos[i] = nullptr;
+        delete rp;
+        rp = nullptr;
     }
 }
 
@@ -656,9 +656,9 @@ bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
     {
         OSL_ENSURE( pSheetItemSet, "Where is the Item-Set for Style-Sheets?" );
 
-        for (size_t i = 0; i < m_Selectors.size(); ++i)
+        for (std::unique_ptr<CSS1Selector> & rpSelection : m_Selectors)
         {
-            StyleParsed(m_Selectors[i].get(), *pSheetItemSet, *pSheetPropInfo);
+            StyleParsed(rpSelection.get(), *pSheetItemSet, *pSheetPropInfo);
         }
         pSheetItemSet->ClearItem();
         pSheetPropInfo->Clear();
@@ -820,9 +820,9 @@ bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     bool bSuccess = CSS1Parser::ParseStyleSheet( rIn );
 
-    for (size_t i = 0; i < m_Selectors.size(); ++i)
+    for (std::unique_ptr<CSS1Selector> & rpSelector : m_Selectors)
     {
-        StyleParsed(m_Selectors[i].get(), *pSheetItemSet, *pSheetPropInfo);
+        StyleParsed(rpSelector.get(), *pSheetItemSet, *pSheetPropInfo);
     }
 
     // und etwas aufrauemen

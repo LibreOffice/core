@@ -4121,9 +4121,9 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
-    for(size_t i = 0; i < m_Entries.size(); i++)
+    for(std::unique_ptr<AutoMarkEntry> & rpEntry : m_Entries)
     {
-        AutoMarkEntry* pEntry = m_Entries[i].get();
+        AutoMarkEntry* pEntry = rpEntry.get();
         if(!pEntry->sComment.isEmpty())
         {
             rOutStr.WriteByteStringLine( "#" + pEntry->sComment, eTEnc );

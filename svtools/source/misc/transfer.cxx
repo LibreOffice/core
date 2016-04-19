@@ -126,8 +126,8 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
         // the display name might contain unacceptable characters, encode all of them
         // this seems to be the only parameter currently that might contain such characters
         sal_Bool pToAccept[128];
-        for ( sal_Int32 nBInd = 0; nBInd < 128; nBInd++ )
-            pToAccept[nBInd] = false;
+        for (sal_Bool & rb : pToAccept)
+            rb = 0;
 
         const char aQuotedParamChars[] =
             "()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";

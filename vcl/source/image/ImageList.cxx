@@ -389,9 +389,9 @@ void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
 
     if( mpImplData )
     {
-        for( size_t i = 0; i < mpImplData->maImages.size(); i++ )
+        for(const ImageAryData* pImage : mpImplData->maImages)
         {
-            const OUString& rName( mpImplData->maImages[ i ]->maName );
+            const OUString& rName( pImage->maName );
             if( !rName.isEmpty())
                 rNames.push_back( rName );
         }

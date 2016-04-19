@@ -718,35 +718,35 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
 
     if ((_eInitWhat & InitWritingMode) != 0)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pWindows); ++i)
+        for (vcl::Window* pWindow : pWindows)
         {
-            if (pWindows[i])
-                pWindows[i]->EnableRTL(rParent.IsRTLEnabled());
+            if (pWindow)
+                pWindow->EnableRTL(rParent.IsRTLEnabled());
         }
     }
 
     if ((_eInitWhat & InitFontFacet) != 0)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pWindows); ++i)
+        for (vcl::Window* pWindow : pWindows)
         {
-            if (!pWindows[i])
+            if (!pWindow)
                 continue;
 
-            pWindows[i]->SetZoom(rParent.GetZoom());
+            pWindow->SetZoom(rParent.GetZoom());
 
-            const StyleSettings& rStyleSettings = pWindows[i]->GetSettings().GetStyleSettings();
+            const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
             vcl::Font aFont = rStyleSettings.GetFieldFont();
             aFont.SetTransparent(isTransparent());
 
             if (rParent.IsControlFont())
             {
-                pWindows[i]->SetControlFont(rParent.GetControlFont());
+                pWindow->SetControlFont(rParent.GetControlFont());
                 aFont.Merge(rParent.GetControlFont());
             }
             else
-                pWindows[i]->SetControlFont();
+                pWindow->SetControlFont();
 
-            pWindows[i]->SetZoomedPointFont(*pWindows[i], aFont); // FIXME RenderContext
+            pWindow->SetZoomedPointFont(*pWindow, aFont); // FIXME RenderContext
         }
     }
 
@@ -757,18 +757,18 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
         bool bTextLineColor = rParent.IsTextLineColor();
         Color aTextLineColor(rParent.GetTextLineColor());
 
-        for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+        for (vcl::Window* pWindow : pWindows)
         {
-            if (pWindows[i])
+            if (pWindow)
             {
-                pWindows[i]->SetTextColor(aTextColor);
+                pWindow->SetTextColor(aTextColor);
                 if (rParent.IsControlForeground())
-                    pWindows[i]->SetControlForeground(aTextColor);
+                    pWindow->SetControlForeground(aTextColor);
 
                 if (bTextLineColor)
-                    pWindows[i]->SetTextLineColor();
+                    pWindow->SetTextLineColor();
                 else
-                    pWindows[i]->SetTextLineColor(aTextLineColor);
+                    pWindow->SetTextLineColor(aTextLineColor);
             }
         }
     }
@@ -778,18 +778,18 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
         if (rParent.IsControlBackground())
         {
             Color aColor(rParent.GetControlBackground());
-            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+            for (vcl::Window* pWindow : pWindows)
             {
-                if (pWindows[i])
+                if (pWindow)
                 {
                     if (isTransparent())
-                        pWindows[i]->SetBackground();
+                        pWindow->SetBackground();
                     else
                     {
-                        pWindows[i]->SetBackground(aColor);
-                        pWindows[i]->SetControlBackground(aColor);
+                        pWindow->SetBackground(aColor);
+                        pWindow->SetControlBackground(aColor);
                     }
-                    pWindows[i]->SetFillColor(aColor);
+                    pWindow->SetFillColor(aColor);
                 }
             }
         }

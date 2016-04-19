@@ -284,11 +284,11 @@ bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, cons
 void lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
 {
     // Shifts the frame left by the given value.
-    for (size_t i = 0; i < rFrameProperties.size(); ++i)
+    for (beans::PropertyValue & rFrameProperty : rFrameProperties)
     {
-        if (rFrameProperties[i].Name == "HoriOrient")
+        if (rFrameProperty.Name == "HoriOrient")
         {
-            sal_Int32 nValue = rFrameProperties[i].Value.get<sal_Int32>();
+            sal_Int32 nValue = rFrameProperty.Value.get<sal_Int32>();
             if (nValue != text::HoriOrientation::NONE)
                 nHoriOrient = nValue;
             return;
@@ -301,9 +301,8 @@ void lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, 
 void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
 {
     // Shifts the frame left by the given value.
-    for (size_t i = 0; i < rFrameProperties.size(); ++i)
+    for (beans::PropertyValue & rPropertyValue : rFrameProperties)
     {
-        beans::PropertyValue& rPropertyValue = rFrameProperties[i];
         if (rPropertyValue.Name == "HoriOrientPosition")
         {
             sal_Int32 nValue = rPropertyValue.Value.get<sal_Int32>();
@@ -720,10 +719,10 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     {
                         PROP_TOP_BORDER, PROP_LEFT_BORDER, PROP_BOTTOM_BORDER, PROP_RIGHT_BORDER
                     };
-                    for (size_t i = 0; i < SAL_N_ELEMENTS(pBorders); ++i)
+                    for (const PropertyIds& rBorder : pBorders)
                     {
-                        boost::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(pBorders[i]);
-                        boost::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(pBorders[i]);
+                        boost::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(rBorder);
+                        boost::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
                         if (oStyleCellBorder && oDirectCellBorder)
                         {
                             // We have a cell border from the table style and as direct formatting as well.
@@ -733,12 +732,12 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                             {
                                 // The style one would be visible, but then cleared away as direct formatting.
                                 // Delete both, so that table formatting can become visible.
-                                pStyleProps->Erase(pBorders[i]);
-                                (*aCellIterator)->Erase(pBorders[i]);
+                                pStyleProps->Erase(rBorder);
+                                (*aCellIterator)->Erase(rBorder);
                             }
                             else
                             {
-                                boost::optional<PropertyMap::Property> oTableBorder = rInfo.pTableBorders->getProperty(pBorders[i]);
+                                boost::optional<PropertyMap::Property> oTableBorder = rInfo.pTableBorders->getProperty(rBorder);
                                 if (oTableBorder)
                                 {
                                     table::BorderLine2 aTableBorder = oTableBorder->second.get<table::BorderLine2>();
@@ -747,8 +746,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                                     if (aTableBorder.LineStyle != table::BorderLineStyle::NONE && bNoCellBorder)
                                     {
                                         // But at a table-level, there is a border, then again delete both cell properties.
-                                        pStyleProps->Erase(pBorders[i]);
-                                        (*aCellIterator)->Erase(pBorders[i]);
+                                        pStyleProps->Erase(rBorder);
+                                        (*aCellIterator)->Erase(rBorder);
                                     }
                                 }
                             }
@@ -862,8 +861,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 /// Do all cells in this row have a CellHideMark property?
 bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
 {
-    for (size_t nCell = 0; nCell < rCellProperties.size(); ++nCell)
-        if (!rCellProperties[nCell]->isSet(PROP_CELL_HIDE_MARK))
+    for (PropertyMapPtr & p : rCellProperties)
+        if (!p->isSet(PROP_CELL_HIDE_MARK))
             return false;
     return true;
 }

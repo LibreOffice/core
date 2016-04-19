@@ -2187,9 +2187,8 @@ void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
         // page.
         const SwPageFrame* pPageFrame = FindPageFrame();
         // #i28701# - re-factoring
-        for ( size_t i = 0; i < GetDrawObjs()->size(); ++i )
+        for (SwAnchoredObject* pAnchoredObj : *GetDrawObjs())
         {
-            SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
             if ( _bNoInvaOfAsCharAnchoredObjs &&
                  (pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
                     == FLY_AS_CHAR) )
@@ -2254,9 +2253,8 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
     if ( pPageFrame && pPageFrame->GetSortedObjs() )
     {
         SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
-        for ( size_t i = 0; i < rObjs.size(); ++i )
+        for (SwAnchoredObject* pObj : rObjs)
         {
-            SwAnchoredObject* pObj = rObjs[i];
             // #i26945# - check, if anchored object is a lower
             // of the layout frame is changed to check, if its anchor frame
             // is a lower of the layout frame.

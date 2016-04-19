@@ -145,8 +145,8 @@ bool StgHeader::Load( SvStream& r )
      .ReadInt32( m_nDataFATSize )               // 40 # of data FATpages
      .ReadInt32( m_nMasterChain )               // 44 chain to the next master block
      .ReadInt32( m_nMaster );                   // 48 # of additional master blocks
-    for( short i = 0; i < cFATPagesInHeader; i++ )
-        r.ReadInt32( m_nMasterFAT[ i ] );
+    for(sal_Int32 & i : m_nMasterFAT)
+        r.ReadInt32( i );
 
     return (r.GetErrorCode() == ERRCODE_NONE) && Check();
 }
@@ -173,8 +173,8 @@ bool StgHeader::Store( StgIo& rIo )
      .WriteInt32( m_nDataFATSize )               // 40 # of data FAT pages
      .WriteInt32( m_nMasterChain )               // 44 chain to the next master block
      .WriteInt32( m_nMaster );                   // 48 # of additional master blocks
-    for( short i = 0; i < cFATPagesInHeader; i++ )
-        r.WriteInt32( m_nMasterFAT[ i ] );
+    for(sal_Int32 i : m_nMasterFAT)
+        r.WriteInt32( i );
     m_bDirty = sal_uInt8(!rIo.Good());
     return !m_bDirty;
 }
@@ -392,8 +392,8 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
         return false;
 
     SvMemoryStream r( const_cast<void *>(pFrom), nBufSize, StreamMode::READ );
-    for( short i = 0; i < 32; i++ )
-        r.ReadUtf16( m_nName[ i ] );             // 00 name as WCHAR
+    for(sal_Unicode & i : m_nName)
+        r.ReadUtf16( i );             // 00 name as WCHAR
     r.ReadUInt16( m_nNameLen )                   // 40 size of name in bytes including 00H
      .ReadUChar( m_cType )                      // 42 entry type
      .ReadUChar( m_cFlags )                     // 43 0 or 1 (tree balance?)
@@ -453,8 +453,8 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
 void StgEntry::Store( void* pTo )
 {
     SvMemoryStream r( pTo, 128, StreamMode::WRITE );
-    for( short i = 0; i < 32; i++ )
-        r.WriteUInt16( m_nName[ i ] );            // 00 name as WCHAR
+    for(sal_Unicode i : m_nName)
+        r.WriteUInt16( i );            // 00 name as WCHAR
     r.WriteUInt16( m_nNameLen )                   // 40 size of name in bytes including 00H
      .WriteUChar( m_cType )                      // 42 entry type
      .WriteUChar( m_cFlags )                     // 43 0 or 1 (tree balance?)

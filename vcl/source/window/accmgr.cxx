@@ -34,8 +34,8 @@ bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
     if ( !mpAccelList ) {
         mpAccelList = new ImplAccelList;
     } else {
-        for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i ) {
-            if ( (*mpAccelList)[ i ] == pAccel ) {
+        for (Accelerator* i : *mpAccelList) {
+            if ( i == pAccel ) {
                 return false;
             }
         }
@@ -58,8 +58,8 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
     if ( mpSequenceList ) {
         for (sal_uInt16 i = 0; i < pAccel->GetItemCount(); ++i) {
             Accelerator* pSubAccel = pAccel->GetAccel( pAccel->GetItemId(i) );
-            for ( size_t j = 0, n = mpSequenceList->size(); j < n; ++j ) {
-                if ( (*mpSequenceList)[ j ] == pSubAccel ) {
+            for (Accelerator* j : *mpSequenceList) {
+                if ( j == pSubAccel ) {
                     EndSequence();
                     i = pAccel->GetItemCount();
                     break;
@@ -86,9 +86,8 @@ void ImplAccelManager::EndSequence()
     if ( !mpSequenceList )
         return;
 
-    for ( size_t i = 0, n = mpSequenceList->size(); i < n; ++i )
+    for (Accelerator* pTempAccel : *mpSequenceList)
     {
-        Accelerator* pTempAccel = (*mpSequenceList)[ i ];
         pTempAccel->mbIsCancel = false;
         pTempAccel->mpDel = nullptr;
     }
@@ -183,9 +182,9 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
     }
 
     // step through the list of accelerators
-    for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i )
+    for (Accelerator* i : *mpAccelList)
     {
-        pAccel = (*mpAccelList)[ i ];
+        pAccel = i;
 
         // is the entry contained ?
         ImplAccelEntry* pEntry = pAccel->ImplGetAccelData( rKeyCode );

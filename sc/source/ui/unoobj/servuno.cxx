@@ -366,21 +366,21 @@ ScServiceProvider::Type ScServiceProvider::GetProviderType(const OUString& rServ
 {
     if (!rServiceName.isEmpty())
     {
-        for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aProvNamesId); i++)
+        for (const ProvNamesId_Type & i : aProvNamesId)
         {
-            if (rServiceName.equalsAscii( aProvNamesId[i].pName ))
+            if (rServiceName.equalsAscii( i.pName ))
             {
-                return aProvNamesId[i].nType;
+                return i.nType;
             }
         }
 
-        for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(aOldNames); i++)
+        for (const ProvNamesId_Type & rOldName : aOldNames)
         {
-            OSL_ENSURE( aOldNames[i].pName, "ScServiceProvider::GetProviderType: no oldname => crash");
-            if (rServiceName.equalsAscii( aOldNames[i].pName ))
+            OSL_ENSURE( rOldName.pName, "ScServiceProvider::GetProviderType: no oldname => crash");
+            if (rServiceName.equalsAscii( rOldName.pName ))
             {
                 OSL_FAIL("old service name used");
-                return aOldNames[i].nType;
+                return rOldName.nType;
             }
         }
     }

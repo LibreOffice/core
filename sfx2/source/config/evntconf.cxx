@@ -64,8 +64,8 @@ SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
 
 void SfxEventNamesList::DelDtor()
 {
-    for ( size_t i = 0, n = aEventNamesList.size(); i < n; ++i )
-        delete aEventNamesList[ i ];
+    for (SfxEventName* i : aEventNamesList)
+        delete i;
     aEventNamesList.clear();
 }
 

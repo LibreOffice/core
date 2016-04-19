@@ -3178,9 +3178,8 @@ void XclImpSolverContainer::RemoveSdrObjectInfo( SdrObject& rSdrObj )
 
 void XclImpSolverContainer::UpdateConnectorRules()
 {
-    for ( size_t i = 0, n = aCList.size(); i < n; ++i )
+    for (SvxMSDffConnectorRule* pRule : aCList)
     {
-        SvxMSDffConnectorRule* pRule = aCList[ i ];
         UpdateConnection( pRule->nShapeA, pRule->pAObj, &pRule->nSpFlagsA );
         UpdateConnection( pRule->nShapeB, pRule->pBObj, &pRule->nSpFlagsB );
         UpdateConnection( pRule->nShapeC, pRule->pCObj );
@@ -3190,8 +3189,8 @@ void XclImpSolverContainer::UpdateConnectorRules()
 void XclImpSolverContainer::RemoveConnectorRules()
 {
     // base class from SVX uses plain untyped tools/List
-    for ( size_t i = 0, n = aCList.size(); i < n; ++i ) {
-        delete aCList[ i ];
+    for (SvxMSDffConnectorRule* p : aCList) {
+        delete p;
     }
     aCList.clear();
     maSdrInfoMap.clear();

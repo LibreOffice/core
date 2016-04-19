@@ -530,9 +530,8 @@ bool ImplSdPPTImport::Import()
         if ( SeekToRec( rStCtrl, PPT_PST_ExObjList, maDocHd.GetRecEndFilePos(), &aHyperHd ) )
         {
             sal_uInt32 nExObjHyperListLen = aHyperHd.GetRecEndFilePos();
-            for ( size_t i = 0, n = aHyperList.size(); i < n; ++i )
+            for (SdHyperlinkEntry* pPtr : aHyperList)
             {
-                SdHyperlinkEntry* pPtr = aHyperList[ i ];
                 DffRecordHeader aHyperE;
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlink, nExObjHyperListLen, &aHyperE ) )
                     break;
@@ -2103,9 +2102,9 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         case 0x04 :
         {
             SdHyperlinkEntry* pPtr = nullptr;
-            for ( size_t i = 0, n = aHyperList.size(); i < n; ++i ) {
-                if ( aHyperList[ i ]->nIndex == pIAtom->nExHyperlinkId ) {
-                    pPtr = aHyperList[ i ];
+            for (SdHyperlinkEntry* pEntry : aHyperList) {
+                if ( pEntry->nIndex == pIAtom->nExHyperlinkId ) {
+                    pPtr = pEntry;
                     break;
                 }
             }

@@ -538,18 +538,15 @@ namespace
             OUString(  "Date"  )
         };
 
-        for ( sal_uInt32 n = 0;
-              n <  ( sizeof( aNonCachableProps )
-                     / sizeof( aNonCachableProps[ 0 ] ) );
-              ++n )
+        for (const auto & rNonCachableProp : aNonCachableProps)
         {
             if ( isCaseSensitive )
             {
-                if ( rName.equals( aNonCachableProps[ n ] ) )
+                if ( rName.equals( rNonCachableProp ) )
                     return false;
             }
             else
-                if ( rName.equalsIgnoreAsciiCase( aNonCachableProps[ n ] ) )
+                if ( rName.equalsIgnoreAsciiCase( rNonCachableProp ) )
                     return false;
         }
         return true;

@@ -207,19 +207,19 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
 
     if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
     {
-        for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
-            aFormatters[ i ]->ReplaceSystemCL( eSysLanguage );
+        for(SvNumberFormatter* pFormatter : aFormatters)
+            pFormatter->ReplaceSystemCL( eSysLanguage );
         eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
     }
     if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
     {
-        for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
-            aFormatters[ i ]->ResetDefaultSystemCurrency();
+        for(SvNumberFormatter* pFormatter : aFormatters)
+            pFormatter->ResetDefaultSystemCurrency();
     }
     if ( nHint & SYSLOCALEOPTIONS_HINT_DATEPATTERNS )
     {
-        for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
-            aFormatters[ i ]->InvalidateDateAcceptancePatterns();
+        for(SvNumberFormatter* pFormatter : aFormatters)
+            pFormatter->InvalidateDateAcceptancePatterns();
     }
 }
 

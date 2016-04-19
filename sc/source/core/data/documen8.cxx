@@ -887,9 +887,9 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
         return;
 
     const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    for (size_t i = 0, n = rLinks.size(); i < n; ++i)
+    for (const auto & rLink : rLinks)
     {
-        const sfx2::SvBaseLink* pBase = rLinks[i].get();
+        const sfx2::SvBaseLink* pBase = rLink.get();
         if (const ScDdeLink* p = dynamic_cast<const ScDdeLink*>(pBase))
         {
             ScDdeLink* pNew = new ScDdeLink(pDestDoc, *p);
@@ -1055,9 +1055,9 @@ void ScDocument::UpdateAreaLinks()
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    for (size_t i=0; i<rLinks.size(); i++)
+    for (const auto & rLink : rLinks)
     {
-        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
+        ::sfx2::SvBaseLink* pBase = rLink.get();
         if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             pBase->Update();
     }

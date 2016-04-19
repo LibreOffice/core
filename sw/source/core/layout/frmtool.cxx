@@ -255,13 +255,12 @@ SwFrameNotify::~SwFrameNotify()
         {
             const SwSortedObjs &rObjs = *mpFrame->GetDrawObjs();
             SwPageFrame* pPageFrame = nullptr;
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pObj : rObjs)
             {
                 // OD 2004-03-31 #i26791# - no general distinction between
                 // Writer fly frames and drawing objects
                 bool bNotify = false;
                 bool bNotifySize = false;
-                SwAnchoredObject* pObj = rObjs[i];
                 SwContact* pContact = ::GetUserCall( pObj->GetDrawObj() );
                 const bool bAnchoredAsChar = pContact->ObjAnchoredAsChar();
                 if ( !bAnchoredAsChar )
@@ -986,9 +985,8 @@ SwContentNotify::~SwContentNotify()
              pMasterFrame->GetDrawObjs() )
         {
             SwSortedObjs* pObjs = pMasterFrame->GetDrawObjs();
-            for ( size_t i = 0; i < pObjs->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *pObjs)
             {
-                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 if ( pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
                         == FLY_AT_CHAR )
                 {
@@ -2242,9 +2240,9 @@ void SwOrderIter::Top()
         {
             sal_uInt32 nTopOrd = 0;
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( size_t i = 0; i < pObjs->size(); ++i )
+            for (SwAnchoredObject* i : *pObjs)
             {
-                const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
+                const SdrObject* pObj = i->GetDrawObj();
                 if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
@@ -2268,9 +2266,9 @@ const SdrObject *SwOrderIter::Bottom()
         if ( pObjs->size() )
         {
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( size_t i = 0; i < pObjs->size(); ++i )
+            for (SwAnchoredObject* i : *pObjs)
             {
-                const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
+                const SdrObject* pObj = i->GetDrawObj();
                 if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
@@ -2296,9 +2294,9 @@ const SdrObject *SwOrderIter::Next()
         if ( pObjs->size() )
         {
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( size_t i = 0; i < pObjs->size(); ++i )
+            for (SwAnchoredObject* i : *pObjs)
             {
-                const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
+                const SdrObject* pObj = i->GetDrawObj();
                 if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
@@ -2324,9 +2322,9 @@ void SwOrderIter::Prev()
         {
             sal_uInt32 nOrd = 0;
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( size_t i = 0; i < pObjs->size(); ++i )
+            for (SwAnchoredObject* i : *pObjs)
             {
-                const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
+                const SdrObject* pObj = i->GetDrawObj();
                 if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
@@ -2354,9 +2352,8 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
 {
     OSL_ENSURE( _pFrame->GetDrawObjs(), "no DrawObjs in lcl_RemoveObjsFromPage." );
     SwSortedObjs &rObjs = *_pFrame->GetDrawObjs();
-    for ( size_t i = 0; i < rObjs.size(); ++i )
+    for (SwAnchoredObject* pObj : rObjs)
     {
-        SwAnchoredObject* pObj = rObjs[i];
         // #115759# - reset member, at which the anchored
         // object orients its vertical position
         pObj->ClearVertPosOrientFrame();
@@ -2517,10 +2514,8 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
 {
     OSL_ENSURE( _pFrame->GetDrawObjs(), "no DrawObjs in lcl_AddObjsToPage." );
     SwSortedObjs &rObjs = *_pFrame->GetDrawObjs();
-    for ( size_t i = 0; i < rObjs.size(); ++i )
+    for (SwAnchoredObject* pObj : rObjs)
     {
-        SwAnchoredObject* pObj = rObjs[i];
-
         // #115759# - unlock position of anchored object
         // in order to get the object's position calculated.
         pObj->UnlockPosition();
@@ -2712,9 +2707,8 @@ SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
 static void lcl_Regist( SwPageFrame *pPage, const SwFrame *pAnch )
 {
     SwSortedObjs *pObjs = const_cast<SwSortedObjs*>(pAnch->GetDrawObjs());
-    for ( size_t i = 0; i < pObjs->size(); ++i )
+    for (SwAnchoredObject* pObj : *pObjs)
     {
-        SwAnchoredObject* pObj = (*pObjs)[i];
         if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
         {
             SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
@@ -2886,9 +2880,8 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
         if ( pCnt->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pObj : rObjs)
             {
-                SwAnchoredObject* pObj = rObjs[i];
                 if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
                 {
                     SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
@@ -3020,9 +3013,8 @@ void Notify_Background( const SdrObject* pObj,
     {
         pObj->GetOrdNum();
         const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-        for ( size_t i = 0; i < rObjs.size(); ++i )
+        for (SwAnchoredObject* pAnchoredObj : rObjs)
         {
-            SwAnchoredObject* pAnchoredObj = rObjs[i];
             if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
             {
                 if( pAnchoredObj->GetDrawObj() == pObj )
