@@ -48,6 +48,7 @@
 struct LOKDocViewPrivateImpl
 {
     const gchar* m_aLOPath;
+    const gchar* m_pUserProfileURL;
     const gchar* m_aDocPath;
     std::string m_aRenderingArguments;
     gdouble m_nLoadProgress;
@@ -128,6 +129,7 @@ struct LOKDocViewPrivateImpl
 
     LOKDocViewPrivateImpl()
         : m_aLOPath(nullptr),
+        m_pUserProfileURL(nullptr),
         m_aDocPath(nullptr),
         m_nLoadProgress(0),
         m_bIsLoading(false),
@@ -206,6 +208,7 @@ enum
 
     PROP_LO_PATH,
     PROP_LO_POINTER,
+    PROP_USER_PROFILE_URL,
     PROP_DOC_PATH,
     PROP_DOC_POINTER,
     PROP_EDITABLE,
@@ -1934,6 +1937,9 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
     case PROP_LO_POINTER:
         priv->m_pOffice = static_cast<LibreOfficeKit*>(g_value_get_pointer(value));
         break;
+    case PROP_USER_PROFILE_URL:
+        priv->m_pUserProfileURL = g_value_dup_string(value);
+        break;
     case PROP_DOC_PATH:
         priv->m_aDocPath = g_value_dup_string (value);
         break;
@@ -1983,6 +1989,9 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
         break;
     case PROP_LO_POINTER:
         g_value_set_pointer(value, priv->m_pOffice);
+        break;
+    case PROP_USER_PROFILE_URL:
+        g_value_set_string(value, priv->m_pUserProfileURL);
         break;
     case PROP_DOC_PATH:
         g_value_set_string (value, priv->m_aDocPath);
@@ -2058,7 +2067,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     if (priv->m_pOffice != nullptr)
         return TRUE;
 
-    priv->m_pOffice = lok_init (priv->m_aLOPath);
+    priv->m_pOffice = lok_init_2(priv->m_aLOPath, priv->m_pUserProfileURL);
 
     if (priv->m_pOffice == nullptr)
     {
@@ -2120,6 +2129,20 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                              static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY |
                                                       G_PARAM_STATIC_STRINGS));
+
+    /**
+     * LOKDocView:userprofileurl:
+     *
+     * The absolute path of the LibreOffice user profile.
+     */
+    properties[PROP_USER_PROFILE_URL] =
+        g_param_spec_string("userprofileurl",
+                            "User profile path",
+                            "LibreOffice user profile path",
+                            nullptr,
+                            static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                     G_PARAM_CONSTRUCT_ONLY |
+                                                     G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:docpath:
@@ -2512,11 +2535,23 @@ lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
                                        nullptr));
 }
 
+SAL_DLLPUBLIC_EXPORT GtkWidget*
+lok_doc_view_new_from_user_profile (const gchar* pPath, const gchar* pUserProfile, GCancellable *cancellable, GError **error)
+{
+    return GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, cancellable, error,
+                                     "lopath", pPath == nullptr ? LOK_PATH : pPath,
+                                     "userprofileurl", pUserProfile,
+                                     "halign", GTK_ALIGN_CENTER,
+                                     "valign", GTK_ALIGN_CENTER,
+                                     nullptr));
+}
+
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView)
 {
     LOKDocViewPrivate& pOldPriv = getPrivate(pOldLOKDocView);
     GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/nullptr, /*error=*/nullptr,
                                                        "lopath", pOldPriv->m_aLOPath,
+                                                       "userprofileurl", pOldPriv->m_pUserProfileURL,
                                                        "lopointer", pOldPriv->m_pOffice,
                                                        "docpointer", pOldPriv->m_pDocument,
                                                        "halign", GTK_ALIGN_CENTER,
