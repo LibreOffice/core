@@ -705,9 +705,8 @@ void EditHTMLParser::StartPara( bool bReal )
     {
         const HTMLOptions& aOptions = GetOptions();
         SvxAdjust eAdjust = SVX_ADJUST_LEFT;
-        for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
+        for (const auto & aOption : aOptions)
         {
-            const HTMLOption& aOption = aOptions[i];
             switch( aOption.GetToken() )
             {
                 case HTML_O_ALIGN:
@@ -766,9 +765,8 @@ void EditHTMLParser::AnchorStart()
         const HTMLOptions& aOptions = GetOptions();
         OUString aRef;
 
-        for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
+        for (const auto & aOption : aOptions)
         {
-            const HTMLOption& aOption = aOptions[i];
             switch( aOption.GetToken() )
             {
                 case HTML_O_HREF:

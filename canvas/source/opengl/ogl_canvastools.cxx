@@ -113,14 +113,14 @@ namespace oglcanvas
         aScaleShear.shearX(-0.1);
         aScaleShear.scale(scale,scale);
 
-        for( size_t i=0; i<rNumbers.size(); ++i )
+        for(double rNumber : rNumbers)
         {
             aTmp.identity();
             aTmp.translate(0,y);
             y += 1.2*scale;
 
             basegfx::B2DPolyPolygon aPoly=
-                basegfx::tools::number2PolyPolygon(rNumbers[i],10,3);
+                basegfx::tools::number2PolyPolygon(rNumber,10,3);
 
             aTmp=aTmp*aScaleShear;
             aPoly.transform(aTmp);

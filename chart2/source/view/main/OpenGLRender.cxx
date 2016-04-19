@@ -329,9 +329,9 @@ OpenGLRender::OpenGLRender()
     , m_SymbolShapeID(0)
 {
     //TODO: moggi: use STL
-    for (size_t i = 0; i < SAL_N_ELEMENTS(m_BackgroundColor); i++)
+    for (float & i : m_BackgroundColor)
     {
-        m_BackgroundColor[i] = 1.0;
+        i = 1.0;
     }
 }
 

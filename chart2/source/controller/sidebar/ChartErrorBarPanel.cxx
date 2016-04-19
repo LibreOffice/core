@@ -150,10 +150,10 @@ sal_Int32 getTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
     sal_Int32 nApi = 0;
     aAny >>= nApi;
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aErrorBarType); ++i)
+    for (ErrorBarTypeMap & i : aErrorBarType)
     {
-        if (aErrorBarType[i].nApi == nApi)
-            return aErrorBarType[i].nPos;
+        if (i.nApi == nApi)
+            return i.nPos;
     }
 
     return 0;
@@ -169,10 +169,10 @@ void setTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
         return;
 
     sal_Int32 nApi = 0;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aErrorBarType); ++i)
+    for (ErrorBarTypeMap & i : aErrorBarType)
     {
-        if (aErrorBarType[i].nPos == nPos)
-            nApi = aErrorBarType[i].nApi;
+        if (i.nPos == nPos)
+            nApi = i.nApi;
     }
 
     xPropSet->setPropertyValue("ErrorBarStyle", css::uno::makeAny(nApi));

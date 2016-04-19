@@ -127,9 +127,9 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
 
-    for (size_t i = 0; i < rCopyFrom.aAttribs.size(); ++i)
+    for (const auto & aAttrib : rCopyFrom.aAttribs)
     {
-        const XEditAttribute& rAttr = *rCopyFrom.aAttribs[i].get();
+        const XEditAttribute& rAttr = *aAttrib.get();
         XEditAttribute* pMyAttr = MakeXEditAttribute(
             rPoolToUse, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
         aAttribs.push_back(std::unique_ptr<XEditAttribute>(pMyAttr));
@@ -712,9 +712,9 @@ void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttr
 
     rLst.clear();
     const ContentInfo& rC = *aContents[nPara].get();
-    for (size_t nAttr = 0; nAttr < rC.aAttribs.size(); ++nAttr)
+    for (const auto & aAttrib : rC.aAttribs)
     {
-        const XEditAttribute& rAttr = *rC.aAttribs[nAttr].get();
+        const XEditAttribute& rAttr = *aAttrib.get();
         EECharAttrib aEEAttr;
         aEEAttr.pAttr = rAttr.GetItem();
         aEEAttr.nPara = nPara;
@@ -880,9 +880,9 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
         SectionBordersType& rBorders = aParaBorders[nPara];
         rBorders.push_back(0);
         rBorders.push_back(rC.GetText().getLength());
-        for (size_t nAttr = 0; nAttr < rC.aAttribs.size(); ++nAttr)
+        for (const auto & aAttrib : rC.aAttribs)
         {
-            const XEditAttribute& rAttr = *rC.aAttribs[nAttr].get();
+            const XEditAttribute& rAttr = *aAttrib.get();
             const SfxPoolItem* pItem = rAttr.GetItem();
             if (!pItem)
                 continue;
@@ -946,9 +946,9 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             return;
         }
 
-        for (size_t i = 0; i < rC.aAttribs.size(); ++i)
+        for (const auto & aAttrib : rC.aAttribs)
         {
-            const XEditAttribute& rXAttr = *rC.aAttribs[i].get();
+            const XEditAttribute& rXAttr = *aAttrib.get();
             const SfxPoolItem* pItem = rXAttr.GetItem();
             if (!pItem)
                 continue;
@@ -1524,9 +1524,9 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     // Works only if tab positions are set, not when DefTab.
     if ( nVersion < 500 )
     {
-        for (size_t i = 0, n = aContents.size(); i < n; ++i)
+        for (std::unique_ptr<ContentInfo> & aContent : aContents)
         {
-            ContentInfo& rC = *aContents[i].get();
+            ContentInfo& rC = *aContent.get();
             const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rC.GetParaAttribs().Get(EE_PARA_LRSPACE));
             if ( rLRSpace.GetTextLeft() && ( rC.GetParaAttribs().GetItemState( EE_PARA_TABS ) == SfxItemState::SET ) )
             {

@@ -2043,8 +2043,8 @@ MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUS
 
 void MessageDialog::dispose()
 {
-    for (size_t i = 0; i < m_aOwnedButtons.size(); ++i)
-        m_aOwnedButtons[i].disposeAndClear();
+    for (VclPtr<PushButton> & m_aOwnedButton : m_aOwnedButtons)
+        m_aOwnedButton.disposeAndClear();
     m_aOwnedButtons.clear();
 
     m_pPrimaryMessage.disposeAndClear();

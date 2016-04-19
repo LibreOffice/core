@@ -76,9 +76,9 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
     m_aValueList[1] = m_pLB_ORDERVALUE2;
     m_aValueList[2] = m_pLB_ORDERVALUE3;
 
-    for (int j=0; j < DOG_ROWS; ++j)
+    for (VclPtr<ListBox> & j : m_aColumnList)
     {
-        m_aColumnList[j]->InsertEntry( aSTR_NOENTRY );
+        j->InsertEntry( aSTR_NOENTRY );
     }
 
     for (int j=0; j < DOG_ROWS; ++j)
@@ -104,9 +104,9 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
                 sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
                 if(eColumnSearch != ColumnSearch::NONE)
                 {
-                    for (int j=0; j < DOG_ROWS; ++j)
+                    for (VclPtr<ListBox> & j : m_aColumnList)
                     {
-                        m_aColumnList[j]->InsertEntry(*pIter);
+                        j->InsertEntry(*pIter);
                     }
                 }
             }

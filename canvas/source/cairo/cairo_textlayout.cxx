@@ -512,10 +512,10 @@ namespace cairocanvas
                 // loop to draw the text for every half pixel of displacement
                 for (int nSteps = 0; nSteps < total_steps; nSteps++)
                 {
-                    for(int nGlyphIdx = 0; nGlyphIdx < (int) cairo_glyphs.size(); nGlyphIdx++)
+                    for(cairo_glyph_t & cairo_glyph : cairo_glyphs)
                     {
-                        cairo_glyphs[nGlyphIdx].x += (bold_dx * nSteps / total_steps) / 4;
-                        cairo_glyphs[nGlyphIdx].y -= (bold_dx * nSteps / total_steps) / 4;
+                        cairo_glyph.x += (bold_dx * nSteps / total_steps) / 4;
+                        cairo_glyph.y -= (bold_dx * nSteps / total_steps) / 4;
                     }
                     cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
                 }

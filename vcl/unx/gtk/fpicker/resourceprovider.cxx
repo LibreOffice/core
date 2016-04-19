@@ -60,10 +60,10 @@ static const struct
 
 static sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
 {
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( CtrlIdToResIdTable ); i++ )
+    for (auto & i : CtrlIdToResIdTable)
     {
-        if ( CtrlIdToResIdTable[i].ctrlId == aControlId )
-            return CtrlIdToResIdTable[i].resId;
+        if ( i.ctrlId == aControlId )
+            return i.resId;
     }
     return -1;
 }

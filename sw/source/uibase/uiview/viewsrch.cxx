@@ -115,9 +115,8 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem* pSearchItem, SwWrtShell
                 std::vector<OString> aSelectionRectangles;
                 pShellCursor->SwSelPaintRects::Show(&aSelectionRectangles);
                 std::vector<OString> aRect;
-                for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
+                for (const OString & rSelectionRectangle : aSelectionRectangles)
                 {
-                    const OString& rSelectionRectangle = aSelectionRectangles[i];
                     if (rSelectionRectangle.isEmpty())
                         continue;
                     aRect.push_back(rSelectionRectangle);

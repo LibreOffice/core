@@ -236,9 +236,8 @@ void SvxLineTabPage::dispose()
         m_pSymbolMB = nullptr;
     }
 
-    for ( size_t i = 0, n = m_aGrfBrushItems.size(); i < n; ++i )
+    for (SvxBmpItemInfo* pInfo : m_aGrfBrushItems)
     {
-        SvxBmpItemInfo* pInfo = m_aGrfBrushItems[ i ];
         delete pInfo->pBrushItem;
         delete pInfo;
     }

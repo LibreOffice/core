@@ -941,8 +941,8 @@ bool GnomeWMAdaptor::isValid() const
 void WMAdaptor::initAtoms()
 {
     // get basic atoms
-    for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAtomTab ); i++ )
-        m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
+    for(const WMAdaptorProtocol & i : aAtomTab)
+        m_aWMAtoms[ i.nProtocol ] = XInternAtom( m_pDisplay, i.pProtocol, False );
     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
     m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
 }
@@ -1490,11 +1490,11 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
         {
             Point aMed( aTL.X() + rGeom.nWidth/2, aTL.Y() + rGeom.nHeight/2 );
             const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
-            for( size_t i = 0; i < rScreens.size(); i++ )
-                if( rScreens[i].IsInside( aMed ) )
+            for(const auto & rScreen : rScreens)
+                if( rScreen.IsInside( aMed ) )
                 {
-                    aTL += rScreens[i].TopLeft();
-                    aScreenSize = rScreens[i].GetSize();
+                    aTL += rScreen.TopLeft();
+                    aScreenSize = rScreen.GetSize();
                     break;
                 }
         }
@@ -2090,14 +2090,14 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 &root_x, &root_y, &lx, &ly, &mask );
                 const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
                 Point aMousePoint( root_x, root_y );
-                for( size_t i = 0; i < rScreens.size(); i++ )
+                for(const auto & rScreen : rScreens)
                 {
-                    if( rScreens[i].IsInside( aMousePoint ) )
+                    if( rScreen.IsInside( aMousePoint ) )
                     {
-                        pFrame->maGeometry.nX       = rScreens[i].Left();
-                        pFrame->maGeometry.nY       = rScreens[i].Top();
-                        pFrame->maGeometry.nWidth   = rScreens[i].GetWidth();
-                        pFrame->maGeometry.nHeight  = rScreens[i].GetHeight();
+                        pFrame->maGeometry.nX       = rScreen.Left();
+                        pFrame->maGeometry.nY       = rScreen.Top();
+                        pFrame->maGeometry.nWidth   = rScreen.GetWidth();
+                        pFrame->maGeometry.nHeight  = rScreen.GetHeight();
                         break;
                     }
                 }

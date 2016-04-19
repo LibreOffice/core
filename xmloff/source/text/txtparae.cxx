@@ -379,17 +379,17 @@ void FieldParamExporter::Export()
     const Type aSeqType = cppu::UnoType<Sequence<OUString>>::get();
     const Type aIntType = ::cppu::UnoType<sal_Int32>::get();
     Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
-    for(const OUString* pCurrent = vParameters.begin(); pCurrent != vParameters.end(); ++pCurrent)
+    for(const auto & vParameter : vParameters)
     {
-        const Any aValue = m_xFieldParams->getByName(*pCurrent);
+        const Any aValue = m_xFieldParams->getByName(vParameter);
         const Type& aValueType = aValue.getValueType();
         if(aValueType == aStringType)
         {
             OUString sValue;
             aValue >>= sValue;
-            ExportParameter(*pCurrent,sValue);
+            ExportParameter(vParameter,sValue);
 
-            if ( *pCurrent == ODF_OLE_PARAM )
+            if ( vParameter == ODF_OLE_PARAM )
             {
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
@@ -414,22 +414,22 @@ void FieldParamExporter::Export()
         {
             bool bValue = false;
             aValue >>= bValue;
-            ExportParameter(*pCurrent, OUString::boolean(bValue) );
+            ExportParameter(vParameter, OUString::boolean(bValue) );
         }
         else if(aValueType == aSeqType)
         {
             Sequence<OUString> vValue;
             aValue >>= vValue;
-            for(OUString* pSeqCurrent = vValue.begin(); pSeqCurrent != vValue.end(); ++pSeqCurrent)
+            for(OUString & pSeqCurrent : vValue)
             {
-                ExportParameter(*pCurrent, *pSeqCurrent);
+                ExportParameter(vParameter, pSeqCurrent);
             }
         }
         else if(aValueType == aIntType)
         {
             sal_Int32 nValue = 0;
             aValue >>= nValue;
-            ExportParameter(*pCurrent, OUStringBuffer().append(nValue).makeStringAndClear());
+            ExportParameter(vParameter, OUStringBuffer().append(nValue).makeStringAndClear());
         }
     }
 }

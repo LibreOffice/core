@@ -657,9 +657,9 @@ SbError SbiStream::Write( const OString& rBuf )
 
 SbiIoSystem::SbiIoSystem()
 {
-    for( short i = 0; i < CHANNELS; i++ )
+    for(SbiStream* & i : pChan)
     {
-        pChan[ i ] = nullptr;
+        i = nullptr;
     }
     nChan  = 0;
     nError = 0;

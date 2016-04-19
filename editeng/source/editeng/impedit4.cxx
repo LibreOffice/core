@@ -2407,9 +2407,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     }
                     else if ( bSimpleRepaint )
                     {
-                        for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+                        for (EditView* pView : aEditViews)
                         {
-                            EditView* pView = aEditViews[nView];
                             Rectangle aClipRect( aInvalidRect );
                             aClipRect.Intersection( pView->GetVisArea() );
                             if ( !aClipRect.IsEmpty() )
@@ -2952,9 +2951,9 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             if ( !pUndo && IsUndoEnabled() && !IsInUndo() )
             {
                 // adjust selection to include all changes
-                for (size_t i = 0; i < aChanges.size(); ++i)
+                for (eeTransliterationChgData & aChange : aChanges)
                 {
-                    const EditSelection &rSel = aChanges[i].aSelection;
+                    const EditSelection &rSel = aChange.aSelection;
                     if (aSel.Min().GetNode() == rSel.Min().GetNode() &&
                         aSel.Min().GetIndex() > rSel.Min().GetIndex())
                         aSel.Min().SetIndex( rSel.Min().GetIndex() );

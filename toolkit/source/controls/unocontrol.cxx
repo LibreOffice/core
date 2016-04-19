@@ -586,9 +586,9 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             while ( pLangDepProp->pPropName != nullptr )
             {
                 bool bMustBeInserted( true );
-                for ( size_t i = 0; i < aPeerPropertiesToSet.size(); i++ )
+                for (PropertyValue & i : aPeerPropertiesToSet)
                 {
-                    if ( aPeerPropertiesToSet[i].Name.equalsAsciiL(
+                    if ( i.Name.equalsAsciiL(
                             pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))
                     {
                         bMustBeInserted = false;
