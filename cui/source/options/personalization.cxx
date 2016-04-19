@@ -29,10 +29,12 @@
 #include <dialmgr.hxx>
 #include "cuires.hrc"
 
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include "ucbhelper/content.hxx"
+#include <comphelper/simplefileaccessinteraction.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -579,10 +581,26 @@ void SearchAndParseThread::execute()
             return;
 
         try {
+            css:: uno::Reference< task::XInteractionHandler > xIH(
+                css::task::InteractionHandler::createWithParent( xContext, nullptr ) );
+
+            xFileAccess->setInteractionHandler( new comphelper::SimpleFileAccessInteraction( xIH ) );
+
             xStream = xFileAccess->openFileRead( m_aURL );
+            if( !xStream.is() )
+            {
+                // in case of a returned CommandFailedException
+                // SimpleFileAccess serves it, returning an empty stream
+                sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
+                sProgress = sProgress.replaceAll("%1", m_aURL);
+                m_pPersonaDialog->SetProgress(sProgress);
+                return;
+            }
         }
         catch (...)
         {
+            // a catch all clause, in case the exception is not
+            // served elsewhere
             sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
             sProgress = sProgress.replaceAll("%1", m_aURL);
             m_pPersonaDialog->SetProgress(sProgress);
