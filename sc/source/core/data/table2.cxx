@@ -53,6 +53,7 @@
 #include "columnspanset.hxx"
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
+#include "listenercontext.hxx"
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
@@ -1033,8 +1034,22 @@ const ScColumn* ScTable::FetchColumn( SCCOL nCol ) const
 
 void ScTable::StartListeners( sc::StartListeningContext& rCxt, bool bAll )
 {
-    for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].StartListeners(rCxt, bAll);
+    std::shared_ptr<const sc::ColumnSet> pColSet = rCxt.getColumnSet();
+    if (!pColSet)
+    {
+        for (SCCOL i=0; i<=MAXCOL; i++)
+            aCol[i].StartListeners(rCxt, bAll);
+    }
+    else if (pColSet->hasTab( nTab))
+    {
+        std::vector<SCCOL> aColumns;
+        pColSet->getColumns( nTab, aColumns);
+        for (auto i : aColumns)
+        {
+            if (0 <= i && i <= MAXCOL)
+                aCol[i].StartListeners(rCxt, bAll);
+        }
+    }
 }
 
 void ScTable::AttachFormulaCells(
