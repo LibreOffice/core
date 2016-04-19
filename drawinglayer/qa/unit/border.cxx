@@ -119,7 +119,7 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
     aMetaFile.WindStart();
     bool bFirst = true;
     sal_Int32 nHeight = 0;
-    for(std::size_t nAction = 0; nAction < aMetaFile.GetActionSize(); ++nAction)
+    for (std::size_t nAction = 0; nAction < aMetaFile.GetActionSize(); ++nAction)
     {
         MetaAction* pAction = aMetaFile.GetAction(nAction);
         if (pAction->GetType() == MetaActionType::POLYPOLYGON)

@@ -125,7 +125,7 @@ protected:
 
     bool IsModifyLocked(){ return m_bModifyLocked;}
 
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     enum SearchType
