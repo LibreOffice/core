@@ -80,6 +80,7 @@ struct SortUndoParam;
 struct ReorderParam;
 class FormulaGroupAreaListener;
 class IconSetBitmapMap;
+class ColumnSet;
 
 }
 
@@ -1959,6 +1960,7 @@ public:
     void                SetHardRecalcState( HardRecalcState eVal ) { eHardRecalcState = eVal; }
     void                StartAllListeners();
     void                StartNeededListeners();
+    void                StartNeededListeners( const std::shared_ptr<const sc::ColumnSet>& rpColSet );
     void                StartAllListeners( const ScRange& rRange );
 
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }

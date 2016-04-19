@@ -23,14 +23,18 @@ namespace sc {
 
 struct ColumnBlockPosition;
 class ColumnBlockPositionSet;
+class ColumnSet;
 
 class StartListeningContext : boost::noncopyable
 {
     ScDocument& mrDoc;
     std::shared_ptr<ColumnBlockPositionSet> mpSet;
+    std::shared_ptr<const ColumnSet> mpColSet;
 public:
     StartListeningContext(ScDocument& rDoc);
     StartListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet);
+    void setColumnSet( const std::shared_ptr<const ColumnSet>& pColSet );
+    const std::shared_ptr<const ColumnSet>& getColumnSet() const;
     ScDocument& getDoc() { return mrDoc;}
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
