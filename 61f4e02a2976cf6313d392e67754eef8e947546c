@@ -16,6 +16,24 @@
       "revId": "61f4e02a2976cf6313d392e67754eef8e947546c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_c3b896e8",
+        "filename": "shell/source/win32/shlxthandler/util/iso8601_converter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-04-19T07:08:26Z",
+      "side": 1,
+      "message": "Function accepts date as a combined date+time string in extended ISO8601 format, which is yyyy-mm-ddThh:mm:ss[.mmm]\n\nLast part is the optional \"fraction of second\" part, that\u0027s why we cut off at 19.\n\nThis format seems to be identical for most (if not all) cases, up to the fractional part. Other parts are padded with zero when necessary, but there is no standard for the fractional part.\n\nNonetheless, I wonder if we should put additional checks other than the length of string to ensure the format.\n\nHere is an example string taken from meta.xml file of a LO document (it is where our input comes from): 2016-04-01T11:57:11.683875838",
+      "parentUuid": "1ac06dbe_a3d2ba32",
+      "revId": "61f4e02a2976cf6313d392e67754eef8e947546c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
