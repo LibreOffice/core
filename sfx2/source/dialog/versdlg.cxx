@@ -113,8 +113,8 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVe
 
 void SfxVersionTableDtor::DelDtor()
 {
-    for ( size_t i = 0, n = aTableList.size(); i < n; ++i )
-        delete aTableList[ i ];
+    for (SfxVersionInfo* i : aTableList)
+        delete i;
     aTableList.clear();
 }
 

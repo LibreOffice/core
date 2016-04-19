@@ -803,9 +803,9 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
 
     // detect max keyname width
     long nMaxWidth  = 0;
-    for ( sal_uInt16 i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
+    for (unsigned short i : KEYCODE_ARRAY)
     {
-        long nTmp = GetTextWidth( vcl::KeyCode( KEYCODE_ARRAY[i] ).GetName() );
+        long nTmp = GetTextWidth( vcl::KeyCode( i ).GetName() );
         if ( nTmp > nMaxWidth )
             nMaxWidth = nTmp;
     }

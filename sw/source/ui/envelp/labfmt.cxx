@@ -612,9 +612,9 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec)
 
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     const std::vector<OUString>& rMan = rCfg.GetManufacturers();
-    for (size_t i = 0; i < rMan.size(); ++i)
+    for (const auto & i : rMan)
     {
-        m_pMakeCB->InsertEntry(rMan[i]);
+        m_pMakeCB->InsertEntry(i);
     }
 }
 

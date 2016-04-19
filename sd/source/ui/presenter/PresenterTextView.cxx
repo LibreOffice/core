@@ -302,9 +302,8 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
         aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN);
         aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
 
-        for (int i = 0;  i < 3;  ++i)
+        for (FontDta & rFntDta : aTable)
         {
-            const FontDta &rFntDta = aTable[i];
             LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
                 rFntDta.nFallbackLang : rFntDta.nLang;
             vcl::Font aFont = OutputDevice::GetDefaultFont(

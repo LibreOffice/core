@@ -95,8 +95,8 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 
 void InitScaFuncDataList( ScaFuncDataList& rList, ResMgr& rResMgr )
 {
-    for( sal_uInt16 nIndex = 0; nIndex < SAL_N_ELEMENTS(pFuncDataArr); nIndex++ )
-        rList.push_back( ScaFuncData( pFuncDataArr[ nIndex ], rResMgr ) );
+    for(const auto & nIndex : pFuncDataArr)
+        rList.push_back( ScaFuncData( nIndex, rResMgr ) );
 }
 
 ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :

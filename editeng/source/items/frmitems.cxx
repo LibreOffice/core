@@ -2255,11 +2255,11 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
 
     if( nIVersion >= BOX_4DISTS_VERSION && (cLine&0x10) != 0 )
     {
-        for( sal_uInt16 i=0; i < 4; i++ )
+        for(SvxBoxItemLine & i : aLineMap)
         {
             sal_uInt16 nDist;
             rStrm.ReadUInt16( nDist );
-            pAttr->SetDistance( nDist, aLineMap[i] );
+            pAttr->SetDistance( nDist, i );
         }
     }
     else

@@ -245,12 +245,11 @@ sal_uInt32 SbiSymPool::Reference( const OUString& rName )
 
 void SbiSymPool::CheckRefs()
 {
-    for (size_t i = 0; i < m_Data.size(); ++i)
+    for (std::unique_ptr<SbiSymDef> & r : m_Data)
     {
-        SbiSymDef &r = *m_Data[ i ];
-        if( !r.IsDefined() )
+        if( !r->IsDefined() )
         {
-            pParser->Error( ERRCODE_BASIC_UNDEF_LABEL, r.GetName() );
+            pParser->Error( ERRCODE_BASIC_UNDEF_LABEL, r->GetName() );
         }
     }
 }

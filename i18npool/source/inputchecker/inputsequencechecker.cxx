@@ -43,8 +43,8 @@ InputSequenceCheckerImpl::InputSequenceCheckerImpl(const char *pServiceName)
 InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 {
     // Clear lookuptable
-    for (size_t l = 0; l < lookupTable.size(); l++)
-        delete lookupTable[l];
+    for (lookupTableItem* p : lookupTable)
+        delete p;
 
     lookupTable.clear();
 }
@@ -111,8 +111,8 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
         return cachedItem->xISC;
     }
     else {
-        for (size_t l = 0; l < lookupTable.size(); l++) {
-            cachedItem = lookupTable[l];
+        for (lookupTableItem* l : lookupTable) {
+            cachedItem = l;
             if (cachedItem->aLanguage == rLanguage)
                 return cachedItem->xISC;
         }

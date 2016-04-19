@@ -113,8 +113,8 @@ void HeaderBar::dispose()
 {
     if (mpItemList)
     {
-        for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
-            delete (*mpItemList)[ i ];
+        for (ImplHeadItem* i : *mpItemList)
+            delete i;
         delete mpItemList;
         mpItemList = nullptr;
     }
@@ -1192,8 +1192,8 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
 void HeaderBar::Clear()
 {
     // delete all items
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        delete (*mpItemList)[ i ];
+    for (ImplHeadItem* i : *mpItemList) {
+        delete i;
     }
     mpItemList->clear();
 
@@ -1349,9 +1349,8 @@ Size HeaderBar::CalcWindowSizePixel() const
     long nMaxImageSize = 0;
     Size aSize( 0, GetTextHeight() );
 
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
+    for (ImplHeadItem* pItem : *mpItemList)
     {
-        ImplHeadItem* pItem = (*mpItemList)[ i ];
         // take image size into account
         long nImageHeight = pItem->maImage.GetSizePixel().Height();
         if ( !(pItem->mnBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) && !pItem->maText.isEmpty() )

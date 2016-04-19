@@ -828,8 +828,8 @@ namespace basegfx
                                 else
                                 {
                                     // the last triangle has not been altered, simply copy to result
-                                    for(sal_uInt32 i=0; i<3; ++i)
-                                        aResult.append(stack[i]);
+                                    for(basegfx::B2DPoint & i : stack)
+                                        aResult.append(i);
                                 }
                             }
                         }

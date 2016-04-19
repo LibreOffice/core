@@ -145,9 +145,9 @@ namespace basctl
             { "OnModeChanged",  &DocumentEventListener::onDocumentModeChanged }
         };
 
-        for ( size_t i=0; i < SAL_N_ELEMENTS( aEvents ); ++i )
+        for (EventEntry & aEvent : aEvents)
         {
-            if ( !_rEvent.EventName.equalsAscii( aEvents[i].pEventName ) )
+            if ( !_rEvent.EventName.equalsAscii( aEvent.pEventName ) )
                 continue;
 
             ScriptDocument aDocument( xDocument );
@@ -162,7 +162,7 @@ namespace basctl
                     // somebody took the chance to dispose us -> bail out
                     return;
 
-                (m_pListener->*aEvents[i].listenerMethod)( aDocument );
+                (m_pListener->*aEvent.listenerMethod)( aDocument );
             }
             break;
         }

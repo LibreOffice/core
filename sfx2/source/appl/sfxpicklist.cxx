@@ -143,8 +143,8 @@ namespace
 void SfxPickList::RemovePickListEntries()
 {
     ::osl::MutexGuard aGuard( thePickListMutex::get() );
-    for ( size_t i = 0; i < m_aPicklistVector.size(); i++ )
-        delete m_aPicklistVector[i];
+    for (PickListEntry* i : m_aPicklistVector)
+        delete i;
     m_aPicklistVector.clear();
 }
 

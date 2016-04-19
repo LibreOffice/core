@@ -1647,9 +1647,9 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         RES_UL_SPACE    // Aussenabstand Oben/unten:   SvxULSpaceItem
     };
     const SfxPoolItem* pPoolItem;
-    for(sal_uInt16 nItem = 0; nItem < nDirectMatch; ++nItem)
+    for(int nItem : aDirectMatch)
         if( SfxItemState::SET == rOldSet.GetItemState(
-                    static_cast< sal_uInt16 >(aDirectMatch[ nItem ]), false, &pPoolItem) )
+                    static_cast< sal_uInt16 >(nItem), false, &pPoolItem) )
         {
             rFlySet.Put( *pPoolItem );
         }

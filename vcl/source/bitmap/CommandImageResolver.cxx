@@ -63,14 +63,14 @@ OUString lclConvertToCanonicalName(const OUString& rFileName)
 
 CommandImageResolver::CommandImageResolver()
 {
-    for (sal_Int32 n = 0; n < ImageType_COUNT; n++)
-        m_pImageList[n] = nullptr;
+    for (ImageList*& n : m_pImageList)
+        n = nullptr;
 }
 
 CommandImageResolver::~CommandImageResolver()
 {
-    for (sal_Int32 n = 0; n < ImageType_COUNT; n++)
-        delete m_pImageList[n];
+    for (ImageList* n : m_pImageList)
+        delete n;
 }
 
 bool CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence)
@@ -128,10 +128,10 @@ ImageList* CommandImageResolver::getImageList(sal_Int16 nImageType)
     if (sIconTheme != m_sIconTheme)
     {
         m_sIconTheme = sIconTheme;
-        for (sal_Int32 n = 0; n < ImageType_COUNT; ++n)
+        for (ImageList*& n : m_pImageList)
         {
-            delete m_pImageList[n];
-            m_pImageList[n] = nullptr;
+            delete n;
+            n = nullptr;
         }
     }
 

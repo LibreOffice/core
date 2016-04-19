@@ -323,13 +323,13 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     // It's not really an error, if no registered jobs could be located.
     // Step over all found jobs and execute it
     int nExecutedJobs=0;
-    for (size_t j=0; j<lJobs.size(); ++j)
+    for (OUString & lJob : lJobs)
     {
         /* SAFE { */
         aReadLock.reset();
 
         JobData aCfg(m_xContext);
-        aCfg.setEvent(sEvent, lJobs[j]);
+        aCfg.setEvent(sEvent, lJob);
         aCfg.setEnvironment(JobData::E_DISPATCH);
         const bool bIsEnabled=aCfg.hasCorrectContext(m_sModuleIdentifier);
 

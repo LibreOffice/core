@@ -821,11 +821,11 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
             { 80, 1500 }, { 75, 1700 }
         };
         sal_Int32 nTargetRatio = 10000;
-        for ( size_t i = 0 ; i < SAL_N_ELEMENTS( aRatios ); ++i )
+        for (auto & aRatio : aRatios)
         {
-            if ( mnCompressionQuality > aRatios[i].mnQuality )
+            if ( mnCompressionQuality > aRatio.mnQuality )
                 break;
-            nTargetRatio = aRatios[i].mnRatio;
+            nTargetRatio = aRatio.mnRatio;
         }
 
         return nCurrentRatio > nTargetRatio;

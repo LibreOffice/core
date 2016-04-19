@@ -105,10 +105,10 @@ struct ImpRememberOrigAndClone
 
 SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContainer, SdrObject* pConnObj)
 {
-    for(size_t a(0); a < aConnectorContainer.size(); a++)
+    for(ImpRememberOrigAndClone* p : aConnectorContainer)
     {
-        if(pConnObj == aConnectorContainer[a]->pOrig)
-            return aConnectorContainer[a]->pClone;
+        if(pConnObj == p->pOrig)
+            return p->pClone;
     }
     return nullptr;
 }
@@ -586,8 +586,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 }
 
                                 // cleanup remember classes
-                                for(size_t a = 0; a < aConnectorContainer.size(); ++a)
-                                    delete aConnectorContainer[a];
+                                for(ImpRememberOrigAndClone* p : aConnectorContainer)
+                                    delete p;
 
                                 if( pMarkList != mpDragSrcMarkList )
                                     delete pMarkList;

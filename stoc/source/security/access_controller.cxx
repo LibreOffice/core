@@ -541,9 +541,8 @@ void AccessController::checkAndClearPostPoned()
         case SINGLE_USER:
         {
             OSL_ASSERT( m_singleUser_init );
-            for ( size_t nPos = 0; nPos < vec.size(); ++nPos )
+            for (const auto & p : vec)
             {
-                pair< OUString, Any > const & p = vec[ nPos ];
                 OSL_ASSERT( m_singleUserId.equals( p.first ) );
                 m_singleUserPermissions.checkPermission( p.second );
             }
@@ -552,9 +551,8 @@ void AccessController::checkAndClearPostPoned()
         case SINGLE_DEFAULT_USER:
         {
             OSL_ASSERT( m_defaultPerm_init );
-            for ( size_t nPos = 0; nPos < vec.size(); ++nPos )
+            for (const auto & p : vec)
             {
-                pair< OUString, Any > const & p = vec[ nPos ];
                 OSL_ASSERT( p.first.isEmpty() ); // default-user
                 m_defaultPermissions.checkPermission( p.second );
             }
@@ -562,9 +560,8 @@ void AccessController::checkAndClearPostPoned()
         }
         case ON:
         {
-            for ( size_t nPos = 0; nPos < vec.size(); ++nPos )
+            for (const auto & p : vec)
             {
-                pair< OUString, Any > const & p = vec[ nPos ];
                 PermissionCollection const * pPermissions;
                 // lookup policy for user
                 {

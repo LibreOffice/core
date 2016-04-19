@@ -43,8 +43,7 @@ ImplIdleMgr::~ImplIdleMgr()
 {
     mbInDestruction = true;
     // Liste loeschen
-    for ( size_t i = 0, n = mpIdleList->size(); i < n; ++i ) {
-        ImplIdleData* pIdleData = (*mpIdleList)[ i ];
+    for (ImplIdleData* pIdleData : *mpIdleList) {
         pIdleData->maIdleHdl.Call( GetpApp() );
         delete pIdleData;
     }

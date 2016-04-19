@@ -181,9 +181,8 @@ namespace drawinglayer
                                             a2DUnitLine.append(basegfx::B2DPoint(0.0, 0.0));
                                             a2DUnitLine.append(basegfx::B2DPoint(1.0, 0.0));
 
-                                            for(size_t c(0); c < aMatrices.size(); c++)
+                                            for(basegfx::B2DHomMatrix & rMatrix : aMatrices)
                                             {
-                                                const basegfx::B2DHomMatrix& rMatrix = aMatrices[c];
                                                 basegfx::B2DPolygon aNewLine(a2DUnitLine);
                                                 aNewLine.transform(rMatrix);
                                                 a2DHatchLines.append(aNewLine);

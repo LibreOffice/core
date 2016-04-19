@@ -238,16 +238,16 @@ sal_Int32 AxisUsage::getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex )
 void AxisUsage::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex )
 {
     std::vector<VCoordinateSystem*> aVCooSysList = getCoordinateSystems(nDimIndex, nAxisIndex);
-    for (size_t i = 0, n = aVCooSysList.size(); i < n; ++i)
-        aVCooSysList[i]->prepareAutomaticAxisScaling(rScaleAutomatism, nDimIndex, nAxisIndex);
+    for (VCoordinateSystem * i : aVCooSysList)
+        i->prepareAutomaticAxisScaling(rScaleAutomatism, nDimIndex, nAxisIndex);
 }
 
 void AxisUsage::setExplicitScaleAndIncrement(
     sal_Int32 nDimIndex, sal_Int32 nAxisIndex, const ExplicitScaleData& rScale, const ExplicitIncrementData& rInc )
 {
     std::vector<VCoordinateSystem*> aVCooSysList = getCoordinateSystems(nDimIndex, nAxisIndex);
-    for (size_t i = 0, n = aVCooSysList.size(); i < n; ++i)
-        aVCooSysList[i]->setExplicitScaleAndIncrement(nDimIndex, nAxisIndex, rScale, rInc);
+    for (VCoordinateSystem* i : aVCooSysList)
+        i->setExplicitScaleAndIncrement(nDimIndex, nAxisIndex, rScale, rInc);
 }
 
 typedef std::vector<std::unique_ptr<VSeriesPlotter> > SeriesPlottersType;
@@ -380,8 +380,8 @@ SeriesPlotterContainer::SeriesPlotterContainer( std::vector< VCoordinateSystem* 
 SeriesPlotterContainer::~SeriesPlotterContainer()
 {
     // - remove plotter from coordinatesystems
-    for( size_t nC=0; nC < m_rVCooSysList.size(); nC++)
-        m_rVCooSysList[nC]->clearMinimumAndMaximumSupplierList();
+    for(VCoordinateSystem* nC : m_rVCooSysList)
+        nC->clearMinimumAndMaximumSupplierList();
 }
 
 std::vector< LegendEntryProvider* > SeriesPlotterContainer::getLegendEntryProviderList()
@@ -396,9 +396,8 @@ std::vector< LegendEntryProvider* > SeriesPlotterContainer::getLegendEntryProvid
 VCoordinateSystem* findInCooSysList( const std::vector< VCoordinateSystem* >& rVCooSysList
                                     , const uno::Reference< XCoordinateSystem >& xCooSys )
 {
-    for( size_t nC=0; nC < rVCooSysList.size(); nC++)
+    for(VCoordinateSystem* pVCooSys : rVCooSysList)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
         if(pVCooSys->getModel()==xCooSys)
             return pVCooSys;
     }
@@ -409,9 +408,8 @@ VCoordinateSystem* lcl_getCooSysForPlotter( const std::vector< VCoordinateSystem
 {
     if(!pMinimumAndMaximumSupplier)
         return nullptr;
-    for( size_t nC=0; nC < rVCooSysList.size(); nC++)
+    for(VCoordinateSystem* pVCooSys : rVCooSysList)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
         if(pVCooSys->hasMinimumAndMaximumSupplier( pMinimumAndMaximumSupplier ))
             return pVCooSys;
     }
@@ -621,9 +619,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     {
         uno::Sequence< OUString > aSeriesNames;
         bool bSeriesNamesInitialized = false;
-        for( size_t nC=0; nC < m_rVCooSysList.size(); nC++)
+        for(VCoordinateSystem* pVCooSys : m_rVCooSysList)
         {
-            VCoordinateSystem* pVCooSys = m_rVCooSysList[nC];
             if(!pVCooSys)
                 continue;
             if( pVCooSys->needSeriesNamesForAxis() )
@@ -663,9 +660,8 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
 
     // Loop through coordinate systems in the diagram (though for now
     // there should only be one coordinate system per diagram).
-    for (size_t i = 0, n = m_rVCooSysList.size(); i < n; ++i)
+    for (VCoordinateSystem* pVCooSys : m_rVCooSysList)
     {
-        VCoordinateSystem* pVCooSys = m_rVCooSysList[i];
         uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
         sal_Int32 nDimCount = xCooSys->getDimension();
 
@@ -708,9 +704,8 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     ::std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
     const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
     m_nMaxAxisIndex = 0;
-    for (size_t i = 0, n = m_rVCooSysList.size(); i < n; ++i)
+    for (VCoordinateSystem* pVCooSys : m_rVCooSysList)
     {
-        VCoordinateSystem* pVCooSys = m_rVCooSysList[i];
         uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
         sal_Int32 nDimCount = xCooSys->getDimension();
 
@@ -790,8 +785,8 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
 
 void SeriesPlotterContainer::updateScalesAndIncrementsOnAxes()
 {
-    for( size_t nC=0; nC < m_rVCooSysList.size(); nC++)
-        m_rVCooSysList[nC]->updateScalesAndIncrementsOnAxes();
+    for(VCoordinateSystem* nC : m_rVCooSysList)
+        nC->updateScalesAndIncrementsOnAxes();
 }
 
 void SeriesPlotterContainer::doAutoScaling( ChartModel& rChartModel )
@@ -882,15 +877,15 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
             if (bSeriesAttachedToThisAxis || nAttachedAxisIndex < 0)
                 continue;
 
-            for( size_t nC = 0; nC < aVCooSysList_Y.size(); ++nC )
+            for(VCoordinateSystem* nC : aVCooSysList_Y)
             {
-                aVCooSysList_Y[nC]->prepareAutomaticAxisScaling( rAxisUsage.aAutoScaling, 1, nAttachedAxisIndex );
+                nC->prepareAutomaticAxisScaling( rAxisUsage.aAutoScaling, 1, nAttachedAxisIndex );
 
-                ExplicitScaleData aExplicitScaleSource = aVCooSysList_Y[nC]->getExplicitScale( 1,nAttachedAxisIndex );
-                ExplicitIncrementData aExplicitIncrementSource = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAttachedAxisIndex );
+                ExplicitScaleData aExplicitScaleSource = nC->getExplicitScale( 1,nAttachedAxisIndex );
+                ExplicitIncrementData aExplicitIncrementSource = nC->getExplicitIncrement( 1,nAttachedAxisIndex );
 
-                ExplicitScaleData aExplicitScaleDest = aVCooSysList_Y[nC]->getExplicitScale( 1,nAxisIndex );
-                ExplicitIncrementData aExplicitIncrementDest = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAxisIndex );
+                ExplicitScaleData aExplicitScaleDest = nC->getExplicitScale( 1,nAxisIndex );
+                ExplicitIncrementData aExplicitIncrementDest = nC->getExplicitIncrement( 1,nAxisIndex );
 
                 aExplicitScaleDest.Orientation = aExplicitScaleSource.Orientation;
                 aExplicitScaleDest.Scaling = aExplicitScaleSource.Scaling;
@@ -936,7 +931,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
                             aExplicitIncrementSource.SubIncrements[0].IntervalCount;
                 }
 
-                aVCooSysList_Y[nC]->setExplicitScaleAndIncrement( 1, nAxisIndex, aExplicitScaleDest, aExplicitIncrementDest );
+                nC->setExplicitScaleAndIncrement( 1, nAxisIndex, aExplicitScaleDest, aExplicitIncrementDest );
             }
         }
     }
