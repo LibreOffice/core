@@ -1177,6 +1177,13 @@ void SvxTableController::SetVertical( sal_uInt16 nSId )
     {
         TableModelNotifyGuard aGuard( mxTable.get() );
 
+        bool bUndo = mpModel && mpModel->IsUndoEnabled();
+        if (bUndo)
+        {
+            mpModel->BegUndo(ImpGetResStr(STR_TABLE_NUMFORMAT));
+            mpModel->AddUndo(mpModel->GetSdrUndoFactory().CreateUndoAttrObject(*pTableObj));
+        }
+
         CellPos aStart, aEnd;
         getSelectedCells( aStart, aEnd );
 
@@ -1203,11 +1210,20 @@ void SvxTableController::SetVertical( sal_uInt16 nSId )
             {
                 CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
                 if( xCell.is() )
-                    xCell->SetMergedItem(aItem);
+                {
+                    if (bUndo)
+                        xCell->AddUndo();
+                    SfxItemSet aSet(xCell->GetItemSet());
+                    aSet.Put(aItem);
+                    xCell->SetMergedItemSetAndBroadcast(aSet, /*bClearAllItems=*/false);
+                }
             }
         }
 
         UpdateTableShape();
+
+        if (bUndo)
+            mpModel->EndUndo();
     }
 }
 
