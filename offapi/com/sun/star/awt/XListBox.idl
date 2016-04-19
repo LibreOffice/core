@@ -89,7 +89,7 @@ published interface XListBox: com::sun::star::uno::XInterface
     sequence<string> getItems();
 
 
-    /** returns the position of the currently selected item.
+    /** returns the position of the currently selected item, or -1 when nothing is selected.
      */
     short getSelectedItemPos();
 
