@@ -353,6 +353,7 @@ void DesktopLOKTest::testSearchCalc()
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 
     std::vector<OString> aSelections;
     sal_Int32 nIndex = 0;
@@ -635,6 +636,7 @@ void DesktopLOKTest::testCommandResult()
     // the condition var.
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
@@ -644,6 +646,7 @@ void DesktopLOKTest::testCommandResult()
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
 
     boost::property_tree::ptree aTree;
@@ -666,6 +669,7 @@ void DesktopLOKTest::testWriterComments()
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
     xToolkit->reschedule();
@@ -706,6 +710,7 @@ void DesktopLOKTest::testModifiedStatus()
     m_bModified = false;
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    Scheduler::ProcessEventsToIdle();
     TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
     m_aStateChangedCondition.wait(aTimeValue);
     Scheduler::ProcessEventsToIdle();
@@ -719,6 +724,7 @@ void DesktopLOKTest::testModifiedStatus()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", "TakeOwnership"));
+    Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(aTimeValue);
     Scheduler::ProcessEventsToIdle();
 
@@ -728,6 +734,7 @@ void DesktopLOKTest::testModifiedStatus()
     // Modify the document again
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(aTimeValue);
     Scheduler::ProcessEventsToIdle();
 
@@ -976,6 +983,7 @@ void DesktopLOKTest::testContextMenuCalc()
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       aPointOnImage.X(), aPointOnImage.Y(),
                                       1, 4, 0);
+    Scheduler::ProcessEventsToIdle();
 
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
@@ -1085,6 +1093,7 @@ void DesktopLOKTest::testContextMenuWriter()
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       aRandomPoint.X(), aRandomPoint.Y(),
                                       1, 4, 0);
+    Scheduler::ProcessEventsToIdle();
 
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
@@ -1140,6 +1149,7 @@ void DesktopLOKTest::testContextMenuImpress()
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       aRandomPoint.X(), aRandomPoint.Y(),
                                       1, 4, 0);
+    Scheduler::ProcessEventsToIdle();
 
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
