@@ -214,9 +214,9 @@ BackendImpl::ExecutablePackageImpl::isRegistered_(
 {
     bool registered = getMyBackend()->hasActiveEntry(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
-            sal_True /* IsPresent */,
+            true /* IsPresent */,
                 beans::Ambiguous<sal_Bool>(
-                    registered, sal_False /* IsAmbiguous */ ) );
+                    registered, false /* IsAmbiguous */ ) );
 }
 
 void BackendImpl::ExecutablePackageImpl::processPackage_(

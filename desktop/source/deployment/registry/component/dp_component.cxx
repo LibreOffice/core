@@ -1630,8 +1630,8 @@ BackendImpl::OtherPlatformPackageImpl::isRegistered_(
     ::rtl::Reference<AbortChannel> const& /* abortChannel */,
     Reference<XCommandEnvironment> const& /* xCmdEnv */ )
 {
-    return beans::Optional<beans::Ambiguous<sal_Bool> >(sal_True,
-            beans::Ambiguous<sal_Bool>(sal_True, sal_False));
+    return beans::Optional<beans::Ambiguous<sal_Bool> >(true,
+            beans::Ambiguous<sal_Bool>(true, false));
 }
 
 void

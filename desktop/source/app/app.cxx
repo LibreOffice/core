@@ -2529,7 +2529,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                     // to true inside attachFrame(). But setComponent() reset this state every time ...
                     xBackingFrame->setComponent(xBackingWin, xStartModule);
                     xStartModule->attachFrame(xBackingFrame);
-                    xContainerWindow->setVisible(sal_True);
+                    xContainerWindow->setVisible(true);
 
                     vcl::Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
                     if (pCompWindow)
@@ -2775,7 +2775,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         {
             progress->CloseSplashScreen();
         }
-        xContainerWindow->setVisible(sal_True);
+        xContainerWindow->setVisible(true);
     }
 }
 

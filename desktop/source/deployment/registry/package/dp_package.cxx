@@ -765,7 +765,7 @@ sal_Bool BackendImpl::PackageImpl::checkDependencies(
         throw deployment::ExtensionRemovedException();
     DescriptionInfoset info = getDescriptionInfoset();
     if (!info.hasDescription())
-        return sal_True;
+        return true;
 
     return checkDependencies(xCmdEnv, info);
 }
