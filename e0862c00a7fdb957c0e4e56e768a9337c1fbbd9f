@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_e6e680e7",
+        "filename": "xmloff/dtd/style.mod",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-20T14:12:13Z",
+      "side": 1,
+      "message": "I\u0027m not sure about this one. It is a typo, yes, but these are the DTDs of the early OpenOffice.org 1.0 XML file format (not ODF), it may be that the typo actually was written to the files, I\u0027d rather not change it.",
+      "range": {
+        "startLine": 368,
+        "startChar": 67,
+        "endLine": 368,
+        "endChar": 75
+      },
+      "revId": "e0862c00a7fdb957c0e4e56e768a9337c1fbbd9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
