@@ -1119,7 +1119,7 @@ namespace drawinglayer
 
                             sal_Int32 nDone;
                             sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
-                            css::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, sal_True));
+                            css::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, true));
                             sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
                             const OString aCommentStringA("XTEXT_EOC");
                             const OString aCommentStringB("XTEXT_EOW");
@@ -1136,7 +1136,7 @@ namespace drawinglayer
                                 if(i == nNextWordBoundary.endPos)
                                 {
                                     mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
-                                    nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, css::i18n::WordType::ANY_WORD, sal_True);
+                                    nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, css::i18n::WordType::ANY_WORD, true);
                                 }
                                 if(i == nNextSentenceBreak)
                                 {

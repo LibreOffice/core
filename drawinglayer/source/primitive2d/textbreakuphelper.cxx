@@ -226,7 +226,7 @@ namespace drawinglayer
                     }
                     case BreakupUnit_word:
                     {
-                        css::i18n::Boundary nNextWordBoundary(xBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, sal_True));
+                        css::i18n::Boundary nNextWordBoundary(xBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, true));
                         sal_Int32 a(nTextPosition);
 
                         for(; a < nTextPosition + nTextLength; a++)
@@ -250,7 +250,7 @@ namespace drawinglayer
                                     }
                                 }
 
-                                nNextWordBoundary = xBreakIterator->getWordBoundary(rTxt, a + 1, rLocale, css::i18n::WordType::ANY_WORD, sal_True);
+                                nNextWordBoundary = xBreakIterator->getWordBoundary(rTxt, a + 1, rLocale, css::i18n::WordType::ANY_WORD, true);
                             }
                         }
 
