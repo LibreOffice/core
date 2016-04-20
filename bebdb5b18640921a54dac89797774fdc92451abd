@@ -16,6 +16,23 @@
       "revId": "bebdb5b18640921a54dac89797774fdc92451abd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_0692bc57",
+        "filename": "connectivity/source/drivers/jdbc/Array.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-20T12:15:52Z",
+      "side": 1,
+      "message": "maybe forbidding certain identifiers starting with just \"m\", not only ones starting with \"m_\" is too restrictive; this \"mID\" is probably meant to mean \"method ID\", not meant to mean a misuse of \"class member named \u0027ID\u0027\"",
+      "revId": "bebdb5b18640921a54dac89797774fdc92451abd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
