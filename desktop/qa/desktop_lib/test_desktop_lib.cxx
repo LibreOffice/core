@@ -317,6 +317,7 @@ void DesktopLOKTest::testSearchCalc()
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 
     std::vector<OString> aSelections;
     sal_Int32 nIndex = 0;
@@ -590,6 +591,7 @@ void DesktopLOKTest::testCommandResult()
     // the condition var.
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
@@ -599,6 +601,7 @@ void DesktopLOKTest::testCommandResult()
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
 
     boost::property_tree::ptree aTree;
@@ -621,6 +624,7 @@ void DesktopLOKTest::testWriterComments()
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
     xToolkit->reschedule();

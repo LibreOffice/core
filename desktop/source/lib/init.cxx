@@ -383,8 +383,6 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
-    , mpCallback(nullptr)
-    , mpCallbackData(nullptr)
 {
     if (!(m_pDocumentClass = gDocumentClass.lock()))
     {
@@ -953,11 +951,11 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     }
 }
 
-void doc_paintTile (LibreOfficeKitDocument* pThis,
-                    unsigned char* pBuffer,
-                    const int nCanvasWidth, const int nCanvasHeight,
-                    const int nTilePosX, const int nTilePosY,
-                    const int nTileWidth, const int nTileHeight)
+void doc_paintTile(LibreOfficeKitDocument* pThis,
+                   unsigned char* pBuffer,
+                   const int nCanvasWidth, const int nCanvasHeight,
+                   const int nTilePosX, const int nTilePosY,
+                   const int nTileWidth, const int nTileHeight)
 {
     SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
@@ -1065,13 +1063,12 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    pDocument->mpCallback = pCallback;
-    pDocument->mpCallbackData = pData;
+    pDocument->mpCallbackFlushHandler.reset(new CallbackFlushHandler(pCallback, pData));
 
     if (comphelper::LibreOfficeKit::isViewCallback())
     {
         if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
-            pViewShell->registerLibreOfficeKitViewCallback(pCallback, pData);
+            pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandler.get());
     }
     else
     {
@@ -1082,7 +1079,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
             return;
         }
 
-        pDoc->registerCallback(pCallback, pData);
+        pDoc->registerCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandler.get());
     }
 }
 
@@ -1108,14 +1105,12 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
 class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
 {
     OString maCommand;                 ///< Command for which this is the result.
-    LibreOfficeKitCallback mpCallback; ///< Callback to call.
-    void* mpCallbackData;              ///< The callback's data.
+    std::shared_ptr<CallbackFlushHandler> mpCallback; ///< Callback to call.
 
 public:
-    DispatchResultListener(const char* pCommand, LibreOfficeKitCallback pCallback, void* pCallbackData)
+    DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler>& pCallback)
         : maCommand(pCommand)
         , mpCallback(pCallback)
-        , mpCallbackData(pCallbackData)
     {
         assert(mpCallback);
     }
@@ -1136,7 +1131,7 @@ public:
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
-        mpCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, strdup(aStream.str().c_str()), mpCallbackData);
+        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, strdup(aStream.str().c_str()));
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) throw (css::uno::RuntimeException, std::exception) override {}
@@ -1165,10 +1160,10 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
     bool bResult = false;
 
-    if (bNotifyWhenFinished && pDocument->mpCallback)
+    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandler)
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
-                new DispatchResultListener(pCommand, pDocument->mpCallback, pDocument->mpCallbackData));
+                new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandler));
     }
     else
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
@@ -1200,9 +1195,9 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 
     LibLODocument_Impl* pLib = static_cast<LibLODocument_Impl*>(pThis);
-    if (pLib->mpCallback && pLib->mpCallbackData)
+    if (pLib->mpCallbackFlushHandler)
     {
-        pLib->mpCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr(), pLib->mpCallbackData);
+        pLib->mpCallbackFlushHandler->queue(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
     }
 }
 
