@@ -3975,7 +3975,7 @@ bool PDFWriterImpl::emitFonts()
                     // copy font file
                     beginCompression();
                     checkAndEnableStreamEncryption( nFontStream );
-                    sal_Bool bEOF = sal_False;
+                    sal_Bool bEOF = false;
                     do
                     {
                         char buf[8192];

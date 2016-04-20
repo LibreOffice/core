@@ -1413,7 +1413,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
     {
         css::beans::PropertyValue aVal;
         aVal.Name = "IsPrinter";
-        aVal.Value <<= sal_True;
+        aVal.Value <<= true;
         aResult[nCur++] = aVal;
     }
     aResult.realloc( nCur );
@@ -1899,12 +1899,12 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
     if( i_rControlOptions.mbInternalOnly )
     {
         aCtrl[nUsed  ].Name    = "InternalUIOnly";
-        aCtrl[nUsed++].Value <<= sal_True;
+        aCtrl[nUsed++].Value <<= true;
     }
     if( ! i_rControlOptions.mbEnabled )
     {
         aCtrl[nUsed  ].Name    = "Enabled";
-        aCtrl[nUsed++].Value <<= sal_False;
+        aCtrl[nUsed++].Value <<= false;
     }
 
     sal_Int32 nAddProps = i_rControlOptions.maAddProps.size();

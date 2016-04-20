@@ -683,7 +683,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, s
     pColor[1] = aCol.GetGreen();
     pColor[2] = aCol.GetBlue();
 
-    return sal_True; // no palette transparency here.
+    return true; // no palette transparency here.
 }
 
 sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal_Bool, sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException, std::exception)
@@ -698,7 +698,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal
         throw lang::IndexOutOfBoundsException("Palette index out of range",
                                               static_cast<rendering::XBitmapPalette*>(this));
 
-    return sal_False; // read-only implementation
+    return false; // read-only implementation
 }
 
 namespace
