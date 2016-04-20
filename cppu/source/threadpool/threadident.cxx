@@ -117,11 +117,11 @@ extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId 
         }
         else
         {
-            return sal_False;
+            return false;
         }
 
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

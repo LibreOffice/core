@@ -296,19 +296,19 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     SAL_THROW_EXTERN_C()
 {
     if (::typelib_typedescriptionreference_isAssignableFrom( pAssignable, pFromType ))
-        return sal_True;
+        return true;
     if (typelib_TypeClass_INTERFACE != pFromType->eTypeClass ||
         typelib_TypeClass_INTERFACE != pAssignable->eTypeClass)
     {
-        return sal_False;
+        return false;
     }
 
     // query
     if (nullptr == pFrom)
-        return sal_False;
+        return false;
     void * pInterface = *static_cast<void **>(pFrom);
     if (nullptr == pInterface)
-        return sal_False;
+        return false;
 
     if (nullptr == queryInterface)
         queryInterface = binuno_queryInterface;

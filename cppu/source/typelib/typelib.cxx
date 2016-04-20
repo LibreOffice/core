@@ -280,7 +280,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
 
             if( pTDR->pType && !pTDR->pType->bOnDemand )
             {
-                pTDR->pType->bOnDemand = sal_True;
+                pTDR->pType->bOnDemand = true;
                 typelib_typedescription_release( pTDR->pType );
             }
             typelib_typedescriptionreference_release( pTDR );
@@ -429,7 +429,7 @@ static inline void typelib_typedescription_initTables(
         }
         // must be the last action after all initialization is done
         pITD->nMapFunctionIndexToMemberIndex = pITD->nAllMembers + nAdditionalOffset;
-        pTD->bComplete = sal_True;
+        pTD->bComplete = true;
     }
 }
 
@@ -490,7 +490,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
             // typedescription found
             // set to on demand
-            pTD->bOnDemand = sal_True;
+            pTD->bOnDemand = true;
 
             if (pTD->eTypeClass == typelib_TypeClass_INTERFACE
                 && !pTD->bComplete && initTables)
@@ -499,7 +499,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
                 OSL_ASSERT( reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD)->ppAllMembers );
                 // complete except of tables init
                 typelib_typedescription_initTables( pTD );
-                pTD->bComplete = sal_True;
+                pTD->bComplete = true;
             }
 
             // The type description is hold by the reference until
@@ -694,11 +694,11 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     pRet->pReserved = nullptr;
     rtl_uString_acquire( pRet->pTypeName = pTypeName );
     pRet->pSelf = pRet;
-    pRet->bComplete = sal_True;
+    pRet->bComplete = true;
     pRet->nSize = 0;
     pRet->nAlignment = 0;
     pRet->pWeakRef = nullptr;
-    pRet->bOnDemand = sal_False;
+    pRet->bOnDemand = false;
     *ppRet = pRet;
 }
 
@@ -1074,7 +1074,7 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
         pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
     pTmp->nSize = typelib_typedescription_getAlignedUnoSize( pTmp, 0, pTmp->nAlignment );
     pTmp->nAlignment = adjustAlignment( pTmp->nAlignment );
-    pTmp->bComplete = sal_False;
+    pTmp->bComplete = false;
 
     *ppRet = pITD;
 }
@@ -2021,7 +2021,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
             else
             {
                 // set to on demand
-                (*ppRet)->bOnDemand = sal_True;
+                (*ppRet)->bOnDemand = true;
                 // The type description is hold by the reference until
                 // on demand is activated.
                 typelib_typedescription_register( ppRet );
@@ -2079,7 +2079,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
             else
             {
                 // set to on demand
-                pRet->bOnDemand = sal_True;
+                pRet->bOnDemand = true;
                 // The type description is hold by the reference until
                 // on demand is activated.
                 typelib_typedescription_register( &pRet );
@@ -2135,8 +2135,8 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
     {
         typelib_typedescription_newEmpty( reinterpret_cast<typelib_TypeDescription ** >(ppTDR), eTypeClass, pTypeName );
         // description will be registered but not acquired
-        (*reinterpret_cast<typelib_TypeDescription **>(ppTDR))->bOnDemand = sal_True;
-        (*reinterpret_cast<typelib_TypeDescription **>(ppTDR))->bComplete = sal_False;
+        (*reinterpret_cast<typelib_TypeDescription **>(ppTDR))->bOnDemand = true;
+        (*reinterpret_cast<typelib_TypeDescription **>(ppTDR))->bComplete = false;
     }
 
     if( !rInit.pWeakMap )
@@ -2349,12 +2349,12 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
         typelib_TypeClass eFrom       = pFrom->eTypeClass;
 
         if (eAssignable == typelib_TypeClass_ANY) // anything can be assigned to an any .)
-            return sal_True;
+            return true;
         if (eAssignable == eFrom)
         {
             if (type_equals( pAssignable, pFrom )) // first shot
             {
-                return sal_True;
+                return true;
             }
             else
             {
@@ -2368,7 +2368,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
                     if (!reinterpret_cast<typelib_CompoundTypeDescription *>(pFromDescr)->pBaseTypeDescription)
                     {
                         TYPELIB_DANGER_RELEASE( pFromDescr );
-                        return sal_False;
+                        return false;
                     }
                     bool bRet = typelib_typedescriptionreference_isAssignableFrom(
                         pAssignable,
@@ -2398,7 +2398,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
                 }
                 default:
                 {
-                    return sal_False;
+                    return false;
                 }
                 }
             }
@@ -2407,7 +2407,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
                 eFrom >= typelib_TypeClass_CHAR && eFrom <= typelib_TypeClass_DOUBLE &&
                 s_aAssignableFromTab[eAssignable-1][eFrom-1]);
     }
-    return sal_False;
+    return false;
 }
 
 extern "C" sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(

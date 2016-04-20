@@ -236,26 +236,26 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     aParameters[0].pParamName = sParamName0.pData;
                     aParameters[0].eTypeClass = typelib_TypeClass_TYPE;
                     aParameters[0].pTypeName = sParamType0.pData;
-                    aParameters[0].bIn = sal_True;
-                    aParameters[0].bOut = sal_False;
+                    aParameters[0].bIn = true;
+                    aParameters[0].bOut = false;
                     rtl_uString * pExceptions[1];
                     OUString sExceptionName0("com.sun.star.uno.RuntimeException");
                     pExceptions[0] = sExceptionName0.pData;
                     OUString sReturnType0("any");
                     typelib_typedescription_newInterfaceMethod(
-                        &pMethod, 0, sal_False, sMethodName0.pData,
+                        &pMethod, 0, false, sMethodName0.pData,
                         typelib_TypeClass_ANY, sReturnType0.pData,
                         1, aParameters, 1, pExceptions );
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
 
                     OUString sReturnType1("void");
                     ::typelib_typedescription_newInterfaceMethod(
-                        &pMethod, 1, sal_True, sMethodName1.pData,
+                        &pMethod, 1, true, sMethodName1.pData,
                         typelib_TypeClass_VOID, sReturnType1.pData, 0, nullptr, 0, nullptr );
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
 
                     ::typelib_typedescription_newInterfaceMethod(
-                        &pMethod, 2, sal_True, sMethodName2.pData,
+                        &pMethod, 2, true, sMethodName2.pData,
                         typelib_TypeClass_VOID, sReturnType1.pData,
                         0, nullptr, 0, nullptr );
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
@@ -400,7 +400,7 @@ void init(
                 // sizeof(void) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
                 pReg->nAlignment = adjustAlignment( pReg->nAlignment );
-                pReg->bComplete = sal_False;
+                pReg->bComplete = false;
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
@@ -498,7 +498,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
 
                 pReg->nAlignment = adjustAlignment( pReg->nAlignment );
-                pReg->bComplete = sal_False;
+                pReg->bComplete = false;
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
@@ -538,7 +538,7 @@ void SAL_CALL typelib_static_enum_type_init(
                 // sizeof(void) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
                 pReg->nAlignment = ::adjustAlignment( pReg->nAlignment );
-                pReg->bComplete = sal_False;
+                pReg->bComplete = false;
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);

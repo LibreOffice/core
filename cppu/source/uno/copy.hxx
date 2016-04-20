@@ -275,7 +275,7 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_BOOLEAN:
                 pDestAny->pData = &pDestAny->pReserved;
-                *static_cast<sal_Bool *>(pDestAny->pData) = sal_False;
+                *static_cast<sal_Bool *>(pDestAny->pData) = false;
                 break;
             case typelib_TypeClass_BYTE:
                 pDestAny->pData = &pDestAny->pReserved;

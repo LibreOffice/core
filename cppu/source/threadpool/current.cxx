@@ -73,15 +73,15 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
             aParameters[0].pParamName = sParamName0.pData;
             aParameters[0].eTypeClass = typelib_TypeClass_STRING;
             aParameters[0].pTypeName = sParamType0.pData;
-            aParameters[0].bIn = sal_True;
-            aParameters[0].bOut = sal_False;
+            aParameters[0].bIn = true;
+            aParameters[0].bOut = false;
             rtl_uString * pExceptions[1];
             OUString sExceptionName0("com.sun.star.uno.RuntimeException");
             pExceptions[0] = sExceptionName0.pData;
             OUString sReturnType0("any");
             typelib_typedescription_newInterfaceMethod(
                 &pMethod,
-                3, sal_False,
+                3, false,
                 sMethodName0.pData,
                 typelib_TypeClass_ANY, sReturnType0.pData,
                 1, aParameters, 1, pExceptions );
@@ -212,15 +212,15 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
             else
             {
                 (*pEnv->release)( pEnv );
-                return sal_False;
+                return false;
             }
         }
         else
         {
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
@@ -238,11 +238,11 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
         target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
         OSL_ASSERT( target_env.is() );
         if (! target_env.is())
-            return sal_False;
+            return false;
         uno_ExtEnvironment * pEnv = target_env.get()->pExtEnv;
         OSL_ASSERT( nullptr != pEnv );
         if (nullptr == pEnv)
-            return sal_False;
+            return false;
         (*pEnv->releaseInterface)( pEnv, *ppCurrentContext );
 
         *ppCurrentContext = nullptr;
@@ -250,24 +250,24 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
 
     // case: null-ref
     if (nullptr == pId->pCurrentContext)
-        return sal_True;
+        return true;
 
     if (! target_env.is())
     {
         target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
         OSL_ASSERT( target_env.is() );
         if (! target_env.is())
-            return sal_False;
+            return false;
     }
 
     Mapping mapping(&pId->pCurrentContextEnv->aBase, target_env.get());
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
-        return sal_False;
+        return false;
 
     mapping.mapInterface(ppCurrentContext, pId->pCurrentContext, ::cppu::get_type_XCurrentContext() );
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
