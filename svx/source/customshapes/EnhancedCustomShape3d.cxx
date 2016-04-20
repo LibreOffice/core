@@ -724,9 +724,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->SetLogicRect( CalculateNewSnapRect( pCustomShape, aSnapRect, aBoundRect2d, pMap ) );
 
             // removing placeholder objects
-            std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() );
-            std::vector< E3dCompoundObject* >::const_iterator aEnd( aPlaceholderObjectList.end() );
-            while ( aObjectListIter != aEnd )
+            for (std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() ); aObjectListIter != aPlaceholderObjectList.end(); )
             {
                 pScene->Remove3DObj( *aObjectListIter );
                 delete *aObjectListIter++;

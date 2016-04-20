@@ -1619,8 +1619,7 @@ void SubsetMap::ApplyCharMap( const FontCharMapPtr& rxFontCharMap )
 
     // remove subsets that are not matched in any range
     SubsetList::iterator it = maSubsets.begin();
-    SubsetList::const_iterator aEnd = maSubsets.end();
-    while(it != aEnd)
+    while(it != maSubsets.end())
     {
         const Subset& rSubset = *it;
         sal_uInt32 cMin = rSubset.GetRangeMin();
