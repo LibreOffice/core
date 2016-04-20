@@ -847,7 +847,7 @@ void SectionPropertyMap::CopyHeaderFooter(
 
     if ( bHasPrevHeader )
     {
-        xStyle->setPropertyValue( sHeaderIsOn, uno::makeAny( sal_True ) );
+        xStyle->setPropertyValue( sHeaderIsOn, uno::makeAny( true ) );
         xStyle->setPropertyValue( sHeaderIsShared, uno::makeAny(bHeaderIsShared));
         if ( !bOmitRightHeader )
         {
@@ -873,7 +873,7 @@ void SectionPropertyMap::CopyHeaderFooter(
 
     if ( bHasPrevFooter )
     {
-        xStyle->setPropertyValue( sFooterIsOn, uno::makeAny( sal_True ) );
+        xStyle->setPropertyValue( sFooterIsOn, uno::makeAny( true ) );
         xStyle->setPropertyValue( sFooterIsShared, uno::makeAny(bFooterIsShared) );
         if ( !bOmitRightFooter )
         {
@@ -1343,8 +1343,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     }
                     evenOddStyle->setPropertyValue("FollowStyle", uno::makeAny(*pageStyle));
                     rDM_Impl.GetPageStyles()->insertByName( evenOddStyleName, uno::makeAny( evenOddStyle ) );
-                    evenOddStyle->setPropertyValue("HeaderIsOn", uno::makeAny(sal_False));
-                    evenOddStyle->setPropertyValue("FooterIsOn", uno::makeAny(sal_False));
+                    evenOddStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
+                    evenOddStyle->setPropertyValue("FooterIsOn", uno::makeAny(false));
                     CopyHeaderFooter( pageProperties, evenOddStyle );
                     *pageStyle = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
                     if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage))

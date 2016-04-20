@@ -1160,7 +1160,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 
                     // List styles don't support automatic update.
                     if (pEntry->bAutoRedefine && !bListStyle)
-                        xPropertySet->setPropertyValue("IsAutoUpdate", uno::makeAny(sal_True));
+                        xPropertySet->setPropertyValue("IsAutoUpdate", uno::makeAny(true));
                 }
                 else if(pEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
                 {

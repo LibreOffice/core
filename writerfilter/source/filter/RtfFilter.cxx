@@ -92,11 +92,11 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< uno::XInterface > xIfc(xMSF->createInstance("com.sun.star.comp.Writer.RtfExport"), uno::UNO_QUERY_THROW);
         if (!xIfc.is())
-            return sal_False;
+            return false;
         uno::Reference< document::XExporter > xExporter(xIfc, uno::UNO_QUERY_THROW);
         uno::Reference< document::XFilter > xFilter(xIfc, uno::UNO_QUERY_THROW);
         if (!xExporter.is() || !xFilter.is())
-            return sal_False;
+            return false;
         xExporter->setSourceDocument(m_xSrcDoc);
         return xFilter->filter(aDescriptor);
     }

@@ -669,7 +669,7 @@ void DomainMapperTableManager::endOfRowAction()
                 sal_Int16 nRelPos = rtl::math::round((fGridWidth * 10000) / nFullWidthRelative);
 
                 pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
-                pSeparators[nBorder].IsVisible = sal_True;
+                pSeparators[nBorder].IsVisible = true;
                 nLastRelPos = nLastRelPos + nRelPos;
                 ++aSpansIter;
             }
@@ -716,7 +716,7 @@ void DomainMapperTableManager::endOfRowAction()
             {
                 nSum += (*pCellWidths.get())[i];
                 pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
-                pSeparators[nPos].IsVisible = sal_True;
+                pSeparators[nPos].IsVisible = true;
                 nPos++;
             }
         }

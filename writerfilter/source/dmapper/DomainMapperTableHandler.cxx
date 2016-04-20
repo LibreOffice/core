@@ -476,7 +476,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         aDistances.IsTopDistanceValid =
         aDistances.IsBottomDistanceValid =
         aDistances.IsLeftDistanceValid =
-        aDistances.IsRightDistanceValid = sal_True;
+        aDistances.IsRightDistanceValid = true;
         aDistances.TopDistance = static_cast<sal_Int16>( rInfo.nTopBorderDistance );
         aDistances.BottomDistance = static_cast<sal_Int16>( rInfo.nBottomBorderDistance );
         aDistances.LeftDistance = static_cast<sal_Int16>( rInfo.nLeftBorderDistance );
@@ -498,17 +498,17 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_TOP_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.TopLine = aBorderLine;
-            aTableBorder.IsTopLineValid = sal_True;
+            aTableBorder.IsTopLineValid = true;
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_BOTTOM_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.BottomLine = aBorderLine;
-            aTableBorder.IsBottomLineValid = sal_True;
+            aTableBorder.IsBottomLineValid = true;
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_LEFT_BORDER, rInfo, aLeftBorder))
         {
             aTableBorder.LeftLine = aLeftBorder;
-            aTableBorder.IsLeftLineValid = sal_True;
+            aTableBorder.IsLeftLineValid = true;
             // Only top level table position depends on border width
             if (rInfo.nNestLevel == 1)
             {
@@ -521,21 +521,21 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.RightLine = aBorderLine;
-            aTableBorder.IsRightLineValid = sal_True;
+            aTableBorder.IsRightLineValid = true;
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_HORIZONTAL_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.HorizontalLine = aBorderLine;
-            aTableBorder.IsHorizontalLineValid = sal_True;
+            aTableBorder.IsHorizontalLineValid = true;
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_VERTICAL_BORDER, rInfo, aBorderLine))
         {
             aTableBorder.VerticalLine = aBorderLine;
-            aTableBorder.IsVerticalLineValid = sal_True;
+            aTableBorder.IsVerticalLineValid = true;
         }
 
         aTableBorder.Distance = 0;
-        aTableBorder.IsDistanceValid = sal_False;
+        aTableBorder.IsDistanceValid = false;
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER, uno::makeAny( aTableBorder ) );
 
@@ -921,7 +921,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
         if( aRowIter->get() )
         {
             //set default to 'break across pages"
-            (*aRowIter)->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_True ), false );
+            (*aRowIter)->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(true ), false );
             // tblHeader is only our property, remove before the property map hits UNO
             (*aRowIter)->Erase(PROP_TBL_HEADER);
 

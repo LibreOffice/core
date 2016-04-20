@@ -410,7 +410,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
 
                 // disable redlining for this operation, otherwise we might
                 // end up with an unwanted recorded deletion
-                xDocProps->setPropertyValue(aRecordChanges, uno::Any(sal_False));
+                xDocProps->setPropertyValue(aRecordChanges, uno::Any(false));
 
                 // delete
                 xCursor->setString(OUString());
@@ -1224,7 +1224,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 for( int i =0; i < len; ++i )
                 {
                     if (pValues[i].Name == "CharHidden")
-                        pValues[i].Value = uno::makeAny(sal_False);
+                        pValues[i].Value = uno::makeAny(false);
                 }
 
             uno::Reference< text::XTextRange > xTextRange;
@@ -1494,7 +1494,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                 //switch on header/footer use
                 xPageStyle->setPropertyValue(
                         getPropertyName(ePropIsOn),
-                        uno::makeAny(sal_True));
+                        uno::makeAny(true));
 
                 if (bFirst)
                 {
@@ -1503,7 +1503,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                     {
                         // This is a first page and has a follow style, then enable the header/footer there as well to be consistent.
                         uno::Reference<beans::XPropertySet> xFollowStyle(GetPageStyles()->getByName(aFollowStyle), uno::UNO_QUERY);
-                        xFollowStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::makeAny(sal_True));
+                        xFollowStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::makeAny(true));
                     }
                 }
 
@@ -1918,7 +1918,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
                 uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
                 uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
-                xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
+                xTextAppend->insertTextContent(xTextRange, xTextContent, false);
 
                 uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
                 // we need to re-set this value to xTextContent, then only values are preserved.
@@ -2922,7 +2922,7 @@ void DomainMapper_Impl::handleFieldAsk
             uno::makeAny( sHint ));
         xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
         // The ASK has no field value to display
-        xFieldProperties->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::makeAny(sal_False));
+        xFieldProperties->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::makeAny(false));
     }
     else
     {
@@ -3439,8 +3439,8 @@ void DomainMapper_Impl::handleToc
         if(xCrsr.is() && xText.is())
         {
             xCrsr->gotoEnd(false);
-            xText->insertString(xCrsr, sMarker, sal_False);
-            xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, sal_False);
+            xText->insertString(xCrsr, sMarker, false);
+            xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, false);
             xTOCMarkerCursor = xCrsr;
         }
     }
@@ -4112,7 +4112,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             if(xCrsr.is() && xText.is())
                             {
                                 xCrsr->gotoEnd(false);
-                                xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, sal_False);
+                                xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, false);
                             }
                         }
                     }
@@ -4199,7 +4199,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
                     if (xTextContent.is())
                     {
-                        xTextAppend->insertTextContent(xCrsr,xTextContent, sal_True);
+                        xTextAppend->insertTextContent(xCrsr,xTextContent, true);
                     }
                     uno::Reference<uno::XInterface> xContent(xTextContent);
                     uno::Reference< text::XFormField> xFormField(xContent, uno::UNO_QUERY);
@@ -4463,9 +4463,9 @@ void DomainMapper_Impl::PopFieldContext()
                         }
                         else
                         {
-                            xTOCMarkerCursor->goLeft(1,sal_True);
+                            xTOCMarkerCursor->goLeft(1,true);
                             xTOCMarkerCursor->setString(OUString());
-                            xTOCMarkerCursor->goLeft(1,sal_True);
+                            xTOCMarkerCursor->goLeft(1,true);
                             xTOCMarkerCursor->setString(OUString());
                         }
                     }

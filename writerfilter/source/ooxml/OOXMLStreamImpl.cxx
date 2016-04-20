@@ -324,7 +324,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                     // file://base/word. We need something more than some
                     // simple string concatination here to handle that.
                     uno::Reference<uri::XUriReference> xPart = xFac->parse(sMyTarget);
-                    uno::Reference<uri::XUriReference> xAbs = xFac->makeAbsolute(xBase, xPart, sal_True, uri::RelativeUriExcessParentSegments_RETAIN);
+                    uno::Reference<uri::XUriReference> xAbs = xFac->makeAbsolute(xBase, xPart, true, uri::RelativeUriExcessParentSegments_RETAIN);
                     rDocumentTarget = xAbs->getPath();
                     // path will start with the fragment separator. need to
                     // remove that

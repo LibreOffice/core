@@ -79,7 +79,7 @@ void SdtHelper::createDropDownControl()
     uno::Reference<awt::XControlModel> xControlModel(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.ComboBox"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("DefaultText", uno::makeAny(aDefaultText));
-    xPropertySet->setPropertyValue("Dropdown", uno::makeAny(sal_True));
+    xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
     xPropertySet->setPropertyValue("StringItemList", uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
 
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems), xControlModel);
@@ -105,7 +105,7 @@ void SdtHelper::createDateControl(OUString& rContentText, const beans::PropertyV
     uno::Reference<beans::XPropertySet> xPropertySet(
         xControlModel, uno::UNO_QUERY_THROW);
 
-    xPropertySet->setPropertyValue("Dropdown", uno::makeAny(sal_True));
+    xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
 
     // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants
     sal_Int16 nDateFormat = 0;
