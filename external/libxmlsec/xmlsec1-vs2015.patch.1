@@ -1,0 +1,46 @@
+From 56448979392d78a6e1688f61ce7bc771f38a880b Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 4 Mar 2016 16:12:29 +0100
+Subject: [PATCH] xmlsec1-vs2015.patch
+
+---
+
+diff --git a/apps/cmdline.c b/apps/cmdline.c
+index b9ecafb..4425eaf 100644
+--- a/apps/cmdline.c
++++ b/apps/cmdline.c
+@@ -7,7 +7,7 @@
+  * 
+  * Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
+  */
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
+diff --git a/apps/crypto.c b/apps/crypto.c
+index 49dd127..f46eeee 100644
+--- a/apps/crypto.c
++++ b/apps/crypto.c
+@@ -7,7 +7,7 @@
+  * 
+  * Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
+  */
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
+diff --git a/apps/xmlsec.c b/apps/xmlsec.c
+index d551b5a..0467c25 100644
+--- a/apps/xmlsec.c
++++ b/apps/xmlsec.c
+@@ -9,7 +9,7 @@
+ #include <string.h>
+ #include <time.h>
+ 
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
