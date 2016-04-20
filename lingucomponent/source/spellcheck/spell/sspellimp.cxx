@@ -394,13 +394,13 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  rWord.isEmpty())
-        return sal_True;
+        return true;
 
     if (!hasLocale( rLocale ))
-        return sal_True;
+        return true;
 
     // return sal_False to process SPELLML requests (they are longer than the header)
-    if (rWord.match(SPELLML_HEADER, 0) && (rWord.getLength() > 10)) return sal_False;
+    if (rWord.match(SPELLML_HEADER, 0) && (rWord.getLength() > 10)) return false;
 
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
