@@ -104,12 +104,12 @@ void ShareControlFile::OpenStream()
                 uno::Reference< io::XInputStream > xInput( new ::utl::OInputStreamWrapper( aStream ) );
                 ucb::InsertCommandArgument aInsertArg;
                 aInsertArg.Data = xInput;
-                aInsertArg.ReplaceExisting = sal_False;
+                aInsertArg.ReplaceExisting = false;
                 aContent.executeCommand( "insert", uno::makeAny( aInsertArg ) );
 
                 // try to let the file be hidden if possible
                 try {
-                    aContent.setPropertyValue("IsHidden", uno::makeAny( sal_True ) );
+                    aContent.setPropertyValue("IsHidden", uno::makeAny( true ) );
                 } catch( uno::Exception& ) {}
 
                 // Try to open one more time
