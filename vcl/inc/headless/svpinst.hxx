@@ -30,6 +30,7 @@
 #include <basebmp/scanlineformats.hxx>
 
 #include <list>
+#include <map>
 
 #include <time.h>
 
@@ -87,13 +88,19 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
 
     void                    DoReleaseYield( int nTimeoutMS );
 
+    typedef std::map< sal_uInt16, ::basebmp::Format > BitCountFormatMap;
+    BitCountFormatMap m_aBitCountFormatMap;
+
 public:
     static SvpSalInstance*  s_pDefaultInstance;
 
     SvpSalInstance( SalYieldMutex *pMutex );
     virtual ~SvpSalInstance();
 
-    void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent);
+    void                    CloseWakeupPipe();
+    void                    CreateWakeupPipe();
+
+    void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent );
 
 #ifdef ANDROID
     bool                    PostedEventsInQueue();

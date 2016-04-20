@@ -19,6 +19,7 @@
 
 #include <unistd.h>
 #include <fcntl.h>
+#include <pthread.h>
 #include <sys/time.h>
 #include <sys/poll.h>
 
@@ -62,6 +63,15 @@ bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
+static void atfork_child()
+{
+    if (SvpSalInstance::s_pDefaultInstance != NULL)
+    {
+        SvpSalInstance::s_pDefaultInstance->CloseWakeupPipe();
+        SvpSalInstance::s_pDefaultInstance->CreateWakeupPipe();
+    }
+}
+
 SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     SalGenericInstance( pMutex )
 {
@@ -70,8 +80,43 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     m_nTimeoutMS            = 0;
 
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
-    if (pipe (m_pTimeoutFDS) != -1)
+    CreateWakeupPipe();
+    m_aEventGuard = osl_createMutex();
+    if( s_pDefaultInstance == NULL )
+        s_pDefaultInstance = this;
+    pthread_atfork(NULL, NULL, atfork_child);
+}
+
+SvpSalInstance::~SvpSalInstance()
+{
+    if( s_pDefaultInstance == this )
+        s_pDefaultInstance = NULL;
+
+    CloseWakeupPipe();
+    osl_destroyMutex( m_aEventGuard );
+}
+
+void SvpSalInstance::CloseWakeupPipe()
+{
+    if (m_pTimeoutFDS[0] != -1)
     {
+        SAL_INFO("vcl.headless", "CloseWakeupPipe: Closing inherited wakeup pipe: [" << m_pTimeoutFDS[0] << "," << m_pTimeoutFDS[1] << "]");
+        close (m_pTimeoutFDS[0]);
+        close (m_pTimeoutFDS[1]);
+        m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
+    }
+}
+
+void SvpSalInstance::CreateWakeupPipe()
+{
+    if (pipe (m_pTimeoutFDS) == -1)
+    {
+        SAL_WARN("vcl.headless", "Could not create wakeup pipe: " << strerror(errno));
+    }
+    else
+    {
+        SAL_INFO("vcl.headless", "CreateWakeupPipe: Created wakeup pipe: [" << m_pTimeoutFDS[0] << "," << m_pTimeoutFDS[1] << "]");
+
         // initialize 'wakeup' pipe.
         int flags;
 
@@ -99,20 +144,6 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
             (void)fcntl(m_pTimeoutFDS[1], F_SETFL, flags);
         }
     }
-    m_aEventGuard = osl_createMutex();
-    if( s_pDefaultInstance == nullptr )
-        s_pDefaultInstance = this;
-}
-
-SvpSalInstance::~SvpSalInstance()
-{
-    if( s_pDefaultInstance == this )
-        s_pDefaultInstance = nullptr;
-
-    // close 'wakeup' pipe.
-    close (m_pTimeoutFDS[0]);
-    close (m_pTimeoutFDS[1]);
-    osl_destroyMutex( m_aEventGuard );
 }
 
 void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent)
