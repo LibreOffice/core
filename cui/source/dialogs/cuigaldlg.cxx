@@ -365,14 +365,14 @@ IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
     if (maTakeThread.is())
         maTakeThread->join();
 
-    TPGalleryThemeProperties*   mpBrowser = static_cast<TPGalleryThemeProperties*>( GetParent() );
-    ::std::vector<bool, std::allocator<bool> >           aRemoveEntries( mpBrowser->aFoundList.size(), false );
+    TPGalleryThemeProperties*   pBrowser = static_cast<TPGalleryThemeProperties*>( GetParent() );
+    ::std::vector<bool, std::allocator<bool> > aRemoveEntries( pBrowser->aFoundList.size(), false );
     ::std::vector< OUString >   aRemainingVector;
     sal_uInt32                  i, nCount;
 
     GetParent()->EnterWait();
-    mpBrowser->m_pLbxFound->SetUpdateMode( false );
-    mpBrowser->m_pLbxFound->SetNoSelection();
+    pBrowser->m_pLbxFound->SetUpdateMode( false );
+    pBrowser->m_pLbxFound->SetNoSelection();
 
     // mark all taken positions in aRemoveEntries
     for( i = 0, nCount = maTakenList.size(); i < nCount; ++i )
@@ -382,29 +382,29 @@ IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
     // refill found list
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
-            aRemainingVector.push_back( mpBrowser->aFoundList[i] );
+            aRemainingVector.push_back( pBrowser->aFoundList[i] );
 
-    mpBrowser->aFoundList.clear();
+    pBrowser->aFoundList.clear();
 
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        mpBrowser->aFoundList.push_back( aRemainingVector[ i ] );
+        pBrowser->aFoundList.push_back( aRemainingVector[ i ] );
 
     aRemainingVector.clear();
 
     // refill list box
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
-            aRemainingVector.push_back( mpBrowser->m_pLbxFound->GetEntry( (sal_uInt16) i ) );
+            aRemainingVector.push_back( pBrowser->m_pLbxFound->GetEntry( (sal_uInt16) i ) );
 
-    mpBrowser->m_pLbxFound->Clear();
+    pBrowser->m_pLbxFound->Clear();
 
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        mpBrowser->m_pLbxFound->InsertEntry( aRemainingVector[ i ] );
+        pBrowser->m_pLbxFound->InsertEntry( aRemainingVector[ i ] );
 
     aRemainingVector.clear();
 
-    mpBrowser->m_pLbxFound->SetUpdateMode( true );
-    mpBrowser->SelectFoundHdl( *mpBrowser->m_pLbxFound );
+    pBrowser->m_pLbxFound->SetUpdateMode( true );
+    pBrowser->SelectFoundHdl( *pBrowser->m_pLbxFound );
     GetParent()->LeaveWait();
 
     EndDialog( RET_OK );

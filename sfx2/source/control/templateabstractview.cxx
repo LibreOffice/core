@@ -310,10 +310,10 @@ void TemplateAbstractView::Paint(vcl::RenderContext& rRenderContext, const Recta
                                             maFillColor.getBColor()));
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> mpProcessor(
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
-    mpProcessor->process(aSeq);
+    pProcessor->process(aSeq);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

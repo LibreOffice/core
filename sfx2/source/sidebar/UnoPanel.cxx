@@ -94,13 +94,11 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
 
     if (bCollapseOther)
     {
-     Panel* aPanel;
-
-     SharedPanelContainer maPanels = mpDeck->GetPanels();
-     for ( SharedPanelContainer::iterator iPanel(maPanels.begin()), iEnd(maPanels.end());
-        iPanel!=iEnd; ++iPanel)
+        SharedPanelContainer aPanels = mpDeck->GetPanels();
+        for ( SharedPanelContainer::iterator iPanel(aPanels.begin()), iEnd(aPanels.end());
+              iPanel!=iEnd; ++iPanel)
         {
-            aPanel = *iPanel;
+            Panel* aPanel = *iPanel;
 
             if (! aPanel->HasIdPredicate(mPanelId))
                 aPanel->SetExpanded(false);

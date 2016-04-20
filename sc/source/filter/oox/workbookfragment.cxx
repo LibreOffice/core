@@ -237,7 +237,7 @@ public:
         // the small safe section of the inner loop in
         // sheetdatacontext.cxx
         SAL_INFO( "sc.filter",  "start wait on solar\n" );
-        SolarMutexGuard maGuard;
+        SolarMutexGuard aGuard;
         SAL_INFO( "sc.filter",  "got solar\n" );
 
         std::unique_ptr<oox::core::FastParser> xParser(
@@ -393,7 +393,7 @@ void WorkbookFragment::finalizeImport()
         loaded. Additionally, the instances of the WorkbookGlobals structures
         have to be stored for every sheet. */
     SheetFragmentVector aSheetFragments;
-    std::vector<WorksheetHelper*> maHelpers;
+    std::vector<WorksheetHelper*> aHelpers;
     WorksheetBuffer& rWorksheets = getWorksheets();
     sal_Int32 nWorksheetCount = rWorksheets.getWorksheetCount();
     for( sal_Int32 nWorksheet = 0; nWorksheet < nWorksheetCount; ++nWorksheet )
@@ -456,7 +456,7 @@ void WorkbookFragment::finalizeImport()
                         if( xFragment.is() )
                         {
                             aSheetFragments.push_back( SheetFragmentHandler( xSheetGlob, xFragment.get() ) );
-                            maHelpers.push_back(xFragment.get());
+                            aHelpers.push_back(xFragment.get());
                         }
                     }
                 }
@@ -500,7 +500,7 @@ void WorkbookFragment::finalizeImport()
 
     recalcFormulaCells();
 
-    for( std::vector<WorksheetHelper*>::iterator aIt = maHelpers.begin(), aEnd = maHelpers.end(); aIt != aEnd; ++aIt )
+    for( std::vector<WorksheetHelper*>::iterator aIt = aHelpers.begin(), aEnd = aHelpers.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->finalizeDrawingImport();
     }

@@ -67,10 +67,10 @@ public:
     explicit WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
-        uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
-        while( mxComponents->hasMoreElements() )
+        uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
+        while( xComponents->hasMoreElements() )
         {
-            uno::Reference< sheet::XSpreadsheetDocument > xNext( mxComponents->nextElement(), uno::UNO_QUERY );
+            uno::Reference< sheet::XSpreadsheetDocument > xNext( xComponents->nextElement(), uno::UNO_QUERY );
             if ( xNext.is() )
                 m_components.push_back( xNext );
         }

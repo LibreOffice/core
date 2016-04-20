@@ -320,7 +320,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    OUString msNote;
+    OUString sNote;
     if (mpDoc)
     {
         SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
@@ -349,7 +349,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote()
                                     uno::Reference <text::XSimpleText> xText (xSheetAnnotation, uno::UNO_QUERY);
                                     if (xText.is())
                                     {
-                                        msNote = xText->getString();
+                                        sNote = xText->getString();
                                     }
                                 }
                             }
@@ -359,7 +359,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote()
             }
         }
     }
-    return msNote;
+    return sNote;
 }
 
 #include <com/sun/star/table/ShadowFormat.hpp>

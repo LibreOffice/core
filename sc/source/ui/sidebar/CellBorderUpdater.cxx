@@ -41,7 +41,7 @@ void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool 
     BitmapEx            aBmpEx( aImg.GetBitmapEx() );
     Bitmap              aBmp( aBmpEx.GetBitmap() );
     BitmapWriteAccess*  pBmpAcc = aBmp.AcquireWriteAccess();
-    const Size maBmpSize = aBmp.GetSizePixel();
+    const Size aBmpSize = aBmp.GetSizePixel();
 
     if( pBmpAcc )
     {
@@ -58,7 +58,7 @@ void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool 
         pBmpAcc->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
         pBmpAcc->SetFillColor( COL_BLACK);
 
-        if(maBmpSize.Width() == 43 && maBmpSize.Height() == 43)
+        if(aBmpSize.Width() == 43 && aBmpSize.Height() == 43)
         {
             Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
             if( pMskAcc )

@@ -798,9 +798,9 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
 
     // Finally, in double buffered environments, request the changes to be
     // made visible.
-    Reference<rendering::XSpriteCanvas> mxSpriteCanvas (mxCanvas, UNO_QUERY);
-    if (mxSpriteCanvas.is())
-        mxSpriteCanvas->updateScreen(true);
+    Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
+    if (xSpriteCanvas.is())
+        xSpriteCanvas->updateScreen(true);
 }
 
 void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
@@ -820,9 +820,9 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
 
     // Finally, in double buffered environments, request the changes to be
     // made visible.
-    Reference<rendering::XSpriteCanvas> mxSpriteCanvas (mxCanvas, UNO_QUERY);
-    if (mxSpriteCanvas.is())
-        mxSpriteCanvas->updateScreen(true);
+    Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
+    if (xSpriteCanvas.is())
+        xSpriteCanvas->updateScreen(true);
 }
 
 Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (

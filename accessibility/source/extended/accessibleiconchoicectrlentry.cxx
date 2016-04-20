@@ -138,11 +138,11 @@ throw(RuntimeException, std::exception)
     bool AccessibleIconChoiceCtrlEntry::IsShowing_Impl() const
     {
         bool bShowing = false;
-        Reference< XAccessibleContext > m_xParentContext =
+        Reference< XAccessibleContext > xParentContext =
             m_xParent.is() ? m_xParent->getAccessibleContext() : Reference< XAccessibleContext >();
-        if( m_xParentContext.is() )
+        if( xParentContext.is() )
         {
-            Reference< XAccessibleComponent > xParentComp( m_xParentContext, uno::UNO_QUERY );
+            Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
             if( xParentComp.is() )
                 bShowing = GetBoundingBox_Impl().IsOver( VCLRectangle( xParentComp->getBounds() ) );
         }

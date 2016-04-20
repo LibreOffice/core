@@ -385,15 +385,15 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
 
     // Send SalEventExtTextInputPos event to get spotlocation
 
-    SalExtTextInputPosEvent mPosEvent;
+    SalExtTextInputPosEvent aPosEvent;
     preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
 
     if( pPreeditData->pFrame )
-        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&mPosEvent));
+        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent));
 
     XPoint point;
-    point.x = mPosEvent.mnX + mPosEvent.mnWidth;
-    point.y = mPosEvent.mnY + mPosEvent.mnHeight;
+    point.x = aPosEvent.mnX + aPosEvent.mnWidth;
+    point.y = aPosEvent.mnY + aPosEvent.mnHeight;
 
     XVaNestedList preedit_attr;
     preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &point, nullptr);

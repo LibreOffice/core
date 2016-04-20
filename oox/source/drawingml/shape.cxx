@@ -1221,8 +1221,8 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
             return xShape;
 
         // Stream in which to place the rendered shape
-        SvMemoryStream mpTempStream;
-        Reference < io::XStream > xStream( new utl::OStreamWrapper( mpTempStream ) );
+        SvMemoryStream pTempStream;
+        Reference < io::XStream > xStream( new utl::OStreamWrapper( pTempStream ) );
         Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
 
         // Rendering format
@@ -1258,11 +1258,11 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         xGraphicExporter->setSourceDocument( xSourceDoc );
         xGraphicExporter->filter( aDescriptor );
 
-        mpTempStream.Seek( STREAM_SEEK_TO_BEGIN );
+        pTempStream.Seek( STREAM_SEEK_TO_BEGIN );
 
         Graphic aGraphic;
         GraphicFilter aFilter( false );
-        if ( aFilter.ImportGraphic( aGraphic, "", mpTempStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE, static_cast < Sequence < PropertyValue >* > ( nullptr ) ) != GRFILTER_OK )
+        if ( aFilter.ImportGraphic( aGraphic, "", pTempStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE, static_cast < Sequence < PropertyValue >* > ( nullptr ) ) != GRFILTER_OK )
         {
             SAL_WARN( "oox.drawingml", OSL_THIS_FUNC
                       << "Unable to import rendered stream into graphic object" );

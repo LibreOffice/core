@@ -422,15 +422,15 @@ IMPL_LINK_TYPED( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, 
 
 IMPL_LINK_NOARG_TYPED( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
 {
-    ScopedVclPtrInstance< CuiAboutConfigTabPage > m_pExpertConfigDlg(this);
-    m_pExpertConfigDlg->Reset();//initialize and reset function
+    ScopedVclPtrInstance< CuiAboutConfigTabPage > pExpertConfigDlg(this);
+    pExpertConfigDlg->Reset();//initialize and reset function
 
-    if( RET_OK == m_pExpertConfigDlg->Execute() )
+    if( RET_OK == pExpertConfigDlg->Execute() )
     {
-        m_pExpertConfigDlg->FillItemSet();//save changes if there are any
+        pExpertConfigDlg->FillItemSet();//save changes if there are any
     }
 
-    m_pExpertConfigDlg.disposeAndClear();
+    pExpertConfigDlg.disposeAndClear();
 }
 
 
@@ -890,14 +890,14 @@ void SvxJavaParameterDlg::EditParameter()
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtrInstance< InputDialog > m_pParamEditDlg( CUI_RES( RID_SVXSTR_JAVA_START_PARAM ).toString(), this);
+        ScopedVclPtrInstance< InputDialog > pParamEditDlg( CUI_RES( RID_SVXSTR_JAVA_START_PARAM ).toString(), this);
         OUString editableClassPath = m_pAssignedList->GetSelectEntry();
-        m_pParamEditDlg->SetEntryText( editableClassPath );
-        m_pParamEditDlg->HideHelpBtn();
+        pParamEditDlg->SetEntryText( editableClassPath );
+        pParamEditDlg->HideHelpBtn();
 
-        if(!m_pParamEditDlg->Execute())
+        if(!pParamEditDlg->Execute())
             return;
-        OUString editedClassPath = comphelper::string::strip( m_pParamEditDlg->GetEntryText(), ' ');
+        OUString editedClassPath = comphelper::string::strip( pParamEditDlg->GetEntryText(), ' ');
 
         if ( !editedClassPath.isEmpty() && editableClassPath != editedClassPath )
         {

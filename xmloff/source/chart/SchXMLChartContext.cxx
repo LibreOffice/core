@@ -1149,7 +1149,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
 
-    css::awt::Point maPosition;
+    css::awt::Point aPosition;
     bool bHasXPosition=false;
     bool bHasYPosition=false;
 
@@ -1165,13 +1165,13 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
             if( IsXMLToken( aLocalName, XML_X ) )
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        maPosition.X, aValue );
+                        aPosition.X, aValue );
                 bHasXPosition = true;
             }
             else if( IsXMLToken( aLocalName, XML_Y ) )
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        maPosition.Y, aValue );
+                        aPosition.Y, aValue );
                 bHasYPosition = true;
             }
         }
@@ -1185,7 +1185,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
     if( mxTitleShape.is())
     {
         if( bHasXPosition && bHasYPosition )
-            mxTitleShape->setPosition( maPosition );
+            mxTitleShape->setPosition( aPosition );
 
         uno::Reference< beans::XPropertySet > xProp( mxTitleShape, uno::UNO_QUERY );
         if( xProp.is())

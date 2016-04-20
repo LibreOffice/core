@@ -585,7 +585,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
 
-    std::unique_ptr< SvXMLElementExport >  mpHyperlinkElement;
+    std::unique_ptr< SvXMLElementExport >  pHyperlinkElement;
 
     // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
     // does not support document events
@@ -605,7 +605,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                mpHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, true, true) );
+                pHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, true, true) );
             }
         }
     }
@@ -935,7 +935,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    mpHyperlinkElement.reset();
+    pHyperlinkElement.reset();
 
     // #97489# #97111#
     // if there was an error and no element for the shape was exported

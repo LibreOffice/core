@@ -166,8 +166,8 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     DPT->insertNewByName("DataPilotTable", sCellAdress, DPDsc);
 
     uno::Reference<uno::XInterface> xDataPilotTableObject;
-    uno::Any mAny = DPT->getByName( DPT->getElementNames()[0] );
-    CPPUNIT_ASSERT(mAny >>= xDataPilotTableObject);
+    data = DPT->getByName( DPT->getElementNames()[0] );
+    CPPUNIT_ASSERT(data >>= xDataPilotTableObject);
     mxObject = xDataPilotTableObject;
 
     return xDataPilotTableObject;

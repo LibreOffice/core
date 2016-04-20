@@ -172,10 +172,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if( const SdrObject* pSdrObj = rObj.GetSdrObject() )
             if (!pSdrObj->GetName().isEmpty())
                 aShapeName = pSdrObj->GetName();
-        uno::Reference< drawing::XShape> mXShape(rObj.GetShapeRef(), uno::UNO_QUERY);
-        if (mXShape.is())
+        uno::Reference< drawing::XShape> xShape(rObj.GetShapeRef(), uno::UNO_QUERY);
+        if (xShape.is())
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(mXShape, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
             if (xPropertySet.is())
             {
                 uno::Sequence<beans::PropertyValue> aGrabBag;
@@ -1082,11 +1082,11 @@ basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape
             else
             {
                 // iT#s a xShape, get its transformation
-                const Reference< XPropertySet > mXPropSet(rxShape, UNO_QUERY);
+                const Reference< XPropertySet > xPropSet(rxShape, UNO_QUERY);
 
-                if(mXPropSet.is())
+                if(xPropSet.is())
                 {
-                    const Any aAny = mXPropSet->getPropertyValue("Transformation");
+                    const Any aAny = xPropSet->getPropertyValue("Transformation");
 
                     if(aAny.hasValue())
                     {

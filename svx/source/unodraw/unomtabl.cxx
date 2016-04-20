@@ -148,20 +148,20 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
 
 void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    SfxItemSet* mpInSet = new SfxItemSet( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND );
-    maItemSetVector.push_back( mpInSet );
+    SfxItemSet* pInSet = new SfxItemSet( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND );
+    maItemSetVector.push_back( pInSet );
 
     XLineEndItem aEndMarker;
     aEndMarker.SetName( aName );
     aEndMarker.PutValue( aElement, 0 );
 
-    mpInSet->Put( aEndMarker, XATTR_LINEEND );
+    pInSet->Put( aEndMarker, XATTR_LINEEND );
 
     XLineStartItem aStartMarker;
     aStartMarker.SetName( aName );
     aStartMarker.PutValue( aElement, 0 );
 
-    mpInSet->Put( aStartMarker, XATTR_LINESTART );
+    pInSet->Put( aStartMarker, XATTR_LINESTART );
 }
 
 // XNameContainer

@@ -407,18 +407,18 @@ void CGMImpressOutAct::EndGroup()
         mnGroupLevel--;
     if ( mnGroupLevel < CGM_OUTACT_MAX_GROUP_LEVEL )
     {
-        sal_uInt32 mnFirstIndex = mpGroupLevel[ mnGroupLevel ];
-        if ( mnFirstIndex == 0xffffffff )
-            mnFirstIndex = 0;
-        sal_uInt32 mnCurrentCount = maXShapes->getCount();
-        if ( ( mnCurrentCount - mnFirstIndex ) > 1 )
+        sal_uInt32 nFirstIndex = mpGroupLevel[ mnGroupLevel ];
+        if ( nFirstIndex == 0xffffffff )
+            nFirstIndex = 0;
+        sal_uInt32 nCurrentCount = maXShapes->getCount();
+        if ( ( nCurrentCount - nFirstIndex ) > 1 )
         {
             uno::Reference< drawing::XShapeGrouper > aXShapeGrouper;
             aXShapeGrouper.set( maXDrawPage, uno::UNO_QUERY );
             if( aXShapeGrouper.is() )
             {
                 uno::Reference< drawing::XShapes >  aXShapes = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
-                for ( sal_uInt32 i = mnFirstIndex; i < mnCurrentCount; i++ )
+                for ( sal_uInt32 i = nFirstIndex; i < nCurrentCount; i++ )
                 {
                     uno::Reference< drawing::XShape >  aXShape = *static_cast<uno::Reference< drawing::XShape > const *>(maXShapes->getByIndex( i ).getValue());
                     if (aXShape.is() )

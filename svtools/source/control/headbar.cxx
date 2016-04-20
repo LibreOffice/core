@@ -1400,10 +1400,10 @@ css::uno::Reference< css::awt::XWindowPeer > HeaderBar::GetComponentInterface( b
         (Window::GetComponentInterface(false));
     if ( !xPeer.is() && bCreate )
     {
-        css::awt::XWindowPeer* mxPeer = new VCLXHeaderBar(this);
-        m_pVCLXHeaderBar = static_cast<VCLXHeaderBar*>(mxPeer);
-        SetComponentInterface(mxPeer);
-        return mxPeer;
+        css::awt::XWindowPeer* pPeer = new VCLXHeaderBar(this);
+        m_pVCLXHeaderBar = static_cast<VCLXHeaderBar*>(pPeer);
+        SetComponentInterface(pPeer);
+        return pPeer;
     }
     else
         return xPeer;

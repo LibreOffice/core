@@ -629,9 +629,9 @@ bool GotoCurrTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
 bool SwCursor::MoveTable( SwWhichTable fnWhichTable, SwPosTable fnPosTable )
 {
     bool bRet = false;
-    SwTableCursor* m_pTableCursor = dynamic_cast<SwTableCursor*>(this);
+    SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(this);
 
-    if( m_pTableCursor || !HasMark() )
+    if( pTableCursor || !HasMark() )
     {
         SwCursorSaveState aSaveState( *this );
         bRet = (*fnWhichTable)( *this, fnPosTable, IsReadOnlyAvailable() ) &&

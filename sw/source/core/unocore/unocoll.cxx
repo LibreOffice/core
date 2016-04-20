@@ -126,8 +126,6 @@ public:
 
                 for ( sal_Int32 i=0; i < sModuleNames.getLength(); ++i )
                 {
-                    script::ModuleInfo mInfo;
-
                     if ( xVBAModuleInfo->hasModuleInfo( sModuleNames[ i ] ) &&  xVBAModuleInfo->getModuleInfo( sModuleNames[ i ] ).ModuleType == script::ModuleType::DOCUMENT )
                     {
                         msThisDocumentCodeName = sModuleNames[ i ];

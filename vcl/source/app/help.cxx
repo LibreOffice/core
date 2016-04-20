@@ -584,8 +584,8 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
     Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
     aPos = pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( aPos );
     // get mouse screen coords
-    Point mPos( pHelpWin->GetParent()->ImplGetFrameWindow()->GetPointerPosPixel() );
-    mPos = pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( mPos );
+    Point aMousePos( pHelpWin->GetParent()->ImplGetFrameWindow()->GetPointerPosPixel() );
+    aMousePos = pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( aMousePos );
 
     if ( nHelpWinStyle == HELPWINSTYLE_QUICK )
     {
@@ -603,7 +603,7 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
     {
         // If it's the mouse position, move the window slightly
         // so the mouse pointer does not cover it
-        if ( aPos == mPos )
+        if ( aPos == aMousePos )
         {
             aPos.X() += 12;
             aPos.Y() += 16;
@@ -665,15 +665,15 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         // otherwise it would directly be closed due to a focus change...
         */
         Rectangle aHelpRect( aPos, aSz );
-        if( aHelpRect.IsInside( mPos ) )
+        if( aHelpRect.IsInside( aMousePos ) )
         {
             Point delta(2,2);
             Point pSize( aSz.Width(), aSz.Height() );
-            Point pTest( mPos - pSize - delta );
+            Point pTest( aMousePos - pSize - delta );
             if( pTest.X() > aScreenRect.Left() &&  pTest.Y() > aScreenRect.Top() )
                 aPos = pTest;
             else
-                aPos = mPos + delta;
+                aPos = aMousePos + delta;
         }
     }
 

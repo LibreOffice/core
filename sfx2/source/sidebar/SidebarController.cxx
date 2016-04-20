@@ -1015,9 +1015,9 @@ IMPL_LINK_TYPED(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
         case MID_HIDE_SIDEBAR:
         {
             const util::URL aURL (Tools::GetURL(gsHideSidebarCommandName));
-            Reference<frame::XDispatch> mxDispatch (Tools::GetDispatch(mxFrame, aURL));
-            if (mxDispatch.is())
-                    mxDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
+            Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(mxFrame, aURL));
+            if (xDispatch.is())
+                    xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
             break;
         }
         default:

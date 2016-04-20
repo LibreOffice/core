@@ -2207,14 +2207,14 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
 {
     get(mpTabControl, "tabs");
 
-    sal_uInt16 mnEffectId = mpTabControl->GetPageId("effect");
-    sal_uInt16 mnTimingId = mpTabControl->GetPageId("timing");
-    sal_uInt16 mnTextAnimId = mpTabControl->GetPageId("textanim");
+    sal_uInt16 nEffectId = mpTabControl->GetPageId("effect");
+    sal_uInt16 nTimingId = mpTabControl->GetPageId("timing");
+    sal_uInt16 nTextAnimId = mpTabControl->GetPageId("textanim");
 
     mpEffectTabPage = VclPtr<CustomAnimationEffectTabPage>::Create( mpTabControl, mpSet );
-    mpTabControl->SetTabPage( mnEffectId, mpEffectTabPage );
+    mpTabControl->SetTabPage( nEffectId, mpEffectTabPage );
     mpDurationTabPage = VclPtr<CustomAnimationDurationTabPage>::Create( mpTabControl, mpSet );
-    mpTabControl->SetTabPage( mnTimingId, mpDurationTabPage );
+    mpTabControl->SetTabPage( nTimingId, mpDurationTabPage );
 
     bool bHasText = false;
     if( pSet->getPropertyState( nHandleHasText ) != STLPropertyState_AMBIGUOUS )
@@ -2223,12 +2223,12 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
     if( bHasText )
     {
         mpTextAnimTabPage = VclPtr<CustomAnimationTextAnimTabPage>::Create( mpTabControl, mpSet );
-        mpTabControl->SetTabPage( mnTextAnimId, mpTextAnimTabPage );
+        mpTabControl->SetTabPage( nTextAnimId, mpTextAnimTabPage );
     }
     else
     {
         mpTextAnimTabPage = nullptr;
-        mpTabControl->RemovePage( mnTextAnimId );
+        mpTabControl->RemovePage( nTextAnimId );
     }
 
     if (!sPage.isEmpty())

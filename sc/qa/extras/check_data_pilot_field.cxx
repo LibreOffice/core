@@ -168,8 +168,8 @@ uno::Reference< uno::XInterface > CheckDataPilotField::init()
 
     uno::Reference< container::XIndexAccess > IA = DPDsc->getDataPilotFields();
     uno::Reference<uno::XInterface> xDataPilotFieldObject;
-    uno::Any mAny = IA->getByIndex(0);
-    CPPUNIT_ASSERT(mAny >>= xDataPilotFieldObject);
+    data = IA->getByIndex(0);
+    CPPUNIT_ASSERT(data >>= xDataPilotFieldObject);
     mxObject = xDataPilotFieldObject;
 
     return xDataPilotFieldObject;

@@ -1664,8 +1664,8 @@ IMPL_LINK_TYPED(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
-                Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
-                ::rtl::Reference< Paragraph > xParagraph(getParagraph(m_aTemp));
+                Paragraphs::iterator aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
+                ::rtl::Reference< Paragraph > xParagraph(getParagraph(aTemp));
                 if (xParagraph.is())
                 {
                     xParagraph->notifyEvent(
@@ -1701,8 +1701,8 @@ IMPL_LINK_TYPED(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
-                Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
-                ::rtl::Reference< Paragraph > xParagraph(getParagraph(m_aTemp));
+                Paragraphs::iterator aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
+                ::rtl::Reference< Paragraph > xParagraph(getParagraph(aTemp));
                 if (xParagraph.is())
                     xParagraph->notifyEvent(
                         css::accessibility::AccessibleEventId::

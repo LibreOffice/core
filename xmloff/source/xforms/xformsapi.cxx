@@ -197,14 +197,14 @@ sal_uInt16 xforms_getTypeClass(
     OUString sLocalName;
     sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
     SvXMLTokenMap aMap( aTypes );
-    sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
+    sal_uInt16 nToken = aMap.Get( nPrefix, sLocalName );
 
     sal_uInt16 nTypeClass = css::xsd::DataTypeClass::STRING;
-    if( mnToken != XML_TOK_UNKNOWN )
+    if( nToken != XML_TOK_UNKNOWN )
     {
         // we found an XSD name: then get the proper API name for it
         DBG_ASSERT( xRepository.is(), "can't find type without repository");
-        switch( mnToken )
+        switch( nToken )
         {
         case XML_STRING:
             nTypeClass = css::xsd::DataTypeClass::STRING;
@@ -267,8 +267,8 @@ OUString xforms_getTypeName(
     OUString sLocalName;
     sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
     SvXMLTokenMap aMap( aTypes );
-    sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
-    return ( mnToken == XML_TOK_UNKNOWN )
+    sal_uInt16 nToken = aMap.Get( nPrefix, sLocalName );
+    return ( nToken == XML_TOK_UNKNOWN )
         ? rXMLName
         : xforms_getBasicTypeName( xRepository, rNamespaceMap, rXMLName );
 }

@@ -3013,12 +3013,12 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 // Not sure if these setParent() and InsertEmbeddedObject() calls are really
                 // needed, it seems to work without, but logic from code elsewhere suggests
                 // they should be done.
-                SfxObjectShell& mrPers = *pDoc->GetPersist();
+                SfxObjectShell& rPers = *pDoc->GetPersist();
                 uno::Reference < container::XChild > xChild( obj, uno::UNO_QUERY );
                 if ( xChild.is() )
-                    xChild->setParent( mrPers.GetModel() );
+                    xChild->setParent( rPers.GetModel() );
                 OUString rName;
-                mrPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
+                rPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
 
                 SwFlyFrameFormat* pFrameFormat = nullptr;
                 pFrameFormat = pDoc->getIDocumentContentOperations().Insert( aPam, xObj, &aFrameSet, nullptr, nullptr );

@@ -258,11 +258,11 @@ namespace svgio
                     }
                     else if(!maXLink.isEmpty())
                     {
-                        const SvgNode* mpXLink = getDocument().findSvgNodeById(maXLink);
+                        const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
 
-                        if(mpXLink && Display_none != mpXLink->getDisplay())
+                        if(pXLink && Display_none != pXLink->getDisplay())
                         {
-                            mpXLink->decomposeSvgNode(aNewTarget, true);
+                            pXLink->decomposeSvgNode(aNewTarget, true);
 
                             if(!aNewTarget.empty())
                             {

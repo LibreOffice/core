@@ -96,7 +96,7 @@ typedef ::comphelper::MakeMap< TitleHelper::eTitleType, OUString > tTitleMap;
 const tTitleMap& lcl_getTitleMap()
 {
     //maps the title type to the ParentParticle for that title
-    static tTitleMap m_aTitleMap = tTitleMap
+    static tTitleMap s_aTitleMap = tTitleMap
         ( TitleHelper::MAIN_TITLE, "" )
         ( TitleHelper::SUB_TITLE, "D=0" )
         ( TitleHelper::X_AXIS_TITLE, "D=0:CS=0:Axis=0,0" )
@@ -105,7 +105,7 @@ const tTitleMap& lcl_getTitleMap()
         ( TitleHelper::SECONDARY_X_AXIS_TITLE, "D=0:CS=0:Axis=0,1" )
         ( TitleHelper::SECONDARY_Y_AXIS_TITLE, "D=0:CS=0:Axis=1,1" )
         ;
-    return m_aTitleMap;
+    return s_aTitleMap;
 }
 
 OUString lcl_getTitleParentParticle( TitleHelper::eTitleType aTitleType )

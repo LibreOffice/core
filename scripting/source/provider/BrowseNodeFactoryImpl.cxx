@@ -428,7 +428,7 @@ public:
     {
         if ( hasChildNodes() )
         {
-            vXBrowseNodes m_vNodes;
+            vXBrowseNodes aVNodes;
             Sequence < Reference< browse::XBrowseNode > > nodes =
                 m_xWrappedBrowseNode->getChildNodes();
             for ( sal_Int32 i=0; i<nodes.getLength(); i++ )
@@ -436,13 +436,13 @@ public:
                 Reference< browse::XBrowseNode > xBrowseNode = nodes[ i ];
                 OSL_ENSURE( xBrowseNode.is(), "DefaultBrowseNode::getChildNodes(): Invalid BrowseNode" );
                 if( xBrowseNode.is() )
-                    m_vNodes.push_back( new DefaultBrowseNode( m_xCtx, xBrowseNode ) );
+                    aVNodes.push_back( new DefaultBrowseNode( m_xCtx, xBrowseNode ) );
             }
 
-            ::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
-            Sequence < Reference< browse::XBrowseNode > > children( m_vNodes.size() );
-            vXBrowseNodes::const_iterator it = m_vNodes.begin();
-            for ( sal_Int32 i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )
+            ::std::sort( aVNodes.begin(), aVNodes.end(), alphaSortForBNodes() );
+            Sequence < Reference< browse::XBrowseNode > > children( aVNodes.size() );
+            vXBrowseNodes::const_iterator it = aVNodes.begin();
+            for ( sal_Int32 i=0; it != aVNodes.end() && i<children.getLength(); i++, ++it )
             {
                 children[ i ].set( *it );
             }

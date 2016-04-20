@@ -201,10 +201,10 @@ void PackageRegistryImpl::insertBackend(
 
         const OUString mediaType( normalizeMediaType(
                                       xPackageType->getMediaType() ) );
-        ::std::pair<t_string2registry::iterator, bool> mb_insertion(
+        ::std::pair<t_string2registry::iterator, bool> a_insertion(
             m_mediaType2backend.insert( t_string2registry::value_type(
                                             mediaType, xBackend ) ) );
-        if (mb_insertion.second)
+        if (a_insertion.second)
         {
             // add parameterless media-type, too:
             sal_Int32 semi = mediaType.indexOf( ';' );

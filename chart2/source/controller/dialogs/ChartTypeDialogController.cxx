@@ -448,7 +448,7 @@ Image ColumnChartDialogController::getImage()
 }
 const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
         ( "com.sun.star.chart2.template.Column" ,                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
         ( "com.sun.star.chart2.template.StackedColumn" ,                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
@@ -458,7 +458,7 @@ const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTem
         ( "com.sun.star.chart2.template.PercentStackedThreeDColumnFlat" , ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
         ( "com.sun.star.chart2.template.ThreeDColumnDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z) )
         ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
@@ -523,7 +523,7 @@ Image BarChartDialogController::getImage()
 }
 const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
         ( "com.sun.star.chart2.template.Bar" ,                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
         ( "com.sun.star.chart2.template.StackedBar" ,                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
@@ -533,7 +533,7 @@ const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTempla
         ( "com.sun.star.chart2.template.PercentStackedThreeDBarFlat" , ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
         ( "com.sun.star.chart2.template.ThreeDBarDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z) )
         ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
@@ -597,7 +597,7 @@ Image PieChartDialogController::getImage()
 }
 const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     ( "com.sun.star.chart2.template.Pie" ,                    ChartTypeParameter(1,false,false) )
     ( "com.sun.star.chart2.template.PieAllExploded" ,         ChartTypeParameter(2,false,false) )
@@ -608,7 +608,7 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     ( "com.sun.star.chart2.template.ThreeDDonut" ,            ChartTypeParameter(3,false,true) )
     ( "com.sun.star.chart2.template.ThreeDDonutAllExploded" , ChartTypeParameter(4,false,true) )
     ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
@@ -659,7 +659,7 @@ Image LineChartDialogController::getImage()
 }
 const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     ( "com.sun.star.chart2.template.Symbol" ,                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
     ( "com.sun.star.chart2.template.StackedSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false) )
@@ -674,7 +674,7 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     ( "com.sun.star.chart2.template.PercentStackedThreeDLine" ,   ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y_PERCENT,false,true) )
     ( "com.sun.star.chart2.template.ThreeDLineDeep" ,             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true) )
     ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
@@ -807,14 +807,14 @@ Image XYChartDialogController::getImage()
 }
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     ( "com.sun.star.chart2.template.ScatterSymbol" ,              ChartTypeParameter(1,true,false,GlobalStackMode_NONE,true,false) )
     ( "com.sun.star.chart2.template.ScatterLineSymbol" ,          ChartTypeParameter(2,true,false,GlobalStackMode_NONE,true,true) )
     ( "com.sun.star.chart2.template.ScatterLine" ,                ChartTypeParameter(3,true,false,GlobalStackMode_NONE,false,true) )
     ( "com.sun.star.chart2.template.ThreeDScatter" ,              ChartTypeParameter(4,true,true,GlobalStackMode_NONE,false,true) )
     ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
@@ -910,7 +910,7 @@ bool AreaChartDialogController::shouldShow_3DLookControl() const
 }
 const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     ( "com.sun.star.chart2.template.Area" ,                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
     ( "com.sun.star.chart2.template.ThreeDArea" ,               ChartTypeParameter(1,false,true,GlobalStackMode_STACK_Z) )
@@ -919,7 +919,7 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
     ( "com.sun.star.chart2.template.PercentStackedArea" ,       ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT) )
     ( "com.sun.star.chart2.template.PercentStackedThreeDArea" , ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
     ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
@@ -992,7 +992,7 @@ bool NetChartDialogController::shouldShow_StackingControl() const
 }
 const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     //@todo need templates with symbols only
     ( "com.sun.star.chart2.template.NetSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
@@ -1011,7 +1011,7 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     ( "com.sun.star.chart2.template.StackedFilledNet" ,       ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y,false,false) )
     ( "com.sun.star.chart2.template.PercentStackedFilledNet" ,ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y_PERCENT,false,false) )
     ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
@@ -1083,14 +1083,14 @@ Image StockChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     ( "com.sun.star.chart2.template.StockLowHighClose" ,          ChartTypeParameter(1) )
     ( "com.sun.star.chart2.template.StockOpenLowHighClose" ,      ChartTypeParameter(2) )
     ( "com.sun.star.chart2.template.StockVolumeLowHighClose" ,    ChartTypeParameter(3) )
     ( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ,ChartTypeParameter(4) )
     ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 
 void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
@@ -1132,12 +1132,12 @@ Image CombiColumnLineChartDialogController::getImage( )
 
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     ( "com.sun.star.chart2.template.ColumnWithLine" ,             ChartTypeParameter(1) )
     ( "com.sun.star.chart2.template.StackedColumnWithLine" ,      ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
     ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 
 void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
@@ -1263,10 +1263,10 @@ Image BubbleChartDialogController::getImage()
 }
 const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
         ( "com.sun.star.chart2.template.Bubble" ,          ChartTypeParameter(1,true) ) ;
-    return m_aTemplateMap;
+    return s_aTemplateMap;
 }
 void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {

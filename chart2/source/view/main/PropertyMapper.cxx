@@ -187,7 +187,7 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap m_aShapePropertyMapForCharacterProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForCharacterProperties =
         tMakePropertyNameMap
         ( "CharColor",                "CharColor" )
         ( "CharContoured",            "CharContoured" )
@@ -237,13 +237,13 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
 
         ( "ParaIsCharacterDistance",  "ParaIsCharacterDistance" )
         ;
-    return m_aShapePropertyMapForCharacterProperties;
+    return s_aShapePropertyMapForCharacterProperties;
 }
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap m_aShapePropertyMapForParagraphProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForParagraphProperties =
         tMakePropertyNameMap
         ( "ParaAdjust",          "ParaAdjust" )
         ( "ParaBottomMargin",    "ParaBottomMargin" )
@@ -253,13 +253,13 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProper
         ( "ParaRightMargin",     "ParaRightMargin" )
         ( "ParaTopMargin",       "ParaTopMargin" )
         ;
-    return m_aShapePropertyMapForParagraphProperties;
+    return s_aShapePropertyMapForParagraphProperties;
 }
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap m_aShapePropertyMapForFillProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForFillProperties =
         tMakePropertyNameMap
         ( "FillBackground",               "FillBackground" )
         ( "FillBitmapName",               "FillBitmapName" )
@@ -281,13 +281,13 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties(
         ( "FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX" )
         ( "FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY" )
         ;
-    return m_aShapePropertyMapForFillProperties;
+    return s_aShapePropertyMapForFillProperties;
 }
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap m_aShapePropertyMapForLineProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForLineProperties =
         tMakePropertyNameMap
         ( "LineColor",              "LineColor" )
         ( "LineDashName",           "LineDashName" )
@@ -296,35 +296,35 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties(
         ( "LineTransparence",       "LineTransparence" )
         ( "LineWidth",              "LineWidth" )
         ;
-    return m_aShapePropertyMapForLineProperties;
+    return s_aShapePropertyMapForLineProperties;
 }
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
 {
-    static tMakePropertyNameMap m_aShapePropertyMapForFillAndLineProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForFillAndLineProperties =
         tMakePropertyNameMap
         ( PropertyMapper::getPropertyNameMapForFillProperties() )
         ( PropertyMapper::getPropertyNameMapForLineProperties() )
         ;
 
-    return m_aShapePropertyMapForFillAndLineProperties;
+    return s_aShapePropertyMapForFillAndLineProperties;
 }
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties()
 {
-    static tMakePropertyNameMap m_aShapePropertyMapForTextShapeProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForTextShapeProperties =
         tMakePropertyNameMap
         ( PropertyMapper::getPropertyNameMapForCharacterProperties() )
         ( PropertyMapper::getPropertyNameMapForFillProperties() )
         ( PropertyMapper::getPropertyNameMapForLineProperties() );
 
-    return m_aShapePropertyMapForTextShapeProperties;
+    return s_aShapePropertyMapForTextShapeProperties;
 }
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap m_aShapePropertyMapForLineSeriesProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForLineSeriesProperties =
         tMakePropertyNameMap
         ( "LineColor",           "Color" )
         ( "LineDashName",        "LineDashName" )
@@ -333,7 +333,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
         ( "LineWidth",           "LineWidth" )
 
         ;
-    return m_aShapePropertyMapForLineSeriesProperties;
+    return s_aShapePropertyMapForLineSeriesProperties;
 }
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProperties()
@@ -352,7 +352,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProper
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap m_aShapePropertyMapForFilledSeriesProperties =
+    static tMakePropertyNameMap s_aShapePropertyMapForFilledSeriesProperties =
         tMakePropertyNameMap
         ( "FillBackground",               "FillBackground" )
         ( "FillBitmapName",               "FillBitmapName" )
@@ -380,7 +380,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
         ( "LineTransparence",             "BorderTransparency" )
         ( "LineWidth",                    "BorderWidth" )
         ;
-    return m_aShapePropertyMapForFilledSeriesProperties;
+    return s_aShapePropertyMapForFilledSeriesProperties;
 }
 
 void PropertyMapper::setMultiProperties(

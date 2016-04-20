@@ -1774,10 +1774,10 @@ void SlideshowImpl::updateSlideShow()
                 // have a minimum frequency.
                 // => Allow up to 60 frames per second.  Call at least once
                 // every 4 seconds.
-                const static sal_Int32 mnMaximumFrameCount (60);
-                const static double mnMinimumTimeout (1.0 / mnMaximumFrameCount);
-                const static double mnMaximumTimeout (4.0);
-                fUpdate = ::basegfx::clamp(fUpdate, mnMinimumTimeout, mnMaximumTimeout);
+                const static sal_Int32 nMaximumFrameCount (60);
+                const static double nMinimumTimeout (1.0 / nMaximumFrameCount);
+                const static double nMaximumTimeout (4.0);
+                fUpdate = ::basegfx::clamp(fUpdate, nMinimumTimeout, nMaximumTimeout);
 
                 // Make sure that the maximum frame count has not been set
                 // too high (only then conversion to milliseconds and long

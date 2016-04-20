@@ -102,21 +102,21 @@ void LwpDocument::Read()
 
     //Skip the SortOption and UIDocument
     {
-        LwpSortOption m_DocSort( m_pObjStrm );
-        LwpUIDocument m_UIDoc( m_pObjStrm );
+        LwpSortOption aDocSort( m_pObjStrm );
+        LwpUIDocument aUIDoc( m_pObjStrm );
     }
 
     m_pLnOpts = new LwpLineNumberOptions(m_pObjStrm);
 
     //Skip LwpUserDictFiles
     {
-        LwpUserDictFiles m_UsrDicts( m_pObjStrm );
+        LwpUserDictFiles aUsrDicts( m_pObjStrm );
     }
 
     if( !IsChildDoc())
     {
         //Skip LwpPrinterInfo
-        LwpPrinterInfo m_PrtInfo( m_pObjStrm );
+        LwpPrinterInfo aPrtInfo( m_pObjStrm );
     }
 
     m_pFoundry = m_pOwnedFoundry = new LwpFoundry(m_pObjStrm, this);
@@ -308,12 +308,12 @@ void LwpDocument::RegisterBulletStyles()
     if (!m_pFoundry)
         return;
     //Register bullet styles
-    LwpDLVListHeadHolder* mBulletHead = dynamic_cast<LwpDLVListHeadHolder*>
+    LwpDLVListHeadHolder* pBulletHead = dynamic_cast<LwpDLVListHeadHolder*>
         (m_pFoundry->GetBulletManagerID().obj(VO_HEADHOLDER).get());
-    if (!mBulletHead)
+    if (!pBulletHead)
         return;
     LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
-                        (mBulletHead->GetHeadID().obj().get());
+                        (pBulletHead->GetHeadID().obj().get());
     while(pBullet)
     {
         pBullet->SetFoundry(m_pFoundry);

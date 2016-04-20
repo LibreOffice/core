@@ -64,11 +64,11 @@ uno::Reference< uno::XInterface > CheckXCellRangesQuery::init()
             // Load an empty document.
             mxComponent = loadFromDesktop("private:factory/scalc");
 
-        uno::Reference< sheet::XSpreadsheetDocument > m_xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_MESSAGE("no calc document!", m_xSheetDoc.is());
+        uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_MESSAGE("no calc document!", xSheetDoc.is());
 
         // Getting spreadsheet
-        uno::Reference< sheet::XSpreadsheets > oSheets = m_xSheetDoc->getSheets();
+        uno::Reference< sheet::XSpreadsheets > oSheets = xSheetDoc->getSheets();
         uno::Reference< container::XIndexAccess > oIndexSheets(oSheets, uno::UNO_QUERY_THROW);
         uno::Any aAny = oIndexSheets->getByIndex(0);
         uno::Reference<container::XNamed> xNamed;
@@ -118,9 +118,9 @@ void CheckXCellRangesQuery::checkEmptyCell()
 
 void CheckXCellRangesQuery::checkFilledCell()
 {
-    uno::Reference< sheet::XSpreadsheet > m_xSpreadSheet(init(), uno::UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSpreadSheet(init(), uno::UNO_QUERY_THROW);
     // fill the cell with a value
-    m_xSpreadSheet->getCellByPosition(2, 3)->setValue(15);
+    xSpreadSheet->getCellByPosition(2, 3)->setValue(15);
 
     // compare an cell with value 5 with a cell with value 15
     _queryColumnDifferences(sSheetName + ".C4");

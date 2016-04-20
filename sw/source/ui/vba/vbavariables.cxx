@@ -27,14 +27,14 @@ using namespace ::com::sun::star;
 uno::Reference< container::XIndexAccess > createVariablesAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertyAccess >& xUserDefined ) throw ( uno::RuntimeException )
 {
     // FIXME: the performance is poor?
-    XNamedObjectCollectionHelper< word::XVariable >::XNamedVec mVariables;
+    XNamedObjectCollectionHelper< word::XVariable >::XNamedVec aVariables;
     const uno::Sequence< beans::PropertyValue > props = xUserDefined->getPropertyValues();
     sal_Int32 nCount = props.getLength();
-    mVariables.reserve( nCount );
+    aVariables.reserve( nCount );
     for( sal_Int32 i=0; i < nCount; i++ )
-        mVariables.push_back( uno::Reference< word::XVariable > ( new SwVbaVariable( xParent, xContext, xUserDefined, props[i].Name ) ) );
+        aVariables.push_back( uno::Reference< word::XVariable > ( new SwVbaVariable( xParent, xContext, xUserDefined, props[i].Name ) ) );
 
-    uno::Reference< container::XIndexAccess > xVariables( new XNamedObjectCollectionHelper< word::XVariable >( mVariables ) );
+    uno::Reference< container::XIndexAccess > xVariables( new XNamedObjectCollectionHelper< word::XVariable >( aVariables ) );
     return xVariables;
 }
 

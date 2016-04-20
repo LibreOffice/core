@@ -240,11 +240,11 @@ OptimizerDialog::~OptimizerDialog()
 
 void OptimizerDialog::execute()
 {
-    Reference< XItemEventBroadcaster > maRoadmapBroadcaster( mxRoadmapControl, UNO_QUERY_THROW );
-    maRoadmapBroadcaster->addItemListener( mxItemListener );
+    Reference< XItemEventBroadcaster > xRoadmapBroadcaster( mxRoadmapControl, UNO_QUERY_THROW );
+    xRoadmapBroadcaster->addItemListener( mxItemListener );
     UnoDialog::execute();
     UpdateConfiguration();          // taking actual control settings for the configuration
-    maRoadmapBroadcaster->removeItemListener( mxItemListener );
+    xRoadmapBroadcaster->removeItemListener( mxItemListener );
 }
 
 

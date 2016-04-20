@@ -339,11 +339,11 @@ void LwpPageLayout::RegisterStyle()
     OUString pmname = pm1->GetStyleName();
 
     //Add master page
-    XFMasterPage* mp1 = new XFMasterPage();
-    mp1->SetStyleName(GetName().str());
-    mp1->SetPageMaster(pmname);
-    mp1 = static_cast<XFMasterPage*>(pXFStyleManager->AddStyle(mp1).m_pStyle);
-    m_StyleName = mp1->GetStyleName();
+    XFMasterPage* p1 = new XFMasterPage();
+    p1->SetStyleName(GetName().str());
+    p1->SetPageMaster(pmname);
+    p1 = static_cast<XFMasterPage*>(pXFStyleManager->AddStyle(p1).m_pStyle);
+    m_StyleName = p1->GetStyleName();
 
     //Set footer style
     LwpFooterLayout* pLayoutFooter = GetFooterLayout();
@@ -351,7 +351,7 @@ void LwpPageLayout::RegisterStyle()
     {
         pLayoutFooter->SetFoundry(m_pFoundry);
         pLayoutFooter->RegisterStyle(pm1);
-        pLayoutFooter->RegisterStyle(mp1);
+        pLayoutFooter->RegisterStyle(p1);
     }
 
     //Set header style
@@ -360,7 +360,7 @@ void LwpPageLayout::RegisterStyle()
     {
         pLayoutHeader->SetFoundry(m_pFoundry);
         pLayoutHeader->RegisterStyle(pm1);
-        pLayoutHeader->RegisterStyle(mp1);
+        pLayoutHeader->RegisterStyle(p1);
     }
     //register child layout style for mirror page and frame
     RegisterChildStyle();
@@ -398,9 +398,9 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
     OUString pmname = pm1->GetStyleName();
 
     //Add master page
-    XFMasterPage* mp1 = new XFMasterPage();
-    mp1->SetStyleName("Endnote");
-    mp1->SetPageMaster(pmname);
+    XFMasterPage* p1 = new XFMasterPage();
+    p1->SetStyleName("Endnote");
+    p1->SetPageMaster(pmname);
 
     //Set footer style
     LwpFooterLayout* pLayoutFooter = GetFooterLayout();
@@ -408,7 +408,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
     {
         pLayoutFooter->SetFoundry(m_pFoundry);
         pLayoutFooter->RegisterStyle(pm1);
-        pLayoutFooter->RegisterStyle(mp1);
+        pLayoutFooter->RegisterStyle(p1);
     }
 
     //Set header style
@@ -417,10 +417,10 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
     {
         pLayoutHeader->SetFoundry(m_pFoundry);
         pLayoutHeader->RegisterStyle(pm1);
-        pLayoutHeader->RegisterStyle(mp1);
+        pLayoutHeader->RegisterStyle(p1);
     }
 
-    return pXFStyleManager->AddStyle(mp1).m_pStyle->GetStyleName();
+    return pXFStyleManager->AddStyle(p1).m_pStyle->GetStyleName();
 }
 /**
 * @descr:   Whether current page layout has columns

@@ -1418,7 +1418,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                 m_nHiddenBlock |= nOr;
             if((pCntType->GetType() == ContentTypeId::OUTLINE))
             {
-                std::map< void*, bool > mCurrOutLineNodeMap;
+                std::map< void*, bool > aCurrOutLineNodeMap;
 
                 SwWrtShell* pShell = GetWrtShell();
                 bool bBool = SvTreeListBox::Expand(pParent);
@@ -1429,17 +1429,17 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                     {
                         sal_Int32 nPos = static_cast<SwContent*>(pChild->GetUserData())->GetYPos();
                         void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
-                        mCurrOutLineNodeMap.insert(std::map<void*, bool>::value_type( key, false ) );
+                        aCurrOutLineNodeMap.insert(std::map<void*, bool>::value_type( key, false ) );
                         std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
                         if( iter != mOutLineNodeMap.end() && mOutLineNodeMap[key])
                         {
-                            mCurrOutLineNodeMap[key] = true;
+                            aCurrOutLineNodeMap[key] = true;
                             SvTreeListBox::Expand(pChild);
                         }
                     }
                     pChild = Next(pChild);
                 }
-                mOutLineNodeMap = mCurrOutLineNodeMap;
+                mOutLineNodeMap = aCurrOutLineNodeMap;
                 return bBool;
             }
 
