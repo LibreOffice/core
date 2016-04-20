@@ -1093,7 +1093,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars )
     if (m_xImpl->m_xText.is())
     {
         m_xImpl->m_xText->insertString(m_xImpl->m_xCursorAsRange,
-            rChars, sal_False);
+            rChars, false);
     }
 }
 
@@ -1127,7 +1127,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars,
             }
         }
         m_xImpl->m_xText->insertString(m_xImpl->m_xCursorAsRange,
-                                       sChars.makeStringAndClear(), sal_False);
+                                       sChars.makeStringAndClear(), false);
     }
 }
 
@@ -1138,7 +1138,7 @@ void XMLTextImportHelper::InsertControlCharacter( sal_Int16 nControl )
     if (m_xImpl->m_xText.is())
     {
         m_xImpl->m_xText->insertControlCharacter(
-            m_xImpl->m_xCursorAsRange, nControl, sal_False);
+            m_xImpl->m_xCursorAsRange, nControl, false);
     }
 }
 
@@ -1150,7 +1150,7 @@ void XMLTextImportHelper::InsertTextContent(
     if (m_xImpl->m_xText.is())
     {
         // note: this may throw IllegalArgumentException and callers handle it
-        m_xImpl->m_xText->insertTextContent( m_xImpl->m_xCursorAsRange, xContent, sal_False);
+        m_xImpl->m_xText->insertTextContent( m_xImpl->m_xCursorAsRange, xContent, false);
     }
 }
 
@@ -1181,10 +1181,10 @@ void XMLTextImportHelper::DeleteParagraph()
     }
     if( bDelete )
     {
-        if (m_xImpl->m_xCursor->goLeft( 1, sal_True ))
+        if (m_xImpl->m_xCursor->goLeft( 1, true ))
         {
             m_xImpl->m_xText->insertString(m_xImpl->m_xCursorAsRange,
-                                           "", sal_True);
+                                           "", true);
         }
     }
 }
@@ -1558,7 +1558,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if (!bNumberingIsNumber &&
                 xPropSetInfo->hasPropertyByName(s_NumberingIsNumber))
             {
-                xPropSet->setPropertyValue(s_NumberingIsNumber, Any(sal_False));
+                xPropSet->setPropertyValue(s_NumberingIsNumber, Any(false));
             }
 
             xPropSet->setPropertyValue( s_NumberingLevel, Any(nLevel) );
@@ -1685,8 +1685,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     if (rCursor->getString().getLength() >
                             MAX_COMBINED_CHARACTERS)
                     {
-                        rCursor->gotoRange(rCursor->getStart(), sal_False);
-                        rCursor->goRight(MAX_COMBINED_CHARACTERS, sal_True);
+                        rCursor->gotoRange(rCursor->getStart(), false);
+                        rCursor->goRight(MAX_COMBINED_CHARACTERS, true);
                     }
 
                     // set field value (the combined character string)
@@ -1699,7 +1699,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     {
                         // #i107225# the combined characters need to be inserted first
                         // the selected text has to be removed afterwards
-                        m_xImpl->m_xText->insertTextContent( rCursor->getStart(), xTextContent, sal_True );
+                        m_xImpl->m_xText->insertTextContent( rCursor->getStart(), xTextContent, true );
 
                         if( !rCursor->getString().isEmpty() )
                         {

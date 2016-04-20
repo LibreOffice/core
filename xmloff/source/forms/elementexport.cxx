@@ -2182,7 +2182,7 @@ namespace xmloff
             };
             static const sal_Bool nEnumPropertyAttrDefaultFlags[] =
             {
-                sal_False, sal_False, sal_False, sal_False, sal_True
+                false, false, false, false, true
             };
             static const sal_Int32 nIdCount = SAL_N_ELEMENTS(eEnumPropertyIds);
         #if OSL_DEBUG_LEVEL > 0

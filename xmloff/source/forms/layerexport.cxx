@@ -689,7 +689,7 @@ namespace xmloff
             }
 
             // check if our own formats collection already knows the format
-            nOwnFormatKey = m_xControlNumberFormats->queryKey(sFormatDescription, aFormatLocale, sal_False);
+            nOwnFormatKey = m_xControlNumberFormats->queryKey(sFormatDescription, aFormatLocale, false);
             if (-1 == nOwnFormatKey)
             {   // no, we don't
                 // -> create a new format

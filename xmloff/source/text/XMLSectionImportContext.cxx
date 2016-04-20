@@ -219,8 +219,8 @@ void XMLSectionImportContext::StartElement(
                 rHelper->InsertString(sMarkerString);
 
                 // select first marker
-                rHelper->GetCursor()->gotoRange(xStart, sal_False);
-                rHelper->GetCursor()->goRight(1, sal_True);
+                rHelper->GetCursor()->gotoRange(xStart, false);
+                rHelper->GetCursor()->goRight(1, true);
 
                 // convert section to XTextContent
                 Reference<XTextContent> xTextContent(xSectionPropertySet,
@@ -228,11 +228,11 @@ void XMLSectionImportContext::StartElement(
 
                 // and insert (over marker)
                 rHelper->GetText()->insertTextContent(
-                    rHelper->GetCursorAsRange(), xTextContent, sal_True );
+                    rHelper->GetCursorAsRange(), xTextContent, true );
 
                 // and delete first marker (in section)
                 rHelper->GetText()->insertString(
-                    rHelper->GetCursorAsRange(), "", sal_True);
+                    rHelper->GetCursorAsRange(), "", true);
 
                 // finally, check for redlines that should start at
                 // the section start node
@@ -332,18 +332,18 @@ void XMLSectionImportContext::EndElement()
     // get rid of last paragraph
     // (unless it's the only paragraph in the section)
     rtl::Reference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
-    rHelper->GetCursor()->goRight(1, sal_False);
+    rHelper->GetCursor()->goRight(1, false);
     if (bHasContent)
     {
-        rHelper->GetCursor()->goLeft(1, sal_True);
+        rHelper->GetCursor()->goLeft(1, true);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                         "", sal_True);
+                                         "", true);
     }
 
     // and delete second marker
-    rHelper->GetCursor()->goRight(1, sal_True);
+    rHelper->GetCursor()->goRight(1, true);
     rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                     "", sal_True);
+                                     "", true);
 
     // check for redlines to our endnode
     rHelper->RedlineAdjustStartNodeCursor(false);

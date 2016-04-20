@@ -792,7 +792,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 {
     // check for xHandler first... should have been supplied in initialize
     if( !mxHandler.is() )
-        return sal_False;
+        return false;
 
     try
     {
@@ -814,12 +814,12 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                 if ( rPropName == "FileName" )
                 {
                     if( !(rValue >>= msOrigFileName ) )
-                        return sal_False;
+                        return false;
                 }
                 else if ( rPropName == "FilterName" )
                 {
                     if( !(rValue >>= msFilterName ) )
-                        return sal_False;
+                        return false;
                 }
             }
         }

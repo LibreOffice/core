@@ -294,7 +294,7 @@ void SdXMLDrawPageContext::EndElement()
         {
             const OUString sFlushCustomShapeUnoApiObjects("FlushCustomShapeUnoApiObjects");
             uno::Any aAny;
-            aAny <<= sal_True;
+            aAny <<= true;
             xPropSet->setPropertyValue(sFlushCustomShapeUnoApiObjects, aAny);
         }
     }

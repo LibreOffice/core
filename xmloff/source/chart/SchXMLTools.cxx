@@ -407,7 +407,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
     if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && !rRange.isEmpty() )
     {
         //#i103911# switch to internal data in case the parent cannot provide the requested data
-        xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
+        xChartDoc->createInternalDataProvider( true /* bCloneExistingData */ );
         xDataProvider = xChartDoc->getDataProvider();
         try
         {

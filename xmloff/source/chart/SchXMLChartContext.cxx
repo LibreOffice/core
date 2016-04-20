@@ -354,7 +354,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             {
                 xDocProp->getPropertyValue("BaseDiagram") >>= aOldChartTypeName;
                 maChartTypeServiceName =  SchXMLTools::GetNewChartTypeName( aOldChartTypeName );
-                xDocProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( sal_False) );
+                xDocProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( false) );
             }
             catch(const uno::Exception&)
             {
@@ -663,7 +663,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         beans::PropertyState_DIRECT_VALUE );
     aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
         OUString("UseCategoriesAsX"),
-        -1, uno::makeAny( sal_False ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
+        -1, uno::makeAny( false ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
         beans::PropertyState_DIRECT_VALUE );
 
     xNewDia->setDiagramData( xDataSource, aArgs );
@@ -762,7 +762,7 @@ void SchXMLChartContext::EndElement()
     }
     else if( bHasOwnData )
     {
-        xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
+        xNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
     }
     if( bHasOwnData )
         msChartAddress = "all";
@@ -815,7 +815,7 @@ void SchXMLChartContext::EndElement()
                     msChartAddress = "all";
                     if( !xNewDoc->hasInternalDataProvider() )
                     {
-                        xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
+                        xNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
                         SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
                         try
                         {
@@ -904,7 +904,7 @@ void SchXMLChartContext::EndElement()
     }
 
     if( xProp.is())
-        xProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( sal_True) );
+        xProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( true) );
 }
 
 void SchXMLChartContext::MergeSeriesForStockChart()

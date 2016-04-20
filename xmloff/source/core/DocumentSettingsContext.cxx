@@ -644,7 +644,7 @@ void XMLConfigItemContext::ManipulateConfigItem()
 
             OUString aURL;
             mrAny >>= aURL;
-            aURL = xStringSubsitution->substituteVariables( aURL, sal_False );
+            aURL = xStringSubsitution->substituteVariables( aURL, false );
             mrAny <<= aURL;
         }
         catch( uno::Exception& )

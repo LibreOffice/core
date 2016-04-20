@@ -131,7 +131,7 @@ void XMLIndexTOCContext::StartElement(
         // find text:protected and set value
         // find text:name and set value (if not empty)
         sal_Int16 nCount = xAttrList->getLength();
-        sal_Bool bProtected = sal_False;
+        sal_Bool bProtected = false;
         OUString sIndexName;
         OUString sXmlId;
         XMLPropStyleContext* pStyle(nullptr);
@@ -226,7 +226,7 @@ void XMLIndexTOCContext::StartElement(
 
                 // b) insert marker and move cursor
                 rImport->InsertString(sMarker);
-                rImport->GetCursor()->goLeft(2, sal_False);
+                rImport->GetCursor()->goLeft(2, false);
             }
         }
 
@@ -262,19 +262,19 @@ void XMLIndexTOCContext::EndElement()
         rtl::Reference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
 
         // get rid of last paragraph (unless it's the only paragraph)
-        rHelper->GetCursor()->goRight(1, sal_False);
+        rHelper->GetCursor()->goRight(1, false);
         if( xBodyContextRef.Is() &&
             static_cast<XMLIndexBodyContext*>(&xBodyContextRef)->HasContent() )
         {
-            rHelper->GetCursor()->goLeft(1, sal_True);
+            rHelper->GetCursor()->goLeft(1, true);
             rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                             "", sal_True);
+                                             "", true);
         }
 
         // and delete second marker
-        rHelper->GetCursor()->goRight(1, sal_True);
+        rHelper->GetCursor()->goRight(1, true);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                         "", sal_True);
+                                         "", true);
 
         // check for Redlines on our end node
         GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(false);

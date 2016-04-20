@@ -1522,8 +1522,8 @@ namespace xmloff
         {
             // delete the newline which has been imported erroneously
             // TODO (fs): stole this code somewhere - why don't we fix the text import??
-            m_xCursor->gotoEnd( sal_False );
-            m_xCursor->goLeft( 1, sal_True );
+            m_xCursor->gotoEnd( false );
+            m_xCursor->goLeft( 1, true );
             m_xCursor->setString( OUString() );
 
             // reset cursor

@@ -651,7 +651,7 @@ XMLImpRubyContext_Impl::~XMLImpRubyContext_Impl()
     const Reference < XTextCursor > xAttrCursor(
         xTextImport->GetText()->createTextCursorByRange( m_xStart ));
     xAttrCursor->gotoRange(xTextImport->GetCursorAsRange()->getStart(),
-            sal_True);
+            true);
     xTextImport->SetRuby( GetImport(), xAttrCursor,
          m_sStyleName, m_sTextStyleName, m_sText );
 }
@@ -775,7 +775,7 @@ void XMLMetaImportContextBase::EndElement()
     const Reference<XTextCursor> xInsertionCursor(
         GetImport().GetTextImport()->GetText()->createTextCursorByRange(
             xEndRange) );
-    xInsertionCursor->gotoRange(m_xStart, sal_True);
+    xInsertionCursor->gotoRange(m_xStart, true);
 
     InsertMeta(xInsertionCursor);
 }
@@ -1952,7 +1952,7 @@ XMLParaContext::~XMLParaContext()
         Reference < XTextCursor > xIdCursor( xTxtImport->GetText()->createTextCursorByRange( xStart ) );
         if( xIdCursor.is() )
         {
-            xIdCursor->gotoRange( xEnd, sal_True );
+            xIdCursor->gotoRange( xEnd, true );
             GetImport().getInterfaceToIdentifierMapper().registerReference(
                 m_sXmlId, Reference<XInterface>( xIdCursor, UNO_QUERY ));
         }
@@ -1972,7 +1972,7 @@ XMLParaContext::~XMLParaContext()
         // though it just means 'we were unable to create the cursor'
         return;
     }
-    xAttrCursor->gotoRange( xEnd, sal_True );
+    xAttrCursor->gotoRange( xEnd, true );
 
     // xml:id for RDF metadata
     if (!m_sXmlId.isEmpty() || m_bHaveAbout || !m_sProperty.isEmpty())
@@ -2072,8 +2072,8 @@ XMLParaContext::~XMLParaContext()
         for (size_t i = 0; i < pHints->GetHints().size(); ++i)
         {
             XMLHint_Impl *const pHint = pHints->GetHints()[i].get();
-            xAttrCursor->gotoRange( pHint->GetStart(), sal_False );
-            xAttrCursor->gotoRange( pHint->GetEnd(), sal_True );
+            xAttrCursor->gotoRange( pHint->GetStart(), false );
+            xAttrCursor->gotoRange( pHint->GetEnd(), true );
             switch( pHint->GetType() )
             {
             case XML_HINT_STYLE:
@@ -2125,7 +2125,7 @@ XMLParaContext::~XMLParaContext()
                         static_cast<const XMLIndexMarkHint_Impl *>(pHint)->GetMark());
                     Reference<XTextContent> xContent(xMark, UNO_QUERY);
                     xTxtImport->GetText()->insertTextContent(
-                        xAttrCursor, xContent, sal_True );
+                        xAttrCursor, xContent, true );
                 }
                 break;
             case XML_HINT_TEXT_FRAME:

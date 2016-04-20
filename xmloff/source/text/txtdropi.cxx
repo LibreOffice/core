@@ -62,7 +62,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
     SvXMLTokenMap aTokenMap( aDropAttrTokenMap );
 
     DropCapFormat aFormat;
-    sal_Bool bWholeWord = sal_False;
+    sal_Bool bWholeWord = false;
 
     sal_Int32 nTmp;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -87,11 +87,11 @@ void XMLTextDropCapImportContext::ProcessAttrs(
         case XML_TOK_DROP_LENGTH:
             if( IsXMLToken( rValue, XML_WORD ) )
             {
-                bWholeWord = sal_True;
+                bWholeWord = true;
             }
             else if (::sax::Converter::convertNumber( nTmp, rValue, 1, 255 ))
             {
-                bWholeWord = sal_False;
+                bWholeWord = false;
                 aFormat.Count = (sal_Int8)nTmp;
             }
             break;

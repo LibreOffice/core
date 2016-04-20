@@ -1065,7 +1065,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 {
                     //need to set this explicitly here for old files as the new api does not support this property fully anymore
                     if( bSwitchOffLinesForScatter )
-                        xPointProp->setPropertyValue("Lines",uno::makeAny(sal_False));
+                        xPointProp->setPropertyValue("Lines",uno::makeAny(false));
                 }
                 catch( const uno::Exception & )
                 {
@@ -1114,7 +1114,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::list< DataRowPointStyle 
             if( !xSeries.is() )
                 continue;
 
-            xSeries->setPropertyValue("Lines",uno::makeAny(sal_False));
+            xSeries->setPropertyValue("Lines",uno::makeAny(false));
         }
         catch( uno::Exception &  )
         {

@@ -1385,7 +1385,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                             Reference< XCommand > xCommand( xChildNode, UNO_QUERY_THROW );
                             if( xCommand->getCommand() == EffectCommands::STOPAUDIO )
                             {
-                                xPageProps->setPropertyValue("Sound", Any(sal_True) );
+                                xPageProps->setPropertyValue("Sound", Any(true) );
                             }
                         }
                         break;
@@ -1400,7 +1400,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
 
                                 Timing eTiming;
                                 if( (xAudio->getRepeatCount() >>= eTiming) && (eTiming == Timing_INDEFINITE) )
-                                    xPageProps->setPropertyValue("LoopSound", Any( sal_True ) );
+                                    xPageProps->setPropertyValue("LoopSound", Any( true ) );
                             }
                         }
                         break;

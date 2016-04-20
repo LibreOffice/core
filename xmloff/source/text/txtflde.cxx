@@ -1063,7 +1063,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     // in all implementations)
     Reference<XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
 
-    OUString sPresentation = rTextField->getPresentation(sal_False);
+    OUString sPresentation = rTextField->getPresentation(false);
 
     // process each field type
     switch (nToken) {

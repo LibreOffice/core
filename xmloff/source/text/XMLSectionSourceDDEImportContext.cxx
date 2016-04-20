@@ -92,7 +92,7 @@ void XMLSectionSourceDDEImportContext::StartElement(
     OUString sApplication;
     OUString sTopic;
     OUString sItem;
-    sal_Bool bAutomaticUpdate = sal_False;
+    sal_Bool bAutomaticUpdate = false;
 
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)

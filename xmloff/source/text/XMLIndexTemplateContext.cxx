@@ -354,26 +354,26 @@ const sal_Char* aLevelStylePropNameTOCMap[] =
 
 const sal_Bool aAllowedTokenTypesTOC[] =
 {
-    sal_True,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
-    sal_True,       // XML_TOK_INDEX_TYPE_TAB_STOP,
-    sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
-    sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
-    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_True,       // XML_TOK_INDEX_TYPE_LINK_START,
-    sal_True,       // XML_TOK_INDEX_TYPE_LINK_END,
-    sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
+    true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
+    true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
+    true,       // XML_TOK_INDEX_TYPE_TEXT,
+    true,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
+    true,       // XML_TOK_INDEX_TYPE_CHAPTER,
+    true,       // XML_TOK_INDEX_TYPE_LINK_START,
+    true,       // XML_TOK_INDEX_TYPE_LINK_END,
+    false       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
 const sal_Bool aAllowedTokenTypesUser[] =
 {
-    sal_True,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
-    sal_True,       // XML_TOK_INDEX_TYPE_TAB_STOP,
-    sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
-    sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
-    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
-    sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
+    true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
+    true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
+    true,       // XML_TOK_INDEX_TYPE_TEXT,
+    true,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
+    true,       // XML_TOK_INDEX_TYPE_CHAPTER,
+    false,      // XML_TOK_INDEX_TYPE_LINK_START,
+    false,      // XML_TOK_INDEX_TYPE_LINK_END,
+    false       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
 
@@ -394,14 +394,14 @@ const sal_Char* aLevelStylePropNameAlphaMap[] =
 
 const sal_Bool aAllowedTokenTypesAlpha[] =
 {
-    sal_True,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
-    sal_True,       // XML_TOK_INDEX_TYPE_TAB_STOP,
-    sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
-    sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
-    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
-    sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
+    true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
+    true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
+    true,       // XML_TOK_INDEX_TYPE_TEXT,
+    true,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
+    true,       // XML_TOK_INDEX_TYPE_CHAPTER,
+    false,      // XML_TOK_INDEX_TYPE_LINK_START,
+    false,      // XML_TOK_INDEX_TYPE_LINK_END,
+    false       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
 
@@ -448,14 +448,14 @@ const sal_Char* aLevelStylePropNameBibliographyMap[] =
 
 const sal_Bool aAllowedTokenTypesBibliography[] =
 {
-    sal_True,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
-    sal_True,       // XML_TOK_INDEX_TYPE_TAB_STOP,
-    sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
-    sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
-    sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
-    sal_True        // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
+    true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
+    true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
+    true,       // XML_TOK_INDEX_TYPE_TEXT,
+    true,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
+    false,      // XML_TOK_INDEX_TYPE_CHAPTER,
+    false,      // XML_TOK_INDEX_TYPE_LINK_START,
+    false,      // XML_TOK_INDEX_TYPE_LINK_END,
+    true        // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
 
@@ -469,14 +469,14 @@ const sal_Char* aLevelStylePropNameTableMap[] =
 
 const sal_Bool aAllowedTokenTypesTable[] =
 {
-    sal_True,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
-    sal_True,       // XML_TOK_INDEX_TYPE_TAB_STOP,
-    sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
-    sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
-    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
-    sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
-    sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
+    true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
+    true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
+    true,       // XML_TOK_INDEX_TYPE_TEXT,
+    true,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
+    true,       // XML_TOK_INDEX_TYPE_CHAPTER,
+    false,      // XML_TOK_INDEX_TYPE_LINK_START,
+    false,      // XML_TOK_INDEX_TYPE_LINK_END,
+    false       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

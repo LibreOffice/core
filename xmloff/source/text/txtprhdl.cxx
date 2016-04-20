@@ -334,9 +334,9 @@ bool XMLOpaquePropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = sal_False;
+    sal_Bool bVal = false;
     if( IsXMLToken( rStrImpValue, XML_FOREGROUND ) )
-        bVal = sal_True;
+        bVal = true;
     else if( !IsXMLToken( rStrImpValue, XML_BACKGROUND ) )
         bRet = false;
 
@@ -384,9 +384,9 @@ bool XMLContourModePropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = sal_False;
+    sal_Bool bVal = false;
     if( IsXMLToken( rStrImpValue, XML_OUTSIDE ) )
-        bVal = sal_True;
+        bVal = true;
     else if( ! IsXMLToken( rStrImpValue, XML_FULL ) )
         bRet = false;
 
@@ -434,7 +434,7 @@ bool XMLParagraphOnlyPropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = sal_False;
+    sal_Bool bVal = false;
 
     if( ! IsXMLToken( rStrImpValue, XML_NO_LIMIT ) )
     {
@@ -552,7 +552,7 @@ bool XMLFrameProtectPropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = sal_False;
+    sal_Bool bVal = false;
     if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = false;
@@ -563,7 +563,7 @@ bool XMLFrameProtectPropHdl_Impl::importXML(
             bRet = true;
             if( aToken == sVal )
             {
-                bVal = sal_True;
+                bVal = true;
                 break;
             }
         }
@@ -794,7 +794,7 @@ bool XMLGrfMirrorPropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = sal_False;
+    sal_Bool bVal = false;
     if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = false;
@@ -806,7 +806,7 @@ bool XMLGrfMirrorPropHdl_Impl::importXML(
             if( aToken == sVal ||
                  (bHori && IsXMLToken( aToken, XML_HORIZONTAL ) ) )
             {
-                bVal = sal_True;
+                bVal = true;
                 break;
             }
         }

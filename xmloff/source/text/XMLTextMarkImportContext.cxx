@@ -303,7 +303,7 @@ void XMLTextMarkImportContext::EndElement()
                                 m_rHelper.GetText()->createTextCursorByRange(
                                     xEndRange);
                             try {
-                            xInsertionCursor->gotoRange(xStartRange, sal_True);
+                            xInsertionCursor->gotoRange(xStartRange, true);
                             } catch (uno::Exception&) {
                                 OSL_ENSURE(false,
                                     "cannot go to end position of bookmark");
@@ -446,7 +446,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
                 // if inserting marks, bAbsorb==sal_False will cause
                 // collapsing of the given XTextRange.
                 rImport.GetTextImport()->GetText()->insertTextContent(rRange,
-                    xTextContent, sal_True);
+                    xTextContent, true);
 
                 // xml:id for RDF metadata -- after insertion!
                 rImport.SetXmlId(xIfc, i_rXmlId);

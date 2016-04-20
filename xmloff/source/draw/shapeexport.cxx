@@ -3126,7 +3126,7 @@ static void lcl_CopyStream(
             uno::makeAny(rMimeType));
         xStreamProps->setPropertyValue( // turn off compression
             "Compressed",
-            uno::makeAny(sal_False));
+            uno::makeAny(false));
     }
     ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     xOutStream->closeOutput();

@@ -1152,8 +1152,8 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     xBarProp->setPropertyValue("PositiveError",uno::makeAny(static_cast<double>(0.0)));
                     xBarProp->setPropertyValue("NegativeError",uno::makeAny(static_cast<double>(0.0)));
                     xBarProp->setPropertyValue("Weight",uno::makeAny(static_cast<double>(1.0)));
-                    xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(sal_True));
-                    xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(sal_True));
+                    xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(true));
+                    xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(true));
 
                     // first import defaults from parent style
                     SetErrorBarStyleProperties( maSeriesStyleName, xBarProp, mrImportHelper );

@@ -168,7 +168,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             SAL_INFO("xmloff.chart", "Invalid axis" );
             break;
     }
-    xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
+    xDiaProp->setPropertyValue( aPropName, uno::makeAny(true) );
     xResult.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xResult;
 }
@@ -205,7 +205,7 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
             SAL_INFO("xmloff.chart", "Invalid axis" );
             break;
     }
-    xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
+    xDiaProp->setPropertyValue( aPropName, uno::makeAny(true) );
 
     Reference< beans::XPropertySet > xGridProp;
     if( bIsMajor )
@@ -412,7 +412,7 @@ void SchXMLAxisContext::CreateAxis()
     }
     try
     {
-        xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
+        xDiaProp->setPropertyValue( aPropName, uno::makeAny(true) );
     }
     catch( beans::UnknownPropertyException & )
     {
@@ -439,7 +439,7 @@ void SchXMLAxisContext::CreateAxis()
     {
         try
         {
-            xDiaProp->setPropertyValue("HasXAxis", uno::makeAny(sal_True) );
+            xDiaProp->setPropertyValue("HasXAxis", uno::makeAny(true) );
         }
         catch( beans::UnknownPropertyException & )
         {
@@ -450,8 +450,8 @@ void SchXMLAxisContext::CreateAxis()
     // set properties
     if( m_xAxisProps.is())
     {
-        uno::Any aTrueBool( uno::makeAny( sal_True ));
-        uno::Any aFalseBool( uno::makeAny( sal_False ));
+        uno::Any aTrueBool( uno::makeAny( true ));
+        uno::Any aFalseBool( uno::makeAny( false ));
 
         // #i109879# the line color is black as default, in the model it is a light gray
         m_xAxisProps->setPropertyValue("LineColor",

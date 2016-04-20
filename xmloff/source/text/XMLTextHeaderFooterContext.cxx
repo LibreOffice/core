@@ -133,7 +133,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
                 if( !bOn )
                 {
                     // Switch header on
-                    bOn = sal_True;
+                    bOn = true;
                     aAny.setValue( &bOn, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( sOn, aAny );
 
@@ -147,7 +147,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
                 sal_Bool bShared = *static_cast<sal_Bool const *>(aAny.getValue());
                 if( !bShared )
                 {
-                    bShared = sal_True;
+                    bShared = true;
                     aAny.setValue( &bShared, cppu::UnoType<bool>::get() );
                     xPropSet->setPropertyValue( sShareContent, aAny );
                 }
@@ -201,7 +201,7 @@ void XMLTextHeaderFooterContext::EndElement()
     {
         // If no content has been inserted into the header or footer,
         // switch it off.
-        sal_Bool bOn = sal_False;
+        sal_Bool bOn = false;
         Any aAny;
         aAny.setValue( &bOn, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sOn, aAny );

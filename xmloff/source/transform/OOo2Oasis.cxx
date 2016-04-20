@@ -1893,7 +1893,7 @@ sal_Bool SAL_CALL OOo2OasisTransformer::filter(
     if( xFilter.is() )
         return xFilter->filter( aDescriptor );
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL OOo2OasisTransformer::cancel(  )

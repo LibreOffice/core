@@ -238,7 +238,7 @@ Property SAL_CALL PropertySetMergerImpl::getPropertyByName( const OUString& aNam
 sal_Bool SAL_CALL PropertySetMergerImpl::hasPropertyByName( const OUString& Name ) throw(RuntimeException, std::exception)
 {
     if(mxPropSet1Info->hasPropertyByName( Name ) )
-        return sal_True;
+        return true;
 
     return mxPropSet2Info->hasPropertyByName( Name );
 }

@@ -158,7 +158,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
     const Reference<XAttributeList> & xAttrList )
 {
     OUString sKey;
-    sal_Bool bSort(sal_True);
+    sal_Bool bSort(true);
 
     // process children here and use default context!
     if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&

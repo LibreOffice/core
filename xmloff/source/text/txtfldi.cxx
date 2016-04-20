@@ -2933,7 +2933,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
     OUString sCommandTopic;
     OUString sCommandItem;
 
-    sal_Bool bUpdate = sal_False;
+    sal_Bool bUpdate = false;
     bool bNameOK = false;
     bool bCommandApplicationOK = false;
     bool bCommandTopicOK = false;
@@ -3597,8 +3597,8 @@ void XMLAnnotationImportContext::EndElement()
     {
         // delete addition newline
         const OUString aEmpty;
-        mxCursor->gotoEnd( sal_False );
-        mxCursor->goLeft( 1, sal_True );
+        mxCursor->gotoEnd( false );
+        mxCursor->goLeft( 1, true );
         mxCursor->setString( aEmpty );
 
         // reset cursor

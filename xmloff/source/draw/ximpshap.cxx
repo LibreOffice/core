@@ -264,12 +264,12 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
     }
 
     drawing::GluePoint2 aGluePoint;
-    aGluePoint.IsUserDefined = sal_True;
+    aGluePoint.IsUserDefined = true;
     aGluePoint.Position.X = 0;
     aGluePoint.Position.Y = 0;
     aGluePoint.Escape = drawing::EscapeDirection_SMART;
     aGluePoint.PositionAlignment = drawing::Alignment_CENTER;
-    aGluePoint.IsRelative = sal_True;
+    aGluePoint.IsRelative = true;
 
     sal_Int32 nId = -1;
 
@@ -307,7 +307,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
                 if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueAlignment_EnumMap ) )
                 {
                     aGluePoint.PositionAlignment = (drawing::Alignment)eKind;
-                    aGluePoint.IsRelative = sal_False;
+                    aGluePoint.IsRelative = false;
                 }
             }
             else if( IsXMLToken( aLocalName, XML_ESCAPE_DIRECTION ) )
@@ -346,8 +346,8 @@ void SdXMLShapeContext::EndElement()
     {
         // delete addition newline
         const OUString aEmpty;
-        mxCursor->gotoEnd( sal_False );
-        mxCursor->goLeft( 1, sal_True );
+        mxCursor->gotoEnd( false );
+        mxCursor->goLeft( 1, true );
         mxCursor->setString( aEmpty );
 
         // reset cursor
@@ -437,10 +437,10 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         {
             uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY_THROW );
             if( !mbVisible )
-                xSet->setPropertyValue("Visible", uno::Any( sal_False ) );
+                xSet->setPropertyValue("Visible", uno::Any( false ) );
 
             if( !mbPrintable )
-                xSet->setPropertyValue("Printable", uno::Any( sal_False ) );
+                xSet->setPropertyValue("Printable", uno::Any( false ) );
         }
         catch(const Exception&)
         {
@@ -2201,7 +2201,7 @@ void SdXMLMeasureShapeContext::EndElement()
 
         const OUString aEmpty;
         xCursor->collapseToStart();
-        xCursor->goRight( 1, sal_True );
+        xCursor->goRight( 1, true );
         xCursor->setString( aEmpty );
     }
     while(false);
@@ -2338,7 +2338,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             aAny >>= bIsAutoGrowWidth;
 
             if ( bIsAutoGrowWidth )
-                xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( sal_False ) );
+                xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( false ) );
         }
 
         // set pos, size, shear and rotate
@@ -2347,7 +2347,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             xProps->setPropertyValue("CaptionPoint", uno::makeAny( maCaptionPoint ) );
 
         if ( bIsAutoGrowWidth )
-            xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( sal_True ) );
+            xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( true ) );
 
         if(mnRadius)
         {
@@ -3847,7 +3847,7 @@ void SdXMLCustomShapeContext::EndElement()
 
             pItem->Name = sName;
             pItem->Handle = -1;
-            pItem->Value <<= sal_True;
+            pItem->Value <<= true;
             pItem->State = beans::PropertyState_DIRECT_VALUE;
         }
     }
@@ -4044,7 +4044,7 @@ void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStrin
                 if( IsXMLToken( rLocalName, pEntry->meXMLName ) )
                 {
                     if( IsXMLToken( rValue, XML_TRUE ) )
-                        maTemplateStylesUsed[i] = sal_True;
+                        maTemplateStylesUsed[i] = true;
                     break;
                 }
                 pEntry++;

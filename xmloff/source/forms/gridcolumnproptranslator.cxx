@@ -171,10 +171,10 @@ namespace xmloff
         sal_Bool SAL_CALL OMergedPropertySetInfo::hasPropertyByName( const OUString& Name ) throw (RuntimeException, std::exception)
         {
             if ( Name == getParaAlignProperty() )
-                return sal_True;
+                return true;
 
             if ( !m_xMasterInfo.is() )
-                return sal_False;
+                return false;
 
             return m_xMasterInfo->hasPropertyByName( Name );
         }

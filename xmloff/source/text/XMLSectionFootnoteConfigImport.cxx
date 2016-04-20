@@ -65,9 +65,9 @@ XMLSectionFootnoteConfigImport::~XMLSectionFootnoteConfigImport()
 void XMLSectionFootnoteConfigImport::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    sal_Bool bEnd = sal_True;   // we're inside the element, so this is true
-    sal_Bool bNumOwn = sal_False;
-    sal_Bool bNumRestart = sal_False;
+    sal_Bool bEnd = true;   // we're inside the element, so this is true
+    sal_Bool bNumOwn = false;
+    sal_Bool bNumRestart = false;
     bool bEndnote = false;
     sal_Int16 nNumRestartAt = 0;
     OUString sNumPrefix;
@@ -93,7 +93,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
                 if (::sax::Converter::convertNumber(nTmp, sAttrValue))
                 {
                     nNumRestartAt = static_cast< sal_Int16 >( nTmp ) - 1;
-                    bNumRestart = sal_True;
+                    bNumRestart = true;
                 }
             }
             else if( IsXMLToken( sLocalName, XML_NOTE_CLASS ) )
@@ -107,22 +107,22 @@ void XMLSectionFootnoteConfigImport::StartElement(
             if (IsXMLToken(sLocalName, XML_NUM_PREFIX))
             {
                 sNumPrefix = sAttrValue;
-                bNumOwn = sal_True;
+                bNumOwn = true;
             }
             else if (IsXMLToken(sLocalName, XML_NUM_SUFFIX))
             {
                 sNumSuffix = sAttrValue;
-                bNumOwn = sal_True;
+                bNumOwn = true;
             }
             else if (IsXMLToken(sLocalName, XML_NUM_FORMAT))
             {
                 sNumFormat = sAttrValue;
-                bNumOwn = sal_True;
+                bNumOwn = true;
             }
             else if (IsXMLToken(sLocalName, XML_NUM_LETTER_SYNC))
             {
                 sNumLetterSync = sAttrValue;
-                bNumOwn = sal_True;
+                bNumOwn = true;
             }
         }
     }

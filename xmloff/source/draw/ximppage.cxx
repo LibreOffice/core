@@ -183,8 +183,8 @@ void DrawAnnotationContext::EndElement()
     {
         // delete addition newline
         const OUString aEmpty;
-        mxCursor->gotoEnd( sal_False );
-        mxCursor->goLeft( 1, sal_True );
+        mxCursor->gotoEnd( false );
+        mxCursor->goLeft( 1, true );
         mxCursor->setString( aEmpty );
 
         // reset cursor

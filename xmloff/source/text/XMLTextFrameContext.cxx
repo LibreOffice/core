@@ -225,7 +225,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 {
     OUString sD, sPoints, sViewBox;
     bool bPixelWidth = false, bPixelHeight = false;
-    sal_Bool bAuto = sal_False;
+    sal_Bool bAuto = false;
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
 
