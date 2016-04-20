@@ -658,6 +658,9 @@ void Test::testMiscEquivalent()
     // check non-BMP Unicode char
     ParseAndCompare("{\xf0\x9d\x91\x8e}", "\xf0\x9d\x91\x8e", "non-BMP variable in brace");
     ParseAndCompare("{ \xf0\x9d\x91\x8e }", "\xf0\x9d\x91\x8e", "non-BMP variable in brace");
+
+    // tdf#88320
+    ParseAndCompare("A_1,B_2", "A_{1},B_2", "Comma between a digit and non-digit delimits subscript");
 }
 
 void Test::testParser()
