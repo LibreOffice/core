@@ -1328,6 +1328,17 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     {
                         bSingleGraphicSelected = nMarkCount == 1;
                         const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
+
+                        // Current size of the OBJ_GRAF
+                        Rectangle aRect = static_cast<SdrObject*>(pObj)->GetLogicRect();
+                        Size aCurrentSizeofObj = Application::GetDefaultDevice()->LogicToLogic( aRect.GetSize(), MapMode(MAP_100TH_MM), pSdrGrafObj->GetGrafPrefMapMode());
+
+                        // Original size of the OBJ_GRAF
+                        Size aOriginalSizeofObj = pSdrGrafObj->getOriginalSize( static_cast<SdrObject*>(pObj) );
+
+                        if(aCurrentSizeofObj == aOriginalSizeofObj )
+                            rSet.DisableItem(SID_ORIGINAL_SIZE);
+
                         switch(pSdrGrafObj->GetGraphicType())
                         {
                             case GRAPHIC_BITMAP :

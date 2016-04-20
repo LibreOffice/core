@@ -143,6 +143,7 @@ public:
 
     void                    SetGrafStreamURL( const OUString& rGraphicStreamURL );
     OUString                GetGrafStreamURL() const;
+    Size                    getOriginalSize( SdrObject* pObj ) const; //MAP_100TH_MM
 
 private:
     void                    ForceSwapIn() const;
