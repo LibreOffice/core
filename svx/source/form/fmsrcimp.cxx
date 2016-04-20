@@ -821,7 +821,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
 
     // important: The case of the columns does not need to be exact - for instance:
     // - a user created a form which works on a table, for which the driver returns a column name "COLUMN"
-    // - the driver itself works case-insensitve with column names
+    // - the driver itself works case-insensitive with column names
     // - a control in the form is bound to "column" - not the different case
     // In such a scenario, the form and the field would work okay, but we here need to case for the different case
     // explicitly

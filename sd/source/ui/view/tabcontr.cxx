@@ -151,7 +151,7 @@ void TabControl::StartDrag( sal_Int8, const Point& )
 {
     bInternalMove = true;
 
-    // object is delete by reference mechanismn
+    // object is delete by reference mechanism
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
 }
 

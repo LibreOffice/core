@@ -3478,7 +3478,7 @@ void SwUiWriterTest::testTdf96479()
     {
         // Save and load cycle
         // Actually not needed, but the bug symptom of a missing bookmark
-        // occurred because a broken bookmar was saved and loading silently
+        // occurred because a broken bookmark was saved and loading silently
         // dropped the broken bookmark!
         utl::TempFile aTempFile;
         save("writer8", aTempFile);
