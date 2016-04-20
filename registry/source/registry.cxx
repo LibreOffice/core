@@ -98,7 +98,7 @@ static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
     if (hReg)
         return static_cast<ORegistry*>(hReg)->isReadOnly();
     else
-        return sal_False;
+        return false;
 }
 
 
