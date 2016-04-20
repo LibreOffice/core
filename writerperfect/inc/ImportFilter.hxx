@@ -74,7 +74,7 @@ public:
         if (!xInputStream.is())
         {
             OSL_ASSERT(false);
-            return sal_False;
+            return false;
         }
 
         // An XML import service: what we push sax messages to..
