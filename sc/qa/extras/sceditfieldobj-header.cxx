@@ -118,7 +118,7 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
         uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
         uno::Reference<text::XTextRange> xRange(xCursor, UNO_QUERY_THROW);
         uno::Reference<text::XTextContent> xContent(mxField, UNO_QUERY_THROW);
-        xText->insertTextContent(xRange, xContent, sal_False);
+        xText->insertTextContent(xRange, xContent, false);
 
         xPropSet->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent));
 

@@ -529,7 +529,7 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
                 //! case-insensitiv ???
                 OUString aLinkDoc(rDoc.GetLinkDoc( nTab ));
                 if ( aLinkDoc == aName )
-                    return sal_True;
+                    return true;
             }
     }
     return false;
@@ -1373,7 +1373,7 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
         {
             rDoc.GetDdeLinkData( i, aAppl, aTopic, aItem );
             if ( lcl_BuildDDEName(aAppl, aTopic, aItem) == aName )
-                return sal_True;
+                return true;
         }
     }
     return false;

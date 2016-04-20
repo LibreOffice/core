@@ -116,7 +116,7 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( 
 {
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         if ( aNames[i] == aName )
-            return sal_True;
+            return true;
     return false;
 }
 
@@ -129,7 +129,7 @@ uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType() throw( uno::RuntimeExc
 
 sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements() throw( uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :

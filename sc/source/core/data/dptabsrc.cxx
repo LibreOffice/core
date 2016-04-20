@@ -1290,7 +1290,7 @@ sal_Bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName ) throw(uno::
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
-            return sal_True;
+            return true;
     return false;
 }
 
@@ -1746,7 +1746,7 @@ sal_Bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName ) throw(uno:
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
-            return sal_True;
+            return true;
     return false;
 }
 
@@ -1925,7 +1925,7 @@ sal_Bool SAL_CALL ScDPLevels::hasByName( const OUString& aName ) throw(uno::Runt
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
-            return sal_True;
+            return true;
     return false;
 }
 
@@ -2003,7 +2003,7 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nHier( nH ),
     nLev( nL ),
     pMembers( nullptr ),
-    aSortInfo( EMPTY_OUSTRING, sal_True, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
+    aSortInfo( EMPTY_OUSTRING, true, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
     bShowEmpty( false ),

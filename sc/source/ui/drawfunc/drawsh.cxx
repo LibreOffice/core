@@ -93,7 +93,7 @@ static void lcl_setModified( SfxObjectShell*  pShell )
     {
         css::uno::Reference< css::util::XModifiable > xModif( pShell->GetModel(), css::uno::UNO_QUERY );
         if ( xModif.is() )
-            xModif->setModified( sal_True );
+            xModif->setModified( true );
     }
 }
 

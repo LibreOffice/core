@@ -122,7 +122,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses ) throw (script::BasicErrorExceptio
         switch (_nCrosses)
         {
             case  xlAxisCrossesAutomatic:       //Microsoft Excel sets the axis crossing point.
-                mxPropertySet->setPropertyValue(AUTOORIGIN, uno::makeAny( sal_True ) );
+                mxPropertySet->setPropertyValue(AUTOORIGIN, uno::makeAny( true ) );
                 bCrossesAreCustomized = false;
                 return;
             case xlAxisCrossesMinimum:                     // The axis crosses at the minimum value.
@@ -562,10 +562,10 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType ) throw (script::BasicErrorExce
             switch (_nScaleType)
             {
                 case xlScaleLinear:
-                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( sal_False ) );
+                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( false ) );
                     break;
                 case xlScaleLogarithmic:
-                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( sal_True ) );
+                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( true ) );
                     break;
                 default:
                     // According to MS the paramenter is ignored and no Error is thrown

@@ -781,7 +781,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                                     if ( xStorable->isReadonly() )
                                     {
-                                        xCloseable->close( sal_True );
+                                        xCloseable->close( true );
 
                                         OUString aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
                                         bool bNoLockAccess = false;
@@ -830,7 +830,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         }
 
                                         // close shared file
-                                        xCloseable->close( sal_True );
+                                        xCloseable->close( true );
 
                                         // TODO: keep file lock on shared file
 
@@ -879,7 +879,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 }
                                 else
                                 {
-                                    xCloseable->close( sal_True );
+                                    xCloseable->close( true );
 
                                     if ( bEntriesNotAccessible )
                                     {
@@ -908,7 +908,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 try
                                 {
                                     uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
-                                    xClose->close( sal_True );
+                                    xClose->close( true );
                                 }
                                 catch ( uno::Exception& )
                                 {

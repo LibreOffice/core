@@ -775,7 +775,7 @@ void PivotCacheField::convertNumericGrouping( const Reference< XDataPilotField >
         DataPilotFieldGroupInfo aGroupInfo;
         aGroupInfo.HasAutoStart  = maFieldGroupModel.mbAutoStart;
         aGroupInfo.HasAutoEnd    = maFieldGroupModel.mbAutoEnd;
-        aGroupInfo.HasDateValues = sal_False;
+        aGroupInfo.HasDateValues = false;
         aGroupInfo.Start         = maFieldGroupModel.mfStartValue;
         aGroupInfo.End           = maFieldGroupModel.mfEndValue;
         aGroupInfo.Step          = maFieldGroupModel.mfInterval;
@@ -796,7 +796,7 @@ OUString PivotCacheField::createDateGroupField( const Reference< XDataPilotField
         DataPilotFieldGroupInfo aGroupInfo;
         aGroupInfo.HasAutoStart  = maFieldGroupModel.mbAutoStart;
         aGroupInfo.HasAutoEnd    = maFieldGroupModel.mbAutoEnd;
-        aGroupInfo.HasDateValues = sal_True;
+        aGroupInfo.HasDateValues = true;
         aGroupInfo.Start         = getUnitConverter().calcSerialFromDateTime( maFieldGroupModel.maStartDate );
         aGroupInfo.End           = getUnitConverter().calcSerialFromDateTime( maFieldGroupModel.maEndDate );
         aGroupInfo.Step          = bDayRanges ? maFieldGroupModel.mfInterval : 0.0;

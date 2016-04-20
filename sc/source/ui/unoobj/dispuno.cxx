@@ -275,7 +275,7 @@ void SAL_CALL ScDispatch::addStatusListener(
 
     //  initial state
     frame::FeatureStateEvent aEvent;
-    aEvent.IsEnabled = sal_True;
+    aEvent.IsEnabled = true;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.FeatureURL = aURL;
 

@@ -418,7 +418,7 @@ ScVbaFormat< Ifc... >::setNumberFormatLocal( const uno::Any& _oLocalFormatString
         initializeNumberFormats();
         lang::Locale aRangeLocale;
         xNumberFormats->getByKey(nFormat)->getPropertyValue( LOCALE ) >>= aRangeLocale;
-        sal_Int32 nNewFormat = xNumberFormats->queryKey(sLocalFormatString, aRangeLocale, sal_True);
+        sal_Int32 nNewFormat = xNumberFormats->queryKey(sLocalFormatString, aRangeLocale, true);
 
         if (nNewFormat == -1)
             nNewFormat = xNumberFormats->addNew(sLocalFormatString, aRangeLocale);
@@ -444,7 +444,7 @@ ScVbaFormat< Ifc... >::setNumberFormat( const uno::Any& _oFormatString ) throw (
 
         lang::Locale aDefaultLocale = m_aDefaultLocale;
         initializeNumberFormats();
-        sal_Int32 nFormat = xNumberFormats->queryKey(sFormatString, aDefaultLocale, sal_True);
+        sal_Int32 nFormat = xNumberFormats->queryKey(sFormatString, aDefaultLocale, true);
 
         if (nFormat == -1)
             nFormat = xNumberFormats->addNew(sFormatString, aDefaultLocale);

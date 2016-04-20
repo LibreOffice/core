@@ -73,7 +73,7 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override
     {
-        return sal_True;
+        return true;
     }
 
 };

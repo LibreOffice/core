@@ -187,13 +187,13 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
                 xTextCursor->collapseToStart();
                 xTextCursor->gotoStart( false );
                 xTextCursor->goRight( nStart - 1, false );
-                xTextCursor->gotoEnd( sal_True );
+                xTextCursor->gotoEnd( true );
             }
             else
             {
                 xTextCursor->collapseToStart();
                 xTextCursor->gotoStart( false );
-                xTextCursor->goRight( nStart - 1 , sal_True );
+                xTextCursor->goRight( nStart - 1 , true );
             }
 
             uno::Reference< text::XTextRange > xRange( xTextCursor, uno::UNO_QUERY_THROW );

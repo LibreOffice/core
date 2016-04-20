@@ -1575,7 +1575,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     pArray[0].Value <<= aPageSize;
     // #i111158# all positions are relative to the whole page, including non-printable area
     pArray[1].Name = SC_UNONAME_INC_NP_AREA;
-    pArray[1].Value = uno::makeAny( sal_True );
+    pArray[1].Value = uno::makeAny( true );
     if ( bWasCellRange )
     {
         table::CellRangeAddress aRangeAddress( nTab,
@@ -3483,7 +3483,7 @@ sal_Bool SAL_CALL ScTableSheetsObj::hasByName( const OUString& aName )
     {
         SCTAB nIndex;
         if ( pDocShell->GetDocument().GetTable( aName, nIndex ) )
-            return sal_True;
+            return true;
     }
     return false;
 }
@@ -3644,7 +3644,7 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const OUString& aName )
     SCCOL nCol = 0;
     if ( ::AlphaToCol( nCol, aName) )
         if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
-            return sal_True;
+            return true;
 
     return false;       // nicht gefunden
 }

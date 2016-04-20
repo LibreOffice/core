@@ -1169,11 +1169,11 @@ void ScXMLChangeCellContext::EndElement()
             if (GetImport().GetTextImport()->GetCursor().is())
             {
                 //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
-                if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
+                if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, true ) )
                 {
                     GetImport().GetTextImport()->GetText()->insertString(
                         GetImport().GetTextImport()->GetCursorAsRange(), "",
-                        sal_True );
+                        true );
                 }
             }
 

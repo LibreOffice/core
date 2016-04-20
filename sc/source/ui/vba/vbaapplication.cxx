@@ -371,7 +371,7 @@ ScVbaApplication::getCutCopyMode() throw (uno::RuntimeException, std::exception)
 {
     //# FIXME TODO, implementation
     uno::Any result;
-    result <<= sal_False;
+    result <<= false;
     return result;
 }
 
@@ -397,7 +397,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
     uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_QUERY_THROW );
     if( _statusbar >>= sText )
     {
-        setDisplayStatusBar( sal_True );
+        setDisplayStatusBar( true );
         if ( !sText.isEmpty() )
             xStatusIndicator->start( sText, 100 );
         else
@@ -408,7 +408,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
         if( !bDefault )
         {
             xStatusIndicator->end();
-            setDisplayStatusBar( sal_True );
+            setDisplayStatusBar( true );
         }
     }
     else
@@ -438,7 +438,7 @@ ScVbaApplication::setCalculation( ::sal_Int32 _calculation ) throw (uno::Runtime
             break;
         case excel::XlCalculation::xlCalculationAutomatic:
         case excel::XlCalculation::xlCalculationSemiautomatic:
-            xCalc->enableAutomaticCalculation(sal_True);
+            xCalc->enableAutomaticCalculation(true);
             break;
     }
 }
@@ -741,7 +741,7 @@ ScVbaApplication::getDisplayFullScreen()  throw (uno::RuntimeException, std::exc
     SfxViewShell* pShell  = excel::getCurrentBestViewShell( mxContext );
     if ( pShell )
         return ScViewUtil::IsFullScreen( *pShell );
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL

@@ -491,28 +491,28 @@ sal_Bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
            std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::selectColumn( sal_Int32 )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
            std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::unselectRow( sal_Int32 )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
            std::exception)
 {
-        return sal_True;
+        return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::unselectColumn( sal_Int32 )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
            std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
