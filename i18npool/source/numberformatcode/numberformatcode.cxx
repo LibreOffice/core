@@ -56,7 +56,7 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
                                                                     aFormatSeq[i].formatName,
                                                                     aFormatSeq[i].formatKey,
                                                                     aFormatSeq[i].formatIndex,
-                                                                    sal_True);
+                                                                    true);
             return anumberFormatCode;
         }
     }

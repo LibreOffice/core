@@ -94,7 +94,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         sal_Unicode* out = pStr->buffer;
         Reference< BreakIteratorImpl > xBrk(new BreakIteratorImpl(m_xContext));
         Boundary bdy = xBrk->getWordBoundary(Text, nPos, rLocale,
-                    WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
+                    WordType::ANYWORD_IGNOREWHITESPACES, true);
         for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {
             if (i >= bdy.endPos)
                 bdy = xBrk->nextWord(Text, bdy.endPos, rLocale,

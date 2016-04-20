@@ -100,8 +100,8 @@ static const sal_uInt16 dev_cell_check[14][14] = {
 };
 
 sal_Bool DEV_Composible[2][2] = {
-/* Mode 0 */    {sal_True, sal_True }, // PASSTHROUGH = 0
-/* Mode 1 */    {sal_False, sal_True}  // STRICT = 1
+/* Mode 0 */    {true, true }, // PASSTHROUGH = 0
+/* Mode 1 */    {false, true}  // STRICT = 1
 };
 
 #define getCharType(x) \

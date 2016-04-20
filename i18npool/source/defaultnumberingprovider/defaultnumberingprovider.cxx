@@ -1034,8 +1034,8 @@ sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingI
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
         if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingType )

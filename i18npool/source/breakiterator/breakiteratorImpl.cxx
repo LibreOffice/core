@@ -112,7 +112,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
             if( nStartPos >= len )
                 result.startPos = result.endPos = len;
             else {
-                result = LBI->getWordBoundary(Text, nStartPos, rLocale, rWordType, sal_True);
+                result = LBI->getWordBoundary(Text, nStartPos, rLocale, rWordType, true);
                 // i88041: avoid startPos goes back to nStartPos when switching between Latin and CJK scripts
                 if (result.startPos < nStartPos) result.startPos = nStartPos;
             }
@@ -172,9 +172,9 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
         } else {
             if (next != prev) {
                 if (next == nPos && next != len)
-                    bDirection = sal_True;
+                    bDirection = true;
                 else if (prev == nPos && prev != 0)
-                    bDirection = sal_False;
+                    bDirection = false;
                 else
                     nPos = bDirection ? next : prev;
             }
@@ -189,13 +189,13 @@ sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int3
 {
     sal_Int32 len = Text.getLength();
 
-    if (nPos < 0 || nPos >= len) return sal_False;
+    if (nPos < 0 || nPos >= len) return false;
 
     sal_Int32 tmp = skipSpace(Text, nPos, len, rWordType, true);
 
-    if (tmp != nPos) return sal_False;
+    if (tmp != nPos) return false;
 
-    result = getWordBoundary(Text, nPos, rLocale, rWordType, sal_True);
+    result = getWordBoundary(Text, nPos, rLocale, rWordType, true);
 
     return result.startPos == nPos;
 }
@@ -205,13 +205,13 @@ sal_Bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 
 {
     sal_Int32 len = Text.getLength();
 
-    if (nPos <= 0 || nPos > len) return sal_False;
+    if (nPos <= 0 || nPos > len) return false;
 
     sal_Int32 tmp = skipSpace(Text, nPos, len, rWordType, false);
 
-    if (tmp != nPos) return sal_False;
+    if (tmp != nPos) return false;
 
-    result = getWordBoundary(Text, nPos, rLocale, rWordType, sal_False);
+    result = getWordBoundary(Text, nPos, rLocale, rWordType, false);
 
     return result.endPos == nPos;
 }

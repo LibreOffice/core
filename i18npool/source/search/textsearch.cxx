@@ -1052,7 +1052,7 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
 
     Boundary aWBnd = xBreak->getWordBoundary( searchStr, startPos,
             aSrchPara.Locale,
-            WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+            WordType::ANYWORD_IGNOREWHITESPACES, true );
 
     do
     {
@@ -1097,7 +1097,7 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
 
     Boundary aWBnd = xBreak->getWordBoundary( searchStr, startPos,
             aSrchPara.Locale,
-            WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+            WordType::ANYWORD_IGNOREWHITESPACES, true );
 
     do
     {

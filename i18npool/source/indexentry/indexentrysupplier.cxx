@@ -51,7 +51,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, cons
                 return xIES->loadAlgorithm(rLocale, SortAlgorithm, collatorOptions);
         }
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale ) throw (RuntimeException, std::exception)

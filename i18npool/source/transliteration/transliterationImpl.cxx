@@ -479,7 +479,7 @@ TransliterationImpl::equals(
             // return number of matched code points so far
             nMatch1 = (i < offset1.getLength()) ? offset1[i] : i;
             nMatch2 = (i < offset2.getLength()) ? offset2[i] : i;
-            return sal_False;
+            return false;
         }
     }
     // i==nLen
@@ -487,11 +487,11 @@ TransliterationImpl::equals(
         // return number of matched code points so far
         nMatch1 = (i <= offset1.getLength()) ? offset1[i-1] + 1 : i;
         nMatch2 = (i <= offset2.getLength()) ? offset2[i-1] + 1 : i;
-        return sal_False;
+        return false;
     } else {
         nMatch1 = nCount1;
         nMatch2 = nCount2;
-        return sal_True;
+        return true;
     }
 }
 

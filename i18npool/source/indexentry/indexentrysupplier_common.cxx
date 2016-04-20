@@ -67,7 +67,7 @@ sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& 
     collator->loadCollatorAlgorithm(rAlgorithm, rLocale, collatorOptions);
     aLocale = rLocale;
     aAlgorithm = rAlgorithm;
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,

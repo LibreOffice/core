@@ -57,9 +57,9 @@ sal_Char TAC_celltype_inputcheck[17][17] = {
 
 sal_Bool TAC_Composible[3][5] = {
         /*  'A',    'C',        'S',        'R',        'X'   */
-/* Mode 0 */    {sal_True,  sal_True,   sal_True,   sal_True,   sal_True}, // PASSTHROUGH = 0
-/* Mode 1 */    {sal_True,  sal_True,   sal_True,   sal_False,      sal_True}, // BASIC = 1
-/* Mode 2 */    {sal_True,  sal_True,   sal_False,      sal_False,      sal_True}  // STRICT = 2
+/* Mode 0 */    {true,  true,   true,   true,   true}, // PASSTHROUGH = 0
+/* Mode 1 */    {true,  true,   true,   false,      true}, // BASIC = 1
+/* Mode 2 */    {true,  true,   false,      false,      true}  // STRICT = 2
 };
 
 static bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode)

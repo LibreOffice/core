@@ -109,7 +109,7 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
         const sal_Unicode *pron2 = getPronounce(*s2++);
         if (pron1 != pron2) {
             nMatch1 = nMatch2 = i;
-            return sal_False;
+            return false;
         }
     }
     nMatch1 = nMatch2 = realCount;

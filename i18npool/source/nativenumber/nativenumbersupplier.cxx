@@ -663,12 +663,12 @@ sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLoc
     switch (nNativeNumberMode) {
         case NativeNumberMode::NATNUM0:     // Ascii
         case NativeNumberMode::NATNUM3:     // Char, FullWidth
-            return sal_True;
+            return true;
         case NativeNumberMode::NATNUM1:     // Char, Lower
             return (langnum >= 0);
         case NativeNumberMode::NATNUM2:     // Char, Upper
             if (langnum == 4) // Hebrew numbering
-                return sal_True;
+                return true;
         case NativeNumberMode::NATNUM4:     // Text, Lower, Long
         case NativeNumberMode::NATNUM5:     // Text, Upper, Long
         case NativeNumberMode::NATNUM6:     // Text, FullWidth
@@ -680,7 +680,7 @@ sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLoc
         case NativeNumberMode::NATNUM11:    // Text, Hangul, Short
             return (langnum == 3); // Korean numbering
     }
-    return sal_False;
+    return false;
 }
 
 NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException, std::exception)

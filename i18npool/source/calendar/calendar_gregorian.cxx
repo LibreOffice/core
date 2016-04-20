@@ -827,7 +827,7 @@ Calendar_gregorian::isValid() throw(RuntimeException, std::exception)
             // compare only with fields that are set and reset fieldSet[]
             if (tmp & (1 << fieldIndex)) {
                 if (fieldSetValue[fieldIndex] != fieldValue[fieldIndex])
-                    return sal_False;
+                    return false;
             }
         }
     }

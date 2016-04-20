@@ -54,14 +54,14 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
         sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException, std::exception)
 {
     if (inputCheckMode == InputSequenceCheckMode::PASSTHROUGH)
-        return sal_True;
+        return true;
 
     sal_Char* language = getLanguageByScripType(Text[nStartPos], inputChar);
 
     if (language)
         return getInputSequenceChecker(language)->checkInputSequence(Text, nStartPos, inputChar, inputCheckMode);
     else
-        return sal_True; // not a checkable languages.
+        return true; // not a checkable languages.
 }
 
 sal_Int32 SAL_CALL

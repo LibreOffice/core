@@ -329,7 +329,7 @@ sal_Bool SAL_CALL
 TextConversion_zh::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
     throw(  RuntimeException, IllegalArgumentException, NoSupportException, std::exception )
 {
-    return sal_False;
+    return false;
 }
 
 } } } }
