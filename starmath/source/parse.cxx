@@ -460,6 +460,13 @@ void SmParser::NextToken()
     }
     else if (aRes.TokenType & KParseType::ANY_NUMBER)
     {
+        assert(aRes.EndPos > 0);
+        if (m_aBufferString[aRes.EndPos-1] == ',')
+        {
+            // Ending with a comma means that it is not for decimal/thousands separator,
+            // so drop it from current token.
+            --aRes.EndPos;
+        }
         sal_Int32 n = aRes.EndPos - nRealStart;
         OSL_ENSURE( n >= 0, "length < 0" );
         m_aCurToken.eType      = TNUMBER;
