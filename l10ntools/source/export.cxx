@@ -134,7 +134,7 @@ int GetError()
     // get error at global instance of class Export
     if (global::exporter->GetError())
         return 1;
-    return sal_False;
+    return false;
 }
 
 } // extern "C"

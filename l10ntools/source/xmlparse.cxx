@@ -315,13 +315,13 @@ XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created 
     : XMLParentNode( nullptr )
     , m_sFileName( rFileName )
 {
-    m_aNodes_localize.insert( TagMap::value_type(OString("bookmark") , sal_True) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("variable") , sal_True) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("paragraph") , sal_True) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("alt") , sal_True) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("caption") , sal_True) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("title") , sal_True) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("link") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("bookmark") , true) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("variable") , true) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("paragraph") , true) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("alt") , true) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("caption") , true) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("title") , true) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("link") , true) );
 }
 
 void XMLFile::Extract()
