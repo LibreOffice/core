@@ -177,7 +177,7 @@ sal_Bool SAL_CALL ScSheetEventsObj::hasElements() throw(uno::RuntimeException, s
 {
     SolarMutexGuard aGuard;
     if (mpDocShell)
-        return sal_True;
+        return true;
     return false;
 }
 

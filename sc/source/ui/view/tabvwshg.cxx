@@ -92,7 +92,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
     {
-        aAny <<= sal_True;
+        aAny <<= true;
         xPropSet->setPropertyValue("DispatchURLInternal", aAny );
     }
 

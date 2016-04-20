@@ -881,7 +881,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
     IsObjectValid();
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
 
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
@@ -904,7 +904,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
 
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
@@ -1471,7 +1471,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
 
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
 
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
@@ -1479,7 +1479,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
     mpViewShell->InitBlockMode( 0, row, maRange.aStart.Tab(), false, false, true );
     mpViewShell->MarkCursor( MAXCOL, row, maRange.aStart.Tab(), false, true );
     mpViewShell->SelectionChanged();
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
@@ -1489,7 +1489,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
 
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
 
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
@@ -1497,7 +1497,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
     mpViewShell->InitBlockMode( static_cast<SCCOL>(column), 0, maRange.aStart.Tab(), false, true );
     mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true );
     mpViewShell->SelectionChanged();
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
@@ -1507,7 +1507,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
 
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
 
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
@@ -1516,7 +1516,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
     mpViewShell->MarkCursor( MAXCOL, row, maRange.aStart.Tab(), false, true );
     mpViewShell->SelectionChanged();
     mpViewShell->DoneBlockMode( true );
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
@@ -1526,7 +1526,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
 
     if (IsFormulaMode())
     {
-        return sal_False;
+        return false;
     }
 
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
@@ -1535,7 +1535,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
     mpViewShell->MarkCursor( static_cast<SCCOL>(column), MAXROW, maRange.aStart.Tab(), true );
     mpViewShell->SelectionChanged();
     mpViewShell->DoneBlockMode( true );
-    return sal_True;
+    return true;
 }
 
 void ScAccessibleSpreadsheet::FireFirstCellFocus()

@@ -729,7 +729,7 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
         {
             const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
             if (pData && lcl_UserVisibleName(*pData))
-                return sal_True;
+                return true;
         }
     }
     return false;

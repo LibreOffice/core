@@ -179,7 +179,7 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const S
                 OUString aChartName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                 Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
                 Reference< util::XModifiable > xModif(xChartDoc, uno::UNO_QUERY_THROW);
-                xModif->setModified( sal_True);
+                xModif->setModified( true);
             }
             pObject = aIter.Next();
         }
@@ -420,9 +420,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                                 else
                                 {
                                     xProps->setPropertyValue("DisableDataTableDialog",
-                                        uno::makeAny( sal_False ) );
+                                        uno::makeAny( false ) );
                                     xProps->setPropertyValue("DisableComplexChartTypes",
-                                        uno::makeAny( sal_False ) );
+                                        uno::makeAny( false ) );
                                 }
                             }
                         }

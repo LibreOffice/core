@@ -741,7 +741,7 @@ ScVbaWindow::getZoom() throw (uno::RuntimeException, std::exception)
     xProps->getPropertyValue( sName ) >>= nZoomType;
     if( nZoomType == view::DocumentZoomType::PAGE_WIDTH )
     {
-        return uno::makeAny( sal_True );
+        return uno::makeAny( true );
     }
     else if( nZoomType == view::DocumentZoomType::BY_VALUE )
     {

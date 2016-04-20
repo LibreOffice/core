@@ -166,7 +166,7 @@ namespace calc
         const Type* pTypesEnd = aSupportedTypes.getConstArray() + aSupportedTypes.getLength();
         while ( pTypes != pTypesEnd )
             if ( aType.equals( *pTypes++ ) )
-                return sal_True;
+                return true;
 
         return false;
     }

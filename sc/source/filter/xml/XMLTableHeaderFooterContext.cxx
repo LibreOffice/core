@@ -81,7 +81,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         {
             if( !::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
                 // share headers
-                xPropSet->setPropertyValue( sShareContent, uno::makeAny(sal_True) );
+                xPropSet->setPropertyValue( sShareContent, uno::makeAny(true) );
         }
     }
     else

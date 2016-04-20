@@ -699,7 +699,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                             }
                             //tell the dialog to unlock controller
                             xDialogProps->setPropertyValue("UnlockControllersOnExecute",
-                                        uno::makeAny( sal_True ) );
+                                        uno::makeAny( true ) );
 
                         }
                         catch( uno::Exception& )

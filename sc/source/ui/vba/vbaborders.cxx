@@ -63,28 +63,28 @@ private:
         switch ( m_LineType )
         {
             case XlBordersIndex::xlEdgeLeft:
-                aTableBorder.IsLeftLineValid = sal_True;
+                aTableBorder.IsLeftLineValid = true;
                 aTableBorder.LeftLine= rBorderLine;
                 break;
             case XlBordersIndex::xlEdgeTop:
-                aTableBorder.IsTopLineValid = sal_True;
+                aTableBorder.IsTopLineValid = true;
                 aTableBorder.TopLine = rBorderLine;
                 break;
 
             case XlBordersIndex::xlEdgeBottom:
-                aTableBorder.IsBottomLineValid = sal_True;
+                aTableBorder.IsBottomLineValid = true;
                 aTableBorder.BottomLine = rBorderLine;
                 break;
             case XlBordersIndex::xlEdgeRight:
-                aTableBorder.IsRightLineValid = sal_True;
+                aTableBorder.IsRightLineValid = true;
                 aTableBorder.RightLine = rBorderLine;
                 break;
             case XlBordersIndex::xlInsideVertical:
-                aTableBorder.IsVerticalLineValid = sal_True;
+                aTableBorder.IsVerticalLineValid = true;
                 aTableBorder.VerticalLine = rBorderLine;
                 break;
             case XlBordersIndex::xlInsideHorizontal:
-                aTableBorder.IsHorizontalLineValid = sal_True;
+                aTableBorder.IsHorizontalLineValid = true;
                 aTableBorder.HorizontalLine = rBorderLine;
                 break;
             case XlBordersIndex::xlDiagonalDown:
@@ -342,7 +342,7 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override
     {
-        return sal_True;
+        return true;
     }
 };
 

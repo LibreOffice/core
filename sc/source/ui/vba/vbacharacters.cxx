@@ -41,9 +41,9 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
         xTextCursor->goRight( nStart, false );
     }
     if ( nLength < 0 ) // expand to end
-        xTextCursor->gotoEnd( sal_True );
+        xTextCursor->gotoEnd( true );
     else
-        xTextCursor->goRight( nLength, sal_True );
+        xTextCursor->goRight( nLength, true );
     m_xTextRange.set( xTextCursor, uno::UNO_QUERY_THROW );
 
 }

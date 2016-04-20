@@ -1335,7 +1335,7 @@ ScXMLDataPilotDisplayInfoContext::ScXMLDataPilotDisplayInfoContext( ScXMLImport&
             if (IsXMLToken(aLocalName, XML_ENABLED))
             {
                 if (IsXMLToken(sValue, XML_TRUE))
-                    aInfo.IsEnabled = sal_True;
+                    aInfo.IsEnabled = true;
                 else
                     aInfo.IsEnabled = false;
             }
@@ -1385,7 +1385,7 @@ ScXMLDataPilotSortInfoContext::ScXMLDataPilotSortInfoContext( ScXMLImport& rImpo
             if (IsXMLToken(aLocalName, XML_ORDER))
             {
                 if (IsXMLToken(sValue, XML_ASCENDING))
-                    aInfo.IsAscending = sal_True;
+                    aInfo.IsAscending = true;
                 else if (IsXMLToken(sValue, XML_DESCENDING))
                     aInfo.IsAscending = false;
             }
@@ -1433,7 +1433,7 @@ ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& r
             if (IsXMLToken(aLocalName, XML_ADD_EMPTY_LINES))
             {
                 if (IsXMLToken(sValue, XML_TRUE))
-                    aInfo.AddEmptyLines = sal_True;
+                    aInfo.AddEmptyLines = true;
                 else
                     aInfo.AddEmptyLines = false;
             }

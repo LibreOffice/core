@@ -302,7 +302,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             document. */
         uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
         uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
-        xVBACompat->setVBACompatibilityMode( sal_True );
+        xVBACompat->setVBACompatibilityMode( true );
 
         if( xLibContainer.is() )
         {

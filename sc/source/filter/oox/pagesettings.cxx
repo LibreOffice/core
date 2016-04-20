@@ -753,16 +753,16 @@ void HeaderFooterParser::updateCurrHeight()
 void HeaderFooterParser::setAttributes()
 {
     Reference<text::XTextRange> xRange( getStartPos(), UNO_QUERY );
-    getEndPos()->gotoRange( xRange, sal_False );
-    getEndPos()->gotoEnd( sal_True );
+    getEndPos()->gotoRange( xRange, false );
+    getEndPos()->gotoEnd( true );
     if( !getEndPos()->isCollapsed() )
     {
         Font aFont( *this, maFontModel );
         aFont.finalizeImport();
         PropertySet aPropSet( getEndPos() );
         aFont.writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
-        getStartPos()->gotoEnd( sal_False );
-        getEndPos()->gotoEnd( sal_False );
+        getStartPos()->gotoEnd( false );
+        getEndPos()->gotoEnd( false );
     }
 }
 
@@ -770,7 +770,7 @@ void HeaderFooterParser::appendText()
 {
     if( !maBuffer.isEmpty() )
     {
-        getEndPos()->gotoEnd( sal_False );
+        getEndPos()->gotoEnd( false );
         getEndPos()->setString( maBuffer.makeStringAndClear() );
         updateCurrHeight();
     }
@@ -778,7 +778,7 @@ void HeaderFooterParser::appendText()
 
 void HeaderFooterParser::appendLineBreak()
 {
-    getEndPos()->gotoEnd( sal_False );
+    getEndPos()->gotoEnd( false );
     getEndPos()->setString( OUString( '\n' ) );
     getPortion().mfTotalHeight += getCurrHeight();
     getPortion().mfCurrHeight = 0;
@@ -802,11 +802,11 @@ Reference<text::XTextContent> HeaderFooterParser::createField( const OUString& r
 
 void HeaderFooterParser::appendField( const Reference<text::XTextContent>& rxContent )
 {
-    getEndPos()->gotoEnd( sal_False );
+    getEndPos()->gotoEnd( false );
     try
     {
         Reference<text::XTextRange> xRange( getEndPos(), UNO_QUERY_THROW );
-        getPortion().mxText->insertTextContent( xRange, rxContent, sal_False );
+        getPortion().mxText->insertTextContent( xRange, rxContent, false );
         updateCurrHeight();
     }
     catch( Exception& )

@@ -145,7 +145,7 @@ sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
     throw (uno::RuntimeException, std::exception )
 {
     if( !mpDoc->GetCodeName().isEmpty() )
-        return sal_True;
+        return true;
 
     SCTAB nCount = mpDoc->GetTableCount();
     OUString sSheetName, sCodeName;
@@ -153,7 +153,7 @@ sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
     {
         mpDoc->GetCodeName( i, sCodeName );
         if (!sCodeName.isEmpty() && mpDoc->GetName(i, sSheetName))
-            return sal_True;
+            return true;
     }
 
     return false;

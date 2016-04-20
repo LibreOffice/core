@@ -95,9 +95,8 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
 {
     if (pDocShell)
     {
-        OUString aNameStr(aName);
         for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
-            if ( aNames[i] == aNameStr )
+            if ( aNames[i] == aName )
                 return uno::makeAny(uno::Reference< beans::XPropertySet >(new ScLinkTargetTypeObj( pDocShell, i )));
     }
 
@@ -115,10 +114,9 @@ uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames() throw( 
 
 sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( uno::RuntimeException, std::exception )
 {
-    OUString aNameStr = aName;
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
-        if ( aNames[i] == aNameStr )
-            return sal_True;
+        if ( aNames[i] == aName )
+            return true;
     return false;
 }
 
@@ -131,7 +129,7 @@ uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType() throw( uno::RuntimeExc
 
 sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements() throw( uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :

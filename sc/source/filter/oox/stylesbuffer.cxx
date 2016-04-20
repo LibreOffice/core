@@ -569,8 +569,8 @@ ApiFontData::ApiFontData() :
         css::awt::FontUnderline::NONE,
         css::awt::FontStrikeout::NONE,
         0.0,
-        sal_False,
-        sal_False,
+        false,
+        false,
         css::awt::FontType::DONTKNOW ),
     mnColor( API_RGB_TRANSPARENT ),
     mnEscapement( API_ESCAPE_NONE ),
@@ -1376,7 +1376,7 @@ ProtectionModel::ProtectionModel() :
 }
 
 ApiProtectionData::ApiProtectionData() :
-    maCellProt( sal_True, sal_False, sal_False, sal_False )
+    maCellProt( true, false, false, false )
 {
 }
 

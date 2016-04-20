@@ -387,13 +387,13 @@ void DefinedName::convertFormula()
                     if( !bHasRowTitles && bFullRow && !bFullCol )
                     {
                         xPrintAreas->setTitleRows( *aIt );
-                        xPrintAreas->setPrintTitleRows( sal_True );
+                        xPrintAreas->setPrintTitleRows( true );
                         bHasRowTitles = true;
                     }
                     else if( !bHasColTitles && bFullCol && !bFullRow )
                     {
                         xPrintAreas->setTitleColumns( *aIt );
-                        xPrintAreas->setPrintTitleColumns( sal_True );
+                        xPrintAreas->setPrintTitleColumns( true );
                         bHasColTitles = true;
                     }
                 }

@@ -992,7 +992,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
             {
                 SvxDateField* p = static_cast<SvxDateField*>(pField);
                 if (rName == SC_UNONAME_ISDATE)
-                    return uno::makeAny(sal_True);
+                    return uno::makeAny(true);
 
                 if (rName == SC_UNONAME_ISFIXED)
                     return uno::makeAny<sal_Bool>(p->GetType() == SVXDATETYPE_FIX);
@@ -1018,10 +1018,10 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
             {
                 // SvxTimeField doesn't have any attributes.
                 if (rName == SC_UNONAME_ISDATE)
-                    return uno::makeAny(sal_False);
+                    return uno::makeAny(false);
 
                 if (rName == SC_UNONAME_ISFIXED)
-                    return uno::makeAny(sal_False);
+                    return uno::makeAny(false);
 
                 if (rName == SC_UNONAME_DATETIME)
                     // This is the best we can do.
@@ -1036,7 +1036,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
             {
                 SvxExtTimeField* p = static_cast<SvxExtTimeField*>(pField);
                 if (rName == SC_UNONAME_ISDATE)
-                    return uno::makeAny(sal_False);
+                    return uno::makeAny(false);
 
                 if (rName == SC_UNONAME_ISFIXED)
                     return uno::makeAny<sal_Bool>(p->GetType() == SVXTIMETYPE_FIX);
@@ -1258,7 +1258,7 @@ void SAL_CALL ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xT
         uno::Reference<text::XText> xText(xTextRange->getText());
         if (xText.is())
         {
-            xText->insertTextContent( xTextRange, this, sal_True );
+            xText->insertTextContent( xTextRange, this, true );
         }
     }
 }

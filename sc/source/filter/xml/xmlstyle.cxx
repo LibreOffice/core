@@ -972,7 +972,7 @@ bool XmlScPropHdl_CellProtection::importXML(
     if (!rValue.hasValue())
     {
         aCellProtection.IsHidden = false;
-        aCellProtection.IsLocked = sal_True;
+        aCellProtection.IsLocked = true;
         aCellProtection.IsFormulaHidden = false;
         aCellProtection.IsPrintHidden = false;
         bDefault = true;
@@ -989,9 +989,9 @@ bool XmlScPropHdl_CellProtection::importXML(
         }
         else if (IsXMLToken(rStrImpValue, XML_HIDDEN_AND_PROTECTED))
         {
-            aCellProtection.IsFormulaHidden = sal_True;
-            aCellProtection.IsHidden = sal_True;
-            aCellProtection.IsLocked = sal_True;
+            aCellProtection.IsFormulaHidden = true;
+            aCellProtection.IsHidden = true;
+            aCellProtection.IsLocked = true;
             rValue <<= aCellProtection;
             bRetval = true;
         }
@@ -999,13 +999,13 @@ bool XmlScPropHdl_CellProtection::importXML(
         {
             aCellProtection.IsFormulaHidden = false;
             aCellProtection.IsHidden = false;
-            aCellProtection.IsLocked = sal_True;
+            aCellProtection.IsLocked = true;
             rValue <<= aCellProtection;
             bRetval = true;
         }
         else if (IsXMLToken(rStrImpValue, XML_FORMULA_HIDDEN))
         {
-            aCellProtection.IsFormulaHidden = sal_True;
+            aCellProtection.IsFormulaHidden = true;
             aCellProtection.IsHidden = false;
             aCellProtection.IsLocked = false;
             rValue <<= aCellProtection;
@@ -1022,9 +1022,9 @@ bool XmlScPropHdl_CellProtection::importXML(
             aCellProtection.IsHidden = false;
             aCellProtection.IsLocked = false;
             if ((IsXMLToken(sFirst, XML_PROTECTED)) || (IsXMLToken(sSecond, XML_PROTECTED)))
-                aCellProtection.IsLocked = sal_True;
+                aCellProtection.IsLocked = true;
             if ((IsXMLToken(sFirst, XML_FORMULA_HIDDEN)) || (IsXMLToken(sSecond, XML_FORMULA_HIDDEN)))
-                aCellProtection.IsFormulaHidden = sal_True;
+                aCellProtection.IsFormulaHidden = true;
             rValue <<= aCellProtection;
             bRetval = true;
         }
@@ -1105,7 +1105,7 @@ bool XmlScPropHdl_PrintContent::importXML(
     if (!rValue.hasValue())
     {
         aCellProtection.IsHidden = false;
-        aCellProtection.IsLocked = sal_True;
+        aCellProtection.IsLocked = true;
         aCellProtection.IsFormulaHidden = false;
         aCellProtection.IsPrintHidden = false;
         bDefault = true;

@@ -194,7 +194,7 @@ ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
     uno::Sequence< beans::PropertyValue > aMediaDesc(1);
     aMediaDesc[ 0 ].Name = "URL";
     aMediaDesc[ 0 ].Value <<= rFileName;
-    OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, sal_True );
+    OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, true );
     return sType;
 }
 

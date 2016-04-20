@@ -600,7 +600,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
             {
                 uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModelSet->getPropertyValue(
                     "BasicLibraries" ), uno::UNO_QUERY_THROW );
-                xVBACompat->setVBACompatibilityMode( sal_True );
+                xVBACompat->setVBACompatibilityMode( true );
             }
             catch( const uno::Exception& )
             {
@@ -658,7 +658,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
             OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
             // advise storage impl to use common encryption
-            xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True) );
+            xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(true) );
         }
 
         xOut = xStream->getOutputStream();

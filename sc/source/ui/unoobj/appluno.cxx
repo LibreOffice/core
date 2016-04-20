@@ -738,7 +738,7 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             //! Case-insensitiv ???
             if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
-                return sal_True;
+                return true;
         }
     }
     return false;

@@ -468,11 +468,11 @@ throw ( IndexOutOfBoundsException,
                 xText(xAcc, uno::UNO_QUERY);
             if( xText.is() )
             {
-                if( xText->getSelectionStart() >= 0 ) return sal_True;
+                if( xText->getSelectionStart() >= 0 ) return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL ScAccessibleEditObject::clearAccessibleSelection(  )

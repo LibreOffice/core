@@ -1013,7 +1013,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     uno::Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY_THROW );
                                     if ( xStorable->isReadonly() )
                                     {
-                                        xCloseable->close( sal_True );
+                                        xCloseable->close( true );
 
                                         OUString aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
                                         try
@@ -1046,7 +1046,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                             ScGlobal::GetRscString( STR_DOC_DISABLESHARED ) );
                                         if ( aBox->Execute() == RET_YES )
                                         {
-                                            xCloseable->close( sal_True );
+                                            xCloseable->close( true );
 
                                             if ( !SwitchToShared( false, true ) )
                                             {
@@ -1069,13 +1069,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         }
                                         else
                                         {
-                                            xCloseable->close( sal_True );
+                                            xCloseable->close( true );
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    xCloseable->close( sal_True );
+                                    xCloseable->close( true );
                                     ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_OK ),
                                         ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
                                     aBox->Execute();
@@ -1089,7 +1089,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 try
                                 {
                                     uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
-                                    xClose->close( sal_True );
+                                    xClose->close( true );
                                 }
                                 catch ( uno::Exception& )
                                 {
@@ -2361,7 +2361,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence < beans::PropertyValue > aArgs( 1 );
         aArgs[0].Name = "Hidden";
-        aArgs[0].Value <<= sal_True;
+        aArgs[0].Value <<= true;
 
         if ( GetMedium() )
         {
@@ -2386,7 +2386,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         try
         {
             uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
-            xClose->close( sal_True );
+            xClose->close( true );
             return uno::Reference< frame::XModel >();
         }
         catch ( uno::Exception& )

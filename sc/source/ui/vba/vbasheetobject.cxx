@@ -266,7 +266,7 @@ void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) thr
 sal_Bool SAL_CALL ScVbaSheetObjectBase::getPrintObject() throw (uno::RuntimeException, std::exception)
 {
     // not supported
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL ScVbaSheetObjectBase::setPrintObject( sal_Bool /*bPrintObject*/ ) throw (uno::RuntimeException, std::exception)

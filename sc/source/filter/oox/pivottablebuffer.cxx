@@ -669,7 +669,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
             if( maModel.mbAutoShow )
             {
                 DataPilotFieldAutoShowInfo aAutoShowInfo;
-                aAutoShowInfo.IsEnabled = sal_True;
+                aAutoShowInfo.IsEnabled = true;
                 aAutoShowInfo.ShowItemsMode = maModel.mbTopAutoShow ? DataPilotFieldShowItemsMode::FROM_TOP : DataPilotFieldShowItemsMode::FROM_BOTTOM;
                 aAutoShowInfo.ItemCount = maModel.mnAutoShowItems;
                 if( const PivotCacheField* pCacheField = mrPivotTable.getCacheFieldOfDataField( maModel.mnAutoShowRankBy ) )
@@ -846,7 +846,7 @@ void PivotTableFilter::finalizeImport()
         {
             using namespace ::com::sun::star::sheet;
             DataPilotFieldAutoShowInfo aAutoShowInfo;
-            aAutoShowInfo.IsEnabled = sal_True;
+            aAutoShowInfo.IsEnabled = true;
             aAutoShowInfo.ShowItemsMode = maModel.mbTopFilter ? DataPilotFieldShowItemsMode::FROM_TOP : DataPilotFieldShowItemsMode::FROM_BOTTOM;
             aAutoShowInfo.ItemCount = getLimitedValue< sal_Int32, double >( maModel.mfValue, 0, SAL_MAX_INT32 );
             if( const PivotCacheField* pCacheField = mrPivotTable.getCacheFieldOfDataField( maModel.mnMeasureField ) )

@@ -884,7 +884,7 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const OUString& aName )
         ScDocument& rDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
         if ( pStylePool->Find( aString, eFamily ) )
-            return sal_True;
+            return true;
     }
     return false;
 }

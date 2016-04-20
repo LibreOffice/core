@@ -355,7 +355,7 @@ void SheetViewSettings::finalizeImport()
         // active tab/sheet cannot be hidden
         // always force it to be displayed
         PropertySet aPropSet( getSheet() );
-        aPropSet.setProperty( PROP_IsVisible, sal_True );
+        aPropSet.setProperty( PROP_IsVisible, true );
     }
     // visible area and current cursor position (selection not supported via API)
     CellAddress aFirstPos = xModel->maFirstPos;

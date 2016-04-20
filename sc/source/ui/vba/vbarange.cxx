@@ -823,7 +823,7 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
 
             OUString sFormula = xCell->getFormula();
             if ( sFormula == "=TRUE()" )
-                aValue <<= sal_True;
+                aValue <<= true;
             else if ( sFormula == "=FALSE()" )
                 aValue <<= false;
             else
@@ -1326,7 +1326,7 @@ void lclExpandAndMerge( const uno::Reference< table::XCellRange >& rxCellRange, 
         if( nLastRowIdx > 0 )
             lclClearRange( rxCellRange->getCellRangeByPosition( 0, 1, nLastColIdx, nLastRowIdx ) );
         // merge the range
-        xMerge->merge( sal_True );
+        xMerge->merge( true );
     }
 }
 
@@ -1778,7 +1778,7 @@ ScVbaRange::HasFormula() throw (uno::RuntimeException, std::exception)
         ScCellRangesBase* pFormulaRanges = dynamic_cast< ScCellRangesBase * > ( xRanges.get() );
         // check if there are no formula cell, return false
         if ( pFormulaRanges->GetRangeList().empty() )
-            return uno::makeAny(sal_False);
+            return uno::makeAny(false);
 
         // check if there are holes (where some cells are not formulas)
         // or returned range is not equal to this range
@@ -1788,7 +1788,7 @@ ScVbaRange::HasFormula() throw (uno::RuntimeException, std::exception)
            )
             return aNULL(); // should return aNULL;
     }
-    return uno::makeAny( sal_True );
+    return uno::makeAny( true );
 }
 void
 ScVbaRange::fillSeries( sheet::FillDirection nFillDirection, sheet::FillMode nFillMode, sheet::FillDateMode nFillDateMode, double fStep, double fEndValue ) throw( uno::RuntimeException )
@@ -2051,7 +2051,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
                                 // force external to be false
                                 // only first address should have the
                                 // document and sheet specifications
-                                aExternalCopy = uno::makeAny(sal_False);
+                                aExternalCopy = uno::makeAny(false);
             }
             sAddress += xRange->Address( RowAbsolute, ColumnAbsolute, ReferenceStyle, aExternalCopy, RelativeTo );
         }
@@ -3027,7 +3027,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->Replace( What, Replacement,  LookAt, SearchOrder, MatchCase, MatchByte, SearchFormat, ReplaceFormat );
         }
-        return sal_True; // seems to return true always ( or at least I haven't found the trick of
+        return true; // seems to return true always ( or at least I haven't found the trick of
     }
 
     // sanity check required params
@@ -3049,7 +3049,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             xReplace->createReplaceDescriptor();
 
         xDescriptor->setSearchString( sWhat);
-        xDescriptor->setPropertyValue( SC_UNO_SRCHREGEXP, uno::makeAny( sal_True ) );
+        xDescriptor->setPropertyValue( SC_UNO_SRCHREGEXP, uno::makeAny( true ) );
         xDescriptor->setReplaceString( Replacement);
         if ( LookAt.hasValue() )
         {
@@ -3119,7 +3119,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             }
         }
     }
-    return sal_True; // always
+    return true; // always
 }
 
 uno::Reference< excel::XRange > SAL_CALL
@@ -3354,7 +3354,7 @@ void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRan
             aTableField.IsCaseSensitive = bMatchCase;
 
             if ( nOrder ==  excel::XlSortOrder::xlAscending )
-                aTableField.IsAscending = sal_True;
+                aTableField.IsAscending = true;
             else
                 aTableField.IsAscending = false;
         }
@@ -3697,7 +3697,7 @@ ScVbaRange::hasElements() throw (uno::RuntimeException, std::exception)
     if ( xColumnRowRange.is() )
         if ( xColumnRowRange->getRows()->getCount() ||
             xColumnRowRange->getColumns()->getCount() )
-            return sal_True;
+            return true;
     return false;
 }
 
@@ -3921,7 +3921,7 @@ ScVbaRange::BorderAround( const css::uno::Any& LineStyle, const css::uno::Any& W
                 return uno::makeAny( false );
         }
     }
-    return uno::makeAny( sal_True );
+    return uno::makeAny( true );
 }
 
 uno::Any SAL_CALL
@@ -4308,7 +4308,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
-                xDescProps->setPropertyValue( "UseRegularExpressions", uno::Any( sal_True ) );
+                xDescProps->setPropertyValue( "UseRegularExpressions", uno::Any( true ) );
         }
 
     }
@@ -4323,7 +4323,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
-                xDescProps->setPropertyValue( "UseRegularExpressions", uno::Any( sal_True ) );
+                xDescProps->setPropertyValue( "UseRegularExpressions", uno::Any( true ) );
         }
     }
     else if ( sCriteria1.startsWith( GREATERTHAN ) )
@@ -4361,7 +4361,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
 
     if ( bIsNumeric )
     {
-        rFilterField.IsNumeric= sal_True;
+        rFilterField.IsNumeric= true;
         rFilterField.NumericValue = sCriteria1.toDouble();
     }
     rFilterField.StringValue = sCriteria1;
@@ -4508,7 +4508,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             }
             else // numeric
             {
-                sTabFilts[0].IsNumeric = sal_True;
+                sTabFilts[0].IsNumeric = true;
                 sTabFilts[0].NumericValue = nCriteria1;
             }
         }
@@ -4522,7 +4522,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             // is no value specified for criteria1 set it to 10
             if ( !bCritHasNumericValue && sCriteria1.isEmpty() && ( nOperator != excel::XlAutoFilterOperator::xlOr ) && ( nOperator != excel::XlAutoFilterOperator::xlAnd ) )
             {
-                sTabFilts[0].IsNumeric = sal_True;
+                sTabFilts[0].IsNumeric = true;
                 sTabFilts[0].NumericValue = 10;
                 bAll = false;
             }
@@ -4576,7 +4576,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                 else // numeric
                 {
                     Criteria2 >>= sTabFilts[1].NumericValue;
-                    sTabFilts[1].IsNumeric = sal_True;
+                    sTabFilts[1].IsNumeric = true;
                     sTabFilts[1].Operator = sheet::FilterOperator2::EQUAL;
                 }
             }
@@ -5516,7 +5516,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
         PageBreaks >>= bAddPageBreaks;
 
         uno::Reference< sheet::XSubTotalCalculatable> xSub(mxRange, uno::UNO_QUERY_THROW );
-        uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(sal_True);
+        uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(true);
         uno::Reference< beans::XPropertySet > xSubDescPropertySet( xSubDesc, uno::UNO_QUERY_THROW );
         xSubDescPropertySet->setPropertyValue(INSERTPAGEBREAKS, uno::makeAny( bAddPageBreaks));
         sal_Int32 nLen = _nTotalList.getLength();

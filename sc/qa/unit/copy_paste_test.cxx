@@ -95,7 +95,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     // 5. Create a new Spreadsheet
     Sequence < beans::PropertyValue > args(1);
     args[0].Name = "Hidden";
-    args[0].Value <<= sal_True;
+    args[0].Value <<= true;
 
     uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
             "private:factory/scalc",

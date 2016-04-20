@@ -1462,7 +1462,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException, std::exception) override
     {
         // elements are always present (but contained property sequences may be empty)
-        return sal_True;
+        return true;
     }
 };
 

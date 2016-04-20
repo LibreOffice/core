@@ -3502,7 +3502,7 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
     throw (uno::RuntimeException, std::exception)
 {
     if(!mbTimeBased)
-        return sal_True;
+        return true;
 
     if(mnCurrentTab >= mnTimeBasedEnd)
     {
@@ -3529,7 +3529,7 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
 
     RebuildDataCache();
 
-    return sal_True;
+    return true;
 }
 
 void ScChart2DataSequence::setRange(sal_Int32 nStart, sal_Int32 nEnd)
@@ -3565,7 +3565,7 @@ sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
 
     RebuildDataCache();
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
