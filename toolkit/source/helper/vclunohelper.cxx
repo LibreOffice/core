@@ -705,7 +705,7 @@ awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, 
     aMouseEvent.X = _rVclEvent.GetPosPixel().X();
     aMouseEvent.Y = _rVclEvent.GetPosPixel().Y();
     aMouseEvent.ClickCount = _rVclEvent.GetClicks();
-    aMouseEvent.PopupTrigger = sal_False;
+    aMouseEvent.PopupTrigger = false;
 
     return aMouseEvent;
 }

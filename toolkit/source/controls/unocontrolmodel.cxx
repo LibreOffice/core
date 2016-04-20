@@ -710,7 +710,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
             sal_Int32 nPropDataBeginMark = xMark->createMark();
             OutStream->writeLong( 0L ); // DataLen
             OutStream->writeShort( n ); // PropId
-            OutStream->writeBoolean( sal_False );   // Void
+            OutStream->writeBoolean( false );   // Void
 
             if ( n == BASEPROPERTY_FONT_TYPE )
             {
@@ -1279,7 +1279,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::A
 
         aGuard.clear();
         setFastPropertyValues( 1, &nDescriptorId, &aNewValue, 1 );
-        fire( &nPropId, &aNewSingleValue, &aOldSingleValue, 1, sal_False );
+        fire( &nPropId, &aNewSingleValue, &aOldSingleValue, 1, false );
        }
     else
         setFastPropertyValues( 1, &nPropId, &rValue, 1 );

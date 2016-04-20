@@ -207,11 +207,11 @@ sal_Bool VCLXFont::hasGlyphs( const OUString& aText )
     {
         if ( pOutDev->HasGlyphs( maFont, aText ) == -1 )
         {
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

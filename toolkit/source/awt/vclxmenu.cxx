@@ -715,7 +715,7 @@ throw (css::uno::RuntimeException, std::exception)
     if ( mpMenu && IsPopupMenu() )
         return PopupMenu::IsInExecute();
     else
-        return sal_False;
+        return false;
 }
 
 

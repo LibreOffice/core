@@ -96,11 +96,11 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         return Any( Reference< XTreeDataModel >( nullptr ) );
     case BASEPROPERTY_TREE_EDITABLE:
     case BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING:
-        return Any( sal_False );
+        return Any( false );
     case BASEPROPERTY_TREE_ROOTDISPLAYED:
     case BASEPROPERTY_TREE_SHOWSROOTHANDLES:
     case BASEPROPERTY_TREE_SHOWSHANDLES:
-        return Any( sal_True );
+        return Any( true );
     case BASEPROPERTY_DEFAULTCONTROL:
         return uno::makeAny( OUString( "com.sun.star.awt.tree.TreeControl" ) );
     default:

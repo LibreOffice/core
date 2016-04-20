@@ -574,7 +574,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     css::awt::FocusEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
-                    aEvent.Temporary = sal_False;
+                    aEvent.Temporary = false;
                     mpImpl->getFocusListeners().focusGained( aEvent );
                 }
             }
@@ -596,7 +596,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     css::awt::FocusEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
-                    aEvent.Temporary = sal_False;
+                    aEvent.Temporary = false;
 
                     vcl::Window* pNext = Application::GetFocusWindow();
                     if ( pNext )
@@ -675,7 +675,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                 MouseEvent aMEvt( aWhere, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT, 0 );
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( aMEvt, *this ) );
-                aEvent.PopupTrigger = sal_True;
+                aEvent.PopupTrigger = true;
 
                 Callback aCallback = [ this, aEvent ]()
                                      { this->mpImpl->getMouseListeners().mousePressed( aEvent ); };
@@ -2417,7 +2417,7 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (css::uno::RuntimeException, 
     if( pWindow )
         return vcl::Window::GetDockingManager()->IsFloating( pWindow );
     else
-        return sal_False;
+        return false;
 }
 
 void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (css::uno::RuntimeException, std::exception)
@@ -2437,7 +2437,7 @@ sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (css::uno::RuntimeException, st
     if( pWindow )
         return vcl::Window::GetDockingManager()->IsLocked( pWindow );
     else
-        return sal_False;
+        return false;
 }
 
 void SAL_CALL VCLXWindow::lock(  ) throw (css::uno::RuntimeException, std::exception)
@@ -2468,7 +2468,7 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (css::uno::RuntimeExceptio
 {
     // TODO: remove interface in the next incompatible build
     SolarMutexGuard aGuard;
-    return sal_False;
+    return false;
 }
 
 
@@ -2510,7 +2510,7 @@ sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (css::uno::RuntimeException, s
     if( GetWindow() )
         return GetWindow()->IsVisible();
     else
-        return sal_False;
+        return false;
 }
 
 sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (css::uno::RuntimeException, std::exception)
@@ -2519,7 +2519,7 @@ sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (css::uno::RuntimeException, st
     if( GetWindow() )
         return GetWindow()->IsActive();
     else
-        return sal_False;
+        return false;
 
 }
 
@@ -2529,7 +2529,7 @@ sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (css::uno::RuntimeException, s
     if( GetWindow() )
         return GetWindow()->IsEnabled();
     else
-        return sal_False;
+        return false;
 }
 
 sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (css::uno::RuntimeException, std::exception)
@@ -2538,7 +2538,7 @@ sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (css::uno::RuntimeException, st
     if( GetWindow() )
         return GetWindow()->HasFocus();
     else
-        return sal_False;
+        return false;
 }
 
 // css::beans::XPropertySetInfo

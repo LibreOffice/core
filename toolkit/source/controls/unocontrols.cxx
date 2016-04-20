@@ -1085,7 +1085,7 @@ void UnoImageControlControl::dispose() throw(uno::RuntimeException, std::excepti
 
 sal_Bool UnoImageControlControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 awt::Size UnoImageControlControl::getMinimumSize(  ) throw(uno::RuntimeException, std::exception)
@@ -1228,7 +1228,7 @@ void UnoRadioButtonControl::dispose() throw(uno::RuntimeException, std::exceptio
 
 sal_Bool UnoRadioButtonControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException, std::exception)
@@ -1482,7 +1482,7 @@ void UnoCheckBoxControl::dispose() throw(uno::RuntimeException, std::exception)
 
 sal_Bool UnoCheckBoxControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void UnoCheckBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException, std::exception)
@@ -1715,7 +1715,7 @@ IMPL_XTYPEPROVIDER_END
 
 sal_Bool UnoFixedHyperlinkControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void UnoFixedHyperlinkControl::setText( const OUString& Text ) throw(uno::RuntimeException, std::exception)
@@ -1928,7 +1928,7 @@ IMPL_XTYPEPROVIDER_END
 
 sal_Bool UnoFixedTextControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void UnoFixedTextControl::setText( const OUString& Text ) throw(uno::RuntimeException, std::exception)
@@ -2093,7 +2093,7 @@ OUString UnoGroupBoxControl::GetComponentServiceName()
 
 sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 OUString UnoGroupBoxControl::getImplementationName()
@@ -2664,12 +2664,12 @@ void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_n
     aEvent.ItemPosition = i_nItemPosition;
     if ( !!i_rItemText )
     {
-        aEvent.ItemText.IsPresent = sal_True;
+        aEvent.ItemText.IsPresent = true;
         aEvent.ItemText.Value = *i_rItemText;
     }
     if ( !!i_rItemImageURL )
     {
-        aEvent.ItemImageURL.IsPresent = sal_True;
+        aEvent.ItemImageURL.IsPresent = true;
         aEvent.ItemImageURL.Value = *i_rItemImageURL;
     }
 
@@ -3072,14 +3072,14 @@ sal_Bool SAL_CALL UnoListBoxControl::setModel( const uno::Reference< awt::XContr
     OSL_ENSURE( xNewItems.is() || !i_rModel.is(), "UnoListBoxControl::setModel: illegal new model!" );
 
     if ( !UnoListBoxControl_Base::setModel( i_rModel ) )
-        return sal_False;
+        return false;
 
     if ( xOldItems.is() )
         xOldItems->removeItemListListener( this );
     if ( xNewItems.is() )
         xNewItems->addItemListListener( this );
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL UnoListBoxControl::listItemInserted( const awt::ItemListEvent& i_rEvent ) throw (uno::RuntimeException, std::exception)
@@ -3394,14 +3394,14 @@ sal_Bool SAL_CALL UnoComboBoxControl::setModel( const uno::Reference< awt::XCont
     OSL_ENSURE( xNewItems.is() || !i_rModel.is(), "UnoComboBoxControl::setModel: illegal new model!" );
 
     if ( !UnoEditControl::setModel( i_rModel ) )
-        return sal_False;
+        return false;
 
     if ( xOldItems.is() )
         xOldItems->removeItemListListener( this );
     if ( xNewItems.is() )
         xNewItems->addItemListListener( this );
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL UnoComboBoxControl::listItemInserted( const awt::ItemListEvent& i_rEvent ) throw (uno::RuntimeException, std::exception)
@@ -5144,7 +5144,7 @@ OUString UnoFixedLineControl::GetComponentServiceName()
 
 sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 OUString UnoFixedLineControl::getImplementationName()

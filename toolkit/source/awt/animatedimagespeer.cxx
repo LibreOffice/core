@@ -326,7 +326,7 @@ namespace toolkit
         VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
         if (pThrobber)
             return pThrobber->isRunning();
-        return sal_False;
+        return false;
     }
 
     void SAL_CALL AnimatedImagesPeer::setProperty( const OUString& i_propertyName, const Any& i_value ) throw(RuntimeException, std::exception)

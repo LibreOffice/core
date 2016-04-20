@@ -112,7 +112,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getP
         {
             sal_uInt16 nElements;
             css::beans::Property* pProps = ImplGetProperties( nElements );
-            pPropertyArrayHelper = new ::cppu::OPropertyArrayHelper( pProps, nElements, sal_False );
+            pPropertyArrayHelper = new ::cppu::OPropertyArrayHelper( pProps, nElements, false );
         }
     }
     return *pPropertyArrayHelper ;

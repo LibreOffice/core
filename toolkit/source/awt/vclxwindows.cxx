@@ -1888,7 +1888,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
                         pListBox->SelectEntryPos( --n, false );
 
                     if ( aItems.getLength() )
-                        selectItemsPos( aItems, sal_True );
+                        selectItemsPos( aItems, true );
                     else
                         pListBox->SetNoSelection();
 

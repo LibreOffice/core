@@ -169,7 +169,7 @@ sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException, 
 
     const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
-        return sal_False;
+        return false;
 
     return pWindow->IsMaximized();
 }
@@ -193,7 +193,7 @@ sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException, 
 
     const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
-        return sal_False;
+        return false;
 
     return pWindow->IsMinimized();
 }

@@ -112,7 +112,7 @@ public:
         Reference< XAnimation > xAnimation( getPeer(), UNO_QUERY );
         if ( xAnimation.is() )
             return xAnimation->isAnimationRunning();
-        return sal_False;
+        return false;
     }
 
 
@@ -152,7 +152,7 @@ public:
         const Reference< XAnimatedImages > xNewContainer( i_rModel, UNO_QUERY );
 
         if ( !AnimatedImagesControl_Base::setModel( i_rModel ) )
-            return sal_False;
+            return false;
 
         if ( xOldContainer.is() )
             xOldContainer->removeContainerListener( this );
@@ -162,7 +162,7 @@ public:
 
         lcl_updatePeer( getPeer(), getModel() );
 
-        return sal_True;
+        return true;
     }
 
 

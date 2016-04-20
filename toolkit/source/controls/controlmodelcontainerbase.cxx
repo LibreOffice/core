@@ -661,7 +661,7 @@ void ControlModelContainerBase::removeByName( const OUString& aName ) throw(NoSu
 
 sal_Bool SAL_CALL ControlModelContainerBase::getGroupControl(  ) throw (RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 

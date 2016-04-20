@@ -352,9 +352,9 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 {
     lcl_setEventForwarding( getModel(), m_pEventForwarder, false );
     if ( !UnoGridControl_Base::setModel( i_model ) )
-        return sal_False;
+        return false;
     lcl_setEventForwarding( getModel(), m_pEventForwarder, true );
-    return sal_True;
+    return true;
 }
 
 

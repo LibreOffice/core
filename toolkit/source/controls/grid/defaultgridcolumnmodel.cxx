@@ -280,7 +280,7 @@ private:
                 pGridColumn->setTitle( colTitle.makeStringAndClear() );
                 pGridColumn->setColumnWidth( 80 /* APPFONT */ );
                 pGridColumn->setFlexibility( 1 );
-                pGridColumn->setResizeable( sal_True );
+                pGridColumn->setResizeable( true );
                 pGridColumn->setDataColumnIndex( i );
 
                 ContainerEvent aEvent;

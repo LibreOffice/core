@@ -973,7 +973,7 @@ void UnoMultiPageModel::insertByName( const OUString& aName, const Any& aElement
 
 sal_Bool SAL_CALL UnoMultiPageModel::getGroupControl(  ) throw (RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 
@@ -1078,7 +1078,7 @@ uno::Reference< beans::XPropertySetInfo > UnoPageModel::getPropertySetInfo(  ) t
 
 sal_Bool SAL_CALL UnoPageModel::getGroupControl(  ) throw (RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 // Frame control

@@ -748,7 +748,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
     {
         bool bVis = maComponentInfos.bVisible;
         if( bVis )
-            UnoControl::setVisible( sal_False );
+            UnoControl::setVisible( false );
 
         uno::Reference< beans::XPropertySet > xTmpPropSet
                 ( getModel(), uno::UNO_QUERY );
@@ -788,12 +788,12 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
 
             uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
             if ( xC.is() )
-                xC->enableDialogControl( sal_True );
+                xC->enableDialogControl( true );
             ImplActivateTabControllers();
         }
 
         if( bVis && !isDesignMode() )
-            UnoControl::setVisible( sal_True );
+            UnoControl::setVisible( true );
     }
 }
 

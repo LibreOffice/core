@@ -723,7 +723,7 @@ sal_Bool SAL_CALL UnoControl::isVisible(  ) throw (RuntimeException, std::except
 
 sal_Bool SAL_CALL UnoControl::isActive(  ) throw (RuntimeException, std::exception)
 {
-    return lcl_askPeer( getPeer(), &XWindow2::isActive, sal_False );
+    return lcl_askPeer( getPeer(), &XWindow2::isActive, false );
 }
 
 sal_Bool SAL_CALL UnoControl::isEnabled(  ) throw (RuntimeException, std::exception)
@@ -733,7 +733,7 @@ sal_Bool SAL_CALL UnoControl::isEnabled(  ) throw (RuntimeException, std::except
 
 sal_Bool SAL_CALL UnoControl::hasFocus(  ) throw (RuntimeException, std::exception)
 {
-    return lcl_askPeer( getPeer(), &XWindow2::hasFocus, sal_False );
+    return lcl_askPeer( getPeer(), &XWindow2::hasFocus, false );
 }
 
 // XWindow
@@ -1416,7 +1416,7 @@ sal_Bool UnoControl::isDesignMode(  ) throw(RuntimeException, std::exception)
 
 sal_Bool UnoControl::isTransparent(  ) throw(RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 // XServiceInfo
