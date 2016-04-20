@@ -1780,7 +1780,7 @@ sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
     SolarMutexGuard g;
 
     if( isAccessibleColumnSelected( row ) )
-        return sal_True;
+        return true;
 
     long lColumnCount = getAccessibleColumnCount();
     for(long lCol = 0; lCol < lColumnCount; lCol ++)
@@ -1789,7 +1789,7 @@ sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
         selectAccessibleChild(lChildIndex);
     }
 
-    return sal_True;
+    return true;
 }
 sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
@@ -1797,7 +1797,7 @@ sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
     SolarMutexGuard g;
 
     if( isAccessibleColumnSelected( column ) )
-        return sal_True;
+        return true;
 
     long lRowCount = getAccessibleRowCount();
 
@@ -1806,7 +1806,7 @@ sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
         long lChildIndex = getAccessibleIndex(lRow, column);
         selectAccessibleChild(lChildIndex);
     }
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
@@ -1824,10 +1824,10 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
             pCursorShell->StartAction();
             pCursorShell->ClearMark();
             pCursorShell->EndAction();
-            return sal_True;
+            return true;
         }
     }
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
@@ -1845,10 +1845,10 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
             pCursorShell->StartAction();
             pCursorShell->ClearMark();
             pCursorShell->EndAction();
-            return sal_True;
+            return true;
         }
     }
-    return sal_True;
+    return true;
 }
 
 // #i77106# - implementation of class <SwAccessibleTableColHeaders>

@@ -150,8 +150,8 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursorByRange(
         throw( uno::RuntimeException, std::exception )
 {
     uno::Reference<text::XTextCursor> xCursor = createTextCursor();
-    xCursor->gotoRange(aTextRange->getStart(), sal_False);
-    xCursor->gotoRange(aTextRange->getEnd(), sal_True);
+    xCursor->gotoRange(aTextRange->getStart(), false);
+    xCursor->gotoRange(aTextRange->getEnd(), true);
     return xCursor;
 }
 
@@ -172,7 +172,7 @@ uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::e
 
 sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;    // we always have a content index
+    return true;    // we always have a content index
 }
 
 SwXRedlinePortion::SwXRedlinePortion(SwRangeRedline const& rRedline,

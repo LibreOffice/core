@@ -234,8 +234,8 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
     SwFormatURL aURL( GetFormat()->GetURL() );
 
     if( aURL.GetMap() || !aURL.GetURL().isEmpty() )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

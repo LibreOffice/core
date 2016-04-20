@@ -3305,7 +3305,7 @@ uno::Type  SwXTextFrame::getElementType() throw( uno::RuntimeException, std::exc
 
 sal_Bool SwXTextFrame::hasElements() throw( uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 void SwXTextFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)

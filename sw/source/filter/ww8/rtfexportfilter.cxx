@@ -51,13 +51,13 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
     SwXTextDocument* pTextDoc = dynamic_cast< SwXTextDocument* >(xIfc.get());
     if (!pTextDoc)
     {
-        return sal_False;
+        return false;
     }
 
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     if (!pDoc)
     {
-        return sal_False;
+        return false;
     }
 
     // fdo#37161 - update layout (if present), for SwWriteTable
@@ -86,7 +86,7 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
     delete pCurPam;
     delete pStream;
 
-    return sal_True;
+    return true;
 }
 
 void RtfExportFilter::cancel() throw(uno::RuntimeException, std::exception)

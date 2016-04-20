@@ -4872,7 +4872,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     uno::Reference<ucb::XSimpleFileAccess3> xSFA(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
 
     if( xSFA->isFolder( aAddinPath ) )
-        sGlobalTemplates = xSFA->getFolderContents( aAddinPath, sal_False );
+        sGlobalTemplates = xSFA->getFolderContents( aAddinPath, false );
 
     sal_Int32 nEntries = sGlobalTemplates.getLength();
     for ( sal_Int32 i=0; i<nEntries; ++i )

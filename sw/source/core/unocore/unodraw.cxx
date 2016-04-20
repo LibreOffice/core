@@ -577,7 +577,7 @@ sal_Bool SwXDrawPage::hasElements() throw( uno::RuntimeException, std::exception
     if(!pDoc)
         throw uno::RuntimeException();
     if(!pDoc->getIDocumentDrawModelAccess().GetDrawModel())
-        return sal_False;
+        return false;
     else
         return static_cast<SwXDrawPage*>(this)->GetSvxPage()->hasElements();
 }

@@ -210,7 +210,7 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( 
             {
                 if( HasSelection() )
                     nCount--;
-                mxTextViewCursor->goRight( nCount, sal_True );
+                mxTextViewCursor->goRight( nCount, true );
                 break;
             }
             default:
@@ -337,8 +337,8 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
                         break;
                 }
             }
-            mxTextViewCursor->gotoRange( xTextCursor->getStart(), sal_False );
-            mxTextViewCursor->gotoRange( xTextCursor->getEnd(), sal_True );
+            mxTextViewCursor->gotoRange( xTextCursor->getStart(), false );
+            mxTextViewCursor->gotoRange( xTextCursor->getEnd(), true );
             break;
         }
         default:
@@ -370,22 +370,22 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
     {
         case word::MOVE_LEFT:
         {
-            xTextTableCursor->goLeft( nCount, sal_False );
+            xTextTableCursor->goLeft( nCount, false );
             break;
         }
         case word::MOVE_RIGHT:
         {
-            xTextTableCursor->goRight( nCount, sal_False );
+            xTextTableCursor->goRight( nCount, false );
             break;
         }
         case word::MOVE_UP:
         {
-            xTextTableCursor->goUp( nCount, sal_False );
+            xTextTableCursor->goUp( nCount, false );
             break;
         }
         case word::MOVE_DOWN:
         {
-            xTextTableCursor->goDown( nCount, sal_False );
+            xTextTableCursor->goDown( nCount, false );
             break;
         }
         default:
@@ -396,7 +396,7 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
     }
     // move the view cursor
     xCell = xTextTable->getCellByName( xTextTableCursor->getRangeName() );
-    mxTextViewCursor->gotoRange( uno::Reference< text::XTextRange >( xCell, uno::UNO_QUERY_THROW ), sal_False );
+    mxTextViewCursor->gotoRange( uno::Reference< text::XTextRange >( xCell, uno::UNO_QUERY_THROW ), false );
 }
 
 void SAL_CALL
@@ -1073,13 +1073,13 @@ void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction ) throw (uno::
     {
         // it is inaccurate if current seleciton is multipul cells, so it needs to go to start
         uno::Reference< text::XTextRange > xTextRange = mxTextViewCursor->getStart();
-        xTextViewCursor->gotoRange( xTextRange, sal_False );
+        xTextViewCursor->gotoRange( xTextRange, false );
         xTextViewCursor->collapseToStart();
     }
     else if( nDirection == word::WdCollapseDirection::wdCollapseEnd )
     {
         uno::Reference< text::XTextRange > xTextRange = mxTextViewCursor->getEnd();
-        xTextViewCursor->gotoRange( xTextRange, sal_False );
+        xTextViewCursor->gotoRange( xTextRange, false );
         xTextViewCursor->collapseToEnd();
     }
     else
@@ -1102,15 +1102,15 @@ void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException, std::
         {
             // insert an empty line
             uno::Reference< text::XTextRange > xFirstCellRange = word::getFirstObjectPosition( xText );
-            mxTextViewCursor->gotoRange( xFirstCellRange, sal_False );
+            mxTextViewCursor->gotoRange( xFirstCellRange, false );
             OUString url = ".uno:InsertPara";
             dispatchRequests( mxModel,url );
         }
     }
     uno::Reference< text::XTextRange > xStart = xText->getStart();
     uno::Reference< text::XTextRange > xEnd = xText->getEnd();
-    mxTextViewCursor->gotoRange( xStart, sal_False );
-    mxTextViewCursor->gotoRange( xEnd, sal_True );
+    mxTextViewCursor->gotoRange( xStart, false );
+    mxTextViewCursor->gotoRange( xEnd, true );
 }
 
 sal_Bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException, std::exception)
@@ -1154,8 +1154,8 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
     uno::Reference< text::XTextRange > xTextRange = mxTextViewCursor->getStart();
     uno::Reference< text::XText > xText = xTextRange->getText();
     uno::Reference< text::XParagraphCursor > xParaCursor( xText->createTextCursor(), uno::UNO_QUERY_THROW );
-    xParaCursor->gotoStartOfParagraph( sal_False );
-    xParaCursor->gotoStartOfParagraph( sal_True );
+    xParaCursor->gotoStartOfParagraph( false );
+    xParaCursor->gotoStartOfParagraph( true );
 
     uno::Reference< text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextRange > xParaRange( xParaCursor, uno::UNO_QUERY_THROW );

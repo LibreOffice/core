@@ -211,18 +211,18 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
                 if( ! xFactory.is() )
-                    return sal_False;
+                    return false;
                 uno::Reference< css::frame::XDesktop > xDesktop( xFactory->createInstance( "com.sun.star.frame.Desktop" ),
                     uno::UNO_QUERY );
                 if( !xDesktop.is() )
-                    return sal_False;
+                    return false;
                 uno::Reference< lang::XComponent > xComp;
                 xComp = xDesktop->getCurrentComponent();
                 if( !xComp.is() )
-                    return sal_False;
+                    return false;
                 uno::Reference< css::document::XLinkTargetSupplier >  xLTS(xComp, uno::UNO_QUERY);
                 if ( !xLTS.is())
-                    return sal_False;
+                    return false;
 
                 uno::Reference< css::container::XNameAccess > xLinks = xLTS->getLinks();
                 uno::Reference< css::container::XNameAccess > xSubLinks;
@@ -237,14 +237,14 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
                     aAny = xLinks->getByName( aLink );
                     aAny >>= xSubLinks;
                     if (xSubLinks->hasByName(sText.copy(1)) )
-                        return sal_True;
+                        return true;
                 }
             }
             else//internet
-                return sal_True;
+                return true;
         }
     }//xpara valid
-    return sal_False;
+    return false;
 }
 
 void SwAccessibleHyperlink::Invalidate()

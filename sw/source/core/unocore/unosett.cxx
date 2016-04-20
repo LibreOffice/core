@@ -1287,7 +1287,7 @@ uno::Type SwXNumberingRules::getElementType()
 
 sal_Bool SwXNumberingRules::hasElements() throw( uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(

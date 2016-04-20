@@ -223,7 +223,7 @@ sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::R
             return !GetTextNode()->IsSmartTagDirty();
     }
 
-    return sal_True;
+    return true;
 }
 
 // text::XFlatParagraph:

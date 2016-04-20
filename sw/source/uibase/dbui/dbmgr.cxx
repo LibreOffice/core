@@ -940,11 +940,11 @@ static void lcl_PreparePrinterOptions(
     const sal_Int32 nOffset = !bVisibleMonitor ? 2 : 1;
     rOutPrintOptions.realloc( nOffset );
     rOutPrintOptions[ 0 ].Name = "Wait";
-    rOutPrintOptions[ 0 ].Value <<= sal_True;
+    rOutPrintOptions[ 0 ].Value <<= true;
     if( !bVisibleMonitor )
     {
         rOutPrintOptions[ 1 ].Name = "MonitorVisible";
-        rOutPrintOptions[ 1 ].Value <<= sal_False;
+        rOutPrintOptions[ 1 ].Value <<= false;
     }
 
     // copy print options
@@ -1766,7 +1766,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> xSour
                         aFormatString >>= sFormat;
                         lang::Locale aLoc;
                         aLocaleVal >>= aLoc;
-                        nFormat = xDocNumberFormats->queryKey( sFormat, aLoc, sal_False );
+                        nFormat = xDocNumberFormats->queryKey( sFormat, aLoc, false );
                         if(NUMBERFORMAT_ENTRY_NOT_FOUND == sal::static_int_cast< sal_uInt32, sal_Int32>(nFormat))
                             nFormat = xDocNumberFormats->addNew( sFormat, aLoc );
                         nRet = nFormat;

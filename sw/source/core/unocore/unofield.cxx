@@ -2852,7 +2852,7 @@ sal_Bool SwXTextFieldMasters::hasElements() throw( uno::RuntimeException, std::e
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return sal_True;
+    return true;
 }
 
 class SwXTextFieldTypes::Impl
@@ -2918,7 +2918,7 @@ sal_Bool SwXTextFieldTypes::hasElements() throw( uno::RuntimeException, std::exc
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return sal_True; // they always exist
+    return true; // they always exist
 }
 
 void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException, std::exception)

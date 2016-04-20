@@ -134,7 +134,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
         case word::WdSeekView::wdSeekEvenPagesHeader:
         {
             // need to test
-            mxViewCursor->gotoRange( getHFTextRange( _seekview ), sal_False );
+            mxViewCursor->gotoRange( getHFTextRange( _seekview ), false );
             break;
         }
         case word::WdSeekView::wdSeekFootnotes:
@@ -144,7 +144,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
             if( xFootnotes->getCount() > 0 )
             {
                 uno::Reference< text::XText > xText( xFootnotes->getByIndex(0), uno::UNO_QUERY_THROW );
-                mxViewCursor->gotoRange( xText->getStart(), sal_False );
+                mxViewCursor->gotoRange( xText->getStart(), false );
             }
             else
             {
@@ -159,7 +159,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
             if( xEndnotes->getCount() > 0 )
             {
                 uno::Reference< text::XText > xText( xEndnotes->getByIndex(0), uno::UNO_QUERY_THROW );
-                mxViewCursor->gotoRange( xText->getStart(), sal_False );
+                mxViewCursor->gotoRange( xText->getStart(), false );
             }
             else
             {
@@ -171,7 +171,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
         {
             uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
             uno::Reference< text::XText > xText = xTextDocument->getText();
-            mxViewCursor->gotoRange( word::getFirstObjectPosition( xText ), sal_False );
+            mxViewCursor->gotoRange( word::getFirstObjectPosition( xText ), false );
             break;
         }
     }

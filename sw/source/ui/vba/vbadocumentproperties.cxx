@@ -491,7 +491,7 @@ sal_Bool
 SwVbaCustomDocumentProperty::getLinkToContent(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // #FIXME we need to store the link content somewhere
-    return sal_False;
+    return false;
 }
 
 void
@@ -575,7 +575,7 @@ SwVbaBuiltInDocumentProperty::setType( ::sal_Int8 /*Type*/ ) throw (script::Basi
 sal_Bool SAL_CALL
 SwVbaBuiltInDocumentProperty::getLinkToContent(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    return sal_False; // built-in always false
+    return false; // built-in always false
 }
 
 void SAL_CALL
@@ -713,8 +713,8 @@ protected:
     {
         DocPropsByName::iterator it = mNamedDocProps.find( aName );
         if ( it == mNamedDocProps.end() )
-            return sal_False;
-        return sal_True;
+            return false;
+        return true;
     }
 // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override

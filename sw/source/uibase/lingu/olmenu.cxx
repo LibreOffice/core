@@ -360,7 +360,7 @@ SwSpellPopup::SwSpellPopup(
         // words could be added.
         uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
         if (xDic.is())
-            xDic->setActive( sal_True );
+            xDic->setActive( true );
 
         m_aDics = xDicList->getDictionaries();
         const uno::Reference< linguistic2::XDictionary >  *pDic = m_aDics.getConstArray();
@@ -744,8 +744,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                 if (pPaM)
                     SwEditShell::IgnoreGrammarErrorAt( *pPaM );
                 // refresh the layout of all paragraphs (workaround to launch a dictionary event)
-                xDictionary->setActive(sal_False);
-                xDictionary->setActive(sal_True);
+                xDictionary->setActive(false);
+                xDictionary->setActive(true);
             }
             catch( const uno::Exception& )
             {

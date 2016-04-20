@@ -339,7 +339,7 @@ namespace sw
                 {
                     uno::Reference < css::util::XCloseable > xClose( mxIPRef, uno::UNO_QUERY );
                     if ( xClose.is() )
-                        xClose->close(sal_True);
+                        xClose->close(true);
                 }
                 catch ( const css::util::CloseVetoException& )
                 {

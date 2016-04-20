@@ -276,11 +276,11 @@ SwPrintUIOptions::SwPrintUIOptions(
     uno::Sequence< OUString > aHelpIds( 3 );
     uno::Sequence< OUString > aWidgetIds( 3 );
     aChoices[0] = SW_RES( STR_PRINTOPTUI_ALLPAGES);
-    aChoicesDisabled[0] = sal_False;
+    aChoicesDisabled[0] = false;
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
     aWidgetIds[0] = "printallpages";
     aChoices[1] = SW_RES( STR_PRINTOPTUI_SOMEPAGES);
-    aChoicesDisabled[1] = sal_False;
+    aChoicesDisabled[1] = false;
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
     aWidgetIds[1] = "printpages";
     aChoices[2] = SW_RES( STR_PRINTOPTUI_SELECTION);

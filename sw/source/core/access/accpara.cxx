@@ -765,7 +765,7 @@ bool SwAccessibleParagraph::GetWordBoundary(
 
         // get word boundary, as the Break-Iterator sees fit.
         rBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
-            rText, nPos, aLocale, nWordType, sal_True );
+            rText, nPos, aLocale, nWordType, true );
 
         // If we have a break-iterator let's trust that it
         // does the right thing.
@@ -2810,7 +2810,7 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     // select and copy (through dispatch mechanism)
     setSelection( nStartIndex, nEndIndex );
     ExecuteAtViewShell( SID_COPY );
-    return sal_True;
+    return true;
 }
 
 // XAccesibleEditableText
@@ -2822,12 +2822,12 @@ sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIn
     SolarMutexGuard aGuard;
 
     if( !IsEditableState() )
-        return sal_False;
+        return false;
 
     // select and cut (through dispatch mechanism)
     setSelection( nStartIndex, nEndIndex );
     ExecuteAtViewShell( SID_CUT );
-    return sal_True;
+    return true;
 }
 
 sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
@@ -2837,12 +2837,12 @@ sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
     SolarMutexGuard aGuard;
 
     if( !IsEditableState() )
-        return sal_False;
+        return false;
 
     // select and paste (through dispatch mechanism)
     setSelection( nIndex, nIndex );
     ExecuteAtViewShell( SID_PASTE );
-    return sal_True;
+    return true;
 }
 
 sal_Bool SwAccessibleParagraph::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
@@ -2871,7 +2871,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
     if( IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
     {
         if( !IsEditableState() )
-            return sal_False;
+            return false;
 
         SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
 
@@ -2923,7 +2923,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
         throw lang::IndexOutOfBoundsException();
 
     if( !IsEditableState() )
-        return sal_False;
+        return false;
 
     // create a (dummy) text portion for the sole purpose of calling
     // setPropertyValue on it
@@ -3270,7 +3270,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
 sal_Bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const css::awt::Point&, sal_Bool )
     throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
@@ -3347,7 +3347,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
 {
     SolarMutexGuard g;
 
-    if(selectionIndex < 0) return sal_False;
+    if(selectionIndex < 0) return false;
 
     sal_Int32 nSelected = selectionIndex;
 
@@ -3395,7 +3395,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
         }
         while( !bRet && (pCursor != pRingStart) );
     }
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 startOffset, sal_Int32 endOffset)

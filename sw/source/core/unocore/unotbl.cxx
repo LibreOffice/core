@@ -1137,7 +1137,7 @@ uno::Type SAL_CALL SwXCell::getElementType() throw( uno::RuntimeException, std::
 
 sal_Bool SwXCell::hasElements() throw( uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -2926,7 +2926,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
                 case FN_UNO_TABLE_BORDER_DISTANCES :
                 {
-                    table::TableBorderDistances aTableBorderDistances( 0, sal_True, 0, sal_True, 0, sal_True, 0, sal_True ) ;
+                    table::TableBorderDistances aTableBorderDistances( 0, true, 0, true, 0, true, 0, true ) ;
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     const SwTableLines &rLines = pTable->GetTabLines();
                     bool bFirst = true;
@@ -2956,16 +2956,16 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                             {
                                 if( aTableBorderDistances.IsLeftDistanceValid &&
                                     nLeftDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::LEFT   )))
-                                    aTableBorderDistances.IsLeftDistanceValid = sal_False;
+                                    aTableBorderDistances.IsLeftDistanceValid = false;
                                 if( aTableBorderDistances.IsRightDistanceValid &&
                                     nRightDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::RIGHT   )))
-                                    aTableBorderDistances.IsRightDistanceValid = sal_False;
+                                    aTableBorderDistances.IsRightDistanceValid = false;
                                 if( aTableBorderDistances.IsTopDistanceValid &&
                                     nTopDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::TOP   )))
-                                    aTableBorderDistances.IsTopDistanceValid = sal_False;
+                                    aTableBorderDistances.IsTopDistanceValid = false;
                                 if( aTableBorderDistances.IsBottomDistanceValid &&
                                     nBottomDistance != convertTwipToMm100( rBox.GetDistance( SvxBoxItemLine::BOTTOM   )))
-                                    aTableBorderDistances.IsBottomDistanceValid = sal_False;
+                                    aTableBorderDistances.IsBottomDistanceValid = false;
                             }
 
                         }
@@ -4021,7 +4021,7 @@ sal_Bool SwXTableRows::hasElements() throw( uno::RuntimeException, std::exceptio
     if(!pFrameFormat)
         throw uno::RuntimeException();
     // a table always has rows
-    return sal_True;
+    return true;
 }
 
 void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
@@ -4174,7 +4174,7 @@ sal_Bool SwXTableColumns::hasElements() throw( uno::RuntimeException, std::excep
 {
     SolarMutexGuard aGuard;
     lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
-    return sal_True;
+    return true;
 }
 
 ///@see SwXTableRows::insertByIndex (TODO: seems to be copy and paste programming here)

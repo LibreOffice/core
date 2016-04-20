@@ -308,7 +308,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     if(nHtmlMode & HTMLMODE_ON)
     {
         xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, makeAny(true));
-        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
+        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, false);
     }
 
     std::vector<OUString> aFormats;

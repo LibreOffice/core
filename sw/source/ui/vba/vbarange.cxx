@@ -76,9 +76,9 @@ void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, c
     mxTextCursor->collapseToStart();
 
     if( rEnd.is() )
-        mxTextCursor->gotoRange( rEnd, sal_True );
+        mxTextCursor->gotoRange( rEnd, true );
     else
-        mxTextCursor->gotoEnd( sal_True );
+        mxTextCursor->gotoEnd( true );
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -104,7 +104,7 @@ SwVbaRange::getText() throw ( uno::RuntimeException, std::exception )
     {
         if( mxTextCursor->isCollapsed() )
         {
-            mxTextCursor->goRight( 1, sal_True );
+            mxTextCursor->goRight( 1, true );
             aText = mxTextCursor->getString();
             mxTextCursor->collapseToStart();
         }
@@ -113,9 +113,9 @@ SwVbaRange::getText() throw ( uno::RuntimeException, std::exception )
             uno::Reference< text::XTextRange > xStart = mxTextCursor->getStart();
             uno::Reference< text::XTextRange > xEnd = mxTextCursor->getEnd();
             mxTextCursor->collapseToEnd();
-            mxTextCursor->goRight( 1, sal_True );
-            mxTextCursor->gotoRange( xStart, sal_False );
-            mxTextCursor->gotoRange( xEnd, sal_True );
+            mxTextCursor->goRight( 1, true );
+            mxTextCursor->gotoRange( xStart, false );
+            mxTextCursor->gotoRange( xEnd, true );
         }
     }
 
@@ -217,8 +217,8 @@ SwVbaRange::Select() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextViewCursor > xTextViewCursor = word::getXTextViewCursor( xModel );
-    xTextViewCursor->gotoRange( mxTextCursor->getStart(), sal_False );
-    xTextViewCursor->gotoRange( mxTextCursor->getEnd(), sal_True );
+    xTextViewCursor->gotoRange( mxTextCursor->getStart(), false );
+    xTextViewCursor->gotoRange( mxTextCursor->getEnd(), true );
 }
 
 void SAL_CALL
@@ -232,15 +232,15 @@ void SAL_CALL
 SwVbaRange::InsertParagraphBefore() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< text::XTextRange > xTextRange = mxTextCursor->getStart();
-    mxText->insertControlCharacter( xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_True );
-    mxTextCursor->gotoRange( xTextRange, sal_True );
+    mxText->insertControlCharacter( xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, true );
+    mxTextCursor->gotoRange( xTextRange, true );
 }
 
 void SAL_CALL
 SwVbaRange::InsertParagraphAfter() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< text::XTextRange > xTextRange = mxTextCursor->getEnd();
-    mxText->insertControlCharacter( xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_True );
+    mxText->insertControlCharacter( xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, true );
 }
 
 uno::Reference< word::XParagraphFormat > SAL_CALL
@@ -344,8 +344,8 @@ void SAL_CALL SwVbaRange::setStart( ::sal_Int32 _start ) throw (uno::RuntimeExce
     uno::Reference< text::XTextRange > xStart = SwVbaRangeHelper::getRangeByPosition( xText, _start );
     uno::Reference< text::XTextRange > xEnd = mxTextCursor->getEnd();
 
-    mxTextCursor->gotoRange( xStart, sal_False );
-    mxTextCursor->gotoRange( xEnd, sal_True );
+    mxTextCursor->gotoRange( xStart, false );
+    mxTextCursor->gotoRange( xEnd, true );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRange::getEnd() throw (uno::RuntimeException, std::exception)
@@ -360,7 +360,7 @@ void SAL_CALL SwVbaRange::setEnd( ::sal_Int32 _end ) throw (uno::RuntimeExceptio
     uno::Reference< text::XTextRange > xEnd = SwVbaRangeHelper::getRangeByPosition( xText, _end );
 
     mxTextCursor->collapseToStart();
-    mxTextCursor->gotoRange( xEnd, sal_True );
+    mxTextCursor->gotoRange( xEnd, true );
 }
 
 sal_Bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException, std::exception)
@@ -371,8 +371,8 @@ sal_Bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::X
     uno::Reference< text::XTextRange > xTextRange = pRange->getXTextRange();
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextCursor->getText(), uno::UNO_QUERY_THROW );
     if( xTRC->compareRegionStarts( xTextRange, getXTextRange() ) >= 0 && xTRC->compareRegionEnds( xTextRange, getXTextRange() ) <= 0 )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 uno::Any SAL_CALL

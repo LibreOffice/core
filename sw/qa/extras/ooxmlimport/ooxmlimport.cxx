@@ -117,7 +117,7 @@ protected:
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         {
             {"InputStream", uno::makeAny(xStream)},
-            {"InputMode", uno::makeAny(sal_True)},
+            {"InputMode", uno::makeAny(true)},
             {"TextInsertModeRange", uno::makeAny(xTextRange)},
         }));
         return xFilter->filter(aDescriptor);

@@ -44,9 +44,9 @@ sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException, std::except
     if( xUpdatable.is() )
     {
         xUpdatable->update();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // XHelperInterface

@@ -187,7 +187,7 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     // move the current cursor to the first table cell
     uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY_THROW );
     uno::Reference< text::XText> xFirstCellText( xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
-    word::getXTextViewCursor( mxDocument )->gotoRange( xFirstCellText->getStart(), sal_False );
+    word::getXTextViewCursor( mxDocument )->gotoRange( xFirstCellText->getStart(), false );
 
     uno::Reference< word::XTable > xVBATable( new SwVbaTable( mxParent, mxContext,  pVbaRange->getDocument(), xTable ) );
     return xVBATable;

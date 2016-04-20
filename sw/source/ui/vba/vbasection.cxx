@@ -36,7 +36,7 @@ SwVbaSection::~SwVbaSection()
 
 sal_Bool SAL_CALL SwVbaSection::getProtectedForForms() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaSection::setProtectedForForms( sal_Bool /*_protectedforforms*/ ) throw (uno::RuntimeException, std::exception)

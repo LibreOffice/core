@@ -38,7 +38,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
     OSL_TRACE("lcl_getAddinCollection: %s", OUStringToOString( aAddinPath, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( xSFA->isFolder( aAddinPath ) )
     {
-        uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, sal_False );
+        uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, false );
         sal_Int32 nEntry = sEntries.getLength();
         for( sal_Int32 index = 0; index < nEntry; ++index )
         {

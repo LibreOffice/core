@@ -95,7 +95,7 @@ uno::Type SwXAutoTextContainer::getElementType() throw( uno::RuntimeException, s
 sal_Bool SwXAutoTextContainer::hasElements() throw( uno::RuntimeException, std::exception )
 {
     // At least standard should always exists!
-    return sal_True;
+    return true;
 }
 
 uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
@@ -139,8 +139,8 @@ sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
     SolarMutexGuard aGuard;
     OUString sGroupName( pGlossaries->GetCompleteGroupName( Name ) );
     if(!sGroupName.isEmpty())
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(

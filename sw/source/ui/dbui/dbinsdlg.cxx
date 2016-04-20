@@ -307,7 +307,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                                 aFormatVal >>= sFormat;
                                 lang::Locale aLoc;
                                 aLocale >>= aLoc;
-                                long nKey = xDocNumberFormats->queryKey( sFormat, aLoc, sal_True);
+                                long nKey = xDocNumberFormats->queryKey( sFormat, aLoc, true);
                                 if(nKey < 0)
                                 {
                                     nKey = xDocNumberFormats->addNew( sFormat, aLoc );

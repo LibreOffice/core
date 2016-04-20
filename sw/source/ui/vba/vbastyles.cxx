@@ -197,16 +197,16 @@ public:
                 if( mxParaStyles->hasByName( sStyleName ) )
                 {
                     cachePos = mxParaStyles->getByName( sStyleName );
-                    return sal_True;
+                    return true;
                 }
-                return sal_False;
+                return false;
             }
         }
 
         if( mxParaStyles->hasByName( aName ) )
         {
             cachePos = mxParaStyles->getByName( aName );
-            return sal_True;
+            return true;
         }
         else
         {
@@ -217,11 +217,11 @@ public:
                 if( aStyleName.equalsIgnoreAsciiCase( aName ) )
                 {
                     cachePos = mxParaStyles->getByName( aStyleName );
-                    return sal_True;
+                    return true;
                 }
             }
         }
-        return sal_False;
+        return false;
     }
 
     // XIndexAccess

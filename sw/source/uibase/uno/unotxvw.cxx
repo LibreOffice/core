@@ -228,7 +228,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
     uno::Reference< uno::XInterface >  xInterface;
     if (!GetView() || !(aInterface >>= xInterface))
     {
-        return sal_False;
+        return false;
     }
 
     SwWrtShell& rSh = GetView()->GetWrtShell();
@@ -262,7 +262,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
             while (pPaM->GetNext() != pPaM)
                 delete pPaM->GetNext();
             delete pPaM;
-            return sal_True;
+            return true;
         }
         else if (!frame.first.isEmpty())
         {
@@ -272,26 +272,26 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
                 rSh.HideCursor();
                 rSh.EnterSelFrameMode();
             }
-            return sal_True;
+            return true;
         }
         else if (!tableName.isEmpty())
         {
             rSh.EnterStdMode();
             rSh.GotoTable(tableName);
-            return sal_True;
+            return true;
         }
         else if (pTableCursor)
         {
             UnoActionRemoveContext const aContext(*pTableCursor);
             rSh.EnterStdMode();
             rSh.SetSelection(*pTableCursor);
-            return sal_True;
+            return true;
         }
         else if (pMark)
         {
             rSh.EnterStdMode();
             rSh.GotoMark(pMark);
-            return sal_True;
+            return true;
         }
         // sdrObjects handled below
     }
@@ -895,7 +895,7 @@ sal_Bool SwXTextViewCursor::isVisible() throw( uno::RuntimeException, std::excep
 {
     SolarMutexGuard aGuard;
     OSL_FAIL("not implemented");
-    return sal_True;
+    return true;
 }
 
 void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException, std::exception )

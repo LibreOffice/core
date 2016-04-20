@@ -625,7 +625,7 @@ SwXMetaText::createTextCursorByRange(
     throw (uno::RuntimeException, std::exception)
 {
     const uno::Reference<text::XTextCursor> xCursor( CreateCursor() );
-    xCursor->gotoRange(xTextPosition, sal_False);
+    xCursor->gotoRange(xTextPosition, false);
     return xCursor;
 }
 
@@ -1445,7 +1445,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     if ( rPropertyName == "NumberFormat" )
     {
-        const OUString text( getPresentation(sal_False) );
+        const OUString text( getPresentation(false) );
         any <<= static_cast<sal_Int32>(pMeta->GetNumberFormat(text));
     }
     else if ( rPropertyName == "IsFixedLanguage" )

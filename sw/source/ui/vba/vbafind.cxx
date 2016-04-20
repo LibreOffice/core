@@ -104,12 +104,12 @@ uno::Reference< text::XTextRange > SwVbaFind::FindOneElement() throw ( uno::Runt
     {
         if( getForward() )
         {
-            mxTVC->gotoStart(sal_False);
+            mxTVC->gotoStart(false);
             xFoundOne.set( mxReplaceable->findNext( mxTextRange->getStart(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
         }
         else
         {
-            mxTVC->gotoEnd( sal_False );
+            mxTVC->gotoEnd( false );
             xFoundOne.set( mxReplaceable->findNext( mxTextRange->getEnd(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
 
         }

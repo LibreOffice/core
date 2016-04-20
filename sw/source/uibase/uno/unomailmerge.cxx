@@ -112,7 +112,7 @@ static CloseResult CloseModelAndDocSh(
         {
             //! 'sal_True' -> transfer ownership to vetoing object if vetoed!
             //! I.e. now that object is responsible for closing the model and doc shell.
-            xClose->close( sal_True );
+            xClose->close( true );
         }
         catch (const util::CloseVetoException&)
         {
@@ -1026,7 +1026,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         if (bChanged)
         {
             PropertyChangeEvent aChgEvt( static_cast<XPropertySet *>(this), rPropertyName,
-                    sal_False, pCur->nWID, aOld, rValue );
+                    false, pCur->nWID, aOld, rValue );
             launchEvent( aChgEvt );
         }
     }

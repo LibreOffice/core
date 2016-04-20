@@ -246,8 +246,8 @@ public:
         // #FIXME #TODO we really need to be checking against the codename for
         // ThisDocument
         if ( aName == "ThisDocument" )
-            return sal_True;
-        return sal_False;
+            return true;
+        return false;
     }
 
     css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
@@ -269,7 +269,7 @@ public:
     }
     // XElemenAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override { return uno::Type(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception ) override { return sal_True; }
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception ) override { return true; }
 
 };
 

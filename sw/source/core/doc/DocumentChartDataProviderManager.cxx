@@ -74,7 +74,7 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
                 {
                     uno::Reference< chart2::XChartDocument > xChart( xIP->getComponent(), UNO_QUERY );
                     if (xChart.is())
-                        xChart->createInternalDataProvider( sal_True );
+                        xChart->createInternalDataProvider( true );
 
                     // there may be more than one chart for each table thus we need to continue the loop...
                 }

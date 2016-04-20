@@ -124,7 +124,7 @@ void SwOneExampleFrame::CreateControl()
         _xControl->createPeer( xToolkit, xParent );
 
         uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
-        xWin->setVisible(sal_False);
+        xWin->setVisible(false);
         Size aWinSize(aTopWindow->GetOutputSizePixel());
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
@@ -214,7 +214,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
             uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
             aValue >>= xLayoutManager;
             if ( xLayoutManager.is() )
-                xLayoutManager->setVisible( sal_False );
+                xLayoutManager->setVisible( false );
         }
         catch (const uno::Exception&)
         {
@@ -377,7 +377,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
         if(xScrCursor.is())
             xScrCursor->screenUp();
 
-        xWin->setVisible( sal_True );
+        xWin->setVisible( true );
         aTopWindow->Show();
 
         if( xTunnel.is() )
@@ -428,8 +428,8 @@ void SwOneExampleFrame::ClearDocument()
         }
         else
         {
-            _xCursor->gotoStart(sal_False);
-            _xCursor->gotoEnd(sal_True);
+            _xCursor->gotoStart(false);
+            _xCursor->gotoEnd(true);
             _xCursor->setString(OUString());
         }
     }

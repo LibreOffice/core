@@ -94,7 +94,7 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override
     {
-        return sal_True;
+        return true;
     }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception) override
@@ -139,7 +139,7 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const u
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
     uno::Reference< text::XText > xText = pVbaRange->getXText();
     uno::Reference< text::XTextContent > xTextContent( xDocumentIndex, uno::UNO_QUERY_THROW );
-    xText->insertTextContent( xTextRange, xTextContent, sal_False );
+    xText->insertTextContent( xTextRange, xTextContent, false );
     xToc->Update();
 
     return xToc;

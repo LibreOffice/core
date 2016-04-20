@@ -280,7 +280,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getIndexAtPoint( const css::awt::Poi
 OUString SAL_CALL SwAccessibleNoTextFrame::getSelectedText(  ) throw (css::uno::RuntimeException, std::exception){return OUString();}
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getSelectionStart(  ) throw (css::uno::RuntimeException, std::exception){return 0;}
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getSelectionEnd(  ) throw (css::uno::RuntimeException, std::exception){return 0;}
-sal_Bool SAL_CALL SwAccessibleNoTextFrame::setSelection( sal_Int32 , sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return sal_True;}
+sal_Bool SAL_CALL SwAccessibleNoTextFrame::setSelection( sal_Int32 , sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return true;}
 OUString SAL_CALL SwAccessibleNoTextFrame::getText(  ) throw (css::uno::RuntimeException, std::exception){return OUString();}
 OUString SAL_CALL SwAccessibleNoTextFrame::getTextRange( sal_Int32 , sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return OUString();}
 css::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextAtIndex( sal_Int32 , sal_Int16 ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
@@ -299,7 +299,7 @@ css::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextBehindI
     return aResult;
 }
 
-sal_Bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return sal_True;}
+sal_Bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return true;}
 
 //  XAccessibleHyperText
 

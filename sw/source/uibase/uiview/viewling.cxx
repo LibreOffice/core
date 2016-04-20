@@ -467,7 +467,7 @@ void SwView::HyphenateDocument()
                 bOther = true;
                 if (xProp.is())
                 {
-                    xProp->setIsHyphSpecial( sal_True );
+                    xProp->setIsHyphSpecial( true );
                 }
             }
             else

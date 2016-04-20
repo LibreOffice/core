@@ -73,7 +73,7 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
                 try
                 {
                     uno::Reference< util::XModifiable > xModif( xIP->getComponent(), uno::UNO_QUERY_THROW );
-                    xModif->setModified( sal_True );
+                    xModif->setModified( true );
                 }
                 catch ( uno::Exception& )
                 {
@@ -1527,7 +1527,7 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
             if (xRef.is())
             {
                 // mark the sequence as 'dirty' and notify listeners
-                xRef->setModified( sal_True );
+                xRef->setModified( true );
             }
             ++aIt;
         }
@@ -2308,7 +2308,7 @@ void SwChartDataSequence::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
     }
     else
     {
-        setModified( sal_True );
+        setModified( true );
     }
 }
 
@@ -2319,7 +2319,7 @@ sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL SwChartDataSequence::setModified(

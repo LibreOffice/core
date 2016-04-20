@@ -2784,7 +2784,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         aRenderer[0].Name  = "PageSize";
         aRenderer[0].Value <<= aPageSize;
         aRenderer[1].Name  = "PageIncludesNonprintableArea";
-        aRenderer[1].Value <<= sal_True;
+        aRenderer[1].Value <<= true;
         if (aPreferredPageSize.Width && aPreferredPageSize.Height)
         {
             ++nLen;
@@ -3795,8 +3795,8 @@ sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
         rName == sSections ||
         rName == sOutlines ||
         rName == sBookmarks    )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 uno::Type  SwXLinkTargetSupplier::getElementType()

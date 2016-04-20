@@ -158,7 +158,7 @@ void SAL_CALL SwVbaOptions::setDefaultBorderColorIndex( ::sal_Int32 /*_defaultbo
 
 sal_Bool SAL_CALL SwVbaOptions::getReplaceSelection() throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL SwVbaOptions::setReplaceSelection( sal_Bool /*_replaceselection*/ ) throw (uno::RuntimeException, std::exception)
@@ -168,7 +168,7 @@ void SAL_CALL SwVbaOptions::setReplaceSelection( sal_Bool /*_replaceselection*/ 
 
 sal_Bool SAL_CALL SwVbaOptions::getMapPaperSize() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setMapPaperSize( sal_Bool /*_mappapersize*/ ) throw (uno::RuntimeException, std::exception)
@@ -178,7 +178,7 @@ void SAL_CALL SwVbaOptions::setMapPaperSize( sal_Bool /*_mappapersize*/ ) throw 
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyHeadings() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( sal_Bool /*_autoformatasyoutypeapplyheadings*/ ) throw (uno::RuntimeException, std::exception)
@@ -188,7 +188,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( sal_Bool /*_aut
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyBulletedLists() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( sal_Bool /*_autoformatasyoutypeapplybulletedlists*/ ) throw (uno::RuntimeException, std::exception)
@@ -198,7 +198,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( sal_Bool /
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyNumberedLists() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( sal_Bool /*_autoformatasyoutypeapplynumberedlists*/ ) throw (uno::RuntimeException, std::exception)
@@ -208,7 +208,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( sal_Bool /
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeFormatListItemBeginning() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( sal_Bool /*_autoformatasyoutypeformatlistitembeginning*/ ) throw (uno::RuntimeException, std::exception)
@@ -218,7 +218,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( sal_B
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeDefineStyles() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( sal_Bool /*_autoformatasyoutypedefinestyles*/ ) throw (uno::RuntimeException, std::exception)
@@ -228,7 +228,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( sal_Bool /*_auto
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyHeadings() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( sal_Bool /*_autoformatapplyheadings*/ ) throw (uno::RuntimeException, std::exception)
@@ -238,7 +238,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( sal_Bool /*_autoformatap
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyLists() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( sal_Bool /*_autoformatapplylists*/ ) throw (uno::RuntimeException, std::exception)
@@ -248,7 +248,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( sal_Bool /*_autoformatapply
 
 sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyBulletedLists() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( sal_Bool /*_autoformatapplybulletedlists*/ ) throw (uno::RuntimeException, std::exception)

@@ -137,9 +137,9 @@ sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter() throw (uno
 {
     OUString pageStyle = getStyleOfFirstPage();
     if ( pageStyle == "First Page" )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status ) throw (uno::RuntimeException, std::exception)

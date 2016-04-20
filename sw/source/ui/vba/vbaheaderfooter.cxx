@@ -41,7 +41,7 @@ sal_Bool SAL_CALL SwVbaHeaderFooter::getIsHeader() throw (uno::RuntimeException,
 sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious() throw (uno::RuntimeException, std::exception)
 {
     // seems always false
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( sal_Bool /*_linktoprevious*/ ) throw (uno::RuntimeException, std::exception)

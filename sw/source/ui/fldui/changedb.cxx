@@ -202,7 +202,7 @@ void SwChangeDBDlg::UpdateFields()
     pSh->StartAllAction();
     OUString sTableName;
     OUString sColumnName;
-    sal_Bool bIsTable = sal_False;
+    sal_Bool bIsTable = false;
     const OUString DBName(m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable));
     const OUString sTemp = DBName
         + OUString(DB_DELIM)
@@ -220,7 +220,7 @@ IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, ButtonHdl, Button*, void)
     OUString sTableName;
     OUString sColumnName;
     SwDBData aData;
-    sal_Bool bIsTable = sal_False;
+    sal_Bool bIsTable = false;
     aData.sDataSource = m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
     aData.nCommandType = bIsTable ? 0 : 1;

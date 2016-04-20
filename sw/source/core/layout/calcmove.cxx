@@ -1135,7 +1135,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     // as long as bMovedFwd is false, the Frame may flow backwards (until
     // it has been moved forward once)
     bool bMovedFwd = false;
-    sal_Bool bFormatted = sal_False;        // For the widow/orphan rules, we encourage the
+    sal_Bool bFormatted = false;        // For the widow/orphan rules, we encourage the
                                             // last ContentFrame of a chain to format. This only
                                             // needs to happen once. Every time the Frame is
                                             // moved, the flag will have to be reset.
@@ -1380,7 +1380,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         if ( !mbValidSize )
         {
             mbValidSize = true;
-            bFormatted = sal_True;
+            bFormatted = true;
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( true );
@@ -1412,7 +1412,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         {
             SWREFRESHFN( this )
             bMovedBwd = true;
-            bFormatted = sal_False;
+            bFormatted = false;
             if ( bKeep && bMoveable )
             {
                 if( CheckMoveFwd( bMakePage, false, bMovedBwd ) )
@@ -1440,7 +1440,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                         if( GetFollow() )
                             Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
                         mbValidSize = true;
-                        bFormatted = sal_True;
+                        bFormatted = true;
                         Format(getRootFrame()->GetCurrShell()->GetOut());
                     }
                 }
@@ -1699,7 +1699,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             bMovedFwd = true;
         }
 
-        bFormatted = sal_False;
+        bFormatted = false;
         if ( bMoveOrFit && GetUpper() == pOldUp )
         {
             // FME 2007-08-30 #i81146# new loop control

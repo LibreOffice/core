@@ -495,7 +495,7 @@ uno::Type SAL_CALL SwXFootnote::getElementType() throw (uno::RuntimeException, s
 
 sal_Bool SAL_CALL SwXFootnote::hasElements() throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL

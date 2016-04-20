@@ -356,13 +356,13 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     bool bHasSettings = false;
                     if ( helper.getCfgManager()->hasSettings( sMenuBar ) )
                     {
-                        xIndexContainer.set( helper.getCfgManager()->getSettings( sMenuBar, sal_True ), uno::UNO_QUERY_THROW );
+                        xIndexContainer.set( helper.getCfgManager()->getSettings( sMenuBar, true ), uno::UNO_QUERY_THROW );
                         bHasSettings = true;
                     }
                     else
                     {
                         if ( helper.getAppCfgManager()->hasSettings( sMenuBar ) )
-                            xIndexContainer.set( helper.getAppCfgManager()->getSettings( sMenuBar, sal_True ), uno::UNO_QUERY_THROW );
+                            xIndexContainer.set( helper.getAppCfgManager()->getSettings( sMenuBar, true ), uno::UNO_QUERY_THROW );
                         else
                             xIndexContainer.set( helper.getAppCfgManager()->createSettings(), uno::UNO_QUERY_THROW );
                     }

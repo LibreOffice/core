@@ -1567,7 +1567,7 @@ throw (uno::RuntimeException, std::exception)
 
     if (CURSOR_META == m_pImpl->m_eType)
     {
-        return sal_False;
+        return false;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
@@ -1592,7 +1592,7 @@ SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw (uno::RuntimeException,
 
     if (CURSOR_META == m_pImpl->m_eType)
     {
-        return sal_False;
+        return false;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     bool bRet = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
@@ -1617,7 +1617,7 @@ SwXTextCursor::gotoNextParagraph(sal_Bool Expand) throw (uno::RuntimeException, 
 
     if (CURSOR_META == m_pImpl->m_eType)
     {
-        return sal_False;
+        return false;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     const bool bRet = rUnoCursor.MovePara(fnParaNext, fnParaStart);
@@ -1634,7 +1634,7 @@ throw (uno::RuntimeException, std::exception)
 
     if (CURSOR_META == m_pImpl->m_eType)
     {
-        return sal_False;
+        return false;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     const bool bRet = rUnoCursor.MovePara(fnParaPrev, fnParaStart);
@@ -1665,7 +1665,7 @@ SwXTextCursor::getStart() throw (uno::RuntimeException, std::exception)
         SwXTextCursor * const pXCursor(
             new SwXTextCursor(*rUnoCursor.GetDoc(), xParent, CURSOR_META,
                 *rUnoCursor.GetPoint()) );
-        pXCursor->gotoStart(sal_False);
+        pXCursor->gotoStart(false);
         xRet = static_cast<text::XWordCursor*>(pXCursor);
     }
     else
@@ -1691,7 +1691,7 @@ SwXTextCursor::getEnd() throw (uno::RuntimeException, std::exception)
         SwXTextCursor * const pXCursor(
             new SwXTextCursor(*rUnoCursor.GetDoc(), xParent, CURSOR_META,
                 *rUnoCursor.GetPoint()) );
-        pXCursor->gotoEnd(sal_False);
+        pXCursor->gotoEnd(false);
         xRet = static_cast<text::XWordCursor*>(pXCursor);
     }
     else
@@ -2602,22 +2602,22 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
 #endif
 
     pFields[0].Field = 1;
-    pFields[0].IsAscending = sal_True;
-    pFields[0].IsCaseSensitive = sal_False;
+    pFields[0].IsAscending = true;
+    pFields[0].IsCaseSensitive = false;
     pFields[0].FieldType = table::TableSortFieldType_ALPHANUMERIC;
     pFields[0].CollatorLocale = aLang;
     pFields[0].CollatorAlgorithm = aCollAlg;
 
     pFields[1].Field = 1;
-    pFields[1].IsAscending = sal_True;
-    pFields[1].IsCaseSensitive = sal_False;
+    pFields[1].IsAscending = true;
+    pFields[1].IsCaseSensitive = false;
     pFields[1].FieldType = table::TableSortFieldType_ALPHANUMERIC;
     pFields[1].CollatorLocale = aLang;
     pFields[1].CollatorAlgorithm = aCollAlg;
 
     pFields[2].Field = 1;
-    pFields[2].IsAscending = sal_True;
-    pFields[2].IsCaseSensitive = sal_False;
+    pFields[2].IsAscending = true;
+    pFields[2].IsCaseSensitive = false;
     pFields[2].FieldType = table::TableSortFieldType_ALPHANUMERIC;
     pFields[2].CollatorLocale = aLang;
     pFields[2].CollatorAlgorithm = aCollAlg;
@@ -2982,7 +2982,7 @@ SwXTextCursor::getElementType() throw (uno::RuntimeException, std::exception)
 
 sal_Bool SAL_CALL SwXTextCursor::hasElements() throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 uno::Sequence< OUString > SAL_CALL

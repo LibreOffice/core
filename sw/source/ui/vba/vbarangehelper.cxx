@@ -52,7 +52,7 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
             }
             else
             {
-                bCanGo = xCursor->goRight( 1, sal_False );
+                bCanGo = xCursor->goRight( 1, false );
                 nPos++;
             }
         }
@@ -148,7 +148,7 @@ sal_Int32 SwVbaRangeHelper::getPosition( const uno::Reference< text::XText >& rT
 
         while( nCompareValue !=0 && canGo )
         {
-            canGo = xCursor->goRight( 1, sal_False );
+            canGo = xCursor->goRight( 1, false );
             nCompareValue = xCompare->compareRegionStarts( xCursor->getStart(), rTextRange );
             nPosition++;
         }

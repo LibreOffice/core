@@ -77,7 +77,7 @@ public:
         if( mxNameAccess->hasByName( aName ) )
         {
             cachePos = mxNameAccess->getByName( aName );
-            return sal_True;
+            return true;
         }
         else
         {
@@ -88,11 +88,11 @@ public:
                 if( aName.equalsIgnoreAsciiCase( aBookmarkName ) )
                 {
                     cachePos <<= xNamed;
-                    return sal_True;
+                    return true;
                 }
             }
         }
-        return sal_False;
+        return false;
     }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
@@ -143,7 +143,7 @@ void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& x
     uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( rName );
-    rTextRange->getText()->insertTextContent( rTextRange, xBookmark, sal_False );
+    rTextRange->getText()->insertTextContent( rTextRange, xBookmark, false );
 }
 
 uno::Any SAL_CALL
@@ -187,7 +187,7 @@ SwVbaBookmarks::setDefaultSorting( sal_Int32/* _type*/ ) throw (css::uno::Runtim
 sal_Bool SAL_CALL
 SwVbaBookmarks::getShowHidden() throw (css::uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL

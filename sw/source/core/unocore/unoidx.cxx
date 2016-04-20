@@ -2605,11 +2605,11 @@ throw (uno::RuntimeException, std::exception)
             if (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
                     == rName)
             {
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 uno::Type SAL_CALL
@@ -2750,7 +2750,7 @@ throw (uno::RuntimeException, std::exception)
 sal_Bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::hasElements() throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 SwXDocumentIndex::TokenAccess_Impl::TokenAccess_Impl(
@@ -3263,7 +3263,7 @@ sal_Bool SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::hasElements()
 throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

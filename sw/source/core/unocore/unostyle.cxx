@@ -3316,7 +3316,7 @@ uno::Type SwXAutoStyles::getElementType(  ) throw(uno::RuntimeException, std::ex
 
 sal_Bool SwXAutoStyles::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 uno::Any SwXAutoStyles::getByName(const OUString& Name)
@@ -3351,9 +3351,9 @@ sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
     if( Name == "CharacterStyles" ||
         Name == "RubyStyles" ||
         Name == "ParagraphStyles" )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoStyleFamily nFamily) :
@@ -3622,7 +3622,7 @@ uno::Type SwXAutoStyleFamily::getElementType(  ) throw(uno::RuntimeException, st
 
 sal_Bool SwXAutoStyleFamily::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam )

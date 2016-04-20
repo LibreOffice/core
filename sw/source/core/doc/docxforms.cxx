@@ -73,7 +73,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
             xModel->setID( sName );
             Reference<XFormsUIHelper1>( xModel, uno::UNO_QUERY_THROW )->newInstance(
                 "Instance 1",
-                OUString(), sal_True );
+                OUString(), true );
             xModel->initialize();
             mxXForms->insertByName( sName, makeAny( xModel ) );
             OSL_ENSURE( mxXForms->hasElements(), "can't create XForms model" );

@@ -831,7 +831,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );
     aProps[0]. Name = "MonitorVisible";
-    aProps[0].Value <<= sal_True;
+    aProps[0].Value <<= true;
     aProps[1]. Name = "Pages";
     aProps[1]. Value <<= sPages;
 

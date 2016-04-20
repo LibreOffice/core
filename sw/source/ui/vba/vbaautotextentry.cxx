@@ -47,7 +47,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
         uno::Reference< text::XText > xText = pWhere->getXText();
         mxEntry->applyTo( xEndMarker->getStart() );
         uno::Reference< text::XTextCursor > xTC = xText->createTextCursorByRange( xTextRange->getStart() );
-        xTC->goRight( 1, sal_True );
+        xTC->goRight( 1, true );
         xTC->setString( "" ); // remove marker
         // remove the blank paragraph if it is a rich text
         bool bRich = false;
@@ -62,10 +62,10 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
                 uno::Reference< frame::XModel > xModel( getCurrentWordDoc( mxContext ), uno::UNO_QUERY_THROW );
                 uno::Reference< text::XTextViewCursor > xTVCursor = word::getXTextViewCursor( xModel );
                 uno::Reference< text::XTextRange > xCurrentRange( xTC->getEnd(), uno::UNO_QUERY_THROW );
-                xTVCursor->gotoRange( xCurrentRange, sal_False );
+                xTVCursor->gotoRange( xCurrentRange, false );
                 OUString url = ".uno:Delete";
                 dispatchRequests( xModel,url );
-                xTVCursor->gotoRange( xEndMarker->getEnd(), sal_False );
+                xTVCursor->gotoRange( xEndMarker->getEnd(), false );
             }
         }
         xEndMarker->setString( "" ); // remove marker

@@ -543,7 +543,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                 if ( xModifiable.is() )
                 {
-                    xModifiable->setModified( sal_True );
+                    xModifiable->setModified( true );
                 }
             }
         }

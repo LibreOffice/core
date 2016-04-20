@@ -112,7 +112,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
             if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
             {
                 // #105638# OJ
-                aTmp <<= sal_True;
+                aTmp <<= true;
                 xPropSet->setPropertyValue("DispatchURLInternal", aTmp );
             }
 #endif

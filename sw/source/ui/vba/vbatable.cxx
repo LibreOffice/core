@@ -59,7 +59,7 @@ SwVbaTable::Select(  ) throw (script::BasicErrorException, uno::RuntimeException
 
     // go to the end of the table and span the view
     uno::Reference< text::XTextViewCursor > xCursor = xViewCursorSupplier->getViewCursor();
-    xCursor->gotoEnd(sal_True);
+    xCursor->gotoEnd(true);
 
 }
 

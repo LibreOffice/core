@@ -1036,7 +1036,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     if (pText)
     {
         xTextCursor.set( pText->CreateCursor() );
-        xTextCursor->gotoEnd(sal_True);
+        xTextCursor->gotoEnd(true);
         const uno::Reference<lang::XUnoTunnel> xCursorTunnel(
                 xTextCursor, uno::UNO_QUERY);
         pCursor =
@@ -1291,7 +1291,7 @@ uno::Type SAL_CALL SwXTextRange::getElementType() throw (uno::RuntimeException, 
 
 sal_Bool SAL_CALL SwXTextRange::hasElements() throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 uno::Sequence< OUString > SAL_CALL

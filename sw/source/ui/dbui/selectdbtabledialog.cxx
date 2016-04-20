@@ -182,9 +182,9 @@ IMPL_LINK_TYPED(SwSelectDBTableDialog, PreviewHdl, Button*, pButton, void)
         pProperties[2].Name = "CommandType";
         pProperties[2].Value <<= nCommandType;
         pProperties[3].Name = "ShowTreeView";
-        pProperties[3].Value <<= sal_False;
+        pProperties[3].Value <<= false;
         pProperties[4].Name = "ShowTreeViewButton";
-        pProperties[4].Value <<= sal_False;
+        pProperties[4].Value <<= false;
 
         VclPtrInstance< SwDBTablePreviewDialog > pDlg(pButton, aProperties);
         pDlg->Execute();

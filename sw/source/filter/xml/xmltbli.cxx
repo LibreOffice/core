@@ -688,7 +688,7 @@ void SwXMLTableCellContext_Impl::EndElement()
                 // paragraph
                 Reference < XTextCursor > xSrcTextCursor =
                     GetImport().GetTextImport()->GetText()->createTextCursor();
-                xSrcTextCursor->gotoEnd( sal_True );
+                xSrcTextCursor->gotoEnd( true );
 
                 // Until we have an API for copying we have to use the core.
                 Reference<XUnoTunnel> xSrcCursorTunnel( xSrcTextCursor, UNO_QUERY);

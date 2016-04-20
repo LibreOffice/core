@@ -313,7 +313,7 @@ void SAL_CALL SwVbaDocument::setProtectionType( ::sal_Int32 /*_protectiontype*/ 
 sal_Bool SAL_CALL SwVbaDocument::getUpdateStylesOnOpen() throw (css::uno::RuntimeException, std::exception)
 {
     //TODO
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( sal_Bool /*_updatestylesonopen*/ ) throw (uno::RuntimeException, std::exception)
@@ -467,7 +467,7 @@ SwVbaDocument::getValue( const OUString& aPropertyName ) throw (beans::UnknownPr
 sal_Bool SAL_CALL
 SwVbaDocument::hasMethod( const OUString& /*aName*/ ) throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL
@@ -476,7 +476,7 @@ SwVbaDocument::hasProperty( const OUString& aName ) throw (uno::RuntimeException
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
     if ( xFormControls.is() )
         return xFormControls->hasByName( aName );
-    return sal_False;
+    return false;
 }
 
 uno::Reference< container::XNameAccess >

@@ -54,28 +54,28 @@ private:
         switch ( m_LineType )
         {
             case word::WdBorderType::wdBorderLeft:
-                aTableBorder.IsLeftLineValid = sal_True;
+                aTableBorder.IsLeftLineValid = true;
                 aTableBorder.LeftLine= rBorderLine;
                 break;
             case word::WdBorderType::wdBorderTop:
-                aTableBorder.IsTopLineValid = sal_True;
+                aTableBorder.IsTopLineValid = true;
                 aTableBorder.TopLine = rBorderLine;
                 break;
 
             case word::WdBorderType::wdBorderBottom:
-                aTableBorder.IsBottomLineValid = sal_True;
+                aTableBorder.IsBottomLineValid = true;
                 aTableBorder.BottomLine = rBorderLine;
                 break;
             case word::WdBorderType::wdBorderRight:
-                aTableBorder.IsRightLineValid = sal_True;
+                aTableBorder.IsRightLineValid = true;
                 aTableBorder.RightLine = rBorderLine;
                 break;
             case word::WdBorderType::wdBorderVertical:
-                aTableBorder.IsVerticalLineValid = sal_True;
+                aTableBorder.IsVerticalLineValid = true;
                 aTableBorder.VerticalLine = rBorderLine;
                 break;
             case word::WdBorderType::wdBorderHorizontal:
-                aTableBorder.IsHorizontalLineValid = sal_True;
+                aTableBorder.IsHorizontalLineValid = true;
                 aTableBorder.HorizontalLine = rBorderLine;
                 break;
             case word::WdBorderType::wdBorderDiagonalDown:
@@ -272,7 +272,7 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override
     {
-        return sal_True;
+        return true;
     }
 };
 
@@ -334,7 +334,7 @@ SwVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )  throw (uno::RuntimeEx
 sal_Bool SAL_CALL SwVbaBorders::getShadow() throw (uno::RuntimeException, std::exception)
 {
     // always return False for table border in MS Word
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::RuntimeException, std::exception)
