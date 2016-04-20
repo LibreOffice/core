@@ -115,7 +115,7 @@ void ChartConverter::createDataProvider( const Reference< XChartDocument >& rxCh
     try
     {
         if( !rxChartDoc->hasInternalDataProvider() )
-            rxChartDoc->createInternalDataProvider( sal_False );
+            rxChartDoc->createInternalDataProvider( false );
     }
     catch( Exception& )
     {

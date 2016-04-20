@@ -223,15 +223,15 @@ sal_Int32 TextField::insertAt(
                     }
                     else
                     {
-                        xText->insertString( xAt, " ", sal_False );
+                        xText->insertString( xAt, " ", false );
                     }
-                    xText->insertTextContent( xAt, xContent, sal_False );
+                    xText->insertTextContent( xAt, xContent, false );
                 }
             }
         }
         else
         {
-            xText->insertString( xAt, getText(), sal_False );
+            xText->insertString( xAt, getText(), false );
         }
     }
     catch( const Exception&  )

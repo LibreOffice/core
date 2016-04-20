@@ -124,7 +124,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                             xPropSet->setPropertyValue( sURL, Any( aURL ) );
                             Reference< text::XTextContent > xContent( rTextField.xTextField, UNO_QUERY);
                             Reference< text::XTextRange > xTextRange( rTextField.xTextCursor, UNO_QUERY );
-                            rTextField.xText->insertTextContent( xTextRange, xContent, sal_True );
+                            rTextField.xText->insertTextContent( xTextRange, xContent, true );
                         }
                         catch( uno::Exception& )
                         {

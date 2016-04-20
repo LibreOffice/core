@@ -399,7 +399,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
         try
         {
             Reference< XVBACompatibility > xVBACompat( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW );
-            xVBACompat->setVBACompatibilityMode( sal_True );
+            xVBACompat->setVBACompatibilityMode( true );
             xVBACompat->setProjectName( maPrjName );
 
         }

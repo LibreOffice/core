@@ -149,10 +149,10 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         mrBulletList.setGraphic( mxBlipProps->mxGraphic );
 
     if( mrBulletList.is() )
-        rPropertyMap.setProperty( PROP_IsNumbering, sal_True);
+        rPropertyMap.setProperty( PROP_IsNumbering, true);
     sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
     rPropertyMap.setProperty( PROP_NumberingLevel, nLevel);
-    rPropertyMap.setProperty( PROP_NumberingIsNumber, sal_True);
+    rPropertyMap.setProperty( PROP_NumberingIsNumber, true);
 
     if( mrTextParagraphProperties.getParaAdjust() )
         rPropertyMap.setProperty( PROP_ParaAdjust, mrTextParagraphProperties.getParaAdjust().get());
@@ -171,7 +171,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             return new TextSpacingContext( *this, mrTextParagraphProperties.getParaBottomMargin() );
         // EG_TextBulletColor
         case A_TOKEN( buClrTx ):        // CT_TextBulletColorFollowText ???
-            mrBulletList.mbBulletColorFollowText <<= sal_True;
+            mrBulletList.mbBulletColorFollowText <<= true;
             break;
         case A_TOKEN( buClr ):          // CT_Color
             return new ColorContext( *this, *mrBulletList.maBulletColorPtr );
@@ -189,7 +189,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
 
         // EG_TextBulletTypeface
         case A_TOKEN( buFontTx ):       // CT_TextBulletTypefaceFollowText
-            mrBulletList.mbBulletFontFollowText <<= sal_True;
+            mrBulletList.mbBulletFontFollowText <<= true;
             break;
         case A_TOKEN( buFont ):         // CT_TextFont
             mrBulletList.maBulletFont.setAttributes( rAttribs );

@@ -423,7 +423,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 if ( xControlShape.is() && !getTypeModel().mbVisible )
                 {
                     PropertySet aControlShapeProp( xControlShape->getControl() );
-                    aControlShapeProp.setProperty( PROP_EnableVisible, uno::makeAny( sal_False ) );
+                    aControlShapeProp.setProperty( PROP_EnableVisible, uno::makeAny( false ) );
                 }
                 /*  Notify the drawing that a new shape has been inserted. For
                     convenience, pass the rectangle that contains position and
@@ -562,12 +562,12 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, 
     else if ( rTypeModel.maPositionHorizontal == "inside" )
     {
         rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::LEFT));
-        rPropSet.setAnyProperty(PROP_PageToggle, makeAny(sal_True));
+        rPropSet.setAnyProperty(PROP_PageToggle, makeAny(true));
     }
     else if ( rTypeModel.maPositionHorizontal == "outside" )
     {
         rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::RIGHT));
-        rPropSet.setAnyProperty(PROP_PageToggle, makeAny(sal_True));
+        rPropSet.setAnyProperty(PROP_PageToggle, makeAny(true));
     }
 
     if ( rTypeModel.maPositionHorizontalRelative == "page" )
@@ -839,7 +839,7 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
         {
             aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
             aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
-            aPropSet.setProperty(PROP_Opaque, sal_False);
+            aPropSet.setProperty(PROP_Opaque, false);
         }
         // fdo#70457: preserve rotation information
         if ( !maTypeModel.maRotation.isEmpty() )

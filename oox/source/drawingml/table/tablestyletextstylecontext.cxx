@@ -38,17 +38,17 @@ TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler2Helper& r
     if( rAttribs.hasAttribute( XML_b ) ) {
         sal_Int32 nB = rAttribs.getToken( XML_b, XML_def );
         if ( nB == XML_on )
-            mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_True );
+            mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( true );
         else if ( nB == XML_off )
-            mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_False );
+            mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( false );
     }
 
     if( rAttribs.hasAttribute( XML_i ) ) {
         sal_Int32 nI = rAttribs.getToken( XML_i, XML_def );
         if ( nI == XML_on )
-            mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( sal_True );
+            mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( true );
         else if ( nI == XML_off )
-            mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( sal_False );
+            mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( false );
     }
 }
 

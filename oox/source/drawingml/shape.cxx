@@ -620,7 +620,7 @@ Reference< XShape > Shape::createAndInsert(
         {
             SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "invisible shape with id: " << msId);
             const OUString sVisible( "Visible" );
-            xSet->setPropertyValue( sVisible, Any( sal_False ) );
+            xSet->setPropertyValue( sVisible, Any( false ) );
         }
 
         ActionLockGuard const alg(mxShape);
@@ -1194,8 +1194,8 @@ void Shape::keepDiagramCompatibilityInfo( XmlFilterBase& rFilterBase )
         } else
             xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
 
-        xSet->setPropertyValue( "MoveProtect", Any( sal_True ) );
-        xSet->setPropertyValue( "SizeProtect", Any( sal_True ) );
+        xSet->setPropertyValue( "MoveProtect", Any( true ) );
+        xSet->setPropertyValue( "SizeProtect", Any( true ) );
 
         // Replace existing shapes with a new Graphic Object rendered
         // from them
@@ -1274,8 +1274,8 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         xShape.set( xServiceFact->createInstance( "com.sun.star.drawing.GraphicObjectShape" ), UNO_QUERY_THROW );
         Reference < XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
         xPropSet->setPropertyValue(  "Graphic", Any( xGraphic ) );
-        xPropSet->setPropertyValue(  "MoveProtect", Any( sal_True ) );
-        xPropSet->setPropertyValue(  "SizeProtect", Any( sal_True ) );
+        xPropSet->setPropertyValue(  "MoveProtect", Any( true ) );
+        xPropSet->setPropertyValue(  "SizeProtect", Any( true ) );
         xPropSet->setPropertyValue(  "Name", Any( OUString( "RenderedShapes" ) ) );
     }
     catch( const Exception& e )

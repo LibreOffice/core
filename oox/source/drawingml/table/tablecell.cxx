@@ -192,9 +192,9 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
 
     applyTableCellProperties( rxCell, *this );
     TextCharacterProperties aTextStyleProps;
-    xAt->gotoStart( sal_True );
+    xAt->gotoStart( true );
     Reference< text::XTextRange > xStart( xAt, UNO_QUERY );
-    xAt->gotoEnd( sal_True );
+    xAt->gotoEnd( true );
 
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     oox::drawingml::FillProperties aFillProperties;

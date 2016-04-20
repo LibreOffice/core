@@ -161,7 +161,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
             character in this call, it will be returned in the next call of one
             of the own member functions. The function createFinalString() adds
             a character that has been buffered in the previous call. */
-        OUString aString = createFinalString( mxTextStrm->readString( aDelimiters, sal_False ) );
+        OUString aString = createFinalString( mxTextStrm->readString( aDelimiters, false ) );
         // remove last character from string and remember it for next call
         if( !bIncludeChar && !aString.isEmpty() && (aString[ aString.getLength() - 1 ] == cChar) )
         {

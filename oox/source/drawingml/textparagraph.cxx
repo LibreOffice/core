@@ -72,8 +72,8 @@ void TextParagraph::insertAt(
 
         if( !bFirst )
         {
-            xText->insertControlCharacter( xAt, ControlCharacter::APPEND_PARAGRAPH, sal_False );
-            xAt->gotoEnd( sal_True );
+            xText->insertControlCharacter( xAt, ControlCharacter::APPEND_PARAGRAPH, false );
+            xAt->gotoEnd( true );
         }
 
         sal_Int32 nCharHeight = 0;
@@ -100,7 +100,7 @@ void TextParagraph::insertAt(
                 nParagraphSize += nLen;
             }
         }
-        xAt->gotoEnd( sal_True );
+        xAt->gotoEnd( true );
 
         PropertyMap aioBulletList;
         Reference< XPropertySet > xProps( xAt, UNO_QUERY);

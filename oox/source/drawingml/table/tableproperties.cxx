@@ -134,7 +134,7 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& 
     pTableStyle->getBand1V().getFillProperties() = pBand1HFillProperties;
 
     //tet bold for 1st row/last row/column
-    ::boost::optional< sal_Bool > textBoldStyle(sal_True);
+    ::boost::optional< sal_Bool > textBoldStyle(true);
     pTableStyle->getFirstRow().getTextBoldStyle() = textBoldStyle;
     pTableStyle->getLastRow().getTextBoldStyle() = textBoldStyle;
     pTableStyle->getFirstCol().getTextBoldStyle() = textBoldStyle;

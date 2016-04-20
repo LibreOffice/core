@@ -474,7 +474,7 @@ OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal
         aEntry[2].First = "TargetMode";
         aEntry[2].Second = "External";
     }
-    rRelations->insertRelationshipByID( sId, aEntry, sal_True );
+    rRelations->insertRelationshipByID( sId, aEntry, true );
 
     return sId;
 }

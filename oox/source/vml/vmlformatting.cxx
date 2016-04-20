@@ -839,13 +839,13 @@ beans::PropertyValue lcl_createTextpathProps()
 {
     uno::Sequence<beans::PropertyValue> aTextpathPropSeq(4);
     aTextpathPropSeq[0].Name = "TextPath";
-    aTextpathPropSeq[0].Value <<= sal_True;
+    aTextpathPropSeq[0].Value <<= true;
     aTextpathPropSeq[1].Name = "TextPathMode";
     aTextpathPropSeq[1].Value <<= drawing::EnhancedCustomShapeTextPathMode_SHAPE;
     aTextpathPropSeq[2].Name = "ScaleX";
-    aTextpathPropSeq[2].Value <<= sal_False;
+    aTextpathPropSeq[2].Value <<= false;
     aTextpathPropSeq[3].Name = "SameLetterHeights";
-    aTextpathPropSeq[3].Value <<= sal_False;
+    aTextpathPropSeq[3].Value <<= false;
 
     beans::PropertyValue aRet;
     aRet.Name = "TextPath";

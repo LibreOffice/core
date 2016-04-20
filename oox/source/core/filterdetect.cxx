@@ -156,7 +156,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
              Reference< XUriReference > xBase = xFactory->parse( "file:///" );
 
              Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getString( XML_Target, OUString() ) );
-             Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, sal_True, RelativeUriExcessParentSegments_RETAIN );
+             Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, true, RelativeUriExcessParentSegments_RETAIN );
 
              if ( xAbs.is() )
                  maTargetPath = xAbs->getPath();

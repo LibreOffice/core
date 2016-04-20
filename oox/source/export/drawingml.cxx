@@ -2136,7 +2136,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
         if (GetDocumentType() == DOCUMENT_DOCX)
         {
-            sal_Bool bTextAutoGrowHeight = sal_False;
+            sal_Bool bTextAutoGrowHeight = false;
             GET(bTextAutoGrowHeight, TextAutoGrowHeight);
             mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
         }
