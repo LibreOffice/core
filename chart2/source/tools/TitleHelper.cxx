@@ -198,7 +198,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
         uno::Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
         if( xProps.is() )
         {
-            xProps->setPropertyValue( "Show", uno::makeAny( sal_False ) );
+            xProps->setPropertyValue( "Show", uno::makeAny( false ) );
             xTitled = lcl_getTitleParent( eTitleType, xModel );
         }
     }

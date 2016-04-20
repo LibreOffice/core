@@ -710,8 +710,8 @@ sal_Int32 XMLFilter::impl_ExportStream(
         if(xStreamProp.is()) try
         {
             xStreamProp->setPropertyValue( "MediaType", uno::makeAny( OUString("text/xml") ) );
-            xStreamProp->setPropertyValue( "Compressed", uno::makeAny( sal_True ) );//@todo?
-            xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
+            xStreamProp->setPropertyValue( "Compressed", uno::makeAny( true ) );//@todo?
+            xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
         }
         catch (const uno::Exception& rEx)
         {

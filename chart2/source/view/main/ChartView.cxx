@@ -1277,7 +1277,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
 
     uno::Sequence< beans::PropertyValue > aFilterData(4);
     aFilterData[0].Name = "ExportOnlyBackground";
-    aFilterData[0].Value <<= sal_False;
+    aFilterData[0].Value <<= false;
     aFilterData[1].Name = "HighContrast";
     aFilterData[1].Value <<= bUseHighContrast;
 
@@ -2845,7 +2845,7 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     if(!bShapeChanged)
         return;
 
-    mrChartModel.setModified(sal_True);
+    mrChartModel.setModified(true);
 }
 
 void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )

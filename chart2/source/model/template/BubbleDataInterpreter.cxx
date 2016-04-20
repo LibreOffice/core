@@ -282,7 +282,7 @@ sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
             Reference< data::XDataSource > xSrc( aSeries[i], uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
             if( aSeq.getLength() != 3 )
-                return sal_False;
+                return false;
         }
         catch( const uno::Exception & ex )
         {
@@ -290,7 +290,7 @@ sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 } // namespace chart

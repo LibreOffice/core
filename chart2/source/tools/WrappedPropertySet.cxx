@@ -423,7 +423,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
         p = m_pPropertyArrayHelper;
         if(!p)
         {
-            p = new ::cppu::OPropertyArrayHelper( getPropertySequence(), sal_True );
+            p = new ::cppu::OPropertyArrayHelper( getPropertySequence(), true );
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             m_pPropertyArrayHelper = p;
         }

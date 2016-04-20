@@ -102,7 +102,7 @@ struct lcl_setModified : public ::std::unary_function< lcl_tSequenceMap, void >
         {
             Reference< util::XModifiable > xMod( xSeq, uno::UNO_QUERY );
             if( xMod.is())
-                xMod->setModified( sal_True );
+                xMod->setModified( true );
         }
     }
 };

@@ -95,7 +95,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
     {
         //filled net chart?:
         if( m_bHasFilledArea )
-            return sal_True;
+            return true;
 
         // check symbol-style
         // for a template with symbols it is ok, if there is at least one series

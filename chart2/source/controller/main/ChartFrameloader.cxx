@@ -115,7 +115,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
                 , uno::UNO_QUERY );
 
         if( impl_checkCancel() )
-            return sal_False;
+            return false;
     }
 
     //create the controller(+XWindow)
@@ -133,7 +133,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
                       uno::Reference< awt::XWindow >( xController, uno::UNO_QUERY );
 
         if( impl_checkCancel() )
-            return sal_False;
+            return false;
     }
 
     //connect frame, controller and model one to each other:
@@ -195,7 +195,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
             ASSERT_EXCEPTION( ex );
         }
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL ChartFrameLoader::cancel()

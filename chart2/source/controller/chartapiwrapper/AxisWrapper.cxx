@@ -633,7 +633,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
             xAxis = AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, m_spChart2ModelContact->m_xContext );
             Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue("Show", uno::makeAny( sal_False ) );
+                xProp->setPropertyValue("Show", uno::makeAny( false ) );
         }
     }
     catch( const uno::Exception & ex )

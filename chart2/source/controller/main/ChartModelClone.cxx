@@ -232,7 +232,7 @@ namespace chart
             Reference< XModifiable > xDestMod( xDestination, UNO_QUERY );
             if ( xSourceMod.is() && xDestMod.is() && !xSourceMod->isModified() )
             {
-                xDestMod->setModified( sal_False );
+                xDestMod->setModified( false );
             }
             // \-- loccked controllers of destination
         }

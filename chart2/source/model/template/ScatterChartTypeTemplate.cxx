@@ -228,7 +228,7 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
 sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
     throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(

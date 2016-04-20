@@ -530,10 +530,10 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault(
         rOutMap, PROP_DATAPOINT_LABEL,
         chart2::DataPointLabel(
-            sal_False, // ShowNumber
-            sal_False, // ShowNumberInPercent
-            sal_False, // ShowCategoryName
-            sal_False  // ShowLegendSymbol
+            false, // ShowNumber
+            false, // ShowNumberInPercent
+            false, // ShowCategoryName
+            false  // ShowLegendSymbol
             ));
 
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_TEXT_WORD_WRAP, false );

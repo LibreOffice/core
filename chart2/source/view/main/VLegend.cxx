@@ -110,8 +110,8 @@ void lcl_getProperties(
         ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
 
         drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
-        aTextValueMap[ "TextAutoGrowHeight" ] = uno::makeAny( sal_True );
-        aTextValueMap[ "TextAutoGrowWidth" ] = uno::makeAny( sal_True );
+        aTextValueMap[ "TextAutoGrowHeight" ] = uno::makeAny( true );
+        aTextValueMap[ "TextAutoGrowWidth" ] = uno::makeAny( true );
         aTextValueMap[ "TextHorizontalAdjust" ] = uno::makeAny( eHorizAdjust );
         aTextValueMap[ "TextMaximumFrameWidth" ] = uno::makeAny( rReferenceSize.Width ); //needs to be overwritten by actual available space in the legend
 

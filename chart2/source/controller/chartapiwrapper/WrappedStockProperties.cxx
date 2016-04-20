@@ -126,7 +126,7 @@ public:
 };
 
 WrappedVolumeProperty::WrappedVolumeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-        : WrappedStockProperty( "Volume", uno::makeAny(sal_False) , spChart2ModelContact )
+        : WrappedStockProperty( "Volume", uno::makeAny(false) , spChart2ModelContact )
 {
 }
 WrappedVolumeProperty::~WrappedVolumeProperty()
@@ -196,7 +196,7 @@ public:
     uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const override;
 };
 WrappedUpDownProperty::WrappedUpDownProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-        : WrappedStockProperty( "UpDown", uno::makeAny(sal_False) , spChart2ModelContact )
+        : WrappedStockProperty( "UpDown", uno::makeAny(false) , spChart2ModelContact )
 {
 }
 WrappedUpDownProperty::~WrappedUpDownProperty()

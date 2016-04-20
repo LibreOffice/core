@@ -181,7 +181,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
 sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
     throw (css::uno::RuntimeException, ::std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagram )

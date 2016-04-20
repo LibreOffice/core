@@ -35,9 +35,9 @@ TitleDialogData::TitleDialogData( ReferenceSizeProvider* pRefSizeProvider )
 {
     sal_Int32 nN = 0;
     for(nN=7;nN--;)
-        aPossibilityList[nN]=sal_True;
+        aPossibilityList[nN]=true;
     for(nN=7;nN--;)
-        aExistenceList[nN]=sal_False;
+        aExistenceList[nN]=false;
 }
 
 void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChartModel )

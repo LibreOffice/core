@@ -205,7 +205,7 @@ sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
             Reference< data::XDataSource > xSrc( aSeries[i], uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
             if( aSeq.getLength() != 1 )
-                return sal_False;
+                return false;
         }
         catch( const uno::Exception & ex )
         {
@@ -213,7 +213,7 @@ sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 namespace

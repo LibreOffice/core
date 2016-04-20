@@ -365,7 +365,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Referen
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_True;
+    aRet <<= true;
     return aRet;
 }
 
@@ -463,7 +463,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Refe
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_True;
+    aRet <<= true;
     return aRet;
 }
 
@@ -534,7 +534,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
         if( xLegendProp.is())
             aRet = xLegendProp->getPropertyValue("Show");
         else
-            aRet <<= sal_False;
+            aRet <<= false;
     }
     catch (const uno::Exception& ex)
     {
@@ -547,7 +547,7 @@ Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPrope
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_False;
+    aRet <<= false;
     return aRet;
 }
 
@@ -620,7 +620,7 @@ Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPr
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_False;
+    aRet <<= false;
     return aRet;
 }
 
@@ -693,7 +693,7 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_False;
+    aRet <<= false;
     return aRet;
 }
 
@@ -850,7 +850,7 @@ sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
         return xModel->attachResource( URL, Arguments );
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL ChartDocumentWrapper::getURL()
@@ -910,7 +910,7 @@ sal_Bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
         return xModel->hasControllersLocked();
-    return sal_False;
+    return false;
 }
 
 Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentController()
@@ -1538,8 +1538,8 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
     aWrappedProperties.push_back( new WrappedIgnoreProperty("NullDate",Any() ) ); // i99104
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableComplexChartTypes", uno::makeAny(sal_True) ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableDataTableDialog", uno::makeAny(sal_True) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableComplexChartTypes", uno::makeAny(true) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableDataTableDialog", uno::makeAny(true) ) );
 
     return aWrappedProperties;
 }

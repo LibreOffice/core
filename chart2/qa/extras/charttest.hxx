@@ -504,7 +504,7 @@ sal_Int32 getNumberFormat( const Reference<chart2::XChartDocument>& xChartDoc, c
     Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
     CPPUNIT_ASSERT(xNumberFormats.is());
 
-    return xNumberFormats->queryKey(sFormat, css::lang::Locale(), sal_False);
+    return xNumberFormats->queryKey(sFormat, css::lang::Locale(), false);
 }
 
 sal_Int32 getNumberFormatFromAxis( const Reference<chart2::XAxis>& xAxis )

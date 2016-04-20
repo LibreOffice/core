@@ -448,8 +448,8 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     //some more shape properties apart from character properties, position-matrix and label string
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); // sal_Bool
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(true) ) ); // sal_Bool
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(true) ) ); // sal_Bool
     if( bName )
         aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( OUString() ) ) ); //CID OUString - needs to be overwritten for each point
 
@@ -459,7 +459,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
             aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameHeight", uno::makeAny(nLimitedSpace) ) ); //sal_Int32
         else
             aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameWidth", uno::makeAny(nLimitedSpace) ) ); //sal_Int32
-        aValueMap.insert( tPropertyNameValueMap::value_type( "ParaIsHyphenation", uno::makeAny(sal_True) ) );
+        aValueMap.insert( tPropertyNameValueMap::value_type( "ParaIsHyphenation", uno::makeAny(true) ) );
     }
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );

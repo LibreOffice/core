@@ -493,7 +493,7 @@ WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Bool >( "Lines"
-            , uno::makeAny( sal_True ), spChart2ModelContact, ePropertyType  )
+            , uno::makeAny( true ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -504,7 +504,7 @@ WrappedSymbolAndLinesProperty::~WrappedSymbolAndLinesProperty()
 sal_Bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& /*xSeriesPropertySet*/ ) const
 {
     //do not export this property anymore, instead use a linestyle none for no lines
-    return sal_True;
+    return true;
 }
 
 void WrappedSymbolAndLinesProperty::setValueToSeries(

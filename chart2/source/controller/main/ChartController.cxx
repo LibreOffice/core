@@ -193,7 +193,7 @@ void ChartController::TheModel::tryTermination()
                 //I think yes, because there might be other closelistners later in the list which might be interested still
                 //but make sure that we do not throw the CloseVetoException here ourselves
                 //so stop listening before trying to terminate or check the source of queryclosing event
-                m_xCloseable->close(sal_True);
+                m_xCloseable->close(true);
 
                 m_bOwnership                = false;
             }
@@ -466,7 +466,7 @@ void SAL_CALL ChartController::attachFrame(
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xContainerWindow);
         assert(pParentComponent);
         if (pParentComponent)
-            pParentComponent->setVisible(sal_True);
+            pParentComponent->setVisible(true);
 
         pParent = VCLUnoHelper::GetWindow( xContainerWindow );
     }
@@ -607,7 +607,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 
     SolarMutexResettableGuard aGuard;
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching a new model while suspended?
-        return sal_False; //behave passive if already disposed or suspended
+        return false; //behave passive if already disposed or suspended
     aGuard.clear();
 
     TheModelRef aNewModelRef( new TheModel( xModel), m_aModelMutex);
@@ -683,7 +683,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
     m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
 
-    return sal_True;
+    return true;
 }
 
 uno::Reference< frame::XFrame > SAL_CALL ChartController::getFrame()
@@ -752,25 +752,25 @@ sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
 
     SolarMutexGuard aGuard;
     if( m_aLifeTimeManager.impl_isDisposed() )
-        return sal_False; //behave passive if already disposed, return false because request was not accepted //@todo? correct
+        return false; //behave passive if already disposed, return false because request was not accepted //@todo? correct
 
     if(bool(bSuspend) == m_bSuspended)
     {
         OSL_FAIL( "new suspend mode equals old suspend mode" );
-        return sal_True;
+        return true;
     }
 
     //change suspend mode
     if(bSuspend)
     {
         m_bSuspended = bSuspend;
-        return sal_True;
+        return true;
     }
     else
     {
         m_bSuspended = bSuspend;
     }
-    return sal_True;
+    return true;
 }
 
 void ChartController::impl_createDrawViewController()
@@ -993,7 +993,7 @@ void SAL_CALL ChartController::notifyClosing(
         {
             try
             {
-                xFrameCloseable->close( sal_False /* DeliverOwnership */ );
+                xFrameCloseable->close( false /* DeliverOwnership */ );
                 m_xFrame.clear();
             }
             catch( const util::CloseVetoException & )

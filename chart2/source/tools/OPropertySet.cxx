@@ -242,21 +242,21 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
             if( rValue>>=n32Value )
             {
                 rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n32Value) );
-                return sal_True;
+                return true;
             }
 
             sal_Int64 n64Value = 0;
             if( rValue>>=n64Value )
             {
                 rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n64Value) );
-                return sal_True;
+                return true;
             }
         }
     }
     rConvertedValue = rValue;
     if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && rOldValue == rConvertedValue )
-        return sal_False;//no change necessary
-    return sal_True;
+        return false;//no change necessary
+    return true;
 }
 
 void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast

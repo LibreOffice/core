@@ -39,7 +39,7 @@ Reference< chart2::XLegend > LegendHelper::showLegend( ChartModel& rModel
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
-        xProp->setPropertyValue( "Show", uno::makeAny(sal_True) );
+        xProp->setPropertyValue( "Show", uno::makeAny(true) );
 
         chart2::RelativePosition aRelativePosition;
         if( !(xProp->getPropertyValue( "RelativePosition") >>=  aRelativePosition) )
@@ -69,7 +69,7 @@ void LegendHelper::hideLegend( ChartModel& rModel )
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
-        xProp->setPropertyValue( "Show", uno::makeAny(sal_False) );
+        xProp->setPropertyValue( "Show", uno::makeAny(false) );
     }
 }
 

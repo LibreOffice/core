@@ -323,7 +323,7 @@ public:
 WrappedMeanValueProperty::WrappedMeanValueProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedStatisticProperty< sal_Bool >( "MeanValue", uno::makeAny( sal_False ), spChart2ModelContact, ePropertyType  )
+        : WrappedStatisticProperty< sal_Bool >( "MeanValue", uno::makeAny( false ), spChart2ModelContact, ePropertyType  )
 {
 }
 WrappedMeanValueProperty::~WrappedMeanValueProperty()

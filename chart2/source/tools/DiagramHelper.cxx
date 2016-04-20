@@ -1709,7 +1709,7 @@ bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
             bool bModelWasModified = rModel.isModified();
             xDiagramPositioning->setDiagramPositionExcludingAxes( xDiagramPositioning->calculateDiagramPositionExcludingAxes() );
             if(bResetModifiedState && !bModelWasModified )
-                rModel.setModified(sal_False);
+                rModel.setModified(false);
             return true;
         }
     }

@@ -288,7 +288,7 @@ sal_Bool SAL_CALL UncachedDataSequence::hasElements()
     throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataProvider.is())
-        return sal_False;
+        return false;
     return m_xDataProvider->hasDataByRangeRepresentation( m_aSourceRepresentation );
 }
 
@@ -317,7 +317,7 @@ Reference< util::XCloneable > SAL_CALL UncachedDataSequence::createClone()
 sal_Bool SAL_CALL UncachedDataSequence::isModified()
     throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL UncachedDataSequence::setModified( sal_Bool bModified )

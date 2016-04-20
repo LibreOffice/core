@@ -1610,10 +1610,10 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
         {
             m_pChartWindow->Invalidate();
         }
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 uno::Any SAL_CALL ChartController::getSelection()

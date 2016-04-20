@@ -352,7 +352,7 @@ uno::Reference< drawing::XShape > OpenglShapeFactory::createInvisibleRectangle(
             , const awt::Size& rSize )
 {
     dummy::DummyRectangle* pRectangle = new dummy::DummyRectangle(rSize);
-    pRectangle->setPropertyValue("Invisible", uno::makeAny(sal_True));
+    pRectangle->setPropertyValue("Invisible", uno::makeAny(true));
     xTarget->add(pRectangle);
     return pRectangle;
 }
@@ -432,8 +432,8 @@ uno::Reference< drawing::XShape >
 
         aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
         aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
-        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
-        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); // sal_Bool
+        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(true) ) ); // sal_Bool
+        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(true) ) ); // sal_Bool
 
     }
 

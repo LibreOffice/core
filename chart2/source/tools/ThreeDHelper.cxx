@@ -205,7 +205,7 @@ void lcl_setLightsForScheme( const uno::Reference< beans::XPropertySet >& xDiagr
     if( rScheme == ThreeDLookScheme_Unknown)
         return;
 
-    xDiagramProps->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2, uno::makeAny( sal_True ) );
+    xDiagramProps->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2, uno::makeAny( true ) );
 
     uno::Reference< chart2::XDiagram > xDiagram( xDiagramProps, uno::UNO_QUERY );
     uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
@@ -1282,13 +1282,13 @@ void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropert
     try
     {
         xSceneProperties->getPropertyValue( "D3DSceneShadeMode" )>>= aShadeMode;
-        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_1, uno::makeAny( sal_False ) );
-        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_3, uno::makeAny( sal_False ) );
-        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_4, uno::makeAny( sal_False ) );
-        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_5, uno::makeAny( sal_False ) );
-        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_6, uno::makeAny( sal_False ) );
-        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_7, uno::makeAny( sal_False ) );
-        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_8, uno::makeAny( sal_False ) );
+        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_1, uno::makeAny( false ) );
+        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_3, uno::makeAny( false ) );
+        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_4, uno::makeAny( false ) );
+        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_5, uno::makeAny( false ) );
+        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_6, uno::makeAny( false ) );
+        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_7, uno::makeAny( false ) );
+        xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_8, uno::makeAny( false ) );
     }
     catch( const uno::Exception & ex )
     {
