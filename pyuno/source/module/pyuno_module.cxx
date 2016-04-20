@@ -632,7 +632,7 @@ static PyObject * generateUuid(
     SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * )
 {
     Sequence< sal_Int8 > seq( 16 );
-    rtl_createUuid( reinterpret_cast<sal_uInt8*>(seq.getArray()) , nullptr , sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(seq.getArray()) , nullptr , false );
     PyRef ret;
     try
     {
