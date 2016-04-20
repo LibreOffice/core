@@ -181,7 +181,6 @@ void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
 //  impl. declarations
 
 
-
 struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 {
     // counter for SfxBaseModel instances created.
@@ -309,7 +308,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
 // static member initialization.
 sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
-
 
 
 // Listener that forwards notifications from the PrintHelper to the "real" listeners
@@ -500,7 +498,7 @@ SfxSaveGuard::~SfxSaveGuard()
         {
             Reference< util::XCloseable > xClose(m_xModel, UNO_QUERY);
             if (xClose.is())
-                xClose->close(sal_True);
+                xClose->close(true);
         }
         catch(const util::CloseVetoException&)
         {}
@@ -524,7 +522,8 @@ SfxBaseModel::~SfxBaseModel()
 {
     //In SvxDrawingLayerImport when !xTargetDocument the fallback SvxUnoDrawingModel created there
     //never gets disposed called on it, so m_pData leaks.
-    delete m_pData, m_pData = nullptr;
+    delete m_pData;
+    m_pData = nullptr;
 }
 
 //  XInterface
@@ -714,7 +713,6 @@ void SAL_CALL SfxBaseModel::addDialog( const OUString& LibraryName, const OUStri
 }
 
 
-
 //  XChild
 
 
@@ -749,7 +747,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
         // and try to make it work (may be really disposed later!)
         try
         {
-            close( sal_True );
+            close( true );
         }
         catch ( util::CloseVetoException& )
         {
@@ -845,7 +843,6 @@ SfxBaseModel::getDocumentProperties()
 }
 
 
-
 //  lang::XEventListener
 
 
@@ -888,7 +885,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
                 m_pData->m_pObjectShell->SetCreateMode_Impl( SfxObjectCreateMode::EMBEDDED );
         }
 
-        return sal_True;
+        return true;
     }
 
     if ( m_pData->m_pObjectShell.Is() )
@@ -952,7 +949,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         }
     }
 
-    return sal_True ;
+    return true ;
 }
 
 
@@ -2187,7 +2184,6 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 // XTransferable
 
 
-
 Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavors()
         throw (RuntimeException, std::exception)
 {
@@ -2255,7 +2251,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
 // XTransferable
 
 
-
 sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
         throw (RuntimeException, std::exception)
 {
@@ -2264,53 +2259,52 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
     if ( aFlavor.MimeType == "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "image/png" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
-
 
 
 //  XEventsSupplier
@@ -2358,7 +2352,7 @@ sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution() throw (RuntimeException
 
     if ( m_pData->m_pObjectShell )
         return m_pData->m_pObjectShell->AdjustMacroMode( OUString() );
-    return sal_False;
+    return false;
 }
 
 
@@ -2549,7 +2543,7 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
             aProps[1].Name = "VersionComment";
             aProps[1].Value = makeAny( rMessage );
             aProps[2].Name = "CheckIn";
-            aProps[2].Value = makeAny( sal_True );
+            aProps[2].Value = makeAny( true );
 
             OUString sName( pMedium->GetName( ) );
             storeSelf( aProps );
@@ -3407,12 +3401,11 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
     if ( !bSuccess )
         throw io::IOException();
 
-       return aResult;
+    return aResult;
 }
 
 
 //  XScriptProviderSupplier
-
 
 
 Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getScriptProvider()
@@ -4219,7 +4212,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
                 if  (   ( pCheckFrame->GetCurrentViewFrame() != nullptr )
                     ||  ( pCheckFrame->GetCurrentDocument() != nullptr )
                     )
-                    // Note that it is perfectly letgitimate that during loading into an XFrame which already contains
+                    // Note that it is perfectly legitimate that during loading into an XFrame which already contains
                     // a document, there exist two SfxFrame instances bound to this XFrame - the old one, which will be
                     // destroyed later, and the new one, which we're going to create
                     continue;

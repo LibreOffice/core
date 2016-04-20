@@ -454,7 +454,7 @@ void SAL_CALL Theme::setPropertyValue (
     const beans::PropertyChangeEvent aEvent(
         static_cast<XWeak*>(this),
         rsPropertyName,
-        sal_False,
+        false,
         eItem,
         aOldValue,
         rValue);
@@ -660,13 +660,13 @@ sal_Bool SAL_CALL Theme::hasPropertyByName (const ::rtl::OUString& rsPropertyNam
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
-        return sal_False;
+        return false;
 
     const PropertyType eType (GetPropertyType(iId->second));
     if (eType == PT_Invalid)
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 void Theme::SetupPropertyMaps()

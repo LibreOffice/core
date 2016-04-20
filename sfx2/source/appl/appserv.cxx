@@ -222,8 +222,8 @@ static void showDocument( const char* pBaseName )
     try {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         auto args(::comphelper::InitPropertySequence({
-            {"ViewOnly",    makeAny(sal_True)},
-            {"ReadOnly",    makeAny(sal_True)}
+            {"ViewOnly",    makeAny(true)},
+            {"ReadOnly",    makeAny(true)}
         }));
 
         OUString aURL;
@@ -397,7 +397,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 aAny >>= xTask;
                 try
                 {
-                    xTask->close(sal_True);
+                    xTask->close(true);
                     n++;
                 }
                 catch( CloseVetoException& )

@@ -161,12 +161,10 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
 }
 
 
-
 bool SfxObjectShell::Save()
 {
     return SaveChildren();
 }
-
 
 
 bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
@@ -175,12 +173,10 @@ bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 }
 
 
-
 bool SfxObjectShell::QuerySlotExecutable( sal_uInt16 /*nSlotId*/ )
 {
     return true;
 }
-
 
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
@@ -625,7 +621,6 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
 }
 
 
-
 bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 {
     ModifyBlocker_Impl aBlock( this );
@@ -978,7 +973,6 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 }
 
 
-
 bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 {
     return !rMedium.GetFilter() || // Embedded
@@ -988,14 +982,12 @@ bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 }
 
 
-
 bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium) const
 {
     return !rMedium.GetFilter() || // Embedded
            ( rMedium.GetFilter()->UsesStorage() &&
              rMedium.GetFilter()->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 }
-
 
 
 bool SfxObjectShell::DoSave()
@@ -1090,7 +1082,6 @@ void Lock_Impl( SfxObjectShell* pDoc, bool bLock )
     }
 
 }
-
 
 
 bool SfxObjectShell::SaveTo_Impl
@@ -1325,7 +1316,10 @@ bool SfxObjectShell::SaveTo_Impl
 
     // TODO/LATER: error handling
     if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
+    {
+        SAL_WARN("sfx.doc", "SfxObjectShell::SaveTo_Impl: very early error return");
         return false;
+    }
 
     AddLog( OSL_LOG_PREFIX "Locking" );
 
@@ -1778,7 +1772,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 // the process of saving a file
                 rSrcMedium.DisableUnlockWebDAV();
                 rSrcMedium.Close();
-                // see comment on the previou third row
+                // see comment on the previous third row
                 rSrcMedium.DisableUnlockWebDAV( false );
 
                 // now try to create the backup
@@ -1789,7 +1783,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 // the following call will only compare stream sizes
                 // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage
                 // contents, the storage will be broken
-                xOptStorage->attachToURL( aBackupURL, sal_True );
+                xOptStorage->attachToURL( aBackupURL, true );
 
                 // the storage is successfully attached to backup, thus it is owned by the document not by the medium
                 rSrcMedium.CanDisposeStorage_Impl( false );
@@ -1802,7 +1796,6 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
 
     return bResult;
 }
-
 
 
 bool SfxObjectShell::ConnectTmpStorage_Impl(
@@ -1886,7 +1879,6 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
 }
 
 
-
 bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, bool bCommit )
 {
     bool bOk = false;
@@ -1920,7 +1912,7 @@ bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, bool bCommit )
         }
         catch( uno::Exception& )
         {
-            SAL_WARN( "sfx.doc", "The strotage was not committed on DoSaveAs!" );
+            SAL_WARN( "sfx.doc", "The storage was not committed on DoSaveAs!" );
         }
     }
 
@@ -2118,7 +2110,6 @@ void SfxObjectShell::AddToRecentlyUsedList()
 }
 
 
-
 bool SfxObjectShell::ConvertFrom
 (
     SfxMedium&  /*rMedium*/     /*  <SfxMedium>, which describes the source file
@@ -2286,15 +2277,10 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                     if (xModifiable.is() && xModifiable->isModified())
                     {
                         uno::Reference<embed::XEmbedPersist> const xPers(xObj, uno::UNO_QUERY);
-                        if (xPers.is())
-                        {   // store it before resetting modified!
-                            xPers->storeOwn();
-                        }
-                        else
-                        {
-                            SAL_WARN("sfx.doc", "Modified object without persistence!");
-                        }
-                        xModifiable->setModified(sal_False);
+                        assert(xPers.is() && "Modified object without persistence!");
+                        // store it before resetting modified!
+                        xPers->storeOwn();
+                        xModifiable->setModified(false);
                     }
                 }
             }
@@ -2439,7 +2425,6 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 }
 
 
-
 bool SfxObjectShell::ConvertTo
 (
     SfxMedium&  /*rMedium*/   /*  <SfxMedium>, which describes the target file
@@ -2582,7 +2567,6 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     SetModified( !bSaved );
     return bSaved;
 }
-
 
 
 bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
@@ -2888,7 +2872,6 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 }
 
 
-
 bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
 {
     SAL_WARN( "sfx.doc", "Base implementation, must not be called in general!" );
@@ -2933,7 +2916,6 @@ bool SfxObjectShell::CanReload_Impl()
 {
     return pMedium && HasName() && !IsInModalMode() && !pImp->bForbidReload;
 }
-
 
 
 HiddenInformation SfxObjectShell::GetHiddenInformationState( HiddenInformation nStates )

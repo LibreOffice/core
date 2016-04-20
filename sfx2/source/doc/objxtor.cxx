@@ -419,7 +419,7 @@ bool SfxObjectShell::CloseInternal()
         {
             try
             {
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
             }
             catch (const Exception&)
             {

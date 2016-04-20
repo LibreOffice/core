@@ -132,7 +132,7 @@ bool SfxFrame::DoClose()
         {
             Reference< XCloseable > xCloseable  ( pImp->xFrame, UNO_QUERY );
             if ( (!GetCurrentDocument() || !GetCurrentDocument()->Get_Impl()->bDisposing ) && xCloseable.is())
-                xCloseable->close(sal_True);
+                xCloseable->close(true);
             else if ( pImp->xFrame.is() )
             {
                 Reference < XFrame > xFrame = pImp->xFrame;
@@ -723,7 +723,7 @@ void SfxFrame::Appear()
     {
         GetCurrentViewFrame()->Show();
         GetWindow().Show();
-        pImp->xFrame->getContainerWindow()->setVisible( sal_True );
+        pImp->xFrame->getContainerWindow()->setVisible( true );
         if ( pParentFrame )
             pParentFrame->Appear();
         Reference < css::awt::XTopWindow > xTopWindow( pImp->xFrame->getContainerWindow(), UNO_QUERY );

@@ -541,14 +541,14 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
         {
             uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
             if( mbPwdCheckBoxState )
-                xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
+                xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( true ) );
         }
     }
     else if( !bWasEnabled && mbIsPwdEnabled )
     {
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         if( mbPwdCheckBoxState )
-            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
+            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( true ) );
     }
     else if( bWasEnabled && !mbIsPwdEnabled )
     {
@@ -557,7 +557,7 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
         Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
         bool bPassWord = false;
         mbPwdCheckBoxState = ( aValue >>= bPassWord ) && bPassWord;
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_False ) );
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( false ) );
     }
 }
 
@@ -1074,7 +1074,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     // set multiselection mode
     if ( nFlags & SFXWB_MULTISELECTION )
-        mxFileDlg->setMultiSelectionMode( sal_True );
+        mxFileDlg->setMultiSelectionMode( true );
 
     if (mbAddGraphicFilter) // generate graphic filter only on demand
     {
@@ -1087,7 +1087,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ).toString() );
         try {
                 css::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
-                xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, sal_True );
+                xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, true );
         }
         catch( const Exception & ) { }
     }

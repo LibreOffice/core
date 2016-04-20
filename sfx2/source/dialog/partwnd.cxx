@@ -115,7 +115,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
         css::uno::Reference< css::beans::XPropertySet > xLMPropSet( xFrame->getLayoutManager(), css::uno::UNO_QUERY_THROW );
 
         const OUString aAutomaticToolbars( "AutomaticToolbars" );
-        xLMPropSet->setPropertyValue( aAutomaticToolbars, css::uno::Any( sal_False ));
+        xLMPropSet->setPropertyValue( aAutomaticToolbars, css::uno::Any( false ));
     }
     catch( css::uno::RuntimeException& )
     {
@@ -164,7 +164,7 @@ bool SfxPartDockWnd_Impl::QueryClose()
         {
             css::uno::Reference< css::frame::XController >  xCtrl = xFrame->getController();
             if( xCtrl.is() )
-                bClose = xCtrl->suspend( sal_True );
+                bClose = xCtrl->suspend( true );
         }
     }
 

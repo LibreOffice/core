@@ -2267,7 +2267,7 @@ void SfxDocumentMetaData::createUserDefined()
         types[12] = ::cppu::UnoType<css::util::Time>::get();
         // #i94175#:  ODF allows empty user-defined property names!
         m_xUserDefined.set(
-            css::beans::PropertyBag::createWithTypes( m_xContext, types, sal_True/*AllowEmptyPropertyName*/, sal_False/*AutomaticAddition*/ ),
+            css::beans::PropertyBag::createWithTypes( m_xContext, types, true/*AllowEmptyPropertyName*/, false/*AutomaticAddition*/ ),
             css::uno::UNO_QUERY_THROW);
 
         const css::uno::Reference<css::util::XModifyBroadcaster> xMB(

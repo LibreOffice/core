@@ -152,10 +152,10 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno
     for ( long i=0; i<nCount; i++ )
     {
         if ( maEventNames[i] == aName )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -173,9 +173,9 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( uno::RuntimeException, s
     ::osl::MutexGuard aGuard( maMutex );
 
     if ( maEventNames.getLength() )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )

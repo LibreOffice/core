@@ -211,7 +211,7 @@ namespace sfx2
         sal_Int32 nStartPos = 0;
         const lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         Boundary aBoundary = xBreak->getWordBoundary(
-            rSearchString, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+            rSearchString, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, true );
 
         while ( aBoundary.startPos != aBoundary.endPos )
         {
@@ -1398,9 +1398,9 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHi
     Reference< XController > xTextController ;
     if (xTextFrame.is())
         xTextController = xTextFrame->getController ();
-    if ( xTextController.is() && !xTextController->suspend( sal_True ) )
+    if ( xTextController.is() && !xTextController->suspend( true ) )
     {
-        xTextController->suspend( sal_False );
+        xTextController->suspend( false );
         return;
     }
 
@@ -2316,9 +2316,9 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                         if ( xText.is() )
                         {
                             if ( pDlg->IsSearchBackwards() )
-                                xTVCrsr->gotoRange( xText->getEnd(), sal_False );
+                                xTVCrsr->gotoRange( xText->getEnd(), false );
                             else
-                                xTVCrsr->gotoRange( xText->getStart(), sal_False );
+                                xTVCrsr->gotoRange( xText->getStart(), false );
                             FindHdl( nullptr );
                         }
                     }
@@ -2606,7 +2606,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
                                 xPropSet->setPropertyValue( "HeaderIsOn",  makeAny( false ) );
 
                                 Reference< XModifiable > xReset(xStyles, UNO_QUERY);
-                                xReset->setModified(sal_False);
+                                xReset->setModified(false);
 #ifdef DBG_UTIL
                                 bSetOff = true;
 #endif
@@ -2639,7 +2639,7 @@ void SfxHelpTextWindow_Impl::CloseFrame()
     {
         css::uno::Reference< css::util::XCloseable > xCloseable  ( xFrame, css::uno::UNO_QUERY );
         if (xCloseable.is())
-            xCloseable->close(sal_True);
+            xCloseable->close(true);
     }
     catch( css::util::CloseVetoException& )
     {
@@ -3228,7 +3228,7 @@ void SfxHelpWindow_Impl::CloseWindow()
         {
             Reference < XCloseable > xCloser( xCreator, UNO_QUERY );
             if ( xCloser.is() )
-                xCloser->close( sal_False );
+                xCloser->close( false );
         }
     }
     catch( Exception& )

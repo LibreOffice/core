@@ -246,7 +246,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         // set non-reschedule progress to prevent problems when asynchronous calls are made
         // during storing of the embedded object
         uno::Reference< task::XStatusIndicatorFactory > xStatusIndicatorFactory =
-               task::StatusIndicatorFactory::createWithFrame( xContext, xFrame, sal_True/*DisableReschedule*/, sal_False/*AllowParentShow*/ );
+               task::StatusIndicatorFactory::createWithFrame( xContext, xFrame, true/*DisableReschedule*/, false/*AllowParentShow*/ );
 
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
         if ( xPropSet.is() )
@@ -334,9 +334,9 @@ sal_Bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
 
     // we don't want to switch directly from outplace to inplace mode
     if ( m_xObject->getCurrentState() == embed::EmbedStates::ACTIVE || m_nAspect == embed::Aspects::MSOLE_ICON )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 

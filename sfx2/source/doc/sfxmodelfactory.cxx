@@ -157,9 +157,9 @@ namespace sfx2
     Reference< XInterface > SAL_CALL SfxModelFactory::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );
-        const bool bEmbeddedObject = aArgs.getOrDefault( "EmbeddedObject", sal_False );
-        const bool bScriptSupport = aArgs.getOrDefault( "EmbeddedScriptSupport", sal_True );
-        const bool bDocRecoverySupport = aArgs.getOrDefault( "DocumentRecoverySupport", sal_True );
+        const bool bEmbeddedObject = aArgs.getOrDefault( "EmbeddedObject", false );
+        const bool bScriptSupport = aArgs.getOrDefault( "EmbeddedScriptSupport", true );
+        const bool bDocRecoverySupport = aArgs.getOrDefault( "DocumentRecoverySupport", true );
 
         SfxModelFlags nCreationFlags =
                 ( bEmbeddedObject ? SfxModelFlags::EMBEDDED_OBJECT : SfxModelFlags::NONE )

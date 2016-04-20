@@ -991,7 +991,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     uno::Reference < view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), uno::UNO_QUERY );
     if ( xSel.is() && xSel->getSelection().hasValue() )
-        GetMediaDescr()[OUString("SelectionOnly")] <<= sal_True;
+        GetMediaDescr()[OUString("SelectionOnly")] <<= true;
 
     // This is a temporary hardcoded solution must be removed when
     // dialogs do not need parameters in SidSet representation any more

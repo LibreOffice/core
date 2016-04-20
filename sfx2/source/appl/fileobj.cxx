@@ -354,7 +354,7 @@ OUString impl_getFilter( const OUString& _rURL )
             aDescr[ utl::MediaDescriptor::PROP_URL() ] <<= OUString( _rURL );
             css::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();
-            OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );
+            OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, true );
             if ( !sType.isEmpty() )
             {
                 // Honor a selected/detected filter.

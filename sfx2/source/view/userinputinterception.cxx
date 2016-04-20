@@ -109,7 +109,7 @@ namespace sfx2
             rEvent.X = rEvt.GetPosPixel().X();
             rEvent.Y = rEvt.GetPosPixel().Y();
             rEvent.ClickCount = rEvt.GetClicks();
-            rEvent.PopupTrigger = sal_False;
+            rEvent.PopupTrigger = false;
         }
 
     }

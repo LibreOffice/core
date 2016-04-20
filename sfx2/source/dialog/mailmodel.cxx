@@ -222,7 +222,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 {
                                     try
                                     {
-                                        xModifiable->setModified( sal_False );
+                                        xModifiable->setModified( false );
                                     }
                                     catch( css::beans::PropertyVetoException& )
                                     {
@@ -612,7 +612,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         try
                         {
-                            xModifiable->setModified( sal_False );
+                            xModifiable->setModified( false );
                         }
                         catch( css::beans::PropertyVetoException& )
                         {

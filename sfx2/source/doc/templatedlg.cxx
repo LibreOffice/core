@@ -684,7 +684,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pIte
     {
         uno::Sequence< PropertyValue > aArgs(4);
         aArgs[0].Name = "AsTemplate";
-        aArgs[0].Value <<= sal_True;
+        aArgs[0].Value <<= true;
         aArgs[1].Name = "MacroExecutionMode";
         aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
         aArgs[2].Name = "UpdateDocMode";
@@ -1115,7 +1115,7 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
 {
     uno::Sequence< PropertyValue > aArgs(3);
     aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= sal_False;
+    aArgs[0].Value <<= false;
     aArgs[1].Name = "MacroExecutionMode";
     aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
     aArgs[2].Name = "UpdateDocMode";

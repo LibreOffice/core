@@ -259,7 +259,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                     bClosed = false;
                     try
                     {
-                        xTask->close(sal_True);
+                        xTask->close(true);
                         bClosed = true;
                     }
                     catch( CloseVetoException& )

@@ -2596,7 +2596,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     util::DateTime aDateTime( aTmpTime.GetNanoSec(), aTmpTime.GetSec(),
                                               aTmpTime.GetMin(), aTmpTime.GetHour(),
                                               aTmpDate.GetDay(), aTmpDate.GetMonth(),
-                                              aTmpDate.GetYear(), sal_True );
+                                              aTmpDate.GetYear(), true );
                     seqValue[k] = aDateTime;
                 }
                 aPropertiesSeq[i].Value <<= makeAny( seqValue );

@@ -462,7 +462,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
             }
 
             uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
-            sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, sal_True); // lDescriptor is used as In/Out param ... don't use aDescriptor.getAsConstPropertyValueList() directly!
+            sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, true); // lDescriptor is used as In/Out param ... don't use aDescriptor.getAsConstPropertyValueList() directly!
 
             for (sal_Int32 i = 0; i < lDescriptor.getLength(); ++i)
             {

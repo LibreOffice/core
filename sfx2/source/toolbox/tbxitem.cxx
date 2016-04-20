@@ -556,7 +556,7 @@ throw ( css::uno::RuntimeException, std::exception )
 // XSubToolbarController
 sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (css::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (css::uno::RuntimeException, std::exception)

@@ -230,7 +230,7 @@ void SfxObjectShell::UpdateTime_Impl(
 {
     // Get old time from documentinfo
     const sal_Int32 secs = i_xDocProps->getEditingDuration();
-    util::Duration editDuration(sal_False, 0, 0, 0,
+    util::Duration editDuration(false, 0, 0, 0,
             secs/3600, (secs%3600)/60, secs%60, 0);
 
     // Initialize some local member! Its necessary for follow operations!

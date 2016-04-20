@@ -601,13 +601,13 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel
     {
         // don't allow to reattach a model!
         OSL_FAIL("Can't reattach model!");
-        return sal_False;
+        return false;
     }
 
     Reference < util::XCloseBroadcaster > xCloseable( xModel, uno::UNO_QUERY );
     if ( xCloseable.is() )
         xCloseable->addCloseListener( m_pData->m_xCloseListener );
-    return sal_True;
+    return true;
 }
 
 
@@ -620,18 +620,18 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
 
     // ignore dublicate calls, which doesn't change anything real
     if (bool(bSuspend) == m_pData->m_bSuspendState)
-       return sal_True;
+       return true;
 
     if ( bSuspend )
     {
         if ( !m_pData->m_pViewShell )
         {
             m_pData->m_bSuspendState = true;
-            return sal_True;
+            return true;
         }
 
         if ( !m_pData->m_pViewShell->PrepareClose() )
-            return sal_False;
+            return false;
 
         if ( getFrame().is() )
             getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
@@ -664,7 +664,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
         }
 
         m_pData->m_bSuspendState = false;
-        return sal_True ;
+        return true ;
     }
 }
 
@@ -1268,7 +1268,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                         Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
                         Reference< beans::XPropertySet > xLayouterProps(
                             xFrameProps->getPropertyValue("LayoutManager"), uno::UNO_QUERY_THROW );
-                        xLayouterProps->setPropertyValue("PreserveContentSize", uno::makeAny( sal_True ) );
+                        xLayouterProps->setPropertyValue("PreserveContentSize", uno::makeAny( true ) );
                     }
                     catch (const uno::Exception&)
                     {

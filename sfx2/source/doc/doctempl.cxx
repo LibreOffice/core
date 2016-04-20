@@ -751,7 +751,7 @@ bool SfxDocumentTemplates::CopyTo
         aTarget = Content( aParentURL, aCmdEnv, comphelper::getProcessComponentContext() );
 
         TransferInfo aTransferInfo;
-        aTransferInfo.MoveData = sal_False;
+        aTransferInfo.MoveData = false;
         aTransferInfo.SourceURL = pSource->GetTargetURL();
         aTransferInfo.NewTitle = aTitle;
         aTransferInfo.NameClash = NameClash::OVERWRITE;
@@ -824,7 +824,7 @@ bool SfxDocumentTemplates::CopyFrom
 
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = "Hidden";
-        aArgs[0].Value <<= sal_True;
+        aArgs[0].Value <<= true;
 
         INetURLObject   aTemplURL( rName );
         uno::Reference< XDocumentPropertiesSupplier > xDocPropsSupplier;
@@ -1588,7 +1588,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         Sequence< NumberedSortingInfo >     aSortingInfo(1);
         aSortingInfo.getArray()->ColumnIndex = 1;
-        aSortingInfo.getArray()->Ascending = sal_True;
+        aSortingInfo.getArray()->Ascending = true;
         xResultSet = rContent.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
     }
     catch ( Exception& ) {}
@@ -1623,7 +1623,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
         ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
         Sequence< NumberedSortingInfo >     aSortingInfo(1);
         aSortingInfo.getArray()->ColumnIndex = 1;
-        aSortingInfo.getArray()->Ascending = sal_True;
+        aSortingInfo.getArray()->Ascending = true;
         xResultSet = rTemplRoot.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
     }
     catch ( Exception& ) {}

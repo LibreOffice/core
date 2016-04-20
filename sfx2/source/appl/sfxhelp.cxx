@@ -419,8 +419,8 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
                 makeAny(SfxResId(STR_HELP_WINDOW_TITLE).toString()));
 
         pHelpWindow->setContainerWindow( xParentWindow );
-        xParentWindow->setVisible(sal_True);
-        xHelpWindow->setVisible(sal_True);
+        xParentWindow->setVisible(true);
+        xHelpWindow->setVisible(true);
 
         // This sub frame is created internally (if we called new SfxHelpWindow_Impl() ...)
         // It should exist :-)

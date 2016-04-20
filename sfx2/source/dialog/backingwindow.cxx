@@ -651,7 +651,7 @@ IMPL_LINK_TYPED(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
     {
         uno::Sequence< PropertyValue > aArgs(4);
         aArgs[0].Name = "AsTemplate";
-        aArgs[0].Value <<= sal_True;
+        aArgs[0].Value <<= true;
         aArgs[1].Name = "MacroExecutionMode";
         aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
         aArgs[2].Name = "UpdateDocMode";

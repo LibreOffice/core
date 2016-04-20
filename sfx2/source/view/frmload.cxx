@@ -226,7 +226,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& s
             aNewArgs.put( "StatusIndicator", i_rDescriptor.get( "StatusIndicator" ) );
 
         Sequence< PropertyValue > aQueryArgs( aNewArgs.getPropertyValues() );
-        OUString sType = xDetect->queryTypeByDescriptor( aQueryArgs, sal_True );
+        OUString sType = xDetect->queryTypeByDescriptor( aQueryArgs, true );
         if ( !sType.isEmpty() )
         {
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( sType );
@@ -450,7 +450,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
                 // load the template document, but, well, "as template"
                 io_rDescriptor.put( "FilterName", OUString( pTemplateFilter->GetName() ) );
                 io_rDescriptor.put( "FileName", OUString( sTemplateURL ) );
-                io_rDescriptor.put( "AsTemplate", sal_True );
+                io_rDescriptor.put( "AsTemplate", true );
 
                 // #i21583#
                 // the DocumentService property will finally be used to create the document. Thus, override any possibly
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     catch ( Exception& )
     {
         const Any aError( ::cppu::getCaughtException() );
-        if ( !aDescriptor.getOrDefault( "Silent", sal_False ) )
+        if ( !aDescriptor.getOrDefault( "Silent", false ) )
             impl_handleCaughtError_nothrow( aError, aDescriptor );
     }
 
@@ -749,7 +749,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         try
         {
             const Reference< XCloseable > xCloseable( xModel, UNO_QUERY_THROW );
-            xCloseable->close( sal_True );
+            xCloseable->close( true );
         }
         catch ( Exception& )
         {

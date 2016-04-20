@@ -258,7 +258,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
                 aArgs[0].Name = "FilterName";
                 aArgs[0].Value <<= aFilterName;
                 aArgs[1].Name = "AsTemplate";
-                aArgs[1].Value <<= sal_True;
+                aArgs[1].Value <<= true;
                 aArgs[2].Name = "URL";
                 aArgs[2].Value <<= OUString( rTemplateName );
 
@@ -267,11 +267,11 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
                 aArgs.realloc( 2 );
                 aArgs[1].Name = "Overwrite";
-                aArgs[1].Value <<= sal_True;
+                aArgs[1].Value <<= true;
 
                 uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
                 xStorable->storeToURL( aUserTemplateURL, aArgs );
-                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED, uno::makeAny( sal_True ));
+                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED, uno::makeAny( true ));
                 ::comphelper::ConfigurationHelper::flush( xConfig );
             }
             else
@@ -280,7 +280,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
                 xSimpleFileAccess->copy( aBackupURL, aUserTemplateURL );
                 xSimpleFileAccess->kill( aBackupURL );
-                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED, uno::makeAny( sal_False ));
+                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED, uno::makeAny( false ));
                 ::comphelper::ConfigurationHelper::flush( xConfig );
             }
         }

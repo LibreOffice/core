@@ -291,8 +291,8 @@ void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< 
         css::frame::FeatureStateEvent aEvent;
         aEvent.FeatureURL = aURL;
         aEvent.Source = static_cast<css::frame::XDispatch*>(this);
-        aEvent.IsEnabled = sal_True;
-        aEvent.Requery = sal_False;
+        aEvent.IsEnabled = true;
+        aEvent.Requery = false;
         aListener->statusChanged( aEvent );
     }
 }
@@ -934,7 +934,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Refe
     css::frame::FeatureStateEvent  aEvent;
     aEvent.FeatureURL = aURL;
     aEvent.Source     = static_cast<css::frame::XDispatch*>(pDispatch);
-    aEvent.Requery    = sal_False;
+    aEvent.Requery    = false;
     if ( bVisible )
     {
         aEvent.IsEnabled  = eState != SfxItemState::DISABLED;
@@ -943,11 +943,11 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Refe
     else
     {
         css::frame::status::Visibility aVisibilityStatus;
-        aVisibilityStatus.bVisible = sal_False;
+        aVisibilityStatus.bVisible = false;
 
         // MBA: we might decide to *not* disable "invisible" slots, but this would be
         // a change that needs to adjust at least the testtool
-        aEvent.IsEnabled           = sal_False;
+        aEvent.IsEnabled           = false;
         aEvent.State               = makeAny( aVisibilityStatus );
     }
 
@@ -1023,7 +1023,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         aEvent.FeatureURL = aDispatchURL;
         aEvent.Source = static_cast<css::frame::XDispatch*>(pDispatch);
         aEvent.IsEnabled = eState != SfxItemState::DISABLED;
-        aEvent.Requery = sal_False;
+        aEvent.Requery = false;
         aEvent.State = aState;
 
         if (pDispatcher && pDispatcher->GetFrame())

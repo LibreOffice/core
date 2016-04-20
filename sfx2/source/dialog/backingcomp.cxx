@@ -465,7 +465,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
 sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
     throw (css::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -548,7 +548,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     throw (css::uno::RuntimeException, std::exception)
 {
     /* FIXME ... implemented by using default :-( */
-    return sal_True;
+    return true;
 }
 
 
@@ -733,7 +733,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     if (xBroadcaster.is())
         xBroadcaster->addEventListener(static_cast< css::lang::XEventListener* >(this));
 
-    m_xWindow->setVisible(sal_True);
+    m_xWindow->setVisible(true);
 
     /* } SAFE */
 }
