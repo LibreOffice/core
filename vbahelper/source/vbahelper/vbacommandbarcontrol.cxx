@@ -134,7 +134,7 @@ ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException, std::
 {
     // TODO: need to check if the item before this item is of type 'separator'
     //#STUB
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL

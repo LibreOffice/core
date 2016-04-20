@@ -216,7 +216,7 @@ void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, b
         uno::Reference< frame::XModel > xModel( rxComponent, uno::UNO_QUERY_THROW );
         uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
         uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
-        uno::Reference< awt::XWindow >( xFrame->getContainerWindow(), uno::UNO_SET_THROW )->setEnable( sal_False );
+        uno::Reference< awt::XWindow >( xFrame->getContainerWindow(), uno::UNO_SET_THROW )->setEnable( false );
     }
     catch( uno::Exception& )
     {

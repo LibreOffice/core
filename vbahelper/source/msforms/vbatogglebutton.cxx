@@ -26,7 +26,7 @@ using namespace ooo::vba;
 ScVbaToggleButton::ScVbaToggleButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper ) : ToggleButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
     SAL_INFO("vbahelper", "ScVbaToggleButton(ctor)");
-    m_xProps->setPropertyValue( "Toggle", uno::makeAny( sal_True ) );
+    m_xProps->setPropertyValue( "Toggle", uno::makeAny( true ) );
 }
 
 ScVbaToggleButton::~ScVbaToggleButton()
@@ -88,7 +88,7 @@ void SAL_CALL ScVbaToggleButton::setAutoSize( sal_Bool bAutoSize ) throw (uno::R
 sal_Bool SAL_CALL ScVbaToggleButton::getCancel() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL ScVbaToggleButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException, std::exception)
@@ -99,7 +99,7 @@ void SAL_CALL ScVbaToggleButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::R
 sal_Bool SAL_CALL ScVbaToggleButton::getDefault() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL ScVbaToggleButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException, std::exception)

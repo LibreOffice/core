@@ -281,7 +281,7 @@ ScVbaShape::getVisible() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
     //UNO Shapes are always visible
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL
@@ -516,7 +516,7 @@ sal_Bool SAL_CALL
 ScVbaShape::getLockAspectRatio() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL
@@ -529,7 +529,7 @@ sal_Bool SAL_CALL
 ScVbaShape::getLockAnchor() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL

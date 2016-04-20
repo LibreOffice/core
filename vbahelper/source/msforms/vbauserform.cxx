@@ -275,7 +275,7 @@ ScVbaUserForm::getValue( const OUString& aPropertyName ) throw (beans::UnknownPr
 sal_Bool SAL_CALL
 ScVbaUserForm::hasMethod( const OUString& /*aName*/ ) throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 uno::Any SAL_CALL
 ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
@@ -306,7 +306,7 @@ ScVbaUserForm::hasProperty( const OUString& aName ) throw (uno::RuntimeException
             return bRes;
         }
     }
-    return sal_False;
+    return false;
 }
 
 namespace userform

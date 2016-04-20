@@ -128,7 +128,7 @@ IMPL_LINK_NOARG_TYPED(VbaTimer, MacroCallHdl, Timer *, void)
     // mast be the last call in the method since it deletes the timer
     try
     {
-        m_xBase->OnTime( uno::makeAny( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::makeAny( m_aTimerInfo.second.second ), uno::makeAny( sal_False ) );
+        m_xBase->OnTime( uno::makeAny( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::makeAny( m_aTimerInfo.second.second ), uno::makeAny( false ) );
     } catch( uno::Exception& )
     {}
 }
@@ -205,10 +205,10 @@ VbaApplicationBase::getDisplayStatusBar() throw (uno::RuntimeException, std::exc
         uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager"), uno::UNO_QUERY_THROW );
         OUString url( "private:resource/statusbar/statusbar" );
         if( xLayoutManager.is() && xLayoutManager->isElementVisible( url ) ){
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL

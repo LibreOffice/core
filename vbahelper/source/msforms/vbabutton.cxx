@@ -64,7 +64,7 @@ void SAL_CALL VbaButton::setLocked( sal_Bool bLocked ) throw (uno::RuntimeExcept
 
 sal_Bool SAL_CALL VbaButton::getCancel() throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL VbaButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException, std::exception)
@@ -75,7 +75,7 @@ void SAL_CALL VbaButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeEx
 sal_Bool SAL_CALL VbaButton::getDefault() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL VbaButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException, std::exception)

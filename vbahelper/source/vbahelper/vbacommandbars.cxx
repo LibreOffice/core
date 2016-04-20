@@ -49,8 +49,8 @@ public:
     virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException, std::exception ) override
     {
         if( m_nCurrentPosition < m_sNames.getLength() )
-            return sal_True;
-        return sal_False;
+            return true;
+        return false;
     }
     virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override
     {

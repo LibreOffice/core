@@ -41,7 +41,7 @@ ScVbaListBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeExceptio
     sal_Int32 nIndex = 0;
     _value >>= nIndex;
     uno::Reference< XPropValue > xPropVal( Selected( nIndex ), uno::UNO_QUERY_THROW );
-    xPropVal->setValue( uno::makeAny( sal_True ) );
+    xPropVal->setValue( uno::makeAny( true ) );
 }
 
 uno::Any SAL_CALL
@@ -247,10 +247,10 @@ ScVbaListBox::getValueEvent()
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
         if( nList[i] == nIndex )
-            return uno::makeAny( sal_True );
+            return uno::makeAny( true );
     }
 
-    return uno::makeAny( sal_False );
+    return uno::makeAny( false );
 }
 
 void SAL_CALL

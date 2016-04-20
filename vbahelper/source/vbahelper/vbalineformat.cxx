@@ -229,9 +229,9 @@ ScVbaLineFormat::getVisible() throw (uno::RuntimeException, std::exception)
     m_xPropertySet->getPropertyValue( "LineStyle" ) >>= aLineStyle;
     if( aLineStyle == drawing::LineStyle_NONE )
     {
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL

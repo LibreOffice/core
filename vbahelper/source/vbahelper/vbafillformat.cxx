@@ -80,8 +80,8 @@ ScVbaFillFormat::getVisible() throw (uno::RuntimeException, std::exception)
     drawing::FillStyle nFillStyle;
     m_xPropertySet->getPropertyValue( "FillStyle" ) >>= nFillStyle;
     if( nFillStyle == drawing::FillStyle_NONE )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 void SAL_CALL

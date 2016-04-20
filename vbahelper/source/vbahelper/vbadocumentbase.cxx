@@ -165,7 +165,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
             if ( xCloseable.is() )
             {
                 bCloseable = true;
-                xCloseable->close(sal_True);
+                xCloseable->close(true);
             }
         }
         catch (const uno::Exception &)

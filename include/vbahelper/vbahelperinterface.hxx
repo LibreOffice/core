@@ -87,8 +87,8 @@ public:
         const OUString* pEnd = pStart + sServices.getLength();
         for ( ; pStart != pEnd ; ++pStart )
             if ( (*pStart).equals( ServiceName ) )
-                return sal_True;
-        return sal_False;
+                return true;
+        return false;
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) override
     {
