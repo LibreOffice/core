@@ -206,7 +206,7 @@ public:
         throw( css::uno::RuntimeException, std::exception ) override
     {
         T t;
-        return ( aElement >>= t ) ? hasItem( t ) : sal_False;
+        return ( aElement >>= t ) && hasItem( t );
     }
 
     virtual void SAL_CALL insert( const css::uno::Any& aElement )
