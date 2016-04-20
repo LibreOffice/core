@@ -821,7 +821,7 @@ void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData 
     pInsDoc->SetClipArea( ScRange(aPos) );
     // insert Block, with Undo etc.
     if ( PasteFromClip( IDF_CONTENTS, pInsDoc, PASTE_NOFUNC, false, false,
-            false, INS_NONE, IDF_ATTRIB ) )
+            false, false, INS_NONE, IDF_ATTRIB ) )
     {
         const SfxUInt32Item* pItem = (SfxUInt32Item*) pInsDoc->GetAttr(
             nCol, nRow, nTab, ATTR_VALUE_FORMAT );

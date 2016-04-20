@@ -61,6 +61,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnSkipEmptyCells( this, ScResId(BTN_SKIP_EMPTY ) ),
     aBtnTranspose   ( this, ScResId( BTN_TRANSPOSE ) ),
     aBtnLink        ( this, ScResId( BTN_LINK ) ),
+    aBtnDDE         ( this, ScResId( BTN_LINK_DDE ) ),
     aFlOperation    ( this, ScResId( FL_OPERATION ) ),
     aRbNoOp         ( this, ScResId( BTN_OP_NOOP ) ),
     aRbAdd          ( this, ScResId( BTN_OP_ADD ) ),
@@ -124,8 +125,9 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     }
 
     aBtnSkipEmptyCells.Check( ( ScInsertContentsDlg::nPreviousChecks2 & INS_CONT_NOEMPTY ) != 0);
-    aBtnTranspose.Check( ( ScInsertContentsDlg::nPreviousChecks2    & INS_CONT_TRANS ) != 0);
-    aBtnLink.Check( ( ScInsertContentsDlg::nPreviousChecks2             & INS_CONT_LINK  ) != 0);
+    aBtnTranspose.Check( ( ScInsertContentsDlg::nPreviousChecks2 & INS_CONT_TRANS ) != 0);
+    aBtnLink.Check( ( ScInsertContentsDlg::nPreviousChecks2 & INS_CONT_LINK  ) != 0);
+    aBtnDDE.Check( ( ScInsertContentsDlg::nPreviousChecks2 & INS_CONT_DDE  ) != 0);
 
     DisableChecks( aBtnInsAll.IsChecked() );
 
@@ -134,6 +136,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
 
     aBtnInsAll.SetClickHdl( LINK( this, ScInsertContentsDlg, InsAllHdl ) );
     aBtnLink.SetClickHdl( LINK( this, ScInsertContentsDlg, LinkBtnHdl ) );
+    aBtnDDE.SetClickHdl( LINK( this, ScInsertContentsDlg, DDEBtnHdl ) );
 
     //-------------
     FreeResource();
@@ -212,12 +215,16 @@ void ScInsertContentsDlg::DisableChecks( sal_Bool bInsAllChecked )
 
 // Link in anderes Dokument -> alles andere disabled
 
-void ScInsertContentsDlg::TestModes()
+void ScInsertContentsDlg::TestModes(bool bLinkFRF, bool bLinkDDE)
 {
-    if ( bOtherDoc && aBtnLink.IsChecked() )
+    if ( bOtherDoc && (aBtnLink.IsChecked() || aBtnDDE.IsChecked()) )
     {
         aBtnSkipEmptyCells.Disable();
         aBtnTranspose.Disable();
+        if (bLinkFRF)
+            aBtnDDE.Check(false);
+        if (bLinkDDE)
+            aBtnLink.Check(false);
         aRbNoOp.Disable();
         aRbAdd.Disable();
         aRbSub.Disable();
@@ -261,7 +268,7 @@ void ScInsertContentsDlg::SetOtherDoc( sal_Bool bSet )
     if ( bSet != bOtherDoc )
     {
         bOtherDoc = bSet;
-        TestModes();
+        TestModes(false, false);
         if ( bSet )
             aRbMoveNone.Check(sal_True);
     }
@@ -272,7 +279,7 @@ void ScInsertContentsDlg::SetFillMode( sal_Bool bSet )
     if ( bSet != bFillMode )
     {
         bFillMode = bSet;
-        TestModes();
+        TestModes(false, false);
         if ( bSet )
             aRbMoveNone.Check(sal_True);
     }
@@ -283,7 +290,7 @@ void ScInsertContentsDlg::SetChangeTrack( sal_Bool bSet )
     if ( bSet != bChangeTrack )
     {
         bChangeTrack = bSet;
-        TestModes();
+        TestModes(false, false);
         if ( bSet )
             aRbMoveNone.Check(sal_True);
     }
@@ -297,7 +304,7 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
     {
         bMoveDownDisabled = bDown;
         bMoveRightDisabled = bRight;
-        TestModes();
+        TestModes(false, false);
         if ( bMoveDownDisabled && aRbMoveDown.IsChecked() )
             aRbMoveNone.Check(sal_True);
         if ( bMoveRightDisabled && aRbMoveRight.IsChecked() )
@@ -317,7 +324,14 @@ IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl)
 
 IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl)
 {
-    TestModes();
+    TestModes(true, false);
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScInsertContentsDlg, DDEBtnHdl)
+{
+    TestModes(false, true);
 
     return 0;
 }
@@ -331,6 +345,8 @@ ScInsertContentsDlg::~ScInsertContentsDlg()
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_TRANS;
     if( aBtnLink.IsChecked() )
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_LINK;
+    if( aBtnDDE.IsChecked() )
+        ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_DDE;
 
     if (!bFillMode)     // im FillMode ist None gecheckt und alle 3 disabled
     {

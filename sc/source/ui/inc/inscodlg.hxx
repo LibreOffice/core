@@ -41,6 +41,7 @@ public:
     sal_Bool        IsSkipEmptyCells() const {return aBtnSkipEmptyCells.IsChecked();}
     sal_Bool        IsTranspose() const {return aBtnTranspose.IsChecked();}
     sal_Bool        IsLink() const {return aBtnLink.IsChecked();}
+    sal_Bool        IsDDE() const {return aBtnDDE.IsChecked();}
     InsCellCmd  GetMoveMode();
 
     void    SetOtherDoc( sal_Bool bSet );
@@ -64,6 +65,7 @@ private:
     CheckBox        aBtnSkipEmptyCells;
     CheckBox        aBtnTranspose;
     CheckBox        aBtnLink;
+    CheckBox        aBtnDDE;
 
     FixedLine       aFlOperation;
     RadioButton     aRbNoOp;
@@ -95,11 +97,12 @@ private:
     static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
 
     void DisableChecks( sal_Bool bInsAllChecked = sal_True );
-    void TestModes();
+    void TestModes(bool bLinkFRF, bool bLinkDDE);
 
     // Handler
     DECL_LINK( InsAllHdl, void* );
     DECL_LINK( LinkBtnHdl, void* );
+    DECL_LINK( DDEBtnHdl, void* );
 };
 
 

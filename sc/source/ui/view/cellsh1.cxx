@@ -1190,6 +1190,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 sal_Bool bSkipEmpty = false;
                 sal_Bool bTranspose = false;
                 sal_Bool bAsLink    = false;
+                sal_Bool bAsDDE     = false;
                 InsCellCmd eMoveMode = INS_NONE;
 
                 Window* pWin = GetViewData()->GetActiveWin();
@@ -1233,6 +1234,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         SFX_REQUEST_ARG( rReq, pTransposeItem, SfxBoolItem, FN_PARAM_3, false );
                         SFX_REQUEST_ARG( rReq, pLinkItem, SfxBoolItem, FN_PARAM_4, false );
                         SFX_REQUEST_ARG( rReq, pMoveItem, SfxInt16Item, FN_PARAM_5, false );
+                        SFX_REQUEST_ARG( rReq, pDDEItem, SfxBoolItem, FN_PARAM_6, false );
                         if ( pFuncItem )
                             nFunction = pFuncItem->GetValue();
                         if ( pSkipItem )
@@ -1241,6 +1243,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             bTranspose = pTransposeItem->GetValue();
                         if ( pLinkItem )
                             bAsLink = pLinkItem->GetValue();
+                        if ( pDDEItem )
+                            bAsDDE = pDDEItem->GetValue();
                         if ( pMoveItem )
                             eMoveMode = (InsCellCmd) pMoveItem->GetValue();
                     }
@@ -1325,6 +1329,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 bSkipEmpty = pDlg->IsSkipEmptyCells();
                                 bTranspose = pDlg->IsTranspose();
                                 bAsLink    = pDlg->IsLink();
+                                bAsDDE     = pDlg->IsDDE();
                                 eMoveMode  = pDlg->GetMoveMode();
                             }
                             delete pDlg;
@@ -1338,11 +1343,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             WaitObject aWait( GetViewData()->GetDialogParent() );
                             if ( bAsLink && bOtherDoc )
-                                pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);  // DDE insert
+                                pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK); // File insert
+                            else if ( bAsDDE && bOtherDoc )
+                                pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK_DDE); // DDE insert
+
                             else
                             {
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
-                                    nFunction, bSkipEmpty, bTranspose, bAsLink,
+                                    nFunction, bSkipEmpty, bTranspose, bAsLink, bAsDDE,
                                     eMoveMode, IDF_NONE, sal_True );    // allow warning dialog
                             }
                         }
@@ -1369,6 +1377,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bSkipEmpty ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_3, bTranspose ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_4, bAsLink ) );
+                            rReq.AppendItem( SfxBoolItem( FN_PARAM_6, bAsDDE ) );
                             rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, nFunction ) );
                             rReq.AppendItem( SfxInt16Item( FN_PARAM_5, (sal_Int16) eMoveMode ) );
                             rReq.Done();

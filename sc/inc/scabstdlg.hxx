@@ -162,6 +162,7 @@ public:
     virtual sal_uInt16      GetFormulaCmdBits() const = 0 ;
     virtual sal_Bool        IsSkipEmptyCells() const = 0;
     virtual sal_Bool        IsLink() const = 0;
+    virtual sal_Bool        IsDDE() const = 0;
     virtual void    SetFillMode( sal_Bool bSet ) = 0;
     virtual void    SetOtherDoc( sal_Bool bSet ) = 0;
     virtual sal_Bool        IsTranspose() const = 0;

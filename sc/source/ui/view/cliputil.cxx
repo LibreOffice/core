@@ -64,7 +64,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
                 nFlags &= ~IDF_FORMULA;
 
             pTabViewShell->PasteFromClip( nFlags, pClipDoc,
-                    PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                    PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                     bShowDialog );      // allow warning dialog
         }
     }

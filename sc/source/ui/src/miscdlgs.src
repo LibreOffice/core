@@ -92,7 +92,7 @@ ModalDialog RID_SCDLG_INSCONT
     OutputSize = TRUE ;
     HelpId = CMD_FID_INS_CELL_CONTENTS ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 187 ) ;
+    Size = MAP_APPFONT ( 260 , 201 ) ;
     Text [ en-US ] = "Paste Special" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -246,6 +246,13 @@ ModalDialog RID_SCDLG_INSCONT
         Pos = MAP_APPFONT ( 12 , 169 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Link" ;
+    };
+    CheckBox BTN_LINK_DDE
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_LINK_DDE";
+        Pos = MAP_APPFONT ( 12 , 183 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text [ en-US ] = "DDExchan~ge" ;
     };
     FixedLine FL_OPTIONS
     {
@@ -1046,7 +1053,7 @@ ModalDialog RID_SCDLG_GROUP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Aktivieren für" ;
+        Text = "Aktivieren fï¿½r" ;
     };
     String STR_GROUP
     {

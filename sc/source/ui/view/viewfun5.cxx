@@ -163,7 +163,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     SetCursor( nPosX, nPosY );
                     Unmark();
                     PasteFromClip( IDF_ALL, pClipDoc,
-                                    PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                                    PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                                     bAllowDialogs );
                     delete pClipDoc;
                     bRet = sal_True;
@@ -276,9 +276,9 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             //TODO/LATER: if format is not available, create picture
         }
     }
-    else if ( nFormatId == SOT_FORMATSTR_ID_LINK )      // LINK is also in ScImportExport
+    else if ( nFormatId == SOT_FORMATSTR_ID_LINK || nFormatId == SOT_FORMATSTR_ID_LINK_DDE )      // LINK is also in ScImportExport
     {
-        bRet = PasteLink( rxTransferable );
+        bRet = PasteLink( nFormatId, rxTransferable );
     }
     else if ( ScImportExport::IsFormatSupported( nFormatId ) || nFormatId == SOT_FORMAT_RTF )
     {
@@ -577,7 +577,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                 pInsDoc->SetClipArea( aSource );
                 PasteFromClip( IDF_ALL, pInsDoc,
-                                PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                                PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                                 bAllowDialogs );
                 delete pInsDoc;
 
@@ -622,14 +622,15 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     return bRet;
 }
 
-bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
+bool ScViewFunc::PasteLink( sal_uLong nFormatId,
+                            const uno::Reference<datatransfer::XTransferable>& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
     //  get link data from transferable before string data,
     //  so the source knows it will be used for a link
 
-    uno::Sequence<sal_Int8> aSequence = aDataHelper.GetSequence(SOT_FORMATSTR_ID_LINK, OUString());
+    uno::Sequence<sal_Int8> aSequence = aDataHelper.GetSequence(nFormatId, OUString());
     if (!aSequence.getLength())
     {
         OSL_FAIL("DDE Data not found.");

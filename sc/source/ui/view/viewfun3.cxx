@@ -471,7 +471,7 @@ void ScViewFunc::PasteFromSystem()
         // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
-                        PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                        PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                         sal_True );     // allow warning dialog
     }
     else if (pDrawClip)
@@ -581,7 +581,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     if (pOwnClip)
     {
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
-                        PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                        PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                         sal_True );     // allow warning dialog
     }
     else if (pDrawClip)
@@ -676,7 +676,7 @@ sal_Bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, sal_Bool bApi )
         // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
-                        PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                        PASTE_NOFUNC, false, false, false, false, INS_NONE, IDF_NONE,
                         !bApi );        // allow warning dialog
     }
     else
@@ -786,7 +786,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 
 bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                                 sal_uInt16 nFunction, bool bSkipEmpty,
-                                bool bTranspose, bool bAsLink,
+                                bool bTranspose, bool bAsLink, bool bAsDDE,
                                 InsCellCmd eMoveMode, sal_uInt16 nUndoExtraFlags,
                                 bool bAllowDialogs )
 {
@@ -1325,6 +1325,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         aOptions.bSkipEmpty = bSkipEmpty;
         aOptions.bTranspose = bTranspose;
         aOptions.bAsLink    = bAsLink;
+        aOptions.bAsDDE     = bAsDDE;
         aOptions.eMoveMode  = eMoveMode;
 
         SfxUndoAction* pUndo = new ScUndoPaste(
