@@ -115,8 +115,8 @@ void LOKInteractionHandler::postError(css::task::InteractionClassification class
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    if (m_pLOKDocument && m_pLOKDocument->mpCallback)
-        m_pLOKDocument->mpCallback(LOK_CALLBACK_ERROR, aStream.str().c_str(), m_pLOKDocument->mpCallbackData);
+    if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandler)
+        m_pLOKDocument->mpCallbackFlushHandler->queue(LOK_CALLBACK_ERROR, aStream.str().c_str());
     else if (m_pLOKit->mpCallback)
         m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aStream.str().c_str(), m_pLOKit->mpCallbackData);
 }
