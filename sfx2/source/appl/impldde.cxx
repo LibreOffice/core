@@ -47,9 +47,6 @@
 
 #include <unotools/securityoptions.hxx>
 
-#define DDELINK_ERROR_APP   1
-#define DDELINK_ERROR_DATA  2
-
 using namespace ::com::sun::star::uno;
 
 namespace sfx2
@@ -121,7 +118,7 @@ IMPL_LINK_NOARG_TYPED( SvDDELinkEditDialog, EditHdl_Impl, Edit&, void)
 }
 
 SvDDEObject::SvDDEObject()
-    : pConnection( nullptr ), pLink( nullptr ), pRequest( nullptr ), pGetData( nullptr ), nError( 0 )
+    : pConnection( nullptr ), pLink( nullptr ), pRequest( nullptr ), pGetData( nullptr )
 {
     SetUpdateTimeout( 100 );
     bWaitForData = sal_False;
@@ -148,8 +145,6 @@ bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
 
         delete pConnection;
         pConnection = new DdeConnection( sServer, sTopic );
-        if( pConnection->GetError() )
-            nError = DDELINK_ERROR_APP;
     }
 
     if( bWaitForData ) // we are in an rekursive loop, get out again
@@ -170,9 +165,6 @@ bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
         do {
             aReq.Execute();
         } while( aReq.GetError() && ImplHasOtherFormat( aReq ) );
-
-        if( pConnection->GetError() )
-            nError = DDELINK_ERROR_DATA;
 
         bWaitForData = sal_False;
     }
@@ -235,11 +227,8 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         if( bSysTopic )
         {
             // if the system topic works then the server is up but just doesn't know the original topic
-            nError = DDELINK_ERROR_DATA;
             return false;
         }
-
-        nError = DDELINK_ERROR_APP;
     }
 
     if( SfxLinkUpdateMode::ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
