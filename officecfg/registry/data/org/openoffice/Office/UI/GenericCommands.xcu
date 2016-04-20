@@ -3108,7 +3108,7 @@
       </node>
       <node oor:name=".uno:TestMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Test Mode On/Off</value>
+          <value xml:lang="en-US">Preview Dialog</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
