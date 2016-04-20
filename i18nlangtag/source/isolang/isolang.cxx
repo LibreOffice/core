@@ -1259,27 +1259,31 @@ css::lang::Locale MsLangId::Conversion::getOverride( const css::lang::Locale& rL
 
 // static
 LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rLang,
-        const OUString& rCountry )
+        const OUString& rCountry, bool bSkipIsoTable )
 {
     // language is lower case in table
     OUString aLowerLang = rLang.toAsciiLowerCase();
     // country is upper case in table
     OUString aUpperCountry = rCountry.toAsciiUpperCase();
 
-    //  first look for exact match
     const IsoLanguageCountryEntry* pFirstLang = nullptr;
-    for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
-            pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+
+    if (!bSkipIsoTable)
     {
-        if ( aLowerLang.equalsAscii( pEntry->maLanguage ) )
+        //  first look for exact match
+        for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
+                pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
         {
-            if ( aUpperCountry.isEmpty() ||
-                 aUpperCountry.equalsAscii( pEntry->maCountry ) )
-                return pEntry->mnLang;
-            if ( !pFirstLang )
-                pFirstLang = pEntry;
-            else if ( !*pEntry->maCountry )
-                pFirstLang = pEntry;
+            if ( aLowerLang.equalsAscii( pEntry->maLanguage ) )
+            {
+                if ( aUpperCountry.isEmpty() ||
+                        aUpperCountry.equalsAscii( pEntry->maCountry ) )
+                    return pEntry->mnLang;
+                if ( !pFirstLang )
+                    pFirstLang = pEntry;
+                else if ( !*pEntry->maCountry )
+                    pFirstLang = pEntry;
+            }
         }
     }
 
@@ -1316,22 +1320,25 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
         }
     }
 
-    // If the language is correct, then we return the default language
-    if ( pFirstLang )
-        return pFirstLang->mnLang;
-
-    //  if only the country is set, look for any entry matching the country
-    //  (to allow reading country and language in separate steps, in any order)
-    if ( !rCountry.isEmpty() && rLang.isEmpty() )
+    if (!bSkipIsoTable)
     {
-        for (const IsoLanguageCountryEntry* pEntry2 = aImplIsoLangEntries;
-                pEntry2->mnLang != LANGUAGE_DONTKNOW; ++pEntry2)
-        {
-            if ( aUpperCountry.equalsAscii( pEntry2->maCountry ) )
-                return pEntry2->mnLang;
-        }
+        // If the language is correct, then we return the default language
+        if ( pFirstLang )
+            return pFirstLang->mnLang;
 
-        aLowerLang = aUpperCountry.toAsciiLowerCase();
+        //  if only the country is set, look for any entry matching the country
+        //  (to allow reading country and language in separate steps, in any order)
+        if ( !rCountry.isEmpty() && rLang.isEmpty() )
+        {
+            for (const IsoLanguageCountryEntry* pEntry2 = aImplIsoLangEntries;
+                    pEntry2->mnLang != LANGUAGE_DONTKNOW; ++pEntry2)
+            {
+                if ( aUpperCountry.equalsAscii( pEntry2->maCountry ) )
+                    return pEntry2->mnLang;
+            }
+
+            aLowerLang = aUpperCountry.toAsciiLowerCase();
+        }
     }
 
     // Look for privateuse definitions.
@@ -1357,7 +1364,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLa
 {
     OUString aLang = OStringToOUString( rLang, RTL_TEXTENCODING_ASCII_US);
     OUString aCountry = OStringToOUString( rCountry, RTL_TEXTENCODING_ASCII_US);
-    return convertIsoNamesToLanguage( aLang, aCountry);
+    return convertIsoNamesToLanguage( aLang, aCountry, false);
 }
 
 

@@ -293,7 +293,7 @@ private:
     bool                isValidBcp47() const;
 
     void                convertLocaleToBcp47();
-    void                convertLocaleToLang( bool bAllowOnTheFlyID );
+    bool                convertLocaleToLang( bool bAllowOnTheFlyID );
     void                convertBcp47ToLocale();
     void                convertBcp47ToLang();
     void                convertLangToLocale();
@@ -1137,7 +1137,8 @@ bool LanguageTagImpl::canonicalize()
         {
             if (!mbInitializedLangID)
             {
-                convertLocaleToLang( false);
+                if (convertLocaleToLang( false))
+                    bChanged = true;
                 if (bTemporaryLocale || mnLangID == LANGUAGE_DONTKNOW)
                     bTemporaryLangID = true;
             }
@@ -1326,8 +1327,9 @@ void LanguageTagImpl::convertLocaleToBcp47()
 }
 
 
-void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
+bool LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
 {
+    bool bRemapped = false;
     if (mbSystemLocale)
     {
         mnLangID = MsLangId::getRealLanguage( LANGUAGE_SYSTEM);
@@ -1335,6 +1337,24 @@ void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
     else
     {
         mnLangID = MsLangId::Conversion::convertLocaleToLanguage( maLocale);
+        if (mnLangID == LANGUAGE_DONTKNOW)
+        {
+            // convertLocaleToLanguage() only searches in ISO and private
+            // definitions, search in remaining definitions, i.e. for the "C"
+            // locale and non-standard things like "sr-latin" or "german" to
+            // resolve to a known locale, skipping ISO lll-CC that were already
+            // searched.
+            mnLangID = MsLangId::Conversion::convertIsoNamesToLanguage( maLocale.Language, maLocale.Country, true);
+            if (mnLangID != LANGUAGE_DONTKNOW)
+            {
+                // If one found, convert back and adapt Locale and Bcp47
+                // strings so we have a matching entry.
+                OUString aOrgBcp47( maBcp47);
+                convertLangToLocale();
+                convertLocaleToBcp47();
+                bRemapped = (maBcp47 != aOrgBcp47);
+            }
+        }
         if (mnLangID == LANGUAGE_DONTKNOW && bAllowOnTheFlyID)
         {
             if (isValidBcp47())
@@ -1364,6 +1384,7 @@ void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
         }
     }
     mbInitializedLangID = true;
+    return bRemapped;
 }
 
 

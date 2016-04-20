@@ -249,9 +249,9 @@ public:
         I18NLANGTAG_DLLPRIVATE static css::lang::Locale getOverride(
                 const css::lang::Locale & rLocale );
 
-        /** Used by convertLocaleToLanguage(Locale) */
+        /** Used by convertLocaleToLanguageImpl(Locale) and LanguageTagImpl::convertLocaleToLang() */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
-                const OUString& rLang, const OUString& rCountry );
+                const OUString& rLang, const OUString& rCountry, bool bSkipIsoTable );
 
 
         /** Used by convertUnxByteStringToLanguage(OString) */
