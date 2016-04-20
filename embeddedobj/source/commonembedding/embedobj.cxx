@@ -110,7 +110,7 @@ void OCommonEmbeddedObject::Deactivate()
 
     m_pDocHolder->CloseFrame();
 
-    xClientSite->visibilityChanged( sal_False );
+    xClientSite->visibilityChanged( false );
 }
 
 
@@ -269,7 +269,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 // create frame and load document in the frame
                 m_pDocHolder->Show();
 
-                m_xClientSite->visibilityChanged( sal_True );
+                m_xClientSite->visibilityChanged( true );
                 m_nObjectState = nNextState;
             }
             else
@@ -287,7 +287,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             if ( !xInplaceClient.is() )
                 throw uno::RuntimeException();
 
-            m_xClientSite->visibilityChanged( sal_True );
+            m_xClientSite->visibilityChanged( true );
 
             xInplaceClient->deactivatedInplace();
             Deactivate();

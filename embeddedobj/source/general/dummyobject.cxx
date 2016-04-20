@@ -463,9 +463,9 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( !m_aEntryName.isEmpty() )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 
@@ -517,7 +517,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::isReadonly()
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // this object can not be changed
-    return sal_True;
+    return true;
 }
 
 

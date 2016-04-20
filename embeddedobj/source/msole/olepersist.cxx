@@ -89,7 +89,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactor
             uno::UNO_QUERY_THROW );
 
     try {
-        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( sal_False ) );
+        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( false ) );
         uno::Any aUrl = xTempFile->getPropertyValue("Uri");
         aUrl >>= aResult;
     }
@@ -1672,9 +1672,9 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_xObjectStream.is() )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 

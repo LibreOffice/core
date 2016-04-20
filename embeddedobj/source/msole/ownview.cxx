@@ -116,14 +116,14 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
             aArgs[0].Value <<= aFileURL;
 
             aArgs[1].Name = "ReadOnly";
-            aArgs[1].Value <<= sal_True;
+            aArgs[1].Value <<= true;
 
             aArgs[2].Name = "InteractionHandler";
             aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >(
                                 static_cast< ::cppu::OWeakObject* >( new DummyHandler_Impl() ), uno::UNO_QUERY );
 
             aArgs[3].Name = "DontEdit";
-            aArgs[3].Value <<= sal_True;
+            aArgs[3].Value <<= true;
 
             if ( !m_aFilterName.isEmpty() )
             {
@@ -216,7 +216,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
         aArgs[2].Value <<= aTypeName;
     }
 
-    aTypeName = xTypeDetection->queryTypeByDescriptor( aArgs, sal_True );
+    aTypeName = xTypeDetection->queryTypeByDescriptor( aArgs, true );
 
     OUString aFilterName;
     for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
@@ -264,7 +264,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
         throw uno::RuntimeException();
 
     try {
-        xNativeTempFile->setPropertyValue("RemoveFile", uno::makeAny( sal_False ) );
+        xNativeTempFile->setPropertyValue("RemoveFile", uno::makeAny( false ) );
         uno::Any aUrl = xNativeTempFile->getPropertyValue("Uri");
         aUrl >>= aNativeTempURL;
     }
@@ -562,7 +562,7 @@ void OwnView_Impl::Close()
             xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >(
                                                                     static_cast< ::cppu::OWeakObject* >( this ),
                                                                      uno::UNO_QUERY ) );
-            xCloseable->close( sal_True );
+            xCloseable->close( true );
         }
     }
     catch( uno::Exception& )

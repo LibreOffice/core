@@ -162,11 +162,11 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     beans::NamedValue aArg;
 
     aArg.Name = "TopWindow";
-    aArg.Value <<= sal_True;
+    aArg.Value <<= true;
     m_aOutplaceFrameProps[0] <<= aArg;
 
     aArg.Name = "MakeVisible";
-    aArg.Value <<= sal_False;
+    aArg.Value <<= false;
     m_aOutplaceFrameProps[1] <<= aArg;
 
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
@@ -221,7 +221,7 @@ void DocumentHolder::CloseFrame()
         m_xFrame,uno::UNO_QUERY );
     if( xCloseable.is() )
         try {
-            xCloseable->close( sal_True );
+            xCloseable->close( true );
         }
         catch( const uno::Exception& ) {
         }
@@ -503,7 +503,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         PlaceFrame( aRectangleToShow );
 
         if ( m_xHatchWindow.is() )
-            m_xHatchWindow->setVisible( sal_True );
+            m_xHatchWindow->setVisible( true );
 
         return true;
     }
@@ -533,7 +533,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         {
             xResult = xUIConfigManager->getSettings(
                 "private:resource/menubar/menubar",
-                sal_False );
+                false );
         }
     }
     catch( const uno::Exception& )
@@ -555,7 +555,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
                     uno::UNO_QUERY_THROW );
             xResult = xModUIConfMan->getSettings(
                     "private:resource/menubar/menubar",
-                    sal_False );
+                    false );
         }
     }
 
@@ -654,7 +654,7 @@ bool DocumentHolder::MergeMenus_Impl( const uno::Reference< css::frame::XLayoutM
         uno::Reference< css::ui::XUIElementSettings > xUISettings(
             xContLM->getElement( "private:resource/menubar/menubar" ),
             uno::UNO_QUERY_THROW );
-        uno::Reference< container::XIndexAccess > xContMenu = xUISettings->getSettings( sal_True );
+        uno::Reference< container::XIndexAccess > xContMenu = xUISettings->getSettings( true );
         if ( !xContMenu.is() )
             throw uno::RuntimeException();
 
@@ -716,7 +716,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     bUnlock = true;
 
                     // by unlocking the LM each layout change will now resize the containers window; pending layouts will be processed now
-                    xOwnLM->setVisible( sal_True );
+                    xOwnLM->setVisible( true );
 
                     uno::Reference< frame::XFramesSupplier > xSupp( m_xFrame->getCreator(), uno::UNO_QUERY );
                     if ( xSupp.is() )
@@ -744,7 +744,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     // remove control about containers window from own LM
                     if ( bLock )
                         xOwnLM->lock();
-                    xOwnLM->setVisible( sal_False );
+                    xOwnLM->setVisible( false );
                     xOwnLM->setDockingAreaAcceptor( uno::Reference< css::ui::XDockingAreaAcceptor >() );
 
                     // unmerge menu
@@ -757,7 +757,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                 {
                     // reestablish control of containers window
                     xContainerLM->setDockingAreaAcceptor( xDocAreaAcc );
-                    xContainerLM->setVisible( sal_True );
+                    xContainerLM->setVisible( true );
                     if ( bUnlock )
                         xContainerLM->unlock();
                 }
@@ -795,13 +795,13 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
 
                 xOwnLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
                 xOwnLM->lock();
-                xOwnLM->setVisible( sal_False );
+                xOwnLM->setVisible( false );
 
                 uno::Reference< css::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
                 xMerge->removeMergedMenuBar();
 
                 xContainerLM->setDockingAreaAcceptor( xDocAreaAcc );
-                xContainerLM->setVisible( sal_True );
+                xContainerLM->setVisible( true );
                 xContainerLM->unlock();
 
                 xContainerLM->doLayout();
@@ -903,7 +903,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
                 xHWindow->setPosSize( aWorkRect.Left(), aWorkRect.Top(), aWorkRect.GetWidth(), aWorkRect.GetHeight(), awt::PosSize::POSSIZE );
             }
 
-            xHWindow->setVisible( sal_True );
+            xHWindow->setVisible( true );
         }
     }
     catch ( const uno::Exception& )

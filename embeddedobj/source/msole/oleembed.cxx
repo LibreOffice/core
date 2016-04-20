@@ -299,7 +299,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
                 uno::Sequence< beans::PropertyValue > aSeq( 1 );
                 aSeq[0].Name = "SetEmbedded";
-                aSeq[0].Value <<= sal_True;
+                aSeq[0].Value <<= true;
                 xModel->attachResource( OUString(), aSeq );
 
                 // load the model from the stream
@@ -307,7 +307,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 aArgs[0].Name = "HierarchicalDocumentName";
                 aArgs[0].Value <<= m_aEntryName;
                 aArgs[1].Name = "ReadOnly";
-                aArgs[1].Value <<= sal_True;
+                aArgs[1].Value <<= true;
                 aArgs[2].Name = "FilterName";
                 aArgs[2].Value <<= m_aFilterName;
                 aArgs[3].Name = "URL";
@@ -321,7 +321,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 // the model is successfully loaded, create a new storage and store the model to the storage
                 uno::Reference< embed::XStorage > xTmpStorage = CreateTemporarySubstorage( aStorageName );
                 xStorDoc->storeToStorage( xTmpStorage, uno::Sequence< beans::PropertyValue >() );
-                xDocument->close( sal_True );
+                xDocument->close( true );
                 uno::Reference< beans::XPropertySet > xStorProps( xTmpStorage, uno::UNO_QUERY_THROW );
                 OUString aMediaType;
                 xStorProps->getPropertyValue("MediaType") >>= aMediaType;
@@ -385,7 +385,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 catch ( const uno::Exception& )
                 {
                     try {
-                        close( sal_True );
+                        close( true );
                     } catch( const uno::Exception& ) {}
 
                     m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without committing!
@@ -400,7 +400,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 catch( const uno::Exception& )
                 {
                     try {
-                        close( sal_True );
+                        close( true );
                     } catch( const uno::Exception& ) {}
 
                     throw uno::RuntimeException(); // the repairing is not possible
@@ -725,7 +725,7 @@ namespace
         if (bCopied)
         {
             xNativeTempFile->setPropertyValue("RemoveFile",
-                uno::makeAny(sal_False));
+                uno::makeAny(false));
             uno::Any aUrl = xNativeTempFile->getPropertyValue("Uri");
             aUrl >>= sUrl;
 
@@ -734,12 +734,12 @@ namespace
             uno::Reference < ucb::XSimpleFileAccess3 > xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
-            xSimpleFileAccess->setReadOnly(sUrl, sal_True);
+            xSimpleFileAccess->setReadOnly(sUrl, true);
         }
         else
         {
             xNativeTempFile->setPropertyValue("RemoveFile",
-                uno::makeAny(sal_True));
+                uno::makeAny(true));
         }
 #else
         (void) xFactory;

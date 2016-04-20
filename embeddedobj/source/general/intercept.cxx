@@ -100,7 +100,7 @@ Interceptor::dispatch(
             {
                 if ( aNewArgs[nInd].Name == "SaveTo" )
                 {
-                    aNewArgs[nInd].Value <<= sal_True;
+                    aNewArgs[nInd].Value <<= true;
                     break;
                 }
                 nInd++;
@@ -110,7 +110,7 @@ Interceptor::dispatch(
             {
                 aNewArgs.realloc( nInd + 1 );
                 aNewArgs[nInd].Name = "SaveTo";
-                aNewArgs[nInd].Value <<= sal_True;
+                aNewArgs[nInd].Value <<= true;
             }
 
             uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
@@ -138,8 +138,8 @@ Interceptor::addStatusListener(
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
         aStateEvent.FeatureDescriptor = "Update";
-        aStateEvent.IsEnabled = sal_True;
-        aStateEvent.Requery = sal_False;
+        aStateEvent.IsEnabled = true;
+        aStateEvent.Requery = false;
         aStateEvent.State <<= ( "($1) " + m_pDocHolder->GetTitle() );
         Control->statusChanged(aStateEvent);
 
@@ -162,8 +162,8 @@ Interceptor::addStatusListener(
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
         aStateEvent.FeatureDescriptor = "Close and Return";
-        aStateEvent.IsEnabled = sal_True;
-        aStateEvent.Requery = sal_False;
+        aStateEvent.IsEnabled = true;
+        aStateEvent.Requery = false;
         aStateEvent.State <<= ( "($2) " + m_pDocHolder->GetTitle() );
         Control->statusChanged(aStateEvent);
 
@@ -184,8 +184,8 @@ Interceptor::addStatusListener(
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
         aStateEvent.FeatureDescriptor = "SaveCopyTo";
-        aStateEvent.IsEnabled = sal_True;
-        aStateEvent.Requery = sal_False;
+        aStateEvent.IsEnabled = true;
+        aStateEvent.Requery = false;
         aStateEvent.State <<= (OUString( "($3)"));
         Control->statusChanged(aStateEvent);
 

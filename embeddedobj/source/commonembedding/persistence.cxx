@@ -96,7 +96,7 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
         aResult[nInd].Name = aOrig[nInd].Name;
         if ( aResult[nInd].Name == "AsTemplate" )
         {
-            aResult[nInd].Value <<= sal_True;
+            aResult[nInd].Value <<= true;
             bAsTemplateSet = true;
         }
         else
@@ -107,7 +107,7 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
     {
         aResult.realloc( nLength + 1 );
         aResult[nLength].Name = "AsTemplate";
-        aResult[nLength].Value <<= sal_True;
+        aResult[nLength].Value <<= true;
     }
 
     return aResult;
@@ -222,7 +222,7 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel >& rDocument, 
     {
         uno::Sequence< beans::PropertyValue > aSeq( 1 );
         aSeq[0].Name = "SetEmbedded";
-        aSeq[0].Value <<= sal_True;
+        aSeq[0].Value <<= true;
         rDocument->attachResource( OUString(), aSeq );
 
         if ( !aModuleName.isEmpty() )
@@ -352,7 +352,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
         {
             try
             {
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -423,7 +423,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
         {
             try
             {
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -549,7 +549,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
         {
             try
             {
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -718,7 +718,7 @@ void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< docum
 
     uno::Reference< util::XModifiable > xModif( xDoc, uno::UNO_QUERY );
     if ( xModif.is() )
-        xModif->setModified( sal_False );
+        xModif->setModified( false );
 
     if ( m_xRecoveryStorage.is() )
         m_xRecoveryStorage.clear();
@@ -841,7 +841,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
         {
             try
             {
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -905,7 +905,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
         aTempMediaDescr[2].Name = "FilterName";
         aTempMediaDescr[2].Value <<= GetFilterName( nStorageFormat );
         aTempMediaDescr[3].Name = "AsTemplate";
-        aTempMediaDescr[3].Value <<= sal_True;
+        aTempMediaDescr[3].Value <<= true;
     }
     else
     {
@@ -973,14 +973,14 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             // saveCompleted is expected, handle it accordingly
             if ( m_xNewParentStorage == xStorage && m_aNewEntryName.equals( sEntName ) )
             {
-                saveCompleted( sal_True );
+                saveCompleted( true );
                 return;
             }
 
             // if a completely different entry is provided, switch first back to the old persistence in saveCompleted
             // and then switch to the target persistence
             bool bSwitchFurther = ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) );
-            saveCompleted( sal_False );
+            saveCompleted( false );
             if ( !bSwitchFurther )
                 return;
         }
@@ -1474,7 +1474,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
         uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
         if ( xModif.is() )
-            xModif->setModified( sal_False );
+            xModif->setModified( false );
 
         PostEvent_Impl( "OnSaveAsDone");
     }
@@ -1523,9 +1523,9 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_xObjectStorage.is() )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1643,7 +1643,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
     uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
     if ( xModif.is() )
-        xModif->setModified( sal_False );
+        xModif->setModified( false );
 
     PostEvent_Impl( "OnSaveDone" );
 }
@@ -1875,7 +1875,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
         throw uno::RuntimeException();
     try
     {
-        xModif->setModified( sal_True );
+        xModif->setModified( true );
     }
     catch( const uno::Exception& )
     {}
