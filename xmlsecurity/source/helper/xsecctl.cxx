@@ -511,7 +511,7 @@ void XSecController::clearSAXChainConnector()
     if (m_xElementStackKeeper.is() && m_xSAXEventKeeper.is())
     {
         cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(m_xSAXEventKeeper, cssu::UNO_QUERY);
-        m_xElementStackKeeper->retrieve(xSEKHandler, sal_True);
+        m_xElementStackKeeper->retrieve(xSEKHandler, true);
     }
 
     chainOff();

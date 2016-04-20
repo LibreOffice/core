@@ -102,7 +102,7 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
         if ( m_pCurrentBufferNode == m_pRootBufferNode &&
              m_xSAXEventKeeperStatusChangeListener.is())
         {
-            m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(sal_True);
+            m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(true);
         }
 
         if (pBufferNode->getParent() == nullptr)
@@ -170,7 +170,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
 
                 if (m_xSAXEventKeeperStatusChangeListener.is())
                 {
-                    m_xSAXEventKeeperStatusChangeListener->blockingStatusChanged(sal_True);
+                    m_xSAXEventKeeperStatusChangeListener->blockingStatusChanged(true);
                 }
             }
 
@@ -724,7 +724,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                     if (m_pCurrentBlockingBufferNode == nullptr &&
                         m_xSAXEventKeeperStatusChangeListener.is())
                     {
-                        m_xSAXEventKeeperStatusChangeListener->blockingStatusChanged(sal_False);
+                        m_xSAXEventKeeperStatusChangeListener->blockingStatusChanged(false);
                     }
                 }
 
@@ -749,7 +749,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
         !m_pRootBufferNode->hasChildren() &&
         m_xSAXEventKeeperStatusChangeListener.is())
     {
-        m_xSAXEventKeeperStatusChangeListener->bufferStatusChanged(sal_True);
+        m_xSAXEventKeeperStatusChangeListener->bufferStatusChanged(true);
     }
 }
 
@@ -1161,7 +1161,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
             if ((m_pCurrentBufferNode == m_pRootBufferNode) &&
                 m_xSAXEventKeeperStatusChangeListener.is())
             {
-                m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(sal_False);
+                m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(false);
             }
         }
     }

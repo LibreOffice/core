@@ -55,7 +55,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     nIdOfSignatureElementCollector =
-        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_BEFOREMODIFY, sal_False);
+        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_BEFOREMODIFY, false);
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
@@ -359,7 +359,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
                     }
 
                     sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
-                        cssxc::sax::ElementMarkPriority_BEFOREMODIFY, sal_False );
+                        cssxc::sax::ElementMarkPriority_BEFOREMODIFY, false );
 
                     cssu::Reference<cssxc::sax::XReferenceResolvedBroadcaster> xReferenceResolvedBroadcaster
                         (m_xSAXEventKeeper,
@@ -383,7 +383,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
             cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(m_xSAXEventKeeper, cssu::UNO_QUERY);
             if (m_xElementStackKeeper.is())
             {
-                m_xElementStackKeeper->retrieve(xSEKHandler, sal_True);
+                m_xElementStackKeeper->retrieve(xSEKHandler, true);
             }
             m_xSAXEventKeeper->setNextHandler(xHandler);
         }
