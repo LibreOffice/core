@@ -1884,7 +1884,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox,
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))
             {
                 bBmp |= nullptr != aNumFmt.GetBrush();
-                aNumFmt.SetIncludeUpperLevels( sal_False );
+                aNumFmt.SetIncludeUpperLevels( 0 );
                 aNumFmt.SetSuffix( "" );
                 aNumFmt.SetPrefix( "" );
                 if(!bBmp)
@@ -1895,7 +1895,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox,
             }
             else if( SVX_NUM_CHAR_SPECIAL == nNumberingType )
             {
-                aNumFmt.SetIncludeUpperLevels( sal_False );
+                aNumFmt.SetIncludeUpperLevels( 0 );
                 aNumFmt.SetSuffix( "" );
                 aNumFmt.SetPrefix( "" );
                 if( !aNumFmt.GetBulletFont() )
