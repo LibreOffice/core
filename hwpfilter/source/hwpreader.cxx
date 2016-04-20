@@ -159,10 +159,10 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
         nTotal += nRead;
     }
 
-    if( nTotal == 0 ) return sal_False;
+    if( nTotal == 0 ) return false;
 
     if (hwpfile.ReadHwpFile(stream.release()))
-          return sal_False;
+          return false;
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->startDocument();
@@ -200,7 +200,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->endDocument();
-    return sal_True;
+    return true;
 }
 
 
