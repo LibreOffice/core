@@ -1414,21 +1414,21 @@ public:
                 case animations::TransitionSubType::HEART:              //  31
                 case animations::TransitionSubType::FANOUTHORIZONTAL:   //  55
                 case animations::TransitionSubType::ACROSS:             // 108
-                    return sal_True;
+                    return true;
 
                 default:
-                    return sal_False;
+                    return false;
             }
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) {
-            return sal_True;
+            return true;
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::FADEOVERCOLOR ) {
-            return sal_True;
+            return true;
         } else if( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) {
-            return sal_True;
+            return true;
         } else if( transitionType == animations::TransitionType::ZOOM && transitionSubType == animations::TransitionSubType::ROTATEIN ) {
-            return sal_True;
+            return true;
         } else
-            return sal_False;
+            return false;
     }
 
     virtual uno::Reference< presentation::XTransition > SAL_CALL createTransition(

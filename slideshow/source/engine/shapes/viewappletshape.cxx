@@ -212,7 +212,7 @@ namespace slideshow
 
             if( xCloseable.is() )
             {
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
                 mxFrame.clear();
             }
         }
