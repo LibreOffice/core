@@ -1785,7 +1785,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 // the following call will only compare stream sizes
                 // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage
                 // contents, the storage will be broken
-                xOptStorage->attachToURL( aBackupURL, sal_True );
+                xOptStorage->attachToURL( aBackupURL, true );
 
                 // the storage is successfully attached to backup, thus it is owned by the document not by the medium
                 rSrcMedium.CanDisposeStorage_Impl( false );
@@ -2282,7 +2282,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                         assert(xPers.is() && "Modified object without persistence!");
                         // store it before resetting modified!
                         xPers->storeOwn();
-                        xModifiable->setModified(sal_False);
+                        xModifiable->setModified(false);
                     }
                 }
             }

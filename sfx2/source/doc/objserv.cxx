@@ -227,7 +227,7 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
                 m_pPreventer->SetPreventClose( false );
 
                 if ( m_pPreventer->HasOwnership() )
-                    m_xCloseable->close( sal_True ); // TODO: do it asynchronously
+                    m_xCloseable->close( true ); // TODO: do it asynchronously
             }
         }
         catch( uno::Exception& )
@@ -339,7 +339,7 @@ void SfxObjectShell::CancelCheckOut( )
 
         uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
         if ( xModifiable.is( ) )
-            xModifiable->setModified( sal_False );
+            xModifiable->setModified( false );
     }
     catch ( const uno::RuntimeException& e )
     {
@@ -362,7 +362,7 @@ void SfxObjectShell::CheckIn( )
             xCmisDoc->checkIn( bMajor, sComment );
             uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
             if ( xModifiable.is( ) )
-                xModifiable->setModified( sal_False );
+                xModifiable->setModified( false );
         }
     }
     catch ( const uno::RuntimeException& e )

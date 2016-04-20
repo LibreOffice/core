@@ -60,7 +60,7 @@ BindDispatch_Impl::BindDispatch_Impl( const css::uno::Reference< css::frame::XDi
     , pSlot( pS )
 {
     DBG_ASSERT( pCache && pSlot, "Invalid BindDispatch!");
-    aStatus.IsEnabled = sal_True;
+    aStatus.IsEnabled = true;
 }
 
 void SAL_CALL BindDispatch_Impl::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )

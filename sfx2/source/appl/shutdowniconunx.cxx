@@ -284,7 +284,7 @@ static gboolean display_menu_cb( GtkWidget *,
                                  GdkEventButton *event, GtkWidget *pMenu )
 {
     if (event->button == 2)
-        return sal_False;
+        return false;
 
     refresh_menu( pMenu );
 
@@ -292,7 +292,7 @@ static gboolean display_menu_cb( GtkWidget *,
                     gtk_status_icon_position_menu, pTrayIcon,
                     0, event->time );
 
-    return sal_True;
+    return true;
 }
 
 #if ENABLE_GIO

@@ -1136,7 +1136,7 @@ void SfxDocTplService_Impl::doUpdate()
     OUString aPropName( PROPERTY_NEEDSUPDATE  );
     Any      aValue;
 
-    aValue <<= sal_True;
+    aValue <<= true;
     setProperty( maRootContent, aPropName, aValue );
 
     GroupList_Impl  aGroupList;
@@ -1210,7 +1210,7 @@ void SfxDocTplService_Impl::doUpdate()
     }
     aGroupList.clear();
 
-    aValue <<= sal_False;
+    aValue <<= false;
     setProperty( maRootContent, aPropName, aValue );
 }
 
@@ -2267,7 +2267,7 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
     if ( pImp->init() )
         return pImp->storeTemplate( GroupName, TemplateName, Storable );
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -2279,7 +2279,7 @@ sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
     if ( pImp->init() )
         return pImp->addTemplate( rGroupName, rTemplateName, rSourceURL );
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -2290,7 +2290,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
     if ( pImp->init() )
         return pImp->removeTemplate( rGroupName, rTemplateName );
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -2300,12 +2300,12 @@ sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
     throw( uno::RuntimeException, std::exception )
 {
     if ( rOldName == rNewName )
-        return sal_True;
+        return true;
 
     if ( pImp->init() )
         return pImp->renameTemplate( rGroupName, rOldName, rNewName );
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -2315,7 +2315,7 @@ sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
     if ( pImp->init() )
         return pImp->addGroup( rGroupName );
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -2325,7 +2325,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
     if ( pImp->init() )
         return pImp->removeGroup( rGroupName );
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -2334,12 +2334,12 @@ sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
     throw( uno::RuntimeException, std::exception )
 {
     if ( rOldName == rNewName )
-        return sal_True;
+        return true;
 
     if ( pImp->init() )
         return pImp->renameGroup( rOldName, rNewName );
     else
-        return sal_False;
+        return false;
 }
 
 

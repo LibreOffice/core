@@ -487,7 +487,7 @@ SfxSaveGuard::~SfxSaveGuard()
         {
             Reference< util::XCloseable > xClose(m_xModel, UNO_QUERY);
             if (xClose.is())
-                xClose->close(sal_True);
+                xClose->close(true);
         }
         catch(const util::CloseVetoException&)
         {}
@@ -736,7 +736,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
         // and try to make it work (may be really disposed later!)
         try
         {
-            close( sal_True );
+            close( true );
         }
         catch ( util::CloseVetoException& )
         {
@@ -874,7 +874,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
                 m_pData->m_pObjectShell->SetCreateMode_Impl( SfxObjectCreateMode::EMBEDDED );
         }
 
-        return sal_True;
+        return true;
     }
 
     if ( m_pData->m_pObjectShell.Is() )
@@ -938,7 +938,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         }
     }
 
-    return sal_True ;
+    return true ;
 }
 
 
@@ -2233,51 +2233,51 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
     if ( aFlavor.MimeType == "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
     else if ( aFlavor.MimeType == "image/png" )
     {
         if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -2326,7 +2326,7 @@ sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution() throw (RuntimeException
 
     if ( m_pData->m_pObjectShell )
         return m_pData->m_pObjectShell->AdjustMacroMode();
-    return sal_False;
+    return false;
 }
 
 
@@ -2517,7 +2517,7 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
             aProps[1].Name = "VersionComment";
             aProps[1].Value = makeAny( rMessage );
             aProps[2].Name = "CheckIn";
-            aProps[2].Value = makeAny( sal_True );
+            aProps[2].Value = makeAny( true );
 
             OUString sName( pMedium->GetName( ) );
             storeSelf( aProps );

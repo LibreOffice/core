@@ -180,7 +180,7 @@ void SfxChildWindow::Destroy()
         {
             css::uno::Reference < css::util::XCloseable > xClose( GetFrame(), css::uno::UNO_QUERY );
             if ( xClose.is() )
-                xClose->close( sal_True );
+                xClose->close( true );
             else
                 GetFrame()->dispose();
         }
@@ -679,7 +679,7 @@ bool SfxChildWindow::QueryClose()
     {
         css::uno::Reference< css::frame::XController >  xCtrl = pImp->xFrame->getController();
         if ( xCtrl.is() )
-            bAllow = xCtrl->suspend( sal_True );
+            bAllow = xCtrl->suspend( true );
     }
 
     if ( bAllow )

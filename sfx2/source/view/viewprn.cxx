@@ -134,7 +134,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
         aRenderOptions[1].Name = "View" ;
         aRenderOptions[1].Value = i_rViewProp;
         aRenderOptions[2].Name = "IsPrinter";
-        aRenderOptions[2].Value <<= sal_True;
+        aRenderOptions[2].Value <<= true;
         try
         {
             Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
@@ -163,7 +163,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     // set some job parameters
     setValue( "IsApi", makeAny( i_bApi ) );
     setValue( "IsDirect", makeAny( i_bDirect ) );
-    setValue( "IsPrinter", makeAny( sal_True ) );
+    setValue( "IsPrinter", makeAny( true ) );
     setValue( "View", i_rViewProp );
 }
 

@@ -203,10 +203,10 @@ throw( uno::RuntimeException, std::exception )
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL IFrameObject::cancel() throw( css::uno::RuntimeException, std::exception )
@@ -215,7 +215,7 @@ void SAL_CALL IFrameObject::cancel() throw( css::uno::RuntimeException, std::exc
     {
         uno::Reference < util::XCloseable > xClose( mxFrame, uno::UNO_QUERY );
         if ( xClose.is() )
-            xClose->close( sal_True );
+            xClose->close( true );
         mxFrame = nullptr;
     }
     catch (const uno::Exception&)
