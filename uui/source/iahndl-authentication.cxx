@@ -242,7 +242,7 @@ handleAuthenticationRequest_(
     else
     {
         bCanUseSystemCredentials = false;
-        bDefaultUseSystemCredentials = sal_False;
+        bDefaultUseSystemCredentials = false;
     }
 
     LoginErrorInfo aInfo;
