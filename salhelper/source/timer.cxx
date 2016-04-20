@@ -146,7 +146,7 @@ sal_Bool Timer::isTicking() const
     if (pManager)
         return pManager->lookupTimer(this);
     else
-        return sal_False;
+        return false;
 
 }
 
@@ -169,7 +169,7 @@ sal_Bool Timer::expiresBefore(const Timer* pTimer) const
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
