@@ -479,7 +479,7 @@ void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetT
                 break;
 
             case TypeClass_BOOLEAN:
-                rRet <<= sal_True;
+                rRet <<= true;
                 break;
 
             case TypeClass_STRING:
