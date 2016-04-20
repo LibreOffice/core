@@ -2643,8 +2643,8 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         static bool bCheckShadow(false);
 
         // #i124477# Found no reason not to set shadow, esp. since it is applied to evtl. existing text
-        // and will lead to an error of in PPT someone used text and added the object shadow to the
-        // object carryintg that text. I found no cases where this leads to problems (the old bugtracker
+        // and will lead to an error if in PPT someone used text and added the object shadow to the
+        // object carrying that text. I found no cases where this leads to problems (the old bugtracker
         // task #160376# from sj is unfortunately no longer available). Keeping the code for now
         // to allow easy fallback when this shows problems in the future
         if(bCheckShadow)

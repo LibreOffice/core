@@ -364,7 +364,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
             xDesktop->getFrames()->append(m_xFrame);
 
-            // determine the menuhandle to get menutitems.
+            // determine the menuhandle to get menuitems.
             if(m_xLayoutManager.is()) {
                 uno::Reference< css::ui::XUIElement > xUIEl(
                     m_xLayoutManager->getElement(

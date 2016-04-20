@@ -2367,7 +2367,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
             bCont = false;
         }
     }
-    // Continure main number:
+    // Continue main number:
     if ( !bCont )
     {
         sStr.truncate();

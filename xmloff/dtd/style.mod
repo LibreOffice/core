@@ -365,7 +365,7 @@
 <!ATTLIST style:properties style:table-centering (horizontal | vertical | both | none) #IMPLIED>
 
 <!ATTLIST style:properties style:footnote-max-height %lengthOrNoLimit; #IMPLIED>
-<!ATTLIST style:properties style:vertical-align (top|bottom|middle|basline|auto) #IMPLIED>
+<!ATTLIST style:properties style:vertical-align (top|bottom|middle|baseline|auto) #IMPLIED>
 <!ATTLIST style:properties style:writing-mode (lr-tb|rl-tb|tb-rl|tb-lr|lr|rl|tb|page) "lr-tb">
 <!ATTLIST style:properties style:layout-grid-mode (none|line|both) #IMPLIED>
 <!ATTLIST style:properties style:layout-grid-base-height %length; #IMPLIED>

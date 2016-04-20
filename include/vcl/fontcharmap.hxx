@@ -66,7 +66,7 @@ public:
         are inside the unicode range from cMin to cMax (inclusive).
 
         @param  cMin        Lowest codepoint in range to be counted
-        @param  cMax        Highest codepoitn in range to be counted
+        @param  cMax        Highest codepoint in range to be counted
 
         @returns number of characters in the font charmap between the two
                  codepoints.

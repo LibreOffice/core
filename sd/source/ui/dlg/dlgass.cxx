@@ -154,7 +154,7 @@ public:
     bool mbTemplatesReady;
 
     /** Flag used to prevent nested or concurrent calls to the
-        <member>UpdatePreview</memember> method.  A <TRUE/> value indicates
+        <member>UpdatePreview</member> method.  A <TRUE/> value indicates
         that a preview update is currently active.
     */
     bool mbPreviewUpdating;

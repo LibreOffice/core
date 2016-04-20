@@ -830,7 +830,7 @@ bool ZipPackageStream::saveChild(
                 {
                     // tdf#93553 limit to a useful amount of threads. Taking number of available
                     // cores and allow 4-times the amount for having the queue well filled. The
-                    // 2nd pparameter is the time to wait beweeen cleanups in 10th of a second.
+                    // 2nd parameter is the time to wait between cleanups in 10th of a second.
                     // Both values may be added to the configuration settings if needed.
                     static sal_Int32 nAllowedThreads(std::max(std::thread::hardware_concurrency(), 1U) * 4);
                     rZipOut.reduceScheduledThreadsToGivenNumberOrLess(nAllowedThreads, 1);
