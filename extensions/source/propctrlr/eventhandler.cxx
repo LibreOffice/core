@@ -1142,7 +1142,7 @@ namespace pcr
     bool EventHandler::impl_filterMethod_nothrow( const EventDescription& _rEvent ) const
     {
         // some (control-triggered) events do not make sense for certain grid control columns. However,
-        // our mechnism to retrieve control-triggered events does not know about this, so we do some
+        // our mechanism to retrieve control-triggered events does not know about this, so we do some
         // late filtering here.
         switch ( m_nGridColumnType )
         {

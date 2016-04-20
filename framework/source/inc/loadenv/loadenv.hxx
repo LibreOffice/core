@@ -40,7 +40,7 @@ namespace framework {
 
 class QuietInteraction;
 
-/** @short  implements general mechainsm for loading documents.
+/** @short  implements general mechanism for loading documents.
 
     @descr  An instance of this class can be used inside the API calls
             XComponentLoader::loadComponentFromURL() and

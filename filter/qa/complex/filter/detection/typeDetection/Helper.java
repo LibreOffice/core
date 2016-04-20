@@ -298,7 +298,7 @@ public class Helper  {
         return newContent;
     }
 
-    /** returns a <code>MediaDescripto</code> filled with given properties and
+    /** returns a <code>MediaDescriptor</code> filled with given properties and
      * values.
      * @param propNames String Array of property names
      * @param values Object Array of property values

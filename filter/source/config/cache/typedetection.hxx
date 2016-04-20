@@ -181,7 +181,7 @@ private:
 
 
     /** @short      check if an input stream is already part of the
-                    given MediaDesciptor and creates a new one if necessary.
+                    given MediaDescriptor and creates a new one if necessary.
 
         @attention  This method does further something special!
                     <ul>
