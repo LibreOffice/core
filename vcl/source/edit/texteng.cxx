@@ -218,7 +218,7 @@ void TextEngine::SetFont( const vcl::Font& rFont )
 
 void TextEngine::SetMaxTextLen( sal_Int32 nLen )
 {
-    mnMaxTextLen = nLen;
+    mnMaxTextLen = nLen>=0 ? nLen : EDIT_NOLIMIT;
 }
 
 void TextEngine::SetMaxTextWidth( long nMaxWidth )
