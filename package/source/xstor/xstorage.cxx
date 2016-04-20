@@ -134,7 +134,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
             // TODO/LATER: in future it might make sense to provide the stream if there is one
             uno::Reference< embed::XRelationshipAccess > xRelAccess( xDest, uno::UNO_QUERY_THROW );
             xRelAccess->clearRelationships();
-            xRelAccess->insertRelationships( aRelInfo, sal_False );
+            xRelAccess->insertRelationships( aRelInfo, false );
 
             aPropNames.realloc( 2 );
             aPropNames[1] = "MediaType";
@@ -755,7 +755,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         if ( !xRels.is() )
             throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
-        xRels->insertRelationships( GetAllRelationshipsIfAny(), sal_False );
+        xRels->insertRelationships( GetAllRelationshipsIfAny(), false );
     }
 
     // if possible the destination storage should be committed after successful copying
@@ -847,7 +847,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                     if ( !xRels.is() )
                         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
-                    xRels->insertRelationships( GetAllRelationshipsIfAny(), sal_False );
+                    xRels->insertRelationships( GetAllRelationshipsIfAny(), false );
                 }
 
                 uno::Reference< embed::XOptimizedStorage > xOptDest( xDest, uno::UNO_QUERY_THROW );
@@ -1047,7 +1047,7 @@ void OStorage_Impl::Commit()
     if ( !m_bCommited && !m_bIsRoot )
     {
         uno::Sequence< uno::Any > aSeq( 1 );
-        aSeq[0] <<= sal_True;
+        aSeq[0] <<= true;
 
         xNewPackageFolder.set( m_xPackage->createInstanceWithArguments( aSeq ),
                                uno::UNO_QUERY );
@@ -1379,7 +1379,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
         throw embed::InvalidStorageException( THROW_WHERE);
 
     uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= sal_False;
+    aSeq[0] <<= false;
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
@@ -1421,7 +1421,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
                                                                      GetSeekableTempCopy( xInStream, m_xContext );
 
     uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= sal_False;
+    aSeq[0] <<= false;
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
@@ -1453,7 +1453,7 @@ OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
         throw embed::InvalidStorageException( THROW_WHERE );
 
     uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= sal_True;
+    aSeq[0] <<= true;
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
@@ -3974,9 +3974,9 @@ void SAL_CALL OStorage::commit()
                                   aCaught );
     }
 
-    setModified( sal_False );
+    setModified( false );
     if ( xParentModif.is() )
-        xParentModif->setModified( sal_True );
+        xParentModif->setModified( true );
 
     BroadcastTransaction( STOR_MESS_COMMITED );
 }
@@ -4047,7 +4047,7 @@ void SAL_CALL OStorage::revert()
 
     aGuard.clear();
 
-    setModified( sal_False );
+    setModified( false );
     BroadcastTransaction( STOR_MESS_REVERTED );
 }
 
@@ -4271,10 +4271,10 @@ sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
     }
 
     if ( aName.isEmpty() )
-        return sal_False;
+        return false;
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
-        return sal_False;
+        return false;
 
     SotElement_Impl* pElement = nullptr;
     try
@@ -4886,7 +4886,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
             if ( aPropertyName == "URL" )
                 return uno::makeAny( OUString() );
 
-            return uno::makeAny( sal_False ); // RepairPackage
+            return uno::makeAny( false ); // RepairPackage
         }
         else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
           && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
@@ -5017,7 +5017,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
     try
     {
         getRelationshipByID( sID );
-        return sal_True;
+        return true;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
@@ -5025,7 +5025,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
         m_pImpl->AddLog( THROW_WHERE "Quiet exception" );
     }
 
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )

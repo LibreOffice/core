@@ -307,12 +307,12 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
     try
     {
         getRelationshipByID( sID );
-        return sal_True;
+        return true;
     }
     catch( container::NoSuchElementException& )
     {}
 
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )

@@ -101,7 +101,7 @@ void ZipOutputEntry::createBufferFile()
     uno::Reference < beans::XPropertySet > xTempFileProps(
             io::TempFile::create(m_xContext),
             uno::UNO_QUERY_THROW );
-    xTempFileProps->setPropertyValue("RemoveFile", uno::makeAny(sal_False));
+    xTempFileProps->setPropertyValue("RemoveFile", uno::makeAny(false));
     uno::Any aUrl = xTempFileProps->getPropertyValue( "Uri" );
     aUrl >>= m_aTempURL;
     assert(!m_aTempURL.isEmpty());

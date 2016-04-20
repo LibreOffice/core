@@ -230,7 +230,7 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext >& rCon
             uno::UNO_QUERY_THROW );
 
     try {
-        xTempFile->setPropertyValue( "RemoveFile", uno::makeAny( sal_False ) );
+        xTempFile->setPropertyValue( "RemoveFile", uno::makeAny( false ) );
         uno::Any aUrl = xTempFile->getPropertyValue( "Uri" );
         aUrl >>= aTempURL;
     }
@@ -810,7 +810,7 @@ void OWriteStream_Impl::Commit()
 
     uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream;
     uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= sal_False;
+    aSeq[0] <<= false;
 
     if ( m_xCacheStream.is() )
     {
@@ -1853,7 +1853,7 @@ void OWriteStream::ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aG
         {
             uno::Reference< util::XModifiable > xParentModif( static_cast<util::XModifiable*>(m_pImpl->m_pParent->m_pAntiImpl) );
             aGuard.clear();
-            xParentModif->setModified( sal_True );
+            xParentModif->setModified( true );
         }
         else
             m_pImpl->m_pParent->m_bIsModified = true;
@@ -2647,7 +2647,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
     try
     {
         getRelationshipByID( sID );
-        return sal_True;
+        return true;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
@@ -2655,7 +2655,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
         m_pImpl->AddLog( "No Element" );
     }
 
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
