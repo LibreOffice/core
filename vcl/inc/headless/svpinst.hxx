@@ -92,6 +92,9 @@ public:
     SvpSalInstance( SalYieldMutex *pMutex );
     virtual ~SvpSalInstance();
 
+    void                    CloseWakeupPipe();
+    void                    CreateWakeupPipe();
+
     void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent);
 
 #ifdef ANDROID
