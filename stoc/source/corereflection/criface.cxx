@@ -821,7 +821,7 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
     if (xType.is() && xType->getTypeClass() == TypeClass_INTERFACE)
     {
         if (equals( xType ))
-            return sal_True;
+            return true;
         else
         {
             const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
@@ -832,7 +832,7 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 Uik InterfaceIdlClassImpl::getUik()

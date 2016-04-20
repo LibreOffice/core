@@ -234,9 +234,9 @@ sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
     for ( sal_Int32 nPos = m_properties.getLength(); nPos--; )
     {
         if (p[ nPos ].Name.equals( name ))
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -1119,7 +1119,7 @@ sal_Bool OServiceManager::has( const Any & Element )
         return m_ImplementationNameMap.find( implName ) !=
             m_ImplementationNameMap.end();
     }
-    return sal_False;
+    return false;
 }
 
 // XSet

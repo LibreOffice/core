@@ -490,7 +490,7 @@ sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
         return _xDirect->hasMethod( Name );
     if( _xIntrospectionAccess.is() )
         return _xIntrospectionAccess->hasMethod( Name, MethodConcept::ALL ^ MethodConcept::DANGEROUS );
-    return sal_False;
+    return false;
 }
 
 
@@ -502,11 +502,11 @@ sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
     // PropertySet
     if( _xIntrospectionAccess.is()
         && _xIntrospectionAccess->hasProperty( Name, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
-        return sal_True;
+        return true;
     // NameAccess
     if( _xNameAccess.is() )
         return _xNameAccess->hasByName( Name );
-    return sal_False;
+    return false;
 }
 
 

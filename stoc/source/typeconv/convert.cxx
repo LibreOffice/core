@@ -740,12 +740,12 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             const OUString & aStr = *static_cast<const OUString *>(rVal.getValue());
             if ( aStr == "0" || aStr.equalsIgnoreAsciiCase( "false" ))
             {
-                sal_Bool bFalse = sal_False;
+                sal_Bool bFalse = false;
                 aRet.setValue( &bFalse, cppu::UnoType<bool>::get() );
             }
             else if ( aStr == "1" || aStr.equalsIgnoreAsciiCase( "true" ))
             {
-                sal_Bool bTrue = sal_True;
+                sal_Bool bTrue = true;
                 aRet.setValue( &bTrue, cppu::UnoType<bool>::get() );
             }
             else

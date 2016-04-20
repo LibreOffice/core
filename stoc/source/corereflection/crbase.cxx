@@ -130,7 +130,7 @@ sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
     TypeClass eAssign = getTypeClass();
     if (equals( xType ) || eAssign == TypeClass_ANY) // default shot
     {
-        return sal_True;
+        return true;
     }
     else
     {
@@ -141,7 +141,7 @@ sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
             return s_aAssignableFromTab[eAssign-1][eFrom-1];
         }
     }
-    return sal_False;
+    return false;
 }
 
 void IdlClassImpl::createObject( Any & rObj )

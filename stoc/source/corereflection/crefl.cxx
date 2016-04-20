@@ -308,7 +308,7 @@ sal_Bool IdlReflectionServiceImpl::hasByHierarchicalName( const OUString & rName
     catch (container::NoSuchElementException &)
     {
     }
-    return sal_False;
+    return false;
 }
 
 

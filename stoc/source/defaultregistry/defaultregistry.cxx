@@ -1244,13 +1244,13 @@ sal_Bool SAL_CALL NestedRegistryImpl::isValid(  ) throw(RuntimeException, std::e
     {
         if ( (m_localReg.is() && m_localReg->isValid()) ||
              (m_defaultReg.is() && m_defaultReg->isValid()) )
-            return sal_True;
+            return true;
     }
     catch(InvalidRegistryException& )
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1321,7 +1321,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 

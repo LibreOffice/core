@@ -276,7 +276,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY);
     if(!xConfRegistry_simple.is()) throw css::uno::RuntimeException("javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
 
-    xConfRegistry_simple->open("org.openoffice.Inet", sal_True, sal_False);
+    xConfRegistry_simple->open("org.openoffice.Inet", true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
 //  if ooInetProxyType is not 0 then read the settings
@@ -370,7 +370,7 @@ void getDefaultLocaleFromConfig(
         throw css::uno::RuntimeException(
             OUString("javavm.cxx: couldn't get ConfigurationRegistry"), nullptr);
 
-    xConfRegistry_simple->open("org.openoffice.Setup", sal_True, sal_False);
+    xConfRegistry_simple->open("org.openoffice.Setup", true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
     // read locale
@@ -426,7 +426,7 @@ void getJavaPropsFromSafetySettings(
 
     xConfRegistry_simple->open(
         "org.openoffice.Office.Java",
-        sal_True, sal_False);
+        true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey =
         xConfRegistry_simple->getRootKey();
 
@@ -791,7 +791,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             jfw::JavaInfoGuard pJavaInfo;
             if (JFW_E_NONE == jfw_getSelectedJRE(&pJavaInfo.info))
             {
-                sal_Bool bExist = sal_False;
+                sal_Bool bExist = false;
                 if (JFW_E_NONE == jfw_existJRE(pJavaInfo.info, &bExist))
                 {
                     if (!bExist
@@ -916,7 +916,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
 //    initVMConfiguration(&aJvm, m_xContext->getServiceManager(), m_xContext);
 //    return aJvm.isEnabled();
     //ToDo
-    sal_Bool bEnabled = sal_False;
+    sal_Bool bEnabled = false;
     if (jfw_getEnabled( & bEnabled) != JFW_E_NONE)
         throw css::uno::RuntimeException();
     return bEnabled;

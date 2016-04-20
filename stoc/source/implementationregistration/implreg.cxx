@@ -1610,7 +1610,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
             {
                 try
                 {
-                    xReg->open(OUString() /* in mem */, sal_False, sal_True);
+                    xReg->open(OUString() /* in mem */, false, true);
                     Reference < XRegistryKey > xImpl;
 
                     { // only necessary for deleting the temporary variable of rootkey
@@ -1723,7 +1723,7 @@ void ImplementationRegistration::doRegister(
     {
         try
         {
-            xReg->open(OUString() /* in mem */, sal_False, sal_True);
+            xReg->open(OUString() /* in mem */, false, true);
 
             { // only necessary for deleting the temporary variable of rootkey
                 xSourceKey = xReg->getRootKey()->createKey( spool().slash_IMPLEMENTATIONS );
