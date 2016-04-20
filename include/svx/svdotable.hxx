@@ -30,6 +30,7 @@
 
 class SvStream;
 class SfxStyleSheet;
+class SdrUndoAction;
 
 namespace sdr { namespace contact {
     class ViewContactOfTableObj;
@@ -248,6 +249,9 @@ public:
     virtual void SetVerticalWriting(bool bVertical) override;
 
     css::text::WritingMode GetWritingMode() const;
+
+    /// Add an undo action that should be on the undo stack after ending text edit.
+    void AddUndo(SdrUndoAction* pUndo);
 
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) override;
 

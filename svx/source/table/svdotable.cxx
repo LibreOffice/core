@@ -203,6 +203,7 @@ public:
     CellPos maEditPos;
     TableStyleSettings maTableStyle;
     Reference< XIndexAccess > mxTableStyle;
+    std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
 
     void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
 
@@ -1781,7 +1782,14 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
     if(rOutl.IsModified())
     {
         if( GetModel() && GetModel()->IsUndoEnabled() )
+        {
+            // These actions should be on the undo stack after text edit.
+            for (std::unique_ptr<SdrUndoAction>& pAction : mpImpl->maUndos)
+                GetModel()->AddUndo(pAction.release());
+            mpImpl->maUndos.clear();
+
             GetModel()->AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*this) );
+        }
 
         OutlinerParaObject* pNewText = nullptr;
         Paragraph* p1stPara = rOutl.GetParagraph( 0 );
@@ -1992,6 +2000,10 @@ WritingMode SdrTableObj::GetWritingMode() const
     return eWritingMode;
 }
 
+void SdrTableObj::AddUndo(SdrUndoAction* pUndo)
+{
+    mpImpl->maUndos.push_back(std::unique_ptr<SdrUndoAction>(pUndo));
+}
 
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
