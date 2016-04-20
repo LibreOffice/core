@@ -900,6 +900,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aEnd.X() -= 2 * nLayoutSign;
         aEnd.Y() -= 2;
 
+        // toggle the cursor off if its on to ensure the cursor invert
+        // background logic remains valid after the background is cleared on
+        // the next cursor flash
+        vcl::Cursor* pCrsr = pEditView->GetCursor();
+        const bool bVisCursor = pCrsr && pCrsr->IsVisible();
+        if (bVisCursor)
+            pCrsr->Hide();
+
         // set the correct mapmode
         Rectangle aBackground(aStart, aEnd);
         if (bIsTiledRendering)
@@ -916,6 +924,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // paint the editeng text
         pEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()))), &rDevice);
         rDevice.SetMapMode(MAP_PIXEL);
+
+        // restore the cursor it it was originally visible
+        if (bVisCursor)
+            pCrsr->Show();
     }
 
     if (pViewData->HasEditView(eWhich))
