@@ -989,7 +989,7 @@ void OTableController::alterColumns()
     // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-    ::std::map< OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
+    ::std::map< OUString,bool,::comphelper::UStringMixLess> aColumns(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
     ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
@@ -1002,14 +1002,14 @@ void OTableController::alterColumns()
             continue;
         if ( (*aIter)->IsReadOnly() )
         {
-            aColumns[pField->GetName()] = sal_True;
+            aColumns[pField->GetName()] = true;
             continue;
         }
 
         Reference<XPropertySet> xColumn;
         if ( xColumns->hasByName(pField->GetName()) )
         {
-            aColumns[pField->GetName()] = sal_True;
+            aColumns[pField->GetName()] = true;
             xColumns->getByName(pField->GetName()) >>= xColumn;
             OSL_ENSURE(xColumn.is(),"Column is null!");
 
@@ -1102,7 +1102,7 @@ void OTableController::alterColumns()
                 xAlter->alterColumnByIndex(nPos,xNewColumn);
                 if(xColumns->hasByName(pField->GetName()))
                 {   // ask for the append by name
-                    aColumns[pField->GetName()] = sal_True;
+                    aColumns[pField->GetName()] = true;
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
                         pField->copyColumnSettingsTo(xColumn);
@@ -1125,8 +1125,8 @@ void OTableController::alterColumns()
                         Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
                         OUString sName;
                         xNewColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                        aColumns[sName] = sal_True;
-                        aColumns[pField->GetName()] = sal_True;
+                        aColumns[sName] = true;
+                        aColumns[pField->GetName()] = true;
                         continue;
                     }
                 }
@@ -1149,7 +1149,7 @@ void OTableController::alterColumns()
             continue;
         if ( (*aIter)->IsReadOnly() )
         {
-            aColumns[pField->GetName()] = sal_True;
+            aColumns[pField->GetName()] = true;
             continue;
         }
 
@@ -1238,7 +1238,7 @@ void OTableController::alterColumns()
                 xAppend->appendByDescriptor(xColumn);
                 if(xColumns->hasByName(pField->GetName()))
                 {   // ask for the append by name
-                    aColumns[pField->GetName()] = sal_True;
+                    aColumns[pField->GetName()] = true;
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
                         pField->copyColumnSettingsTo(xColumn);
