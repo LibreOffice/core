@@ -150,7 +150,11 @@ public:
 
     bool VisitValueDecl(ValueDecl const * decl);
 
+    bool TraverseStaticAssertDecl(StaticAssertDecl * decl);
+
 private:
+    bool isFromCIncludeFile(SourceLocation spellingLocation) const;
+
     bool isInSpecialMainFile(SourceLocation spellingLocation) const;
 
     bool rewrite(SourceLocation location);
@@ -276,6 +280,43 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {
+                auto callLoc = compiler.getSourceManager().getSpellingLoc(
+                    compiler.getSourceManager().getImmediateMacroCallerLoc(
+                        loc));
+                if (!isFromCIncludeFile(callLoc)) {
+                    SourceLocation argLoc;
+                    if (compiler.getSourceManager().isMacroArgExpansion(
+                            expr->getLocStart(), &argLoc)
+                        //TODO: check its the complete (first) arg to the macro
+                        && (Lexer::getImmediateMacroName(
+                                argLoc, compiler.getSourceManager(),
+                                compiler.getLangOpts())
+                            == "CPPUNIT_ASSERT_EQUAL"))
+                    {
+                        // Ignore sal_False/True that are directly used as
+                        // arguments to CPPUNIT_ASSERT_EQUAL:
+                        return true;
+                    }
+                    bool b = name == "sal_True";
+                    if (rewriter != nullptr) {
+                        unsigned n = Lexer::MeasureTokenLength(
+                            callLoc, compiler.getSourceManager(),
+                            compiler.getLangOpts());
+                        if (StringRef(
+                                compiler.getSourceManager().getCharacterData(
+                                    callLoc),
+                                n)
+                            == name)
+                        {
+                            return replaceText(
+                                callLoc, n, b ? "true" : "false");
+                        }
+                    }
+                    report(
+                        DiagnosticsEngine::Warning,
+                        "use '%select{false|true}0' instead of '%1'", callLoc)
+                        << b << name << expr->getSourceRange();
+                }
                 return true;
             }
         }
@@ -576,6 +617,26 @@ bool SalBool::VisitValueDecl(ValueDecl const * decl) {
             << decl->getSourceRange();
     }
     return true;
+}
+
+bool SalBool::TraverseStaticAssertDecl(StaticAssertDecl * decl) {
+    // Ignore special code like
+    //
+    //   static_cast<sal_Bool>(true) == sal_True
+    //
+    // inside static_assert in cppu/source/uno/check.cxx:
+    return
+        (compiler.getSourceManager().getFilename(decl->getLocation())
+         == SRCDIR "/cppu/source/uno/check.cxx")
+        || RecursiveASTVisitor::TraverseStaticAssertDecl(decl);
+}
+
+bool SalBool::isFromCIncludeFile(SourceLocation spellingLocation) const {
+    return !compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+        && (StringRef(
+                compiler.getSourceManager().getPresumedLoc(spellingLocation)
+                .getFilename())
+            .endswith(".h"));
 }
 
 bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
