@@ -884,18 +884,8 @@ void View::SetMarkedOriginalSize()
             }
             else if( pObj->GetObjIdentifier() == OBJ_GRAF )
             {
-                const MapMode   aMap100( MAP_100TH_MM );
-                Size            aSize;
-
-                if ( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
-                    aSize = Application::GetDefaultDevice()->PixelToLogic( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefSize(), aMap100 );
-                else
-                {
-                    aSize = OutputDevice::LogicToLogic( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefSize(),
-                                                        static_cast< SdrGrafObj* >( pObj )->GetGrafPrefMapMode(),
-                                                        aMap100 );
-                }
-
+                const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
+                Size aSize = pSdrGrafObj->getOriginalSize( static_cast< SdrGrafObj* >(pObj) );
                 pUndoGroup->AddAction( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj ) );
                 Rectangle aRect( pObj->GetLogicRect() );
                 aRect.SetSize( aSize );
