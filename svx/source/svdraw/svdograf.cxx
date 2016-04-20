@@ -559,6 +559,23 @@ OUString SdrGrafObj::GetGrafStreamURL() const
     return pGraphic->GetUserData();
 }
 
+Size SdrGrafObj::getOriginalSize() const
+{
+    Size aSize;
+
+    if ( GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
+        aSize = Application::GetDefaultDevice()->PixelToLogic( GetGrafPrefSize(),
+                                                               GetModel()->GetScaleUnit() );
+    else
+    {
+        aSize = OutputDevice::LogicToLogic( GetGrafPrefSize(),
+                                            GetGrafPrefMapMode(),
+                                            GetModel()->GetScaleUnit() );
+    }
+
+    return aSize;
+}
+
 void SdrGrafObj::ForceSwapIn() const
 {
     if( mbIsPreview && pGraphic->HasUserData() )

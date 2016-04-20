@@ -143,6 +143,7 @@ public:
 
     void                    SetGrafStreamURL( const OUString& rGraphicStreamURL );
     OUString                GetGrafStreamURL() const;
+    Size                    getOriginalSize() const;
 
 private:
     void                    ForceSwapIn() const;
