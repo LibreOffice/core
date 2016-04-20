@@ -145,7 +145,7 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
     rInfo.Version = getStringValue(UPDATE_VERSION);
     rInfo.Description = getStringValue(UPDATE_DESCRIPTION);
 
-    sal_Bool isDirectDownload = sal_False;
+    sal_Bool isDirectDownload = false;
     m_aNameAccess.getValue(IS_DIRECT_DOWNLOAD) >>= isDirectDownload;
 
     rInfo.Sources.push_back( DownloadSource( isDirectDownload, getStringValue(DOWNLOAD_URL) ) );
@@ -253,7 +253,7 @@ UpdateCheckConfig::get(
 bool
 UpdateCheckConfig::isAutoCheckEnabled() const
 {
-    sal_Bool nValue = sal_False;
+    sal_Bool nValue = false;
     const_cast < UpdateCheckConfig *> (this)->getByName( AUTOCHECK_ENABLED ) >>= nValue;
     return nValue;
 }
@@ -261,7 +261,7 @@ UpdateCheckConfig::isAutoCheckEnabled() const
 bool
 UpdateCheckConfig::isAutoDownloadEnabled() const
 {
-    sal_Bool nValue = sal_False;
+    sal_Bool nValue = false;
     const_cast < UpdateCheckConfig *> (this)->getByName( AUTODOWNLOAD_ENABLED ) >>= nValue;
     return nValue;
 }
@@ -520,7 +520,7 @@ UpdateCheckConfig::commitChanges()
                 aChangesSet[i].Accessor >>= aString;
                 if( aString.endsWith(AUTOCHECK_ENABLED "']") )
                 {
-                    sal_Bool bEnabled = sal_False;
+                    sal_Bool bEnabled = false;
                     aChangesSet[i].Element >>= bEnabled;
                     m_rListener->autoCheckStatusChanged(bEnabled);
                 }
@@ -551,7 +551,7 @@ UpdateCheckConfig::hasPendingChanges(  ) throw (uno::RuntimeException, std::exce
     if( xChangesBatch.is() )
         return xChangesBatch->hasPendingChanges();
 
-    return sal_False;
+    return false;
 }
 
 uno::Sequence< util::ElementChange > SAL_CALL

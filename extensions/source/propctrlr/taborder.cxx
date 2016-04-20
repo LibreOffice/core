@@ -60,7 +60,7 @@ namespace pcr
         virtual sal_Int32 SAL_CALL getGroupCount() throw( RuntimeException, std::exception ) override {return 0;}
         virtual void SAL_CALL getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< XControlModel > >& /*Group*/, OUString& /*Name*/) throw( RuntimeException, std::exception ) override {}
         virtual void SAL_CALL getGroupByName(const OUString& /*Name*/, Sequence< Reference< XControlModel > >& /*Group*/) throw( RuntimeException, std::exception ) override {}
-        virtual sal_Bool SAL_CALL getGroupControl() throw( RuntimeException, std::exception ) override {return sal_False;} ;
+        virtual sal_Bool SAL_CALL getGroupControl() throw( RuntimeException, std::exception ) override {return false;} ;
         virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException, std::exception ) override {};
     };
 

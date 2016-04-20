@@ -296,7 +296,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     if (pParentComponent)
     {
         // not earlier because SetFocus() is triggered in setVisible()
-        pParentComponent->setVisible(sal_True);
+        pParentComponent->setVisible(true);
     }
 
     m_xDatMan->load();

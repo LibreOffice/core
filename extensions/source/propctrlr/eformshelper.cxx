@@ -614,7 +614,7 @@ namespace pcr
             OSL_ENSURE( xHelper.is(), "EFormsHelper::getModelElementUIName: invalid element or model!" );
             if ( xHelper.is() )
             {
-                OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( _rxElement, sal_True ) : xHelper->getBindingName( _rxElement, sal_True );
+                OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( _rxElement, true ) : xHelper->getBindingName( _rxElement, true );
                 Reference< xforms::XModel > xModel( xHelper, UNO_QUERY_THROW );
                 sUIName = composeModelElementUIName( xModel->getID(), sElementName );
             }
@@ -686,7 +686,7 @@ namespace pcr
                             xElement->setPropertyValue( PROPERTY_MODEL, makeAny( xModel ) );
                     }
 #endif
-                    OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( xElement, sal_True ) : xHelper->getBindingName( xElement, sal_True );
+                    OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( xElement, true ) : xHelper->getBindingName( xElement, true );
                     OUString sUIName = composeModelElementUIName( *pModelName, sElementName );
 
                     OSL_ENSURE( rMapUINameToElement.find( sUIName ) == rMapUINameToElement.end(), "EFormsHelper::getAllElementUINames: duplicate name!" );

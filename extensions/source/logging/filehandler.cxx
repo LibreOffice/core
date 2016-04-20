@@ -322,14 +322,14 @@ namespace logging
         MethodGuard aGuard( *this );
 
         if ( !impl_prepareFile_nothrow() )
-            return sal_False;
+            return false;
 
         OString sEntry;
         if ( !m_aHandlerHelper.formatForPublishing( _rRecord, sEntry ) )
-            return sal_False;
+            return false;
 
         impl_writeString_nothrow( sEntry );
-        return sal_True;
+        return true;
     }
 
     OUString SAL_CALL FileHandler::getImplementationName() throw(RuntimeException, std::exception)

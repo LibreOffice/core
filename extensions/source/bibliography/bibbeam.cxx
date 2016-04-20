@@ -154,8 +154,8 @@ namespace bib
                     m_xControlContainer->addControl("GridControl", m_xControl);
                     m_xGridWin.set(m_xControl, UNO_QUERY );
                     m_xDispatchProviderInterception.set(m_xControl, UNO_QUERY );
-                    m_xGridWin->setVisible( sal_True );
-                    m_xControl->setDesignMode( sal_True );
+                    m_xGridWin->setVisible( true );
+                    m_xControl->setDesignMode( true );
                     // initially switch on the design mode - switch it off _after_ loading the form
 
                     ::Size aSize = GetOutputSizePixel();

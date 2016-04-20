@@ -222,14 +222,14 @@ namespace logging
 
         OString sEntry;
         if ( !m_aHandlerHelper.formatForPublishing( _rRecord, sEntry ) )
-            return sal_False;
+            return false;
 
         if ( _rRecord.Level >= m_nThreshold )
             fprintf( stderr, "%s\n", sEntry.getStr() );
         else
             fprintf( stdout, "%s\n", sEntry.getStr() );
 
-        return sal_True;
+        return true;
     }
 
     OUString SAL_CALL ConsoleHandler::getImplementationName() throw(RuntimeException, std::exception)

@@ -472,11 +472,11 @@ namespace pcr
         {   // this means a "suspend" is to be "revoked"
             suspendPropertyHandlers_nothrow( false );
             // we ourself cannot revoke our suspend
-            return sal_False;
+            return false;
         }
 
         if ( !suspendAll_nothrow() )
-            return sal_False;
+            return false;
 
         // commit the editor's content
         if ( haveView() )
@@ -486,7 +486,7 @@ namespace pcr
         stopContainerWindowListening();
 
         // outtahere
-        return sal_True;
+        return true;
     }
 
 

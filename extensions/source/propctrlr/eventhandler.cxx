@@ -781,21 +781,21 @@ namespace pcr
 
         LineDescriptor aDescriptor;
 
-        aDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::TextField, sal_True );
+        aDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::TextField, true );
         Reference< XEventListener > xControlExtender = new PropertyControlExtender( aDescriptor.Control );
 
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         aDescriptor.DisplayName = rEvent.sDisplayName;
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
         aDescriptor.PrimaryButtonId = OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
-        aDescriptor.HasPrimaryButton = sal_True;
+        aDescriptor.HasPrimaryButton = true;
         aDescriptor.Category = "Events";
         return aDescriptor;
     }
 
     sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
-        return sal_False;
+        return false;
     }
 
     InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException, std::exception)
@@ -888,7 +888,7 @@ namespace pcr
 
     sal_Bool SAL_CALL EventHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException, std::exception)
     {
-        return sal_True;
+        return true;
     }
 
     Reference< XFrame > EventHandler::impl_getContextFrame_nothrow() const

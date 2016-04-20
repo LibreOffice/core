@@ -244,7 +244,7 @@ namespace pcr
         try
         {
             Reference< XModifiable > xDocumentModifiable( getContextDocument_throw(_rContext), UNO_QUERY_THROW );
-            xDocumentModifiable->setModified( sal_True );
+            xDocumentModifiable->setModified( true );
         }
         catch( const Exception& )
         {

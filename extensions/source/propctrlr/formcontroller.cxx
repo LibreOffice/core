@@ -190,7 +190,7 @@ namespace pcr
 
         getFastPropertyValue( rOldValue, nHandle );
         rConvertedValue = rValue;
-        return sal_True;
+        return true;
     }
 
 

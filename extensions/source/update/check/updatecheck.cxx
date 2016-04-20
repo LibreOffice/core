@@ -1330,7 +1330,7 @@ void UpdateCheck::handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdat
     {
         if( UPDATESTATE_NO_UPDATE_AVAIL == eState )
         {
-            xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(sal_False) );
+            xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(false) );
         }
         else
         {
@@ -1338,10 +1338,10 @@ void UpdateCheck::handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdat
             xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::makeAny(rUpdateHandler->getBubbleText(eState)) );
 
             if( ! suppressBubble && ( ! rUpdateHandler->isVisible() || rUpdateHandler->isMinimized() ) )
-                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( sal_True ) );
+                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( true ) );
 
             if( UPDATESTATE_CHECKING != eState )
-                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(sal_True) );
+                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(true) );
         }
     }
 }

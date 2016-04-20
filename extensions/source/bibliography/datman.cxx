@@ -688,7 +688,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             const OUString sType("Type");
             sal_Int32 nType = 0;
             bool bIsFormatted           = false;
-            sal_Bool bFormattedIsNumeric    = sal_True;
+            sal_Bool bFormattedIsNumeric    = true;
             xField->getPropertyValue(sType) >>= nType;
             switch(nType)
             {
@@ -708,7 +708,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                 case DataType::LONGVARCHAR:
                 case DataType::CHAR:
                 case DataType::CLOB:
-                    bFormattedIsNumeric = sal_False;
+                    bFormattedIsNumeric = false;
                     // _NO_ break !
                 default:
                     sCurrentModelType = "FormattedField";
@@ -884,7 +884,7 @@ void BibDataManager::setFilter(const OUString& rQuery)
         OUString aQuery = m_xParser->getFilter();
         Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
         xFormProps->setPropertyValue( "Filter", makeAny( aQuery ) );
-        xFormProps->setPropertyValue( "ApplyFilter", makeAny( sal_True ) );
+        xFormProps->setPropertyValue( "ApplyFilter", makeAny( true ) );
         reload();
     }
     catch (const Exception&)
@@ -1022,8 +1022,8 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
         }
         FeatureStateEvent aEvent;
         util::URL aURL;
-        aEvent.IsEnabled  = sal_True;
-        aEvent.Requery    = sal_False;
+        aEvent.IsEnabled  = true;
+        aEvent.Requery    = false;
         aEvent.FeatureDescriptor = getActiveDataTable();
 
         aEvent.State = makeAny( getDataSources() );
@@ -1369,7 +1369,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
                 xPropSet->setPropertyValue("StringItemList", aAny);
 
-                sal_Bool bTrue = sal_True;
+                sal_Bool bTrue = true;
                 aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
                 xPropSet->setPropertyValue( "Dropdown", aAny );
             }

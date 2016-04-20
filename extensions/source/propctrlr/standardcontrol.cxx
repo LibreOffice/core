@@ -500,11 +500,11 @@ namespace pcr
 
     Optional< double > SAL_CALL ONumericControl::getMinValue() throw (RuntimeException, std::exception)
     {
-        Optional< double > aReturn( sal_True, 0 );
+        Optional< double > aReturn( true, 0 );
 
         sal_Int64 minValue = getTypedControlWindow()->GetMin();
         if ( minValue == ::std::numeric_limits< sal_Int64 >::min() )
-            aReturn.IsPresent = sal_False;
+            aReturn.IsPresent = false;
         else
             aReturn.Value = (double)minValue;
 
@@ -523,11 +523,11 @@ namespace pcr
 
     Optional< double > SAL_CALL ONumericControl::getMaxValue() throw (RuntimeException, std::exception)
     {
-        Optional< double > aReturn( sal_True, 0 );
+        Optional< double > aReturn( true, 0 );
 
         sal_Int64 maxValue = getTypedControlWindow()->GetMax();
         if ( maxValue == ::std::numeric_limits< sal_Int64 >::max() )
-            aReturn.IsPresent = sal_False;
+            aReturn.IsPresent = false;
         else
             aReturn.Value = (double)maxValue;
 

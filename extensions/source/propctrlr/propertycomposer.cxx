@@ -483,7 +483,7 @@ namespace pcr
                     do
                     {
                         --loop;
-                        (*loop)->suspend( sal_False );
+                        (*loop)->suspend( false );
                     }
                     while ( loop != m_aSlaveHandlers.begin() );
                 }

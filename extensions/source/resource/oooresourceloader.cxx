@@ -290,12 +290,12 @@ namespace extensions { namespace resource
         ResourceTypePtr resourceType;
         sal_Int32 resourceId( 0 );
         if ( !impl_getResourceTypeAndId_nothrow( _key, resourceType, resourceId ) )
-            return sal_False;
+            return false;
 
         if ( !m_pResourceManager->IsAvailable( StringResourceAccess::getResourceType(), resourceId ) )
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
     Type SAL_CALL OpenOfficeResourceBundle::getElementType(  ) throw (RuntimeException, std::exception)

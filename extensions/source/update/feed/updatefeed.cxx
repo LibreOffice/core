@@ -489,7 +489,7 @@ UpdateInformationProvider::load(const OUString& rURL)
 
     // Disable KeepAlive in webdav - don't want millions of office
     // instances phone home & clog up servers
-    uno::Sequence< beans::NamedValue > aProps { { "KeepAlive", uno::makeAny(sal_False) } };
+    uno::Sequence< beans::NamedValue > aProps { { "KeepAlive", uno::makeAny(false) } };
 
     ucb::OpenCommandArgument3 aOpenArgument;
     aOpenArgument.Mode = ucb::OpenMode::DOCUMENT;
@@ -565,7 +565,7 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
                  * seems to evaluate expression always relative to the root node.
                  */
                 uno::Reference< xml::dom::XDocument > xUpdateXML = m_xDocumentBuilder->newDocument();
-                xUpdateXML->appendChild( xUpdateXML->importNode(xChildElement.get(), sal_True ) );
+                xUpdateXML->appendChild( xUpdateXML->importNode(xChildElement.get(), true ) );
                 return xUpdateXML->getDocumentElement();
             }
         }

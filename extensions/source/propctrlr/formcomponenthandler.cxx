@@ -1223,7 +1223,7 @@ namespace pcr
                     }
                 }
 
-                Optional< double > aValueNotPresent( sal_False, 0 );
+                Optional< double > aValueNotPresent( false, 0 );
                 aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
                     _rxControlFactory, nDigits, aValueNotPresent, aValueNotPresent, false );
 
@@ -1312,8 +1312,8 @@ namespace pcr
                 OTimeDurationControl* pControl = new OTimeDurationControl( impl_getDefaultDialogParent_nothrow(), WB_BORDER | WB_TABSTOP );
                 aDescriptor.Control = pControl;
 
-                pControl->setMinValue( Optional< double >( sal_True, 0 ) );
-                pControl->setMaxValue( Optional< double >( sal_True, ::std::numeric_limits< double >::max() ) );
+                pControl->setMinValue( Optional< double >( true, 0 ) );
+                pControl->setMaxValue( Optional< double >( true, ::std::numeric_limits< double >::max() ) );
             }
             break;
 
@@ -1325,8 +1325,8 @@ namespace pcr
             case PROPERTY_ID_BLOCKINCREMENT:
             case PROPERTY_ID_SPININCREMENT:
             {
-                Optional< double > aMinValue( sal_True, 0 );
-                Optional< double > aMaxValue( sal_True, 0x7FFFFFFF );
+                Optional< double > aMinValue( true, 0 );
+                Optional< double > aMaxValue( true, 0x7FFFFFFF );
 
                 if ( nPropId == PROPERTY_ID_MAXTEXTLEN ||  nPropId == PROPERTY_ID_BOUNDCOLUMN )
                     aMinValue.Value = -1;
@@ -1342,8 +1342,8 @@ namespace pcr
 
             case PROPERTY_ID_DECIMAL_ACCURACY:
             {
-                Optional< double > aMinValue( sal_True, 0 );
-                Optional< double > aMaxValue( sal_True, 20 );
+                Optional< double > aMinValue( true, 0 );
+                Optional< double > aMaxValue( true, 20 );
 
                 aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
                     _rxControlFactory, 0, aMinValue, aMaxValue, false );
@@ -1400,9 +1400,9 @@ namespace pcr
         }
 
         if ( !aDescriptor.PrimaryButtonId.isEmpty() )
-            aDescriptor.HasPrimaryButton = sal_True;
+            aDescriptor.HasPrimaryButton = true;
         if ( !aDescriptor.SecondaryButtonId.isEmpty() )
-            aDescriptor.HasSecondaryButton = sal_True;
+            aDescriptor.HasSecondaryButton = true;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
         aDescriptor.Category = bIsDataProperty ? OUString("Data") : OUString("General");
@@ -2019,7 +2019,7 @@ namespace pcr
         if ( _bSuspend )
             if ( m_xCommandDesigner.is() && m_xCommandDesigner->isActive() )
                 return m_xCommandDesigner->suspend();
-        return sal_True;
+        return true;
     }
 
 
@@ -2475,7 +2475,7 @@ namespace pcr
             break;
 
             default:
-                _out_rProperty.Control = _rxControlFactory->createPropertyControl( PropertyControlType::MultiLineTextField, sal_False );
+                _out_rProperty.Control = _rxControlFactory->createPropertyControl( PropertyControlType::MultiLineTextField, false );
                 break;
             }
         }
@@ -2571,7 +2571,7 @@ namespace pcr
         switch( nListSourceType )
         {
         case ListSourceType_VALUELIST:
-            _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::StringListField, sal_False );
+            _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::StringListField, false );
             break;
 
         case ListSourceType_TABLEFIELDS:
@@ -3208,12 +3208,12 @@ namespace pcr
                 const OUString* pToDisable = xCommandUI->getPropertiesToDisable();
                 while ( !pToDisable->isEmpty() )
                 {
-                    m_xBrowserUI->enablePropertyUIElements( *pToDisable++, PropertyLineElement::All, sal_False );
+                    m_xBrowserUI->enablePropertyUIElements( *pToDisable++, PropertyLineElement::All, false );
                 }
 
                 // but enable the browse button for the property itself - so it can be used to raise the query designer
                 OUString sPropertyName( impl_getPropertyNameFromId_nothrow( _nDesignForProperty ) );
-                m_xBrowserUI->enablePropertyUIElements( sPropertyName, PropertyLineElement::PrimaryButton, sal_True );
+                m_xBrowserUI->enablePropertyUIElements( sPropertyName, PropertyLineElement::PrimaryButton, true );
             }
         }
         catch( const Exception& )
@@ -3239,7 +3239,7 @@ namespace pcr
                 const OUString* pToEnable = xCommandUI->getPropertiesToDisable();
                 while ( !pToEnable->isEmpty() )
                 {
-                    m_xBrowserUI->enablePropertyUIElements( *pToEnable++, PropertyLineElement::All, sal_True );
+                    m_xBrowserUI->enablePropertyUIElements( *pToEnable++, PropertyLineElement::All, true );
                 }
             }
             catch( const Exception& )

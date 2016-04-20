@@ -499,8 +499,8 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                             break;
                         }
                     // initially switch on the design mode - switch it off _after_ loading the form
-                    xCtrWin->setVisible( sal_True );
-                    xControl->setDesignMode( sal_True );
+                    xCtrWin->setVisible( true );
+                    xControl->setDesignMode( true );
 
                     vcl::Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
                     pWindow->set_grid_top_attach(rLabel.get_grid_top_attach());

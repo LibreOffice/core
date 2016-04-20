@@ -454,8 +454,8 @@ namespace pcr
             case PROPERTY_ID_POSITIONX:
             case PROPERTY_ID_POSITIONY:
             {
-                Optional< double > aZero( sal_True, 0 );
-                Optional< double > aValueNotPresent( sal_False, 0 );
+                Optional< double > aZero( true, 0 );
+                Optional< double > aValueNotPresent( false, 0 );
                 aLineDesc.Control = PropertyHandlerHelper::createNumericControl(
                     _rxControlFactory, 2, bIsSize ? aZero : aValueNotPresent, aValueNotPresent, false );
 

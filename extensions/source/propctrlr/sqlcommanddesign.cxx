@@ -333,7 +333,7 @@ namespace pcr
                 // fallback: use the XCloseable::close (with all possible disadvantages)
                 Reference< XCloseable > xClose( m_xDesigner->getFrame(), UNO_QUERY );
                 if ( xClose.is() )
-                    xClose->close( sal_True );
+                    xClose->close( true );
             }
         }
         catch( const Exception& )
@@ -351,7 +351,7 @@ namespace pcr
         bool bAllow = true;
         try
         {
-            bAllow = m_xDesigner->suspend( sal_True );
+            bAllow = m_xDesigner->suspend( true );
         }
         catch( const Exception& )
         {

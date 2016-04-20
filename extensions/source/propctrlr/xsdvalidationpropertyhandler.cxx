@@ -302,8 +302,8 @@ namespace pcr
         // collect some information about the to-be-created control
         sal_Int16 nControlType = PropertyControlType::TextField;
         ::std::vector< OUString > aListEntries;
-        Optional< double > aMinValue( sal_False, 0 );
-        Optional< double > aMaxValue( sal_False, 0 );
+        Optional< double > aMinValue( false, 0 );
+        Optional< double > aMaxValue( false, 0 );
 
         switch ( nPropId )
         {
@@ -314,7 +314,7 @@ namespace pcr
 
             aDescriptor.PrimaryButtonId = UID_PROP_ADD_DATA_TYPE;
             aDescriptor.SecondaryButtonId = UID_PROP_REMOVE_DATA_TYPE;
-            aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
+            aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = true;
             aDescriptor.PrimaryButtonImageURL = "private:graphicrepository/extensions/res/buttonplus.png";
             aDescriptor.SecondaryButtonImageURL = "private:graphicrepository/extensions/res/buttonminus.png";
             break;
@@ -354,7 +354,7 @@ namespace pcr
             ::rtl::Reference< XSDDataType > xDataType( m_pHelper->getValidatingDataType() );
             sal_Int16 nTypeClass = xDataType.is() ? xDataType->classify() : DataTypeClass::STRING;
 
-            aMinValue.IsPresent = aMaxValue.IsPresent = sal_True;
+            aMinValue.IsPresent = aMaxValue.IsPresent = true;
             aMinValue.Value = DataTypeClass::gYear == nTypeClass ? 0 : 1;
             aMaxValue.Value = ::std::numeric_limits< sal_Int32 >::max();
             if ( DataTypeClass::gMonth == nTypeClass )
@@ -407,7 +407,7 @@ namespace pcr
             aDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue, false );
             break;
         default:
-            aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
+            aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, false );
             break;
         }
 

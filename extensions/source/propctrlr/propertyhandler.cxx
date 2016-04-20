@@ -239,7 +239,7 @@ namespace pcr
 
     sal_Bool SAL_CALL PropertyHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException, std::exception)
     {
-        return sal_True;
+        return true;
     }
 
     IMPLEMENT_FORWARD_XCOMPONENT( PropertyHandler, PropertyHandler_Base )
@@ -335,7 +335,7 @@ namespace pcr
     {
         Reference< XModifiable > xModifiable( impl_getContextDocument_nothrow(), UNO_QUERY );
         if ( xModifiable.is() )
-            xModifiable->setModified( sal_True );
+            xModifiable->setModified( true );
     }
 
     bool PropertyHandler::impl_componentHasProperty_throw( const OUString& _rPropName ) const
