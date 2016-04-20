@@ -260,7 +260,7 @@ inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal
 {
     if (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass)
     {
-        value = (* static_cast< const sal_Bool * >( rAny.pData ) != sal_False);
+        value = bool(* static_cast< const sal_Bool * >( rAny.pData ));
         return true;
     }
     return false;
@@ -270,7 +270,7 @@ template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value )
 {
     return (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass &&
-            (value != sal_False) == (* static_cast< const sal_Bool * >( rAny.pData ) != sal_False));
+            bool(value) == bool(* static_cast< const sal_Bool * >( rAny.pData )));
 }
 
 
@@ -279,8 +279,7 @@ inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
 {
     if (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN)
     {
-        value = *static_cast< sal_Bool const * >(
-            rAny.pData ) != sal_False;
+        value = *static_cast< sal_Bool const * >( rAny.pData );
         return true;
     }
     return false;
@@ -292,8 +291,7 @@ inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
 {
     return (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN &&
             (value ==
-             (*static_cast< sal_Bool const * >( rAny.pData )
-              != sal_False)));
+             bool(*static_cast< sal_Bool const * >( rAny.pData ))));
 }
 
 // byte

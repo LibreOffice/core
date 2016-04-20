@@ -381,12 +381,12 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-orientation", OUString::number( (float)_descr.Orientation ) );
         }
         // dialog:font-kerning %boolean; #IMPLIED
-        if ((def_descr.Kerning != sal_False) != (_descr.Kerning != sal_False))
+        if (bool(def_descr.Kerning) != bool(_descr.Kerning))
         {
             pStyle->addBoolAttr( XMLNS_DIALOGS_PREFIX ":font-kerning", _descr.Kerning );
         }
         // dialog:font-wordlinemode %boolean; #IMPLIED
-        if ((def_descr.WordLineMode != sal_False) != (_descr.WordLineMode != sal_False))
+        if (bool(def_descr.WordLineMode) != bool(_descr.WordLineMode))
         {
             pStyle->addBoolAttr( XMLNS_DIALOGS_PREFIX ":font-wordlinemode", _descr.WordLineMode );
         }
@@ -1254,8 +1254,8 @@ inline bool equalFont( Style const & style1, Style const & style2 )
         f1.Underline == f2.Underline &&
         f1.Strikeout == f2.Strikeout &&
         f1.Orientation == f2.Orientation &&
-        (f1.Kerning != sal_False) == (f2.Kerning != sal_False) &&
-        (f1.WordLineMode != sal_False) == (f2.WordLineMode != sal_False) &&
+        bool(f1.Kerning) == bool(f2.Kerning) &&
+        bool(f1.WordLineMode) == bool(f2.WordLineMode) &&
         f1.Type == f2.Type &&
         style1._fontRelief == style2._fontRelief &&
         style1._fontEmphasisMark == style2._fontEmphasisMark

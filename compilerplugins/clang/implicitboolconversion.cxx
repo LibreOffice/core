@@ -110,6 +110,11 @@ bool isMatchingBool(Expr const * expr, Expr const * comparisonExpr) {
         || areSameTypedef(expr->getType(), comparisonExpr->getType());
 }
 
+bool isSalBool(QualType type) {
+    auto t = type->getAs<TypedefType>();
+    return t != nullptr && t->getDecl()->getName() == "sal_Bool";
+}
+
 bool isBoolExpr(Expr const * expr) {
     if (isBool(expr)) {
         return true;
@@ -836,6 +841,14 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
             == expr->getType().IgnoreParens())
         && isBool(sub->getSubExpr()->IgnoreParenImpCasts()))
     {
+        // Ignore "normalizing cast" bool(b) from sal_Bool b to bool, then
+        // implicitly cast back again to sal_Bool:
+        if (dyn_cast<CXXFunctionalCastExpr>(sub) != nullptr
+            && sub->getType()->isBooleanType() && isSalBool(expr->getType())
+            && isSalBool(sub->getSubExpr()->IgnoreParenImpCasts()->getType()))
+        {
+            return true;
+        }
         report(
             DiagnosticsEngine::Warning,
             "explicit conversion (%0) from %1 to %2 implicitly cast back to %3",
