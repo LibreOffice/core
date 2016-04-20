@@ -1028,7 +1028,7 @@ MenuSaveInData::MenuSaveInData(
     try
     {
         OUString url( ITEM_MENUBAR_URL  );
-        m_xMenuSettings = GetConfigManager()->getSettings( url, sal_False );
+        m_xMenuSettings = GetConfigManager()->getSettings( url, false );
     }
     catch ( container::NoSuchElementException& )
     {
@@ -1335,7 +1335,7 @@ MenuSaveInData::Reset()
     try
     {
         m_xMenuSettings = GetConfigManager()->getSettings(
-            m_aMenuResourceURL, sal_False );
+            m_aMenuResourceURL, false );
     }
     catch ( container::NoSuchElementException& )
     {
@@ -1414,7 +1414,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
             css::uno::Reference< css::container::XIndexAccess > xPopupMenu;
             try
             {
-                xPopupMenu = GetConfigManager()->getSettings( aUrl, sal_False );
+                xPopupMenu = GetConfigManager()->getSettings( aUrl, false );
             }
             catch ( const css::uno::Exception& )
             {}
@@ -1463,7 +1463,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
             try
             {
                 if ( aMenuInfo.find( aUrl ) == aMenuInfo.end() )
-                    xPopupMenu = xParentCfgMgr->getSettings( aUrl, sal_False );
+                    xPopupMenu = xParentCfgMgr->getSettings( aUrl, false );
             }
             catch ( const css::uno::Exception& )
             {}
@@ -3939,7 +3939,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             try
             {
                 uno::Reference< container::XIndexAccess > xToolbarSettings =
-                    GetConfigManager()->getSettings( url, sal_False );
+                    GetConfigManager()->getSettings( url, false );
 
                 if ( uiname.isEmpty() )
                 {
@@ -4027,7 +4027,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                     try
                     {
                         uno::Reference< container::XIndexAccess > xToolbarSettings =
-                            xParentCfgMgr->getSettings( url, sal_False );
+                            xParentCfgMgr->getSettings( url, false );
 
                         if ( uiname.isEmpty() )
                         {
@@ -4362,11 +4362,11 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
         uno::Reference< container::XIndexAccess > xToolbarSettings;
         if ( IsDocConfig() )
         {
-            xToolbarSettings = GetParentConfigManager()->getSettings( url, sal_False );
+            xToolbarSettings = GetParentConfigManager()->getSettings( url, false );
             pToolbar->SetParentData();
         }
         else
-            xToolbarSettings = GetConfigManager()->getSettings( url, sal_False );
+            xToolbarSettings = GetConfigManager()->getSettings( url, false );
 
         LoadToolbar( xToolbarSettings, pToolbar );
 
@@ -5219,7 +5219,7 @@ IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, ImportHdl, Button *, void)
     {
         xController->enableControl(
             css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK,
-            sal_False);
+            false);
     }
 
     aImportDialog.SetCurrentFilter(

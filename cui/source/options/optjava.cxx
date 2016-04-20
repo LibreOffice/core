@@ -321,7 +321,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
         if ( !areListsEqual( aParameterList, m_pParamDlg->GetParameters() ) )
         {
             aParameterList = m_pParamDlg->GetParameters();
-            sal_Bool bRunning = sal_False;
+            sal_Bool bRunning = false;
             javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
         if ( m_pPathDlg->GetClassPath() != sClassPath )
         {
             sClassPath = m_pPathDlg->GetClassPath();
-            sal_Bool bRunning = sal_False;
+            sal_Bool bRunning = false;
             javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
@@ -704,7 +704,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
             {
                 if (pSelectedJava == nullptr || !jfw_areEqualJavaInfo( pInfo, pSelectedJava ) )
                 {
-                    sal_Bool bRunning = sal_False;
+                    sal_Bool bRunning = false;
                     eErr = jfw_isVMRunning( &bRunning );
                     DBG_ASSERT( JFW_E_NONE == eErr,
                                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_isVMRunning" );
@@ -726,7 +726,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         }
     }
 
-    sal_Bool bEnabled = sal_False;
+    sal_Bool bEnabled = false;
     eErr = jfw_getEnabled( &bEnabled );
     DBG_ASSERT( JFW_E_NONE == eErr,
                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" );
@@ -751,10 +751,10 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     SvtMiscOptions aMiscOpt;
 
 #if HAVE_FEATURE_JAVA
-    sal_Bool bEnabled = sal_False;
+    sal_Bool bEnabled = false;
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
     if ( eErr != JFW_E_NONE )
-        bEnabled = sal_False;
+        bEnabled = false;
     m_pJavaEnableCB->Check( bEnabled );
     EnableHdl_Impl(m_pJavaEnableCB);
 #else

@@ -677,7 +677,7 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
 
         if ( m_pSavePasswordsCB->IsChecked() )
         {
-            bool bOldValue = xMasterPasswd->allowPersistentStoring( sal_True );
+            bool bOldValue = xMasterPasswd->allowPersistentStoring( true );
             xMasterPasswd->removeMasterPassword();
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
@@ -700,7 +700,7 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
 
             if( RET_YES == nRet )
             {
-                xMasterPasswd->allowPersistentStoring( sal_False );
+                xMasterPasswd->allowPersistentStoring( false );
                 m_pMasterPasswordCB->Check();
                 m_pMasterPasswordPB->Enable( false );
                 m_pMasterPasswordCB->Enable( false );

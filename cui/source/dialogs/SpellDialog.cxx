@@ -639,8 +639,8 @@ IMPL_LINK_TYPED( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
                 pSpellErrorDescription->xGrammarChecker->ignoreRule( pSpellErrorDescription->sRuleId,
                     pSpellErrorDescription->aLocale );
                 // refresh the layout (workaround to launch a dictionary event)
-                aXDictionary->setActive(sal_False);
-                aXDictionary->setActive(sal_True);
+                aXDictionary->setActive(false);
+                aXDictionary->setActive(true);
             }
         }
         catch( const uno::Exception& )
@@ -829,7 +829,7 @@ int SpellDialog::InitUserDicts()
         // words could be added.
         Reference< XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
         if (xDic.is())
-            xDic->setActive( sal_True );
+            xDic->setActive( true );
 
         pImpl->aDics = xDicList->getDictionaries();
     }

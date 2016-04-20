@@ -2284,7 +2284,7 @@ void ExtensionsTabPage::ActivatePage()
 
     if ( m_xPage.is() )
     {
-        m_xPage->setVisible( sal_True );
+        m_xPage->setVisible( true );
         m_bIsWindowHidden = false;
     }
 }
@@ -2294,7 +2294,7 @@ void ExtensionsTabPage::DeactivatePage()
     TabPage::DeactivatePage();
 
     if ( m_xPage.is() )
-        m_xPage->setVisible( sal_False );
+        m_xPage->setVisible( false );
 }
 
 

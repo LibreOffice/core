@@ -355,13 +355,13 @@ IMPL_LINK_NOARG_TYPED( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, void
         {
             uno::Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
 
-            xProp->setIsHyphAuto( sal_True );
+            xProp->setIsHyphAuto( true );
 
             m_bBusy = true;
             ContinueHyph_Impl( /*m_nHyphPos*/m_nOldPos );
             m_bBusy = false;
 
-            xProp->setIsHyphAuto( sal_False );
+            xProp->setIsHyphAuto( false );
         }
         catch (uno::Exception &e)
         {

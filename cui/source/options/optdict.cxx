@@ -169,7 +169,7 @@ IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
             lang::Locale aLocale( LanguageTag::convertToLocale(nLang) );
             OUString aURL( linguistic::GetWritableDictionaryURL( sDict ) );
             xNewDic.set( xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
-            xNewDic->setActive( sal_True );
+            xNewDic->setActive( true );
         }
         DBG_ASSERT(xNewDic.is(), "NULL pointer");
     }

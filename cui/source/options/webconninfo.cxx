@@ -190,7 +190,7 @@ void WebConnectionInfoDialog::FillPasswordList()
             m_nPos = nCount;
 
             uno::Sequence< OUString > aUrls
-                = xMasterPasswd->getUrls( sal_True /* OnlyPersistent */ );
+                = xMasterPasswd->getUrls( true /* OnlyPersistent */ );
 
             for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             {
@@ -246,7 +246,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, RemoveAllPasswordsHdl, Button*, v
         xPasswdContainer->removeAllPersistent();
 
         uno::Sequence< OUString > aUrls
-            = xPasswdContainer->getUrls( sal_True /* OnlyPersistent */ );
+            = xPasswdContainer->getUrls( true /* OnlyPersistent */ );
         for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             xPasswdContainer->removeUrl( aUrls[ nURLIdx ] );
 

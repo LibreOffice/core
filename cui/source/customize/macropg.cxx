@@ -375,7 +375,7 @@ bool _SvxMacroTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
             // in principle this should not be necessary (see issue ??)
             if(m_xModifiable.is())
             {
-                m_xModifiable->setModified( sal_True );
+                m_xModifiable->setModified( true );
             }
         }
     }
@@ -419,7 +419,7 @@ void _SvxMacroTabPage::Reset( const SfxItemSet* )
                 // call setModified(true)
                 if(m_xModifiable.is())
                 {
-                    m_xModifiable->setModified( sal_True );
+                    m_xModifiable->setModified( true );
                 }
             }
     }
