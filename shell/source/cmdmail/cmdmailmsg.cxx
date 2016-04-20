@@ -196,27 +196,27 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     MutexGuard aGuard( m_aMutex );
 
     if( aName == "body" &&  !m_aBody.isEmpty() )
-        return sal_True;
+        return true;
 
     if( aName == "from" &&  !m_aOriginator.isEmpty() )
-        return sal_True;
+        return true;
 
     else if( aName == "to" &&  !m_aRecipient.isEmpty() )
-        return sal_True;
+        return true;
 
     else if( aName == "cc" &&  m_CcRecipients.getLength() )
-        return sal_True;
+        return true;
 
     else if( aName == "bcc" &&  m_BccRecipients.getLength() )
-        return sal_True;
+        return true;
 
     else if( aName == "subject" &&  !m_aSubject.isEmpty() )
-        return sal_True;
+        return true;
 
     else if( aName == "attachment" &&  m_Attachments.getLength() )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 Type SAL_CALL CmdMailMsg::getElementType(  )
