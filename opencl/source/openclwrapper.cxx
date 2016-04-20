@@ -705,7 +705,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         osl::FileBase::getSystemPathFromFileURL(url,path);
         OString dsFileName = rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8);
         ds_device pSelectedDevice = getDeviceSelection(dsFileName.getStr(), bForceEvaluation);
-        pDeviceId = pSelectedDevice.oclDeviceID;
+        pDeviceId = pSelectedDevice.aDeviceID;
 
     }
 
