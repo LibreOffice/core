@@ -416,6 +416,8 @@ public:
     virtual int getPart() SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::getPartName().
     virtual OUString getPartName(int nPart) SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::getPartHash().
+    virtual OUString getPartHash(int nPart) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::registerCallback().

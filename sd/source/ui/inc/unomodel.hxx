@@ -240,6 +240,8 @@ public:
     virtual int  getPart() SAL_OVERRIDE;
     virtual int  getParts() SAL_OVERRIDE;
     virtual OUString getPartName( int nPart ) SAL_OVERRIDE;
+    virtual OUString getPartHash( int nPart ) SAL_OVERRIDE;
+
     virtual void setPartMode( int nPartMode ) SAL_OVERRIDE;
 
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().

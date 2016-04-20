@@ -292,6 +292,8 @@ public:
     void        SetLink( sal_uInt8 nMode, const OUString& rDoc, const OUString& rFlt,
                         const OUString& rOpt, const OUString& rTab, sal_uLong nRefreshDelay );
 
+    sal_Int64   GetHashCode () const;
+
     void        GetName( OUString& rName ) const;
     void        SetName( const OUString& rNewName );
 
