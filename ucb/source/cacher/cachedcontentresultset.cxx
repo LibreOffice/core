@@ -230,7 +230,7 @@ void SAL_CALL CachedContentResultSet::CCRS_Cache
         nDiff *= -1;
     Sequence< sal_Bool >* pMappedReminder = getMappedReminder();
     if( nDiff < pMappedReminder->getLength() )
-        (*pMappedReminder)[nDiff] = sal_True;
+        (*pMappedReminder)[nDiff] = true;
 }
 
 bool SAL_CALL CachedContentResultSet::CCRS_Cache
@@ -261,7 +261,7 @@ Sequence< sal_Bool >* SAL_CALL CachedContentResultSet::CCRS_Cache
         sal_Int32 nCount = m_pResult->Rows.getLength();
         m_pMappedReminder = new Sequence< sal_Bool >( nCount );
         for( ;nCount; nCount-- )
-            (*m_pMappedReminder)[nCount] = sal_False;
+            (*m_pMappedReminder)[nCount] = false;
     }
     return m_pMappedReminder;
 }
@@ -861,7 +861,7 @@ void SAL_CALL CachedContentResultSet
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aEvt.Source =  static_cast< XPropertySet * >( this );
-        aEvt.Further = sal_False;
+        aEvt.Further = false;
         aEvt.OldValue <<= nOld;
         aEvt.NewValue <<= nNew;
 
@@ -884,7 +884,7 @@ void SAL_CALL CachedContentResultSet
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aEvt.Source =  static_cast< XPropertySet * >( this );
-        aEvt.Further = sal_False;
+        aEvt.Further = false;
         aEvt.OldValue <<= bOld;
         aEvt.NewValue <<= bNew;
 
@@ -1043,7 +1043,7 @@ void SAL_CALL CachedContentResultSet
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             aEvt.Source =  static_cast< XPropertySet * >( this );
             aEvt.PropertyName = aPropertyName;
-            aEvt.Further = sal_False;
+            aEvt.Further = false;
             aEvt.PropertyHandle = m_pMyPropSetInfo->
                                     m_nFetchDirectionPropertyHandle;
             aEvt.OldValue <<= m_nFetchDirection;
@@ -1076,7 +1076,7 @@ void SAL_CALL CachedContentResultSet
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             aEvt.Source =  static_cast< XPropertySet * >( this );
             aEvt.PropertyName = aPropertyName;
-            aEvt.Further = sal_False;
+            aEvt.Further = false;
             aEvt.PropertyHandle = m_pMyPropSetInfo->
                                     m_nFetchSizePropertyHandle;
             aEvt.OldValue <<= m_nFetchSize;
@@ -1187,7 +1187,7 @@ void SAL_CALL CachedContentResultSet
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = sal_False;
+    aEvt.Further = false;
 
 
     if( CCRS_PropertySetInfo
@@ -1254,7 +1254,7 @@ void SAL_CALL CachedContentResultSet
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = sal_False;
+    aEvt.Further = false;
 
     impl_notifyVetoableChangeListeners( aEvt );
 }
@@ -1352,7 +1352,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     ReacquireableGuard aGuard( m_aMutex );
     //after last
     if( m_bAfterLast )
-        return sal_False;
+        return false;
     //last
     aGuard.clear();
     if( isLast() )
@@ -1360,14 +1360,14 @@ sal_Bool SAL_CALL CachedContentResultSet
         aGuard.reacquire();
         m_nRow++;
         m_bAfterLast = true;
-        return sal_False;
+        return false;
     }
     aGuard.reacquire();
     //known valid position
     if( impl_isKnownValidPosition( m_nRow + 1 ) )
     {
         m_nRow++;
-        return sal_True;
+        return true;
     }
 
     //unknown position
@@ -1396,20 +1396,20 @@ sal_Bool SAL_CALL CachedContentResultSet
     ReacquireableGuard aGuard( m_aMutex );
     //before first ?:
     if( !m_bAfterLast && !m_nRow )
-        return sal_False;
+        return false;
     //first ?:
     if( !m_bAfterLast && m_nKnownCount && m_nRow == 1 )
     {
         m_nRow--;
         m_bAfterLast = false;
-        return sal_False;
+        return false;
     }
     //known valid position ?:
     if( impl_isKnownValidPosition( m_nRow - 1 ) )
     {
         m_nRow--;
         m_bAfterLast = false;
-        return sal_True;
+        return true;
     }
     //unknown position:
     sal_Int32 nRow = m_nRow;
@@ -1442,7 +1442,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( !m_xResultSetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
-        return sal_False;
+        return false;
     }
     if( row < 0 )
     {
@@ -1503,11 +1503,11 @@ sal_Bool SAL_CALL CachedContentResultSet
         {
             m_nRow = m_nKnownCount + 1;
             m_bAfterLast = true;
-            return sal_False;
+            return false;
         }
         m_nRow = row;
         m_bAfterLast = false;
-        return sal_True;
+        return true;
     }
     //unknown new position:
     aGuard.clear();
@@ -1558,7 +1558,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         throw SQLException();
 
     if( !rows )
-        return sal_True;
+        return true;
 
     sal_Int32 nNewRow = m_nRow + rows;
         if( nNewRow < 0 )
@@ -1568,7 +1568,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     {
         m_nRow = nNewRow;
         m_bAfterLast = false;
-        return sal_True;
+        return true;
     }
     else
     {
@@ -1577,13 +1577,13 @@ sal_Bool SAL_CALL CachedContentResultSet
         {
             m_bAfterLast = false;
             m_nRow = 0;
-            return sal_False;
+            return false;
         }
         if( m_bFinalCount && nNewRow > m_nKnownCount )
         {
             m_bAfterLast = true;
             m_nRow = m_nKnownCount + 1;
-            return sal_False;
+            return false;
         }
         //unknown new position:
         aGuard.clear();
@@ -1613,13 +1613,13 @@ sal_Bool SAL_CALL CachedContentResultSet
     {
         m_nRow = 1;
         m_bAfterLast = false;
-        return sal_True;
+        return true;
     }
     if( impl_isKnownInvalidPosition( 1 ) )
     {
         m_nRow = 1;
         m_bAfterLast = false;
-        return sal_False;
+        return false;
     }
     //unknown position
     aGuard.clear();
@@ -1654,7 +1654,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( !m_xResultSetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
-        return sal_False;
+        return false;
     }
     aGuard.clear();
 
@@ -1723,16 +1723,16 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     ReacquireableGuard aGuard( m_aMutex );
     if( !m_bAfterLast )
-        return sal_False;
+        return false;
     if( m_nKnownCount )
         return m_bAfterLast;
     if( m_bFinalCount )
-        return sal_False;
+        return false;
 
     if( !m_xResultSetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
-        return sal_False;
+        return false;
     }
     aGuard.clear();
 
@@ -1756,18 +1756,18 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     ReacquireableGuard aGuard( m_aMutex );
     if( m_bAfterLast )
-        return sal_False;
+        return false;
     if( m_nRow )
-        return sal_False;
+        return false;
     if( m_nKnownCount )
         return !m_nRow;
     if( m_bFinalCount )
-        return sal_False;
+        return false;
 
     if( !m_xResultSetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
-        return sal_False;
+        return false;
     }
     aGuard.clear();
 
@@ -1796,13 +1796,13 @@ sal_Bool SAL_CALL CachedContentResultSet
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_bAfterLast )
-            return sal_False;
+            return false;
         if( m_nRow != 1 )
-            return sal_False;
+            return false;
         if( m_nKnownCount )
             return m_nRow == 1;
         if( m_bFinalCount )
-            return sal_False;
+            return false;
 
         nRow = m_nRow;
         xResultSetOrigin = m_xResultSetOrigin;
@@ -1813,7 +1813,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         if( applyPositionToOrigin( nRow ) )
             return xResultSetOrigin->isFirst();
         else
-            return sal_False;
+            return false;
     }
 }
 
@@ -1830,9 +1830,9 @@ sal_Bool SAL_CALL CachedContentResultSet
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_bAfterLast )
-            return sal_False;
+            return false;
         if( m_nRow < m_nKnownCount )
-            return sal_False;
+            return false;
         if( m_bFinalCount )
             return m_nKnownCount && m_nRow == m_nKnownCount;
 
@@ -1845,7 +1845,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         if( applyPositionToOrigin( nRow ) )
             return xResultSetOrigin->isLast();
         else
-            return sal_False;
+            return false;
     }
 }
 
@@ -1885,7 +1885,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     impl_EnsureNotDisposed();
 
     //the ContentResultSet is static and will not change
-    return sal_False;
+    return false;
 }
 //virtual
 sal_Bool SAL_CALL CachedContentResultSet
@@ -1896,7 +1896,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     impl_EnsureNotDisposed();
 
     //the ContentResultSet is static and will not change
-    return sal_False;
+    return false;
 }
 
 //virtual
@@ -1908,7 +1908,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     impl_EnsureNotDisposed();
 
     //the ContentResultSet is static and will not change
-    return sal_False;
+    return false;
 }
 
 //virtual
@@ -1941,7 +1941,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         if( !m_xRowOrigin.is() )
         {
             OSL_FAIL( "broadcaster was disposed already" );
-            return sal_False;
+            return false;
         }
     }
     return m_xRowOrigin->wasNull();

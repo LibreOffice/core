@@ -466,7 +466,7 @@ sal_Bool SAL_CALL PropertySetRegistry::hasElements()
     if ( xElemAccess.is() )
         return xElemAccess->hasElements();
 
-    return sal_False;
+    return false;
 }
 
 
@@ -531,7 +531,7 @@ sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
         return xNameAccess->hasByName( aName );
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -999,7 +999,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 aArguments[ 0 ] <<= aProperty;
 
                 aProperty.Name = CFGPROPERTY_LAZYWRITE;
-                aProperty.Value <<= sal_True;
+                aProperty.Value <<= true;
                 aArguments[ 1 ] <<= aProperty;
 
                 m_pImpl->m_bTriedToGetRootWriteAccess = true;
@@ -1275,7 +1275,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                         aEvt.Source         = static_cast<OWeakObject*>(this);
                         aEvt.PropertyName   = aPropertyName;
                         aEvt.PropertyHandle = nHandle;
-                        aEvt.Further        = sal_False;
+                        aEvt.Further        = false;
                         aEvt.OldValue       = aOldValue;
                         aEvt.NewValue       = aValue;
 
@@ -2001,7 +2001,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                             aEvt.Source         = static_cast<OWeakObject*>(this);
                             aEvt.PropertyName   = rNewValue.Name;
                             aEvt.PropertyHandle = rNewValue.Handle;
-                            aEvt.Further        = sal_False;
+                            aEvt.Further        = false;
                             aEvt.OldValue       = aOldValue;
                             aEvt.NewValue       = rNewValue.Value;
 
@@ -2401,7 +2401,7 @@ sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
         return xRootHierNameAccess->hasByHierarchicalName( aFullPropName );
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

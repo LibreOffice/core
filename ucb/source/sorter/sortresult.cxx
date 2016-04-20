@@ -302,7 +302,7 @@ sal_Bool SAL_CALL SortedResultSet::next()
             mnCurEntry = mnCount + 1;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -310,9 +310,9 @@ sal_Bool SAL_CALL SortedResultSet::isBeforeFirst()
     throw ( SQLException, RuntimeException, std::exception )
 {
     if ( mnCurEntry )
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
 
@@ -320,9 +320,9 @@ sal_Bool SAL_CALL SortedResultSet::isAfterLast()
     throw ( SQLException, RuntimeException, std::exception )
 {
     if ( mnCurEntry > mnCount )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -330,9 +330,9 @@ sal_Bool SAL_CALL SortedResultSet::isFirst()
     throw ( SQLException, RuntimeException, std::exception )
 {
     if ( mnCurEntry == 1 )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -340,9 +340,9 @@ sal_Bool SAL_CALL SortedResultSet::isLast()
     throw ( SQLException, RuntimeException, std::exception )
 {
     if ( mnCurEntry == mnCount )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -378,7 +378,7 @@ sal_Bool SAL_CALL SortedResultSet::first()
     else
     {
         mnCurEntry = 0;
-        return sal_False;
+        return false;
     }
 }
 
@@ -397,7 +397,7 @@ sal_Bool SAL_CALL SortedResultSet::last()
     else
     {
         mnCurEntry = 0;
-        return sal_False;
+        return false;
     }
 }
 
@@ -452,7 +452,7 @@ sal_Bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
         else
         {
             mnCurEntry = mnCount + 1;
-            return sal_False;
+            return false;
         }
     }
     else if ( row == 0 )
@@ -470,7 +470,7 @@ sal_Bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
         else
         {
             mnCurEntry = 0;
-            return sal_False;
+            return false;
         }
     }
 }
@@ -508,19 +508,19 @@ sal_Bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
     }
 
     if ( rows == 0 )
-        return sal_True;
+        return true;
 
     sal_Int32 nTmp = mnCurEntry + rows;
 
     if ( nTmp <= 0 )
     {
         mnCurEntry = 0;
-        return sal_False;
+        return false;
     }
     else if ( nTmp > mnCount )
     {
         mnCurEntry = mnCount + 1;
-        return sal_False;
+        return false;
     }
     else
     {
@@ -560,7 +560,7 @@ sal_Bool SAL_CALL SortedResultSet::previous()
     else
         mnCurEntry = 0;
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1430,7 +1430,7 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
             PropertyChangeEvent aEvt;
 
             aEvt.PropertyName = "RowCount";
-            aEvt.Further = sal_False;
+            aEvt.Further = false;
             aEvt.PropertyHandle = -1;
             aEvt.OldValue <<= nOldCount;
             aEvt.NewValue <<= GetCount();
@@ -1442,7 +1442,7 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
             if ( (aRet >>= bIsFinal) && bIsFinal != bWasFinal )
             {
                 aEvt.PropertyName = aName;
-                aEvt.Further = sal_False;
+                aEvt.Further = false;
                 aEvt.PropertyHandle = -1;
                 aEvt.OldValue <<= bWasFinal;
                 aEvt.NewValue <<= bIsFinal;
@@ -1974,11 +1974,11 @@ SRSPropertySetInfo::hasPropertyByName( const OUString& Name )
     throw( RuntimeException, std::exception )
 {
     if ( Name == "RowCount" )
-        return sal_True;
+        return true;
     else if ( Name == "IsRowCountFinal" )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

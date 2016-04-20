@@ -1068,7 +1068,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-    aEvent.Further        = sal_False;
+    aEvent.Further        = false;
 //    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
 //    aEvent.OldValue       =
@@ -1785,7 +1785,7 @@ void HierarchyContent::transfer(
             aChildId += rResult.getName();
 
             ucb::TransferInfo aInfo;
-            aInfo.MoveData  = sal_False;
+            aInfo.MoveData  = false;
             aInfo.NewTitle.clear();
             aInfo.SourceURL = aChildId;
             aInfo.NameClash = rInfo.NameClash;

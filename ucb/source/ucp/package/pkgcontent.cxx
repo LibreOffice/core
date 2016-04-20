@@ -1026,7 +1026,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-    aEvent.Further        = sal_False;
+    aEvent.Further        = false;
 //    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
 //    aEvent.OldValue       =
@@ -2011,7 +2011,7 @@ void Content::transfer(
                     aChildId += ::ucb_impl::urihelper::encodeSegment( aName );
 
                     ucb::TransferInfo aInfo;
-                    aInfo.MoveData  = sal_False;
+                    aInfo.MoveData  = false;
                     aInfo.NewTitle.clear();
                     aInfo.SourceURL = aChildId;
                     aInfo.NameClash = rInfo.NameClash;

@@ -512,7 +512,7 @@ namespace ucb { namespace ucp { namespace ext
 
         PropertyChangeEvent aEvent;
         aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-        aEvent.Further        = sal_False;
+        aEvent.Further        = false;
         aEvent.PropertyHandle = -1;
 
         const PropertyValue* pValues = i_rValues.getConstArray();

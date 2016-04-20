@@ -473,14 +473,14 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
                 if ( xApprove.is() )
                 {
                     xCertificateContainer->addCertificate(
-                        pSession->getHostName(), cert_subject,  sal_True );
+                        pSession->getHostName(), cert_subject,  true );
                     return 0;
                 }
                 else
                 {
                     // Don't trust cert
                     xCertificateContainer->addCertificate(
-                        pSession->getHostName(), cert_subject, sal_False );
+                        pSession->getHostName(), cert_subject, false );
                     return 1;
                 }
             }
@@ -489,7 +489,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         {
             // Don't trust cert
             xCertificateContainer->addCertificate(
-                pSession->getHostName(), cert_subject, sal_False );
+                pSession->getHostName(), cert_subject, false );
             return 1;
         }
     }

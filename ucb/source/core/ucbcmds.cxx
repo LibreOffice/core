@@ -296,10 +296,10 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {
         if ( (*m_pInfo)[ n ].Name == Name )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -310,10 +310,10 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {
         if ( (*m_pInfo)[ n ].Handle == Handle )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1146,7 +1146,7 @@ void handleNameClashRename(
 
             ucb::InsertCommandArgument2 aArg;
             aArg.Data = xInputStream;
-            aArg.ReplaceExisting = sal_False;
+            aArg.ReplaceExisting = false;
 
             ucb::Command aInsertCommand(
                         OUString("insert"),
@@ -1325,18 +1325,18 @@ void globalTransfer_(
     switch ( rContext.aArg.NameClash )
     {
         case ucb::NameClash::OVERWRITE:
-            aArg.ReplaceExisting = sal_True;
+            aArg.ReplaceExisting = true;
             break;
 
         case ucb::NameClash::ERROR:
         case ucb::NameClash::RENAME:
         case ucb::NameClash::KEEP: // deprecated
         case ucb::NameClash::ASK:
-            aArg.ReplaceExisting = sal_False;
+            aArg.ReplaceExisting = false;
             break;
 
         default:
-            aArg.ReplaceExisting = sal_False;
+            aArg.ReplaceExisting = false;
             OSL_FAIL( "Unknown nameclash directive!" );
             break;
     }
@@ -1456,7 +1456,7 @@ void globalTransfer_(
                                 OSL_ENSURE( !aArg.ReplaceExisting,
                                             "Hu? ReplaceExisting already true?"
                                           );
-                                aArg.ReplaceExisting = sal_True;
+                                aArg.ReplaceExisting = true;
                                 bRetry = true;
                                 break;
 

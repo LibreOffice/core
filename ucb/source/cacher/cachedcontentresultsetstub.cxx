@@ -104,7 +104,7 @@ void SAL_CALL CachedContentResultSetStub
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = sal_False;
+    aEvt.Further = false;
 
     impl_notifyPropertyChangeListeners( aEvt );
 }
@@ -126,7 +126,7 @@ void SAL_CALL CachedContentResultSetStub
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = sal_False;
+    aEvt.Further = false;
 
     impl_notifyVetoableChangeListeners( aEvt );
 }

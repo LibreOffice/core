@@ -491,7 +491,7 @@ HierarchyDataSource::createInstanceWithArguments(
 
                 beans::PropertyValue aProp;
                 aProp.Name = CFGPROPERTY_LAZYWRITE;
-                aProp.Value <<= sal_True;
+                aProp.Value <<= true;
                 aNewArgs[ nLen ] <<= aProp;
             }
 

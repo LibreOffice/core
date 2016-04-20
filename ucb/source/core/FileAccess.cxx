@@ -607,7 +607,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
             Reference< XInputStream > xInput( pInput );
             InsertCommandArgument aInsertArg;
             aInsertArg.Data = xInput;
-            aInsertArg.ReplaceExisting = sal_False;
+            aInsertArg.ReplaceExisting = false;
 
             aCmdArg <<= aInsertArg;
             aCnt.executeCommand( "insert", aCmdArg );

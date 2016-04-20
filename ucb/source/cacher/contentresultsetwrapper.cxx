@@ -781,7 +781,7 @@ void SAL_CALL ContentResultSetWrapper::impl_propertyChange( const PropertyChange
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = sal_False;
+    aEvt.Further = false;
     impl_notifyPropertyChangeListeners( aEvt );
 }
 
@@ -794,7 +794,7 @@ void SAL_CALL ContentResultSetWrapper::impl_vetoableChange( const PropertyChange
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = sal_False;
+    aEvt.Further = false;
 
     impl_notifyVetoableChangeListeners( aEvt );
 }

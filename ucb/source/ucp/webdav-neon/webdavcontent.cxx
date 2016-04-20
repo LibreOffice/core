@@ -1546,7 +1546,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-    aEvent.Further        = sal_False;
+    aEvent.Further        = false;
     // aEvent.PropertyName =
     aEvent.PropertyHandle = -1;
     // aEvent.OldValue   =
