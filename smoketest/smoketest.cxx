@@ -152,7 +152,7 @@ void Test::test() {
     args[0].State = css::beans::PropertyState_DIRECT_VALUE;
     args[1].Name = "ReadOnly";
     args[1].Handle = -1;
-    args[1].Value <<= sal_True;
+    args[1].Value <<= true;
     args[1].State = css::beans::PropertyState_DIRECT_VALUE;
     css::util::URL url;
     url.Complete = "vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"
