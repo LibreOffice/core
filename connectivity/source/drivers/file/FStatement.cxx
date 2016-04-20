@@ -702,9 +702,9 @@ void OStatement_Base::SetAssignValue(const OUString& aColumnName,
 
         case DataType::BIT:
             if (aValue.equalsIgnoreAsciiCase("TRUE")  || aValue[0] == '1')
-                *(m_aAssignValues->get())[nId] = sal_True;
+                *(m_aAssignValues->get())[nId] = true;
             else if (aValue.equalsIgnoreAsciiCase("FALSE") || aValue[0] == '0')
-                *(m_aAssignValues->get())[nId] = sal_False;
+                *(m_aAssignValues->get())[nId] = false;
             else
                 throwFunctionSequenceException(*this);
             break;

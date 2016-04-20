@@ -387,7 +387,7 @@ namespace connectivity
 
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url ) throw (SQLException, RuntimeException, std::exception)
     {
-        sal_Bool bEnabled = sal_False;
+        sal_Bool bEnabled = false;
         javaFrameworkError e = jfw_getEnabled(&bEnabled);
         switch (e) {
         case JFW_E_NONE:
@@ -415,21 +415,21 @@ namespace connectivity
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("Storage")
                 ,OUString("Defines the storage where the database will be stored.")
-                ,sal_True
+                ,true
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("URL")
                 ,OUString("Defines the url of the data source.")
-                ,sal_True
+                ,true
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("AutoRetrievingStatement")
                 ,OUString("Defines the statement which will be executed to retrieve auto increment values.")
-                ,sal_False
+                ,false
                 ,OUString("CALL IDENTITY()")
                 ,Sequence< OUString >())
                 );
@@ -655,7 +655,7 @@ namespace connectivity
                             xStmt->execute( "SET WRITE_DELAY 0" );
 
                         bool bPreviousAutoCommit = xConnection->getAutoCommit();
-                        xConnection->setAutoCommit( sal_False );
+                        xConnection->setAutoCommit( false );
                         xConnection->commit();
                         xConnection->setAutoCommit( bPreviousAutoCommit );
 

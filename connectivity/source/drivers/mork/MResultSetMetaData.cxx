@@ -67,7 +67,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -130,12 +130,12 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLEx
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
@@ -163,10 +163,10 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ ) throw
     if ( !m_pTable || !m_pTable->getConnection() )
     {
         OSL_FAIL( "OResultSetMetaData::isSearchable: suspicious: called without table or connection!" );
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 

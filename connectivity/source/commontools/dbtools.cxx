@@ -178,10 +178,10 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
                 {
                     // generate a new format if necessary
                     Reference< XNumberFormats > xFormats(_xTypes, UNO_QUERY);
-                    OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, sal_False, sal_False, (sal_Int16)_nScale, 1);
+                    OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, false, false, (sal_Int16)_nScale, 1);
 
                     // and add it to the formatter if necessary
-                    nFormat = xFormats->queryKey(sNewFormat, _rLocale, sal_False);
+                    nFormat = xFormats->queryKey(sNewFormat, _rLocale, false);
                     if (nFormat == (sal_Int32)-1)
                         nFormat = xFormats->addNew(sNewFormat, _rLocale);
                 }
@@ -1127,11 +1127,11 @@ try
             }
 
             // With this we can generate a new format ...
-            OUString sNewFormat = xFormats->generateFormat(nBaseKey, _rLocale, sal_False, sal_False, nDecimals, 0);
+            OUString sNewFormat = xFormats->generateFormat(nBaseKey, _rLocale, false, false, nDecimals, 0);
             // No thousands separator, negative numbers are not in red, no leading zeros
 
             // ... and add at FormatsSupplier (if needed)
-            sal_Int32 nKey = xFormats->queryKey(sNewFormat, _rLocale, sal_False);
+            sal_Int32 nKey = xFormats->queryKey(sNewFormat, _rLocale, false);
             if (nKey == (sal_Int32)-1)
             {   // not added yet in my formatter ...
                 nKey = xFormats->addNew(sNewFormat, _rLocale);

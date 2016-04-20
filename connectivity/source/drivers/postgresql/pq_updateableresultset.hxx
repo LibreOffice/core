@@ -94,7 +94,7 @@ protected:
         //           Why is an updatable ResultSet a sequenceresultset in the first place?
         //           This seems to imply that the whole data is fetched once and kept in memory. BAAAAD.
         // LEM TODO: shouldn't these things be inherited from the statement or something like that?
-        sal_Bool b = sal_False;
+        sal_Bool b = false;
         // Positioned update/delete not supported, so no cursor name
         // Fetch direction and size are cursor-specific things, so not used now.
         // Fetch size not set

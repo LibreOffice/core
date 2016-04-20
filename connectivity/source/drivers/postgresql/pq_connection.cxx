@@ -268,7 +268,7 @@ Reference< XStatement > Connection::createStatement() throw (SQLException, Runti
     Statement *stmt = new Statement( m_refMutex, this , &m_settings );
     Reference< XStatement > ret( stmt );
     ::rtl::ByteSequence id( 16 );
-    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, false );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
     return ret;
@@ -285,7 +285,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
     Reference< XPreparedStatement > ret = stmt;
 
     ::rtl::ByteSequence id( 16 );
-    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, false );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
     return ret;
@@ -314,7 +314,7 @@ void Connection::setAutoCommit( sal_Bool ) throw (SQLException, RuntimeException
 sal_Bool Connection::getAutoCommit() throw (SQLException, RuntimeException, std::exception)
 {
     // UNSUPPORTED
-    return sal_True;
+    return true;
 }
 
 void Connection::commit() throw (SQLException, RuntimeException, std::exception)
@@ -351,7 +351,7 @@ void  Connection::setReadOnly( sal_Bool ) throw (SQLException, RuntimeException,
 sal_Bool Connection::isReadOnly() throw (SQLException, RuntimeException, std::exception)
 {
     // UNSUPPORTED
-    return sal_False;
+    return false;
 }
 
 void Connection::setCatalog( const OUString& )

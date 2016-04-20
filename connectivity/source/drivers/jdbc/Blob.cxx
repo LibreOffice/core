@@ -81,7 +81,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         ThrowSQLException(t.pEnv,*this);
         if(out)
         {
-            jboolean p = sal_False;
+            jboolean p = false;
             aSeq.realloc(t.pEnv->GetArrayLength(out));
             memcpy(aSeq.getArray(),t.pEnv->GetByteArrayElements(out,&p),aSeq.getLength());
             t.pEnv->DeleteLocalRef(out);

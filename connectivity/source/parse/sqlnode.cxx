@@ -1216,7 +1216,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
                         aLocale.Language = "en";
                         aLocale.Country = "US";
                         OUString sFormat("YYYY-MM-DD");
-                        m_nDateFormatKey = xFormats->queryKey(sFormat,aLocale,sal_False);
+                        m_nDateFormatKey = xFormats->queryKey(sFormat,aLocale,false);
                         if ( m_nDateFormatKey == sal_Int32(-1) )
                             m_nDateFormatKey = xFormats->addNew(sFormat, aLocale);
                     }

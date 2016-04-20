@@ -71,7 +71,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
     m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
     Any aCatalog = m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
-    Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(aCatalog,aSchema,aTable,sal_False,sal_False);
+    Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(aCatalog,aSchema,aTable,false,false);
 
     if ( xResult.is() )
     {

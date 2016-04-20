@@ -133,7 +133,7 @@ OUString SAL_CALL java_sql_ResultSetMetaData::getColumnServiceName( sal_Int32 co
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     if ( m_pConnection->isIgnoreCurrencyEnabled() )
-        return sal_False;
+        return false;
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isCurrency", mID,column );
 }

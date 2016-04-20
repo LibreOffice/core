@@ -97,7 +97,7 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
             ThrowRuntimeException(t.pEnv,*this);
         if(out > 0)
         {
-            jboolean p = sal_False;
+            jboolean p = false;
             aData.realloc ( out );
             memcpy(aData.getArray(),t.pEnv->GetByteArrayElements(pByteArray,&p),out);
         }

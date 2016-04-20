@@ -92,7 +92,7 @@ static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
     {
         seq[i] = Property( props[i].name, i, props[i].type, attr );
     }
-    return new cppu::OPropertyArrayHelper( seq, sal_True );
+    return new cppu::OPropertyArrayHelper( seq, true );
 }
 
 static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
@@ -103,7 +103,7 @@ static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
     {
         seq[i] = Property( props[i].name, i, props[i].type, props[i].attribute );
     }
-    return new cppu::OPropertyArrayHelper( seq, sal_True );
+    return new cppu::OPropertyArrayHelper( seq, true );
 }
 
 Statics & getStatics()

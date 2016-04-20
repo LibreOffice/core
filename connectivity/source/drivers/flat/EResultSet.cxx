@@ -134,7 +134,7 @@ sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const Any& lhs, const  Any&
 
 sal_Bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException, std::exception)

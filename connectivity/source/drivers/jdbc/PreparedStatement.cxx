@@ -619,7 +619,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     jintArray out = static_cast<jintArray>(callObjectMethod(t.pEnv,"executeBatch","()[I", mID));
     if(out)
     {
-        jboolean p = sal_False;
+        jboolean p = false;
         aSeq.realloc(t.pEnv->GetArrayLength(out));
         memcpy(aSeq.getArray(),t.pEnv->GetIntArrayElements(out,&p),aSeq.getLength());
         t.pEnv->DeleteLocalRef(out);

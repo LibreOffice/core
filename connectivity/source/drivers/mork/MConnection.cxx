@@ -243,7 +243,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
     // you have to distinguish which if you are in autocommit mode or not
     // at normal case true should be fine here
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException, std::exception)
@@ -291,7 +291,7 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLExcepti
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
     // return if your connection to readonly
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException, std::exception)

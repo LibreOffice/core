@@ -87,21 +87,21 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("CharSet")
                 ,OUString("CharSet of the database.")
-                ,sal_False
+                ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("ShowDeleted")
                 ,OUString("Display inactive records.")
-                ,sal_False
+                ,false
                 ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("EnableSQL92Check")
                 ,OUString("Use SQL92 naming constraints.")
-                ,sal_False
+                ,false
                 ,OUString("0")
                 ,aBoolean)
                 );

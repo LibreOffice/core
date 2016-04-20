@@ -127,63 +127,63 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("CharSet")
                 ,OUString("CharSet of the database.")
-                ,sal_False
+                ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("UseCatalog")
                 ,OUString("Use catalog for file-based databases.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("SystemDriverSettings")
                 ,OUString("Driver settings.")
-                ,sal_False
+                ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("ParameterNameSubstitution")
                 ,OUString("Change named parameters with '?'.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("IgnoreDriverPrivileges")
                 ,OUString("Ignore the privileges from the database driver.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("IsAutoRetrievingEnabled")
                 ,OUString("Retrieve generated values.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("AutoRetrievingStatement")
                 ,OUString("Auto-increment statement.")
-                ,sal_False
+                ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("GenerateASBeforeCorrelationName")
                 ,OUString("Generate AS before table correlation names.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("EscapeDateTime")
                 ,OUString("Escape date time format.")
-                ,sal_False
+                ,false
                 ,OUString(  "true"  )
                 ,aBooleanValues)
                 );

@@ -54,7 +54,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
     m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
     Reference< XResultSet > xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getIndexInfo(
-        Catalog, aSchema, aTable, sal_False, sal_False);
+        Catalog, aSchema, aTable, false, false);
 
     bool bAsc = true;
     if ( xResult.is() )

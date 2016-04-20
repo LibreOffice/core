@@ -115,7 +115,7 @@ static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& r
         //  If the used area is larger than the contiguous cell area, find non-empty
         //  cells in that area.
 
-        xUsed->gotoEndOfUsedArea( sal_False );
+        xUsed->gotoEndOfUsedArea( false );
         CellRangeAddress aUsedAddr = xRange->getRangeAddress();
 
         if ( aUsedAddr.EndColumn > aRegionAddr.EndColumn )

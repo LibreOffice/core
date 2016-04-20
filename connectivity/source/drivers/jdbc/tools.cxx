@@ -161,7 +161,7 @@ OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring Str)
     OUString aStr;
     if(Str)
     {
-        jboolean bCopy(sal_True);
+        jboolean bCopy(true);
         const jchar* pChar = pEnv->GetStringChars(Str,&bCopy);
         jsize len = pEnv->GetStringLength(Str);
         aStr = OUString(reinterpret_cast<sal_Unicode const *>(pChar), len);
@@ -221,7 +221,7 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     jbyteArray pByteArray = t.pEnv->NewByteArray(length);
     Sequence< sal_Int8 > aData;
     x->readBytes(aData,length);
-    jboolean p = sal_False;
+    jboolean p = false;
     memcpy(t.pEnv->GetByteArrayElements(pByteArray,&p),aData.getArray(),aData.getLength());
     jobject out = t.pEnv->NewObject( clazz, mID,pByteArray);
     t.pEnv->DeleteLocalRef(pByteArray);
@@ -248,7 +248,7 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     jcharArray pCharArray = t.pEnv->NewCharArray(length);
     Sequence< sal_Int8 > aData;
     x->readBytes(aData,length);
-    jboolean p = sal_False;
+    jboolean p = false;
     memcpy(t.pEnv->GetCharArrayElements(pCharArray,&p),aData.getArray(),aData.getLength());
     jobject out = t.pEnv->NewObject( clazz, mID,pCharArray);
     t.pEnv->DeleteLocalRef(pCharArray);

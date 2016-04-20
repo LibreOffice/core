@@ -134,19 +134,19 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException, std::
                                m_pSqlda);
     if (fetchStat == 0)         // SUCCESSFUL
     {
-        return sal_True;
+        return true;
     }
     else if (fetchStat == 100L) // END OF DATASET
     {
         m_bIsAfterLastRow = true;
-        return sal_False;
+        return false;
     }
     else
     {
         SAL_WARN("connectivity.firebird", "Error when fetching data");
         // Throws sql exception as appropriate
         evaluateStatusVector(m_statusVector, "isc_dsql_fetch", *this);
-        return sal_False;
+        return false;
     }
 }
 
@@ -154,14 +154,14 @@ sal_Bool SAL_CALL OResultSet::previous() throw(SQLException, RuntimeException, s
 {
     ::dbtools::throwFunctionNotSupportedSQLException("previous not supported in firebird",
                                                   *this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::isLast() throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("isLast not supported in firebird",
                                                   *this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::isBeforeFirst() throw(SQLException, RuntimeException, std::exception)
@@ -219,13 +219,13 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException, std:
     }
     else if (m_currentRow == 1 && !m_bIsAfterLastRow)
     {
-        return sal_True;
+        return true;
     }
     else
     {
         ::dbtools::throwFunctionNotSupportedSQLException("first not supported in firebird",
                                                       *this);
-        return sal_False;
+        return false;
     }
 }
 
@@ -235,7 +235,7 @@ sal_Bool SAL_CALL OResultSet::last() throw(SQLException, RuntimeException, std::
     // row, hence we can't actually move to last.
     ::dbtools::throwFunctionNotSupportedSQLException("last not supported in firebird",
                                                   *this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow) throw(SQLException, RuntimeException, std::exception)
@@ -252,7 +252,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow) throw(SQLException, Runti
     {
         ::dbtools::throwFunctionNotSupportedSQLException("absolute not supported in firebird",
                                                       *this);
-        return sal_False;
+        return false;
     }
 }
 
@@ -266,15 +266,15 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row) throw(SQLException, Runtim
         while (row--)
         {
             if (!next())
-                return sal_False;
+                return false;
         }
-        return sal_True;
+        return true;
     }
     else
     {
         ::dbtools::throwFunctionNotSupportedSQLException("relative not supported in firebird",
                                                       *this);
-        return sal_False;
+        return false;
     }
 }
 
@@ -720,20 +720,20 @@ sal_Bool SAL_CALL OResultSet::rowDeleted() throw(SQLException, RuntimeException,
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowDeleted not supported in firebird",
                                                   *this);
-    return sal_False;
+    return false;
 }
 sal_Bool SAL_CALL OResultSet::rowInserted() throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowInserted not supported in firebird",
                                                   *this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::rowUpdated() throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowUpdated not supported in firebird",
                                                   *this);
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL OResultSet::refreshRow() throw(SQLException, RuntimeException, std::exception)

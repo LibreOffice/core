@@ -179,7 +179,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
     jbyteArray out = static_cast<jbyteArray>(callObjectMethodWithIntArg(t.pEnv,"getBytes","(I)[B", mID, columnIndex));
     if (out)
     {
-        jboolean p = sal_False;
+        jboolean p = false;
         aSeq.realloc(t.pEnv->GetArrayLength(out));
         memcpy(aSeq.getArray(),t.pEnv->GetByteArrayElements(out,&p),aSeq.getLength());
         t.pEnv->DeleteLocalRef(out);

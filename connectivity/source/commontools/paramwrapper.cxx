@@ -185,7 +185,7 @@ namespace param
         // we're lazy here ...
         rOldValue = m_aValue.makeAny();
         rConvertedValue = rValue;
-        return sal_True;    // assume "modified" ...
+        return true;    // assume "modified" ...
     }
 
 
@@ -255,7 +255,7 @@ namespace param
         m_xDelegatorPSI.clear();
         m_xValueDestination.clear();
 
-        m_aBHelper.bDisposed = sal_True;
+        m_aBHelper.bDisposed = true;
     }
 
     ParameterWrapperContainer::ParameterWrapperContainer()

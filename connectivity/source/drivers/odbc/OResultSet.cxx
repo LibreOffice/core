@@ -1210,7 +1210,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
             return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
         }
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException, std::exception)
@@ -1239,7 +1239,7 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& lhs, const  Any& rhs
 
 sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL OResultSet::hashBookmark( const  Any& /*bookmark*/ ) throw( SQLException,  RuntimeException, std::exception)
@@ -1453,7 +1453,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
         default:
             ;
     }
-    return sal_False;
+    return false;
 }
 
 void OResultSet::setFastPropertyValue_NoBroadcast(

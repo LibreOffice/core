@@ -108,7 +108,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLEx
 {
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
-    sal_Bool bEnabled = sal_False;
+    sal_Bool bEnabled = false;
     javaFrameworkError e = jfw_getEnabled(&bEnabled);
     switch (e) {
     case JFW_E_NONE:
@@ -140,91 +140,91 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("JavaDriverClass")
                 ,OUString("The JDBC driver class name.")
-                ,sal_True
+                ,true
                 ,OUString()
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("JavaDriverClassPath")
                 ,OUString("The class path where to look for the JDBC driver.")
-                ,sal_True
+                ,true
                 ,OUString(  ""  )
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("SystemProperties")
                 ,OUString("Additional properties to set at java.lang.System before loading the driver.")
-                ,sal_True
+                ,true
                 ,OUString(  ""  )
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("ParameterNameSubstitution")
                 ,OUString("Change named parameters with '?'.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("IgnoreDriverPrivileges")
                 ,OUString("Ignore the privileges from the database driver.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("IsAutoRetrievingEnabled")
                 ,OUString("Retrieve generated values.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("AutoRetrievingStatement")
                 ,OUString("Auto-increment statement.")
-                ,sal_False
+                ,false
                 ,OUString()
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("GenerateASBeforeCorrelationName")
                 ,OUString("Generate AS before table correlation names.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("IgnoreCurrency")
                 ,OUString("Ignore the currency field from the ResultsetMetaData.")
-                ,sal_False
+                ,false
                 ,OUString(  "false"  )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("EscapeDateTime")
                 ,OUString("Escape date time format.")
-                ,sal_False
+                ,false
                 ,OUString(  "true"  )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("TypeInfoSettings")
                 ,OUString("Defines how the type info of the database metadata should be manipulated.")
-                ,sal_False
+                ,false
                 ,OUString( )
                 ,Sequence< OUString > ())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("ImplicitCatalogRestriction")
                 ,OUString("The catalog which should be used in getTables calls, when the caller passed NULL.")
-                ,sal_False
+                ,false
                 ,OUString( )
                 ,Sequence< OUString > ())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("ImplicitSchemaRestriction")
                 ,OUString("The schema which should be used in getTables calls, when the caller passed NULL.")
-                ,sal_False
+                ,false
                 ,OUString( )
                 ,Sequence< OUString > ())
         );

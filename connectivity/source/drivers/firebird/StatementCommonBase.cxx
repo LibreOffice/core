@@ -232,7 +232,7 @@ uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet() throw
 sal_Bool SAL_CALL OStatementCommonBase::getMoreResults() throw(SQLException, RuntimeException, std::exception)
 {
     // TODO: verify we really can't support this
-    return sal_False;
+    return false;
 //     MutexGuard aGuard( m_aMutex );
 //     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 }

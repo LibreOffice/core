@@ -328,7 +328,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 void Connection::notifyDatabaseModified()
 {
     if (m_xParentDocument.is()) // Only true in embedded mode
-        m_xParentDocument->setModified(sal_True);
+        m_xParentDocument->setModified(true);
 }
 
 //----- XServiceInfo ---------------------------------------------------------

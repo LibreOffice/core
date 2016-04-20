@@ -317,7 +317,7 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  ) throw(SQLExceptio
 
 sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 

@@ -74,12 +74,12 @@ sal_Bool SequenceResultSetMetaData::isCaseSensitive( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException, std::exception)
 {
 
-    return sal_True; // ??? hmm, numeric types or
+    return true; // ??? hmm, numeric types or
 }
 
 sal_Bool SequenceResultSetMetaData::isSearchable( sal_Int32 /* column */ ) throw (SQLException, RuntimeException, std::exception)
 {
-    return sal_True; // mmm, what types are not searchable ?
+    return true; // mmm, what types are not searchable ?
 }
 
 sal_Bool SequenceResultSetMetaData::isCurrency( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
@@ -98,7 +98,7 @@ sal_Int32 SequenceResultSetMetaData::isNullable( sal_Int32 column )
 sal_Bool SequenceResultSetMetaData::isSigned( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SequenceResultSetMetaData::getColumnDisplaySize( sal_Int32 /* column */ )
@@ -172,7 +172,7 @@ OUString SequenceResultSetMetaData::getColumnTypeName( sal_Int32 column )
 sal_Bool SequenceResultSetMetaData::isReadOnly( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SequenceResultSetMetaData::isWritable( sal_Int32 column )

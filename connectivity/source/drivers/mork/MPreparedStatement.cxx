@@ -490,7 +490,7 @@ sal_Int32 SAL_CALL OPreparedStatement::getUpdateCount(  ) throw(::com::sun::star
 
 sal_Bool SAL_CALL OPreparedStatement::getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 

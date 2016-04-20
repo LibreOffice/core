@@ -69,7 +69,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     // there remains some ambiguity if there is another mixed-case-named column
     // of the same name. For safety always assume case insensitive.
     (void) column;
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     (void) column;
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
@@ -143,7 +143,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 {
     // Supported internally but no way of determining this here.
     (void) column;
-    return sal_False;
+    return false;
 }
 
 
@@ -152,7 +152,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
 {
     // Unsigned values aren't supported in firebird.
     (void) column;
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
 {
     // TODO: Can the column be used as part of a where clause? Assume yes
     (void) column;
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)

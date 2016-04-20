@@ -334,13 +334,13 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 SAL_WNOUNREACHABLE_CODE_POP
@@ -373,32 +373,32 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 SAL_WNOUNREACHABLE_CODE_POP
@@ -415,19 +415,19 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return false;
 }
 
 SAL_WNOUNREACHABLE_CODE_POP
@@ -475,7 +475,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, Ru
 
 
     if(m_aRowsIter == m_aRows.end() || !(*m_aRowsIter)[m_nColPos].is())
-        return sal_True;
+        return true;
 
     return (*m_aRowsIter)[m_nColPos]->getValue().isNull();
 }

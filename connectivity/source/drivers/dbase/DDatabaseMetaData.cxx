@@ -117,13 +117,13 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow[13] = new ORowSetValueDecorator(OUString("B"));
         aRows.push_back(aRow);
 
-        aRow[11] = new ORowSetValueDecorator(sal_True);
+        aRow[11] = new ORowSetValueDecorator(true);
         aRow[13] = new ORowSetValueDecorator(OUString("Y"));
         aRows.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-        aRow[11] = new ORowSetValueDecorator(sal_False);
+        aRow[11] = new ORowSetValueDecorator(false);
         aRow[13] = new ORowSetValueDecorator(OUString("T"));
         aRows.push_back(aRow);
 
@@ -361,12 +361,12 @@ sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExc
 
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)

@@ -749,7 +749,7 @@ sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
         default:
             ;
     }
-    return sal_False;
+    return false;
 }
 
 void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& /*rValue*/ ) throw (Exception, std::exception)

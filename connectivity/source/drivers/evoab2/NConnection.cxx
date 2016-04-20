@@ -208,7 +208,7 @@ void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(S
 }
 sal_Bool SAL_CALL OEvoabConnection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 void SAL_CALL OEvoabConnection::commit(  ) throw(SQLException, RuntimeException, std::exception)
 {
@@ -222,7 +222,7 @@ void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLEx
 }
 sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 void SAL_CALL OEvoabConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException, std::exception)
 {

@@ -448,7 +448,7 @@ void OTableHelper::refreshIndexes()
         Any aCatalog;
         if ( !m_CatalogName.isEmpty() )
             aCatalog <<= m_CatalogName;
-        Reference< XResultSet > xResult = getMetaData()->getIndexInfo(aCatalog,m_SchemaName,m_Name,sal_False,sal_False);
+        Reference< XResultSet > xResult = getMetaData()->getIndexInfo(aCatalog,m_SchemaName,m_Name,false,false);
 
         if(xResult.is())
         {

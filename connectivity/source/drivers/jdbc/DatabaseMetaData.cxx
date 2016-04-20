@@ -993,7 +993,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
     static const char* pMethodName = "supportsConvert";
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG2, pMethodName, fromType, toType );
 
-    jboolean out( sal_False );
+    jboolean out( false );
     SDBThreadAttach t;
 
     {
@@ -1335,7 +1335,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
     static const char* pMethodName = "supportsResultSetConcurrency";
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG2, pMethodName, setType, concurrency );
 
-    jboolean out( sal_False );
+    jboolean out( false );
     SDBThreadAttach t;
 
     {

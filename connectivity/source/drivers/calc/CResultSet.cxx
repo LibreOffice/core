@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL OCalcResultSet::compareBookmarks( const Any& lhs, const  Any&
 
 sal_Bool SAL_CALL OCalcResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL OCalcResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException, std::exception)

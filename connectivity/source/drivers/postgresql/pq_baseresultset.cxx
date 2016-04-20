@@ -117,7 +117,7 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
                         ::cppu::UnoType<sal_Int32>::get() , 0 )
                 };
             OSL_ASSERT( sizeof(aTable) / sizeof(Property) == BASERESULTSET_SIZE );
-            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, BASERESULTSET_SIZE, sal_True );
+            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, BASERESULTSET_SIZE, true );
             pArrayHelper = &arrayHelper;
         }
     }
@@ -296,7 +296,7 @@ sal_Bool BaseResultSet::absolute( sal_Int32 row ) throw (SQLException, RuntimeEx
         if( m_row < -1 )
             m_row = -1;
     }
-    return sal_True;
+    return true;
 }
 
 sal_Bool BaseResultSet::relative( sal_Int32 rows ) throw (SQLException, RuntimeException, std::exception)
@@ -309,7 +309,7 @@ sal_Bool BaseResultSet::relative( sal_Int32 rows ) throw (SQLException, RuntimeE
         m_row = m_rowCount;
     else if ( m_row < -1 )
         m_row = -1;
-    return sal_True;
+    return true;
 }
 
 sal_Bool BaseResultSet::previous(  ) throw (SQLException, RuntimeException, std::exception)
@@ -329,17 +329,17 @@ void BaseResultSet::refreshRow(  ) throw (SQLException, RuntimeException, std::e
 
 sal_Bool BaseResultSet::rowUpdated(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool BaseResultSet::rowInserted(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool BaseResultSet::rowDeleted(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 Reference< XInterface > BaseResultSet::getStatement() throw (SQLException, RuntimeException, std::exception)
@@ -390,10 +390,10 @@ sal_Bool BaseResultSet::getBoolean( sal_Int32 columnIndex ) throw (SQLException,
         case 'y':
         case 'Y':
 
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 sal_Int8 BaseResultSet::getByte( sal_Int32 columnIndex )

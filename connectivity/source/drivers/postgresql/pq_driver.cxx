@@ -207,8 +207,8 @@ public:
     {
         for( int i = 0 ; i < m_serviceNames.getLength() ; i ++ )
             if( m_serviceNames[i] == ServiceName )
-                return sal_True;
-        return sal_False;
+                return true;
+        return false;
     }
     Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw(::com::sun::star::uno::RuntimeException, std::exception) override

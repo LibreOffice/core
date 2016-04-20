@@ -102,7 +102,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     if(!m_pTable)
-        return sal_False;
+        return false;
 
 
     Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),false);
@@ -133,7 +133,7 @@ sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any&
 
 sal_Bool SAL_CALL ODbaseResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException, std::exception)

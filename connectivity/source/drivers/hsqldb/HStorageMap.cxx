@@ -167,7 +167,7 @@ namespace connectivity
             OUString aStr;
             if ( jstr )
             {
-                jboolean bCopy(sal_True);
+                jboolean bCopy(true);
                 const jchar* pChar = env->GetStringChars(jstr,&bCopy);
                 jsize len = env->GetStringLength(jstr);
                 aStr = OUString(

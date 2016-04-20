@@ -91,35 +91,35 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("FieldDelimiter")
                 ,OUString("Field separator.")
-                ,sal_False
+                ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("HeaderLine")
                 ,OUString("Text contains headers.")
-                ,sal_False
+                ,false
                 ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("StringDelimiter")
                 ,OUString("Text separator.")
-                ,sal_False
+                ,false
                 ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("DecimalDelimiter")
                 ,OUString("Decimal separator.")
-                ,sal_False
+                ,false
                 ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("ThousandDelimiter")
                 ,OUString("Thousands separator.")
-                ,sal_False
+                ,false
                 ,OUString("0")
                 ,aBoolean)
                 );

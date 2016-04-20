@@ -91,7 +91,7 @@ sal_Bool ReflectionBase::convertFastPropertyValue(
     rOldValue = m_values[nHandle];
     rConvertedValue = rValue;     // TODO !!! implement correct conversion !
     m_values[nHandle] = rValue;
-    return sal_True;
+    return true;
 }
 
 void ReflectionBase::setPropertyValue_NoBroadcast_public(

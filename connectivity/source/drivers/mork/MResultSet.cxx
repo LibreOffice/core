@@ -182,7 +182,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 /*columnIndex*/ ) throw(SQLE
 {
     ResultSetEntryGuard aGuard( *this );
     m_bWasNull = true;
-    return sal_False;
+    return false;
 }
 
 
@@ -508,21 +508,21 @@ sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeExceptio
 {
     SAL_WARN("connectivity.mork", "OResultSet::rowDeleted() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
-    return sal_True;//return ((m_RowStates & RowStates_Deleted) == RowStates_Deleted) ;
+    return true;//return ((m_RowStates & RowStates_Deleted) == RowStates_Deleted) ;
 }
 
 sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_WARN("connectivity.mork", "OResultSet::rowInserted() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
-    return sal_True;//return ((m_RowStates & RowStates_Inserted) == RowStates_Inserted);
+    return true;//return ((m_RowStates & RowStates_Inserted) == RowStates_Inserted);
 }
 
 sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_WARN("connectivity.mork", "OResultSet::rowUpdated() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
-    return sal_True;// return ((m_RowStates & RowStates_Updated) == RowStates_Updated) ;
+    return true;// return ((m_RowStates & RowStates_Updated) == RowStates_Updated) ;
 }
 
 
@@ -614,7 +614,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
         default:
             ;
     }
-    return sal_False;
+    return false;
 }
 
 void OResultSet::setFastPropertyValue_NoBroadcast(
@@ -1534,7 +1534,7 @@ sal_Bool  OResultSet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark
     sal_Int32 nCardNum = comphelper::getINT32(bookmark);
     m_nRowPos = getRowForCardNumber(nCardNum);
     fetchCurrentRow();
-    return sal_True;
+    return true;
 }
 sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -1571,7 +1571,7 @@ sal_Bool OResultSet::hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLEx
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
-    return sal_True;
+    return true;
 }
 sal_Int32 OResultSet::hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {

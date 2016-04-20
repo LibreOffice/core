@@ -126,7 +126,7 @@ static ::cppu::IPropertyArrayHelper & getPreparedStatementPropertyArrayHelper()
                         ::cppu::UnoType<sal_Int32>::get() , 0 )
                 };
             OSL_ASSERT( sizeof(aTable)/ sizeof(Property)  == PREPARED_STATEMENT_SIZE );
-            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, PREPARED_STATEMENT_SIZE, sal_True );
+            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, PREPARED_STATEMENT_SIZE, true );
             pArrayHelper = &arrayHelper;
         }
     }
@@ -811,7 +811,7 @@ sal_Int32 PreparedStatement::getUpdateCount(  )
 sal_Bool PreparedStatement::getMoreResults(  )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 Reference< XResultSet > PreparedStatement::getGeneratedValues(  )

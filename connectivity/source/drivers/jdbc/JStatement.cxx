@@ -223,7 +223,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
-    jboolean out(sal_False);
+    jboolean out(false);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         createStatement(t.pEnv);
@@ -325,7 +325,7 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
     jintArray out = static_cast<jintArray>(callObjectMethod(t.pEnv,"executeBatch","()[I", mID));
     if (out)
     {
-        jboolean p = sal_False;
+        jboolean p = false;
         aSeq.realloc(t.pEnv->GetArrayLength(out));
         memcpy(aSeq.getArray(),t.pEnv->GetIntArrayElements(out,&p),aSeq.getLength());
         t.pEnv->DeleteLocalRef(out);
@@ -663,7 +663,7 @@ sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return sal_False;
+    return false;
 }
 
 void java_sql_Statement_Base::setFastPropertyValue_NoBroadcast(

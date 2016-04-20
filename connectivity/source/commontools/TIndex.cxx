@@ -73,7 +73,7 @@ void OIndexHelper::refreshColumns()
 
         Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
-            aSchema,aTable,sal_False,sal_False);
+            aSchema,aTable,false,false);
 
         if ( xResult.is() )
         {

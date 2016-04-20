@@ -144,7 +144,7 @@ static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
                         ::cppu::UnoType<sal_Int32>::get() , 0 )
                 };
             OSL_ASSERT( sizeof(aTable)/ sizeof(Property)  == STATEMENT_SIZE );
-            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, STATEMENT_SIZE, sal_True );
+            static ::cppu::OPropertyArrayHelper arrayHelper( aTable, STATEMENT_SIZE, true );
             pArrayHelper = &arrayHelper;
         }
     }
@@ -971,7 +971,7 @@ sal_Int32 Statement::getUpdateCount(  )
 sal_Bool Statement::getMoreResults(  )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 

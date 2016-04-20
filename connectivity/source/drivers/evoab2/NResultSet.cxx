@@ -1047,7 +1047,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  ) throw(SQLException, RuntimeExc
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1055,7 +1055,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  ) throw(SQLException, RuntimeEx
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1063,7 +1063,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  ) throw(SQLException, RuntimeExc
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL OEvoabResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)

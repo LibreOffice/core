@@ -126,7 +126,7 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeExce
         {
             m_bResetValues = true;
             if ( !m_xTables->next() )
-                return sal_False;
+                return false;
         }
 
         bReturn = ODatabaseMetaDataResultSet::next();
