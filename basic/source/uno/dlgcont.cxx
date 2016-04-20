@@ -443,7 +443,7 @@ void SfxDialogLibraryContainer::onNewRootStorage()
 sal_Bool SAL_CALL
 SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ ) throw (uno::RuntimeException, std::exception)
 {
-    return sal_False; // dialog library has no executable code
+    return false; // dialog library has no executable code
 }
 
 // Service

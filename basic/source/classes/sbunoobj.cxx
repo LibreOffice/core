@@ -4390,12 +4390,12 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
 
 sal_Bool SAL_CALL ModuleInvocationProxy::hasMethod( const OUString& ) throw(std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ModuleInvocationProxy::hasProperty( const OUString& ) throw(std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,

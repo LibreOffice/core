@@ -474,8 +474,8 @@ namespace basic
         // #i104876: Library container must not be modified just after
         // creation. This happens as side effect when creating default
         // "Standard" libraries and needs to be corrected here
-        xBasicLibs->setModified( sal_False );
-        xDialogLibs->setModified( sal_False );
+        xBasicLibs->setModified( false );
+        xDialogLibs->setModified( false );
 
     }
 

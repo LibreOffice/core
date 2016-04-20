@@ -492,7 +492,7 @@ sal_Bool SfxLibraryContainer::isModified()
     LibraryContainerMethodGuard aGuard( *this );
     if ( maModifiable.isModified() )
     {
-        return sal_True;
+        return true;
     }
     // the library container is not modified, go through the libraries and check whether they are modified
     Sequence< OUString > aNames = maNameContainer->getElementNames();
@@ -513,11 +513,11 @@ sal_Bool SfxLibraryContainer::isModified()
                     // empty standard library should stay marked as modified
                     // but should not be treated as modified while it is empty
                     if ( pImplLib->hasElements() )
-                        return sal_True;
+                        return true;
                 }
                 else
                 {
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -526,7 +526,7 @@ sal_Bool SfxLibraryContainer::isModified()
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SfxLibraryContainer::setModified( sal_Bool _bModified )
@@ -1462,7 +1462,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                     // #87671 Allow encryption
-                    xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
+                    xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
 
                     Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -1602,7 +1602,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                 // #87671 Allow encryption
-                xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
+                xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
 
                 xOut = xInfoStream->getOutputStream();
             }
@@ -2126,7 +2126,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
             // #87671 Allow encryption
-            xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
+            xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
 
             xOut = xInfoStream->getOutputStream();
         }
@@ -2796,7 +2796,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordProtected( const OUStrin
     throw (NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordVerified( const OUString& )

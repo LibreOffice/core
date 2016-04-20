@@ -1166,7 +1166,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString&
         return pBasicMgr->HasExeCode( Library ); // need to change this to take name
     }
     // default to it has code if we can't decide
-    return sal_True;
+    return true;
 }
 
 

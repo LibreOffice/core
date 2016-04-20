@@ -357,7 +357,7 @@ sal_Bool SAL_CALL
 DocObjectWrapper::hasMethod( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
-        return sal_True;
+        return true;
     return getMethod( aName ).Is();
 }
 
