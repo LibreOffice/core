@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_c62a642c",
+        "filename": "compilerplugins/clang/stylepolice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-20T10:58:43Z",
+      "side": 1,
+      "message": "what about ^m[_][a-zA-Z] too? \"^m([abnprsx]?[A-Z]|[_][a-zA-Z])\" or so...",
+      "revId": "bebdb5b18640921a54dac89797774fdc92451abd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
