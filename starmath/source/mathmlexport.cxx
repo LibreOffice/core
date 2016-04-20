@@ -337,7 +337,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 
     // all streams must be encrypted in encrypted document
     OUString aTmpPropName( "UseCommonStoragePasswordEncryption" );
-    sal_Bool bTrue = sal_True;
+    sal_Bool bTrue = true;
     aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
     xSet->setPropertyValue( aTmpPropName, aAny );
 

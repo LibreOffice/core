@@ -447,7 +447,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     OUString aTxt( GetAccessibleText_Impl() );
     if (!(nIndex < aTxt.getLength()))
         throw IndexOutOfBoundsException();
-    return sal_False;
+    return false;
 }
 
 sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
@@ -644,7 +644,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
     if (!(0 <= nStartIndex  &&  nStartIndex < nLen) ||
         !(0 <= nEndIndex    &&  nEndIndex   < nLen))
         throw IndexOutOfBoundsException();
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL SmGraphicAccessible::getText()
