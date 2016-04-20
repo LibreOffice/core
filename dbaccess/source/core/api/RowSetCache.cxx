@@ -399,19 +399,19 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
     {
         // now correct the iterator in our iterator vector
         ::std::vector<sal_Int32> aPositions;
-        ::std::map<sal_Int32,sal_Bool> aCacheIterToChange;
+        ::std::map<sal_Int32,bool> aCacheIterToChange;
         // first get the positions where they stand now
         ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
         ORowSetCacheMap::const_iterator aCacheEnd = m_aCacheIterators.end();
         for(;aCacheIter != aCacheEnd;++aCacheIter)
         {
-            aCacheIterToChange[aCacheIter->first] = sal_False;
+            aCacheIterToChange[aCacheIter->first] = false;
             if ( !aCacheIter->second.pRowSet->isInsertRow()
                 /*&& aCacheIter->second.aIterator != m_pMatrix->end()*/ && !m_bModified )
             {
                 ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                 aPositions.push_back(nDist);
-                aCacheIterToChange[aCacheIter->first] = sal_True;
+                aCacheIterToChange[aCacheIter->first] = true;
             }
         }
         sal_Int32 nKeyPos = (m_aMatrixIter - m_pMatrix->begin());
@@ -425,7 +425,7 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
 
         // now adjust their positions because a resize invalidates all iterators
         ::std::vector<sal_Int32>::const_iterator aIter = aPositions.begin();
-        ::std::map<sal_Int32,sal_Bool>::const_iterator aPosChangeIter = aCacheIterToChange.begin();
+        ::std::map<sal_Int32,bool>::const_iterator aPosChangeIter = aCacheIterToChange.begin();
         for(    aCacheIter = m_aCacheIterators.begin();
                 aPosChangeIter != aCacheIterToChange.end();
                 ++aPosChangeIter,++aCacheIter)
