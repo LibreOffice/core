@@ -173,7 +173,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                             ::comphelper::NamedValueCollection aWindowsData;
                             saveTableWindows( aWindowsData );
                             getDataSource()->setPropertyValue( PROPERTY_LAYOUTINFORMATION, makeAny( aWindowsData.getPropertyValues() ) );
-                            setModified(sal_False);
+                            setModified(false);
                         }
                     }
                     catch ( const Exception& )
@@ -474,7 +474,7 @@ IMPL_LINK_NOARG_TYPED( ORelationController, OnThreadFinished, void*, void )
         getView()->initialize();    // show the windows and fill with our information
         getView()->Invalidate(InvalidateFlags::NoErase);
         ClearUndoManager();
-        setModified(sal_False);     // and we are not modified yet
+        setModified(false);     // and we are not modified yet
 
         if(m_vTableData.empty())
             Execute(ID_BROWSER_ADDTABLE,Sequence<PropertyValue>());

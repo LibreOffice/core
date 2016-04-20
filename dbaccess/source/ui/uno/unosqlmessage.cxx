@@ -114,7 +114,7 @@ sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedV
             _rOldValue = m_aException;
             _rConvertedValue = aInfo.get();
 
-            return sal_True;
+            return true;
                 // always assume "modified", don't bother with comparing the two values
         }
         default:

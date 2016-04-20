@@ -295,7 +295,7 @@ namespace dbaui
                     xProp->setPropertyValue(PROPERTY_TABLETYPEFILTER,aTableTypeFilter);
 
                     if ( xModi.is() && !bModified )
-                        xModi->setModified(sal_False);
+                        xModi->setModified(false);
 
                 }
 

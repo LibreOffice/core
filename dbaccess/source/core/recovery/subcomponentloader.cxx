@@ -82,7 +82,7 @@ namespace dbaccess
                     const Reference< XController > xController( i_rData.xNonDocComponent, UNO_QUERY_THROW );
                     const Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
                     const Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
-                    xWindow->setVisible( sal_True );
+                    xWindow->setVisible( true );
                 }
             }
             catch( const Exception& )

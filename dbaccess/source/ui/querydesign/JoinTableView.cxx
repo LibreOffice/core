@@ -386,7 +386,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
         if(aFind != rController.getTableWindowData().end())
         {
             rController.getTableWindowData().erase(aFind);
-            rController.setModified(sal_True);
+            rController.setModified(true);
         }
 
         if ( !m_aTableMap.erase( pTabWin->GetWinName() ) )
@@ -1500,7 +1500,7 @@ void OJoinTableView::HideTabWins()
     for(;aIter != aEnd;++aIter)
         RemoveTabWin(aIter->second);
 
-    m_pView->getController().setModified(sal_True);
+    m_pView->getController().setModified(true);
 
     SetUpdateMode(true);
 
@@ -1569,7 +1569,7 @@ Reference< XAccessible > OJoinTableView::CreateAccessible()
 void OJoinTableView::modified()
 {
     OJoinController& rController = m_pView->getController();
-    rController.setModified( sal_True );
+    rController.setModified( true );
     rController.InvalidateFeature(ID_BROWSER_ADDTABLE);
     rController.InvalidateFeature(SID_RELATION_ADD_RELATION);
 }

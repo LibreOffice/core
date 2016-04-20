@@ -254,7 +254,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                         return;
                     case RET_NO:
                         reset();
-                        setModified(sal_False);     // and we are not modified yet
+                        setModified(false);     // and we are not modified yet
                         break;
                     default:
                         break;
@@ -322,12 +322,12 @@ void OJoinController::describeSupportedFeatures()
 sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeException, std::exception )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
-        return sal_True;
+        return true;
 
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
-        return sal_False;
+        return false;
     bool bCheck = true;
     if ( _bSuspend )
     {

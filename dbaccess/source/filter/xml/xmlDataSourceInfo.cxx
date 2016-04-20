@@ -100,7 +100,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     if ( bAutoEnabled )
     {
         aProperty.Name = INFO_AUTORETRIEVEENABLED;
-        aProperty.Value <<= sal_True;
+        aProperty.Value <<= true;
         rImport.addInfo(aProperty);
     }
     if ( rImport.isNewFormat() )

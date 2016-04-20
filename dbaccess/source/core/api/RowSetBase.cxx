@@ -97,7 +97,7 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
     sal_Int32 nInitialRowCountValue = 0;
-    sal_Bool bInitialRowCountFinalValue( sal_False );
+    sal_Bool bInitialRowCountFinalValue( false );
     registerPropertyNoMember( PROPERTY_ROWCOUNT,        PROPERTY_ID_ROWCOUNT,        nRBT, cppu::UnoType<decltype(nInitialRowCountValue)>::get(), &nInitialRowCountValue );
     registerPropertyNoMember( PROPERTY_ISROWCOUNTFINAL, PROPERTY_ID_ISROWCOUNTFINAL, nRBT, cppu::UnoType<bool>::get(),                  &bInitialRowCountFinalValue );
 }
@@ -660,7 +660,7 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException,
     checkCache();
 
     if ( m_bBeforeFirst || m_bAfterLast )
-        return sal_False;
+        return false;
 
     if ( impl_rowDeleted() )
         return ( m_nDeletedPosition == 1 );
@@ -685,12 +685,12 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException, 
     checkCache();
 
     if ( m_bBeforeFirst || m_bAfterLast )
-        return sal_False;
+        return false;
 
     if ( impl_rowDeleted() )
     {
         if ( !m_pCache->m_bRowCountFinal )
-            return sal_False;
+            return false;
         else
             return ( m_nDeletedPosition == impl_getRowCount() );
     }
@@ -927,7 +927,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     if(!rows)
-        return sal_True; // in this case do nothing
+        return true; // in this case do nothing
 
     checkPositioningAllowed();
 
@@ -1112,7 +1112,7 @@ sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeExcepti
     checkCache();
 
     if ( impl_rowDeleted() )
-        return sal_False;
+        return false;
 
     return m_pCache->rowUpdated();
 }
@@ -1124,7 +1124,7 @@ sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeExcept
     checkCache();
 
     if ( impl_rowDeleted() )
-        return sal_False;
+        return false;
 
     return m_pCache->rowInserted();
 }
@@ -1224,7 +1224,7 @@ void ORowSetBase::fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld )
 {
     Any aNew = css::uno::makeAny( _bNew );
     Any aOld = css::uno::makeAny( _bOld );
-    fire( &_nProperty, &aNew, &aOld, 1, sal_False );
+    fire( &_nProperty, &aNew, &aOld, 1, false );
 }
 
 void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )

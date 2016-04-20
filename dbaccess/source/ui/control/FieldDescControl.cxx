@@ -1670,7 +1670,7 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
 
                 Reference< css::util::XNumberFormatPreviewer> xPreviewer(xNumberFormatter,UNO_QUERY);
                 OSL_ENSURE(xPreviewer.is(),"XNumberFormatPreviewer is null!");
-                sDefault = xPreviewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
+                sDefault = xPreviewer->convertNumberToPreviewString(sFormat,nValue,aLocale,true);
             }
             else if ( !(_bCheck && sDefault.isEmpty()) )
                 sDefault = xNumberFormatter->formatString(nFormatKey, sDefault.isEmpty() ? sFormat : sDefault);

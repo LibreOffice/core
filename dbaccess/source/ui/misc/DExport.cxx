@@ -196,7 +196,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 aTypes.reserve(nCount+1);
                 aNullable.reserve(nCount+1);
                 aTypes.push_back(-1);
-                aNullable.push_back(sal_False);
+                aNullable.push_back(false);
                 for (sal_Int32 j = 1; j <= nCount ; ++j)
                 {
                     aNullable.push_back(xResultSetMetaData->isNullable(j) != ColumnValue::NO_NULLS );

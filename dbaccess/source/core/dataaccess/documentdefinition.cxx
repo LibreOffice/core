@@ -452,7 +452,7 @@ void ODocumentDefinition::closeObject()
         {
             Reference< css::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
             if ( xCloseable.is() )
-                xCloseable->close(sal_True);
+                xCloseable->close(true);
         }
         catch(const Exception&)
         {
@@ -728,12 +728,12 @@ void ODocumentDefinition::impl_initFormEditView( const Reference< XController >&
         LayoutManagerLock aLockLayout( _rxController );
 
         // setting of the visual properties
-        xViewSettings->setPropertyValue("ShowRulers",makeAny(sal_True));
-        xViewSettings->setPropertyValue("ShowVertRuler",makeAny(sal_True));
-        xViewSettings->setPropertyValue("ShowHoriRuler",makeAny(sal_True));
-        xViewSettings->setPropertyValue("IsRasterVisible",makeAny(sal_True));
-        xViewSettings->setPropertyValue("IsSnapToRaster",makeAny(sal_True));
-        xViewSettings->setPropertyValue("ShowOnlineLayout",makeAny(sal_True));
+        xViewSettings->setPropertyValue("ShowRulers",makeAny(true));
+        xViewSettings->setPropertyValue("ShowVertRuler",makeAny(true));
+        xViewSettings->setPropertyValue("ShowHoriRuler",makeAny(true));
+        xViewSettings->setPropertyValue("IsRasterVisible",makeAny(true));
+        xViewSettings->setPropertyValue("IsSnapToRaster",makeAny(true));
+        xViewSettings->setPropertyValue("ShowOnlineLayout",makeAny(true));
         xViewSettings->setPropertyValue("RasterSubdivisionX",makeAny(sal_Int32(5)));
         xViewSettings->setPropertyValue("RasterSubdivisionY",makeAny(sal_Int32(5)));
     }
@@ -1201,7 +1201,7 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
             {
                 Reference< css::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
                 if ( xCloseable.is() )
-                    xCloseable->close(sal_True);
+                    xCloseable->close(true);
             }
             catch(const Exception&)
             {
@@ -2005,7 +2005,7 @@ bool ODocumentDefinition::prepareClose()
             // document has not yet been activated, i.e. has no UI, yet
             return true;
 
-        bool bCouldSuspend = xController->suspend( sal_True );
+        bool bCouldSuspend = xController->suspend( true );
         if ( !bCouldSuspend )
             // controller vetoed the closing
             return false;
@@ -2022,7 +2022,7 @@ bool ODocumentDefinition::prepareClose()
             {
                 if ( bCouldSuspend )
                     // revert suspension
-                    xController->suspend( sal_False );
+                    xController->suspend( false );
                 // saving failed or was cancelled
                 return false;
             }

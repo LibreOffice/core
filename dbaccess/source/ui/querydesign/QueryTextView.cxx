@@ -107,14 +107,14 @@ void OQueryTextView::cut()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Cut();
-    getContainerWindow()->getDesignView()->getController().setModified(sal_True);
+    getContainerWindow()->getDesignView()->getController().setModified(true);
 }
 
 void OQueryTextView::paste()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Paste();
-    getContainerWindow()->getDesignView()->getController().setModified(sal_True);
+    getContainerWindow()->getDesignView()->getController().setModified(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

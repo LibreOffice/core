@@ -357,7 +357,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         {
             uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
             if ( xModi.is() )
-                xModi->setModified(sal_False);
+                xModi->setModified(false);
         }
         else
         {

@@ -146,7 +146,7 @@ namespace dbaui
             m_xConnection = m_pImpl->createConnection().first;
             m_bOwnConnection = m_xConnection.is();
         }
-        return ::std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,sal_False);
+        return ::std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,false);
     }
     Reference< XComponentContext > OUserAdminDlg::getORB() const
     {

@@ -196,7 +196,7 @@ namespace dbaccess
                 return;
             }
 
-            xModify->setModified( sal_True );
+            xModify->setModified( true );
         }
     }
 

@@ -49,7 +49,7 @@ void OTableDesignUndoAct::Undo()
     // doc has not been modified if first undo was reverted
     if( m_pTabDgnCtrl->m_nCurUndoActId == 0 )
     {
-        m_pTabDgnCtrl->GetView()->getController().setModified(sal_False);
+        m_pTabDgnCtrl->GetView()->getController().setModified(false);
         m_pTabDgnCtrl->GetView()->getController().InvalidateFeature(SID_SAVEDOC);
     }
 }
@@ -61,7 +61,7 @@ void OTableDesignUndoAct::Redo()
     // restore Modified-flag after Redo of first Undo-action
     if( m_pTabDgnCtrl->m_nCurUndoActId > 0 )
     {
-        m_pTabDgnCtrl->GetView()->getController().setModified(sal_True);
+        m_pTabDgnCtrl->GetView()->getController().setModified(true);
         m_pTabDgnCtrl->GetView()->getController().InvalidateFeature(SID_SAVEDOC);
     }
 }
@@ -92,7 +92,7 @@ void OTableDesignCellUndoAct::Undo()
         CellControllerRef xController = m_pTabDgnCtrl->Controller();
         if ( xController.Is() )
             xController->ClearModified();
-        m_pTabDgnCtrl->GetView()->getController().setModified(sal_False);
+        m_pTabDgnCtrl->GetView()->getController().setModified(false);
 
     }
 

@@ -294,14 +294,14 @@ namespace dbaui
 
             // suspend the controller in the document
             if ( xController.is() )
-                if ( !xController->suspend( sal_True ) )
+                if ( !xController->suspend( true ) )
                     return false;
 
             bool bSuccess = false;
             try
             {
                 Reference< XCloseable > xCloseable( _rComponent.xFrame, UNO_QUERY_THROW );
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
                 bSuccess = true;
             }
             catch( const Exception& )

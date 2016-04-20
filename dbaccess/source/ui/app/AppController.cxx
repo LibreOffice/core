@@ -512,14 +512,14 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getView() && getView()->IsInModalMode() )
-        return sal_False;
+        return false;
 
     bool bCanSuspend = true;
 
     if ( m_bSuspended != bool(bSuspend) )
     {
         if ( bSuspend && !closeSubComponents() )
-            return sal_False;
+            return false;
 
         Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
         Reference<XStorable> xStor(getModel(),UNO_QUERY);
@@ -1213,7 +1213,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             eType = E_QUERY;
                             break;
                         case ID_NEW_QUERY_DESIGN:
-                            aCreationArgs.put( OUString(PROPERTY_GRAPHICAL_DESIGN), sal_True );
+                            aCreationArgs.put( OUString(PROPERTY_GRAPHICAL_DESIGN), true );
                             // run through
                         case ID_NEW_QUERY_SQL:
                             eType = E_QUERY;
@@ -2584,7 +2584,7 @@ void OApplicationController::OnFirstControllerConnected()
         // If the migration just happened, but was not successful, the document is reloaded.
         // In this case, we should not show the warning, again.
         ::comphelper::NamedValueCollection aModelArgs( m_xModel->getArgs() );
-        if ( aModelArgs.getOrDefault( "SuppressMigrationWarning", sal_False ) )
+        if ( aModelArgs.getOrDefault( "SuppressMigrationWarning", false ) )
             return;
 
         // also, if the document is read-only, then no migration is possible, and the
@@ -2626,14 +2626,14 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     if ( ( !xOfficeDoc.is() || !xDocModify.is() ) && _rxModel.is() )
     {
         OSL_FAIL( "OApplicationController::attachModel: invalid model!" );
-        return sal_False;
+        return false;
     }
 
     if ( m_xModel.is() && ( m_xModel != _rxModel ) && ( _rxModel.is() ) )
     {
         OSL_ENSURE( false, "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
         // we'd need to completely update our view here, close sub components, and the like
-        return sal_False;
+        return false;
     }
 
     const OUString aPropertyNames[] =
@@ -2705,7 +2705,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 void OApplicationController::containerFound( const Reference< XContainer >& _xContainer)
@@ -2763,7 +2763,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw
     if ( !_aSelection.hasValue() || !getView() )
     {
         getContainer()->selectElements(aSelection);
-        return sal_True;
+        return true;
     }
 
     // BEGIN compatibility
@@ -2790,7 +2790,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw
         m_aSelectContainerEvent.CancelCall();   // just in case the async select request was running
         getContainer()->selectContainer(eType);
         getContainer()->selectElements(aSelection);
-        return sal_True;
+        return true;
     }
     // END compatibility
 
@@ -2871,7 +2871,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw
     m_aSelectContainerEvent.CancelCall();   // just in case the async select request was running
     getContainer()->selectContainer( eSelectedCategory );
 
-    return sal_True;
+    return true;
 }
 
 Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException, std::exception)

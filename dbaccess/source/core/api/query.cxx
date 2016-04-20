@@ -247,7 +247,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
         }
     }
 
-    fire(&nOwnHandle, &_rSource.NewValue, &_rSource.OldValue, 1, sal_False);
+    fire(&nOwnHandle, &_rSource.NewValue, &_rSource.OldValue, 1, false);
 }
 
 void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)

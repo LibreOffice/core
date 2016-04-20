@@ -94,7 +94,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
     Sequence< Property > aRegisteredProperties;
     describeProperties( aRegisteredProperties );
 
-    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), sal_False );
+    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), false );
 }
 
 // cppu::OPropertySetHelper
@@ -188,7 +188,7 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
         m_aOldValue = _rOldValue.makeAny();
         Any aNew = value.makeAny();
 
-        fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
+        fire(&nHandle, &aNew, &m_aOldValue, 1, false );
     }
 }
 

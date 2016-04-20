@@ -169,26 +169,26 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
         if ( !bFoundTableNameLengthLimited && ( _eUsedFor == eAppSettings ) )
         {
             aProperty.Name = INFO_ALLOWLONGTABLENAMES;
-            aProperty.Value <<= sal_True;
+            aProperty.Value <<= true;
             rImport.addInfo(aProperty);
         }
         if ( !bFoundParamNameSubstitution && ( _eUsedFor == eDriverSettings ) )
         {
             aProperty.Name = INFO_PARAMETERNAMESUBST;
-            aProperty.Value <<= sal_True;
+            aProperty.Value <<= true;
             rImport.addInfo(aProperty);
         }
         if ( !bFoundAppendTableAliasName && ( _eUsedFor == eAppSettings ) )
         {
             aProperty.Name = INFO_APPEND_TABLE_ALIAS;
-            aProperty.Value <<= sal_True;
+            aProperty.Value <<= true;
             rImport.addInfo(aProperty);
         }
         if ( !bFoundSuppressVersionColumns && ( _eUsedFor == eAppSettings ) )
         {
             try
             {
-                xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sal_True));
+                xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(true));
             }
             catch(const Exception&)
             {

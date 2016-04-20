@@ -403,15 +403,15 @@ namespace dbaui
         if ( !bSuspend && !isConnected() )
             reconnect(true);
 
-        return sal_True;
+        return true;
     }
 
     sal_Bool SAL_CALL DBSubComponentController::attachModel( const Reference< XModel > & _rxModel) throw( RuntimeException, std::exception )
     {
         if ( !_rxModel.is() )
-            return sal_False;
+            return false;
         if ( !DBSubComponentController_Base::attachModel( _rxModel ) )
-            return sal_False;
+            return false;
 
         m_pImpl->m_bNotAttached = false;
         if ( m_pImpl->m_nDocStartNumber == 1 )
@@ -422,7 +422,7 @@ namespace dbaui
         if ( xUntitledProvider.is() )
             m_pImpl->m_nDocStartNumber = xUntitledProvider->leaseNumber( static_cast< XWeak* >( this ) );
 
-        return sal_True;
+        return true;
     }
 
     void DBSubComponentController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& _rArgs)

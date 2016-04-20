@@ -105,7 +105,7 @@ sal_Bool SAL_CALL OSharedConnection::isClosed(  ) throw(SQLException, RuntimeExc
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_xConnection.is() )
-        return sal_True;
+        return true;
 
     return m_xConnection->isClosed();
 }

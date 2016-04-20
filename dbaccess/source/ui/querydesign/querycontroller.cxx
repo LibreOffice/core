@@ -568,7 +568,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         case ID_BROWSER_ESCAPEPROCESSING:
             setEscapeProcessing_fireEvent( !m_bEscapeProcessing );
             if ( !editingView() )
-                setModified(sal_True);
+                setModified(true);
             InvalidateFeature(ID_BROWSER_SQL);
             break;
         case ID_BROWSER_SAVEASDOC:
@@ -697,17 +697,17 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         case SID_QUERY_VIEW_TABLES:
         case SID_QUERY_VIEW_ALIASES:
             getContainer()->setSlotEnabled(_nId,!getContainer()->isSlotEnabled(_nId));
-            setModified(sal_True);
+            setModified(true);
             break;
         case SID_QUERY_DISTINCT_VALUES:
             m_bDistinct = !m_bDistinct;
-            setModified(sal_True);
+            setModified(true);
             break;
         case SID_QUERY_LIMIT:
             if ( aArgs.getLength() >= 1 && aArgs[0].Name == "DBLimit.Value" )
             {
                 aArgs[0].Value >>= m_nLimit;
-                setModified(sal_True);
+                setModified(true);
             }
             break;
         case SID_QUERY_PROP_DLG:
@@ -727,7 +727,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 {
                     try
                     {
-                        xCloseFrame->close( sal_True );
+                        xCloseFrame->close( true );
                     }
                     catch(const Exception&)
                     {
@@ -1042,7 +1042,7 @@ void OQueryController::impl_initialize()
             Application::PostUserEvent( LINK( this, OQueryController, OnExecuteAddTable ) );
         }
 
-        setModified(sal_False);
+        setModified(false);
     }
     catch(const SQLException& e)
     {
@@ -1418,7 +1418,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     OUString sTranslatedStmt = translateStatement();
     if ( editingCommand() )
     {
-        setModified( sal_False );
+        setModified( false );
         // this is all we need to do here. translateStatement implicitly set our m_sStatement, and
         // notified it, and that's all
         return true;
@@ -1546,7 +1546,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
             releaseNumberForComponent();
         }
 
-        setModified( sal_False );
+        setModified( false );
         bSuccess = true;
 
     }
@@ -1929,7 +1929,7 @@ void OQueryController::setStatement_fireEvent( const OUString& _rNewStatement, b
 
     sal_Int32 nHandle = PROPERTY_ID_ACTIVECOMMAND;
     if ( _bFireStatementChange )
-        fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
+        fire( &nHandle, &aNewValue, &aOldValue, 1, false );
 }
 
 void OQueryController::setEscapeProcessing_fireEvent( const bool _bEscapeProcessing )
@@ -1942,7 +1942,7 @@ void OQueryController::setEscapeProcessing_fireEvent( const bool _bEscapeProcess
     Any aNewValue = makeAny( m_bEscapeProcessing );
 
     sal_Int32 nHandle = PROPERTY_ID_ESCAPE_PROCESSING;
-    fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
+    fire( &nHandle, &aNewValue, &aOldValue, 1, false );
 }
 
 IMPL_LINK_NOARG_TYPED( OQueryController, OnExecuteAddTable, void*, void )

@@ -124,7 +124,7 @@ namespace sdbtools
         Reference< XPropertySet > xTable;
         try
         {
-            xTable.set( xTables->getByName( getComposedName( CompositionType::Complete, sal_False ) ), UNO_QUERY_THROW );
+            xTable.set( xTables->getByName( getComposedName( CompositionType::Complete, false ) ), UNO_QUERY_THROW );
         }
         catch( const WrappedTargetException& )
         {

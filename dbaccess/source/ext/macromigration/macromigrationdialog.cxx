@@ -448,7 +448,7 @@ namespace dbmm
                 aDocumentArgs.put( "SalvagedFile", m_pData->sSuccessfulBackupLocation );
                 // reset the modified flag of the document, so the controller can be suspended later
                 Reference< XModifiable > xModify( m_pData->xDocument, UNO_QUERY_THROW );
-                xModify->setModified( sal_False );
+                xModify->setModified( false );
                 // after this reload, don't show the migration warning, again
                 aDocumentArgs.put( "SuppressMigrationWarning", true );
             }
@@ -473,7 +473,7 @@ namespace dbmm
                 Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
                 OUString sViewName( xController->getViewControllerName() );
 
-                if ( !xController->suspend( sal_True ) )
+                if ( !xController->suspend( true ) )
                 {   // ouch. There shouldn't be any modal dialogs and such, so there
                     // really is no reason why suspending shouldn't work.
                     OSL_FAIL( "MacroMigrationDialog::impl_reloadDocument_nothrow: could not suspend a controller!" );
@@ -536,7 +536,7 @@ namespace dbmm
             if ( !_bMigrationSuccess )
             {
                 Reference< XModifiable > xModify( m_pData->xDocument, UNO_QUERY_THROW );
-                xModify->setModified( sal_True );
+                xModify->setModified( true );
                     // this is just paranoia - in case saving the doc fails, perhaps the user is tempted to do so
                 Reference< XStorable > xStor( m_pData->xDocument, UNO_QUERY_THROW );
                 xStor->store();
@@ -556,7 +556,7 @@ namespace dbmm
             try
             {
                 Reference< XCloseable > xFrameClose( aView.first, UNO_QUERY_THROW );
-                xFrameClose->close( sal_True );
+                xFrameClose->close( true );
             }
             catch( const Exception& )
             {

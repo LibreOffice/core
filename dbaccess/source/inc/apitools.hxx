@@ -84,9 +84,9 @@ public:
         const OUString* pSupported = aSupported.getConstArray(); \
         for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)    \
             if (pSupported->equals(_rServiceName))  \
-                return sal_True;    \
+                return true;    \
     \
-        return sal_False;   \
+        return false;   \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(classname, serviceasciiname)    \

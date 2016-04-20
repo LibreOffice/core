@@ -166,24 +166,24 @@ sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequ
             css::chart::ChartDataRowSource eRowSource = css::chart::ChartDataRowSource_COLUMNS;
             pArgIter->Value >>= eRowSource;
             if ( eRowSource != css::chart::ChartDataRowSource_COLUMNS )
-                return sal_False;
+                return false;
         }
         else if ( pArgIter->Name == "CellRangeRepresentation" )
         {
             OUString sRange;
             pArgIter->Value >>= sRange;
             if ( sRange != "all" )
-                return sal_False;
+                return false;
         }
         else if ( pArgIter->Name == "FirstCellAsLabel" )
         {
             bool bFirstCellAsLabel = true;
             pArgIter->Value >>= bFirstCellAsLabel;
             if ( !bFirstCellAsLabel )
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::createDataSource(const uno::Sequence< beans::PropertyValue > & _aArguments) throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
@@ -205,7 +205,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
         }
 
         ::comphelper::NamedValueCollection aArgs( _aArguments );
-        const bool bHasCategories = aArgs.getOrDefault( "HasCategories", sal_True );
+        const bool bHasCategories = aArgs.getOrDefault( "HasCategories", true );
         uno::Sequence< OUString > aColumnNames =
             aArgs.getOrDefault( "ColumnDescriptions", uno::Sequence< OUString >() );
 
@@ -229,7 +229,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             if ( xIni.is() )
             {
                 uno::Sequence< uno::Any > aInitArgs(1);
-                beans::NamedValue aParam("CreateDefaultData",uno::makeAny(sal_True));
+                beans::NamedValue aParam("CreateDefaultData",uno::makeAny(true));
                 aInitArgs[0] <<= aParam;
                 xIni->initialize(aInitArgs);
             }
@@ -245,7 +245,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
     aArguments.put( "CellRangeRepresentation", uno::Any( OUString( "all" ) ) );
     aArguments.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
     // internal data always contains labels
-    aArguments.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+    aArguments.put( "FirstCellAsLabel", uno::makeAny( true ) );
 
     bool bHasCategories = false;
     if( _xDataSource.is())
@@ -275,7 +275,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
 
 sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/) throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const

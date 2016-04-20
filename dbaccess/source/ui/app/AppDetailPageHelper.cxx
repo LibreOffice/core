@@ -228,7 +228,7 @@ void OAppDetailPageHelper::dispose()
     {
         Reference< ::util::XCloseable> xCloseable(m_xFrame,UNO_QUERY);
         if ( xCloseable.is() )
-            xCloseable->close(sal_True);
+            xCloseable->close(true);
     }
     catch(const Exception&)
     {
@@ -1110,10 +1110,10 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         pDispatcher->setTargetFrame( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW) );
 
         ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "Preview", sal_True );
-        aArgs.put( "ReadOnly", sal_True );
-        aArgs.put( "AsTemplate", sal_False );
-        aArgs.put( OUString(PROPERTY_SHOWMENU), sal_False );
+        aArgs.put( "Preview", true );
+        aArgs.put( "ReadOnly", true );
+        aArgs.put( "AsTemplate", false );
+        aArgs.put( OUString(PROPERTY_SHOWMENU), false );
 
         Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
         bool bClearPreview = !xPreview.is();

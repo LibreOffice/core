@@ -810,7 +810,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             {
                 xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
                 Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
-                try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
+                try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( false ) ); }
                 catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
                 xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
                 xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );

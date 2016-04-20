@@ -110,10 +110,10 @@ void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLEx
         Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
         aGuard.clear();
         Any aNew = makeAny(newName);
-        fire(&nHandle, &aNew, &aOld, 1, sal_True );
+        fire(&nHandle, &aNew, &aOld, 1, true );
 
         m_pImpl->m_aProps.aTitle = newName;
-        fire(&nHandle, &aNew, &aOld, 1, sal_False );
+        fire(&nHandle, &aNew, &aOld, 1, false );
     }
     catch(const PropertyVetoException&)
     {

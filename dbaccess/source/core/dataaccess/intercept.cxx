@@ -142,7 +142,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
             {
                 if ( aNewArgs[nInd].Name == "SaveTo" )
                 {
-                    aNewArgs[nInd].Value <<= sal_True;
+                    aNewArgs[nInd].Value <<= true;
                     break;
                 }
                 nInd++;
@@ -152,7 +152,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
             {
                 aNewArgs.realloc( nInd + 1 );
                 aNewArgs[nInd].Name = "SaveTo";
-                aNewArgs[nInd].Value <<= sal_True;
+                aNewArgs[nInd].Value <<= true;
             }
 
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(URL, "_self", 0 );
@@ -215,8 +215,8 @@ void SAL_CALL OInterceptor::addStatusListener(
             FeatureStateEvent aStateEvent;
             aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVEAS];
             aStateEvent.FeatureDescriptor = "SaveCopyTo";
-            aStateEvent.IsEnabled = sal_True;
-            aStateEvent.Requery = sal_False;
+            aStateEvent.IsEnabled = true;
+            aStateEvent.Requery = false;
             aStateEvent.State <<= OUString("($3)");
             Control->statusChanged(aStateEvent);
         }
@@ -234,8 +234,8 @@ void SAL_CALL OInterceptor::addStatusListener(
         FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
         aStateEvent.FeatureDescriptor = "Update";
-        aStateEvent.IsEnabled = sal_True;
-        aStateEvent.Requery = sal_False;
+        aStateEvent.IsEnabled = true;
+        aStateEvent.Requery = false;
 
         Control->statusChanged(aStateEvent);
         {
@@ -257,8 +257,8 @@ void SAL_CALL OInterceptor::addStatusListener(
             FeatureStateEvent aStateEvent;
             aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
             aStateEvent.FeatureDescriptor = "Close and Return";
-            aStateEvent.IsEnabled = sal_True;
-            aStateEvent.Requery = sal_False;
+            aStateEvent.IsEnabled = true;
+            aStateEvent.Requery = false;
             Control->statusChanged(aStateEvent);
 
 

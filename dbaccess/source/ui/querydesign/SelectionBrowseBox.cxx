@@ -1269,7 +1269,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)
 
     ActivateCell( nCurrentRow, nCurCol );
 
-    rController.setModified( sal_True );
+    rController.setModified( true );
 
     invalidateUndoRedo();
 }
@@ -1529,7 +1529,7 @@ void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uIn
     Invalidate( aInvalidRect );
 
     ActivateCell( nCurrentRow, nCurCol );
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
 
     invalidateUndoRedo();
 }
@@ -1890,7 +1890,7 @@ void OSelectionBrowseBox::CellModified()
             }
             break;
     }
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
 }
 
 void OSelectionBrowseBox::Fill()
@@ -1990,12 +1990,12 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                             break;
                         case ID_QUERY_DISTINCT:
                             static_cast<OQueryController&>(getDesignView()->getController()).setDistinct(!static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
-                            static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
+                            static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
                             static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
                             break;
                     }
 
-                    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
+                    static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
                 }
             }
             else
@@ -2314,7 +2314,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
     if (bWasEditing)
         ActivateCell(nCellIndex, nColId);
 
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
 }
 
 void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
@@ -2329,7 +2329,7 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
     OSL_ENSURE(nPos <= getFields().size(),"ColumnResized:: nColId sollte nicht groesser als List::count sein!");
     OTableFieldDescRef pEntry = getEntry(nPos-1);
     OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::ColumnResized : keine FieldDescription !");
-    static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
+    static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
     EditBrowseBox::ColumnResized(nColId);
 
     if ( pEntry.is())

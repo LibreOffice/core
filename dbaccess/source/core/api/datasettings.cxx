@@ -145,7 +145,7 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
             _rDefault <<= ::comphelper::getDefaultFont();
             break;
         case PROPERTY_ID_APPLYFILTER:
-            _rDefault <<= sal_False;
+            _rDefault <<= false;
             break;
         case PROPERTY_ID_TEXTRELIEF:
             _rDefault <<= css::awt::FontRelief::NONE;

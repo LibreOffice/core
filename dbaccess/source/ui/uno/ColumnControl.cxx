@@ -102,10 +102,10 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         }
 
         if (aComponentInfos.bVisible)
-            xW->setVisible(sal_True);
+            xW->setVisible(true);
 
         if (!aComponentInfos.bEnable)
-            xW->setEnable(sal_False);
+            xW->setEnable(false);
 
         if (maWindowListeners.getLength())
             xW->addWindowListener( &maWindowListeners );

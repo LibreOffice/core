@@ -123,7 +123,7 @@ namespace
         if( bOk )
         {
             pData->SetJoinType(aDlg->GetJoinType());
-            _pView->getDesignView()->getController().setModified(sal_True);
+            _pView->getDesignView()->getController().setModified(true);
         }
 
         return bOk;
@@ -315,7 +315,7 @@ void OQueryTableView::ClearAll()
     OJoinTableView::ClearAll();
 
     SetUpdateMode(true);
-    m_pView->getController().setModified(sal_True);
+    m_pView->getController().setModified(true);
 }
 
 VclPtr<OTableWindow> OQueryTableView::createWindow(const TTableWindowData::value_type& _pData)
@@ -853,7 +853,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
     pUndoAction->SetOwnership(true);
 
     // by doing so, we have modified the document
-    m_pView->getController().setModified( sal_True );
+    m_pView->getController().setModified( true );
     m_pView->getController().InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
 }
 
@@ -920,7 +920,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
     // show that I have changed the document
     if(!m_pView->getController().isReadOnly())
-        m_pView->getController().setModified( sal_True );
+        m_pView->getController().setModified( true );
 
     m_pView->getController().InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
 

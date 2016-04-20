@@ -143,7 +143,7 @@ namespace dbaccess
                     {
                         Reference< util::XCloseable > xClose( xMod,
                                                               UNO_QUERY_THROW );
-                        xClose->close( sal_False );
+                        xClose->close( false );
                     }
                 }
                 catch( const CloseVetoException& )

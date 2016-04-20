@@ -235,19 +235,19 @@ void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) c
             _rDefault <<= static_cast<sal_Int32>(CommandType::COMMAND);
             break;
         case PROPERTY_ID_IGNORERESULT:
-            _rDefault <<= sal_False;
+            _rDefault <<= false;
             break;
         case PROPERTY_ID_APPLYFILTER:
-            _rDefault <<= sal_False;
+            _rDefault <<= false;
             break;
         case PROPERTY_ID_ISMODIFIED:
-            _rDefault <<= sal_False;
+            _rDefault <<= false;
             break;
         case PROPERTY_ID_ISBOOKMARKABLE:
-            _rDefault <<= sal_True;
+            _rDefault <<= true;
             break;
         case PROPERTY_ID_CANUPDATEINSERTEDROWS:
-            _rDefault <<= sal_True;
+            _rDefault <<= true;
             break;
         case PROPERTY_ID_RESULTSETTYPE:
             _rDefault <<= ResultSetType::SCROLL_INSENSITIVE;
@@ -262,7 +262,7 @@ void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) c
             _rDefault <<= static_cast<sal_Int32>(1);
             break;
         case PROPERTY_ID_ESCAPE_PROCESSING:
-            _rDefault <<= sal_True;
+            _rDefault <<= true;
             break;
         case PROPERTY_ID_MAXROWS:
             _rDefault <<= sal_Int32( 0 );
@@ -630,7 +630,7 @@ void ORowSet::setActiveConnection( Reference< XConnection >& _rxNewConn, bool _b
 
     // fire the event
     if (_bFireEvent)
-        fire(&nHandle, &aNewConnection, &aOldConnection, 1, sal_False);
+        fire(&nHandle, &aNewConnection, &aOldConnection, 1, false);
 
     // register as event listener for the new connection
     xComponent.set(m_xActiveConnection,UNO_QUERY);
@@ -1163,7 +1163,7 @@ void ORowSet::fireRowcount()
         sal_Int32 nHandle = PROPERTY_ID_ROWCOUNT;
         Any aNew,aOld;
         aNew <<= nCurrentRowCount; aOld <<= m_nLastKnownRowCount;
-        fire(&nHandle,&aNew,&aOld,1,sal_False);
+        fire(&nHandle,&aNew,&aOld,1,false);
         m_nLastKnownRowCount = nCurrentRowCount;
     }
     if ( !m_bLastKnownRowCountFinal && ( m_bLastKnownRowCountFinal != bCurrentRowCountFinal ) )
@@ -1172,7 +1172,7 @@ void ORowSet::fireRowcount()
         Any aNew,aOld;
         aNew <<= bCurrentRowCountFinal;
         aOld <<= m_bLastKnownRowCountFinal;
-        fire(&nHandle,&aNew,&aOld,1,sal_False);
+        fire(&nHandle,&aNew,&aOld,1,false);
         m_bLastKnownRowCountFinal = bCurrentRowCountFinal;
     }
 }
@@ -1249,7 +1249,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
         (*aIter)->getPropertyValue(PROPERTY_ISREADONLY) >>= bReadOnly;
         *aReadIter = bReadOnly;
 
-        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY,makeAny(sal_False));
+        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY,makeAny(false));
     }
 }
 
@@ -1662,7 +1662,7 @@ void ORowSet::impl_ensureStatement_throw()
         // set the result set type and concurrency
         try
         {
-            xStatementProps->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( sal_True ) );
+            xStatementProps->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( true ) );
             xStatementProps->setPropertyValue( PROPERTY_MAXROWS, makeAny( m_nMaxRows ) );
 
             setStatementResultSetType( xStatementProps, m_nResultSetType, m_nResultSetConcurrency );

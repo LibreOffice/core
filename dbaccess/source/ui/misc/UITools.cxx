@@ -454,7 +454,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
                     nCount = 18;
                 aTypes.reserve(nCount+1);
                 aTypes.push_back(-1);
-                aNullable.push_back(sal_False);
+                aNullable.push_back(false);
                 for (sal_Int32 j = 1; j <= nCount ; ++j)
                 {
                     aTypes.push_back(xResultSetMetaData->getColumnType(j));

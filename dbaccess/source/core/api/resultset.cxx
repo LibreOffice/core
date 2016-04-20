@@ -216,7 +216,7 @@ sal_Bool OResultSet::convertFastPropertyValue(Any & rConvertedValue, Any & rOldV
     // be lazy ...
     rConvertedValue = rValue;
     getFastPropertyValue( rOldValue, nHandle );
-    return sal_True;
+    return true;
 }
 
 void OResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)

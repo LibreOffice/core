@@ -377,7 +377,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 {
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
-    bool bPreview = aMediaDesc.getOrDefault( "Preview", sal_False );
+    bool bPreview = aMediaDesc.getOrDefault( "Preview", false );
     if ( bPreview )
     {
         if (rListener.is())

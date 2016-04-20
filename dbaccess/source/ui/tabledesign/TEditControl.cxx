@@ -688,7 +688,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         xController->SetModified();
 
     // Set the Modify flag
-    GetView()->getController().setModified( sal_True );
+    GetView()->getController().setModified( true );
     InvalidateFeatures();
 }
 
@@ -815,7 +815,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
 
     // Create the Undo-Action
     GetUndoManager().AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
-    GetView()->getController().setModified( sal_True );
+    GetView()->getController().setModified( true );
     InvalidateFeatures();
 }
 
@@ -852,7 +852,7 @@ void OTableEditorCtrl::DeleteRows()
     SetDataPtr( m_nDataPos );
     ActivateCell();
     pDescrWin->DisplayData( pActRow->GetActFieldDescr() );
-    GetView()->getController().setModified( sal_True );
+    GetView()->getController().setModified( true );
     InvalidateFeatures();
 }
 
@@ -869,7 +869,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
         m_pRowList->insert( m_pRowList->begin()+i ,std::shared_ptr<OTableRow>(new OTableRow()));
     RowInserted( nRow, nInsertRows );
 
-    GetView()->getController().setModified( sal_True );
+    GetView()->getController().setModified( true );
     InvalidateFeatures();
 }
 
@@ -1555,7 +1555,7 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
     InvalidateHandleColumn();
 
     // Set the TableDocSh's ModifyFlag
-    GetView()->getController().setModified( sal_True );
+    GetView()->getController().setModified( true );
     InvalidateFeatures();
 }
 

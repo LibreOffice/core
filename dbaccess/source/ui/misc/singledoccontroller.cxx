@@ -90,7 +90,7 @@ namespace dbaui
         GetUndoManager().AddUndoAction( _pAction );
 
         // when we add an undo action the controller was modified
-        setModified( sal_True );
+        setModified( true );
 
         // now inform me that or states changed
         InvalidateFeature( ID_BROWSER_UNDO );

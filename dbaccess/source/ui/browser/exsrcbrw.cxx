@@ -335,7 +335,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     {
         // switch the control to design mode
         if (getBrowserView() && getBrowserView()->getGridControl().is())
-            getBrowserView()->getGridControl()->setDesignMode(sal_True);
+            getBrowserView()->getGridControl()->setDesignMode(true);
 
         // the grid will move the form's cursor to the first record, but we want the form to remain unchanged
         // restore the old position

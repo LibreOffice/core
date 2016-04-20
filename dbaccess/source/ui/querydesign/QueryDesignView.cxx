@@ -2529,7 +2529,7 @@ IMPL_LINK_NOARG_TYPED( OQueryDesignView, SplitHdl, Splitter*, void )
         m_bInSplitHandler = true;
         m_aSplitter->SetPosPixel( Point( m_aSplitter->GetPosPixel().X(),m_aSplitter->GetSplitPosPixel() ) );
         static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter->GetSplitPosPixel());
-        static_cast<OQueryController&>(getController()).setModified( sal_True );
+        static_cast<OQueryController&>(getController()).setModified( true );
         Resize();
         m_bInSplitHandler = true;
     }
@@ -2684,7 +2684,7 @@ void OQueryDesignView::cut()
     if( m_eChildFocus == SELECTION)
     {
         m_pSelectionBox->cut();
-        static_cast<OQueryController&>(getController()).setModified(sal_True);
+        static_cast<OQueryController&>(getController()).setModified(true);
     }
 }
 
@@ -2693,7 +2693,7 @@ void OQueryDesignView::paste()
     if( m_eChildFocus == SELECTION)
     {
         m_pSelectionBox->paste();
-        static_cast<OQueryController&>(getController()).setModified(sal_True);
+        static_cast<OQueryController&>(getController()).setModified(true);
     }
 }
 

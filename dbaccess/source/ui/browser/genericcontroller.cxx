@@ -1036,7 +1036,7 @@ IMPL_LINK_NOARG_TYPED(OGenericUnoController, OnAsyncCloseTask, void*, void)
         try
         {
             Reference< util::XCloseable > xCloseable( m_aCurrentFrame.getFrame(), UNO_QUERY_THROW );
-            xCloseable->close( sal_False ); // false - holds the owner ship for this frame inside this object!
+            xCloseable->close( false ); // false - holds the owner ship for this frame inside this object!
         }
         catch( const Exception& )
         {
@@ -1068,7 +1068,7 @@ Reference< XFrame > SAL_CALL OGenericUnoController::getFrame() throw( RuntimeExc
 sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/) throw( RuntimeException, std::exception )
 {
     SAL_WARN("dbaccess.ui", "OGenericUnoController::attachModel: not supported!" );
-    return sal_False;
+    return false;
 }
 
 void OGenericUnoController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)

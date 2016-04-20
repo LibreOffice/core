@@ -185,7 +185,7 @@ OAuthenticationContinuation::OAuthenticationContinuation()
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ ) throw(RuntimeException, std::exception)
@@ -207,7 +207,7 @@ void SAL_CALL OAuthenticationContinuation::setUserName( const OUString& _rUser )
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetPassword(  ) throw(RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL OAuthenticationContinuation::setPassword( const OUString& _rPassword ) throw(RuntimeException, std::exception)
@@ -229,7 +229,7 @@ void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthenti
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL OAuthenticationContinuation::setAccount( const OUString& ) throw(RuntimeException, std::exception)
@@ -1059,8 +1059,8 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         // the request
         AuthenticationRequest aRequest;
         aRequest.ServerName = sServerName;
-        aRequest.HasRealm = aRequest.HasAccount = sal_False;
-        aRequest.HasUserName = aRequest.HasPassword = sal_True;
+        aRequest.HasRealm = aRequest.HasAccount = false;
+        aRequest.HasUserName = aRequest.HasPassword = true;
         aRequest.UserName = m_pImpl->m_sUser;
         aRequest.Password = m_pImpl->m_sFailedPassword.isEmpty() ?  m_pImpl->m_aPassword : m_pImpl->m_sFailedPassword;
         OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));

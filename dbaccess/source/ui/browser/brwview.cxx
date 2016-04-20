@@ -89,11 +89,11 @@ void UnoDataBrowserView::Construct(const Reference< css::awt::XControlModel >& x
         m_xGrid = new SbaXGridControl( getORB() );
         OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
-        m_xGrid->setDesignMode(sal_True);
+        m_xGrid->setDesignMode(true);
 
         Reference< css::awt::XWindow >  xGridWindow(m_xGrid, UNO_QUERY);
-        xGridWindow->setVisible(sal_True);
-        xGridWindow->setEnable(sal_True);
+        xGridWindow->setVisible(true);
+        xGridWindow->setEnable(true);
 
         // introduce the model to the grid
         m_xGrid->setModel(xModel);

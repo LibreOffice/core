@@ -630,7 +630,7 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeE
     // However, the API definition explicitly allows to be that sloppy ...
 
     if ( isModified() )
-        return sal_True;
+        return true;
 
     // auto recovery is an "UI feature", it is to restore the UI the user knows. Thus,
     // we ask our connected controllers, not simply our existing form/report definitions.
@@ -646,7 +646,7 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeE
             )
         {
             if ( lcl_hasAnyModifiedSubComponent_throw( *ctrl ) )
-                return sal_True;
+                return true;
         }
     }
     catch( const Exception& )
@@ -654,7 +654,7 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeE
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException, std::exception )
@@ -886,7 +886,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
         // #i51157#
         try
         {
-            close( sal_True );
+            close( true );
         }
         catch( const CloseVetoException& )
         {

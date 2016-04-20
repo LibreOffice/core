@@ -488,7 +488,7 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
     describeProperties( aBaseProperties );
 
     Sequence< Property > aAllProperties( ::comphelper::concatSequences( aDescriptor, aBaseProperties ) );
-    return new ::cppu::OPropertyArrayHelper( aAllProperties, sal_False );
+    return new ::cppu::OPropertyArrayHelper( aAllProperties, false );
 }
 
 // cppu::OPropertySetHelper

@@ -251,31 +251,31 @@ OUString ODsnTypeCollection::getJavaDriverClass(const OUString& _sURL) const
 bool ODsnTypeCollection::isFileSystemBased(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("FileSystemBased",sal_False);
+    return aFeatures.getOrDefault("FileSystemBased",false);
 }
 
 bool ODsnTypeCollection::supportsTableCreation(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsTableCreation",sal_False);
+    return aFeatures.getOrDefault("SupportsTableCreation",false);
 }
 
 bool ODsnTypeCollection::supportsColumnDescription(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsColumnDescription",sal_False);
+    return aFeatures.getOrDefault("SupportsColumnDescription",false);
 }
 
 bool ODsnTypeCollection::supportsBrowsing(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsBrowsing",sal_False);
+    return aFeatures.getOrDefault("SupportsBrowsing",false);
 }
 
 bool ODsnTypeCollection::supportsDBCreation(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("SupportsDBCreation",sal_False);
+    return aFeatures.getOrDefault("SupportsDBCreation",false);
 }
 
 Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const OUString& _sURL ) const

@@ -266,13 +266,13 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             AuthenticationRequest aRequest;
             aRequest.ServerName = sName;
             aRequest.Diagnostic = sLoginRequest;
-            aRequest.HasRealm   = aRequest.HasAccount = sal_False;
+            aRequest.HasRealm   = aRequest.HasAccount = false;
             // aRequest.Realm
             aRequest.HasUserName = pUser != nullptr;
             aRequest.UserName    = pUser ? OUString(pUser->GetValue()) : OUString();
-            aRequest.HasPassword = sal_True;
+            aRequest.HasPassword = true;
             //aRequest.Password
-            aRequest.HasAccount  = sal_False;
+            aRequest.HasAccount  = false;
             // aRequest.Account
 
             comphelper::OInteractionRequest* pRequest = new comphelper::OInteractionRequest(makeAny(aRequest));
@@ -351,7 +351,7 @@ void ODbDataSourceAdministrationHelper::clearPassword()
 ::std::pair< Reference<XConnection>,sal_Bool> ODbDataSourceAdministrationHelper::createConnection()
 {
     ::std::pair< Reference<XConnection>,sal_Bool> aRet;
-    aRet.second = sal_False;
+    aRet.second = false;
     Sequence< PropertyValue > aConnectionParams;
     if ( getCurrentSettings(aConnectionParams) )
     {
@@ -362,7 +362,7 @@ void ODbDataSourceAdministrationHelper::clearPassword()
         {
             WaitObject aWaitCursor(m_pParent);
             aRet.first = getDriver()->connect(getConnectionURL(), aConnectionParams);
-            aRet.second = sal_True;
+            aRet.second = true;
         }
         catch (const SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
         catch (const SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }

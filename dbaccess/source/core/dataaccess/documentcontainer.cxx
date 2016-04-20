@@ -746,9 +746,9 @@ void SAL_CALL ODocumentContainer::rename( const OUString& newName ) throw (SQLEx
         Any aNew = makeAny(newName);
 
         aGuard.clear();
-        fire(&nHandle, &aNew, &aOld, 1, sal_True );
+        fire(&nHandle, &aNew, &aOld, 1, true );
         m_pImpl->m_aProps.aTitle = newName;
-        fire(&nHandle, &aNew, &aOld, 1, sal_False );
+        fire(&nHandle, &aNew, &aOld, 1, false );
     }
     catch(const PropertyVetoException&)
     {

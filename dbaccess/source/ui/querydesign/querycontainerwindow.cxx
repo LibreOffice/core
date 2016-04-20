@@ -72,7 +72,7 @@ namespace dbaui
             Reference< css::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
             m_xBeamer = nullptr;
             if(xCloseable.is())
-                xCloseable->close(sal_False); // false - holds the ownership of this frame
+                xCloseable->close(false); // false - holds the ownership of this frame
         }
 
         m_pSplitter.disposeAndClear();
@@ -186,7 +186,7 @@ namespace dbaui
                 if ( xLMPropSet.is() )
                 {
                     const OUString aAutomaticToolbars( "AutomaticToolbars" );
-                    xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( sal_False ));
+                    xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( false ));
                 }
             }
             catch( Exception& )

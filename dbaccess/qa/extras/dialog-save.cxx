@@ -98,7 +98,7 @@ void DialogSaveTest::test()
         // xDocProps.setTitle(xDocProps.getTitle() + " suffix");
         uno::Reference< util::XModifiable > xDocMod(xComponent, UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xDocMod.is());
-        xDocMod->setModified(sal_True);
+        xDocMod->setModified(true);
 
         // now save; the code path to exercise in this test is the "store to same location"
         //           do *not* change to store(As|To|URL)!

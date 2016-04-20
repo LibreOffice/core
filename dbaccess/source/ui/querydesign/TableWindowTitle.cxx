@@ -146,7 +146,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
                     conn->RecalcLines();
 
                 pView->InvalidateConnections();
-                pView->getDesignView()->getController().setModified(sal_True);
+                pView->getDesignView()->getController().setModified(true);
                 pView->Invalidate(InvalidateFlags::NoChildren);
             }
         }

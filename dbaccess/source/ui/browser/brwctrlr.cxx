@@ -1300,7 +1300,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
     {
         // not my data source -> allow anything
         SAL_WARN("dbaccess.ui","SbaXDataBrowserController::approveParameter : invalid event source !");
-        return sal_True;
+        return true;
     }
 
     Reference< css::container::XIndexAccess >  xParameters = aEvent.Parameters;
@@ -1329,7 +1329,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
         if (!pParamValues->wasSelected())
         {   // canceled
             setLoadingCancelled();
-            return sal_False;
+            return false;
         }
 
         // transfer the values into the parameter supplier
@@ -1338,7 +1338,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
         {
             SAL_WARN("dbaccess.ui","SbaXDataBrowserController::approveParameter: the InteractionHandler returned nonsense!");
             setLoadingCancelled();
-            return sal_False;
+            return false;
         }
         const PropertyValue* pFinalValues = aFinalValues.getConstArray();
         for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
@@ -1366,12 +1366,12 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool SbaXDataBrowserController::approveReset(const css::lang::EventObject& /*rEvent*/) throw( RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent) throw( RuntimeException, std::exception )
@@ -1384,9 +1384,9 @@ void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent) t
 sal_Bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException, std::exception )
 {
     if (ScopedVclPtrInstance<MessageDialog>::Create(getBrowserView(), ModuleRes(STR_QUERY_BRW_DELETE_ROWS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() != RET_YES)
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
@@ -2053,7 +2053,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if ( bHaving )
             {
                 HANDLE_SQL_ERRORS(
-                    xParser->appendHavingClauseByColumn(xField,sal_True,nOp),
+                    xParser->appendHavingClauseByColumn(xField,true,nOp),
                     bParserSuccess,
                     ModuleRes(SBA_BROWSER_SETTING_FILTER).toString(),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
@@ -2062,7 +2062,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             else
             {
                 HANDLE_SQL_ERRORS(
-                    xParser->appendFilterByColumn(xField,sal_True,nOp),
+                    xParser->appendFilterByColumn(xField,true,nOp),
                     bParserSuccess,
                     ModuleRes(SBA_BROWSER_SETTING_FILTER).toString(),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
@@ -2461,7 +2461,7 @@ void SbaXDataBrowserController::LoadFinished(bool /*bWasSynch*/)
         }
 
         // switch the control to alive mode
-        getBrowserView()->getGridControl()->setDesignMode(sal_False);
+        getBrowserView()->getGridControl()->setDesignMode(false);
 
         initializeParser();
 

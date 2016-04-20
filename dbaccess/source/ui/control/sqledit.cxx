@@ -186,7 +186,7 @@ IMPL_LINK_NOARG_TYPED(OSqlEdit, ModifyHdl, Edit&, void)
 
     OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
     if (!rController.isModified())
-        rController.setModified( sal_True );
+        rController.setModified( true );
 
     rController.InvalidateFeature(SID_SBA_QRY_EXECUTE);
     rController.InvalidateFeature(SID_CUT);

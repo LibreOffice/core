@@ -239,7 +239,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::wasNull() throw( css::sdbc::SQLException, Run
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->wasNull();
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL SbaXFormAdapter::getString(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -255,7 +255,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::getBoolean(sal_Int32 columnIndex) throw( css:
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getBoolean(columnIndex);
-    return sal_False;
+    return false;
 }
 
 sal_Int8 SAL_CALL SbaXFormAdapter::getByte(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -409,7 +409,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::moveToBookmark(const Any& bookmark) throw( cs
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->moveToBookmark(bookmark);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -417,7 +417,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, s
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->moveRelativeToBookmark(bookmark,rows);
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& _first, const Any& _second) throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -433,7 +433,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasOrderedBookmarks() throw( css::sdbc::SQLEx
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->hasOrderedBookmarks();
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL SbaXFormAdapter::hashBookmark(const Any& bookmark) throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -569,35 +569,35 @@ sal_Bool SAL_CALL SbaXFormAdapter::next() throw( css::sdbc::SQLException, Runtim
 {
     if (m_xMainForm.is())
         return m_xMainForm->next();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::isBeforeFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isBeforeFirst();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::isAfterLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isAfterLast();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::isFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isFirst();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::isLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isLast();
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SbaXFormAdapter::beforeFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -616,14 +616,14 @@ sal_Bool SAL_CALL SbaXFormAdapter::first() throw( css::sdbc::SQLException, Runti
 {
     if (m_xMainForm.is())
         return m_xMainForm->first();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::last() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->last();
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL SbaXFormAdapter::getRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -637,21 +637,21 @@ sal_Bool SAL_CALL SbaXFormAdapter::absolute(sal_Int32 row) throw( css::sdbc::SQL
 {
     if (m_xMainForm.is())
         return m_xMainForm->absolute(row);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::relative(sal_Int32 rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->relative(rows);
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::previous() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->previous();
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SbaXFormAdapter::refreshRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -664,21 +664,21 @@ sal_Bool SAL_CALL SbaXFormAdapter::rowUpdated() throw( css::sdbc::SQLException, 
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowUpdated();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::rowInserted() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowInserted();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::rowDeleted() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowDeleted();
-    return sal_False;
+    return false;
 }
 
 Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement() throw( css::sdbc::SQLException, RuntimeException, std::exception )
@@ -807,7 +807,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::isLoaded() throw( RuntimeException, std::exce
     Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->isLoaded();
-    return sal_False;
+    return false;
 }
 
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm)
@@ -1022,7 +1022,7 @@ IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, SubmitListener, m_aSubm
 sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl() throw( RuntimeException, std::exception )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupControl : not supported !");
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SbaXFormAdapter::setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException, std::exception )

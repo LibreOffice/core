@@ -704,7 +704,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                                 pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
                                 pView->TabWinMoved(this,aOldDataPoint);
                                 Invalidate(InvalidateFlags::NoChildren);
-                                getDesignView()->getController().setModified( sal_True );
+                                getDesignView()->getController().setModified( true );
                             }
                             else
                             {

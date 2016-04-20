@@ -77,7 +77,7 @@ ORowSetColumn::ORowSetColumn( const Reference < XResultSetMetaData >& _xMetaData
     Sequence< Property > aRegisteredProperties;
     describeProperties( aRegisteredProperties );
 
-    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), sal_False );
+    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), false );
 }
 
 ::cppu::IPropertyArrayHelper& ORowSetColumn::getInfoHelper()

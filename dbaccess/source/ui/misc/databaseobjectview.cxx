@@ -119,11 +119,11 @@ namespace dbaui
                     lArgs[nArg++] <<= aProp;
 
                     aProp.Name    = "TopWindow";
-                    aProp.Value <<= sal_True;
+                    aProp.Value <<= true;
                     lArgs[nArg++] <<= aProp;
 
                     aProp.Name    = "SupportPersistentWindowState";
-                    aProp.Value <<= sal_True;
+                    aProp.Value <<= true;
                     lArgs[nArg++] <<= aProp;
 
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
@@ -188,7 +188,7 @@ namespace dbaui
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
 
         const bool bIncludeQueryName = !_rObjectName.isEmpty();
-        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( PROPERTY_GRAPHICAL_DESIGN, sal_True );
+        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( PROPERTY_GRAPHICAL_DESIGN, true );
         const bool bEditViewAsSQLCommand = ( m_nCommandType == CommandType::TABLE ) && !bGraphicalDesign;
 
         i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), m_nCommandType );
@@ -200,7 +200,7 @@ namespace dbaui
 
         if ( bEditViewAsSQLCommand )
         {
-            i_rDispatchArgs.put( OUString(PROPERTY_ESCAPE_PROCESSING), sal_False );
+            i_rDispatchArgs.put( OUString(PROPERTY_ESCAPE_PROCESSING), false );
         }
     }
 
@@ -285,7 +285,7 @@ namespace dbaui
 
         i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
         i_rDispatchArgs.put( OUString(PROPERTY_COMMAND), _rQualifiedName );
-        i_rDispatchArgs.put( OUString(PROPERTY_ENABLE_BROWSER), sal_False );
+        i_rDispatchArgs.put( OUString(PROPERTY_ENABLE_BROWSER), false );
 
         if ( m_bTable )
         {

@@ -519,7 +519,7 @@ void OTableController::impl_initialize()
         loadData();                 // fill the column information from the table
         getView()->initialize();    // show the windows and fill with our information
         ClearUndoManager();
-        setModified(sal_False);     // and we are not modified yet
+        setModified(false);     // and we are not modified yet
     }
     catch( const Exception& )
     {
@@ -537,12 +537,12 @@ bool OTableController::Construct(vcl::Window* pParent)
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException, std::exception )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
-        return sal_True;
+        return true;
 
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
-        return sal_False;
+        return false;
     if ( getView() )
         static_cast<OTableDesignView*>(getView())->GrabFocus();
     bool bCheck = true;
@@ -625,7 +625,7 @@ void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(R
         stopTableListening();
         m_xTable    = nullptr;
         m_bNew      = true;
-        setModified(sal_True);
+        setModified(true);
     }
     else
         OTableController_BASE::disposing( _rSource );
@@ -649,7 +649,7 @@ void OTableController::losingConnection( )
     if(!m_xTable.is())
     {
         m_bNew      = true;
-        setModified(sal_True);
+        setModified(true);
     }
     InvalidateAll();
 }
@@ -1448,7 +1448,7 @@ void OTableController::reSyncRows()
     static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our information
 
     ClearUndoManager();
-    setModified(sal_False);     // and we are not modified yet
+    setModified(false);     // and we are not modified yet
 }
 
 OUString OTableController::createUniqueName(const OUString& _rName)
@@ -1504,7 +1504,7 @@ void OTableController::reload()
     loadData();                 // fill the column information from the table
     static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our information
     ClearUndoManager();
-    setModified(sal_False);     // and we are not modified yet
+    setModified(false);     // and we are not modified yet
     static_cast<OTableDesignView*>(getView())->Invalidate();
 }
 

@@ -474,7 +474,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
         *pAllowedType++ = ::cppu::UnoType<sal_Int16>::get();
         *pAllowedType++ = cppu::UnoType<Sequence< Any >>::get();
 
-        m_xSettings = PropertyBag::createWithTypes( m_aContext, aAllowedTypes, sal_False/*AllowEmptyPropertyName*/, sal_True/*AutomaticAddition*/ );
+        m_xSettings = PropertyBag::createWithTypes( m_aContext, aAllowedTypes, false/*AllowEmptyPropertyName*/, true/*AutomaticAddition*/ );
 
         // insert the default settings
         Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY_THROW );

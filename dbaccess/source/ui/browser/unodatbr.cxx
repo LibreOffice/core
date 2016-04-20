@@ -581,9 +581,9 @@ void SbaTableQueryBrowser::initializePreviewMode()
     Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
     if ( xDataSourceSet.is() )
     {
-        xDataSourceSet->setPropertyValue("AllowInserts",makeAny(sal_False));
-        xDataSourceSet->setPropertyValue("AllowUpdates",makeAny(sal_False));
-        xDataSourceSet->setPropertyValue("AllowDeletes",makeAny(sal_False));
+        xDataSourceSet->setPropertyValue("AllowInserts",makeAny(false));
+        xDataSourceSet->setPropertyValue("AllowUpdates",makeAny(false));
+        xDataSourceSet->setPropertyValue("AllowDeletes",makeAny(false));
     }
 }
 
@@ -617,7 +617,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 if ( m_bPreview )
                 {
                     *pStringIter++  = "AlwaysShowCursor";
-                    *pValueIter++   <<= sal_False;
+                    *pValueIter++   <<= false;
                     *pStringIter++  = PROPERTY_BORDER;
                     *pValueIter++   <<= sal_Int16(0);
                 }
@@ -631,16 +631,16 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 if ( m_bPreview )
                 {
                     *pStringIter++  = "HasNavigationBar";
-                    *pValueIter++       <<= sal_False;
+                    *pValueIter++       <<= false;
                     *pStringIter++  = "HasRecordMarker";
-                    *pValueIter++       <<= sal_False;
+                    *pValueIter++       <<= false;
                 }
                 *pStringIter++  = PROPERTY_ROW_HEIGHT;
                 *pValueIter++   = pData->xObjectProperties->getPropertyValue(PROPERTY_ROW_HEIGHT);
                 if ( m_bPreview )
                 {
                     *pStringIter++  = "Tabstop";
-                    *pValueIter++       <<= sal_False;
+                    *pValueIter++       <<= false;
                 }
                 *pStringIter++  = PROPERTY_TEXTCOLOR;
                 *pValueIter++   = pData->xObjectProperties->getPropertyValue(PROPERTY_TEXTCOLOR);
@@ -963,7 +963,7 @@ sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeExceptio
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
-        return sal_False;
+        return false;
     bool bRet = false;
     if ( !m_bInSuspend )
     {
@@ -1986,7 +1986,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                         if ( aSelection.getLength() )
                         {
                             aDescriptor[daSelection]            <<= aSelection;
-                            aDescriptor[daBookmarkSelection]    <<= sal_False;
+                            aDescriptor[daBookmarkSelection]    <<= false;
                                 // these are selection indices
                                 // before we change this, all clients have to be adjusted
                                 // so that they recognize the new BookmarkSelection property!
@@ -2381,7 +2381,7 @@ bool SbaTableQueryBrowser::implLoadAnything(const OUString& _rDataSourceName, co
         initFormatter();
 
         // switch the grid to design mode while loading
-        getBrowserView()->getGridControl()->setDesignMode(sal_True);
+        getBrowserView()->getGridControl()->setDesignMode(true);
         InitializeForm( xProp );
 
         bool bSuccess = true;
@@ -3102,16 +3102,16 @@ void SbaTableQueryBrowser::impl_initialize()
 
     // disable the browser if either of ShowTreeViewButton (compatibility name) or EnableBrowser
     // is present and set to FALSE
-    bool bDisableBrowser =  !rArguments.getOrDefault( "ShowTreeViewButton", sal_True )   // compatibility name
-                            ||  !rArguments.getOrDefault( PROPERTY_ENABLE_BROWSER, sal_True );
+    bool bDisableBrowser =  !rArguments.getOrDefault( "ShowTreeViewButton", true )   // compatibility name
+                            ||  !rArguments.getOrDefault( PROPERTY_ENABLE_BROWSER, true );
     OSL_ENSURE( !rArguments.has( "ShowTreeViewButton" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeViewButton is superseded by EnableBrowser!" );
     m_bEnableBrowser = !bDisableBrowser;
 
     // hide the tree view it is disabled in general, or if the settings tell to hide it initially
     bool bHideTreeView =    ( !m_bEnableBrowser )
-                            ||  !rArguments.getOrDefault( "ShowTreeView", sal_True )  // compatibility name
-                            ||  !rArguments.getOrDefault( PROPERTY_SHOW_BROWSER, sal_True );
+                            ||  !rArguments.getOrDefault( "ShowTreeView", true )  // compatibility name
+                            ||  !rArguments.getOrDefault( PROPERTY_SHOW_BROWSER, true );
     OSL_ENSURE( !rArguments.has( "ShowTreeView" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeView is superseded by ShowBrowser!" );
 
@@ -3130,17 +3130,17 @@ void SbaTableQueryBrowser::impl_initialize()
             OUString* pStringIter = aProperties.getArray();
             Any* pValueIter = aValues.getArray();
             *pStringIter++  = "AlwaysShowCursor";
-            *pValueIter++   <<= sal_False;
+            *pValueIter++   <<= false;
             *pStringIter++  = PROPERTY_BORDER;
             *pValueIter++   <<= sal_Int16(0);
 
             *pStringIter++  = "HasNavigationBar";
-            *pValueIter++   <<= sal_False;
+            *pValueIter++   <<= false;
             *pStringIter++  = "HasRecordMarker";
-            *pValueIter++   <<= sal_False;
+            *pValueIter++   <<= false;
 
             *pStringIter++  = "Tabstop";
-            *pValueIter++   <<= sal_False;
+            *pValueIter++   <<= false;
 
             Reference< XMultiPropertySet >  xFormMultiSet(getFormComponent(), UNO_QUERY);
             if ( xFormMultiSet.is() )
@@ -3662,7 +3662,7 @@ bool SbaTableQueryBrowser::preReloadForm()
     if ( !m_pCurrentlyDisplayed )
     {
         // switch the grid to design mode while loading
-        getBrowserView()->getGridControl()->setDesignMode(sal_True);
+        getBrowserView()->getGridControl()->setDesignMode(true);
         // we had an invalid statement so we need to connect the column models
         Reference<XPropertySet> xRowSetProps(getRowSet(),UNO_QUERY);
         svx::ODataAccessDescriptor aDesc(xRowSetProps);

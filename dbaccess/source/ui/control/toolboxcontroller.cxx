@@ -111,19 +111,19 @@ namespace dbaui
 
         if ( m_aCommandURL == ".uno:DBNewForm" )
         {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewForm")           ,sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewView")           ,sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewViewSQL")        ,sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewQuery")          ,sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewQuerySql")       ,sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewReport")         ,sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewReportAutoPilot"),sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewTable")          ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewForm")           ,true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewView")           ,true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewViewSQL")        ,true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewQuery")          ,true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewQuerySql")       ,true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewReport")         ,true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewReportAutoPilot"),true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewTable")          ,true));
         }
         else
         {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:Refresh")         ,sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBRebuildData")   ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:Refresh")         ,true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBRebuildData")   ,true));
         }
 
         TCommandState::const_iterator aIter = m_aStates.begin();
