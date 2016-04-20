@@ -900,7 +900,7 @@ throw (uno::RuntimeException, std::exception)
     {
         m_aNotifyListeners.addInterface( xListener );
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -912,7 +912,7 @@ throw (uno::RuntimeException, std::exception)
     {
         m_aNotifyListeners.removeInterface( xListener );
     }
-    return sal_True;
+    return true;
 }
 
 

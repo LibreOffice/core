@@ -398,7 +398,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
             uno::Reference< XConversionDictionary > xDic =
                     pNameContainer->GetByName( pActiveConvDics[i] );
             if (xDic.is())
-                xDic->setActive( sal_True );
+                xDic->setActive( true );
         }
 
         // since there is no UI to active/deactivate the dictionaries
@@ -408,9 +408,9 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         uno::Reference< XConversionDictionary > xT2SDic(
                     pNameContainer->GetByName( "ChineseT2S" ), UNO_QUERY );
             if (xS2TDic.is())
-                xS2TDic->setActive( sal_True );
+                xS2TDic->setActive( true );
             if (xT2SDic.is())
-                xT2SDic->setActive( sal_True );
+                xT2SDic->setActive( true );
 
     }
     return *pNameContainer;
@@ -454,7 +454,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
         throw NoSupportException();
     else
     {
-        xRes->setActive( sal_True );
+        xRes->setActive( true );
         uno::Any aAny;
         aAny <<= xRes;
         GetNameContainer().insertByName( rName, aAny );

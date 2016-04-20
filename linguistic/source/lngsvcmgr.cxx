@@ -238,7 +238,7 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
     if (xDicList.is())
     {
         xDicList->addDictionaryListEventListener(
-            static_cast<linguistic2::XDictionaryListEventListener *>(this), sal_False );
+            static_cast<linguistic2::XDictionaryListEventListener *>(this), false );
     }
 
     nCombinedLngSvcEvt = 0;

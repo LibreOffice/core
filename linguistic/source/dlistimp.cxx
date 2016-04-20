@@ -424,7 +424,7 @@ sal_Bool SAL_CALL DicList::addDictionary(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return sal_False;
+        return false;
 
     bool bRes = false;
     if (xDictionary.is())
@@ -446,7 +446,7 @@ sal_Bool SAL_CALL
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return sal_False;
+        return false;
 
     bool  bRes = false;
     sal_Int32 nPos = GetDicPos( xDictionary );
@@ -459,7 +459,7 @@ sal_Bool SAL_CALL
         if (xDic.is())
         {
             // deactivate dictionary if not already done
-            xDic->setActive( sal_False );
+            xDic->setActive( false );
 
             xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
         }
@@ -479,7 +479,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return sal_False;
+        return false;
 
     DBG_ASSERT(!bReceiveVerbose, "lng : not yet supported");
 
@@ -499,7 +499,7 @@ sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return sal_False;
+        return false;
 
     bool bRes = false;
     if(xListener.is())
@@ -641,7 +641,7 @@ void DicList::CreateDicList()
     if (xIgnAll.is())
     {
         AddUserData( xIgnAll );
-        xIgnAll->setActive( sal_True );
+        xIgnAll->setActive( true );
         addDictionary( xIgnAll );
     }
 
@@ -660,7 +660,7 @@ void DicList::CreateDicList()
         {
             uno::Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
             if (xDic.is())
-                xDic->setActive( sal_True );
+                xDic->setActive( true );
         }
     }
 
@@ -803,7 +803,7 @@ static void AddInternal(
         {
             if( !aToken.isEmpty()  &&  !IsNumeric( aToken ) )
             {
-                rDic->add( aToken, sal_False, OUString() );
+                rDic->add( aToken, false, OUString() );
             }
         }
     }

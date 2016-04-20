@@ -110,7 +110,7 @@ void FlushListener::SetDicList( Reference<XSearchableDictionaryList> &rDL )
 
         xDicList = rDL;
         if (xDicList.is())
-            xDicList->addDictionaryListEventListener( this, sal_False );
+            xDicList->addDictionaryListEventListener( this, false );
     }
 }
 

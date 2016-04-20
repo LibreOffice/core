@@ -316,7 +316,7 @@ Reference< XHyphenatedWord > SAL_CALL
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
-                        sal_True, sal_False );
+                        true, false );
         }
 
         if (xEntry.is())
@@ -452,7 +452,7 @@ Reference< XHyphenatedWord > SAL_CALL
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
-                        sal_True, sal_False );
+                        true, false );
         }
 
         if (xEntry.is())
@@ -577,7 +577,7 @@ Reference< XPossibleHyphens > SAL_CALL
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
-                        sal_True, sal_False );
+                        true, false );
         }
 
         if (xEntry.is())
