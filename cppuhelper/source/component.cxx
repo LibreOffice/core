@@ -153,7 +153,7 @@ void OComponentHelper::dispose()
         if( !rBHelper.bDisposed && !rBHelper.bInDispose )
         {
             // only one call go into this section
-            rBHelper.bInDispose = sal_True;
+            rBHelper.bInDispose = true;
             bDoDispose = true;
         }
     }
@@ -180,14 +180,14 @@ void OComponentHelper::dispose()
             {
                 MutexGuard aGuard( rBHelper.rMutex );
                 // bDispose and bInDisposing must be set in this order:
-                rBHelper.bDisposed = sal_True;
-                rBHelper.bInDispose = sal_False;
+                rBHelper.bDisposed = true;
+                rBHelper.bInDispose = false;
                 throw;
             }
             MutexGuard aGuard( rBHelper.rMutex );
             // bDispose and bInDisposing must be set in this order:
-            rBHelper.bDisposed = sal_True;
-            rBHelper.bInDispose = sal_False;
+            rBHelper.bDisposed = true;
+            rBHelper.bInDispose = false;
         }
         catch (RuntimeException &)
         {

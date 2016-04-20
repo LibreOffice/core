@@ -42,7 +42,7 @@ namespace cppu
         {
             static class_data9 s_cd =
             {
-                9 +1, sal_False, sal_False,
+                9 +1, false, false,
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {
                     CPPUHELPER_DETAIL_TYPEENTRY(Ifc1),

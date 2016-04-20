@@ -124,7 +124,7 @@ public:
     OPropertyArrayHelper(
         css::beans::Property *pProps,
         sal_Int32 nElements ,
-        sal_Bool bSorted = sal_True );
+        sal_Bool bSorted = true );
 
      /**
        Create an object which supports the common property interfaces.
@@ -134,7 +134,7 @@ public:
      */
     OPropertyArrayHelper(
         const css::uno::Sequence< css::beans::Property > & aProps,
-        sal_Bool bSorted = sal_True );
+        sal_Bool bSorted = true );
 
     /**
        Return the number of properties.

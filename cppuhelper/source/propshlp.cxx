@@ -536,7 +536,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
             // In aValue is the converted rValue
             // fire a constrained event
             // second parameter NULL means constrained
-            fire( &nHandle, &rValue, &aOldVal, 1, sal_True );
+            fire( &nHandle, &rValue, &aOldVal, 1, true );
         }
 
         {
@@ -593,7 +593,7 @@ void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newVal
     if ( m_pReserved->m_handles.empty() )
     {
         aGuard.clear();
-        fire( i_handles, i_newValues, i_oldValues, i_count, sal_False );
+        fire( i_handles, i_newValues, i_oldValues, i_count, false );
         return;
     }
 
@@ -619,7 +619,7 @@ void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newVal
     m_pReserved->m_oldValues.clear();
 
     aGuard.clear();
-    fire( &allHandles[0], &allNewValues[0], &allOldValues[0], additionalEvents + i_count, sal_False );
+    fire( &allHandles[0], &allNewValues[0], &allOldValues[0], additionalEvents + i_count, false );
 }
 
 
@@ -871,7 +871,7 @@ void OPropertySetHelper::setFastPropertyValues(
         }
 
         // fire vetoable events
-        fire( pHandles, pConvertedValues.get(), pOldValues.get(), n, sal_True );
+        fire( pHandles, pConvertedValues.get(), pOldValues.get(), n, true );
 
         {
         // must lock the mutex outside the loop.
@@ -1034,7 +1034,7 @@ void OPropertyArrayHelper::init( sal_Bool bSorted )
         if( pProperties[i].Handle != i )
             return;
     // The handle is the index
-    bRightOrdered = sal_True;
+    bRightOrdered = true;
 }
 
 OPropertyArrayHelper::OPropertyArrayHelper(
@@ -1043,7 +1043,7 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     sal_Bool bSorted )
     : m_pReserved(nullptr)
     , aInfos(pProps, nEle)
-    , bRightOrdered( sal_False )
+    , bRightOrdered( false )
 {
     init( bSorted );
 }
@@ -1053,7 +1053,7 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     sal_Bool bSorted )
     : m_pReserved(nullptr)
     , aInfos(aProps)
-    , bRightOrdered( sal_False )
+    , bRightOrdered( false )
 {
     init( bSorted );
 }
@@ -1078,12 +1078,12 @@ sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
     if( bRightOrdered )
     {
         if( nHandle < 0 || nHandle >= nElements )
-            return sal_False;
+            return false;
         if( pPropName )
             *pPropName = pProperties[ nHandle ].Name;
         if( pAttributes )
             *pAttributes = pProperties[ nHandle ].Attributes;
-        return sal_True;
+        return true;
     }
     else
     {
@@ -1096,11 +1096,11 @@ sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
                     *pPropName = pProperties[ i ].Name;
                 if( pAttributes )
                     *pAttributes = pProperties[ i ].Attributes;
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 

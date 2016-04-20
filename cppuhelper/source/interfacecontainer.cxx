@@ -70,7 +70,7 @@ OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & 
     aData = rCont_.aData;
     if( bIsList )
     {
-        rCont.bInUse = sal_True;
+        rCont.bInUse = true;
         nRemain = aData.pAsSequence->getLength();
     }
     else if( aData.pAsInterface )
@@ -92,7 +92,7 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper()
     if( bShared )
     {
         OSL_ENSURE( rCont.bInUse, "OInterfaceContainerHelper must be in use" );
-        rCont.bInUse = sal_False;
+        rCont.bInUse = false;
     }
     }
 
@@ -140,8 +140,8 @@ void OInterfaceIteratorHelper::remove()
 
 OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ )
     : rMutex( rMutex_ )
-    , bInUse( sal_False )
-    , bIsList( sal_False )
+    , bInUse( false )
+    , bIsList( false )
 {
 }
 
@@ -189,7 +189,7 @@ void OInterfaceContainerHelper::copyAndResetInUse()
         else if( aData.pAsInterface )
             aData.pAsInterface->acquire();
 
-        bInUse = sal_False;
+        bInUse = false;
     }
 }
 
@@ -215,7 +215,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
         pArray[1] = rListener;
         aData.pAsInterface->release();
         aData.pAsSequence = pSeq;
-        bIsList = sal_True;
+        bIsList = true;
         return 2;
     }
     else
@@ -268,7 +268,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
             p->acquire();
             delete aData.pAsSequence;
             aData.pAsInterface = p;
-            bIsList = sal_False;
+            bIsList = false;
             return 1;
         }
         else
@@ -292,8 +292,8 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
         aData.pAsInterface->release();
     // set the member to null, use the iterator to delete the values
     aData.pAsInterface = nullptr;
-    bIsList = sal_False;
-    bInUse = sal_False;
+    bIsList = false;
+    bInUse = false;
     aGuard.clear();
     while( aIt.hasMoreElements() )
     {
@@ -322,8 +322,8 @@ void OInterfaceContainerHelper::clear()
         aData.pAsInterface->release();
     // set the member to null, use the iterator to delete the values
     aData.pAsInterface = nullptr;
-    bIsList = sal_False;
-    bInUse = sal_False;
+    bIsList = false;
+    bInUse = false;
     // release mutex before aIt destructor call
     aGuard.clear();
 }

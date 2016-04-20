@@ -105,7 +105,7 @@ static inline type_entry * getTypeEntries( class_data * cd )
                 // ref is statically held by getCppuType()
                 pEntry->m_type.typeRef = rType.getTypeLibType();
             }
-            cd->m_storedTypeRefs = sal_True;
+            cd->m_storedTypeRefs = true;
         }
     }
     return pEntries;

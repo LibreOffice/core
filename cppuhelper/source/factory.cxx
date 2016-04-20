@@ -461,8 +461,8 @@ void OFactoryComponentHelper::dispose()
 sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(css::uno::RuntimeException, std::exception)
 {
     if( bOneInstance)
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 class ORegistryFactoryHelper : public OFactoryComponentHelper,
@@ -940,7 +940,7 @@ sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(css::uno::R
     Reference<XUnloadingPreference> pref( xFactory, UNO_QUERY);
     if( pref.is())
         return pref->releaseOnNotification();
-    return sal_True;
+    return true;
 }
 
 // global function
