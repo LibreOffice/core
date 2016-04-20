@@ -479,7 +479,7 @@ void FmXAutoControl::createPeer( const Reference< XToolkit > & rxToolkit, const 
     if (xText.is())
     {
         xText->setText(SVX_RESSTR(RID_STR_AUTOFIELD));
-        xText->setEditable(sal_False);
+        xText->setEditable(false);
     }
 }
 
@@ -677,7 +677,7 @@ Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames() throw( R
 
 sal_Bool SAL_CALL FormController::approveReset(const EventObject& /*rEvent*/) throw( RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 
@@ -767,7 +767,7 @@ sal_Bool FormController::convertFastPropertyValue( Any & /*rConvertedValue*/, An
                                             sal_Int32 /*nHandle*/, const Any& /*rValue*/ )
                 throw( IllegalArgumentException )
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -2198,7 +2198,7 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
                         {
                             Any aVal = xField->getPropertyValue(FM_PROP_ISREADONLY);
                             if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
-                                xBound->setLock(sal_True);
+                                xBound->setLock(true);
                             else
                                 xBound->setLock(bLocked);
                         }
@@ -3500,9 +3500,9 @@ sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode) throw( Runt
     for (sal_Int32 i = aModes.getLength(); i > 0; )
     {
         if (pModes[--i] == Mode)
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -3689,11 +3689,11 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
 
     // check values on NULL and required flag
     if ( !lcl_shouldValidateRequiredFields_nothrow( _rEvent.Source ) )
-        return sal_True;
+        return true;
 
     OSL_ENSURE( m_pColumnInfoCache.get(), "FormController::approveRowChange: no column infos!" );
     if ( !m_pColumnInfoCache.get() )
-        return sal_True;
+        return true;
 
     try
     {
@@ -3730,7 +3730,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
 
             aGuard.clear();
             displayErrorSetFocus( sMessage, rColInfo.xFirstControlWithInputRequired, getDialogParentWindow() );
-            return sal_False;
+            return false;
         }
     }
     catch( const Exception& )
@@ -3755,7 +3755,7 @@ sal_Bool SAL_CALL FormController::approveCursorMove(const EventObject& event) th
         return static_cast<XRowSetApproveListener*>(aIter.next())->approveCursorMove(aEvt);
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -3772,7 +3772,7 @@ sal_Bool SAL_CALL FormController::approveRowSetChange(const EventObject& event) 
         return static_cast<XRowSetApproveListener*>(aIter.next())->approveRowSetChange(aEvt);
     }
 
-    return sal_True;
+    return true;
 }
 
 // XRowSetApproveBroadcaster
@@ -3887,7 +3887,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
         try
         {
             if ( !ensureInteractionHandler() )
-                return sal_False;
+                return false;
 
             // two continuations allowed: OK and Cancel
             OParameterContinuation* pParamValues = new OParameterContinuation;
@@ -3907,14 +3907,14 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
 
             if (!pParamValues->wasSelected())
                 // canceled
-                return sal_False;
+                return false;
 
             // transfer the values into the parameter supplier
             Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
             if (aFinalValues.getLength() != aRequest.Parameters->getCount())
             {
                 OSL_FAIL("FormController::approveParameter: the InteractionHandler returned nonsense!");
-                return sal_False;
+                return false;
             }
             const PropertyValue* pFinalValues = aFinalValues.getConstArray();
             for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
@@ -3941,7 +3941,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    return sal_True;
+    return true;
 }
 
 // XConfirmDeleteBroadcaster
@@ -3992,7 +3992,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     try
     {
         if ( !ensureInteractionHandler() )
-            return sal_False;
+            return false;
 
         // two continuations allowed: Yes and No
         OInteractionApprove* pApprove = new OInteractionApprove;
@@ -4016,14 +4016,14 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
         m_xInteractionHandler->handle( xRequest );
 
         if ( pApprove->wasSelected() )
-            return sal_True;
+            return true;
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -4131,7 +4131,7 @@ void SAL_CALL FormController::addStatusListener( const Reference< XStatusListene
         {   // send an initial statusChanged event
             FeatureStateEvent aEvent;
             aEvent.FeatureURL = _rURL;
-            aEvent.IsEnabled = sal_True;
+            aEvent.IsEnabled = true;
             _rxListener->statusChanged(aEvent);
             // and don't add the listener at all (the status will never change)
         }

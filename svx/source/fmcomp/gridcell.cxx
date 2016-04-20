@@ -3432,7 +3432,7 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
             awt::FocusEvent aEvent;
             aEvent.Source = *this;
             aEvent.FocusFlags = static_cast<sal_Int16>(_rWindow.GetGetFocusFlags());
-            aEvent.Temporary = sal_False;
+            aEvent.Temporary = false;
 
             if ( bFocusGained )
                 onFocusGained( aEvent );
@@ -4652,7 +4652,7 @@ css::awt::Selection SAL_CALL FmXFilterCell::getSelection() throw( RuntimeExcepti
 
 sal_Bool SAL_CALL FmXFilterCell::isEditable() throw( RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 

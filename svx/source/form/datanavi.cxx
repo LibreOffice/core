@@ -585,7 +585,7 @@ namespace svxform
 
                     try
                     {
-                        m_xUIHelper->getBindingForNode( xNewNode, sal_True );
+                        m_xUIHelper->getBindingForNode( xNewNode, true );
                     }
                     catch ( Exception& )
                     {
@@ -959,7 +959,7 @@ namespace svxform
                     ScopedVclPtrInstance< MessageDialog > aQBox(this, SVX_RES(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst(
-                        sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, sal_False ) );
+                        sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, false ) );
                     aQBox->set_primary_text(sMessText);
                     if ( aQBox->Execute() == RET_YES )
                     {
@@ -2574,7 +2574,7 @@ namespace svxform
                      */
 
                     Reference< css::xml::dom::XNode > xNode = m_pItemNode->m_xNode;
-                    m_xBinding = m_xUIHelper->getBindingForNode( xNode, sal_True );
+                    m_xBinding = m_xUIHelper->getBindingForNode( xNode, true );
                     if ( m_xBinding.is() )
                     {
                         Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -3290,7 +3290,7 @@ namespace svxform
                 Reference<css::xml::dom::XNode>(
                     xModel->getDefaultInstance()->getDocumentElement(),
                     UNO_QUERY_THROW ),
-                sal_True );
+                true );
             m_xTempBinding = m_xCreatedBinding;
         }
 

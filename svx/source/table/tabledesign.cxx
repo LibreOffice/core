@@ -224,7 +224,7 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames() throw
 // XStyle
 sal_Bool SAL_CALL TableDesignStyle::isUserDefined() throw (RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL TableDesignStyle::isInUse() throw (RuntimeException, std::exception)
@@ -241,10 +241,10 @@ sal_Bool SAL_CALL TableDesignStyle::isInUse() throw (RuntimeException, std::exce
         {
             TableDesignUser* pUser = dynamic_cast< TableDesignUser* >( aListener[nIndex].get() );
             if( pUser && pUser->isInUse() )
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -321,7 +321,7 @@ Type SAL_CALL TableDesignStyle::getElementType() throw(RuntimeException, std::ex
 
 sal_Bool SAL_CALL TableDesignStyle::hasElements() throw(RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 
@@ -522,9 +522,9 @@ sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName ) throw(Ru
     for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
         iter != aEnd; ++iter)
         if( (*iter)->getName() == aName )
-            return sal_True;
+            return true;
 
-    return sal_False;
+    return false;
 }
 
 

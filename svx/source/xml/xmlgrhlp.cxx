@@ -451,7 +451,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
         {
             OUString aPropName( "UseCommonStoragePasswordEncryption" );
             uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
-            xProps->setPropertyValue( aPropName, uno::makeAny( sal_True) );
+            xProps->setPropertyValue( aPropName, uno::makeAny( true) );
         }
     }
 

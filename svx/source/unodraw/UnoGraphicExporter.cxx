@@ -1006,10 +1006,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpUnoPage )
-        return sal_False;
+        return false;
 
     if( nullptr == mpUnoPage->GetSdrPage() || nullptr == mpDoc )
-        return sal_False;
+        return false;
 
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
 
@@ -1225,11 +1225,11 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& rMimeTypeNa
     {
         if( rMimeTypeName == rFilter.GetExportFormatMediaType( nFilter ) )
         {
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) throw (RuntimeException, std::exception)

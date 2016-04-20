@@ -179,7 +179,7 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
         xProps->setPropertyValue("MediaType",  uno::makeAny( OUString( "text/xml" ) ) );
 
         // use stock encryption
-        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
+        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
     } catch ( const uno::Exception & )
     {
         OSL_FAIL( "exception setting stream metadata" );

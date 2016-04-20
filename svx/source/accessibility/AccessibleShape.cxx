@@ -838,27 +838,27 @@ throw ( IndexOutOfBoundsException,
                 xText(xAcc, uno::UNO_QUERY);
             if( xText.is() )
             {
-                if( xText->getSelectionStart() >= 0 ) return sal_True;
+                if( xText->getSelectionStart() >= 0 ) return true;
             }
         }
         else if( xContext->getAccessibleRole() == AccessibleRole::SHAPE )
         {
             Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
             if( !pRState.is() )
-                return sal_False;
+                return false;
 
             uno::Sequence<short> pStates = pRState->getStates();
             int nCount = pStates.getLength();
             for( int i = 0; i < nCount; i++ )
             {
                 if(pStates[i] == AccessibleStateType::SELECTED)
-                    return sal_True;
+                    return true;
             }
-            return sal_False;
+            return false;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1536,7 +1536,7 @@ sal_Int32 SAL_CALL AccessibleShape::getIndexAtPoint( const css::awt::Point& ) th
 OUString SAL_CALL AccessibleShape::getSelectedText(  ) throw (css::uno::RuntimeException, std::exception){return OUString();}
 sal_Int32 SAL_CALL AccessibleShape::getSelectionStart(  ) throw (css::uno::RuntimeException, std::exception){return 0;}
 sal_Int32 SAL_CALL AccessibleShape::getSelectionEnd(  ) throw (css::uno::RuntimeException, std::exception){return 0;}
-sal_Bool SAL_CALL AccessibleShape::setSelection( sal_Int32, sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return sal_True;}
+sal_Bool SAL_CALL AccessibleShape::setSelection( sal_Int32, sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return true;}
 OUString SAL_CALL AccessibleShape::getText(  ) throw (css::uno::RuntimeException, std::exception){return OUString();}
 OUString SAL_CALL AccessibleShape::getTextRange( sal_Int32, sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return OUString();}
 css::accessibility::TextSegment SAL_CALL AccessibleShape::getTextAtIndex( sal_Int32, sal_Int16 ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
@@ -1554,7 +1554,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleShape::getTextBehindIndex( sa
     css::accessibility::TextSegment aResult;
     return aResult;
 }
-sal_Bool SAL_CALL AccessibleShape::copyText( sal_Int32, sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return sal_True;}
+sal_Bool SAL_CALL AccessibleShape::copyText( sal_Int32, sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return true;}
 
 } // end of namespace accessibility
 

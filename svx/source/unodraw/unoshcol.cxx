@@ -149,7 +149,7 @@ void SvxShapeCollection::dispose()
     if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
     {
         // only one call go into this section
-        mrBHelper.bInDispose = sal_True;
+        mrBHelper.bInDispose = true;
         bDoDispose = true;
     }
     }
@@ -174,15 +174,15 @@ void SvxShapeCollection::dispose()
             // catch exception and throw again but signal that
             // the object was disposed. Dispose should be called
             // only once.
-            mrBHelper.bDisposed = sal_True;
-            mrBHelper.bInDispose = sal_False;
+            mrBHelper.bDisposed = true;
+            mrBHelper.bInDispose = false;
             throw;
         }
 
         // the values bDispose and bInDisposing must set in this order.
         // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
-        mrBHelper.bDisposed = sal_True;
-        mrBHelper.bInDispose = sal_False;
+        mrBHelper.bDisposed = true;
+        mrBHelper.bInDispose = false;
     }
     else
     {

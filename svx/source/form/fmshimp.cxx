@@ -1357,21 +1357,21 @@ void FmXFormShell::LoopGrids(LoopGridsSync nSync, LoopGridsFlags nFlags)
             {
                 case LoopGridsSync::DISABLE_SYNC:
                 {
-                    sal_Bool bB(sal_False);
+                    sal_Bool bB(false);
                     xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
                 }
                 break;
                 case LoopGridsSync::FORCE_SYNC:
                 {
                     Any aOldVal( xModelSet->getPropertyValue(FM_PROP_DISPLAYSYNCHRON) );
-                    sal_Bool bB(sal_True);
+                    sal_Bool bB(true);
                     xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
                     xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, aOldVal);
                 }
                 break;
                 case LoopGridsSync::ENABLE_SYNC:
                 {
-                    sal_Bool bB(sal_True);
+                    sal_Bool bB(true);
                     xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
                 }
                 break;
@@ -1379,7 +1379,7 @@ void FmXFormShell::LoopGrids(LoopGridsSync nSync, LoopGridsFlags nFlags)
 
             if (nFlags & LoopGridsFlags::DISABLE_ROCTRLR)
             {
-                sal_Bool bB(sal_False);
+                sal_Bool bB(false);
                 xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,cppu::UnoType<bool>::get()));
                 Reference< XPropertyState> xModelPropState(xModelSet, UNO_QUERY);
                 if (xModelPropState.is())
@@ -3058,7 +3058,7 @@ void FmXFormShell::stopFiltering(bool bSave)
                         if (aOriginalFilters.size() == aOriginalApplyFlags.size())
                             // the first getPropertyValue failed -> use two dummies
                             aOriginalFilters.push_back( OUString() );
-                        aOriginalApplyFlags.push_back( sal_False );
+                        aOriginalApplyFlags.push_back( false );
                     }
                 }
                 saveFilter(*j);

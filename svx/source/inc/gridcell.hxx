@@ -754,12 +754,12 @@ public:
     virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& /*Toolkit*/, const css::uno::Reference< css::awt::XWindowPeer >& /*Parent*/) throw(css::uno::RuntimeException, std::exception) override {}
 
     virtual css::uno::Reference< css::awt::XWindowPeer > SAL_CALL getPeer() throw (css::uno::RuntimeException, std::exception) override {return css::uno::Reference< css::awt::XWindowPeer > ();}
-    virtual sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& /*Model*/) throw (css::uno::RuntimeException, std::exception) override {return sal_False;}
+    virtual sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& /*Model*/) throw (css::uno::RuntimeException, std::exception) override {return false;}
     virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::awt::XView > SAL_CALL getView() throw (css::uno::RuntimeException, std::exception) override {return css::uno::Reference< css::awt::XView > ();}
     virtual void SAL_CALL setDesignMode(sal_Bool /*bOn*/) throw (css::uno::RuntimeException, std::exception) override {}
-    virtual sal_Bool SAL_CALL isDesignMode() throw (css::uno::RuntimeException, std::exception) override {return sal_False;}
-    virtual sal_Bool SAL_CALL isTransparent() throw (css::uno::RuntimeException, std::exception) override {return sal_False;}
+    virtual sal_Bool SAL_CALL isDesignMode() throw (css::uno::RuntimeException, std::exception) override {return false;}
+    virtual sal_Bool SAL_CALL isTransparent() throw (css::uno::RuntimeException, std::exception) override {return false;}
 
 // css::form::XBoundControl
     virtual sal_Bool SAL_CALL getLock() throw(css::uno::RuntimeException, std::exception) override;

@@ -417,7 +417,7 @@ sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< css::awt::XControlMo
     SolarMutexGuard aGuard;
 
     if (!UnoControl::setModel(rModel))
-        return sal_False;
+        return false;
 
     Reference< XGridPeer > xGridPeer(getPeer(), UNO_QUERY);
     if (xGridPeer.is())
@@ -425,7 +425,7 @@ sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< css::awt::XControlMo
         Reference< XIndexContainer > xCols(mxModel, UNO_QUERY);
         xGridPeer->setColumns(xCols);
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -509,10 +509,10 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
                 pPeer->setColumns(xColumns);
 
             if (maComponentInfos.bVisible)
-                pPeer->setVisible(sal_True);
+                pPeer->setVisible(true);
 
             if (!maComponentInfos.bEnable)
-                pPeer->setEnable(sal_False);
+                pPeer->setEnable(false);
 
             if (maWindowListeners.getLength())
                 pPeer->addWindowListener( &maWindowListeners );
@@ -786,7 +786,7 @@ sal_Bool SAL_CALL FmXGridControl::commit() throw( RuntimeException, std::excepti
     if (xBound.is())
         return xBound->commit();
     else
-        return sal_True;
+        return true;
 }
 
 // XContainer
@@ -1185,25 +1185,25 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
     // eine 'Konvertierungstabelle'
     static const sal_Bool bCanConvert[LAST_KNOWN_TYPE][4] =
     {
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::CONTROL
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::COMMANDBUTTON
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::RADIOBUTTON
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::IMAGEBUTTON
-        { sal_False, sal_False, sal_False, sal_True  }, //  FormComponentType::CHECKBOX
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::LISTBOX
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::COMBOBOX
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::GROUPBOX
-        { sal_True , sal_False, sal_False, sal_False }, //  FormComponentType::TEXTFIELD
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::FIXEDTEXT
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::GRIDCONTROL
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::FILECONTROL
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::HIDDENCONTROL
-        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::IMAGECONTROL
-        { sal_True , sal_True , sal_True , sal_False }, //  FormComponentType::DATEFIELD
-        { sal_True , sal_True , sal_False, sal_False }, //  FormComponentType::TIMEFIELD
-        { sal_True , sal_True , sal_False, sal_False }, //  FormComponentType::NUMERICFIELD
-        { sal_True , sal_True , sal_False, sal_False }, //  FormComponentType::CURRENCYFIELD
-        { sal_True , sal_False, sal_False, sal_False }  //  FormComponentType::PATTERNFIELD
+        { false, false, false, false }, //  FormComponentType::CONTROL
+        { false, false, false, false }, //  FormComponentType::COMMANDBUTTON
+        { false, false, false, false }, //  FormComponentType::RADIOBUTTON
+        { false, false, false, false }, //  FormComponentType::IMAGEBUTTON
+        { false, false, false, true  }, //  FormComponentType::CHECKBOX
+        { false, false, false, false }, //  FormComponentType::LISTBOX
+        { false, false, false, false }, //  FormComponentType::COMBOBOX
+        { false, false, false, false }, //  FormComponentType::GROUPBOX
+        { true , false, false, false }, //  FormComponentType::TEXTFIELD
+        { false, false, false, false }, //  FormComponentType::FIXEDTEXT
+        { false, false, false, false }, //  FormComponentType::GRIDCONTROL
+        { false, false, false, false }, //  FormComponentType::FILECONTROL
+        { false, false, false, false }, //  FormComponentType::HIDDENCONTROL
+        { false, false, false, false }, //  FormComponentType::IMAGECONTROL
+        { true , true , true , false }, //  FormComponentType::DATEFIELD
+        { true , true , false, false }, //  FormComponentType::TIMEFIELD
+        { true , true , false, false }, //  FormComponentType::NUMERICFIELD
+        { true , true , false, false }, //  FormComponentType::CURRENCYFIELD
+        { true , false, false, false }  //  FormComponentType::PATTERNFIELD
     };
 
 
@@ -1241,11 +1241,11 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
     {
         if (bRequestedAsAny)
         {
-            pReturnArray[i] = sal_True;
+            pReturnArray[i] = true;
             continue;
         }
 
-        pReturnArray[i] = sal_False;
+        pReturnArray[i] = false;
 
         sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
         DBG_ASSERT(nModelPos != (sal_uInt16)-1, "FmXGridPeer::queryFieldDataType : no model pos !");
@@ -1493,7 +1493,7 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException, std::exception )
 {
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if (!m_xCursor.is() || !pGrid)
-        return sal_True;
+        return true;
 
     EventObject aEvt(static_cast< ::cppu::OWeakObject* >(this));
     ::comphelper::OInterfaceIteratorHelper2 aIter(m_aUpdateListeners);
@@ -1701,7 +1701,7 @@ sal_Bool FmXGridPeer::isDesignMode() throw( RuntimeException, std::exception )
     if (pWin)
         return static_cast<FmGridControl*>(pWin)->IsDesignMode();
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -2392,9 +2392,9 @@ sal_Bool FmXGridPeer::supportsMode(const OUString& Mode) throw( RuntimeException
     for (sal_Int32 i = aModes.getLength(); i > 0; )
     {
         if (pModes[--i] == Mode)
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -2582,7 +2582,7 @@ void FmXGridPeer::statusChanged(const css::frame::FeatureStateEvent& Event) thro
 
 sal_Bool FmXGridPeer::approveReset(const EventObject& /*rEvent*/) throw( RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 

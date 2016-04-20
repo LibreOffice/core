@@ -284,7 +284,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
             pModel->AddUndo( pUndo );
             pUndo = nullptr;
         }
-        mxTableModel->setModified(sal_True);
+        mxTableModel->setModified(true);
     }
 
     delete pUndo;

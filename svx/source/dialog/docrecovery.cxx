@@ -120,7 +120,7 @@ void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
     css::util::URL aCopyURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_BACKUP);
     css::uno::Sequence< css::beans::PropertyValue > lCopyArgs(3);
     lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lCopyArgs[0].Value <<= sal_False;
+    lCopyArgs[0].Value <<= false;
     lCopyArgs[1].Name    = PROP_SAVEPATH;
     lCopyArgs[1].Value <<= rPath;
     lCopyArgs[2].Name    = PROP_ENTRYID;
@@ -158,7 +158,7 @@ void RecoveryCore::saveAllTempEntries(const OUString& rPath)
     css::util::URL aCopyURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_BACKUP);
     css::uno::Sequence< css::beans::PropertyValue > lCopyArgs(3);
     lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lCopyArgs[0].Value <<= sal_False;
+    lCopyArgs[0].Value <<= false;
     lCopyArgs[1].Name    = PROP_SAVEPATH;
     lCopyArgs[1].Value <<= rPath;
     lCopyArgs[2].Name    = PROP_ENTRYID;
@@ -192,7 +192,7 @@ void RecoveryCore::forgetBrokenTempEntries()
     css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
     css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
     lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lRemoveArgs[0].Value <<= sal_False;
+    lRemoveArgs[0].Value <<= false;
     lRemoveArgs[1].Name    = PROP_ENTRYID;
     // lRemoveArgs[1].Value will be changed during next loop ...
 
@@ -224,7 +224,7 @@ void RecoveryCore::forgetAllRecoveryEntries()
     css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
     css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
     lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lRemoveArgs[0].Value <<= sal_False;
+    lRemoveArgs[0].Value <<= false;
     lRemoveArgs[1].Name    = PROP_ENTRYID;
     // lRemoveArgs[1].Value will be changed during next loop ...
 
@@ -253,7 +253,7 @@ void RecoveryCore::forgetBrokenRecoveryEntries()
     css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
     css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
     lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lRemoveArgs[0].Value <<= sal_False;
+    lRemoveArgs[0].Value <<= false;
     lRemoveArgs[1].Name    = PROP_ENTRYID;
     // lRemoveArgs[1].Value will be changed during next loop ...
 
@@ -298,7 +298,7 @@ void RecoveryCore::doEmergencySavePrepare()
 
     css::uno::Sequence< css::beans::PropertyValue > lArgs(1);
     lArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lArgs[0].Value <<= sal_False;
+    lArgs[0].Value <<= false;
 
     m_xRealCore->dispatch(aURL, lArgs);
 }
@@ -315,7 +315,7 @@ void RecoveryCore::doEmergencySave()
     lArgs[0].Name    = PROP_STATUSINDICATOR;
     lArgs[0].Value <<= m_xProgress;
     lArgs[1].Name    = PROP_DISPATCHASYNCHRON;
-    lArgs[1].Value <<= sal_True;
+    lArgs[1].Value <<= true;
 
     m_xRealCore->dispatch(aURL, lArgs);
 }
@@ -332,7 +332,7 @@ void RecoveryCore::doRecovery()
     lArgs[0].Name    = PROP_STATUSINDICATOR;
     lArgs[0].Value <<= m_xProgress;
     lArgs[1].Name    = PROP_DISPATCHASYNCHRON;
-    lArgs[1].Value <<= sal_True;
+    lArgs[1].Value <<= true;
 
     m_xRealCore->dispatch(aURL, lArgs);
 }
@@ -553,7 +553,7 @@ PluginProgress::PluginProgress(      vcl::Window*                               
 {
     m_pPlugProgressWindow = VclPtr<PluginProgressWindow>::Create(pParent, static_cast< css::lang::XComponent* >(this));
     css::uno::Reference< css::awt::XWindow > xProgressWindow = VCLUnoHelper::GetInterface(m_pPlugProgressWindow);
-    m_xProgressFactory = css::task::StatusIndicatorFactory::createWithWindow(xContext, xProgressWindow, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/);
+    m_xProgressFactory = css::task::StatusIndicatorFactory::createWithWindow(xContext, xProgressWindow, false/*DisableReschedule*/, true/*AllowParentShow*/);
     m_xProgress = m_xProgressFactory->createStatusIndicator();
 }
 

@@ -741,7 +741,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr 
     MutexGuard          aGuard( maMutex );
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
     {
-        return sal_True;
+        return true;
     }
     else
     {
@@ -749,7 +749,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr 
         if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
                                   aObjectStorageName,
                                   true ) )
-            return sal_False;
+            return false;
 
         comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
         return !aObjectStorageName.isEmpty() &&
@@ -774,7 +774,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
     MutexGuard          aGuard( maMutex );
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
     {
-        return sal_True;
+        return true;
     }
     else
     {

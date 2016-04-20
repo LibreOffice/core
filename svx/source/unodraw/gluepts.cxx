@@ -303,7 +303,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
         if( Identifier < NON_USER_DEFINED_GLUE_POINTS ) // default glue point?
         {
             SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( (sal_uInt16)Identifier );
-            aGluePoint.IsUserDefined = sal_False;
+            aGluePoint.IsUserDefined = false;
             convert( aTempPoint, aGluePoint );
             return uno::makeAny( aGluePoint );
         }
@@ -321,7 +321,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
                     // #i38892#
                     if(rTempPoint.IsUserDefined())
                     {
-                        aGluePoint.IsUserDefined = sal_True;
+                        aGluePoint.IsUserDefined = true;
                     }
 
                     convert( rTempPoint, aGluePoint );
@@ -479,7 +479,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
         if( Index < 4 ) // default glue point?
         {
             SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( (sal_uInt16)Index );
-            aGluePoint.IsUserDefined = sal_False;
+            aGluePoint.IsUserDefined = false;
             convert( aTempPoint, aGluePoint );
             uno::Any aAny;
             aAny <<= aGluePoint;
@@ -492,7 +492,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
             if( pList && Index < pList->GetCount() )
             {
                 const SdrGluePoint& rTempPoint = (*pList)[(sal_uInt16)Index];
-                aGluePoint.IsUserDefined = sal_True;
+                aGluePoint.IsUserDefined = true;
                 convert( rTempPoint, aGluePoint );
                 uno::Any aAny;
                 aAny <<= aGluePoint;

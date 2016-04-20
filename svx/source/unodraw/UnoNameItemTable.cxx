@@ -258,7 +258,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
     if (aName.isEmpty())
-        return sal_False;
+        return false;
 
     sal_uInt32 nSurrogate;
 
@@ -268,10 +268,10 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     {
         const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
         if (isValid(pItem) && aName.equals(pItem->GetName()))
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
@@ -287,10 +287,10 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
         const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
         if( isValid( pItem ) )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

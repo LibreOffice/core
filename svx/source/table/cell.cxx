@@ -546,7 +546,7 @@ void Cell::copyFormatFrom( const CellRef& xSourceCell )
 void Cell::notifyModified()
 {
     if( mxTable.is() )
-        mxTable->setModified( sal_True );
+        mxTable->setModified( true );
 }
 
 

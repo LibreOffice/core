@@ -250,7 +250,7 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException,
     {
         mxTable->merge( aStart.mnCol, aStart.mnRow, aEnd.mnCol - aStart.mnCol + 1, aEnd.mnRow - aStart.mnRow + 1 );
         mxTable->optimize();
-        mxTable->setModified(sal_True);
+        mxTable->setModified(true);
     }
     catch( Exception& )
     {
@@ -515,7 +515,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
             split_vertical( nRows );
 
         if( nColumns > 0 ||nRows > 0 )
-            mxTable->setModified(sal_True);
+            mxTable->setModified(true);
     }
     catch( Exception& )
     {

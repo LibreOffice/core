@@ -139,7 +139,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         {
             css::beans::PropertyValue aPropValue;
             aPropValue.Name = sExtrusion;
-            aPropValue.Value <<= sal_True;
+            aPropValue.Value <<= true;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
         }
     }
@@ -419,11 +419,11 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
             aPropValue.Name = sLightFace;
-            aPropValue.Value <<= sal_True;
+            aPropValue.Value <<= true;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
             aPropValue.Name = sFirstLightHarsh;
-            aPropValue.Value <<= sal_True;
+            aPropValue.Value <<= true;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
             aPropValue.Name = sSecondLightHarsh;

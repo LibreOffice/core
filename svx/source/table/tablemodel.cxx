@@ -222,7 +222,7 @@ void TableModel::UndoInsertRows( sal_Int32 nIndex, sal_Int32 nCount )
     // remove the rows
     remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
     updateRows();
-    setModified(sal_True);
+    setModified(true);
 }
 
 
@@ -238,7 +238,7 @@ void TableModel::UndoRemoveRows( sal_Int32 nIndex, RowVector& aRows )
         maRows[nIndex+nOffset] = aRows[nOffset];
 
     updateRows();
-    setModified(sal_True);
+    setModified(true);
 }
 
 
@@ -253,7 +253,7 @@ void TableModel::UndoInsertColumns( sal_Int32 nIndex, sal_Int32 nCount )
         maRows[nRows]->removeColumns( nIndex, nCount );
 
     updateColumns();
-    setModified(sal_True);
+    setModified(true);
 }
 
 
@@ -281,7 +281,7 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
     }
 
     updateColumns();
-    setModified(sal_True);
+    setModified(true);
 }
 
 
@@ -686,7 +686,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
             OSL_FAIL("sdr::table::TableModel::insertColumns(), exception caught!");
         }
         updateColumns();
-        setModified(sal_True);
+        setModified(true);
     }
 }
 
@@ -795,7 +795,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         }
 
         updateColumns();
-        setModified(sal_True);
+        setModified(true);
     }
 }
 
@@ -857,7 +857,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
             pModel->SetChanged();
 
         updateRows();
-        setModified(sal_True);
+        setModified(true);
     }
 }
 
@@ -952,7 +952,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
 
         updateRows();
-        setModified(sal_True);
+        setModified(true);
     }
 }
 
@@ -1061,7 +1061,7 @@ void TableModel::optimize()
         }
     }
     if( bWasModified )
-        setModified(sal_True);
+        setModified(true);
 }
 
 

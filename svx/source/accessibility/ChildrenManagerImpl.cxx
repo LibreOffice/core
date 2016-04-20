@@ -915,7 +915,7 @@ void ChildrenManagerImpl::UpdateSelection()
                 {
                     if (bDrawShape)
                     {
-                        vecSelect.push_back(std::make_pair(pAccessibleShape,sal_True));
+                        vecSelect.push_back(std::make_pair(pAccessibleShape,true));
                         ++nAddSelect;
                     }
                 }
@@ -931,7 +931,7 @@ void ChildrenManagerImpl::UpdateSelection()
                 {
                     if(bDrawShape)
                     {
-                        vecSelect.push_back(std::make_pair(pAccessibleShape,sal_False));
+                        vecSelect.push_back(std::make_pair(pAccessibleShape,false));
                         ++nRemoveSelect;
                     }
                 }

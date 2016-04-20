@@ -226,10 +226,10 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
     {
         XPropertyEntry* pEntry = get( i );
         if (pEntry && aInternalName.equals(pEntry->GetName()))
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // XElementAccess

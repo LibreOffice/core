@@ -525,7 +525,7 @@ void SvxOle2Shape::resetModifiedState()
             uno::Reference < util::XModifiable > xMod( pOle->GetObjRef(), uno::UNO_QUERY );
             if( xMod.is() )
                 // TODO/MBA: what's this?!
-                xMod->setModified( sal_False );
+                xMod->setModified( false );
         }
     }
 }

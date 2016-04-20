@@ -224,7 +224,7 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
 
 
     if ( m_xBrowserComponentWindow.is() )
-        m_xBrowserComponentWindow->setVisible( sal_True );
+        m_xBrowserComponentWindow->setVisible( true );
 
     if ( _pInfo )
         m_sLastActivePage = _pInfo->aExtraString;
@@ -341,7 +341,7 @@ bool FmPropBrw::Close()
         try
         {
             Reference< XController > xController( m_xMeAsFrame->getController() );
-            if ( xController.is() && !xController->suspend( sal_True ) )
+            if ( xController.is() && !xController->suspend( true ) )
                 return false;
         }
         catch( const Exception& )

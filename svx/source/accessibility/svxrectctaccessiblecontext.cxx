@@ -944,7 +944,7 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getCurrentValue() throw( RuntimeE
 
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::setCurrentValue( const Any& /*aNumber*/ ) throw( RuntimeException, std::exception )
 {
-    return sal_False;
+    return false;
 }
 
 Any SAL_CALL SvxRectCtlChildAccessibleContext::getMaximumValue() throw( RuntimeException, std::exception )
@@ -984,7 +984,7 @@ sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex
 
     xSelection->selectAccessibleChild(mnIndexInParent);
 
-    return sal_True;
+    return true;
 }
 
 

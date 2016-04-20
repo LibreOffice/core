@@ -308,7 +308,7 @@ bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
         ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
 
         aDestPath.executeCommand( "transfer",
-                                  uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                  uno::makeAny( ucb::TransferInfo( false, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                 rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
         bRet = true;
     }
@@ -381,7 +381,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
             else
                 aProgressText = "Gallery";
 
-            xMonitor->addText( "Gallery", aProgressText, sal_False ) ;
+            xMonitor->addText( "Gallery", aProgressText, false ) ;
             mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
         }
     }

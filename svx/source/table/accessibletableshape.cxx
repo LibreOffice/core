@@ -621,7 +621,7 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow 
     {
         return pController->isRowSelected( nRow );
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -634,7 +634,7 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nC
     {
         return pController->isColumnSelected( nColumn );
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -676,10 +676,10 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sa
         CellPos aFirstPos, aLastPos;
         pController->getSelectedCells( aFirstPos, aLastPos );
         if( (aFirstPos.mnRow <= nRow) && (aFirstPos.mnCol <= nColumn) && (nRow <= aLastPos.mnRow) && (nColumn <= aLastPos.mnCol) )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -842,7 +842,7 @@ throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
     if( !pController )
-        return sal_False;
+        return false;
     return pController->selectRow( row );
 }
 
@@ -852,7 +852,7 @@ sal_Bool SAL_CALL AccessibleTableShape::selectColumn( sal_Int32 column )
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
     if( !pController )
-        return sal_False;
+        return false;
     return pController->selectColumn( column );
 }
 
@@ -862,7 +862,7 @@ throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
     if( !pController )
-        return sal_False;
+        return false;
     return pController->deselectRow( row );
 }
 
@@ -872,7 +872,7 @@ throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
     if( !pController )
-        return sal_False;
+        return false;
     return pController->deselectColumn( column );
 }
 
@@ -1299,7 +1299,7 @@ throw (IndexOutOfBoundsException, RuntimeException, std::exception)
         mpTable->clearAccessibleSelection();
         sal_Int32 nIndex = mpTable->getAccessibleIndex( row, 0 );
         mpTable->selectAccessibleChild( nIndex );
-        return sal_True;
+        return true;
     }
 }
 
@@ -1313,7 +1313,7 @@ throw (IndexOutOfBoundsException, RuntimeException, std::exception)
         mpTable->clearAccessibleSelection();
         sal_Int32 nIndex = mpTable->getAccessibleIndex( 0, column );
         mpTable->selectAccessibleChild( nIndex );
-        return sal_True;
+        return true;
     }
 }
 
@@ -1326,7 +1326,7 @@ throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         sal_Int32 nIndex = mpTable->getAccessibleIndex( row, 0 );
         mpTable->deselectAccessibleChild( nIndex );
-        return sal_True;
+        return true;
     }
 }
 
@@ -1339,7 +1339,7 @@ throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         sal_Int32 nIndex = mpTable->getAccessibleIndex( 0, column );
         mpTable->deselectAccessibleChild( nIndex );
-        return sal_True;
+        return true;
     }
 }
 }

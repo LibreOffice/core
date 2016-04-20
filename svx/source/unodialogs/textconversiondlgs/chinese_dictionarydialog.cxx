@@ -497,7 +497,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
                                 ), UNO_QUERY );
                     }
                     if (xDictionary_To_Simplified.is())
-                        xDictionary_To_Simplified->setActive( sal_True );
+                        xDictionary_To_Simplified->setActive( true );
 
 
                     if( xContainer->hasByName( aNameTo_Traditional ) )
@@ -512,7 +512,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
                                 UNO_QUERY );
                     }
                     if (xDictionary_To_Traditional.is())
-                        xDictionary_To_Traditional->setActive( sal_True );
+                        xDictionary_To_Traditional->setActive( true );
 
                 }
                 catch(const uno::Exception& )

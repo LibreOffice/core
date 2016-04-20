@@ -462,7 +462,7 @@ void AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
         if(nFocusFlags & GetFocusFlags::UniqueMnemonic)
             aEvent.FocusFlags |= css::awt::FocusChangeReason::UNIQUEMNEMONIC;
     }
-    aEvent.Temporary = sal_False;
+    aEvent.Temporary = false;
 
     Reference < XAccessibleContext > xThis( this );
     aEvent.Source = xThis;

@@ -362,7 +362,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     SolarMutexGuard aGuard;
 
     if( aName.isEmpty() )
-        return sal_False;
+        return false;
 
     OUString aSearchName;
 
@@ -375,7 +375,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     {
         pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate));
         if( pItem && pItem->GetName() == aSearchName )
-            return sal_True;
+            return true;
     }
 
     aSearchName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aName);
@@ -384,10 +384,10 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     {
         pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate));
         if( pItem && pItem->GetName() == aSearchName )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // XElementAccess
@@ -410,7 +410,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
     {
         pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate));
         if( pItem && !pItem->GetName().isEmpty() )
-            return sal_True;
+            return true;
     }
 
     const sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
@@ -418,10 +418,10 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
     {
         pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate));
         if( pItem && !pItem->GetName().isEmpty() )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /**
