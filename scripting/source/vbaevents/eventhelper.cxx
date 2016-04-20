@@ -526,8 +526,8 @@ ReadOnlyEventsNameContainer::hasByName( const OUString& aName ) throw (RuntimeEx
 {
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
     if ( it == m_hEvents.end() )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 class ReadOnlyEventsSupplier : public ::cppu::WeakImplHelper< XScriptEventsSupplier >

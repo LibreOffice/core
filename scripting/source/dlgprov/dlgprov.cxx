@@ -462,7 +462,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
                 xDialogControl->setModel( rxDialogModel );
 
             // set visible
-            xDialogControl->setVisible( sal_False );
+            xDialogControl->setVisible( false );
 
             // get the parent of the dialog control
             Reference< XWindowPeer > xPeer;

@@ -1013,7 +1013,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                 aPropName = "UseCommonStoragePasswordEncryption";
-                xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
+                xProps->setPropertyValue( aPropName, uno::makeAny( true ) );
             }
 
             Reference< io::XOutputStream > xOutputStream = xElementStream->getOutputStream();

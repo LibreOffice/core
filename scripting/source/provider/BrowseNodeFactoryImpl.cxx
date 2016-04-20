@@ -134,7 +134,7 @@ public:
                 {
                     if ( m_Nodes[ i ]->hasChildNodes() )
                     {
-                        return sal_True;
+                        return true;
                     }
                 }
                 catch ( Exception& )
@@ -145,7 +145,7 @@ public:
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     virtual sal_Int16 SAL_CALL getType()
@@ -229,7 +229,7 @@ public:
     virtual sal_Bool SAL_CALL hasChildNodes()
         throw ( RuntimeException, std::exception ) override
     {
-        return sal_True;
+        return true;
     }
 
     virtual sal_Int16 SAL_CALL getType()
@@ -634,7 +634,7 @@ public:
     virtual sal_Bool SAL_CALL hasChildNodes()
         throw ( RuntimeException, std::exception ) override
     {
-        return sal_True; // will always be user and share
+        return true; // will always be user and share
     }
 
     virtual sal_Int16 SAL_CALL getType()

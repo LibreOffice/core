@@ -449,7 +449,7 @@ sal_Bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
         throw ( css::uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 

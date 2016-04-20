@@ -138,7 +138,7 @@ namespace basprov
     {
         SolarMutexGuard aGuard;
 
-        return sal_False;
+        return false;
     }
 
 
@@ -312,7 +312,7 @@ namespace basprov
     {
         (void)aName;
 
-        return sal_False;
+        return false;
     }
 
 
