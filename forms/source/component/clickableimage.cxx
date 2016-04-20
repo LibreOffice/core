@@ -491,7 +491,7 @@ namespace frm
             // simulate a propertyChanged event for the ImageURL
             Any aImageURL;
             getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
-            _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, sal_False, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );
+            _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, false, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );
         }
         osl_atomic_decrement( &m_refCount );
     }
@@ -848,7 +848,7 @@ namespace frm
             case PROPERTY_ID_BUTTONTYPE             : return makeAny( FormButtonType_PUSH );
             case PROPERTY_ID_TARGET_URL             :
             case PROPERTY_ID_TARGET_FRAME           : return makeAny( OUString() );
-            case PROPERTY_ID_DISPATCHURLINTERNAL    : return makeAny( sal_False );
+            case PROPERTY_ID_DISPATCHURLINTERNAL    : return makeAny( false );
             default:
                 return OControlModel::getPropertyDefaultByHandle(nHandle);
         }

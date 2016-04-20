@@ -895,7 +895,7 @@ void OImageControlControl::mousePressed(const css::awt::MouseEvent& e) throw ( c
 
             // check if the ImageURL is empty
             if ( impl_isEmptyGraphics_nothrow() )
-                xMenu->enableItem( ID_CLEAR_GRAPHICS, sal_False );
+                xMenu->enableItem( ID_CLEAR_GRAPHICS, false );
 
             awt::Rectangle aRect( e.X, e.Y, 0, 0 );
             if ( ( e.X < 0 ) || ( e.Y < 0 ) )

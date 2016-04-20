@@ -217,7 +217,7 @@ namespace frm
         MethodGuard aGuard( *this );
 
         FeatureState aState;
-        aState.Enabled = sal_False;
+        aState.Enabled = false;
 
         try
         {
@@ -248,7 +248,7 @@ namespace frm
             case FormFeature::DeleteRecord:
                 // already deleted ?
                 if ( m_xCursor->rowDeleted() )
-                    aState.Enabled = sal_False;
+                    aState.Enabled = false;
                 else
                 {
                     // allowed to delete the row ?
@@ -344,20 +344,20 @@ namespace frm
                         // can't insert records -> disabled
                         if ( !nCount && !::dbtools::canInsert( m_xCursorProperties ) )
                         {
-                            aState.Enabled = sal_False;
+                            aState.Enabled = false;
                         }
                         else
                         {
                             if ( bIsNew )
                                 nPosition = ++nCount;
                             aState.State <<= (sal_Int32)nPosition;
-                            aState.Enabled = sal_True;
+                            aState.Enabled = true;
                         }
                     }
                     else
                     {
                         aState.State <<= (sal_Int32)nPosition;
-                        aState.Enabled = sal_True;
+                        aState.Enabled = true;
                     }
                 }
             }
@@ -377,7 +377,7 @@ namespace frm
                     sValue += " *";
 
                 aState.State <<= sValue;
-                aState.Enabled = sal_True;
+                aState.Enabled = true;
             }
             break;
 
@@ -868,7 +868,7 @@ namespace frm
     sal_Bool SAL_CALL FormOperations::commitCurrentRecord( sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException, std::exception)
     {
         MethodGuard aGuard( *this );
-        _out_rRecordInserted = sal_False;
+        _out_rRecordInserted = false;
 
         return impl_commitCurrentRecord_throw( &_out_rRecordInserted );
     }
@@ -892,7 +892,7 @@ namespace frm
             {
                 m_xUpdateCursor->insertRow();
                 if ( _pRecordInserted )
-                    *_pRecordInserted = sal_True;
+                    *_pRecordInserted = true;
             }
             else
                 m_xUpdateCursor->updateRow();
@@ -1453,7 +1453,7 @@ namespace frm
         if ( !impl_hasCursor_nothrow() )
             return;
 
-        sal_Bool bRecordInserted = sal_False;
+        sal_Bool bRecordInserted = false;
         bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )
@@ -1487,7 +1487,7 @@ namespace frm
         if ( !impl_hasCursor_nothrow() )
             return;
 
-        sal_Bool bRecordInserted = sal_False;
+        sal_Bool bRecordInserted = false;
         bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )

@@ -131,7 +131,7 @@ namespace frm
                         >>= bShouldBeEnabled );
 
             if ( !bShouldBeEnabled && bEnabled )
-                xWindow->setEnable( sal_False );
+                xWindow->setEnable( false );
         }
         catch( const Exception& )
         {

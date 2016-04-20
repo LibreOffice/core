@@ -605,7 +605,7 @@ namespace frm
             sal_Int32 nHandle = PROPERTY_ID_TEXT;
             Any aOldValue; aOldValue <<= m_sLastKnownEngineText;
             Any aNewValue; aNewValue <<= sCurrentEngineText;
-            fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
+            fire( &nHandle, &aNewValue, &aOldValue, 1, false );
 
             m_sLastKnownEngineText = sCurrentEngineText;
         }

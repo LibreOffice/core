@@ -499,7 +499,7 @@ namespace frm
 #if HAVE_FEATURE_DBCONNECTIVITY
         if ( !ensureInitialized( ) )
             // already asserted in ensureInitialized
-            return sal_True;
+            return true;
 
         OUString aText;
         switch (m_nControlClass)
@@ -512,7 +512,7 @@ namespace frm
                     aText = xText->getText();
             }   break;
             default:
-                return sal_True;
+                return true;
         }
         if (m_aText.compareTo(aText))
         {
@@ -530,7 +530,7 @@ namespace frm
                     aError.Message = FRM_RES_STRING( RID_STR_SYNTAXERROR );
                     aError.Details = sErrorMessage;
                     displayException( aError );
-                    return sal_False;
+                    return false;
                 }
             }
 
@@ -542,7 +542,7 @@ namespace frm
                 static_cast< XTextListener* >( aIt.next() )->textChanged( aEvt );
         }
 #endif
-        return sal_True;
+        return true;
     }
 
     // XTextComponent
@@ -634,12 +634,12 @@ namespace frm
                     {
                         while ( xListBox->getSelectedItemPos() >= 0 )
                         {
-                            xListBox->selectItemPos( xListBox->getSelectedItemPos(), sal_False );
+                            xListBox->selectItemPos( xListBox->getSelectedItemPos(), false );
                         }
                     }
                     else
                     {
-                        xListBox->selectItem( m_aText, sal_True );
+                        xListBox->selectItem( m_aText, true );
                     }
                 }
             }

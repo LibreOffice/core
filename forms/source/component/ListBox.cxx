@@ -2108,7 +2108,7 @@ namespace frm
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->isMutipleMode();
-        return sal_False;
+        return false;
     }
 
 

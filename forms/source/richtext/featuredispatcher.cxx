@@ -96,10 +96,10 @@ namespace frm
     FeatureStateEvent ORichTextFeatureDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent;
-        aEvent.IsEnabled = sal_False;
+        aEvent.IsEnabled = false;
         aEvent.Source = *const_cast< ORichTextFeatureDispatcher* >( this );
         aEvent.FeatureURL = getFeatureURL();
-        aEvent.Requery = sal_False;
+        aEvent.Requery = false;
         return aEvent;
     }
 

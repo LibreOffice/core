@@ -67,7 +67,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             descriptor[0] = PropertyValue(OUString("InputStream"),
                 -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
             descriptor[1] = PropertyValue(OUString("ReadOnly"),
-                -1, makeAny(sal_True), PropertyState_DIRECT_VALUE);
+                -1, makeAny(true), PropertyState_DIRECT_VALUE);
 
             OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
             OUString aTarget = "_default";
@@ -86,7 +86,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
                     Reference< XElement > oldRoot = aDocument->getDocumentElement();
                     Reference< XElement > newRoot = aNewDocument->getDocumentElement();
 
-                    Reference< XNode > aImportedNode = aDocument->importNode(newRoot, sal_True);
+                    Reference< XNode > aImportedNode = aDocument->importNode(newRoot, true);
                     aDocument->replaceChild(aImportedNode, oldRoot);
                     return CSubmission::SUCCESS;
                 } else {

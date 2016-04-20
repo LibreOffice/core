@@ -523,7 +523,7 @@ css::uno::Reference<css::xforms::XModel> Model::newModel( const Reference<css::f
         xModel.set( pModel );
 
         pModel->setID( sName );
-        pModel->newInstance( OUString(), OUString(), sal_False );
+        pModel->newInstance( OUString(), OUString(), false );
         pModel->initialize();
         xModels->insertByName( sName, makeAny( xModel ) );
     }
@@ -804,7 +804,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
         }
 
         // append node
-        xFragment->appendChild( xDocument->importNode( xCurrent, sal_True ) );
+        xFragment->appendChild( xDocument->importNode( xCurrent, true ) );
     }
     OSL_ENSURE( ( nAttributeNodes == 0 ) || ( nAttributeNodes == nLength ),
         "lcl_serializeForDisplay: mixed attribute and non-attribute nodes?" );

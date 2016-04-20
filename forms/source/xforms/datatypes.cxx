@@ -241,7 +241,7 @@ namespace xforms
     {
         // let the base class do the conversion
         if ( !OXSDDataType_PBase::convertFastPropertyValue( _rConvertedValue, _rOldValue, _nHandle, _rValue ) )
-            return sal_False;
+            return false;
 
         // sanity checks
         OUString sErrorMessage;
@@ -253,7 +253,7 @@ namespace xforms
             throw IllegalArgumentException( aException );
         }
 
-        return sal_True;
+        return true;
     }
 
 

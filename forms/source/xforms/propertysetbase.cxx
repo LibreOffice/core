@@ -58,7 +58,7 @@ cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
     if ( !m_pProperties )
     {
         OSL_ENSURE( !m_aProperties.empty(), "PropertySetBase::getInfoHelper: no registered properties!" );
-        m_pProperties = new cppu::OPropertyArrayHelper( &m_aProperties[0], m_aProperties.size(), sal_False );
+        m_pProperties = new cppu::OPropertyArrayHelper( &m_aProperties[0], m_aProperties.size(), false );
     }
     return *m_pProperties;
 }
@@ -149,9 +149,9 @@ sal_Bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValu
     if ( rOldValue != rValue )
     {
         rConvertedValue = rValue;   // no conversion at all
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL PropertySetBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )

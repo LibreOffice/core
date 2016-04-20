@@ -333,7 +333,7 @@ namespace frm
                 , m_xField(xField)
             {};
 
-            void operator()() { m_pFO->m_xParser->appendFilterByColumn( m_xField, sal_True, css::sdb::SQLFilterOperator::EQUAL ); }
+            void operator()() { m_pFO->m_xParser->appendFilterByColumn( m_xField, true, css::sdb::SQLFilterOperator::EQUAL ); }
         private:
             const FormOperations *m_pFO;
             css::uno::Reference< css::beans::XPropertySet > m_xField;

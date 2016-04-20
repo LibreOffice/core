@@ -758,7 +758,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                 if (xFormats.is())
                 {
                     Locale aDescriptionLanguage( LanguageTag::convertToLocale(eDescriptionLanguage));
-                    nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, sal_False);
+                    nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, false);
                     if (nKey == (sal_Int32)-1)
                     {   // does not yet exist in my formatter...
                         nKey = xFormats->addNew(sFormatDescription, aDescriptionLanguage);

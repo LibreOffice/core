@@ -198,7 +198,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
 OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
-    ,m_aHidden( makeAny( sal_False ) )
+    ,m_aHidden( makeAny( false ) )
     ,m_aModelName(_sModelName)
 {
 

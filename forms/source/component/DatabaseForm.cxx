@@ -1191,7 +1191,7 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
 
         // switch to "insert only" mode
         saveInsertOnlyState( );
-        m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( sal_True ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( true ) );
     }
     else if (m_bAllowInsert || m_bAllowUpdate || m_bAllowDelete)
         nConcurrency = ResultSetConcurrency::UPDATABLE;
@@ -1883,7 +1883,7 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     {
         case PROPERTY_ID_INSERTONLY:
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
-            aReturn <<= sal_False;
+            aReturn <<= false;
             break;
 
         case PROPERTY_ID_FILTER:
@@ -1891,7 +1891,7 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_APPLYFILTER:
-            aReturn <<= sal_True;
+            aReturn <<= true;
             break;
 
         case PROPERTY_ID_NAVIGATION:
@@ -2420,9 +2420,9 @@ sal_Bool SAL_CALL ODatabaseForm::getGroupControl() throw(css::uno::RuntimeExcept
     }
 
     if (isLoaded() && getConnection().is())
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 
@@ -3105,7 +3105,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) thr
             try
             {
                 if ( !xListener->approveCursorMove( event ) )
-                    return sal_False;
+                    return false;
             }
             catch (const DisposedException& e)
             {
@@ -3130,9 +3130,9 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) thr
         // ask our own RowSetChangesListeners, too
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         if ( !impl_approveRowChange_throw( event, false, aGuard ) )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -3172,7 +3172,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) t
         }
         return true;
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -3183,7 +3183,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event) t
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         bool bWasLoaded = isLoaded();
         if ( !impl_approveRowChange_throw( event, false, aGuard ) )
-            return sal_False;
+            return false;
 
         if ( bWasLoaded )
         {
@@ -3197,9 +3197,9 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event) t
         // ask our own RowSetChangesListeners, too
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         if ( !impl_approveRowChange_throw( event, false, aGuard ) )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -3852,7 +3852,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     if (m_xAggregateSet.is())
         _rxOutStream->writeBoolean(getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_INSERTONLY)));
     else
-        _rxOutStream->writeBoolean(sal_False);
+        _rxOutStream->writeBoolean(false);
 
     _rxOutStream->writeBoolean(m_bAllowInsert);
     _rxOutStream->writeBoolean(m_bAllowUpdate);

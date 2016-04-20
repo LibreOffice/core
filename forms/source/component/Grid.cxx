@@ -294,9 +294,9 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalAr
         m_xSelection = xSel;
         aGuard.clear();
         m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, EventObject( *this ) );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 Any SAL_CALL OGridControlModel::getSelection() throw(RuntimeException, std::exception)
 {

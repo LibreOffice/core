@@ -167,7 +167,7 @@ namespace frm
                         pLoopFormats->nKey = xStandardFormats->queryKey(
                             OUString::createFromAscii(pLoopFormats->pDescription),
                             getLocale(pLoopFormats->eLocale),
-                            sal_False
+                            false
                         );
 
                         if (-1 == pLoopFormats->nKey)

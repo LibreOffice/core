@@ -78,7 +78,7 @@ namespace frm
     FeatureStateEvent OSelectAllDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
-        aEvent.IsEnabled = sal_True;
+        aEvent.IsEnabled = true;
         return aEvent;
     }
 
@@ -96,7 +96,7 @@ namespace frm
         EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : nullptr;
         OSL_ENSURE( pEngine, "OParagraphDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
         if ( pEngine && pEngine->IsVertical() )
-            aEvent.IsEnabled = sal_False;
+            aEvent.IsEnabled = false;
 
         return aEvent;
     }
@@ -131,7 +131,7 @@ namespace frm
         EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : nullptr;
         OSL_ENSURE( pEngine, "OTextDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
 
-        aEvent.IsEnabled = sal_True;
+        aEvent.IsEnabled = true;
         aEvent.State <<= pEngine && pEngine->IsVertical();
 
         return aEvent;

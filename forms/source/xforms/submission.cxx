@@ -541,7 +541,7 @@ static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, cons
         MIP mip = aModel.queryMIP(cur);
         if(mip.isRelevant() && !(bRemoveWSNodes && _isIgnorable(cur)))
         {
-            imported = dstDoc->importNode(cur, sal_False);
+            imported = dstDoc->importNode(cur, false);
             imported = dstParent->appendChild(imported);
             // append source children to new imported parent
             for( cur = cur->getFirstChild(); cur.is(); cur = cur->getNextSibling() )
