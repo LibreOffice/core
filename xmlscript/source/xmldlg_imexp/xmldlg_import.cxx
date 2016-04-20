@@ -1575,18 +1575,18 @@ void ImportContext::importDefaults(
 
     importShortProperty( "TabIndex", "tab-index", xAttributes );
 
-    sal_Bool bDisable = sal_False;
+    sal_Bool bDisable = false;
     if (getBoolAttr( &bDisable,"disabled", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bDisable)
     {
-        _xControlModel->setPropertyValue( "Enabled", makeAny( sal_False ) );
+        _xControlModel->setPropertyValue( "Enabled", makeAny( false ) );
     }
 
-    sal_Bool bVisible = sal_True;
+    sal_Bool bVisible = true;
     if (getBoolAttr( &bVisible, "visible", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !bVisible)
     {
     try
     {
-            _xControlModel->setPropertyValue( "EnableVisible", makeAny( sal_False ) );
+            _xControlModel->setPropertyValue( "EnableVisible", makeAny( false ) );
     }
     catch( Exception& )
     {

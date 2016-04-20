@@ -67,12 +67,12 @@ inline bool getBoolAttr(
     {
         if ( aValue == "true" )
         {
-            *pRet = sal_True;
+            *pRet = true;
             return true;
         }
         else if ( aValue == "false" )
         {
-            *pRet = sal_False;
+            *pRet = false;
             return true;
         }
         else

@@ -73,12 +73,12 @@ namespace xmlscript
             {
                 if ( aValue == "true" )
                 {
-                    *pRet = sal_True;
+                    *pRet = true;
                     return true;
                 }
                 else if ( aValue == "false" )
                 {
-                    *pRet = sal_False;
+                    *pRet = false;
                     return true;
                 }
                 else
@@ -180,7 +180,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
 
                 OUString aStorageURL = xAttributes->getValueByUidName(m_pImport->XMLNS_XLINK_UID, "href" );
 
-                sal_Bool bReadOnly = sal_False;
+                sal_Bool bReadOnly = false;
                 getBoolAttr( &bReadOnly,"readonly", xAttributes, m_pImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
@@ -211,7 +211,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
             {
                 OUString aName = xAttributes->getValueByUidName( m_pImport->XMLNS_UID, "name" );
 
-                sal_Bool bReadOnly = sal_False;
+                sal_Bool bReadOnly = false;
                 getBoolAttr( &bReadOnly, "readonly", xAttributes, m_pImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
