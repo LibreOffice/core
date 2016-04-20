@@ -1507,7 +1507,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
                 xPropSet->setPropertyValue( "ButtonType" , Any( form::FormButtonType_URL ) );
                 if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
                 {
-                    xPropSet->setPropertyValue( "DispatchURLInternal" , Any( sal_True ) );
+                    xPropSet->setPropertyValue( "DispatchURLInternal" , Any( true ) );
                 }
             }
             else
@@ -1541,7 +1541,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
         xPropSet->setPropertyValue( "ButtonType" , Any(  form::FormButtonType_URL ) );
         if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
-            xPropSet->setPropertyValue( "DispatchURLInternal" , Any( sal_True ) );
+            xPropSet->setPropertyValue( "DispatchURLInternal" , Any( true ) );
 
         Point aPos;
 

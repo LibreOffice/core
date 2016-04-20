@@ -1298,21 +1298,21 @@ sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(Run
     throwIfDisposed();
 
     if( mxGraphicFamily->getName() == aName )
-        return sal_True;
+        return true;
 
     if( mxCellFamily->getName() == aName )
-        return sal_True;
+        return true;
 
     if( msTableFamilyName == aName )
-        return sal_True;
+        return true;
 
     for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); ++iter )
     {
         if( (*iter).second->getName() == aName )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // XElementAccess
@@ -1326,7 +1326,7 @@ Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException, std::ex
 
 sal_Bool SAL_CALL SdStyleSheetPool::hasElements() throw(RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 // XIndexAccess

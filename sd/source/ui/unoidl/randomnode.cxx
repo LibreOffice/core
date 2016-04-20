@@ -452,7 +452,7 @@ Type SAL_CALL RandomAnimationNode::getElementType() throw (RuntimeException, std
 // XElementAccess
 sal_Bool SAL_CALL RandomAnimationNode::hasElements() throw (RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 // XEnumerationAccess

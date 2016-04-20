@@ -468,11 +468,11 @@ sal_Bool SAL_CALL PresenterCanvas::updateScreen (sal_Bool bUpdateAll)
     if (mpUpdateRequester.get() != nullptr)
     {
         mpUpdateRequester->RequestUpdate(bUpdateAll);
-        return sal_True;
+        return true;
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
@@ -542,7 +542,7 @@ sal_Bool SAL_CALL PresenterCanvas::hasAlpha()
     if (xBitmap.is())
         return xBitmap->hasAlpha();
     else
-        return sal_False;
+        return false;
 }
 
 Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
@@ -758,7 +758,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
         Reference<rendering::XLinePolyPolygon2D> xLinePolygon(
             xDevice->createCompatibleLinePolyPolygon(aPoints));
         if (xLinePolygon.is())
-            xLinePolygon->setClosed(0, sal_True);
+            xLinePolygon->setClosed(0, true);
         xPolygon.set(xLinePolygon, UNO_QUERY);
     }
 

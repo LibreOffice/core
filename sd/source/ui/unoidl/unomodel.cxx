@@ -2842,10 +2842,10 @@ sal_Bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName ) throw(un
             continue;
 
         if( aName == SdDrawPage::getPageApiName( pPage ) )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // XElementAccess

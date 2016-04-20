@@ -57,7 +57,7 @@ sal_Bool SAL_CALL SdUnoOutlineView::select( const Any&  )
     throw(lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     // todo: add selections for text ranges
-    return sal_False;
+    return false;
 }
 
 Any SAL_CALL SdUnoOutlineView::getSelection()

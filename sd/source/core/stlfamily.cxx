@@ -285,14 +285,14 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
                 {
                     if (pSdStyle->GetApiName() == aName)
                     {
-                        return sal_True;
+                        return true;
                     }
                 }
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // XElementAccess
@@ -309,18 +309,18 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException, std::exce
 
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
     {
-        return sal_True;
+        return true;
     }
     else
     {
         SfxStyleSheetIteratorPtr aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
         if (aSSSIterator->First())
         {
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // XIndexAccess

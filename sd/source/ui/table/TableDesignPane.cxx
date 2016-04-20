@@ -376,7 +376,7 @@ VCL_BUILDER_DECL_FACTORY(TableValueSet)
 
 void TableDesignWidget::updateControls()
 {
-    static const sal_Bool gDefaults[CB_COUNT] = { sal_True, sal_False, sal_True, sal_False, sal_False, sal_False };
+    static const sal_Bool gDefaults[CB_COUNT] = { true, false, true, false, false, false };
 
     const bool bHasTable = mxSelectedTable.is();
     const OUString* pPropNames = getPropertyNames();

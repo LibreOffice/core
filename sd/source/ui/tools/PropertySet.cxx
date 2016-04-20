@@ -66,7 +66,7 @@ void SAL_CALL PropertySet::setPropertyValue (
         beans::PropertyChangeEvent aEvent(
             static_cast<XWeak*>(this),
             rsPropertyName,
-            sal_False,
+            false,
             -1,
             aOldValue,
             rsPropertyValue);

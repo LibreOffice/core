@@ -2298,12 +2298,12 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     pSet->setPropertyDefaultValue( nHandleAutoReverse, aEmpty );
     pSet->setPropertyDefaultValue( nHandleTrigger, aEmpty );
 
-    pSet->setPropertyDefaultValue( nHandleHasText, makeAny( sal_False ) );
-    pSet->setPropertyDefaultValue( nHandleHasVisibleShape, makeAny( sal_False ) );
+    pSet->setPropertyDefaultValue( nHandleHasText, makeAny( false ) );
+    pSet->setPropertyDefaultValue( nHandleHasVisibleShape, makeAny( false ) );
     pSet->setPropertyDefaultValue( nHandleTextGrouping, makeAny( (sal_Int32)-1 ) );
-    pSet->setPropertyDefaultValue( nHandleAnimateForm, makeAny( sal_True ) );
+    pSet->setPropertyDefaultValue( nHandleAnimateForm, makeAny( true ) );
     pSet->setPropertyDefaultValue( nHandleTextGroupingAuto, makeAny( (double)-1.0 ) );
-    pSet->setPropertyDefaultValue( nHandleTextReverse, makeAny( sal_False ) );
+    pSet->setPropertyDefaultValue( nHandleTextReverse, makeAny( false ) );
 
     pSet->setPropertyDefaultValue( nHandleCurrentPage, aEmpty );
 

@@ -561,7 +561,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     case ATTR_PRESENT_ALWAYS_ON_TOP:
         return Any( rPresSettings.mbAlwaysOnTop );
     case ATTR_PRESENT_NAVIGATOR:
-        return Any( sal_False );
+        return Any( false );
     case ATTR_PRESENT_PEN:
         return Any( rPresSettings.mbMouseAsPen );
     case ATTR_PRESENT_PAUSE_TIMEOUT:
@@ -777,7 +777,7 @@ void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException, std::exceptio
 {
     Sequence< PropertyValue > aArguments(1);
     aArguments[0].Name = "RehearseTimings";
-    aArguments[0].Value <<= sal_True;
+    aArguments[0].Value <<= true;
     startWithArguments( aArguments );
 }
 
@@ -887,7 +887,7 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
     Sequence< PropertyValue > aArguments(4);
 
     aArguments[0].Name = "Preview";
-    aArguments[0].Value <<= sal_True;
+    aArguments[0].Value <<= true;
 
     aArguments[1].Name = "FirstPage";
     aArguments[1].Value <<= xDrawPage;

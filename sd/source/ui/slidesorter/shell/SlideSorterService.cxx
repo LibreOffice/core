@@ -138,7 +138,7 @@ Reference<XResourceId> SAL_CALL SlideSorterService::getResourceId()
 sal_Bool SAL_CALL SlideSorterService::isAnchorOnly()
     throw (RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 //----- XWindowListener -------------------------------------------------------

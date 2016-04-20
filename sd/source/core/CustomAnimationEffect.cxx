@@ -333,7 +333,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
                     {
                         for( nPos = 0; nPos < nEndPos; nPos++ )
                         {
-                            nPos = xBI->getWordBoundary(aText, nPos, aLocale, i18n::WordType::ANY_WORD, sal_True).endPos;
+                            nPos = xBI->getWordBoundary(aText, nPos, aLocale, i18n::WordType::ANY_WORD, true).endPos;
                             nSubItems++;
                         }
                         break;

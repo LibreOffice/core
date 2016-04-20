@@ -741,7 +741,7 @@ void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException, std::exception)
     ClearableMutexGuard aGuard( mrBHelper.rMutex );
     if (!mrBHelper.bDisposed && !mrBHelper.bInDispose)
     {
-        mrBHelper.bInDispose = sal_True;
+        mrBHelper.bInDispose = true;
         aGuard.clear();
         try
         {
@@ -756,14 +756,14 @@ void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException, std::exception)
             {
                 MutexGuard aGuard2( mrBHelper.rMutex );
                 // bDisposed and bInDispose must be set in this order:
-                mrBHelper.bDisposed = sal_True;
-                mrBHelper.bInDispose = sal_False;
+                mrBHelper.bDisposed = true;
+                mrBHelper.bInDispose = false;
                 throw;
             }
             MutexGuard aGuard2( mrBHelper.rMutex );
             // bDisposed and bInDispose must be set in this order:
-            mrBHelper.bDisposed = sal_True;
-            mrBHelper.bInDispose = sal_False;
+            mrBHelper.bDisposed = true;
+            mrBHelper.bInDispose = false;
         }
         catch (RuntimeException &)
         {
@@ -1106,7 +1106,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
         }
         else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
         {
-            aAny <<= sal_False;
+            aAny <<= false;
         }
         else if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
         {
@@ -1310,7 +1310,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
     }
     else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
     {
-        aRet <<= sal_False;
+        aRet <<= false;
     }
     else if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
     {

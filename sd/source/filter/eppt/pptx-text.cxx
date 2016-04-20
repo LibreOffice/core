@@ -508,7 +508,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                         css::uno::Reference< css::beans::XPropertySet > xFieldPropSet( aXTextField, css::uno::UNO_QUERY );
                         if ( xFieldPropSet.is() )
                         {
-                            OUString aFieldKind( aXTextField->getPresentation( sal_True ) );
+                            OUString aFieldKind( aXTextField->getPresentation( true ) );
                             if ( aFieldKind == "Date" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, "IsFix", true ) )

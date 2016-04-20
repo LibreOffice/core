@@ -678,7 +678,7 @@ void AssistentDlgImpl::CloseDocShell()
         uno::Reference< util::XCloseable > xCloseable( xDocShell->GetModel(), uno::UNO_QUERY );
         if( xCloseable.is() )
         {
-            xCloseable->close( sal_True );
+            xCloseable->close( true );
             xDocShell = nullptr;
         }
         else

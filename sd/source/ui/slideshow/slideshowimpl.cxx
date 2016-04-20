@@ -461,12 +461,12 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
             aProperties.push_back(
                 PropertyValue( "SkipAllMainSequenceEffects",
                     -1,
-                    Any(sal_True),
+                    Any(true),
                     PropertyState_DIRECT_VALUE));
             aProperties.push_back(
                 PropertyValue("SkipSlideTransition",
                     -1,
-                    Any(sal_True),
+                    Any(true),
                     PropertyState_DIRECT_VALUE));
         }
 
@@ -821,7 +821,7 @@ bool SlideshowImpl::startPreview(
         if( mxPreviewAnimationNode.is() )
         {
             aProperties[1].Name = "NoSlideTransitions";
-            aProperties[1].Value = uno::makeAny( sal_True );
+            aProperties[1].Value = uno::makeAny( true );
         }
 
         bRet = startShowImpl( aProperties );
@@ -1403,7 +1403,7 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException, std::exception)
         mbIsPaused = true;
         if( mxShow.is() )
         {
-            mxShow->pause(sal_True);
+            mxShow->pause(true);
 
             if( mxListenerProxy.is() )
                 mxListenerProxy->paused();
@@ -1435,7 +1435,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException, std::exception)
             mbIsPaused = false;
             if( mxShow.is() )
             {
-                mxShow->pause(sal_False);
+                mxShow->pause(false);
                 update();
 
                 if( mxListenerProxy.is() )
@@ -2763,7 +2763,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
             // for Pen Mode
             beans::PropertyValue aPenPropSwitchPenMode;
             aPenPropSwitchPenMode.Name = "SwitchPenMode";
-            aPenPropSwitchPenMode.Value <<= sal_True;
+            aPenPropSwitchPenMode.Value <<= true;
             mxShow->setProperty( aPenPropSwitchPenMode );
         }
     }

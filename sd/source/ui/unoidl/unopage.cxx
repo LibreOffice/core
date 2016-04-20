@@ -1955,11 +1955,11 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
             if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
                 aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
             if( !aStr.isEmpty() )
-                return sal_True;
+                return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // container::XNameAccess
@@ -2850,7 +2850,7 @@ sal_Bool SAL_CALL SdMasterPage::hasElements() throw(uno::RuntimeException, std::
     throwIfDisposed();
 
     if( SvxFmDrawPage::mpPage == nullptr )
-        return sal_False;
+        return false;
 
     return SvxFmDrawPage::mpPage->GetObjCount() > 0;
 }

@@ -608,7 +608,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     if (SDXMLMODE_Organizer == meFilterMode)
-        xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(sal_True));
+        xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(true));
 
     if( 0 == nRet )
     {

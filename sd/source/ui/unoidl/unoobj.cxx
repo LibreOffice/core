@@ -1687,7 +1687,7 @@ uno::Type SAL_CALL SdUnoEventsAccess::getElementType(  )
 
 sal_Bool SAL_CALL SdUnoEventsAccess::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 // XServiceInfo

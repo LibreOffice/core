@@ -202,7 +202,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
         aArg[0] = makeAny(reinterpret_cast<sal_Int64>(pWindow));
         aArg[1] = Any();
         aArg[2] = makeAny(css::awt::Rectangle());
-        aArg[3] = makeAny(sal_False);
+        aArg[3] = makeAny(false);
         aArg[4] = makeAny(mxWindow);
 
         Reference<lang::XMultiServiceFactory> xFactory (
