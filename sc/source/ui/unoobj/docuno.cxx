@@ -522,6 +522,13 @@ OUString ScModelObj::getPartName( int nPart )
     return sTabName;
 }
 
+OUString ScModelObj::getPartHash( int nPart )
+{
+    sal_Int64 nHashCode;
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    return (pViewData->GetDocument()->GetHashCode(nPart, nHashCode) ? OUString::number(nHashCode) : OUString());
+}
+
 Size ScModelObj::getDocumentSize()
 {
     Size aSize(10, 10); // minimum size

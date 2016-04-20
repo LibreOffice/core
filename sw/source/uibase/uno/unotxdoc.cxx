@@ -3224,6 +3224,14 @@ OUString SwXTextDocument::getPartName(int nPart)
     return OUString(SW_RES(STR_PAGE)) + OUString::number(nPart + 1);
 }
 
+OUString SwXTextDocument::getPartHash(int nPart)
+{
+    SolarMutexGuard aGuard;
+    OUString sPart(OUString(SW_RES(STR_PAGE)) + OUString::number(nPart + 1));
+
+    return OUString::number(sPart.hashCode());
+}
+
 void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;

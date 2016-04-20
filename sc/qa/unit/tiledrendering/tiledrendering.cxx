@@ -48,12 +48,14 @@ public:
 #if !defined(WNT) && !defined(MACOSX)
     void testRowColumnSelections();
     void testSortAscendingDescending();
+    void testPartHash();
 #endif
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
 #if !defined(WNT) && !defined(MACOSX)
     CPPUNIT_TEST(testRowColumnSelections);
     CPPUNIT_TEST(testSortAscendingDescending);
+    CPPUNIT_TEST(testPartHash);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -248,6 +250,22 @@ void ScTiledRenderingTest::testSortAscendingDescending()
     CPPUNIT_ASSERT_EQUAL(double(3), pDoc->GetValue(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(double(2), pDoc->GetValue(ScAddress(1, 2, 0)));
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testPartHash()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("sort-range.ods");
+
+    int nParts = pModelObj->getParts();
+    for (int it = 0; it < nParts; it++)
+    {
+        CPPUNIT_ASSERT(!pModelObj->getPartHash(it).isEmpty());
+    }
+
+    // check part that it does not exists
+    CPPUNIT_ASSERT(pModelObj->getPartHash(100).isEmpty());
     comphelper::LibreOfficeKit::setActive(false);
 }
 

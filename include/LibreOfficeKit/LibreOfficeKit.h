@@ -116,6 +116,10 @@ struct _LibreOfficeKitDocumentClass
     char* (*getPartName) (LibreOfficeKitDocument* pThis,
                           int nPart);
 
+    /// @see lok::Document::getPartHash().
+    char* (*getPartHash) (LibreOfficeKitDocument* pThis,
+                          int nPart);
+
     /// @see lok::Document::setPartMode().
     void (*setPartMode) (LibreOfficeKitDocument* pThis,
                          int nMode);

@@ -116,6 +116,12 @@ public:
         return mpDoc->pClass->getPartName(mpDoc, nPart);
     }
 
+    /// Get the current part's hash.
+    inline char* getPartHash(int nPart)
+    {
+        return mpDoc->pClass->getPartHash(mpDoc, nPart);
+    }
+
     inline void setPartMode(int nMode)
     {
         mpDoc->pClass->setPartMode(mpDoc, nMode);

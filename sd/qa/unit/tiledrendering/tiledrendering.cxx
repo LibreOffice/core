@@ -63,6 +63,7 @@ public:
     void testResizeTableColumn();
     void testSearchAllNotifications();
     void testSearchAllFollowedBySearch();
+    void testPartHash();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testResizeTableColumn);
     CPPUNIT_TEST(testSearchAllNotifications);
     CPPUNIT_TEST(testSearchAllFollowedBySearch);
+    CPPUNIT_TEST(testPartHash);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -750,6 +752,22 @@ void SdTiledRenderingTest::testInsertDeletePage()
     // the document has 1 slide
     CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testPartHash()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pDoc = createDoc("dummy.odp");
+
+    int nParts = pDoc->getParts();
+    for (int it = 0; it < nParts; it++)
+    {
+        CPPUNIT_ASSERT(!pDoc->getPartHash(it).isEmpty());
+    }
+
+    // check part that it does not exists
+    CPPUNIT_ASSERT(pDoc->getPartHash(100).isEmpty());
     comphelper::LibreOfficeKit::setActive(false);
 }
 

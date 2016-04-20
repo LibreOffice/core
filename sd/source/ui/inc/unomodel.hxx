@@ -241,6 +241,8 @@ public:
     virtual int  getPart() override;
     virtual int  getParts() override;
     virtual OUString getPartName( int nPart ) override;
+    virtual OUString getPartHash( int nPart ) override;
+
     virtual void setPartMode( int nPartMode ) override;
 
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
