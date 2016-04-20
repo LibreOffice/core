@@ -878,11 +878,11 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     ::osl::File::RC rc_item = ::osl::DirectoryItem::get(sLocation, item);
     if (::osl::File::E_None == rc_item)
     {
-        *exist = sal_True;
+        *exist = true;
     }
     else if (::osl::File::E_NOENT == rc_item)
     {
-        *exist = sal_False;
+        *exist = false;
     }
     else
     {
@@ -901,13 +901,13 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
         ::osl::File::RC rc_itemRt = ::osl::DirectoryItem::get(sRuntimeLib, itemRt);
         if (::osl::File::E_None == rc_itemRt)
         {
-            *exist = sal_True;
+            *exist = true;
             JFW_TRACE2("Java runtime library exist: " << sRuntimeLib);
 
         }
         else if (::osl::File::E_NOENT == rc_itemRt)
         {
-            *exist = sal_False;
+            *exist = false;
             JFW_TRACE2("Java runtime library does not exist: " << sRuntimeLib);
         }
         else

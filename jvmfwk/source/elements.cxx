@@ -278,9 +278,9 @@ void NodeJava::load()
                 CXmlCharPtr sEnabled( xmlNodeListGetString(
                     docUser, cur->children, 1));
                 if (xmlStrcmp(sEnabled, reinterpret_cast<xmlChar const *>("true")) == 0)
-                    m_enabled = boost::optional<sal_Bool>(sal_True);
+                    m_enabled = boost::optional<sal_Bool>(true);
                 else if (xmlStrcmp(sEnabled, reinterpret_cast<xmlChar const *>("false")) == 0)
-                    m_enabled = boost::optional<sal_Bool>(sal_False);
+                    m_enabled = boost::optional<sal_Bool>(false);
             }
         }
         else if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("userClassPath")) == 0)
@@ -464,7 +464,7 @@ void NodeJava::write() const
                      reinterpret_cast<xmlChar const *>("nil"),
                      reinterpret_cast<xmlChar const *>("false"));
 
-        if (m_enabled == boost::optional<sal_Bool>(sal_True))
+        if (m_enabled == boost::optional<sal_Bool>(true))
             xmlNodeSetContent(nodeEnabled,reinterpret_cast<xmlChar const *>("true"));
         else
             xmlNodeSetContent(nodeEnabled,reinterpret_cast<xmlChar const *>("false"));

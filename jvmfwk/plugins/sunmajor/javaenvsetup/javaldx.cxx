@@ -51,7 +51,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             fprintf(stdout, HELP_TEXT);// default
             return 0;
         }
-        sal_Bool bEnabled = sal_False;
+        sal_Bool bEnabled = false;
         javaFrameworkError errcode = jfw_getEnabled( & bEnabled);
         if (errcode == JFW_E_NONE && !bEnabled)
         {
@@ -81,7 +81,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
         {
             //check if the JRE was not uninstalled
-            sal_Bool bExist = sal_False;
+            sal_Bool bExist = false;
             errcode = jfw_existJRE(pInfo.info, &bExist);
             if (errcode == JFW_E_NONE)
             {

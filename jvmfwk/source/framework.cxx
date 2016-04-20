@@ -702,9 +702,9 @@ javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning)
     if (bRunning == nullptr)
         return JFW_E_INVALID_ARG;
     if (g_pJavaVM == nullptr)
-        *bRunning = sal_False;
+        *bRunning = false;
     else
-        *bRunning = sal_True;
+        *bRunning = true;
     return JFW_E_NONE;
 }
 
