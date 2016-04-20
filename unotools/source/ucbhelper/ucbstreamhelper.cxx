@@ -90,7 +90,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
                 InsertCommandArgument aInsertArg;
                 aInsertArg.Data = xInput;
 
-                aInsertArg.ReplaceExisting = sal_False;
+                aInsertArg.ReplaceExisting = false;
                 Any aCmdArg;
                 aCmdArg <<= aInsertArg;
                 aContent.executeCommand( "insert", aCmdArg );

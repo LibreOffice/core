@@ -128,7 +128,7 @@ namespace utl
         // close
         try
         {
-            m_xCloseable->close( sal_True );
+            m_xCloseable->close( true );
         }
         catch( const CloseVetoException& ) { /* fine */ }
         catch( const Exception& )

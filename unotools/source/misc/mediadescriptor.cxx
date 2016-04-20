@@ -533,7 +533,7 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
                 css::uno::Reference< css::uno::XInterface >(), 1);
 
     // PostData can't be used in read/write mode!
-    (*this)[MediaDescriptor::PROP_READONLY()] <<= sal_True;
+    (*this)[MediaDescriptor::PROP_READONLY()] <<= true;
 
     // prepare the environment
     css::uno::Reference< css::task::XInteractionHandler > xInteraction = getUnpackedValueOrDefault(

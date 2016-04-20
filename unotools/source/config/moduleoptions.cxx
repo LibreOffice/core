@@ -210,7 +210,7 @@ struct FactoryInfo
             {
                 sTemplateFile
                     = getStringSubstitution()
-                        ->substituteVariables( sNewTemplateFile, sal_False );
+                        ->substituteVariables( sNewTemplateFile, false );
             }
             else
             {

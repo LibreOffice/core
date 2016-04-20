@@ -177,11 +177,11 @@ public:
         {
             if (j == aIterator.getPos())
             {
-                pArr[nIntegerDigits] = sal_True;
+                pArr[nIntegerDigits] = true;
                 aIterator.advance();
             }
             else
-                pArr[nIntegerDigits] = sal_False;
+                pArr[nIntegerDigits] = false;
         }
         return aSeq;
     }
