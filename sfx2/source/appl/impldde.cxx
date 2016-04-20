@@ -121,7 +121,7 @@ SvDDEObject::SvDDEObject()
     : pConnection( nullptr ), pLink( nullptr ), pRequest( nullptr ), pGetData( nullptr )
 {
     SetUpdateTimeout( 100 );
-    bWaitForData = sal_False;
+    bWaitForData = false;
 }
 
 SvDDEObject::~SvDDEObject()
@@ -151,7 +151,7 @@ bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
         return false;
 
     // Lock against Reentrance
-    bWaitForData = sal_True;
+    bWaitForData = true;
 
     // if you want to print, we'll wait until the data is available
     if( bSynchron )
@@ -166,7 +166,7 @@ bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
             aReq.Execute();
         } while( aReq.GetError() && ImplHasOtherFormat( aReq ) );
 
-        bWaitForData = sal_False;
+        bWaitForData = false;
     }
     else
     {
@@ -341,7 +341,7 @@ IMPL_LINK_TYPED( SvDDEObject, ImplGetDDEData, const DdeData*, pData, void )
                 aVal <<= aSeq;
                 DataChanged( SotExchange::GetFormatMimeType(
                                                 pData->GetFormat() ), aVal );
-                bWaitForData = sal_False;
+                bWaitForData = false;
             }
         }
     }
@@ -365,13 +365,13 @@ IMPL_LINK_TYPED( SvDDEObject, ImplDoneDDEData, bool, bValid, void )
             }
             else if( pReq == pRequest )
             {
-                bWaitForData = sal_False;
+                bWaitForData = false;
             }
         }
     }
     else
         // End waiting
-        bWaitForData = sal_False;
+        bWaitForData = false;
 }
 
 }
