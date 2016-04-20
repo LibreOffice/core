@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_externals,opencl,\
     icu_headers \
     icui18n \
     icuuc \
+    libxml2 \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,opencl,\
@@ -37,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,opencl,\
     comphelper \
     cppu \
     sal \
+    tl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,opencl,\
