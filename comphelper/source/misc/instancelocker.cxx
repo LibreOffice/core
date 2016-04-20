@@ -244,7 +244,7 @@ void OLockListener::Dispose()
 
             uno::Reference< util::XCloseable > xCloseable( m_xInstance, uno::UNO_QUERY );
             if ( xCloseable.is() )
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
         }
         catch( uno::Exception& )
         {}

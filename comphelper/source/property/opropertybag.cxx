@@ -223,7 +223,7 @@ namespace comphelper
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
-        return sal_False;
+        return false;
     }
 
 
@@ -250,7 +250,7 @@ namespace comphelper
         m_pArrayHelper.reset();
 
         g.clear();
-        setModified(sal_True);
+        setModified(true);
     }
 
 
@@ -282,7 +282,7 @@ namespace comphelper
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
-        return sal_False;
+        return false;
     }
 
 
@@ -356,7 +356,7 @@ namespace comphelper
         m_pArrayHelper.reset();
 
         g.clear();
-        setModified(sal_True);
+        setModified(true);
     }
 
 
@@ -370,7 +370,7 @@ namespace comphelper
         m_pArrayHelper.reset();
 
         g.clear();
-        setModified(sal_True);
+        setModified(true);
     }
 
 

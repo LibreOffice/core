@@ -56,7 +56,7 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(css::uno::Runtim
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     if (m_xAccess.is() && m_aNames.getLength() > m_nPos)
-        return sal_True;
+        return true;
 
     if (m_xAccess.is())
     {
@@ -64,7 +64,7 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(css::uno::Runtim
         m_xAccess.clear();
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(css::uno::Runti
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     if (m_xAccess.is() && m_xAccess->getCount() > m_nPos)
-        return sal_True;
+        return true;
 
     if (m_xAccess.is())
     {
@@ -163,7 +163,7 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(css::uno::Runti
         m_xAccess.clear();
     }
 
-    return sal_False;
+    return false;
 }
 
 

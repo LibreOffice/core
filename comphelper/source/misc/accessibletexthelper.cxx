@@ -135,7 +135,7 @@ namespace comphelper
             Reference < i18n::XBreakIterator > xBreakIter = implGetBreakIterator();
             if ( xBreakIter.is() )
             {
-                rBoundary = xBreakIter->getWordBoundary( sText, nIndex, implGetLocale(), i18n::WordType::ANY_WORD, sal_True );
+                rBoundary = xBreakIter->getWordBoundary( sText, nIndex, implGetLocale(), i18n::WordType::ANY_WORD, true );
 
                 // it's a word, if the first character is an alpha-numeric character
                 Reference< i18n::XCharacterClassification > xCharClass = implGetCharacterClassification();

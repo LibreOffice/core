@@ -564,9 +564,9 @@ namespace comphelper
             )
         {
             if ( mapping->second == _value )
-                return sal_True;
+                return true;
         }
-        return sal_False;
+        return false;
     }
 
 

@@ -203,7 +203,7 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
         {
             try
             {
-                xClose->close( sal_True );
+                xClose->close( true );
             }
             catch (const uno::Exception&)
             {
@@ -508,7 +508,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
                 //TODO/LATER: possible optimization, don't store immediately
                 //xPersist->setPersistentEntry( pImpl->mxStorage, rName, embed::EntryInitModes::ENTRY_NO_INIT, aSeq, aSeq );
                 xPersist->storeAsEntry( pImpl->mxStorage, rName, aSeq, aSeq );
-                xPersist->saveCompleted( sal_True );
+                xPersist->saveCompleted( true );
             }
         }
     }
@@ -802,7 +802,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                 {
                     try
                     {
-                        xResult->close( sal_True );
+                        xResult->close( true );
                     }
                     catch (const uno::Exception&)
                     {
@@ -1093,7 +1093,7 @@ bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
         uno::Reference < ::util::XCloseable > xClose( xObj, uno::UNO_QUERY );
         try
         {
-            xClose->close( sal_True );
+            xClose->close( true );
         }
         catch (const uno::Exception&)
         {
@@ -1598,7 +1598,7 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
                 {
                     uno::Reference< util::XModifiable > xModif( xObj->getComponent(), uno::UNO_QUERY_THROW );
                     if ( xModif->isModified() )
-                        xModif->setModified( sal_False );
+                        xModif->setModified( false );
                 }
                 catch (const uno::Exception&)
                 {

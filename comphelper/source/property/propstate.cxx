@@ -71,7 +71,7 @@ namespace comphelper
 
     void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  css::uno::Any& aNewValue, const  css::uno::Any& aOldValue)
     {
-        fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+        fire(&nHandle, &aNewValue, &aOldValue, 1, false);
     }
 
     // XPropertyState

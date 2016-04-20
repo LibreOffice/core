@@ -425,7 +425,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Se
         // implementation)
 
         if ( ( nHandle != -1 ) && !isCurrentlyForwardingProperty( nHandle ) )
-            fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, sal_False);
+            fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, false);
     }
     else
     {
@@ -448,7 +448,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Se
         }
 
         if (nDest)
-            fire(pHandles.get(), pNewValues.get(), pOldValues.get(), nDest, sal_False);
+            fire(pHandles.get(), pNewValues.get(), pOldValues.get(), nDest, false);
     }
 }
 
@@ -460,7 +460,7 @@ void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const css::beans::Pr
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
 
     sal_Int32 nHandle = rPH.getHandleByName(_rEvent.PropertyName);
-    fire(&nHandle, &_rEvent.NewValue, &_rEvent.OldValue, 1, sal_True);
+    fire(&nHandle, &_rEvent.NewValue, &_rEvent.OldValue, 1, true);
 }
 
 
@@ -759,7 +759,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                     }
 
                     // fire vetoable events
-                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, sal_True );
+                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, true );
 
                     // setting the agg Properties
                     m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
@@ -777,7 +777,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                     }
 
                     // fire change events
-                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, sal_False );
+                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, false );
                 }
                 else
                     m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);

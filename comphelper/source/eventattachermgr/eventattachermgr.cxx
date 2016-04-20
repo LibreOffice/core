@@ -210,7 +210,7 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
                 break;
 
             case TypeClass_BOOLEAN:
-                rRet <<= sal_True;
+                rRet <<= true;
                 break;
 
             case TypeClass_STRING:

@@ -589,7 +589,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         uno::Sequence< beans::PropertyValue > aTempMD( aMediaDescr );
 
         // get TypeName
-        OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMD, sal_True );
+        OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMD, true );
 
         // get FilterName
         for ( sal_Int32 nInd = 0; nInd < aTempMD.getLength(); nInd++ )
