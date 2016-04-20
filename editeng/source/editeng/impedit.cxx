@@ -962,8 +962,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         {
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, (nShowCursorFlags & GETCRSR_PREFERPORTIONSTART) != 0 );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
-            sal_uInt16 nRTLLevel = rTextPortion.GetRightToLeftLevel();
-            if ( nRTLLevel%2 )
+            if (rTextPortion.IsRightToLeft())
                 nCursorDir = CursorDirection::RTL;
             else
                 nCursorDir = CursorDirection::LTR;

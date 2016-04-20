@@ -949,8 +949,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         sal_Int32 nTmp;
         sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, true );
         const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
-        sal_Int32 nRTLLevel = rTextPortion.GetRightToLeftLevel();
-        bool bPortionRTL = (nRTLLevel%2) != 0;
+        bool bPortionRTL = rTextPortion.IsRightToLeft();
 
         if ( bStart )
         {
@@ -1092,7 +1091,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
             sal_Int32 nPortionStart;
             sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, bBeforePortion );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
-            bool bRTLPortion = (rTextPortion.GetRightToLeftLevel() % 2) != 0;
+            bool bRTLPortion = rTextPortion.IsRightToLeft();
 
             // -1: We are 'behind' the character
             long nVisPos = (long)ubidi_getVisualIndex( pBidi, bWasBehind ? nPosInLine-1 : nPosInLine, &nError );
@@ -1119,9 +1118,9 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
                 // sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, !bRTLPortion );
                 sal_Int32 _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, true );
                 const TextPortion& _rTextPortion = pParaPortion->GetTextPortions()[_nTextPortion];
-                if ( bVisualToLeft && !bRTLPortion && ( _rTextPortion.GetRightToLeftLevel() % 2 ) )
+                if ( bVisualToLeft && !bRTLPortion && _rTextPortion.IsRightToLeft() )
                     aPaM.SetIndex( aPaM.GetIndex()+1 );
-                else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(_rTextPortion.GetRightToLeftLevel() % 2 )) )
+                else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !_rTextPortion.IsRightToLeft() ) )
                     aPaM.SetIndex( aPaM.GetIndex()+1 );
 
                 pEditView->pImpEditView->SetCursorBidiLevel( _nPortionStart );
