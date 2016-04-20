@@ -122,9 +122,9 @@ sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token ) throw (RuntimeExce
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return sal_True;
+            return true;
 
-    return sal_False;
+    return false;
 }
 
 sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXException, RuntimeException, std::exception)

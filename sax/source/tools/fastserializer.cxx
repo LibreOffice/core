@@ -82,7 +82,7 @@ namespace sax_fastparser {
         rtl_math_doubleToString(
             &mpDoubleStr, &mnDoubleStrCapacity, 0, value, rtl_math_StringFormat_G,
             RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
-            0, sal_True);
+            0, true);
 
         write(mpDoubleStr->buffer, mpDoubleStr->length);
         // and "clear" the string
