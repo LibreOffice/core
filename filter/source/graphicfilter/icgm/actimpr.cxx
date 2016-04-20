@@ -788,7 +788,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         }
         if ( nWidth == -1 )
         {
-            sal_Bool bTrue( sal_True );
+            sal_Bool bTrue( true );
             aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
             maXPropSet->setPropertyValue( "TextAutoGrowWidth", aAny );
 
@@ -812,7 +812,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         }
         if ( nHeight == -1 )
         {
-            sal_Bool bTrue = sal_True;
+            sal_Bool bTrue = true;
             aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
             maXPropSet->setPropertyValue( "TextAutoGrowHeight", aAny );
         }
@@ -824,7 +824,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
 
             uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
             {
-                aXTextCursor->gotoEnd( sal_False );
+                aXTextCursor->gotoEnd( false );
                 uno::Reference< text::XTextRange >  aCursorText;
                 uno::Any aSecondQuery( aXTextCursor->queryInterface( cppu::UnoType<text::XTextRange>::get()));
                 if ( aSecondQuery >>= aCursorText )
@@ -854,12 +854,12 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                         }
                         if ( nWidth > 0 && nHeight > 0 )    // restricted text
                         {
-                            sal_Bool bTrue = sal_True;
+                            sal_Bool bTrue = true;
                             aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
                             maXPropSet->setPropertyValue( "TextFitToSize", aAny );
                         }
                         aCursorText->setString( aStr );
-                        aXTextCursor->gotoEnd( sal_True );
+                        aXTextCursor->gotoEnd( true );
                         ImplSetTextBundle( aCursorPropSet );
                     }
                 }
@@ -888,7 +888,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
                 uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
                 if ( aXTextCursor.is() )
                 {
-                    aXTextCursor->gotoEnd( sal_False );
+                    aXTextCursor->gotoEnd( false );
                     uno::Reference< text::XTextRange >  aCursorText;
                     uno::Any aSecondQuery(aXTextCursor->queryInterface( cppu::UnoType<text::XTextRange>::get()));
                     if ( aSecondQuery >>= aCursorText )
@@ -898,7 +898,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
                         if( aQuery >>= aPropSet )
                         {
                             aCursorText->setString( aStr );
-                            aXTextCursor->gotoEnd( sal_True );
+                            aXTextCursor->gotoEnd( true );
                             ImplSetTextBundle( aPropSet );
                         }
                     }

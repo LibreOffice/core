@@ -134,7 +134,7 @@ OdfFlatXml::importer(
 
     OSL_ASSERT(inputStream.is());
     if (!inputStream.is())
-        return sal_False;
+        return false;
 
     Reference<XParser> saxParser = Parser::create(m_xContext);
 
@@ -156,9 +156,9 @@ OdfFlatXml::importer(
         SAL_WARN(
             "filter.odfflatxml",
             "caught exception \"" << exc.Message << "\"");
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 sal_Bool
@@ -190,13 +190,13 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
     Reference<XActiveDataSource> dataSource(getDelegate(), UNO_QUERY);
     OSL_ASSERT(dataSource.is());
     if (!dataSource.is())
-        return sal_False;
+        return false;
     OSL_ASSERT(outputStream.is());
     if (!outputStream.is())
-        return sal_False;
+        return false;
     dataSource->setOutputStream(outputStream);
 
-    return sal_True;
+    return true;
 }
 
 

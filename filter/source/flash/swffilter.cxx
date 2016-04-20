@@ -235,7 +235,7 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::bean
     aFilterData = findPropertyValue<Sequence< PropertyValue > >(aDescriptor, "FilterData", aFilterData);
 
     // #i56084# check if selection shall be exported only; if yes, get the selected page and the selection itself
-    if(findPropertyValue<sal_Bool>(aDescriptor, "SelectionOnly", sal_False))
+    if(findPropertyValue<sal_Bool>(aDescriptor, "SelectionOnly", false))
     {
         Reference< XDesktop2 > xDesktop(Desktop::create(mxContext));
 
@@ -295,7 +295,7 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::bean
     if( mxStatusIndicator.is() )
         mxStatusIndicator->end();
 
-    return sal_True;
+    return true;
 }
 
 

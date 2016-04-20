@@ -215,7 +215,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     const sal_Int32 nCurrentRenderer = *aIter;
                     ++aIter;
                     if ( pLastPage && aIter == aEnd )
-                        *pLastPage <<= sal_True;
+                        *pLastPage <<= true;
 
                     rRenderable->render( nCurrentRenderer, rSelection, rRenderOptions );
 
@@ -231,7 +231,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     if ( mxStatusIndicator.is() )
                         mxStatusIndicator->setValue( mnProgressValue );
                     if ( pFirstPage )
-                        *pFirstPage <<= sal_False;
+                        *pFirstPage <<= false;
 
                     ++mnProgressValue;
                     ++nCurrentPage;
@@ -826,12 +826,12 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aRenderOptions[ 0 ].Name = "RenderDevice";
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
                 aRenderOptions[ 1 ].Name = "ExportNotesPages";
-                aRenderOptions[ 1 ].Value <<= sal_False;
+                aRenderOptions[ 1 ].Value <<= false;
                 Any& rExportNotesValue = aRenderOptions[ 1 ].Value;
                 aRenderOptions[ 2 ].Name = "IsFirstPage";
-                aRenderOptions[ 2 ].Value <<= sal_True;
+                aRenderOptions[ 2 ].Value <<= true;
                 aRenderOptions[ 3 ].Name = "IsLastPage";
-                aRenderOptions[ 3 ].Value <<= sal_False;
+                aRenderOptions[ 3 ].Value <<= false;
                 aRenderOptions[ 4 ].Name = "IsSkipEmptyPages";
                 aRenderOptions[ 4 ].Value <<= mbSkipEmptyPages;
                 aRenderOptions[ 5 ].Name = "PageRange";
@@ -910,7 +910,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 if ( bRet && bExportNotesPages )
                 {
-                    rExportNotesValue <<= sal_True;
+                    rExportNotesValue <<= true;
                     bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
                 }
                 if ( mxStatusIndicator.is() )

@@ -270,7 +270,7 @@ namespace XSLT
                     OUString>& msUserData) throw (RuntimeException, std::exception)
     {
         if (msUserData.getLength() < 5)
-            return sal_False;
+            return false;
 
         OUString udStyleSheet = rel2abs(msUserData[4]);
 
@@ -297,7 +297,7 @@ namespace XSLT
             }
         OSL_ASSERT(xInputStream.is());
         if (!xInputStream.is())
-            return sal_False;
+            return false;
 
         // create SAX parser that will read the document file
         // and provide events to xHandler passed to this call
@@ -397,12 +397,12 @@ namespace XSLT
                     {
                         // something went wrong
                         OSL_FAIL(OUStringToOString(exc.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-                        return sal_False;
+                        return false;
                     }
             }
         else
             {
-                return sal_False;
+                return false;
             }
     }
 
@@ -411,7 +411,7 @@ namespace XSLT
             const Sequence<OUString>& msUserData) throw (RuntimeException, std::exception)
     {
         if (msUserData.getLength() < 6)
-            return sal_False;
+            return false;
 
         // get interesting values from user data
         OUString udStyleSheet = rel2abs(msUserData[5]);
@@ -496,11 +496,11 @@ namespace XSLT
                 // we will start receiving events after returning 'true'.
                 // we will start the transformation as soon as we receive the startDocument
                 // event.
-                return sal_True;
+                return true;
             }
         else
             {
-                return sal_False;
+                return false;
             }
     }
 

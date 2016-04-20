@@ -7582,9 +7582,9 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
             if ( nFlags & LinePositionBottom )
                 xPropSet->setPropertyValue( sBottomBorder, Any( aBorderLine ) );
             if ( nFlags & LinePositionTLBR )
-                xPropSet->setPropertyValue( sDiagonalTLBR, Any( sal_True ) );
+                xPropSet->setPropertyValue( sDiagonalTLBR, Any( true ) );
             if ( nFlags & LinePositionBLTR )
-                xPropSet->setPropertyValue( sDiagonalBLTR, Any( sal_True ) );
+                xPropSet->setPropertyValue( sDiagonalBLTR, Any( true ) );
             ++aIter;
         }
     }

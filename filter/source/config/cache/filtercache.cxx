@@ -514,8 +514,8 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                     (sItem.equals(sDefaultFrameLoader)   )
                    )
                 {
-                    rItem[PROPNAME_FINALIZED] <<= sal_True;
-                    rItem[PROPNAME_MANDATORY] <<= sal_True;
+                    rItem[PROPNAME_FINALIZED] <<= true;
+                    rItem[PROPNAME_MANDATORY] <<= true;
                     return;
                 }
                 /* <-- HACK */
@@ -557,8 +557,8 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
 
             => mark item as FINALIZED / MANDATORY, we don't support writing to the old format
         */
-        rItem[PROPNAME_FINALIZED] <<= sal_True;
-        rItem[PROPNAME_MANDATORY] <<= sal_True;
+        rItem[PROPNAME_FINALIZED] <<= true;
+        rItem[PROPNAME_MANDATORY] <<= true;
     }
 
     // <- SAFE
@@ -2048,9 +2048,9 @@ void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
         // Preferred
         case 0:     {
                         if (sValue.toInt32() == 1)
-                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(sal_True);
+                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(true);
                         else
-                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(sal_False);
+                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(false);
                     }
                     break;
         // MediaType

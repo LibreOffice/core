@@ -1128,7 +1128,7 @@ bool SVGTextWriter::nextTextPortion()
                         }
 
 #if OSL_DEBUG_LEVEL > 0
-                        sInfo += "text field type: " + sFieldName + "; content: " + xTextField->getPresentation( /* show command: */ sal_False ) + "; ";
+                        sInfo += "text field type: " + sFieldName + "; content: " + xTextField->getPresentation( /* show command: */ false ) + "; ";
 #endif
                         if( sFieldName == "DateTime" || sFieldName == "Header"
                                 || sFieldName == "Footer" || sFieldName == "PageNumber" )
@@ -1529,7 +1529,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
                     {
                         Reference < XPropertySet > xPropSet( mrCurrentTextPortion, UNO_QUERY );
                         Reference < XTextField > xTextField( xPropSet->getPropertyValue( "TextField" ), UNO_QUERY );
-                        sContent = xTextField->getPresentation( /* show command: */ sal_False );
+                        sContent = xTextField->getPresentation( /* show command: */ false );
                         if( sContent.isEmpty() )
                             OSL_FAIL( "SVGTextWriter::writeTextPortion: content of URL TextField is empty." );
                     }

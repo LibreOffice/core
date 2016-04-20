@@ -108,7 +108,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const css::uno::Sequence< css::
     if ( !xOutputStream.is() )
     {
         OSL_ASSERT ( false );
-        return sal_False;
+        return false;
     }
 
     PlaceWareExporter aExporter( mxContext );
