@@ -781,6 +781,11 @@ void Cell::AddUndo()
     {
         CellRef xCell( this );
         GetModel()->AddUndo( new CellUndo( &rObj, xCell ) );
+
+        // Undo action for the after-text-edit-ended stack.
+        SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(&rObj);
+        if (pTableObj && pTableObj->IsTextEditActive())
+            pTableObj->AddUndo(new CellUndo(pTableObj, xCell));
     }
 }
 

@@ -27,6 +27,10 @@
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
+#include <editeng/eeitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <ImpressViewShellBase.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
@@ -45,11 +49,13 @@ public:
     void testTdf96206();
     void testTdf96708();
     void testTdf99396();
+    void testTdf99396TextEdit();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
     CPPUNIT_TEST(testTdf96708);
     CPPUNIT_TEST(testTdf99396);
+    CPPUNIT_TEST(testTdf99396TextEdit);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -160,6 +166,75 @@ void SdMiscTest::testTdf99396()
     pTableController->Execute(aRequest);
     // This was 0, it wasn't possible to undo a vertical alignment change.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+
+    xDocSh->DoClose();
+}
+
+void SdMiscTest::testTdf99396TextEdit()
+{
+    // Load the document and select the table.
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf99396.odp"), ODP);
+    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pPage->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+
+    // Make sure that the undo stack is empty.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+
+    // Set horizontal and vertical adjustment during text edit.
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    {
+        SfxRequest aRequest(pViewShell->GetViewFrame(), SID_ATTR_PARA_ADJUST_RIGHT);
+        SfxItemSet aEditAttr(xDocSh->GetDoc()->GetPool());
+        pView->GetAttributes(aEditAttr);
+        SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
+        aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_RIGHT, EE_PARA_JUST));
+        aRequest.Done(aNewAttr);
+        const SfxItemSet* pArgs = aRequest.GetArgs();
+        pView->SetAttributes(*pArgs);
+    }
+    {
+        auto pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+        SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
+        pTableController->Execute(aRequest);
+    }
+    pView->SdrEndTextEdit();
+
+    // Check that the result is what we expect.
+    {
+        uno::Reference<table::XTable> xTable = pTableObject->getTable();
+        uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
+        drawing::TextVerticalAdjust eAdjust = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
+        CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, eAdjust);
+    }
+    {
+        const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
+        const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
+        auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
+        CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, pAdjust->GetAdjust());
+    }
+
+    // Now undo.
+    xDocSh->GetUndoManager()->Undo();
+
+    // Check again that the result is what we expect.
+    {
+        uno::Reference<table::XTable> xTable = pTableObject->getTable();
+        uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
+        drawing::TextVerticalAdjust eAdjust = xCell->getPropertyValue("TextVerticalAdjust").get<drawing::TextVerticalAdjust>();
+        // This failed: Undo() did not change it from drawing::TextVerticalAdjust_BOTTOM.
+        CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, eAdjust);
+    }
+    {
+        const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
+        const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
+        auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
+        CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_CENTER, pAdjust->GetAdjust());
+    }
 
     xDocSh->DoClose();
 }
