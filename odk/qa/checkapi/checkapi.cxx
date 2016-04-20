@@ -31,7 +31,7 @@
 CPPUNIT_PLUGIN_IMPLEMENT();
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL firstfunc(sal_Bool)
 {
-   return sal_True;
+   return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
