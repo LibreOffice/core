@@ -89,7 +89,9 @@ published interface XListBox: com::sun::star::uno::XInterface
     sequence<string> getItems();
 
 
-    /** returns the position of the currently selected item, or -1 when nothing is selected.
+    /** returns the position of the currently selected item.
+        When multiple items are selected, the position of the first one is returned.
+        When nothing is selected, -1 is returned.
      */
     short getSelectedItemPos();
 
@@ -100,6 +102,8 @@ published interface XListBox: com::sun::star::uno::XInterface
 
 
     /** returns the currently selected item.
+        When multiple items are selected, the first one is returned.
+        When nothing is selected, an empty string is returned.
      */
     string getSelectedItem();
 
