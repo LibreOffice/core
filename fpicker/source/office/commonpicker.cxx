@@ -299,7 +299,7 @@ namespace svt
             return svt::OControlAccess::isControlSupported( aControlName );
         }
 
-        return sal_False;
+        return false;
     }
 
 
@@ -329,7 +329,7 @@ namespace svt
             return aAccess.isControlPropertySupported( aControlName, aControlProperty );
         }
 
-        return sal_False;
+        return false;
     }
 
 
