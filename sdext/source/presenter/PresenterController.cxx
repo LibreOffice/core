@@ -1133,7 +1133,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     }
     Reference<XPane2> xPane2 (rxPane, UNO_QUERY);
     if (xPane2.is())
-        xPane2->setVisible(sal_True);
+        xPane2->setVisible(true);
 
     mpPaintManager.reset(new PresenterPaintManager(mxMainWindow, mxPresenterHelper, mpPaneContainer));
 

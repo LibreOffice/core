@@ -403,7 +403,7 @@ void PresenterToolBar::Initialize (
             if (xPeer.is())
                 xPeer->setBackground(util::Color(0xff000000));
 
-            mxWindow->setVisible(sal_True);
+            mxWindow->setVisible(true);
         }
 
         mxSlideShowController = mpPresenterController->GetSlideShowController();
@@ -558,7 +558,7 @@ void SAL_CALL PresenterToolBar::windowPaint (const css::awt::PaintEvent& rEvent)
     // Make the back buffer visible.
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
-        xSpriteCanvas->updateScreen(sal_False);
+        xSpriteCanvas->updateScreen(false);
 }
 
 //----- XMouseListener --------------------------------------------------------
@@ -1109,7 +1109,7 @@ PresenterToolBarView::PresenterToolBarView (
             if (xPeer.is())
                 xPeer->setBackground(util::Color(0xff000000));
 
-            mxWindow->setVisible(sal_True);
+            mxWindow->setVisible(true);
         }
     }
     catch (RuntimeException&)

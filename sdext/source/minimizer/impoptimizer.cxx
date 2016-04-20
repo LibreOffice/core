@@ -454,7 +454,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                     {
                                         if ( !aSize.Width || !aSize.Height )
                                         {
-                                            rxPropertySet->setPropertyValue( "FillBitmapLogicalSize", Any( sal_True ) );
+                                            rxPropertySet->setPropertyValue( "FillBitmapLogicalSize", Any( true ) );
                                             rxPropertySet->setPropertyValue( "FillBitmapSizeX", Any( aGraphicUserIter->maLogicalSize.Width ) );
                                             rxPropertySet->setPropertyValue( "FillBitmapSizeY", Any( aGraphicUserIter->maLogicalSize.Height ) );
                                         }
@@ -717,7 +717,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             if ( mbOpenNewDocument && xSelf.is() )
             {
                 Reference< awt::XWindow > xContainerWindow( xSelf->getContainerWindow() );
-                xContainerWindow->setVisible( sal_True );
+                xContainerWindow->setVisible( true );
             }
             else
             {

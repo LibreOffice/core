@@ -119,7 +119,7 @@ void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
 void PresenterSprite::Update()
 {
     if (mxSpriteFactory.is())
-        mxSpriteFactory->updateScreen(sal_False);
+        mxSpriteFactory->updateScreen(false);
 }
 
 void PresenterSprite::ProvideSprite()

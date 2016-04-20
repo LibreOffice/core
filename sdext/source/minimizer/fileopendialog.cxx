@@ -56,7 +56,7 @@ using namespace ::com::sun::star::ui::dialogs;
 FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext )
 {
     mxFilePicker = FilePicker::createWithMode( rxContext, TemplateDescription::FILESAVE_AUTOEXTENSION);
-    mxFilePicker->setMultiSelectionMode( sal_False );
+    mxFilePicker->setMultiSelectionMode( false );
 
     Reference< XFilePickerControlAccess > xAccess( mxFilePicker, UNO_QUERY );
     if ( xAccess.is() )

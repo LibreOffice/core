@@ -57,9 +57,9 @@ void OptimizerDialog::InitDialog()
         OUString("Width") };
 
     Any pValues[] = {
-        Any( sal_True ),
+        Any( true ),
         Any( sal_Int32( DIALOG_HEIGHT ) ),
-        Any( sal_True ),
+        Any( true ),
         Any( sal_Int32( 200 ) ),
         Any( sal_Int32( 52 ) ),
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
@@ -325,7 +325,7 @@ void OptimizerDialog::UpdateStatus( const css::uno::Sequence< css::beans::Proper
             OUString sStatus;
             if ( *pVal >>= sStatus )
             {
-                setControlProperty( "FixedText1Pg4", "Enabled", Any( sal_True ) );
+                setControlProperty( "FixedText1Pg4", "Enabled", Any( true ) );
                 setControlProperty( "FixedText1Pg4", "Label", Any( getString( TKGet( sStatus ) ) ) );
             }
         }
@@ -492,11 +492,11 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
 
             mrOptimizerDialog.SwitchPage( ITEM_ID_SUMMARY );
             mrOptimizerDialog.DisablePage( ITEM_ID_SUMMARY );
-            mrOptimizerDialog.setControlProperty( "btnNavBack", "Enabled", Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( "btnNavNext", "Enabled", Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( "btnNavFinish", "Enabled", Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( "btnNavCancel", "Enabled", Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( "FixedText0Pg4", "Enabled", Any( sal_True ) );
+            mrOptimizerDialog.setControlProperty( "btnNavBack", "Enabled", Any( false ) );
+            mrOptimizerDialog.setControlProperty( "btnNavNext", "Enabled", Any( false ) );
+            mrOptimizerDialog.setControlProperty( "btnNavFinish", "Enabled", Any( false ) );
+            mrOptimizerDialog.setControlProperty( "btnNavCancel", "Enabled", Any( false ) );
+            mrOptimizerDialog.setControlProperty( "FixedText0Pg4", "Enabled", Any( true ) );
 
             // check if we have to open the FileDialog
             bool    bSuccessfullyExecuted = true;
@@ -595,10 +595,10 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
             else
             {
-                mrOptimizerDialog.setControlProperty( "btnNavBack", "Enabled", Any( sal_True ) );
-                mrOptimizerDialog.setControlProperty( "btnNavNext", "Enabled", Any( sal_False ) );
-                mrOptimizerDialog.setControlProperty( "btnNavFinish", "Enabled", Any( sal_True ) );
-                mrOptimizerDialog.setControlProperty( "btnNavCancel", "Enabled", Any( sal_True ) );
+                mrOptimizerDialog.setControlProperty( "btnNavBack", "Enabled", Any( true ) );
+                mrOptimizerDialog.setControlProperty( "btnNavNext", "Enabled", Any( false ) );
+                mrOptimizerDialog.setControlProperty( "btnNavFinish", "Enabled", Any( true ) );
+                mrOptimizerDialog.setControlProperty( "btnNavCancel", "Enabled", Any( true ) );
                 mrOptimizerDialog.EnablePage( ITEM_ID_SUMMARY );
             }
         }

@@ -324,16 +324,16 @@ void PresenterPaneBase::CreateWindows (
 
         mxBorderWindow = mxPresenterHelper->createWindow(
             rxParentWindow,
-            sal_False,
+            false,
             bIsWindowVisibleOnCreation,
-            sal_False,
-            sal_False);
+            false,
+            false);
         mxContentWindow = mxPresenterHelper->createWindow(
             mxBorderWindow,
-            sal_False,
+            false,
             bIsWindowVisibleOnCreation,
-            sal_False,
-            sal_False);
+            false,
+            false);
     }
 }
 

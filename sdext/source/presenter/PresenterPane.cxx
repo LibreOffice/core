@@ -111,7 +111,7 @@ void SAL_CALL PresenterPane::windowShown (const lang::EventObject& rEvent)
     if (mxContentWindow.is())
     {
         LayoutContextWindow();
-        mxContentWindow->setVisible(sal_True);
+        mxContentWindow->setVisible(true);
     }
 
     UpdateBoundingBox();
@@ -125,7 +125,7 @@ void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
     PresenterPaneBase::windowHidden(rEvent);
 
     if (mxContentWindow.is())
-        mxContentWindow->setVisible(sal_False);
+        mxContentWindow->setVisible(false);
 }
 
 //----- XPaintListener --------------------------------------------------------

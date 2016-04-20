@@ -152,7 +152,7 @@ PresenterHelpView::PresenterHelpView (
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
         if (xPeer.is())
             xPeer->setBackground(util::Color(0xff000000));
-        mxWindow->setVisible(sal_True);
+        mxWindow->setVisible(true);
 
         if (mpPresenterController.is())
         {
@@ -351,7 +351,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
-        xSpriteCanvas->updateScreen(sal_False);
+        xSpriteCanvas->updateScreen(false);
 }
 
 void PresenterHelpView::ReadHelpStrings()

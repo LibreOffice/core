@@ -193,7 +193,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
     Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
     if (xRectangle.is())
-        xRectangle->setClosed(0, sal_True);
+        xRectangle->setClosed(0, true);
 
     return xRectangle;
 }
@@ -215,7 +215,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
     Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
     if (xRectangle.is())
-        xRectangle->setClosed(0, sal_True);
+        xRectangle->setClosed(0, true);
 
     return xRectangle;
 }
@@ -244,7 +244,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
     if (xRectangle.is())
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
-            xRectangle->setClosed(nIndex, sal_True);
+            xRectangle->setClosed(nIndex, true);
 
     return xRectangle;
 }

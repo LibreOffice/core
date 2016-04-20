@@ -292,7 +292,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         mxWindow->addPaintListener(this);
         mxWindow->addMouseListener(this);
         mxWindow->addMouseMotionListener(this);
-        mxWindow->setVisible(sal_True);
+        mxWindow->setVisible(true);
 
         // Remember the current slide.
         mnCurrentSlideIndex = mxSlideShowController->getCurrentSlideIndex();
@@ -500,7 +500,7 @@ void SAL_CALL PresenterSlideSorter::windowPaint (const css::awt::PaintEvent& rEv
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
-        xSpriteCanvas->updateScreen(sal_False);
+        xSpriteCanvas->updateScreen(false);
 }
 
 //----- XMouseListener --------------------------------------------------------
@@ -1057,7 +1057,7 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
-        xSpriteCanvas->updateScreen(sal_False);
+        xSpriteCanvas->updateScreen(false);
 }
 
 void PresenterSlideSorter::SetHorizontalOffset (const double nXOffset)

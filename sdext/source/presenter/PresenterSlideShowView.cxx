@@ -150,7 +150,7 @@ void PresenterSlideShowView::LateInit()
         Resize();
 
     if (mxWindow.is())
-        mxWindow->setVisible(sal_True);
+        mxWindow->setVisible(true);
 
     // Add the new slide show view to the slide show.
     if (mxSlideShow.is() && ! mbIsViewAdded)
@@ -800,7 +800,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
     // made visible.
     Reference<rendering::XSpriteCanvas> mxSpriteCanvas (mxCanvas, UNO_QUERY);
     if (mxSpriteCanvas.is())
-        mxSpriteCanvas->updateScreen(sal_True);
+        mxSpriteCanvas->updateScreen(true);
 }
 
 void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
@@ -822,7 +822,7 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
     // made visible.
     Reference<rendering::XSpriteCanvas> mxSpriteCanvas (mxCanvas, UNO_QUERY);
     if (mxSpriteCanvas.is())
-        mxSpriteCanvas->updateScreen(sal_True);
+        mxSpriteCanvas->updateScreen(true);
 }
 
 Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
@@ -854,7 +854,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
             xPeer->setBackground(0xff000000);
         }
 
-        xViewWindow->setVisible(sal_True);
+        xViewWindow->setVisible(true);
     }
     catch (RuntimeException&)
     {
@@ -1007,7 +1007,7 @@ void PresenterSlideShowView::impl_addAndConfigureView()
     aProperty.Name = "IsSoundEnabled";
     Sequence<Any> aValues (2);
     aValues[0] <<= xView;
-    aValues[1] <<= sal_False;
+    aValues[1] <<= false;
     aProperty.Value <<= aValues;
     mxSlideShow->setProperty(aProperty);
 }

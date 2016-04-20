@@ -71,8 +71,8 @@ UnoDialog::~UnoDialog()
 
 void UnoDialog::execute()
 {
-    mxDialog->setEnable( sal_True );
-    mxDialog->setVisible( sal_True );
+    mxDialog->setEnable( true );
+    mxDialog->setVisible( true );
     mxDialog->execute();
 }
 
@@ -86,7 +86,7 @@ void UnoDialog::endExecute( bool bStatus )
 Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > xParentPeer )
     throw ( Exception )
 {
-    mxDialog->setVisible( sal_False );
+    mxDialog->setVisible( false );
     Reference< XToolkit > xToolkit( Toolkit::create( mxContext ), UNO_QUERY_THROW  );
     if ( !xParentPeer.is() )
         xParentPeer = xToolkit->getDesktopWindow();
@@ -311,14 +311,14 @@ Any UnoDialog::getControlProperty( const OUString& rControlName, const OUString&
 void UnoDialog::enableControl( const OUString& rControlName )
 {
     const OUString sEnabled( "Enabled" );
-    setControlProperty( rControlName, sEnabled, Any( sal_True ) );
+    setControlProperty( rControlName, sEnabled, Any( true ) );
 }
 
 
 void UnoDialog::disableControl( const OUString& rControlName )
 {
     const OUString sEnabled( "Enabled" );
-    setControlProperty( rControlName, sEnabled, Any( sal_False ) );
+    setControlProperty( rControlName, sEnabled, Any( false ) );
 }
 
 

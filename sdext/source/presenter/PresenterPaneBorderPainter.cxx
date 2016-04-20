@@ -495,7 +495,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     // In a double buffering environment request to make the changes visible.
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
-        xSpriteCanvas->updateScreen(sal_False);
+        xSpriteCanvas->updateScreen(false);
 }
 
 void PresenterPaneBorderPainter::Renderer::PaintTitle (

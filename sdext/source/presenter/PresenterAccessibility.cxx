@@ -1393,9 +1393,9 @@ sal_Bool SAL_CALL AccessibleStateSet::containsAll (const css::uno::Sequence<sal_
     for (sal_Int32 nIndex=0,nCount=rStateSet.getLength(); nIndex<nCount; ++nIndex)
     {
         if ((mnStateSet & GetStateMask(rStateSet[nIndex])) == 0)
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 css::uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates()
@@ -1456,9 +1456,9 @@ sal_Bool SAL_CALL AccessibleRelationSet::containsRelation (sal_Int16 nRelationTy
          ++iRelation)
     {
         if (iRelation->RelationType == nRelationType)
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 nRelationType)
@@ -1544,10 +1544,10 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setCaretPosition (sa
     if (mpParagraph)
     {
         mpParagraph->SetCaretPosition(nIndex);
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal_Int32 nIndex)
@@ -1759,7 +1759,7 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::copyText (
     // this here.
     (void)nStartIndex;
     (void)nEndIndex;
-    return sal_False;
+    return false;
 }
 
 //----- protected -------------------------------------------------------------

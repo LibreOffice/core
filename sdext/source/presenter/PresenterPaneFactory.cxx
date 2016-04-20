@@ -168,7 +168,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
             {
                 pDescriptor->SetActivationState(true);
                 if (pDescriptor->mxBorderWindow.is())
-                    pDescriptor->mxBorderWindow->setVisible(sal_True);
+                    pDescriptor->mxBorderWindow->setVisible(true);
                 pPaneContainer->StorePane(pDescriptor->mxPane);
             }
 
@@ -199,7 +199,7 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     {
         pDescriptor->SetActivationState(false);
         if (pDescriptor->mxBorderWindow.is())
-            pDescriptor->mxBorderWindow->setVisible(sal_False);
+            pDescriptor->mxBorderWindow->setVisible(false);
 
         if (mpResourceCache.get() != nullptr)
         {
@@ -312,7 +312,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 
         // Get the window of the frame and make that visible.
         Reference<awt::XWindow> xWindow (pDescriptor->mxBorderWindow, UNO_QUERY_THROW);
-        xWindow->setVisible(sal_True);
+        xWindow->setVisible(true);
     }
 
     return Reference<XResource>(static_cast<XWeak*>(xPane.get()), UNO_QUERY_THROW);

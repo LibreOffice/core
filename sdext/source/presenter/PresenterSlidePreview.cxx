@@ -83,7 +83,7 @@ PresenterSlidePreview::PresenterSlidePreview (
         if (xPeer.is())
             xPeer->setBackground(util::Color(0xff000000));
 
-        mxWindow->setVisible(sal_True);
+        mxWindow->setVisible(true);
     }
 
     if (mpPresenterController.get() != nullptr)
@@ -358,7 +358,7 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
-        xSpriteCanvas->updateScreen(sal_False);
+        xSpriteCanvas->updateScreen(false);
 }
 
 void PresenterSlidePreview::Resize()

@@ -115,10 +115,10 @@ PresenterScrollBar::PresenterScrollBar (
 
         if (mxPresenterHelper.is())
             mxWindow = mxPresenterHelper->createWindow(rxParentWindow,
-                sal_False,
-                sal_False,
-                sal_False,
-                sal_False);
+                false,
+                false,
+                false,
+                false);
 
         // Make the background transparent.  The slide show paints its own background.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);
@@ -127,7 +127,7 @@ PresenterScrollBar::PresenterScrollBar (
             xPeer->setBackground(0xff000000);
         }
 
-        mxWindow->setVisible(sal_True);
+        mxWindow->setVisible(true);
         mxWindow->addWindowListener(this);
         mxWindow->addPaintListener(this);
         mxWindow->addMouseListener(this);
@@ -307,7 +307,7 @@ void PresenterScrollBar::Paint (
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
-        xSpriteCanvas->updateScreen(sal_False);
+        xSpriteCanvas->updateScreen(false);
 }
 
 //----- XWindowListener -------------------------------------------------------
@@ -351,7 +351,7 @@ void SAL_CALL PresenterScrollBar::windowPaint (const css::awt::PaintEvent& rEven
 
         Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
         if (xSpriteCanvas.is())
-            xSpriteCanvas->updateScreen(sal_False);
+            xSpriteCanvas->updateScreen(false);
     }
 }
 

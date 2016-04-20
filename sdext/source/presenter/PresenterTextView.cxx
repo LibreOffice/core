@@ -876,7 +876,7 @@ TextSegment PresenterTextParagraph::GetWordTextSegment (
             nIndex,
             lang::Locale(),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES,
-            sal_True);
+            true);
     else if (nCurrentOffset < 0)
     {
         while (nCurrentOffset<0 && nCurrentIndex>0)

@@ -1073,7 +1073,7 @@ void PresenterWindowManager::ProvideBackgroundBitmap()
                     aSize.Width = mxParentWindow->getPosSize().Width;
                 else
                     aSize.Width = xBitmap->getSize().Width;
-                mxScaledBackgroundBitmap = xBitmap->getScaledBitmap(aSize, sal_False);
+                mxScaledBackgroundBitmap = xBitmap->getScaledBitmap(aSize, false);
             }
             else
             {

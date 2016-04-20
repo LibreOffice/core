@@ -52,7 +52,7 @@ namespace {
         virtual ~Command() {}
         virtual void Execute() = 0;
         virtual bool IsEnabled() const { return true; }
-        virtual Any GetState() const { return Any(sal_False); }
+        virtual Any GetState() const { return Any(false); }
     };
 
     class GotoPreviousSlideCommand : public Command
@@ -484,7 +484,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::addStatusListener(
         frame::FeatureStateEvent aEvent;
         aEvent.FeatureURL = rURL;
         aEvent.IsEnabled = mpCommand->IsEnabled();
-        aEvent.Requery = sal_False;
+        aEvent.Requery = false;
         aEvent.State = mpCommand->GetState();
         rxListener->statusChanged(aEvent);
     }

@@ -133,7 +133,7 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
         OUString("Width") };
 
     Any pValues[] = {
-        Any( sal_True ),
+        Any( true ),
         Any( nHeight ),
         Any( rLabel ),
         Any( nXPos ),
@@ -168,7 +168,7 @@ OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rC
         OUString("Width") };
 
     Any pValues[] = {
-        Any( sal_True ),
+        Any( true ),
         Any( nHeight ),
         Any( rInformationDialog.getString( nResID ) ),
         Any( nXPos ),
@@ -218,9 +218,9 @@ void InformationDialog::InitDialog()
         OUString("Width") };
 
     Any pValues[] = {
-        Any( sal_True ),
+        Any( true ),
         Any( nDialogHeight ),
-        Any( sal_True ),
+        Any( true ),
         Any( sal_Int32( 245 ) ),
         Any( sal_Int32( 115 ) ),
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
@@ -265,7 +265,7 @@ void InformationDialog::InitDialog()
 
         const OUString sFileProtocol( "file:///" );
         aPresentationURL.Complete = sFileProtocol.concat( aURL.Name );
-        aTitle = xURLTransformer->getPresentation( aPresentationURL, sal_False );
+        aTitle = xURLTransformer->getPresentation( aPresentationURL, false );
 
         if ( aTitle.match( sFileProtocol ) )
             aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), OUString() );

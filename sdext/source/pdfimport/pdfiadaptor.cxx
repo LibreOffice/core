@@ -311,7 +311,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
             pAttribs->Value >>= aFilterOptions;
     }
     if( !xInput.is() )
-        return sal_False;
+        return false;
 
     XmlEmitterSharedPtr pEmitter = createSaxEmitter(rHdl);
     const bool bSuccess = parse(xInput, xInteractionHandler,
