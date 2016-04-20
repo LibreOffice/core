@@ -565,8 +565,8 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                         {
                             typelib_MethodParameter param;
                             param.pTypeRef = attr_td->pAttributeTypeRef;
-                            param.bIn = sal_True;
-                            param.bOut = sal_False;
+                            param.bIn = true;
+                            param.bOut = false;
                             return bridge->call_uno(
                                 jni, pUnoI, member_td.get(),
                                 jni_info->m_void_type.getTypeLibType(),

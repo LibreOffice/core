@@ -610,8 +610,8 @@ void SAL_CALL UNO_proxy_dispatch(
             {
                 typelib_MethodParameter param;
                 param.pTypeRef = attrib_td->pAttributeTypeRef;
-                param.bIn = sal_True;
-                param.bOut = sal_False;
+                param.bIn = true;
+                param.bOut = false;
 
                 bridge->call_java(
                     that->m_javaI, iface_td,
