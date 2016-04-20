@@ -2328,6 +2328,18 @@ OUString SdXImpressDocument::getPartName( int nPart )
     return pPage->GetName();
 }
 
+OUString SdXImpressDocument::getPartHash( int nPart )
+{
+    SdPage* pPage = mpDoc->GetSdPage( nPart, PK_STANDARD );
+    if (!pPage)
+    {
+        SAL_WARN("sd", "DrawViewShell not available!");
+        return OUString();
+    }
+
+    return OUString::number(pPage->GetHashCode());
+}
+
 void SdXImpressDocument::setPartMode( int nPartMode )
 {
     DrawViewShell* pViewSh = GetViewShell();
