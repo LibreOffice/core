@@ -287,8 +287,8 @@ OStyle::OStyle()
     m_aSize.Width = aDefaultSize.Width();
 
     const style::GraphicLocation eGraphicLocation = style::GraphicLocation_NONE;
-    const sal_Bool bFalse = sal_False;
-    const sal_Bool bTrue = sal_True;
+    const sal_Bool bFalse = false;
+    const sal_Bool bTrue = true;
     const sal_Int32 nMargin = 2000;
     //const sal_Int32 nColor = COL_WHITE;
     const sal_Int32 nTransparent = COL_TRANSPARENT;
@@ -418,12 +418,12 @@ void OStyle::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, uno::Any& /*_rD
 // XStyle
 sal_Bool SAL_CALL OStyle::isUserDefined(  ) throw (uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OStyle::isInUse(  ) throw (uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL OStyle::getParentStyle(  ) throw (uno::RuntimeException, std::exception)
@@ -1145,7 +1145,7 @@ sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, 
         throw;
     }
     m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( true );
-    return sal_True;
+    return true;
 }
 
 void OReportDefinition::fillArgs(utl::MediaDescriptor& _aDescriptor)
@@ -1471,7 +1471,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         }
 
         if ( _xStorageToSaveTo == m_pImpl->m_xStorage )
-            setModified(sal_False);
+            setModified(false);
     }
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -1616,8 +1616,8 @@ bool OReportDefinition::WriteThroughComponent(
 // XLoadable
 void SAL_CALL OReportDefinition::initNew(  ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
-     setPageHeaderOn( sal_True );
-     setPageFooterOn( sal_True );
+     setPageHeaderOn( true );
+     setPageFooterOn( true );
 }
 
 void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue >& _rArguments ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
@@ -1727,7 +1727,7 @@ void SAL_CALL OReportDefinition::setVisualAreaSize( ::sal_Int64 _nAspect, const 
              m_pImpl->m_aVisualAreaSize.Height != _aSize.Height);
         m_pImpl->m_aVisualAreaSize = _aSize;
         if( bChanged )
-            setModified( sal_True );
+            setModified( true );
     m_pImpl->m_nAspect = _nAspect;
 }
 

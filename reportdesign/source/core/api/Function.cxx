@@ -43,7 +43,7 @@ OFunction::OFunction(uno::Reference< uno::XComponentContext > const & _xContext)
 ,m_bPreEvaluated(false)
 ,m_bDeepTraversing(false)
 {
-    m_sInitialFormula.IsPresent = sal_False;
+    m_sInitialFormula.IsPresent = false;
 }
 
 OFunction::~OFunction()

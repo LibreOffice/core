@@ -63,7 +63,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
 
     const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = _rImport.GetGroupElemTokenMap();
-    m_xGroup->setSortAscending(sal_False);// the default value has to be set
+    m_xGroup->setSortAscending(false);// the default value has to be set
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
@@ -212,7 +212,7 @@ SvXMLImportContext* OXMLGroup::CreateChildContext(
         case XML_TOK_GROUP_HEADER:
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                m_xGroup->setHeaderOn(sal_True);
+                m_xGroup->setHeaderOn(true);
                 pContext = new OXMLSection( rImport, nPrefix, rLocalName,xAttrList,m_xGroup->getHeader());
             }
             break;
@@ -231,7 +231,7 @@ SvXMLImportContext* OXMLGroup::CreateChildContext(
         case XML_TOK_GROUP_FOOTER:
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                m_xGroup->setFooterOn(sal_True);
+                m_xGroup->setFooterOn(true);
                 pContext = new OXMLSection( rImport, nPrefix, rLocalName,xAttrList,m_xGroup->getFooter());
             }
             break;

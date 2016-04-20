@@ -140,18 +140,18 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         }
         if ( m_aCommandURL == ".uno:CharFontName" )
         {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:CharFontName"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:CharFontName"),true));
             m_pToolbarController = new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:FontColor" || m_aCommandURL == ".uno:Color" )
         {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),sal_True));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),true));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),true));
             m_pToolbarController = new SvxColorToolBoxControl(m_nSlotId = SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox);
         }
         else
         {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:BackgroundColor"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:BackgroundColor"),true));
             m_pToolbarController = new SvxColorToolBoxControl(m_nSlotId = SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox);
         }
 

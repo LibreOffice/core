@@ -170,7 +170,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
         m_xBrowserComponentWindow->setPosSize(0, 0, aPropWinSize.Width(), aPropWinSize.Height(),
             awt::PosSize::WIDTH | awt::PosSize::HEIGHT | awt::PosSize::X | awt::PosSize::Y);
         Resize();
-        m_xBrowserComponentWindow->setVisible(sal_True);
+        m_xBrowserComponentWindow->setVisible(true);
     }
     ::rptui::notifySystemWindow(pParent,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 }
@@ -258,7 +258,7 @@ bool PropBrw::Close()
         try
         {
             Reference< XController > xController( m_xMeAsFrame->getController() );
-            if ( xController.is() && !xController->suspend( sal_True ) )
+            if ( xController.is() && !xController->suspend( true ) )
                 return false;
         }
         catch( const Exception& )

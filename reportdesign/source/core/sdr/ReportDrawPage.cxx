@@ -81,7 +81,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
             {
                 uno::Reference<beans::XPropertySet> xControlModel(rUnoObj.GetUnoControlModel(),uno::UNO_QUERY);
                 if ( xControlModel.is() )
-                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(sal_True));
+                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(true));
             }
             else
                 bChangeOrientation = rUnoObj.GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;

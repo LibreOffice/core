@@ -777,19 +777,19 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
             aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
-            aOut.HasPrimaryButton = sal_True;
-            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
+            aOut.HasPrimaryButton = true;
+            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , false);
             break;
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
             aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
-            aOut.HasPrimaryButton = sal_True;
-            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
+            aOut.HasPrimaryButton = true;
+            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , false);
             break;
         case PROPERTY_ID_DATAFIELD:
             {
                 uno::Reference< inspection::XStringListControl > xListControl(
                     _xControlFactory->createPropertyControl(
-                        m_nDataFieldType == DATA_OR_FORMULA ? inspection::PropertyControlType::ComboBox : inspection::PropertyControlType::ListBox, sal_False
+                        m_nDataFieldType == DATA_OR_FORMULA ? inspection::PropertyControlType::ComboBox : inspection::PropertyControlType::ListBox, false
                     ),
                     uno::UNO_QUERY_THROW
                 );
@@ -797,7 +797,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 if ( m_nDataFieldType == DATA_OR_FORMULA )
                 {
                     aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
-                    aOut.HasPrimaryButton = sal_True;
+                    aOut.HasPrimaryButton = true;
                 }
 
                 aOut.Control = xListControl.get();
@@ -820,17 +820,17 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             break;
         case PROPERTY_ID_BACKCOLOR:
         case PROPERTY_ID_CONTROLBACKGROUND:
-            aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::ColorListBox, sal_False );
+            aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::ColorListBox, false );
             break;
         case PROPERTY_ID_FONT:
             aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_FONT_TYPE;
-            aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
-            aOut.HasPrimaryButton = sal_True;
+            aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, true );
+            aOut.HasPrimaryButton = true;
             break;
         case PROPERTY_ID_AREA:
             aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_AREA;
-            aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
-            aOut.HasPrimaryButton = sal_True;
+            aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, true );
+            aOut.HasPrimaryButton = true;
             break;
         case PROPERTY_ID_VERTICALALIGN:
             implCreateListLikeControl(_xControlFactory,aOut,RID_STR_VERTICAL_ALIGN_CONST,false,true);
@@ -868,7 +868,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         uno::Reference< drawing::XShapeDescriptor> xShapeDesc(m_xReportComponent,uno::UNO_QUERY);
         bool bSetMin = !xShapeDesc.is() || xShapeDesc->getShapeType() != "com.sun.star.drawing.CustomShape";
         if ( bSetMin )
-            xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
+            xNumericControl->setMinValue(beans::Optional<double>(true,0.0));
         if ( nDisplayUnit != -1 )
             xNumericControl->setDisplayUnit( nDisplayUnit );
         uno::Reference< report::XReportComponent> xComp(m_xReportComponent,uno::UNO_QUERY);
@@ -886,13 +886,13 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                     case PROPERTY_ID_POSITIONX:
                     case PROPERTY_ID_WIDTH:
                         if ( bSetMin )
-                            xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
-                        xNumericControl->setMaxValue(beans::Optional<double>(sal_True,double(aSize.Width - nLeftMargin - nRightMargin)));
+                            xNumericControl->setMinValue(beans::Optional<double>(true,0.0));
+                        xNumericControl->setMaxValue(beans::Optional<double>(true,double(aSize.Width - nLeftMargin - nRightMargin)));
                         if ( PROPERTY_ID_WIDTH == nId )
                         {
                             uno::Reference<report::XFixedLine> xFixedLine(m_xReportComponent,uno::UNO_QUERY);
                             if ( xFixedLine.is() && xFixedLine->getOrientation() == 1 ) // vertical
-                                xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.08 ));
+                                xNumericControl->setMinValue(beans::Optional<double>(true,0.08 ));
                         }
                         break;
                     default:
@@ -912,7 +912,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                     uno::Reference<drawing::XShape> xShape(xSection->getByIndex(i),uno::UNO_QUERY);
                     nHeight = ::std::max<sal_Int32>(nHeight,xShape->getPosition().Y + xShape->getSize().Height);
                 }
-                xNumericControl->setMinValue(beans::Optional<double>(sal_True,nHeight ));
+                xNumericControl->setMinValue(beans::Optional<double>(true,nHeight ));
             }
         }
     }
@@ -1477,29 +1477,29 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & Actuati
                 {
                     case DATA_OR_FORMULA:
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,true);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,false);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,false);
                         OSL_ENSURE(m_sDefaultFunction.isEmpty(),"Why is the m_sDefaultFunction set?");
                         OSL_ENSURE(m_sScope.isEmpty(),"Why is the m_sScope set?");
                         break;
                     case FUNCTION:
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,true);
                         _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,!m_sDefaultFunction.isEmpty());
                         _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,!m_sScope.isEmpty());
                         break;
                     case USER_DEF_FUNCTION:
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_True);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,false);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,true);
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,false);
                         break;
                     case COUNTER:
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_True);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,false);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,false);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,true);
                         break;
                 }
             }
@@ -1893,7 +1893,7 @@ void GeometryHandler::loadDefaultFunctions()
         m_aCounterFunction.m_sName = ModuleRes(RID_STR_F_COUNTER);
         m_aCounterFunction.m_sFormula = "rpt:[%FunctionName] + 1";
         m_aCounterFunction.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*";
-        m_aCounterFunction.m_sInitialFormula.IsPresent = sal_True;
+        m_aCounterFunction.m_sInitialFormula.IsPresent = true;
         m_aCounterFunction.m_sInitialFormula.Value = "rpt:1";
 
         DefaultFunction aDefault;
@@ -1904,21 +1904,21 @@ void GeometryHandler::loadDefaultFunctions()
         aDefault.m_sName = ModuleRes(RID_STR_F_ACCUMULATION);
         aDefault.m_sFormula = "rpt:[%Column] + [%FunctionName]";
         aDefault.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
-        aDefault.m_sInitialFormula.IsPresent = sal_True;
+        aDefault.m_sInitialFormula.IsPresent = true;
         aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
         m_aDefaultFunctions.push_back(aDefault);
 
         aDefault.m_sName = ModuleRes(RID_STR_F_MINIMUM);
         aDefault.m_sFormula = "rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])";
         aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
-        aDefault.m_sInitialFormula.IsPresent = sal_True;
+        aDefault.m_sInitialFormula.IsPresent = true;
         aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
         m_aDefaultFunctions.push_back(aDefault);
 
         aDefault.m_sName = ModuleRes(RID_STR_F_MAXIMUM);
         aDefault.m_sFormula = "rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])";
         aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
-        aDefault.m_sInitialFormula.IsPresent = sal_True;
+        aDefault.m_sInitialFormula.IsPresent = true;
         aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
         m_aDefaultFunctions.push_back(aDefault);
     }

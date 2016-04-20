@@ -174,7 +174,7 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 uno::Sequence<beans::PropertyValue> aArgs(1);
                 aArgs[0].Name = "ShowProperties";
-                aArgs[0].Value <<= sal_True;
+                aArgs[0].Value <<= true;
                 m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
                 m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
                 // TODO character in shapes

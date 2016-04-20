@@ -299,15 +299,15 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
             uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
             sal_Int32 nLen = 0;
             aArgs[nLen].Name = "AsTemplate";
-            aArgs[nLen++].Value <<= sal_False;
+            aArgs[nLen++].Value <<= false;
 
             aArgs[nLen].Name = "ReadOnly";
-            aArgs[nLen++].Value <<= sal_True;
+            aArgs[nLen++].Value <<= true;
 
             if ( _bHidden )
             {
                 aArgs[nLen].Name = "Hidden";
-                aArgs[nLen++].Value <<= sal_True;
+                aArgs[nLen++].Value <<= true;
             }
 
             uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);

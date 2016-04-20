@@ -126,7 +126,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
 
                 uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
                 if ( xControlModel.is() )
-                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(sal_True));
+                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(true));
             }
             break;
         case OBJ_DLG_IMAGECONTROL:
@@ -614,7 +614,7 @@ void OUnoObject::impl_initializeModel_nothrow()
         {
             const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
             const OUString sTreatAsNumberProperty = "TreatAsNumber";
-            xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( sal_False ) );
+            xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( false ) );
             xModelProps->setPropertyValue( PROPERTY_VERTICALALIGN,m_xReportComponent->getPropertyValue(PROPERTY_VERTICALALIGN));
         }
     }
@@ -1168,8 +1168,8 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
 
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "CellRangeRepresentation", uno::makeAny( OUString( "all" ) ) );
-        aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
-        aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+        aArgs.put( "HasCategories", uno::makeAny( true ) );
+        aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
         aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
         xReceiver->setArguments( aArgs.getPropertyValues() );
 

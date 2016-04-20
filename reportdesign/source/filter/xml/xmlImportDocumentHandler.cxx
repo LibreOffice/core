@@ -113,7 +113,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
         // this fills the chart again
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "CellRangeRepresentation", OUString("all") );
-        aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+        aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
         aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
 
         bool bHasCategories = false;

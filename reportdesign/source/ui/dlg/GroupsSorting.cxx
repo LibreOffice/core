@@ -446,7 +446,7 @@ bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
                 OUString sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
                 m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString() );
                 xGroup = m_pParent->getGroups()->createGroup();
-                xGroup->setHeaderOn(sal_True);
+                xGroup->setHeaderOn(true);
 
                 uno::Sequence< beans::PropertyValue > aArgs(2);
                 aArgs[0].Name = PROPERTY_GROUP;

@@ -537,7 +537,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
         catch (const uno::Exception&)
         {
-            xProp->setPropertyValue(s_sOld,uno::makeAny(sal_True));
+            xProp->setPropertyValue(s_sOld,uno::makeAny(true));
         }
 
         if ( nRet == 0 )
@@ -588,7 +588,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( bRet )
         {
-            m_xReportDefinition->setModified(sal_False);
+            m_xReportDefinition->setModified(false);
         }
         else
         {

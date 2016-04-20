@@ -263,17 +263,17 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     {
         case PROPERTY_ID_CHARTTYPE:
             aOut.PrimaryButtonId = UID_RPT_PROP_CHARTTYPE_DLG;
-            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::TextField , sal_True);
-            aOut.HasPrimaryButton = sal_True;
+            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::TextField , true);
+            aOut.HasPrimaryButton = true;
             break;
         case PROPERTY_ID_PREVIEW_COUNT:
-            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::NumericField , sal_False);
+            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::NumericField , false);
             break;
         case PROPERTY_ID_MASTERFIELDS:
         case PROPERTY_ID_DETAILFIELDS:
-            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::StringListField , sal_False);
+            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::StringListField , false);
             aOut.PrimaryButtonId = UID_RPT_PROP_DLG_LINKFIELDS;
-            aOut.HasPrimaryButton = sal_True;
+            aOut.HasPrimaryButton = true;
             break;
         default:
             aOut = m_xFormComponentHandler->describePropertyLine(PropertyName, _xControlFactory);
@@ -446,13 +446,13 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
             // this fills the chart again
             ::comphelper::NamedValueCollection aArgs;
             aArgs.put( "CellRangeRepresentation", uno::makeAny( OUString( "all" ) ) );
-            aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
-            aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+            aArgs.put( "HasCategories", uno::makeAny( true ) );
+            aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
             aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
             uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xChartModel,uno::UNO_QUERY_THROW);
             xReceiver->setArguments( aArgs.getPropertyValues() );
             if ( !bModified )
-                xReport->setModified(sal_False);
+                xReport->setModified(false);
         }
         m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, InspectorUI, FirstTimeInit);
     }

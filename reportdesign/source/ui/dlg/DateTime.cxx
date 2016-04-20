@@ -101,7 +101,7 @@ ODateTimeDialog::ODateTimeDialog( vcl::Window* _pParent
 
         const uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getReportNumberFormatter();
         const uno::Reference< util::XNumberFormats> xFormats = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats();
-        const uno::Sequence<sal_Int32> aFormatKeys = xFormats->queryKeys(_nNumberFormatId,m_nLocale,sal_True);
+        const uno::Sequence<sal_Int32> aFormatKeys = xFormats->queryKeys(_nNumberFormatId,m_nLocale,true);
         const sal_Int32* pIter = aFormatKeys.getConstArray();
         const sal_Int32* pEnd  = pIter + aFormatKeys.getLength();
         for(;pIter != pEnd;++pIter)
@@ -202,7 +202,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
 
     uno::Reference< util::XNumberFormatPreviewer> xPreviewer(m_pController->getReportNumberFormatter(),uno::UNO_QUERY);
     OSL_ENSURE(xPreviewer.is(),"XNumberFormatPreviewer is null!");
-    return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,sal_True);
+    return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,true);
 }
 
 IMPL_LINK_TYPED( ODateTimeDialog, CBClickHdl, Button*, _pBox, void )

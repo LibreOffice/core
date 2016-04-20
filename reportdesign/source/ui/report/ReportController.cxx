@@ -1598,7 +1598,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_EDITDOC:
             if(isEditable())
             { // the state should be changed to not editable
-                setModified(sal_False);     // and we are not modified yet
+                setModified(false);     // and we are not modified yet
             }
             setEditable(!isEditable());
             InvalidateAll();
@@ -1726,7 +1726,7 @@ void OReportController::impl_initialize( )
             executeUnChecked(SID_SELECT_REPORT,aArgs);
         }
 
-        setModified(sal_False);     // and we are not modified yet
+        setModified(false);     // and we are not modified yet
 
         // open the global help agent
         // we need a Frame but at this time there is no frame, therefore we send a UserEvent
@@ -1789,16 +1789,16 @@ bool OReportController::Construct(vcl::Window* pParent)
 sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException, std::exception )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
-        return sal_True;
+        return true;
 
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getView() && getView()->IsInModalMode() )
-        return sal_False;
+        return false;
 
     // this suspend will be handled in the DBAccess interceptor implementation
-    return sal_True;
+    return true;
 }
 
 void OReportController::describeSupportedFeatures()
@@ -2548,14 +2548,14 @@ sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XM
 
     uno::Reference< report::XReportDefinition > xReportDefinition( xModel, UNO_QUERY );
     if ( !xReportDefinition.is() )
-        return sal_False;
+        return false;
 
     uno::Reference< document::XUndoManagerSupplier > xTestSuppUndo( xModel, UNO_QUERY );
     if ( !xTestSuppUndo.is() )
-        return sal_False;
+        return false;
 
     m_xReportDefinition = xReportDefinition;
-    return sal_True;
+    return true;
 }
 
 
@@ -3005,7 +3005,7 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
         uno::Reference< beans::XPropertySet> xRowSetProp( xRowSet, uno::UNO_QUERY_THROW );
 
         xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::makeAny( getConnection() ) );
-        xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::makeAny( sal_True ) );
+        xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::makeAny( true ) );
 
         std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
         TPropertyNamePair aPropertyMediation;
@@ -3037,7 +3037,7 @@ void OReportController::insertGraphic()
 
         uno::Reference< ui::dialogs::XFilePickerControlAccess > xController(aDialog.GetFilePicker(), UNO_QUERY_THROW);
         xController->setValue(ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, css::uno::Any(true));
-        xController->enableControl(ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False/*sal_True*/);
+        xController->enableControl(ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, false/*sal_True*/);
         xController->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, css::uno::Any(true) );
 
         if ( ERRCODE_NONE == aDialog.Execute() )
@@ -4274,7 +4274,7 @@ void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const 
              m_aVisualAreaSize.Height != _aSize.Height);
         m_aVisualAreaSize = _aSize;
         if( bChanged )
-            setModified( sal_True );
+            setModified( true );
     m_nAspect = _nAspect;
 }
 
