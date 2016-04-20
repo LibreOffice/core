@@ -48,6 +48,7 @@ public:
     void testSearchAll();
     void testSearchAllNotifications();
     void testPageDownInvalidation();
+    void testPartHash();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testSearchAll);
     CPPUNIT_TEST(testSearchAllNotifications);
     CPPUNIT_TEST(testPageDownInvalidation);
+    CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -512,6 +514,20 @@ void SwTiledRenderingTest::testPageDownInvalidation()
 
     // This was 2.
     CPPUNIT_ASSERT_EQUAL(0, m_nInvalidations);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testPartHash()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
+    int nParts = pXTextDocument->getParts();
+    for (int it = 0; it < nParts; it++)
+    {
+        CPPUNIT_ASSERT(!pXTextDocument->getPartHash(it).isEmpty());
+    }
 
     comphelper::LibreOfficeKit::setActive(false);
 }

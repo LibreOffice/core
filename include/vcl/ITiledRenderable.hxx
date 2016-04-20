@@ -83,6 +83,16 @@ public:
         return OUString("");
     }
 
+    /**
+     * Get the hash of the currently displayed part, i.e. sheet in a spreadsheet
+     * or slide in a presentation.
+     */
+    virtual OUString getPartHash(int nPart)
+    {
+        (void) nPart;
+        return OUString("");
+    }
+
     /// @see lok::Document::setPartMode().
     virtual void setPartMode(int nPartMode)
     {
