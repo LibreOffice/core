@@ -99,8 +99,8 @@ void RscTypCont::Init()
     aNmTb.Put( "writeifset",         WRITEIFSET,     (sal_IntPtr)0  );
 
 /* values for integer types */
-    aNmTb.Put( "TRUE",               BOOLEAN,        (sal_IntPtr)sal_True  );
-    aNmTb.Put( "FALSE",              BOOLEAN,        (sal_IntPtr)sal_False );
+    aNmTb.Put( "TRUE",               BOOLEAN,        (sal_IntPtr)true  );
+    aNmTb.Put( "FALSE",              BOOLEAN,        (sal_IntPtr)false );
 
     aNmTb.Put( "XSCALE",             XSCALE ,        (sal_IntPtr)0     );
     aNmTb.Put( "YSCALE",             YSCALE ,        (sal_IntPtr)0     );
