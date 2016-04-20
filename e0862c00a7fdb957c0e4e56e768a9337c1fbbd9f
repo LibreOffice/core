@@ -22,6 +22,30 @@
       "revId": "e0862c00a7fdb957c0e4e56e768a9337c1fbbd9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_464674c0",
+        "filename": "xmloff/dtd/style.mod",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2016-04-20T15:50:26Z",
+      "side": 1,
+      "message": "Thanks a lot for your review.\nReverted",
+      "parentUuid": "1ac06dbe_e6e680e7",
+      "range": {
+        "startLine": 368,
+        "startChar": 67,
+        "endLine": 368,
+        "endChar": 75
+      },
+      "revId": "e0862c00a7fdb957c0e4e56e768a9337c1fbbd9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
