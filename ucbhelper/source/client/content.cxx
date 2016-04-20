@@ -956,7 +956,7 @@ bool Content::insertNewContent( const OUString& rContentType,
                                 makeAny(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
-                                        sal_False /* ReplaceExisting */ ) ) );
+                                        false /* ReplaceExisting */ ) ) );
     aNewContent.m_xImpl->inserted();
 
     rNewContent = aNewContent;

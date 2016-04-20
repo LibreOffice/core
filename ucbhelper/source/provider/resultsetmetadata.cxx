@@ -162,7 +162,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 column )
      */
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_False;
+        return false;
 
     return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement;
 }
@@ -173,7 +173,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
     throw( SQLException, RuntimeException, std::exception )
 {
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_False;
+        return false;
 
     return m_pImpl->m_aColumnData[ column - 1 ].isCaseSensitive;
 }
@@ -189,7 +189,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 column )
      */
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_False;
+        return false;
 
     return m_pImpl->m_aColumnData[ column - 1 ].isSearchable;
 }
@@ -204,7 +204,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 column )
      */
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_False;
+        return false;
 
     return m_pImpl->m_aColumnData[ column - 1 ].isCurrency;
 }
@@ -235,7 +235,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 column )
      */
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_False;
+        return false;
 
     return m_pImpl->m_aColumnData[ column - 1 ].isSigned;
 }
@@ -514,7 +514,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 column )
         return m_bReadOnly;
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_True;
+        return true;
 
     // autoincrement==true => readonly
     return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement ||
@@ -530,7 +530,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 column )
         return !m_bReadOnly;
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_False;
+        return false;
 
     return m_pImpl->m_aColumnData[ column - 1 ].isWritable;
 }
@@ -544,7 +544,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
         return !m_bReadOnly;
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return sal_False;
+        return false;
 
     return m_pImpl->m_aColumnData[ column - 1 ].isDefinitelyWritable;
 }

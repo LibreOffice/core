@@ -46,9 +46,9 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     aRequest.HasRealm       = !rRealm.isEmpty();
     if ( aRequest.HasRealm )
         aRequest.Realm = rRealm;
-    aRequest.HasUserName    = sal_True;
+    aRequest.HasUserName    = true;
     aRequest.UserName       = rUserName;
-    aRequest.HasPassword    = sal_True;
+    aRequest.HasPassword    = true;
     aRequest.Password       = rPassword;
     aRequest.HasAccount     = !rAccount.isEmpty();
     if ( aRequest.HasAccount )
