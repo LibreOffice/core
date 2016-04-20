@@ -153,7 +153,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
             aValue = GetPropertySet()->getPropertyValue( "CharUnderlineHasColor" );
             if( aValue.hasValue() &&
-                ( *static_cast< const sal_Bool * >( aValue.getValue()) != sal_False ))
+                *static_cast< const sal_Bool * >( aValue.getValue()) )
             {
                 aItem.PutValue( aValue, MID_TL_HASCOLOR );
                 bModified = true;
@@ -185,7 +185,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
             aValue = GetPropertySet()->getPropertyValue( "CharOverlineHasColor" );
             if ( aValue.hasValue() &&
-                 ( *static_cast< const sal_Bool* >( aValue.getValue() ) != sal_False ) )
+                 *static_cast< const sal_Bool* >( aValue.getValue() ) )
             {
                 aItem.PutValue( aValue, MID_TL_HASCOLOR );
                 bModified = true;
