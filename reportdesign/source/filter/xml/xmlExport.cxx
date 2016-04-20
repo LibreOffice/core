@@ -570,7 +570,7 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     TSectionsGrid::iterator aInsert = m_aSectionsGrid.insert(
         TSectionsGrid::value_type(
                                     _xProp.get(),
-                                    TGrid(aRowPos.size() - 1,TGrid::value_type(sal_False,TRow(aColumnPos.size() - 1)))
+                                    TGrid(aRowPos.size() - 1,TGrid::value_type(false,TRow(aColumnPos.size() - 1)))
                                   )
         ).first;
     lcl_calculate(aColumnPos,aRowPos,aInsert->second);
@@ -635,7 +635,7 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
                     aInsert->second[yi].second[xi] = TCell();
                     ++xi;
                 }
-                aInsert->second[yi].first = sal_True;
+                aInsert->second[yi].first = true;
                 ++yi;
             }
 
@@ -1545,7 +1545,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         {
                             sFunction = "INT";
                             uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
-                            xCountFunction->setInitialFormula(beans::Optional< OUString>(sal_True,OUString("rpt:0")));
+                            xCountFunction->setInitialFormula(beans::Optional< OUString>(true,OUString("rpt:0")));
                             OUString sCountName = sFunction + "_count_" + sExpression;
                             xCountFunction->setName(sCountName);
                             xCountFunction->setFormula( "rpt:[" + sCountName + "] + 1" );
@@ -1572,7 +1572,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
 
                     xFunction->setName(sFunctionName);
                     if ( !sInitialFormula.isEmpty() )
-                        xFunction->setInitialFormula(beans::Optional< OUString>(sal_True, sInitialFormula));
+                        xFunction->setInitialFormula(beans::Optional< OUString>(true, sInitialFormula));
                     sFunction = "rpt:" + sFunction;
                     sFunction += "([";
                     sFunction += sExpression;

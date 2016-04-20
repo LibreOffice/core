@@ -88,7 +88,7 @@ public:
     typedef ::std::map< Reference<XPropertySet> ,OUString >  TPropertyStyleMap;
     typedef ::std::map< Reference<XPropertySet> ,  TStringVec>      TGridStyleMap;
     typedef ::std::vector< TCell >                                  TRow;
-    typedef ::std::vector< ::std::pair< sal_Bool, TRow > >          TGrid;
+    typedef ::std::vector< ::std::pair< bool, TRow > >              TGrid;
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
