@@ -65,7 +65,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const lang::Locale& 
     SolarMutexGuard aGuard;
 
     if(!mxForbiddenChars.is())
-        return sal_False;
+        return false;
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, false );

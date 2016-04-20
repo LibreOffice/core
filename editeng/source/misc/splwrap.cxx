@@ -433,7 +433,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
         {
             xDic = SvxGetOrCreatePosDic( xDicList );
             if (xDic.is())
-                xDic->setActive( sal_True );
+                xDic->setActive( true );
         }
     }
 
@@ -465,7 +465,7 @@ bool SvxSpellWrapper::FindSpellError()
         {
             if (IsAllRight() && xAllRightDic.is())
             {
-                xAllRightDic->add( xAlt->getWord(), sal_False, OUString() );
+                xAllRightDic->add( xAlt->getWord(), false, OUString() );
             }
             else
             {

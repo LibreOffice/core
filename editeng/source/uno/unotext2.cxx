@@ -64,7 +64,7 @@ sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
     if( mpEditSource && mpEditSource->GetTextForwarder() )
         return mnNextParagraph < mpEditSource->GetTextForwarder()->GetParagraphCount();
     else
-        return sal_False;
+        return false;
 }
 
 uno::Any SvxUnoTextContentEnumeration::nextElement() throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )

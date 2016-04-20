@@ -135,7 +135,7 @@ Type SAL_CALL SvxUnoNumberingRules::getElementType()
 
 sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 // XAnyCompare

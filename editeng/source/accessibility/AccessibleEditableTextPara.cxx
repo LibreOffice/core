@@ -1474,7 +1474,7 @@ namespace accessibility
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -2174,7 +2174,7 @@ namespace accessibility
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -2202,7 +2202,7 @@ namespace accessibility
             ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
             //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
             if( !rCacheTF.IsEditable( aSelection ) )
-                return sal_False; // non-editable area selected
+                return false; // non-editable area selected
 
             // don't save selection, might become invalid after cut!
             //rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
@@ -2212,7 +2212,7 @@ namespace accessibility
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -2237,7 +2237,7 @@ namespace accessibility
             if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
                         nBulletLen = aBulletInfo.aText.getLength();
             if( !rCacheTF.IsEditable( MakeSelection(nIndex + nBulletLen) ) )
-                return sal_False; // non-editable area selected
+                return false; // non-editable area selected
 
             // #104400# set empty selection (=> cursor) to given index
             //rCacheVF.SetSelection( MakeCursor(nIndex) );
@@ -2247,7 +2247,7 @@ namespace accessibility
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -2277,7 +2277,7 @@ namespace accessibility
 
             //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
             if( !rCacheTF.IsEditable( aSelection ) )
-                return sal_False; // non-editable area selected
+                return false; // non-editable area selected
 
             //sal_Bool bRet = rCacheTF.Delete( MakeSelection(nStartIndex, nEndIndex) );
             bool bRet = rCacheTF.Delete( aSelection );
@@ -2288,7 +2288,7 @@ namespace accessibility
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -2316,7 +2316,7 @@ namespace accessibility
                         nBulletLen = aBulletInfo.aText.getLength();
 
             if( !rCacheTF.IsEditable( MakeSelection(nIndex + nBulletLen) ) )
-                return sal_False; // non-editable area selected
+                return false; // non-editable area selected
 
             // #104400# insert given text at empty selection (=> cursor)
             bool bRet = rCacheTF.InsertText( sText, MakeCursor(nIndex + nBulletLen) );
@@ -2328,7 +2328,7 @@ namespace accessibility
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -2358,7 +2358,7 @@ namespace accessibility
 
             //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
             if( !rCacheTF.IsEditable( aSelection ) )
-                return sal_False; // non-editable area selected
+                return false; // non-editable area selected
 
             // insert given text into given range => replace
             //sal_Bool bRet = rCacheTF.InsertText( sReplacement, MakeSelection(nStartIndex, nEndIndex) );
@@ -2371,7 +2371,7 @@ namespace accessibility
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -2394,7 +2394,7 @@ namespace accessibility
             CheckRange(nStartIndex, nEndIndex);
 
             if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
-                return sal_False; // non-editable area selected
+                return false; // non-editable area selected
 
             // do the indices span the whole paragraph? Then use the outliner map
             // TODO: hold it as a member?
@@ -2426,11 +2426,11 @@ namespace accessibility
             rCacheTF.QuickFormatDoc();
             GetEditSource().UpdateData();
 
-            return sal_True;
+            return true;
         }
         catch (const uno::RuntimeException&)
         {
-            return sal_False;
+            return false;
         }
     }
 
