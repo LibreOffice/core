@@ -193,6 +193,19 @@ bool ScDocument::HasTable( SCTAB nTab ) const
     return false;
 }
 
+bool ScDocument::GetHashCode( SCTAB nTab, sal_Int64& rHashCode ) const
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+    {
+        if (maTabs[nTab])
+        {
+            rHashCode = maTabs[nTab]->GetHashCode();
+            return true;
+        }
+    }
+    return false;
+}
+
 bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
