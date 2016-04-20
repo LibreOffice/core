@@ -1006,13 +1006,13 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
             glUniform4fv(maPickingResources.m_2DColorID, 1, &polygon.id[0]);
         }
         CHECK_GL_ERROR();
-        GLint maVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
+        GLint aVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(maVertexID);
+        glEnableVertexAttribArray(aVertexID);
         CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
-        glVertexAttribPointer(maVertexID, // attribute
+        glVertexAttribPointer(aVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -1038,7 +1038,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         CHECK_GL_ERROR();
         glDrawArrays(GL_POLYGON, 0, pointList->size());
         CHECK_GL_ERROR();
-        glDisableVertexAttribArray(maVertexID);
+        glDisableVertexAttribArray(aVertexID);
         CHECK_GL_ERROR();
         if(!mbPickingMode)
             glDisableVertexAttribArray(maResources.m_3DNormalID);

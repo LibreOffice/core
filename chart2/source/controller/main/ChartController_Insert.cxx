@@ -108,11 +108,11 @@ void ChartController::executeDispatch_InsertAxes()
 
             InsertAxisOrGridDialogData aDialogOutput;
             aDlg->getResult( aDialogOutput );
-            std::unique_ptr< ReferenceSizeProvider > mpRefSizeProvider(
+            std::unique_ptr< ReferenceSizeProvider > pRefSizeProvider(
                 impl_createReferenceSizeProvider());
             bool bChanged = AxisHelper::changeVisibilityOfAxes( xDiagram
                 , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC
-                , mpRefSizeProvider.get() );
+                , pRefSizeProvider.get() );
             if( bChanged )
                 aUndoGuard.commit();
         }

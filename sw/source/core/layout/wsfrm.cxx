@@ -1974,15 +1974,15 @@ void SwContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             }
             _InvalidatePrt();
         }
-        SwFrame* mpNextFrame = GetIndNext();
-        if ( mpNextFrame && nInvFlags & 0x10)
+        SwFrame* pNextFrame = GetIndNext();
+        if ( pNextFrame && nInvFlags & 0x10)
         {
-            mpNextFrame->_InvalidatePrt();
-            mpNextFrame->InvalidatePage( pPage );
+            pNextFrame->_InvalidatePrt();
+            pNextFrame->InvalidatePage( pPage );
         }
-        if ( mpNextFrame && nInvFlags & 0x80 )
+        if ( pNextFrame && nInvFlags & 0x80 )
         {
-            mpNextFrame->SetCompletePaint();
+            pNextFrame->SetCompletePaint();
         }
         if ( nInvFlags & 0x20 )
         {

@@ -187,8 +187,8 @@ namespace
         {
             uno::Sequence< OUString > seqValue;
             value >>= seqValue;
-            sal_Int32 m_nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            sal_Int32 nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < nNumValue; ++i )
             {
                 values.push_back( OUSTR_TO_STDSTR( seqValue[i] ) );
             }
@@ -198,8 +198,8 @@ namespace
         {
             uno::Sequence< sal_Bool > seqValue;
             value >>= seqValue;
-            sal_Int32 m_nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            sal_Int32 nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < nNumValue; ++i )
             {
                 values.push_back( OUSTR_TO_STDSTR( OUString::boolean( seqValue[i] ) ) );
             }
@@ -209,8 +209,8 @@ namespace
         {
             uno::Sequence< sal_Int64 > seqValue;
             value >>= seqValue;
-            sal_Int32 m_nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            sal_Int32 nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < nNumValue; ++i )
             {
                 values.push_back( OUSTR_TO_STDSTR( OUString::number( seqValue[i] ) ) );
             }
@@ -220,8 +220,8 @@ namespace
         {
             uno::Sequence< double > seqValue;
             value >>= seqValue;
-            sal_Int32 m_nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            sal_Int32 nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < nNumValue; ++i )
             {
                 values.push_back( OUSTR_TO_STDSTR( OUString::number( seqValue[i] ) ) );
             }
@@ -231,8 +231,8 @@ namespace
         {
             uno::Sequence< util::DateTime > seqValue;
             value >>= seqValue;
-            sal_Int32 m_nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            sal_Int32 nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < nNumValue; ++i )
             {
                 OUStringBuffer aBuffer;
                 ::sax::Converter::convertDateTime( aBuffer, seqValue[i], nullptr );

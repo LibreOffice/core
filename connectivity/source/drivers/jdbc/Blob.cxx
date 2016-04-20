@@ -58,9 +58,9 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
         // submit Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        out = t.pEnv->CallLongMethod( object, mID );
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
+        out = t.pEnv->CallLongMethod( object, nID );
         ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     return (sal_Int64)out;
@@ -75,9 +75,9 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         static const char * cSignature = "(JI)[B";
         static const char * cMethodName = "getBytes";
         // submit Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        jbyteArray out = static_cast<jbyteArray>(t.pEnv->CallObjectMethod( object, mID,pos,count));
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
+        jbyteArray out = static_cast<jbyteArray>(t.pEnv->CallObjectMethod( object, nID,pos,count));
         ThrowSQLException(t.pEnv,*this);
         if(out)
         {
@@ -94,8 +94,8 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Blob::getBinaryStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    static jmethodID mID(nullptr);
-    jobject out = callObjectMethod(t.pEnv,"getBinaryStream","()Ljava/io/InputStream;", mID);
+    static jmethodID nID(nullptr);
+    jobject out = callObjectMethod(t.pEnv,"getBinaryStream","()Ljava/io/InputStream;", nID);
     // WARNING: the caller becomes the owner of the returned pointer
     return out==nullptr ? nullptr : new java_io_InputStream( t.pEnv, out );
 }
@@ -110,8 +110,8 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
         static const char * cSignature = "([BI)J";
         static const char * cMethodName = "position";
         // submit Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         // convert Parameter
         jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
         jbyte * patternData = reinterpret_cast<jbyte *>(
@@ -123,7 +123,7 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
             // functions.html#wp22933>; work around that difference in a way
             // that doesn't trigger loplugin:redundantcast
         t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),patternData);
-        out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
+        out = t.pEnv->CallLongMethod( object, nID, pByteArray,start );
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowSQLException(t.pEnv,*this);
     } //t.pEnv

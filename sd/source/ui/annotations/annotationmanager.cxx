@@ -103,17 +103,17 @@ namespace sd {
 
 SfxItemPool* GetAnnotationPool()
 {
-    static SfxItemPool* mpAnnotationPool = nullptr;
-    if( mpAnnotationPool == nullptr )
+    static SfxItemPool* s_pAnnotationPool = nullptr;
+    if( s_pAnnotationPool == nullptr )
     {
-        mpAnnotationPool = EditEngine::CreatePool( false );
-        mpAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
+        s_pAnnotationPool = EditEngine::CreatePool( false );
+        s_pAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
         vcl::Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
-        mpAnnotationPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+        s_pAnnotationPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     }
 
-    return mpAnnotationPool;
+    return s_pAnnotationPool;
 }
 
 static SfxBindings* getBindings( ViewShellBase& rBase )

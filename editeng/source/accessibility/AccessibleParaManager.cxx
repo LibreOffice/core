@@ -102,9 +102,9 @@ namespace accessibility
 
         if( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara) )
         {
-            auto maChild( GetChild( nPara ).first.get() );
-            if( maChild.is() )
-                maChild->FireEvent( nEventId );
+            auto aChild( GetChild( nPara ).first.get() );
+            if( aChild.is() )
+                aChild->FireEvent( nEventId );
         }
     }
 

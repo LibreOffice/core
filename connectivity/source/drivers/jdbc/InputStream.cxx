@@ -61,20 +61,20 @@ sal_Int32 SAL_CALL java_io_InputStream::readSomeBytes( ::com::sun::star::uno::Se
 
 void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callIntMethodWithIntArg_ThrowRuntime("skip",mID,nBytesToSkip);
+    static jmethodID nID(nullptr);
+    callIntMethodWithIntArg_ThrowRuntime("skip",nID,nBytesToSkip);
 }
 
 sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    return callIntMethod_ThrowRuntime("available", mID);
+    static jmethodID nID(nullptr);
+    return callIntMethod_ThrowRuntime("available", nID);
 }
 
 void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowRuntime("close",mID);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowRuntime("close",nID);
 }
 
 sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -90,9 +90,9 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
         static const char * cSignature = "([BII)I";
         static const char * cMethodName = "read";
         // execute Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
-        out = t.pEnv->CallIntMethod( object, mID, pByteArray, 0, nBytesToRead );
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, nID);
+        out = t.pEnv->CallIntMethod( object, nID, pByteArray, 0, nBytesToRead );
         if ( !out )
             ThrowRuntimeException(t.pEnv,*this);
         if(out > 0)

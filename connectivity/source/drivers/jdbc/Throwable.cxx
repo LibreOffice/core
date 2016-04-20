@@ -44,22 +44,22 @@ jclass java_lang_Throwable::st_getMyClass()
 
 OUString java_lang_Throwable::getMessage() const
 {
-    static jmethodID mID(nullptr);
-    return callStringMethod("getMessage",mID);
+    static jmethodID nID(nullptr);
+    return callStringMethod("getMessage",nID);
 }
 
 
 OUString java_lang_Throwable::getLocalizedMessage() const
 {
-    static jmethodID mID(nullptr);
-    return callStringMethod("getLocalizedMessage",mID);
+    static jmethodID nID(nullptr);
+    return callStringMethod("getLocalizedMessage",nID);
 }
 
 #if OSL_DEBUG_LEVEL > 0
 void java_lang_Throwable::printStackTrace() const
 {
-    static jmethodID mID(nullptr);
-    return callVoidMethod_ThrowSQL("printStackTrace",mID);
+    static jmethodID nID(nullptr);
+    return callVoidMethod_ThrowSQL("printStackTrace",nID);
 }
 #endif
 

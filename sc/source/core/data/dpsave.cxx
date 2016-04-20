@@ -1366,8 +1366,8 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
 
         long nDimIndex = itr->second;
         const std::vector<SCROW>& rMembers = pData->GetColumnEntries(nDimIndex);
-        size_t mMemberCount = rMembers.size();
-        for (size_t j = 0; j < mMemberCount; ++j)
+        size_t nMemberCount = rMembers.size();
+        for (size_t j = 0; j < nMemberCount; ++j)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById( nDimIndex, rMembers[j] );
             OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData);

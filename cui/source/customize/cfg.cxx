@@ -5030,18 +5030,18 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     m_xImportedImageManager = css::ui::ImageManager::create( xComponentContext );
     m_xImportedImageManager->initialize(aProp);
 
-    ImageInfo mImageInfo;
+    ImageInfo aImageInfo1;
     uno::Sequence< OUString > names;
     if ( m_xImportedImageManager.is() )
     {
         names = m_xImportedImageManager->getAllImageNames( GetImageType() );
         for ( sal_Int32 n = 0; n < names.getLength(); ++n )
-            mImageInfo.insert( ImageInfo::value_type( names[n], false ));
+            aImageInfo1.insert( ImageInfo::value_type( names[n], false ));
     }
     sal_uInt16 nId = 1;
-    ImageInfo::const_iterator pConstIter = mImageInfo.begin();
+    ImageInfo::const_iterator pConstIter = aImageInfo1.begin();
     uno::Sequence< OUString > name( 1 );
-    while ( pConstIter != mImageInfo.end() )
+    while ( pConstIter != aImageInfo1.end() )
     {
         name[ 0 ] = pConstIter->first;
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( GetImageType(), name );

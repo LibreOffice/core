@@ -351,9 +351,9 @@ void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)
 
 void ScNameDlg::RemovePushed()
 {
-    std::vector<ScRangeNameLine> maEntries = m_pRangeManagerTable->GetSelectedEntries();
+    std::vector<ScRangeNameLine> aEntries = m_pRangeManagerTable->GetSelectedEntries();
     m_pRangeManagerTable->DeleteSelectedEntries();
-    for (std::vector<ScRangeNameLine>::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    for (std::vector<ScRangeNameLine>::iterator itr = aEntries.begin(); itr != aEntries.end(); ++itr)
     {
         ScRangeName* pRangeName = GetRangeName(itr->aScope);
         ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(itr->aName));

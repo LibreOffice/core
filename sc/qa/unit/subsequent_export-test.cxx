@@ -1586,14 +1586,14 @@ void ScExportTest::testBordersExchangeXLSX()
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc    = xDocSh->GetDocument();
 
-    for (size_t mnCol = 0; mnCol < nMaxCol; ++mnCol)
+    for (size_t nCol = 0; nCol < nMaxCol; ++nCol)
     {
-        for (size_t mnRow = 0; mnRow < nMaxRow; ++mnRow)
+        for (size_t nRow = 0; nRow < nMaxRow; ++nRow)
         {
             const editeng::SvxBorderLine* pLineTop    = nullptr;
             const editeng::SvxBorderLine* pLineBottom = nullptr;
-            rDoc.GetBorderLines(mnCol + 2, (mnRow * 2) + 8, 0, nullptr, &pLineTop, nullptr, &pLineBottom);
-            if((mnCol < 5) && (mnRow == 6))
+            rDoc.GetBorderLines(nCol + 2, (nRow * 2) + 8, 0, nullptr, &pLineTop, nullptr, &pLineBottom);
+            if((nCol < 5) && (nRow == 6))
             {   // in this range no lines
                 CPPUNIT_ASSERT(pLineTop == nullptr);
                 CPPUNIT_ASSERT(pLineBottom == nullptr);
@@ -1605,13 +1605,13 @@ void ScExportTest::testBordersExchangeXLSX()
                 CPPUNIT_ASSERT(pLineBottom);
             }
 
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border-Line-Style wrong", aCheckBorderWidth[mnCol][mnRow].BorderStyleTop,
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border-Line-Style wrong", aCheckBorderWidth[nCol][nRow].BorderStyleTop,
                                           pLineTop->GetBorderLineStyle());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border-Line-Style wrong", aCheckBorderWidth[mnCol][mnRow].BorderStyleBottom,
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border-Line-Style wrong", aCheckBorderWidth[nCol][nRow].BorderStyleBottom,
                                           pLineBottom->GetBorderLineStyle());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Width-Line wrong", aCheckBorderWidth[mnCol][mnRow].WidthTop,
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Width-Line wrong", aCheckBorderWidth[nCol][nRow].WidthTop,
                                           pLineTop->GetWidth());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Width-Line wrong", aCheckBorderWidth[mnCol][mnRow].WidthBottom,
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Width-Line wrong", aCheckBorderWidth[nCol][nRow].WidthBottom,
                                           pLineBottom->GetWidth());
         }
     }

@@ -946,10 +946,10 @@ bool SVGTextWriter::nextParagraph()
                             if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
                             {
                                 bool bIsNumbered = true;
-                                OUString msNumberingIsNumber("NumberingIsNumber");
-                                if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
+                                OUString sNumberingIsNumber("NumberingIsNumber");
+                                if( xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
                                 {
-                                    if( !(xPropSet->getPropertyValue( msNumberingIsNumber ) >>= bIsNumbered ) )
+                                    if( !(xPropSet->getPropertyValue( sNumberingIsNumber ) >>= bIsNumbered ) )
                                     {
                                         OSL_FAIL( "numbered paragraph without number info" );
                                         bIsNumbered = false;

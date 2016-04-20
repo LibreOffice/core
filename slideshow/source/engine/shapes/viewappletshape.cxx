@@ -83,7 +83,7 @@ namespace slideshow
 
             uno::Reference< beans::XPropertySet > xShapePropSet( rxShape,
                                                                  uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > mxViewerPropSet( mxViewer,
+            uno::Reference< beans::XPropertySet > xViewerPropSet( mxViewer,
                                                                    uno::UNO_QUERY_THROW );
 
             // copy shape properties to applet viewer
@@ -91,9 +91,9 @@ namespace slideshow
             for( sal_Size i=0; i<nNumPropEntries; ++i )
             {
                 aPropName = OUString::createFromAscii( pPropCopyTable[i] );
-                mxViewerPropSet->setPropertyValue( aPropName,
-                                                   xShapePropSet->getPropertyValue(
-                                                       aPropName ));
+                xViewerPropSet->setPropertyValue( aPropName,
+                                                  xShapePropSet->getPropertyValue(
+                                                  aPropName ));
             }
         }
 

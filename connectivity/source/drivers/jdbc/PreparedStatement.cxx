@@ -100,8 +100,8 @@ sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    return callBooleanMethod( "execute", mID );
+    static jmethodID nID(nullptr);
+    return callBooleanMethod( "execute", nID );
 }
 
 
@@ -113,8 +113,8 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    return callIntMethod_ThrowSQL("executeUpdate", mID);
+    static jmethodID nID(nullptr);
+    return callIntMethod_ThrowSQL("executeUpdate", nID);
 }
 
 
@@ -130,10 +130,10 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
         static const char * cSignature = "(ILjava/lang/String;)V";
         static const char * cMethodName = "setString";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,x));
-        t.pEnv->CallVoidMethod( object, mID, parameterIndex,str.get());
+        t.pEnv->CallVoidMethod( object, nID, parameterIndex,str.get());
         // and clean up
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
@@ -154,8 +154,8 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    jobject out = callResultSetMethod(t.env(),"executeQuery",mID);
+    static jmethodID nID(nullptr);
+    jobject out = callResultSetMethod(t.env(),"executeQuery",nID);
 
     return out==nullptr ? nullptr : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this);
 }
@@ -169,8 +169,8 @@ void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, 
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setBoolean", "(IZ)V", mID, parameterIndex, x);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setBoolean", "(IZ)V", nID, parameterIndex, x);
 }
 
 
@@ -182,8 +182,8 @@ void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setByte", "(IB)V", mID, parameterIndex, x);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setByte", "(IB)V", nID, parameterIndex, x);
 }
 
 
@@ -196,8 +196,8 @@ void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, con
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     java_sql_Date aT(x);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setDate", "(ILjava/sql/Date;)V", mID, parameterIndex, aT.getJavaObject());
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setDate", "(ILjava/sql/Date;)V", nID, parameterIndex, aT.getJavaObject());
 }
 
 
@@ -210,8 +210,8 @@ void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, con
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     java_sql_Time aT(x);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setTime", "(ILjava/sql/Time;)V", mID, parameterIndex, aT.getJavaObject());
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setTime", "(ILjava/sql/Time;)V", nID, parameterIndex, aT.getJavaObject());
 }
 
 
@@ -223,9 +223,9 @@ void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
+    static jmethodID nID(nullptr);
     java_sql_Timestamp aD(x);
-    callVoidMethod_ThrowSQL("setTimestamp", "(ILjava/sql/Timestamp;)V", mID, parameterIndex, aD.getJavaObject());
+    callVoidMethod_ThrowSQL("setTimestamp", "(ILjava/sql/Timestamp;)V", nID, parameterIndex, aD.getJavaObject());
 }
 
 void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -236,8 +236,8 @@ void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, d
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setDouble", "(ID)V", mID, parameterIndex, x);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setDouble", "(ID)V", nID, parameterIndex, x);
 }
 
 
@@ -249,8 +249,8 @@ void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, fl
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setFloat", "(IF)V", mID, parameterIndex, x);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setFloat", "(IF)V", nID, parameterIndex, x);
 }
 
 
@@ -262,8 +262,8 @@ void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setInt", "(II)V", mID, parameterIndex, x);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setInt", "(II)V", nID, parameterIndex, x);
 }
 
 
@@ -275,8 +275,8 @@ void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setLong", "(IJ)V", mID, parameterIndex, x);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setLong", "(IJ)V", nID, parameterIndex, x);
 }
 
 
@@ -288,8 +288,8 @@ void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setNull", "(II)V", mID, parameterIndex, sqlType);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setNull", "(II)V", nID, parameterIndex, sqlType);
 }
 
 
@@ -331,8 +331,8 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
         static const char * cSignature = "(ILjava/lang/Object;II)V";
         static const char * cMethodName = "setObject";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         {
             jobject obj = nullptr;
             switch(targetSqlType)
@@ -360,7 +360,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
                                 pBigDecimal.reset(new java_math_BigDecimal(0.0));
                         }
                             //obj = convertwchar_tToJavaString(t.pEnv,::comphelper::getString(x));
-                        t.pEnv->CallVoidMethod( object, mID, parameterIndex,pBigDecimal->getJavaObject(),targetSqlType,scale);
+                        t.pEnv->CallVoidMethod( object, nID, parameterIndex,pBigDecimal->getJavaObject(),targetSqlType,scale);
                         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
                         return;
                     }
@@ -368,11 +368,11 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
                     obj = convertwchar_tToJavaString(t.pEnv,::comphelper::getString(x));
                     break;
             }
-            t.pEnv->CallVoidMethod( object, mID, parameterIndex,obj,targetSqlType,scale);
+            t.pEnv->CallVoidMethod( object, nID, parameterIndex,obj,targetSqlType,scale);
             t.pEnv->DeleteLocalRef(obj);
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // and clean up
-        } //mID
+        } //nID
     } //t.pEnv
 }
 
@@ -385,8 +385,8 @@ void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterInde
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL<jobject>("setObject", "(ILjava/lang/Object;)V", mID, parameterIndex, nullptr);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL<jobject>("setObject", "(ILjava/lang/Object;)V", nID, parameterIndex, nullptr);
 }
 
 
@@ -411,8 +411,8 @@ void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sa
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("setShort", "(IS)V", mID, parameterIndex, x);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("setShort", "(IS)V", nID, parameterIndex, x);
 }
 
 
@@ -430,8 +430,8 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
         static const char * cSignature = "(I[B)V";
         static const char * cMethodName = "setBytes";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         jbyteArray pByteArray = t.pEnv->NewByteArray(x.getLength());
         jbyte * xData = reinterpret_cast<jbyte *>(
             const_cast<sal_Int8 *>(x.getConstArray()));
@@ -442,7 +442,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
             // functions.html#wp22933>; work around that difference in a way
             // that doesn't trigger loplugin:redundantcast
         t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),xData);
-        t.pEnv->CallVoidMethod( object, mID, parameterIndex,pByteArray);
+        t.pEnv->CallVoidMethod( object, nID, parameterIndex,pByteArray);
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
@@ -464,8 +464,8 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
         static const char * cSignature = "(ILjava/io/InputStream;I)V";
         static const char * cMethodName = "setCharacterStream";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         Sequence< sal_Int8 > aSeq;
         if ( x.is() )
             x->readBytes( aSeq, length );
@@ -487,18 +487,18 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
         args2[2].i =  actualLength;
         // Java-Call
         jclass aClass = t.pEnv->FindClass("java/io/CharArrayInputStream");
-        static jmethodID mID2 = nullptr;
-        if ( !mID2 )
+        static jmethodID nID2 = nullptr;
+        if ( !nID2 )
         {
             // initialize temporary variable
             const char * cSignatureStream = "([BII)V";
-            mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
+            nID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
         }
         jobject tempObj = nullptr;
-        if(mID2)
-            tempObj = t.pEnv->NewObjectA( aClass, mID2, args2 );
+        if(nID2)
+            tempObj = t.pEnv->NewObjectA( aClass, nID2, args2 );
 
-        t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,actualLength);
+        t.pEnv->CallVoidMethod( object, nID, parameterIndex,tempObj,actualLength);
         // and clean up
         t.pEnv->DeleteLocalRef(pByteArray);
         t.pEnv->DeleteLocalRef(tempObj);
@@ -521,8 +521,8 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
         static const char * cSignature = "(ILjava/io/InputStream;I)V";
         static const char * cMethodName = "setBinaryStream";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         {
             Sequence< sal_Int8 > aSeq;
             if ( x.is() )
@@ -546,17 +546,17 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
 
             // Java-Call
             jclass aClass = t.pEnv->FindClass("java/io/ByteArrayInputStream");
-            static jmethodID mID2 = nullptr;
-            if ( !mID2 )
+            static jmethodID nID2 = nullptr;
+            if ( !nID2 )
             {
                 // initialize temporary variable
                 const char * cSignatureStream = "([BII)V";
-                mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
+                nID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
             }
             jobject tempObj = nullptr;
-            if(mID2)
-                tempObj = t.pEnv->NewObjectA( aClass, mID2, args2 );
-            t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,(sal_Int32)actualLength);
+            if(nID2)
+                tempObj = t.pEnv->NewObjectA( aClass, nID2, args2 );
+            t.pEnv->CallVoidMethod( object, nID, parameterIndex,tempObj,(sal_Int32)actualLength);
             // and clean up
             t.pEnv->DeleteLocalRef(pByteArray);
             t.pEnv->DeleteLocalRef(tempObj);
@@ -577,8 +577,8 @@ void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(::com::sun::
     {
         createStatement(t.pEnv);
 
-        static jmethodID mID(nullptr);
-        callVoidMethod_ThrowSQL("clearParameters",mID);
+        static jmethodID nID(nullptr);
+        callVoidMethod_ThrowSQL("clearParameters",nID);
     } //t.pEnv
 }
 
@@ -589,8 +589,8 @@ void SAL_CALL java_sql_PreparedStatement::clearBatch(  ) throw(::com::sun::star:
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         createStatement(t.pEnv);
-        static jmethodID mID(nullptr);
-        callVoidMethod_ThrowSQL("clearBatch",mID);
+        static jmethodID nID(nullptr);
+        callVoidMethod_ThrowSQL("clearBatch",nID);
     } //t.pEnv
 }
 
@@ -602,8 +602,8 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         createStatement(t.pEnv);
-        static jmethodID mID(nullptr);
-        callVoidMethod_ThrowSQL("addBatch", mID);
+        static jmethodID nID(nullptr);
+        callVoidMethod_ThrowSQL("addBatch", nID);
     } //t.pEnv
 }
 
@@ -615,8 +615,8 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     ::com::sun::star::uno::Sequence< sal_Int32 > aSeq;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    jintArray out = static_cast<jintArray>(callObjectMethod(t.pEnv,"executeBatch","()[I", mID));
+    static jmethodID nID(nullptr);
+    jintArray out = static_cast<jintArray>(callObjectMethod(t.pEnv,"executeBatch","()[I", nID));
     if(out)
     {
         jboolean p = sal_False;
@@ -633,8 +633,8 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    static jmethodID mID(nullptr);
-    jobject out = callObjectMethod(t.pEnv,"getMetaData","()Ljava/sql/ResultSetMetaData;", mID);
+    static jmethodID nID(nullptr);
+    jobject out = callObjectMethod(t.pEnv,"getMetaData","()Ljava/sql/ResultSetMetaData;", nID);
 
     return out==nullptr ? nullptr : new java_sql_ResultSetMetaData( t.pEnv, out, *m_pConnection );
 }
@@ -663,26 +663,26 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
         args[0].l = convertwchar_tToJavaString(_pEnv,m_sSqlStatement);
         // Java-Call
         jobject out = nullptr;
-        static jmethodID mID(nullptr);
-        if ( !mID )
+        static jmethodID nID(nullptr);
+        if ( !nID )
         {
             static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
-            mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+            nID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
         }
-        if( mID )
+        if( nID )
         {
-            out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l ,m_nResultSetType,m_nResultSetConcurrency);
+            out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), nID, args[0].l ,m_nResultSetType,m_nResultSetConcurrency);
         }
         else
         {
-            static jmethodID mID2 = nullptr;
-            if ( !mID2 )
+            static jmethodID nID2 = nullptr;
+            if ( !nID2 )
             {
                 static const char * cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
-                mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );
+                nID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );
             }
-            if ( mID2 )
-                out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, args[0].l );
+            if ( nID2 )
+                out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), nID2, args[0].l );
         }
         _pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
         ThrowLoggedSQLException( m_aLogger, _pEnv, *this );

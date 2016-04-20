@@ -37,12 +37,12 @@ public:
     explicit lcl_Escape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
     void operator() ( sal_Unicode aChar )
     {
-        static const sal_Unicode m_aQuote( '\'' );
-        static const sal_Unicode m_aBackslash( '\\' );
+        static const sal_Unicode s_aQuote( '\'' );
+        static const sal_Unicode s_aBackslash( '\\' );
 
-        if( aChar == m_aQuote ||
-            aChar == m_aBackslash )
-            m_aResultBuffer.append( m_aBackslash );
+        if( aChar == s_aQuote ||
+            aChar == s_aBackslash )
+            m_aResultBuffer.append( s_aBackslash );
         m_aResultBuffer.append( aChar );
     }
 
@@ -60,9 +60,9 @@ public:
     explicit lcl_UnEscape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
     void operator() ( sal_Unicode aChar )
     {
-        static const sal_Unicode m_aBackslash( '\\' );
+        static const sal_Unicode s_aBackslash( '\\' );
 
-        if( aChar != m_aBackslash )
+        if( aChar != s_aBackslash )
             m_aResultBuffer.append( aChar );
     }
 

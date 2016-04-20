@@ -148,14 +148,14 @@ typedef std::unordered_map< sal_Int16, sal_Int16 > GroupHashMap;
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
 {
-    static GroupHashMap mHashMap;
+    static GroupHashMap s_aHashMap;
 
     if ( !bGroupIDMapInitialized )
     {
         sal_Int32 i = 0;
         while ( GroupIDCommandGroupMap[i].nGroupID != 0 )
         {
-            mHashMap.insert( GroupHashMap::value_type(
+            s_aHashMap.insert( GroupHashMap::value_type(
                 GroupIDCommandGroupMap[i].nGroupID,
                 GroupIDCommandGroupMap[i].nCommandGroup ));
             ++i;
@@ -163,8 +163,8 @@ sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
         bGroupIDMapInitialized = true;
     }
 
-    GroupHashMap::const_iterator pIter = mHashMap.find( nGroupID );
-    if ( pIter != mHashMap.end() )
+    GroupHashMap::const_iterator pIter = s_aHashMap.find( nGroupID );
+    if ( pIter != s_aHashMap.end() )
         return pIter->second;
     else
         return frame::CommandGroup::INTERNAL;

@@ -462,11 +462,11 @@ namespace cairocanvas
             cairo_set_font_options( pSCairo.get(), options);
 
             // Font color
-            Color mTextColor = rOutDev.GetTextColor();
+            Color aTextColor = rOutDev.GetTextColor();
             cairo_set_source_rgb(pSCairo.get(),
-                                 mTextColor.GetRed()/255.0,
-                                 mTextColor.GetGreen()/255.0,
-                                 mTextColor.GetBlue()/255.0);
+                                 aTextColor.GetRed()/255.0,
+                                 aTextColor.GetGreen()/255.0,
+                                 aTextColor.GetBlue()/255.0);
 
             // Font rotation and scaling
             cairo_matrix_t m;

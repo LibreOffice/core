@@ -49,9 +49,9 @@ void java_util_Properties::setProperty(const OUString& key, const OUString& valu
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
         static const char * cMethodName = "setProperty";
         // Turn off Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
+        out = t.pEnv->CallObjectMethod(object, nID, args[0].l,args[1].l);
         ThrowSQLException(t.pEnv,nullptr);
         t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
         t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
@@ -84,9 +84,9 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( nullptr, nullpt
     // Initialize temperary Variables
     static const char * cSignature = "()V";
     jobject tempObj;
-    static jmethodID mID(nullptr);
-    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
-    tempObj = t.pEnv->NewObject( getMyClass(), mID);
+    static jmethodID nID(nullptr);
+    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, nID);
+    tempObj = t.pEnv->NewObject( getMyClass(), nID);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
 }
@@ -209,13 +209,13 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     // Turn off Java-Call for the constructor
     // Initialize temperary variables
     jclass clazz = java_lang_Object::findMyClass("java/io/ByteArrayInputStream");
-    static jmethodID mID(nullptr);
-    if  ( !mID )
+    static jmethodID nID(nullptr);
+    if  ( !nID )
     {
         static const char * cSignature = "([B)V";
-        mID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
-        OSL_ENSURE( mID, cSignature );
-        if  ( !mID )
+        nID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
+        OSL_ENSURE( nID, cSignature );
+        if  ( !nID )
             throw SQLException();
     } // if  ( !_inout_MethodID )
     jbyteArray pByteArray = t.pEnv->NewByteArray(length);
@@ -223,7 +223,7 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     x->readBytes(aData,length);
     jboolean p = sal_False;
     memcpy(t.pEnv->GetByteArrayElements(pByteArray,&p),aData.getArray(),aData.getLength());
-    jobject out = t.pEnv->NewObject( clazz, mID,pByteArray);
+    jobject out = t.pEnv->NewObject( clazz, nID,pByteArray);
     t.pEnv->DeleteLocalRef(pByteArray);
     return out;
 }
@@ -236,13 +236,13 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     // Turn off Java-Call for the constructor
     // Initialize temperary Variables
     jclass clazz = java_lang_Object::findMyClass("java/io/CharArrayReader");
-    static jmethodID mID(nullptr);
-    if  ( !mID )
+    static jmethodID nID(nullptr);
+    if  ( !nID )
     {
         static const char * cSignature = "([C)V";
-        mID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
-        OSL_ENSURE( mID, cSignature );
-        if  ( !mID )
+        nID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
+        OSL_ENSURE( nID, cSignature );
+        if  ( !nID )
             throw SQLException();
     } // if  ( !_inout_MethodID )
     jcharArray pCharArray = t.pEnv->NewCharArray(length);
@@ -250,7 +250,7 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     x->readBytes(aData,length);
     jboolean p = sal_False;
     memcpy(t.pEnv->GetCharArrayElements(pCharArray,&p),aData.getArray(),aData.getLength());
-    jobject out = t.pEnv->NewObject( clazz, mID,pCharArray);
+    jobject out = t.pEnv->NewObject( clazz, nID,pCharArray);
     t.pEnv->DeleteLocalRef(pCharArray);
     return out;
 }

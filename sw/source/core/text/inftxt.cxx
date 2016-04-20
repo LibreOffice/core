@@ -840,31 +840,31 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
     const SwFont* pOldFnt = rInf.GetFont();
 
     // Font is generated only once:
-    static SwFont* m_pFnt = nullptr;
-    if ( ! m_pFnt )
+    static SwFont* s_pFnt = nullptr;
+    if ( ! s_pFnt )
     {
-        m_pFnt = new SwFont( *pOldFnt );
-        m_pFnt->SetFamily( FAMILY_DONTKNOW, m_pFnt->GetActual() );
-        m_pFnt->SetName( numfunc::GetDefBulletFontname(), m_pFnt->GetActual() );
-        m_pFnt->SetStyleName( aEmptyOUStr, m_pFnt->GetActual() );
-        m_pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, m_pFnt->GetActual() );
+        s_pFnt = new SwFont( *pOldFnt );
+        s_pFnt->SetFamily( FAMILY_DONTKNOW, s_pFnt->GetActual() );
+        s_pFnt->SetName( numfunc::GetDefBulletFontname(), s_pFnt->GetActual() );
+        s_pFnt->SetStyleName( aEmptyOUStr, s_pFnt->GetActual() );
+        s_pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, s_pFnt->GetActual() );
     }
 
     // Some of the current values are set at the font:
     if ( ! bRotate )
-        m_pFnt->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
+        s_pFnt->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
     else
-        m_pFnt->SetVertical( pOldFnt->GetOrientation() );
+        s_pFnt->SetVertical( pOldFnt->GetOrientation() );
 
-    m_pFnt->SetColor(rCol);
+    s_pFnt->SetColor(rCol);
 
     Size aFontSize( 0, SPECIAL_FONT_HEIGHT );
-    m_pFnt->SetSize( aFontSize, m_pFnt->GetActual() );
+    s_pFnt->SetSize( aFontSize, s_pFnt->GetActual() );
 
-    const_cast<SwTextPaintInfo&>(rInf).SetFont( m_pFnt );
+    const_cast<SwTextPaintInfo&>(rInf).SetFont( s_pFnt );
 
     // The maximum width depends on the current orientation
-    const sal_uInt16 nDir = m_pFnt->GetOrientation( rInf.GetTextFrame()->IsVertical() );
+    const sal_uInt16 nDir = s_pFnt->GetOrientation( rInf.GetTextFrame()->IsVertical() );
     SwTwips nMaxWidth;
     if (nDir == 900 || nDir == 2700)
         nMaxWidth = rRect.Height();
@@ -883,14 +883,14 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
         const SwTwips nOldWidth = aFontSize.Width();
 
         // new height for font
-        const SwFontScript nAct = m_pFnt->GetActual();
-        aFontSize.Height() = ( 100 * m_pFnt->GetSize( nAct ).Height() ) / nFactor;
-        aFontSize.Width() = ( 100 * m_pFnt->GetSize( nAct).Width() ) / nFactor;
+        const SwFontScript nAct = s_pFnt->GetActual();
+        aFontSize.Height() = ( 100 * s_pFnt->GetSize( nAct ).Height() ) / nFactor;
+        aFontSize.Width() = ( 100 * s_pFnt->GetSize( nAct).Width() ) / nFactor;
 
         if ( !aFontSize.Width() && !aFontSize.Height() )
             break;
 
-        m_pFnt->SetSize( aFontSize, nAct );
+        s_pFnt->SetSize( aFontSize, nAct );
 
         aFontSize = rInf.GetTextSize( aTmp ).SvLSize();
 

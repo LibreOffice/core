@@ -1380,15 +1380,15 @@ void annotateStyles( StatePool&                                        rStatePoo
                             const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
                             std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
-    bool maGradientNotFound = false;
-    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector, maGradientNotFound);
+    bool bGradientNotFound = false;
+    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector, bGradientNotFound);
     visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
 
     //Sometimes, xlink:href in gradients refers to another gradient which hasn't been parsed yet.
     // if that happens, we'll need to parse the styles again, so everything gets referred.
-    if( maGradientNotFound )
+    if( bGradientNotFound )
     {
-        maGradientNotFound = false;
+        bGradientNotFound = false;
         visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
     }
 }
@@ -2278,10 +2278,10 @@ bool SVGReader::parseAndConvert()
 
     StatePool aStatePool;
     StateMap  aStateMap;
-    std::vector< uno::Reference<xml::dom::XElement> > maUseElementVector;
+    std::vector< uno::Reference<xml::dom::XElement> > aUseElementVector;
 
     annotateStyles(aStatePool,aStateMap,aInitialState,
-                   xDocElem,m_xDocumentHandler,maUseElementVector);
+                   xDocElem,m_xDocumentHandler,aUseElementVector);
 
 #ifdef DEBUG_FILTER_SVGREADER
     dumpTree(xDocElem);
@@ -2322,7 +2322,7 @@ bool SVGReader::parseAndConvert()
                 aStateMap,
                 xDocElem,
                 m_xDocumentHandler,
-                maUseElementVector);
+                aUseElementVector);
 
     m_xDocumentHandler->endElement( "draw:page" );
     m_xDocumentHandler->endElement( "office:drawing" );

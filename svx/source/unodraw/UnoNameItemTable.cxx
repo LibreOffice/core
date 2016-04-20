@@ -85,13 +85,13 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
 
 void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    SfxItemSet* mpInSet = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
-    maItemSetVector.push_back( mpInSet );
+    SfxItemSet* pInSet = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
+    maItemSetVector.push_back( pInSet );
 
     std::unique_ptr<NameOrIndex> pNewItem(createItem());
     pNewItem->SetName( aName );
     pNewItem->PutValue( aElement, mnMemberId );
-    mpInSet->Put( *pNewItem, mnWhich );
+    pInSet->Put( *pNewItem, mnWhich );
 }
 
 // XNameContainer

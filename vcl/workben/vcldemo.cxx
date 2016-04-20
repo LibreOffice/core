@@ -404,7 +404,7 @@ public:
             else
                 aText = aLatinText;
 
-            std::vector<OUString> maFontNames;
+            std::vector<OUString> aFontNames;
 
             sal_uInt32 nCols[] = {
                 COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
@@ -420,7 +420,7 @@ public:
             size_t nNumFontNames = SAL_N_ELEMENTS(pNames);
 
             for (size_t i = 0; i < nNumFontNames; i++)
-                maFontNames.push_back(OUString::createFromAscii(pNames[i]));
+                aFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
             if (bClip && !bRotate)
             {
@@ -445,12 +445,12 @@ public:
                 {
                     // random font size to avoid buffering
                     nFontHeight = 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies;
-                    nFontIndex = (i % maFontNames.size());
-                    nFontColorIndex=(i % maFontNames.size());
+                    nFontIndex = (i % aFontNames.size());
+                    nFontColorIndex=(i % aFontNames.size());
                 }
 
                 rDev.SetTextColor(Color(nCols[nFontColorIndex]));
-                vcl::Font aFont( maFontNames[nFontIndex], Size(0, nFontHeight ));
+                vcl::Font aFont( aFontNames[nFontIndex], Size(0, nFontHeight ));
 
                 if (bRotate)
                 {

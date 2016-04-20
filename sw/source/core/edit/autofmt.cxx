@@ -2599,12 +2599,12 @@ void SwEditShell::AutoFormatBySplitNode()
         else
         {
             // then go one node backwards
-            SwNodeIndex m_aNdIdx( pCursor->GetMark()->nNode, -1 );
-            SwTextNode* pTextNd = m_aNdIdx.GetNode().GetTextNode();
+            SwNodeIndex aNdIdx( pCursor->GetMark()->nNode, -1 );
+            SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
             if (pTextNd && !pTextNd->GetText().isEmpty())
             {
                 pContent->Assign( pTextNd, 0 );
-                pCursor->GetMark()->nNode = m_aNdIdx;
+                pCursor->GetMark()->nNode = aNdIdx;
                 bRange = true;
             }
         }

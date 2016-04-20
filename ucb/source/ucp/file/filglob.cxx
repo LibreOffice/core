@@ -564,12 +564,12 @@ namespace fileaccess {
             PropertyValue prop;
             prop.Name = "ResourceName";
             prop.Handle = -1;
-            OUString m_aClashingName(
+            OUString aClashingName(
                 rtl::Uri::decode(
                     getTitle(aUncPath),
                     rtl_UriDecodeWithCharset,
                     RTL_TEXTENCODING_UTF8));
-            prop.Value <<= m_aClashingName;
+            prop.Value <<= aClashingName;
             Sequence<Any> seq(1);
             seq[0] <<= prop;
             excep.Arguments = seq;

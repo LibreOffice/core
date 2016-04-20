@@ -278,8 +278,8 @@ void OpenGLProgram::SetTransform(
         (float) aYRel.getX()/nTexHeight, (float) aYRel.getY()/nTexHeight, 0, 0,
         0,                               0,                               1, 0,
         (float) rNull.getX(),            (float) rNull.getY(),            0, 1 };
-    glm::mat4 mMatrix = glm::make_mat4( aValues );
-    glUniformMatrix4fv( nUniform, 1, GL_FALSE, glm::value_ptr( mMatrix ) );
+    glm::mat4 aMatrix = glm::make_mat4( aValues );
+    glUniformMatrix4fv( nUniform, 1, GL_FALSE, glm::value_ptr( aMatrix ) );
     CHECK_GL_ERROR();
 }
 
@@ -296,12 +296,12 @@ void OpenGLProgram::ApplyMatrix(float fWidth, float fHeight, float fPixelOffset)
     OString sProjectionMatrix("mvp");
     GLuint nUniform = GetUniformLocation(sProjectionMatrix);
 
-    glm::mat4 mMVP = glm::ortho(0.0f, fWidth, fHeight, 0.0f, 0.0f, 1.0f);
+    glm::mat4 aMVP = glm::ortho(0.0f, fWidth, fHeight, 0.0f, 0.0f, 1.0f);
 
     if (fPixelOffset != 0.0f)
-        mMVP = glm::translate(mMVP, glm::vec3(fPixelOffset, fPixelOffset, 0.0f));
+        aMVP = glm::translate(aMVP, glm::vec3(fPixelOffset, fPixelOffset, 0.0f));
 
-    glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr(mMVP));
+    glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr(aMVP));
     CHECK_GL_ERROR();
 }
 

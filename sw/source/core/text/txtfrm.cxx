@@ -2227,7 +2227,7 @@ void SwTextFrame::_CalcHeightOfLastLine( const bool _bUseFont )
 {
     // i#71281
     // Invalidate printing area, if height of last line changes
-    const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
+    const SwTwips nOldHeightOfLastLine( mnHeightOfLastLine );
 
     // determine output device
     SwViewShell* pVsh = getRootFrame()->GetCurrShell();
@@ -2346,7 +2346,7 @@ void SwTextFrame::_CalcHeightOfLastLine( const bool _bUseFont )
     }
     // i#71281
     // invalidate printing area, if height of last line changes
-    if ( mnHeightOfLastLine != mnOldHeightOfLastLine )
+    if ( mnHeightOfLastLine != nOldHeightOfLastLine )
     {
         InvalidatePrt();
     }

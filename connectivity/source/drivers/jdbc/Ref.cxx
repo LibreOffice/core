@@ -45,8 +45,8 @@ jclass java_sql_Ref::getMyClass() const
 
 OUString SAL_CALL java_sql_Ref::getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    return callStringMethod("getBaseTypeName",mID);
+    static jmethodID nID(nullptr);
+    return callStringMethod("getBaseTypeName",nID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

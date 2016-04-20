@@ -101,19 +101,19 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
 
             sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
 
-            uno::Sequence< sal_Int32 > m_aBarPositionSequence;
+            uno::Sequence< sal_Int32 > aBarPositionSequence;
             uno::Reference< beans::XPropertySet > xChartTypeProps( xChartType, uno::UNO_QUERY );
             if( xChartTypeProps.is() )
             {
-                if( xChartTypeProps->getPropertyValue( "OverlapSequence" ) >>= m_aBarPositionSequence )
+                if( xChartTypeProps->getPropertyValue( "OverlapSequence" ) >>= aBarPositionSequence )
                 {
-                    if( nAxisIndex >= 0 && nAxisIndex < m_aBarPositionSequence.getLength() )
-                        m_nBarOverlap = m_aBarPositionSequence[nAxisIndex];
+                    if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
+                        m_nBarOverlap = aBarPositionSequence[nAxisIndex];
                 }
-                if( xChartTypeProps->getPropertyValue( "GapwidthSequence" ) >>= m_aBarPositionSequence )
+                if( xChartTypeProps->getPropertyValue( "GapwidthSequence" ) >>= aBarPositionSequence )
                 {
-                    if( nAxisIndex >= 0 && nAxisIndex < m_aBarPositionSequence.getLength() )
-                        m_nGapWidth = m_aBarPositionSequence[nAxisIndex];
+                    if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
+                        m_nGapWidth = aBarPositionSequence[nAxisIndex];
                 }
             }
         }
@@ -220,22 +220,22 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 if( xChartTypeProps.is() )
                 {
                     sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
-                    uno::Sequence< sal_Int32 > m_aBarPositionSequence;
+                    uno::Sequence< sal_Int32 > aBarPositionSequence;
                     if( xChartTypeProps.is() )
                     {
-                        if( xChartTypeProps->getPropertyValue( aPropName ) >>= m_aBarPositionSequence )
+                        if( xChartTypeProps->getPropertyValue( aPropName ) >>= aBarPositionSequence )
                         {
                             bool bGroupBarsPerAxis =  static_cast< const SfxBoolItem & >(rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS )).GetValue();
                             if(!bGroupBarsPerAxis)
                             {
                                 //set the same value for all axes
-                                for( sal_Int32 nN = 0; nN < m_aBarPositionSequence.getLength(); nN++ )
-                                    m_aBarPositionSequence[nN] = rBarPosition;
+                                for( sal_Int32 nN = 0; nN < aBarPositionSequence.getLength(); nN++ )
+                                    aBarPositionSequence[nN] = rBarPosition;
                             }
-                            else if( nAxisIndex >= 0 && nAxisIndex < m_aBarPositionSequence.getLength() )
-                                m_aBarPositionSequence[nAxisIndex] = rBarPosition;
+                            else if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
+                                aBarPositionSequence[nAxisIndex] = rBarPosition;
 
-                            xChartTypeProps->setPropertyValue( aPropName, uno::makeAny(m_aBarPositionSequence) );
+                            xChartTypeProps->setPropertyValue( aPropName, uno::makeAny(aBarPositionSequence) );
                             bChanged = true;
                         }
                     }

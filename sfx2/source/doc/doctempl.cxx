@@ -296,7 +296,7 @@ OUString SfxDocumentTemplates::GetFullRegionName
 }
 
 
-const OUString& SfxDocumentTemplates::GetRegionName
+OUString SfxDocumentTemplates::GetRegionName
 (
     sal_uInt16 nIdx                 // vcl::Region Index
 )   const
@@ -311,7 +311,7 @@ const OUString& SfxDocumentTemplates::GetRegionName
 
 */
 {
-    static OUString maTmpString;
+    OUString aTmpString;
 
     DocTemplLocker_Impl aLocker( *pImp );
 
@@ -320,14 +320,10 @@ const OUString& SfxDocumentTemplates::GetRegionName
         RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
         if ( pData )
-            maTmpString = pData->GetTitle();
-        else
-            maTmpString.clear();
+            aTmpString = pData->GetTitle();
     }
-    else
-        maTmpString.clear();
 
-    return maTmpString;
+    return aTmpString;
 }
 
 
@@ -383,7 +379,7 @@ sal_uInt16 SfxDocumentTemplates::GetCount
 }
 
 
-const OUString& SfxDocumentTemplates::GetName
+OUString SfxDocumentTemplates::GetName
 (
     sal_uInt16 nRegion,     //  vcl::Region Index, in which the entry lies
     sal_uInt16 nIdx         //  Index of the entry
@@ -401,7 +397,7 @@ const OUString& SfxDocumentTemplates::GetName
 {
     DocTemplLocker_Impl aLocker( *pImp );
 
-    static OUString maTmpString;
+    OUString aTmpString;
 
     if ( pImp->Construct() )
     {
@@ -412,14 +408,10 @@ const OUString& SfxDocumentTemplates::GetName
             pEntry = pRegion->GetEntry( nIdx );
 
         if ( pEntry )
-            maTmpString = pEntry->GetTitle();
-        else
-            maTmpString.clear();
+            aTmpString = pEntry->GetTitle();
     }
-    else
-        maTmpString.clear();
 
-    return maTmpString;
+    return aTmpString;
 }
 
 

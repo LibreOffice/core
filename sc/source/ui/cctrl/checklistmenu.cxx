@@ -1133,12 +1133,12 @@ void ScCheckListMenuWindow::packWindow()
 void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
-    std::set<SvTreeListEntry*> maParents;
+    std::set<SvTreeListEntry*> aParents;
     for (size_t i = 0; i < n; ++i)
     {
-        maParents.insert(maMembers[i].mpParent);
+        aParents.insert(maMembers[i].mpParent);
     }
-    for (auto itr = maParents.begin(), itrEnd = maParents.end(); itr != itrEnd; ++itr)
+    for (auto itr = aParents.begin(), itrEnd = aParents.end(); itr != itrEnd; ++itr)
     {
         if (!(*itr))
         {

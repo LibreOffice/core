@@ -308,8 +308,8 @@ void java_sql_Connection::disposing()
 
     if ( object )
     {
-        static jmethodID mID(nullptr);
-        callVoidMethod_ThrowSQL("close", mID);
+        static jmethodID nID(nullptr);
+        callVoidMethod_ThrowSQL("close", nID);
     }
 }
 
@@ -327,8 +327,8 @@ OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, Runtim
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
-    static jmethodID mID(nullptr);
-    return callStringMethod("getCatalog",mID);
+    static jmethodID nID(nullptr);
+    return callStringMethod("getCatalog",nID);
 }
 
 Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
@@ -341,8 +341,8 @@ Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) thr
     if(!xMetaData.is())
     {
         SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-        static jmethodID mID(nullptr);
-        jobject out = callObjectMethod(t.pEnv,"getMetaData","()Ljava/sql/DatabaseMetaData;", mID);
+        static jmethodID nID(nullptr);
+        jobject out = callObjectMethod(t.pEnv,"getMetaData","()Ljava/sql/DatabaseMetaData;", nID);
         if(out)
         {
             xMetaData = new java_sql_DatabaseMetaData( t.pEnv, out, *this );
@@ -360,54 +360,54 @@ void SAL_CALL java_sql_Connection::close(  ) throw(SQLException, RuntimeExceptio
 
 void SAL_CALL java_sql_Connection::commit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("commit", mID);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("commit", nID);
 }
 
 sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    static jmethodID mID(nullptr);
-    return callBooleanMethod( "isClosed", mID ) && java_sql_Connection_BASE::rBHelper.bDisposed;
+    static jmethodID nID(nullptr);
+    return callBooleanMethod( "isClosed", nID ) && java_sql_Connection_BASE::rBHelper.bDisposed;
 }
 
 sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
-    static jmethodID mID(nullptr);
-    return callBooleanMethod( "isReadOnly", mID );
+    static jmethodID nID(nullptr);
+    return callBooleanMethod( "isReadOnly", nID );
 }
 
 void SAL_CALL java_sql_Connection::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethodWithStringArg("setCatalog",mID,catalog);
+    static jmethodID nID(nullptr);
+    callVoidMethodWithStringArg("setCatalog",nID,catalog);
 }
 
 void SAL_CALL java_sql_Connection::rollback(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("rollback", mID);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("rollback", nID);
 }
 
 sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    return callBooleanMethod( "getAutoCommit", mID );
+    static jmethodID nID(nullptr);
+    return callBooleanMethod( "getAutoCommit", nID );
 }
 
 void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethodWithBoolArg_ThrowSQL("setReadOnly", mID, readOnly);
+    static jmethodID nID(nullptr);
+    callVoidMethodWithBoolArg_ThrowSQL("setReadOnly", nID, readOnly);
 }
 
 void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethodWithBoolArg_ThrowSQL("setAutoCommit", mID, autoCommit);
+    static jmethodID nID(nullptr);
+    callVoidMethodWithBoolArg_ThrowSQL("setAutoCommit", nID, autoCommit);
 }
 
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
@@ -416,8 +416,8 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    static jmethodID mID(nullptr);
-    callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", mID);
+    static jmethodID nID(nullptr);
+    callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", nID);
     // WARNING: the caller becomes the owner of the returned pointer
     return nullptr;
 }
@@ -436,8 +436,8 @@ sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLExc
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
-    static jmethodID mID(nullptr);
-    return callIntMethod_ThrowSQL("getTransactionIsolation", mID);
+    static jmethodID nID(nullptr);
+    return callIntMethod_ThrowSQL("getTransactionIsolation", nID);
 }
 
 void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException, std::exception)
@@ -445,8 +445,8 @@ void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) th
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
-    static jmethodID mID(nullptr);
-    callVoidMethodWithIntArg_ThrowSQL("setTransactionIsolation", mID, level);
+    static jmethodID nID(nullptr);
+    callVoidMethodWithIntArg_ThrowSQL("setTransactionIsolation", nID, level);
 }
 
 Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
@@ -539,12 +539,12 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
         static const char * cSignature = "(Ljava/lang/String;)Ljava/lang/String;";
         static const char * cMethodName = "nativeSQL";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         // Convert Parameter
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,sql));
 
-        jobject out = t.pEnv->CallObjectMethod( object, mID, str.get() );
+        jobject out = t.pEnv->CallObjectMethod( object, nID, str.get() );
         aStr = JavaString2String(t.pEnv, static_cast<jstring>(out) );
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
@@ -556,8 +556,8 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
 
 void SAL_CALL java_sql_Connection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowSQL("clearWarnings", mID);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowSQL("clearWarnings", nID);
 }
 
 Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
@@ -566,8 +566,8 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
     SDBThreadAttach t;
-    static jmethodID mID(nullptr);
-    jobject out = callObjectMethod(t.pEnv,"getWarnings","()Ljava/sql/SQLWarning;", mID);
+    static jmethodID nID(nullptr);
+    jobject out = callObjectMethod(t.pEnv,"getWarnings","()Ljava/sql/SQLWarning;", nID);
     // WARNING: the caller becomes the owner of the returned pointer
     if( out )
     {
@@ -812,9 +812,9 @@ bool java_sql_Connection::construct(const OUString& url,
         // Java-Call
         static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         static const char * cMethodName = "connect";
-        jmethodID mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
+        jmethodID nID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
 
-        if ( mID )
+        if ( nID )
         {
             jvalue args[2];
             // convert Parameter
@@ -840,7 +840,7 @@ bool java_sql_Connection::construct(const OUString& url,
             // #i82222# / 2007-10-15
             {
                 ContextClassLoaderScope ccl( t.env(), getDriverClassLoader(), getLogger(), *this );
-                out = t.pEnv->CallObjectMethod( m_pDriverobject, mID, args[0].l,args[1].l );
+                out = t.pEnv->CallObjectMethod( m_pDriverobject, nID, args[0].l,args[1].l );
                 delete pProps;
                 pProps = nullptr;
                 ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -856,7 +856,7 @@ bool java_sql_Connection::construct(const OUString& url,
                 m_aLogger.log( LogLevel::INFO, STR_LOG_GOT_JDBC_CONNECTION, url );
 
             m_aConnectionInfo = info;
-        } //mID
+        } //nID
     } //t.pEnv
      return object != nullptr;
 }

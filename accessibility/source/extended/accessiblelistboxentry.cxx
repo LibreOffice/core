@@ -151,11 +151,11 @@ namespace accessibility
         Reference< XAccessible > xParent = implGetParentAccessible( );
 
         bool bShowing = false;
-        Reference< XAccessibleContext > m_xParentContext =
+        Reference< XAccessibleContext > xParentContext =
             xParent.is() ? xParent->getAccessibleContext() : Reference< XAccessibleContext >();
-        if( m_xParentContext.is() )
+        if( xParentContext.is() )
         {
-            Reference< XAccessibleComponent > xParentComp( m_xParentContext, uno::UNO_QUERY );
+            Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
             if( xParentComp.is() )
                 bShowing = GetBoundingBox_Impl().IsOver( VCLRectangle( xParentComp->getBounds() ) );
         }

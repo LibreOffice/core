@@ -57,8 +57,8 @@ java_lang_Class * java_lang_Class::forName( const OUString& _par0 )
 jobject java_lang_Class::newInstanceObject()
 {
     SDBThreadAttach t;
-    static jmethodID mID(nullptr);
-    return callObjectMethod(t.pEnv,"newInstance","()Ljava/lang/Object;", mID);
+    static jmethodID nID(nullptr);
+    return callObjectMethod(t.pEnv,"newInstance","()Ljava/lang/Object;", nID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

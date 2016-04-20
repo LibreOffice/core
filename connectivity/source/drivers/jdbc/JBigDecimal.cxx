@@ -47,11 +47,11 @@ java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_O
     // initialize temporary Variable
     static const char * cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
-    static jmethodID mID(nullptr);
-    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
+    static jmethodID nID(nullptr);
+    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, nID);
 
     jstring str = convertwchar_tToJavaString(t.pEnv,_par0.replace(',','.'));
-    tempObj = t.pEnv->NewObject( getMyClass(), mID, str );
+    tempObj = t.pEnv->NewObject( getMyClass(), nID, str );
     t.pEnv->DeleteLocalRef(str);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
@@ -68,9 +68,9 @@ java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Obj
     // initialize temporary Variable
     static const char * cSignature = "(D)V";
     jobject tempObj;
-    static jmethodID mID(nullptr);
-    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
-    tempObj = t.pEnv->NewObject( getMyClass(), mID, _par0 );
+    static jmethodID nID(nullptr);
+    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, nID);
+    tempObj = t.pEnv->NewObject( getMyClass(), nID, _par0 );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     ThrowSQLException( t.pEnv, nullptr );

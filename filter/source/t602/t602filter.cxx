@@ -119,7 +119,7 @@ namespace T602ImportFilter {
 #define Start_(_nam) \
     if (mxHandler.is()) \
     { \
-        mxHandler->startElement(_nam, mAttrList); \
+        mxHandler->startElement(_nam, xAttrList); \
         if (mpAttrList) \
             mpAttrList->Clear(); \
     }
@@ -218,7 +218,7 @@ void SAL_CALL T602ImportFilter::initialize( const Sequence< Any >& aArguments )
 
 void T602ImportFilter::inschr(unsigned char ch)
 {
-    Reference < XAttributeList > mAttrList ( mpAttrList );
+    Reference < XAttributeList > xAttrList ( mpAttrList );
 
     if(!ini.showcomm&&pst.comment) return;
 
@@ -282,7 +282,7 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::Property
 
     mpAttrList = new SvXMLAttributeList;
 
-    Reference < XAttributeList > mAttrList ( mpAttrList );
+    Reference < XAttributeList > xAttrList ( mpAttrList );
 
     mxHandler->startDocument();
 
@@ -527,7 +527,7 @@ void T602ImportFilter::inschrdef(unsigned char ch)
 
 void T602ImportFilter::wrtfnt()
 {
-    Reference < XAttributeList > mAttrList ( mpAttrList );
+    Reference < XAttributeList > xAttrList ( mpAttrList );
     const sal_Char *style = "P1";
 
     switch(fst.nowfnt) {
@@ -575,7 +575,7 @@ unsigned char T602ImportFilter::Readchar602()
 void T602ImportFilter::par602(bool endofpage)
 {
     sal_Int16 endp;
-    Reference < XAttributeList > mAttrList ( mpAttrList );
+    Reference < XAttributeList > xAttrList ( mpAttrList );
 
     if(!endofpage || !pst.waspar) {
         if(ini.showcomm||!pst.comment) {
@@ -713,7 +713,7 @@ void T602ImportFilter::Read602()
     unsigned char ch=0;
     char cmd602[3] = {0};
 
-    Reference < XAttributeList > mAttrList ( mpAttrList );
+    Reference < XAttributeList > xAttrList ( mpAttrList );
 
     if (node==QUIT) return;
 

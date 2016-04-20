@@ -68,12 +68,12 @@ void ScVbaShapes::initBaseCollection()
     if ( m_xNameAccess.is() ) // already has NameAccess
         return;
     // no NameAccess then use ShapeCollectionHelper
-    XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec mShapes;
+    XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec aShapes;
     sal_Int32 nLen = m_xIndexAccess->getCount();
-    mShapes.reserve( nLen );
+    aShapes.reserve( nLen );
     for ( sal_Int32 index=0; index<nLen; ++index )
-        mShapes.push_back( uno::Reference< drawing::XShape >( m_xIndexAccess->getByIndex( index ) , uno::UNO_QUERY ) );
-    uno::Reference< container::XIndexAccess > xShapes( new XNamedObjectCollectionHelper< drawing::XShape >( mShapes ) );
+        aShapes.push_back( uno::Reference< drawing::XShape >( m_xIndexAccess->getByIndex( index ) , uno::UNO_QUERY ) );
+    uno::Reference< container::XIndexAccess > xShapes( new XNamedObjectCollectionHelper< drawing::XShape >( aShapes ) );
     m_xIndexAccess.set( xShapes, uno::UNO_QUERY );
     m_xNameAccess.set( xShapes, uno::UNO_QUERY );
 }
@@ -138,7 +138,7 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::Runti
 
     uno::Sequence< uno::Any > sIndices;
     aConverted >>= sIndices;
-    XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec mShapes;
+    XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec aShapes;
     sal_Int32 nElems = sIndices.getLength();
     for( sal_Int32 index = 0; index < nElems; ++index )
     {
@@ -159,9 +159,9 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::Runti
         }
         // populate map with drawing::XShapes
         if ( xShape.is() )
-            mShapes.push_back( xShape );
+            aShapes.push_back( xShape );
     }
-    uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( mShapes ) );
+    uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( aShapes ) );
     return xIndexAccess;
 }
 

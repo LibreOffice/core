@@ -128,8 +128,8 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     ::comphelper::UStringMixEqual aCase(bCase);
     vector<OUString> aColumnNames;
-    vector<OUString> m_aTypeNames;
-    m_aTypeNames.resize(nFieldCount);
+    vector<OUString> aTypeNames;
+    aTypeNames.resize(nFieldCount);
     const sal_Int32 nMaxRowsToScan = pConnection->getMaxRowsToScan();
     sal_Int32 nRowCount = 0;
 
@@ -156,7 +156,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             if(bRead)
             {
                 impl_fillColumnInfo_nothrow(m_aCurrentLine, nStartPosFirstLine, nStartPosFirstLine2,
-                                            m_aTypes[i], m_aPrecisions[i], m_aScales[i], m_aTypeNames[i],
+                                            m_aTypes[i], m_aPrecisions[i], m_aScales[i], aTypeNames[i],
                                             cDecimalDelimiter, cThousandDelimiter, aCharClass);
             }
         }
@@ -179,7 +179,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,m_aTypeNames[i],OUString(),OUString(),
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeNames[i],OUString(),OUString(),
                                                 ColumnValue::NULLABLE,
                                                 m_aPrecisions[i],
                                                 m_aScales[i],

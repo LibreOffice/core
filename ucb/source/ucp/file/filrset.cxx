@@ -217,12 +217,12 @@ XResultSet_impl::OneMore(
     osl::FileBase::RC err;
     bool IsRegular;
     OUString aUnqPath;
-    osl::DirectoryItem  m_aDirIte;
+    osl::DirectoryItem  aDirIte;
     uno::Reference< sdbc::XRow > aRow;
 
     while( true )
     {
-        err = m_aFolder.getNextItem( m_aDirIte );
+        err = m_aFolder.getNextItem( aDirIte );
 
         if( err == osl::FileBase::E_NOENT || err == osl::FileBase::E_INVAL )
         {
@@ -233,7 +233,7 @@ XResultSet_impl::OneMore(
         else if( err == osl::FileBase::E_None )
         {
             aRow = m_pMyShell->getv(
-                this, m_sProperty, m_aDirIte, aUnqPath, IsRegular );
+                this, m_sProperty, aDirIte, aUnqPath, IsRegular );
 
             if( m_nOpenMode == ucb::OpenMode::DOCUMENTS && IsRegular )
             {

@@ -61,9 +61,9 @@ void SAL_CALL SfxUnoSidebar::setVisible ( const sal_Bool bVisible )
     if ( (bVisible && !pSidebarController) || (!bVisible && pSidebarController) )
     {
         const util::URL aURL (Tools::GetURL(".uno:Sidebar"));
-        uno::Reference<frame::XDispatch> mxDispatch (Tools::GetDispatch(xFrame, aURL));
-        if (mxDispatch.is())
-                mxDispatch->dispatch(aURL, uno::Sequence<beans::PropertyValue>());
+        uno::Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(xFrame, aURL));
+        if (xDispatch.is())
+                xDispatch->dispatch(aURL, uno::Sequence<beans::PropertyValue>());
     }
 
 }

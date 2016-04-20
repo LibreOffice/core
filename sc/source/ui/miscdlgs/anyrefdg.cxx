@@ -514,14 +514,14 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             //We want just pRefBtn and pRefEdit to be shown
             //mark widgets we want to be visible, starting with pRefEdit
             //and all its direct parents.
-            winset m_aVisibleWidgets;
+            winset aVisibleWidgets;
             pResizeDialog = pRefEdit->GetParentDialog();
             vcl::Window *pContentArea = pResizeDialog->get_content_area();
             for (vcl::Window *pCandidate = pRefEdit;
                 pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
                 pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
             {
-                m_aVisibleWidgets.insert(pCandidate);
+                aVisibleWidgets.insert(pCandidate);
             }
             //same again with pRefBtn, except stop if there's a
             //shared parent in the existing widgets
@@ -529,12 +529,12 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                 pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
                 pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
             {
-                if (m_aVisibleWidgets.insert(pCandidate).second)
+                if (aVisibleWidgets.insert(pCandidate).second)
                     break;
             }
 
-            //hide everything except the m_aVisibleWidgets
-            hideUnless(pContentArea, m_aVisibleWidgets, m_aHiddenWidgets);
+            //hide everything except the aVisibleWidgets
+            hideUnless(pContentArea, aVisibleWidgets, m_aHiddenWidgets);
         }
 
         if (!mbOldDlgLayoutEnabled)

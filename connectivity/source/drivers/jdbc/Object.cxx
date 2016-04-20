@@ -152,8 +152,8 @@ void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 
 OUString java_lang_Object::toString() const
 {
-    static jmethodID mID(nullptr);
-    return callStringMethod("toString",mID);
+    static jmethodID nID(nullptr);
+    return callStringMethod("toString",nID);
 }
 
 

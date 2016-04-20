@@ -692,12 +692,12 @@ KeyCodeEntry aMSKeyCodesData[] = {
 
 awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException )
 {
-    static MSKeyCodeMap msKeyCodes;
-    if ( msKeyCodes.empty() )
+    static MSKeyCodeMap s_KeyCodes;
+    if ( s_KeyCodes.empty() )
     {
         for ( unsigned int i = 0; i < SAL_N_ELEMENTS( aMSKeyCodesData ); ++i )
         {
-            msKeyCodes[ OUString::createFromAscii( aMSKeyCodesData[ i ].sName ) ] = aMSKeyCodesData[ i ].nCode;
+            s_KeyCodes[ OUString::createFromAscii( aMSKeyCodesData[ i ].sName ) ] = aMSKeyCodesData[ i ].nCode;
         }
     }
     OUString sKeyCode;
@@ -731,8 +731,8 @@ awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException
             nVclKey |= parseChar( (char)( sKeyCode[ 0 ] ) );
         else
         {
-            MSKeyCodeMap::iterator it = msKeyCodes.find( sKeyCode );
-            if ( it == msKeyCodes.end() ) // unknown or unsupported
+            MSKeyCodeMap::iterator it = s_KeyCodes.find( sKeyCode );
+            if ( it == s_KeyCodes.end() ) // unknown or unsupported
                 throw uno::RuntimeException();
             nVclKey |= it->second;
         }

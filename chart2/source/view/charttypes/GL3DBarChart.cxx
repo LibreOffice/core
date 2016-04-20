@@ -1103,8 +1103,8 @@ void GL3DBarChart::scroll(long nDelta)
         if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) &&
             (maRenderEvent != EVENT_AUTO_FLY) && (maRenderEvent != EVENT_SHOW_SELECT))
             return;
-        glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
-        maCameraPosition -= ((float)nDelta/10) * maDir;
+        glm::vec3 aDir = glm::normalize(maCameraPosition - maCameraDirection);
+        maCameraPosition -= ((float)nDelta/10) * aDir;
         mpCamera->setPosition(maCameraPosition);
         if(mbBenchMarkMode)
         {

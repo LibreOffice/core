@@ -138,12 +138,12 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     mnStateFlags  &= ~SCRBAR_STATE_BTN1_DISABLE;
     mnStateFlags  &= ~SCRBAR_STATE_BTN2_DISABLE;
 
-    Rectangle& maTrackRect = mpData->maTrackRect; // TODO: remove when maTrackRect is no longer in mpData
+    Rectangle& aTrackRect = mpData->maTrackRect; // TODO: remove when maTrackRect is no longer in mpData
     if ( mnThumbPixRange )
     {
         if ( GetStyle() & WB_HORZ )
         {
-            maThumbRect.Left()      = maTrackRect.Left()+mnThumbPixPos;
+            maThumbRect.Left()      = aTrackRect.Left()+mnThumbPixPos;
             maThumbRect.Right()     = maThumbRect.Left()+mnThumbPixSize-1;
             if ( !mnThumbPixPos )
                 maPage1Rect.Right()     = RECT_EMPTY;
@@ -154,12 +154,12 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
             else
             {
                 maPage2Rect.Left()      = maThumbRect.Right()+1;
-                maPage2Rect.Right()     = maTrackRect.Right();
+                maPage2Rect.Right()     = aTrackRect.Right();
             }
         }
         else
         {
-            maThumbRect.Top()       = maTrackRect.Top()+mnThumbPixPos;
+            maThumbRect.Top()       = aTrackRect.Top()+mnThumbPixPos;
             maThumbRect.Bottom()    = maThumbRect.Top()+mnThumbPixSize-1;
             if ( !mnThumbPixPos )
                 maPage1Rect.Bottom()    = RECT_EMPTY;
@@ -170,7 +170,7 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
             else
             {
                 maPage2Rect.Top()       = maThumbRect.Bottom()+1;
-                maPage2Rect.Bottom()    = maTrackRect.Bottom();
+                maPage2Rect.Bottom()    = aTrackRect.Bottom();
             }
         }
     }
@@ -178,24 +178,24 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     {
         if ( GetStyle() & WB_HORZ )
         {
-            const long nSpace = maTrackRect.Right() - maTrackRect.Left();
+            const long nSpace = aTrackRect.Right() - aTrackRect.Left();
             if ( nSpace > 0 )
             {
-                maPage1Rect.Left()   = maTrackRect.Left();
-                maPage1Rect.Right()  = maTrackRect.Left() + (nSpace/2);
+                maPage1Rect.Left()   = aTrackRect.Left();
+                maPage1Rect.Right()  = aTrackRect.Left() + (nSpace/2);
                 maPage2Rect.Left()   = maPage1Rect.Right() + 1;
-                maPage2Rect.Right()  = maTrackRect.Right();
+                maPage2Rect.Right()  = aTrackRect.Right();
             }
         }
         else
         {
-            const long nSpace = maTrackRect.Bottom() - maTrackRect.Top();
+            const long nSpace = aTrackRect.Bottom() - aTrackRect.Top();
             if ( nSpace > 0 )
             {
-                maPage1Rect.Top()    = maTrackRect.Top();
-                maPage1Rect.Bottom() = maTrackRect.Top() + (nSpace/2);
+                maPage1Rect.Top()    = aTrackRect.Top();
+                maPage1Rect.Bottom() = aTrackRect.Top() + (nSpace/2);
                 maPage2Rect.Top()    = maPage1Rect.Bottom() + 1;
-                maPage2Rect.Bottom() = maTrackRect.Bottom();
+                maPage2Rect.Bottom() = aTrackRect.Bottom();
             }
         }
     }
@@ -250,7 +250,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
     const Size aSize = GetOutputSizePixel();
     const long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
 
-    Rectangle& maTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
+    Rectangle& aTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
     if ( mbCalcSize )
     {
         Size aOldSize = getCurrentCalcSize();
@@ -279,18 +279,18 @@ void ScrollBar::ImplCalc( bool bUpdate )
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_HORZ_AREA,
                      aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
-                maTrackRect = aTrackRegion;
+                aTrackRect = aTrackRegion;
             else
-                maTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
+                aTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
 
             // Check if available space is big enough for thumb ( min thumb size = ScrBar width/height )
-            mnThumbPixRange = maTrackRect.Right() - maTrackRect.Left();
+            mnThumbPixRange = aTrackRect.Right() - aTrackRect.Left();
             if( mnThumbPixRange > 0 )
             {
-                maPage1Rect.Left()      = maTrackRect.Left();
+                maPage1Rect.Left()      = aTrackRect.Left();
                 maPage1Rect.Bottom()    =
                 maPage2Rect.Bottom()    =
-                maThumbRect.Bottom()    = maTrackRect.Bottom();
+                maThumbRect.Bottom()    = aTrackRect.Bottom();
             }
             else
             {
@@ -320,18 +320,18 @@ void ScrollBar::ImplCalc( bool bUpdate )
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_VERT_AREA,
                      aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
-                maTrackRect = aTrackRegion;
+                aTrackRect = aTrackRegion;
             else
-                maTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
+                aTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
 
             // Check if available space is big enough for thumb
-            mnThumbPixRange = maTrackRect.Bottom() - maTrackRect.Top();
+            mnThumbPixRange = aTrackRect.Bottom() - aTrackRect.Top();
             if( mnThumbPixRange > 0 )
             {
-                maPage1Rect.Top()       = maTrackRect.Top();
+                maPage1Rect.Top()       = aTrackRect.Top();
                 maPage1Rect.Right()     =
                 maPage2Rect.Right()     =
-                maThumbRect.Right()     = maTrackRect.Right();
+                maThumbRect.Right()     = aTrackRect.Right();
             }
             else
             {

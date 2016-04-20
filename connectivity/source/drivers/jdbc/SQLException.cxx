@@ -64,8 +64,8 @@ jclass java_sql_SQLException_BASE::st_getMyClass()
 css::sdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 {
     SDBThreadAttach t;
-    static jmethodID mID(nullptr);
-    jobject out = callObjectMethod(t.pEnv,"getNextException","()Ljava/sql/SQLException;", mID);
+    static jmethodID nID(nullptr);
+    jobject out = callObjectMethod(t.pEnv,"getNextException","()Ljava/sql/SQLException;", nID);
     // WARNING: the caller will become the owner of the returned pointers !!!
     if( out )
     {
@@ -78,13 +78,13 @@ css::sdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 
 OUString java_sql_SQLException_BASE::getSQLState() const
 {
-    static jmethodID mID(nullptr);
-    return callStringMethod("getSQLState",mID);
+    static jmethodID nID(nullptr);
+    return callStringMethod("getSQLState",nID);
 }
 sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
 {
-    static jmethodID mID(nullptr);
-    return callIntMethod_ThrowSQL("getErrorCode", mID);
+    static jmethodID nID(nullptr);
+    return callIntMethod_ThrowSQL("getErrorCode", nID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

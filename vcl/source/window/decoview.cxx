@@ -955,11 +955,11 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, DrawFrameStyle nSty
              ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
         else
         {
-             Color maOldLineColor  = mpOutDev->GetLineColor();
-             Color maOldFillColor  = mpOutDev->GetFillColor();
+             Color aOldLineColor  = mpOutDev->GetLineColor();
+             Color aOldFillColor  = mpOutDev->GetFillColor();
              ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
-             mpOutDev->SetLineColor( maOldLineColor );
-             mpOutDev->SetFillColor( maOldFillColor );
+             mpOutDev->SetLineColor( aOldLineColor );
+             mpOutDev->SetFillColor( aOldFillColor );
         }
     }
 
@@ -988,11 +988,11 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, DrawButtonFlags nS
         mpOutDev->EnableMapMode( false );
     }
 
-    const Color maOldLineColor = mpOutDev->GetLineColor();
-    const Color maOldFillColor = mpOutDev->GetFillColor();
+    const Color aOldLineColor = mpOutDev->GetLineColor();
+    const Color aOldFillColor = mpOutDev->GetFillColor();
     ImplDrawButton( mpOutDev, aRect, nStyle );
-    mpOutDev->SetLineColor( maOldLineColor );
-    mpOutDev->SetFillColor( maOldFillColor );
+    mpOutDev->SetLineColor( aOldLineColor );
+    mpOutDev->SetFillColor( aOldFillColor );
 
     // keep border free, although it is used at default representation
     ++aRect.Left();

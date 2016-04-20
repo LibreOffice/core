@@ -42,14 +42,14 @@ jclass java_sql_Array::getMyClass() const
 
 OUString SAL_CALL java_sql_Array::getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    return callStringMethod("getBaseTypeName",mID);
+    static jmethodID nID(nullptr);
+    return callStringMethod("getBaseTypeName",nID);
 }
 
 sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    return callIntMethod_ThrowSQL("getBaseType", mID);
+    static jmethodID nID(nullptr);
+    return callIntMethod_ThrowSQL("getBaseType", nID);
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL java_sql_Array::getArray( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -59,10 +59,10 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         static const char * cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
         static const char * cMethodName = "getArray";
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
         // submit Java-Call
-        t.pEnv->CallObjectMethod( object, mID, obj);
+        t.pEnv->CallObjectMethod( object, nID, obj);
         ThrowSQLException(t.pEnv,*this);
         // and clean up
         t.pEnv->DeleteLocalRef(obj);
@@ -78,9 +78,9 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         static const char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
         static const char * cMethodName = "getArray";
         // submit Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        t.pEnv->CallObjectMethod( object, mID, index,count,obj);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
+        t.pEnv->CallObjectMethod( object, nID, index,count,obj);
         ThrowSQLException(t.pEnv,*this);
         // and clean up
         t.pEnv->DeleteLocalRef(obj);
@@ -98,9 +98,9 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getResultSet";
         // submit Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        t.pEnv->CallObjectMethod( object, mID, obj);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
+        t.pEnv->CallObjectMethod( object, nID, obj);
         ThrowSQLException(t.pEnv,*this);
         // and cleanup
         t.pEnv->DeleteLocalRef(obj);
@@ -118,9 +118,9 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getResultSetAtIndex";
         // submit Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        t.pEnv->CallObjectMethod( object, mID, index,count,obj);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, nID);
+        t.pEnv->CallObjectMethod( object, nID, index,count,obj);
         ThrowSQLException(t.pEnv,*this);
         // and cleanup
         t.pEnv->DeleteLocalRef(obj);

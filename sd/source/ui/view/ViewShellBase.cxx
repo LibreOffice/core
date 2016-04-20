@@ -986,9 +986,9 @@ OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const 
         {
             Reference< XNameAccess > const xNameAccess(
                     frame::theUICommandDescription::get(xContext) );
-            Reference< css::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
+            Reference< css::container::XNameAccess > xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
             Sequence< PropertyValue > aPropSeq;
-            if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
+            if( xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
             {
                 for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                 {

@@ -198,13 +198,13 @@ MenuItemData* MenuItemList::SearchItem(
                 sal_Int32 n = pData->aText.indexOf('~');
                 if ( n != -1 )
                 {
-                    KeyCode mnKeyCode;
-                    sal_Unicode mnUnicode = pData->aText[n+1];
+                    KeyCode nKeyCode;
+                    sal_Unicode nUnicode = pData->aText[n+1];
                     vcl::Window* pDefWindow = ImplGetDefaultWindow();
                     if(  (  pDefWindow
-                         && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode,
-                             Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
-                         && aKeyCode.GetCode() == mnKeyCode.GetCode()
+                         && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( nUnicode,
+                             Application::GetSettings().GetUILanguageTag().getLanguageType(), nKeyCode )
+                         && aKeyCode.GetCode() == nKeyCode.GetCode()
                          )
                       || (  ascii
                          && rI18nHelper.MatchMnemonic( pData->aText, ascii )
@@ -258,14 +258,14 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
             sal_Int32 n = pData->aText.indexOf('~');
             if (n != -1)
             {
-                KeyCode mnKeyCode;
+                KeyCode nKeyCode;
                 // if MapUnicodeToKeyCode fails or is unsupported we try the pure ascii mapping of the keycodes
                 // so we have working shortcuts when ascii mnemonics are used
                 vcl::Window* pDefWindow = ImplGetDefaultWindow();
                 if(  (  pDefWindow
                      && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText[n+1],
-                         Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
-                     && aKeyCode.GetCode() == mnKeyCode.GetCode()
+                         Application::GetSettings().GetUILanguageTag().getLanguageType(), nKeyCode )
+                     && aKeyCode.GetCode() == nKeyCode.GetCode()
                      )
                   || (  ascii
                      && rI18nHelper.MatchMnemonic( pData->aText, ascii )

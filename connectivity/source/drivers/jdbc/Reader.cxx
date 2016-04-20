@@ -52,7 +52,7 @@ sal_Int32 SAL_CALL java_io_Reader::readSomeBytes( ::com::sun::star::uno::Sequenc
 
 void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
+    static jmethodID nID(nullptr);
     if(nBytesToSkip <= 0)
         return;
 
@@ -64,7 +64,7 @@ void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::s
 
     static_assert(sizeof(jchar) == 2, "I thought Java characters were UTF16 code units?");
     sal_Int32 nCharsToSkip = nBytesToSkip / sizeof(jchar);
-    callIntMethodWithIntArg_ThrowRuntime("skip",mID,nCharsToSkip);
+    callIntMethodWithIntArg_ThrowRuntime("skip",nID,nCharsToSkip);
     if(nBytesToSkip % sizeof(jchar) != 0)
     {
         assert(nBytesToSkip % sizeof(jchar) == 1);
@@ -85,9 +85,9 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
         static const char * cSignature = "()Z";
         static const char * cMethodName = "ready";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
-        out = t.pEnv->CallBooleanMethod( object, mID);
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, nID);
+        out = t.pEnv->CallBooleanMethod( object, nID);
         ThrowRuntimeException(t.pEnv,*this);
     } //t.pEnv
     return (m_buf != boost::none ? 1 : 0) + (out ? 1 : 0); // no way to tell *how much* is ready
@@ -95,8 +95,8 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
 
 void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(nullptr);
-    callVoidMethod_ThrowRuntime("close", mID);
+    static jmethodID nID(nullptr);
+    callVoidMethod_ThrowRuntime("close", nID);
 }
 
 sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -136,9 +136,9 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
         static const char * cSignature = "([CII)I";
         static const char * cMethodName = "read";
         // Java-Call
-        static jmethodID mID(nullptr);
-        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
-        outChars = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nCharsToRead );
+        static jmethodID nID(nullptr);
+        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, nID);
+        outChars = t.pEnv->CallIntMethod( object, nID, pCharArray, 0, nCharsToRead );
         if ( !outChars )
         {
             if(nBytesWritten==0)

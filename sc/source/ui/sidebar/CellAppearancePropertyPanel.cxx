@@ -286,10 +286,10 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
             if(pSvxLineItem)
             {
-                const editeng::SvxBorderLine* mbLineItem = pSvxLineItem->GetLine();
-                mnIn = mbLineItem->GetInWidth();
-                mnOut = mbLineItem->GetOutWidth();
-                mnDis = mbLineItem->GetDistance();
+                const editeng::SvxBorderLine* pLineItem = pSvxLineItem->GetLine();
+                mnIn = pLineItem->GetInWidth();
+                mnOut = pLineItem->GetOutWidth();
+                mnDis = pLineItem->GetDistance();
 
                 if(mnIn == 0 && mnOut == 0 && mnDis == 0)
                     mbBorderStyleAvailable = false;

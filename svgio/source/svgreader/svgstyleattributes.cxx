@@ -1145,21 +1145,21 @@ namespace svgio
                     aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                 }
 
-                const SvgClipPathNode* mpClip = accessClipPathXLink();
-                while(mpClip)
+                const SvgClipPathNode* pClip = accessClipPathXLink();
+                while(pClip)
                 {
                     // #i124852# transform may be needed when userSpaceOnUse
-                    mpClip->apply(aSource, pTransform);
-                    mpClip = mpClip->getSvgStyleAttributes()->accessClipPathXLink();
+                    pClip->apply(aSource, pTransform);
+                    pClip = pClip->getSvgStyleAttributes()->accessClipPathXLink();
                 }
 
                 if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
                 {
-                    const SvgMaskNode* mpMask = accessMaskXLink();
-                    if(mpMask)
+                    const SvgMaskNode* pMask = accessMaskXLink();
+                    if(pMask)
                     {
                         // #i124852# transform may be needed when userSpaceOnUse
-                        mpMask->apply(aSource, pTransform);
+                        pMask->apply(aSource, pTransform);
                     }
 
                     if(!aSource.empty()) // test again, applied mask may have lead to empty geometry
