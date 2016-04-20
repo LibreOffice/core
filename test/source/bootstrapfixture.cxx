@@ -75,11 +75,11 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
         // initialise unconfigured UCB:
         uno::Reference<ucb::XUniversalContentBroker> xUcb(pSFactory->createInstance("com.sun.star.ucb.UniversalContentBroker"), uno::UNO_QUERY_THROW);
         uno::Reference<ucb::XContentProvider> xFileProvider(pSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY_THROW);
-        xUcb->registerContentProvider(xFileProvider, "file", sal_True);
+        xUcb->registerContentProvider(xFileProvider, "file", true);
         uno::Reference<ucb::XContentProvider> xTdocProvider(pSFactory->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"), uno::UNO_QUERY);
         if (xTdocProvider.is())
         {
-            xUcb->registerContentProvider(xTdocProvider, "vnd.sun.star.tdoc", sal_True);
+            xUcb->registerContentProvider(xTdocProvider, "vnd.sun.star.tdoc", true);
         }
     }
 }

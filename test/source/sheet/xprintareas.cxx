@@ -21,7 +21,7 @@ namespace apitest {
     void XPrintAreas::testSetAndGetPrintTitleColumns()
     {
         uno::Reference< sheet::XPrintAreas > xPrintAreas(init(), UNO_QUERY_THROW);
-        xPrintAreas->setPrintTitleColumns(sal_True);
+        xPrintAreas->setPrintTitleColumns(true);
 
         CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleColumns", xPrintAreas->getPrintTitleColumns());
 
@@ -30,7 +30,7 @@ namespace apitest {
     void XPrintAreas::testSetAndGetPrintTitleRows()
     {
         uno::Reference< sheet::XPrintAreas > xPrintAreas(init(), UNO_QUERY_THROW);
-        xPrintAreas->setPrintTitleRows(sal_True);
+        xPrintAreas->setPrintTitleRows(true);
 
         CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleRows", xPrintAreas->getPrintTitleRows());
     }

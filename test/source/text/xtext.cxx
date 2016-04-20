@@ -21,7 +21,7 @@ void XText::testInsertRemoveTextContent()
     uno::Reference<text::XText> xText(init(), UNO_QUERY_THROW);
     uno::Reference<text::XTextRange> xCursor(xText->createTextCursor(), UNO_QUERY_THROW);
 
-    xText->insertTextContent(xCursor, getTextContent(), sal_False);
+    xText->insertTextContent(xCursor, getTextContent(), false);
     xText->removeTextContent(getTextContent());
 }
 
