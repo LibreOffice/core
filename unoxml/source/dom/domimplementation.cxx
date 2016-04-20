@@ -80,7 +80,7 @@ namespace DOM
     {
         OSL_ENSURE(false,
             "CDOMImplementation::hasFeature: not implemented (#i113683#)");
-        return sal_False;
+        return false;
     }
 }
 

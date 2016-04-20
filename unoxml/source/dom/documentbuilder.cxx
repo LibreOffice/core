@@ -149,13 +149,13 @@ namespace DOM
     sal_Bool SAL_CALL CDocumentBuilder::isNamespaceAware()
         throw (RuntimeException, std::exception)
     {
-        return sal_True;
+        return true;
     }
 
     sal_Bool SAL_CALL CDocumentBuilder::isValidating()
         throw (RuntimeException, std::exception)
     {
-        return sal_False;
+        return false;
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::newDocument()

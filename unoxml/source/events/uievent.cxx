@@ -87,7 +87,7 @@ namespace DOM { namespace events
     sal_Bool SAL_CALL CUIEvent::getCancelable() throw (RuntimeException, std::exception)
     {
         // mutation events cannot be canceled
-        return sal_False;
+        return false;
     }
 
     css::util::Time SAL_CALL CUIEvent::getTimeStamp() throw (RuntimeException, std::exception)

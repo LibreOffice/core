@@ -141,7 +141,7 @@ namespace DOM
     {
         // FIXME if this DOM implementation supported DTDs it would need
         // to check that this attribute is not default or something
-        return sal_True;
+        return true;
     }
 
     /**
@@ -205,7 +205,7 @@ namespace DOM
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(sEventName),UNO_QUERY);
         event->initMutationEvent(
-                sEventName, sal_True, sal_False,
+                sEventName, true, false,
                 Reference<XNode>( static_cast<XAttr*>( this ) ),
                 sOldValue, value, getName(), AttrChangeType_MODIFICATION );
 

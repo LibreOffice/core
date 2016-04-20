@@ -747,7 +747,7 @@ namespace DOM
         while (xSibling.is())
         {
             Reference< XNode > const xTmp(
-                    xTargetDocument->importNode(xSibling, sal_True));
+                    xTargetDocument->importNode(xSibling, true));
             xTargetParent->appendChild(xTmp);
             xSibling = xSibling->getNextSibling();
         }
@@ -905,7 +905,7 @@ namespace DOM
             Reference< XMutationEvent > const event(xDocevent->createEvent(
                 "DOMNodeInsertedIntoDocument"), UNO_QUERY_THROW);
             event->initMutationEvent(
-                "DOMNodeInsertedIntoDocument", sal_True, sal_False, Reference< XNode >(),
+                "DOMNodeInsertedIntoDocument", true, false, Reference< XNode >(),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             Reference< XEventTarget > const xDocET(xDocument, UNO_QUERY);
             xDocET->dispatchEvent(event);

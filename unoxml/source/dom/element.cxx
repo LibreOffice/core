@@ -580,7 +580,7 @@ namespace DOM
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent("DOMAttrModified",
-            sal_True, sal_False, xAttr,
+            true, false, xAttr,
             OUString(), xAttr->getValue(), xAttr->getName(),
             AttrChangeType_ADDITION);
 
@@ -645,7 +645,7 @@ namespace DOM
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent("DOMAttrModified",
-            sal_True, sal_False,
+            true, false,
             Reference< XNode >(getAttributeNode(name), UNO_QUERY),
             oldValue, value, name, aChangeType);
 
@@ -727,7 +727,7 @@ namespace DOM
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent(
-            "DOMAttrModified", sal_True, sal_False,
+            "DOMAttrModified", true, false,
             Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString(reinterpret_cast<char const *>(xLName), strlen(reinterpret_cast<char const *>(xLName)), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
             oldValue, value, qualifiedName, aChangeType);
 

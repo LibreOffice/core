@@ -370,7 +370,7 @@ namespace DOM
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMNodeInserted"), UNO_QUERY);
-        event->initMutationEvent("DOMNodeInserted", sal_True, sal_False, this,
+        event->initMutationEvent("DOMNodeInserted", true, false, this,
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
 
         // the following dispatch functions use only UNO interfaces
@@ -733,7 +733,7 @@ namespace DOM
         throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false, "CNode::isSupported: not implemented (#i113683#)");
-        return sal_False;
+        return false;
     }
 
     /**
@@ -809,8 +809,8 @@ namespace DOM
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMNodeRemoved"), UNO_QUERY);
             event->initMutationEvent("DOMNodeRemoved",
-            sal_True,
-            sal_False,
+            true,
+            false,
             this,
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
 
@@ -940,8 +940,8 @@ namespace DOM
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMSubtreeModified"), UNO_QUERY);
         event->initMutationEvent(
-            "DOMSubtreeModified", sal_True,
-            sal_False, Reference< XNode >(),
+            "DOMSubtreeModified", true,
+            false, Reference< XNode >(),
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
         dispatchEvent(event);
     }
@@ -1025,7 +1025,7 @@ namespace DOM
         }
         // this calls event listeners, do not call with locked mutex
         pDispatcher->dispatchEvent(*pDocument, m_rMutex, pNode, this, evt);
-        return sal_True;
+        return true;
     }
 
     ::sal_Int64 SAL_CALL

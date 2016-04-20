@@ -51,7 +51,7 @@ namespace DOM
             "DOMCharacterDataModified"), UNO_QUERY);
         event->initMutationEvent(
                 "DOMCharacterDataModified",
-                sal_True, sal_False, Reference< XNode >(),
+                true, false, Reference< XNode >(),
                 prevValue, newValue, OUString(), (AttrChangeType)0 );
         dispatchEvent(event);
         dispatchSubtreeModified();
