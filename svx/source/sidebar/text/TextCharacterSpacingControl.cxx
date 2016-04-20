@@ -77,20 +77,19 @@ TextCharacterSpacingControl::TextCharacterSpacingControl(sal_uInt16 nId)
 
 TextCharacterSpacingControl::~TextCharacterSpacingControl()
 {
-    if(GetLastCustomState() == SPACING_CLOSE_BY_CUS_EDIT)
-    {
-        SvtViewOptions aWinOpt(E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE);
-        css::uno::Sequence<css::beans::NamedValue> aSeq
-            { { "Spacing", css::uno::makeAny(OUString::number(GetLastCustomValue())) } };
-        aWinOpt.SetUserData(aSeq);
-
-    }
-
     disposeOnce();
 }
 
 void TextCharacterSpacingControl::dispose()
 {
+    if (GetLastCustomState() == SPACING_CLOSE_BY_CUS_EDIT)
+    {
+        SvtViewOptions aWinOpt(E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE);
+        css::uno::Sequence<css::beans::NamedValue> aSeq
+            { { "Spacing", css::uno::makeAny(OUString::number(GetLastCustomValue())) } };
+        aWinOpt.SetUserData(aSeq);
+    }
+
     maFTBy.clear();
     maFTSpacing.clear();
     maLBKerning.clear();
