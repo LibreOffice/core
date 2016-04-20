@@ -76,7 +76,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 
     if (res != 0)
     {
-        return sal_False;
+        return false;
     }
 
     tv->Seconds = tp.tv_sec;
@@ -86,7 +86,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
     tv->Nanosec = tp.tv_usec * 1000;
     #endif
 #endif
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
@@ -112,10 +112,10 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
         pDateTime->Month        =   pSystemTime->tm_mon + 1;
         pDateTime->Year         =   pSystemTime->tm_year  + 1900;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
@@ -133,7 +133,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
     if ( pDateTime->Month > 0 )
         aTime.tm_mon = pDateTime->Month - 1;
     else
-        return sal_False;
+        return false;
 
     aTime.tm_year = pDateTime->Year - 1900;
 
@@ -178,10 +178,10 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
         if ( nSeconds > bias )
             pTimeVal->Seconds -= bias;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
@@ -211,10 +211,10 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVa
         pLocalTimeVal->Seconds = pSystemTimeVal->Seconds - bias;
         pLocalTimeVal->Nanosec = pSystemTimeVal->Nanosec;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
@@ -253,10 +253,10 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal
         pSystemTimeVal->Seconds = pLocalTimeVal->Seconds + bias;
         pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void sal_initGlobalTimer()

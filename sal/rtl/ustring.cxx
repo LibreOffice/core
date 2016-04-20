@@ -154,7 +154,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
     rtl_math_doubleToUString(
         &pResult, nullptr, 0, f, rtl_math_StringFormat_G,
         RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
-        0, sal_True);
+        0, true);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
@@ -171,7 +171,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
     rtl_math_doubleToUString(
         &pResult, nullptr, 0, d, rtl_math_StringFormat_G,
         RTL_USTR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
-        0, sal_True);
+        0, true);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFDOUBLE);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
@@ -350,10 +350,10 @@ sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength( const sal_Unicode* p
         pStr1Run--;
         pStr2Run--;
         if( *pStr1Run != (sal_Unicode)*pStr2Run )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 /* ----------------------------------------------------------------------- */

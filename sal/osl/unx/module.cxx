@@ -210,7 +210,7 @@ osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 #else
     *pResult = nullptr;
 #endif
-    return sal_True;
+    return true;
 }
 
 #ifndef DISABLE_DYNLOADING

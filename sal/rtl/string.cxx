@@ -94,7 +94,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
     rtl_math_doubleToString(
         &pResult, nullptr, 0, f, rtl_math_StringFormat_G,
         RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr, 0,
-        sal_True);
+        true);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
@@ -111,7 +111,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
     rtl_math_doubleToString(
         &pResult, nullptr, 0, d, rtl_math_StringFormat_G,
         RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
-        0, sal_True);
+        0, true);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));

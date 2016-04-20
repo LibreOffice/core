@@ -972,7 +972,7 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 {
     assert(pStr);
     if ( *pStr == '1' )
-        return sal_True;
+        return true;
 
     if ( (*pStr == 'T') || (*pStr == 't') )
     {
@@ -984,12 +984,12 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
             {
                 pStr++;
                 if ( (*pStr == 'E') || (*pStr == 'e') )
-                    return sal_True;
+                    return true;
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 /* ----------------------------------------------------------------------- */

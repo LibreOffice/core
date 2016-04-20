@@ -538,7 +538,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
 
     if (pAddr1 == pAddr2)
     {
-        return sal_True;
+        return true;
     }
 
     if (pAddr1->sa_family == pAddr2->sa_family)
@@ -553,7 +553,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
                 if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
                     (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
                     (pInetAddr1->sin_port == pInetAddr2->sin_port))
-                    return sal_True;
+                    return true;
             }
 
             default:
@@ -563,7 +563,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
@@ -1210,12 +1210,12 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr pAddr, sal_Int32 Por
         if ( pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
         {
             pSystemInetAddr->sin_port= htons((short)Port);
-            return sal_True;
+            return true;
         }
     }
 
     /* this is not a inet-addr => can't set port */
-    return sal_False;
+    return false;
 }
 
 oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrHostname)
@@ -1485,7 +1485,7 @@ sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket pSocket,
     SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
     if ( pSocket == nullptr || pAddr == nullptr )
     {
-        return sal_False;
+        return false;
     }
 
     pSocket->m_nLastError=0;
@@ -1495,10 +1495,10 @@ sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket pSocket,
     if ( nRet == OSL_SOCKET_ERROR)
     {
         pSocket->m_nLastError=errno;
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_listenOnSocket(oslSocket pSocket,
@@ -1509,7 +1509,7 @@ sal_Bool SAL_CALL osl_listenOnSocket(oslSocket pSocket,
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
     if ( pSocket == nullptr )
     {
-        return sal_False;
+        return false;
     }
 
     pSocket->m_nLastError=0;
@@ -1521,10 +1521,10 @@ sal_Bool SAL_CALL osl_listenOnSocket(oslSocket pSocket,
     if ( nRet == OSL_SOCKET_ERROR)
     {
         pSocket->m_nLastError=errno;
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
@@ -1566,7 +1566,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     }
 
     /* set socket temporarily to non-blocking */
-    if( !osl_enableNonBlockingMode(pSocket, sal_True) )
+    if( !osl_enableNonBlockingMode(pSocket, true) )
         SAL_WARN( "sal.osl", "failed to enable non-blocking mode" );
 
     /* initiate connect */
@@ -1575,7 +1575,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
                sizeof(struct sockaddr)) != OSL_SOCKET_ERROR)
     {
        /* immediate connection */
-        osl_enableNonBlockingMode(pSocket, sal_False);
+        osl_enableNonBlockingMode(pSocket, false);
 
         return osl_Socket_Ok;
     }
@@ -1588,7 +1588,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
             int nErrno = errno;
             SAL_WARN( "sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno) );
 
-            osl_enableNonBlockingMode(pSocket, sal_False);
+            osl_enableNonBlockingMode(pSocket, false);
             return osl_Socket_Error;
         }
     }
@@ -1655,7 +1655,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
         Result= osl_Socket_TimedOut;
     }
 
-    osl_enableNonBlockingMode(pSocket, sal_False);
+    osl_enableNonBlockingMode(pSocket, false);
 
     return Result;
 }
@@ -2079,7 +2079,7 @@ sal_Bool SAL_CALL osl_isReceiveReady (
     if (pSocket == nullptr)
     {
         /* ENOTSOCK */
-        return sal_False;
+        return false;
     }
 
     return socket_poll (pSocket, pTimeout, POLLIN);
@@ -2092,7 +2092,7 @@ sal_Bool SAL_CALL osl_isSendReady (
     if (pSocket == nullptr)
     {
         /* ENOTSOCK */
-        return sal_False;
+        return false;
     }
 
     return socket_poll (pSocket, pTimeout, POLLOUT);
@@ -2105,7 +2105,7 @@ sal_Bool SAL_CALL osl_isExceptionPending (
     if (pSocket == nullptr)
     {
         /* ENOTSOCK */
-        return sal_False;
+        return false;
     }
 
     return socket_poll (pSocket, pTimeout, POLLPRI);
@@ -2119,7 +2119,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket pSocket,
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
     if ( pSocket == nullptr )
     {
-        return sal_False;
+        return false;
     }
 
     pSocket->m_nLastError=0;
@@ -2174,7 +2174,7 @@ sal_Bool SAL_CALL osl_setSocketOption(oslSocket pSocket,
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
     if ( pSocket == nullptr )
     {
-        return sal_False;
+        return false;
     }
 
     pSocket->m_nLastError=0;
@@ -2188,10 +2188,10 @@ sal_Bool SAL_CALL osl_setSocketOption(oslSocket pSocket,
     if ( nRet < 0 )
     {
         pSocket->m_nLastError=errno;
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket pSocket,
@@ -2203,7 +2203,7 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket pSocket,
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
     if ( pSocket == nullptr )
     {
-        return sal_False;
+        return false;
     }
 
     pSocket->m_nLastError=0;
@@ -2220,10 +2220,10 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket pSocket,
     if  ( nRet < 0 )
     {
         pSocket->m_nLastError=errno;
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
@@ -2233,7 +2233,7 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
     if ( pSocket == nullptr )
     {
-        return sal_False;
+        return false;
     }
 
     pSocket->m_nLastError=0;
@@ -2241,9 +2241,9 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
     flags = fcntl(pSocket->m_Socket, F_GETFL, 0);
 
     if (flags == -1 || !(flags & O_NONBLOCK))
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
 oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
@@ -2403,7 +2403,7 @@ sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket pSocket)
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
     if ( Set == nullptr || pSocket == nullptr )
     {
-        return sal_False;
+        return false;
     }
 
     return bool(FD_ISSET(pSocket->m_Socket, &Set->m_Set));

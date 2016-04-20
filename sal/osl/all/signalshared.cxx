@@ -125,7 +125,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 
             free(pHandler);
 
-            return sal_True;
+            return true;
         }
 
         pPrevious = pHandler;
@@ -134,7 +134,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 
     osl_releaseMutex(SignalListMutex);
 
-    return sal_False;
+    return false;
 }
 
 oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)

@@ -2578,7 +2578,7 @@ namespace osl_File
         void isEndOfFile_001()
         {
             ::osl::File   testFile( aTmpName4 );
-            sal_Bool      bEOF  = sal_False;
+            sal_Bool      bEOF  = false;
             sal_Bool      *pEOF = &bEOF;
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
@@ -2599,7 +2599,7 @@ namespace osl_File
         void isEndOfFile_002()
         {
              ::osl::File   testFile( aTmpName4 );
-            sal_Bool      bEOF  = sal_False;
+            sal_Bool      bEOF  = false;
             sal_Bool      *pEOF = &bEOF;
             sal_uInt64    nFilePointer = 0;
 
@@ -2608,7 +2608,7 @@ namespace osl_File
 
              nError1 = testFile.setPos( osl_Pos_Absolut, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            *pEOF = sal_False;
+            *pEOF = false;
              while ( !( *pEOF ) )
             {
                 nError1 = testFile.isEndOfFile( pEOF );
@@ -2952,7 +2952,7 @@ namespace osl_File
         void readLine_002()
         {
             ::osl::File testFile( aTmpName6 );
-            sal_Bool bEOF  = sal_False;
+            sal_Bool bEOF  = false;
             sal_Bool *pEOF = &bEOF;
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );

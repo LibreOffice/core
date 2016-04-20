@@ -100,13 +100,13 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
         if ( nRet != 0 )
         {
             SAL_WARN("sal.osl.mutex", "pthread_mutex_lock failed: " << strerror(nRet));
-            return sal_False;
+            return false;
         }
-        return sal_True;
+        return true;
     }
 
     /* not initialized */
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
@@ -137,14 +137,14 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
         if ( nRet != 0 )
         {
             SAL_WARN("sal.osl.mutex", "pthread_mutex_unlock failed: " << strerror(nRet));
-            return sal_False;
+            return false;
         }
 
-        return sal_True;
+        return true;
     }
 
     /* not initialized */
-    return sal_False;
+    return false;
 }
 
 static oslMutexImpl globalMutexImpl;

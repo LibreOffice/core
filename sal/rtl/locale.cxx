@@ -170,13 +170,13 @@ sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
     rtl_freeMemory((*table));
     (*table) = pNewTable;
 
-    return sal_True;
+    return true;
 }
 
 extern "C" sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal_Int32 hashCode, rtl_Locale** pValue)
 {
     if (!table)
-        return sal_False;
+        return false;
 
     if (table->Table[key])
     {
@@ -188,11 +188,11 @@ extern "C" sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal
         if (pEntry)
             *pValue = pEntry->Entry;
         else
-            return sal_False;
+            return false;
     } else
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

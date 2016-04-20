@@ -425,16 +425,16 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
     DirectoryItem_Impl *pA = static_cast<DirectoryItem_Impl *>(a);
     DirectoryItem_Impl *pB = static_cast<DirectoryItem_Impl *>(b);
     if (a == b)
-        return sal_True;
+        return true;
     /* same name => same item, unless renaming / moving madness has occurred */
     if (pA->m_ustrFilePath == pB->m_ustrFilePath)
-        return sal_True;
+        return true;
 
     struct stat a_stat, b_stat;
 
     if (osl::lstat(rtl::OUString(pA->m_ustrFilePath), a_stat) != 0 ||
         osl::lstat(rtl::OUString(pB->m_ustrFilePath), b_stat) != 0)
-        return sal_False;
+        return false;
 
     return (a_stat.st_ino == b_stat.st_ino);
 }

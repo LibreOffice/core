@@ -503,12 +503,12 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
     if (pSecImpl == nullptr)
-        return sal_False;
+        return false;
 
     if (pSecImpl->m_pPasswd.pw_uid != 0)
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
@@ -519,7 +519,7 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
 sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 {
     (void) Security; /* unused */
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL osl_unloadUserProfile(oslSecurity Security)

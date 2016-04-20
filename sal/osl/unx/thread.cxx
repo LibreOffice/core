@@ -416,7 +416,7 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
-        return sal_False;
+        return false;
 
     pthread_mutex_lock (&(pImpl->m_Lock));
     active = ((pImpl->m_Flags & THREADIMPL_FLAGS_ACTIVE) > 0);
@@ -490,13 +490,13 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
     if (!pImpl)
     {
         SAL_WARN("sal.osl", "invalid osl_scheduleThread(nullptr) call");
-        return sal_False; /* EINVAL */
+        return false; /* EINVAL */
     }
 
     if (!(pthread_equal (pthread_self(), pImpl->m_hThread)))
     {
         SAL_WARN("sal.osl", "invalid osl_scheduleThread(non-self) call");
-        return sal_False; /* EINVAL */
+        return false; /* EINVAL */
     }
 
     pthread_mutex_lock (&(pImpl->m_Lock));
@@ -981,7 +981,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     void *pOldData = nullptr;
     wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
     if (!pKey)
-        return sal_False;
+        return false;
 
     if (pKey->pfnCallback)
         pOldData = pthread_getspecific(pKey->m_key);

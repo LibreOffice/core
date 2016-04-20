@@ -219,11 +219,11 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Seque
     assert(pSequence1 && pSequence2);
     if (pSequence1 == pSequence2)
     {
-        return sal_True;
+        return true;
     }
     if (pSequence1->nElements != pSequence2->nElements)
     {
-        return sal_False;
+        return false;
     }
     return
         memcmp(
