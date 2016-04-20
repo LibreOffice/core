@@ -61,7 +61,7 @@ inline bool SAL_CALL setCurrentContext(
     Reference< XCurrentContext > const & xContext )
 {
     ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
-    return (::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, NULL ) != sal_False);
+    return ::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, NULL );
 }
 
 /** Objects of this class are used for applying a current context until they are destructed, i.e.
