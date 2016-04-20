@@ -599,7 +599,7 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
                 awt::Point aPos;
                 aPos.X = rEvt.GetMousePosPixel().X();
                 aPos.Y = rEvt.GetMousePosPixel().Y();
-                xController->command( aPos, awt::Command::CONTEXTMENU, sal_True, uno::Any() );
+                xController->command( aPos, awt::Command::CONTEXTMENU, true, uno::Any() );
             }
         }
     }

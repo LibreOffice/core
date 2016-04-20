@@ -293,7 +293,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = "AsTemplate";
-        aArgsList[1].Value = makeAny( sal_False );
+        aArgsList[1].Value = makeAny( false );
 
         if (!m_aModuleName.isEmpty())
         {

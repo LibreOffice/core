@@ -166,7 +166,7 @@ void ToolbarsMenuController::addCommand(
     if ( !bInternal )
     {
         if ( !getDispatchFromCommandURL( rCommandURL ).is() )
-            m_xPopupMenu->enableItem( nItemId, sal_False );
+            m_xPopupMenu->enableItem( nItemId, false );
     }
 
     SolarMutexGuard aSolarMutexGuard;
@@ -391,7 +391,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             sal_uInt16 nItemCount = m_xPopupMenu->getItemCount();
             m_xPopupMenu->insertItem( nIndex, aSortedTbs[i].aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
             if ( aSortedTbs[i].bVisible )
-                m_xPopupMenu->checkItem( nIndex, sal_True );
+                m_xPopupMenu->checkItem( nIndex, true );
 
             {
                 SolarMutexGuard aGuard;
@@ -607,7 +607,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                                     if ( !bVisible && bContextSensitive && nVisibleIndex >= 0 )
                                     {
                                         // Default is: Every context sensitive toolbar is visible
-                                        aWindowState[nVisibleIndex].Value <<= sal_True;
+                                        aWindowState[nVisibleIndex].Value <<= true;
                                         xNameReplace->replaceByName( aElementName, makeAny( aWindowState ));
                                         bRefreshToolbars = true;
                                     }
@@ -628,7 +628,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                                 {
                                     try
                                     {
-                                        xPropSet->setPropertyValue("RefreshContextToolbarVisibility", makeAny( sal_True ));
+                                        xPropSet->setPropertyValue("RefreshContextToolbarVisibility", makeAny( true ));
                                     }
                                     catch ( const RuntimeException& )
                                     {

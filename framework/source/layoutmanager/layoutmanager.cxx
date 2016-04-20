@@ -134,7 +134,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_xToolbarManager( nullptr )
 {
     // Initialize statusbar member
-    const sal_Bool bRefreshVisibility = sal_False;
+    const sal_Bool bRefreshVisibility = false;
     m_aStatusBarElement.m_aType = "statusbar";
     m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
 
@@ -725,7 +725,7 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
     aPropSeq[0].Name = "Frame";
     aPropSeq[0].Value <<= m_xFrame;
     aPropSeq[1].Name = "Persistent";
-    aPropSeq[1].Value <<= sal_True;
+    aPropSeq[1].Value <<= true;
 
     try
     {
@@ -1248,7 +1248,7 @@ throw (uno::RuntimeException, std::exception)
 
     uno::Any a;
     implts_notifyListeners( frame::LayoutManagerEvents::MERGEDMENUBAR, a );
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL LayoutManager::removeMergedMenuBar()
@@ -1924,7 +1924,7 @@ throw (RuntimeException, std::exception)
     if ( bNotify )
         implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::makeAny( aName ) );
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL LayoutManager::dockWindow( const OUString& aName, DockingArea DockingArea, const awt::Point& Pos )
@@ -1947,7 +1947,7 @@ throw (RuntimeException, std::exception)
                 doLayout();
         }
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ ) throw (uno::RuntimeException, std::exception)
@@ -2101,7 +2101,7 @@ throw (RuntimeException, std::exception)
             {
                 MenuBar* pMenuBar = pSysWindow->GetMenuBar();
                 if ( pMenuBar && pMenuBar->IsDisplayable() )
-                    return sal_True;
+                    return true;
             }
             else
             {
@@ -2122,9 +2122,9 @@ throw (RuntimeException, std::exception)
                 SolarMutexGuard g;
                 vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow && pWindow->IsVisible() )
-                    return sal_True;
+                    return true;
                 else
-                    return sal_False;
+                    return false;
             }
         }
     }
@@ -2152,7 +2152,7 @@ throw (RuntimeException, std::exception)
         return IsDockingWindowVisible( xFrame, aElementName );
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL LayoutManager::isElementFloating( const OUString& aName )
@@ -2168,7 +2168,7 @@ throw (RuntimeException, std::exception)
             return pToolbarManager->isToolbarFloating( aName );
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL LayoutManager::isElementDocked( const OUString& aName )
@@ -2184,7 +2184,7 @@ throw (RuntimeException, std::exception)
             return pToolbarManager->isToolbarDocked( aName );
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
@@ -2200,7 +2200,7 @@ throw (uno::RuntimeException, std::exception)
             return pToolbarManager->isToolbarLocked( aName );
     }
 
-    return sal_False;
+    return false;
 }
 
 awt::Size SAL_CALL LayoutManager::getElementSize( const OUString& aName )
@@ -3172,7 +3172,7 @@ namespace detail
         {
             uno::Sequence< beans::Property > aProperties;
             rManager.describeProperties(aProperties);
-            m_pInfoHelper = new ::cppu::OPropertyArrayHelper(aProperties, sal_True);
+            m_pInfoHelper = new ::cppu::OPropertyArrayHelper(aProperties, true);
         }
         ~InfoHelperBuilder()
         {

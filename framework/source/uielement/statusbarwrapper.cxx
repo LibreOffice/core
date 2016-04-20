@@ -120,7 +120,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
 
             try
             {
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
                 if ( m_xConfigData.is() && pStatusBar && pStatusBarManager )
                 {
                     // Fill statusbar with container contents
@@ -150,7 +150,7 @@ void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException, std::
         {
             StatusBarManager* pStatusBarManager = static_cast< StatusBarManager *>( m_xStatusBarManager.get() );
 
-            m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+            m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
             if ( m_xConfigData.is() )
                 pStatusBarManager->FillStatusBar( m_xConfigData );
         }

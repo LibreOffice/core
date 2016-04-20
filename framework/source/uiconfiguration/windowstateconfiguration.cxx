@@ -305,14 +305,14 @@ throw (css::uno::RuntimeException, std::exception)
 
     ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
-        return sal_True;
+        return true;
     else
     {
         Any a( impl_getWindowStateFromResourceURL( rResourceURL ) );
         if ( a == Any() )
-            return sal_False;
+            return false;
         else
-            return sal_True;
+            return true;
     }
 }
 
@@ -338,7 +338,7 @@ throw ( RuntimeException, std::exception )
     if ( m_xConfigAccess.is() )
         return m_xConfigAccess->hasElements();
     else
-        return sal_False;
+        return false;
 }
 
 // XNameContainer
@@ -1245,7 +1245,7 @@ void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
         aPropValue.Value <<= m_aConfigWindowAccess;
         aArgs[0] <<= aPropValue;
         aPropValue.Name = "lazywrite";
-        aPropValue.Value <<= sal_True;
+        aPropValue.Value <<= true;
         aArgs[1] <<= aPropValue;
 
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
@@ -1442,7 +1442,7 @@ sal_Bool SAL_CALL WindowStateConfiguration::hasElements()
 throw (css::uno::RuntimeException, std::exception)
 {
     // We always have at least one module. So it is valid to return true!
-    return sal_True;
+    return true;
 }
 
 struct Instance {

@@ -94,7 +94,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     lArgs[0]   <<= aArg;
 
     aArg.Name    = ARGUMENT_CREATETOPWINDOW;
-    aArg.Value <<= sal_True;
+    aArg.Value <<= true;
     lArgs[1]   <<= aArg;
 
     aArg.Name    = ARGUMENT_MAKEVISIBLE;
@@ -102,7 +102,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     lArgs[2]   <<= aArg;
 
     aArg.Name    = ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
-    aArg.Value <<= sal_True;
+    aArg.Value <<= true;
     lArgs[3]   <<= aArg;
 
     aArg.Name    = ARGUMENT_FRAMENAME;

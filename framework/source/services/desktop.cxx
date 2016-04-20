@@ -229,7 +229,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     if ( bVeto )
     {
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
-        return sal_False;
+        return false;
     }
 
     // try to close all open frames.
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     if ( ! bFramesClosed )
     {
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
-        return sal_False;
+        return false;
     }
 
     // Normal listener had no problem ...
@@ -816,7 +816,7 @@ void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::Runtime
 
 sal_Bool SAL_CALL Desktop::isTop() throw( css::uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL Desktop::activate() throw( css::uno::RuntimeException, std::exception )
@@ -835,13 +835,13 @@ void SAL_CALL Desktop::deactivate() throw( css::uno::RuntimeException, std::exce
 
 sal_Bool SAL_CALL Desktop::isActive() throw( css::uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
                                          const css::uno::Reference< css::frame::XController >& /*xController*/      ) throw( css::uno::RuntimeException, std::exception )
 {
-    return sal_False;
+    return false;
 }
 
 css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getComponentWindow() throw( css::uno::RuntimeException, std::exception )
@@ -1399,7 +1399,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     {
         case PropHandle::ActiveFrame           :   aValue <<= m_aChildTaskContainer.getActive();
                                                     break;
-        case PropHandle::IsPlugged           :   aValue <<= sal_False;
+        case PropHandle::IsPlugged           :   aValue <<= false;
                                                     break;
         case PropHandle::SuspendQuickstartVeto:    aValue <<= m_bSuspendQuickstartVeto;
                                                     break;
@@ -1655,7 +1655,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
                 ( xController.is() )
                )
             {
-                bSuspended = xController->suspend( sal_True );
+                bSuspended = xController->suspend( true );
                 if ( ! bSuspended )
                 {
                     ++nNonClosedFrames;
@@ -1671,7 +1671,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
             {
                 try
                 {
-                    xClose->close(sal_False);
+                    xClose->close(false);
                 }
                 catch(const css::util::CloseVetoException&)
                 {
@@ -1687,7 +1687,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
                         (bSuspended      ) &&
                         (xController.is())
                        )
-                        xController->suspend(sal_False);
+                        xController->suspend(false);
                 }
 
                 // If interface XClosable interface exists and was used ...

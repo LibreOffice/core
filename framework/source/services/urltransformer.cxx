@@ -129,7 +129,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
     // Safe impossible cases.
     if ( aURL.Complete.isEmpty() )
     {
-        return sal_False;
+        return false;
     }
     // Try to extract the protocol
     sal_Int32 nURLIndex = aURL.Complete.indexOf( ':' );
@@ -148,13 +148,13 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
             INetProtocol eINetProt = aParser.GetProtocol();
             if ( eINetProt == INetProtocol::NotValid )
             {
-                return sal_False;
+                return false;
             }
             else if ( !aParser.HasError() )
             {
                 lcl_ParserHelper(aParser,aURL,false);
                 // Return "URL is parsed".
-                return sal_True;
+                return true;
             }
         }
         else
@@ -166,11 +166,11 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
             aURL.Path       = aURL.Complete.copy( nURLIndex+1 );
 
             // Return "URL is parsed".
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 //  XURLTransformer
@@ -181,7 +181,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
     // Safe impossible cases.
     if ( aURL.Complete.isEmpty() )
     {
-        return sal_False;
+        return false;
     }
 
     // Initialize parser with given URL.
@@ -193,7 +193,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
     {
         lcl_ParserHelper(aParser,aURL,true);
         // Return "URL is parsed".
-        return sal_True;
+        return true;
     }
     else
     {
@@ -211,19 +211,19 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
                 // If INetURLObject knows this protocol something is wrong as detected before =>
                 // give up and return false!
                 if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INetProtocol::NotValid )
-                    return sal_False;
+                    return false;
                 else
                     aURL.Protocol = aProtocol;
             }
             else
-                return sal_False;
+                return false;
 
             aURL.Main = aURL.Complete;
             aURL.Path = aURL.Complete.copy( nIndex+1 );
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
 }
 
@@ -259,7 +259,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
                             aCompletePath.makeStringAndClear()                          );
 
         if ( !bResult )
-            return sal_False;
+            return false;
 
         // First parse URL WITHOUT ...
         aURL.Main = aParser.GetMainURL( INetURLObject::NO_DECODE );
@@ -269,7 +269,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
         aURL.Complete = aParser.GetMainURL( INetURLObject::NO_DECODE );
 
         // Return "URL is assembled".
-        return sal_True;
+        return true;
     }
     else if ( !aURL.Protocol.isEmpty() )
     {
@@ -278,10 +278,10 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
         aBuffer.append( aURL.Path );
         aURL.Complete   = aBuffer.makeStringAndClear();
         aURL.Main       = aURL.Complete;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //  XURLTransformer

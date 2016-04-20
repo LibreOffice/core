@@ -666,12 +666,12 @@ throw (css::uno::RuntimeException)
         const std::vector< OUString >& rGlobalImageNameVector = rGlobalImageList->getImageCommandNames();
         const sal_uInt32 nGlobalCount = rGlobalImageNameVector.size();
         for ( i = 0; i < nGlobalCount; i++ )
-            aImageCmdNameMap.insert( ImageNameMap::value_type( rGlobalImageNameVector[i], sal_True ));
+            aImageCmdNameMap.insert( ImageNameMap::value_type( rGlobalImageNameVector[i], true ));
 
         const std::vector< OUString >& rModuleImageNameVector = implts_getDefaultImageList()->getImageCommandNames();
         const sal_uInt32 nModuleCount = rModuleImageNameVector.size();
         for ( i = 0; i < nModuleCount; i++ )
-            aImageCmdNameMap.insert( ImageNameMap::value_type( rModuleImageNameVector[i], sal_True ));
+            aImageCmdNameMap.insert( ImageNameMap::value_type( rModuleImageNameVector[i], true ));
     }
 
     ImageList* pImageList = implts_getUserImageList( ImageType( nIndex ));
@@ -679,7 +679,7 @@ throw (css::uno::RuntimeException)
     pImageList->GetImageNames( rUserImageNames );
     const sal_uInt32 nUserCount = rUserImageNames.size();
     for ( i = 0; i < nUserCount; i++ )
-        aImageCmdNameMap.insert( ImageNameMap::value_type( rUserImageNames[i], sal_True ));
+        aImageCmdNameMap.insert( ImageNameMap::value_type( rUserImageNames[i], true ));
 
     return comphelper::mapKeysToSequence( aImageCmdNameMap );
 }

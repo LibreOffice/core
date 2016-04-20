@@ -240,7 +240,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         {
             try
             {
-                xClose->close(sal_True);
+                xClose->close(true);
             }
             catch(const css::util::CloseVetoException&) {}
         }
@@ -254,7 +254,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         {
             try
             {
-                xClose->close(sal_True);
+                xClose->close(true);
             }
             catch(const css::util::CloseVetoException&) {}
         }
@@ -668,7 +668,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
     {
         try
         {
-            xClose->close(sal_False);
+            xClose->close(false);
             m_eRunState = E_STOPPED_OR_FINISHED;
         }
         catch(const css::util::CloseVetoException&) {}

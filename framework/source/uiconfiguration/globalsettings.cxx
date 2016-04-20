@@ -228,7 +228,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
             aPropValue.Value = css::uno::makeAny( OUString( GLOBALSETTINGS_ROOT_ACCESS ));
             aArgs[0] = css::uno::makeAny( aPropValue );
             aPropValue.Name = "lazywrite";
-            aPropValue.Value = css::uno::makeAny( sal_True );
+            aPropValue.Value = css::uno::makeAny( true );
             aArgs[1] = css::uno::makeAny( aPropValue );
 
             m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(

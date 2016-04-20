@@ -110,7 +110,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
     {
         css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(m_xContext) );
 
-        OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !
+        OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, true); // sal_True force an exception if unknown variables exists !
 
         css::uno::Reference< css::system::XSystemShellExecute > xShell = css::system::SystemShellExecute::create( m_xContext );
 

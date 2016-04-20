@@ -110,7 +110,7 @@ void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
 {
     OUString aTarget;
 
-    css::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
+    css::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, false );
     m_aStatements.push_back( aStatement );
 }
 
@@ -120,7 +120,7 @@ void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& 
     OUString aTarget;
 
     // last parameter must be set to true -> it's a comment
-    css::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_True );
+    css::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, true );
     m_aStatements.push_back( aStatement );
 }
 

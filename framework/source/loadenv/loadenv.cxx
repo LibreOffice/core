@@ -771,7 +771,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.document.TypeDetection", xContext),
         css::uno::UNO_QUERY_THROW);
-    sType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
+    sType = xDetect->queryTypeByDescriptor(lDescriptor, true); /*TODO should deep detection be able for enable/disable it from outside? */
 
     // no valid content -> loading not possible
     if (sType.isEmpty())
@@ -848,7 +848,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         // Don't overwrite external decisions! See comments before ...
         utl::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_ASTEMPLATE());
         if (pAsTemplateItem == m_lMediaDescriptor.end())
-            m_lMediaDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
+            m_lMediaDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= true;
         aWriteLock.clear();
         // <- SAFE
     }
@@ -1485,7 +1485,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     css::uno::Reference< css::frame::XController > xOldDoc = xTask->getController();
     if (xOldDoc.is())
     {
-        bReactivateOldControllerOnError = xOldDoc->suspend(sal_True);
+        bReactivateOldControllerOnError = xOldDoc->suspend(true);
         if (! bReactivateOldControllerOnError)
             return css::uno::Reference< css::frame::XFrame >();
     }
@@ -1563,7 +1563,7 @@ void LoadEnv::impl_reactForLoadingState()
         m_xTargetFrame.clear();
         if (xOldDoc.is())
         {
-            bool bReactivated = xOldDoc->suspend(sal_False);
+            bool bReactivated = xOldDoc->suspend(false);
             if (!bReactivated)
                 throw LoadEnvException(LoadEnvException::ID_COULD_NOT_REACTIVATE_CONTROLLER);
             m_bReactivateControllerOnError = false;
@@ -1578,7 +1578,7 @@ void LoadEnv::impl_reactForLoadingState()
         try
         {
             if (xCloseable.is())
-                xCloseable->close(sal_True);
+                xCloseable->close(true);
             else
             if (xDisposable.is())
                 xDisposable->dispose();

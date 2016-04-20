@@ -226,7 +226,7 @@ throw (RuntimeException, std::exception)
     if ( m_pStatusBar )
         return m_pStatusBar->IsItemVisible( m_nId );
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL StatusbarItem::setVisible( sal_Bool bVisible )

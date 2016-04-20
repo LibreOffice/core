@@ -816,7 +816,7 @@ void ToolBarManager::CreateControllers()
                        aCommandURL == ".uno:ParaLeftToRight" ||
                        aCommandURL == ".uno:ParaRightToLeft"
                        )
-                        pController->setFastPropertyValue_NoBroadcast(1, makeAny(sal_True));
+                        pController->setFastPropertyValue_NoBroadcast(1, makeAny(true));
                 }
             }
 
@@ -983,11 +983,11 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                 Reference< XIndexAccess > xMenuContainer;
                                 if ( m_xDocUICfgMgr.is() &&
                                      m_xDocUICfgMgr->hasSettings( aCommandURL ) )
-                                    xMenuContainer  = m_xDocUICfgMgr->getSettings( aCommandURL, sal_False );
+                                    xMenuContainer  = m_xDocUICfgMgr->getSettings( aCommandURL, false );
                                 if ( !xMenuContainer.is() &&
                                      m_xUICfgMgr.is() &&
                                      m_xUICfgMgr->hasSettings( aCommandURL ) )
-                                    xMenuContainer = m_xUICfgMgr->getSettings( aCommandURL, sal_False );
+                                    xMenuContainer = m_xUICfgMgr->getSettings( aCommandURL, false );
                                 if ( xMenuContainer.is() && xMenuContainer->getCount() )
                                 {
                                     Sequence< PropertyValue > aProps;
@@ -1678,7 +1678,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                         Reference< XUIElementSettings > xUIElementSettings( xLayoutManager->getElement( m_aResourceName ), UNO_QUERY );
                         if ( xUIElementSettings.is() )
                         {
-                            Reference< XIndexContainer > xItemContainer( xUIElementSettings->getSettings( sal_True ), UNO_QUERY );
+                            Reference< XIndexContainer > xItemContainer( xUIElementSettings->getSettings( true ), UNO_QUERY );
                             sal_Int32 nCount = xItemContainer->getCount();
                             for ( sal_Int32 i = 0; i < nCount; i++ )
                             {

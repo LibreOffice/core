@@ -1162,10 +1162,10 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exc
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
         if ( pDataSettings )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( const OUString& ResourceURL, sal_Bool bWriteable )
@@ -1522,10 +1522,10 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exc
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
         if ( pDataSettings && pDataSettings->bDefaultNode )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSettings( const OUString& ResourceURL )

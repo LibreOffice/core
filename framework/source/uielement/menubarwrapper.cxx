@@ -147,7 +147,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             try
             {
                 xTrans.set( URLTransformer::create(m_xContext) );
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
                 if ( m_xConfigData.is() )
                 {
                     // Fill menubar with container contents
@@ -214,7 +214,7 @@ void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException, std::ex
             {
                 MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
 
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
                 if ( m_xConfigData.is() )
                     pMenuBarManager->SetItemContainer( m_xConfigData );
             }
@@ -319,9 +319,9 @@ throw (css::uno::RuntimeException, std::exception)
 
     PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.find( aName );
     if ( pIter != m_aPopupControllerCache.end() )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 // XUIElement

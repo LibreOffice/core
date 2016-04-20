@@ -340,7 +340,7 @@ void impl_addWindowListeners(
             xWindow->addWindowListener(
                 css::uno::Reference< css::awt::XWindowListener >(
                     xThis, css::uno::UNO_QUERY ));
-            xDockWindow->enableDocking( sal_True );
+            xDockWindow->enableDocking( true );
         }
         catch ( const css::uno::Exception& )
         {

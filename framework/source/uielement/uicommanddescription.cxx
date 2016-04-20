@@ -293,7 +293,7 @@ sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
 throw ( RuntimeException, std::exception )
 {
     // There must are global commands!
-    return sal_True;
+    return true;
 }
 
 void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel )
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL UICommandDescription::hasElements()
 throw (css::uno::RuntimeException, std::exception)
 {
     // generic UI commands are always available!
-    return sal_True;
+    return true;
 }
 
 } // namespace framework

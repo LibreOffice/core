@@ -918,10 +918,10 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exc
     {
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
         if ( pDataSettings && !pDataSettings->bDefault )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OUString& ResourceURL, sal_Bool bWriteable )

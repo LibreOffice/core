@@ -953,7 +953,7 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
              lNewVals.getArray(),
              lOldVals.getArray(),
              1,
-             sal_False);
+             false);
     }
 }
 
@@ -972,7 +972,7 @@ void PathSettings::impl_subst(std::vector<OUString>& lVals   ,
         if (bReSubst)
             sNew = xSubst->reSubstituteVariables(sOld);
         else
-            sNew = xSubst->substituteVariables(sOld, sal_False);
+            sNew = xSubst->substituteVariables(sOld, false);
 
         *pIt = sNew;
     }
@@ -988,7 +988,7 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
     if (bReSubst)
         aPath.sWritePath = xSubst->reSubstituteVariables(aPath.sWritePath);
     else
-        aPath.sWritePath = xSubst->substituteVariables(aPath.sWritePath, sal_False);
+        aPath.sWritePath = xSubst->substituteVariables(aPath.sWritePath, false);
 }
 
 OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
@@ -1150,7 +1150,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
     }
 
     delete m_pPropHelp;
-    m_pPropHelp = new ::cppu::OPropertyArrayHelper(m_lPropDesc, sal_False); // false => not sorted ... must be done inside helper
+    m_pPropHelp = new ::cppu::OPropertyArrayHelper(m_lPropDesc, false); // false => not sorted ... must be done inside helper
 
     // <- SAFE
 }

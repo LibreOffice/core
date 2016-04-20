@@ -234,7 +234,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
                 css::uno::Reference< css::awt::XDockableWindow > xDockWindow( xSubToolBar, css::uno::UNO_QUERY );
                 xDockWindow->addDockableWindowListener( css::uno::Reference< css::awt::XDockableWindowListener >(
                                                         static_cast< OWeakObject * >( this ), css::uno::UNO_QUERY ) );
-                xDockWindow->enableDocking( sal_True );
+                xDockWindow->enableDocking( true );
 
                 // keep reference to UIElement to avoid its destruction
                 disposeUIElement();
@@ -317,7 +317,7 @@ void SubToolBarController::endDocking( const css::awt::EndDockingEvent& )
 sal_Bool SubToolBarController::prepareToggleFloatingMode( const css::lang::EventObject& )
     throw ( css::uno::RuntimeException, std::exception )
 {
-    return sal_False;
+    return false;
 }
 
 void SubToolBarController::toggleFloatingMode( const css::lang::EventObject& )

@@ -141,7 +141,7 @@ bool StartModuleDispatcher::implts_establishBackingMode()
     css::uno::Reference< css::awt::XWindow > xComponentWindow(xStartModule, css::uno::UNO_QUERY);
     xFrame->setComponent(xComponentWindow, xStartModule);
     xStartModule->attachFrame(xFrame);
-    xContainerWindow->setVisible(sal_True);
+    xContainerWindow->setVisible(true);
 
     return true;
 }

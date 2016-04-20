@@ -210,7 +210,7 @@ throw (css::uno::RuntimeException, std::exception)
         return ( m_pMenu->GetItemCount() > 0 );
     }
 
-    return sal_False;
+    return false;
 }
 
 // XServiceInfo

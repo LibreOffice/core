@@ -224,7 +224,7 @@ void SessionListener::QuitSessionQuietly()
         xURLTransformer->parseStrict(aURL);
 
         Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue(OUString("DispatchAsynchron"),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
+        args[0] = PropertyValue(OUString("DispatchAsynchron"),-1,makeAny(false),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception& e) {
         SAL_WARN("fwk.session",e.Message);

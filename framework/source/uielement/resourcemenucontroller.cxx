@@ -165,9 +165,9 @@ void ResourceMenuController::updatePopupMenu()
         try
         {
             if ( m_xConfigManager.is() && m_xConfigManager->hasSettings( m_aMenuURL ) )
-                m_xMenuContainer.set( m_xConfigManager->getSettings( m_aMenuURL, sal_False ) );
+                m_xMenuContainer.set( m_xConfigManager->getSettings( m_aMenuURL, false ) );
             else if ( m_xModuleConfigManager.is() && m_xModuleConfigManager->hasSettings( m_aMenuURL ) )
-                m_xMenuContainer.set( m_xModuleConfigManager->getSettings( m_aMenuURL, sal_False ) );
+                m_xMenuContainer.set( m_xModuleConfigManager->getSettings( m_aMenuURL, false ) );
         }
         catch ( const css::container::NoSuchElementException& )
         {

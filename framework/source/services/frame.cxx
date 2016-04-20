@@ -793,7 +793,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // create progress helper
     css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
-        css::task::StatusIndicatorFactory::createWithFrame(m_xContext, xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
+        css::task::StatusIndicatorFactory::createWithFrame(m_xContext, xThis, false/*DisableReschedule*/, true/*AllowParentShow*/ );
 
     // SAFE -> ----------------------------------
     aWriteLock.reset();
@@ -1422,7 +1422,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     // Ignore this HACK of sfx2!
     // He call us with an valid controller without a valid window ... Thats not allowed!
     if  ( xController.is() && ! xComponentWindow.is() )
-        return sal_True;
+        return true;
 
     checkDisposed();
 
@@ -1554,7 +1554,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     aWriteLock.clear();
     /* } SAFE */
 
-    return sal_True;
+    return true;
 }
 
 /*-****************************************************************************************************
@@ -1868,7 +1868,7 @@ void SAL_CALL Frame::setPropertyValue(const OUString& sProperty,
 
     css::beans::PropertyChangeEvent aEvent;
     aEvent.PropertyName   = aPropInfo.Name;
-    aEvent.Further        = sal_False;
+    aEvent.Further        = false;
     aEvent.PropertyHandle = aPropInfo.Handle;
     aEvent.OldValue       = aCurrentValue;
     aEvent.NewValue       = aValue;
@@ -2182,7 +2182,7 @@ void SAL_CALL Frame::disposing()
     }
     if( contWin.is() )
     {
-        contWin->setVisible( sal_False );
+        contWin->setVisible( false );
         // All VclComponents are XComponents; so call dispose before discarding
         // a css::uno::Reference< XVclComponent >, because this frame is the owner of the window
         contWin->dispose();
@@ -3116,7 +3116,7 @@ void Frame::implts_startWindowListening()
             if( xDropTarget.is() )
             {
                 xDropTarget->addDropTargetListener( xDragDropListener );
-                xDropTarget->setActive( sal_True );
+                xDropTarget->setActive( true );
             }
         }
     }
@@ -3152,7 +3152,7 @@ void Frame::implts_stopWindowListening()
             if( xDropTarget.is() )
             {
                 xDropTarget->removeDropTargetListener( xDragDropListener );
-                xDropTarget->setActive( sal_False );
+                xDropTarget->setActive( false );
             }
         }
     }
@@ -3188,7 +3188,7 @@ void Frame::implts_checkSuicide()
     try
     {
         if (bSuicide)
-            close(sal_True);
+            close(true);
     }
     catch(const css::util::CloseVetoException&)
         {}

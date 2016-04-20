@@ -395,7 +395,7 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     {
         css::uno::Reference< css::frame::XController > xController = xCloseFrame->getController();
         if (xController.is())
-            xController->suspend(sal_False);
+            xController->suspend(false);
     }
 
     // inform listener
@@ -459,7 +459,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         css::uno::Reference< css::frame::XController > xController = xFrame->getController();
         if (xController.is()) // some views don't uses a controller .-( (e.g. the help window)
         {
-            bControllerSuspended = xController->suspend(sal_True);
+            bControllerSuspended = xController->suspend(true);
             if (! bControllerSuspended)
                 return false;
         }
@@ -523,7 +523,7 @@ bool CloseDispatcher::implts_establishBackingMode()
     css::uno::Reference< css::awt::XWindow > xBackingWin(xStartModule, css::uno::UNO_QUERY);
     xFrame->setComponent(xBackingWin, xStartModule);
     xStartModule->attachFrame(xFrame);
-    xContainerWindow->setVisible(sal_True);
+    xContainerWindow->setVisible(true);
 
     return true;
 }

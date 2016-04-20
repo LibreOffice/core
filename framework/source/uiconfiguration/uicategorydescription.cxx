@@ -181,7 +181,7 @@ sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
 throw ( RuntimeException, std::exception )
 {
     // There must be global categories!
-    return sal_True;
+    return true;
 }
 
 void ConfigurationAccess_UICategory::fillCache()

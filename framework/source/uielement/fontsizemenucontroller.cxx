@@ -110,7 +110,7 @@ void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XP
 
         if ( m_pHeightArray[i] == nHeight )
         {
-            rPopupMenu->checkItem( nItemId, sal_True );
+            rPopupMenu->checkItem( nItemId, true );
             return;
         }
 
@@ -119,7 +119,7 @@ void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XP
     }
 
     if ( nChecked )
-        rPopupMenu->checkItem( nChecked, sal_False );
+        rPopupMenu->checkItem( nChecked, false );
 }
 
 // private function

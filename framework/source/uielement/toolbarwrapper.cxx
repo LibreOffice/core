@@ -159,7 +159,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
             try
             {
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
                 if ( m_xConfigData.is() && pToolBar && pToolBarManager )
                 {
                     // Fill toolbar with container contents
@@ -226,7 +226,7 @@ void SAL_CALL ToolBarWrapper::updateSettings() throw (css::uno::RuntimeException
             {
                 ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
 
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
                 if ( m_xConfigData.is() )
                     pToolBarManager->FillToolbar( m_xConfigData );
             }

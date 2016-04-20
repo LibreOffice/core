@@ -163,7 +163,7 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
     {
         // Top docking area window
         xTopDockAreaWindow->setPosSize( 0, 0, aContainerClientSize.Width, rBorderSpace.Y, awt::PosSize::POSSIZE );
-        xTopDockAreaWindow->setVisible( sal_True );
+        xTopDockAreaWindow->setVisible( true );
         nLeftRightDockingAreaHeight -= rBorderSpace.Y;
     }
 
@@ -174,7 +174,7 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
         sal_Int32 nHeight = ( nBottomPos == 0 ) ? 0 : rBorderSpace.Height;
 
         xBottomDockAreaWindow->setPosSize( 0, nBottomPos, aContainerClientSize.Width, nHeight, awt::PosSize::POSSIZE );
-        xBottomDockAreaWindow->setVisible( sal_True );
+        xBottomDockAreaWindow->setVisible( true );
         nLeftRightDockingAreaHeight -= nHeight - 1;
     }
 
@@ -186,7 +186,7 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
         sal_Int32 nHeight = std::max( sal_Int32( 0 ), sal_Int32( nLeftRightDockingAreaHeight ));
 
         xLeftDockAreaWindow->setPosSize( 0, rBorderSpace.Y, rBorderSpace.X, nHeight, awt::PosSize::POSSIZE );
-        xLeftDockAreaWindow->setVisible( sal_True );
+        xLeftDockAreaWindow->setVisible( true );
     }
     if ( rBorderSpace.Width >= 0 || nLeftRightDockingAreaHeight > 0 )
     {
@@ -197,7 +197,7 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
         sal_Int32 nWidth   = ( nLeftPos == 0 ) ? 0 : rBorderSpace.Width;
 
         xRightDockAreaWindow->setPosSize( nLeftPos, rBorderSpace.Y, nWidth, nHeight, awt::PosSize::POSSIZE );
-        xRightDockAreaWindow->setVisible( sal_True );
+        xRightDockAreaWindow->setVisible( true );
     }
 }
 
@@ -493,7 +493,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
                         static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
                     xWindow->addWindowListener( uno::Reference< awt::XWindowListener >(
                         static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
-                    xDockWindow->enableDocking( sal_True );
+                    xDockWindow->enableDocking( true );
                 }
                 catch (const uno::Exception&)
                 {
@@ -611,7 +611,7 @@ bool ToolbarLayoutManager::destroyToolbar( const OUString& rResourceURL )
         else
         {
             if ( xWindow.is() )
-                xWindow->setVisible( sal_False );
+                xWindow->setVisible( false );
             bNotify = true;
         }
 
@@ -860,7 +860,7 @@ bool ToolbarLayoutManager::dockToolbar( const OUString& rResourceURL, ui::Dockin
                 {
                     // ATTENTION: This will call toggleFloatingMode() via notifications which
                     // sets the floating member of the UIElement correctly!
-                    xDockWindow->setFloatingMode( sal_False );
+                    xDockWindow->setFloatingMode( false );
                 }
                 else
                 {
@@ -1118,7 +1118,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     try
                     {
                         xDockWindow->addDockableWindowListener( uno::Reference< awt::XDockableWindowListener >( static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
-                        xDockWindow->enableDocking( sal_True );
+                        xDockWindow->enableDocking( true );
                         uno::Reference< awt::XWindow > xWindow( xDockWindow, uno::UNO_QUERY );
                         if ( xWindow.is() )
                             xWindow->addWindowListener( uno::Reference< awt::XWindowListener >( static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
@@ -1449,7 +1449,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             bool bUndefPos = hasDefaultPosValue( rElement.m_aFloatingData.m_aPos );
             bool bSetSize = ( rElement.m_aFloatingData.m_aSize.Width != 0 &&
                               rElement.m_aFloatingData.m_aSize.Height != 0 );
-            rDockWindow->setFloatingMode( sal_True );
+            rDockWindow->setFloatingMode( true );
             if ( bUndefPos )
             {
                 aPos = implts_findNextCascadeFloatingPos();
@@ -1500,7 +1500,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
                 SolarMutexGuard aGuard;
                 pToolBox->SetAlign( ImplConvertAlignment(rElement.m_aDockedData.m_nDockedArea )  );
                 pToolBox->SetLineCount( 1 );
-                rDockWindow->setFloatingMode( sal_False );
+                rDockWindow->setFloatingMode( false );
                 if ( rElement.m_aDockedData.m_bLocked )
                     rDockWindow->lock();
                 aSize = pToolBox->CalcWindowSizePixel();
@@ -3612,7 +3612,7 @@ throw (uno::RuntimeException, std::exception)
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject& e )
@@ -3836,7 +3836,7 @@ throw (uno::RuntimeException, std::exception)
                 try
                 {
                     xCfgMgr.set( rEvent.Source, uno::UNO_QUERY );
-                    xPropSet.set( xCfgMgr->getSettings( rEvent.ResourceURL, sal_False ), uno::UNO_QUERY );
+                    xPropSet.set( xCfgMgr->getSettings( rEvent.ResourceURL, false ), uno::UNO_QUERY );
 
                     if ( xPropSet.is() )
                         xPropSet->getPropertyValue("UIName") >>= aUIName;

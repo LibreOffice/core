@@ -2815,7 +2815,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
         {
             css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
             if (xModify.is())
-                xModify->setModified(sal_False);
+                xModify->setModified(false);
 
             // close the model.
             css::uno::Reference< css::util::XCloseable > xClose(rInfo.Document, css::uno::UNO_QUERY);
@@ -2823,7 +2823,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
             {
                 try
                 {
-                    xClose->close(sal_False);
+                    xClose->close(false);
                 }
                 catch(const css::uno::Exception&)
                 {
@@ -3266,13 +3266,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         else if (!rInfo.TemplateURL.isEmpty())
         {
             sLoadOriginalURL = rInfo.TemplateURL;
-            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()]   <<= sal_True;
+            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()]   <<= true;
             lDescriptor[utl::MediaDescriptor::PROP_TEMPLATENAME()] <<= rInfo.TemplateURL;
         }
         else if (!rInfo.FactoryURL.isEmpty())
         {
             sLoadOriginalURL = rInfo.FactoryURL;
-            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
+            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= true;
         }
 
         // A "Salvaged" item must exists every time. The core can make something special then for recovery.
@@ -3475,7 +3475,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         {
             css::uno::Reference< css::util::XCloseable > xClose( *component, css::uno::UNO_QUERY );
             if ( xClose.is() )
-                xClose->close( sal_True );
+                xClose->close( true );
             else
                 (*component)->dispose();
         }
@@ -3694,7 +3694,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
         CFG_PACKAGE_RECOVERY,
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_CRASHED,
-        css::uno::makeAny(sal_True),
+        css::uno::makeAny(true),
         ::comphelper::EConfigurationModes::Standard);
 
     // for all docs, store their current view/names in the configurtion
@@ -3754,7 +3754,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
         CFG_PACKAGE_RECOVERY,
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_CRASHED,
-        css::uno::makeAny(sal_False),
+        css::uno::makeAny(false),
         ::comphelper::EConfigurationModes::Standard);
 }
 
@@ -3819,7 +3819,7 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
         CFG_PACKAGE_RECOVERY,
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_SESSIONDATA,
-        css::uno::makeAny(sal_True),
+        css::uno::makeAny(true),
         ::comphelper::EConfigurationModes::Standard);
 
     // flush config cached back to disc.
@@ -3854,7 +3854,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
         CFG_PACKAGE_RECOVERY,
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_SESSIONDATA,
-        css::uno::makeAny(sal_False),
+        css::uno::makeAny(false),
         ::comphelper::EConfigurationModes::Standard);
 
     SAL_INFO("fwk.autorecovery", "... AutoRecovery::implts_doSessionRestore()");
@@ -3964,7 +3964,7 @@ sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*
     throw(css::lang::IllegalArgumentException)
 {
     // not needed currently
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      /*nHandle*/,
@@ -4040,7 +4040,7 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
         SolarMutexGuard g;
         if(!pInfoHelper)
         {
-            static ::cppu::OPropertyArrayHelper aInfoHelper(impl_getStaticPropertyDescriptor(), sal_True);
+            static ::cppu::OPropertyArrayHelper aInfoHelper(impl_getStaticPropertyDescriptor(), true);
             pInfoHelper = &aInfoHelper;
         }
     }
@@ -4314,7 +4314,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
-        aContent.executeCommand("delete", css::uno::makeAny(sal_True));
+        aContent.executeCommand("delete", css::uno::makeAny(true));
     }
     catch(const css::uno::Exception&)
     {

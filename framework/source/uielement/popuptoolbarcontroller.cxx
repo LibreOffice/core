@@ -410,7 +410,7 @@ void SaveToolbarController::update()
 sal_Bool SaveToolbarController::opensSubToolbar()
     throw ( css::uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return true;
 }
 
 OUString SaveToolbarController::getSubToolbarName()
