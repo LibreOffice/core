@@ -71,21 +71,21 @@ namespace drawinglayer
 
                 const Point aEmptyPoint;
                 const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
-                ScopedVclPtrInstance< VirtualDevice > maContent;
+                ScopedVclPtrInstance< VirtualDevice > pContent;
 
                 // prepare vdev
-                maContent->SetOutputSizePixel(aSizePixel, false);
-                maContent->SetMapMode(aMapModePixel);
+                pContent->SetOutputSizePixel(aSizePixel, false);
+                pContent->SetMapMode(aMapModePixel);
 
                 // set to all white
-                maContent->SetBackground(Wallpaper(Color(COL_WHITE)));
-                maContent->Erase();
+                pContent->SetBackground(Wallpaper(Color(COL_WHITE)));
+                pContent->Erase();
 
                 // create pixel processor, also already takes care of AAing and
                 // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
                 // not wanted, change after this call as needed
                 processor2d::BaseProcessor2D* pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
-                    *maContent.get(),
+                    *pContent.get(),
                     rViewInformation2D);
 
                 if(pContentProcessor)
@@ -94,8 +94,8 @@ namespace drawinglayer
                     pContentProcessor->process(aSequence);
 
                     // get content
-                    maContent->EnableMapMode(false);
-                    const Bitmap aContent(maContent->GetBitmap(aEmptyPoint, aSizePixel));
+                    pContent->EnableMapMode(false);
+                    const Bitmap aContent(pContent->GetBitmap(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
                     if(bDoSaveForVisualControl)
@@ -106,10 +106,10 @@ namespace drawinglayer
                     }
 #endif
                     // prepare for mask creation
-                    maContent->SetMapMode(aMapModePixel);
+                    pContent->SetMapMode(aMapModePixel);
 
                     // set alpha to all white (fully transparent)
-                    maContent->Erase();
+                    pContent->Erase();
 
                     // embed primitives to paint them black
                     const primitive2d::Primitive2DReference xRef(
@@ -125,8 +125,8 @@ namespace drawinglayer
                     delete pContentProcessor;
 
                     // get alpha channel from vdev
-                    maContent->EnableMapMode(false);
-                    const Bitmap aAlpha(maContent->GetBitmap(aEmptyPoint, aSizePixel));
+                    pContent->EnableMapMode(false);
+                    const Bitmap aAlpha(pContent->GetBitmap(aEmptyPoint, aSizePixel));
 #ifdef DBG_UTIL
                     if(bDoSaveForVisualControl)
                     {

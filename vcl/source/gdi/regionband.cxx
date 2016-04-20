@@ -1233,25 +1233,25 @@ void RegionBand::GetRegionRectangles(RectangleVector& rTarget) const
 {
     // clear result vector
     rTarget.clear();
-    ImplRegionBand* mpCurrRectBand = mpFirstBand;
+    ImplRegionBand* pCurrRectBand = mpFirstBand;
     Rectangle aRectangle;
 
-    while(mpCurrRectBand)
+    while(pCurrRectBand)
     {
-        ImplRegionBandSep* mpCurrRectBandSep = mpCurrRectBand->mpFirstSep;
+        ImplRegionBandSep* pCurrRectBandSep = pCurrRectBand->mpFirstSep;
 
-        aRectangle.Top() = mpCurrRectBand->mnYTop;
-        aRectangle.Bottom() = mpCurrRectBand->mnYBottom;
+        aRectangle.Top() = pCurrRectBand->mnYTop;
+        aRectangle.Bottom() = pCurrRectBand->mnYBottom;
 
-        while(mpCurrRectBandSep)
+        while(pCurrRectBandSep)
         {
-            aRectangle.Left() = mpCurrRectBandSep->mnXLeft;
-            aRectangle.Right() = mpCurrRectBandSep->mnXRight;
+            aRectangle.Left() = pCurrRectBandSep->mnXLeft;
+            aRectangle.Right() = pCurrRectBandSep->mnXRight;
             rTarget.push_back(aRectangle);
-            mpCurrRectBandSep = mpCurrRectBandSep->mpNextSep;
+            pCurrRectBandSep = pCurrRectBandSep->mpNextSep;
         }
 
-        mpCurrRectBand = mpCurrRectBand->mpNextBand;
+        pCurrRectBand = pCurrRectBand->mpNextBand;
     }
 }
 

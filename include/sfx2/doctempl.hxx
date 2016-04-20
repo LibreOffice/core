@@ -50,11 +50,11 @@ public:
     void                ReInitFromComponent();
 
     sal_uInt16          GetRegionCount() const;
-    const OUString&     GetRegionName(sal_uInt16 nIdx) const;                   //dv!
+    OUString            GetRegionName(sal_uInt16 nIdx) const;                   //dv!
     OUString            GetFullRegionName(sal_uInt16 nIdx) const;
 
     sal_uInt16          GetCount(sal_uInt16 nRegion) const;
-    const OUString&     GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
+    OUString            GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
     OUString            GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
 
     // Allows to retrieve the target template URL from the UCB

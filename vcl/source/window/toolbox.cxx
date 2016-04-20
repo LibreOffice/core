@@ -956,7 +956,7 @@ sal_uInt16 ToolBox::ImplTestLineSize( ToolBox* pThis, const Point& rPos )
 
 void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode )
 {
-    bool    mbHorz;
+    bool    bHorz;
     long    nOneLineSize;
     long    nCurSize;
     long    nMaxSize;
@@ -966,34 +966,34 @@ void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRec
     if ( nLineMode & DOCK_LINERIGHT )
     {
         nCurSize = rPos.X() - rRect.Left();
-        mbHorz = false;
+        bHorz = false;
     }
     else if ( nLineMode & DOCK_LINEBOTTOM )
     {
         nCurSize = rPos.Y() - rRect.Top();
-        mbHorz = true;
+        bHorz = true;
     }
     else if ( nLineMode & DOCK_LINELEFT )
     {
         nCurSize = rRect.Right() - rPos.X();
-        mbHorz = false;
+        bHorz = false;
     }
     else if ( nLineMode & DOCK_LINETOP )
     {
         nCurSize = rRect.Bottom() - rPos.Y();
-        mbHorz = true;
+        bHorz = true;
     }
     else {
         OSL_FAIL( "ImplLineSizing: Trailing else" );
         nCurSize = 0;
-        mbHorz = false;
+        bHorz = false;
     }
 
     Size    aWinSize = pThis->GetSizePixel();
     sal_uInt16  nMaxLines = (pThis->mnLines > pThis->mnCurLines) ? pThis->mnLines : pThis->mnCurLines;
     if ( nMaxLines > TB_MAXLINES )
         nMaxLines = TB_MAXLINES;
-    if ( mbHorz )
+    if ( bHorz )
     {
         nOneLineSize = ImplCalcSize( pThis, 1 ).Height();
         nMaxSize = pThis->maOutDockRect.GetHeight() - 20;
@@ -1018,7 +1018,7 @@ void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRec
         {
             i++;
             aSize = ImplCalcSize( pThis, i );
-            if ( mbHorz )
+            if ( bHorz )
                 nSize = aSize.Height();
             else
                 nSize = aSize.Width();
@@ -1026,7 +1026,7 @@ void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRec
             {
                 i--;
                 aSize = ImplCalcSize( pThis, i );
-                if ( mbHorz )
+                if ( bHorz )
                     nSize = aSize.Height();
                 else
                     nSize = aSize.Width();
@@ -4584,7 +4584,7 @@ void ToolBox::ToggleFloatingMode()
     if (!mpData)
         return;
 
-    bool mbOldHorz = mbHorz;
+    bool bOldHorz = mbHorz;
 
     if ( ImplIsFloatingMode() )
     {
@@ -4592,7 +4592,7 @@ void ToolBox::ToggleFloatingMode()
         meAlign  = WindowAlign::Top;
         mbScroll = true;
 
-        if( mbOldHorz != mbHorz )
+        if( bOldHorz != mbHorz )
             mbCalc = true;  // orientation was changed !
 
         ImplSetMinMaxFloatSize( this );
@@ -4610,7 +4610,7 @@ void ToolBox::ToggleFloatingMode()
         ImplGetFrameWindow()->GetWindow( GetWindowType::Client )->GrabFocus();
     }
 
-    if( mbOldHorz != mbHorz )
+    if( bOldHorz != mbHorz )
     {
         // if orientation changes, the toolbox has to be initialized again
         // to update the direction of the gradient

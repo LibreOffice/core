@@ -101,11 +101,11 @@ XBitmapListRef   ViewElementListProvider::GetBitmapList() const
 //create chartspecific symbols for linecharts
 SdrObjList* ViewElementListProvider::GetSymbolList() const
 {
-    SdrObjList* m_pSymbolList = nullptr;
-    uno::Reference< drawing::XShapes > m_xSymbols(nullptr);//@todo this keeps the first drawinglayer alive ...
+    SdrObjList* pSymbolList = nullptr;
+    uno::Reference< drawing::XShapes > xSymbols(nullptr);//@todo this keeps the first drawinglayer alive ...
     try
     {
-        if(!m_pSymbolList || !m_pSymbolList->GetObjCount())
+        if(!pSymbolList || !pSymbolList->GetObjCount())
         {
             //@todo use mutex
 
@@ -117,18 +117,18 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
 
             //create symbols via uno and convert to native sdr objects
             drawing::Direction3D aSymbolSize(220,220,0); // should be 250, but 250 -> 280 ??
-            m_xSymbols =  DataPointSymbolSupplier::create2DSymbolList( xShapeFactory, xTarget, aSymbolSize );
+            xSymbols =  DataPointSymbolSupplier::create2DSymbolList( xShapeFactory, xTarget, aSymbolSize );
 
-            SdrObject* pSdrObject = DrawViewWrapper::getSdrObject( uno::Reference< drawing::XShape >( m_xSymbols, uno::UNO_QUERY ) );
+            SdrObject* pSdrObject = DrawViewWrapper::getSdrObject( uno::Reference< drawing::XShape >( xSymbols, uno::UNO_QUERY ) );
             if(pSdrObject)
-                m_pSymbolList = pSdrObject->GetSubList();
+                pSymbolList = pSdrObject->GetSubList();
         }
     }
     catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
-    return m_pSymbolList;
+    return pSymbolList;
 }
 
 Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, const SfxItemSet* pSymbolShapeProperties ) const

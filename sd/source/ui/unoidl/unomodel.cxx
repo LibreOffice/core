@@ -3072,11 +3072,11 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
     uno::Reference< drawing::XDrawPage > xDrawPage;
 
-    SdDrawDocument* mpDoc = mpModel->mpDoc;
-    if( mpDoc )
+    SdDrawDocument* pDoc = mpModel->mpDoc;
+    if( pDoc )
     {
         // calculate internal index and check for range errors
-        const sal_Int32 nMPageCount = mpDoc->GetMasterPageCount();
+        const sal_Int32 nMPageCount = pDoc->GetMasterPageCount();
         nInsertPos = nInsertPos * 2 + 1;
         if( nInsertPos < 0 || nInsertPos > nMPageCount )
             nInsertPos = nMPageCount;
@@ -3092,7 +3092,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             bUnique = true;
             for( sal_Int32 nMaster = 1; nMaster < nMPageCount; nMaster++ )
             {
-                SdPage* pPage = static_cast<SdPage*>(mpDoc->GetMasterPage((sal_uInt16)nMaster));
+                SdPage* pPage = static_cast<SdPage*>(pDoc->GetMasterPage((sal_uInt16)nMaster));
                 if( pPage && pPage->GetName() == aPrefix )
                 {
                     bUnique = false;
@@ -3113,7 +3113,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         aLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
         // create styles
-        static_cast<SdStyleSheetPool*>(mpDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
+        static_cast<SdStyleSheetPool*>(pDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
 
         // get the first page for initial size and border settings
         SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_STANDARD );
@@ -3127,7 +3127,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                            pPage->GetRgtBorder(),
                            pPage->GetLwrBorder() );
         pMPage->SetLayoutName( aLayoutName );
-        mpDoc->InsertMasterPage(pMPage,  (sal_uInt16)nInsertPos);
+        pDoc->InsertMasterPage(pMPage,  (sal_uInt16)nInsertPos);
 
         {
             // ensure default MasterPage fill
@@ -3145,7 +3145,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetRgtBorder(),
                                 pRefNotesPage->GetLwrBorder() );
         pMNotesPage->SetLayoutName( aLayoutName );
-        mpDoc->InsertMasterPage(pMNotesPage,  (sal_uInt16)nInsertPos + 1);
+        pDoc->InsertMasterPage(pMNotesPage,  (sal_uInt16)nInsertPos + 1);
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
         mpModel->SetModified();
     }
@@ -3290,17 +3290,17 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
     if( nullptr == mpModel )
         throw lang::DisposedException();
 
-    SdDrawDocument* mpDoc = mpModel->GetDoc();
-    if( mpDoc == nullptr )
+    SdDrawDocument* pDoc = mpModel->GetDoc();
+    if( pDoc == nullptr )
     {
         uno::Sequence< OUString > aSeq;
         return aSeq;
     }
 
-    if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
+    if( pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
     {
-        const sal_uInt16 nMaxPages = mpDoc->GetSdPageCount( PK_STANDARD );
-        const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterSdPageCount( PK_STANDARD );
+        const sal_uInt16 nMaxPages = pDoc->GetSdPageCount( PK_STANDARD );
+        const sal_uInt16 nMaxMasterPages = pDoc->GetMasterSdPageCount( PK_STANDARD );
 
         uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
         OUString* pStr = aSeq.getArray();
@@ -3308,17 +3308,17 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
         sal_uInt16 nPage;
         // standard pages
         for( nPage = 0; nPage < nMaxPages; nPage++ )
-            *pStr++ = mpDoc->GetSdPage( nPage, PK_STANDARD )->GetName();
+            *pStr++ = pDoc->GetSdPage( nPage, PK_STANDARD )->GetName();
 
         // master pages
         for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
-            *pStr++ = mpDoc->GetMasterSdPage( nPage, PK_STANDARD )->GetName();
+            *pStr++ = pDoc->GetMasterSdPage( nPage, PK_STANDARD )->GetName();
         return aSeq;
     }
     else
     {
-        const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
-        const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterPageCount();
+        const sal_uInt16 nMaxPages = pDoc->GetPageCount();
+        const sal_uInt16 nMaxMasterPages = pDoc->GetMasterPageCount();
 
         uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
         OUString* pStr = aSeq.getArray();
@@ -3326,11 +3326,11 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
         sal_uInt16 nPage;
         // standard pages
         for( nPage = 0; nPage < nMaxPages; nPage++ )
-            *pStr++ = static_cast<SdPage*>(mpDoc->GetPage( nPage ))->GetName();
+            *pStr++ = static_cast<SdPage*>(pDoc->GetPage( nPage ))->GetName();
 
         // master pages
         for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
-            *pStr++ = static_cast<SdPage*>(mpDoc->GetMasterPage( nPage ))->GetName();
+            *pStr++ = static_cast<SdPage*>(pDoc->GetMasterPage( nPage ))->GetName();
         return aSeq;
     }
 }
@@ -3366,22 +3366,22 @@ sal_Bool SAL_CALL SdDocLinkTargets::hasElements()
 
 SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exception)
 {
-    SdDrawDocument* mpDoc = mpModel->GetDoc();
-    if( mpDoc == nullptr )
+    SdDrawDocument* pDoc = mpModel->GetDoc();
+    if( pDoc == nullptr )
         return nullptr;
 
-    const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
-    const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterPageCount();
+    const sal_uInt16 nMaxPages = pDoc->GetPageCount();
+    const sal_uInt16 nMaxMasterPages = pDoc->GetMasterPageCount();
 
     sal_uInt16 nPage;
     SdPage* pPage;
 
-    const bool bDraw = mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW;
+    const bool bDraw = pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW;
 
     // standard pages
     for( nPage = 0; nPage < nMaxPages; nPage++ )
     {
-        pPage = static_cast<SdPage*>(mpDoc->GetPage( nPage ));
+        pPage = static_cast<SdPage*>(pDoc->GetPage( nPage ));
         if( (pPage->GetName() == rName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }
@@ -3389,7 +3389,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exc
     // master pages
     for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
     {
-        pPage = static_cast<SdPage*>(mpDoc->GetMasterPage( nPage ));
+        pPage = static_cast<SdPage*>(pDoc->GetMasterPage( nPage ));
         if( (pPage->GetName() == rName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }

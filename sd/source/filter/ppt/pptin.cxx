@@ -2734,8 +2734,8 @@ ImplSdPPTImport::ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Ref
     if (  mpDoc->GetDocSh() )
     {
         xModel = mpDoc->GetDocSh()->GetModel();
-        oox::ole::MSConvertOCXControls mCtrlImporter( xModel );
-        return mCtrlImporter.ReadOCXStorage( rSrc1, rFormComp );
+        oox::ole::MSConvertOCXControls aCtrlImporter( xModel );
+        return aCtrlImporter.ReadOCXStorage( rSrc1, rFormComp );
     }
     return false;
 }

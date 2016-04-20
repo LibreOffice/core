@@ -485,18 +485,18 @@ lcl_areAllLineWidthsSame( const table::TableBorder& maTableBorder, bool bIsCell 
 
 uno::Any SAL_CALL ScVbaBorders::getLineStyle() throw (uno::RuntimeException, std::exception)
 {
-    table::TableBorder maTableBorder;
-    m_xProps->getPropertyValue( sTableBorder ) >>= maTableBorder;
+    table::TableBorder aTableBorder;
+    m_xProps->getPropertyValue( sTableBorder ) >>= aTableBorder;
 
     sal_Int32 aLinestyle =  XlLineStyle::xlLineStyleNone;
 
-    if ( lcl_areAllLineWidthsSame( maTableBorder, bRangeIsSingleCell ))
+    if ( lcl_areAllLineWidthsSame( aTableBorder, bRangeIsSingleCell ))
     {
-        if (maTableBorder.TopLine.LineDistance != 0)
+        if (aTableBorder.TopLine.LineDistance != 0)
         {
             aLinestyle = XlLineStyle::xlDouble;
         }
-        else if ( maTableBorder.TopLine.OuterLineWidth != 0 )
+        else if ( aTableBorder.TopLine.OuterLineWidth != 0 )
         {
             aLinestyle = XlLineStyle::xlContinuous;
         }

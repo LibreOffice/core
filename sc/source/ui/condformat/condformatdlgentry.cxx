@@ -127,8 +127,8 @@ void ScCondFrmtEntry::Select()
 
 void ScCondFrmtEntry::Deselect()
 {
-    OUString maCondText = GetExpressionString();
-    maFtCondition->SetText(maCondText);
+    OUString aCondText = GetExpressionString();
+    maFtCondition->SetText(aCondText);
     maFtCondition->Show();
     maLbType->Hide();
     mbActive = false;

@@ -2277,10 +2277,10 @@ bool SVGReader::parseAndConvert()
 
     StatePool aStatePool;
     StateMap  aStateMap;
-    std::vector< uno::Reference<xml::dom::XElement> > maUseElementVector;
+    std::vector< uno::Reference<xml::dom::XElement> > aUseElementVector;
 
     annotateStyles(aStatePool,aStateMap,aInitialState,
-                   xDocElem,m_xDocumentHandler,maUseElementVector);
+                   xDocElem,m_xDocumentHandler,aUseElementVector);
 
 #ifdef DEBUG_FILTER_SVGREADER
     dumpTree(xDocElem);
@@ -2321,7 +2321,7 @@ bool SVGReader::parseAndConvert()
                 aStateMap,
                 xDocElem,
                 m_xDocumentHandler,
-                maUseElementVector);
+                aUseElementVector);
 
     m_xDocumentHandler->endElement( "draw:page" );
     m_xDocumentHandler->endElement( "office:drawing" );

@@ -2336,9 +2336,9 @@ css::uno::Reference< css::awt::XWindowPeer >
     css::uno::Reference< css::awt::XWindowPeer > xPeer( Window::GetComponentInterface(false) );
     if ( !xPeer.is() && bCreate )
     {
-        css::awt::XWindowPeer* mxPeer = new VCLXSvxFindReplaceDialog(this);
-        SetComponentInterface(mxPeer);
-        return mxPeer;
+        css::awt::XWindowPeer* pPeer = new VCLXSvxFindReplaceDialog(this);
+        SetComponentInterface(pPeer);
+        return pPeer;
     }
     else
         return xPeer;

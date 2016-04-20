@@ -158,13 +158,13 @@ void StartGrammarChecking( SwDoc &rDoc )
 {
     // check for a visible view
     bool bVisible = false;
-    const SwDocShell *mpDocShell = rDoc.GetDocShell();
-    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( mpDocShell, false );
+    const SwDocShell *pDocShell = rDoc.GetDocShell();
+    SfxViewFrame     *pFrame = SfxViewFrame::GetFirst( pDocShell, false );
     while (pFrame && !bVisible)
     {
         if (pFrame->IsVisible())
             bVisible = true;
-        pFrame = SfxViewFrame::GetNext( *pFrame, mpDocShell, false );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, false );
     }
 
     //!! only documents with visible views need to be checked

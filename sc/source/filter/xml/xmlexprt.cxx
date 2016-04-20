@@ -4327,9 +4327,9 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     else if(pFormatEntry->GetType() == condformat::COLORSCALE)
                     {
                         SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, true, true);
-                        const ScColorScaleFormat& mrColorScale = static_cast<const ScColorScaleFormat&>(*pFormatEntry);
-                        for(ScColorScaleEntries::const_iterator it = mrColorScale.begin();
-                                it != mrColorScale.end(); ++it)
+                        const ScColorScaleFormat& rColorScale = static_cast<const ScColorScaleFormat&>(*pFormatEntry);
+                        for(ScColorScaleEntries::const_iterator it = rColorScale.begin();
+                                it != rColorScale.end(); ++it)
                         {
                             if(it[0]->GetType() == COLORSCALE_FORMULA)
                             {
@@ -4423,19 +4423,19 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     }
                     else if(pFormatEntry->GetType() == condformat::ICONSET)
                     {
-                        const ScIconSetFormat& mrIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
-                        OUString aIconSetName = getIconSetName(mrIconSet.GetIconSetData()->eIconSetType);
+                        const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
+                        OUString aIconSetName = getIconSetName(rIconSet.GetIconSetData()->eIconSetType);
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, aIconSetName );
-                        if (mrIconSet.GetIconSetData()->mbCustom)
+                        if (rIconSet.GetIconSetData()->mbCustom)
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM, OUString::boolean(true));
 
                         SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_ICON_SET, true, true);
 
-                        if (mrIconSet.GetIconSetData()->mbCustom)
+                        if (rIconSet.GetIconSetData()->mbCustom)
                         {
                             for (std::vector<std::pair<ScIconSetType, sal_Int32> >::const_iterator
-                                    it = mrIconSet.GetIconSetData()->maCustomVector.begin();
-                                    it != mrIconSet.GetIconSetData()->maCustomVector.end(); ++it)
+                                    it = rIconSet.GetIconSetData()->maCustomVector.begin();
+                                    it != rIconSet.GetIconSetData()->maCustomVector.end(); ++it)
                             {
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, getIconSetName(it->first));
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_INDEX, OUString::number(it->second));
@@ -4444,9 +4444,9 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
 
                         }
 
-                        if(!mrIconSet.GetIconSetData()->mbShowValue)
+                        if(!rIconSet.GetIconSetData()->mbShowValue)
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
-                        for (auto const& it : mrIconSet)
+                        for (auto const& it : rIconSet)
                         {
                             if(it->GetType() == COLORSCALE_FORMULA)
                             {
@@ -4462,9 +4462,9 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     }
                     else if(pFormatEntry->GetType() == condformat::DATE)
                     {
-                        const ScCondDateFormatEntry& mrDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
-                        OUString aDateType = getDateStringForType(mrDateFormat.GetDateType());
-                        OUString aStyleName = ScStyleNameConversion::DisplayToProgrammaticName(mrDateFormat.GetStyleName(), SFX_STYLE_FAMILY_PARA );
+                        const ScCondDateFormatEntry& rDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
+                        OUString aDateType = getDateStringForType(rDateFormat.GetDateType());
+                        OUString aStyleName = ScStyleNameConversion::DisplayToProgrammaticName(rDateFormat.GetStyleName(), SFX_STYLE_FAMILY_PARA );
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_STYLE, aStyleName);
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_DATE, aDateType);
                         SvXMLElementExport aElementDateFormat(*this, XML_NAMESPACE_CALC_EXT, XML_DATE_IS, true, true);

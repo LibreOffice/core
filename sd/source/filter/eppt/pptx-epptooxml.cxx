@@ -341,8 +341,7 @@ void PowerPointExport::writeDocumentProperties()
 
     if (xDocProps.is())
     {
-        PowerPointExport& mrExport(*this);
-        mrExport.exportDocumentProperties( xDocProps );
+        exportDocumentProperties( xDocProps );
     }
 }
 

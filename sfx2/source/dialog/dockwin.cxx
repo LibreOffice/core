@@ -159,22 +159,22 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
             xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
             uno::UNO_QUERY );
 
-        static uno::WeakReference< frame::XModuleManager2 >  m_xModuleManager;
+        static uno::WeakReference< frame::XModuleManager2 >  s_xModuleManager;
 
-        uno::Reference< frame::XModuleManager2 > xModuleManager( m_xModuleManager );
+        uno::Reference< frame::XModuleManager2 > xModuleManager( s_xModuleManager );
         if ( !xModuleManager.is() )
         {
             xModuleManager = frame::ModuleManager::create(xContext);
-            m_xModuleManager = xModuleManager;
+            s_xModuleManager = xModuleManager;
         }
 
-        static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
+        static uno::WeakReference< container::XNameAccess > s_xWindowStateConfiguration;
 
-        uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
+        uno::Reference< container::XNameAccess > xWindowStateConfiguration( s_xWindowStateConfiguration );
         if ( !xWindowStateConfiguration.is() )
         {
             xWindowStateConfiguration = ui::theWindowStateConfiguration::get( xContext );
-            m_xWindowStateConfiguration = xWindowStateConfiguration;
+            s_xWindowStateConfiguration = xWindowStateConfiguration;
         }
 
         OUString sModuleIdentifier = xModuleManager->identify( xFrame );

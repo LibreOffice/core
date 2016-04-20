@@ -1624,14 +1624,14 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
 void SfxTemplateManagerDlg::loadRepositories()
 {
-    uno::Reference < uno::XComponentContext > m_context(comphelper::getProcessComponentContext());
+    uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
 
     // Load from user settings
     css::uno::Sequence<OUString>  aUrls =
-            officecfg::Office::Common::Misc::TemplateRepositoryUrls::get(m_context);
+            officecfg::Office::Common::Misc::TemplateRepositoryUrls::get(xContext);
 
     css::uno::Sequence<OUString> aNames =
-            officecfg::Office::Common::Misc::TemplateRepositoryNames::get(m_context);
+            officecfg::Office::Common::Misc::TemplateRepositoryNames::get(xContext);
 
     for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
     {

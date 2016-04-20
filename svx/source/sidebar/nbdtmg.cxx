@@ -166,7 +166,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
         if (nVersion==DEFAULT_NUMBERING_CACHE_FORMAT_VERSION) //first version
         {
             xIStm->ReadInt32( nNumIndex );
-            sal_uInt16 mLevel = 0x1;
+            sal_uInt16 nLevel = 0x1;
             while (nNumIndex>=0 && nNumIndex<DEFAULT_NUM_VALUSET_COUNT) {
                 SvxNumRule aNum(*xIStm);
                 //bullet color in font properties is not stored correctly. Need set tranparency bits manually
@@ -182,7 +182,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
                         aNum.SetLevel(i, aFmt);
                     }
                 }
-                RelplaceNumRule(aNum,nNumIndex,mLevel);
+                RelplaceNumRule(aNum,nNumIndex,nLevel);
                 xIStm->ReadInt32( nNumIndex );
             }
         }
@@ -209,9 +209,9 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
                     SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::SYMBOL_ALIGNMENT,
                     10, false,
                     SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
-                sal_uInt16 mLevel = 0x1;
+                sal_uInt16 nLevel = 0x1;
                 xOStm->WriteInt32( nItem );
-                ApplyNumRule(aDefNumRule,nItem,mLevel,false,true);
+                ApplyNumRule(aDefNumRule,nItem,nLevel,false,true);
                 aDefNumRule.Store(*xOStm);
             }
         }

@@ -1040,9 +1040,9 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
 
 SbModule* StarBASIC::MakeModule( const OUString& rName, const OUString& rSrc )
 {
-    ModuleInfo mInfo;
-    mInfo.ModuleType = ModuleType::NORMAL;
-    return MakeModule(  rName, mInfo, rSrc );
+    ModuleInfo aInfo;
+    aInfo.ModuleType = ModuleType::NORMAL;
+    return MakeModule(  rName, aInfo, rSrc );
 }
 SbModule* StarBASIC::MakeModule( const OUString& rName, const ModuleInfo& mInfo, const OUString& rSrc )
 {

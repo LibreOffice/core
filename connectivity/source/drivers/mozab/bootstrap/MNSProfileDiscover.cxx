@@ -65,15 +65,15 @@ namespace connectivity
         sal_Int32 ProfileAccess::LoadXPToolkitProfiles(MozillaProductType product)
         {
             sal_Int32 index=product;
-            ProductStruct &m_Product = m_ProductProfileList[index];
+            ProductStruct &rProduct = m_ProductProfileList[index];
 
             OUString regDir = getRegistryDir(product);
             OUString profilesIni = regDir + "profiles.ini";
             IniParser parser( profilesIni );
-            IniSectionMap &mAllSection = parser.getAllSection();
+            IniSectionMap &rAllSection = parser.getAllSection();
 
-            IniSectionMap::iterator iBegin = mAllSection.begin();
-            IniSectionMap::const_iterator iEnd = mAllSection.end();
+            IniSectionMap::iterator iBegin = rAllSection.begin();
+            IniSectionMap::const_iterator iEnd = rAllSection.end();
             for(;iBegin != iEnd;++iBegin)
             {
                 ini_Section *aSection = &(*iBegin).second;
@@ -125,7 +125,7 @@ namespace connectivity
                     ProfileStruct*  profileItem     = new ProfileStruct(product,profileName,
                             fullProfilePath
                         );
-                    m_Product.mProfileList[profileName] = profileItem;
+                    rProduct.mProfileList[profileName] = profileItem;
 
                     sal_Int32 isDefault = 0;
                     if (!sIsDefault.isEmpty())
@@ -133,41 +133,41 @@ namespace connectivity
                         isDefault = sIsDefault.toInt32();
                     }
                     if (isDefault)
-                        m_Product.mCurrentProfileName = profileName;
+                        rProduct.mCurrentProfileName = profileName;
 
                 }
 
             }
-            return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
+            return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
 
         OUString ProfileAccess::getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
-            ProductStruct &m_Product = m_ProductProfileList[index];
-            if (m_Product.mProfileList.empty() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
+            ProductStruct &rProduct = m_ProductProfileList[index];
+            if (rProduct.mProfileList.empty() || rProduct.mProfileList.find(profileName) == rProduct.mProfileList.end())
             {
                 //Profile not found
                 return OUString();
             }
             else
-                return m_Product.mProfileList[profileName]->getProfilePath();
+                return rProduct.mProfileList[profileName]->getProfilePath();
         }
 
         ::sal_Int32 ProfileAccess::getProfileCount( ::com::sun::star::mozilla::MozillaProductType product) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
-            ProductStruct &m_Product = m_ProductProfileList[index];
-            return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
+            ProductStruct &rProduct = m_ProductProfileList[index];
+            return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
         ::sal_Int32 ProfileAccess::getProfileList( ::com::sun::star::mozilla::MozillaProductType product, ::com::sun::star::uno::Sequence< OUString >& list ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
-            ProductStruct &m_Product = m_ProductProfileList[index];
-            list.realloc(static_cast<sal_Int32>(m_Product.mProfileList.size()));
+            ProductStruct &rProduct = m_ProductProfileList[index];
+            list.realloc(static_cast<sal_Int32>(rProduct.mProfileList.size()));
             sal_Int32 i=0;
-            for(ProfileList::const_iterator itor=m_Product.mProfileList.begin();
-                itor != m_Product.mProfileList.end();
+            for(ProfileList::const_iterator itor=rProduct.mProfileList.begin();
+                itor != rProduct.mProfileList.end();
                 ++itor)
             {
                 ProfileStruct * aProfile = (*itor).second;
@@ -175,24 +175,24 @@ namespace connectivity
                 i++;
             }
 
-            return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
+            return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
 
         OUString ProfileAccess::getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
-            ProductStruct &m_Product = m_ProductProfileList[index];
-            if (!m_Product.mCurrentProfileName.isEmpty())
+            ProductStruct &rProduct = m_ProductProfileList[index];
+            if (!rProduct.mCurrentProfileName.isEmpty())
             {
                 //default profile setted in mozilla registry
-                return m_Product.mCurrentProfileName;
+                return rProduct.mCurrentProfileName;
             }
-            if (m_Product.mProfileList.empty())
+            if (rProduct.mProfileList.empty())
             {
                 //there are not any profiles
                 return OUString();
             }
-            ProfileStruct * aProfile = (*m_Product.mProfileList.begin()).second;
+            ProfileStruct * aProfile = (*rProduct.mProfileList.begin()).second;
             return aProfile->getProfileName();
         }
         bool ProfileAccess::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
@@ -205,8 +205,8 @@ namespace connectivity
         bool ProfileAccess::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
-            ProductStruct &m_Product = m_ProductProfileList[index];
-            if (m_Product.mProfileList.empty() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
+            ProductStruct &rProduct = m_ProductProfileList[index];
+            if (rProduct.mProfileList.empty() || rProduct.mProfileList.find(profileName) == rProduct.mProfileList.end())
             {
                 return false;
             }

@@ -413,9 +413,6 @@ void SvXMLImport::InitCtor_()
         mxEventListener.set(new SvXMLImportEventListener(this));
         mxModel->addEventListener(mxEventListener);
     }
-
-    ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
-
 }
 
 SvXMLImport::SvXMLImport(

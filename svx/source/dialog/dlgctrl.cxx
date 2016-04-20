@@ -967,8 +967,8 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
         Point pRepaintPoint( aRectSize.Width() *( aFocusPosition.getX() - 1)/ nLines - 1,
                              aRectSize.Height() *( aFocusPosition.getY() - 1)/ nLines -1
                             );
-        Size  mRepaintSize( aRectSize.Width() *3/ nLines + 2,aRectSize.Height() *3/ nLines + 2);
-        Rectangle mRepaintRect( pRepaintPoint, mRepaintSize );
+        Size  aRepaintSize( aRectSize.Width() *3/ nLines + 2,aRectSize.Height() *3/ nLines + 2);
+        Rectangle aRepaintRect( pRepaintPoint, aRepaintSize );
         bool bFocusPosChanged=false;
         switch(nCode)
         {
@@ -976,7 +976,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 if((aFocusPosition.getX() >= 1))
                 {
                     aFocusPosition.setX( aFocusPosition.getX() - 1 );
-                    Invalidate(mRepaintRect);
+                    Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;
@@ -984,7 +984,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 if( aFocusPosition.getX() < (nLines - 1) )
                 {
                     aFocusPosition.setX( aFocusPosition.getX() + 1 );
-                    Invalidate(mRepaintRect);
+                    Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;
@@ -992,7 +992,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 if((aFocusPosition.getY() >= 1))
                 {
                     aFocusPosition.setY( aFocusPosition.getY() - 1 );
-                    Invalidate(mRepaintRect);
+                    Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;
@@ -1000,7 +1000,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 if( aFocusPosition.getY() < ( nLines - 1 ) )
                 {
                     aFocusPosition.setY( aFocusPosition.getY() + 1 );
-                    Invalidate(mRepaintRect);
+                    Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;

@@ -273,10 +273,10 @@ PrinterJob::~PrinterJob ()
 
 static void WriteLocalTimePS( osl::File *rFile )
 {
-    TimeValue m_start_time, tLocal;
+    TimeValue aStartTime, tLocal;
     oslDateTime date_time;
-    if (osl_getSystemTime( &m_start_time ) &&
-        osl_getLocalTimeFromSystemTime( &m_start_time, &tLocal ) &&
+    if (osl_getSystemTime( &aStartTime ) &&
+        osl_getLocalTimeFromSystemTime( &aStartTime, &tLocal ) &&
         osl_getDateTimeFromTimeValue( &tLocal, &date_time ))
     {
         char ar[ 256 ];

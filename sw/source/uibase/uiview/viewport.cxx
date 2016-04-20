@@ -87,7 +87,7 @@ static void lcl_GetPos(SwView* pView,
                 bool bBorder)
 {
     SwWrtShell &rSh = pView->GetWrtShell();
-    const Size m_aDocSz( rSh.GetDocSize() );
+    const Size aDocSz( rSh.GetDocSize() );
 
     const long lBorder = bBorder ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     const bool bHori = pScrollbar->IsHoriScroll();
@@ -96,7 +96,7 @@ static void lcl_GetPos(SwView* pView,
 
     long lDelta = lPos - (bHori ? rSh.VisArea().Pos().X() : rSh.VisArea().Pos().Y());
 
-    const long lSize = (bHori ? m_aDocSz.A() : m_aDocSz.B()) + lBorder;
+    const long lSize = (bHori ? aDocSz.A() : aDocSz.B()) + lBorder;
     // Should right or below are too much space,
     // then they must be subtracted out of the VisArea!
     long nTmp = pView->GetVisArea().Right()+lDelta;

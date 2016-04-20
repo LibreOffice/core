@@ -1762,8 +1762,8 @@ namespace osl_ThreadData
             {
                 // at first, set the data a value
                 char* pc = new char[2];
-                char m_nData = 'm';
-                pc[0] = m_nData;
+                char nData = 'm';
+                pc[0] = nData;
                 pc[1] = '\0';
 
                 myThreadData.setData(pc);
@@ -1795,8 +1795,8 @@ namespace osl_ThreadData
             {
                 // at first, set the data a value
                 char* pc = new char[2];
-                char m_nData = 'm';
-                memcpy(pc, &m_nData, 1);
+                char nData = 'm';
+                memcpy(pc, &nData, 1);
                 pc[1] = '\0';
                 myThreadData.setData(pc);
 
@@ -1807,8 +1807,8 @@ namespace osl_ThreadData
                 // aThread1 and aThread2 should have not terminated yet
                 // setData the second time
                 char* pc2 = new char[2];
-                m_nData = 'o';
-                memcpy(pc2, &m_nData, 1);
+                nData = 'o';
+                memcpy(pc2, &nData, 1);
                 pc2[1] = '\0';
 
                 myThreadData.setData(pc2);
@@ -1843,8 +1843,8 @@ namespace osl_ThreadData
         void getData_001()
             {
                 char* pc = new char[2];
-                char m_nData[] = "i";
-                strcpy(pc, m_nData);
+                char nData[] = "i";
+                strcpy(pc, nData);
                 myThreadData.setData(pc);
 
                 myKeyThread aThread1('c');
@@ -1872,8 +1872,8 @@ namespace osl_ThreadData
         void getData_002()
             {
                 char* pc = new char[2];
-                char m_nData = 'i';
-                memcpy(pc, &m_nData, 1);
+                char nData = 'i';
+                memcpy(pc, &nData, 1);
                 pc[1] = '\0';
 
                 myThreadData.setData(pc);
@@ -1884,8 +1884,8 @@ namespace osl_ThreadData
                 aThread2.create();
 
                 // change the value which pc points
-                char m_nData2 = 'j';
-                memcpy(pc, &m_nData2, 1);
+                char nData2 = 'j';
+                memcpy(pc, &nData2, 1);
                 pc[1] = '\0';
 
                 void* pChar = myThreadData.getData();

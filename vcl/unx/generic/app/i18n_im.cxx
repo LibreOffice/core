@@ -387,20 +387,20 @@ SalI18N_InputMethod::FilterEvent( XEvent *pEvent, ::Window window    )
      * fix broken key release handling of some IMs
      */
     XKeyEvent*         pKeyEvent = &(pEvent->xkey);
-    static XKeyEventOp maLastKeyPress;
+    static XKeyEventOp s_aLastKeyPress;
 
     if (bFilterEvent)
     {
         if (pKeyEvent->type == KeyRelease)
-            bFilterEvent = !maLastKeyPress.match (*pKeyEvent);
-        maLastKeyPress.erase();
+            bFilterEvent = !s_aLastKeyPress.match (*pKeyEvent);
+        s_aLastKeyPress.erase();
     }
     else /* (!bFilterEvent) */
     {
         if (pKeyEvent->type == KeyPress)
-            maLastKeyPress = *pKeyEvent;
+            s_aLastKeyPress = *pKeyEvent;
         else
-            maLastKeyPress.erase();
+            s_aLastKeyPress.erase();
     }
 
     return bFilterEvent;

@@ -220,9 +220,9 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, uno::UNO_QUERY );
             if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
             {
-                ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
+                ModuleInfo aInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
                 OSL_TRACE("#addLibraryModulesImpl - aMod");
-                pLib->MakeModule( aModuleName, mInfo, aMod );
+                pLib->MakeModule( aModuleName, aInfo, aMod );
             }
             else
         pLib->MakeModule( aModuleName, aMod );
@@ -279,8 +279,8 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
                 uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( Event.Source, uno::UNO_QUERY );
                 if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aName ) )
                 {
-                    ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aName );
-                    pLib->MakeModule( aName, mInfo, aMod );
+                    ModuleInfo aInfo = xVBAModuleInfo->getModuleInfo( aName );
+                    pLib->MakeModule( aName, aInfo, aMod );
                 }
                 else
                     pLib->MakeModule( aName, aMod );

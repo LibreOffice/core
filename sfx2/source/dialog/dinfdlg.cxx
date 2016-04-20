@@ -959,10 +959,10 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
-            const SfxDocumentInfoItem* m_pInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
+            const SfxDocumentInfoItem* pInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
             bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
-            const_cast<SfxDocumentInfoItem*>(m_pInfoItem)->SetUseUserData( bUseData );
-            rSet->Put( SfxDocumentInfoItem( *m_pInfoItem ) );
+            const_cast<SfxDocumentInfoItem*>(pInfoItem)->SetUseUserData( bUseData );
+            rSet->Put( SfxDocumentInfoItem( *pInfoItem ) );
             bRet = true;
         }
     }
@@ -996,10 +996,10 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
-            const SfxDocumentInfoItem* m_pxInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
+            const SfxDocumentInfoItem* pInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
             bool bUseThumbnail = ( TRISTATE_TRUE == m_pUseThumbnailSaveCB->GetState() );
-            const_cast<SfxDocumentInfoItem*>(m_pxInfoItem)->SetUseThumbnailSave( bUseThumbnail );
-            rSet->Put( SfxDocumentInfoItem( *m_pxInfoItem ) );
+            const_cast<SfxDocumentInfoItem*>(pInfoItem)->SetUseThumbnailSave( bUseThumbnail );
+            rSet->Put( SfxDocumentInfoItem( *pInfoItem ) );
             bRet = true;
         }
     }
@@ -1082,7 +1082,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         m_pFileValEd->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
-    bool m_bUseUserData = rInfoItem.IsUseUserData();
+    bool bUseUserData = rInfoItem.IsUseUserData();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     m_pCreateValFt->SetText( ConvertDateTime_Impl( rInfoItem.getAuthor(),
         rInfoItem.getCreationDate(), rLocaleWrapper ) );
@@ -1095,7 +1095,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         m_pPrintValFt->SetText( ConvertDateTime_Impl( rInfoItem.getPrintedBy(),
             aTime, rLocaleWrapper ) );
     const long nTime = rInfoItem.getEditingDuration();
-    if ( m_bUseUserData )
+    if ( bUseUserData )
     {
         const tools::Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
         m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aT ) );
@@ -1103,7 +1103,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             rInfoItem.getEditingCycles() ) );
     }
 
-    bool m_bUseThumbnailSave = rInfoItem.IsUseThumbnailSave();
+    bool bUseThumbnailSave = rInfoItem.IsUseThumbnailSave();
 
     // Check for cmis properties where otherwise unavailable
     if ( rInfoItem.isCmisDocument( ) )
@@ -1116,13 +1116,13 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             {
                 Sequence< sal_Int64 > seqValue;
                 aCmisProps[i].Value >>= seqValue;
-                SvNumberFormatter m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
+                SvNumberFormatter aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() );
-                sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
+                sal_uInt32 nIndex = aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
                 if ( seqValue.getLength( ) > 0 )
                 {
                     OUString sValue;
-                    m_aNumberFormatter.GetInputLineString( seqValue[0], nIndex, sValue );
+                    aNumberFormatter.GetInputLineString( seqValue[0], nIndex, sValue );
                     m_pShowSizeFT->SetText( CreateSizeText( sValue.toInt64( ) ) );
                 }
             }
@@ -1154,12 +1154,12 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         }
     }
 
-    m_pUseUserDataCB->SetState( static_cast<TriState>(m_bUseUserData) );
+    m_pUseUserDataCB->SetState( static_cast<TriState>(bUseUserData) );
     m_pUseUserDataCB->SaveValue();
     m_pUseUserDataCB->Enable( bEnableUseUserData );
     bHandleDelete = false;
     m_pDeleteBtn->Enable( bEnableUseUserData );
-    m_pUseThumbnailSaveCB->SetState( static_cast<TriState>(m_bUseThumbnailSave) );
+    m_pUseThumbnailSaveCB->SetState( static_cast<TriState>(bUseThumbnailSave) );
     m_pUseThumbnailSaveCB->SaveValue();
 }
 

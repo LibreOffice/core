@@ -442,7 +442,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
         uno::Reference< script::XTypeConverter > xConverter = getTypeConverter(mxContext);
         uno::Any aConverted;
         aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
-        SheetMap mSheets;
+        SheetMap aSheets;
         uno::Sequence< uno::Any > sIndices;
         aConverted >>= sIndices;
         sal_Int32 nElems = sIndices.getLength();
@@ -452,9 +452,9 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
             ScVbaWorksheet* pWorkSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xWorkSheet );
             uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_QUERY_THROW );
             uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );
-            mSheets.push_back( xSheet );
+            aSheets.push_back( xSheet );
         }
-        uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( mSheets );
+        uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( aSheets );
         uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( this->getParent(), mxContext, xIndexAccess, mxModel ) );
         return uno::makeAny( xSelectedSheets );
     }

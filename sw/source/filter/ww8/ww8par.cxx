@@ -278,10 +278,10 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     //sal_uInt8 maGuidStdLink[ 16 ] ={
     //    0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
 
-    sal_uInt8 maGuidUrlMoniker[ 16 ] = {
+    sal_uInt8 aGuidUrlMoniker[ 16 ] = {
         0xE0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
 
-    sal_uInt8 maGuidFileMoniker[ 16 ] = {
+    sal_uInt8 aGuidFileMoniker[ 16 ] = {
         0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 };
 
     sal_uInt8 aGuid[16];
@@ -320,7 +320,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     {
         rStrm.Read( aGuid, 16);
 
-        if( (memcmp(aGuid, maGuidFileMoniker, 16) == 0) )
+        if( (memcmp(aGuid, aGuidFileMoniker, 16) == 0) )
         {
             rStrm.ReadUInt16( nLevel );
             xShortName.reset( new OUString );
@@ -342,7 +342,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
             else
                 lclGetAbsPath( *xShortName, nLevel, pDocShell);
         }
-        else if( (memcmp(aGuid, maGuidUrlMoniker, 16) == 0) )
+        else if( (memcmp(aGuid, aGuidUrlMoniker, 16) == 0) )
         {
             sal_uInt32 nStrLen(0);
             rStrm.ReadUInt32( nStrLen );
@@ -1149,22 +1149,22 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
     {
         SvMemoryStream aMemStream;
         struct HyperLinksTable hlStr;
-        sal_uInt16 mnRawRecId,mnRawRecSize;
+        sal_uInt16 nRawRecId,nRawRecSize;
         aMemStream.WriteUInt16( 0 ).WriteUInt16( nBufferSize );
 
         // copy from DFF stream to memory stream
         ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
         sal_uInt8* pnData = &aBuffer.front();
-        sal_uInt8 mnStreamSize;
+        sal_uInt8 nStreamSize;
         if( pnData && rSt.Read( pnData, nBufferSize ) == nBufferSize )
         {
             aMemStream.Write( pnData, nBufferSize );
             aMemStream.Seek( STREAM_SEEK_TO_END );
-            mnStreamSize = aMemStream.Tell();
+            nStreamSize = aMemStream.Tell();
             aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
-            bool bRet =  4 <= mnStreamSize;
+            bool bRet =  4 <= nStreamSize;
             if( bRet )
-                aMemStream.ReadUInt16( mnRawRecId ).ReadUInt16( mnRawRecSize );
+                aMemStream.ReadUInt16( nRawRecId ).ReadUInt16( nRawRecSize );
             SwDocShell* pDocShell = rReader.m_pDocShell;
             if(pDocShell)
             {

@@ -156,9 +156,9 @@ bool SwAccessibleChild::IsBoundAsChar() const
     }
     else if ( mpDrawObj )
     {
-        const SwFrameFormat* mpFrameFormat = ::FindFrameFormat( mpDrawObj );
-        bRet = mpFrameFormat
-               && (FLY_AS_CHAR == mpFrameFormat->GetAnchor().GetAnchorId());
+        const SwFrameFormat* pFrameFormat = ::FindFrameFormat( mpDrawObj );
+        bRet = pFrameFormat
+               && (FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId());
     }
     else if ( mpWindow )
     {

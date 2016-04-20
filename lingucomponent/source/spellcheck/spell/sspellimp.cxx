@@ -356,22 +356,22 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                 int rVal = pMS->spell(aWrd.getStr());
                 if (rVal != 1) {
                     if (extrachar && (eEnc != RTL_TEXTENCODING_UTF8)) {
-                        OUStringBuffer mBuf(nWord);
-                        n = mBuf.getLength();
+                        OUStringBuffer aBuf(nWord);
+                        n = aBuf.getLength();
                         for (sal_Int32 ix=n-1; ix >= 0; ix--)
                         {
-                          switch (mBuf[ix]) {
-                            case 0xFB00: mBuf.remove(ix, 1); mBuf.insert(ix, "ff"); break;
-                            case 0xFB01: mBuf.remove(ix, 1); mBuf.insert(ix, "fi"); break;
-                            case 0xFB02: mBuf.remove(ix, 1); mBuf.insert(ix, "fl"); break;
-                            case 0xFB03: mBuf.remove(ix, 1); mBuf.insert(ix, "ffi"); break;
-                            case 0xFB04: mBuf.remove(ix, 1); mBuf.insert(ix, "ffl"); break;
+                          switch (aBuf[ix]) {
+                            case 0xFB00: aBuf.remove(ix, 1); aBuf.insert(ix, "ff"); break;
+                            case 0xFB01: aBuf.remove(ix, 1); aBuf.insert(ix, "fi"); break;
+                            case 0xFB02: aBuf.remove(ix, 1); aBuf.insert(ix, "fl"); break;
+                            case 0xFB03: aBuf.remove(ix, 1); aBuf.insert(ix, "ffi"); break;
+                            case 0xFB04: aBuf.remove(ix, 1); aBuf.insert(ix, "ffl"); break;
                             case 0x200C:
-                            case 0x200D: mBuf.remove(ix, 1); break;
+                            case 0x200D: aBuf.remove(ix, 1); break;
                           }
                         }
-                        OUString mWord(mBuf.makeStringAndClear());
-                        OString bWrd(OU2ENC(mWord, eEnc));
+                        OUString aWord(aBuf.makeStringAndClear());
+                        OString bWrd(OU2ENC(aWord, eEnc));
                         rVal = pMS->spell(bWrd.getStr());
                         if (rVal == 1) return -1;
                     }
