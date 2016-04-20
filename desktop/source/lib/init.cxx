@@ -690,7 +690,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         }
 
         MediaDescriptor aSaveMediaDescriptor;
-        aSaveMediaDescriptor["Overwrite"] <<= sal_True;
+        aSaveMediaDescriptor["Overwrite"] <<= true;
         aSaveMediaDescriptor["FilterName"] <<= aFilterName;
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
 

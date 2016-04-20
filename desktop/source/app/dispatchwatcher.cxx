@@ -261,16 +261,16 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         {
             // documents opened for printing are opened readonly because they must be opened as a new document and this
             // document could be open already
-            aArgs[1].Value <<= sal_True;
+            aArgs[1].Value <<= true;
 
             // always open a new document for printing, because it must be disposed afterwards
-            aArgs[2].Value <<= sal_True;
+            aArgs[2].Value <<= true;
 
             // printing is done in a hidden view
-            aArgs[3].Value <<= sal_True;
+            aArgs[3].Value <<= true;
 
             // load document for printing without user interaction
-            aArgs[4].Value <<= sal_True;
+            aArgs[4].Value <<= true;
 
             // hidden documents should never be put into open tasks
             aTarget = "_blank";
@@ -337,7 +337,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                     // window!!
                     Sequence < PropertyValue > aArgs2(1);
                     aArgs2[0].Name    = "SynchronMode";
-                    aArgs2[0].Value <<= sal_True;
+                    aArgs2[0].Value <<= true;
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
                         xDisp->dispatchWithNotification( aURL, aArgs2, this );
@@ -368,9 +368,9 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 aArgs.realloc( nIndex+1 );
                 aArgs[nIndex].Name = aAsTemplateArg;
                 if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW )
-                    aArgs[nIndex].Value <<= sal_True;
+                    aArgs[nIndex].Value <<= true;
                 else
-                    aArgs[nIndex].Value <<= sal_False;
+                    aArgs[nIndex].Value <<= false;
             }
 
             // if we are called in viewmode, open document read-only
@@ -378,7 +378,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
                 aArgs[nIndex].Name = "ReadOnly";
-                aArgs[nIndex].Value <<= sal_True;
+                aArgs[nIndex].Value <<= true;
             }
 
             // if we are called with -start set Start in mediadescriptor
@@ -386,7 +386,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
                 aArgs[nIndex].Name = "StartPresentation";
-                aArgs[nIndex].Value <<= sal_True;
+                aArgs[nIndex].Value <<= true;
             }
 
             // Force input filter, if possible
@@ -508,7 +508,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 sal_Int32 nFilterOptionsIndex = aFilter.indexOf(':');
                                 Sequence<PropertyValue> conversionProperties( 0 < nFilterOptionsIndex ? 3 : 2 );
                                 conversionProperties[0].Name = "Overwrite";
-                                conversionProperties[0].Value <<= sal_True;
+                                conversionProperties[0].Value <<= true;
 
                                 conversionProperties[1].Name = "FilterName";
                                 if( 0 < nFilterOptionsIndex )
@@ -649,7 +649,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 {
                     Reference < XCloseable > xClose( xDoc, UNO_QUERY );
                     if ( xClose.is() )
-                        xClose->close( sal_True );
+                        xClose->close( true );
                     else
                     {
                         Reference < XComponent > xComp( xDoc, UNO_QUERY );
@@ -674,7 +674,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         aArgs[0].Name = "Referer";
         aArgs[0].Value <<= OUString("private:OpenEvent");
         aArgs[1].Name = "SynchronMode";
-        aArgs[1].Value <<= sal_True;
+        aArgs[1].Value <<= true;
 
         for ( size_t n = 0; n < aDispatches.size(); n++ )
         {

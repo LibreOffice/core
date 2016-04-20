@@ -318,7 +318,7 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
     // TODO: perform more interactions 'for real' like the above
     selectApproved(rContinuations);
 
-    return sal_True;
+    return true;
 }
 
 void LOKInteractionHandler::SetPassword(char const*const pPassword)

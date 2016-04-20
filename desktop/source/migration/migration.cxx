@@ -264,7 +264,7 @@ bool MigrationImpl::doMigration()
             uno::Reference< ui::XUIConfigurationManager > xCfgManager = aNewVersionUIInfo.getConfigManager(vModulesInfo[i].sModuleShortName);
 
             if (vModulesInfo[i].bHasMenubar) {
-                uno::Reference< container::XIndexContainer > xOldVersionMenuSettings(xOldCfgManager->getSettings(sMenubarResourceURL, sal_True), uno::UNO_QUERY);
+                uno::Reference< container::XIndexContainer > xOldVersionMenuSettings(xOldCfgManager->getSettings(sMenubarResourceURL, true), uno::UNO_QUERY);
                 uno::Reference< container::XIndexContainer > xNewVersionMenuSettings = aNewVersionUIInfo.getNewMenubarSettings(vModulesInfo[i].sModuleShortName);
                 OUString sParent;
                 compareOldAndNewConfig(sParent, xOldVersionMenuSettings, xNewVersionMenuSettings, sMenubarResourceURL);
@@ -277,7 +277,7 @@ bool MigrationImpl::doMigration()
                     OUString sToolbarName = vModulesInfo[i].m_vToolbars[j];
                     OUString sToolbarResourceURL = sToolbarResourcePre + sToolbarName;
 
-                    uno::Reference< container::XIndexContainer > xOldVersionToolbarSettings(xOldCfgManager->getSettings(sToolbarResourceURL, sal_True), uno::UNO_QUERY);
+                    uno::Reference< container::XIndexContainer > xOldVersionToolbarSettings(xOldCfgManager->getSettings(sToolbarResourceURL, true), uno::UNO_QUERY);
                     uno::Reference< container::XIndexContainer > xNewVersionToolbarSettings = aNewVersionUIInfo.getNewToolbarSettings(vModulesInfo[i].sModuleShortName, sToolbarName);
                     OUString sParent;
                     compareOldAndNewConfig(sParent, xOldVersionToolbarSettings, xNewVersionToolbarSettings, sToolbarResourceURL);
@@ -321,7 +321,7 @@ void MigrationImpl::setMigrationCompleted()
 {
     try {
         uno::Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), uno::UNO_QUERY_THROW);
-        aPropertySet->setPropertyValue("MigrationCompleted", uno::makeAny(sal_True));
+        aPropertySet->setPropertyValue("MigrationCompleted", uno::makeAny(true));
         uno::Reference< XChangesBatch >(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
     } catch (...) {
         // fail silently
@@ -1230,7 +1230,7 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
 
             if (vModulesInfo[i].bHasMenubar) {
                 m_lNewVersionMenubarSettingsSeq[i].Name = vModulesInfo[i].sModuleShortName;
-                m_lNewVersionMenubarSettingsSeq[i].Value <<= xCfgManager->getSettings(sMenubarResourceURL, sal_True);
+                m_lNewVersionMenubarSettingsSeq[i].Value <<= xCfgManager->getSettings(sMenubarResourceURL, true);
             }
 
             sal_Int32 nToolbars = vModulesInfo[i].m_vToolbars.size();
@@ -1241,7 +1241,7 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
                     OUString sToolbarResourceURL = sToolbarResourcePre + sToolbarName;
 
                     lPropSeq[j].Name = sToolbarName;
-                    lPropSeq[j].Value <<= xCfgManager->getSettings(sToolbarResourceURL, sal_True);
+                    lPropSeq[j].Value <<= xCfgManager->getSettings(sToolbarResourceURL, true);
                 }
 
                 m_lNewVersionToolbarSettingsSeq[i].Name = vModulesInfo[i].sModuleShortName;
