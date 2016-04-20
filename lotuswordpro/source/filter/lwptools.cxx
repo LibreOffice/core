@@ -253,13 +253,13 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
     UErrorCode status = U_ZERO_ERROR;
     UChar* pattern = nullptr;
 
-    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,nullptr,nLength,&status);
+    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),false,nullptr,nLength,&status);
     if (status == U_BUFFER_OVERFLOW_ERROR)
     {
         status = U_ZERO_ERROR;
         nLength = nLengthNeed +1;
         pattern = static_cast<UChar*>(malloc(sizeof(UChar)*nLength));
-        udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,pattern,nLength,&status);
+        udat_toPattern(reinterpret_cast<void **>(fmt),false,pattern,nLength,&status);
     }
     if (pattern == nullptr)
         return nullptr;

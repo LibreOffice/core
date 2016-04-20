@@ -564,7 +564,7 @@ void LwpTableLayout::RegisterColumns()
     sal_Bool * pWidthCalculated = new sal_Bool[nCols];
     for(sal_uInt16 i=0;i<nCols; i++)
     {
-        pWidthCalculated[i] = sal_False;
+        pWidthCalculated[i] = false;
         m_pColumns[i] = nullptr;
     }
 
@@ -588,7 +588,7 @@ void LwpTableLayout::RegisterColumns()
         m_pColumns[nColId] = pColumnLayout;
         if (!pColumnLayout->IsJustifiable())
         {
-            pWidthCalculated[nColId] = sal_True;
+            pWidthCalculated[nColId] = true;
             dTableWidth -= pColumnLayout->GetWidth();
             nJustifiableColumn --;
         }
@@ -603,7 +603,7 @@ void LwpTableLayout::RegisterColumns()
         nJustifiableColumn ++;
         if (m_pColumns[nCols - 1])
         {
-            pWidthCalculated[nCols-1] = sal_False;
+            pWidthCalculated[nCols-1] = false;
             dTableWidth += m_pColumns[nCols-1]->GetWidth();
         }
         else
