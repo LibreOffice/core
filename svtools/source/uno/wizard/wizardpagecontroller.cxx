@@ -60,7 +60,7 @@ namespace svt { namespace uno
             ), UNO_SET_THROW );
 
             Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
-            xPageWindow->setVisible( sal_True );
+            xPageWindow->setVisible( true );
 
             TabPage* pTabPage( getTabPage() );
             if ( pTabPage )

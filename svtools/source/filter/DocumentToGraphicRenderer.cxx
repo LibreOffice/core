@@ -67,7 +67,7 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
 
     renderProperties.realloc( 3 );
     renderProperties[0].Name = "IsPrinter";
-    renderProperties[0].Value <<= sal_True;
+    renderProperties[0].Value <<= true;
     renderProperties[1].Name = "RenderDevice";
     renderProperties[1].Value <<= xDevice;
     renderProperties[2].Name = "View";
@@ -111,7 +111,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     PropertyValues renderProps;
     renderProps.realloc( 3 );
     renderProps[0].Name = "IsPrinter";
-    renderProps[0].Value <<= sal_True;
+    renderProps[0].Value <<= true;
     renderProps[1].Name = "RenderDevice";
     renderProps[1].Value <<= xDevice;
     renderProps[2].Name = "View";

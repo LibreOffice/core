@@ -558,7 +558,7 @@ void ToolboxController::bindListener()
                         // UI disables the button. Catch exception as we release our mutex, it is possible
                         // that someone else already disposed this instance!
                         FeatureStateEvent aFeatureStateEvent;
-                        aFeatureStateEvent.IsEnabled = sal_False;
+                        aFeatureStateEvent.IsEnabled = false;
                         aFeatureStateEvent.FeatureURL = rListener.aURL;
                         aFeatureStateEvent.State = Any();
                         xStatusListener->statusChanged( aFeatureStateEvent );
@@ -737,9 +737,9 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( css::uno::Any&   
             {
                 aConvertedValue <<= aNewValue;
                 aOldValue <<= m_bSupportVisible;
-                return sal_True;
+                return true;
             }
-            return sal_False;
+            return false;
         }
     }
     return OPropertyContainer::convertFastPropertyValue(aConvertedValue, aOldValue, nHandle, aValue);

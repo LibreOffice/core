@@ -304,21 +304,21 @@ sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
     const css::awt::MouseEvent& )
 throw (css::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL StatusbarController::mouseMove(
     const css::awt::MouseEvent& )
 throw (css::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
     const css::awt::MouseEvent& )
 throw (css::uno::RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL StatusbarController::command(
@@ -495,7 +495,7 @@ void StatusbarController::bindListener()
                 // UI disables the button. Catch exception as we release our mutex, it is possible
                 // that someone else already disposed this instance!
                 FeatureStateEvent aFeatureStateEvent;
-                aFeatureStateEvent.IsEnabled = sal_False;
+                aFeatureStateEvent.IsEnabled = false;
                 aFeatureStateEvent.FeatureURL = rListener.aURL;
                 aFeatureStateEvent.State = Any();
                 xStatusListener->statusChanged( aFeatureStateEvent );

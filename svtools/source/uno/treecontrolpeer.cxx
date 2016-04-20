@@ -494,7 +494,7 @@ sal_Bool SAL_CALL TreeControlPeer::select( const Any& rSelection ) throw (Illega
 {
     SolarMutexGuard aGuard;
     ChangeNodesSelection( rSelection, true, true );
-    return sal_True;
+    return true;
 }
 
 
@@ -551,7 +551,7 @@ void SAL_CALL TreeControlPeer::removeSelectionChangeListener( const Reference< X
 sal_Bool SAL_CALL TreeControlPeer::addSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ChangeNodesSelection( rSelection, true, false );
-    return sal_True;
+    return true;
 }
 
 
@@ -865,11 +865,11 @@ sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException, std::e
     if( rTree.IsEditingActive() )
     {
         rTree.EndEditing();
-        return sal_True;
+        return true;
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
@@ -1351,7 +1351,7 @@ Any TreeControlPeer::getProperty( const OUString& PropertyName ) throw(RuntimeEx
         case BASEPROPERTY_TREE_EDITABLE:
             return Any( rTree.IsInplaceEditingEnabled() );
         case BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING:
-            return Any( sal_True ); // @todo
+            return Any( true ); // @todo
         case BASEPROPERTY_TREE_ROOTDISPLAYED:
             return Any( mbIsRootDisplayed );
         case BASEPROPERTY_TREE_SHOWSHANDLES:

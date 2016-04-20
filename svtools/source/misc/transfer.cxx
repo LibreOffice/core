@@ -127,7 +127,7 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
         // this seems to be the only parameter currently that might contain such characters
         sal_Bool pToAccept[128];
         for ( sal_Int32 nBInd = 0; nBInd < 128; nBInd++ )
-            pToAccept[nBInd] = sal_False;
+            pToAccept[nBInd] = false;
 
         const char aQuotedParamChars[] =
             "()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
@@ -136,7 +136,7 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
         {
             sal_Unicode nChar = aQuotedParamChars[nInd];
             if ( nChar < 128 )
-                pToAccept[nChar] = sal_True;
+                pToAccept[nChar] = true;
         }
 
         aParams += ";displayname=\""

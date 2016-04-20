@@ -263,8 +263,8 @@ throw( css::uno::RuntimeException, std::exception )
         // Dummy update for popup menu controllers
         FeatureStateEvent aEvent;
         aEvent.FeatureURL = aURL;
-        aEvent.IsEnabled  = sal_True;
-        aEvent.Requery    = sal_False;
+        aEvent.IsEnabled  = true;
+        aEvent.Requery    = false;
         aEvent.State      = Any();
         xControl->statusChanged( aEvent );
     }

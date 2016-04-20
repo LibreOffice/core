@@ -131,9 +131,9 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
             {
                 rConvertedValue <<= xNew;
                 rOldValue <<= m_xParent;
-                return sal_True;
+                return true;
             }
-            return sal_False;
+            return false;
         }
     }
     return OPropertyContainer::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);

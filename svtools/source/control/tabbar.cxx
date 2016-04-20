@@ -428,7 +428,7 @@ bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
             {
                 if ( !mbPostEvt )
                 {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(sal_False), true ) )
+                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(false), true ) )
                         mbPostEvt = true;
                 }
                 return true;
@@ -437,7 +437,7 @@ bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
             {
                 if ( !mbPostEvt )
                 {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(sal_True), true ) )
+                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(true), true ) )
                         mbPostEvt = true;
                 }
                 return true;
@@ -452,7 +452,7 @@ void TabBarEdit::LoseFocus()
 {
     if ( !mbPostEvt )
     {
-        if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(sal_False), true ) )
+        if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(false), true ) )
             mbPostEvt = true;
     }
 

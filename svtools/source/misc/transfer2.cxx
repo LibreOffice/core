@@ -255,7 +255,7 @@ void DropTargetHelper::ImplConstruct()
     {
         mxDropTargetListener = new DropTargetHelper::DropTargetListener( *this );
         mxDropTarget->addDropTargetListener( mxDropTargetListener );
-        mxDropTarget->setActive( sal_True );
+        mxDropTarget->setActive( true );
     }
 }
 

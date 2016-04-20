@@ -113,7 +113,7 @@ IMPL_STATIC_LINK_TYPED( MainThreadFrameCloserRequest, worker, void*, p, void )
                 uno::Reference< awt::XWindow > xWindow = pMTRequest->m_xFrame->getContainerWindow();
                 uno::Reference< awt::XVclWindowPeer > xWinPeer( xWindow, uno::UNO_QUERY_THROW );
 
-                xWindow->setVisible( sal_False );
+                xWindow->setVisible( false );
 
                 // reparent the window
                 xWinPeer->setProperty( "PluginParent", uno::makeAny( (sal_Int64) 0 ) );
@@ -130,7 +130,7 @@ IMPL_STATIC_LINK_TYPED( MainThreadFrameCloserRequest, worker, void*, p, void )
             try
             {
                 uno::Reference< util::XCloseable > xCloseable( pMTRequest->m_xFrame, uno::UNO_QUERY_THROW );
-                xCloseable->close( sal_True );
+                xCloseable->close( true );
             }
             catch( uno::Exception& )
             {
