@@ -2031,7 +2031,7 @@ sal_Bool SAL_CALL SvxUnoTextBase::hasElements(  ) throw(uno::RuntimeException, s
             return pForwarder->GetParagraphCount() != 0;
     }
 
-    return sal_False;
+    return false;
 }
 
 // text::XTextRangeMover

@@ -699,7 +699,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
         if (xTmp.is())
         {
             xTmpDicList->addDictionary( xTmp );
-            xTmp->setActive( sal_True );
+            xTmp->setActive( true );
         }
         xDic.set( xTmp, UNO_QUERY );
     }

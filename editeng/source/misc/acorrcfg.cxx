@@ -573,7 +573,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
             case  11: bVal = rSwFlags.bAddNonBrkSpace;  pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
             case  12:
-                bVal = sal_True;  pValues[nProp].setValue(&bVal, rType);
+                bVal = true;  pValues[nProp].setValue(&bVal, rType);
             break; // "Format/Option/ChangeDash",
             case  13: bVal = rSwFlags.bDelEmptyNode; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelEmptyParagraphs",
             case  14: bVal = rSwFlags.bChgUserColl; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ReplaceUserStyle",

@@ -1812,7 +1812,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
             aUserOptions.applyForbiddenRules = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
             aUserOptions.allowPunctuationOutsideMargin = bAllowPunctuationOutsideMargin;
-            aUserOptions.allowHyphenateEnglish = sal_False;
+            aUserOptions.allowHyphenateEnglish = false;
 
             i18n::LineBreakResults aLBR = _xBI->getLineBreak(
                 pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );

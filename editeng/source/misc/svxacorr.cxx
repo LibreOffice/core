@@ -2345,7 +2345,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             aInfo.NameClash = NameClash::OVERWRITE;
             aInfo.NewTitle  = aDest.GetName();
             aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DECODE_TO_IURI );
-            aInfo.MoveData  = sal_False;
+            aInfo.MoveData  = false;
             aAny <<= aInfo;
             aNewContent.executeCommand( "transfer", aAny);
         }

@@ -1335,7 +1335,7 @@ OUString ImpEditView::SpellIgnoreWord()
         {
             Reference< XDictionary >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
             if (xDic.is())
-                xDic->add( aWord, sal_False, OUString() );
+                xDic->add( aWord, false, OUString() );
             EditDoc& rDoc = pEditEngine->GetEditDoc();
             sal_Int32 nNodes = rDoc.Count();
             for ( sal_Int32 n = 0; n < nNodes; n++ )
@@ -2161,7 +2161,7 @@ void ImpEditView::AddDragAndDropListeners()
         pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
         uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
         pWindow->GetDropTarget()->addDropTargetListener( xDTL );
-        pWindow->GetDropTarget()->setActive( sal_True );
+        pWindow->GetDropTarget()->setActive( true );
         pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
 
         bActiveDragAndDropListener = true;

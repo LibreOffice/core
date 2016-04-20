@@ -244,7 +244,7 @@ sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString& aURL, const
 {
     (void)aURL;
     (void)aArgs;
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL SvxSimpleUnoModel::getURL(  ) throw (css::uno::RuntimeException, std::exception)
@@ -277,7 +277,7 @@ void SAL_CALL SvxSimpleUnoModel::unlockControllers(  ) throw (css::uno::RuntimeE
 
 sal_Bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 css::uno::Reference< css::frame::XController > SAL_CALL SvxSimpleUnoModel::getCurrentController(  ) throw (css::uno::RuntimeException, std::exception)

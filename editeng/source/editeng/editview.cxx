@@ -891,7 +891,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             // words could be added.
             uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
             if (xDic.is())
-                xDic->setActive( sal_True );
+                xDic->setActive( true );
 
             aDics = xDicList->getDictionaries();
             pDic  = aDics.getConstArray();
@@ -1018,7 +1018,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
                 xDic = xDicList->getDictionaryByName( aDicName );
 
             if (xDic.is())
-                xDic->add( aSelected, sal_False, OUString() );
+                xDic->add( aSelected, false, OUString() );
             // save modified user-dictionary if it is persistent
             Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
             if (xSavDic.is())
