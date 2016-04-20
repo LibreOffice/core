@@ -279,7 +279,7 @@ sal_Bool SAL_CALL OCommonStatement::getMoreResults()
 
     // if your driver supports more than only one resultset
     // and has one more at this moment return true
-    return sal_False;
+    return false;
 }
 
 Any SAL_CALL OCommonStatement::getWarnings()
@@ -377,7 +377,7 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
         case PROPERTY_ID_ESCAPEPROCESSING:
             break;
         case PROPERTY_ID_USEBOOKMARKS:
-            _rValue <<= sal_False;
+            _rValue <<= false;
             break;
         default:
             ;

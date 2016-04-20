@@ -619,7 +619,7 @@ rtl::OUString OConnection::transFormPreparedStatement(const rtl::OUString& _sSQL
     }
     if ( m_xParameterSubstitution.is() ) {
         try {
-            sSqlStatement = m_xParameterSubstitution->substituteVariables(sSqlStatement,sal_True);
+            sSqlStatement = m_xParameterSubstitution->substituteVariables(sSqlStatement,true);
         } catch(const Exception&) { }
     }
     return sSqlStatement;

@@ -595,7 +595,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /* fromType */, s
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy()
@@ -954,7 +954,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setT
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible(sal_Int32 setType)

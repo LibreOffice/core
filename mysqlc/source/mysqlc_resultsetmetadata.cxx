@@ -96,7 +96,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
@@ -218,7 +218,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
@@ -250,7 +250,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
@@ -313,7 +313,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
@@ -329,7 +329,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
@@ -345,7 +345,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return false; // fool compiler
 }
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)

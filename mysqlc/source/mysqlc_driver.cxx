@@ -241,14 +241,14 @@ Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const rtl:
         aDriverInfo.push_back(DriverPropertyInfo(
                 rtl::OUString("Hostname")
                 ,rtl::OUString("Name of host")
-                ,sal_True
+                ,true
                 ,rtl::OUString("localhost")
                 ,Sequence< rtl::OUString >())
             );
         aDriverInfo.push_back(DriverPropertyInfo(
                 rtl::OUString("Port")
                 ,rtl::OUString("Port")
-                ,sal_True
+                ,true
                 ,rtl::OUString("3306")
                 ,Sequence< rtl::OUString >())
             );

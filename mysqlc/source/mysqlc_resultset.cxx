@@ -193,7 +193,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False;
+    return false;
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 column)
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::isAfterLast()
@@ -542,7 +542,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::isFirst()
@@ -557,7 +557,7 @@ sal_Bool SAL_CALL OResultSet::isFirst()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::isLast()
@@ -572,7 +572,7 @@ sal_Bool SAL_CALL OResultSet::isLast()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 void SAL_CALL OResultSet::beforeFirst()
@@ -629,7 +629,7 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException, std:
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::last()
@@ -644,7 +644,7 @@ sal_Bool SAL_CALL OResultSet::last()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
@@ -659,7 +659,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
@@ -674,7 +674,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::previous()
@@ -689,7 +689,7 @@ sal_Bool SAL_CALL OResultSet::previous()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 Reference< XInterface > SAL_CALL OResultSet::getStatement()
@@ -709,7 +709,7 @@ sal_Bool SAL_CALL OResultSet::rowDeleted()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::rowInserted()
@@ -719,7 +719,7 @@ sal_Bool SAL_CALL OResultSet::rowInserted()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::rowUpdated()
@@ -729,7 +729,7 @@ sal_Bool SAL_CALL OResultSet::rowUpdated()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::next()
@@ -744,7 +744,7 @@ sal_Bool SAL_CALL OResultSet::next()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 sal_Bool SAL_CALL OResultSet::wasNull()
@@ -759,7 +759,7 @@ sal_Bool SAL_CALL OResultSet::wasNull()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; //fool
+    return false; //fool
 }
 
 void SAL_CALL OResultSet::cancel()
@@ -1045,7 +1045,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark(const Any& /* bookmark */)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark(const Any& /* bookmark */, sal_Int32 /* rows */)
@@ -1056,7 +1056,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark(const Any& /* bookmark */, 
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::moveRelativeToBookmark", *this);
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL OResultSet::compareBookmarks(const Any& /* n1 */, const Any& /* n2 */)
@@ -1075,7 +1075,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::hasOrderedBookmarks");
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL OResultSet::hashBookmark(const Any& /* bookmark */)
@@ -1141,7 +1141,7 @@ sal_Bool OResultSet::convertFastPropertyValue(Any & /* rConvertedValue */,
         default:
             ;
     }
-    return sal_False;
+    return false;
 }
 
 void OResultSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& /* rValue */)
@@ -1168,7 +1168,7 @@ void OResultSet::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) const
     OSL_TRACE("OResultSet::getFastPropertyValue");
     switch (nHandle) {
         case PROPERTY_ID_ISBOOKMARKABLE:
-            _rValue <<= sal_False;
+            _rValue <<= false;
             break;
         case PROPERTY_ID_CURSORNAME:
             break;
