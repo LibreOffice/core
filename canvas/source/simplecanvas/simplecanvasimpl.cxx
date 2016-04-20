@@ -75,7 +75,7 @@ namespace
             xDevice->createCompatibleLinePolyPolygon( sequenceSequence ),
             uno::UNO_QUERY );
         if( xRes.is() )
-            xRes->setClosed( 0, sal_True );
+            xRes->setClosed( 0, true );
         return xRes;
     }
 

@@ -2288,7 +2288,7 @@ namespace cairocanvas
         aLayout.PlaneStride = 0;
         aLayout.ColorSpace = mbHaveAlpha ? CairoColorSpaceHolder::get() : CairoNoAlphaColorSpaceHolder::get();
         aLayout.Palette.clear();
-        aLayout.IsMsbFirst = sal_False;
+        aLayout.IsMsbFirst = false;
 
         return aLayout;
     }

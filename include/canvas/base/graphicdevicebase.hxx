@@ -240,7 +240,7 @@ namespace canvas
 
         virtual sal_Bool SAL_CALL hasFullScreenMode(  ) throw (css::uno::RuntimeException) override
         {
-            return sal_False;
+            return false;
         }
 
         virtual sal_Bool SAL_CALL enterFullScreenMode( sal_Bool ) throw (css::uno::RuntimeException) override

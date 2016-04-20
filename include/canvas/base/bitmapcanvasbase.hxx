@@ -77,7 +77,7 @@ namespace canvas
 
         virtual sal_Bool SAL_CALL hasAlpha(  ) throw (css::uno::RuntimeException) override
         {
-            return sal_True;
+            return true;
         }
 
         virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize,
