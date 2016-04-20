@@ -138,7 +138,7 @@ SAL_IMPLEMENT_MAIN()
 
     sal_uInt32 nPos = 0;
     OUString arg, sOption;
-    sal_Bool bOption=sal_False;
+    sal_Bool bOption=false;
 
     // check command
     rtl_getAppCommandArg(nPos++, &arg.pData);

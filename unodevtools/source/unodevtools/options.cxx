@@ -74,7 +74,7 @@ bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
        (aArg.startsWith("--") && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
     {
         ++(*pnIndex);
-        *pbOpt = sal_True;
+        *pbOpt = true;
         SAL_INFO("unodevtools", "identified option --" << pOpt);
         return true;
     }
