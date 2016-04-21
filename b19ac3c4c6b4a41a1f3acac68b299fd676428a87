@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_691d4166",
+        "filename": "package/source/zippackage/ZipPackage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-21T09:42:50Z",
+      "side": 0,
+      "message": "requiring recovery mode seems like the best approach to loading invalid files",
+      "revId": "b19ac3c4c6b4a41a1f3acac68b299fd676428a87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

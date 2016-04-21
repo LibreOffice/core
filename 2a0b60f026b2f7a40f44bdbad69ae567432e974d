@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_09100d4e",
+        "filename": "comphelper/source/misc/storagehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-21T09:42:50Z",
+      "side": 1,
+      "message": "ugh ugh ugh ... we will be able to create invalid zip files with this change ...",
+      "revId": "2a0b60f026b2f7a40f44bdbad69ae567432e974d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
