@@ -43,9 +43,7 @@ namespace {
 template< typename T >
 void testBoolean() {
     CPPUNIT_ASSERT_EQUAL( T( "false" ), T::boolean( false ) );
-    CPPUNIT_ASSERT_EQUAL( T( "false" ), T::boolean( sal_False ) );
     CPPUNIT_ASSERT_EQUAL( T( "true" ), T::boolean( true ) );
-    CPPUNIT_ASSERT_EQUAL( T( "true" ), T::boolean( sal_True ) );
 }
 
 }
