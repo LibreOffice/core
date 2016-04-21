@@ -96,7 +96,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
         }
         else
         {
-            ImplBorderWindow* pBorderWin;
+            VclPtr<ImplBorderWindow> pBorderWin;
             sal_uInt16 nBorderStyle = BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
 
             if (nStyle & WB_OWNERDRAWDECORATION)
