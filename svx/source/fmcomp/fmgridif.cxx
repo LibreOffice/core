@@ -1183,7 +1183,7 @@ void FmXGridPeer::removeModifyListener(const Reference< css::util::XModifyListen
 Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType ) throw(RuntimeException, std::exception)
 {
     // eine 'Konvertierungstabelle'
-    static const sal_Bool bCanConvert[LAST_KNOWN_TYPE][4] =
+    static const bool bCanConvert[LAST_KNOWN_TYPE][4] =
     {
         { false, false, false, false }, //  FormComponentType::CONTROL
         { false, false, false, false }, //  FormComponentType::COMMANDBUTTON

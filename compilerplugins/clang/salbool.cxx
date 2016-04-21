@@ -24,6 +24,13 @@ bool isSalBool(QualType type) {
     return t != nullptr && t->getDecl()->getNameAsString() == "sal_Bool";
 }
 
+bool isSalBoolArray(QualType type) {
+    auto t = type->getAsArrayTypeUnsafe();
+    return t != nullptr
+        && (isSalBool(t->getElementType())
+            || isSalBoolArray(t->getElementType()));
+}
+
 // Clang 3.2 FunctionDecl::isInlined doesn't work as advertised ("Determine
 // whether this function should be inlined, because it is either marked 'inline'
 // or 'constexpr' or is a member function of a class that was defined in the
@@ -135,6 +142,8 @@ public:
     bool VisitCXXStaticCastExpr(CXXStaticCastExpr * expr);
 
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr);
+
+    bool VisitReturnStmt(ReturnStmt const * stmt);
 
     bool WalkUpFromParmVarDecl(ParmVarDecl const * decl);
     bool VisitParmVarDecl(ParmVarDecl const * decl);
@@ -248,17 +257,27 @@ bool SalBool::VisitCallExpr(CallExpr * expr) {
     if (ft != nullptr) {
         for (unsigned i = 0; i != compat::getNumParams(*ft); ++i) {
             QualType t(compat::getParamType(*ft, i));
+            bool b = false;
             if (t->isLValueReferenceType()) {
                 t = t.getNonReferenceType();
-                if (!t.isConstQualified() && isSalBool(t)
-                    && i < expr->getNumArgs())
-                {
-                    DeclRefExpr * ref = dyn_cast<DeclRefExpr>(expr->getArg(i));
-                    if (ref != nullptr) {
-                        VarDecl const * d = dyn_cast<VarDecl>(ref->getDecl());
-                        if (d != nullptr) {
-                            varDecls_.erase(d);
-                        }
+                b = !t.isConstQualified() && isSalBool(t);
+            } else if (t->isPointerType()) {
+                for (;;) {
+                    auto t2 = t->getAs<PointerType>();
+                    if (t2 == nullptr) {
+                        break;
+                    }
+                    t = t2->getPointeeType();
+                }
+                b = isSalBool(t);
+            }
+            if (b && i < expr->getNumArgs()) {
+                DeclRefExpr * ref = dyn_cast<DeclRefExpr>(
+                    expr->getArg(i)->IgnoreParenImpCasts());
+                if (ref != nullptr) {
+                    VarDecl const * d = dyn_cast<VarDecl>(ref->getDecl());
+                    if (d != nullptr) {
+                        varDecls_.erase(d);
                     }
                 }
             }
@@ -360,6 +379,53 @@ bool SalBool::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
     }
+    return true;
+}
+
+bool SalBool::VisitReturnStmt(ReturnStmt const * stmt) {
+    // Just enough to avoid warnings in rtl_getUriCharClass (sal/rtl/uri.cxx),
+    // which has
+    //
+    //  static sal_Bool const aCharClass[][nCharClassSize] = ...;
+    //
+    // and
+    //
+    //  return aCharClass[eCharClass];
+    //
+    if (ignoreLocation(stmt)) {
+        return true;
+    }
+    auto e = stmt->getRetValue();
+    if (e == nullptr) {
+        return true;
+    }
+    auto t = e->getType();
+    if (!t->isPointerType()) {
+        return true;
+    }
+    for (;;) {
+        auto t2 = t->getAs<PointerType>();
+        if (t2 == nullptr) {
+            break;
+        }
+        t = t2->getPointeeType();
+    }
+    if (!isSalBool(t)) {
+        return true;
+    }
+    auto e2 = dyn_cast<ArraySubscriptExpr>(e->IgnoreParenImpCasts());
+    if (e2 == nullptr) {
+        return true;
+    }
+    auto e3 = dyn_cast<DeclRefExpr>(e2->getBase()->IgnoreParenImpCasts());
+    if (e3 == nullptr) {
+        return true;
+    }
+    auto d = dyn_cast<VarDecl>(e3->getDecl());
+    if (d == nullptr) {
+        return true;
+    }
+    varDecls_.erase(d);
     return true;
 }
 
@@ -467,7 +533,8 @@ bool SalBool::VisitVarDecl(VarDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (!decl->isExternC() && isSalBool(decl->getType())
+    if (!decl->isExternC()
+        && (isSalBool(decl->getType()) || isSalBoolArray(decl->getType()))
         && !isInSpecialMainFile(
             compiler.getSourceManager().getSpellingLoc(decl->getLocStart())))
     {
@@ -484,7 +551,7 @@ bool SalBool::VisitFieldDecl(FieldDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (isSalBool(decl->getType())
+    if ((isSalBool(decl->getType()) || isSalBoolArray(decl->getType()))
         && !isInSpecialMainFile(
             compiler.getSourceManager().getSpellingLoc(decl->getLocStart())))
     {

@@ -2321,20 +2321,20 @@ extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
 }
 
 
-static const sal_Bool s_aAssignableFromTab[11][11] =
+static const bool s_aAssignableFromTab[11][11] =
 {
-                         /* from CH,BO,BY,SH,US,LO,UL,HY,UH,FL,DO */
-/* TypeClass_CHAR */            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_BOOLEAN */         { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_BYTE */            { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_SHORT */           { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_UNSIGNED_SHORT */  { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_LONG */            { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-/* TypeClass_UNSIGNED_LONG */   { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-/* TypeClass_HYPER */           { 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-/* TypeClass_UNSIGNED_HYPER */  { 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-/* TypeClass_FLOAT */           { 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0 },
-/* TypeClass_DOUBLE */          { 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1 }
+                          /* from CH,    BO,    BY,    SH,    US,    LO,    UL,    HY,    UH,    FL,    DO */
+/* TypeClass_CHAR */            { true,  false, false, false, false, false, false, false, false, false, false },
+/* TypeClass_BOOLEAN */         { false, true,  false, false, false, false, false, false, false, false, false },
+/* TypeClass_BYTE */            { false, false, true,  false, false, false, false, false, false, false, false },
+/* TypeClass_SHORT */           { false, false, true,  true,  true,  false, false, false, false, false, false },
+/* TypeClass_UNSIGNED_SHORT */  { false, false, true,  true,  true,  false, false, false, false, false, false },
+/* TypeClass_LONG */            { false, false, true,  true,  true,  true,  true,  false, false, false, false },
+/* TypeClass_UNSIGNED_LONG */   { false, false, true,  true,  true,  true,  true,  false, false, false, false },
+/* TypeClass_HYPER */           { false, false, true,  true,  true,  true,  true,  true,  true,  false, false },
+/* TypeClass_UNSIGNED_HYPER */  { false, false, true,  true,  true,  true,  true,  true,  true,  false, false },
+/* TypeClass_FLOAT */           { false, false, true,  true,  true,  false, false, false, false, true,  false },
+/* TypeClass_DOUBLE */          { false, false, true,  true,  true,  true,  true,  false, false, true,  true  }
 };
 
 

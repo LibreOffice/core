@@ -62,7 +62,7 @@ struct SvxSaveTabPage_Impl
     Sequence< sal_Bool >        aODFArr[APP_COUNT];
     Sequence< OUString >        aUIFilterArr[APP_COUNT];
     OUString                    aDefaultArr[APP_COUNT];
-    sal_Bool                    aDefaultReadonlyArr[APP_COUNT];
+    bool                    aDefaultReadonlyArr[APP_COUNT];
     bool                    bInitialized;
 
     SvxSaveTabPage_Impl();

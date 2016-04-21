@@ -165,13 +165,13 @@ public:
     inline void clearBuffer() throw( SAXException );
 };
 
-const sal_Bool g_bValidCharsBelow32[32] =
+const bool g_bValidCharsBelow32[32] =
 {
-//  0 1 2 3 4 5 6 7
-    0,0,0,0,0,0,0,0,  //0
-    0,1,1,0,0,1,0,0,  //8
-    0,0,0,0,0,0,0,0,  //16
-    0,0,0,0,0,0,0,0
+//  0     1     2     3     4     5     6     7
+    false,false,false,false,false,false,false,false,  //0
+    false,true, true, false,false,true, false,false,  //8
+    false,false,false,false,false,false,false,false,  //16
+    false,false,false,false,false,false,false,false
 };
 
 inline bool IsInvalidChar(const sal_Unicode aChar)

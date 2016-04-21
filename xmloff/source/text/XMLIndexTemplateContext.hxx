@@ -40,23 +40,23 @@ struct SvXMLEnumMapEntry;
 // TOC and user defined index:
 extern const SvXMLEnumMapEntry aSvLevelNameTOCMap[];
 extern const sal_Char* aLevelStylePropNameTOCMap[];
-extern const sal_Bool aAllowedTokenTypesTOC[];
-extern const sal_Bool aAllowedTokenTypesUser[];
+extern const bool aAllowedTokenTypesTOC[];
+extern const bool aAllowedTokenTypesUser[];
 
 // alphabetical index:
 extern const SvXMLEnumMapEntry aLevelNameAlphaMap[];
 extern const sal_Char* aLevelStylePropNameAlphaMap[];
-extern const sal_Bool aAllowedTokenTypesAlpha[];
+extern const bool aAllowedTokenTypesAlpha[];
 
 // bibliography:
 extern const SvXMLEnumMapEntry aLevelNameBibliographyMap[];
 extern const sal_Char* aLevelStylePropNameBibliographyMap[];
-extern const sal_Bool aAllowedTokenTypesBibliography[];
+extern const bool aAllowedTokenTypesBibliography[];
 
 // table, illustration and object tables:
 extern const SvXMLEnumMapEntry* aLevelNameTableMap; // NULL: no outline-level
 extern const sal_Char* aLevelStylePropNameTableMap[];
-extern const sal_Bool aAllowedTokenTypesTable[];
+extern const bool aAllowedTokenTypesTable[];
 
 
 /**
@@ -72,7 +72,7 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     const SvXMLEnumMapEntry* pOutlineLevelNameMap;
     enum ::xmloff::token::XMLTokenEnum eOutlineLevelAttrName;
     const sal_Char** pOutlineLevelStylePropMap;
-    const sal_Bool* pAllowedTokenTypesMap;
+    const bool* pAllowedTokenTypesMap;
 
     sal_Int32 nOutlineLevel;
     bool bStyleNameOK;
@@ -117,7 +117,7 @@ public:
         const SvXMLEnumMapEntry* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         const sal_Char** aLevelStylePropNameMap,
-        const sal_Bool* aAllowedTokenTypes,
+        const bool* aAllowedTokenTypes,
         bool bTOC=false);
 
     virtual ~XMLIndexTemplateContext();

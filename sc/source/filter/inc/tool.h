@@ -92,7 +92,7 @@ class FormCache
 {
 private:
     FormIdent           aIdents[ nSize_ ]; //gepufferte Formate
-    sal_Bool                bValid[ nSize_ ];
+    bool                bValid[ nSize_ ];
     FormIdent           aCompareIdent;      // zum Vergleichen
     sal_uInt8               nDefaultFormat;     // Defaultformat der Datei
     SvNumberFormatter*  pFormTable;         // Value-Format-Table-Anker
@@ -128,7 +128,7 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
         OSL_ENSURE( pAttr, "FormCache::GetAttr(): Nothing to save" );
 
         aIdents[ nIndex ] = FormIdent( nFormat, nSt, *pAttr );
-        bValid[ nIndex ] = sal_True;
+        bValid[ nIndex ] = true;
 
         pRet = pAttr;
     }

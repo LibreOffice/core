@@ -619,7 +619,7 @@ public:
 private:
     SvXMLImportContextRef mxTableImportContext;
     OUString msTemplateStyleName;
-    sal_Bool maTemplateStylesUsed[6];
+    bool maTemplateStylesUsed[6];
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX

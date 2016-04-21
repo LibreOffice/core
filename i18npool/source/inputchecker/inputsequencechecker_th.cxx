@@ -55,7 +55,7 @@ sal_Char TAC_celltype_inputcheck[17][17] = {
          { 'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'C', 'R', 'R', 'R', 'R' }
 };
 
-sal_Bool TAC_Composible[3][5] = {
+bool TAC_Composible[3][5] = {
         /*  'A',    'C',        'S',        'R',        'X'   */
 /* Mode 0 */    {true,  true,   true,   true,   true}, // PASSTHROUGH = 0
 /* Mode 1 */    {true,  true,   true,   false,      true}, // BASIC = 1

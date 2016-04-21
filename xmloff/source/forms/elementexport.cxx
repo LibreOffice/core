@@ -2180,7 +2180,7 @@ namespace xmloff
             {
                 FormSubmitEncoding_URL, FormSubmitMethod_GET, CommandType::COMMAND, NavigationBarMode_CURRENT, TabulatorCycle_RECORDS
             };
-            static const sal_Bool nEnumPropertyAttrDefaultFlags[] =
+            static const bool nEnumPropertyAttrDefaultFlags[] =
             {
                 false, false, false, false, true
             };

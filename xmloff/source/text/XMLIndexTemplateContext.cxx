@@ -67,7 +67,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     const SvXMLEnumMapEntry* pLevelNameMap,
     enum XMLTokenEnum eLevelAttrName,
     const sal_Char** pLevelStylePropMap,
-    const sal_Bool* pAllowedTokenTypes,
+    const bool* pAllowedTokenTypes,
     bool bT )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
 ,   pOutlineLevelNameMap(pLevelNameMap)
@@ -352,7 +352,7 @@ const sal_Char* aLevelStylePropNameTOCMap[] =
           "ParaStyleLevel7", "ParaStyleLevel8", "ParaStyleLevel9",
           "ParaStyleLevel10", nullptr };
 
-const sal_Bool aAllowedTokenTypesTOC[] =
+const bool aAllowedTokenTypesTOC[] =
 {
     true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
     true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
@@ -364,7 +364,7 @@ const sal_Bool aAllowedTokenTypesTOC[] =
     false       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
 };
 
-const sal_Bool aAllowedTokenTypesUser[] =
+const bool aAllowedTokenTypesUser[] =
 {
     true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
     true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
@@ -392,7 +392,7 @@ const sal_Char* aLevelStylePropNameAlphaMap[] =
     { nullptr, "ParaStyleSeparator", "ParaStyleLevel1", "ParaStyleLevel2",
           "ParaStyleLevel3", nullptr };
 
-const sal_Bool aAllowedTokenTypesAlpha[] =
+const bool aAllowedTokenTypesAlpha[] =
 {
     true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
     true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
@@ -446,7 +446,7 @@ const sal_Char* aLevelStylePropNameBibliographyMap[] =
     "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
     "ParaStyleLevel1", nullptr };
 
-const sal_Bool aAllowedTokenTypesBibliography[] =
+const bool aAllowedTokenTypesBibliography[] =
 {
     true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
     true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
@@ -467,7 +467,7 @@ const SvXMLEnumMapEntry* aLevelNameTableMap = nullptr;
 const sal_Char* aLevelStylePropNameTableMap[] =
     { nullptr, "ParaStyleLevel1", nullptr };
 
-const sal_Bool aAllowedTokenTypesTable[] =
+const bool aAllowedTokenTypesTable[] =
 {
     true,       // XML_TOK_INDEX_TYPE_ENTRY_TEXT =
     true,       // XML_TOK_INDEX_TYPE_TAB_STOP,
