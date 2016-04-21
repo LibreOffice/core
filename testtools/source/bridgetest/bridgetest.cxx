@@ -641,22 +641,8 @@ static bool performTest(
         }
         // Perform sequence tests (XBridgeTest2); create the sequence which is
         // compared with the results:
-        sal_Bool _arBool[] = { true, false, true };
-        sal_Unicode _arChar[] = { 0x0065, 0x0066, 0x0067 };
-        sal_Int8 _arByte[] = { 1, 2, -1 };
-        sal_Int16 _arShort[] = { -0x8000, 1, 0x7FFF };
-        sal_uInt16 _arUShort[] = { 0 , 1, 0xFFFF };
         sal_Int32 _arLong[] = {
             static_cast< sal_Int32 >(0x80000000), 1, 0x7FFFFFFF };
-        sal_uInt32 _arULong[] = { 0, 1, 0xFFFFFFFF };
-        sal_Int64 _arHyper[] = {
-            static_cast< sal_Int64 >(SAL_CONST_INT64(0x8000000000000000)), 1,
-            SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF) };
-        sal_uInt64 _arUHyper[] = { 0, 1, SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF) };
-        OUString _arString[] = {
-            OUString("String 1"),
-            OUString("String 2"),
-            OUString("String 3") };
         sal_Bool _aBool = true;
         sal_Int32 _aInt = 0xBABEBABE;
         float _aFloat = 3.14f;
@@ -668,7 +654,6 @@ static bool performTest(
         _arObj[0] = new OWeakObject();
         _arObj[1] = new OWeakObject();
         _arObj[2] = new OWeakObject();
-        TestEnum _arEnum[] = { TestEnum_ONE, TestEnum_TWO, TestEnum_CHECK };
         TestElement _arStruct[3];
         assign(
             _arStruct[0], true, '@', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
@@ -689,23 +674,27 @@ static bool performTest(
             TestEnum_CHECK, STRING_TEST_CONSTANT, _arObj[2],
             Any(&_arObj[2], cppu::UnoType<XInterface>::get()));
         {
-            float _arFloat[] = { 1.1f, 2.2f, 3.3f };
-            double _arDouble[] = { 1.11, 2.22, 3.33 };
-            Sequence<sal_Bool> arBool(_arBool, 3);
-            Sequence<sal_Unicode> arChar( _arChar, 3);
-            Sequence<sal_Int8> arByte(_arByte, 3);
-            Sequence<sal_Int16> arShort(_arShort, 3);
-            Sequence<sal_uInt16> arUShort(_arUShort, 3);
+            Sequence<sal_Bool> arBool({true, false, true});
+            Sequence<sal_Unicode> arChar({0x0065, 0x0066, 0x0067});
+            Sequence<sal_Int8> arByte({1, 2, -1});
+            Sequence<sal_Int16> arShort({-0x8000, 1, 0x7FFF});
+            Sequence<sal_uInt16> arUShort({0 , 1, 0xFFFF});
             Sequence<sal_Int32> arLong(_arLong, 3);
-            Sequence<sal_uInt32> arULong(_arULong, 3);
-            Sequence<sal_Int64> arHyper(_arHyper, 3);
-            Sequence<sal_uInt64> arUHyper(_arUHyper, 3);
-            Sequence<float> arFloat(_arFloat, 3);
-            Sequence<double> arDouble(_arDouble, 3);
-            Sequence<OUString> arString(_arString, 3);
+            Sequence<sal_uInt32> arULong({0, 1, 0xFFFFFFFF});
+            Sequence<sal_Int64> arHyper({
+                static_cast<sal_Int64>(SAL_CONST_INT64(0x8000000000000000)), 1,
+                SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF)});
+            Sequence<sal_uInt64> arUHyper({
+                0, 1, SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF)});
+            Sequence<float> arFloat({1.1f, 2.2f, 3.3f});
+            Sequence<double> arDouble({1.11, 2.22, 3.33});
+            Sequence<OUString> arString({
+                OUString("String 1"), OUString("String 2"),
+                OUString("String 3")});
             Sequence<Any> arAny(_arAny, 3);
             Sequence<Reference<XInterface> > arObject(_arObj, 3);
-            Sequence<TestEnum> arEnum(_arEnum, 3);
+            Sequence<TestEnum> arEnum({
+                TestEnum_ONE, TestEnum_TWO, TestEnum_CHECK});
             Sequence<TestElement> arStruct(_arStruct, 3);
             Sequence<Sequence<sal_Int32> > _arSeqLong2[3];
             for (int j = 0; j != 3; ++j) {

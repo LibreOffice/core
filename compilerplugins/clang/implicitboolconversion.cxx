@@ -293,6 +293,8 @@ public:
 
     bool TraverseBinXorAssign(CompoundAssignOperator * expr);
 
+    bool TraverseCXXStdInitializerListExpr(CXXStdInitializerListExpr * expr);
+
     bool TraverseReturnStmt(ReturnStmt * stmt);
 
     bool TraverseFunctionDecl(FunctionDecl * decl);
@@ -764,6 +766,43 @@ bool ImplicitBoolConversion::TraverseBinXorAssign(CompoundAssignOperator * expr)
             << expr->getSourceRange();
     }
     return bRet;
+}
+
+bool ImplicitBoolConversion::TraverseCXXStdInitializerListExpr(
+    CXXStdInitializerListExpr * expr)
+{
+    // Must be some std::initializer_list<T>; check whether T is sal_Bool (i.e.,
+    // unsigned char) [TODO: check for real sal_Bool instead]:
+    auto t = expr->getType();
+    if (auto et = dyn_cast<ElaboratedType>(t)) {
+        t = et->desugar();
+    }
+    auto ts = t->getAs<TemplateSpecializationType>();
+    if (ts == nullptr
+        || !ts->getArg(0).getAsType()->isSpecificBuiltinType(
+            clang::BuiltinType::UChar))
+    {
+        return RecursiveASTVisitor::TraverseCXXStdInitializerListExpr(expr);
+    }
+    // Avoid warnings for code like
+    //
+    //  Sequence<sal_Bool> arBool({true, false, true});
+    //
+    auto e = dyn_cast<InitListExpr>(
+        ignoreParenAndTemporaryMaterialization(expr->getSubExpr()));
+    if (e == nullptr) {
+        return RecursiveASTVisitor::TraverseCXXStdInitializerListExpr(expr);
+    }
+    nested.push(std::vector<ImplicitCastExpr const *>());
+    bool ret = RecursiveASTVisitor::TraverseCXXStdInitializerListExpr(expr);
+    assert(!nested.empty());
+    for (auto i: nested.top()) {
+        if (!std::find(e->begin(), e->end(), i)) {
+            reportWarning(i);
+        }
+    }
+    nested.pop();
+    return ret;
 }
 
 bool ImplicitBoolConversion::TraverseReturnStmt(ReturnStmt * stmt) {
