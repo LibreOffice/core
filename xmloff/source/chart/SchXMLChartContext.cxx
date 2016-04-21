@@ -248,7 +248,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     if( xVisualObject.is() )
         maChartSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ); //#i103460# take the size given from the parent frame as default
 
-    // this flag is necessarry for pie charts in the core
+    // this flag is necessary for pie charts in the core
     bool bSetSwitchData = false;
 
     OUString sAutoStyleName;

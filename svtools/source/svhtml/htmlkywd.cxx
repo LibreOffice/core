@@ -85,7 +85,7 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_dt},            HTML_DT_ON},
     {{OOO_STRING_SVTOOLS_HTML_emphasis},        HTML_EMPHASIS_ON},
     {{OOO_STRING_SVTOOLS_HTML_figure},      HTML_FIGURE_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_font},            HTML_FONT_ON}, // Netscpe
+    {{OOO_STRING_SVTOOLS_HTML_font},            HTML_FONT_ON}, // Netscape
     {{OOO_STRING_SVTOOLS_HTML_footnote},        HTML_FOOTNOTE_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_form},            HTML_FORM_ON},
     {{OOO_STRING_SVTOOLS_HTML_frame},       HTML_FRAME_ON}, // Netscape 2.0

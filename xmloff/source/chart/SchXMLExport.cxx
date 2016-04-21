@@ -633,7 +633,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
             }
             if(!bHasValue)
             {
-                //no double value is countained
+                //no double value is contained
                 //is there any text?
                 uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
                 sal_Int32 nTextCount = aStrings.getLength();

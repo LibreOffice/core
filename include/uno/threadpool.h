@@ -86,7 +86,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C();
   called, BEFORE uno_threadpool_enter() is called and BEFORE a job for this
   thread is put into the threadpool (avoid a race between this thread and
   an incoming request/reply).
-  For every call to uno_threadpool_attach, a corrosponding call to
+  For every call to uno_threadpool_attach, a corresponding call to
   uno_threadpool_detach must be done.
 
   @param hPool The bridge threadpool handle previously created by uno_threadpool_create.

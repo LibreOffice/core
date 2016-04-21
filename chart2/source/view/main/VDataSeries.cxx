@@ -117,7 +117,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
         if( !::rtl::math::isNan( rData.Doubles[i] ) )
             return;
     }
-    //no double value is countained
+    //no double value is contained
     //is there any text?
     uno::Sequence< OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
     sal_Int32 nTextCount = aStrings.getLength();
