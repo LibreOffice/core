@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_c616e454",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-21T09:12:26Z",
+      "side": 1,
+      "message": "\"the former one\" being 70bb8c257e7fc402da60fa70109cece1fe4c69d1",
+      "revId": "9a6f169d35a6ab6ed69b1b2a63d71d2e04cf1109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_a6176853",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-21T09:12:26Z",
+      "side": 1,
+      "message": "no need to query-cast the return value of createWithParent here, it can be used directly to initialize xIH",
+      "revId": "9a6f169d35a6ab6ed69b1b2a63d71d2e04cf1109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_861cec78",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-21T09:12:26Z",
+      "side": 1,
+      "message": "no need to check xIH here, it is guaranteed to be non-null",
+      "revId": "9a6f169d35a6ab6ed69b1b2a63d71d2e04cf1109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_e611605f",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-21T09:12:26Z",
+      "side": 1,
+      "message": "Neither create raw pointer variables to UNO objects, nor use static_cast on UNO objects.  The simplest way to code the above is just\n\n  xFileAccess-\u003esetInteractionHandler(\n    new comphelper::SimpleFileAccessInteraction(xIH, xIH));",
+      "revId": "9a6f169d35a6ab6ed69b1b2a63d71d2e04cf1109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
