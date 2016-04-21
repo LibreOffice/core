@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_e9c931ae",
+        "filename": "basctl/source/basicide/objdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-21T20:46:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t these be handled independently below for each block? i.e. if there is no title there could still be a tree to be arranged?",
+      "revId": "9b3fcb0e55c4f178cf570404a5fb0f207045a05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
