@@ -215,7 +215,7 @@ uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
     const uno::Any& rAnchor, const uno::Any& rAddress, const uno::Any& rSubAddress,
     const uno::Any& rScreenTip, const uno::Any& rTextToDisplay ) throw (uno::RuntimeException, std::exception)
 {
-    /*  If this Hyperlinks object has been craeted from a Range object, the
+    /*  If this Hyperlinks object has been created from a Range object, the
         call to Add() is passed to the Hyperlinks object of the parent
         worksheet. This container will not be modified (it will not contain the
         inserted hyperlink).

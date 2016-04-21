@@ -292,7 +292,7 @@ namespace dxcanvas
     {
         // since clients will most probably draw directly
         // to the GDI+ bitmap, we need to mark it as dirty
-        // to ensure that the corrosponding dxsurface will
+        // to ensure that the corresponding dxsurface will
         // be updated.
         mbIsSurfaceDirty = true;
 

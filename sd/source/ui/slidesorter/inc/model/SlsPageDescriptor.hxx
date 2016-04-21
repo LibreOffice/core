@@ -56,7 +56,7 @@ public:
             separately.
         @param nIndex
             This index is displayed in the view as page number.  It is not
-            necessaryily the page index (not even when you add or subtract 1
+            necessarily the page index (not even when you add or subtract 1
             or use (x-1)/2 magic).
     */
     PageDescriptor (

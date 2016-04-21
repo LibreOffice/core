@@ -163,7 +163,7 @@ End
     End
 
 #ifdef MACOSX
-// links are craeted at configure time by odk/config/setsdkenv_unix.sh.in
+// links are created at configure time by odk/config/setsdkenv_unix.sh.in
 #define SDK_LIBRARY_LINK(id,name,target)
 #elif defined(WNT)
 #define SDK_LIBRARY_LINK(id,name,target) \

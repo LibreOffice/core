@@ -46,7 +46,7 @@ class LoadEnvException
             ID_UNSUPPORTED_CONTENT,
 
             /** @short  It was not possible to get access to global filter configuration.
-                @descr  Might som neccsessary services could not be created. */
+                @descr  Might some necessary services could not be created. */
             ID_NO_CONFIG_ACCESS,
 
             /** @short  Some data obtained from the filter configuration seems to incorrect.

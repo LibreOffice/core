@@ -185,7 +185,7 @@ public:
 
     /** Returns true, if a single HLINK record has been created. */
     bool                HasLinkRecord() const;
-    /** Returns the craeted single HLINk record, or an empty reference. */
+    /** Returns the created single HLINk record, or an empty reference. */
     XclExpHyperlinkRef  GetLinkRecord();
 
     /** Returns true, if multiple URLs have been processed. */
