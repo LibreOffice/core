@@ -116,10 +116,6 @@ struct _LibreOfficeKitDocumentClass
     char* (*getPartName) (LibreOfficeKitDocument* pThis,
                           int nPart);
 
-    /// @see lok::Document::getPartHash().
-    char* (*getPartHash) (LibreOfficeKitDocument* pThis,
-                          int nPart);
-
     /// @see lok::Document::setPartMode().
     void (*setPartMode) (LibreOfficeKitDocument* pThis,
                          int nMode);
@@ -226,6 +222,10 @@ struct _LibreOfficeKitDocumentClass
                        const char* pFontName,
                        int* pFontWidth,
                        int* pFontHeight);
+
+    /// @see lok::Document::getPartHash().
+    char* (*getPartHash) (LibreOfficeKitDocument* pThis,
+                          int nPart);
 #endif // LOK_USE_UNSTABLE_API
 };
 
