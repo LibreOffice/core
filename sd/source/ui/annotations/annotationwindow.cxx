@@ -281,6 +281,7 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 , mbReadonly(pDocShell->IsReadOnly())
 , mbProtected(false)
 , mbMouseOverButton(false)
+, mbPopupMenuActive(false)
 , mpTextWindow(nullptr)
 , mpMeta(nullptr)
 {

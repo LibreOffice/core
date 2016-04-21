@@ -602,7 +602,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
 
 void AnnotationTag::ClosePopup()
 {
-    if( mpAnnotationWindow.get() )
+    if( mpAnnotationWindow.get())
     {
         mpAnnotationWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
         mpAnnotationWindow->Deactivate();
@@ -620,10 +620,18 @@ IMPL_LINK_TYPED(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void
             {
                 if( rEvent.GetId() == VCLEVENT_WINDOW_DEACTIVATE )
                 {
-                    if( mnClosePopupEvent )
-                        Application::RemoveUserEvent( mnClosePopupEvent );
+                    if(mpAnnotationWindow->getPopupMenuActive())
+                    {
+                        // tdf#99388 if PopupMenu is active, suppress deletion of the
+                        // AnnotationWindow which is triggeded by it losing focus
+                    }
+                    else
+                    {
+                        if( mnClosePopupEvent )
+                            Application::RemoveUserEvent( mnClosePopupEvent );
 
-                    mnClosePopupEvent = Application::PostUserEvent( LINK( this, AnnotationTag, ClosePopupHdl ) );
+                        mnClosePopupEvent = Application::PostUserEvent( LINK( this, AnnotationTag, ClosePopupHdl ) );
+                    }
                 }
             }
             else if( pWindow == mpListenWindow )
