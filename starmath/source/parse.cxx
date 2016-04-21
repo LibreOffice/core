@@ -2344,7 +2344,6 @@ void SmParser::Error(SmParseError eError)
 
 SmParser::SmParser()
     : m_nCurError( 0 )
-    , m_nLang( Application::GetSettings().GetUILanguageTag().getLanguageType() )
     , m_nBufferIndex( 0 )
     , m_nTokenIndex( 0 )
     , m_Row( 0 )
@@ -2370,7 +2369,6 @@ SmNode *SmParser::Parse(const OUString &rBuffer)
 
     m_aNodeStack.clear();
 
-    SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();
     DoTable();
 
@@ -2391,7 +2389,6 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
 
     m_aNodeStack.clear();
 
-    SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();
     DoExpression();
 

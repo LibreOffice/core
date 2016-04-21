@@ -19,7 +19,7 @@
 #ifndef INCLUDED_STARMATH_INC_PARSE_HXX
 #define INCLUDED_STARMATH_INC_PARSE_HXX
 
-#include <vcl/svapp.hxx>
+#include <com/sun/star/lang/Locale.hpp>
 #include <memory>
 #include <set>
 #include <vector>
@@ -36,7 +36,6 @@ class SmParser
     SmNodeStack     m_aNodeStack;
     std::vector<std::unique_ptr<SmErrorDesc>> m_aErrDescList;
     int             m_nCurError;
-    LanguageType    m_nLang;
     sal_Int32       m_nBufferIndex,
                     m_nTokenIndex;
     sal_Int32       m_Row,
@@ -90,8 +89,6 @@ class SmParser
     void    DoSpecial();
     void    DoGlyphSpecial();
     // end of grammar
-
-    void            SetLanguage( LanguageType nNewLang ) { m_nLang = nNewLang; }
 
     void    Error(SmParseError Error);
 
