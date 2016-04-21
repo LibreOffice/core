@@ -665,7 +665,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                                 { svx::FRAMEBORDER_RIGHT,SvxBoxItemLine::RIGHT },
                             };
 
-    for (std::pair<svx::FrameBorderType,SvxBoxItemLine> i : eTypes1)
+    for (std::pair<svx::FrameBorderType,SvxBoxItemLine> const & i : eTypes1)
         aBoxItem.SetLine( m_pFrameSel->GetFrameBorderStyle( i.first ), i.second );
 
 
@@ -676,7 +676,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                                 { svx::FRAMEBORDER_HOR,SvxBoxInfoItemLine::HORI },
                                 { svx::FRAMEBORDER_VER,SvxBoxInfoItemLine::VERT }
                             };
-    for (std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> j : eTypes2)
+    for (std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> const & j : eTypes2)
         aBoxInfoItem.SetLine( m_pFrameSel->GetFrameBorderStyle( j.first ), j.second );
 
     aBoxInfoItem.EnableHor( mbHorEnabled );
