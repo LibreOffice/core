@@ -200,7 +200,7 @@ void SAL_CALL SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDire
     }
 }
 
-rtl::OUString SAL_CALL SalAquaPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
+rtl::OUString const & SAL_CALL SalAquaPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
 {
     return m_sDisplayDirectory;
 }

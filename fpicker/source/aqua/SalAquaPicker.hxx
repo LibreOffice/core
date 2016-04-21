@@ -47,7 +47,7 @@ public:
     int run();
     int runandwaitforresult();
 
-    inline OUString getDisplayDirectory() { return m_sDisplayDirectory; }
+    inline OUString const & getDisplayDirectory() { return m_sDisplayDirectory; }
 
     inline ControlHelper* getControlHelper() const {
         return m_pControlHelper;
@@ -78,7 +78,7 @@ protected:
     void implsetDisplayDirectory( const OUString& rDirectory )
         throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
-    OUString implgetDisplayDirectory(  )
+    OUString const & implgetDisplayDirectory(  )
         throw( css::uno::RuntimeException );
 
     void implInitialize( );

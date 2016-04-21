@@ -158,7 +158,7 @@ public:
        return m_pDelegate;
    }
 
-   inline OUString getSaveFileName() {
+   inline OUString const & getSaveFileName() {
        return m_sSaveFileName;
    }
 
