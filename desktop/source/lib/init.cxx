@@ -380,6 +380,7 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           const char *pFontName,
                           int* pFontWidth,
                           int* pFontHeight);
+static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -399,7 +400,6 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setPart = doc_setPart;
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
-        m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->paintTile = doc_paintTile;
         m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
@@ -422,6 +422,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setView = doc_setView;
         m_pDocumentClass->getView = doc_getView;
         m_pDocumentClass->getViews = doc_getViews;
+
+        m_pDocumentClass->renderFont = doc_renderFont;
+        m_pDocumentClass->getPartHash = doc_getPartHash;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -910,6 +913,23 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 
     OUString sName = pDoc->getPartName( nPart );
     OString aString = OUStringToOString(sName, RTL_TEXTENCODING_UTF8);
+    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    strcpy(pMemory, aString.getStr());
+    return pMemory;
+
+}
+
+static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+
+    OUString sHash = pDoc->getPartHash(nPart);
+    OString aString = OUStringToOString(sHash, RTL_TEXTENCODING_UTF8);
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
     strcpy(pMemory, aString.getStr());
     return pMemory;
