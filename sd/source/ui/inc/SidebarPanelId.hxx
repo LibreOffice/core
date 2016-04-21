@@ -30,8 +30,7 @@ namespace sd { namespace sidebar {
 */
 enum PanelId
 {
-    PID__START = 0,
-    PID_UNKNOWN = PID__START,
+    PID_UNKNOWN,
     PID_MASTER_PAGES_ALL,
     PID_MASTER_PAGES_RECENT,
     PID_MASTER_PAGES_USED,
@@ -39,8 +38,7 @@ enum PanelId
     PID_TABLE_DESIGN,
     PID_ANIMATION_SCHEMES,
     PID_CUSTOM_ANIMATION,
-    PID_SLIDE_TRANSITION,
-    PID__END = PID_SLIDE_TRANSITION
+    PID_SLIDE_TRANSITION
 };
 
 } } // namespace sd::sidebar
