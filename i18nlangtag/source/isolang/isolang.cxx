@@ -1285,16 +1285,16 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
                     pFirstLang = pEntry;
             }
         }
-    }
 
-    // some eng countries should be mapped to a specific english language
-    if ( aLowerLang == "en" )
-    {
-        for (const IsoLangEngEntry* pEngEntry = aImplIsoLangEngEntries;
-                pEngEntry->mnLang != LANGUAGE_DONTKNOW; ++pEngEntry)
+        // some eng countries should be mapped to a specific english language
+        if ( aLowerLang == "en" )
         {
-            if ( aUpperCountry.equalsAscii( pEngEntry->maCountry ) )
-                return pEngEntry->mnLang;
+            for (const IsoLangEngEntry* pEngEntry = aImplIsoLangEngEntries;
+                    pEngEntry->mnLang != LANGUAGE_DONTKNOW; ++pEngEntry)
+            {
+                if ( aUpperCountry.equalsAscii( pEngEntry->maCountry ) )
+                    return pEngEntry->mnLang;
+            }
         }
     }
 
