@@ -93,19 +93,19 @@ static sal_uInt16 aWndFunc(
     switch ( nFlags & 0xf000 )
     {
         case ERRCODE_MSG_ERROR:
-            pBox.reset(VclPtr<ErrorBox>::Create(pWin, eBits, aErr));
+            pBox = VclPtr<ErrorBox>::Create(pWin, eBits, aErr);
             break;
 
         case ERRCODE_MSG_WARNING:
-            pBox.reset(VclPtr<WarningBox>::Create(pWin, eBits, aErr));
+            pBox = VclPtr<WarningBox>::Create(pWin, eBits, aErr);
             break;
 
         case ERRCODE_MSG_INFO:
-            pBox.reset(VclPtr<InfoBox>::Create(pWin, aErr));
+            pBox = VclPtr<InfoBox>::Create(pWin, aErr);
             break;
 
         case ERRCODE_MSG_QUERY:
-            pBox.reset(VclPtr<QueryBox>::Create(pWin, eBits, aErr));
+            pBox = VclPtr<QueryBox>::Create(pWin, eBits, aErr);
             break;
 
         default:
