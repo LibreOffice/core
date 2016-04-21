@@ -98,8 +98,11 @@ void ObjectCatalog::ToggleFloatingMode ()
 }
 
 // ArrangeWindows() -- arranges the controls to the size of the ObjectCatalog
-void ObjectCatalog::ArrangeWindows ()
+void ObjectCatalog::ArrangeWindows()
 {
+    if (!aTitle || !aTree)
+        return;
+
     Size const aSize = GetOutputSizePixel();
     bool const bFloating = IsFloatingMode();
 
