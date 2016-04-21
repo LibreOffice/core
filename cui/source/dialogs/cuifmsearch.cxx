@@ -120,8 +120,10 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == (sal_Int32)fmscInitial.arrFields.size(),
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-    for (Reference<XInterface> & arrField : fmscInitial.arrFields)
+    for (const Reference<XInterface> & arrField : fmscInitial.arrFields)
+    {
         DBG_ASSERT(arrField.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
+    }
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
     for (   ::std::vector< OUString >::const_iterator context = _rContexts.begin();
