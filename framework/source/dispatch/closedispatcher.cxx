@@ -372,7 +372,7 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             if( xSet.is() )
             {
                 css::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
-                sal_Bool bState = sal_False;
+                sal_Bool bState = false;
                 if( aVal >>= bState )
                     bQuickstarterRunning = bState;
             }
