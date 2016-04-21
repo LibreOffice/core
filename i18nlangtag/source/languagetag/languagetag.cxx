@@ -328,7 +328,7 @@ private:
     /** Obtain Language, Script, Country and Variants via simpleExtract() and
         assign them to the cached variables if successful.
 
-        @return return of simpleExtract()
+        @return simpleExtract() successfully extracted and cached.
      */
     bool                cacheSimpleLSCV();
 
@@ -337,6 +337,7 @@ private:
         EXTRACTED_NONE,
         EXTRACTED_LSC,
         EXTRACTED_LV,
+        EXTRACTED_C_LOCALE,
         EXTRACTED_X,
         EXTRACTED_X_JOKER
     };
@@ -349,6 +350,7 @@ private:
         @return EXTRACTED_LSC if simple tag was detected (i.e. one that
                 would fulfill the isIsoODF() condition),
                 EXTRACTED_LV if a tag with variant was detected,
+                EXTRACTED_C_LOCALE if a 'C' locale was detected,
                 EXTRACTED_X if x-... privateuse tag was detected,
                 EXTRACTED_X_JOKER if "*" joker was detected,
                 EXTRACTED_NONE else.
@@ -486,7 +488,7 @@ LanguageTag::LanguageTag( const css::lang::Locale & rLocale )
         mnLangID( LANGUAGE_DONTKNOW),
         mbSystemLocale( rLocale.Language.isEmpty()),
         mbInitializedBcp47( false),
-        mbInitializedLocale( !mbSystemLocale),
+        mbInitializedLocale( false),    // we do not know which mess we got passed in
         mbInitializedLangID( false),
         mbIsFallback( false)
 {
@@ -799,8 +801,15 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     }
 
     // Force Bcp47 if not LangID.
-    if (!mbInitializedLangID && !mbInitializedBcp47 && mbInitializedLocale)
+    if (!mbInitializedLangID && !mbInitializedBcp47)
     {
+        // The one central point to set mbInitializedLocale=true if a
+        // LanguageTag was initialized with a Locale. We will now convert and
+        // possibly later resolve it.
+        if (!mbInitializedLocale && (mbSystemLocale || !maLocale.Language.isEmpty()))
+            mbInitializedLocale = true;
+        SAL_WARN_IF( !mbInitializedLocale, "i18nlangtag", "LanguageTag::registerImpl: still not mbInitializedLocale");
+
         maBcp47 = LanguageTagImpl::convertToBcp47( maLocale);
         mbInitializedBcp47 = !maBcp47.isEmpty();
     }
@@ -1109,6 +1118,11 @@ bool LanguageTagImpl::canonicalize()
                         }
                     }
                     if (eExt == EXTRACTED_LSC && aScript.isEmpty())
+                    {
+                        maLocale.Language = aLanguage;
+                        maLocale.Country  = aCountry;
+                    }
+                    else if (eExt == EXTRACTED_C_LOCALE)
                     {
                         maLocale.Language = aLanguage;
                         maLocale.Country  = aCountry;
@@ -2349,6 +2363,14 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     {
         // x-... privateuse tags MUST be known to us by definition.
         eRet = EXTRACTED_X;
+    }
+    else if (nLen == 1 && rBcp47[0] == 'C')         // the 'C' locale
+    {
+        eRet = EXTRACTED_C_LOCALE;
+        rLanguage = "C";
+        rScript.clear();
+        rCountry.clear();
+        rVariants.clear();
     }
     else if (nLen == 2 || nLen == 3)                // ll or lll
     {
