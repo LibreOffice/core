@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_662f30a2",
+        "filename": "include/vcl/ITiledRenderable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-04-21T09:02:03Z",
+      "side": 1,
+      "message": "Seeing you implemented this for all 3 applications (nice!), can\u0027t this be pure-virtual?",
+      "revId": "7a3ece1a53d1214a1d1e5ba756102a5fef7c97c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
