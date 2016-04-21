@@ -79,6 +79,8 @@
   <block-list:block block-list:abbreviated-name="tirkai" block-list:name="tikrai"/>
   <block-list:block block-list:abbreviated-name="visdėlto" block-list:name="vis dėlto"/>
   <block-list:block block-list:abbreviated-name="vsio" block-list:name="viso"/>
+  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
+  <block-list:block block-list:abbreviated-name=":pinigai:" block-list:name="💸"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":10:30:" block-list:name="🕥"/>
@@ -200,7 +202,6 @@
   <block-list:block block-list:abbreviated-name=":būgnai2:" block-list:name="♢"/>
   <block-list:block block-list:abbreviated-name=":būgnai:" block-list:name="♦"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":centas:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
   <block-list:block block-list:abbreviated-name=":_chi:" block-list:name="ᵪ"/>
@@ -417,7 +418,7 @@
   <block-list:block block-list:abbreviated-name=":pieštukas2:" block-list:name="✏"/>
   <block-list:block block-list:abbreviated-name=":pieštukas3:" block-list:name="✐"/>
   <block-list:block block-list:abbreviated-name=":pieštukas:" block-list:name="✎"/>
-  <block-list:block block-list:abbreviated-name=":pinigai:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":pinigai:" block-list:name="🍯"/>
   <block-list:block block-list:abbreviated-name=":Plutonas:" block-list:name="♇"/>
   <block-list:block block-list:abbreviated-name=":poaibis:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":priklauso:" block-list:name="∈"/>

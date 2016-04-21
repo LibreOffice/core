@@ -311,7 +311,6 @@
   <block-list:block block-list:abbreviated-name=":caduceus:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":camera:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":CD:" block-list:name="💿"/>
   <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
@@ -339,6 +338,7 @@
   <block-list:block block-list:abbreviated-name=":danser:" block-list:name="💃"/>
   <block-list:block block-list:abbreviated-name=":Davidster:" block-list:name="✡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":deelt:" block-list:name="∣"/>
   <block-list:block block-list:abbreviated-name=":deelt niet:" block-list:name="∤"/>
   <block-list:block block-list:abbreviated-name=":deelverzameling:" block-list:name="⊂"/>

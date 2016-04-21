@@ -821,7 +821,6 @@
   <block-list:block block-list:abbreviated-name=":butik2:" block-list:name="🏬"/>
   <block-list:block block-list:abbreviated-name=":butik:" block-list:name="🏪"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
   <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":champignon:" block-list:name="🍄"/>
@@ -849,6 +848,7 @@
   <block-list:block block-list:abbreviated-name=":danser:" block-list:name="💃"/>
   <block-list:block block-list:abbreviated-name=":Davidsstjerne:" block-list:name="✡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":delfin:" block-list:name="🐬"/>
   <block-list:block block-list:abbreviated-name=":delmængde:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>

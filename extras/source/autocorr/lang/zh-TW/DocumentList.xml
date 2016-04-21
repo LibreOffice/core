@@ -811,6 +811,8 @@
   <block-list:block block-list:abbreviated-name="ytou" block-list:name="you"/>
   <block-list:block block-list:abbreviated-name="yuo" block-list:name="you"/>
   <block-list:block block-list:abbreviated-name="yuor" block-list:name="your"/>
+  <block-list:block block-list:abbreviated-name=":旗幟3:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":籃球:" block-list:name="🏀"/>
   <block-list:block block-list:abbreviated-name=":^alpha:" block-list:name="ᵅ"/>
   <block-list:block block-list:abbreviated-name=":alpha:" block-list:name="α"/>
   <block-list:block block-list:abbreviated-name=":Alpha:" block-list:name="Α"/>
@@ -921,7 +923,7 @@
   <block-list:block block-list:abbreviated-name=":屬於:" block-list:name="∈"/>
   <block-list:block block-list:abbreviated-name=":平行:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":度:" block-list:name="°"/>
-  <block-list:block block-list:abbreviated-name=":旗幟3:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":旗幟3:" block-list:name="⚐"/>
   <block-list:block block-list:abbreviated-name=":日圓:" block-list:name="¥"/>
   <block-list:block block-list:abbreviated-name=":歐圓:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":無限:" block-list:name="∞"/>
@@ -929,7 +931,7 @@
   <block-list:block block-list:abbreviated-name=":短劍:" block-list:name="†"/>
   <block-list:block block-list:abbreviated-name=":空集合:" block-list:name="∅"/>
   <block-list:block block-list:abbreviated-name=":立方根:" block-list:name="∛"/>
-  <block-list:block block-list:abbreviated-name=":籃球:" block-list:name="🏀"/>
+  <block-list:block block-list:abbreviated-name=":籃球:" block-list:name="⚾"/>
   <block-list:block block-list:abbreviated-name=":英吋:" block-list:name="″"/>
   <block-list:block block-list:abbreviated-name=":英鎊2:" block-list:name="💷"/>
   <block-list:block block-list:abbreviated-name=":英鎊:" block-list:name="£"/>

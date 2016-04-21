@@ -772,7 +772,6 @@
   <block-list:block block-list:abbreviated-name=":castillo2:" block-list:name="🏯"/>
   <block-list:block block-list:abbreviated-name=":castillo:" block-list:name="🏰"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
   <block-list:block block-list:abbreviated-name=":celebración:" block-list:name="🙌"/>
   <block-list:block block-list:abbreviated-name=":céntimo:" block-list:name="¢"/>
@@ -879,6 +878,7 @@
   <block-list:block block-list:abbreviated-name=":daga:" block-list:name="†"/>
   <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":decepción:" block-list:name="😞"/>
   <block-list:block block-list:abbreviated-name=":decepción y alivio:" block-list:name="😥"/>
   <block-list:block block-list:abbreviated-name=":delfín:" block-list:name="🐬"/>

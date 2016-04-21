@@ -2119,7 +2119,6 @@
   <block-list:block block-list:abbreviated-name=":cavalo de frente:" block-list:name="🐴"/>
   <block-list:block block-list:abbreviated-name=":cavalo preto:" block-list:name="♞"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
   <block-list:block block-list:abbreviated-name=":celebração:" block-list:name="🙌"/>
   <block-list:block block-list:abbreviated-name=":celular:" block-list:name="📱"/>
@@ -2224,6 +2223,7 @@
   <block-list:block block-list:abbreviated-name=":dançarino:" block-list:name="💃"/>
   <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":delicioso:" block-list:name="😋"/>
   <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
   <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>

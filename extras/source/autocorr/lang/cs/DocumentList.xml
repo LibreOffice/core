@@ -730,7 +730,6 @@
   <block-list:block block-list:abbreviated-name=":bylina:" block-list:name="🌿"/>
   <block-list:block block-list:abbreviated-name=":čaj:" block-list:name="🍵"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
   <block-list:block block-list:abbreviated-name=":celá nota:" block-list:name="𝅝"/>
   <block-list:block block-list:abbreviated-name=":celá pomlka:" block-list:name="𝄻"/>
@@ -780,6 +779,7 @@
   <block-list:block block-list:abbreviated-name=":dárek:" block-list:name="🎁"/>
   <block-list:block block-list:abbreviated-name=":Davidova hvězda:" block-list:name="✡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":delfín:" block-list:name="🐬"/>
   <block-list:block block-list:abbreviated-name=":dělitelné:" block-list:name="∣"/>
   <block-list:block block-list:abbreviated-name=":dělník:" block-list:name="👷"/>
