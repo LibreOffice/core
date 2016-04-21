@@ -461,7 +461,7 @@ namespace
         }
         return BuildJoin(_xConnection, rRh, BuildTable(_xConnection,pLh), &data);
     }
-    typedef ::std::map< OUString,bool,::comphelper::UStringMixLess> tableNames_t;
+    typedef ::std::map< OUString,bool> tableNames_t;
     void addConnectionTableNames( const Reference< XConnection>& _xConnection,
                                   const OQueryTableConnection* const pEntryConn,
                                   tableNames_t &_rTableNames )
