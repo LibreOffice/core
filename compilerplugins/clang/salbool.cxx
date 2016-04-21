@@ -284,12 +284,12 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                     compiler.getSourceManager().getImmediateMacroCallerLoc(
                         loc));
                 if (!isFromCIncludeFile(callLoc)) {
-                    if (compiler.getSourceManager().isMacroArgExpansion(
-                            expr->getLocStart())
+                    SourceLocation argLoc;
+                    if (compat::isMacroArgExpansion(
+                            compiler, expr->getLocStart(), &argLoc)
                         //TODO: check its the complete (first) arg to the macro
                         && (Lexer::getImmediateMacroName(
-                                expr->getLocStart(),
-                                compiler.getSourceManager(),
+                                argLoc, compiler.getSourceManager(),
                                 compiler.getLangOpts())
                             == "CPPUNIT_ASSERT_EQUAL"))
                     {

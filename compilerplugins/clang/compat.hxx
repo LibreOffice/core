@@ -256,6 +256,24 @@ inline void addPPCallbacks(
 #endif
 }
 
+inline bool isMacroArgExpansion(
+    clang::CompilerInstance& compiler, clang::SourceLocation location,
+    clang::SourceLocation * startLocation)
+{
+#if CLANG_VERSION >= 30900
+    return compiler.getSourceManager().isMacroArgExpansion(
+        location, startLocation);
+#else
+    bool b = compiler.getSourceManager().isMacroArgExpansion(location);
+    if (b) {
+        startLocation* = compiler.getSourceManager()
+            .getSLocEntry(compiler.getSourceManager().getFileID(location))
+            .getExpansion().getExpansionLocStart();
+    }
+    return b;
+#endif
+}
+
 inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::SourceLocation location)
 {
 #if CLANG_VERSION >= 30300
