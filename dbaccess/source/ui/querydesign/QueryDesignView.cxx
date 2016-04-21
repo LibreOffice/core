@@ -56,6 +56,7 @@
 #include "sqlmessage.hxx"
 #include <unotools/syslocale.hxx>
 #include <memory>
+#include <set>
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -461,7 +462,7 @@ namespace
         }
         return BuildJoin(_xConnection, rRh, BuildTable(_xConnection,pLh), &data);
     }
-    typedef ::std::map< OUString,bool> tableNames_t;
+    typedef std::set<OUString> tableNames_t;
     void addConnectionTableNames( const Reference< XConnection>& _xConnection,
                                   const OQueryTableConnection* const pEntryConn,
                                   tableNames_t &_rTableNames )
@@ -469,13 +470,8 @@ namespace
             // insert tables into table list to avoid double entries
             const OQueryTableWindow* const pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
             const OQueryTableWindow* const pEntryTabTo = static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin());
-
-            OUString sTabName(BuildTable(_xConnection,pEntryTabFrom));
-            if(_rTableNames.find(sTabName) == _rTableNames.end())
-                _rTableNames[sTabName] = true;
-            sTabName = BuildTable(_xConnection,pEntryTabTo);
-            if(_rTableNames.find(sTabName) == _rTableNames.end())
-                _rTableNames[sTabName] = true;
+            _rTableNames.insert(BuildTable(_xConnection,pEntryTabFrom));
+            _rTableNames.insert(BuildTable(_xConnection,pEntryTabTo));
     }
     void GetNextJoin(   const Reference< XConnection>& _xConnection,
                         OQueryTableConnection* pEntryConn,
@@ -1004,9 +1000,8 @@ namespace
     {
         OUString sTabName(BuildTable(_xConnection,_pTableWindow));
 
-        if(_rTableNames.find(sTabName) == _rTableNames.end())
+        if(_rTableNames.insert(sTabName).second)
         {
-            _rTableNames[sTabName] = true;
             _rsTableListStr += sTabName;
             _rsTableListStr += ",";
         }
