@@ -1001,6 +1001,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     // I, II, ...
                     pSectionContext->SetPageNumberType(style::NumberingType::ROMAN_UPPER);
                 break;
+                case NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman:
+                    // i, ii, ...
+                    pSectionContext->SetPageNumberType(style::NumberingType::ROMAN_LOWER);
+                break;
                 }
             }
         break;
