@@ -450,7 +450,6 @@ bool OStorageHelper::IsValidZipEntryFileName(
     {
         switch ( pChar[i] )
         {
-            case '\\':
             case '?':
             case '<':
             case '>':
@@ -458,6 +457,7 @@ bool OStorageHelper::IsValidZipEntryFileName(
             case '|':
             case ':':
                 return false;
+            case '\\':
             case '/':
                 if ( !bSlashAllowed )
                     return false;
