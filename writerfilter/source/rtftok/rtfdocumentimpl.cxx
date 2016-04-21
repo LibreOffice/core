@@ -3245,7 +3245,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     break;
     case RTF_PGNUCRM:
-    case RTF_PGNLCRM:
     case RTF_PGNLCLTR:
     case RTF_PGNBIDIA:
     case RTF_PGNBIDIB:
@@ -3559,6 +3558,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_PGNDEC:
     {
         auto pIntValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_NumberFormat_decimal);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgNumType, NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
+    }
+    break;
+    case RTF_PGNLCRM:
+    {
+        auto pIntValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman);
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgNumType, NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
     }
     break;
