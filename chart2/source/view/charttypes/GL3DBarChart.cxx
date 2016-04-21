@@ -1302,9 +1302,9 @@ void GL3DBarChart::updateClickEvent()
             }
             nIdex++;
         }
-        for (sal_uInt32 i = 0; i < DISPLAY_BARS_NUM; i++)
+        for (unsigned int i : nBarIdArray)
         {
-            addMovementScreenText(nBarIdArray[i]);
+            addMovementScreenText(i);
         }
         //add translucent back ground
         aTitle = " ";
@@ -1417,10 +1417,10 @@ void GL3DBarChart::updateScroll()
     {
         float fMinDistance = 0.0f;
         std::vector<BarInformation> aBarInfoList;
-        for(size_t i= 0;i < maVectorNearest.size(); i++)
+        for(sal_uInt32 i : maVectorNearest)
         {
             //get bar height position
-            std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(maVectorNearest[i]);
+            std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(i);
             const BarInformation& rBarInfo = itr->second;
             aBarInfoList.push_back(rBarInfo);
             glm::vec3 aPos = rBarInfo.maPos;
@@ -1431,15 +1431,15 @@ void GL3DBarChart::updateScroll()
         if (fMinDistance <= SHOW_SCROLL_TEXT_DISTANCE)
         {
             //update scroll value
-            for(size_t i = 0; i < aBarInfoList.size(); i++)
+            for(BarInformation & i : aBarInfoList)
             {
-                OUString aBarValue = "Value: " + OUString::number(aBarInfoList[i].mnVal);
+                OUString aBarValue = "Value: " + OUString::number(i.mnVal);
                 maScreenTextShapes.push_back(o3tl::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID, true));
                 const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
                 float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.024;
-                glm::vec3 aTextPos = glm::vec3(aBarInfoList[i].maPos.x + BAR_SIZE_X / 2.0f,
-                                      aBarInfoList[i].maPos.y + BAR_SIZE_Y / 2.0f,
-                                      aBarInfoList[i].maPos.z);
+                glm::vec3 aTextPos = glm::vec3(i.maPos.x + BAR_SIZE_X / 2.0f,
+                                      i.maPos.y + BAR_SIZE_Y / 2.0f,
+                                      i.maPos.z);
                 opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
                 pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
             }

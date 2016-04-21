@@ -468,11 +468,11 @@ static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
-    for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < SAL_N_ELEMENTS(aRelationMap); ++nRelMapPos )
+    for (RelationMap & nRelMapPos : aRelationMap)
     {
-        if ( aRelationMap[nRelMapPos].nRelation == _nRel )
+        if ( nRelMapPos.nRelation == _nRel )
         {
-            nLBRelations |= aRelationMap[nRelMapPos].nLBRelation;
+            nLBRelations |= nRelMapPos.nLBRelation;
         }
     }
 
@@ -659,12 +659,12 @@ void SvxSwPosSizeTabPage::setOptimalFrmWidth()
     };
 
     std::vector<SvxSwFramePosString::StringId> aFrames;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aMaps); ++i)
+    for (const FrmMaps& aMap : aMaps)
     {
-        for (size_t j = 0; j < aMaps[i].nCount; ++j)
+        for (size_t j = 0; j < aMap.nCount; ++j)
         {
-            aFrames.push_back(aMaps[i].pMap[j].eStrId);
-            aFrames.push_back(aMaps[i].pMap[j].eMirrorStrId);
+            aFrames.push_back(aMap.pMap[j].eStrId);
+            aFrames.push_back(aMap.pMap[j].eMirrorStrId);
         }
     }
 
@@ -700,12 +700,12 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     };
 
     std::vector<SvxSwFramePosString::StringId> aRels;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aMaps); ++i)
+    for (const RelationMaps& aMap : aMaps)
     {
-        for (size_t j = 0; j < aMaps[i].nCount; ++j)
+        for (size_t j = 0; j < aMap.nCount; ++j)
         {
-            aRels.push_back(aMaps[i].pMap[j].eStrId);
-            aRels.push_back(aMaps[i].pMap[j].eMirrorStrId);
+            aRels.push_back(aMap.pMap[j].eStrId);
+            aRels.push_back(aMap.pMap[j].eMirrorStrId);
         }
     }
 

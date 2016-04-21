@@ -169,8 +169,8 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     {
         const SfxIntegerListItem* p = static_cast<const SfxIntegerListItem*>(pItem);
         std::vector<sal_Int32> aUsedStyles = p->GetList();
-        for (size_t i = 0, n = aUsedStyles.size(); i < n; ++i)
-            maUsedBorderStyles.insert(static_cast<sal_Int16>(aUsedStyles[i]));
+        for (int aUsedStyle : aUsedStyles)
+            maUsedBorderStyles.insert(static_cast<sal_Int16>(aUsedStyle));
     }
 
     if (rCoreAttrs.HasItem(SID_ATTR_BORDER_DEFAULT_WIDTH, &pItem))
@@ -665,8 +665,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                                 { svx::FRAMEBORDER_RIGHT,SvxBoxItemLine::RIGHT },
                             };
 
-    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(eTypes1); ++i)
-        aBoxItem.SetLine( m_pFrameSel->GetFrameBorderStyle( eTypes1[i].first ), eTypes1[i].second );
+    for (std::pair<svx::FrameBorderType,SvxBoxItemLine> i : eTypes1)
+        aBoxItem.SetLine( m_pFrameSel->GetFrameBorderStyle( i.first ), i.second );
 
 
     aBoxItem.SetRemoveAdjacentCellBorder( mbRemoveAdjacentCellBorders );
@@ -676,8 +676,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                                 { svx::FRAMEBORDER_HOR,SvxBoxInfoItemLine::HORI },
                                 { svx::FRAMEBORDER_VER,SvxBoxInfoItemLine::VERT }
                             };
-    for (sal_uInt32 j=0; j < SAL_N_ELEMENTS(eTypes2); ++j)
-        aBoxInfoItem.SetLine( m_pFrameSel->GetFrameBorderStyle( eTypes2[j].first ), eTypes2[j].second );
+    for (std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> j : eTypes2)
+        aBoxInfoItem.SetLine( m_pFrameSel->GetFrameBorderStyle( j.first ), j.second );
 
     aBoxInfoItem.EnableHor( mbHorEnabled );
     aBoxInfoItem.EnableVer( mbVerEnabled );

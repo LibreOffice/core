@@ -800,8 +800,8 @@ void TPGalleryThemeProperties::dispose()
     xMediaPlayer.clear();
     xDialogListener.clear();
 
-    for ( size_t i = 0, n = aFilterEntryList.size(); i < n; ++i ) {
-        delete aFilterEntryList[ i ];
+    for (FilterEntry* i : aFilterEntryList) {
+        delete i;
     }
     aFilterEntryList.clear();
 
@@ -901,17 +901,17 @@ void TPGalleryThemeProperties::FillFilterList()
     ::avmedia::FilterNameVector     aFilters;
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 
-    for( unsigned long l = 0; l < aFilters.size(); ++l )
+    for(std::pair<OUString,OUString> & aFilter : aFilters)
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
             OUString aFilterWildcard( aWildcard );
 
             pFilterEntry = new FilterEntry;
-            pFilterEntry->aFilterName = aFilters[ l ].second.getToken( 0, ';', nIndex );
+            pFilterEntry->aFilterName = aFilter.second.getToken( 0, ';', nIndex );
             nFirstExtFilterPos = m_pCbbFileType->InsertEntry(
                 addExtension(
-                    aFilters[ l ].first,
+                    aFilter.first,
                     aFilterWildcard += pFilterEntry->aFilterName
                 )
             );
@@ -950,13 +950,13 @@ void TPGalleryThemeProperties::FillFilterList()
     }
 
     // media filters
-    for( unsigned long k = 0; k < aFilters.size(); ++k )
+    for(std::pair<OUString,OUString> & aFilter : aFilters)
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
             if ( !aExtensions.isEmpty() )
                 aExtensions += ";";
-            aExtensions += aWildcard + aFilters[ k ].second.getToken( 0, ';', nIndex );
+            aExtensions += aWildcard + aFilter.second.getToken( 0, ';', nIndex );
         }
      }
 

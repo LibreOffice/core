@@ -582,8 +582,8 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
 
         std::vector<double> aValues;
         aValues.reserve(aRawElems.size());
-        for (size_t i = 0; i < aRawElems.size(); ++i)
-            aValues.push_back(aRawElems[i].toDouble());
+        for (OUString & aRawElem : aRawElems)
+            aValues.push_back(aRawElem.toDouble());
         sal_Int32 n = m_aInternalData.appendColumn();
 
         m_aInternalData.setColumnValues(n, aValues);
@@ -598,8 +598,8 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         aValues.reserve(aRawElems.size());
         if (bAllNumeric)
         {
-            for (size_t i = 0; i < aRawElems.size(); ++i)
-                aValues.push_back(aRawElems[i].toDouble());
+            for (OUString & aRawElem : aRawElems)
+                aValues.push_back(aRawElem.toDouble());
         }
         else
         {

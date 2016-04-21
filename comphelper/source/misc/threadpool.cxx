@@ -102,8 +102,8 @@ ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
     maTasksComplete.set();
 
     osl::MutexGuard aGuard( maGuard );
-    for( size_t i = 0; i < maWorkers.size(); i++ )
-        maWorkers[ i ]->launch();
+    for(rtl::Reference<ThreadWorker> & maWorker : maWorkers)
+        maWorker->launch();
 }
 
 ThreadPool::~ThreadPool()
@@ -154,8 +154,8 @@ void ThreadPool::pushTask( ThreadTask *pTask )
     maTasks.insert( maTasks.begin(), pTask );
 
     // horrible beyond belief:
-    for( size_t i = 0; i < maWorkers.size(); i++ )
-        maWorkers[ i ]->signalNewWork();
+    for(rtl::Reference<ThreadWorker> & maWorker : maWorkers)
+        maWorker->signalNewWork();
     maTasksComplete.reset();
 }
 

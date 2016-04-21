@@ -1803,8 +1803,8 @@ bool isNodeActive( OptionsNode* pNode, Module* pModule )
         // search node in active module
         if ( pModule->m_bActive )
         {
-            for ( size_t j = 0; j < pModule->m_aNodeList.size(); ++j )
-                if ( pModule->m_aNodeList[j]->m_sId == pNode->m_sId )
+            for (OrderedEntry* j : pModule->m_aNodeList)
+                if ( j->m_sId == pNode->m_sId )
                     return true;
         }
     }
@@ -1997,22 +1997,21 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                                 bool bAlreadyOpened = false;
                                 if ( pNode->m_aGroupedLeaves.size() > 0 )
                                 {
-                                    for ( size_t k = 0;
-                                          k < pNode->m_aGroupedLeaves.size(); ++k )
+                                    for (std::vector<OptionsLeaf*> & m_aGroupedLeave : pNode->m_aGroupedLeaves)
                                     {
-                                        if ( pNode->m_aGroupedLeaves[k].size() > 0 &&
-                                             pNode->m_aGroupedLeaves[k][0]->m_sGroupId
+                                        if ( m_aGroupedLeave.size() > 0 &&
+                                             m_aGroupedLeave[0]->m_sGroupId
                                              == sLeafGrpId )
                                         {
                                             sal_uInt32 l = 0;
-                                            for ( ; l < pNode->m_aGroupedLeaves[k].size(); ++l )
+                                            for ( ; l < m_aGroupedLeave.size(); ++l )
                                             {
-                                                if ( pNode->m_aGroupedLeaves[k][l]->
+                                                if ( m_aGroupedLeave[l]->
                                                      m_nGroupIndex >= nLeafGrpIdx )
                                                     break;
                                             }
-                                            pNode->m_aGroupedLeaves[k].insert(
-                                                pNode->m_aGroupedLeaves[k].begin() + l, pLeaf );
+                                            m_aGroupedLeave.insert(
+                                                m_aGroupedLeave.begin() + l, pLeaf );
                                             bAlreadyOpened = true;
                                             break;
                                         }
@@ -2112,10 +2111,8 @@ static void lcl_insertLeaf(
 
 void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
 {
-    for ( size_t i = 0; i < rNodeList.size(); ++i )
+    for (OptionsNode* pNode : rNodeList)
     {
-        OptionsNode* pNode = rNodeList[i];
-
         if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
         {
             sal_uInt32 j = 0;

@@ -1444,14 +1444,14 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         // +1 for UNKNOWN_RULE
         static_assert(nRuleMapCount + 1 == static_cast<size_t>(OSQLParseNode::rule_count), "must be equal");
 
-        for ( size_t mapEntry = 0; mapEntry < nRuleMapCount; ++mapEntry )
+        for (const auto & aRuleDescription : aRuleDescriptions)
         {
             // look up the rule description in the our identifier map
-            sal_uInt32 nParserRuleID = StrToRuleID( aRuleDescriptions[ mapEntry ].sRuleName );
+            sal_uInt32 nParserRuleID = StrToRuleID( aRuleDescription.sRuleName );
             // map the parser's rule ID to the OSQLParseNode::Rule
-            s_aReverseRuleIDLookup[ nParserRuleID ] = aRuleDescriptions[ mapEntry ].eRule;
+            s_aReverseRuleIDLookup[ nParserRuleID ] = aRuleDescription.eRule;
             // and map the OSQLParseNode::Rule to the parser's rule ID
-            s_nRuleIDs[ aRuleDescriptions[ mapEntry ].eRule ] = nParserRuleID;
+            s_nRuleIDs[ aRuleDescription.eRule ] = nParserRuleID;
         }
     }
     ++s_nRefCount;

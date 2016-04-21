@@ -465,11 +465,11 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
     for( int i = 0; i < args.getLength() ; ++i )
     {
         bool append = false;
-        for( size_t j = 0; j < SAL_N_ELEMENTS( keyword_list ); j++)
+        for(const char* j : keyword_list)
         {
-            if( args[i].Name.equalsIgnoreAsciiCaseAscii( keyword_list[j] ))
+            if( args[i].Name.equalsIgnoreAsciiCaseAscii( j ))
             {
-                keywords.push_back( keyword_list[j], SAL_NO_ACQUIRE );
+                keywords.push_back( j, SAL_NO_ACQUIRE );
                 append = true;
                 break;
             }

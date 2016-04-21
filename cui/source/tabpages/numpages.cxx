@@ -1136,11 +1136,11 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
             }
         }
     }
-    for (size_t i=0; i<aRemove.size(); ++i)
+    for (unsigned short i : aRemove)
     {
-        if (aRemove[i] != nDontRemove)
+        if (i != nDontRemove)
         {
-            sal_Int32 nPos = rFmtLB.GetEntryPos( reinterpret_cast<void*>((sal_uLong)aRemove[i]));
+            sal_Int32 nPos = rFmtLB.GetEntryPos( reinterpret_cast<void*>((sal_uLong)i));
             rFmtLB.RemoveEntry( nPos);
         }
     }
