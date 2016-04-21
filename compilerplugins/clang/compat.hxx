@@ -266,7 +266,7 @@ inline bool isMacroArgExpansion(
 #else
     bool b = compiler.getSourceManager().isMacroArgExpansion(location);
     if (b) {
-        startLocation* = compiler.getSourceManager()
+        *startLocation = compiler.getSourceManager()
             .getSLocEntry(compiler.getSourceManager().getFileID(location))
             .getExpansion().getExpansionLocStart();
     }
