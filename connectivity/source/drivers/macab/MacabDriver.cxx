@@ -273,7 +273,7 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if ( !m_aImplModule.isMacOSPresent() )
-        return sal_False;
+        return false;
 
     // here we have to look whether we support this URL format
     return url == "sdbc:address:macab";

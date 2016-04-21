@@ -125,7 +125,7 @@ sal_Bool SAL_CALL MacabConnection::getAutoCommit(  ) throw(SQLException, Runtime
     // you have to distinguish which if you are in autocommit mode or not
     // at normal case true should be fine here
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL MacabConnection::commit(  ) throw(SQLException, RuntimeException)
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL MacabConnection::isReadOnly(  ) throw(SQLException, RuntimeExc
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
 
     // return if your connection to readonly
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL MacabConnection::setCatalog( const OUString& ) throw(SQLException, RuntimeException)

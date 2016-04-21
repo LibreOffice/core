@@ -109,7 +109,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnCount() throw(SQLException, 
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL MacabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
@@ -164,17 +164,17 @@ OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32) throw(
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isAutoIncrement(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isSigned(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL MacabResultSetMetaData::getPrecision(sal_Int32) throw(SQLException, RuntimeException)
@@ -189,27 +189,27 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32) throw(::com::sun:
 
 sal_Int32 SAL_CALL MacabResultSetMetaData::isNullable(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return (sal_Int32) sal_True;
+    return (sal_Int32) true;
 }
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isReadOnly(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isDefinitelyWritable(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 

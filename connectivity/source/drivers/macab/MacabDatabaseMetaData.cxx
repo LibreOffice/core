@@ -140,47 +140,47 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLExce
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
@@ -191,7 +191,7 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxIndexLength(  ) throw(SQLExcepti
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
@@ -218,7 +218,7 @@ OUString SAL_CALL MacabDatabaseMetaData::getExtraNameCharacters(  ) throw(SQLExc
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
@@ -232,107 +232,107 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException)
 {
-    return sal_True; // should be supported at least
+    return true; // should be supported at least
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
@@ -355,198 +355,198 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLEx
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     // for the moment, we have read-only addresses, but this might change in the future
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsLikeEscapeClause(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInComparisons(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInExists(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInIns(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
@@ -648,27 +648,27 @@ OUString SAL_CALL MacabDatabaseMetaData::getNumericFunctions(  ) throw(SQLExcept
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException)
@@ -701,9 +701,9 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetType( sal_Int32 setTyp
     {
         case ResultSetType::FORWARD_ONLY:
         case ResultSetType::SCROLL_INSENSITIVE:
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 ) throw(SQLException, RuntimeException)
@@ -712,59 +712,59 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32
     {
         case ResultSetType::FORWARD_ONLY:
         case ResultSetType::SCROLL_INSENSITIVE:
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::updatesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::deletesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::insertsAreDetected( sal_Int32 ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 Reference< XConnection > SAL_CALL MacabDatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)

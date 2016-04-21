@@ -236,7 +236,7 @@ sal_Bool SAL_CALL MacabResultSet::getBoolean(sal_Int32) throw(SQLException, Runt
 
 ::dbtools::throwFunctionNotSupportedSQLException("getBoolean", nullptr);
 
-    return sal_False;
+    return false;
 }
 
 sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32) throw(SQLException, RuntimeException)
@@ -524,9 +524,9 @@ sal_Bool SAL_CALL MacabResultSet::isBeforeFirst() throw(SQLException, RuntimeExc
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
     if (m_nRowPos == -1)
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSet::isAfterLast() throw(SQLException, RuntimeException)
@@ -536,9 +536,9 @@ sal_Bool SAL_CALL MacabResultSet::isAfterLast() throw(SQLException, RuntimeExcep
 
     sal_Int32 nRecords = m_aMacabRecords->size();
     if (m_nRowPos == nRecords)
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSet::isFirst() throw(SQLException, RuntimeException)
@@ -547,9 +547,9 @@ sal_Bool SAL_CALL MacabResultSet::isFirst() throw(SQLException, RuntimeException
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
     if (m_nRowPos == 0)
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSet::isLast() throw(SQLException, RuntimeException)
@@ -559,9 +559,9 @@ sal_Bool SAL_CALL MacabResultSet::isLast() throw(SQLException, RuntimeException)
 
     sal_Int32 nRecords = m_aMacabRecords->size();
     if (m_nRowPos == nRecords - 1)
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL MacabResultSet::beforeFirst() throw(SQLException, RuntimeException)
@@ -599,10 +599,10 @@ sal_Bool SAL_CALL MacabResultSet::first() throw(SQLException, RuntimeException)
 
     sal_Int32 nRecords = m_aMacabRecords->size();
     if (nRecords == 0)
-        return sal_False;
+        return false;
 
     m_nRowPos = 0;
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabResultSet::last() throw(SQLException, RuntimeException)
@@ -612,10 +612,10 @@ sal_Bool SAL_CALL MacabResultSet::last() throw(SQLException, RuntimeException)
 
     sal_Int32 nRecords = m_aMacabRecords->size();
     if (nRecords == 0)
-        return sal_False;
+        return false;
 
     m_nRowPos = nRecords - 1;
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL MacabResultSet::getRow() throw(SQLException, RuntimeException)
@@ -634,10 +634,10 @@ sal_Bool SAL_CALL MacabResultSet::absolute(sal_Int32 row) throw(SQLException, Ru
     sal_Int32 nRecords = m_aMacabRecords->size();
     if (row <= -1 ||
         row >= nRecords)
-        return sal_False;
+        return false;
 
     m_nRowPos = row;
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL MacabResultSet::relative(sal_Int32 row) throw(SQLException, RuntimeException)
@@ -678,7 +678,7 @@ sal_Bool SAL_CALL MacabResultSet::rowDeleted() throw(SQLException, RuntimeExcept
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSet::rowInserted() throw(SQLException, RuntimeException)
@@ -686,7 +686,7 @@ sal_Bool SAL_CALL MacabResultSet::rowInserted() throw(SQLException, RuntimeExcep
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSet::rowUpdated() throw(SQLException, RuntimeException)
@@ -694,7 +694,7 @@ sal_Bool SAL_CALL MacabResultSet::rowUpdated() throw(SQLException, RuntimeExcept
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSet::wasNull() throw(SQLException, RuntimeException)
@@ -911,12 +911,12 @@ sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark) throw( SQ
                 if (sUniqueIdentifier == sBookmark)
                 {
                     m_nRowPos = nRow;
-                    return sal_True;
+                    return true;
                 }
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_Int32 rows) throw( SQLException,  RuntimeException)
@@ -933,11 +933,11 @@ sal_Bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, s
         m_nRowPos += rows;
 
         if (-1 < m_nRowPos && m_nRowPos < nRecords)
-            return sal_True;
+            return true;
     }
 
     m_nRowPos = nRowSave;
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const  Any& secondItem) throw( SQLException,  RuntimeException)
@@ -957,7 +957,7 @@ sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const
 
 sal_Bool SAL_CALL MacabResultSet::hasOrderedBookmarks() throw( SQLException,  RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL MacabResultSet::hashBookmark(const  Any& bookmark) throw( SQLException,  RuntimeException)
@@ -1030,7 +1030,7 @@ sal_Bool MacabResultSet::convertFastPropertyValue(
         default:
             ;
     }
-    return sal_False;
+    return false;
 }
 
 void MacabResultSet::setFastPropertyValue_NoBroadcast(
