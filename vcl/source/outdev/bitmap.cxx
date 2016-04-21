@@ -447,7 +447,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                         }
                         else
                         {
-                            OSL_ENSURE(false, "CopyBits with negative width or height (!)");
+                            OSL_ENSURE(false, "CopyBits with zero or negative width or height");
                         }
 
                         aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
