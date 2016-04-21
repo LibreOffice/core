@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_c9f715f4",
+        "filename": "sc/source/ui/app/scmod.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-21T20:21:59Z",
+      "side": 1,
+      "message": "Calling DoHardRecalc() as is ignores my concerns I expressed in https://gerrit.libreoffice.org/#/c/24094/2/sc/source/ui/app/scmod.cxx@1278 regarding the Detective Undo and now updating charts twice.",
+      "revId": "8b9c477bc0dd9da57176c568725ff186bc6ee008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
