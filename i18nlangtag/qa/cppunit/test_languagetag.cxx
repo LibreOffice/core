@@ -562,6 +562,30 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( joker.getLanguageType() == LANGUAGE_USER_PRIV_JOKER );
     }
 
+    // 'C' locale shall map to 'en-US'
+    {
+        LanguageTag aTag( "C" );
+        CPPUNIT_ASSERT( aTag.getLanguage() == "en" );
+        CPPUNIT_ASSERT( aTag.getCountry() == "US" );
+        lang::Locale aLocale = aTag.getLocale();
+        CPPUNIT_ASSERT( aTag.getBcp47() == "en-US" );
+        CPPUNIT_ASSERT( aLocale.Language == "en" );
+        CPPUNIT_ASSERT( aLocale.Country == "US" );
+        CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
+        CPPUNIT_ASSERT( aTag.getLanguageType() == LANGUAGE_ENGLISH_US );
+    }
+    {
+        LanguageTag aTag( lang::Locale("C","","") );
+        CPPUNIT_ASSERT( aTag.getLanguage() == "en" );
+        CPPUNIT_ASSERT( aTag.getCountry() == "US" );
+        lang::Locale aLocale = aTag.getLocale();
+        CPPUNIT_ASSERT( aTag.getBcp47() == "en-US" );
+        CPPUNIT_ASSERT( aLocale.Language == "en" );
+        CPPUNIT_ASSERT( aLocale.Country == "US" );
+        CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
+        CPPUNIT_ASSERT( aTag.getLanguageType() == LANGUAGE_ENGLISH_US );
+    }
+
     // test reset() methods
     {
         LanguageTag aTag( LANGUAGE_DONTKNOW );
