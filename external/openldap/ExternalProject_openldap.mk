@@ -41,10 +41,10 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 				ac_cv_func_memcmp_working=yes \
 			) \
 			$(if $(SYSTEM_NSS), \
-				CPPFLAGS="$(NSS_CFLAGS)" CFLAGS="$(NSS_CFLAGS)" LDFLAGS="$(NSS_LIBS)" \
+				CPPFLAGS="$(CPPFLAGS) $(NSS_CFLAGS)" CFLAGS="$(CFLAGS) $(NSS_CFLAGS)" LDFLAGS="$(LDFLAGS) $(NSS_LIBS)" \
 				, \
-				CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
-				CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
+				CPPFLAGS="$(CPPFLAGS) -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
+				CFLAGS="$(CFLAGS) -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
 			) \
 			$(if $(openldap_LDFLAGS),LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS)") \
 		&& MAKEFLAGS= && $(MAKE) \
