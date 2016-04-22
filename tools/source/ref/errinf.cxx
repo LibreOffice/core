@@ -149,7 +149,7 @@ StringErrorInfo::StringErrorInfo(
 {
 }
 
-class ErrHdl_Impl
+class ErrorHandler_Impl
 {
 public:
     ErrorHandler        *pNext;
@@ -197,7 +197,7 @@ ErrorContext *ErrorContext::GetContext()
 }
 
 ErrorHandler::ErrorHandler()
-    : pImpl(new ErrHdl_Impl)
+    : pImpl(new ErrorHandler_Impl)
 {
     EDcrData &pData=TheEDcrData::get();
     ErrorHandler *&pHdl=pData.pFirstHdl;
@@ -289,7 +289,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
             nErrFlags = nDynFlags;
     }
 
-    if(ErrHdl_Impl::CreateString(pData.pFirstHdl,pInfo,aErr,nErrFlags))
+    if(ErrorHandler_Impl::CreateString(pData.pFirstHdl,pInfo,aErr,nErrFlags))
     {
         if (bJustCreateString)
         {
@@ -354,7 +354,7 @@ sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
     return HandleError_Impl( lId, nFlags, false, aDummy );
 }
 
-bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
+bool ErrorHandler_Impl::CreateString( const ErrorHandler *pStart,
                                     const ErrorInfo* pInfo, OUString& pStr,
                                     sal_uInt16 &rFlags)
 {

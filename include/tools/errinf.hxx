@@ -32,7 +32,7 @@
 namespace vcl { class Window; }
 
 class DynamicErrorInfo_Impl;
-class ErrHdl_Impl;
+class ErrorHandler_Impl;
 
 class TOOLS_DLLPUBLIC ErrorInfo
 {
@@ -138,10 +138,10 @@ typedef void BasicDisplayErrorFunc(
 
 class TOOLS_DLLPUBLIC ErrorHandler
 {
-    friend class ErrHdl_Impl;
+    friend class ErrorHandler_Impl;
 
 private:
-    std::unique_ptr<ErrHdl_Impl>  pImpl;
+    std::unique_ptr<ErrorHandler_Impl>  pImpl;
 
     static sal_uInt16   HandleError_Impl( sal_uIntPtr lId,
                               sal_uInt16 nFlags,
