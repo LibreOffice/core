@@ -40,7 +40,8 @@ enum CompatibilityOptions
     COPT_USE_OBJECTPOSITIONING,
     COPT_USE_OUR_TEXTWRAPPING,
     COPT_CONSIDER_WRAPPINGSTYLE,
-    COPT_EXPAND_WORDSPACE
+    COPT_EXPAND_WORDSPACE,
+    COPT_PROTECT_FORM
 };
 
 /*-************************************************************************************************************
@@ -60,6 +61,7 @@ enum CompatibilityOptions
 #define COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING       "UseOurTextWrapping"
 #define COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE    "ConsiderWrappingStyle"
 #define COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE          "ExpandWordSpace"
+#define COMPATIBILITY_PROPERTYNAME_PROTECTFORM              "ProtectForm"
 
 #define COMPATIBILITY_DEFAULT_NAME                          "_default"
 
@@ -147,7 +149,8 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
                          bool bUseObjectPositioning,
                          bool bUseOurTextWrapping,
                          bool bConsiderWrappingStyle,
-                         bool bExpandWordSpace );
+                         bool bExpandWordSpace,
+                         bool bProtectForm );
 
         bool        IsUsePrtDevice() const;
         bool        IsAddSpacing() const;
@@ -160,6 +163,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
         bool        IsUseOurTextWrapping() const;
         bool        IsConsiderWrappingStyle() const;
         bool        IsExpandWordSpace() const;
+        bool        IsProtectForm() const;
 
     //  private methods
 
