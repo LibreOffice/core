@@ -395,9 +395,9 @@ void SAL_CALL OReportEngineJFree::setActiveConnection( const uno::Reference< sdb
     return m_nMaxRows;
 }
 
-void SAL_CALL OReportEngineJFree::setMaxRows( ::sal_Int32 _MaxRows ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OReportEngineJFree::setMaxRows( ::sal_Int32 MaxRows ) throw (uno::RuntimeException, std::exception)
 {
-    set(PROPERTY_MAXROWS,_MaxRows,m_nMaxRows);
+    set(PROPERTY_MAXROWS,MaxRows,m_nMaxRows);
 }
 
 } // namespace reportdesign

@@ -54,31 +54,31 @@ namespace reportdesign
         OFormattedField& operator=(const OFormattedField&) = delete;
 
         template <typename T> void set(  const OUString& _sProperty
-                                        ,const T& _Value
+                                        ,const T& Value
                                         ,T& _member)
         {
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                if ( _member != _Value )
+                if ( _member != Value )
                 {
-                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(_Value), &l);
-                    _member = _Value;
+                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    _member = Value;
                 }
             }
             l.notify();
         }
         void set(  const OUString& _sProperty
-                  ,bool _Value
+                  ,bool Value
                   ,bool& _member)
         {
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                if ( _member != _Value )
+                if ( _member != Value )
                 {
-                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(_Value), &l);
-                    _member = _Value;
+                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    _member = Value;
                 }
             }
             l.notify();

@@ -3112,14 +3112,14 @@ Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException, std::e
     return aRet;
 }
 
-void SAL_CALL OReportController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OReportController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aSelectionListeners.addInterface( _Listener );
+    m_aSelectionListeners.addInterface( Listener );
 }
 
-void SAL_CALL OReportController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OReportController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
-    m_aSelectionListeners.removeInterface( _Listener );
+    m_aSelectionListeners.removeInterface( Listener );
 }
 
 void OReportController::createNewFunction(const uno::Any& _aValue)

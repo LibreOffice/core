@@ -55,14 +55,14 @@ namespace reportdesign
         OReportEngineJFree(const OReportEngineJFree&) = delete;
         OReportEngineJFree& operator=(const OReportEngineJFree&) = delete;
         template <typename T> void set(  const OUString& _sProperty
-                                        ,const T& _Value
+                                        ,const T& Value
                                         ,T& _member)
         {
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(_Value), &l);
-                _member = _Value;
+                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                _member = Value;
             }
             l.notify();
         }
@@ -111,7 +111,7 @@ namespace reportdesign
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL getStatusIndicator() throw (css::uno::RuntimeException, std::exception) override ;
         virtual void SAL_CALL setStatusIndicator( const css::uno::Reference< css::task::XStatusIndicator >& _statusindicator ) throw (css::uno::RuntimeException, std::exception) override ;
         virtual ::sal_Int32 SAL_CALL getMaxRows() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setMaxRows( ::sal_Int32 _MaxRows ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setMaxRows( ::sal_Int32 MaxRows ) throw (css::uno::RuntimeException, std::exception) override;
             // Methods
         virtual css::uno::Reference< css::frame::XModel > SAL_CALL createDocumentModel(  ) throw (css::lang::DisposedException, css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;
         virtual css::uno::Reference< css::frame::XModel > SAL_CALL createDocumentAlive( const css::uno::Reference< css::frame::XFrame >& _frame ) throw (css::lang::DisposedException, css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;

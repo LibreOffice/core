@@ -2064,7 +2064,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
     }
 }
 
-bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunctionName,OUString& _Out_sScope) const
+bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunctionName,OUString& Out_sScope) const
 {
     ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunctionName);
     while ( aFind.first != aFind.second )
@@ -2086,10 +2086,10 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
                 if ( xGroup.is() )
                 {
                     OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
-                    _Out_sScope = sGroupName.replaceFirst("%1",xGroup->getExpression());
+                    Out_sScope = sGroupName.replaceFirst("%1",xGroup->getExpression());
                 }
                 else
-                    _Out_sScope = uno::Reference< report::XReportDefinition >(aFind.first->second.second,uno::UNO_QUERY_THROW)->getName();
+                    Out_sScope = uno::Reference< report::XReportDefinition >(aFind.first->second.second,uno::UNO_QUERY_THROW)->getName();
                 break;
             }
         }

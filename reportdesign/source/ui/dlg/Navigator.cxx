@@ -134,7 +134,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
 
         // OContainerListener
         virtual void _elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception) override;
-        virtual void _elementRemoved( const container::ContainerEvent& _Event )
+        virtual void _elementRemoved( const container::ContainerEvent& Event )
             throw (uno::RuntimeException, std::exception) override;
         virtual void _elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception) override;
         virtual void _disposing(const lang::EventObject& _rSource)
@@ -174,7 +174,7 @@ protected:
 
     // OContainerListener Helper
     void _elementInserted( const container::ContainerEvent& _rEvent );
-    void _elementRemoved( const container::ContainerEvent& _Event );
+    void _elementRemoved( const container::ContainerEvent& Event );
     void _elementReplaced( const container::ContainerEvent& _rEvent );
 
 public:

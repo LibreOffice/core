@@ -39,7 +39,7 @@ namespace rptxml
         OXMLSubDocument(const OXMLSubDocument&) = delete;
         void operator =(const OXMLSubDocument&) = delete;
 
-        virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
+        virtual SvXMLImportContext* CreateChildContext_( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
     public:

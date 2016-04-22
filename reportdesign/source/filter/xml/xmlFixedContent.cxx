@@ -126,12 +126,12 @@ OXMLFixedContent::~OXMLFixedContent()
 }
 
 
-SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
+SvXMLImportContext* OXMLFixedContent::CreateChildContext_(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = OXMLReportElementBase::_CreateChildContext(nPrefix,rLocalName,xAttrList);
+    SvXMLImportContext *pContext = OXMLReportElementBase::CreateChildContext_(nPrefix,rLocalName,xAttrList);
     if ( pContext )
         return pContext;
 

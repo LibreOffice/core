@@ -56,14 +56,14 @@ namespace reportdesign
         OFixedLine& operator=(const OFixedLine&) = delete;
 
         template <typename T> void set(  const OUString& _sProperty
-                                        ,const T& _Value
+                                        ,const T& Value
                                         ,T& _member)
         {
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(_Value), &l);
-                _member = _Value;
+                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                _member = Value;
             }
             l.notify();
         }

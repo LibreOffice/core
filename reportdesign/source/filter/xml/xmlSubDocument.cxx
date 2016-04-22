@@ -57,12 +57,12 @@ OXMLSubDocument::~OXMLSubDocument()
 }
 
 
-SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
+SvXMLImportContext* OXMLSubDocument::CreateChildContext_(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = OXMLReportElementBase::_CreateChildContext(_nPrefix,_rLocalName,xAttrList);
+    SvXMLImportContext *pContext = OXMLReportElementBase::CreateChildContext_(_nPrefix,_rLocalName,xAttrList);
     if ( pContext )
         return pContext;
     const SvXMLTokenMap&    rTokenMap   = static_cast<ORptFilter&>(GetImport()).GetReportElemTokenMap();

@@ -124,10 +124,10 @@ namespace rptui
         /** check whether the given function name is a counter function.
         *
         * \param _sQuotedFunctionName the quoted function name to check
-        * \param _Out_sScope the scope of the function
+        * \param Out_sScope the scope of the function
         * \return When true it is a counter functions otherwise false.
         */
-        bool impl_isCounterFunction_throw(const OUString& _sQuotedFunctionName,OUString& _Out_sScope) const;
+        bool impl_isCounterFunction_throw(const OUString& _sQuotedFunctionName,OUString& Out_sScope) const;
 
         /** clear the own properties like function and scope and send a notification
         *
@@ -185,13 +185,13 @@ namespace rptui
         /** checks if the given function is a default function we know.
         *
         * \param _sQuotedFunction the quoted function name
-        * \param _Out_rDataField the data field which is used in the function
+        * \param Out_rDataField the data field which is used in the function
         * \param _xFunctionsSupplier the function supplier to search or empty if not used
         * \param _bSet If set to sal_True than the m_sDefaultFunction and m_sScope vars will be set if successful.
         * \return sal_True with known otherwise sal_False
         */
         bool isDefaultFunction(const OUString& _sQuotedFunction
-                                    ,OUString& _Out_rDataField
+                                    ,OUString& Out_rDataField
                                     ,const css::uno::Reference< css::report::XFunctionsSupplier>& _xFunctionsSupplier = css::uno::Reference< css::report::XFunctionsSupplier>()
                                     ,bool _bSet = false) const;
 

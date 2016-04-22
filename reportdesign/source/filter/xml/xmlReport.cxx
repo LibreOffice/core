@@ -131,7 +131,7 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = _CreateChildContext(nPrefix,rLocalName,xAttrList);
+    SvXMLImportContext *pContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
     if ( pContext )
         return pContext;
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetReportElemTokenMap();

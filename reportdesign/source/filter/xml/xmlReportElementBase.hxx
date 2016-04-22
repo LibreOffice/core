@@ -46,7 +46,7 @@ namespace rptxml
         OXMLTable*    m_pContainer;
         css::uno::Reference< css::report::XReportComponent >      m_xComponent;
 
-        virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
+        virtual SvXMLImportContext* CreateChildContext_( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
     public:
