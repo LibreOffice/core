@@ -28,6 +28,7 @@
 #include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/fntstyle.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 class SvStream;
 #define FontAlign TextAlign
@@ -170,9 +171,7 @@ public:
     static Font identifyFont( const void* pBuffer, sal_uInt32 nLen );
 
 private:
-    ImplFont*           mpImplFont;
-    void                MakeUnique();
-
+    ::o3tl::cow_wrapper< ImplFont > mpImplFont;
 };
 
 }
