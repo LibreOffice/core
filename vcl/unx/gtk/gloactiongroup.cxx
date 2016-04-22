@@ -23,7 +23,7 @@
 #define G_LO_ACTION(inst)                               (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
                                                          G_TYPE_LO_ACTION, GLOAction))
 
-struct _GLOAction
+struct GLOAction
 {
     GObject         parent_instance;
 
@@ -37,7 +37,6 @@ struct _GLOAction
 };
 
 typedef GObjectClass GLOActionClass;
-typedef struct _GLOAction GLOAction;
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push
@@ -98,7 +97,7 @@ g_lo_action_class_init (GLOActionClass *klass)
  * GLOActionGroup
  */
 
-struct _GLOActionGroupPrivate
+struct GLOActionGroupPrivate
 {
     GHashTable  *table;    /* string -> GLOAction */
     GtkSalFrame *frame;    /* Frame to which GActionGroup is associated. */

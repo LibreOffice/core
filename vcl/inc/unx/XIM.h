@@ -30,7 +30,7 @@ typedef struct {
 } XIMCallback1;
 #endif
 
-typedef struct _XIMAnnotation {
+typedef struct {
   int start_position;
   int end_position;
   XPointer data;
@@ -39,7 +39,7 @@ typedef struct _XIMAnnotation {
 /*
   XIMUText: XIMText extension for UTF16
  */
-typedef struct _XIMUnicodeText {
+typedef struct {
   unsigned short length;
   XIMFeedback *feedback;
   Bool encoding_is_wchar;
@@ -58,7 +58,7 @@ typedef enum {
   XIMDrawUpVertically = 1
 } XIMDrawUpDirection ;
 
-typedef struct _XIMLookupStartCallbackStruct {
+typedef struct {
   int       choice_per_window;  /* Number of choices can be display
                      * in the region
                      */
@@ -67,12 +67,12 @@ typedef struct _XIMLookupStartCallbackStruct {
   XIMDrawUpDirection draw_up_direction;
 } XIMLookupStartCallbackStruct;
 
-typedef struct _XIMUnicodeChoiceObject {
+typedef struct {
   XIMUnicodeText *label;
   XIMUnicodeText *value;
 } XIMUnicodeChoiceObject;
 
-typedef struct _XIMLookupDrawCallbackStruct {
+typedef struct {
   XIMUnicodeChoiceObject *choices;       /* the lookup choices */
   int              n_choices;      /* Total number of lookup choices */
   int              first_index;
@@ -86,19 +86,19 @@ typedef enum {
   XIMKatakana, XIMHanzi
 } XIMUnicodeCharacterSubsetID;
 
-typedef struct  _XIMUncodeSubset {
+typedef struct {
   XIMUnicodeCharacterSubsetID   index;
   XIMUnicodeCharacterSubsetID   subset_id;
   char          *name;
   Bool          is_active;
 } XIMUnicodeCharacterSubset;
 
-typedef struct  _XIMUncodeSubsets {
+typedef struct {
   unsigned short count_subsets;
   XIMUnicodeCharacterSubset *supported_subsets;
 } XIMUnicodeCharacterSubsets;
 
-typedef struct  _XIMSwitchIMNotifyCallbackStruct {
+typedef struct {
   XIMUnicodeCharacterSubset *from;
   XIMUnicodeCharacterSubset *to;
 } XIMSwitchIMNotifyCallbackStruct;

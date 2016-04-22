@@ -21,11 +21,9 @@ G_BEGIN_DECLS
 #define G_IS_LO_ACTION_GROUP(inst)                      (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
                                                          G_TYPE_LO_ACTION_GROUP))
 
-typedef struct _GLOActionGroupPrivate                   GLOActionGroupPrivate;
-typedef struct _GLOActionGroupClass                     GLOActionGroupClass;
-typedef struct _GLOActionGroup                          GLOActionGroup;
+struct GLOActionGroupPrivate;
 
-struct _GLOActionGroup
+struct GLOActionGroup
 {
     /*< private >*/
     GObject parent_instance;
@@ -33,7 +31,7 @@ struct _GLOActionGroup
     GLOActionGroupPrivate *priv;
 };
 
-struct _GLOActionGroupClass
+struct GLOActionGroupClass
 {
     /*< private >*/
     GObjectClass parent_class;

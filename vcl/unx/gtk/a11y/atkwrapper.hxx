@@ -25,9 +25,6 @@
 
 extern "C" {
 
-typedef struct _AtkObjectWrapper      AtkObjectWrapper;
-typedef struct _AtkObjectWrapperClass AtkObjectWrapperClass;
-
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleAction;
     class XAccessibleComponent;
@@ -43,7 +40,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleValue;
 } } } }
 
-struct _AtkObjectWrapper
+struct AtkObjectWrapper
 {
     AtkObject aParent;
 
@@ -70,7 +67,7 @@ struct _AtkObjectWrapper
 //    OString * m_pKeyBindings
 };
 
-struct _AtkObjectWrapperClass
+struct AtkObjectWrapperClass
 {
     AtkObjectClass aParentClass;
 };

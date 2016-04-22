@@ -244,10 +244,7 @@ public:
 //one here for that purpose and just give it a VclGtkClipboard* member
 class VclGtkClipboard;
 
-typedef struct _ClipboardOwner ClipboardOwner;
-typedef struct _ClipboardOwnerClass ClipboardOwnerClass;
-
-struct _ClipboardOwner
+struct ClipboardOwner
 {
     GObject parent_instance;
 
@@ -255,7 +252,7 @@ struct _ClipboardOwner
     VclGtkClipboard* m_pThis;
 };
 
-struct _ClipboardOwnerClass
+struct ClipboardOwnerClass
 {
   GObjectClass parent_class;
 

@@ -15,7 +15,7 @@
 
 #include <unx/gtk/glomenu.h>
 
-struct _GLOMenu
+struct GLOMenu
 {
     GMenuModel  parent_instance;
 

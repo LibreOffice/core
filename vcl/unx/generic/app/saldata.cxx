@@ -109,8 +109,8 @@ static int XIOErrorHdl( Display * )
 
 }
 
-static const struct timeval noyield__ = { 0, 0 };
-static const struct timeval yield__   = { 0, 10000 };
+static const struct timeval noyield_ = { 0, 0 };
+static const struct timeval yield_   = { 0, 10000 };
 
 static const char* XRequest[] = {
     // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
@@ -698,7 +698,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     fd_set   ExceptionFDS = aExceptionFDS_;
     int      nFound       = 0;
 
-    timeval  Timeout      = noyield__;
+    timeval  Timeout      = noyield_;
     timeval *pTimeout     = &Timeout;
 
     bool bHandledEvent = false;
@@ -711,10 +711,10 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             // determine remaining timeout.
             gettimeofday (&Timeout, nullptr);
             Timeout = m_aTimeout - Timeout;
-            if (yield__ >= Timeout)
+            if (yield_ >= Timeout)
             {
                 // guard against micro timeout.
-                Timeout = yield__;
+                Timeout = yield_;
             }
             pTimeout = &Timeout;
         }

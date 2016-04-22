@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 #define G_IS_LO_MENU(inst)      (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
                                  G_TYPE_LO_MENU))
 
-typedef struct _GLOMenu GLOMenu;
+struct GLOMenu;
 
 class GtkSalMenuItem;
 
