@@ -514,12 +514,12 @@ namespace
 {
     template < class COMPLEXTYPE >
     bool impl_setObject( const Reference< XParameters >& _rxParam, sal_Int32 _parameterIndex, const Any& _value,
-        void ( SAL_CALL XParameters::*_Setter )( sal_Int32, const COMPLEXTYPE& ), bool _throwIfNotExtractable )
+        void ( SAL_CALL XParameters::*Setter )( sal_Int32, const COMPLEXTYPE& ), bool _throwIfNotExtractable )
     {
         COMPLEXTYPE aValue;
         if ( _value >>= aValue )
         {
-            (_rxParam.get()->*_Setter)( _parameterIndex, aValue );
+            (_rxParam.get()->*Setter)( _parameterIndex, aValue );
             return true;
         }
 
@@ -530,12 +530,12 @@ namespace
 
     template < class INTTYPE >
     void impl_setObject( const Reference< XParameters >& _rxParam, sal_Int32 _parameterIndex, const Any& _value,
-        void ( SAL_CALL XParameters::*_Setter )( sal_Int32, INTTYPE ) )
+        void ( SAL_CALL XParameters::*Setter )( sal_Int32, INTTYPE ) )
     {
         sal_Int32 nValue(0);
         if ( !( _value >>= nValue ) )
             mysqlc_sdbc_driver::throwInvalidArgumentException( "OPreparedStatement::setObjectWithInfo", _rxParam );
-        (_rxParam.get()->*_Setter)( _parameterIndex, static_cast<INTTYPE>(nValue) );
+        (_rxParam.get()->*Setter)( _parameterIndex, static_cast<INTTYPE>(nValue) );
     }
 }
 

@@ -96,12 +96,12 @@ ODatabaseMetaData::~ODatabaseMetaData()
     OSL_TRACE("ODatabaseMetaData::~ODatabaseMetaData");
 }
 
-rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*_Method)() )
+rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     rtl::OUString stringMetaData;
     try {
-        stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
+        stringMetaData = mysqlc_sdbc_driver::convert((meta->*Method)(), m_rConnection.getConnectionEncoding());
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
     } catch (const sql::InvalidArgumentException &) {
@@ -112,12 +112,12 @@ rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodN
     return stringMetaData;
 }
 
-rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*_Method)() )
+rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     rtl::OUString stringMetaData;
     try {
-        stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
+        stringMetaData = mysqlc_sdbc_driver::convert((meta->*Method)(), m_rConnection.getConnectionEncoding());
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
     } catch (const sql::InvalidArgumentException &) {
@@ -128,12 +128,12 @@ rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodN
     return stringMetaData;
 }
 
-sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*_Method)() )
+sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     sal_Int32 int32MetaData(0);
     try {
-        int32MetaData = (meta->*_Method)();
+        int32MetaData = (meta->*Method)();
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
     } catch (const sql::InvalidArgumentException &) {
@@ -144,12 +144,12 @@ sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, 
     return int32MetaData;
 }
 
-bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)() )
+bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     bool boolMetaData(false);
     try {
-        boolMetaData = (meta->*_Method)();
+        boolMetaData = (meta->*Method)();
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
     } catch (const sql::InvalidArgumentException &) {
@@ -160,12 +160,12 @@ bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (
     return boolMetaData;
 }
 
-bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _arg )
+bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _arg )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     bool boolMetaData(false);
     try {
-        boolMetaData = (meta->*_Method)( _arg );
+        boolMetaData = (meta->*Method)( _arg );
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
     } catch (const sql::InvalidArgumentException &) {
@@ -176,7 +176,7 @@ bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (
     return boolMetaData;
 }
 
-bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _resultSetType )
+bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _resultSetType )
 {
     int resultSetType(sql::ResultSet::TYPE_FORWARD_ONLY);
     switch ( _resultSetType ) {
@@ -184,7 +184,7 @@ bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool
         case ResultSetType::SCROLL_SENSITIVE:   resultSetType = sql::ResultSet::TYPE_SCROLL_SENSITIVE;      break;
     }
 
-    return impl_getBoolMetaData(_methodName, _Method, resultSetType);
+    return impl_getBoolMetaData(_methodName, Method, resultSetType);
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator()

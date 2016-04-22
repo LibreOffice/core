@@ -49,12 +49,12 @@ namespace connectivity
             bool                    identifier_quote_string_set;
 
         private:
-            rtl::OUString impl_getStringMetaData( const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*_Method)() );
-            rtl::OUString impl_getStringMetaData( const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*_Method)() );
-            sal_Int32 impl_getInt32MetaData( const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*_Method)() );
-            bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)() );
-            bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _arg );
-            bool impl_getRSTypeMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _resultSetType );
+            rtl::OUString impl_getStringMetaData( const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*Method)() );
+            rtl::OUString impl_getStringMetaData( const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*Method)() );
+            sal_Int32 impl_getInt32MetaData( const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*Method)() );
+            bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)() );
+            bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _arg );
+            bool impl_getRSTypeMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _resultSetType );
 
         public:
             inline const OConnection& getOwnConnection() const { return m_rConnection; }
