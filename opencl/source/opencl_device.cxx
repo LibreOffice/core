@@ -381,7 +381,8 @@ ds_status pickBestDevice(std::unique_ptr<ds_profile>& profile, int& rBestDeviceI
 
     rBestDeviceIndex = -1;
 
-    for (unsigned int d = 0; d < profile->devices.size(); d++)
+    for (std::vector<ds_device>::size_type d = 0; d < profile->devices.size();
+         d++)
     {
         ds_device& device = profile->devices[d];
 
@@ -410,7 +411,8 @@ ds_status pickBestDevice(std::unique_ptr<ds_profile>& profile, int& rBestDeviceI
         }
 
         double fScore = DBL_MAX;
-        if (device.fTime >= 0.0 || device.fTime == DBL_MAX)
+        if (device.fTime >= 0.0
+            || rtl::math::approxEqual(device.fTime, DBL_MAX))
         {
             fScore = device.fTime;
         }
@@ -481,11 +483,6 @@ public:
         maStream.WriteChar('\n');
     }
 
-    void log(const OString& rKey, const OUString& rValue)
-    {
-        log(rKey, OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
-    }
-
     void log(const OString& rKey, int rValue)
     {
         log(rKey, OString::number(rValue));
@@ -536,7 +533,8 @@ void writeDevicesLog(std::unique_ptr<ds_profile>& rProfile, OUString sProfilePat
 
 } // end anonymous namespace
 
-ds_device getDeviceSelection(OUString sProfilePath, bool bForceSelection)
+ds_device getDeviceSelection(
+    OUString const & sProfilePath, bool bForceSelection)
 {
     /* Run only if device is not yet selected */
     if (!bIsDeviceSelected || bForceSelection)
@@ -554,7 +552,7 @@ ds_device getDeviceSelection(OUString sProfilePath, bool bForceSelection)
         }
 
         /* Try reading scores from file */
-        OUString sFilePath = sProfilePath + OUString("opencl_profile.xml");
+        OUString sFilePath = sProfilePath + "opencl_profile.xml";
 
         if (!bForceSelection)
         {

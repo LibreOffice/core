@@ -14,7 +14,7 @@
 
 namespace opencl {
 
-ds_device getDeviceSelection(OUString pFileName, bool bForceSelection = false);
+ds_device getDeviceSelection(OUString const & pFileName, bool bForceSelection = false);
 
 }
 

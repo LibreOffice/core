@@ -402,7 +402,7 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
 
     XmlWriter aXmlWriter(pStream.get());
 
-    if (aXmlWriter.startDocument() == false)
+    if (!aXmlWriter.startDocument())
         return DS_FILE_ERROR;
 
     aXmlWriter.startElement("profile");
@@ -440,7 +440,7 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
         }
 
         aXmlWriter.startElement("time");
-        if (rDevice.fTime == DBL_MAX)
+        if (rtl::math::approxEqual(rDevice.fTime, DBL_MAX))
             aXmlWriter.content("max");
         else
             aXmlWriter.content(OString::number(rDevice.fTime));
