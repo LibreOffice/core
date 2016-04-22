@@ -32,10 +32,6 @@ namespace svx {
 
 #define SIDEBAR_SPACING_GLOBAL_VALUE   "PopupPanel_Spacing"
 
-#define SIDEBAR_SPACE_NORMAL    0
-#define SIDEBAR_SPACE_EXPAND    1
-#define SIDEBAR_SPACE_CONDENSED 2
-
 class TextCharacterSpacingControl : public SfxPopupWindow
 {
 public:
@@ -47,9 +43,6 @@ public:
     long  GetLastCustomValue() { return mnCustomKern;}
 
 private:
-    VclPtr<FixedText>   maFTSpacing;
-    VclPtr<ListBox>     maLBKerning;
-    VclPtr<FixedText>   maFTBy;
     VclPtr<MetricField> maEditKerning;
 
     VclPtr<PushButton> maNormal;
