@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <vector>
 #include <map>
 #include <set>
 
@@ -49,28 +48,6 @@ public:
     {
         this->realloc( this->getLength() + 1 );
         this->operator[]( this->getLength() - 1 ) = a;
-        return *this;
-    }
-};
-
-
-/** Creates a vector which contains an arbitrary number of elements.
-
-    usage:
-
-    vector< t > aVec( MakeVector< t >( t_1 )( t_2 )...( t_n ) );
- */
-template < typename T >
-class MakeVector : public ::std::vector< T >
-{
-public:
-    explicit MakeVector(const T &a)
-        : ::std::vector< T >(1, a)
-    {
-    }
-    MakeVector &operator()(const T &a)
-    {
-        this->push_back(a);
         return *this;
     }
 };
