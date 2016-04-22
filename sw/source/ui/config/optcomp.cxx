@@ -55,13 +55,14 @@ struct CompatibilityItem
     bool        m_bUseOurTextWrapping;
     bool        m_bConsiderWrappingStyle;
     bool        m_bExpandWordSpace;
+    bool        m_bProtectForm;
     bool        m_bIsDefault;
 
     CompatibilityItem( const OUString& _rName, const OUString& _rModule,
                        bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
                        bool _bUseOurTabStops, bool _bNoExtLeading, bool _bUseLineSpacing,
                        bool _bAddTableSpacing, bool _bUseObjPos, bool _bUseOurTextWrapping,
-                       bool _bConsiderWrappingStyle, bool _bExpandWordSpace,
+                       bool _bConsiderWrappingStyle, bool _bExpandWordSpace, bool _bProtectForm,
                        bool _bIsDefault ) :
 
         m_sName                 ( _rName ),
@@ -77,6 +78,7 @@ struct CompatibilityItem
         m_bUseOurTextWrapping   ( _bUseOurTextWrapping ),
         m_bConsiderWrappingStyle( _bConsiderWrappingStyle ),
         m_bExpandWordSpace      ( _bExpandWordSpace ),
+        m_bProtectForm          ( _bProtectForm),
         m_bIsDefault            ( _bIsDefault ) {}
 };
 
@@ -101,7 +103,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
     get(m_pOptionsLB, "options");
     get(m_pDefaultPB, "default");
 
-    for (sal_Int32 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
+    for (sal_Int32 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_PROTECT_FORM; ++nId)
     {
         const OUString sEntry = m_pFormattingLB->GetEntry(nId);
         SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
@@ -151,7 +153,8 @@ sal_uLong convertBools2Ulong_Impl
     bool _bUseObjPos,
     bool _bUseOurTextWrapping,
     bool _bConsiderWrappingStyle,
-    bool _bExpandWordSpace
+    bool _bExpandWordSpace,
+    bool _bProtectForm
 )
 {
     sal_uLong nRet = 0;
@@ -188,6 +191,9 @@ sal_uLong convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if ( _bExpandWordSpace )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bProtectForm )
         nRet |= nSetBit;
 
     return nRet;
@@ -229,6 +235,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     bool bUseOurTextWrapping = false;
     bool bConsiderWrappingStyle = false;
     bool bExpandWordSpace = false;
+    bool bProtectForm = false;
     const sal_Int32 nCount = aList.getLength();
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
@@ -263,6 +270,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
                 aValue.Value >>= bConsiderWrappingStyle;
             else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE )
                 aValue.Value >>= bExpandWordSpace;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_PROTECTFORM )
+                aValue.Value >>= bProtectForm;
         }
 
         const bool bIsUserEntry = sName == "_user";
@@ -272,7 +281,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             sName, sModule, bUsePrtMetrics, bAddSpacing,
             bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
             bUseLineSpacing, bAddTableSpacing, bUseObjPos,
-            bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace,
+            bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm,
             bIsDefaultEntry );
         m_pImpl->m_aList.push_back( aItem );
 
@@ -298,7 +307,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
             bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
-            bConsiderWrappingStyle, bExpandWordSpace );
+            bConsiderWrappingStyle, bExpandWordSpace, bProtectForm );
         m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nOptions) );
     }
 
@@ -341,6 +350,7 @@ IMPL_LINK_NOARG_TYPED(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
                         case COPT_USE_OUR_TEXTWRAPPING: pItem->m_bUseOurTextWrapping = bChecked; break;
                         case COPT_CONSIDER_WRAPPINGSTYLE: pItem->m_bConsiderWrappingStyle = bChecked; break;
                         case COPT_EXPAND_WORDSPACE:  pItem->m_bExpandWordSpace = bChecked; break;
+                        case COPT_PROTECT_FORM: pItem->m_bProtectForm = bChecked; break;
                         default:
                         {
                             OSL_FAIL("SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
@@ -384,7 +394,8 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
                 rIDocumentSettingAccess.get(DocumentSettingId::USE_FORMER_OBJECT_POS),
                 rIDocumentSettingAccess.get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING),
                 rIDocumentSettingAccess.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION),
-                !rIDocumentSettingAccess.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) );
+                !rIDocumentSettingAccess.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK),
+                rIDocumentSettingAccess.get(DocumentSettingId::PROTECT_FORM));
     }
     return nRet;
 }
@@ -400,7 +411,7 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bNoExtLeading, pItem->m_bUseLineSpacing,
             pItem->m_bAddTableSpacing, pItem->m_bUseObjPos,
             pItem->m_bUseOurTextWrapping, pItem->m_bConsiderWrappingStyle,
-            pItem->m_bExpandWordSpace );
+            pItem->m_bExpandWordSpace, pItem->m_bProtectForm );
 }
 
 VclPtr<SfxTabPage> SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
@@ -471,6 +482,11 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
                 else if ( COPT_EXPAND_WORDSPACE == nOption )
                 {
                     m_pWrtShell->SetDoNotJustifyLinesWithManualBreak( !bChecked );
+                    bModified = true;
+                }
+                else if ( COPT_PROTECT_FORM == nOption )
+                {
+                    m_pWrtShell->SetProtectForm( bChecked );
                     bModified = true;
                 }
             }
