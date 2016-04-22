@@ -109,10 +109,10 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
 protected:
     FormulaToken**  pCode;                  // Token code array
     FormulaToken**  pRPN;                   // RPN array
-    sal_uInt16          nLen;                   // Length of token array
-    sal_uInt16          nRPN;                   // Length of RPN array
-    sal_uInt16          nIndex;                 // Current step index
-    sal_uInt16          nError;                 // Error code
+    sal_uInt16      nLen;                   // Length of token array
+    sal_uInt16      nRPN;                   // Length of RPN array
+    sal_uInt16      nIndex;                 // Current step index
+    sal_uInt16      nError;                 // Error code
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
     bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
     bool            mbFromRangeName;        // If this array originates from a named expression
