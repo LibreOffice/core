@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_a9d29932",
+        "filename": "include/test/sheet/xviewpane.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-22T06:51:37Z",
+      "side": 1,
+      "message": "The destructor should be virtual.",
+      "revId": "d8ea278bf8624bce1f99a79fca5a471ce9a9d2c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_091dad0f",
+        "filename": "test/source/sheet/xviewpane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-22T06:51:37Z",
+      "side": 1,
+      "message": "Please use CPPUNIT_ASSERT_EQUAL. It is also unnecessary to add the method name as the CPPUNIT_ASSERT macro already mentions the file an line number.",
+      "revId": "d8ea278bf8624bce1f99a79fca5a471ce9a9d2c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_691a6119",
+        "filename": "test/source/sheet/xviewpane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-22T06:51:37Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d8ea278bf8624bce1f99a79fca5a471ce9a9d2c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_4917a5ed",
+        "filename": "test/source/sheet/xviewpane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-22T06:51:37Z",
+      "side": 1,
+      "message": "Same here. Also use one assert for each check.",
+      "revId": "d8ea278bf8624bce1f99a79fca5a471ce9a9d2c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
