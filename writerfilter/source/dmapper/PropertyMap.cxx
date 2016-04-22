@@ -1177,7 +1177,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     uno::Reference<beans::XPropertySet> xPageStyle (rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW);
                     HandleMarginsHeaderFooter(rDM_Impl);
                     if (rDM_Impl.IsNewDoc())
-                        _ApplyProperties(xPageStyle);
+                        ApplyProperties_(xPageStyle);
                 }
                 catch( const uno::Exception& )
                 {
@@ -1311,7 +1311,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
 
         if (rDM_Impl.IsNewDoc())
-            _ApplyProperties( xFollowPageStyle );
+            ApplyProperties_( xFollowPageStyle );
 
         //todo: creating a "First Page" style depends on HasTitlePage und _fFacingPage_
         if( m_bTitlePage )
@@ -1321,7 +1321,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(
                                 rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), true );
             if (rDM_Impl.IsNewDoc())
-                _ApplyProperties( xFirstPageStyle );
+                ApplyProperties_( xFirstPageStyle );
 
             sal_Int32 nPaperBin = m_nFirstPaperBin >= 0 ? m_nFirstPaperBin : m_nPaperBin >= 0 ? m_nPaperBin : 0;
             if( nPaperBin )
@@ -1425,7 +1425,7 @@ public:
     bool operator() (beans::PropertyValue& aVal)
     {   return aVal.Name == m_aName;    }
 };
-void SectionPropertyMap::_ApplyProperties(
+void SectionPropertyMap::ApplyProperties_(
         uno::Reference< beans::XPropertySet > const& xStyle)
 {
     uno::Reference<beans::XMultiPropertySet> const xMultiSet(xStyle,
@@ -1473,7 +1473,7 @@ void SectionPropertyMap::_ApplyProperties(
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( "Exception in SectionPropertyMap::_ApplyProperties");
+            OSL_FAIL( "Exception in SectionPropertyMap::ApplyProperties_");
         }
         return;
     }
@@ -1486,7 +1486,7 @@ void SectionPropertyMap::_ApplyProperties(
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( "Exception in SectionPropertyMap::_ApplyProperties");
+            OSL_FAIL( "Exception in SectionPropertyMap::ApplyProperties_");
         }
     }
 }
