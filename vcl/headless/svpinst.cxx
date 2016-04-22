@@ -18,6 +18,7 @@
  */
 
 #include <unistd.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <pthread.h>
 #include <sys/time.h>
@@ -60,6 +61,8 @@ bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
+#ifndef ANDROID
+
 static void atfork_child()
 {
     if (SvpSalInstance::s_pDefaultInstance != nullptr)
@@ -68,6 +71,8 @@ static void atfork_child()
         SvpSalInstance::s_pDefaultInstance->CreateWakeupPipe();
     }
 }
+
+#endif
 
 SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     SalGenericInstance( pMutex )
@@ -80,7 +85,9 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     CreateWakeupPipe();
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
+#ifndef ANDROID
     pthread_atfork(nullptr, nullptr, atfork_child);
+#endif
 }
 
 SvpSalInstance::~SvpSalInstance()
