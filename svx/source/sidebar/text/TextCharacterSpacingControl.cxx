@@ -46,11 +46,6 @@ TextCharacterSpacingControl::TextCharacterSpacingControl(sal_uInt16 nId)
 ,   mnLastCus(SPACING_NOCUSTOM)
 {
     get(maEditKerning, "kerning");
-    get(maLBKerning, "kerninglb");
-    get(maFTBy, "change_by_label");
-    get(maFTSpacing, "spacing_label");
-    maEditKerning->Disable();
-    maFTBy->Disable();
 
     get(maNormal, "normal");
     get(maVeryTight, "very_tight");
@@ -59,8 +54,6 @@ TextCharacterSpacingControl::TextCharacterSpacingControl(sal_uInt16 nId)
     get(maLoose, "loose");
     get(maLastCustom, "last_custom");
 
-    maLBKerning->SetSelectHdl(LINK(this, TextCharacterSpacingControl, KerningSelectHdl));
-    maLBKerning->SetHelpId(HID_SPACING_CB_KERN);
     maEditKerning->SetModifyHdl(LINK(this, TextCharacterSpacingControl, KerningModifyHdl));
     maEditKerning->SetHelpId(HID_SPACING_MB_KERN);
 
@@ -90,9 +83,6 @@ void TextCharacterSpacingControl::dispose()
         aWinOpt.SetUserData(aSeq);
     }
 
-    maFTBy.clear();
-    maFTSpacing.clear();
-    maLBKerning.clear();
     maEditKerning.clear();
 
     maNormal.clear();
@@ -135,61 +125,22 @@ void TextCharacterSpacingControl::Initialize()
 
     if(eState >= SfxItemState::DEFAULT)
     {
-        maLBKerning->Enable();
-        maFTSpacing->Enable();
-
         SfxMapUnit eUnit = GetCoreMetric();
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit(MAP_POINT);
         long nBig = maEditKerning->Normalize(nKerning);
         nKerning = LogicToLogic(nBig, eOrgUnit, ePntUnit);
-
-        if(nKerning > 0)
-        {
-            maFTBy->Enable();
-            maEditKerning->Enable();
-            maEditKerning->SetMax(9999);
-            maEditKerning->SetLast(9999);
-            maEditKerning->SetValue(nKerning);
-            maLBKerning->SelectEntryPos(SIDEBAR_SPACE_EXPAND);
-        }
-        else if(nKerning < 0)
-        {
-            maFTBy->Enable();
-            maEditKerning->Enable();
-            maEditKerning->SetValue(-nKerning);
-            maLBKerning->SelectEntryPos(SIDEBAR_SPACE_CONDENSED);
-            long nMax = GetSelFontSize()/6;
-            maEditKerning->SetMax(maEditKerning->Normalize(nMax), FUNIT_POINT);
-            maEditKerning->SetLast(maEditKerning->GetMax(maEditKerning->GetUnit()));
-        }
-        else
-        {
-            maLBKerning->SelectEntryPos(SIDEBAR_SPACE_NORMAL);
-            maFTBy->Disable();
-            maEditKerning->Disable();
-            maEditKerning->SetValue(0);
-            maEditKerning->SetMax(9999);
-            maEditKerning->SetLast(9999);
-        }
+        maEditKerning->SetValue(nKerning);
     }
     else if(SfxItemState::DISABLED == eState)
     {
         maEditKerning->SetText(OUString());
-        maLBKerning->SetNoSelection();
-        maLBKerning->Disable();
-        maFTSpacing->Disable();
         maEditKerning->Disable();
-        maFTBy->Disable();
     }
     else
     {
-        maLBKerning->Enable();
-        maFTSpacing->Enable();
-        maLBKerning->SetNoSelection();
         maEditKerning->SetText(OUString());
         maEditKerning->Disable();
-        maFTBy->Disable();
     }
 }
 
@@ -242,53 +193,10 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, PredefinedValuesHdl, Button*, pCont
     }
 }
 
-IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningSelectHdl, ListBox&, void)
-{
-    if(maLBKerning->GetSelectEntryPos() > 0)
-    {
-        maFTBy->Enable();
-        maEditKerning->Enable();
-    }
-    else
-    {
-        maEditKerning->SetValue(0);
-        maFTBy->Disable();
-        maEditKerning->Disable();
-    }
-
-    KerningModifyHdl(*maEditKerning);
-}
-
 IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningModifyHdl, Edit&, void)
 {
-    const sal_Int32 nPos = maLBKerning->GetSelectEntryPos();
-
     mnLastCus = SPACING_CLOSE_BY_CUS_EDIT;
-    if(nPos == SIDEBAR_SPACE_EXPAND || nPos == SIDEBAR_SPACE_CONDENSED)
-    {
-        long nTmp = static_cast<long>(maEditKerning->GetValue());
-        if(nPos == SIDEBAR_SPACE_CONDENSED)
-        {
-            long nMax = GetSelFontSize()/6;
-            maEditKerning->SetMax(maEditKerning->Normalize(nMax), FUNIT_TWIP);
-            maEditKerning->SetLast(maEditKerning->GetMax(maEditKerning->GetUnit()));
-            if(nTmp > maEditKerning->GetMax())
-                nTmp = maEditKerning->GetMax();
-            mnCustomKern = -nTmp;
-        }
-        else
-        {
-            maEditKerning->SetMax(9999);
-            maEditKerning->SetLast(9999);
-            if(nTmp > maEditKerning->GetMax(FUNIT_TWIP))
-                nTmp = maEditKerning->GetMax(FUNIT_TWIP);
-            mnCustomKern = nTmp;
-        }
-    }
-    else
-    {
-        mnCustomKern = 0;
-    }
+    mnCustomKern = static_cast<long>(maEditKerning->GetValue());
 
     ExecuteCharacterSpacing(mnCustomKern, false);
 }
@@ -298,20 +206,6 @@ SfxMapUnit TextCharacterSpacingControl::GetCoreMetric() const
     SfxItemPool &rPool = SfxGetpApp()->GetPool();
     sal_uInt16 nWhich = rPool.GetWhich(mnId);
     return rPool.GetMetric(nWhich);
-}
-
-long TextCharacterSpacingControl::GetSelFontSize() const
-{
-    const SfxPoolItem* pItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_FONTHEIGHT, pItem);
-
-    const SvxFontHeightItem* pHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
-
-    long nH = 240;
-    SfxMapUnit eUnit = GetCoreMetric();
-    if(pHeightItem)
-        nH = LogicToLogic(pHeightItem->GetHeight(), (MapUnit)eUnit, MAP_TWIP);
-    return nH;
 }
 
 } // end of namespace svx
