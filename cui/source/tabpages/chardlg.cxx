@@ -80,10 +80,6 @@ using namespace ::com::sun::star;
 
 #define CLEARTITEM  rSet.InvalidateItem(nWhich)
 
-#define LW_NORMAL   0
-#define LW_EXPANDED 1
-#define LW_CONDENSED   2
-
 // static ----------------------------------------------------------------
 
 const sal_uInt16 SvxCharNamePage::pNameRanges[] =
@@ -2636,8 +2632,6 @@ SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet
     get(m_p270degRB, "270deg");
     get(m_pFitToLineCB, "fittoline");
     get(m_pScaleWidthMF, "scalewidthsb");
-    get(m_pKerningLB, "kerninglb");
-    get(m_pKerningFT, "kerningft");
     get(m_pKerningMF, "kerningsb");
     get(m_pPairKerningBtn, "pairkerning");
 
@@ -2669,8 +2663,6 @@ void SvxCharPositionPage::dispose()
     m_p270degRB.clear();
     m_pFitToLineCB.clear();
     m_pScaleWidthMF.clear();
-    m_pKerningLB.clear();
-    m_pKerningFT.clear();
     m_pKerningMF.clear();
     m_pPairKerningBtn.clear();
     SvxCharBasePage::dispose();
@@ -2688,8 +2680,6 @@ void SvxCharPositionPage::Initialize()
 
     m_pNormalPosBtn->Check();
     PositionHdl_Impl( m_pNormalPosBtn );
-    m_pKerningLB->SelectEntryPos( 0 );
-    KerningSelectHdl_Impl( *m_pKerningLB );
 
     Link<Button*,void> aLink2 = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
     m_pHighPosBtn->SetClickHdl( aLink2 );
@@ -2711,7 +2701,6 @@ void SvxCharPositionPage::Initialize()
 
     m_pHighLowRB->SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
     m_pFitToLineCB->SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
-    m_pKerningLB->SetSelectHdl( LINK( this, SvxCharPositionPage, KerningSelectHdl_Impl ) );
     m_pKerningMF->SetModifyHdl( LINK( this, SvxCharPositionPage, KerningModifyHdl_Impl ) );
     m_pScaleWidthMF->SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
 }
@@ -2830,47 +2819,11 @@ IMPL_LINK_TYPED( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningSelectHdl_Impl, ListBox&, void)
-{
-    if ( m_pKerningLB->GetSelectEntryPos() > LW_NORMAL )
-    {
-        m_pKerningFT->Enable();
-        m_pKerningMF->Enable();
-
-        if ( m_pKerningLB->GetSelectEntryPos() == LW_CONDENSED )
-        {
-            // Condensed -> max value == 1/6 of the current font height
-            SvxFont& rFont = GetPreviewFont();
-            long nMax = rFont.GetFontSize().Height() / 6;
-            m_pKerningMF->SetMax( m_pKerningMF->Normalize( nMax ), FUNIT_TWIP );
-            m_pKerningMF->SetLast( m_pKerningMF->GetMax( m_pKerningMF->GetUnit() ) );
-        }
-        else
-        {
-            m_pKerningMF->SetMax( 9999 );
-            m_pKerningMF->SetLast( 9999 );
-        }
-    }
-    else
-    {
-        m_pKerningMF->SetValue( 0 );
-        m_pKerningFT->Disable();
-        m_pKerningMF->Disable();
-    }
-
-    KerningModifyHdl_Impl( *m_pKerningMF );
-}
-
-
 IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
 {
     long nVal = static_cast<long>(m_pKerningMF->GetValue());
     nVal = LogicToLogic( nVal, MAP_POINT, MAP_TWIP );
     long nKern = (short)m_pKerningMF->Denormalize( nVal );
-
-    // Condensed? -> then negative
-    if ( m_pKerningLB->GetSelectEntryPos() == LW_CONDENSED )
-        nKern *= -1;
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
@@ -2911,25 +2864,6 @@ IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, Edit&, void
 {
     m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_pScaleWidthMF->GetValue() ) );
 }
-
-void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
-{
-    //update the preview
-    SvxCharBasePage::ActivatePage( rSet );
-
-    //the only thing that has to be checked is the max. allowed value for the
-    //condense edit field
-    if ( m_pKerningLB->GetSelectEntryPos() == LW_CONDENSED )
-    {
-        // Condensed -> max value == 1/6 of the current font height
-        SvxFont& rFont = GetPreviewFont();
-        long nMax = rFont.GetFontSize().Height() / 6;
-        long nKern = (short)m_pKerningMF->Denormalize( LogicToLogic( static_cast<long>(m_pKerningMF->GetValue()), MAP_POINT, MAP_TWIP ) );
-        m_pKerningMF->SetMax( m_pKerningMF->Normalize( nKern > nMax ? nKern : nMax ), FUNIT_TWIP );
-        m_pKerningMF->SetLast( m_pKerningMF->GetMax( m_pKerningMF->GetUnit() ) );
-    }
-}
-
 
 SfxTabPage::sfxpg SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -3077,22 +3011,6 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         rCJKFont.SetFixKerning( (short)nKern );
         rCTLFont.SetFixKerning( (short)nKern );
 
-        if ( nKerning > 0 )
-        {
-            m_pKerningLB->SelectEntryPos( LW_EXPANDED );
-        }
-        else if ( nKerning < 0 )
-        {
-            m_pKerningLB->SelectEntryPos( LW_CONDENSED );
-            nKerning = -nKerning;
-        }
-        else
-        {
-            nKerning = 0;
-            m_pKerningLB->SelectEntryPos( LW_NORMAL );
-        }
-        //enable/disable and set min/max of the Edit
-        KerningSelectHdl_Impl(*m_pKerningLB);
         //the attribute value must be displayed also if it's above the maximum allowed value
         long nVal = static_cast<long>(m_pKerningMF->GetMax());
         if(nVal < nKerning)
@@ -3195,7 +3113,6 @@ void SvxCharPositionPage::ChangesApplied()
     m_p270degRB->SaveValue();
     m_pFitToLineCB->SaveValue();
     m_pScaleWidthMF->SaveValue();
-    m_pKerningLB->SaveValue();
     m_pKerningMF->SaveValue();
     m_pPairKerningBtn->SaveValue();
 }
@@ -3254,19 +3171,12 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     // Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_KERNING );
-    sal_Int32 nPos = m_pKerningLB->GetSelectEntryPos();
     short nKerning = 0;
     SfxMapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
-    if ( nPos == LW_EXPANDED || nPos == LW_CONDENSED )
-    {
-        long nTmp = static_cast<long>(m_pKerningMF->GetValue());
-        long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
-        nKerning = (short)m_pKerningMF->Denormalize( nVal );
-
-        if ( nPos == LW_CONDENSED )
-            nKerning *= - 1;
-    }
+    long nTmp = static_cast<long>(m_pKerningMF->GetValue());
+    long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
+    nKerning = (short)m_pKerningMF->Denormalize( nVal );
 
     if ( pOld )
     {
@@ -3275,12 +3185,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
             bChanged = false;
     }
 
-    if ( !bChanged &&
-         ( m_pKerningLB->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND ||
-           ( m_pKerningMF->GetSavedValue().isEmpty() && m_pKerningMF->IsEnabled() ) ) )
-        bChanged = true;
-
-    if ( bChanged && nPos != LISTBOX_ENTRY_NOTFOUND )
+    if ( bChanged )
     {
         rSet->Put( SvxKerningItem( nKerning, nWhich ) );
         bModified = true;
