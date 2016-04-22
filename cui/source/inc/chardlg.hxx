@@ -276,8 +276,6 @@ private:
 
     VclPtr<MetricField>        m_pScaleWidthMF;
 
-    VclPtr<ListBox>            m_pKerningLB;
-    VclPtr<FixedText>          m_pKerningFT;
     VclPtr<MetricField>        m_pKerningMF;
     VclPtr<CheckBox>           m_pPairKerningBtn;
 
@@ -310,11 +308,9 @@ public:
     virtual ~SvxCharPositionPage();
     virtual void dispose() override;
 
-    using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
-    virtual void        ActivatePage( const SfxItemSet& rSet ) override;
 
 public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
