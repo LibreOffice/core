@@ -2212,6 +2212,7 @@ OpCode FormulaCompiler::NextToken()
     }
     return eOp;
 }
+
 void FormulaCompiler::PutCode( FormulaTokenRef& p )
 {
     if( pc >= FORMULA_MAXTOKENS - 1 )
