@@ -80,13 +80,13 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     CreateWakeupPipe();
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
-    pthread_atfork(NULL, NULL, atfork_child);
+    pthread_atfork(nullptr, nullptr, atfork_child);
 }
 
 SvpSalInstance::~SvpSalInstance()
 {
     if( s_pDefaultInstance == this )
-        s_pDefaultInstance = NULL;
+        s_pDefaultInstance = nullptr;
 
     CloseWakeupPipe();
 }
