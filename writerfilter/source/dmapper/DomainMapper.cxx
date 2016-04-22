@@ -82,7 +82,7 @@ namespace writerfilter {
 
 namespace dmapper{
 
-struct _PageSz
+struct
 {
     sal_Int32 code;
     sal_Int32 h;
@@ -1958,7 +1958,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            const _PageMar& rPageMar = m_pImpl->GetPageMargins();
+            const PageMar& rPageMar = m_pImpl->GetPageMargins();
             pSectionContext->SetTopMargin( rPageMar.top );
             pSectionContext->SetRightMargin( rPageMar.right );
             pSectionContext->SetBottomMargin( rPageMar.bottom );
@@ -1990,7 +1990,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     pSectionContext->SetEvenlySpaced( false );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
                     pSectionContext->SetColumnCount( (sal_Int16)(pSectHdl->GetColumns().size() -1));
-                    std::vector<_Column>::const_iterator tmpIter = pSectHdl->GetColumns().begin();
+                    std::vector<Column_>::const_iterator tmpIter = pSectHdl->GetColumns().begin();
                     for (; tmpIter != pSectHdl->GetColumns().end(); ++tmpIter)
                     {
                         pSectionContext->AppendColumnWidth( tmpIter->nWidth );

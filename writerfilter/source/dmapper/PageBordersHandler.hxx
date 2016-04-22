@@ -33,7 +33,7 @@
 namespace writerfilter {
 namespace dmapper {
 
-class _PgBorder
+class PgBorder
 {
 public:
     css::table::BorderLine2 m_rLine;
@@ -41,8 +41,8 @@ public:
     BorderPosition m_ePos;
     bool m_bShadow;
 
-    _PgBorder( );
-    ~_PgBorder( );
+    PgBorder( );
+    ~PgBorder( );
 };
 
 class PageBordersHandler : public LoggedProperties
@@ -52,7 +52,7 @@ private:
     // See implementation of SectionPropertyMap::ApplyBorderToPageStyles
     sal_Int32 m_nDisplay;
     sal_Int32 m_nOffset;
-    std::vector<_PgBorder> m_aBorders;
+    std::vector<PgBorder> m_aBorders;
 
     // Properties
     virtual void lcl_attribute( Id eName, Value& rVal ) override;

@@ -75,7 +75,7 @@ namespace dmapper {
 
 class SdtHelper;
 
-struct _PageMar
+struct PageMar
 {
     sal_Int32 top;
     sal_Int32 right;
@@ -85,7 +85,7 @@ struct _PageMar
     sal_Int32 footer;
     sal_Int32 gutter;
     public:
-        _PageMar();
+        PageMar();
 };
 enum PageMarElement
 {
@@ -380,7 +380,7 @@ private:
     OUString                                                                        m_sCurrentBkmkId;
     OUString                                                                        m_sCurrentBkmkName;
 
-    _PageMar                                                                        m_aPageMargins;
+    PageMar                                                                        m_aPageMargins;
     SymbolData                                                                      m_aSymbolData;
 
     // TableManagers are stacked: one for each stream to avoid any confusion
@@ -733,9 +733,9 @@ public:
 
     bool IsRTFImport() const { return m_eDocumentType == SourceDocumentType::RTF; }
 
-    void InitPageMargins() { m_aPageMargins = _PageMar(); }
+    void InitPageMargins() { m_aPageMargins = PageMar(); }
     void SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue );
-    const _PageMar& GetPageMargins() const {return m_aPageMargins;}
+    const PageMar& GetPageMargins() const {return m_aPageMargins;}
 
     const LineNumberSettings& GetLineNumberSettings() const { return m_aLineNumberSettings;}
     void SetLineNumberSettings(const LineNumberSettings& rSet) { m_aLineNumberSettings = rSet;}

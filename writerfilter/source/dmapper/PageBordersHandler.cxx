@@ -24,14 +24,14 @@
 namespace writerfilter {
 namespace dmapper {
 
-_PgBorder::_PgBorder( ) :
+PgBorder::PgBorder( ) :
     m_nDistance( 0 ),
     m_ePos( BORDER_RIGHT ),
     m_bShadow(false)
 {
 }
 
-_PgBorder::~_PgBorder( )
+PgBorder::~PgBorder( )
 {
 }
 
@@ -118,7 +118,7 @@ void PageBordersHandler::lcl_sprm( Sprm& rSprm )
                     default:;
                 }
 
-                _PgBorder aPgBorder;
+                PgBorder aPgBorder;
                 aPgBorder.m_rLine = pBorderHandler->getBorderLine( );
                 aPgBorder.m_nDistance = pBorderHandler->getLineDistance( );
                 aPgBorder.m_ePos = ePos;
@@ -135,7 +135,7 @@ void PageBordersHandler::SetBorders( SectionPropertyMap* pSectContext )
 {
     for ( int i = 0, length = m_aBorders.size( ); i < length; i++ )
     {
-        _PgBorder aBorder = m_aBorders[i];
+        PgBorder aBorder = m_aBorders[i];
         pSectContext->SetBorder( aBorder.m_ePos, aBorder.m_nDistance, aBorder.m_rLine, aBorder.m_bShadow );
     }
 }

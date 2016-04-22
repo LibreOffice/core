@@ -26,7 +26,7 @@
 namespace writerfilter {
 namespace dmapper
 {
-struct _Column
+struct Column_
 {
     sal_Int32 nWidth;
     sal_Int32 nSpace;
@@ -39,9 +39,9 @@ class SectionColumnHandler : public LoggedProperties
     sal_Int32   m_nSpace;
     sal_Int32   m_nNum;
     bool        m_bSep;
-    std::vector<_Column> m_aCols;
+    std::vector<Column_> m_aCols;
 
-    _Column   m_aTempColumn;
+    Column_   m_aTempColumn;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;
@@ -56,7 +56,7 @@ public:
     sal_Int32   GetNum() const { return m_nNum; }
     bool        IsSeparator() const { return m_bSep; }
 
-    const std::vector<_Column>& GetColumns() const { return m_aCols;}
+    const std::vector<Column_>& GetColumns() const { return m_aCols;}
 
 };
 
