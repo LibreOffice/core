@@ -102,8 +102,6 @@ private:
 
     void                AskConfig();
 
-    sal_uInt32          mnRefCount;
-
     // Device independent variables
     OUString            maFamilyName;
     OUString            maStyleName;
