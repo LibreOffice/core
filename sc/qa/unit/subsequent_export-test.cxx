@@ -111,6 +111,8 @@ public:
 
     void testInlineArrayXLS();
     void testEmbeddedChartXLS();
+    void testCellAnchoredGroupXLS();
+
     void testFormulaReferenceXLS();
     void testSheetProtectionXLSX();
 
@@ -187,6 +189,8 @@ public:
     CPPUNIT_TEST(testFormatExportODS);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
+    CPPUNIT_TEST(testCellAnchoredGroupXLS);
+
     CPPUNIT_TEST(testFormulaReferenceXLS);
     CPPUNIT_TEST(testSheetProtectionXLSX);
     CPPUNIT_TEST(testCellBordersXLS);
@@ -1375,6 +1379,33 @@ void ScExportTest::testEmbeddedChartXLS()
     CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.", aRanges.In(ScAddress(2,1,1)));
     CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.", aRanges.In(ScRange(2,2,1,2,4,1)));
 
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testCellAnchoredGroupXLS()
+{
+    ScDocShellRef xDocSh_in = loadDoc("cell-anchored-group.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-group.xls", xDocSh_in.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xDocSh_in), FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to save and reload cell-anchored-group.ods", xDocSh.Is());
+
+    // the document contains a group anchored on the first cell, make sure it's there in the right place
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    const size_t nCount = pPage->GetObjCount();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be 1 objects.", static_cast<size_t>(1), nCount);
+
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Upper left of bounding rectangle should be nonnegative.",
+        pData->maLastRect.Left() >= 0 || pData->maLastRect.Top() >= 0);
     xDocSh->DoClose();
 }
 
