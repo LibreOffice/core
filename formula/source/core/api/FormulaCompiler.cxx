@@ -1101,27 +1101,29 @@ bool FormulaCompiler::GetToken()
         mpToken = new FormulaByteToken( ocStop );
         return false;
     }
-    if ( mpToken->GetOpCode() == ocSubTotal || mpToken->GetOpCode() == ocAggregate )
-        glSubTotal = true;
-    else if ( mpToken->IsExternalRef() )
+    if ( mpToken->IsExternalRef() )
     {
         return HandleExternalReference(*mpToken);
     }
-    else if( mpToken->GetOpCode() == ocName )
+    else
     {
-        return HandleRange();
-    }
-    else if( mpToken->GetOpCode() == ocColRowName )
-    {
-        return HandleColRowName();
-    }
-    else if( mpToken->GetOpCode() == ocDBArea )
-    {
-        return HandleDbData();
-    }
-    else if( mpToken->GetOpCode() == ocTableRef )
-    {
-        return HandleTableRef();
+        switch (mpToken->GetOpCode())
+        {
+            case ocSubTotal:
+            case ocAggregate:
+                glSubTotal = true;
+                break;
+            case ocName:
+                return HandleRange();
+            case ocColRowName:
+                return HandleColRowName();
+            case ocDBArea:
+                return HandleDbData();
+            case ocTableRef:
+                return HandleTableRef();
+            default:
+                ;   // nothing
+        }
     }
     return true;
 }
