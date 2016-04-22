@@ -245,7 +245,7 @@ class SectionPropertyMap : public PropertyMap
     bool                                    m_bEvenPageFooterLinkToPrevious;
     bool                                    m_bFirstPageFooterLinkToPrevious;
 
-    void _ApplyProperties(css::uno::Reference<css::beans::XPropertySet> const& xStyle);
+    void ApplyProperties_(css::uno::Reference<css::beans::XPropertySet> const& xStyle);
     css::uno::Reference<css::text::XTextColumns> ApplyColumnProperties(css::uno::Reference<css::beans::XPropertySet> const& xFollowPageStyle,
                                                                        DomainMapper_Impl& rDM_Impl);
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
