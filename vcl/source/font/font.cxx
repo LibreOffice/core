@@ -34,85 +34,57 @@
 
 #include <algorithm>
 
+#include <rtl/instance.hxx>
+
 using namespace vcl;
 
-Font::Font()
+namespace
 {
-    static ImplFont aStaticImplFont;
-    // RefCount is zero for static objects
-    aStaticImplFont.mnRefCount = 0;
-    mpImplFont = &aStaticImplFont;
+    struct theGlobalDefault :
+        public rtl::Static< Font::ImplType, theGlobalDefault > {};
 }
 
-Font::Font( const vcl::Font& rFont )
+Font::Font() : mpImplFont(theGlobalDefault::get())
 {
-    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<sal_uInt32>::max();
-    DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
-
-    mpImplFont = rFont.mpImplFont;
-    // do not count static objects (where RefCount is zero)
-    if ( mpImplFont->mnRefCount && bRefIncrementable )
-        mpImplFont->mnRefCount++;
 }
 
-Font::Font( const OUString& rFamilyName, const Size& rSize )
+Font::Font( const vcl::Font& rFont ) : mpImplFont( rFont.mpImplFont )
 {
-    mpImplFont = new ImplFont;
+}
+
+Font::Font( const OUString& rFamilyName, const Size& rSize ) : mpImplFont()
+{
     mpImplFont->SetFamilyName( rFamilyName );
     mpImplFont->SetFontSize( rSize );
 }
 
-Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
+Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize ) : mpImplFont()
 {
-    mpImplFont = new ImplFont;
     mpImplFont->SetFamilyName( rFamilyName );
     mpImplFont->SetStyleName( rStyleName );
     mpImplFont->SetFontSize( rSize );
 }
 
-Font::Font( FontFamily eFamily, const Size& rSize )
+Font::Font( FontFamily eFamily, const Size& rSize ) : mpImplFont()
 {
-    mpImplFont = new ImplFont;
     mpImplFont->SetFamilyType( eFamily );
     mpImplFont->SetFontSize( rSize );
 }
 
 Font::~Font()
 {
-    // decrement reference counter and delete if last reference
-    // if the object is not static (Refcounter==0)
-    if ( mpImplFont->mnRefCount )
-    {
-        if ( mpImplFont->mnRefCount == 1 )
-            delete mpImplFont;
-        else
-            mpImplFont->mnRefCount--;
-    }
-}
-
-void Font::MakeUnique()
-{
-    // create a copy if others still reference it
-    if ( mpImplFont->mnRefCount != 1 )
-    {
-        if ( mpImplFont->mnRefCount )
-            mpImplFont->mnRefCount--;
-        mpImplFont = new ImplFont( *mpImplFont );
-    }
 }
 
 void Font::SetColor( const Color& rColor )
 {
     if( mpImplFont->maColor != rColor )
     {
-        MakeUnique();
         mpImplFont->maColor = rColor;
     }
 }
 
 void Font::SetFillColor( const Color& rColor )
 {
-    MakeUnique();
     mpImplFont->maFillColor = rColor;
     if ( rColor.GetTransparency() )
         mpImplFont->mbTransparent = true;
@@ -121,56 +93,41 @@ void Font::SetFillColor( const Color& rColor )
 void Font::SetTransparent( bool bTransparent )
 {
     if( mpImplFont->mbTransparent != bTransparent )
-    {
-        MakeUnique();
         mpImplFont->mbTransparent = bTransparent;
-    }
 }
 
 void Font::SetAlignment( FontAlign eAlign )
 {
     if( mpImplFont->meAlign != eAlign )
-    {
-        MakeUnique();
         mpImplFont->SetAlignment(eAlign);
-    }
 }
 
 void Font::SetFamilyName( const OUString& rFamilyName )
 {
-    MakeUnique();
     mpImplFont->SetFamilyName( rFamilyName );
 }
 
 void Font::SetStyleName( const OUString& rStyleName )
 {
-    MakeUnique();
     mpImplFont->maStyleName = rStyleName;
 }
 
 void Font::SetFontSize( const Size& rSize )
 {
     if( mpImplFont->GetFontSize() != rSize )
-    {
-        MakeUnique();
         mpImplFont->SetFontSize( rSize );
-    }
 }
 
 void Font::SetFamily( FontFamily eFamily )
 {
     if( mpImplFont->GetFamilyType() != eFamily )
-    {
-        MakeUnique();
         mpImplFont->SetFamilyType( eFamily );
-    }
 }
 
 void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
     if( mpImplFont->GetCharSet() != eCharSet )
     {
-        MakeUnique();
         mpImplFont->SetCharSet( eCharSet );
 
         if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
@@ -203,73 +160,49 @@ void Font::SetSymbolFlag( bool bSymbol )
 void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
     if( mpImplFont->maLanguageTag != rLanguageTag )
-    {
-        MakeUnique();
         mpImplFont->maLanguageTag = rLanguageTag;
-    }
 }
 
 void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
 {
     if( mpImplFont->maCJKLanguageTag != rLanguageTag )
-    {
-        MakeUnique();
         mpImplFont->maCJKLanguageTag = rLanguageTag;
-    }
 }
 
 void Font::SetLanguage( LanguageType eLanguage )
 {
     if( mpImplFont->maLanguageTag.getLanguageType( false) != eLanguage )
-    {
-        MakeUnique();
         mpImplFont->maLanguageTag.reset( eLanguage);
-    }
 }
 
 void Font::SetCJKContextLanguage( LanguageType eLanguage )
 {
     if( mpImplFont->maCJKLanguageTag.getLanguageType( false) != eLanguage )
-    {
-        MakeUnique();
         mpImplFont->maCJKLanguageTag.reset( eLanguage);
-    }
 }
 
 void Font::SetPitch( FontPitch ePitch )
 {
     if( mpImplFont->GetPitchNoAsk() != ePitch )
-    {
-        MakeUnique();
         mpImplFont->SetPitch( ePitch );
-    }
 }
 
 void Font::SetOrientation( short nOrientation )
 {
     if( mpImplFont->mnOrientation != nOrientation )
-    {
-        MakeUnique();
         mpImplFont->mnOrientation = nOrientation;
-    }
 }
 
 void Font::SetVertical( bool bVertical )
 {
     if( mpImplFont->mbVertical != bVertical )
-    {
-        MakeUnique();
         mpImplFont->mbVertical = bVertical;
-    }
 }
 
 void Font::SetKerning( FontKerning eKerning )
 {
     if( mpImplFont->meKerning != eKerning )
-    {
-        MakeUnique();
         mpImplFont->meKerning = eKerning;
-    }
 }
 
 bool Font::IsKerning() const
@@ -280,130 +213,78 @@ bool Font::IsKerning() const
 void Font::SetWeight( FontWeight eWeight )
 {
     if( mpImplFont->GetWeightNoAsk() != eWeight )
-    {
-        MakeUnique();
         mpImplFont->SetWeight( eWeight );
-    }
 }
 
 void Font::SetWidthType( FontWidth eWidth )
 {
     if( mpImplFont->GetWidthTypeNoAsk() != eWidth )
-    {
-        MakeUnique();
         mpImplFont->SetWidthType( eWidth );
-    }
 }
 
 void Font::SetItalic( FontItalic eItalic )
 {
     if( mpImplFont->GetItalicNoAsk() != eItalic )
-    {
-        MakeUnique();
         mpImplFont->SetItalic( eItalic );
-    }
 }
 
 void Font::SetOutline( bool bOutline )
 {
     if( mpImplFont->mbOutline != bOutline )
-    {
-        MakeUnique();
         mpImplFont->mbOutline = bOutline;
-    }
 }
 
 void Font::SetShadow( bool bShadow )
 {
     if( mpImplFont->mbShadow != bShadow )
-    {
-        MakeUnique();
         mpImplFont->mbShadow = bShadow;
-    }
 }
 
 void Font::SetUnderline( FontLineStyle eUnderline )
 {
     if( mpImplFont->meUnderline != eUnderline )
-    {
-        MakeUnique();
         mpImplFont->meUnderline = eUnderline;
-    }
 }
 
 void Font::SetOverline( FontLineStyle eOverline )
 {
     if( mpImplFont->meOverline != eOverline )
-    {
-        MakeUnique();
         mpImplFont->meOverline = eOverline;
-    }
 }
 
 void Font::SetStrikeout( FontStrikeout eStrikeout )
 {
     if( mpImplFont->meStrikeout != eStrikeout )
-    {
-        MakeUnique();
         mpImplFont->meStrikeout = eStrikeout;
-    }
 }
 
 void Font::SetRelief( FontRelief eRelief )
 {
     if( mpImplFont->meRelief != eRelief )
-    {
-        MakeUnique();
         mpImplFont->meRelief = eRelief;
-    }
 }
 
 void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 {
     if( mpImplFont->meEmphasisMark != eEmphasisMark )
-    {
-        MakeUnique();
         mpImplFont->meEmphasisMark = eEmphasisMark;
-    }
 }
 
 void Font::SetWordLineMode( bool bWordLine )
 {
     if( mpImplFont->mbWordLine != bWordLine )
-    {
-        MakeUnique();
         mpImplFont->mbWordLine = bWordLine;
-    }
 }
 
 Font& Font::operator=( const vcl::Font& rFont )
 {
-    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<sal_uInt32>::max();
-    DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
-
-    // Increment RefCount first, so that we can reference ourselves
-    // RefCount == 0 for static objects
-    if ( rFont.mpImplFont->mnRefCount && bRefIncrementable )
-        rFont.mpImplFont->mnRefCount++;
-
-    // If it's not static ImplData and if it's the last reference, delete it
-    // else decrement RefCount
-    if ( mpImplFont->mnRefCount )
-    {
-        if ( mpImplFont->mnRefCount == 1 )
-            delete mpImplFont;
-        else
-            mpImplFont->mnRefCount--;
-    }
-
     mpImplFont = rFont.mpImplFont;
-
     return *this;
 }
 
 bool Font::operator==( const vcl::Font& rFont ) const
 {
-    return mpImplFont == rFont.mpImplFont || *mpImplFont == *rFont.mpImplFont;
+    return mpImplFont == rFont.mpImplFont;
 }
 
 void Font::Merge( const vcl::Font& rFont )
@@ -553,7 +434,6 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
 
 SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
 {
-    rFont.MakeUnique();
     return ReadImplFont( rIStm, *rFont.mpImplFont );
 }
 
@@ -838,7 +718,6 @@ bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImplFont =
 
 
 ImplFont::ImplFont() :
-    mnRefCount( 1 ),
     meWeight( WEIGHT_DONTKNOW ),
     meFamily( FAMILY_DONTKNOW ),
     mePitch( PITCH_DONTKNOW ),
@@ -872,7 +751,6 @@ ImplFont::ImplFont() :
 {}
 
 ImplFont::ImplFont( const ImplFont& rImplFont ) :
-    mnRefCount( 1 ),
     maFamilyName( rImplFont.maFamilyName ),
     maStyleName( rImplFont.maStyleName ),
     meWeight( rImplFont.meWeight ),
