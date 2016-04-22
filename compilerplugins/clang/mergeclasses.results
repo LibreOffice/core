@@ -183,7 +183,7 @@ merge XclExpFutureRecord with XclExpChFutureRecordBase
 merge XclExpSubStream with XclExpChart
 merge XclNumFmtBuffer with XclImpNumFmtBuffer
 merge SdrItemBrowserWindow with SdrItemBrowser
-merge _SfxMacroTabPage with SfxMacroTabPage
+merge SfxMacroTabPage_ with SfxMacroTabPage
 merge abp::OModuleResourceClient with abp::OABSPilotUno
 merge accessibility::GridControlAccessibleElement with accessibility::AccessibleGridControlTableBase
 merge accessibility::IComboListBoxHelper with VCLListBoxHelper

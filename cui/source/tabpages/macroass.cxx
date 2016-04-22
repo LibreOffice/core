@@ -40,10 +40,10 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
 
-class _SfxMacroTabPage_Impl
+class SfxMacroTabPage_Impl
 {
 public:
-    _SfxMacroTabPage_Impl();
+    SfxMacroTabPage_Impl();
 
     OUString                               maStaticMacroLBLabel;
     VclPtr<PushButton>                     pAssignPB;
@@ -62,7 +62,7 @@ public:
     bool m_bDummyActivated; ///< has this tab page already been activated
 };
 
-_SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl()
+SfxMacroTabPage_Impl::SfxMacroTabPage_Impl()
     : pAssignPB(nullptr)
     , pDeletePB(nullptr)
     , pEventLB(nullptr)
@@ -117,7 +117,7 @@ OUString ConvertToUIName_Impl( SvxMacro *pMacro )
         return aName;
 }
 
-void _SfxMacroTabPage::EnableButtons()
+void SfxMacroTabPage_::EnableButtons()
 {
     // don't do anything as long as the eventbox is empty
     const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
@@ -136,24 +136,24 @@ void _SfxMacroTabPage::EnableButtons()
         mpImpl->pAssignPB->Enable( false );
 }
 
-_SfxMacroTabPage::_SfxMacroTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
+SfxMacroTabPage_::SfxMacroTabPage_(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "EventAssignPage", "cui/ui/eventassignpage.ui", &rAttrSet)
 {
-    mpImpl = new _SfxMacroTabPage_Impl;
+    mpImpl = new SfxMacroTabPage_Impl;
 }
 
-_SfxMacroTabPage::~_SfxMacroTabPage()
+SfxMacroTabPage_::~SfxMacroTabPage_()
 {
     disposeOnce();
 }
 
-void _SfxMacroTabPage::dispose()
+void SfxMacroTabPage_::dispose()
 {
     DELETEZ( mpImpl );
     SfxTabPage::dispose();
 }
 
-void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventId )
+void SfxMacroTabPage_::AddEvent( const OUString & rEventName, sal_uInt16 nEventId )
 {
     OUString sTmp( rEventName );
     sTmp += "\t";
@@ -170,7 +170,7 @@ void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventI
     pE->SetUserData( reinterpret_cast< void* >( sal::static_int_cast< sal_IntPtr >( nEventId )) );
 }
 
-void _SfxMacroTabPage::ScriptChanged()
+void SfxMacroTabPage_::ScriptChanged()
 {
     // get new areas and their functions
     mpImpl->pGroupFrame->Show();
@@ -179,7 +179,7 @@ void _SfxMacroTabPage::ScriptChanged()
     EnableButtons();
 }
 
-bool _SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
+bool SfxMacroTabPage_::FillItemSet( SfxItemSet* rSet )
 {
     SvxMacroItem aItem( GetWhich( aPageRg[0] ) );
     ((SvxMacroTableDtor&)aItem.GetMacroTable()) = aTbl;
@@ -194,17 +194,17 @@ bool _SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
     return false;
 }
 
-void _SfxMacroTabPage::LaunchFillGroup()
+void SfxMacroTabPage_::LaunchFillGroup()
 {
     if (!mpImpl->maFillGroupIdle.GetIdleHdl().IsSet())
     {
-        mpImpl->maFillGroupIdle.SetIdleHdl( LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
+        mpImpl->maFillGroupIdle.SetIdleHdl( LINK( this, SfxMacroTabPage_, TimeOut_Impl ) );
         mpImpl->maFillGroupIdle.SetPriority( SchedulerPriority::HIGHEST );
         mpImpl->maFillGroupIdle.Start();
     }
 }
 
-void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
+void SfxMacroTabPage_::ActivatePage( const SfxItemSet& )
 {
     // fdo#57553 lazily init script providers, because it is annoying if done
     // on dialog open (SfxTabDialog::Start_Impl activates all tab pages once!)
@@ -216,7 +216,7 @@ void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
     LaunchFillGroup();
 }
 
-void _SfxMacroTabPage::PageCreated(const SfxAllItemSet& aSet)
+void SfxMacroTabPage_::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxPoolItem* pEventsItem;
     if( !mpImpl->bGotEvents && SfxItemState::SET == aSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
@@ -231,7 +231,7 @@ void _SfxMacroTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
-void _SfxMacroTabPage::Reset( const SfxItemSet* rSet )
+void SfxMacroTabPage_::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet->GetItemState( GetWhich( aPageRg[0] ), true, &pItem ))
@@ -257,12 +257,12 @@ void _SfxMacroTabPage::Reset( const SfxItemSet* rSet )
         rListBox.SetCurEntry( pE );
 }
 
-bool _SfxMacroTabPage::IsReadOnly() const
+bool SfxMacroTabPage_::IsReadOnly() const
 {
     return mpImpl->bReadOnly;
 }
 
-IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG_TYPED( SfxMacroTabPage_, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&     rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
@@ -278,7 +278,7 @@ IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
     EnableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectGroup_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG_TYPED( SfxMacroTabPage_, SelectGroup_Impl, SvTreeListBox*, void)
 {
     mpImpl->pGroupLB->GroupSelected();
     const OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
@@ -290,22 +290,22 @@ IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectGroup_Impl, SvTreeListBox*, void)
     EnableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectMacro_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG_TYPED( SfxMacroTabPage_, SelectMacro_Impl, SvTreeListBox*, void)
 {
     EnableButtons();
 }
 
-IMPL_LINK_TYPED( _SfxMacroTabPage, AssignDeleteClickHdl_Impl, Button*, pBtn, void )
+IMPL_LINK_TYPED( SfxMacroTabPage_, AssignDeleteClickHdl_Impl, Button*, pBtn, void )
 {
     AssignDeleteHdl(pBtn);
 }
 
-IMPL_LINK_TYPED( _SfxMacroTabPage, AssignDeleteHdl_Impl, SvTreeListBox*, pBtn, bool )
+IMPL_LINK_TYPED( SfxMacroTabPage_, AssignDeleteHdl_Impl, SvTreeListBox*, pBtn, bool )
 {
     return AssignDeleteHdl(pBtn);
 }
 
-bool _SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
+bool SfxMacroTabPage_::AssignDeleteHdl(Control* pBtn)
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
@@ -334,7 +334,7 @@ bool _SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
         }
         else
         {
-            OSL_ENSURE( false, "_SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead? (out of interest: tell fs, please!)" );
+            OSL_ENSURE( false, "SfxMacroTabPage_::AssignDeleteHdl_Impl: this branch is *not* dead? (out of interest: tell fs, please!)" );
             aTbl.Insert(
                 nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
         }
@@ -351,7 +351,7 @@ bool _SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
     return false;
 }
 
-IMPL_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
+IMPL_LINK_TYPED( SfxMacroTabPage_, TimeOut_Impl, Idle*,, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
     SfxTabDialog* pTabDlg = GetTabDialog();
@@ -369,19 +369,19 @@ IMPL_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
     }
 }
 
-void _SfxMacroTabPage::InitAndSetHandler()
+void SfxMacroTabPage_::InitAndSetHandler()
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link<SvTreeListBox*,bool> aLnk(LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
+    Link<SvTreeListBox*,bool> aLnk(LINK(this, SfxMacroTabPage_, AssignDeleteHdl_Impl ));
     mpImpl->pMacroLB->SetDoubleClickHdl( aLnk );
-    mpImpl->pDeletePB->SetClickHdl( LINK(this, _SfxMacroTabPage, AssignDeleteClickHdl_Impl ) );
-    mpImpl->pAssignPB->SetClickHdl( LINK(this, _SfxMacroTabPage, AssignDeleteClickHdl_Impl ) );
+    mpImpl->pDeletePB->SetClickHdl( LINK(this, SfxMacroTabPage_, AssignDeleteClickHdl_Impl ) );
+    mpImpl->pAssignPB->SetClickHdl( LINK(this, SfxMacroTabPage_, AssignDeleteClickHdl_Impl ) );
     rListBox.SetDoubleClickHdl( aLnk );
 
-    rListBox.SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectEvent_Impl ));
-    mpImpl->pGroupLB->SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectGroup_Impl ));
-    mpImpl->pMacroLB->SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectMacro_Impl ));
+    rListBox.SetSelectHdl( LINK( this, SfxMacroTabPage_, SelectEvent_Impl ));
+    mpImpl->pGroupLB->SetSelectHdl( LINK( this, SfxMacroTabPage_, SelectGroup_Impl ));
+    mpImpl->pMacroLB->SetSelectHdl( LINK( this, SfxMacroTabPage_, SelectMacro_Impl ));
 
     rListBox.SetSelectionMode( SINGLE_SELECTION );
     rListBox.SetTabs( &nTabs[0] );
@@ -402,7 +402,7 @@ void _SfxMacroTabPage::InitAndSetHandler()
 
 }
 
-void _SfxMacroTabPage::FillMacroList()
+void SfxMacroTabPage_::FillMacroList()
 {
     mpImpl->pGroupLB->Init(
         css::uno::Reference<
@@ -411,7 +411,7 @@ void _SfxMacroTabPage::FillMacroList()
         OUString(), false);
 }
 
-void _SfxMacroTabPage::FillEvents()
+void SfxMacroTabPage_::FillEvents()
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
 
@@ -424,7 +424,7 @@ void _SfxMacroTabPage::FillEvents()
         if( pE )
         {
             SvLBoxString&     rLItem = static_cast<SvLBoxString&>( pE->GetItem( LB_MACROS_ITEMPOS ) );
-            DBG_ASSERT( SV_ITEM_ID_LBOXSTRING == rLItem.GetType(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
+            DBG_ASSERT( SV_ITEM_ID_LBOXSTRING == rLItem.GetType(), "SfxMacroTabPage_::FillEvents(): no LBoxString" );
 
             OUString          sOld( rLItem.GetText() );
             OUString          sNew;
@@ -442,7 +442,7 @@ void _SfxMacroTabPage::FillEvents()
 }
 
 SfxMacroTabPage::SfxMacroTabPage(vcl::Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
-    : _SfxMacroTabPage( pParent, rSet )
+    : SfxMacroTabPage_( pParent, rSet )
 {
     mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
     mpImpl->sAssignedMacro = get<FixedText>("assignft")->GetText();

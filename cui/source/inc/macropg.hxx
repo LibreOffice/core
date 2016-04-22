@@ -51,22 +51,22 @@ struct EventDisplayName
 };
 typedef ::std::vector< EventDisplayName >   EventDisplayNames;
 
-class _SvxMacroTabPage;
+class SvxMacroTabPage_;
 class SvTabListBox;
 
-class _SvxMacroTabPage_Impl;
+class SvxMacroTabPage_Impl;
 
 
-class _SvxMacroTabPage : public SfxTabPage
+class SvxMacroTabPage_ : public SfxTabPage
 {
     DECL_LINK_TYPED( SelectEvent_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( AssignDeleteHdl_Impl, Button *, void );
     DECL_LINK_TYPED( DoubleClickHdl_Impl, SvTreeListBox*, bool );
 
-    static long GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn );
+    static long GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton* pBtn );
 
 protected:
-    _SvxMacroTabPage_Impl*      mpImpl;
+    SvxMacroTabPage_Impl*      mpImpl;
     css::uno::Reference< css::container::XNameReplace > m_xAppEvents;
     css::uno::Reference< css::container::XNameReplace > m_xDocEvents;
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
@@ -75,7 +75,7 @@ protected:
     bool bReadOnly, bDocModified, bAppEvents, bInitialized;
     EventDisplayNames aDisplayNames;
 
-    _SvxMacroTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
+    SvxMacroTabPage_( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
 
     void                        EnableButtons();
     static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
@@ -83,7 +83,7 @@ protected:
 
 public:
 
-    virtual                     ~_SvxMacroTabPage();
+    virtual                     ~SvxMacroTabPage_();
     virtual void                dispose() override;
     void                        InitResources();
 
@@ -97,7 +97,7 @@ public:
     bool                        IsReadOnly() const override;
 };
 
-class SvxMacroTabPage : public _SvxMacroTabPage
+class SvxMacroTabPage : public SvxMacroTabPage_
 {
 public:
     SvxMacroTabPage(

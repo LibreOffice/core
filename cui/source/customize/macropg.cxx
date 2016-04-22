@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 static const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
 static const char aVndSunStarScript[] = "vnd.sun.star.script:";
 
-_SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
+SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
     : pAssignPB(nullptr)
     , pAssignComponentPB(nullptr)
     , pDeletePB(nullptr)
@@ -211,7 +211,7 @@ void MacroEventListBox::Enable()
 // assign button ("Add Command") is enabled only if it is not read only
 // delete button ("Remove Command") is enabled if a current binding exists
 //     and it is not read only
-void _SvxMacroTabPage::EnableButtons()
+void SvxMacroTabPage_::EnableButtons()
 {
     const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
@@ -224,7 +224,7 @@ void _SvxMacroTabPage::EnableButtons()
     }
 }
 
-_SvxMacroTabPage::_SvxMacroTabPage(vcl::Window* pParent, const OString& rID,
+SvxMacroTabPage_::SvxMacroTabPage_(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet& rAttrSet)
     : SfxTabPage( pParent, rID, rUIXMLDescription, &rAttrSet ),
     m_xAppEvents(nullptr),
@@ -234,21 +234,21 @@ _SvxMacroTabPage::_SvxMacroTabPage(vcl::Window* pParent, const OString& rID,
     bAppEvents(false),
     bInitialized(false)
 {
-    mpImpl = new _SvxMacroTabPage_Impl( rAttrSet );
+    mpImpl = new SvxMacroTabPage_Impl( rAttrSet );
 }
 
-_SvxMacroTabPage::~_SvxMacroTabPage()
+SvxMacroTabPage_::~SvxMacroTabPage_()
 {
     disposeOnce();
 }
 
-void _SvxMacroTabPage::dispose()
+void SvxMacroTabPage_::dispose()
 {
     DELETEZ( mpImpl );
     SfxTabPage::dispose();
 }
 
-void _SvxMacroTabPage::InitResources()
+void SvxMacroTabPage_::InitResources()
 {
     // Note: the order here controls the order in which the events are displayed in the UI!
 
@@ -332,7 +332,7 @@ void _SvxMacroTabPage::InitResources()
 
 // the following method is called when the user clicks OK
 // We use the contents of the hashes to replace the settings
-bool _SvxMacroTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
+bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     try
     {
@@ -387,7 +387,7 @@ bool _SvxMacroTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 }
 
 // the following method clears the bindings in the hashes for both doc & app
-void _SvxMacroTabPage::Reset( const SfxItemSet* )
+void SvxMacroTabPage_::Reset( const SfxItemSet* )
 {
     // called once in creation - don't reset the data this time
     if(!bInitialized)
@@ -429,12 +429,12 @@ void _SvxMacroTabPage::Reset( const SfxItemSet* )
     DisplayAppEvents(bAppEvents);
 }
 
-void _SvxMacroTabPage::SetReadOnly( bool bSet )
+void SvxMacroTabPage_::SetReadOnly( bool bSet )
 {
     mpImpl->bReadOnly = bSet;
 }
 
-bool _SvxMacroTabPage::IsReadOnly() const
+bool SvxMacroTabPage_::IsReadOnly() const
 {
     return mpImpl->bReadOnly;
 }
@@ -494,7 +494,7 @@ void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::R
 
 
 // displays the app events if appEvents=true, otherwise displays the doc events
-void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
+void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
 {
     bAppEvents = appEvents;
 
@@ -538,7 +538,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         EventsHash::iterator h_it = eventsHash->find( sEventName );
         if( h_it == eventsHash->end() )
         {
-            OSL_FAIL( "_SvxMacroTabPage::DisplayAppEvents: something's suspicious here!" );
+            OSL_FAIL( "SvxMacroTabPage_::DisplayAppEvents: something's suspicious here!" );
             continue;
         }
 
@@ -570,7 +570,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 }
 
 // select event handler on the listbox
-IMPL_LINK_NOARG_TYPED( _SvxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG_TYPED( SvxMacroTabPage_, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*           pE = rListBox.FirstSelected();
@@ -586,20 +586,20 @@ IMPL_LINK_NOARG_TYPED( _SvxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
     EnableButtons();
 }
 
-IMPL_LINK_TYPED( _SvxMacroTabPage, AssignDeleteHdl_Impl, Button*, pBtn, void )
+IMPL_LINK_TYPED( SvxMacroTabPage_, AssignDeleteHdl_Impl, Button*, pBtn, void )
 {
     GenericHandler_Impl( this, static_cast<PushButton*>(pBtn) );
 }
 
-IMPL_LINK_NOARG_TYPED( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG_TYPED( SvxMacroTabPage_, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 {
     return GenericHandler_Impl( this, nullptr );
 }
 
 // handler for double click on the listbox, and for the assign/delete buttons
-long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn )
+long SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton* pBtn )
 {
-    _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
+    SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
     sal_uLong nPos;
@@ -711,21 +711,21 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 
 // pass in the XNameReplace.
 // can remove the 3rd arg once issue ?? is fixed
-void _SvxMacroTabPage::InitAndSetHandler( const Reference< container::XNameReplace>& xAppEvents, const Reference< container::XNameReplace>& xDocEvents, const Reference< util::XModifiable >& xModifiable )
+void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameReplace>& xAppEvents, const Reference< container::XNameReplace>& xDocEvents, const Reference< util::XModifiable >& xModifiable )
 {
     m_xAppEvents = xAppEvents;
     m_xDocEvents = xDocEvents;
     m_xModifiable = xModifiable;
     SvHeaderTabListBox&    rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&             rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link<Button*,void>     aLnk(LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
+    Link<Button*,void>     aLnk(LINK(this, SvxMacroTabPage_, AssignDeleteHdl_Impl ));
     mpImpl->pDeletePB->SetClickHdl(    aLnk );
     mpImpl->pAssignPB->SetClickHdl(    aLnk );
     if( mpImpl->pAssignComponentPB )
         mpImpl->pAssignComponentPB->SetClickHdl( aLnk );
-    rListBox.SetDoubleClickHdl( LINK(this, _SvxMacroTabPage, DoubleClickHdl_Impl ) );
+    rListBox.SetDoubleClickHdl( LINK(this, SvxMacroTabPage_, DoubleClickHdl_Impl ) );
 
-    rListBox.SetSelectHdl( LINK( this, _SvxMacroTabPage, SelectEvent_Impl ));
+    rListBox.SetSelectHdl( LINK( this, SvxMacroTabPage_, SelectEvent_Impl ));
 
     rListBox.SetSelectionMode( SINGLE_SELECTION );
     rListBox.SetTabs( &nTabs[0] );
@@ -780,7 +780,7 @@ void _SvxMacroTabPage::InitAndSetHandler( const Reference< container::XNameRepla
 }
 
 // returns the two props EventType & Script for a given event name
-Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eventsHash )
+Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eventsHash )
 {
     const ::std::pair< OUString, OUString >& rAssignedEvent( eventsHash[ eventName ] );
 
@@ -798,7 +798,7 @@ Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eve
 
 // converts the Any returned by GetByName into a pair which can be stored in
 // the EventHash
-::std::pair< OUString, OUString  > _SvxMacroTabPage::GetPairFromAny( const Any& aAny )
+::std::pair< OUString, OUString  > SvxMacroTabPage_::GetPairFromAny( const Any& aAny )
 {
     Sequence< beans::PropertyValue > props;
     OUString type, url;
@@ -816,7 +816,7 @@ SvxMacroTabPage::SvxMacroTabPage(vcl::Window* pParent,
     const SfxItemSet& rSet,
     Reference< container::XNameReplace > xNameReplace,
     sal_uInt16 nSelectedIndex)
-    : _SvxMacroTabPage(pParent, "MacroAssignPage", "cui/ui/macroassignpage.ui", rSet)
+    : SvxMacroTabPage_(pParent, "MacroAssignPage", "cui/ui/macroassignpage.ui", rSet)
 {
     mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
     mpImpl->sAssignedMacro = get<FixedText>("assignft")->GetText();

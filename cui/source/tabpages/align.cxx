@@ -108,9 +108,9 @@ const sal_uInt16 AlignmentTabPage::s_pRanges[] =
 
 namespace {
 
-template<typename _JustContainerType, typename _JustEnumType>
+template<typename JustContainerType, typename JustEnumType>
 void lcl_MaybeResetAlignToDistro(
-    ListBox& rLB, sal_uInt16 nListPos, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, _JustEnumType eBlock)
+    ListBox& rLB, sal_uInt16 nListPos, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, JustEnumType eBlock)
 {
     const SfxPoolItem* pItem;
     if (rCoreAttrs.GetItemState(nWhichAlign, true, &pItem) != SfxItemState::SET)
@@ -118,7 +118,7 @@ void lcl_MaybeResetAlignToDistro(
         return;
 
     const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
-    _JustContainerType eVal = static_cast<_JustContainerType>(p->GetEnumValue());
+    JustContainerType eVal = static_cast<JustContainerType>(p->GetEnumValue());
     if (eVal != eBlock)
         // alignment is not 'justify'.  No need to go further.
         return;

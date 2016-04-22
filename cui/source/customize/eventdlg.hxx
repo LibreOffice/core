@@ -27,7 +27,7 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-class SvxEventConfigPage : public _SvxMacroTabPage
+class SvxEventConfigPage : public SvxMacroTabPage_
 {
     VclPtr<ListBox>   m_pSaveInListBox;
 

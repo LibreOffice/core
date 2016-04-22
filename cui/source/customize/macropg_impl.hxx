@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CUI_SOURCE_CUSTOMIZE_MACROPG_IMPL_HXX
 #define INCLUDED_CUI_SOURCE_CUSTOMIZE_MACROPG_IMPL_HXX
 
-class _SvxMacroTabPage_Impl
+class SvxMacroTabPage_Impl
 {
 public:
-    explicit _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
+    explicit SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
 
     VclPtr<PushButton>                     pAssignPB;
     VclPtr<PushButton>                     pAssignComponentPB;

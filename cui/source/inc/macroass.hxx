@@ -27,12 +27,12 @@
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-class _SfxMacroTabPage;
+class SfxMacroTabPage_;
 class SvTabListBox;
 class SvTreeListBox;
-class _SfxMacroTabPage_Impl;
+class SfxMacroTabPage_Impl;
 
-class _SfxMacroTabPage : public SfxTabPage
+class SfxMacroTabPage_ : public SfxTabPage
 {
     SvxMacroTableDtor           aTbl;
     DECL_DLLPRIVATE_LINK_TYPED( SelectEvent_Impl, SvTreeListBox*, void );
@@ -45,9 +45,9 @@ class _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_LINK_TYPED( TimeOut_Impl, Idle*, void );
 
 protected:
-    _SfxMacroTabPage_Impl*      mpImpl;
+    SfxMacroTabPage_Impl*      mpImpl;
 
-                                _SfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rItemSet );
+                                SfxMacroTabPage_( vcl::Window* pParent, const SfxItemSet& rItemSet );
 
     void                        InitAndSetHandler();
     void                        FillEvents();
@@ -56,7 +56,7 @@ protected:
 
 public:
 
-    virtual                     ~_SfxMacroTabPage();
+    virtual                     ~SfxMacroTabPage_();
     virtual void                dispose() override;
 
     void                        AddEvent( const OUString & rEventName, sal_uInt16 nEventId );
@@ -74,7 +74,7 @@ public:
     bool                        IsReadOnly() const override;
 };
 
-class SfxMacroTabPage : public _SfxMacroTabPage
+class SfxMacroTabPage : public SfxMacroTabPage_
 {
 public:
     SfxMacroTabPage(

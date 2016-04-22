@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 
 SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& rSet,
     SvxEventConfigPage::EarlyInit)
-    : _SvxMacroTabPage(pParent, "EventsConfigPage",
+    : SvxMacroTabPage_(pParent, "EventsConfigPage",
         "cui/ui/eventsconfigpage.ui", rSet)
     , bAppConfig(true)
 {
@@ -118,7 +118,7 @@ void SvxEventConfigPage::dispose()
         pE = SvTreeListBox::NextSibling( pE );
     }
     m_pSaveInListBox.clear();
-    _SvxMacroTabPage::dispose();
+    SvxMacroTabPage_::dispose();
 }
 
 void SvxEventConfigPage::ImplInitDocument()
@@ -177,7 +177,7 @@ IMPL_LINK_NOARG_TYPED( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
     if ( *bApp )
     {
         SetReadOnly( false );
-        _SvxMacroTabPage::DisplayAppEvents( true );
+        SvxMacroTabPage_::DisplayAppEvents( true );
     }
     else
     {
@@ -203,7 +203,7 @@ IMPL_LINK_NOARG_TYPED( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
         }
 
         SetReadOnly( isReadonly );
-        _SvxMacroTabPage::DisplayAppEvents( false );
+        SvxMacroTabPage_::DisplayAppEvents( false );
     }
 
     mpImpl->pEventLB->SetUpdateMode( true );
@@ -211,7 +211,7 @@ IMPL_LINK_NOARG_TYPED( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
 
 bool SvxEventConfigPage::FillItemSet( SfxItemSet* rSet )
 {
-    return _SvxMacroTabPage::FillItemSet( rSet );
+    return SvxMacroTabPage_::FillItemSet( rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

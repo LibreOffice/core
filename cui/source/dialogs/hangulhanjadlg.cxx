@@ -1242,7 +1242,7 @@ namespace svx
         // index of the internal iterator, used for First() and Next() methods
         sal_uInt16          m_nAct;
 
-        const OUString*       _Next();
+        const OUString*       Next_();
     public:
                             SuggestionList();
                             ~SuggestionList();
@@ -1322,7 +1322,7 @@ namespace svx
         }
     }
 
-    const OUString* SuggestionList::_Next()
+    const OUString* SuggestionList::Next_()
     {
         const OUString*   pRet = nullptr;
         while( m_nAct < m_vElements.size() && !pRet )
@@ -1338,7 +1338,7 @@ namespace svx
     const OUString* SuggestionList::First()
     {
         m_nAct = 0;
-        return _Next();
+        return Next_();
     }
 
     const OUString* SuggestionList::Next()
@@ -1348,7 +1348,7 @@ namespace svx
         if( m_nAct < m_nNumOfEntries )
         {
             ++m_nAct;
-            pRet = _Next();
+            pRet = Next_();
         }
         else
             pRet = nullptr;
