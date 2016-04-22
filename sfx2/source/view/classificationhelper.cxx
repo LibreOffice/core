@@ -392,7 +392,7 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     std::map<OUString, OUString> aLabels = m_aCategory.m_aLabels;
     aLabels[PROP_BACNAME()] = m_aCategory.m_aName;
-    for (const std::pair<OUString, OUString>& rLabel : aLabels)
+    for (const auto& rLabel : aLabels)
     {
         try
         {
