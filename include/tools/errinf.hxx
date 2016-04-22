@@ -31,7 +31,7 @@
 // FIXME: horrible legacy dependency on VCL from tools.
 namespace vcl { class Window; }
 
-class EDcr_Impl;
+class DynamicErrorInfo_Impl;
 class ErrHdl_Impl;
 
 class TOOLS_DLLPUBLIC ErrorInfo
@@ -52,10 +52,10 @@ public:
 
 class TOOLS_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
 {
-    friend class EDcr_Impl;
+    friend class DynamicErrorInfo_Impl;
 
 private:
-    std::unique_ptr<EDcr_Impl>   pImpl;
+    std::unique_ptr<DynamicErrorInfo_Impl>   pImpl;
 
 public:
 

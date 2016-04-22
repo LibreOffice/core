@@ -45,7 +45,7 @@ public:
 
 struct TheEDcrData: public rtl::Static<EDcrData, TheEDcrData> {};
 
-class EDcr_Impl
+class DynamicErrorInfo_Impl
 {
     sal_uIntPtr                 lErrId;
     sal_uInt16                  nMask;
@@ -69,7 +69,7 @@ EDcrData::EDcrData()
         ppDcr[n]=nullptr;
 }
 
-void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
+void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 {
     // Register dynamic identifier
     EDcrData& pData=TheEDcrData::get();
@@ -87,7 +87,7 @@ void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
         pData.nNextDcr=0;
 }
 
-void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
+void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
 {
     DynamicErrorInfo **ppDcr=TheEDcrData::get().ppDcr;
     sal_uIntPtr lIdx=(
@@ -105,7 +105,7 @@ ErrorInfo::~ErrorInfo()
 ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
 {
     if(lId & ERRCODE_DYNAMIC_MASK)
-        return EDcr_Impl::GetDynamicErrorInfo(lId);
+        return DynamicErrorInfo_Impl::GetDynamicErrorInfo(lId);
     else
         return new ErrorInfo(lId);
 }
@@ -117,7 +117,7 @@ DynamicErrorInfo::operator sal_uIntPtr() const
 
 DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, sal_uInt16 nMask)
 : ErrorInfo(lArgUserId),
-  pImpl(new EDcr_Impl)
+  pImpl(new DynamicErrorInfo_Impl)
 {
     pImpl->RegisterEDcr(this);
     pImpl->nMask=nMask;
@@ -125,10 +125,10 @@ DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, sal_uInt16 nMask)
 
 DynamicErrorInfo::~DynamicErrorInfo()
 {
-    EDcr_Impl::UnRegisterEDcr(this);
+    DynamicErrorInfo_Impl::UnRegisterEDcr(this);
 }
 
-ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
+ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
 {
     sal_uIntPtr lIdx=((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDcr=TheEDcrData::get().ppDcr[lIdx];
