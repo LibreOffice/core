@@ -39,9 +39,6 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-#include <comphelper/InlineContainer.hxx>
-#include <comphelper/sequence.hxx>
-
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -476,22 +473,18 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
 {
     awt::FontDescriptor aResult;
     // Note: keep this sorted!
-    ::comphelper::MakeVector< OUString > aPropNames
-        ( "CharFontCharSet");                // CharSet
-    aPropNames
-        ( "CharFontFamily")                  // Family
-        ( "CharFontName")                    // Name
-        ( "CharFontPitch")                   // Pitch
-        ( "CharFontStyleName")               // StyleName
-        ( "CharHeight")                      // Height
-        ( "CharPosture")                     // Slant
-        ( "CharStrikeout")                   // Strikeout
-        ( "CharUnderline")                   // Underline
-        ( "CharWeight")                      // Weight
-        ( "CharWordMode")                    // WordLineMode
-        ;
-
-    uno::Sequence< OUString > aPropNameSeq( comphelper::containerToSequence( aPropNames ));
+    uno::Sequence< OUString > aPropNameSeq{
+        "CharFontCharSet",   // CharSet
+        "CharFontFamily",    // Family
+        "CharFontName",      // Name
+        "CharFontPitch",     // Pitch
+        "CharFontStyleName", // StyleName
+        "CharHeight",        // Height
+        "CharPosture",       // Slant
+        "CharStrikeout",     // Strikeout
+        "CharUnderline",     // Underline
+        "CharWeight",        // Weight
+        "CharWordMode"};     // WordLineMode
     uno::Sequence< uno::Any > aValues( xMultiPropSet->getPropertyValues( aPropNameSeq ));
 
     sal_Int32 i=0;
