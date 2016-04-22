@@ -2958,36 +2958,59 @@ void Notify_Background( const SdrObject* pObj,
     }
     SwFrame *pLastTab = nullptr;
 
+    bool isValidTableBeforeAnchor(false);
     while ( pCnt && pArea && pArea->IsAnLower( pCnt ) )
     {
         ::lcl_NotifyContent( pObj, pCnt, rRect, eHint );
         if ( pCnt->IsInTab() )
         {
+            SwTabFrame *pTab = pCnt->FindTabFrame();
+            if ( pTab != pLastTab )
+            {
+                pLastTab = pTab;
+                isValidTableBeforeAnchor = false;
+                if (PREP_FLY_ARRIVE == eHint
+                    && pFlyFrame // TODO: do it for draw objects too?
+                    && pTab->IsFollow() // table starts on previous page?
+                    // "through" means they will actually overlap anyway
+                    && SURROUND_THROUGHT != pFlyFrame->GetFormat()->GetSurround().GetSurround()
+                    // if it's anchored in footer it can't move to other page
+                    && !pAnchor->FindFooterOrHeader())
+                {
+                    SwFrame * pTmp(pAnchor->GetPrev());
+                    while (pTmp)
+                    {
+                        if (pTmp == pTab)
+                        {
+                            // tdf#99460 the table shouldn't be moved by the fly
+                            isValidTableBeforeAnchor = true;
+                            break;
+                        }
+                        pTmp = pTmp->GetPrev();
+                    }
+                }
+                // #i40606# - use <GetLastBoundRect()>
+                // instead of <GetCurrentBoundRect()>, because a recalculation
+                // of the bounding rectangle isn't intended here.
+                if (!isValidTableBeforeAnchor
+                    && (pTab->Frame().IsOver(pObj->GetLastBoundRect()) ||
+                        pTab->Frame().IsOver(rRect)))
+                {
+                    if ( !pFlyFrame || !pFlyFrame->IsLowerOf( pTab ) )
+                        pTab->InvalidatePrt();
+                }
+            }
             SwLayoutFrame* pCell = pCnt->GetUpper();
             // #i40606# - use <GetLastBoundRect()>
             // instead of <GetCurrentBoundRect()>, because a recalculation
             // of the bounding rectangle isn't intended here.
-            if ( pCell->IsCellFrame() &&
+            if (!isValidTableBeforeAnchor && pCell->IsCellFrame() &&
                  ( pCell->Frame().IsOver( pObj->GetLastBoundRect() ) ||
                    pCell->Frame().IsOver( rRect ) ) )
             {
                 const SwFormatVertOrient &rOri = pCell->GetFormat()->GetVertOrient();
                 if ( text::VertOrientation::NONE != rOri.GetVertOrient() )
                     pCell->InvalidatePrt();
-            }
-            SwTabFrame *pTab = pCnt->FindTabFrame();
-            if ( pTab != pLastTab )
-            {
-                pLastTab = pTab;
-                // #i40606# - use <GetLastBoundRect()>
-                // instead of <GetCurrentBoundRect()>, because a recalculation
-                // of the bounding rectangle isn't intended here.
-                if ( pTab->Frame().IsOver( pObj->GetLastBoundRect() ) ||
-                     pTab->Frame().IsOver( rRect ) )
-                {
-                    if ( !pFlyFrame || !pFlyFrame->IsLowerOf( pTab ) )
-                        pTab->InvalidatePrt();
-                }
             }
         }
         pCnt = pCnt->GetNextContentFrame();
