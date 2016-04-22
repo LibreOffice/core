@@ -20,33 +20,9 @@
 #define INCLUDED_COMPHELPER_INLINECONTAINER_HXX
 
 #include <map>
-#include <set>
 
 namespace comphelper
 {
-
-/** Creates a set which contains an arbitrary number of elements.
-
-    usage:
-
-    set< t > aSet( MakeSet< t >( t_1 )( t_2 )...( t_n ) );
- */
-template < typename T >
-class MakeSet : public ::std::set< T >
-{
-public:
-    explicit MakeSet(const T &a)
-        : ::std::set< T >()
-    {
-        this->insert(this->end(), a);
-    }
-    MakeSet &operator()(const T &a)
-    {
-        this->insert(this->end(), a);
-        return *this;
-    }
-};
-
 
 /** usage:
 

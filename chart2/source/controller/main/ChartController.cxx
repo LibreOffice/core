@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <set>
+
 #include "ChartController.hxx"
 #include "servicenames.hxx"
 #include "ResId.hxx"
@@ -45,7 +49,6 @@
 #include "UndoActions.hxx"
 #include "ViewElementListProvider.hxx"
 
-#include <comphelper/InlineContainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
@@ -1569,70 +1572,69 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
 
 ::std::set< OUString > ChartController::impl_getAvailableCommands()
 {
-    return ::comphelper::MakeSet< OUString >
+    return {
         // commands for container forward
-        ( "AddDirect" )           ( "NewDoc" )                ( "Open" )
-        ( "Save" )                ( "SaveAs" )                ( "SendMail" )
-        ( "EditDoc" )             ( "ExportDirectToPDF" )     ( "PrintDefault" )
+        "AddDirect",           "NewDoc",                "Open",
+        "Save",                "SaveAs",                "SendMail",
+        "EditDoc",             "ExportDirectToPDF",     "PrintDefault",
 
         // own commands
-        ( "Cut" )                ( "Copy" )                 ( "Paste" )
-        ( "DataRanges" )         ( "DiagramData" )
+        "Cut",                "Copy",                 "Paste",
+        "DataRanges",         "DiagramData",
         // insert objects
-        ( "InsertMenuTitles" )   ( "InsertTitles" )
-        ( "InsertMenuLegend" )   ( "InsertLegend" )         ( "DeleteLegend" )
-        ( "InsertMenuDataLabels" )
-        ( "InsertMenuAxes" )     ( "InsertRemoveAxes" )         ( "InsertMenuGrids" )
-        ( "InsertSymbol" )
-        ( "InsertTrendlineEquation" )  ( "InsertTrendlineEquationAndR2" )
-        ( "InsertR2Value" )      ( "DeleteR2Value" )
-        ( "InsertMenuTrendlines" )  ( "InsertTrendline" )
-        ( "InsertMenuMeanValues" ) ( "InsertMeanValue" )
-        ( "InsertMenuXErrorBars" )  ( "InsertXErrorBars" )
-        ( "InsertMenuYErrorBars" )   ( "InsertYErrorBars" )
-        ( "InsertDataLabels" )   ( "InsertDataLabel" )
-        ( "DeleteTrendline" )    ( "DeleteMeanValue" )      ( "DeleteTrendlineEquation" )
-        ( "DeleteXErrorBars" )   ( "DeleteYErrorBars" )
-        ( "DeleteDataLabels" )   ( "DeleteDataLabel" )
+        "InsertMenuTitles",   "InsertTitles",
+        "InsertMenuLegend",   "InsertLegend",         "DeleteLegend",
+        "InsertMenuDataLabels",
+        "InsertMenuAxes",     "InsertRemoveAxes",         "InsertMenuGrids",
+        "InsertSymbol",
+        "InsertTrendlineEquation",  "InsertTrendlineEquationAndR2",
+        "InsertR2Value",      "DeleteR2Value",
+        "InsertMenuTrendlines",  "InsertTrendline",
+        "InsertMenuMeanValues", "InsertMeanValue",
+        "InsertMenuXErrorBars",  "InsertXErrorBars",
+        "InsertMenuYErrorBars",   "InsertYErrorBars",
+        "InsertDataLabels",   "InsertDataLabel",
+        "DeleteTrendline",    "DeleteMeanValue",      "DeleteTrendlineEquation",
+        "DeleteXErrorBars",   "DeleteYErrorBars",
+        "DeleteDataLabels",   "DeleteDataLabel",
         //format objects
-        ( "FormatSelection" )     ( "TransformDialog" )
-        ( "DiagramType" )        ( "View3D" )
-        ( "Forward" )            ( "Backward" )
-        ( "MainTitle" )          ( "SubTitle" )
-        ( "XTitle" )             ( "YTitle" )               ( "ZTitle" )
-        ( "SecondaryXTitle" )    ( "SecondaryYTitle" )
-        ( "AllTitles" )          ( "Legend" )
-        ( "DiagramAxisX" )       ( "DiagramAxisY" )         ( "DiagramAxisZ" )
-        ( "DiagramAxisA" )       ( "DiagramAxisB" )         ( "DiagramAxisAll" )
-        ( "DiagramGridXMain" )   ( "DiagramGridYMain" )     ( "DiagramGridZMain" )
-        ( "DiagramGridXHelp" )   ( "DiagramGridYHelp" )     ( "DiagramGridZHelp" )
-        ( "DiagramGridAll" )
-        ( "DiagramWall" )        ( "DiagramFloor" )         ( "DiagramArea" )
+        "FormatSelection",     "TransformDialog",
+        "DiagramType",        "View3D",
+        "Forward",            "Backward",
+        "MainTitle",          "SubTitle",
+        "XTitle",             "YTitle",               "ZTitle",
+        "SecondaryXTitle",    "SecondaryYTitle",
+        "AllTitles",          "Legend",
+        "DiagramAxisX",       "DiagramAxisY",         "DiagramAxisZ",
+        "DiagramAxisA",       "DiagramAxisB",         "DiagramAxisAll",
+        "DiagramGridXMain",   "DiagramGridYMain",     "DiagramGridZMain",
+        "DiagramGridXHelp",   "DiagramGridYHelp",     "DiagramGridZHelp",
+        "DiagramGridAll",
+        "DiagramWall",        "DiagramFloor",         "DiagramArea",
 
         //context menu - format objects entries
-        ( "FormatWall" )        ( "FormatFloor" )         ( "FormatChartArea" )
-        ( "FormatLegend" )
+        "FormatWall",        "FormatFloor",         "FormatChartArea",
+        "FormatLegend",
 
-        ( "FormatAxis" )           ( "FormatTitle" )
-        ( "FormatDataSeries" )     ( "FormatDataPoint" )
-        ( "ResetAllDataPoints" )   ( "ResetDataPoint" )
-        ( "FormatDataLabels" )     ( "FormatDataLabel" )
-        ( "FormatMeanValue" )      ( "FormatTrendline" )      ( "FormatTrendlineEquation" )
-        ( "FormatXErrorBars" )     ( "FormatYErrorBars" )
-        ( "FormatStockLoss" )      ( "FormatStockGain" )
+        "FormatAxis",           "FormatTitle",
+        "FormatDataSeries",     "FormatDataPoint",
+        "ResetAllDataPoints",   "ResetDataPoint",
+        "FormatDataLabels",     "FormatDataLabel",
+        "FormatMeanValue",      "FormatTrendline",      "FormatTrendlineEquation",
+        "FormatXErrorBars",     "FormatYErrorBars",
+        "FormatStockLoss",      "FormatStockGain",
 
-        ( "FormatMajorGrid" )      ( "InsertMajorGrid" )      ( "DeleteMajorGrid" )
-        ( "FormatMinorGrid" )      ( "InsertMinorGrid" )      ( "DeleteMinorGrid" )
-        ( "InsertAxis" )           ( "DeleteAxis" )           ( "InsertAxisTitle" )
+        "FormatMajorGrid",      "InsertMajorGrid",      "DeleteMajorGrid",
+        "FormatMinorGrid",      "InsertMinorGrid",      "DeleteMinorGrid",
+        "InsertAxis",           "DeleteAxis",           "InsertAxisTitle",
 
         // toolbar commands
-        ( "ToggleGridHorizontal" ) ( "ToggleGridVertical" ) ( "ToggleLegend" )         ( "ScaleText" )
-        ( "NewArrangement" )     ( "Update" )
-        ( "DefaultColors" )      ( "BarWidth" )             ( "NumberOfLines" )
-        ( "ArrangeRow" )
-        ( "StatusBarVisible" )
-        ( "ChartElementSelector" )
-        ;
+        "ToggleGridHorizontal", "ToggleGridVertical", "ToggleLegend",         "ScaleText",
+        "NewArrangement",     "Update",
+        "DefaultColors",      "BarWidth",             "NumberOfLines",
+        "ArrangeRow",
+        "StatusBarVisible",
+        "ChartElementSelector"};
 }
 
 ViewElementListProvider ChartController::getViewElementListProvider()
