@@ -26,8 +26,6 @@
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 
-#include <comphelper/InlineContainer.hxx>
-
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 using namespace ::com::sun::star;
@@ -45,12 +43,10 @@ CommandDispatchContainer::CommandDispatchContainer(
         ,m_pDrawCommandDispatch( nullptr )
         ,m_pShapeController( nullptr )
 {
-    m_aContainerDocumentCommands =
-        ::comphelper::MakeSet< OUString >
-        ("AddDirect")    ("NewDoc")             ("Open")
-        ("Save")         ("SaveAs")             ("SendMail")
-        ("EditDoc")      ("ExportDirectToPDF")  ("PrintDefault")
-        ;
+    m_aContainerDocumentCommands.insert({
+        "AddDirect",    "NewDoc",             "Open",
+        "Save",         "SaveAs",             "SendMail",
+        "EditDoc",      "ExportDirectToPDF",  "PrintDefault"});
 }
 
 void CommandDispatchContainer::setModel(
