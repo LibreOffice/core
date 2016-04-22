@@ -3551,10 +3551,6 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     // process the SdrObject
     if( xSdrObj )
     {
-        // cell anchoring
-        if ( !rDffObjData.bPageAnchor )
-            ScDrawLayer::SetCellAnchoredFromPosition( *xSdrObj,  GetDoc(), xDrawObj->GetTab() );
-
         // filled without color -> set system window color
         if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
             xSdrObj->SetMergedItem( XFillColorItem( EMPTY_OUSTRING, GetPalette().GetColor( EXC_COLOR_WINDOWBACK ) ) );
@@ -3587,6 +3583,28 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
         if( !bIsTopLevel )
             xDrawObj->PostProcessSdrObject( *this, *xSdrObj );
      }
+
+    return xSdrObj.release();
+}
+
+SdrObject* XclImpDffConverter::FinalizeObj(DffObjData& rDffObjData, SdrObject* pOldSdrObj )
+{
+    XclImpDffConvData& rConvData = GetConvData();
+
+    /*  pOldSdrObj passes a generated SdrObject. This function owns this object
+        and can modify it. The function has either to return it back to caller
+        or to delete it by itself. */
+    SdrObjectPtr xSdrObj( pOldSdrObj );
+
+    // find the OBJ record data related to the processed shape
+    XclImpDrawObjRef xDrawObj = rConvData.mrDrawing.FindDrawObj( rDffObjData.rSpHd );
+
+    if( xSdrObj && xDrawObj )
+    {
+        // cell anchoring
+        if ( !rDffObjData.bPageAnchor )
+            ScDrawLayer::SetCellAnchoredFromPosition( *xSdrObj,  GetDoc(), xDrawObj->GetTab() );
+    }
 
     return xSdrObj.release();
 }
