@@ -709,11 +709,11 @@ static struct hostent* osl_gethostbyname_r (
     char *buffer, int buflen, int *h_errnop)
 {
 #if defined(LINUX) || defined(ANDROID) || defined(FREEBSD) || defined(DRAGONFLY) || defined(EMSCRIPTEN)
-    struct hostent *__result; /* will be the same as result */
-    int __error;
-    __error = gethostbyname_r (name, result, buffer, buflen,
-                 &__result, h_errnop);
-    return __error ? nullptr : __result ;
+    struct hostent *result_; /* will be the same as result */
+    int e;
+    e = gethostbyname_r (name, result, buffer, buflen,
+                 &result_, h_errnop);
+    return e ? nullptr : result_ ;
 #elif defined(AIX)
     *h_errnop = gethostbyname_r (name, result, (struct hostent_data *)buffer);
     (void)buflen;
