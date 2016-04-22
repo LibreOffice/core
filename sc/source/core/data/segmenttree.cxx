@@ -26,12 +26,12 @@
 
 using ::std::numeric_limits;
 
-template<typename _ValueType, typename _ExtValueType = _ValueType>
+template<typename ValueType_, typename ExtValueType_ = ValueType_>
 class ScFlatSegmentsImpl
 {
 public:
-    typedef _ValueType ValueType;
-    typedef _ExtValueType ExtValueType;
+    typedef ValueType_ ValueType;
+    typedef ExtValueType_ ExtValueType;
 
     struct RangeData
     {
@@ -71,27 +71,27 @@ private:
     bool mbTreeSearchEnabled:1;
 };
 
-template<typename _ValueType, typename _ExtValueType>
-ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ScFlatSegmentsImpl(SCCOLROW nMax, ValueType nDefault) :
+template<typename ValueType_, typename ExtValueType_>
+ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ScFlatSegmentsImpl(SCCOLROW nMax, ValueType nDefault) :
     maSegments(0, nMax+1, nDefault),
     mbTreeSearchEnabled(true)
 {
 }
 
-template<typename _ValueType, typename _ExtValueType>
-ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ScFlatSegmentsImpl(const ScFlatSegmentsImpl<_ValueType, _ExtValueType>& r) :
+template<typename ValueType_, typename ExtValueType_>
+ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ScFlatSegmentsImpl(const ScFlatSegmentsImpl<ValueType_, ExtValueType_>& r) :
     maSegments(r.maSegments),
     mbTreeSearchEnabled(r.mbTreeSearchEnabled)
 {
 }
 
-template<typename _ValueType, typename _ExtValueType>
-ScFlatSegmentsImpl<_ValueType, _ExtValueType>::~ScFlatSegmentsImpl()
+template<typename ValueType_, typename ExtValueType_>
+ScFlatSegmentsImpl<ValueType_, ExtValueType_>::~ScFlatSegmentsImpl()
 {
 }
 
-template<typename _ValueType, typename _ExtValueType>
-bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue)
+template<typename ValueType_, typename ExtValueType_>
+bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue)
 {
     ::std::pair<typename fst_type::const_iterator, bool> ret;
     ret = maSegments.insert(maItr, nPos1, nPos2+1, nValue);
@@ -99,8 +99,8 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::setValue(SCCOLROW nPos1, SCC
     return ret.second;
 }
 
-template<typename _ValueType, typename _ExtValueType>
-typename ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ValueType ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getValue(SCCOLROW nPos)
+template<typename ValueType_, typename ExtValueType_>
+typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ValueType ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getValue(SCCOLROW nPos)
 {
     ValueType nValue = 0;
     if (!mbTreeSearchEnabled)
@@ -116,9 +116,9 @@ typename ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ValueType ScFlatSegments
     return nValue;
 }
 
-template<typename _ValueType, typename _ExtValueType>
-typename ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ExtValueType
-ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getSumValue(SCCOLROW nPos1, SCCOLROW nPos2)
+template<typename ValueType_, typename ExtValueType_>
+typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ExtValueType
+ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOLROW nPos2)
 {
     RangeData aData;
     if (!getRangeData(nPos1, aData))
@@ -145,8 +145,8 @@ ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getSumValue(SCCOLROW nPos1, SCCOL
     return nValue;
 }
 
-template<typename _ValueType, typename _ExtValueType>
-bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, RangeData& rData)
+template<typename ValueType_, typename ExtValueType_>
+bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeData(SCCOLROW nPos, RangeData& rData)
 {
     if (!mbTreeSearchEnabled)
         return getRangeDataLeaf(nPos, rData);
@@ -161,8 +161,8 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, 
     return true;
 }
 
-template<typename _ValueType, typename _ExtValueType>
-bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeDataLeaf(SCCOLROW nPos, RangeData& rData)
+template<typename ValueType_, typename ExtValueType_>
+bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeDataLeaf(SCCOLROW nPos, RangeData& rData)
 {
     // Conduct leaf-node only search.  Faster when searching between range insertion.
     const ::std::pair<typename fst_type::const_iterator, bool> &ret =
@@ -177,22 +177,22 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeDataLeaf(SCCOLROW nP
     return true;
 }
 
-template<typename _ValueType, typename _ExtValueType>
-void ScFlatSegmentsImpl<_ValueType, _ExtValueType>::removeSegment(SCCOLROW nPos1, SCCOLROW nPos2)
+template<typename ValueType_, typename ExtValueType_>
+void ScFlatSegmentsImpl<ValueType_, ExtValueType_>::removeSegment(SCCOLROW nPos1, SCCOLROW nPos2)
 {
     maSegments.shift_left(nPos1, nPos2);
     maItr = maSegments.begin();
 }
 
-template<typename _ValueType, typename _ExtValueType>
-void ScFlatSegmentsImpl<_ValueType, _ExtValueType>::insertSegment(SCCOLROW nPos, SCCOLROW nSize, bool bSkipStartBoundary)
+template<typename ValueType_, typename ExtValueType_>
+void ScFlatSegmentsImpl<ValueType_, ExtValueType_>::insertSegment(SCCOLROW nPos, SCCOLROW nSize, bool bSkipStartBoundary)
 {
     maSegments.shift_right(nPos, nSize, bSkipStartBoundary);
     maItr = maSegments.begin();
 }
 
-template<typename _ValueType, typename _ExtValueType>
-SCCOLROW ScFlatSegmentsImpl<_ValueType, _ExtValueType>::findLastTrue(ValueType nValue) const
+template<typename ValueType_, typename ExtValueType_>
+SCCOLROW ScFlatSegmentsImpl<ValueType_, ExtValueType_>::findLastTrue(ValueType nValue) const
 {
     SCCOLROW nPos = numeric_limits<SCCOLROW>::max(); // position not found.
     typename fst_type::const_reverse_iterator itr = maSegments.rbegin(), itrEnd = maSegments.rend();
@@ -209,15 +209,15 @@ SCCOLROW ScFlatSegmentsImpl<_ValueType, _ExtValueType>::findLastTrue(ValueType n
     return nPos;
 }
 
-template<typename _ValueType, typename _ExtValueType>
-bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getFirst(RangeData& rData)
+template<typename ValueType_, typename ExtValueType_>
+bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getFirst(RangeData& rData)
 {
     maItr = maSegments.begin();
     return getNext(rData);
 }
 
-template<typename _ValueType, typename _ExtValueType>
-bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getNext(RangeData& rData)
+template<typename ValueType_, typename ExtValueType_>
+bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getNext(RangeData& rData)
 {
     typename fst_type::const_iterator itrEnd = maSegments.end();
     if (maItr == itrEnd)

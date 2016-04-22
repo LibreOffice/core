@@ -318,7 +318,7 @@ namespace
 }
 
 // XFormLayerAccess
-uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFormController( const uno::Reference< form::XForm >& _Form ) throw (uno::RuntimeException, std::exception)
+uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -328,7 +328,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     SdrView* pSdrView( nullptr );
     FmFormShell* pFormShell( nullptr );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
-        xController = FmFormShell::GetFormController( _Form, *pSdrView, *pWindow );
+        xController = FmFormShell::GetFormController( Form, *pSdrView, *pWindow );
 
     return xController;
 }
@@ -346,7 +346,7 @@ sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeExcept
     return bIsFormDesignMode;
 }
 
-void SAL_CALL ScViewPaneBase::setFormDesignMode( sal_Bool _DesignMode ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScViewPaneBase::setFormDesignMode( sal_Bool DesignMode ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -354,7 +354,7 @@ void SAL_CALL ScViewPaneBase::setFormDesignMode( sal_Bool _DesignMode ) throw (u
     SdrView* pSdrView( nullptr );
     FmFormShell* pFormShell( nullptr );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
-        pFormShell->SetDesignMode( _DesignMode );
+        pFormShell->SetDesignMode( DesignMode );
 }
 
 // XControlAccess

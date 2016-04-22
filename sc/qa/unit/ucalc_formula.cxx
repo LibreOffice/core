@@ -4425,14 +4425,14 @@ struct StrStrCheck {
     const char* pRes;
 };
 
-template<size_t _DataSize, size_t _FormulaSize, int _Type>
-void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aChecks[_FormulaSize])
+template<size_t DataSize, size_t FormulaSize, int Type>
+void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], StrStrCheck aChecks[FormulaSize])
 {
-    size_t nDataSize = _DataSize;
+    size_t nDataSize = DataSize;
     for (size_t i = 0; i < nDataSize; ++i)
         pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
-    for (size_t i = 0; i < _FormulaSize; ++i)
+    for (size_t i = 0; i < FormulaSize; ++i)
     {
         pDoc->SetString(1, i, 0, OUString::createFromAscii(aChecks[i].pVal));
 
@@ -4442,17 +4442,17 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
         aBuf.append(";A1:A");
         aBuf.append(static_cast<sal_Int32>(nDataSize));
         aBuf.append(";");
-        aBuf.append(static_cast<sal_Int32>(_Type));
+        aBuf.append(static_cast<sal_Int32>(Type));
         aBuf.append(")");
         OUString aFormula = aBuf.makeStringAndClear();
         pDoc->SetString(2, i, 0, aFormula);
     }
 
     pDoc->CalcAll();
-    Test::printRange(pDoc, ScRange(0, 0, 0, 2, _FormulaSize-1, 0), "MATCH");
+    Test::printRange(pDoc, ScRange(0, 0, 0, 2, FormulaSize-1, 0), "MATCH");
 
     // verify the results.
-    for (size_t i = 0; i < _FormulaSize; ++i)
+    for (size_t i = 0; i < FormulaSize; ++i)
     {
         OUString aStr = pDoc->GetString(2, i, 0);
         if (!aStr.equalsAscii(aChecks[i].pRes))
@@ -4464,14 +4464,14 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
     }
 }
 
-template<size_t _DataSize, size_t _FormulaSize, int _Type>
-void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aChecks[_FormulaSize])
+template<size_t DataSize, size_t FormulaSize, int Type>
+void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize], StrStrCheck aChecks[FormulaSize])
 {
-    size_t nDataSize = _DataSize;
+    size_t nDataSize = DataSize;
     for (size_t i = 0; i < nDataSize; ++i)
         pDoc->SetString(i, 0, 0, OUString::createFromAscii(aData[i]));
 
-    for (size_t i = 0; i < _FormulaSize; ++i)
+    for (size_t i = 0; i < FormulaSize; ++i)
     {
         pDoc->SetString(i, 1, 0, OUString::createFromAscii(aChecks[i].pVal));
 
@@ -4482,17 +4482,17 @@ void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrS
         aBuf.append("2;A1:");
         aBuf.append(static_cast<sal_Unicode>('A'+nDataSize));
         aBuf.append("1;");
-        aBuf.append(static_cast<sal_Int32>(_Type));
+        aBuf.append(static_cast<sal_Int32>(Type));
         aBuf.append(")");
         OUString aFormula = aBuf.makeStringAndClear();
         pDoc->SetString(i, 2, 0, aFormula);
     }
 
     pDoc->CalcAll();
-    Test::printRange(pDoc, ScRange(0, 0, 0, _FormulaSize-1, 2, 0), "MATCH");
+    Test::printRange(pDoc, ScRange(0, 0, 0, FormulaSize-1, 2, 0), "MATCH");
 
     // verify the results.
-    for (size_t i = 0; i < _FormulaSize; ++i)
+    for (size_t i = 0; i < FormulaSize; ++i)
     {
         OUString aStr = pDoc->GetString(i, 2, 0);
         if (!aStr.equalsAscii(aChecks[i].pRes))

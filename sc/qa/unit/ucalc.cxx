@@ -1014,8 +1014,8 @@ struct HoriIterCheck
     const char* pVal;
 };
 
-template<size_t _Size>
-bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][_Size], size_t nDataCount, const HoriIterCheck* pChecks, size_t nCheckCount)
+template<size_t Size>
+bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][Size], size_t nDataCount, const HoriIterCheck* pChecks, size_t nCheckCount)
 {
     ScAddress aPos(0,0,0);
     Test::insertRangeData(pDoc, aPos, pData, nDataCount);

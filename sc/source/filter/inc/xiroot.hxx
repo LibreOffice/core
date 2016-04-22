@@ -56,7 +56,7 @@ class XclImpTabViewSettings;
 class XclImpSheetProtectBuffer;
 class XclImpDocProtectBuffer;
 
-class _ScRangeListTabs;
+class ScRangeListTabs;
 class ExcelToSc;
 class ScDocumentImport;
 
@@ -163,9 +163,9 @@ public:
     XclImpXFRangeBuffer& GetXFRangeBuffer() const;
 
     /** Returns the buffer that contains all print areas in the document. */
-    _ScRangeListTabs&   GetPrintAreaBuffer() const;
+    ScRangeListTabs&   GetPrintAreaBuffer() const;
     /** Returns the buffer that contains all print titles in the document. */
-    _ScRangeListTabs&   GetTitleAreaBuffer() const;
+    ScRangeListTabs&   GetTitleAreaBuffer() const;
 
     /** Returns the buffer that contains the sheet creation order. */
     XclImpTabInfo&      GetTabInfo() const;

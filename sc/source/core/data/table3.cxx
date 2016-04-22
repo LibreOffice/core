@@ -652,12 +652,12 @@ void ScTable::DestroySortCollator()
 
 namespace {
 
-template<typename _Hint, typename _ReorderMap, typename _Index>
+template<typename Hint, typename ReorderMap, typename Index>
 class ReorderNotifier : public std::unary_function<SvtListener*, void>
 {
-    _Hint maHint;
+    Hint maHint;
 public:
-    ReorderNotifier( const _ReorderMap& rMap, SCTAB nTab, _Index nPos1, _Index nPos2 ) :
+    ReorderNotifier( const ReorderMap& rMap, SCTAB nTab, Index nPos1, Index nPos2 ) :
         maHint(rMap, nTab, nPos1, nPos2) {}
 
     void operator() ( SvtListener* p )

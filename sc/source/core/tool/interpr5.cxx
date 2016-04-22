@@ -1096,11 +1096,11 @@ static inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
         return n2;
 }
 
-template<class _Function>
+template<class Function>
 static ScMatrixRef lcl_MatrixCalculation(
     const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
 {
-    static _Function Op;
+    static Function Op;
 
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;

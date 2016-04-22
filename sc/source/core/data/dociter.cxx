@@ -56,16 +56,16 @@ using ::std::set;
 
 namespace {
 
-template<typename _Iter>
-void incBlock(std::pair<_Iter, size_t>& rPos)
+template<typename Iter>
+void incBlock(std::pair<Iter, size_t>& rPos)
 {
     // Move to the next block.
     ++rPos.first;
     rPos.second = 0;
 }
 
-template<typename _Iter>
-void decBlock(std::pair<_Iter, size_t>& rPos)
+template<typename Iter>
+void decBlock(std::pair<Iter, size_t>& rPos)
 {
     // Move to the last element of the previous block.
     --rPos.first;

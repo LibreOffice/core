@@ -41,8 +41,8 @@ struct DPFieldDef
     bool bRepeatItemLabels;
 };
 
-template<size_t _Size>
-ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
+template<size_t Size>
+ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][Size], size_t nDataCount)
 {
     // Insert field names in row 0.
     for (size_t i = 0; i < nFieldCount; ++i)
@@ -72,10 +72,10 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nField
     return aSrcRange;
 }
 
-template<size_t _Size>
-bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][_Size], const char* pCaption)
+template<size_t Size>
+bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][Size], const char* pCaption)
 {
-    return checkOutput<_Size>(pDoc, aOutRange, aOutputCheck, pCaption);
+    return checkOutput<Size>(pDoc, aOutRange, aOutputCheck, pCaption);
 }
 
 ScDPObject* createDPFromSourceDesc(

@@ -264,11 +264,11 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )
 
 namespace {
 
-template<typename _ItemType, typename _EnumType>
-_EnumType lcl_GetValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const SfxItemSet* pCondSet)
+template<typename ItemType, typename EnumType>
+EnumType lcl_GetValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const SfxItemSet* pCondSet)
 {
-    const _ItemType& rItem = static_cast<const _ItemType&>(rPattern.GetItem(nWhich, pCondSet));
-    return static_cast<_EnumType>(rItem.GetValue());
+    const ItemType& rItem = static_cast<const ItemType&>(rPattern.GetItem(nWhich, pCondSet));
+    return static_cast<EnumType>(rItem.GetValue());
 }
 
 bool lcl_GetBoolValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const SfxItemSet* pCondSet)

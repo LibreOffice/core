@@ -60,7 +60,7 @@ private:
     void                Font_Face();                  // 174
     void                Font_Type();                  // 176
     void                Font_Ysize();                 // 177
-    void                _Row( const sal_uInt16 nRecLen );       // 197 ?
+    void                Row_( const sal_uInt16 nRecLen );       // 197 ?
 
     inline void         Read( ScAddress& );
     inline void         Read( ScRange& );

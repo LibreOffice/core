@@ -131,10 +131,10 @@ struct ElemLessEqualZero : public unary_function<double, double>
     }
 };
 
-template<typename _Comp>
+template<typename Comp>
 class CompareMatrixElemFunc : public std::unary_function<MatrixImplType::element_block_node_type, void>
 {
-    static _Comp maComp;
+    static Comp maComp;
 
     std::vector<double> maNewMatValues;     // double instead of bool to transport error values
     size_t mnRow;
@@ -190,8 +190,8 @@ public:
     }
 };
 
-template<typename _Comp>
-_Comp CompareMatrixElemFunc<_Comp>::maComp;
+template<typename Comp>
+Comp CompareMatrixElemFunc<Comp>::maComp;
 
 }
 
@@ -979,10 +979,10 @@ struct XorEvaluator
 
 // Do not short circuit logical operations, in case there are error values
 // these need to be propagated even if the result was determined earlier.
-template <typename _Evaluator>
+template <typename Evaluator>
 double EvalMatrix(const MatrixImplType& rMat)
 {
-    _Evaluator aEval;
+    Evaluator aEval;
     size_t nRows = rMat.size().row, nCols = rMat.size().column;
     for (size_t i = 0; i < nRows; ++i)
     {
@@ -1030,15 +1030,15 @@ double ScMatrixImpl::Xor() const
 
 namespace {
 
-template<typename _Op>
+template<typename Op>
 class WalkElementBlocks
 {
-    _Op maOp;
+    Op maOp;
     ScMatrix::IterateResult maRes;
     bool mbFirst:1;
     bool mbTextAsZero:1;
 public:
-    WalkElementBlocks(bool bTextAsZero) : maRes(_Op::InitVal, _Op::InitVal, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
+    WalkElementBlocks(bool bTextAsZero) : maRes(Op::InitVal, Op::InitVal, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
 
     const ScMatrix::IterateResult& getResult() const { return maRes; }
 
@@ -1099,15 +1099,15 @@ public:
     }
 };
 
-template<typename _Op>
+template<typename Op>
 class WalkElementBlocksMultipleValues
 {
-    const std::vector<std::unique_ptr<_Op>>& maOp;
+    const std::vector<std::unique_ptr<Op>>& maOp;
     std::vector<ScMatrix::IterateResult> maRes;
     bool mbFirst:1;
     bool mbTextAsZero:1;
 public:
-    WalkElementBlocksMultipleValues(bool bTextAsZero, const std::vector<std::unique_ptr<_Op>>& aOp) :
+    WalkElementBlocksMultipleValues(bool bTextAsZero, const std::vector<std::unique_ptr<Op>>& aOp) :
         maOp(aOp), mbFirst(true), mbTextAsZero(bTextAsZero)
     {
         for (const auto& pOp : maOp)
@@ -1234,10 +1234,10 @@ public:
 
 const size_t ResultNotSet = std::numeric_limits<size_t>::max();
 
-template<typename _Type>
+template<typename Type>
 class WalkAndMatchElements : public std::unary_function<MatrixImplType::element_block_node_type, void>
 {
-    _Type maMatchValue;
+    Type maMatchValue;
     MatrixImplType::size_pair_type maSize;
     size_t mnCol1;
     size_t mnCol2;
@@ -1245,7 +1245,7 @@ class WalkAndMatchElements : public std::unary_function<MatrixImplType::element_
     size_t mnIndex;
 
 public:
-    WalkAndMatchElements(_Type aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2) :
+    WalkAndMatchElements(Type aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2) :
         maMatchValue(aMatchValue),
         maSize(aSize),
         mnCol1(nCol1),
@@ -1384,7 +1384,7 @@ struct MinOp
     }
 };
 
-template<typename _Op>
+template<typename Op>
 class CalcMaxMinValue : public std::unary_function<MatrixImplType::element_block_type, void>
 {
     double mfVal;
@@ -1392,7 +1392,7 @@ class CalcMaxMinValue : public std::unary_function<MatrixImplType::element_block
     bool mbHasValue;
 public:
     CalcMaxMinValue( bool bTextAsZero ) :
-        mfVal(_Op::init()),
+        mfVal(Op::init()),
         mbTextAsZero(bTextAsZero),
         mbHasValue(false) {}
 
@@ -1410,7 +1410,7 @@ public:
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
-                    mfVal = _Op::compare(mfVal, *it);
+                    mfVal = Op::compare(mfVal, *it);
 
                 mbHasValue = true;
             }
@@ -1421,8 +1421,8 @@ public:
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
-                double fVal = _Op::boolValue(it, itEnd);
-                mfVal = _Op::compare(mfVal, fVal);
+                double fVal = Op::boolValue(it, itEnd);
+                mfVal = Op::compare(mfVal, fVal);
                 mbHasValue = true;
             }
             break;
@@ -1432,7 +1432,7 @@ public:
                 // empty elements are treated as empty strings.
                 if (mbTextAsZero)
                 {
-                    mfVal = _Op::compare(mfVal, 0.0);
+                    mfVal = Op::compare(mfVal, 0.0);
                     mbHasValue = true;
                 }
             }
@@ -1730,7 +1730,7 @@ struct ArrayMul : public std::binary_function<double, double, double>
     }
 };
 
-template<typename _Op>
+template<typename Op>
 class MergeDoubleArrayFunc : public std::unary_function<MatrixImplType::element_block_type, void>
 {
     std::vector<double>& mrArray;
@@ -1745,7 +1745,7 @@ public:
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
         using namespace mdds::mtv;
-        static _Op op;
+        static Op op;
 
         switch (node.type)
         {

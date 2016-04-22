@@ -21,15 +21,15 @@
 
 #include <o3tl/make_unique.hxx>
 
-_ScRangeListTabs::_ScRangeListTabs()
+ScRangeListTabs::ScRangeListTabs()
 {
 }
 
-_ScRangeListTabs::~_ScRangeListTabs()
+ScRangeListTabs::~ScRangeListTabs()
 {
 }
 
-void _ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
+void ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
 {
     ScAddress a = aSRD;
 
@@ -66,7 +66,7 @@ void _ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
     itr->second->push_back(ScRange(a.Col(),a.Row(),a.Tab()));
 }
 
-void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
+void ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
 {
     ScRange a = aCRD;
 
@@ -124,9 +124,9 @@ void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
     itr->second->push_back(a);
 }
 
-const ScRange* _ScRangeListTabs::First( SCTAB n )
+const ScRange* ScRangeListTabs::First( SCTAB n )
 {
-    OSL_ENSURE( ValidTab(n), "-_ScRangeListTabs::First(): Good bye!" );
+    OSL_ENSURE( ValidTab(n), "-ScRangeListTabs::First(): Good bye!" );
 
     TabRangeType::iterator itr = m_TabRanges.find(n);
     if (itr == m_TabRanges.end())
@@ -139,7 +139,7 @@ const ScRange* _ScRangeListTabs::First( SCTAB n )
     return rList.empty() ? nullptr : &(*maItrCur);
 }
 
-const ScRange* _ScRangeListTabs::Next ()
+const ScRange* ScRangeListTabs::Next ()
 {
     ++maItrCur;
     if (maItrCur == maItrCurEnd)

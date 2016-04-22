@@ -33,8 +33,8 @@ CellType adjustCellType( CellType eOrig )
     return eOrig;
 }
 
-template<typename _T>
-OUString getString( const _T& rVal )
+template<typename T>
+OUString getString( const T& rVal )
 {
     if (rVal.meType == CELLTYPE_STRING)
         return rVal.mpString->getString();
@@ -75,8 +75,8 @@ bool equalsFormulaCells( const ScFormulaCell* p1, const ScFormulaCell* p2 )
     return true;
 }
 
-template<typename _T>
-bool equalsWithoutFormatImpl( const _T& left, const _T& right )
+template<typename T>
+bool equalsWithoutFormatImpl( const T& left, const T& right )
 {
     CellType eType1 = adjustCellType(left.meType);
     CellType eType2 = adjustCellType(right.meType);
@@ -154,8 +154,8 @@ bool hasNumericImpl( CellType eType, ScFormulaCell* pFormula )
     }
 }
 
-template<typename _CellT>
-OUString getStringImpl( const _CellT& rCell, const ScDocument* pDoc )
+template<typename CellT>
+OUString getStringImpl( const CellT& rCell, const ScDocument* pDoc )
 {
     switch (rCell.meType)
     {

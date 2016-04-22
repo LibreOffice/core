@@ -58,17 +58,17 @@ public:
     static void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
 
 
-    template<size_t _Size>
+    template<size_t Size>
     static ScRange insertRangeData(
-        ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount )
+        ScDocument* pDoc, const ScAddress& rPos, const char* aData[][Size], size_t nRowCount )
     {
         ScRange aRange(rPos);
-        aRange.aEnd.SetCol(rPos.Col()+_Size-1);
+        aRange.aEnd.SetCol(rPos.Col()+Size-1);
         aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
 
         clearRange(pDoc, aRange);
 
-        for (size_t i = 0; i < _Size; ++i)
+        for (size_t i = 0; i < Size; ++i)
         {
             for (size_t j = 0; j < nRowCount; ++j)
             {

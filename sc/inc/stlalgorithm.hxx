@@ -21,7 +21,7 @@ namespace sc {
  * Custom allocator for STL container to ensure that the base address of
  * allocated storage is aligned to a specified boundary.
  */
-template<typename T, size_t _Alignment>
+template<typename T, size_t Alignment>
 class AlignedAllocator
 {
 public:
@@ -36,17 +36,17 @@ public:
     typedef T& reference;
     typedef const T& const_reference;
 
-    template<typename _Type2>
+    template<typename Type2>
     struct rebind
     {
-        typedef AlignedAllocator<_Type2,_Alignment> other;
+        typedef AlignedAllocator<Type2,Alignment> other;
     };
 
     AlignedAllocator() {}
     ~AlignedAllocator() {}
 
-    template<typename _Type2>
-    AlignedAllocator(const AlignedAllocator<_Type2,_Alignment>&) {}
+    template<typename Type2>
+    AlignedAllocator(const AlignedAllocator<Type2,Alignment>&) {}
 
     static void construct(T* p, const value_type& val) { new(p) value_type(val); }
     static void destroy(T* p)
@@ -65,7 +65,7 @@ public:
 
     static pointer allocate(size_type n)
     {
-        return static_cast<pointer>(rtl_allocateAlignedMemory(_Alignment, n*sizeof(value_type)));
+        return static_cast<pointer>(rtl_allocateAlignedMemory(Alignment, n*sizeof(value_type)));
     }
 
     static void deallocate(pointer p, size_type)

@@ -289,7 +289,7 @@ FltError ImportLotus::Read(SvStream& rIn)
                     nExtTab++;
                     break;
                 case 197:
-                    _Row( nRecLen );
+                    Row_( nRecLen );
                 break;
             }
 

@@ -169,13 +169,13 @@ XclImpXFRangeBuffer& XclImpRoot::GetXFRangeBuffer() const
     return *mrImpData.mxXFRangeBfr;
 }
 
-_ScRangeListTabs& XclImpRoot::GetPrintAreaBuffer() const
+ScRangeListTabs& XclImpRoot::GetPrintAreaBuffer() const
 {
     // TODO still in old RootData
     return *GetOldRoot().pPrintRanges;
 }
 
-_ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
+ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
 {
     // TODO still in old RootData
     return *GetOldRoot().pPrintTitles;

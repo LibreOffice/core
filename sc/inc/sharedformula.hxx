@@ -29,10 +29,10 @@ public:
      * Group formula cells stored in the passed container. The formula cells
      * in the container are assumed to be all <b>non-shared</b>.
      */
-    template<typename _Iter>
-    static void groupFormulaCells(const _Iter& itBeg, const _Iter& itEnd)
+    template<typename Iter>
+    static void groupFormulaCells(const Iter& itBeg, const Iter& itEnd)
     {
-        _Iter it = itBeg;
+        Iter it = itBeg;
         ScFormulaCell* pPrev = *it;
         ScFormulaCell* pCur = nullptr;
         for (++it; it != itEnd; ++it, pPrev = pCur)

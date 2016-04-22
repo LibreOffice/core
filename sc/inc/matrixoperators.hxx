@@ -17,11 +17,11 @@ namespace op {
 
 
 template<typename T>
-struct _Op
+struct Op_
 {
     const double mInitVal;
     const T maOp;
-    _Op(double InitVal, T aOp):
+    Op_(double InitVal, T aOp):
         mInitVal(InitVal), maOp(aOp)
     {
     }
@@ -31,7 +31,7 @@ struct _Op
     }
 };
 
-using Op = _Op<std::function<void(double&, double)>>;
+using Op = Op_<std::function<void(double&, double)>>;
 
 struct Sum
 {

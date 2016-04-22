@@ -923,7 +923,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 }
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
+ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
                             SCsTAB nTab, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();

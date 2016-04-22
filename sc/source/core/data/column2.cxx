@@ -2307,16 +2307,16 @@ void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nR
 
 namespace {
 
-template<typename _Blk>
+template<typename Blk>
 void getBlockIterators(
     const sc::CellStoreType::iterator& it, size_t& rLenRemain,
-    typename _Blk::iterator& rData, typename _Blk::iterator& rDataEnd )
+    typename Blk::iterator& rData, typename Blk::iterator& rDataEnd )
 {
-    rData = _Blk::begin(*it->data);
+    rData = Blk::begin(*it->data);
     if (rLenRemain >= it->size)
     {
         // Block is shorter than the remaining requested length.
-        rDataEnd = _Blk::end(*it->data);
+        rDataEnd = Blk::end(*it->data);
         rLenRemain -= it->size;
     }
     else

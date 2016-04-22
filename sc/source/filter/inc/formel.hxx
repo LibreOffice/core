@@ -58,7 +58,7 @@ enum FORMULA_TYPE
     FT_CondFormat
 };
 
-class _ScRangeListTabs
+class ScRangeListTabs
 {
     typedef ::std::vector<ScRange> RangeListType;
     typedef ::std::map<SCTAB, std::unique_ptr<RangeListType>> TabRangeType;
@@ -67,8 +67,8 @@ class _ScRangeListTabs
     RangeListType::const_iterator maItrCurEnd;
 
 public:
-    _ScRangeListTabs ();
-    ~_ScRangeListTabs();
+    ScRangeListTabs ();
+    ~ScRangeListTabs();
 
     void Append( const ScAddress& aSRD, SCTAB nTab );
     void Append( const ScRange& aCRD, SCTAB nTab );
@@ -106,7 +106,7 @@ public:
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab,
+    virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
 

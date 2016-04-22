@@ -36,7 +36,7 @@ class ExcelToSc;
 
 class XclImpColRowSettings;
 class XclImpAutoFilterBuffer;
-class _ScRangeListTabs;
+class ScRangeListTabs;
 
 class XclExpChTrTabId;
 class XclExpUserBViewList;
@@ -57,8 +57,8 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     // Biff8
     XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter
-    _ScRangeListTabs*       pPrintRanges;
-    _ScRangeListTabs*       pPrintTitles;
+    ScRangeListTabs*       pPrintRanges;
+    ScRangeListTabs*       pPrintTitles;
 
     // Erweiterungen fuer Export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy

@@ -1472,9 +1472,9 @@ OUString SAL_CALL ScShapeObj::getImplementationName(  ) throw (uno::RuntimeExcep
     return OUString( "com.sun.star.comp.sc.ScShapeObj" );
 }
 
-sal_Bool SAL_CALL ScShapeObj::supportsService( const OUString& _ServiceName ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScShapeObj::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
 {
-    return cppu::supportsService(this, _ServiceName);
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)

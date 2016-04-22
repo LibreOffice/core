@@ -379,9 +379,9 @@ void ImportLotus::Font_Ysize()
     }
 }
 
-void ImportLotus::_Row( const sal_uInt16 nRecLen )
+void ImportLotus::Row_( const sal_uInt16 nRecLen )
 {
-    OSL_ENSURE( nExtTab >= 0, "*ImportLotus::_Row(): not possible!" );
+    OSL_ENSURE( nExtTab >= 0, "*ImportLotus::Row_(): not possible!" );
 
     sal_uInt16            nCntDwn = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 5;
     SCCOL           nColCnt = 0;
