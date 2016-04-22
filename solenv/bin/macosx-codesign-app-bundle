@@ -60,7 +60,7 @@ done
 # Code Signing In Depth" suggests we should get rid of them rather sooner than
 # later, but they appear to be OK for now):
 
-for i in gengal python senddoc unoinfo
+for i in python senddoc unoinfo
 do
     if [ -f "$APP_BUNDLE/Contents/MacOS/$i" ]
     then
