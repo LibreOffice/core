@@ -1062,8 +1062,7 @@ bool FormulaCompiler::GetToken()
     else
     {
         short nWasColRowName;
-        if ( pArr->nIndex
-          && pArr->pCode[ pArr->nIndex-1 ]->GetOpCode() == ocColRowName )
+        if ( pArr->nIndex > 0 && pArr->pCode[ pArr->nIndex-1 ]->GetOpCode() == ocColRowName )
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
@@ -1102,8 +1101,7 @@ bool FormulaCompiler::GetToken()
         mpToken = new FormulaByteToken( ocStop );
         return false;
     }
-    if ( mpToken->GetOpCode() == ocSubTotal ||
-         mpToken->GetOpCode() == ocAggregate )
+    if ( mpToken->GetOpCode() == ocSubTotal || mpToken->GetOpCode() == ocAggregate )
         glSubTotal = true;
     else if ( mpToken->IsExternalRef() )
     {
