@@ -461,6 +461,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
         default:
             bRet = false;
+            // SfxDispatchController_Impl::StateChanged calls this with hardcoded 0 triggering this; there used to be a MID_LR_MARGIN 0 but what type would it have?
             OSL_FAIL("unknown MemberId");
     }
     return bRet;

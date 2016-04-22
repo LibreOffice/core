@@ -520,6 +520,7 @@ bool SvxColumnItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= bTable;
             break;
         default:
+            // SfxDispatchController_Impl::StateChanged calls this with hardcoded 0 triggering this;
             OSL_FAIL("Wrong MemberId!");
             return false;
     }
