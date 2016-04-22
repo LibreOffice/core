@@ -980,6 +980,14 @@ private:
                             Rectangle& rTextRect,
                             SdrObject* pOldSdrObj = nullptr ) override;
 
+    /** Finalize a DFF object, sets anchor after nested objs have been loaded. */
+    virtual SdrObject*  FinalizeObj(
+                            SvStream& rDffStrm,
+                            DffObjData& rDffObjData,
+                            void* pClientData,
+                            Rectangle& rTextRect,
+                            SdrObject* pOldSdrObj = nullptr ) override;
+
     // virtual functions of SvxMSConvertOCXControls
 
     /** Inserts the passed control rxFComp into the form. Needs call to SetCurrentForm() before. */

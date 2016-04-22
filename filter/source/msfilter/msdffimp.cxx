@@ -4142,6 +4142,11 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             }
         }
     }
+    if (size_t(nCalledByGroup) < maPendingGroupData.size()) {
+        // finalization for this group is pending, do it now
+        pRet = FinalizeObj(rSt, maPendingGroupData.back().first, pClientData, rClientRect, pRet);
+        maPendingGroupData.pop_back();
+    }
     return pRet;
 }
 
@@ -4158,6 +4163,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         return pRet;
 
     DffObjData aObjData( rHd, rClientRect, nCalledByGroup );
+
     aObjData.bRotateTextWithShape = ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL ) == 0;
     maShapeRecords.Consume( rSt );
     if( maShapeRecords.SeekToContent( rSt,
@@ -4817,6 +4823,15 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         pRet->SetDescription( aAltText );
     }
 
+    // If this shape opens a new group, push back its object data because
+    // finalization will be called when nested objects have been imported;
+    // otherwise, just finalize here
+    if (size_t(nCalledByGroup) > maPendingGroupData.size()) {
+        std::shared_ptr<DffRecordHeader> rHdClone(new DffRecordHeader(aObjData.rSpHd));
+        maPendingGroupData.push_back( make_pair(DffObjData(rHdClone, aObjData), rHdClone) );
+    } else {
+        pRet = FinalizeObj( rSt, aObjData, pClientData, aTextRect, pRet);
+    }
     return pRet;
 }
 
@@ -5489,6 +5504,15 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
     return pObj;
 };
+
+SdrObject* SvxMSDffManager::FinalizeObj(SvStream& /* rSt */,
+                                       DffObjData& /* rObjData */,
+                                       void* /* pData */,
+                                       Rectangle& /* rTextRect */,
+                                       SdrObject* pObj
+                                       )
+{ return pObj; };
+
 
 void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
                                       sal_uLong         nTxBx,
