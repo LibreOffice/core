@@ -129,8 +129,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             const SfxBoolItem* pBVisible = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEBACK);
             const SfxBoolItem* pBObjsVisible = rRequest.GetArg<SfxBoolItem>(ID_VAL_ISPAGEOBJ);
             AutoLayout aLayout ((AutoLayout)pNewAutoLayout->GetValue ());
-            if (aLayout >= AUTOLAYOUT__START
-                && aLayout < AUTOLAYOUT__END)
+            if (aLayout >= AUTOLAYOUT_START
+                && aLayout < AUTOLAYOUT_END)
             {
                 aNewName        = pNewName->GetValue ();
                 aNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue ();

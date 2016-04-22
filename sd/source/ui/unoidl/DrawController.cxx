@@ -720,13 +720,13 @@ sal_Bool SAL_CALL DrawController::isFormDesignMode(  ) throw (uno::RuntimeExcept
     return bIsDesignMode;
 }
 
-void SAL_CALL DrawController::setFormDesignMode( sal_Bool _DesignMode ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DrawController::setFormDesignMode( sal_Bool DesignMode ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     if ( pFormShell )
-        pFormShell->SetDesignMode( _DesignMode );
+        pFormShell->SetDesignMode( DesignMode );
 }
 
 uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::Reference< awt::XControlModel >& xModel ) throw (container::NoSuchElementException, uno::RuntimeException, std::exception)

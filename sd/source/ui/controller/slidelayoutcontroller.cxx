@@ -283,7 +283,7 @@ void LayoutToolbarMenu::SelectHdl(void* pControl)
 
     Sequence< PropertyValue > aArgs;
 
-    AutoLayout eLayout = AUTOLAYOUT__END;
+    AutoLayout eLayout = AUTOLAYOUT_END;
 
     OUString sCommandURL( mrController.getCommandURL() );
 
@@ -296,7 +296,7 @@ void LayoutToolbarMenu::SelectHdl(void* pControl)
         eLayout = static_cast< AutoLayout >(mpLayoutSet2->GetSelectItemId()-1);
     }
 
-    if( eLayout != AUTOLAYOUT__END )
+    if( eLayout != AUTOLAYOUT_END )
     {
         aArgs = Sequence< PropertyValue >(1);
         aArgs[0].Name = "WhatLayout";

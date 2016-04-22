@@ -69,7 +69,7 @@ Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
 
-        maColor.resize(_ColorType_Size_);
+        maColor.resize(ColorType_Size_);
         maColor[Color_Background] = maBackgroundColor;
         maColor[Color_PageNumberDefault] = 0x0808080;
         maColor[Color_PageNumberHover] = 0x4c4c4c;
@@ -90,7 +90,7 @@ void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
 
     maColor[Color_Background] = maBackgroundColor;
 
-    maGradients.resize(_GradientColorType_Size_);
+    maGradients.resize(GradientColorType_Size_);
 
     maColor[Color_Background] = maBackgroundColor;
     const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
@@ -119,7 +119,7 @@ void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
     if (maIcons.empty())
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
-        maIcons.resize(_IconType_Size_);
+        maIcons.resize(IconType_Size_);
 
         InitializeIcon(Icon_RawShadow, IMAGE_SHADOW);
         InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);

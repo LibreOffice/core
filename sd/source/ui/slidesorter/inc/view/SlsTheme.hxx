@@ -71,7 +71,7 @@ public:
         Color_Selection,
         Color_PreviewBorder,
         Color_PageCountFontColor,
-        _ColorType_Size_
+        ColorType_Size_
     };
     ColorData GetColor (const ColorType eType);
 
@@ -83,7 +83,7 @@ public:
         Gradient_MouseOverSelected,
         Gradient_MouseOverSelectedAndFocusedPage,
         Gradient_FocusedPage,
-        _GradientColorType_Size_
+        GradientColorType_Size_
     };
     enum GradientColorClass {
         Border1,
@@ -111,7 +111,7 @@ public:
         Icon_RawInsertShadow,
         Icon_HideSlideOverlay,
         Icon_FocusBorder,
-        _IconType_Size_
+        IconType_Size_
     };
     const BitmapEx& GetIcon (const IconType eType);
 

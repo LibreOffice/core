@@ -1198,7 +1198,7 @@ LayoutDescriptor::LayoutDescriptor( int k0, int k1, int k2, int k3, int k4, int 
 
 static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
 {
-    static const LayoutDescriptor aLayouts[AUTOLAYOUT__END-AUTOLAYOUT__START] =
+    static const LayoutDescriptor aLayouts[AUTOLAYOUT_END-AUTOLAYOUT_START] =
     {
         LayoutDescriptor( PRESOBJ_TITLE, PRESOBJ_TEXT ),                                 // AUTOLAYOUT_TITLE
         LayoutDescriptor( PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              // AUTOLAYOUT_ENUM
@@ -1240,10 +1240,10 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
             PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE )
     };
 
-    if( (eLayout < AUTOLAYOUT__START) || (eLayout >= AUTOLAYOUT__END) )
+    if( (eLayout < AUTOLAYOUT_START) || (eLayout >= AUTOLAYOUT_END) )
         eLayout = AUTOLAYOUT_NONE;
 
-    return aLayouts[ eLayout - AUTOLAYOUT__START ];
+    return aLayouts[ eLayout - AUTOLAYOUT_START ];
 }
 
 rtl::OUString enumtoString(AutoLayout aut)
@@ -1272,8 +1272,8 @@ rtl::OUString enumtoString(AutoLayout aut)
         case AUTOLAYOUT_TITLE_6CONTENT:
             retstr="AUTOLAYOUT_TITLE_6CONTENT";
             break;
-        case AUTOLAYOUT__START:
-            retstr="AUTOLAYOUT__START";
+        case AUTOLAYOUT_START:
+            retstr="AUTOLAYOUT_START";
             break;
         case AUTOLAYOUT_TITLE_2CONTENT_CONTENT:
             retstr="AUTOLAYOUT_TITLE_2CONTENT_CONTENT";

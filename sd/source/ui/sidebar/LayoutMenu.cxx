@@ -681,7 +681,7 @@ void LayoutMenu::UpdateSelection()
 
         // Get layout of current page.
         AutoLayout aLayout (pCurrentPage->GetAutoLayout());
-        if (aLayout<AUTOLAYOUT__START || aLayout>AUTOLAYOUT__END)
+        if (aLayout<AUTOLAYOUT_START || aLayout>AUTOLAYOUT_END)
             break;
 
         // Find the entry of the menu for to the layout.

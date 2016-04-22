@@ -120,14 +120,14 @@ public:
     /** The set of tool bar groups.
     */
     enum ToolBarGroup {
-        TBG__FIRST,
+        TBG_FIRST,
 
-        TBG_PERMANENT = TBG__FIRST,
+        TBG_PERMANENT = TBG_FIRST,
         TBG_FUNCTION,
         TBG_COMMON_TASK,
         TBG_MASTER_MODE,
 
-        TBG__LAST = TBG_MASTER_MODE
+        TBG_LAST = TBG_MASTER_MODE
     };
 
     /** Reset the set of visible object bars in the specified group.  Tool

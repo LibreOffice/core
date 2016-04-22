@@ -47,7 +47,7 @@ enum PresObjKind
 enum AutoLayout
 {
     // new layouts with enum/text/chart/org/clip merged to content
-    AUTOLAYOUT__START = 0,
+    AUTOLAYOUT_START = 0,
     AUTOLAYOUT_TITLE = 0,                       ///< Title Slide
     AUTOLAYOUT_TITLE_CONTENT = 1,               ///< Title, Content
     AUTOLAYOUT_TITLE_2CONTENT = 3,              ///< Title and 2 Content
@@ -98,7 +98,7 @@ enum AutoLayout
     AUTOLAYOUT_HANDOUT9 = 31,
     AUTOLAYOUT_4CLIPART = 33,
     AUTOLAYOUT_6CLIPART = 34,
-    AUTOLAYOUT__END
+    AUTOLAYOUT_END
 };
 
 enum PageKind
