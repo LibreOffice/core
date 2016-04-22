@@ -3355,6 +3355,7 @@ void SwUiWriterTest::testTdf96515()
     SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
     aViewOptions.SetHideWhitespaceMode(true);
     pWrtShell->ApplyViewOptions(aViewOptions);
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsWhitespaceHidden());
 
     // Insert a new paragraph at the end of the document.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -3391,24 +3392,29 @@ void SwUiWriterTest::testTdf96536()
     SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
     aViewOptions.SetHideWhitespaceMode(true);
     pWrtShell->ApplyViewOptions(aViewOptions);
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsWhitespaceHidden());
 
     // Insert a page break and go back to the first page.
     pWrtShell->InsertPageBreak();
     pWrtShell->SttEndDoc(/*bStt=*/true);
+    calcLayout();
+    sal_Int32 nSingleParaPageHeight = parseDump("/root/page[1]/infos/bounds", "height").toInt32();
+    discardDumpedLayout();
 
-    // Insert a new paragraph at the end of the page, and then delete it.
+    // Insert a 2nd paragraph at the end of the first page, so the page height grows at least twice...
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(), uno::UNO_QUERY);
-    xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
+    const uno::Reference< text::XTextRange > xInsertPos = getRun(getParagraph(1), 1);
+    xParagraphAppend->finishParagraphInsert(uno::Sequence<beans::PropertyValue>(), xInsertPos);
     calcLayout();
+    CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds", "height").toInt32() >= 2 * nSingleParaPageHeight);
+    discardDumpedLayout();
+
+    // ... and then delete the 2nd paragraph, which shriks the page to the previous size.
     uno::Reference<lang::XComponent> xParagraph(getParagraph(2), uno::UNO_QUERY);
     xParagraph->dispose();
     calcLayout();
-
-    // This was 552, page did not shrink after deleting the second paragraph.
-    // Expected 276, which is 12pt font size + default line spacing (15%), but
-    // tolerate some difference to that.
-    CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds", "height").toInt32() <= 276);
+    CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds", "height").toInt32() == nSingleParaPageHeight);
 }
 
 void SwUiWriterTest::testTdf96479()
