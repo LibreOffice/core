@@ -291,7 +291,7 @@ namespace oox { namespace ppt {
             OUString sString;
             Sequence< NamedValue > aSeq;
 
-            for( int i = 0; i < _NP_SIZE; i++)
+            for( int i = 0; i < NP_SIZE_; i++)
             {
                 Any & aValue( maNodeProperties[ i ] );
                 if( aValue.hasValue() )

@@ -120,7 +120,7 @@ private:
     OUString parseFormula( const OUString& rRange );
     void InitPlotArea();
 
-    void _ExportContent();
+    void ExportContent_();
     void exportChartSpace( const css::uno::Reference<
                            css::chart::XChartDocument >& rChartDoc,
                            bool bIncludeTable );

@@ -45,10 +45,10 @@ namespace oox { namespace ppt {
         NP_ENDSYNC, NP_ITERATETYPE, NP_ITERATEINTERVAL,
         NP_SUBITEM, NP_TARGET, NP_COMMAND, NP_PARAMETER,
         NP_VALUES, NP_FORMULA, NP_KEYTIMES, NP_DISPLAY,
-        _NP_SIZE
+        NP_SIZE_
     };
 
-    typedef std::array< css::uno::Any, _NP_SIZE > NodePropertyMap;
+    typedef std::array< css::uno::Any, NP_SIZE_ > NodePropertyMap;
 
 
     /** data for CT_TLShapeTargetElement */

@@ -664,10 +664,10 @@ void ChartExport::ExportContent()
         return;
     InitRangeSegmentationProperties( xChartDoc );
     // TODO: export chart
-    _ExportContent( );
+    ExportContent_( );
 }
 
-void ChartExport::_ExportContent()
+void ChartExport::ExportContent_()
 {
     Reference< css::chart::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
