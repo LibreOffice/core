@@ -68,7 +68,7 @@ using namespace ::com::sun::star::uno;
 
 // the StartIndex can be supplied optionally (e.g. if it was queried before - is a virtual
 // method otherwise!)
-_SetGetExpField::_SetGetExpField(
+SetGetExpField::SetGetExpField(
     const SwNodeIndex& rNdIdx,
     const SwTextField* pField,
     const SwIndex* pIdx )
@@ -84,7 +84,7 @@ _SetGetExpField::_SetGetExpField(
         nContent = 0;
 }
 
-_SetGetExpField::_SetGetExpField( const SwNodeIndex& rNdIdx,
+SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
                             const SwTextINetFormat& rINet, const SwIndex* pIdx )
 {
     eSetGetExpFieldType = TEXTINET;
@@ -99,7 +99,7 @@ _SetGetExpField::_SetGetExpField( const SwNodeIndex& rNdIdx,
 // Extension for Sections:
 // these always have content position 0xffffffff!
 // There is never a field on this, only up to COMPLETE_STRING possible
-_SetGetExpField::_SetGetExpField( const SwSectionNode& rSectNd,
+SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {
     eSetGetExpFieldType = SECTIONNODE;
@@ -117,7 +117,7 @@ _SetGetExpField::_SetGetExpField( const SwSectionNode& rSectNd,
     }
 }
 
-_SetGetExpField::_SetGetExpField( const SwTableBox& rTBox, const SwPosition* pPos )
+SetGetExpField::SetGetExpField( const SwTableBox& rTBox, const SwPosition* pPos )
 {
     eSetGetExpFieldType = TABLEBOX;
     CNTNT.pTBox = &rTBox;
@@ -141,7 +141,7 @@ _SetGetExpField::_SetGetExpField( const SwTableBox& rTBox, const SwPosition* pPo
     }
 }
 
-_SetGetExpField::_SetGetExpField( const SwNodeIndex& rNdIdx,
+SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
                                 const SwTextTOXMark& rTOX,
                                 const SwIndex* pIdx )
 {
@@ -154,7 +154,7 @@ _SetGetExpField::_SetGetExpField( const SwNodeIndex& rNdIdx,
         nContent = rTOX.GetStart();
 }
 
-_SetGetExpField::_SetGetExpField( const SwPosition& rPos )
+SetGetExpField::SetGetExpField( const SwPosition& rPos )
 {
     eSetGetExpFieldType = CRSRPOS;
     CNTNT.pPos = &rPos;
@@ -162,7 +162,7 @@ _SetGetExpField::_SetGetExpField( const SwPosition& rPos )
     nContent = rPos.nContent.GetIndex();
 }
 
-_SetGetExpField::_SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
+SetGetExpField::SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
                                 const SwPosition* pPos  )
 {
     eSetGetExpFieldType = FLYFRAME;
@@ -180,7 +180,7 @@ _SetGetExpField::_SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
     }
 }
 
-void _SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
+void SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
 {
     const SwNode* pNd = GetNodeFromContent();
     if( pNd )
@@ -198,7 +198,7 @@ void _SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
     }
 }
 
-void _SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
+void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
 {
     if( !rFrame.IsInDocBody() )
     {
@@ -213,7 +213,7 @@ void _SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
     }
 }
 
-bool _SetGetExpField::operator==( const _SetGetExpField& rField ) const
+bool SetGetExpField::operator==( const SetGetExpField& rField ) const
 {
     return nNode == rField.nNode
            && nContent == rField.nContent
@@ -222,7 +222,7 @@ bool _SetGetExpField::operator==( const _SetGetExpField& rField ) const
                 || CNTNT.pTextField == rField.CNTNT.pTextField );
 }
 
-bool _SetGetExpField::operator<( const _SetGetExpField& rField ) const
+bool SetGetExpField::operator<( const SetGetExpField& rField ) const
 {
     if( nNode < rField.nNode || ( nNode == rField.nNode && nContent < rField.nContent ))
         return true;
@@ -271,7 +271,7 @@ bool _SetGetExpField::operator<( const _SetGetExpField& rField ) const
     return GetCntPosFromContent() < rField.GetCntPosFromContent();
 }
 
-const SwNode* _SetGetExpField::GetNodeFromContent() const
+const SwNode* SetGetExpField::GetNodeFromContent() const
 {
     const SwNode* pRet = nullptr;
     if( CNTNT.pTextField )
@@ -315,7 +315,7 @@ const SwNode* _SetGetExpField::GetNodeFromContent() const
     return pRet;
 }
 
-sal_Int32 _SetGetExpField::GetCntPosFromContent() const
+sal_Int32 SetGetExpField::GetCntPosFromContent() const
 {
     sal_Int32 nRet = 0;
     if( CNTNT.pTextField )
@@ -337,8 +337,8 @@ sal_Int32 _SetGetExpField::GetCntPosFromContent() const
     return nRet;
 }
 
-_HashStr::_HashStr( const OUString& rName, const OUString& rText,
-                    _HashStr* pNxt )
+HashStr::HashStr( const OUString& rName, const OUString& rText,
+                    HashStr* pNxt )
     : SwHash( rName ), aSetStr( rText )
 {
     pNext = pNxt;
@@ -349,7 +349,7 @@ OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName )
 {
     SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTable, nSize );
     if( pFnd )
-        return static_cast<_HashStr*>(pFnd)->aSetStr;
+        return static_cast<HashStr*>(pFnd)->aSetStr;
 
     return OUString();
 }
@@ -787,7 +787,7 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
     {
         if( !bIns )             // if list is present and deleted
             return;             // don't do a thing
-        pFieldSortLst = new _SetGetExpFields;
+        pFieldSortLst = new SetGetExpFields;
     }
 
     if( bIns )      // insert anew:
@@ -796,7 +796,7 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
     {
         // look up via the pTextField pointer. It is a sorted list, but it's sorted by node
         // position. Until this is found, the search for the pointer is already done.
-        for( _SetGetExpFields::size_type n = 0; n < pFieldSortLst->size(); ++n )
+        for( SetGetExpFields::size_type n = 0; n < pFieldSortLst->size(); ++n )
             if( &rField == (*pFieldSortLst)[ n ]->GetPointer() )
             {
                 delete (*pFieldSortLst)[n];
@@ -810,14 +810,14 @@ void SwDocUpdateField::MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode )
 {
     if( !pFieldSortLst || bAll || !( eGetMode & nFieldLstGetMode ) ||
         rDoc.GetNodes().Count() != nNodes )
-        _MakeFieldList( rDoc, eGetMode );
+        MakeFieldList_( rDoc, eGetMode );
 }
 
-void SwDocUpdateField::_MakeFieldList( SwDoc& rDoc, int eGetMode )
+void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 {
     // new version: walk all fields of the attribute pool
     delete pFieldSortLst;
-    pFieldSortLst = new _SetGetExpFields;
+    pFieldSortLst = new SetGetExpFields;
 
     // consider and unhide sections
     //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
@@ -1007,7 +1007,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, sal_uInt16 nFiel
     Point aPt;
     const SwContentFrame* pFrame = rTextNd.getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
 
-    _SetGetExpField* pNew = nullptr;
+    SetGetExpField* pNew = nullptr;
     bool bIsInBody = false;
 
     if( !pFrame || pFrame->IsInDocBody() )
@@ -1021,7 +1021,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, sal_uInt16 nFiel
         // fields in hidden sections. So: In order to be updated, a field 1)
         // must have a frame, or 2) it must be in the document body.
         if( (pFrame != nullptr) || bIsInBody )
-            pNew = new _SetGetExpField( aIdx, &rTField );
+            pNew = new SetGetExpField( aIdx, &rTField );
     }
     else
     {
@@ -1030,7 +1030,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, sal_uInt16 nFiel
         bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
         OSL_ENSURE(bResult, "where is the Field");
         (void) bResult; // unused in non-debug
-        pNew = new _SetGetExpField( aPos.nNode, &rTField, &aPos.nContent );
+        pNew = new SetGetExpField( aPos.nNode, &rTField, &aPos.nContent );
     }
 
     // always set the BodyTextFlag in GetExp or DB fields
@@ -1054,7 +1054,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, sal_uInt16 nFiel
 void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 {
     const SwDoc& rDoc = *rSectNd.GetDoc();
-    _SetGetExpField* pNew = nullptr;
+    SetGetExpField* pNew = nullptr;
 
     if( rSectNd.GetIndex() < rDoc.GetNodes().GetEndOfExtras().GetIndex() )
     {
@@ -1077,13 +1077,13 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
             bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
             OSL_ENSURE(bResult, "where is the Field");
             (void) bResult; // unused in non-debug
-            pNew = new _SetGetExpField( rSectNd, &aPos );
+            pNew = new SetGetExpField( rSectNd, &aPos );
 
         } while( false );
     }
 
     if( !pNew )
-        pNew = new _SetGetExpField( rSectNd );
+        pNew = new SetGetExpField( rSectNd );
 
     if( !pFieldSortLst->insert( pNew ).second )
         delete pNew;

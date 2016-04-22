@@ -414,7 +414,7 @@ SwXMLImport::SwXMLImport(
     m_bPreserveRedlineMode( true ),
     m_pDoc( nullptr )
 {
-    _InitItemImport();
+    InitItemImport();
 
 }
 
@@ -423,7 +423,7 @@ SwXMLImport::~SwXMLImport() throw ()
     delete m_pDocElemTokenMap;
     delete m_pTableElemTokenMap;
     delete m_pTableCellAttrTokenMap;
-    _FinitItemImport();
+    FinitItemImport();
 }
 
 void SwXMLImport::setTextInsertMode(

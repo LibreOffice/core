@@ -58,8 +58,8 @@ extern Color *pWaveCol;
 class SwFntObj : public SwCacheObj
 {
     friend class SwFntAccess;
-    friend void _InitCore();
-    friend void _FinitCore();
+    friend void InitCore();
+    friend void FinitCore();
 
     vcl::Font aFont;
     vcl::Font *pScrFont;

@@ -110,7 +110,7 @@ public:
     void        ExecField(SfxRequest& rReq);
 
     static void    SetFrameMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
-    static void   _SetFrameMode( FlyMode eMode )   { eFrameMode = eMode; }
+    static void   SetFrameMode_( FlyMode eMode )   { eFrameMode = eMode; }
     static FlyMode  GetFrameMode()                 { return eFrameMode;  }
 };
 

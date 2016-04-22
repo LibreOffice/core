@@ -352,7 +352,7 @@ bool wwSectionManager::SetCols(SwFrameFormat &rFormat, const wwSection &rSection
     // sprmSFEvenlySpaced
     if (!rSep.fEvenlySpaced)
     {
-        aCol._SetOrtho(false);
+        aCol.SetOrtho_(false);
         const sal_uInt16 maxIdx = SAL_N_ELEMENTS(rSep.rgdxaColumnWidthSpacing);
         for (sal_uInt16 i = 0, nIdx = 1; i < nCols && nIdx < maxIdx; i++, nIdx+=2 )
         {
@@ -1224,7 +1224,7 @@ void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
 // Read BoRder Control structure
 // nBrcVer should be set to the version of the BRC record being read (6, 8 or 9)
 // This will be converted to the latest format (9).
-static bool _SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS)
+static bool SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS)
 {
 
     if( pS )
@@ -1260,7 +1260,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
             {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= int(_SetWW8_BRC( 8, brc[ i ], pSprm[ i ] ))<<i;
+                    nBorder |= int(SetWW8_BRC( 8, brc[ i ], pSprm[ i ] ))<<i;
             }
             // Version 9 BRCs if present will override version 8
             if( pSep->Find4Sprms(
@@ -1269,7 +1269,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
             {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= int(_SetWW8_BRC( 9, brc[ i ], pSprm[ i ] ))<<i;
+                    nBorder |= int(SetWW8_BRC( 9, brc[ i ], pSprm[ i ] ))<<i;
             }
         }
     }
@@ -1289,15 +1289,15 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             if (bVer67)
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(_SetWW8_BRC( 6 , brc[ i ], pPap->HasSprm( aVer67Ids[ i ] )))<<i;
+                    nBorder |= int(SetWW8_BRC( 6 , brc[ i ], pPap->HasSprm( aVer67Ids[ i ] )))<<i;
             }
             else
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(_SetWW8_BRC( 8 , brc[ i ], pPap->HasSprm( aVer8Ids[ i ] )))<<i;
+                    nBorder |= int(SetWW8_BRC( 8 , brc[ i ], pPap->HasSprm( aVer8Ids[ i ] )))<<i;
                 // Version 9 BRCs if present will override version 8
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(_SetWW8_BRC( 9 , brc[ i ], pPap->HasSprm( aVer9Ids[ i ] )))<<i;
+                    nBorder |= int(SetWW8_BRC( 9 , brc[ i ], pPap->HasSprm( aVer9Ids[ i ] )))<<i;
             }
         }
         else if( pSty )
@@ -1305,15 +1305,15 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             if (bVer67)
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(_SetWW8_BRC( 6 , brc[ i ], pSty->HasParaSprm( aVer67Ids[ i ] )))<<i;
+                    nBorder |= int(SetWW8_BRC( 6 , brc[ i ], pSty->HasParaSprm( aVer67Ids[ i ] )))<<i;
             }
             else
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(_SetWW8_BRC( 8 , brc[ i ], pSty->HasParaSprm( aVer8Ids[ i ] )))<<i;
+                    nBorder |= int(SetWW8_BRC( 8 , brc[ i ], pSty->HasParaSprm( aVer8Ids[ i ] )))<<i;
                 // Version 9 BRCs if present will override version 8
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(_SetWW8_BRC( 9 , brc[ i ], pSty->HasParaSprm( aVer9Ids[ i ] )))<<i;
+                    nBorder |= int(SetWW8_BRC( 9 , brc[ i ], pSty->HasParaSprm( aVer9Ids[ i ] )))<<i;
             }
         }
         else {
@@ -3107,7 +3107,7 @@ void SwWW8ImplReader::SetToggleAttr(sal_uInt8 nAttrId, bool bOn)
     }
 }
 
-void SwWW8ImplReader::_ChkToggleAttr( sal_uInt16 nOldStyle81Mask,
+void SwWW8ImplReader::ChkToggleAttr_( sal_uInt16 nOldStyle81Mask,
                                         sal_uInt16 nNewStyle81Mask )
 {
     sal_uInt16 i = 1, nToggleAttrFlags = m_pCtrlStck->GetToggleAttrFlags();
@@ -3123,7 +3123,7 @@ void SwWW8ImplReader::_ChkToggleAttr( sal_uInt16 nOldStyle81Mask,
     }
 }
 
-void SwWW8ImplReader::_ChkToggleBiDiAttr( sal_uInt16 nOldStyle81Mask,
+void SwWW8ImplReader::ChkToggleBiDiAttr_( sal_uInt16 nOldStyle81Mask,
                                         sal_uInt16 nNewStyle81Mask )
 {
     sal_uInt16 i = 1, nToggleAttrFlags = m_pCtrlStck->GetToggleBiDiAttrFlags();
@@ -4836,7 +4836,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             WW8_BRCVer9 aBrc;
             int nBrcVer = (nId == NS_sprm::LN_CBrc) ? 9 : (m_bVer67 ? 6 : 8);
 
-            _SetWW8_BRC(nBrcVer, aBrc, pData);
+            SetWW8_BRC(nBrcVer, aBrc, pData);
 
             // Border style is none -> no border, no shadow
             if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != table::BorderLineStyle::NONE )

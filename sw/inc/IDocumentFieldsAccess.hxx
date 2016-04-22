@@ -33,7 +33,7 @@ class SwTextField;
 class SwField;
 class SwMsgPoolItem;
 class DateTime;
-class _SetGetExpField;
+class SetGetExpField;
 struct SwHash;
 class SwNode;
 
@@ -120,9 +120,9 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     // (if the address != 0 and the pointer == 0 a new list will be returned).
     virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
 
-    virtual void FieldsToCalc(SwCalc& rCalc, const _SetGetExpField& rToThisField) = 0;
+    virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField) = 0;
 
-    virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const _SetGetExpField& rToThisField) = 0;
+    virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const SetGetExpField& rToThisField) = 0;
 
     virtual bool IsNewFieldLst() const = 0;
 

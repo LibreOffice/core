@@ -133,7 +133,7 @@ void SwEndnoter::InsertEndnotes()
     SwFrame* pRef = pSect->FindLastContent( SwFindMode::MyLast );
     SwFootnoteBossFrame *pBoss = pRef ? pRef->FindFootnoteBossFrame()
                                : static_cast<SwFootnoteBossFrame*>(pSect->Lower());
-    pBoss->_MoveFootnotes( *pEndArr );
+    pBoss->MoveFootnotes_( *pEndArr );
     delete pEndArr;
     pEndArr = nullptr;
     pSect = nullptr;
@@ -224,7 +224,7 @@ SwLayouter::~SwLayouter()
     mpObjsTmpConsiderWrapInfl = nullptr;
 }
 
-void SwLayouter::_CollectEndnotes( SwSectionFrame* pSect )
+void SwLayouter::CollectEndnotes_( SwSectionFrame* pSect )
 {
     if( !mpEndnoter )
         mpEndnoter = new SwEndnoter( this );
@@ -284,7 +284,7 @@ void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect )
     assert(pDoc && "No doc, no fun");
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         pDoc->getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
-    pDoc->getIDocumentLayoutAccess().GetLayouter()->_CollectEndnotes( pSect );
+    pDoc->getIDocumentLayoutAccess().GetLayouter()->CollectEndnotes_( pSect );
 }
 
 bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame* pSect, SwFootnoteFrame* pFootnote )

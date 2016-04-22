@@ -839,7 +839,7 @@ SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
     return pFormat;
 }
 
-SwFormat *SwDoc::_MakeFrameFormat(const OUString &rFormatName,
+SwFormat *SwDoc::MakeFrameFormat_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
@@ -875,7 +875,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
     return pFormat;
 }
 
-SwFormat *SwDoc::_MakeCharFormat(const OUString &rFormatName,
+SwFormat *SwDoc::MakeCharFormat_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
@@ -910,7 +910,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
     return pFormatColl;
 }
 
-SwFormat *SwDoc::_MakeTextFormatColl(const OUString &rFormatName,
+SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
@@ -1147,7 +1147,7 @@ SwFormat* SwDoc::CopyFormat( const SwFormat& rFormat,
 /// copy the frame format
 SwFrameFormat* SwDoc::CopyFrameFormat( const SwFrameFormat& rFormat )
 {
-    return static_cast<SwFrameFormat*>(CopyFormat( rFormat, *GetFrameFormats(), &SwDoc::_MakeFrameFormat,
+    return static_cast<SwFrameFormat*>(CopyFormat( rFormat, *GetFrameFormats(), &SwDoc::MakeFrameFormat_,
                                 *GetDfltFrameFormat() ));
 }
 
@@ -1155,7 +1155,7 @@ SwFrameFormat* SwDoc::CopyFrameFormat( const SwFrameFormat& rFormat )
 SwCharFormat* SwDoc::CopyCharFormat( const SwCharFormat& rFormat )
 {
     return static_cast<SwCharFormat*>(CopyFormat( rFormat, *GetCharFormats(),
-                                            &SwDoc::_MakeCharFormat,
+                                            &SwDoc::MakeCharFormat_,
                                             *GetDfltCharFormat() ));
 }
 
@@ -1383,7 +1383,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                 const SwNode& rCSttNd = pContent->GetContentIdx()->GetNode();
                 SwNodeRange aRg( rCSttNd, 0, *rCSttNd.EndOfSectionNode() );
                 aTmpIdx = *pSttNd->EndOfSectionNode();
-                rSrcNds._Copy( aRg, aTmpIdx );
+                rSrcNds.Copy_( aRg, aTmpIdx );
                 aTmpIdx = *pSttNd;
                 rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl( aRg, 0, aTmpIdx );
                 pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));
@@ -1526,11 +1526,11 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     CopyFormatArr( *rSource.mpCharFormatTable, *mpCharFormatTable,
-                &SwDoc::_MakeCharFormat, *mpDfltCharFormat );
+                &SwDoc::MakeCharFormat_, *mpDfltCharFormat );
     CopyFormatArr( *rSource.mpFrameFormatTable, *mpFrameFormatTable,
-                &SwDoc::_MakeFrameFormat, *mpDfltFrameFormat );
+                &SwDoc::MakeFrameFormat_, *mpDfltFrameFormat );
     CopyFormatArr( *rSource.mpTextFormatCollTable, *mpTextFormatCollTable,
-                &SwDoc::_MakeTextFormatColl, *mpDfltTextFormatColl );
+                &SwDoc::MakeTextFormatColl_, *mpDfltTextFormatColl );
 
     //To-Do:
     //  a) in rtf export don't export our hideous pgdsctbl
@@ -1710,7 +1710,7 @@ SwTableLineFormat* SwDoc::MakeTableLineFormat()
     return pFormat;
 }
 
-void SwDoc::_CreateNumberFormatter()
+void SwDoc::CreateNumberFormatter()
 {
     OSL_ENSURE( !mpNumberFormatter, "is already there" );
 

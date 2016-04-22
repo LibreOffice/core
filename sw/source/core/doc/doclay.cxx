@@ -161,7 +161,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     return pObj;
 }
 
-SwFlyFrameFormat* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
+SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
                                     const SwContentNode& rNode,
                                     RndStdIds eRequestId,
                                     const SfxItemSet* pFlySet,
@@ -341,7 +341,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             static_cast<SwContentNode *>(pNewTextNd)->SetAttr(*pItem);
         }
 
-         pFormat = _MakeFlySection( *pAnchorPos, *pNewTextNd,
+         pFormat = MakeFlySection_( *pAnchorPos, *pNewTextNd,
                                 eAnchorType, pFlySet, pFrameFormat );
     }
     return pFormat;

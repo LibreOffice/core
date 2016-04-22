@@ -358,8 +358,8 @@ class SW_DLLPUBLIC Writer
     SwAsciiOptions aAscOpts;
     OUString       sBaseURL;
 
-    void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
-    void _AddFontItems( SfxItemPool& rPool, sal_uInt16 nWhichId );
+    void AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
+    void AddFontItems_( SfxItemPool& rPool, sal_uInt16 nWhichId );
 
     ::std::unique_ptr<Writer_Impl> m_pImpl;
 

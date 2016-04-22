@@ -1032,7 +1032,7 @@ sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
     return m_nOrgHeight;
 }
 
-short SwSubFont::_CheckKerning( )
+short SwSubFont::CheckKerning_( )
 {
     short nKernx = - short( Font::GetFontSize().Height() / 6 );
 
@@ -1061,7 +1061,7 @@ sal_uInt16 SwSubFont::GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
     return nHeight; // + nLeading;
 }
 
-Size SwSubFont::_GetTextSize( SwDrawTextInfo& rInf )
+Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
 {
     // Robust: Eigentlich sollte der Font bereits eingestellt sein, aber
     // sicher ist sicher ...
@@ -1159,7 +1159,7 @@ Size SwSubFont::_GetTextSize( SwDrawTextInfo& rInf )
     return aTextSize;
 }
 
-void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
+void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
 {
     rInf.SetGreyWave( bGrey );
     sal_Int32 nLn = rInf.GetText().getLength();
@@ -1236,7 +1236,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
 
     if( pUnderFnt && nOldUnder != LINESTYLE_NONE )
     {
-        Size aFontSize = _GetTextSize( rInf );
+        Size aFontSize = GetTextSize_( rInf );
         const OUString oldStr = rInf.GetText();
         OUString aStr("  ");
 
@@ -1279,7 +1279,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
         // set position for underline font
         rInf.SetPos( pUnderFnt->GetPos() );
 
-        pUnderFnt->GetFont()._DrawStretchText( rInf );
+        pUnderFnt->GetFont().DrawStretchText_( rInf );
 
         rInf.SetUnderFnt( pUnderFnt );
         rInf.SetText(oldStr);
@@ -1290,7 +1290,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
     rInf.SetPos(aOldPos);
 }
 
-void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
+void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
 {
     if( !rInf.GetLen() || !rInf.GetText().getLength() )
         return;
@@ -1361,7 +1361,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         // set position for underline font
         rInf.SetPos( pUnderFnt->GetPos() );
 
-        pUnderFnt->GetFont()._DrawStretchText( rInf );
+        pUnderFnt->GetFont().DrawStretchText_( rInf );
 
         rInf.SetUnderFnt( pUnderFnt );
         rInf.SetText(oldStr);
@@ -1372,7 +1372,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     rInf.SetPos(aOldPos);
 }
 
-sal_Int32 SwSubFont::_GetCursorOfst( SwDrawTextInfo& rInf )
+sal_Int32 SwSubFont::GetCursorOfst_( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=m_pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );

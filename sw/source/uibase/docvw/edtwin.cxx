@@ -5889,12 +5889,12 @@ IMPL_LINK_NOARG_TYPED(SwEditWin, KeyInputTimerHandler, Timer *, void)
     m_bTableInsDelMode = false;
 }
 
-void SwEditWin::_InitStaticData()
+void SwEditWin::InitStaticData()
 {
     m_pQuickHlpData = new QuickHelpData();
 }
 
-void SwEditWin::_FinitStaticData()
+void SwEditWin::FinitStaticData()
 {
     delete m_pQuickHlpData;
 }

@@ -213,9 +213,9 @@ SwDrawModel* DocumentDrawModelManager::GetDrawModel()
     return mpDrawModel;
 }
 
-SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
+SwDrawModel* DocumentDrawModelManager::MakeDrawModel_()
 {
-    OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
+    OSL_ENSURE( !mpDrawModel, "MakeDrawModel_: Why?" );
     InitDrawModel();
     SwViewShell* const pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( pSh )
@@ -235,7 +235,7 @@ SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
 
 SwDrawModel* DocumentDrawModelManager::GetOrCreateDrawModel()
 {
-    return GetDrawModel() ? GetDrawModel() : _MakeDrawModel();
+    return GetDrawModel() ? GetDrawModel() : MakeDrawModel_();
 }
 
 SdrLayerID DocumentDrawModelManager::GetHeavenId() const

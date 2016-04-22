@@ -155,10 +155,10 @@ protected:
     void ScrolledInShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl );
 
-    virtual void _InvalidateContent( bool bVisibleDataFired );
+    virtual void InvalidateContent_( bool bVisibleDataFired );
 
-    virtual void _InvalidateCursorPos();
-    virtual void _InvalidateFocus();
+    virtual void InvalidateCursorPos_();
+    virtual void InvalidateFocus_();
 
 public:
     void SetMap(SwAccessibleMap *const pMap) { m_pMap = pMap; }

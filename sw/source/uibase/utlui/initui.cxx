@@ -146,12 +146,12 @@ std::vector<OUString>* pAuthFieldTypeList = nullptr;
 
 // Finish UI
 
-void _FinitUI()
+void FinitUI()
 {
     delete SwViewShell::GetShellRes();
     SwViewShell::SetShellRes( nullptr );
 
-    SwEditWin::_FinitStaticData();
+    SwEditWin::FinitStaticData();
 
     DELETEZ(pGlossaries);
 
@@ -166,11 +166,11 @@ void _FinitUI()
 
 // Initialise
 
-void _InitUI()
+void InitUI()
 {
     // ShellResource gives the CORE the possibility to work with resources.
     SwViewShell::SetShellRes( new ShellResource );
-    SwEditWin::_InitStaticData();
+    SwEditWin::InitStaticData();
 }
 
 ShellResource::ShellResource()
@@ -275,7 +275,7 @@ struct ImpAutoFormatNameListLoader : public Resource
     explicit ImpAutoFormatNameListLoader( std::vector<OUString>& rLst );
 };
 
-void ShellResource::_GetAutoFormatNameLst() const
+void ShellResource::GetAutoFormatNameLst_() const
 {
     assert(!pAutoFormatNameLst);
     pAutoFormatNameLst = new std::vector<OUString>;

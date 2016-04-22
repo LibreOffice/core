@@ -68,7 +68,7 @@ public:
     void               SetContour( const tools::PolyPolygon *pPoly,
                                    bool bAutomatic = false );
     const tools::PolyPolygon *HasContour() const;
-    bool               _HasContour() const { return pContour!=nullptr; };
+    bool               HasContour_() const { return pContour!=nullptr; };
     void               GetContour( tools::PolyPolygon &rPoly ) const;
     void               CreateContour();
 

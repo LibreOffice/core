@@ -592,7 +592,7 @@ bool SwFEShell::IsColRightToLeft() const
     return false;
 }
 
-sal_uInt16 SwFEShell::_GetCurColNum( const SwFrame *pFrame,
+sal_uInt16 SwFEShell::GetCurColNum_( const SwFrame *pFrame,
                                 SwGetCurColNumPara* pPara ) const
 {
     sal_uInt16 nRet = 0;
@@ -638,7 +638,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrame *pFrame,
 sal_uInt16 SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
 {
     OSL_ENSURE( GetCurrFrame(), "Cursor parked?" );
-    return _GetCurColNum( GetCurrFrame(), pPara );
+    return GetCurColNum_( GetCurrFrame(), pPara );
 }
 
 sal_uInt16 SwFEShell::GetCurOutColNum() const
@@ -652,7 +652,7 @@ sal_uInt16 SwFEShell::GetCurOutColNum() const
                                : static_cast<SwFrame*>(pFrame->FindSctFrame());
         OSL_ENSURE( pFrame, "No Tab, no Sect" );
         if( pFrame )
-            nRet = _GetCurColNum( pFrame, nullptr );
+            nRet = GetCurColNum_( pFrame, nullptr );
     }
     return nRet;
 }

@@ -618,7 +618,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
         const sal_Int32 nIdx = m_pPam->GetPoint()->nContent.GetIndex();
         for( auto i = m_aSetAttrTab.size(); i > 0; )
         {
-            _HTMLAttr *pAttr = m_aSetAttrTab[--i];
+            HTMLAttr *pAttr = m_aSetAttrTab[--i];
             if( pAttr->GetSttParaIdx() != nNodeIdx ||
                 pAttr->GetSttCnt() != nIdx )
                 break;

@@ -1258,7 +1258,7 @@ std::set<Color> SwDocShell::GetDocColors()
 
 void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
 {
-    _LoadStyles(rSource, false);
+    LoadStyles_(rSource, false);
 }
 
 // bPreserveCurrentDocument determines whether SetFixFields() is called
@@ -1266,7 +1266,7 @@ void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
 // is a document the user is working on.
 // Calls of ::LoadStyles() normally use files especially loaded for the purpose
 // of importing styles.
-void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocument )
+void SwDocShell::LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocument )
 {
 /*  [Description]
 

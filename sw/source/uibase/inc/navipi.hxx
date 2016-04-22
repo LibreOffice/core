@@ -93,9 +93,9 @@ class SwNavigationPI : public vcl::Window,
     bool    m_bPageCtrlsVisible : 1;
     bool    m_bGlobalMode : 1;
 
-    bool _IsZoomedIn() const {return m_bIsZoomedIn;}
-    void _ZoomOut();
-    void _ZoomIn();
+    bool IsZoomedIn() const {return m_bIsZoomedIn;}
+    void ZoomOut();
+    void ZoomIn();
 
     void FillBox();
     void MakeMark();

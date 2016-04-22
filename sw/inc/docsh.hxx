@@ -249,7 +249,7 @@ public:
 
     virtual void LoadStyles( SfxObjectShell& rSource ) override;
 
-    void _LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocument );
+    void LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocument );
 
     /// Show page style format dialog
     /// @param nSlot

@@ -292,7 +292,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE long          PhyPageUp();
     SAL_DLLPRIVATE long          PhyPageDown();
 
-    SAL_DLLPRIVATE void           _CreateScrollbar( bool bHori );
+    SAL_DLLPRIVATE void           CreateScrollbar( bool bHori );
     DECL_DLLPRIVATE_LINK_TYPED(  ScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK_TYPED(  EndScrollHdl, ScrollBar*, void );
     SAL_DLLPRIVATE bool          UpdateScrollbars();
@@ -319,13 +319,13 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // for readonly switching
     SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    SAL_DLLPRIVATE void          _CheckReadonlyState();
-    SAL_DLLPRIVATE void          _CheckReadonlySelection();
+    SAL_DLLPRIVATE void          CheckReadonlyState();
+    SAL_DLLPRIVATE void          CheckReadonlySelection();
 
     // method for rotating PageDesc
     SAL_DLLPRIVATE void          SwapPageMargin(const SwPageDesc&, SvxLRSpaceItem& rLR);
 
-    SAL_DLLPRIVATE void          _SetZoom( const Size &rEditSz,
+    SAL_DLLPRIVATE void          SetZoom_( const Size &rEditSz,
                               SvxZoomType eZoomType,
                               short nFactor = 100,
                               bool bViewOnly = false);

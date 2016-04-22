@@ -327,7 +327,7 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
     return pContext;
 }
 
-void SwXMLImport::_InitItemImport()
+void SwXMLImport::InitItemImport()
 {
     m_pTwipUnitConv = new SvXMLUnitConverter( GetComponentContext(),
             util::MeasureUnit::TWIP, util::MeasureUnit::TWIP );
@@ -340,7 +340,7 @@ void SwXMLImport::_InitItemImport()
     m_pTableItemMapper = new SwXMLImportTableItemMapper_Impl( m_xTableItemMap );
 }
 
-void SwXMLImport::_FinitItemImport()
+void SwXMLImport::FinitItemImport()
 {
     delete m_pTableItemMapper;
     delete m_pTwipUnitConv;

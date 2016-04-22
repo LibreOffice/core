@@ -322,7 +322,7 @@ SwDoc::SwDoc()
     // Set BodyFormat for columns
     mpColumnContFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
 
-    GetDocumentFieldsManager()._InitFieldTypes();
+    GetDocumentFieldsManager().InitFieldTypes();
 
     // Create a default OutlineNumRule (for Filters)
     mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),

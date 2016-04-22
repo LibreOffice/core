@@ -62,13 +62,13 @@ using namespace ::com::sun::star::frame;
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
 {
     bool const bCursorIsVisible(m_pWrtShell->IsCursorVisible());
-    _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
+    SetZoom_( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
     // fdo#40465 force the cursor to stay in view whilst zooming
     if (bCursorIsVisible)
         m_pWrtShell->ShowCursor();
 }
 
-void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
+void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
                         short nFactor, bool bViewOnly )
 {
     bool bUnLockView = !m_pWrtShell->IsViewLocked();
@@ -280,7 +280,7 @@ IMPL_LINK_TYPED( SwView, WindowChildEventListener, VclWindowEvent&, rEvent, void
     }
 }
 
-void SwView::_CreateScrollbar( bool bHori )
+void SwView::CreateScrollbar( bool bHori )
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;

@@ -1095,8 +1095,8 @@ class HTMLEndPosLst
 
     // Eine SttEndPos in die Start- und Ende-Listen eintragen bzw. aus
     // ihnen loeschen, wobei die Ende-Position bekannt ist
-    void _InsertItem( HTMLStartEndPos *pPos, HTMLStartEndPositions::size_type nEndPos );
-    void _RemoveItem( HTMLStartEndPositions::size_type nEndPos );
+    void InsertItem_( HTMLStartEndPos *pPos, HTMLStartEndPositions::size_type nEndPos );
+    void RemoveItem_( HTMLStartEndPositions::size_type nEndPos );
 
     // die "Art" es Attributs ermitteln
     HTMLOnOffState GetHTMLItemState( const SfxPoolItem& rItem );
@@ -1156,7 +1156,7 @@ public:
     bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
 
-void HTMLEndPosLst::_InsertItem( HTMLStartEndPos *pPos, HTMLStartEndPositions::size_type nEndPos )
+void HTMLEndPosLst::InsertItem_( HTMLStartEndPos *pPos, HTMLStartEndPositions::size_type nEndPos )
 {
     // In der Start-Liste das Attribut hinter allen vorher und an
     // der gleichen Position gestarteten Attributen einfuegen
@@ -1171,7 +1171,7 @@ void HTMLEndPosLst::_InsertItem( HTMLStartEndPos *pPos, HTMLStartEndPositions::s
     aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
 }
 
-void HTMLEndPosLst::_RemoveItem( HTMLStartEndPositions::size_type nEndPos )
+void HTMLEndPosLst::RemoveItem_( HTMLStartEndPositions::size_type nEndPos )
 {
     HTMLStartEndPos *pPos = aEndLst[nEndPos];
 
@@ -1476,7 +1476,7 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
             {
                 // das Test-Attribut endet, bevor das neue endet. Das
                 // neue Attribut muss deshalb aufgesplittet werden
-                _InsertItem( new HTMLStartEndPos( rItem, nStart, nTestEnd ), i );
+                InsertItem_( new HTMLStartEndPos( rItem, nStart, nTestEnd ), i );
                 nStart = nTestEnd;
             }
         }
@@ -1489,7 +1489,7 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
     }
 
     // ein Attribut muss noch eingefuegt werden
-    _InsertItem( new HTMLStartEndPos( rItem, nStart, nEnd ), i );
+    InsertItem_( new HTMLStartEndPos( rItem, nStart, nEnd ), i );
 }
 
 void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
@@ -1994,7 +1994,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             {
                 Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
             }
-            _RemoveItem( i );
+            RemoveItem_( i );
         }
         else if( nEnd > nPos )
         {

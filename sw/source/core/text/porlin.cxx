@@ -152,7 +152,7 @@ void SwLinePortion::CalcTextSize( const SwTextSizeInfo &rInf )
 }
 
 // Es werden alle nachfolgenden Portions geloescht.
-void SwLinePortion::_Truncate()
+void SwLinePortion::Truncate_()
 {
     SwLinePortion *pPos = pPortion;
     do

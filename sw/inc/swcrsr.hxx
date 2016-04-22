@@ -25,7 +25,7 @@
 #include <tblsel.hxx>
 #include <cshtyp.hxx>
 
-struct _SwCursor_SavePos;
+struct SwCursor_SavePos;
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions2;
@@ -69,7 +69,7 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
 {
     friend class SwCursorSaveState;
 
-    _SwCursor_SavePos* m_pSavePos;
+    SwCursor_SavePos* m_pSavePos;
     long m_nRowSpanOffset;        // required for travelling in tabs with rowspans
     sal_uInt8 m_nCursorBidiLevel; // bidi level of the cursor
     bool m_bColumnSelection;      // true: cursor is aprt of a column selection
@@ -81,11 +81,11 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
     SwCursor(SwCursor const& rPaM) = delete;
 
 protected:
-    _SwCursor_SavePos* CreateNewSavePos() const;
+    SwCursor_SavePos* CreateNewSavePos() const;
     void SaveState();
     void RestoreState();
 
-    const _SwCursor_SavePos* GetSavePos() const { return m_pSavePos; }
+    const SwCursor_SavePos* GetSavePos() const { return m_pSavePos; }
 
     virtual const SwContentFrame* DoSetBidiLevelLeftRight(
         bool & io_rbLeft, bool bVisualAllowed, bool bInsertCursor);
@@ -240,20 +240,20 @@ public:
 };
 
 // internal, used by SwCursor::SaveState() etc.
-struct _SwCursor_SavePos
+struct SwCursor_SavePos
 {
     sal_uLong nNode;
     sal_Int32 nContent;
-    _SwCursor_SavePos* pNext;
+    SwCursor_SavePos* pNext;
 
-    _SwCursor_SavePos( const SwCursor& rCursor )
+    SwCursor_SavePos( const SwCursor& rCursor )
         : nNode( rCursor.GetPoint()->nNode.GetIndex() ),
         nContent( rCursor.GetPoint()->nContent.GetIndex() ),
         pNext( nullptr )
     {}
-    virtual ~_SwCursor_SavePos() {}
+    virtual ~SwCursor_SavePos() {}
 
-    DECL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos )
+    DECL_FIXEDMEMPOOL_NEWDEL( SwCursor_SavePos )
 };
 
 class SwTableCursor : public virtual SwCursor

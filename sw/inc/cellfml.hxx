@@ -66,13 +66,13 @@ typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
                         void* pPara = nullptr ) const;
     void BoxNmsToRelNm( const SwTable&, OUString&, OUString&, OUString* = nullptr,
                         void* pPara = nullptr ) const;
-    void _MakeFormula( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void MakeFormula_( const SwTable&, OUString&, OUString&, OUString* = nullptr,
                         void* pPara = nullptr ) const;
-    void _GetFormulaBoxes( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void GetFormulaBoxes( const SwTable&, OUString&, OUString&, OUString* = nullptr,
                         void* pPara = nullptr ) const;
-    void _HasValidBoxes( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void HasValidBoxes_( const SwTable&, OUString&, OUString&, OUString* = nullptr,
                         void* pPara = nullptr ) const;
-    void _SplitMergeBoxNm( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void SplitMergeBoxNm_( const SwTable&, OUString&, OUString&, OUString* = nullptr,
                         void* pPara = nullptr ) const;
 
     static void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
@@ -99,7 +99,7 @@ protected:
 
     OUString MakeFormula( SwTableCalcPara& rCalcPara ) const
     {
-        return ScanString( &SwTableFormula::_MakeFormula,
+        return ScanString( &SwTableFormula::MakeFormula_,
                             *rCalcPara.pTable, &rCalcPara );
     }
 

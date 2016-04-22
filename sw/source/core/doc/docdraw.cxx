@@ -178,7 +178,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
     _pFrameFormat->PosAttrSet();
     // #i34750# - keep current object rectangle for  drawing
     // objects. The object rectangle is used on events from the drawing layer
-    // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
+    // to adjust the positioning attributes - see <SwDrawContact::Changed_(..)>.
     {
         const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( &_rSdrObj );
         if ( dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) !=  nullptr )
@@ -478,7 +478,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
     return bCallBase;
 }
 
-_ZSortFly::_ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAn,
+ZSortFly::ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAn,
                       sal_uInt32 nArrOrdNum )
     : pFormat( pFrameFormat ), pAnchor( pFlyAn ), nOrdNum( nArrOrdNum )
 {

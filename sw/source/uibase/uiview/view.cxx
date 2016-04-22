@@ -471,10 +471,10 @@ IMPL_LINK_NOARG_TYPED(SwView, AttrChangedNotify, SwCursorShell*, void)
     //Opt: Not if PaintLocked. During unlock a notify will be once more triggered.
     if( !m_pWrtShell->IsPaintLocked() && !g_bNoInterrupt &&
         GetDocShell()->IsReadOnly() )
-        _CheckReadonlyState();
+        CheckReadonlyState();
 
     if( !m_pWrtShell->IsPaintLocked() && !g_bNoInterrupt )
-        _CheckReadonlySelection();
+        CheckReadonlySelection();
 
     if( !m_bAttrChgNotified )
     {
@@ -523,8 +523,8 @@ IMPL_LINK_NOARG_TYPED(SwView, TimeoutHdl, Timer *, void)
         m_bAttrChgNotifiedWithRegistrations = false;
     }
 
-    _CheckReadonlyState();
-    _CheckReadonlySelection();
+    CheckReadonlyState();
+    CheckReadonlySelection();
 
     bool bOldUndo = m_pWrtShell->DoesUndo();
     m_pWrtShell->DoUndo( false );
@@ -534,7 +534,7 @@ IMPL_LINK_NOARG_TYPED(SwView, TimeoutHdl, Timer *, void)
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 }
 
-void SwView::_CheckReadonlyState()
+void SwView::CheckReadonlyState()
 {
     SfxDispatcher &rDis = GetDispatcher();
     // To be able to recognize if it is already disabled!
@@ -622,7 +622,7 @@ void SwView::_CheckReadonlyState()
         GetViewFrame()->GetBindings().InvalidateAll(true);
 }
 
-void SwView::_CheckReadonlySelection()
+void SwView::CheckReadonlySelection()
 {
     sal_uInt32 nDisableFlags = 0;
     SfxDispatcher &rDis = GetDispatcher();
@@ -734,8 +734,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     m_bShowAtResize = m_bDrawSelMode = bDocSzUpdated = true;
 
-    _CreateScrollbar( true );
-    _CreateScrollbar( false );
+    CreateScrollbar( true );
+    CreateScrollbar( false );
 
     m_pViewImpl = new SwView_Impl(this);
     SetName("View");

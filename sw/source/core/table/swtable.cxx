@@ -156,7 +156,7 @@ static OUString& lcl_DelTabsAtSttEnd( OUString& rText )
     return rText;
 }
 
-void _InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
+void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
                         SwTableLine* pLine, SwTableBoxFormat* pBoxFrameFormat,
                         SwTableBox* pBox,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt )
@@ -987,7 +987,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
         SwTwips nSize = GetFrameFormat()->GetFrameSize().GetWidth();
         for (size_t n = 0; n < m_aLines.size(); ++n)
         {
-            _CheckBoxWidth( *m_aLines[ n ], nSize );
+            CheckBoxWidth( *m_aLines[ n ], nSize );
         }
     }
 #endif
@@ -1298,7 +1298,7 @@ static bool lcl_IsValidRowName( const OUString& rStr )
 
 // #i80314#
 // add 3rd parameter and its handling
-sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, bool bFirstPart,
+sal_uInt16 SwTable::GetBoxNum( OUString& rStr, bool bFirstPart,
                             const bool bPerformValidCheck )
 {
     sal_uInt16 nRet = 0;
@@ -1362,7 +1362,7 @@ const SwTableBox* SwTable::GetTableBox( const OUString& rName,
     OUString aNm( rName );
     while( !aNm.isEmpty() )
     {
-        nBox = SwTable::_GetBoxNum( aNm, nullptr == pBox, bPerformValidCheck );
+        nBox = SwTable::GetBoxNum( aNm, nullptr == pBox, bPerformValidCheck );
         // first box ?
         if( !pBox )
             pLines = &GetTabLines();
@@ -1373,7 +1373,7 @@ const SwTableBox* SwTable::GetTableBox( const OUString& rName,
                 --nBox;
         }
 
-        nLine = SwTable::_GetBoxNum( aNm, false, bPerformValidCheck );
+        nLine = SwTable::GetBoxNum( aNm, false, bPerformValidCheck );
 
         // determine line
         if( !nLine || nLine > pLines->size() )
@@ -1535,7 +1535,7 @@ void SwTableLine::ChgFrameFormat( SwTableLineFormat *pNewFormat )
             pRow->RegisterToFormat( *pNewFormat );
 
             pRow->InvalidateSize();
-            pRow->_InvalidatePrt();
+            pRow->InvalidatePrt_();
             pRow->SetCompletePaint();
             pRow->ReinitializeFrameSizeAttrFlags();
 
@@ -1770,7 +1770,7 @@ void SwTableBox::ChgFrameFormat( SwTableBoxFormat* pNewFormat )
         {
             pCell->RegisterToFormat( *pNewFormat );
             pCell->InvalidateSize();
-            pCell->_InvalidatePrt();
+            pCell->InvalidatePrt_();
             pCell->SetCompletePaint();
             pCell->SetDerivedVert( false );
             pCell->CheckDirChange();
@@ -1783,8 +1783,8 @@ void SwTableBox::ChgFrameFormat( SwTableBoxFormat* pNewFormat )
             if ( pTab && pTab->IsCollapsingBorders() )
             {
                 SwFrame* pRow = pCell->GetUpper();
-                pRow->_InvalidateSize();
-                pRow->_InvalidatePrt();
+                pRow->InvalidateSize_();
+                pRow->InvalidatePrt_();
             }
         }
     }

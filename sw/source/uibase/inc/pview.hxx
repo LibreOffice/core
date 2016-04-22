@@ -193,7 +193,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE void Init();
     SAL_DLLPRIVATE Point AlignToPixel(const Point& rPt) const;
 
-    SAL_DLLPRIVATE void _CreateScrollbar( bool bHori);
+    SAL_DLLPRIVATE void CreateScrollbar( bool bHori);
     DECL_DLLPRIVATE_LINK_TYPED(ScrollHdl, ScrollBar*, void);
     DECL_DLLPRIVATE_LINK_TYPED(EndScrollHdl, ScrollBar*, void);
     SAL_DLLPRIVATE bool ChgPage( int eMvMode, bool bUpdateScrollbar = true );
@@ -214,7 +214,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
         @param _pReq
         optional input parameter - pointer to the <SfxRequest> instance, if existing.
     */
-    SAL_DLLPRIVATE void _ExecPgUpAndPgDown( const bool  _bPgUp,
+    SAL_DLLPRIVATE void ExecPgUpAndPgDown( const bool  _bPgUp,
                              SfxRequest* _pReq = nullptr );
 
 protected:

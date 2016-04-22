@@ -615,7 +615,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
 // Notice: the smaller line will be manipulated, normally it's the ruby line,
 // but it could be the main text, too.
 // If there is a tabulator in smaller line, no adjustment is possible.
-void SwRubyPortion::_Adjust( SwTextFormatInfo &rInf )
+void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
 {
     SwTwips nLineDiff = GetRoot().Width() - GetRoot().GetNext()->Width();
     sal_Int32 nOldIdx = rInf.GetIdx();
@@ -1620,7 +1620,7 @@ static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTextFormatInfo& 
 
 // Manages the formatting of a SwMultiPortion. External, for the calling
 // function, it seems to be a normal Format-function, internal it is like a
-// SwTextFrame::_Format with multiple BuildPortions
+// SwTextFrame::Format_ with multiple BuildPortions
 bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     SwMultiPortion& rMulti )
 {
@@ -1867,7 +1867,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
             if ( nActWidth == nMaxWidth && rInf.GetLineStart() == rInf.GetIdx() )
             // we have too less space, we must allow break cuts
-            // ( the first multi flag is considered during TextPortion::_Format() )
+            // ( the first multi flag is considered during TextPortion::Format_() )
                 bFirstMulti = false;
             if( nActWidth <= nMinWidth )
                 break;

@@ -1926,7 +1926,7 @@ SwTwips SwTextFormatter::CalcBottomLine() const
 }
 
 // FME/OD: This routine does a limited text formatting.
-SwTwips SwTextFormatter::_CalcFitToContent()
+SwTwips SwTextFormatter::CalcFitToContent_()
 {
     FormatReset( GetInfo() );
     BuildPortions( GetInfo() );
@@ -2210,7 +2210,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
             {
                 if( aInter.IsOver( aLine ) )
                 {
-                    aInter._Intersection( aLine );
+                    aInter.Intersection_( aLine );
                     if( aInter.HasArea() )
                     {
                         // To be evaluated during reformat of this line:
@@ -2233,7 +2233,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
                 }
                 else
                 {
-                    aInter._Intersection( aLine );
+                    aInter.Intersection_( aLine );
 
                     // No area means a fly has become invalid because of
                     // lowering the line => reformat the line

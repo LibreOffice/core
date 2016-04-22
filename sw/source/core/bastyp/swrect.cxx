@@ -80,7 +80,7 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
     return *this;
 }
 
-SwRect& SwRect::_Intersection( const SwRect& rRect )
+SwRect& SwRect::Intersection_( const SwRect& rRect )
 {
     // get smaller right and lower, and greater left and upper edge
     if ( Left() < rRect.Left() )
@@ -150,19 +150,19 @@ void SwRect::Justify()
 }
 
 // Similar to the inline methods, but we need the function pointers
-void SwRect::_Width( const long nNew ) { m_Size.setWidth(nNew); }
-void SwRect::_Height( const long nNew ) { m_Size.setHeight(nNew); }
-void SwRect::_Left( const long nLeft ){ m_Size.Width() += m_Point.getX() - nLeft; m_Point.setX(nLeft); }
-void SwRect::_Right( const long nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
-void SwRect::_Top( const long nTop ){ m_Size.Height() += m_Point.getY() - nTop; m_Point.setY(nTop); }
-void SwRect::_Bottom( const long nBottom ){ m_Size.setHeight(nBottom - m_Point.getY()); }
+void SwRect::Width_( const long nNew ) { m_Size.setWidth(nNew); }
+void SwRect::Height_( const long nNew ) { m_Size.setHeight(nNew); }
+void SwRect::Left_( const long nLeft ){ m_Size.Width() += m_Point.getX() - nLeft; m_Point.setX(nLeft); }
+void SwRect::Rigth_( const long nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
+void SwRect::Top_( const long nTop ){ m_Size.Height() += m_Point.getY() - nTop; m_Point.setY(nTop); }
+void SwRect::Bottom_( const long nBottom ){ m_Size.setHeight(nBottom - m_Point.getY()); }
 
-long SwRect::_Width() const{ return m_Size.getWidth(); }
-long SwRect::_Height() const{ return m_Size.getHeight(); }
-long SwRect::_Left() const{ return m_Point.getX(); }
-long SwRect::_Right() const{ return m_Point.getX() + m_Size.getWidth(); }
-long SwRect::_Top() const{ return m_Point.getY(); }
-long SwRect::_Bottom() const{ return m_Point.getY() + m_Size.getHeight(); }
+long SwRect::Width_() const{ return m_Size.getWidth(); }
+long SwRect::Height_() const{ return m_Size.getHeight(); }
+long SwRect::Left_() const{ return m_Point.getX(); }
+long SwRect::Rigth_() const{ return m_Point.getX() + m_Size.getWidth(); }
+long SwRect::Top_() const{ return m_Point.getY(); }
+long SwRect::Bottom_() const{ return m_Point.getY() + m_Size.getHeight(); }
 
 void SwRect::AddWidth( const long nAdd ) { m_Size.Width() += nAdd; }
 void SwRect::AddHeight( const long nAdd ) { m_Size.Height() += nAdd; }

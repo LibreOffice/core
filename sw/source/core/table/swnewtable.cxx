@@ -596,7 +596,7 @@ static void lcl_InvalidateCellFrame( const SwTableBox& rBox )
             pCell->InvalidateSize();
             SwFrame* pLower = pCell->GetLower();
             if( pLower )
-                pLower->_InvalidateSize();
+                pLower->InvalidateSize_();
         }
     }
 }
@@ -685,7 +685,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         AdjustWidths( static_cast< long >(nTableWidth), static_cast< long >(nTableWidth - nAddWidth) );
     }
 
-    _FndBox aFndBox( nullptr, nullptr );
+    FndBox_ aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrames( *this );
 
@@ -703,7 +703,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         if( bBehind )
             ++nInsPos;
         SwTableBoxFormat* pBoxFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
-        ::_InsTableBox( pDoc, pTableNd, pLine, pBoxFrameFormat, pBox, nInsPos, nCnt );
+        ::InsTableBox( pDoc, pTableNd, pLine, pBoxFrameFormat, pBox, nInsPos, nCnt );
         long nRowSpan = pBox->getRowSpan();
         long nDiff = i - nLastLine;
         bool bNewSpan = false;
@@ -921,7 +921,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     {
         // A row containing overlapped cells is superfluous,
         // these cells can be put into rBoxes for deletion
-        _FindSuperfluousRows( rBoxes, pFirstLn, pLastLn );
+        FindSuperfluousRows_( rBoxes, pFirstLn, pLastLn );
         // pNewFormat will be set to the new master box and the overlapped cells
         SwFrameFormat* pNewFormat = pMergeBox->ClaimFrameFormat();
         pNewFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, pSel->mnMergeWidth, 0 ) );
@@ -961,11 +961,11 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     return bMerge;
 }
 
-/** SwTable::_FindSuperfluousRows(..) is looking for superfluous rows, i.e. rows
+/** SwTable::FindSuperfluousRows_(..) is looking for superfluous rows, i.e. rows
     containing overlapped cells only.
 */
 
-void SwTable::_FindSuperfluousRows( SwSelBoxes& rBoxes,
+void SwTable::FindSuperfluousRows_( SwSelBoxes& rBoxes,
     SwTableLine* pFirstLn, SwTableLine* pLastLn )
 {
     if( !pFirstLn || !pLastLn )
@@ -1166,7 +1166,7 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
         aFSz.SetHeight( nNewHeight );
         pFrameFormat->SetFormatAttr( aFSz );
     }
-    _InsertRow( pDoc, aBoxes, nCnt, true );
+    InsertRow_( pDoc, aBoxes, nCnt, true );
     const size_t nBoxCount = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
@@ -1399,7 +1399,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 {
     CHECK_TABLE( *this )
     ++nCnt;
-    _FndBox aFndBox( nullptr, nullptr );
+    FndBox_ aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( rBoxes, *this );
 
     if( bSameHeight && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
@@ -1490,7 +1490,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         sal_uInt16 nRowIdx = lcl_LineIndex( *this, rBoxes, bBehind );
         if( nRowIdx < USHRT_MAX )
         {
-            _FndBox aFndBox( nullptr, nullptr );
+            FndBox_ aFndBox( nullptr, nullptr );
             aFndBox.SetTableLines( rBoxes, *this );
             aFndBox.DelFrames( *this );
 
@@ -1498,7 +1498,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             SwTableLine *pLine = GetTabLines()[ nRowIdx ];
             SwSelBoxes aLineBoxes;
             lcl_FillSelBoxes( aLineBoxes, *pLine );
-            _InsertRow( pDoc, aLineBoxes, nCnt, bBehind );
+            InsertRow_( pDoc, aLineBoxes, nCnt, bBehind );
             const size_t nBoxCount = pLine->GetTabBoxes().size();
             sal_uInt16 nOfs = bBehind ? 0 : 1;
             for( sal_uInt16 n = 0; n < nCnt; ++n )
@@ -1534,7 +1534,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         CHECK_TABLE( *this )
     }
     else
-        bRet = _InsertRow( pDoc, rBoxes, nCnt, bBehind );
+        bRet = InsertRow_( pDoc, rBoxes, nCnt, bBehind );
     return bRet;
 }
 

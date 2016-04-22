@@ -41,8 +41,8 @@ protected:
     bool GetSelectedState( );
     SwPaM* GetCursor();
 
-    virtual void _InvalidateCursorPos() override;
-    virtual void _InvalidateFocus() override;
+    virtual void InvalidateCursorPos_() override;
+    virtual void InvalidateFocus_() override;
 
     virtual ~SwAccessibleFrameBase();
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;

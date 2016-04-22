@@ -449,8 +449,8 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
             pStart->GetPrev()->mpNext = pStart;
         else
             pParent->m_pLower = pStart;
-        pSibling->_InvalidatePos();
-        pSibling->_InvalidatePrt();
+        pSibling->InvalidatePos_();
+        pSibling->InvalidatePrt_();
     }
     else
     {
@@ -497,7 +497,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
     SwTwips nGrowVal = 0;
     do
     {   pFloat->mpUpper = pParent;
-        pFloat->_InvalidateAll();
+        pFloat->InvalidateAll_();
         pFloat->CheckDirChange();
 
         // I'm a friend of the TextFrame and thus am allowed to do many things.
@@ -564,7 +564,7 @@ void SwFlowFrame::MoveSubTree( SwLayoutFrame* pParent, SwFrame* pSibling )
             // invalidate printing area of previous frame, if it's in a table
             if ( pPre->GetUpper()->IsInTab() )
             {
-                pPre->_InvalidatePrt();
+                pPre->InvalidatePrt_();
             }
             pPre->InvalidatePage();
         }
@@ -629,7 +629,7 @@ void SwFlowFrame::MoveSubTree( SwLayoutFrame* pParent, SwFrame* pSibling )
         else if ( pSh && pSh->GetDoc()->GetLineNumberInfo().IsRestartEachPage()
                   && pPage->FindFirstBodyContent() == &m_rThis )
         {
-            m_rThis._InvalidateLineNum();
+            m_rThis.InvalidateLineNum_();
         }
     }
     if ( bInvaLay || (pSibling && pSibling->IsLayoutFrame()) )
@@ -1238,7 +1238,7 @@ bool SwFlowFrame::HasParaSpaceAtPages( bool bSct ) const
 
     OD 2004-03-10 #i11860#
 */
-const SwFrame* SwFlowFrame::_GetPrevFrameForUpperSpaceCalc( const SwFrame* _pProposedPrevFrame ) const
+const SwFrame* SwFlowFrame::GetPrevFrameForUpperSpaceCalc_( const SwFrame* _pProposedPrevFrame ) const
 {
     const SwFrame* pPrevFrame = _pProposedPrevFrame
                             ? _pProposedPrevFrame
@@ -1347,7 +1347,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    const bool _bConsiderGrid ) const
 {
     // OD 2004-03-10 #i11860# - use new method <GetPrevFrameForUpperSpaceCalc(..)>
-    const SwFrame* pPrevFrame = _GetPrevFrameForUpperSpaceCalc( pPr );
+    const SwFrame* pPrevFrame = GetPrevFrameForUpperSpaceCalc_( pPr );
 
     std::unique_ptr<SwBorderAttrAccess> pAccess;
     SwFrame* pOwn;
@@ -1495,7 +1495,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     //consider grid in square page mode
     if ( _bConsiderGrid && m_rThis.GetUpper()->GetFormat()->GetDoc()->IsSquaredPageMode() )
     {
-        nUpper += _GetUpperSpaceAmountConsideredForPageGrid( nUpper );
+        nUpper += GetUpperSpaceAmountConsideredForPageGrid_( nUpper );
     }
 
     const bool bContextualSpacing = pAttrs->GetULSpace().GetContext();
@@ -1515,7 +1515,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     OD 2004-03-12 #i11860#
     Precondition: Position of frame is valid.
 */
-SwTwips SwFlowFrame::_GetUpperSpaceAmountConsideredForPageGrid(
+SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
                             const SwTwips _nUpperSpaceWithoutGrid ) const
 {
     SwTwips nUpperSpaceAmountConsideredForPageGrid = 0;
@@ -1569,11 +1569,11 @@ SwTwips SwFlowFrame::_GetUpperSpaceAmountConsideredForPageGrid(
 
     OD 2004-03-11 #i11860#
 */
-SwTwips SwFlowFrame::_GetUpperSpaceAmountConsideredForPrevFrame() const
+SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrame() const
 {
     SwTwips nUpperSpaceAmountOfPrevFrame = 0;
 
-    const SwFrame* pPrevFrame = _GetPrevFrameForUpperSpaceCalc();
+    const SwFrame* pPrevFrame = GetPrevFrameForUpperSpaceCalc_();
     if ( pPrevFrame )
     {
         SwTwips nPrevLowerSpace = 0;
@@ -1612,9 +1612,9 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid() cons
     if ( !m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
     {
         nUpperSpaceAmountConsideredForPrevFrameAndPageGrid =
-            _GetUpperSpaceAmountConsideredForPrevFrame() +
+            GetUpperSpaceAmountConsideredForPrevFrame() +
             ( m_rThis.GetUpper()->GetFormat()->GetDoc()->IsSquaredPageMode()
-              ? _GetUpperSpaceAmountConsideredForPageGrid( CalcUpperSpace( nullptr, nullptr, false ) )
+              ? GetUpperSpaceAmountConsideredForPageGrid_( CalcUpperSpace( nullptr, nullptr, false ) )
               : 0 );
     }
 

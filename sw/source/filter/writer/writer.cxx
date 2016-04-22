@@ -385,7 +385,7 @@ void Writer::PutNumFormatFontsInAttrPool()
                     else if( *pFont == *pDefFont )
                         bCheck = true;
 
-                    _AddFontItem( rPool, SvxFontItem( pFont->GetFamilyType(),
+                    AddFontItem( rPool, SvxFontItem( pFont->GetFamilyType(),
                                 pFont->GetFamilyName(), pFont->GetStyleName(),
                                 pFont->GetPitch(), pFont->GetCharSet(), RES_CHRATR_FONT ));
                 }
@@ -396,30 +396,30 @@ void Writer::PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL )
     SfxItemPool& rPool = pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )
     {
-        _AddFontItems( rPool, EE_CHAR_FONTINFO );
+        AddFontItems_( rPool, EE_CHAR_FONTINFO );
         if( bIncl_CJK_CTL )
         {
-            _AddFontItems( rPool, EE_CHAR_FONTINFO_CJK );
-            _AddFontItems( rPool, EE_CHAR_FONTINFO_CTL );
+            AddFontItems_( rPool, EE_CHAR_FONTINFO_CJK );
+            AddFontItems_( rPool, EE_CHAR_FONTINFO_CTL );
         }
     }
 }
 
-void Writer::_AddFontItems( SfxItemPool& rPool, sal_uInt16 nW )
+void Writer::AddFontItems_( SfxItemPool& rPool, sal_uInt16 nW )
 {
     const SvxFontItem* pFont = static_cast<const SvxFontItem*>(&rPool.GetDefaultItem( nW ));
-    _AddFontItem( rPool, *pFont );
+    AddFontItem( rPool, *pFont );
 
     if( nullptr != ( pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ))) )
-        _AddFontItem( rPool, *pFont );
+        AddFontItem( rPool, *pFont );
 
     sal_uInt32 nMaxItem = rPool.GetItemCount2( nW );
     for( sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet )
         if( nullptr != (pFont = static_cast<const SvxFontItem*>(rPool.GetItem2( nW, nGet ))) )
-            _AddFontItem( rPool, *pFont );
+            AddFontItem( rPool, *pFont );
 }
 
-void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
+void Writer::AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
 {
     const SvxFontItem* pItem;
     if( RES_CHRATR_FONT != rFont.Which() )

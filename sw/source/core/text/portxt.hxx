@@ -30,7 +30,7 @@ class SwTextPortion : public SwLinePortion
 {
     void BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess );
     void BreakUnderflow( SwTextFormatInfo &rInf );
-    bool _Format( SwTextFormatInfo &rInf );
+    bool Format_( SwTextFormatInfo &rInf );
 
 public:
     inline SwTextPortion(){ SetWhichPor( POR_TXT ); }

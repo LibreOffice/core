@@ -180,17 +180,17 @@ public:
 
 class Hash
 {
-    struct _HashData
+    struct HashData
     {
         sal_uLong nNext, nHash;
         const SwCompareLine* pLine;
 
-        _HashData()
+        HashData()
             : nNext( 0 ), nHash( 0 ), pLine(nullptr) {}
     };
 
     sal_uLong* pHashArr;
-    _HashData* pDataArr;
+    HashData* pDataArr;
     sal_uLong nCount, nPrime;
 
 public:
@@ -528,7 +528,7 @@ static const sal_uLong primes[] =
 };
     int i;
 
-    pDataArr = new _HashData[ nSize ];
+    pDataArr = new HashData[ nSize ];
     pDataArr[0].nNext = 0;
     pDataArr[0].nHash = 0;
     pDataArr[0].pLine = nullptr;

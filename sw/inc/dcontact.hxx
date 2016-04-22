@@ -95,7 +95,7 @@ class SwContact : public SdrObjUserCall, public SwClient
         input parameter, which will be changed - drawing object, which will
         change its layer.
     */
-    void _MoveObjToLayer( const bool _bToVisible,
+    void MoveObjToLayer( const bool _bToVisible,
                           SdrObject* _pDrawObj );
 
 protected:
@@ -122,7 +122,7 @@ public:
 
     /** method to move drawing object to corresponding visible layer
 
-        uses method <_MoveObjToLayer(..)>
+        uses method <MoveObjToLayer(..)>
 
         @author OD
 
@@ -133,7 +133,7 @@ public:
 
     /** method to move drawing object to corresponding invisible layer
 
-        uses method <_MoveObjToLayer(..)>
+        uses method <MoveObjToLayer(..)>
 
         @author OD
 
@@ -334,7 +334,7 @@ class SwDrawContact : public SwContact
         bool mbDisconnectInProgress : 1;
 
         /** Needed data for handling of nested <SdrObjUserCall> events in
-         method <_Changed(..)> */
+         method <Changed_(..)> */
         bool mbUserCallActive : 1;
         /** event type, which is handled for <mpSdrObjHandledByCurrentUserCall>.
          Note: value only valid, if <mbUserCallActive> is true. */
@@ -375,7 +375,7 @@ class SwDrawContact : public SwContact
         static void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
         void RemoveAllVirtObjs();
 
-        void _InvalidateObjs( const bool _bUpdateSortedObjsList = false );
+        void InvalidateObjs_( const bool _bUpdateSortedObjsList = false );
 
         SwDrawContact( const SwDrawContact& ) = delete;
         SwDrawContact& operator=( const SwDrawContact& ) = delete;
@@ -443,7 +443,7 @@ class SwDrawContact : public SwContact
 
         /** Used by Changed() and by UndoDraw.
          Notifies paragraphs that have to get out of the way. */
-        void _Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle* pOldBoundRect);
+        void Changed_(const SdrObject& rObj, SdrUserCallType eType, const Rectangle* pOldBoundRect);
 
         /// Moves all SW-connections to new Master)
         void ChangeMasterObject( SdrObject *pNewMaster );

@@ -154,9 +154,9 @@ private:
     bool NewSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
     SwBoxSelection* CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
-    bool _InsertRow( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
+    bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
     bool NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool );
-    void _FindSuperfluousRows( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
+    void FindSuperfluousRows_( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const long nOld, const long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
                         const SwTableBox *pStart, bool bCurRowOnly );
@@ -183,7 +183,7 @@ public:
     void SetTableStyleName(const OUString& rName) { maTableStyleName = rName; }
 
     sal_uInt16 GetRowsToRepeat() const { return std::min( (sal_uInt16)GetTabLines().size(), m_nRowsToRepeat ); }
-    sal_uInt16 _GetRowsToRepeat() const { return m_nRowsToRepeat; }
+    sal_uInt16 GetRowsToRepeat_() const { return m_nRowsToRepeat; }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { m_nRowsToRepeat = nNumOfRows; }
 
     bool IsHeadline( const SwTableLine& rLine ) const;
@@ -252,7 +252,7 @@ public:
     bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
-        { _FindSuperfluousRows( rBoxes, nullptr, nullptr ); }
+        { FindSuperfluousRows_( rBoxes, nullptr, nullptr ); }
     void CheckRowSpan( SwTableLine* &rpLine, bool bUp ) const;
 
           SwTableSortBoxes& GetTabSortBoxes()       { return m_TabSortContentBoxes; }
@@ -262,7 +262,7 @@ public:
 
     // #i80314#
     // add 3rd parameter in order to control validation check on <rStr>
-    static sal_uInt16 _GetBoxNum( OUString& rStr,
+    static sal_uInt16 GetBoxNum( OUString& rStr,
                               bool bFirst = false,
                               const bool bPerformValidCheck = false );
 
@@ -270,7 +270,7 @@ public:
 
     // #i80314#
     // add 2nd parameter in order to control validation check in called method
-    // <_GetBoxNum(..)>
+    // <GetBoxNum(..)>
     const SwTableBox* GetTableBox( const OUString& rName,
                                  const bool bPerformValidCheck = false ) const;
     // Copy selected boxes to another document.

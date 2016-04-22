@@ -137,7 +137,7 @@ protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     // #i28701#
-    virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const override;
+    virtual bool InvalidationAllowed( const InvalidationType _nInvalid ) const override;
 
     /** method to assure that anchored object is registered at the correct
         page frame
@@ -215,7 +215,7 @@ public:
 
     // invalidate anchor frame on invalidation of the position, because the
     // position is calculated during the format of the anchor frame
-    virtual void _ActionOnInvalidation( const InvalidationType _nInvalid ) override;
+    virtual void ActionOnInvalidation( const InvalidationType _nInvalid ) override;
 };
 
 inline void SwFlyInContentFrame::InvalidateLayout() const

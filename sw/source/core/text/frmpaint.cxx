@@ -220,7 +220,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     bool bPaint = true;
     if( !IsClipChg() )
     {
-        Size aSize = pTmpFnt->_GetTextSize( aDrawInf );
+        Size aSize = pTmpFnt->GetTextSize_( aDrawInf );
         if( bGoLeft )
             aTmpPos.X() -= aSize.Width();
         // calculate rectangle containing the line number
@@ -236,10 +236,10 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
         }
     }
     else if( bGoLeft )
-        aTmpPos.X() -= pTmpFnt->_GetTextSize( aDrawInf ).Width();
+        aTmpPos.X() -= pTmpFnt->GetTextSize_( aDrawInf ).Width();
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
-        pTmpFnt->_DrawText( aDrawInf );
+        pTmpFnt->DrawText_( aDrawInf );
 
     if( bTooBig )
         delete pTmpFnt;
@@ -560,7 +560,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aDrawInf.SetSnapToGrid( false );
 
                     pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
-                    pFnt->_DrawText( aDrawInf );
+                    pFnt->DrawText_( aDrawInf );
                 }
                 delete pClip;
             }

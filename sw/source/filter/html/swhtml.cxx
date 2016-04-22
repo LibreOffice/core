@@ -308,7 +308,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
 
     rCursor.DeleteMark();
     m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwIndexReg assert
-    memset( &m_aAttrTab, 0, sizeof( _HTMLAttrTable ));
+    memset( &m_aAttrTab, 0, sizeof( HTMLAttrTable ));
 
     // Die Font-Groessen 1-7 aus der INI-Datei lesen
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
@@ -447,7 +447,7 @@ SwHTMLParser::~SwHTMLParser()
     if( !m_aSetAttrTab.empty() )
     {
         OSL_ENSURE( m_aSetAttrTab.empty(),"Es stehen noch Attribute auf dem Stack" );
-        for ( _HTMLAttrs::const_iterator it = m_aSetAttrTab.begin();
+        for ( HTMLAttrs::const_iterator it = m_aSetAttrTab.begin();
               it != m_aSetAttrTab.end(); ++it )
             delete *it;
         m_aSetAttrTab.clear();
@@ -667,7 +667,7 @@ void SwHTMLParser::Continue( int nToken )
             m_nContextStMin = 0;
             while( m_aContexts.size() )
             {
-                _HTMLAttrContext *pCntxt = PopContext();
+                HTMLAttrContext *pCntxt = PopContext();
                 if( pCntxt )
                 {
                     EndContext( pCntxt );
@@ -2043,7 +2043,7 @@ void SwHTMLParser::NextToken( int nToken )
         m_aParaAttrs.clear();
 }
 
-static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
+static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
                                  bool& rScriptDependent, bool& rFont,
                                  sal_uInt16& rScriptType )
 {
@@ -2142,17 +2142,17 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     const sal_Int32 nEndCnt = aOldPos.nContent.GetIndex();
     const SwPosition& rPos = *m_pPam->GetPoint();
 
-    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&m_aAttrTab);
-    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
-        _HTMLAttr *pAttr = *pHTMLAttributes;
+        HTMLAttr *pAttr = *pHTMLAttributes;
         if( pAttr && pAttr->GetItem().Which() < RES_PARATR_BEGIN )
         {
             bool bWholePara = false;
 
             while( pAttr )
             {
-                _HTMLAttr *pNext = pAttr->GetNext();
+                HTMLAttr *pNext = pAttr->GetNext();
                 if( pAttr->GetSttParaIdx() < rEndIdx.GetIndex() ||
                     (!bWholePara &&
                      pAttr->GetSttPara() == rEndIdx &&
@@ -2186,7 +2186,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                             {
                                 if( nScriptItem == nScriptText )
                                 {
-                                    _HTMLAttr *pSetAttr =
+                                    HTMLAttr *pSetAttr =
                                         pAttr->Clone( rEndIdx, nScriptEnd );
                                     pSetAttr->nSttContent = nStt;
                                     pSetAttr->ClearPrev();
@@ -2211,7 +2211,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                     }
                     if( bInsert )
                     {
-                        _HTMLAttr *pSetAttr =
+                        HTMLAttr *pSetAttr =
                             pAttr->Clone( rEndIdx, nEndCnt );
                         pSetAttr->nSttContent = nStt;
 
@@ -2233,7 +2233,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                     }
                     else
                     {
-                        _HTMLAttr *pPrev = pAttr->GetPrev();
+                        HTMLAttr *pPrev = pAttr->GetPrev();
                         if( pPrev )
                         {
                             // Die Previous-Attribute muessen trotzdem gesetzt werden.
@@ -2646,16 +2646,16 @@ SwViewShell *SwHTMLParser::CheckActionViewShell()
     return m_pActionViewShell;
 }
 
-void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
-                             _HTMLAttrs *pPostIts )
+void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
+                             HTMLAttrs *pPostIts )
 {
     SwPaM* pAttrPam = new SwPaM( *m_pPam->GetPoint() );
     const SwNodeIndex& rEndIdx = m_pPam->GetPoint()->nNode;
     const sal_Int32 nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
-    _HTMLAttr* pAttr;
+    HTMLAttr* pAttr;
     SwContentNode* pCNd;
 
-    _HTMLAttrs aFields;
+    HTMLAttrs aFields;
 
     for( auto n = m_aSetAttrTab.size(); n; )
     {
@@ -2711,7 +2711,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
 
             while( pAttr )
             {
-                _HTMLAttr *pPrev = pAttr->GetPrev();
+                HTMLAttr *pPrev = pAttr->GetPrev();
                 if( !pAttr->bValid )
                 {
                     // ungueltige Attribute koennen gloescht werden
@@ -2990,7 +2990,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
     delete pAttrPam;
 }
 
-void SwHTMLParser::NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem )
+void SwHTMLParser::NewAttr( HTMLAttr **ppAttr, const SfxPoolItem& rItem )
 {
     // Font-Hoehen und -Farben- sowie Escapement-Attribute duerfen nicht
     // zusammengefasst werden. Sie werden deshalb in einer Liste gespeichert,
@@ -2999,23 +2999,23 @@ void SwHTMLParser::NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem )
     // hochgezaehlt.
     if( *ppAttr )
     {
-        _HTMLAttr *pAttr = new _HTMLAttr( *m_pPam->GetPoint(), rItem,
+        HTMLAttr *pAttr = new HTMLAttr( *m_pPam->GetPoint(), rItem,
                                             ppAttr );
         pAttr->InsertNext( *ppAttr );
         (*ppAttr) = pAttr;
     }
     else
-        (*ppAttr) = new _HTMLAttr( *m_pPam->GetPoint(), rItem, ppAttr );
+        (*ppAttr) = new HTMLAttr( *m_pPam->GetPoint(), rItem, ppAttr );
 }
 
-bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
+bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, HTMLAttr **ppDepAttr,
                             bool bChkEmpty )
 {
     bool bRet = true;
 
     OSL_ENSURE( !ppDepAttr, "SwHTMLParser::EndAttr: ppDepAttr-Feature ungetestet?" );
     // Der Listenkopf ist im Attribut gespeichert
-    _HTMLAttr **ppHead = pAttr->ppHead;
+    HTMLAttr **ppHead = pAttr->ppHead;
 
     OSL_ENSURE( ppHead, "keinen Attributs-Listenkopf gefunden!" );
 
@@ -3025,7 +3025,7 @@ bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
     // WIrd das zueltzt gestartete oder ein frueher gestartetes Attribut
     // beendet?
-    _HTMLAttr *pLast = nullptr;
+    HTMLAttr *pLast = nullptr;
     if( ppHead && pAttr != *ppHead )
     {
         // Es wird nicht das zuletzt gestartete Attribut beendet
@@ -3051,7 +3051,7 @@ bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
     }
 
     // nun das Attrubut beenden
-    _HTMLAttr *pNext = pAttr->GetNext();
+    HTMLAttr *pNext = pAttr->GetNext();
 
     bool bInsert;
     sal_uInt16 nScriptItem = 0;
@@ -3089,7 +3089,7 @@ bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         {
             if( nScriptItem == nScriptText )
             {
-                _HTMLAttr *pSetAttr = pAttr->Clone( *pEndIdx, nScriptEnd );
+                HTMLAttr *pSetAttr = pAttr->Clone( *pEndIdx, nScriptEnd );
                 pSetAttr->ClearPrev();
                 if( pNext )
                     pNext->InsertPrev( pSetAttr );
@@ -3147,7 +3147,7 @@ bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         // Vorlagen durch harte Attributierung koennen sich auch mal andere
         // leere Attribute in der Prev-Liste befinden, die dann trotzdem
         // gesetzt werden muessen
-        _HTMLAttr *pPrev = pAttr->GetPrev();
+        HTMLAttr *pPrev = pAttr->GetPrev();
         bRet = false;
         delete pAttr;
 
@@ -3180,7 +3180,7 @@ bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
     return bRet;
 }
 
-void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
+void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
@@ -3190,13 +3190,13 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
         m_aParaAttrs.clear();
 
     // Der Listenkopf ist im Attribut gespeichert
-    _HTMLAttr **ppHead = pAttr->ppHead;
+    HTMLAttr **ppHead = pAttr->ppHead;
 
     OSL_ENSURE( ppHead, "keinen Attributs-Listenkopf gefunden!" );
 
     // Wird das zueltzt gestartete oder ein frueher gestartetes Attribut
     // entfernt?
-    _HTMLAttr *pLast = nullptr;
+    HTMLAttr *pLast = nullptr;
     if( ppHead && pAttr != *ppHead )
     {
         // Es wird nicht das zuletzt gestartete Attribut beendet
@@ -3212,8 +3212,8 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
     }
 
     // nun das Attrubut entfernen
-    _HTMLAttr *pNext = pAttr->GetNext();
-    _HTMLAttr *pPrev = pAttr->GetPrev();
+    HTMLAttr *pNext = pAttr->GetNext();
+    HTMLAttr *pPrev = pAttr->GetPrev();
     delete pAttr;
 
     if( pPrev )
@@ -3238,7 +3238,7 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
         *ppHead = pNext;
 }
 
-void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
+void SwHTMLParser::SaveAttrTab( HTMLAttrTable& rNewAttrTab )
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
@@ -3247,14 +3247,14 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
-    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&m_aAttrTab);
-    _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(&rNewAttrTab);
 
-    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
+    for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
     {
         *pSaveAttributes = *pHTMLAttributes;
 
-        _HTMLAttr *pAttr = *pSaveAttributes;
+        HTMLAttr *pAttr = *pSaveAttributes;
         while (pAttr)
         {
             pAttr->SetHead(pSaveAttributes);
@@ -3265,7 +3265,7 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
     }
 }
 
-void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
+void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
                                  bool bMoveEndBack )
 {
     // preliminary paragraph attributes are not allowed here, they could
@@ -3280,8 +3280,8 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
     // alle noch offenen Attribute beenden und hinter der Tabelle
     // neu aufspannen
-    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&m_aAttrTab);
-    _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(&rNewAttrTab);
     bool bSetAttr = true;
     const sal_Int32 nSttCnt = m_pPam->GetPoint()->nContent.GetIndex();
     sal_Int32 nEndCnt = nSttCnt;
@@ -3303,14 +3303,14 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
         nEndCnt = (bSetAttr ? pCNd->Len() : 0);
     }
-    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
+    for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
     {
-        _HTMLAttr *pAttr = *pHTMLAttributes;
+        HTMLAttr *pAttr = *pHTMLAttributes;
         *pSaveAttributes = nullptr;
         while( pAttr )
         {
-            _HTMLAttr *pNext = pAttr->GetNext();
-            _HTMLAttr *pPrev = pAttr->GetPrev();
+            HTMLAttr *pNext = pAttr->GetNext();
+            HTMLAttr *pPrev = pAttr->GetPrev();
 
             if( bSetAttr &&
                 ( pAttr->GetSttParaIdx() < nEndIdx.GetIndex() ||
@@ -3322,7 +3322,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
                 // noch in den Kontexten existieren, muessen wir es clonen.
                 // Die Next-Liste geht dabei verloren, aber die
                 // Previous-Liste bleibt erhalten
-                _HTMLAttr *pSetAttr = pAttr->Clone( nEndIdx, nEndCnt );
+                HTMLAttr *pSetAttr = pAttr->Clone( nEndIdx, nEndCnt );
 
                 if( pNext )
                     pNext->InsertPrev( pSetAttr );
@@ -3356,7 +3356,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
             if (*pSaveAttributes)
             {
-                _HTMLAttr *pSAttr = *pSaveAttributes;
+                HTMLAttr *pSAttr = *pSaveAttributes;
                 while( pSAttr->GetNext() )
                     pSAttr = pSAttr->GetNext();
                 pSAttr->InsertNext( pAttr );
@@ -3371,7 +3371,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
     }
 }
 
-void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab )
+void SwHTMLParser::RestoreAttrTab( HTMLAttrTable& rNewAttrTab )
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
@@ -3380,16 +3380,16 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab )
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
-    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&m_aAttrTab);
-    _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(&rNewAttrTab);
 
-    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
+    for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
     {
         OSL_ENSURE(!*pHTMLAttributes, "Die Attribut-Tabelle ist nicht leer!");
 
         *pHTMLAttributes = *pSaveAttributes;
 
-        _HTMLAttr *pAttr = *pHTMLAttributes;
+        HTMLAttr *pAttr = *pHTMLAttributes;
         while (pAttr)
         {
             OSL_ENSURE( !pAttr->GetPrev() || !pAttr->GetPrev()->ppHead,
@@ -3404,7 +3404,7 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab )
 
 void SwHTMLParser::InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart )
 {
-    _HTMLAttr* pTmp = new _HTMLAttr( *m_pPam->GetPoint(),
+    HTMLAttr* pTmp = new HTMLAttr( *m_pPam->GetPoint(),
                                      rItem );
     if (bInsAtStart)
         m_aSetAttrTab.push_front( pTmp );
@@ -3412,11 +3412,11 @@ void SwHTMLParser::InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart )
         m_aSetAttrTab.push_back( pTmp );
 }
 
-void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
+void SwHTMLParser::InsertAttrs( HTMLAttrs& rAttrs )
 {
     while( !rAttrs.empty() )
     {
-        _HTMLAttr *pAttr = rAttrs.front();
+        HTMLAttr *pAttr = rAttrs.front();
         InsertAttr( pAttr->GetItem(), false );
         rAttrs.pop_front();
         delete pAttr;
@@ -3453,7 +3453,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3475,9 +3475,9 @@ void SwHTMLParser::NewStdAttr( int nToken )
 }
 
 void SwHTMLParser::NewStdAttr( int nToken,
-                               _HTMLAttr **ppAttr, const SfxPoolItem & rItem,
-                               _HTMLAttr **ppAttr2, const SfxPoolItem *pItem2,
-                               _HTMLAttr **ppAttr3, const SfxPoolItem *pItem3 )
+                               HTMLAttr **ppAttr, const SfxPoolItem & rItem,
+                               HTMLAttr **ppAttr2, const SfxPoolItem *pItem2,
+                               HTMLAttr **ppAttr3, const SfxPoolItem *pItem3 )
 {
     OUString aId, aStyle, aClass, aLang, aDir;
 
@@ -3506,7 +3506,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3547,7 +3547,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
 void SwHTMLParser::EndTag( int nToken )
 {
     // den Kontext holen
-    _HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
+    HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
     if( pCntxt )
     {
         // und ggf. die Attribute beenden
@@ -3595,7 +3595,7 @@ void SwHTMLParser::NewBasefontAttr()
         nSize = 7;
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_BASEFONT_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_BASEFONT_ON );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3798,7 +3798,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3909,10 +3909,10 @@ void SwHTMLParser::NewPara()
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt =
-        !aClass.isEmpty() ? new _HTMLAttrContext( HTML_PARABREAK_ON,
+    HTMLAttrContext *pCntxt =
+        !aClass.isEmpty() ? new HTMLAttrContext( HTML_PARABREAK_ON,
                                              RES_POOLCOLL_TEXT, aClass )
-                     : new _HTMLAttrContext( HTML_PARABREAK_ON );
+                     : new HTMLAttrContext( HTML_PARABREAK_ON );
 
     // Styles parsen (Class nicht beruecksichtigen. Das geht nur, solange
     // keine der CSS1-Properties der Klasse hart formatiert werden muss!!!)
@@ -3975,7 +3975,7 @@ void SwHTMLParser::EndPara( bool bReal )
 
     // den Kontext vom Stack holen. Er kann auch von einer implizit
     // geoeffneten Definitionsliste kommen
-    _HTMLAttrContext *pCntxt =
+    HTMLAttrContext *pCntxt =
         PopContext( static_cast< sal_uInt16 >(m_nOpenParaToken ? (m_nOpenParaToken & ~1)
                                    : HTML_PARABREAK_ON) );
 
@@ -4047,7 +4047,7 @@ void SwHTMLParser::NewHeading( int nToken )
     }
 
     // den Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nTextColl, aClass );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nTextColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4088,7 +4088,7 @@ void SwHTMLParser::EndHeading()
         AddParSpace();
 
     // Kontext zu dem Token suchen und vom Stack holen
-    _HTMLAttrContext *pCntxt = nullptr;
+    HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     while( !pCntxt && nPos>m_nContextStMin )
     {
@@ -4181,7 +4181,7 @@ void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
         AddParSpace();
 
     // ... und in einem Kontext merken
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nColl, aClass );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4234,7 +4234,7 @@ void SwHTMLParser::EndTextFormatColl( int nToken )
         AddParSpace();
 
     // den aktuellen Kontext vom Stack holen
-    _HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
+    HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
 
     // und noch Attribute beenden
     if( pCntxt )
@@ -4307,7 +4307,7 @@ void SwHTMLParser::NewDefList()
     }
 
     // ... und in einem Kontext merken
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_DEFLIST_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_DEFLIST_ON );
 
     // darin auch die Raender merken
     sal_uInt16 nLeft=0, nRight=0;
@@ -4363,7 +4363,7 @@ void SwHTMLParser::EndDefList()
         m_nDefListDeep--;
 
     // den aktuellen Kontext vom Stack holen
-    _HTMLAttrContext *pCntxt = PopContext( HTML_DEFLIST_ON );
+    HTMLAttrContext *pCntxt = PopContext( HTML_DEFLIST_ON );
 
     // und noch Attribute beenden
     if( pCntxt )
@@ -4420,7 +4420,7 @@ void SwHTMLParser::EndDefListItem( int nToken, bool /*bLastPara*/ )
 
     // Kontext zu dem Token suchen und vom Stack holen
     nToken &= ~1;
-    _HTMLAttrContext *pCntxt = nullptr;
+    HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     while( !pCntxt && nPos>m_nContextStMin )
     {
@@ -4534,7 +4534,7 @@ const SwFormatColl *SwHTMLParser::GetCurrFormatColl() const
     return &pCNd->GetAnyFormatColl();
 }
 
-void SwHTMLParser::SetTextCollAttrs( _HTMLAttrContext *pContext )
+void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 {
     SwTextFormatColl *pCollToSet = nullptr;   // die zu setzende Vorlage
     SfxItemSet *pItemSet = nullptr;       // der Set fuer harte Attrs
@@ -4549,7 +4549,7 @@ void SwHTMLParser::SetTextCollAttrs( _HTMLAttrContext *pContext )
 
     for( auto i = m_nContextStAttrMin; i < m_aContexts.size(); ++i )
     {
-        const _HTMLAttrContext *pCntxt = m_aContexts[i];
+        const HTMLAttrContext *pCntxt = m_aContexts[i];
 
         sal_uInt16 nColl = pCntxt->GetTextFormatColl();
         if( nColl )
@@ -4786,7 +4786,7 @@ void SwHTMLParser::NewCharFormat( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // die Vorlage setzen und im Kontext merken
     SwCharFormat* pCFormat = m_pCSS1Parser->GetChrFormat( static_cast< sal_uInt16 >(nToken), aClass );
@@ -5260,8 +5260,8 @@ void SwHTMLParser::InsertHorzRule()
     m_pPam->Move( fnMoveBackward );
 
     // ... und in einem Kontext merken
-    _HTMLAttrContext *pCntxt =
-        new _HTMLAttrContext( HTML_HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr );
+    HTMLAttrContext *pCntxt =
+        new HTMLAttrContext( HTML_HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr );
 
     PushContext( pCntxt );
 
@@ -5302,7 +5302,7 @@ void SwHTMLParser::InsertHorzRule()
 
         SvxBoxItem aBoxItem(RES_BOX);
         aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
-        _HTMLAttr* pTmp = new _HTMLAttr( *m_pPam->GetPoint(), aBoxItem );
+        HTMLAttr* pTmp = new HTMLAttr( *m_pPam->GetPoint(), aBoxItem );
         m_aSetAttrTab.push_back( pTmp );
     }
     if( nWidth )
@@ -5343,7 +5343,7 @@ void SwHTMLParser::InsertHorzRule()
                     break;
                 }
 
-                _HTMLAttr* pTmp = new _HTMLAttr( *m_pPam->GetPoint(), aLRItem );
+                HTMLAttr* pTmp = new HTMLAttr( *m_pPam->GetPoint(), aLRItem );
                 m_aSetAttrTab.push_back( pTmp );
             }
         }
@@ -5354,7 +5354,7 @@ void SwHTMLParser::InsertHorzRule()
         InsertBookmark( aId );
 
     // den aktuellen Kontext vom Stack holen
-    _HTMLAttrContext *pPoppedContext = PopContext( HTML_HORZRULE );
+    HTMLAttrContext *pPoppedContext = PopContext( HTML_HORZRULE );
     OSL_ENSURE( pPoppedContext==pCntxt, "wo kommt denn da ein HR-Kontext her?" );
     delete pPoppedContext;
 
@@ -5437,8 +5437,8 @@ void SwHTMLParser::ParseMoreMetaOptions()
     InsertAttr( aFormatField,  false );
 }
 
-_HTMLAttr::_HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
-                      _HTMLAttr **ppHd ) :
+HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
+                      HTMLAttr **ppHd ) :
     nSttPara( rPos.nNode ),
     nEndPara( rPos.nNode ),
     nSttContent( rPos.nContent.GetIndex() ),
@@ -5453,8 +5453,8 @@ _HTMLAttr::_HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
     pItem = rItem.Clone();
 }
 
-_HTMLAttr::_HTMLAttr( const _HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
-                      sal_Int32 nEndCnt, _HTMLAttr **ppHd ) :
+HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
+                      sal_Int32 nEndCnt, HTMLAttr **ppHd ) :
     nSttPara( rAttr.nSttPara ),
     nEndPara( rEndPara ),
     nSttContent( rAttr.nSttContent ),
@@ -5469,15 +5469,15 @@ _HTMLAttr::_HTMLAttr( const _HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
     pItem = rAttr.pItem->Clone();
 }
 
-_HTMLAttr::~_HTMLAttr()
+HTMLAttr::~HTMLAttr()
 {
     delete pItem;
 }
 
-_HTMLAttr *_HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
+HTMLAttr *HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
 {
     // das Attribut mit der alten Start-Position neu anlegen
-    _HTMLAttr *pNew = new _HTMLAttr( *this, rEndPara, nEndCnt, ppHead );
+    HTMLAttr *pNew = new HTMLAttr( *this, rEndPara, nEndCnt, ppHead );
 
     // die Previous-Liste muss uebernommen werden, die Next-Liste nicht!
     pNew->pPrev = pPrev;
@@ -5485,8 +5485,8 @@ _HTMLAttr *_HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) cons
     return pNew;
 }
 
-void _HTMLAttr::Reset(const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
-                       _HTMLAttr **ppHd)
+void HTMLAttr::Reset(const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
+                       HTMLAttr **ppHd)
 {
     // den Anfang (und das Ende) neu setzen
     nSttPara = rSttPara;
@@ -5500,17 +5500,17 @@ void _HTMLAttr::Reset(const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
     ppHead = ppHd;
 }
 
-void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
+void HTMLAttr::InsertPrev( HTMLAttr *pPrv )
 {
     OSL_ENSURE( !pPrv->pNext || pPrv->pNext == this,
-            "_HTMLAttr::InsertPrev: pNext falsch" );
+            "HTMLAttr::InsertPrev: pNext falsch" );
     pPrv->pNext = nullptr;
 
     OSL_ENSURE( nullptr == pPrv->ppHead || ppHead == pPrv->ppHead,
-            "_HTMLAttr::InsertPrev: ppHead falsch" );
+            "HTMLAttr::InsertPrev: ppHead falsch" );
     pPrv->ppHead = nullptr;
 
-    _HTMLAttr *pAttr = this;
+    HTMLAttr *pAttr = this;
     while( pAttr->GetPrev() )
         pAttr = pAttr->GetPrev();
 

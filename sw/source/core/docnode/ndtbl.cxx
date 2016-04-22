@@ -1484,27 +1484,27 @@ bool SwDoc::TableToText( const SwTableNode* pTableNd, sal_Unicode cCh )
  * Use the ForEach method from PtrArray to recreate Text from a Table.
  * The Boxes can also contain Lines!
  */
-struct _DelTabPara
+struct DelTabPara
 {
     SwTextNode* pLastNd;
     SwNodes& rNds;
     SwUndoTableToText* pUndo;
     sal_Unicode cCh;
 
-    _DelTabPara( SwNodes& rNodes, sal_Unicode cChar, SwUndoTableToText* pU ) :
+    DelTabPara( SwNodes& rNodes, sal_Unicode cChar, SwUndoTableToText* pU ) :
         pLastNd(nullptr), rNds( rNodes ), pUndo( pU ), cCh( cChar ) {}
-    _DelTabPara( const _DelTabPara& rPara ) :
+    DelTabPara( const DelTabPara& rPara ) :
         pLastNd(rPara.pLastNd), rNds( rPara.rNds ),
         pUndo( rPara.pUndo ), cCh( rPara.cCh ) {}
 };
 
 // Forward declare so that the Lines and Boxes can use recursion
-static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara );
+static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara );
 
-static void lcl_DelLine( SwTableLine* pLine, _DelTabPara* pPara )
+static void lcl_DelLine( SwTableLine* pLine, DelTabPara* pPara )
 {
     assert(pPara && "The parameters are missing!");
-    _DelTabPara aPara( *pPara );
+    DelTabPara aPara( *pPara );
     for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
              it != pLine->GetTabBoxes().end(); ++it)
         lcl_DelBox(*it, &aPara );
@@ -1513,7 +1513,7 @@ static void lcl_DelLine( SwTableLine* pLine, _DelTabPara* pPara )
         pPara->pLastNd = aPara.pLastNd;
 }
 
-static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
+static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara )
 {
     assert(pDelPara && "The parameters are missing");
 
@@ -1596,7 +1596,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     pTableNd->DelFrames();
 
     // "Delete" the Table and merge all Lines/Boxes
-    _DelTabPara aDelPara( *this, cCh, pUndo );
+    DelTabPara aDelPara( *this, cCh, pUndo );
     for( SwTableLine *pLine : pTableNd->m_pTable->GetTabLines() )
         lcl_DelLine( pLine, &aDelPara );
 
@@ -1840,9 +1840,9 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
             return false;
 
         // Find all Boxes/Lines
-        _FndBox aFndBox( nullptr, nullptr );
+        FndBox_ aFndBox( nullptr, nullptr );
         {
-            _FndPara aPara( aBoxes, &aFndBox );
+            FndPara aPara( aBoxes, &aFndBox );
             ForEach_FndLineCopyCol( pTableNd->GetTable().GetTabLines(), &aPara );
         }
 
@@ -1856,11 +1856,11 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
             // FIXME: Actually we should be interating over all Shells!
         }
 
-        _FndBox* pFndBox = &aFndBox;
+        FndBox_* pFndBox = &aFndBox;
         while( 1 == pFndBox->GetLines().size() &&
                 1 == pFndBox->GetLines().front()->GetBoxes().size() )
         {
-            _FndBox *const pTmp = pFndBox->GetLines().front()->GetBoxes()[0].get();
+            FndBox_ *const pTmp = pFndBox->GetLines().front()->GetBoxes()[0].get();
             if( pTmp->GetBox()->GetSttNd() )
                 break; // Else it gets too far
             pFndBox = pTmp;
@@ -3173,7 +3173,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     }
 
     // Find Lines for the Layout update
-    _FndBox aFndBox( nullptr, nullptr );
+    FndBox_ aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( rTable );
     aFndBox.DelFrames( rTable );
 
@@ -3309,14 +3309,14 @@ static bool lcl_ChgTableSize( SwTable& rTable )
     return true;
 }
 
-class _SplitTable_Para
+class SplitTable_Para
 {
     std::map<SwFrameFormat*, SwFrameFormat*> aSrcDestMap;
     SwTableNode* pNewTableNd;
     SwTable& rOldTable;
 
 public:
-    _SplitTable_Para( SwTableNode* pNew, SwTable& rOld )
+    SplitTable_Para( SwTableNode* pNew, SwTable& rOld )
         : aSrcDestMap(), pNewTableNd( pNew ), rOldTable( rOld )
     {}
     SwFrameFormat* GetDestFormat( SwFrameFormat* pSrcFormat ) const
@@ -3335,9 +3335,9 @@ public:
     }
 };
 
-static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara );
+static void lcl_SplitTable_CpyBox( SwTableBox* pBox, SplitTable_Para* pPara );
 
-static void lcl_SplitTable_CpyLine( SwTableLine* pLn, _SplitTable_Para* pPara )
+static void lcl_SplitTable_CpyLine( SwTableLine* pLn, SplitTable_Para* pPara )
 {
     SwFrameFormat *pSrcFormat = pLn->GetFrameFormat();
     SwTableLineFormat* pDestFormat = static_cast<SwTableLineFormat*>( pPara->GetDestFormat( pSrcFormat ) );
@@ -3353,7 +3353,7 @@ static void lcl_SplitTable_CpyLine( SwTableLine* pLn, _SplitTable_Para* pPara )
         lcl_SplitTable_CpyBox(*it, pPara );
 }
 
-static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara )
+static void lcl_SplitTable_CpyBox( SwTableBox* pBox, SplitTable_Para* pPara )
 {
     SwFrameFormat *pSrcFormat = pBox->GetFrameFormat();
     SwTableBoxFormat* pDestFormat = static_cast<SwTableBoxFormat*>(pPara->GetDestFormat( pSrcFormat ));
@@ -3454,7 +3454,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         rTable.GetTabLines().erase( rTable.GetTabLines().begin() + nLinePos, rTable.GetTabLines().end() );
 
         // Move the affected Boxes. Make the Formats unique and correct the StartNodes
-        _SplitTable_Para aPara( pNewTableNd, rTable );
+        SplitTable_Para aPara( pNewTableNd, rTable );
         for( SwTableLine* pNewLine : rNewTable.GetTabLines() )
             lcl_SplitTable_CpyLine( pNewLine, &aPara );
         rTable.CleanUpBottomRowSpan( nDeleted );
@@ -3568,7 +3568,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     SwTable& rTable = pTableNd->GetTable();
 
     // Find Lines for the Layout update
-    _FndBox aFndBox( nullptr, nullptr );
+    FndBox_ aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( rTable );
     aFndBox.DelFrames( rTable );
 
@@ -3642,7 +3642,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     // Clean up the Borders
     if( nOldSize )
     {
-        _SwGCLineBorder aPara( rTable );
+        SwGCLineBorder aPara( rTable );
         aPara.nLinePos = --nOldSize;
         pFirstLn = rTable.GetTabLines()[ nOldSize ];
         sw_GC_Line_Border( pFirstLn, &aPara );
@@ -3655,24 +3655,24 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
 }
 
 // Use the PtrArray's ForEach method
-struct _SetAFormatTabPara
+struct SetAFormatTabPara
 {
     SwTableAutoFormat& rTableFormat;
     SwUndoTableAutoFormat* pUndo;
     sal_uInt16 nEndBox, nCurBox;
     sal_uInt8 nAFormatLine, nAFormatBox;
 
-    explicit _SetAFormatTabPara( const SwTableAutoFormat& rNew )
+    explicit SetAFormatTabPara( const SwTableAutoFormat& rNew )
         : rTableFormat( (SwTableAutoFormat&)rNew ), pUndo( nullptr ),
         nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 )
     {}
 };
 
 // Forward declare so that the Lines and Boxes can use recursion
-static bool lcl_SetAFormatBox(_FndBox &, _SetAFormatTabPara *pSetPara, bool bResetDirect);
-static bool lcl_SetAFormatLine(_FndLine &, _SetAFormatTabPara *pPara, bool bResetDirect);
+static bool lcl_SetAFormatBox(FndBox_ &, SetAFormatTabPara *pSetPara, bool bResetDirect);
+static bool lcl_SetAFormatLine(FndLine_ &, SetAFormatTabPara *pPara, bool bResetDirect);
 
-static bool lcl_SetAFormatLine(_FndLine & rLine, _SetAFormatTabPara *pPara, bool bResetDirect)
+static bool lcl_SetAFormatLine(FndLine_ & rLine, SetAFormatTabPara *pPara, bool bResetDirect)
 {
     for (auto const& it : rLine.GetBoxes())
     {
@@ -3681,7 +3681,7 @@ static bool lcl_SetAFormatLine(_FndLine & rLine, _SetAFormatTabPara *pPara, bool
     return true;
 }
 
-static bool lcl_SetAFormatBox(_FndBox & rBox, _SetAFormatTabPara *pSetPara, bool bResetDirect)
+static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool bResetDirect)
 {
     if (!rBox.GetUpper()->GetUpper()) // Box on first level?
     {
@@ -3750,9 +3750,9 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
         return false;
 
     // Find all Boxes/Lines
-    _FndBox aFndBox( nullptr, nullptr );
+    FndBox_ aFndBox( nullptr, nullptr );
     {
-        _FndPara aPara( rBoxes, &aFndBox );
+        FndPara aPara( rBoxes, &aFndBox );
         ForEach_FndLineCopyCol( pTableNd->GetTable().GetTabLines(), &aPara );
     }
     if( aFndBox.GetLines().empty() )
@@ -3761,7 +3761,7 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
     SwTable &table = pTableNd->GetTable();
     table.SetHTMLTableLayout( nullptr );
 
-    _FndBox* pFndBox = &aFndBox;
+    FndBox_* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
             1 == pFndBox->GetLines().front()->GetBoxes().size())
     {
@@ -3783,15 +3783,15 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
 
     rNew.RestoreTableProperties(table);
 
-    _SetAFormatTabPara aPara( rNew );
+    SetAFormatTabPara aPara( rNew );
     FndLines_t& rFLns = pFndBox->GetLines();
 
     for (FndLines_t::size_type n = 0; n < rFLns.size(); ++n)
     {
-        _FndLine* pLine = rFLns[n].get();
+        FndLine_* pLine = rFLns[n].get();
 
         // Set Upper to 0 (thus simulate BaseLine)
-        _FndBox* pSaveBox = pLine->GetUpper();
+        FndBox_* pSaveBox = pLine->GetUpper();
         pLine->SetUpper( nullptr );
 
         if( !n )
@@ -3835,9 +3835,9 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
         return false;
 
     // Find all Boxes/Lines
-    _FndBox aFndBox( nullptr, nullptr );
+    FndBox_ aFndBox( nullptr, nullptr );
     {
-        _FndPara aPara( rBoxes, &aFndBox );
+        FndPara aPara( rBoxes, &aFndBox );
         ForEach_FndLineCopyCol( pTableNd->GetTable().GetTabLines(), &aPara );
     }
     if( aFndBox.GetLines().empty() )
@@ -3847,7 +3847,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
     SwTable &table = pTableNd->GetTable();
     rGet.StoreTableProperties(table);
 
-    _FndBox* pFndBox = &aFndBox;
+    FndBox_* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
             1 == pFndBox->GetLines().front()->GetBoxes().size())
     {
@@ -3867,7 +3867,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 
     for( sal_uInt8 nLine = 0; nLine < 4; ++nLine )
     {
-        _FndLine& rLine = *rFLns[ aLnArr[ nLine ] ];
+        FndLine_& rLine = *rFLns[ aLnArr[ nLine ] ];
 
         sal_uInt16 aBoxArr[4];
         aBoxArr[0] = 0;
@@ -4436,7 +4436,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     return bRet;
 }
 
-bool SwDoc::_UnProtectTableCells( SwTable& rTable )
+bool SwDoc::UnProtectTableCells( SwTable& rTable )
 {
     bool bChgd = false;
     SwUndoAttrTable *const pUndo = (GetIDocumentUndoRedo().DoesUndo())
@@ -4472,7 +4472,7 @@ bool SwDoc::UnProtectCells( const OUString& rName )
     SwTableFormat* pFormat = FindTableFormatByName( rName );
     if( pFormat )
     {
-        bChgd = _UnProtectTableCells( *SwTable::FindTable( pFormat ) );
+        bChgd = UnProtectTableCells( *SwTable::FindTable( pFormat ) );
         if( bChgd )
             getIDocumentState().SetModified();
     }
@@ -4557,7 +4557,7 @@ bool SwDoc::UnProtectTables( const SwPaM& rPam )
             }
 
             // Lift the protection
-            bChgd |= _UnProtectTableCells( *pTable );
+            bChgd |= UnProtectTableCells( *pTable );
         }
 
     GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);

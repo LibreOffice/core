@@ -244,7 +244,7 @@ class SwHTMLTableLayout
 
     void ClearPass1Info() { m_nMin = m_nMax = 0; }
 
-    void _Resize( sal_uInt16 nAbsAvail, bool bRecalc=false );
+    void Resize_( sal_uInt16 nAbsAvail, bool bRecalc=false );
 
     DECL_LINK_TYPED( DelayedResize_Impl, Timer*, void );
 

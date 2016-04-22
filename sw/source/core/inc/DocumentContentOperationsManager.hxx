@@ -155,7 +155,7 @@ private:
     bool DeleteRangeImpl(SwPaM&, const bool unused = false);
     bool DeleteRangeImplImpl(SwPaM &);
     bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
-    SwFlyFrameFormat* _InsNoTextNode( const SwPosition&rPos, SwNoTextNode*,
+    SwFlyFrameFormat* InsNoTextNode( const SwPosition&rPos, SwNoTextNode*,
                                 const SfxItemSet* pFlyAttrSet,
                                 const SfxItemSet* pGrfAttrSet,
                                 SwFrameFormat* = nullptr );

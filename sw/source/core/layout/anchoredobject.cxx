@@ -231,8 +231,8 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
             const SwTextFrame& aAnchorCharFrame = *(FindAnchorCharFrame());
             if ( !_bCheckForParaPorInf || aAnchorCharFrame.HasPara() )
             {
-                _CheckCharRect( rAnch, aAnchorCharFrame );
-                _CheckTopOfLine( rAnch, aAnchorCharFrame );
+                CheckCharRect( rAnch, aAnchorCharFrame );
+                CheckTopOfLine( rAnch, aAnchorCharFrame );
             }
         }
     }
@@ -248,7 +248,7 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
 
     improvement - add second parameter <_rAnchorCharFrame>
 */
-void SwAnchoredObject::_CheckCharRect( const SwFormatAnchor& _rAnch,
+void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
                                        const SwTextFrame& _rAnchorCharFrame )
 {
     // determine rectangle of anchor character. If not exist, abort operation
@@ -312,7 +312,7 @@ void SwAnchoredObject::_CheckCharRect( const SwFormatAnchor& _rAnch,
 
     improvement - add second parameter <_rAnchorCharFrame>
 */
-void SwAnchoredObject::_CheckTopOfLine( const SwFormatAnchor& _rAnch,
+void SwAnchoredObject::CheckTopOfLine( const SwFormatAnchor& _rAnch,
                                         const SwTextFrame& _rAnchorCharFrame )
 {
     SwTwips nTopOfLine = 0L;
@@ -595,7 +595,7 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
 // --> #i68520#
 void SwAnchoredObject::SetObjTop( const SwTwips _nTop)
 {
-    const bool bTopChanged( _SetObjTop( _nTop ) );
+    const bool bTopChanged( SetObjTop_( _nTop ) );
     if ( bTopChanged )
     {
         mbObjRectWithSpacesValid = false;
@@ -604,7 +604,7 @@ void SwAnchoredObject::SetObjTop( const SwTwips _nTop)
 
 void SwAnchoredObject::SetObjLeft( const SwTwips _nLeft)
 {
-    const bool bLeftChanged( _SetObjLeft( _nLeft ) );
+    const bool bLeftChanged( SetObjLeft_( _nLeft ) );
     if ( bLeftChanged )
     {
         mbObjRectWithSpacesValid = false;

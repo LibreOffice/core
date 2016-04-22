@@ -39,8 +39,8 @@ class SwAccessibleCell : public SwAccessibleContext,
 
     bool    IsSelected();
 
-    bool _InvalidateMyCursorPos();
-    bool _InvalidateChildrenCursorPos( const SwFrame *pFrame );
+    bool InvalidateMyCursorPos();
+    bool InvalidateChildrenCursorPos( const SwFrame *pFrame );
 
     rtl::Reference<SwAccessibleTable> m_pAccTable;
 
@@ -49,7 +49,7 @@ protected:
     // This derived class additionally sets SELECTABLE(1) and SELECTED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
 
-    virtual void _InvalidateCursorPos() override;
+    virtual void InvalidateCursorPos_() override;
 
     virtual ~SwAccessibleCell();
 

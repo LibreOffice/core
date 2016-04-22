@@ -63,7 +63,7 @@ public:
 
     OUString SAL_CALL getAccessibleDescription() throw (css::uno::RuntimeException, std::exception) override;
     OUString SAL_CALL getAccessibleName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void _InvalidateFocus() override;
+    virtual void InvalidateFocus_() override;
 };
 
 #endif

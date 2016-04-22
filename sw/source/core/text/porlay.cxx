@@ -2006,7 +2006,7 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
 // looks for hanging punctuation portions in the paragraph
 // and return the maximum right offset of them.
 // If no such portion is found, the Margin/Hanging-flags will be updated.
-SwTwips SwLineLayout::_GetHangingMargin() const
+SwTwips SwLineLayout::GetHangingMargin_() const
 {
     SwLinePortion* pPor = GetPortion();
     bool bFound = false;

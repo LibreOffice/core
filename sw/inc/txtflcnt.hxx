@@ -29,7 +29,7 @@ class SwDoc;
 // Attribute for line-bound frames (without end index).
 class SwTextFlyCnt : public SwTextAttr
 {
-    SwFlyInContentFrame  *_GetFlyFrame( const SwFrame *pCurrFrame );
+    SwFlyInContentFrame  *GetFlyFrame_( const SwFrame *pCurrFrame );
 public:
     SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStart );
 
@@ -45,12 +45,12 @@ public:
 
 inline SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame( const SwFrame *pCurrFrame )
 {
-    return _GetFlyFrame( pCurrFrame );
+    return GetFlyFrame_( pCurrFrame );
 }
 
 inline const SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame( const SwFrame *pCurrFrame ) const
 {
-    return (const_cast<SwTextFlyCnt*>(this))->_GetFlyFrame( pCurrFrame );
+    return (const_cast<SwTextFlyCnt*>(this))->GetFlyFrame_( pCurrFrame );
 }
 
 #endif

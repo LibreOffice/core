@@ -73,7 +73,7 @@ SwFrame& SwObjectFormatterLayFrame::GetAnchorFrame()
 bool SwObjectFormatterLayFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                            const bool )
 {
-    _FormatObj( _rAnchoredObj );
+    FormatObj_( _rAnchoredObj );
 
     // #124218# - consider that the layout action has to be
     // restarted due to a deleted page frame.
@@ -84,7 +84,7 @@ bool SwObjectFormatterLayFrame::DoFormatObjs()
 {
     bool bSuccess( true );
 
-    bSuccess = _FormatObjsAtFrame();
+    bSuccess = FormatObjsAtFrame_();
 
     if ( bSuccess && GetAnchorFrame().IsPageFrame() )
     {
@@ -92,7 +92,7 @@ bool SwObjectFormatterLayFrame::DoFormatObjs()
         // Thus, format also all anchored objects, which are registered at
         // this page frame, whose 'anchor' isn't on this page frame and whose
         // anchor frame is valid.
-        bSuccess = _AdditionalFormatObjsOnPage();
+        bSuccess = AdditionalFormatObjsOnPage();
     }
 
     return bSuccess;
@@ -104,11 +104,11 @@ bool SwObjectFormatterLayFrame::DoFormatObjs()
 
     OD 2004-07-02 #i28701#
 */
-bool SwObjectFormatterLayFrame::_AdditionalFormatObjsOnPage()
+bool SwObjectFormatterLayFrame::AdditionalFormatObjsOnPage()
 {
     if ( !GetAnchorFrame().IsPageFrame() )
     {
-        OSL_FAIL( "<SwObjectFormatterLayFrame::_AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
+        OSL_FAIL( "<SwObjectFormatterLayFrame::AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
         return true;
     }
 
@@ -146,7 +146,7 @@ bool SwObjectFormatterLayFrame::_AdditionalFormatObjsOnPage()
         // #i26945# - check, if the page frame of the
         // object's anchor frame isn't the given page frame
         OSL_ENSURE( pPageFrameOfAnchor,
-                "<SwObjectFormatterLayFrame::_AdditionalFormatObjsOnPage()> - missing page frame" );
+                "<SwObjectFormatterLayFrame::AdditionalFormatObjsOnPage()> - missing page frame" );
         if ( pPageFrameOfAnchor &&
              // #i35911#
              pPageFrameOfAnchor->GetPhyPageNum() < rPageFrame.GetPhyPageNum() )

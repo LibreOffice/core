@@ -189,7 +189,7 @@ class SwCacheAccess
 {
     SwCache &rCache;
 
-    void _Get();
+    void Get_();
 
 protected:
     SwCacheObj *pObj;
@@ -263,7 +263,7 @@ inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn,
 inline SwCacheObj *SwCacheAccess::Get()
 {
     if ( !pObj )
-        _Get();
+        Get_();
     return pObj;
 }
 

@@ -1547,7 +1547,7 @@ sal_uInt16 SwFieldMgr::GetCurrLanguage() const
     return SvtSysLocale().GetLanguageTag().getLanguageType();
 }
 
-void SwFieldType::_GetFieldName()
+void SwFieldType::GetFieldName_()
 {
     static const sal_uInt16 coFieldNms[] = {
         FLD_DATE_STD,

@@ -379,8 +379,8 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
         // growing happens upwards, so successors to not need to be invalidated
         if( nReal )
         {
-            _InvalidateSize();
-            _InvalidatePos();
+            InvalidateSize_();
+            InvalidatePos_();
             InvalidatePage( pPage );
         }
     }
@@ -409,7 +409,7 @@ SwTwips SwFootnoteContFrame::ShrinkFrame( SwTwips nDiff, bool bTst, bool bInfo )
             FindSctFrame()->InvalidateNextPos();
         if ( !bTst && nRet )
         {
-            _InvalidatePos();
+            InvalidatePos_();
             InvalidatePage( pPage );
         }
         return nRet;
@@ -438,16 +438,16 @@ void SwFootnoteFrame::InvalidateNxtFootnoteCnts( SwPageFrame *pPage )
         if( pCnt )
         {
             pCnt->InvalidatePage( pPage );
-            pCnt->_InvalidatePrt();
+            pCnt->InvalidatePrt_();
             do
-            {   pCnt->_InvalidatePos();
+            {   pCnt->InvalidatePos_();
                 if( pCnt->IsSctFrame() )
                 {
                     SwFrame* pTmp = static_cast<SwSectionFrame*>(pCnt)->ContainsAny();
                     if( pTmp )
-                        pTmp->_InvalidatePos();
+                        pTmp->InvalidatePos_();
                 }
-                pCnt->GetUpper()->_InvalidateSize();
+                pCnt->GetUpper()->InvalidateSize_();
                 pCnt = pCnt->FindNext();
             } while ( pCnt && GetUpper()->IsAnLower( pCnt ) );
         }
@@ -524,7 +524,7 @@ void SwFootnoteFrame::Cut()
             // If the last footnote container was removed from a column
             // section without a Follow, then this section can be shrunk.
             if( pSect && !pSect->ToMaximize( false ) && !pSect->IsColLocked() )
-                pSect->_InvalidateSize();
+                pSect->InvalidateSize_();
         }
         else
         {   if ( Frame().Height() )
@@ -549,12 +549,12 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
 
     SWRECTFN( this )
     if( (Frame().*fnRect->fnGetWidth)()!=(pParent->Prt().*fnRect->fnGetWidth)() )
-        _InvalidateSize();
-    _InvalidatePos();
+        InvalidateSize_();
+    InvalidatePos_();
     SwPageFrame *pPage = FindPageFrame();
     InvalidatePage( pPage );
     if ( GetNext() )
-        GetNext()->_InvalidatePos();
+        GetNext()->InvalidatePos_();
     if( (Frame().*fnRect->fnGetHeight)() )
         pParent->Grow( (Frame().*fnRect->fnGetHeight)() );
 
@@ -1540,7 +1540,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
     SwFootnoteFrame *pNew = new SwFootnoteFrame( pDoc->GetDfltFrameFormat(), this, pRef, pAttr );
     {
         SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
-        ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
+        ::InsertCnt_( pNew, pDoc, aIdx.GetIndex() );
     }
     // If the page was changed or newly created,
     // we need to place ourselves in the first column
@@ -1739,7 +1739,7 @@ void SwFootnoteBossFrame::CollectFootnotes( const SwContentFrame* _pRef,
     {
         pRefBossFrame = this;
     }
-    _CollectFootnotes( _pRef, pFootnote, _rFootnoteArr, _bCollectOnlyPreviousFootnotes, pRefBossFrame );
+    CollectFootnotes_( _pRef, pFootnote, _rFootnoteArr, _bCollectOnlyPreviousFootnotes, pRefBossFrame );
 }
 
 inline void FootnoteInArr( SwFootnoteFrames& rFootnoteArr, SwFootnoteFrame* pFootnote )
@@ -1754,7 +1754,7 @@ inline void FootnoteInArr( SwFootnoteFrames& rFootnoteArr, SwFootnoteFrame* pFoo
 /// Note: if parameter <_bCollectOnlyPreviousFootnotes> is true, then parameter
 /// <_pRefFootnoteBossFrame> have to be referenced to an object.
 /// Adjust parameter names.
-void SwFootnoteBossFrame::_CollectFootnotes( const SwContentFrame*   _pRef,
+void SwFootnoteBossFrame::CollectFootnotes_( const SwContentFrame*   _pRef,
                                  SwFootnoteFrame*           _pFootnote,
                                  SwFootnoteFrames&          _rFootnoteArr,
                                  bool                _bCollectOnlyPreviousFootnotes,
@@ -1764,7 +1764,7 @@ void SwFootnoteBossFrame::_CollectFootnotes( const SwContentFrame*   _pRef,
     // is set, in spite of the order, that only previous footnotes has to be
     // collected.
     OSL_ENSURE( !_bCollectOnlyPreviousFootnotes || _pRefFootnoteBossFrame,
-            "<SwFootnoteBossFrame::_CollectFootnotes(..)> - No reference footnote boss frame for collecting only previous footnotes set.\nCrash will be caused!" );
+            "<SwFootnoteBossFrame::CollectFootnotes_(..)> - No reference footnote boss frame for collecting only previous footnotes set.\nCrash will be caused!" );
 
     // Collect all footnotes referenced by pRef (attribute by attribute), combine them
     // (the content might be divided over multiple pages) and cut them.
@@ -1833,7 +1833,7 @@ void SwFootnoteBossFrame::_CollectFootnotes( const SwContentFrame*   _pRef,
             {
                 SwFootnoteBossFrame* pBossOfFoundFootnote = _pFootnote->FindFootnoteBossFrame( true );
                 OSL_ENSURE( pBossOfFoundFootnote,
-                        "<SwFootnoteBossFrame::_CollectFootnotes(..)> - footnote boss frame of found footnote frame missing.\nWrong layout!" );
+                        "<SwFootnoteBossFrame::CollectFootnotes_(..)> - footnote boss frame of found footnote frame missing.\nWrong layout!" );
                 if ( !pBossOfFoundFootnote ||    // don't crash, if no footnote boss is found.
                      pBossOfFoundFootnote->IsBefore( _pRefFootnoteBossFrame )
                    )
@@ -1892,7 +1892,7 @@ void SwFootnoteBossFrame::_CollectFootnotes( const SwContentFrame*   _pRef,
     while ( _pFootnote );
 }
 
-void SwFootnoteBossFrame::_MoveFootnotes( SwFootnoteFrames &rFootnoteArr, bool bCalc )
+void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool bCalc )
 {
     // All footnotes referenced by pRef need to be moved
     // to a new position (based on the new column/page)
@@ -1961,7 +1961,7 @@ void SwFootnoteBossFrame::_MoveFootnotes( SwFootnoteFrames &rFootnoteArr, bool b
 
                 while ( pCnt && pCnt->FindFootnoteFrame()->GetAttr() == pAttr )
                 {
-                    pCnt->_InvalidatePos();
+                    pCnt->InvalidatePos_();
                     pCnt->Calc(getRootFrame()->GetCurrShell()->GetOut());
                     // #i49383# - format anchored objects
                     if ( pCnt->IsTextFrame() && pCnt->IsValid() )
@@ -2041,7 +2041,7 @@ void SwFootnoteBossFrame::_MoveFootnotes( SwFootnoteFrames &rFootnoteArr, bool b
 
             while ( pCnt && pCnt->FindFootnoteFrame()->GetAttr() == pAttr )
             {
-                pCnt->_InvalidatePos();
+                pCnt->InvalidatePos_();
                 pCnt->Calc(getRootFrame()->GetCurrShell()->GetOut());
                 // #i49383# - format anchored objects
                 if ( pCnt->IsTextFrame() && pCnt->IsValid() )
@@ -2099,10 +2099,10 @@ void SwFootnoteBossFrame::MoveFootnotes( const SwContentFrame *pSrc, SwContentFr
         if( pDestBoss )     // robust
         {
             SwFootnoteFrames aFootnoteArr;
-            SwFootnoteBossFrame::_CollectFootnotes( pDest, pFootnote, aFootnoteArr );
+            SwFootnoteBossFrame::CollectFootnotes_( pDest, pFootnote, aFootnoteArr );
             if ( !aFootnoteArr.empty() )
             {
-                pDestBoss->_MoveFootnotes( aFootnoteArr, true );
+                pDestBoss->MoveFootnotes_( aFootnoteArr, true );
                 SwPageFrame* pSrcPage = FindPageFrame();
                 SwPageFrame* pDestPage = pDestBoss->FindPageFrame();
                 // update FootnoteNum only at page change
@@ -2164,8 +2164,8 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                          == nFootnotePos;
             if( bStart )
             {
-                pCnt->_InvalidatePos();
-                pCnt->_InvalidateSize();
+                pCnt->InvalidatePos_();
+                pCnt->InvalidateSize_();
                 pCnt->Prepare( PREP_ADJUST_FRM );
                 SwFootnoteFrame* pFootnoteFrame = pCnt->FindFootnoteFrame();
                 // #i49383#
@@ -2208,7 +2208,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                     SwFrame* aFootnoteContFrame = pFootnoteFrame->GetUpper();
                     if ( (pFootnoteFrame->Frame().*fnRect->fnTopDist)((aFootnoteContFrame->*fnRect->fnGetPrtBottom)()) > 0 )
                     {
-                        pFootnoteFrame->_InvalidatePos();
+                        pFootnoteFrame->InvalidatePos_();
                     }
                 }
                 if ( bLock )
@@ -2495,7 +2495,7 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
  * @see Grow()
  * @see Shrink()
  */
-SwNeighbourAdjust SwFootnoteBossFrame::_NeighbourhoodAdjustment( const SwFrame* ) const
+SwNeighbourAdjust SwFootnoteBossFrame::NeighbourhoodAdjustment_( const SwFrame* ) const
 {
     SwNeighbourAdjust nRet = SwNeighbourAdjust::OnlyAdjust;
     if( GetUpper() && !GetUpper()->IsPageBodyFrame() )
@@ -2611,10 +2611,10 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
     if ( !aFootnoteArr.empty() || pFootnoteArr )
     {
         if( !aFootnoteArr.empty() )
-            pNewBoss->_MoveFootnotes( aFootnoteArr, true );
+            pNewBoss->MoveFootnotes_( aFootnoteArr, true );
         if( pFootnoteArr )
         {
-            static_cast<SwFootnoteBossFrame*>(pNewChief)->_MoveFootnotes( *pFootnoteArr, true );
+            static_cast<SwFootnoteBossFrame*>(pNewChief)->MoveFootnotes_( *pFootnoteArr, true );
             delete pFootnoteArr;
         }
         bMoved = true;

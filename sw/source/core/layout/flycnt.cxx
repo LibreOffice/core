@@ -176,7 +176,7 @@ void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
             NotifyBackground( pOldPage, aOld, PREP_FLY_LEAVE );
 
         //Fix(3495)
-        _InvalidatePos();
+        InvalidatePos_();
         InvalidatePage();
         SetNotifyBack();
         // #i28701# - reset member <maLastCharRect> and
@@ -485,7 +485,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // If a multi column frame leaves invalid columns because of
                     // a position change, we loop once more and format
                     // our content using FormatWidthCols again.
-                    _InvalidateSize();
+                    InvalidateSize_();
                     bExtra = false; // Ensure only one additional loop run
                 }
             } while ( !IsValid() && !bOsz &&
@@ -1438,9 +1438,9 @@ void SwFlyAtContentFrame::MakeObjPos()
 }
 
 // #i28701#
-bool SwFlyAtContentFrame::_InvalidationAllowed( const InvalidationType _nInvalid ) const
+bool SwFlyAtContentFrame::InvalidationAllowed( const InvalidationType _nInvalid ) const
 {
-    bool bAllowed( SwFlyFreeFrame::_InvalidationAllowed( _nInvalid ) );
+    bool bAllowed( SwFlyFreeFrame::InvalidationAllowed( _nInvalid ) );
 
     // forbiddance of base instance can't be over ruled.
     if ( bAllowed )

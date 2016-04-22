@@ -123,9 +123,9 @@ SwDLL::SwDLL()
 
     SAL_INFO( "sw.ui", "Init Core/UI/Filter" );
     // Initialisation of Statics
-    ::_InitCore();
+    ::InitCore();
     filters_.reset(new sw::Filters);
-    ::_InitUI();
+    ::InitUI();
 
     pModule->InitAttrPool();
     // now SWModule can create its Pool
@@ -154,7 +154,7 @@ SwDLL::~SwDLL()
 {
     if (!utl::ConfigManager::IsAvoidConfig())
     {
-        // fdo#86494 SwAutoCorrect must be deleted before _FinitCore
+        // fdo#86494 SwAutoCorrect must be deleted before FinitCore
         SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
         rACfg.SetAutoCorrect(nullptr); // delete SwAutoCorrect before exit handlers
     }
@@ -162,9 +162,9 @@ SwDLL::~SwDLL()
     // Pool has to be deleted before statics are
     SW_MOD()->RemoveAttrPool();
 
-    ::_FinitUI();
+    ::FinitUI();
     filters_.reset();
-    ::_FinitCore();
+    ::FinitCore();
     // sign out Objekt-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
 #if 0

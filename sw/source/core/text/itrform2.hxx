@@ -191,7 +191,7 @@ public:
     sal_uInt16 GetFrameRstHeight() const;
 
     // How wide would you be without any bounds (Flys etc.)?
-    SwTwips _CalcFitToContent( );
+    SwTwips CalcFitToContent_( );
 
     SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, sal_Int32 nPos);
 

@@ -214,7 +214,7 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
     nAbsWidth = nAbs;
 }
 
-void SwXMLExport::_InitItemExport()
+void SwXMLExport::InitItemExport()
 {
     pTwipUnitConv = new SvXMLUnitConverter(getComponentContext(),
         util::MeasureUnit::TWIP, GetMM100UnitConverter().GetXMLMeasureUnit());
@@ -226,7 +226,7 @@ void SwXMLExport::_InitItemExport()
     pTableItemMapper = new SwXMLTableItemMapper_Impl( xTableItemMap, *this );
 }
 
-void SwXMLExport::_FinitItemExport()
+void SwXMLExport::FinitItemExport()
 {
     delete pTableItemMapper;
     delete pTwipUnitConv;

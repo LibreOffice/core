@@ -106,15 +106,15 @@ SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart = nullptr );
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling, bool bGrow );
 
 // Get ContentNodes, create ContentFrames, and add them to LayFrame.
-void _InsertCnt( SwLayoutFrame *pLay, SwDoc *pDoc, sal_uLong nIndex,
+void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, sal_uLong nIndex,
                  bool bPages = false, sal_uLong nEndIndex = 0,
                  SwFrame *pPrv = nullptr );
 
-// Creation of frames for a specific section (uses _InsertCnt)
+// Creation of frames for a specific section (uses InsertCnt_)
 void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             const SwNodeIndex &rEndIdx );
 
-// prevent creation of Flys in _InsertCnt, e.g. for table headlines
+// prevent creation of Flys in InsertCnt_, e.g. for table headlines
 extern bool bDontCreateObjects;
 
 // for FlyCnts, see SwFlyAtContentFrame::MakeAll()
@@ -299,32 +299,32 @@ class SwBorderAttrs : public SwCacheObj
            m_nGetBottomLine;
 
     // only calculate lines and shadow
-    void _CalcTopLine();
-    void _CalcBottomLine();
-    void _CalcLeftLine();
-    void _CalcRightLine();
+    void CalcTopLine_();
+    void CalcBottomLine_();
+    void CalcLeftLine_();
+    void CalcRightLine_();
 
     // lines + shadow + margin
-    void _CalcTop();
-    void _CalcBottom();
+    void CalcTop_();
+    void CalcBottom_();
 
-    void _IsLine();
+    void IsLine_();
 
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    void _GetTopLine   ( const SwFrame& _rFrame,
+    void GetTopLine_   ( const SwFrame& _rFrame,
                          const SwFrame* _pPrevFrame = nullptr );
-    void _GetBottomLine( const SwFrame& _rFrame );
+    void GetBottomLine_( const SwFrame& _rFrame );
 
     // calculate cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    void _CalcJoinedWithPrev( const SwFrame& _rFrame,
+    void CalcJoinedWithPrev( const SwFrame& _rFrame,
                               const SwFrame* _pPrevFrame = nullptr );
-    void _CalcJoinedWithNext( const SwFrame& _rFrame );
+    void CalcJoinedWithNext( const SwFrame& _rFrame );
 
-    // internal helper method for _CalcJoinedWithPrev and _CalcJoinedWithNext
-    bool _JoinWithCmp( const SwFrame& _rCallerFrame,
+    // internal helper method for CalcJoinedWithPrev and CalcJoinedWithNext
+    bool JoinWithCmp( const SwFrame& _rCallerFrame,
                        const SwFrame& _rCmpFrame ) const;
 
     // Are the left and right line and the LRSpace equal?
@@ -436,14 +436,14 @@ inline sal_uInt16 SwBorderAttrs::GetTopLine ( const SwFrame& _rFrame,
 {
     if ( !m_bCachedGetTopLine || _pPrevFrame )
     {
-        const_cast<SwBorderAttrs*>(this)->_GetTopLine( _rFrame, _pPrevFrame );
+        const_cast<SwBorderAttrs*>(this)->GetTopLine_( _rFrame, _pPrevFrame );
     }
     return m_nGetTopLine;
 }
 inline sal_uInt16 SwBorderAttrs::GetBottomLine( const SwFrame& _rFrame ) const
 {
     if ( !m_bCachedGetBottomLine )
-        const_cast<SwBorderAttrs*>(this)->_GetBottomLine( _rFrame );
+        const_cast<SwBorderAttrs*>(this)->GetBottomLine_( _rFrame );
     return m_nGetBottomLine;
 }
 inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
@@ -459,43 +459,43 @@ inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
 inline sal_uInt16 SwBorderAttrs::CalcTopLine() const
 {
     if ( m_bTopLine )
-        const_cast<SwBorderAttrs*>(this)->_CalcTopLine();
+        const_cast<SwBorderAttrs*>(this)->CalcTopLine_();
     return m_nTopLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcBottomLine() const
 {
     if ( m_bBottomLine )
-        const_cast<SwBorderAttrs*>(this)->_CalcBottomLine();
+        const_cast<SwBorderAttrs*>(this)->CalcBottomLine_();
     return m_nBottomLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcLeftLine() const
 {
     if ( m_bLeftLine )
-        const_cast<SwBorderAttrs*>(this)->_CalcLeftLine();
+        const_cast<SwBorderAttrs*>(this)->CalcLeftLine_();
     return m_nLeftLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcRightLine() const
 {
     if ( m_bRightLine )
-        const_cast<SwBorderAttrs*>(this)->_CalcRightLine();
+        const_cast<SwBorderAttrs*>(this)->CalcRightLine_();
     return m_nRightLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcTop() const
 {
     if ( m_bTop )
-        const_cast<SwBorderAttrs*>(this)->_CalcTop();
+        const_cast<SwBorderAttrs*>(this)->CalcTop_();
     return m_nTop;
 }
 inline sal_uInt16 SwBorderAttrs::CalcBottom() const
 {
     if ( m_bBottom )
-        const_cast<SwBorderAttrs*>(this)->_CalcBottom();
+        const_cast<SwBorderAttrs*>(this)->CalcBottom_();
     return m_nBottom;
 }
 inline bool SwBorderAttrs::IsLine() const
 {
     if ( m_bLine )
-        const_cast<SwBorderAttrs*>(this)->_IsLine();
+        const_cast<SwBorderAttrs*>(this)->IsLine_();
     return m_bIsLine;
 }
 

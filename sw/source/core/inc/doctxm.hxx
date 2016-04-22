@@ -54,7 +54,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
     // replace page num placeholder with actual page number
-    void _UpdatePageNum( SwTextNode* pNd,
+    void UpdatePageNum_( SwTextNode* pNd,
                          const std::vector<sal_uInt16>& rNums,
                          const std::vector<SwPageDesc*>& rDescs,
                          const std::vector<sal_uInt16>* pMainEntryNums,

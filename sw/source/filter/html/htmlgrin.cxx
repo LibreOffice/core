@@ -1060,7 +1060,7 @@ void SwHTMLParser::InsertBodyOptions()
 void SwHTMLParser::NewAnchor()
 {
     // den voherigen Link beenden, falls es einen gab
-    _HTMLAttrContext *pOldCntxt = PopContext( HTML_ANCHOR_ON );
+    HTMLAttrContext *pOldCntxt = PopContext( HTML_ANCHOR_ON );
     if( pOldCntxt )
     {
         // und ggf. die Attribute beenden
@@ -1181,7 +1181,7 @@ ANCHOR_SETEVENT:
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_ANCHOR_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_ANCHOR_ON );
 
     bool bEnAnchor = false, bFootnoteAnchor = false, bFootnoteEnSymbol = false;
     OUString aFootnoteName;
@@ -1280,7 +1280,7 @@ void SwHTMLParser::EndAnchor()
 
 void SwHTMLParser::InsertBookmark( const OUString& rName )
 {
-    _HTMLAttr* pTmp = new _HTMLAttr( *m_pPam->GetPoint(),
+    HTMLAttr* pTmp = new HTMLAttr( *m_pPam->GetPoint(),
             SfxStringItem( RES_FLTR_BOOKMARK, rName ));
     m_aSetAttrTab.push_back( pTmp );
 }
@@ -1297,7 +1297,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
     {
         for( auto i = m_aSetAttrTab.size(); i; )
         {
-            _HTMLAttr* pAttr = m_aSetAttrTab[ --i ];
+            HTMLAttr* pAttr = m_aSetAttrTab[ --i ];
             if( RES_FLTR_BOOKMARK == pAttr->pItem->Which() )
             {
                 if( pAttr->GetSttParaIdx() == nNodeIdx )

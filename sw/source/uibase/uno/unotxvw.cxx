@@ -458,7 +458,7 @@ uno::Reference< awt::XControl >  SwXTextView::getControl(const uno::Reference< a
     return xRet;
 }
 
-uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormController( const uno::Reference< form::XForm >& _Form ) throw (RuntimeException, std::exception)
+uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormController( const uno::Reference< form::XForm >& Form ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -470,7 +470,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
 
     uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pDrawView && pWindow )
-        xController = FmFormShell::GetFormController( _Form, *pDrawView, *pWindow );
+        xController = FmFormShell::GetFormController( Form, *pDrawView, *pWindow );
     return xController;
 }
 
@@ -482,13 +482,13 @@ sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException
     return !pFormShell || pFormShell->IsDesignMode();
 }
 
-void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool _DesignMode ) throw (RuntimeException, std::exception)
+void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool DesignMode ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : nullptr;
     if ( pFormShell )
-        pFormShell->SetDesignMode( _DesignMode );
+        pFormShell->SetDesignMode( DesignMode );
 }
 
 uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor() throw( uno::RuntimeException, std::exception )

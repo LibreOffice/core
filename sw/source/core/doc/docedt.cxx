@@ -53,14 +53,14 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
 
-void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
+void RestFlyInRange( SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsertPos )
 {
     SwPosition aPos( rSttIdx );
     for( size_t n = 0; n < rArr.size(); ++n )
     {
         // create new anchor
-        _SaveFly& rSave = rArr[n];
+        SaveFly& rSave = rArr[n];
         SwFrameFormat* pFormat = rSave.pFrameFormat;
 
         if( rSave.bInsertPosition )
@@ -86,7 +86,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
     sw::CheckAnchoredFlyConsistency(*rSttIdx.GetNode().GetDoc());
 }
 
-void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
+void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
 {
     SwFrameFormats& rFormats = *rRg.aStart.GetNode().GetDoc()->GetSpzFrameFormats();
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
@@ -99,7 +99,7 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
              (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
-            _SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
+            SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
                             pFormat, false );
             rArr.push_back( aSave );
             pFormat->DelFrames();
@@ -113,8 +113,8 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
     sw::CheckAnchoredFlyConsistency(*rRg.aStart.GetNode().GetDoc());
 }
 
-void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
-                       _SaveFlyArr& rArr, bool bMoveAllFlys )
+void SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
+                       SaveFlyArr& rArr, bool bMoveAllFlys )
 {
     SwFrameFormats& rFormats = *rPam.GetPoint()->nNode.GetNode().GetDoc()->GetSpzFrameFormats();
     SwFrameFormat* pFormat;
@@ -165,7 +165,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                         ( bInsPos = (rInsPos == pAPos->nNode) ))
 
             {
-                _SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
+                SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
                                 pFormat, bInsPos );
                 rArr.push_back( aSave );
                 pFormat->DelFrames();
@@ -239,7 +239,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 // because of unnecessary expanded redlines
 // From now on this class saves the redline positions of all redlines which ends exact at the
 // insert position (node _and_ content index)
-_SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nCnt )
+SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nCnt )
     : pSavArr( nullptr ), pSavIdx( nullptr ), nSavContent( nCnt )
 {
     SwNode& rNd = rInsIdx.GetNode();
@@ -265,13 +265,13 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
     }
 }
 
-_SaveRedlEndPosForRestore::~_SaveRedlEndPosForRestore()
+SaveRedlEndPosForRestore::~SaveRedlEndPosForRestore()
 {
     delete pSavArr;
     delete pSavIdx;
 }
 
-void _SaveRedlEndPosForRestore::_Restore()
+void SaveRedlEndPosForRestore::Restore_()
 {
     ++(*pSavIdx);
     SwContentNode* pNode = pSavIdx->GetNode().GetContentNode();

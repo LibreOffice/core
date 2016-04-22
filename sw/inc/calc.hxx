@@ -145,9 +145,9 @@ SwHash* Find( const OUString& rSrch, SwHash* const * ppTable,
 
 void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTableSize );
 
-// if _CalcOp != 0, this is a valid operator
-struct _CalcOp;
-_CalcOp* FindOperator( const OUString& rSearch );
+// if CalcOp != 0, this is a valid operator
+struct CalcOp;
+CalcOp* FindOperator( const OUString& rSearch );
 
 class SwCalc
 {

@@ -29,7 +29,7 @@ class SwViewShell;
 
 class SwLayVout
 {
-    friend void _FrameFinit();    //deletes Vout
+    friend void FrameFinit();    //deletes Vout
 private:
     SwViewShell*      pSh;
     VclPtr<OutputDevice>  pOut;
@@ -53,8 +53,8 @@ public:
     const SwRect& GetOrgRect() const { return aOrgRect; }
 
     bool IsFlushable() const { return bool(pOut); }
-    void _Flush();
-    void Flush() { if( pOut ) _Flush(); }
+    void Flush_();
+    void Flush() { if( pOut ) Flush_(); }
 };
 
 #endif

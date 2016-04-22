@@ -499,7 +499,7 @@ bool SwWrtShell::PopCursor(bool bUpdate, bool bSelect)
             // positions are thrown away.
         else
         {
-            _ResetCursorStack();
+            ResetCursorStack_();
             return false;
         }
     }
@@ -517,7 +517,7 @@ bool SwWrtShell::PopCursor(bool bUpdate, bool bSelect)
 // Reset of all pushed cursor positions; these will
 // not be displayed ( --> No Start-/EndAction!!)
 
-void SwWrtShell::_ResetCursorStack()
+void SwWrtShell::ResetCursorStack_()
 {
     while(m_pCursorStack)
     {

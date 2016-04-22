@@ -359,9 +359,9 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
             SwTableNode* pTableNd = static_cast<SwContentFrame*>(pFrame)->GetNode()->FindTableNode();
 
             // search all boxes / lines
-            _FndBox aFndBox( nullptr, nullptr );
+            FndBox_ aFndBox( nullptr, nullptr );
             {
-                _FndPara aPara( aBoxes, &aFndBox );
+                FndPara aPara( aBoxes, &aFndBox );
                 ForEach_FndLineCopyCol( pTableNd->GetTable().GetTabLines(), &aPara );
             }
 
@@ -373,11 +373,11 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
             KillPams();
 
-            _FndBox* pFndBox = &aFndBox;
+            FndBox_* pFndBox = &aFndBox;
             while( 1 == pFndBox->GetLines().size() &&
                     1 == pFndBox->GetLines().front()->GetBoxes().size())
             {
-                _FndBox *const pTmp = pFndBox->GetLines().front()->GetBoxes()[0].get();
+                FndBox_ *const pTmp = pFndBox->GetLines().front()->GetBoxes()[0].get();
                 if( pTmp->GetBox()->GetSttNd() )
                     break;      // otherwise too far
                 pFndBox = pTmp;
@@ -517,7 +517,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     return bRet;
 }
 
-void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrame *pBox ) const
+void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox ) const
 {
     const SwTabFrame *pTab = pBox->FindTabFrame();
     if ( pLastCols )
@@ -590,7 +590,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrame *pBox ) const
 #endif
 }
 
-void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrame *pBox ) const
+void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox ) const
 {
     const SwTabFrame *pTab = pBox->FindTabFrame();
     if ( pLastRows )
@@ -662,7 +662,7 @@ void SwFEShell::GetTabCols( SwTabCols &rToFill ) const
     {   pFrame = pFrame->GetUpper();
     } while ( !pFrame->IsCellFrame() );
 
-    _GetTabCols( rToFill, pFrame );
+    GetTabCols_( rToFill, pFrame );
 }
 
 void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
@@ -674,7 +674,7 @@ void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
     {   pFrame = pFrame->GetUpper();
     } while ( !pFrame->IsCellFrame() );
 
-    _GetTabRows( rToFill, pFrame );
+    GetTabRows_( rToFill, pFrame );
 }
 
 void SwFEShell::SetTabRows( const SwTabCols &rNew, bool bCurColOnly )
@@ -698,7 +698,7 @@ void SwFEShell::GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const
 {
     const SwFrame *pBox = GetBox( rPt );
     if ( pBox )
-        _GetTabRows( rToFill, pBox );
+        GetTabRows_( rToFill, pBox );
 }
 
 void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const Point &rPt )
@@ -1056,7 +1056,7 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
 sal_uInt16 SwFEShell::GetRowSelectionFromTop() const
 {
     sal_uInt16 nRet = 0;
-    const SwPaM* pPaM = IsTableMode() ? GetTableCursor() : _GetCursor();
+    const SwPaM* pPaM = IsTableMode() ? GetTableCursor() : GetCursor_();
     const sal_uInt16 nPtLine = lcl_GetRowNumber( *pPaM->GetPoint() );
 
     if ( !IsTableMode() )
@@ -1816,7 +1816,7 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
 
     if ( ppPos[0] )
     {
-        SwShellCursor* pCursor = _GetCursor();
+        SwShellCursor* pCursor = GetCursor_();
         SwCursorSaveState aSaveState( *pCursor );
         SwPosition aOldPos( *pCursor->GetPoint() );
 
@@ -1861,9 +1861,9 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
                 if ( pbRow[0] && pbCol[0] )
                     bRet = SwCursorShell::SelTable();
                 else if ( pbRow[0] )
-                    bRet = SwCursorShell::_SelTableRowOrCol( true, true );
+                    bRet = SwCursorShell::SelTableRowOrCol( true, true );
                 else if ( pbCol[0] )
-                    bRet = SwCursorShell::_SelTableRowOrCol( false, true );
+                    bRet = SwCursorShell::SelTableRowOrCol( false, true );
             }
             else
                 bRet = true;
@@ -2018,7 +2018,7 @@ void SwFEShell::GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const
 {
     const SwFrame *pBox = GetBox( rPt );
     if ( pBox )
-        _GetTabCols( rToFill, pBox );
+        GetTabCols_( rToFill, pBox );
 }
 
 void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
@@ -2036,7 +2036,7 @@ void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
 
 sal_uInt16 SwFEShell::GetCurMouseColNum( const Point &rPt ) const
 {
-    return _GetCurColNum( GetBox( rPt ), nullptr );
+    return GetCurColNum_( GetBox( rPt ), nullptr );
 }
 
 size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const

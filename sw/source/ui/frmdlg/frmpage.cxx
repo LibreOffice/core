@@ -2163,7 +2163,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
             // disable width and height for math objects
             const SvGlobalName& rFactNm( pSh->GetOLEObject()->getClassID() );
 
-            struct _GlobalNameId {
+            struct GlobalNameId {
                 sal_uInt32 n1;
                 sal_uInt16 n2, n3;
                 sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
@@ -2171,7 +2171,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
                                { SO3_SM_CLASSID_40 }, { SO3_SM_CLASSID_30 } };
 
             for ( int i = 0; i < 4; ++i ) {
-                const _GlobalNameId& rId = aGlbNmIds[ i ];
+                const GlobalNameId& rId = aGlbNmIds[ i ];
 
                 SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
                                      rId.b8, rId.b9, rId.b10, rId.b11,

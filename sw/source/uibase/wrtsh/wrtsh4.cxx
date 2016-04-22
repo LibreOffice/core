@@ -27,7 +27,7 @@
 // non-sentence separators on sentence separator.
 // The begin of paragraph is also the word beginning.
 
-bool SwWrtShell::_SttWrd()
+bool SwWrtShell::SttWrd()
 {
     if ( IsSttPara() )
         return true;
@@ -48,7 +48,7 @@ bool SwWrtShell::_SttWrd()
 // punctuation marks.
 // The end of a paragraph is also the end of a word.
 
-bool SwWrtShell::_EndWrd()
+bool SwWrtShell::EndWrd()
 {
     if ( IsEndWrd() )
         return true;
@@ -64,7 +64,7 @@ bool SwWrtShell::_EndWrd()
     return true;
 }
 
-bool SwWrtShell::_NxtWrd()
+bool SwWrtShell::NxtWrd_()
 {
     bool bRet = false;
     while( IsEndPara() )               // If already at the end, then the next???
@@ -95,7 +95,7 @@ bool SwWrtShell::_NxtWrd()
     return bRet;
 }
 
-bool SwWrtShell::_PrvWrd()
+bool SwWrtShell::PrvWrd_()
 {
     bool bRet = false;
     while( IsSttPara() )
@@ -127,8 +127,8 @@ bool SwWrtShell::_PrvWrd()
 }
 
 // #i92468#
-// method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
-bool SwWrtShell::_NxtWrdForDelete()
+// method code of <SwWrtShell::NxtWrd_()> before fix for issue i72162
+bool SwWrtShell::NxtWrdForDelete()
 {
     if ( IsEndPara() )
     {
@@ -150,8 +150,8 @@ bool SwWrtShell::_NxtWrdForDelete()
     return true;
 }
 
-// method code of <SwWrtShell::_PrvWrd()> before fix for issue i72162
-bool SwWrtShell::_PrvWrdForDelete()
+// method code of <SwWrtShell::PrvWrd_()> before fix for issue i72162
+bool SwWrtShell::PrvWrdForDelete()
 {
     if ( IsSttPara() )
     {
@@ -173,7 +173,7 @@ bool SwWrtShell::_PrvWrdForDelete()
     return true;
 }
 
-bool SwWrtShell::_FwdSentence()
+bool SwWrtShell::FwdSentence_()
 {
     Push();
     ClearMark();
@@ -190,7 +190,7 @@ bool SwWrtShell::_FwdSentence()
     return true;
 }
 
-bool SwWrtShell::_BwdSentence()
+bool SwWrtShell::BwdSentence_()
 {
     Push();
     ClearMark();
@@ -207,7 +207,7 @@ bool SwWrtShell::_BwdSentence()
     return true;
 }
 
-bool SwWrtShell::_FwdPara()
+bool SwWrtShell::FwdPara_()
 {
     Push();
     ClearMark();
@@ -218,7 +218,7 @@ bool SwWrtShell::_FwdPara()
     return bRet;
 }
 
-bool SwWrtShell::_BwdPara()
+bool SwWrtShell::BwdPara_()
 {
     Push();
     ClearMark();

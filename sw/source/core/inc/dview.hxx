@@ -50,7 +50,7 @@ class SwDrawView : public FmFormView
         optional input parameter - 'child' object, which will not be considered
         on the calculation of the maximal order number
     */
-    static sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrame& _rParentObj,
+    static sal_uInt32 GetMaxChildOrdNum( const SwFlyFrame& _rParentObj,
                                    const SdrObject* _pExclChildObj = nullptr );
 
     /** method to move 'repeated' objects of the given moved object to the
@@ -64,7 +64,7 @@ class SwDrawView : public FmFormView
         input parameter - data collection of moved 'child' objects - the 'repeated'
         ones of these 'children' will also been moved.
     */
-    void _MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
+    void MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                             const std::vector<SdrObject*>& _rMovedChildObjs ) const;
 
 protected:

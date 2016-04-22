@@ -454,7 +454,7 @@ SwCacheAccess::~SwCacheAccess()
         pObj->Unlock();
 }
 
-void SwCacheAccess::_Get()
+void SwCacheAccess::Get_()
 {
     OSL_ENSURE( !pObj, "SwCacheAcces Obj already available." );
 

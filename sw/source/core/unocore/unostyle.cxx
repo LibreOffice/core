@@ -172,7 +172,7 @@ namespace sw
         SfxStyleSheetBasePool* m_pBasePool;
         SwDocShell* m_pDocShell;
 
-        SwXStyle* _FindStyle(const OUString& rStyleName) const;
+        SwXStyle* FindStyle(const OUString& rStyleName) const;
         sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
             { return m_rEntry.m_fGetCountOrName(*m_pDocShell->GetDoc(), pString, nIndex); };
         static const StyleFamilyEntry& InitEntry(SfxStyleFamily eFamily)
@@ -798,7 +798,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
     if(!pBase)
         throw container::NoSuchElementException();
-    uno::Reference<style::XStyle> xStyle = _FindStyle(sStyleName);
+    uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
     if(!xStyle.is())
         xStyle = m_rEntry.m_fCreateStyle(m_pBasePool, m_pDocShell, m_rEntry.m_eFamily == SFX_STYLE_FAMILY_FRAME ? pBase->GetName() : sStyleName);
     return uno::makeAny(xStyle);
@@ -892,7 +892,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     if(!pBase->IsUserDefined())
         throw lang::IllegalArgumentException();
     //if theres an object available to this style then it must be invalidated
-    uno::Reference<style::XStyle> xStyle = _FindStyle(pBase->GetName());
+    uno::Reference<style::XStyle> xStyle = FindStyle(pBase->GetName());
     if(xStyle.is())
     {
         uno::Reference<lang::XUnoTunnel> xTunnel( xStyle, uno::UNO_QUERY);
@@ -930,7 +930,7 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
 }
 
 
-SwXStyle* XStyleFamily::_FindStyle(const OUString& rStyleName) const
+SwXStyle* XStyleFamily::FindStyle(const OUString& rStyleName) const
 {
     const size_t nLCount = m_pBasePool->GetSizeOfVector();
     for(size_t i = 0; i < nLCount; ++i)

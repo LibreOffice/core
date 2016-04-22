@@ -193,8 +193,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
     bool Up         ( bool bSelect, bool bBasicCall = false );
     bool Down       ( bool bSelect, bool bBasicCall = false );
-    void NxtWrd     ( bool bSelect = false ) { SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
-    bool PrvWrd     ( bool bSelect = false ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
+    void NxtWrd     ( bool bSelect = false ) { SimpleMove( &SwWrtShell::NxtWrd_, bSelect ); }
+    bool PrvWrd     ( bool bSelect = false ) { return SimpleMove( &SwWrtShell::PrvWrd_, bSelect ); }
 
     bool LeftMargin ( bool bSelect, bool bBasicCall );
     bool RightMargin( bool bSelect, bool bBasicCall );
@@ -211,13 +211,13 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool SttPara    ( bool bSelect = false );
     void EndPara    ( bool bSelect = false );
     bool FwdPara    ()
-                { return SimpleMove( &SwWrtShell::_FwdPara, false/*bSelect*/ ); }
+                { return SimpleMove( &SwWrtShell::FwdPara_, false/*bSelect*/ ); }
     void BwdPara    ()
-                { SimpleMove( &SwWrtShell::_BwdPara, false/*bSelect*/ ); }
+                { SimpleMove( &SwWrtShell::BwdPara_, false/*bSelect*/ ); }
     void FwdSentence( bool bSelect = false )
-                { SimpleMove( &SwWrtShell::_FwdSentence, bSelect ); }
+                { SimpleMove( &SwWrtShell::FwdSentence_, bSelect ); }
     void BwdSentence( bool bSelect = false )
-                { SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
+                { SimpleMove( &SwWrtShell::BwdSentence_, bSelect ); }
 
     // #i20126# Enhanced table selection
     bool SelectTableRowCol( const Point& rPt, const Point* pEnd = nullptr, bool bRowDrag = false );
@@ -530,17 +530,17 @@ private:
     SAL_DLLPRIVATE bool  PopCursor(bool bUpdate, bool bSelect = false);
 
     // take END cursor along when PageUp / -Down
-    SAL_DLLPRIVATE bool _SttWrd();
-    SAL_DLLPRIVATE bool _EndWrd();
-    SAL_DLLPRIVATE bool _NxtWrd();
-    SAL_DLLPRIVATE bool _PrvWrd();
+    SAL_DLLPRIVATE bool SttWrd();
+    SAL_DLLPRIVATE bool EndWrd();
+    SAL_DLLPRIVATE bool NxtWrd_();
+    SAL_DLLPRIVATE bool PrvWrd_();
     // #i92468#
-    SAL_DLLPRIVATE bool _NxtWrdForDelete();
-    SAL_DLLPRIVATE bool _PrvWrdForDelete();
-    SAL_DLLPRIVATE bool _FwdSentence();
-    SAL_DLLPRIVATE bool _BwdSentence();
-    bool _FwdPara();
-    SAL_DLLPRIVATE bool _BwdPara();
+    SAL_DLLPRIVATE bool NxtWrdForDelete();
+    SAL_DLLPRIVATE bool PrvWrdForDelete();
+    SAL_DLLPRIVATE bool FwdSentence_();
+    SAL_DLLPRIVATE bool BwdSentence_();
+    bool FwdPara_();
+    SAL_DLLPRIVATE bool BwdPara_();
 
         // selections
     bool    m_bIns            :1;
@@ -560,7 +560,7 @@ private:
     Link<SwWrtShell&,void>  m_aSelTableLink;
 
     // resets the cursor stack after movement by PageUp/-Down
-    SAL_DLLPRIVATE void  _ResetCursorStack();
+    SAL_DLLPRIVATE void  ResetCursorStack_();
 
     using SwCursorShell::SetCursor;
     SAL_DLLPRIVATE long  SetCursor(const Point *, bool bProp=false );
@@ -603,7 +603,7 @@ private:
 inline void SwWrtShell::ResetCursorStack()
 {
     if ( HasCursorStack() )
-        _ResetCursorStack();
+        ResetCursorStack_();
 }
 
 inline void SwWrtShell::SelTableCells(const Link<SwWrtShell&,void> &rLink )

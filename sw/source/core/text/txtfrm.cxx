@@ -566,7 +566,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
  * paragraph portion visibility.
  *
  * - is called from HideHidden() - should hide objects in hidden paragraphs and
- * - from _Format() - should hide/show objects in partly visible paragraphs
+ * - from Format_() - should hide/show objects in partly visible paragraphs
  */
 void SwTextFrame::HideAndShowObjects()
 {
@@ -705,10 +705,10 @@ bool SwTextFrame::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) cons
 inline void SwTextFrame::InvalidateRange(const SwCharRange &aRange, const long nD)
 {
     if ( IsIdxInside( aRange.Start(), aRange.Len() ) )
-        _InvalidateRange( aRange, nD );
+        InvalidateRange_( aRange, nD );
 }
 
-void SwTextFrame::_InvalidateRange( const SwCharRange &aRange, const long nD)
+void SwTextFrame::InvalidateRange_( const SwCharRange &aRange, const long nD)
 {
     if ( !HasPara() )
     {   InvalidateSize();
@@ -922,7 +922,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             // collection has changed
             Prepare();
-            _InvalidatePrt();
+            InvalidatePrt_();
             lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
             SetDerivedR2L( false );
             CheckDirChange();
@@ -966,7 +966,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                         Prepare();
                 }
                 else
-                    _InvalidateRange( SwCharRange( nPos, nLen ), nLen );
+                    InvalidateRange_( SwCharRange( nPos, nLen ), nLen );
             }
             lcl_SetWrong( *this, nPos, nLen, true );
             lcl_SetScriptInval( *this, nPos );
@@ -1020,7 +1020,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 if( !nLen )
                     nLen = 1;
 
-                _InvalidateRange( SwCharRange( nPos, nLen) );
+                InvalidateRange_( SwCharRange( nPos, nLen) );
                 const sal_uInt16 nTmp = static_cast<const SwUpdateAttr*>(pNew)->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
@@ -1049,7 +1049,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 CalcLineSpace();
                 InvalidateSize();
-                _InvalidatePrt();
+                InvalidatePrt_();
                 if( IsInSct() && !GetPrev() )
                 {
                     SwSectionFrame *pSect = FindSctFrame();
@@ -1081,7 +1081,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                         SetCompletePaint();
                     }
                     else
-                        _InvalidateRange( SwCharRange( nPos, 1 ) );
+                        InvalidateRange_( SwCharRange( nPos, 1 ) );
                 }
                 bSetFieldsDirty = true;
                 // ST2
@@ -1129,7 +1129,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                         SetCompletePaint();
                     }
                     else
-                        _InvalidateRange( SwCharRange( nPos, 1 ) );
+                        InvalidateRange_( SwCharRange( nPos, 1 ) );
                 }
                 nClear |= 0x02;
                 --nCount;
@@ -1143,7 +1143,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 Prepare( bRegister ? PREP_REGISTER : PREP_ADJUST_FRM );
                 CalcLineSpace();
                 InvalidateSize();
-                _InvalidatePrt();
+                InvalidatePrt_();
 
                 // i#11859
                 //  (1) Also invalidate next frame on next page/column.
@@ -1244,7 +1244,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 if( getRootFrame()->GetCurrShell() )
                 {
                     Prepare();
-                    _InvalidatePrt();
+                    InvalidatePrt_();
                 }
 
                 if( nClear )
@@ -1325,7 +1325,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         default:
         {
             Prepare();
-            _InvalidatePrt();
+            InvalidatePrt_();
             if ( !nWhich )
             {
                 // is called by e. g. HiddenPara with 0
@@ -1416,7 +1416,7 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
     }
     if ( bNotify )
     {
-        _InvalidateSize();
+        InvalidateSize_();
         InvalidatePage();
     }
 }
@@ -1510,7 +1510,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         if ( bNotify )
             InvalidateSize();
         else
-            _InvalidateSize();
+            InvalidateSize_();
         return bParaPossiblyInvalid;
     }
 
@@ -1522,8 +1522,8 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
     {
         case PREP_MOVEFTN :     Frame().Height(0);
                                 Prt().Height(0);
-                                _InvalidatePrt();
-                                _InvalidateSize();
+                                InvalidatePrt_();
+                                InvalidateSize_();
                                 /* no break here */
         case PREP_ADJUST_FRM :  pPara->SetPrepAdjust();
                                 if( IsFootnoteNumFrame() != pPara->IsFootnoteNum() ||
@@ -1531,7 +1531,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                                 {
                                     InvalidateRange( SwCharRange( 0, 1 ), 1);
                                     if( GetOfst() && !IsFollow() )
-                                        _SetOfst( 0 );
+                                        SetOfst_( 0 );
                                 }
                                 break;
         case PREP_MUST_FIT :        pPara->SetPrepMustFit();
@@ -1636,7 +1636,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             // A new boss, a new chance for growing
             if( IsUndersized() )
             {
-                _InvalidateSize();
+                InvalidateSize_();
                 InvalidateRange( SwCharRange( GetOfst(), 1 ), 1);
             }
             break;
@@ -1702,7 +1702,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                         SetCompletePaint();
                     Init();
                     pPara = nullptr;
-                    _InvalidateSize();
+                    InvalidateSize_();
                 }
             }
             else
@@ -1714,7 +1714,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 else if( HasFootnote() )
                 {
                     bParaPossiblyInvalid = Prepare( PREP_ADJUST_FRM, nullptr, bNotify );
-                    _InvalidateSize();
+                    InvalidateSize_();
                 }
                 else
                     return bParaPossiblyInvalid; // So that there's no SetPrep()
@@ -1739,11 +1739,11 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 pPara = aAccess.GetPara();
 
                 InvalidateSize();
-                _InvalidatePrt();
+                InvalidatePrt_();
                 SwFrame* pNxt;
                 if ( nullptr != ( pNxt = GetIndNext() ) )
                 {
-                    pNxt->_InvalidatePrt();
+                    pNxt->InvalidatePrt_();
                     if ( pNxt->IsLayoutFrame() )
                         pNxt->InvalidatePage();
                 }
@@ -1803,11 +1803,11 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 Init();
                 pPara = nullptr;
                 if( GetOfst() && !IsFollow() )
-                    _SetOfst( 0 );
+                    SetOfst_( 0 );
                 if ( bNotify )
                     InvalidateSize();
                 else
-                    _InvalidateSize();
+                    InvalidateSize_();
             }
             return bParaPossiblyInvalid; // no SetPrep() happened
         }
@@ -1874,7 +1874,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     pOldPara = pFrame->HasPara() ? pFrame->GetPara() : nullptr;
     pFrame->SetPara( new SwParaPortion(), false );
 
-    OSL_ENSURE( ! pFrame->IsSwapped(), "A frame is swapped before _Format" );
+    OSL_ENSURE( ! pFrame->IsSwapped(), "A frame is swapped before Format_" );
 
     if ( pFrame->IsVertical() )
         pFrame->SwapWidthAndHeight();
@@ -1882,12 +1882,12 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     SwTextFormatInfo aInf( pFrame->getRootFrame()->GetCurrShell()->GetOut(), pFrame, false, true, true );
     SwTextFormatter  aLine( pFrame, &aInf );
 
-    pFrame->_Format( aLine, aInf );
+    pFrame->Format_( aLine, aInf );
 
     if ( pFrame->IsVertical() )
         pFrame->SwapWidthAndHeight();
 
-    OSL_ENSURE( ! pFrame->IsSwapped(), "A frame is swapped after _Format" );
+    OSL_ENSURE( ! pFrame->IsSwapped(), "A frame is swapped after Format_" );
 }
 
 SwTestFormat::~SwTestFormat()
@@ -1936,7 +1936,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
 
     // i#27801 - correction: 'short cut' for empty paragraph
     // can *not* be applied, if test format is in progress. The test format doesn't
-    // adjust the frame and the printing area - see method <SwTextFrame::_Format(..)>,
+    // adjust the frame and the printing area - see method <SwTextFrame::Format_(..)>,
     // which is called in <SwTextFrame::TestFormat(..)>
     if ( IsEmpty() && !bTst )
     {
@@ -2119,7 +2119,7 @@ SwTwips SwTextFrame::CalcFitToContent()
 
     // i#54031 - assure mininum of MINLAY twips.
     const SwTwips nMax = std::max( (SwTwips)MINLAY,
-                              aLine._CalcFitToContent() + 1 );
+                              aLine.CalcFitToContent_() + 1 );
 
     Frame().Width( nOldFrameWidth );
     Prt().Width( nOldPrtWidth );
@@ -2176,7 +2176,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
             aInf.SetIgnoreFly( true );
             SwTextFormatter aLine( this, &aInf );
             SwHookOut aHook( aInf );
-            aLine._CalcFitToContent();
+            aLine.CalcFitToContent_();
 
             // determine additional first line offset
             const SwLinePortion* pFirstPortion = aLine.GetCurr()->GetFirstPortion();
@@ -2223,7 +2223,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
  *                  determine the height of the last line, which
  *                  uses the font
  */
-void SwTextFrame::_CalcHeightOfLastLine( const bool _bUseFont )
+void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
 {
     // i#71281
     // Invalidate printing area, if height of last line changes
@@ -2308,7 +2308,7 @@ void SwTextFrame::_CalcHeightOfLastLine( const bool _bUseFont )
             if ( bCalcHeightOfLastLine )
             {
                 OSL_ENSURE( HasPara(),
-                        "<SwTextFrame::_CalcHeightOfLastLine()> - missing paragraph portions." );
+                        "<SwTextFrame::CalcHeightOfLastLine()> - missing paragraph portions." );
                 const SwLineLayout* pLineLayout = GetPara();
                 while ( pLineLayout && pLineLayout->GetNext() )
                 {
@@ -2334,7 +2334,7 @@ void SwTextFrame::_CalcHeightOfLastLine( const bool _bUseFont )
                     // In this case determine height of last line by the font
                     if ( nNewHeightOfLastLine == 0 )
                     {
-                        _CalcHeightOfLastLine( true );
+                        CalcHeightOfLastLine( true );
                     }
                     else
                     {
@@ -2544,7 +2544,7 @@ void SwTextFrame::RecalcAllLines()
                 if ( pNxt->GetUpper() != GetUpper() )
                     pNxt->InvalidateLineNum();
                 else
-                    pNxt->_InvalidateLineNum();
+                    pNxt->InvalidateLineNum_();
             }
         }
     }

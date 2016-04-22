@@ -144,7 +144,7 @@ class SwTextFormatColls;
 class SwURLStateChanged;
 class SwUnoCursor;
 class SwViewShell;
-class _SetGetExpField;
+class SetGetExpField;
 class SwDrawContact;
 class SwLayouter;
 class SdrView;
@@ -188,7 +188,7 @@ class IDocumentState;
 class IDocumentLayoutAccess;
 class IDocumentStylePoolAccess;
 class IDocumentExternalData;
-class _SetGetExpFields;
+class SetGetExpFields;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -247,8 +247,8 @@ class SW_DLLPUBLIC SwDoc :
 {
     friend class ::sw::DocumentContentOperationsManager;
 
-    friend void _InitCore();
-    friend void _FinitCore();
+    friend void InitCore();
+    friend void FinitCore();
 
     // private Member
     std::unique_ptr<SwNodes> m_pNodes;    //< document content (Nodes Array)
@@ -388,7 +388,7 @@ private:
     static SwAutoCompleteWord *mpACmpltWords;  //< List of all words for AutoComplete
 
     // private methods
-    SwFlyFrameFormat* _MakeFlySection( const SwPosition& rAnchPos,
+    SwFlyFrameFormat* MakeFlySection_( const SwPosition& rAnchPos,
                                 const SwContentNode& rNode, RndStdIds eRequestId,
                                 const SfxItemSet* pFlyAttrSet,
                                 SwFrameFormat* = nullptr );
@@ -417,9 +417,9 @@ private:
                                 const OUString& rFormula,
                                 std::vector<OUString>& rUsedDBNames );
 
-    void _CreateNumberFormatter();
+    void CreateNumberFormatter();
 
-    bool _UnProtectTableCells( SwTable& rTable );
+    bool UnProtectTableCells( SwTable& rTable );
 
     /** Create sub-documents according to the given collection.
      If no collection is given, take chapter style of the 1st level. */
@@ -427,9 +427,9 @@ private:
                         const SwTextFormatColl* pSplitColl, int nOutlineLevel = 0 );
 
     // Update charts of given table.
-    void _UpdateCharts( const SwTable& rTable, SwViewShell const & rVSh ) const;
+    void UpdateCharts_( const SwTable& rTable, SwViewShell const & rVSh ) const;
 
-    static bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
+    static bool SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 sal_uInt16 nMode );
 
     // CharTimer calls this method.
@@ -437,11 +437,11 @@ private:
     DECL_LINK_TYPED( DoUpdateModifiedOLE, Idle *, void );
 
 public:
-    SwFormat *_MakeCharFormat(const OUString &, SwFormat *, bool, bool );
-    SwFormat *_MakeFrameFormat(const OUString &, SwFormat *, bool, bool );
+    SwFormat *MakeCharFormat_(const OUString &, SwFormat *, bool, bool );
+    SwFormat *MakeFrameFormat_(const OUString &, SwFormat *, bool, bool );
 
 private:
-    SwFormat *_MakeTextFormatColl(const OUString &, SwFormat *, bool, bool );
+    SwFormat *MakeTextFormatColl_(const OUString &, SwFormat *, bool, bool );
 
 private:
     bool mbReadOnly;
@@ -1666,7 +1666,7 @@ inline const SwTableNode* SwDoc::IsIdxInTable( const SwNodeIndex& rIdx ) const
 inline SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate )
 {
     if( bCreate && !mpNumberFormatter )
-        _CreateNumberFormatter();
+        CreateNumberFormatter();
     return mpNumberFormatter;
 }
 
@@ -1682,7 +1682,7 @@ inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
         mbAllOLENotify = false;
 }
 
-bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFields * pSrtLst );
+bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, SetGetExpFields * pSrtLst );
 
 #endif  //_DOC_HXX
 

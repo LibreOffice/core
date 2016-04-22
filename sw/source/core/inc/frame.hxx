@@ -161,8 +161,8 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
     SwFrame       *mpNext;
     SwFrame       *mpPrev;
 
-    SwFrame *_FindNext();
-    SwFrame *_FindPrev();
+    SwFrame *FindNext_();
+    SwFrame *FindPrev_();
 
     /** method to determine next content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
@@ -191,7 +191,7 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
         @return SwContentFrame*
         pointer to the found next content frame. It's NULL, if none exists.
     */
-    SwContentFrame* _FindNextCnt( const bool _bInSameFootnote = false );
+    SwContentFrame* FindNextCnt_( const bool _bInSameFootnote = false );
 
     /** method to determine previous content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
@@ -218,10 +218,10 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
         @return SwContentFrame*
         pointer to the found previous content frame. It's NULL, if none exists.
     */
-    SwContentFrame* _FindPrevCnt();
+    SwContentFrame* FindPrevCnt_();
 
-    void _UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
-    SwFrame* _GetIndNext();
+    void UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
+    SwFrame* GetIndNext_();
     void SetDirFlags( bool bVert );
 
     const SwLayoutFrame* ImplGetNextLayoutLeaf( bool bFwd ) const;
@@ -313,7 +313,7 @@ protected:
     /** method to determine, if an invalidation is allowed.
         #i28701
     */
-    virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const;
+    virtual bool InvalidationAllowed( const InvalidationType _nInvalid ) const;
 
     /** method to perform additional actions on an invalidation
 
@@ -321,7 +321,7 @@ protected:
         Method has *only* to contain actions, which has to be performed on
         *every* assignment of the corresponding flag to <false>.
     */
-    virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
+    virtual void ActionOnInvalidation( const InvalidationType _nInvalid );
 
     // draw shadow and borders
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
@@ -359,7 +359,7 @@ public:
 
     // For internal use only - who ignores this will be put in a sack and has
     // to stay there for two days
-    // Does special treatment for _Get[Next|Prev]Leaf() (for tables).
+    // Does special treatment for Get_[Next|Prev]Leaf() (for tables).
     SwLayoutFrame *GetLeaf( MakePageType eMakePage, bool bFwd );
     SwLayoutFrame *GetNextLeaf   ( MakePageType eMakePage );
     SwLayoutFrame *GetNextFootnoteLeaf( MakePageType eMakePage );
@@ -534,12 +534,12 @@ public:
     const SwContentFrame* FindPrevCnt() const;
 
     // #i79774#
-    SwFrame* _GetIndPrev() const;
+    SwFrame* GetIndPrev_() const;
     SwFrame* GetIndPrev() const
-        { return ( mpPrev || !IsInSct() ) ? mpPrev : _GetIndPrev(); }
+        { return ( mpPrev || !IsInSct() ) ? mpPrev : GetIndPrev_(); }
 
     SwFrame* GetIndNext()
-        { return ( mpNext || !IsInSct() ) ? mpNext : _GetIndNext(); }
+        { return ( mpNext || !IsInSct() ) ? mpNext : GetIndNext_(); }
     const SwFrame* GetIndNext() const { return const_cast<SwFrame*>(this)->GetIndNext(); }
 
     sal_uInt16 GetPhyPageNum() const;   // page number without offset
@@ -591,51 +591,51 @@ public:
     bool IsValid() const { return mbValidPos && mbValidSize && mbValidPrtArea; }
 
     // Only invalidate Frame
-    // #i28701# - add call to method <_ActionOnInvalidation(..)>
+    // #i28701# - add call to method <ActionOnInvalidation(..)>
     //            for all invalidation methods.
-    // #i28701# - use method <_InvalidationAllowed(..)> to
+    // #i28701# - use method <InvalidationAllowed(..)> to
     //            decide, if invalidation will to be performed or not.
     // #i26945# - no additional invalidation, if it's already
     //            invalidate.
-    void _InvalidateSize()
+    void InvalidateSize_()
     {
-        if ( mbValidSize && _InvalidationAllowed( INVALID_SIZE ) )
+        if ( mbValidSize && InvalidationAllowed( INVALID_SIZE ) )
         {
             mbValidSize = false;
-            _ActionOnInvalidation( INVALID_SIZE );
+            ActionOnInvalidation( INVALID_SIZE );
         }
     }
-    void _InvalidatePrt()
+    void InvalidatePrt_()
     {
-        if ( mbValidPrtArea && _InvalidationAllowed( INVALID_PRTAREA ) )
+        if ( mbValidPrtArea && InvalidationAllowed( INVALID_PRTAREA ) )
         {
             mbValidPrtArea = false;
-            _ActionOnInvalidation( INVALID_PRTAREA );
+            ActionOnInvalidation( INVALID_PRTAREA );
         }
     }
-    void _InvalidatePos()
+    void InvalidatePos_()
     {
-        if ( mbValidPos && _InvalidationAllowed( INVALID_POS ) )
+        if ( mbValidPos && InvalidationAllowed( INVALID_POS ) )
         {
             mbValidPos = false;
-            _ActionOnInvalidation( INVALID_POS );
+            ActionOnInvalidation( INVALID_POS );
         }
     }
-    void _InvalidateLineNum()
+    void InvalidateLineNum_()
     {
-        if ( mbValidLineNum && _InvalidationAllowed( INVALID_LINENUM ) )
+        if ( mbValidLineNum && InvalidationAllowed( INVALID_LINENUM ) )
         {
             mbValidLineNum = false;
-            _ActionOnInvalidation( INVALID_LINENUM );
+            ActionOnInvalidation( INVALID_LINENUM );
         }
     }
-    void _InvalidateAll()
+    void InvalidateAll_()
     {
         if ( ( mbValidSize || mbValidPrtArea || mbValidPos ) &&
-             _InvalidationAllowed( INVALID_ALL ) )
+             InvalidationAllowed( INVALID_ALL ) )
         {
             mbValidSize = mbValidPrtArea = mbValidPos = false;
-            _ActionOnInvalidation( INVALID_ALL );
+            ActionOnInvalidation( INVALID_ALL );
         }
     }
     // also notify page at the same time
@@ -876,14 +876,14 @@ inline void SwFrame::InvalidateLineNum()
 }
 inline void SwFrame::InvalidateAll()
 {
-    if ( _InvalidationAllowed( INVALID_ALL ) )
+    if ( InvalidationAllowed( INVALID_ALL ) )
     {
         if ( mbValidPrtArea && mbValidSize && mbValidPos  )
             ImplInvalidatePos();
         mbValidPrtArea = mbValidSize = mbValidPos = false;
 
         // #i28701#
-        _ActionOnInvalidation( INVALID_ALL );
+        ActionOnInvalidation( INVALID_ALL );
     }
 }
 inline void SwFrame::InvalidateNextPos( bool bNoFootnote )
@@ -953,28 +953,28 @@ inline SwFrame *SwFrame::FindNext()
     if ( mpNext )
         return mpNext;
     else
-        return _FindNext();
+        return FindNext_();
 }
 inline const SwFrame *SwFrame::FindNext() const
 {
     if ( mpNext )
         return mpNext;
     else
-        return const_cast<SwFrame*>(this)->_FindNext();
+        return const_cast<SwFrame*>(this)->FindNext_();
 }
 inline SwFrame *SwFrame::FindPrev()
 {
     if ( mpPrev && !mpPrev->IsSctFrame() )
         return mpPrev;
     else
-        return _FindPrev();
+        return FindPrev_();
 }
 inline const SwFrame *SwFrame::FindPrev() const
 {
     if ( mpPrev && !mpPrev->IsSctFrame() )
         return mpPrev;
     else
-        return const_cast<SwFrame*>(this)->_FindPrev();
+        return const_cast<SwFrame*>(this)->FindPrev_();
 }
 
 inline bool SwFrame::IsLayoutFrame() const

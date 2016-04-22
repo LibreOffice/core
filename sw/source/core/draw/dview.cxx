@@ -308,14 +308,14 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 }
 
 /// determine maximal order number for a 'child' object of given 'parent' object
-sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrame& _rParentObj,
+sal_uInt32 SwDrawView::GetMaxChildOrdNum( const SwFlyFrame& _rParentObj,
                                            const SdrObject* _pExclChildObj )
 {
     sal_uInt32 nMaxChildOrdNum = _rParentObj.GetDrawObj()->GetOrdNum();
 
     const SdrPage* pDrawPage = _rParentObj.GetDrawObj()->GetPage();
     OSL_ENSURE( pDrawPage,
-            "<SwDrawView::_GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!" );
+            "<SwDrawView::GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!" );
 
     const size_t nObjCount = pDrawPage->GetObjCount();
     for ( size_t i = nObjCount-1; i > _rParentObj.GetDrawObj()->GetOrdNum() ; --i )
@@ -340,14 +340,14 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrame& _rParentObj,
 }
 
 /// method to move 'repeated' objects of the given moved object to the according level
-void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
+void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                     const std::vector<SdrObject*>& _rMovedChildObjs ) const
 {
     // determine 'repeated' objects of already moved object <_rMovedAnchoredObj>
     std::list<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
-        assert(pContact && "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash.");
+        assert(pContact && "SwDrawView::MoveRepeatedObjs(..) - missing contact object -> crash.");
         pContact->GetAnchoredObjs( aAnchoredObjs );
     }
 
@@ -389,7 +389,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
             SdrObject* pChildObj = (*aObjIter);
             {
                 const SwContact* pContact = ::GetUserCall( pChildObj );
-                assert(pContact && "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash.");
+                assert(pContact && "SwDrawView::MoveRepeatedObjs(..) - missing contact object -> crash.");
                 pContact->GetAnchoredObjs( aAnchoredObjs );
             }
             // move 'repeated' ones to the same order number as the already moved one.
@@ -450,7 +450,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         if ( bMovedForward )
         {
             const size_t nMaxChildOrdNumWithoutMoved =
-                    _GetMaxChildOrdNum( *pParentAnchoredObj, pMovedAnchoredObj->GetDrawObj() );
+                    GetMaxChildOrdNum( *pParentAnchoredObj, pMovedAnchoredObj->GetDrawObj() );
             if ( nNewPos > nMaxChildOrdNumWithoutMoved+1 )
             {
                 // set position to the top of the 'child' object group
@@ -512,7 +512,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
          bMovedForward && nNewPos < nObjCount - 1 )
     {
         sal_uInt32 nMaxChildOrdNum =
-                    _GetMaxChildOrdNum( *(static_cast<const SwFlyFrame*>(pMovedAnchoredObj)) );
+                    GetMaxChildOrdNum( *(static_cast<const SwFlyFrame*>(pMovedAnchoredObj)) );
         if ( nNewPos < nMaxChildOrdNum )
         {
             // determine position before the object before its top 'child' object
@@ -644,7 +644,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         rImp.AddAccessibleObj( pObj );
     }
 
-    _MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
+    MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
 }
 
 bool SwDrawView::TakeDragLimit( SdrDragMode eMode,

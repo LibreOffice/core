@@ -206,11 +206,11 @@ void SwViewShellImp::MakeDrawView()
 {
     IDocumentDrawModelAccess& rIDDMA = GetShell()->getIDocumentDrawModelAccess();
 
-    // the else here is not an error, _MakeDrawModel() calls this method again
+    // the else here is not an error, MakeDrawModel_() calls this method again
     // after the DrawModel is created to create DrawViews for all shells...
     if( !rIDDMA.GetDrawModel() )
     {
-        rIDDMA._MakeDrawModel();
+        rIDDMA.MakeDrawModel_();
     }
     else
     {
@@ -369,7 +369,7 @@ void SwViewShellImp::InvalidateAccessibleRelationSet( const SwFlyFrame *pMaster,
 }
 
 /// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
-void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTextFrame* _pFromTextFrame,
+void SwViewShellImp::InvalidateAccessibleParaFlowRelation_( const SwTextFrame* _pFromTextFrame,
                                                        const SwTextFrame* _pToTextFrame )
 {
     if ( !_pFromTextFrame && !_pToTextFrame )
@@ -397,7 +397,7 @@ void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTextFrame* _
 }
 
 /// invalidate text selection for paragraphs
-void SwViewShellImp::_InvalidateAccessibleParaTextSelection()
+void SwViewShellImp::InvalidateAccessibleParaTextSelection_()
 {
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
@@ -409,7 +409,7 @@ void SwViewShellImp::_InvalidateAccessibleParaTextSelection()
 }
 
 /// invalidate attributes for paragraphs
-void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFrame )
+void SwViewShellImp::InvalidateAccessibleParaAttrs_( const SwTextFrame& rTextFrame )
 {
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {

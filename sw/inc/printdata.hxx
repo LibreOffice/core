@@ -32,7 +32,7 @@
 
 class SwDoc;
 class SwDocShell;
-class _SetGetExpFields;
+class SetGetExpFields;
 class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
@@ -242,8 +242,8 @@ class SwRenderData
 public:
 
     // PostIt relevant data
-    /// an array of "_SetGetExpField *" sorted by page and line numbers
-    std::unique_ptr<_SetGetExpFields> m_pPostItFields;
+    /// an array of "SetGetExpField *" sorted by page and line numbers
+    std::unique_ptr<SetGetExpFields> m_pPostItFields;
     /// this contains a SwDoc with the post-it content
     std::unique_ptr<SwViewShell>      m_pPostItShell;
 

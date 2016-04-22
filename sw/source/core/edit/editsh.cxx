@@ -115,7 +115,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
     }
 
     // calculate cursor bidi level
-    SwCursor* pTmpCursor = _GetCursor();
+    SwCursor* pTmpCursor = GetCursor_();
     const bool bDoNotSetBidiLevel = ! pTmpCursor ||
                                 ( dynamic_cast<SwUnoCursor*>(pTmpCursor) !=  nullptr );
 
@@ -218,7 +218,7 @@ bool SwEditShell::AppendTextNode()
 }
 
 // the returned SwGrfNode pointer is used in GetGraphic() and GetGraphicSize()
-SwGrfNode * SwEditShell::_GetGrfNode() const
+SwGrfNode * SwEditShell::GetGrfNode_() const
 {
     SwGrfNode *pGrfNode = nullptr;
     SwPaM* pCursor = GetCursor();
@@ -233,7 +233,7 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
 // GetMark is not set or points to the same Graphic
 const Graphic* SwEditShell::GetGraphic( bool bWait ) const
 {
-    SwGrfNode* pGrfNode = _GetGrfNode();
+    SwGrfNode* pGrfNode = GetGrfNode_();
     const Graphic* pGrf( nullptr );
     if ( pGrfNode )
     {
@@ -244,7 +244,7 @@ const Graphic* SwEditShell::GetGraphic( bool bWait ) const
 
 bool SwEditShell::IsLinkedGrfSwapOut() const
 {
-    SwGrfNode *pGrfNode = _GetGrfNode();
+    SwGrfNode *pGrfNode = GetGrfNode_();
     return pGrfNode &&
         ( pGrfNode->IsLinkedFile() &&
           ( GRAPHIC_DEFAULT == pGrfNode->GetGrfObj().GetType() ||
@@ -253,13 +253,13 @@ bool SwEditShell::IsLinkedGrfSwapOut() const
 
 const GraphicObject* SwEditShell::GetGraphicObj() const
 {
-    SwGrfNode* pGrfNode = _GetGrfNode();
+    SwGrfNode* pGrfNode = GetGrfNode_();
     return pGrfNode ? &(pGrfNode->GetGrfObj()) : nullptr;
 }
 
 sal_uInt16 SwEditShell::GetGraphicType() const
 {
-    SwGrfNode *pGrfNode = _GetGrfNode();
+    SwGrfNode *pGrfNode = GetGrfNode_();
     return static_cast<sal_uInt16>(pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE);
 }
 
@@ -299,7 +299,7 @@ void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName,
         SwDoc::GetGrfNms( *pFormat, pGrfName, pFltName );
     else
     {
-        SwGrfNode *pGrfNode = _GetGrfNode();
+        SwGrfNode *pGrfNode = GetGrfNode_();
         if( pGrfNode && pGrfNode->IsLinkedFile() )
             pGrfNode->GetFileFilterNms( pGrfName, pFltName );
     }

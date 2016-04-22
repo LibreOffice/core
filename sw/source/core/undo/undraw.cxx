@@ -525,7 +525,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         rFlyFormats.push_back( rSave.pFormat );
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFormat, pObj );
-        pContact->_Changed( *pObj, SDRUSERCALL_INSERTED, nullptr );
+        pContact->Changed_( *pObj, SDRUSERCALL_INSERTED, nullptr );
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
 

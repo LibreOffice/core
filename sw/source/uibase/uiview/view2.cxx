@@ -1467,7 +1467,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             case SID_ATTR_SIZE:
             {
                 if( !rShell.IsFrameSelected() && !rShell.IsObjSelected() )
-                    SwBaseShell::_SetFrameMode( FLY_DRAG_END );
+                    SwBaseShell::SetFrameMode_( FLY_DRAG_END );
                 else
                 {
                     FlyMode eFrameMode = SwBaseShell::GetFrameMode();

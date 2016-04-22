@@ -91,9 +91,9 @@ public:
     inline sal_uInt16& GetCursorCnt(){ return nCursorCnt; }
 
     // for the UI:
-    void _Start( SwEditShell *pSh, SwDocPositions eStart,
+    void Start_( SwEditShell *pSh, SwDocPositions eStart,
                 SwDocPositions eEnd );
-    void _End(bool bRestoreSelection = true);
+    void End_(bool bRestoreSelection = true);
 };
 
 // #i18881# to be able to identify the positions of the changed words
@@ -192,7 +192,7 @@ SwLinguIter::SwLinguIter()
     // TODO missing: ensurance of re-entrance, OSL_ENSURE( etc.
 }
 
-void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
+void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
                             SwDocPositions eEnd )
 {
     // TODO missing: ensurance of re-entrance, locking
@@ -205,7 +205,7 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
 
     SET_CURR_SHELL( pSh );
 
-    OSL_ENSURE( !pEnd, "SwLinguIter::_Start without End?");
+    OSL_ENSURE( !pEnd, "SwLinguIter::Start_ without End?");
 
     SwPaM *pCursor = pSh->GetCursor();
 
@@ -250,12 +250,12 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
     pCursor->SetMark();
 }
 
-void SwLinguIter::_End(bool bRestoreSelection)
+void SwLinguIter::End_(bool bRestoreSelection)
 {
     if( !pSh )
         return;
 
-    OSL_ENSURE( pEnd, "SwLinguIter::_End without end?");
+    OSL_ENSURE( pEnd, "SwLinguIter::End_ without end?");
     if(bRestoreSelection)
     {
         while( nCursorCnt-- )
@@ -280,7 +280,7 @@ void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
 
     xSpeller = ::GetSpellChecker();
     if ( xSpeller.is() )
-        _Start( pShell, eStart, eEnd );
+        Start_( pShell, eStart, eEnd );
     aLastPortions.clear();
     aLastPositions.clear();
 }
@@ -347,7 +347,7 @@ void SwConvIter::Start( SwEditShell *pShell, SwDocPositions eStart,
 {
     if( GetSh() )
         return;
-    _Start( pShell, eStart, eEnd );
+    Start_( pShell, eStart, eEnd );
 }
 
 uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
@@ -440,7 +440,7 @@ void SwHyphIter::Start( SwEditShell *pShell, SwDocPositions eStart, SwDocPositio
     // nothing to do (at least not in the way as in the "else" part)
     bOldIdle = pShell->GetViewOptions()->IsIdle();
     pShell->GetViewOptions()->SetIdle( false );
-    _Start( pShell, eStart, eEnd );
+    Start_( pShell, eStart, eEnd );
 }
 
 // restore selections
@@ -449,7 +449,7 @@ void SwHyphIter::End()
     if( !GetSh() )
         return;
     GetSh()->GetViewOptions()->SetIdle( bOldIdle );
-    _End();
+    End_();
 }
 
 uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
@@ -665,14 +665,14 @@ void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection 
     if (!pConvArgs && g_pSpellIter && g_pSpellIter->GetSh() == this)
     {
         OSL_ENSURE( g_pSpellIter, "where is my Iterator?" );
-        g_pSpellIter->_End(bRestoreSelection);
+        g_pSpellIter->End_(bRestoreSelection);
         delete g_pSpellIter;
         g_pSpellIter = nullptr;
     }
     if (pConvArgs && g_pConvIter && g_pConvIter->GetSh() == this)
     {
         OSL_ENSURE( g_pConvIter, "where is my Iterator?" );
-        g_pConvIter->_End();
+        g_pConvIter->End_();
         delete g_pConvIter;
         g_pConvIter = nullptr;
     }

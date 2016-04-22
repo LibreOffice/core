@@ -563,8 +563,8 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
             try
             {
                 const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
-                uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
-                SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
+                uno::Reference < embed::XStorage > refPics = GetDocSubstorageOrRoot( aNames.sStorage );
+                SvStream* pStrm = GetStreamForEmbedGrf( refPics, aNames.sStream );
                 if ( pStrm )
                 {
                     bRet = ImportGraphic( *pStrm );
@@ -857,7 +857,7 @@ void SwGrfNode::ScaleImageMap()
     A substorage with the specified name will be opened readonly. If the provided
     name is empty the root storage will be returned.
 */
-uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const OUString& aStgName ) const
+uno::Reference< embed::XStorage > SwGrfNode::GetDocSubstorageOrRoot( const OUString& aStgName ) const
 {
     uno::Reference < embed::XStorage > refStor =
         const_cast<SwGrfNode*>(this)->GetDoc()->GetDocStorage();
@@ -882,7 +882,7 @@ uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const OUSt
     after the method returns, because its parent stream is closed and deleted.
     Proposed name of embedded graphic stream is also provided by parameter.
 */
-SvStream* SwGrfNode::_GetStreamForEmbedGrf(
+SvStream* SwGrfNode::GetStreamForEmbedGrf(
             const uno::Reference< embed::XStorage >& _refPics,
             const OUString& rStreamName ) const
 {
@@ -918,7 +918,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         }
         else
         {
-            OSL_FAIL( "<SwGrfNode::_GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
+            OSL_FAIL( "<SwGrfNode::GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
         }
     }
 

@@ -47,7 +47,7 @@
 
 // DELETE
 /*  lcl_MakeAutoFrames has to call MakeFrames for objects bounded "AtChar"
-    ( == AUTO ), if the anchor frame has be moved via _MoveNodes(..) and
+    ( == AUTO ), if the anchor frame has be moved via MoveNodes(..) and
     DelFrames(..)
 */
 static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, sal_uLong nMovedIndex )
@@ -150,7 +150,7 @@ SwUndoDelete::SwUndoDelete(
                         DelContentType(nsDelContentType::DELCNT_ALL | nsDelContentType::DELCNT_CHKNOCNTNT) );
 
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-        _DelBookmarks(pStt->nNode, pEnd->nNode);
+        DelBookmarks(pStt->nNode, pEnd->nNode);
     }
     else
     {
@@ -159,7 +159,7 @@ SwUndoDelete::SwUndoDelete(
         if (nEndNode - nSttNode > 1) // check for fully selected nodes
         {
             SwNodeIndex const start(pStt->nNode, +1);
-            _DelBookmarks(start, pEnd->nNode);
+            DelBookmarks(start, pEnd->nNode);
         }
     }
 
@@ -252,14 +252,14 @@ SwUndoDelete::SwUndoDelete(
                 if( pEndTextNd )
                 {
                     // The end text node has to leave the (expanded) selection
-                    // The dummy is needed because _MoveNodes deletes empty
+                    // The dummy is needed because MoveNodes deletes empty
                     // sections
                     ++m_nReplaceDummy;
                     SwNodeRange aMvRg( *pEndTextNd, 0, *pEndTextNd, 1 );
                     SwPosition aSplitPos( *pEndTextNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd );
                     --aRg.aEnd;
                 }
                 else
@@ -283,7 +283,7 @@ SwUndoDelete::SwUndoDelete(
                     SwPosition aSplitPos( *pSttTextNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart );
                     --aRg.aStart;
                 }
             }
@@ -304,7 +304,7 @@ SwUndoDelete::SwUndoDelete(
 
         // Step 3: Moving into UndoArray...
         m_nNode = rNds.GetEndOfContent().GetIndex();
-        rDocNds._MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
+        rDocNds.MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
         m_pMvStt = new SwNodeIndex( rNds, m_nNode );
         // remember difference!
         m_nNode = rNds.GetEndOfContent().GetIndex() - m_nNode;
@@ -321,12 +321,12 @@ SwUndoDelete::SwUndoDelete(
                 if( m_bJoinNext )
                 {
                     SwNodeRange aMvRg( *pEndTextNd, 0, *pEndTextNd, 1 );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart );
                 }
                 else
                 {
                     SwNodeRange aMvRg( *pSttTextNd, 0, *pSttTextNd, 1 );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd );
                 }
             }
         }
@@ -850,7 +850,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             --aPos.nNode;
             if( !m_bJoinNext )
                 pMovedNode = &aPos.nNode.GetNode();
-            rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
+            rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
             ++aPos.nNode;
         }
 
@@ -858,7 +858,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwNodeRange aRange( *m_pMvStt, 0, *m_pMvStt, m_nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
-            rDoc.GetUndoManager().GetUndoNodes()._Copy( aRange, aPos.nNode );
+            rDoc.GetUndoManager().GetUndoNodes().Copy_( aRange, aPos.nNode );
 
             if( m_nReplaceDummy )
             {
@@ -876,7 +876,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
                 SwNodeRange aRg( aPos.nNode, 0, aPos.nNode, 1 );
                 pMovedNode = &aPos.nNode.GetNode();
-                rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
+                rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
                 rDoc.GetNodes().Delete( aMvIdx);
             }
         }
@@ -992,7 +992,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelContentType(nsDelContentType::DELCNT_ALL | nsDelContentType::DELCNT_CHKNOCNTNT) );
 
-            _DelBookmarks(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
+            DelBookmarks(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
         }
         else
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
@@ -1008,7 +1008,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelContentType(nsDelContentType::DELCNT_ALL | nsDelContentType::DELCNT_CHKNOCNTNT) );
 
-            _DelBookmarks( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
+            DelBookmarks( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
         }
         else
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );

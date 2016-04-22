@@ -81,7 +81,7 @@ SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )
  * setzen des Ankers (die SwPosition des Dummy-Zeichens wird dem FlyFrameFormat
  * per SetAttr bekannt gegeben). Dies kann nicht im MakeTextHint erledigt
  * werden, da der Zielnode unbestimmt ist.
- * ad 3) _GetFlyFrame() wird im Formatierungsprozess vom LineIter gerufen
+ * ad 3) GetFlyFrame_() wird im Formatierungsprozess vom LineIter gerufen
  * und sucht den FlyFrame zum Dummyzeichen des aktuellen ContentFrame. Wird keiner
  * gefunden, so wird ein neuer FlyFrame angelegt.
  * Kritisch an diesem Vorgehen ist, dass das pContent->AppendFly() eine
@@ -208,21 +208,21 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
     // Fuer jeden ContentFrame wird ein SwFlyInContentFrame angelegt.
 }
 
-// _GetFlyFrame() wird im Formatierungsprozess vom LineIter gerufen
+// GetFlyFrame_() wird im Formatierungsprozess vom LineIter gerufen
 // und sucht den FlyFrame zum Dummyzeichen des aktuellen ContentFrame. Wird keiner
 // gefunden, so wird ein neuer FlyFrame angelegt.
 // (siehe Kommentar ind SwTextFlyCnt::MakeTextHint)
-SwFlyInContentFrame *SwTextFlyCnt::_GetFlyFrame( const SwFrame *pCurrFrame )
+SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame_( const SwFrame *pCurrFrame )
 {
     SwFrameFormat* pFrameFormat = GetFlyCnt().GetFrameFormat();
     if( RES_DRAWFRMFMT == pFrameFormat->Which() )
     {
-        OSL_ENSURE(  false, "SwTextFlyCnt::_GetFlyFrame: DrawInCnt-Baustelle!" );
+        OSL_ENSURE(  false, "SwTextFlyCnt::GetFlyFrame_: DrawInCnt-Baustelle!" );
         return nullptr;
     }
 
     SwIterator<SwFlyFrame,SwFormat> aIter( *GetFlyCnt().pFormat );
-    OSL_ENSURE( pCurrFrame->IsTextFrame(), "SwTextFlyCnt::_GetFlyFrame for TextFrames only." );
+    OSL_ENSURE( pCurrFrame->IsTextFrame(), "SwTextFlyCnt::GetFlyFrame_ for TextFrames only." );
     SwFrame* pFrame = aIter.First();
     if ( pFrame )
     {

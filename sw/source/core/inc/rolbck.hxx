@@ -395,7 +395,7 @@ private:
     SwHistory * const m_pHistory;
     sal_uLong m_nNodeIndex;
 
-    void _MakeSetWhichIds();
+    void MakeSetWhichIds();
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;

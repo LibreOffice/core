@@ -85,7 +85,7 @@ class SwTextFrame: public SwContentFrame
     sal_uInt16 mnCacheIndex; // Index into the cache, USHRT_MAX if there's definitely no fitting object in the cache
 
     // Separates the Master and creates a Follow or adjusts the data in the Follow
-    void _AdjustFollow( SwTextFormatter &rLine, const sal_Int32 nOffset,
+    void AdjustFollow_( SwTextFormatter &rLine, const sal_Int32 nOffset,
                                const sal_Int32 nStrEnd, const sal_uInt8 nMode );
 
     // Iterates all Lines and sets the line spacing using the attribute
@@ -97,7 +97,7 @@ class SwTextFrame: public SwContentFrame
     // Evaluates the Preps in Format()
     bool CalcPreps();
     void PrepWidows( const sal_uInt16 nNeed, bool bNotify = true );
-    void _InvalidateRange( const SwCharRange &, const long = 0);
+    void InvalidateRange_( const SwCharRange &, const long = 0);
     inline void InvalidateRange( const SwCharRange &, const long = 0);
 
     // WidowsAndOrphans, AdjustFrame, AdjustFollow
@@ -133,7 +133,7 @@ class SwTextFrame: public SwContentFrame
     bool IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const;
 
     // Changes the Frame or not (cf. FlyCnt)
-    bool _GetCursorOfst(SwPosition *pPos, const Point &rPoint,
+    bool GetCursorOfst_(SwPosition *pPos, const Point &rPoint,
                       const bool bChgFrame, SwCursorMoveState* = nullptr ) const;
     void FillCursorPos( SwFillData &rFill ) const;
 
@@ -141,9 +141,9 @@ class SwTextFrame: public SwContentFrame
     bool FormatLine( SwTextFormatter &rLine, const bool bPrev );
 
     // In order to safe stack space, we split this method:
-    // _Format calls _Format with parameters
-    void _Format( vcl::RenderContext* pRenderContext, SwParaPortion *pPara );
-    void _Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
+    // Format_ calls Format_ with parameters
+    void Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pPara );
+    void Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                   const bool bAdjust = false );
     void FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
 
@@ -155,7 +155,7 @@ class SwTextFrame: public SwContentFrame
                                        const sal_Int32 nEnd);
 
     // inline branch
-    SwTwips _GetFootnoteFrameHeight() const;
+    SwTwips GetFootnoteFrameHeight_() const;
 
     // Outsourced to CalcPreps
     bool CalcPrepFootnoteAdjust();
@@ -164,11 +164,11 @@ class SwTextFrame: public SwContentFrame
     void ValidateFrame();
     void ValidateBodyFrame();
 
-    bool _GetDropRect( SwRect &rRect ) const;
+    bool GetDropRect_( SwRect &rRect ) const;
 
     void SetPara( SwParaPortion *pNew, bool bDelete = true );
 
-    bool _IsFootnoteNumFrame() const;
+    bool IsFootnoteNumFrame_() const;
 
     // Refresh formatting information
     bool FormatQuick( bool bForceQuickFormat );
@@ -196,7 +196,7 @@ class SwTextFrame: public SwContentFrame
         optional input parameter - boolean indicating, if the font has to be
         used to determine the height of the last line. default value: false
     */
-    void _CalcHeightOfLastLine( const bool _bUseFont = false );
+    void CalcHeightOfLastLine( const bool _bUseFont = false );
 
     virtual void DestroyImpl() override;
     virtual ~SwTextFrame();
@@ -215,7 +215,7 @@ public:
     void Init();
 
     /// Is called by FormatSpelling()
-    SwRect _AutoSpell( const SwContentNode*, sal_Int32 );
+    SwRect AutoSpell_( const SwContentNode*, sal_Int32 );
 
     /// Is called by FormatSpelling()
     SwRect SmartTagScan( SwContentNode* , sal_Int32 );
@@ -276,7 +276,7 @@ public:
      * character-bound Frame)
      */
     inline bool GetKeyCursorOfst(SwPosition *pPos, const Point &rPoint ) const
-            { return _GetCursorOfst( pPos, rPoint, false ); }
+            { return GetCursorOfst_( pPos, rPoint, false ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
     SwRect Paint();
@@ -296,9 +296,9 @@ public:
                             bool bSetInReadOnly = false ) const override;
     virtual bool UnitDown(SwPaM *, const SwTwips nOffset = 0,
                             bool bSetInReadOnly = false ) const override;
-    bool _UnitUp(SwPaM *, const SwTwips nOffset = 0,
+    bool UnitUp_(SwPaM *, const SwTwips nOffset = 0,
                             bool bSetInReadOnly = false ) const;
-    bool _UnitDown(SwPaM *, const SwTwips nOffset = 0,
+    bool UnitDown_(SwPaM *, const SwTwips nOffset = 0,
                             bool bSetInReadOnly = false ) const;
 
     /**
@@ -312,7 +312,7 @@ public:
     void            SplitFrame( const sal_Int32 nTextPos );
     SwContentFrame *JoinFrame();
     inline sal_Int32  GetOfst() const { return mnOffset; }
-           void        _SetOfst( const sal_Int32 nNewOfst );
+           void        SetOfst_( const sal_Int32 nNewOfst );
     inline void        SetOfst ( const sal_Int32 nNewOfst );
     inline void        ManipOfst ( const sal_Int32 nNewOfst ){ mnOffset = nNewOfst; }
            SwTextFrame   *GetFrameAtPos ( const SwPosition &rPos);
@@ -369,7 +369,7 @@ public:
     SwParaPortion *GetPara();
     inline const SwParaPortion *GetPara() const;
     inline bool HasPara() const;
-    bool _HasPara() const;
+    bool HasPara_() const;
 
     // If there are any hanging punctuation portions in the margin
     // the offset will be returned.
@@ -466,7 +466,7 @@ public:
 
     /// DropCaps and selections
     inline bool GetDropRect( SwRect &rRect ) const
-    { return HasPara() && _GetDropRect( rRect ); }
+    { return HasPara() && GetDropRect_( rRect ); }
 
     static SwCache *GetTextCache() { return pTextCache; }
     static void     SetTextCache( SwCache *pNew ) { pTextCache = pNew; }
@@ -481,7 +481,7 @@ public:
 
     /// Am I a FootnoteFrame, with a number at the start of the paragraph?
     inline bool IsFootnoteNumFrame() const
-    { return IsInFootnote() && !GetIndPrev() && _IsFootnoteNumFrame(); }
+    { return IsInFootnote() && !GetIndPrev() && IsFootnoteNumFrame_(); }
 
     /**
      * Simulates a formatting as if there were not right margin or Flys or other
@@ -644,7 +644,7 @@ private:
     bool m_bOldLocked;
 public:
     //Lock pFrame for the lifetime of the Cut/Paste call, etc. to avoid
-    //SwTextFrame::_AdjustFollow removing the pFrame we're trying to Make
+    //SwTextFrame::AdjustFollow_ removing the pFrame we're trying to Make
     TextFrameLockGuard(SwFrame* pFrame)
     {
         m_pTextFrame = pFrame->IsTextFrame() ? static_cast<SwTextFrame*>(pFrame) : nullptr;
@@ -673,7 +673,7 @@ inline const SwParaPortion *SwTextFrame::GetPara() const
 
 inline bool SwTextFrame::HasPara() const
 {
-    return mnCacheIndex!=USHRT_MAX && _HasPara();
+    return mnCacheIndex!=USHRT_MAX && HasPara_();
 }
 
 inline SwTwips SwTextFrame::GrowTst( const SwTwips nGrow )
@@ -698,7 +698,7 @@ inline bool SwTextFrame::IsInside( const sal_Int32 nPos ) const
 inline SwTwips SwTextFrame::GetFootnoteFrameHeight() const
 {
     if(  !IsFollow() && IsInFootnote() && HasPara() )
-        return _GetFootnoteFrameHeight();
+        return GetFootnoteFrameHeight_();
     else
         return 0;
 }
@@ -720,7 +720,7 @@ inline const SwTextFrame *SwTextFrame::GetFrameAtPos( const SwPosition &rPos) co
 inline void SwTextFrame::SetOfst( const sal_Int32 nNewOfst )
 {
     if ( mnOffset != nNewOfst )
-        _SetOfst( nNewOfst );
+        SetOfst_( nNewOfst );
 }
 
 inline void SwTextFrame::SetRepaint() const

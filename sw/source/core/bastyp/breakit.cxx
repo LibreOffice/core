@@ -36,13 +36,13 @@ using namespace com::sun::star;
 
 SwBreakIt* g_pBreakIt = nullptr;
 
-void SwBreakIt::_Create( const uno::Reference<uno::XComponentContext> & rxContext )
+void SwBreakIt::Create_( const uno::Reference<uno::XComponentContext> & rxContext )
 {
     delete g_pBreakIt;
     g_pBreakIt = new SwBreakIt( rxContext );
 }
 
-void SwBreakIt::_Delete()
+void SwBreakIt::Delete_()
 {
     delete g_pBreakIt;
     g_pBreakIt = nullptr;
@@ -74,7 +74,7 @@ void SwBreakIt::createBreakIterator() const
         xBreak.set( i18n::BreakIterator::create(m_xContext) );
 }
 
-void SwBreakIt::_GetLocale( const LanguageType aLang )
+void SwBreakIt::GetLocale_( const LanguageType aLang )
 {
     if (m_pLanguageTag)
         m_pLanguageTag->reset( aLang );
@@ -82,7 +82,7 @@ void SwBreakIt::_GetLocale( const LanguageType aLang )
         m_pLanguageTag = new LanguageTag( aLang );
 }
 
-void SwBreakIt::_GetLocale( const LanguageTag& rLanguageTag )
+void SwBreakIt::GetLocale_( const LanguageTag& rLanguageTag )
 {
     if (m_pLanguageTag)
         *m_pLanguageTag = rLanguageTag;
@@ -90,7 +90,7 @@ void SwBreakIt::_GetLocale( const LanguageTag& rLanguageTag )
         m_pLanguageTag = new LanguageTag( rLanguageTag );
 }
 
-void SwBreakIt::_GetForbidden( const LanguageType aLang )
+void SwBreakIt::GetForbidden_( const LanguageType aLang )
 {
     LocaleDataWrapper aWrap( m_xContext, GetLanguageTag( aLang ) );
 

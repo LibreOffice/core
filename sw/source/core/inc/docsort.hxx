@@ -29,8 +29,8 @@ class SwUndoSort;
 class FlatFndBox;
 struct SwSortOptions;
 struct SwSortElement;
-class _FndBox;
-class _FndLine;
+class FndBox_;
+class FndLine_;
 class CollatorWrapper;
 class LocaleDataWrapper;
 
@@ -117,28 +117,28 @@ struct SwSortBoxElement : public SwSortElement
 class FlatFndBox
 {
 public:
-    FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox);
+    FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox);
     ~FlatFndBox();
 
     bool            IsSymmetric() const { return bSym;  }
     sal_uInt16          GetRows()     const { return nRows; }
     sal_uInt16          GetCols()     const { return nCols; }
 
-    const _FndBox*      GetBox(sal_uInt16 nCol, sal_uInt16 nRow) const;
+    const FndBox_*      GetBox(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
     inline bool     HasItemSets() const;
     const SfxItemSet*   GetItemSet(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
 private:
-    bool            CheckLineSymmetry(const _FndBox& rBox);
-    bool            CheckBoxSymmetry(const _FndLine& rLn);
-    sal_uInt16          GetColCount(const _FndBox& rBox);
-    sal_uInt16          GetRowCount(const _FndBox& rBox);
-    void                FillFlat(const _FndBox&, bool bLastBox=false);
+    bool            CheckLineSymmetry(const FndBox_& rBox);
+    bool            CheckBoxSymmetry(const FndLine_& rLn);
+    sal_uInt16          GetColCount(const FndBox_& rBox);
+    sal_uInt16          GetRowCount(const FndBox_& rBox);
+    void                FillFlat(const FndBox_&, bool bLastBox=false);
 
     SwDoc*              pDoc;
-    const _FndBox&      rBoxRef;
-    const _FndBox**     pArr;
+    const FndBox_&      rBoxRef;
+    const FndBox_**     pArr;
     SfxItemSet**        ppItemSets;
 
     sal_uInt16          nRows;

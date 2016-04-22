@@ -1656,22 +1656,22 @@ private:
     // interfaces for the toggle attributes
     void SetToggleAttr(sal_uInt8 nAttrId, bool bOn);
     void SetToggleBiDiAttr(sal_uInt8 nAttrId, bool bOn);
-    void _ChkToggleAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask );
+    void ChkToggleAttr_( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask );
 
     void ChkToggleAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask )
     {
         if( nOldStyle81Mask != nNewStyle81Mask &&
             m_pCtrlStck->GetToggleAttrFlags() )
-            _ChkToggleAttr( nOldStyle81Mask, nNewStyle81Mask );
+            ChkToggleAttr_( nOldStyle81Mask, nNewStyle81Mask );
     }
 
-    void _ChkToggleBiDiAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask );
+    void ChkToggleBiDiAttr_( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask );
 
     void ChkToggleBiDiAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask )
     {
         if( nOldStyle81Mask != nNewStyle81Mask &&
             m_pCtrlStck->GetToggleBiDiAttrFlags() )
-            _ChkToggleBiDiAttr( nOldStyle81Mask, nNewStyle81Mask );
+            ChkToggleBiDiAttr_( nOldStyle81Mask, nNewStyle81Mask );
     }
 
     void PopTableDesc();

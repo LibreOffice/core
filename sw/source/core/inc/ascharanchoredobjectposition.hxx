@@ -88,7 +88,7 @@ namespace objectpositioning
 
             @return relative position to the base line
         */
-        SwTwips _GetRelPosToBase( const SwTwips          _nObjBoundHeight,
+        SwTwips GetRelPosToBase( const SwTwips          _nObjBoundHeight,
                                   const SwFormatVertOrient& _rVert );
 
     public:

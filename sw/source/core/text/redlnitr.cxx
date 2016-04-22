@@ -191,7 +191,7 @@ SwRedlineItr::~SwRedlineItr()
 
 // The return value of SwRedlineItr::Seek tells you if the current font
 // has been manipulated by leaving (-1) or accessing (+1) of a section
-short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
+short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
 {
     short nRet = 0;
     if( ExtOn() )
@@ -204,13 +204,13 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             if( nNew >= nEnd )
             {
                 --nRet;
-                _Clear( &rFnt );    // We go behind the current section
+                Clear_( &rFnt );    // We go behind the current section
                 ++nAct;             // and check the next one
             }
             else if( nNew < nStart )
             {
                 --nRet;
-                _Clear( &rFnt );    // We go in front of the current section
+                Clear_( &rFnt );    // We go in front of the current section
                 if( nAct > nFirst )
                     nAct = nFirst;  // the test has to run from the beginning
                 else
@@ -320,7 +320,7 @@ void SwRedlineItr::ChangeTextAttr( SwFont* pFnt, SwTextAttr &rHt, bool bChg )
     }
 }
 
-void SwRedlineItr::_Clear( SwFont* pFnt )
+void SwRedlineItr::Clear_( SwFont* pFnt )
 {
     OSL_ENSURE( bOn, "SwRedlineItr::Clear: Off?" );
     bOn = false;
@@ -338,7 +338,7 @@ void SwRedlineItr::_Clear( SwFont* pFnt )
         pFnt->SetNoCol( false );
 }
 
-sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
+sal_Int32 SwRedlineItr::GetNextRedln_( sal_Int32 nNext )
 {
     nNext = NextExtend( nNext );
     if( !bShow || COMPLETE_STRING == nFirst )
@@ -358,7 +358,7 @@ sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
     return nNext;
 }
 
-bool SwRedlineItr::_ChkSpecialUnderline() const
+bool SwRedlineItr::ChkSpecialUnderline_() const
 {
     // If the underlining or the escapement is caused by redlining,
     // we always apply the SpecialUnderlining, i.e. the underlining
@@ -440,7 +440,7 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
     return 0;
 }
 
-bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
+bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
     const sal_uInt16 nOldAttr = rArr[ nPos - nStart ];

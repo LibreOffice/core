@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwFormatField
     , public SwModify
     , public SfxBroadcaster
 {
-    friend void _InitCore();
+    friend void InitCore();
     SwFormatField( sal_uInt16 nWhich ); // for default-Attibute
 
     css::uno::WeakReference<css::text::XTextField> m_wXTextField;

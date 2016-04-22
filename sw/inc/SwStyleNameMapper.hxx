@@ -77,8 +77,8 @@ typedef std::unordered_map<OUString, sal_uInt16, OUStringHash> NameToIdHash;
 
 class SwStyleNameMapper
 {
-    friend void _InitCore();
-    friend void _FinitCore();
+    friend void InitCore();
+    friend void FinitCore();
 
 protected:
     // UI Name tables

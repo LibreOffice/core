@@ -58,7 +58,7 @@
 using namespace ::com::sun::star;
 
 // global variables declared in fntcache.hxx
-// FontCache is created in txtinit.cxx _TextInit and deleted in _TextFinit
+// FontCache is created in txtinit.cxx TextInit_ and deleted in TextFinit
 SwFntCache *pFntCache = nullptr;
 // last Font set by ChgFntCache
 SwFntObj *pLastFont = nullptr;

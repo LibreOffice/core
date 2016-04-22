@@ -123,7 +123,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
     /// Copies the attributes at nStart to pDest.
     SAL_DLLPRIVATE void CopyAttr( SwTextNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
 
-    SAL_DLLPRIVATE SwTextNode* _MakeNewTextNode( const SwNodeIndex&, bool bNext = true,
+    SAL_DLLPRIVATE SwTextNode* MakeNewTextNode( const SwNodeIndex&, bool bNext = true,
                                 bool bChgFollow = true );
 
     SAL_DLLPRIVATE void CutImpl(
@@ -150,7 +150,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     SAL_DLLPRIVATE void CalcHiddenCharFlags() const;
 
-    SAL_DLLPRIVATE SwNumRule * _GetNumRule(bool bInParent = true) const;
+    SAL_DLLPRIVATE SwNumRule * GetNumRule_(bool bInParent = true) const;
 
     SAL_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
             LanguageType nLang, sal_uInt16 nLangWhichId,
@@ -410,7 +410,7 @@ public:
 
     inline SwTextFormatColl *GetTextColl() const;
     virtual SwFormatColl *ChgFormatColl( SwFormatColl* ) override;
-    void _ChgTextCollUpdateNum( const SwTextFormatColl* pOld,
+    void ChgTextCollUpdateNum( const SwTextFormatColl* pOld,
                                 const SwTextFormatColl* pNew );
 
     /** Copy collection with all auto formats to dest-node.

@@ -277,7 +277,7 @@ static bool lcl_HasContent( const SwFieldPortion& rField, SwTextFormatInfo &rInf
     return rField.GetExpText( rInf, aText ) && !aText.isEmpty();
 }
 
-bool SwTextPortion::_Format( SwTextFormatInfo &rInf )
+bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 {
     // 5744: If only the hyphen does not fit anymore, we still need to wrap
     // the word, or else return true!
@@ -450,7 +450,7 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
         "SwTextPortion::Format: missing real width" );
     OSL_ENSURE( Height(), "SwTextPortion::Format: missing height" );
 
-    return _Format( rInf );
+    return Format_( rInf );
 }
 
 // Format end of line

@@ -421,7 +421,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
     if( !bNext )
         aFndPos.nNode = 0;
-    _SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
+    SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
     {
         const SwNode* pSttNd = rPos.nNode.GetNode().FindTableBoxStartNode();
@@ -430,7 +430,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
             const SwTableBox* pTBox = pSttNd->FindTableNode()->GetTable().
                                         GetTableBox( pSttNd->GetIndex() );
             if( pTBox )
-                aCurGEF = _SetGetExpField( *pTBox );
+                aCurGEF = SetGetExpField( *pTBox );
         }
     }
 
@@ -459,7 +459,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                 if( pCNd && nullptr != ( pCFrame = pCNd->getLayoutFrame( GetLayout(), &aPt, nullptr, false ) ) &&
                     (IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
                 {
-                    _SetGetExpField aCmp( *pTBox );
+                    SetGetExpField aCmp( *pTBox );
                     aCmp.SetBodyPos( *pCFrame );
 
                     if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )
@@ -503,7 +503,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
     if( !bNext )
         aFndPos.nNode = 0;
-    _SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
+    SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
         // also at collection use only the first frame
@@ -528,7 +528,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
                 ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
             {
                 SwNodeIndex aNdIndex( *pTextNd ); // UNIX needs this object
-                _SetGetExpField aCmp( aNdIndex, *pTextTOX, nullptr );
+                SetGetExpField aCmp( aNdIndex, *pTextTOX, nullptr );
                 aCmp.SetBodyPos( *pCFrame );
 
                 if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )
@@ -582,7 +582,7 @@ const SwTOXMark& SwCursorShell::GotoTOXMark( const SwTOXMark& rStart,
 
 /// jump to next/previous field type
 void lcl_MakeFieldLst(
-    _SetGetExpFields& rLst,
+    SetGetExpFields& rLst,
     const SwFieldType& rFieldType,
     const bool bInReadOnly,
     const bool bChkInpFlag = false )
@@ -604,7 +604,7 @@ void lcl_MakeFieldLst(
             if ( pCFrame != nullptr
                  && ( bInReadOnly || !pCFrame->IsProtected() ) )
             {
-                _SetGetExpField* pNew = new _SetGetExpField( SwNodeIndex( rTextNode ), pTextField );
+                SetGetExpField* pNew = new SetGetExpField( SwNodeIndex( rTextNode ), pTextField );
                 pNew->SetBodyPos( *pCFrame );
                 rLst.insert( pNew );
             }
@@ -612,22 +612,22 @@ void lcl_MakeFieldLst(
     }
 }
 
-static _SetGetExpFields::const_iterator
-lcl_FindField(bool & o_rFound, _SetGetExpFields const& rSrtLst,
+static SetGetExpFields::const_iterator
+lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
         SwRootFrame *const pLayout, SwTextNode *const pTextNode,
         SwTextField *const pTextField, SwPosition const& rPos,
         sal_Int32 const nContentOffset)
 {
-    std::unique_ptr<_SetGetExpField> pSrch;
+    std::unique_ptr<SetGetExpField> pSrch;
     std::unique_ptr<SwIndex> pIndex;
     if (-1 == nContentOffset)
     {
-        pSrch.reset(new _SetGetExpField(rPos.nNode, pTextField, &rPos.nContent));
+        pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, &rPos.nContent));
     }
     else
     {
         pIndex.reset(new SwIndex(rPos.nNode.GetNode().GetContentNode(), nContentOffset));
-        pSrch.reset(new _SetGetExpField(rPos.nNode, pTextField, pIndex.get()));
+        pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, pIndex.get()));
     }
 
     if (rPos.nNode.GetIndex() < pTextNode->GetNodes().GetEndOfExtras().GetIndex())
@@ -637,7 +637,7 @@ lcl_FindField(bool & o_rFound, _SetGetExpFields const& rSrtLst,
         pSrch->SetBodyPos(*pTextNode->getLayoutFrame(pLayout, &aPt, &rPos, false));
     }
 
-    _SetGetExpFields::const_iterator it = rSrtLst.lower_bound(pSrch.get());
+    SetGetExpFields::const_iterator it = rSrtLst.lower_bound(pSrch.get());
 
     o_rFound = (it != rSrtLst.end()) && (**it == *pSrch);
     return it;
@@ -650,7 +650,7 @@ bool SwCursorShell::MoveFieldType(
     const bool bAddSetExpressionFieldsToInputFields )
 {
     // sorted list of all fields
-    _SetGetExpFields aSrtLst;
+    SetGetExpFields aSrtLst;
 
     if ( pFieldType )
     {
@@ -695,7 +695,7 @@ bool SwCursorShell::MoveFieldType(
     if( aSrtLst.empty() )
         return false;
 
-    _SetGetExpFields::const_iterator it;
+    SetGetExpFields::const_iterator it;
     SwCursor* pCursor = getShellCursor( true );
     {
         // (1998): Always use field for search so that the right one is found as
@@ -767,7 +767,7 @@ bool SwCursorShell::MoveFieldType(
             }
         }
     }
-    const _SetGetExpField& rFnd = **it;
+    const SetGetExpField& rFnd = **it;
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -1639,7 +1639,7 @@ const SwPostItField* SwCursorShell::GetPostItFieldAtCursor() const
 
     if ( !IsTableMode() )
     {
-        const SwPosition* pCursorPos = _GetCursor()->GetPoint();
+        const SwPosition* pCursorPos = GetCursor_()->GetPoint();
         const SwTextNode* pTextNd = pCursorPos->nNode.GetNode().GetTextNode();
         if ( pTextNd )
         {
@@ -2000,7 +2000,7 @@ const SwRangeRedline* SwCursorShell::SelPrevRedline()
     return pFnd;
 }
 
-const SwRangeRedline* SwCursorShell::_GotoRedline( sal_uInt16 nArrPos, bool bSelect )
+const SwRangeRedline* SwCursorShell::GotoRedline_( sal_uInt16 nArrPos, bool bSelect )
 {
     const SwRangeRedline* pFnd = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -2085,7 +2085,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline( sal_uInt16 nArrPos, bool bSele
             sal_uInt16 nArrSavPos = nArrPos;
 
             do {
-                pTmp = _GotoRedline( nArrPos, true );
+                pTmp = GotoRedline_( nArrPos, true );
 
                 if( !pFnd )
                     pFnd = pTmp;
@@ -2172,7 +2172,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline( sal_uInt16 nArrPos, bool bSele
             } while( nLoopCnt );
         }
         else
-            pFnd = _GotoRedline( nArrPos, bSelect );
+            pFnd = GotoRedline_( nArrPos, bSelect );
     }
     return pFnd;
 }
@@ -2185,8 +2185,8 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
     sal_uLong nBodySttNdIdx = pBodySttNd->GetIndex();
     Point aPt;
 
-    _SetGetExpField aCmpPos( SwPosition( bNext ? *pBodyEndNd : *pBodySttNd ) );
-    _SetGetExpField aCurPos( bNext ? *m_pCurrentCursor->End() : *m_pCurrentCursor->Start() );
+    SetGetExpField aCmpPos( SwPosition( bNext ? *pBodyEndNd : *pBodySttNd ) );
+    SetGetExpField aCurPos( bNext ? *m_pCurrentCursor->End() : *m_pCurrentCursor->Start() );
     if( aCurPos.GetNode() < nBodySttNdIdx )
     {
         const SwContentNode* pCNd = aCurPos.GetNodeFromContent()->GetContentNode();
@@ -2209,7 +2209,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                 {
                     SwTextINetFormat& rAttr = *pFnd;
                     SwPosition aTmpPos( *pTextNd );
-                    _SetGetExpField aPos( aTmpPos.nNode, rAttr );
+                    SetGetExpField aPos( aTmpPos.nNode, rAttr );
                     SwContentFrame* pFrame;
                     if( pTextNd->GetIndex() < nBodySttNdIdx &&
                         nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt )) )
@@ -2246,7 +2246,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                 if( pFly &&
                     GetBodyTextNode( *GetDoc(), aTmpPos, *pFly->GetLower() ) )
                 {
-                    _SetGetExpField aPos( *pFormat, &aTmpPos );
+                    SetGetExpField aPos( *pFormat, &aTmpPos );
 
                     if( bNext
                             ? ( aPos < aCmpPos && aCurPos < aPos )

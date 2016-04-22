@@ -84,8 +84,8 @@ class SwXMLImport: public SvXMLImport
 
     SwDoc*      m_pDoc; // cached for getDoc()
 
-    void                    _InitItemImport();
-    void                    _FinitItemImport();
+    void                    InitItemImport();
+    void                    FinitItemImport();
     void                    UpdateTextCollConditions( SwDoc *pDoc );
 
     void         setTextInsertMode(

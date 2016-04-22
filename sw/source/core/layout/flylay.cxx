@@ -273,7 +273,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
     SwRect aClip, aTmpStretch;
     ::CalcClipRect( pObj, aClip );
     ::CalcClipRect( pObj, aTmpStretch, false );
-    aClip._Intersection( aTmpStretch );
+    aClip.Intersection_( aTmpStretch );
 
     const long nBot = Frame().Top() + Frame().Height();
     const long nRig = Frame().Left() + Frame().Width();

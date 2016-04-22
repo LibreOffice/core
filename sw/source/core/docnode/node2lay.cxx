@@ -387,7 +387,7 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
                     static_cast<SwSectionFrame*>(pNxt)->UnlockJoin();
                 pUp = static_cast<SwLayoutFrame*>((*pUpperFrames)[x++]);
                 OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrame(), "Lost Upper" );
-                ::_InsertCnt( pUp, pDoc, pNd->GetIndex(), false, nStt+1, pNxt );
+                ::InsertCnt_( pUp, pDoc, pNd->GetIndex(), false, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
                 (*pUpperFrames)[x-2] = pNxt;
             }
@@ -406,7 +406,7 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
             // #i18103# - invalidate size of section in order to
             // assure, that the section is formatted, unless it was 'Collocked'
             // from its 'collection' until its 'restoration'.
-            pSctFrame->_InvalidateSize();
+            pSctFrame->InvalidateSize_();
         }
     }
 }

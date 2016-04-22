@@ -1117,7 +1117,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( m_pWrtShell->GetViewOptions()->GetZoomType() != SvxZoomType::PERCENT &&
              !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-            _SetZoom( aEditSz, (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType(), 100, true );
+            SetZoom_( aEditSz, (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType(), 100, true );
         m_pWrtShell->EndAction();
 
         bRepeat = bScroll1 != m_pVScrollbar->IsVisible(true);

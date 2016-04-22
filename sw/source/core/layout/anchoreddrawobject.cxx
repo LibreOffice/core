@@ -285,7 +285,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         if ( dynamic_cast< const SwDrawVirtObj* >(GetDrawObj()) ==  nullptr &&
              !static_cast<SwDrawFrameFormat&>(GetFrameFormat()).IsPosAttrSet() )
         {
-            _SetPositioningAttr();
+            SetPositioningAttr();
         }
         // -->
         // - reset internal flag after all needed actions are performed to
@@ -312,16 +312,16 @@ void SwAnchoredDrawObject::MakeObjPos()
             case FLY_AT_CHAR:
             {
                 // --> #i32795# - move intrinsic positioning to
-                // helper method <_MakeObjPosAnchoredAtPara()>
-                _MakeObjPosAnchoredAtPara();
+                // helper method <MakeObjPosAnchoredAtPara()>
+                MakeObjPosAnchoredAtPara();
             }
             break;
             case FLY_AT_PAGE:
             case FLY_AT_FLY:
             {
                 // --> #i32795# - move intrinsic positioning to
-                // helper method <_MakeObjPosAnchoredAtLayout()>
-                _MakeObjPosAnchoredAtLayout();
+                // helper method <MakeObjPosAnchoredAtLayout()>
+                MakeObjPosAnchoredAtLayout();
             }
             break;
             default:
@@ -373,7 +373,7 @@ void SwAnchoredDrawObject::MakeObjPos()
 
     #i32795# - helper method for method <MakeObjPos>
 */
-void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
+void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
 {
     // --> #i32795# - adopt positioning algorithm from Writer
     // fly frames, which are anchored at paragraph|at character
@@ -420,7 +420,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
 
             // get further needed results of the positioning algorithm
             SetVertPosOrientFrame ( aObjPositioning.GetVertPosOrientFrame() );
-            _SetDrawObjAnchor();
+            SetDrawObjAnchor();
 
             // check for object position oscillation, if position has changed.
             if ( GetObjRect().Pos() != aPosNotify.LastObjPos() )
@@ -461,7 +461,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
 
     #i32795# - helper method for method <MakeObjPos>
 */
-void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
+void SwAnchoredDrawObject::MakeObjPosAnchoredAtLayout()
 {
     // indicate that position will be valid after positioning is performed
     mbValidPos = true;
@@ -494,7 +494,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
     SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
 }
 
-void SwAnchoredDrawObject::_SetDrawObjAnchor()
+void SwAnchoredDrawObject::SetDrawObjAnchor()
 {
     // new anchor position
     // --> #i31698# -
@@ -519,7 +519,7 @@ void SwAnchoredDrawObject::_SetDrawObjAnchor()
 
     #i28701#
 */
-void SwAnchoredDrawObject::_InvalidatePage( SwPageFrame* _pPageFrame )
+void SwAnchoredDrawObject::InvalidatePage_( SwPageFrame* _pPageFrame )
 {
     if ( _pPageFrame && !_pPageFrame->GetFormat()->GetDoc()->IsInDtor() )
     {
@@ -578,7 +578,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             }
 
             SwPageFrame* pPageFrame = AnchorFrame()->FindPageFrame();
-            _InvalidatePage( pPageFrame );
+            InvalidatePage_( pPageFrame );
 
             // --> #i32270# - also invalidate page frame, at which the
             // drawing object is registered at.
@@ -586,7 +586,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             if ( pPageFrameRegisteredAt &&
                  pPageFrameRegisteredAt != pPageFrame )
             {
-                _InvalidatePage( pPageFrameRegisteredAt );
+                InvalidatePage_( pPageFrameRegisteredAt );
             }
             // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
             // is replaced by method <FindPageFrameOfAnchor()>. It's return value
@@ -596,7 +596,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
                  pPageFrameOfAnchor != pPageFrame &&
                  pPageFrameOfAnchor != pPageFrameRegisteredAt )
             {
-                _InvalidatePage( pPageFrameOfAnchor );
+                InvalidatePage_( pPageFrameOfAnchor );
             }
         }
     }
@@ -670,14 +670,14 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 }
 
 // --> #i68520#
-bool SwAnchoredDrawObject::_SetObjTop( const SwTwips _nTop )
+bool SwAnchoredDrawObject::SetObjTop_( const SwTwips _nTop )
 {
     SwTwips nDiff = _nTop - GetObjRect().Top();
     DrawObj()->Move( Size( 0, nDiff ) );
 
     return nDiff != 0;
 }
-bool SwAnchoredDrawObject::_SetObjLeft( const SwTwips _nLeft )
+bool SwAnchoredDrawObject::SetObjLeft_( const SwTwips _nLeft )
 {
     SwTwips nDiff = _nLeft - GetObjRect().Left();
     DrawObj()->Move( Size( nDiff, 0 ) );
@@ -750,7 +750,7 @@ void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
     (not anchored as-character) imported from OpenOffice.org file format
     once and directly before the first positioning.
 */
-void SwAnchoredDrawObject::_SetPositioningAttr()
+void SwAnchoredDrawObject::SetPositioningAttr()
 {
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(GetUserCall( GetDrawObj() ));
@@ -787,7 +787,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
                 break;
                 default:
                 {
-                    OSL_FAIL( "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
+                    OSL_FAIL( "<SwAnchoredDrawObject::SetPositioningAttr()> - unsupported layout direction" );
                 }
             }
         }

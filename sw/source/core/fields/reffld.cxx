@@ -921,7 +921,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
     return pTextNd;
 }
 
-struct _RefIdsMap
+struct RefIdsMap
 {
 private:
     OUString aName;
@@ -937,7 +937,7 @@ private:
     static sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    explicit _RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}
+    explicit RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 
@@ -947,7 +947,7 @@ public:
 /// Get a sorted list of the field IDs from a document.
 /// @param[in]     rDoc The document to search.
 /// @param[in,out] rIds The list of IDs found in the document.
-void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
+void RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
     SwFieldType *const pType = rDoc.getIDocumentFieldsAccess().GetFieldType(RES_SETEXPFLD, aName, false);
 
@@ -972,7 +972,7 @@ void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 /// Get a sorted list of the footnote/endnote IDs from a document.
 /// @param[in]     rDoc The document to search.
 /// @param[in,out] rIds The list of IDs found in the document.
-void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
+void RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
     for( auto n = rDoc.GetFootnoteIdxs().size(); n; )
         rIds.insert( rDoc.GetFootnoteIdxs()[ --n ]->GetSeqRefNo() );
@@ -982,7 +982,7 @@ void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 /// @param[in] rDoc     The source document.
 /// @param[in] rDestDoc The destination document.
 /// @param[in] bField   True if we're interested in all fields, false for footnotes.
-void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
+void RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
 {
     if( bInit )
         return;
@@ -1032,7 +1032,7 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
 /// Get the lowest number unused in the passed set.
 /// @param[in] rIds The set of used ID numbers.
 /// @returns The lowest number unused by the passed set
-sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
+sal_uInt16 RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
 {
     sal_uInt16 num(0);
     std::set<sal_uInt16>::iterator it;
@@ -1051,13 +1051,13 @@ sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
 /// Add a new ID and sequence number to the "occupied" collection.
 /// @param[in] id     The ID number.
 /// @param[in] seqNum The sequence number.
-void _RefIdsMap::AddId( sal_uInt16 id, sal_uInt16 seqNum )
+void RefIdsMap::AddId( sal_uInt16 id, sal_uInt16 seqNum )
 {
     aIds.insert( id );
     sequencedIds[ seqNum ] = id;
 }
 
-void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField,
+void RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField,
                         bool bField )
 {
     Init( rDoc, rDestDoc, bField);
@@ -1096,8 +1096,8 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 
         // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
         // need to be converted to have unique IDs for both documents
-        _RefIdsMap aFntMap( aEmptyOUStr );
-        std::vector<std::unique_ptr<_RefIdsMap>> aFieldMap;
+        RefIdsMap aFntMap( aEmptyOUStr );
+        std::vector<std::unique_ptr<RefIdsMap>> aFieldMap;
 
         SwIterator<SwFormatField,SwFieldType> aIter( *this );
         for( SwFormatField* pField = aIter.First(); pField; pField = aIter.Next() )
@@ -1107,7 +1107,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
             {
             case REF_SEQUENCEFLD:
                 {
-                    _RefIdsMap* pMap = nullptr;
+                    RefIdsMap* pMap = nullptr;
                     for( auto n = aFieldMap.size(); n; )
                     {
                         if (aFieldMap[ --n ]->GetName() == rRefField.GetSetRefName())
@@ -1118,8 +1118,8 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                     }
                     if( !pMap )
                     {
-                        pMap = new _RefIdsMap( rRefField.GetSetRefName() );
-                        aFieldMap.push_back(std::unique_ptr<_RefIdsMap>(pMap));
+                        pMap = new RefIdsMap( rRefField.GetSetRefName() );
+                        aFieldMap.push_back(std::unique_ptr<RefIdsMap>(pMap));
                     }
 
                     pMap->Check( *pDoc, rDestDoc, rRefField, true );

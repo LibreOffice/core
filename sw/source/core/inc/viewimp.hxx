@@ -113,7 +113,7 @@ private:
         has to be invalidated.
         If NULL, no CONTENT_FLOWS_TO relation has to be invalidated
     */
-    void _InvalidateAccessibleParaFlowRelation( const SwTextFrame* _pFromTextFrame,
+    void InvalidateAccessibleParaFlowRelation_( const SwTextFrame* _pFromTextFrame,
                                                 const SwTextFrame* _pToTextFrame );
 
     /** invalidate text selection for paragraphs
@@ -122,7 +122,7 @@ private:
         implementation for wrapper method
         <SwViewShell::InvalidateAccessibleParaTextSelection(..)>
     */
-    void _InvalidateAccessibleParaTextSelection();
+    void InvalidateAccessibleParaTextSelection_();
 
     /** invalidate attributes for paragraphs and paragraph's characters
 
@@ -130,7 +130,7 @@ private:
         implementation for wrapper method
         <SwViewShell::InvalidateAccessibleParaAttrs(..)>
     */
-    void _InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFrame );
+    void InvalidateAccessibleParaAttrs_( const SwTextFrame& rTextFrame );
 
 public:
     SwViewShellImp( SwViewShell * );

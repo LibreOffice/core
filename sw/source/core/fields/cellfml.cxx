@@ -310,7 +310,7 @@ SwTableFormula::~SwTableFormula()
 {
 }
 
-void SwTableFormula::_MakeFormula( const SwTable& rTable, OUString& rNewStr,
+void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     SwTableCalcPara* pCalcPara = static_cast<SwTableCalcPara*>(pPara);
@@ -649,7 +649,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
             // JP 16.02.99: SplitMergeBoxNm take care of the name themself
             // JP 22.02.99: Linux compiler needs cast
             // JP 28.06.99: rel. BoxName has no preceding tablename!
-            if( fnFormula != (FnScanFormula)&SwTableFormula::_SplitMergeBoxNm &&
+            if( fnFormula != (FnScanFormula)&SwTableFormula::SplitMergeBoxNm_ &&
                 m_sFormula.getLength()>(nStt+1) && cRelIdentifier != m_sFormula[nStt+1] &&
                 (nSeparator = m_sFormula.indexOf( '.', nStt ))>=0
                 && nSeparator < nEnd )
@@ -662,7 +662,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
                     sTableNm = sTableNm.copy( 0, nSeparator - nStt );
 
                     // when creating a formula the table name is unwanted
-                    if( fnFormula != (FnScanFormula)&SwTableFormula::_MakeFormula )
+                    if( fnFormula != (FnScanFormula)&SwTableFormula::MakeFormula_ )
                         aStr += sTableNm;
                     nStt = nSeparator;
 
@@ -799,12 +799,12 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
 
         while (!sGetName.isEmpty())
         {
-            nSttBox = SwTable::_GetBoxNum( sGetName );
+            nSttBox = SwTable::GetBoxNum( sGetName );
             pLines = &pBox->GetTabLines();
             if( nSttBox )
                 --nSttBox;
 
-            nSttLine = SwTable::_GetBoxNum( sGetName );
+            nSttLine = SwTable::GetBoxNum( sGetName );
 
             // determine line
             if( !nSttLine || nSttLine > pLines->size() )
@@ -851,10 +851,10 @@ static OUString lcl_BoxNmToRel( const SwTable& rTable, const SwTableNode& rTable
     // If the formula is spanning over a table then keep external presentation
     if( &rTable == &rTableNd.GetTable() )
     {
-        long nBox = SwTable::_GetBoxNum( sTmp, true );
-        nBox -= SwTable::_GetBoxNum( sRefBoxNm, true );
-        long nLine = SwTable::_GetBoxNum( sTmp );
-        nLine -= SwTable::_GetBoxNum( sRefBoxNm );
+        long nBox = SwTable::GetBoxNum( sTmp, true );
+        nBox -= SwTable::GetBoxNum( sRefBoxNm, true );
+        long nLine = SwTable::GetBoxNum( sTmp );
+        nLine -= SwTable::GetBoxNum( sRefBoxNm );
 
         const OUString sCpy = sTmp;        //JP 01.11.95: add rest from box name
 
@@ -879,10 +879,10 @@ void SwTableFormula::GetBoxesOfFormula( const SwTable& rTable,
     rBoxes.clear();
 
     BoxNmToPtr( &rTable );
-    ScanString( &SwTableFormula::_GetFormulaBoxes, rTable, &rBoxes );
+    ScanString( &SwTableFormula::GetFormulaBoxes, rTable, &rBoxes );
 }
 
-void SwTableFormula::_GetFormulaBoxes( const SwTable& rTable, OUString& ,
+void SwTableFormula::GetFormulaBoxes( const SwTable& rTable, OUString& ,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     SwSelBoxes* pBoxes = static_cast<SwSelBoxes*>(pPara);
@@ -972,7 +972,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
 }
 
 /// Are all boxes valid that are referenced by the formula?
-void SwTableFormula::_HasValidBoxes( const SwTable& rTable, OUString& ,
+void SwTableFormula::HasValidBoxes_( const SwTable& rTable, OUString& ,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     bool* pBValid = static_cast<bool*>(pPara);
@@ -1025,7 +1025,7 @@ bool SwTableFormula::HasValidBoxes() const
     bool bRet = true;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && nullptr != ( pNd = pNd->FindTableNode() ) )
-        ScanString( &SwTableFormula::_HasValidBoxes,
+        ScanString( &SwTableFormula::HasValidBoxes_,
                         static_cast<const SwTableNode*>(pNd)->GetTable(), &bRet );
     return bRet;
 }
@@ -1043,7 +1043,7 @@ sal_uInt16 SwTableFormula::GetLnPosInTable( const SwTable& rTable, const SwTable
     return nRet;
 }
 
-void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
+void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUString& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     SwTableFormulaUpdate& rTableUpd = *static_cast<SwTableFormulaUpdate*>(pPara);
@@ -1198,7 +1198,7 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFormulaUpdate& rTableUpd )
     else
         pTable = rTableUpd.m_pTable;
 
-    m_sFormula = ScanString( &SwTableFormula::_SplitMergeBoxNm, *pTable, static_cast<void*>(&rTableUpd) );
+    m_sFormula = ScanString( &SwTableFormula::SplitMergeBoxNm_, *pTable, static_cast<void*>(&rTableUpd) );
     m_eNmType = INTRNL_NAME;
 }
 

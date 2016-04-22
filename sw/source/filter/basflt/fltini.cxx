@@ -107,7 +107,7 @@ SwRead SwGetReaderXML() // SW_DLLPUBLIC
         return ReadXML;
 }
 
-inline void _SetFltPtr( sal_uInt16 rPos, SwRead pReader )
+inline void SetFltPtr( sal_uInt16 rPos, SwRead pReader )
 {
         aReaderWriter[ rPos ].pReader = pReader;
 }
@@ -116,11 +116,11 @@ namespace sw {
 
 Filters::Filters()
 {
-    _SetFltPtr( READER_WRITER_BAS, (ReadAscii = new AsciiReader) );
-    _SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
-    _SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
-    _SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
-    _SetFltPtr( READER_WRITER_TEXT, ReadAscii );
+    SetFltPtr( READER_WRITER_BAS, (ReadAscii = new AsciiReader) );
+    SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
+    SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
+    SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
+    SetFltPtr( READER_WRITER_TEXT, ReadAscii );
 }
 
 Filters::~Filters()

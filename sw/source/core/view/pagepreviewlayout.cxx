@@ -50,7 +50,7 @@ SwPagePreviewLayout::SwPagePreviewLayout( SwViewShell& _rParentViewShell,
       mrParentViewShell( _rParentViewShell ),
       mrLayoutRootFrame ( _rLayoutRootFrame )
 {
-    _Clear();
+    Clear_();
 
     // OD 2004-03-05 #i18143#
     mbBookPreview = false;
@@ -59,7 +59,7 @@ SwPagePreviewLayout::SwPagePreviewLayout( SwViewShell& _rParentViewShell,
     mbPrintEmptyPages = mrParentViewShell.getIDocumentDeviceAccess().getPrintData().IsPrintEmptyPages();
 }
 
-void SwPagePreviewLayout::_Clear()
+void SwPagePreviewLayout::Clear_()
 {
     mbLayoutInfoValid = mbLayoutSizesValid = mbPaintInfoValid = false;
 
@@ -67,7 +67,7 @@ void SwPagePreviewLayout::_Clear()
     maWinSize.Height() = 0;
     mnCols = mnRows = 0;
 
-    _ClearPreviewLayoutSizes();
+    ClearPreviewLayoutSizes();
 
     mbDoesLayoutRowsFitIntoWindow = false;
     mbDoesLayoutColsFitIntoWindow = false;
@@ -86,14 +86,14 @@ void SwPagePreviewLayout::_Clear()
     maPaintedPreviewDocRect.Right() = 0;
     maPaintedPreviewDocRect.Bottom() = 0;
     mnSelectedPageNum = 0;
-    _ClearPreviewPageData();
+    ClearPreviewPageData();
 
     // OD 07.11.2003 #i22014#
     mbInPaint = false;
     mbNewLayoutDuringPaint = false;
 }
 
-void SwPagePreviewLayout::_ClearPreviewLayoutSizes()
+void SwPagePreviewLayout::ClearPreviewLayoutSizes()
 {
     mnPages = 0;
 
@@ -105,7 +105,7 @@ void SwPagePreviewLayout::_ClearPreviewLayoutSizes()
     mnPreviewLayoutWidth = mnPreviewLayoutHeight = 0;
 }
 
-void SwPagePreviewLayout::_ClearPreviewPageData()
+void SwPagePreviewLayout::ClearPreviewPageData()
 {
     for ( std::vector<PreviewPage*>::iterator aPageDelIter = maPreviewPages.begin();
           aPageDelIter != maPreviewPages.end();
@@ -120,7 +120,7 @@ void SwPagePreviewLayout::_ClearPreviewPageData()
 
     OD 18.12.2002 #103492#
 */
-void SwPagePreviewLayout::_CalcPreviewLayoutSizes()
+void SwPagePreviewLayout::CalcPreviewLayoutSizes()
 {
     vcl::RenderContext* pRenderContext = mrParentViewShell.GetOut();
     // calculate maximal page size; calculate also number of pages
@@ -200,13 +200,13 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     // environment and parameters ok
 
     // clear existing preview settings
-    _Clear();
+    Clear_();
 
     // set layout information columns and rows
     mnCols = _nCols;
     mnRows = _nRows;
 
-    _CalcPreviewLayoutSizes();
+    CalcPreviewLayoutSizes();
 
     // validate layout information
     mbLayoutInfoValid = true;
@@ -226,7 +226,7 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
             nNewNuminator = 1;
         aYScale = Fraction( nNewNuminator, 1000 );
         // propagate scaling as zoom percentage to view options for font cache
-        _ApplyNewZoomAtViewShell( static_cast<sal_uInt8>(nNewNuminator/10) );
+        ApplyNewZoomAtViewShell( static_cast<sal_uInt8>(nNewNuminator/10) );
 
         aMapMode.SetScaleY( aYScale );
         aMapMode.SetScaleX( aYScale );
@@ -245,7 +245,7 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
 }
 
 /** apply new zoom at given view shell */
-void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
+void SwPagePreviewLayout::ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
 {
     SwViewOption aNewViewOptions = *(mrParentViewShell.GetViewOptions());
     if ( aNewViewOptions.GetZoom() != _aNewZoom )
@@ -273,8 +273,8 @@ bool SwPagePreviewLayout::ReInit()
             return false;
     }
 
-    _ClearPreviewLayoutSizes();
-    _CalcPreviewLayoutSizes();
+    ClearPreviewLayoutSizes();
+    CalcPreviewLayoutSizes();
 
     return true;
 }
@@ -419,10 +419,10 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     }
 
     // determine additional paint offset, if preview layout fits into window.
-    _CalcAdditionalPaintOffset();
+    CalcAdditionalPaintOffset();
 
     // determine rectangle to be painted from document preview
-    _CalcDocPreviewPaintRect();
+    CalcDocPreviewPaintRect();
     _orDocPreviewPaintRect = maPaintedPreviewDocRect;
 
     // OD 20.01.2003 #103492# - shift visible preview document area to the left,
@@ -466,7 +466,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
 
     // determine preview pages - visible pages with needed data for paint and
     // accessible pages with needed data.
-    _CalcPreviewPages();
+    CalcPreviewPages();
 
     // OD 07.11.2003 #i22014# - indicate new layout, if print preview is in paint
     if ( mbInPaint )
@@ -487,7 +487,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
 
     OD 12.12.2002 #103492#
 */
-void SwPagePreviewLayout::_CalcAdditionalPaintOffset()
+void SwPagePreviewLayout::CalcAdditionalPaintOffset()
 {
     if ( mnPreviewLayoutWidth <= maWinSize.Width() &&
          maPaintStartPageOffset.X() <= 0 )
@@ -518,7 +518,7 @@ void SwPagePreviewLayout::_CalcAdditionalPaintOffset()
 
     OD 12.12.2002 #103492#
 */
-void SwPagePreviewLayout::_CalcDocPreviewPaintRect()
+void SwPagePreviewLayout::CalcDocPreviewPaintRect()
 {
     Point aTopLeftPos = maPaintPreviewDocOffset;
     maPaintedPreviewDocRect.SetPos( aTopLeftPos );
@@ -543,10 +543,10 @@ void SwPagePreviewLayout::_CalcDocPreviewPaintRect()
 
     OD 12.12.2002 #103492#
 */
-void SwPagePreviewLayout::_CalcPreviewPages()
+void SwPagePreviewLayout::CalcPreviewPages()
 {
     vcl::RenderContext* pRenderContext = mrParentViewShell.GetOut();
-    _ClearPreviewPageData();
+    ClearPreviewPageData();
 
     if ( mbNoPageVisible )
         return;
@@ -597,7 +597,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
             PreviewPage* pPreviewPage = new PreviewPage;
             Point aCurrAccOffset = aCurrPaintOffset -
                            Point( (mnPaintStartCol-nCurrCol) * mnColWidth, 0 );
-            _CalcPreviewDataForPage( *(pPage), aCurrAccOffset, pPreviewPage );
+            CalcPreviewDataForPage( *(pPage), aCurrAccOffset, pPreviewPage );
             pPreviewPage->bVisible = false;
             maPreviewPages.push_back( pPreviewPage );
             // continue with next page and next column
@@ -624,7 +624,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
 
             // calculate data of visible page
             PreviewPage* pPreviewPage = new PreviewPage;
-            _CalcPreviewDataForPage( *(pPage), aCurrPaintOffset, pPreviewPage );
+            CalcPreviewDataForPage( *(pPage), aCurrPaintOffset, pPreviewPage );
             pPreviewPage->bVisible = true;
             maPreviewPages.push_back( pPreviewPage );
         }
@@ -632,7 +632,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         {
             // calculate data of unvisible page needed for accessibility
             PreviewPage* pPreviewPage = new PreviewPage;
-            _CalcPreviewDataForPage( *(pPage), aCurrPaintOffset, pPreviewPage );
+            CalcPreviewDataForPage( *(pPage), aCurrPaintOffset, pPreviewPage );
             pPreviewPage->bVisible = false;
             maPreviewPages.push_back( pPreviewPage );
         }
@@ -659,7 +659,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
 
     OD 13.12.2002 #103492#
 */
-bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrame& _rPage,
+bool SwPagePreviewLayout::CalcPreviewDataForPage( const SwPageFrame& _rPage,
                                                    const Point& _rPreviewOffset,
                                                    PreviewPage* _opPreviewPage )
 {
@@ -802,7 +802,7 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
 */
 bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 {
-    const PreviewPage* pPreviewPage = _GetPreviewPageByPageNum( _nPageNum );
+    const PreviewPage* pPreviewPage = GetPreviewPageByPageNum( _nPageNum );
     return pPreviewPage && pPreviewPage->bVisible;
 }
 
@@ -1065,7 +1065,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
             }
         }
         // paint preview background rectangles
-        mrParentViewShell._PaintDesktop(rRenderContext, aPreviewBackgrdRegion);
+        mrParentViewShell.PaintDesktop_(rRenderContext, aPreviewBackgrdRegion);
     }
 
     // prepare data for paint of pages
@@ -1149,7 +1149,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
 
             if (pPage->GetPhyPageNum() == mnSelectedPageNum)
             {
-                _PaintSelectMarkAtPage(rRenderContext, *aPageIter);
+                PaintSelectMarkAtPage(rRenderContext, *aPageIter);
             }
         }
     }
@@ -1229,7 +1229,7 @@ void SwPagePreviewLayout::Repaint( const Rectangle& rInvalidCoreRect ) const
 
     OD 17.12.2002 #103492#
 */
-void SwPagePreviewLayout::_PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext,
+void SwPagePreviewLayout::PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext,
                                     const PreviewPage* _aSelectedPreviewPage ) const
 {
     OutputDevice* pOutputDev = &rRenderContext;
@@ -1295,7 +1295,7 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
     mnSelectedPageNum = _nSelectedPage;
 
     // re-paint for current selected page in order to unmark it.
-    const PreviewPage* pOldSelectedPreviewPage = _GetPreviewPageByPageNum( nOldSelectedPageNum );
+    const PreviewPage* pOldSelectedPreviewPage = GetPreviewPageByPageNum( nOldSelectedPageNum );
     OutputDevice* pOutputDev = mrParentViewShell.GetOut();
     if ( pOldSelectedPreviewPage && pOldSelectedPreviewPage->bVisible )
     {
@@ -1323,10 +1323,10 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
     }
 
     // re-paint for new selected page in order to mark it.
-    const PreviewPage* pNewSelectedPreviewPage = _GetPreviewPageByPageNum( _nSelectedPage );
+    const PreviewPage* pNewSelectedPreviewPage = GetPreviewPageByPageNum( _nSelectedPage );
     if ( pNewSelectedPreviewPage && pNewSelectedPreviewPage->bVisible )
     {
-        const PreviewPage* pSelectedPreviewPage = _GetPreviewPageByPageNum(mnSelectedPageNum);
+        const PreviewPage* pSelectedPreviewPage = GetPreviewPageByPageNum(mnSelectedPageNum);
         SwRect aPageRect(pSelectedPreviewPage->aPreviewWinPos, pSelectedPreviewPage->aPageSize);
         ::SwAlignRect(aPageRect, &mrParentViewShell, pOutputDev);
         mrParentViewShell.GetWin()->Invalidate(aPageRect.SVRect());
@@ -1351,7 +1351,7 @@ struct EqualsPageNumPred
     }
 };
 
-const PreviewPage* SwPagePreviewLayout::_GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const
+const PreviewPage* SwPagePreviewLayout::GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const
 {
     std::vector<PreviewPage*>::const_iterator aFoundPreviewPageIter =
             std::find_if( maPreviewPages.begin(), maPreviewPages.end(),
@@ -1416,7 +1416,7 @@ Size SwPagePreviewLayout::GetPreviewDocSize() const
 */
 Size SwPagePreviewLayout::GetPreviewPageSizeByPageNum( sal_uInt16 _nPageNum ) const
 {
-    const PreviewPage* pPreviewPage = _GetPreviewPageByPageNum( _nPageNum );
+    const PreviewPage* pPreviewPage = GetPreviewPageByPageNum( _nPageNum );
     if ( pPreviewPage )
     {
         return pPreviewPage->aPageSize;
@@ -1430,7 +1430,7 @@ Size SwPagePreviewLayout::GetPreviewPageSizeByPageNum( sal_uInt16 _nPageNum ) co
 */
 sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const
 {
-    const PreviewPage* pPreviewPage = _GetPreviewPageByPageNum( _nPageNum );
+    const PreviewPage* pPreviewPage = GetPreviewPageByPageNum( _nPageNum );
     if ( pPreviewPage )
     {
         return pPreviewPage->pPage->GetVirtPageNum();

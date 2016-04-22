@@ -65,7 +65,7 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
     rItem.m_nRows   = nRows;
 }
 
-void SwLabDlg::_ReplaceGroup( const OUString &rMake )
+void SwLabDlg::ReplaceGroup_( const OUString &rMake )
 {
     // Remove old entries
     m_pRecs->erase(m_pRecs->begin() + 1, m_pRecs->end());
@@ -160,7 +160,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     }
 
     if ( !aMakes.empty() )
-        _ReplaceGroup( aMakes[nLstGroup] );
+        ReplaceGroup_( aMakes[nLstGroup] );
 
     if (m_pExampleSet)
         m_pExampleSet->Put(aItem);

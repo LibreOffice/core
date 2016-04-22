@@ -174,7 +174,7 @@ void SwFlyInContentFrame::MakeObjPos()
     }
 }
 
-void SwFlyInContentFrame::_ActionOnInvalidation( const InvalidationType _nInvalid )
+void SwFlyInContentFrame::ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
         AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG, &GetFrameFormat() );

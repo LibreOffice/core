@@ -325,7 +325,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     if( pCpyNd || pEndNdIdx )
     {
         SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-        rDoc.GetNodes()._MoveNodes( aRg, rNds, aPos.nNode, false );
+        rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.nNode, false );
         aPos.nContent = 0;
         --aPos.nNode;
     }
@@ -374,7 +374,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
         aPaM.GetPoint()->nNode = nNodeIdx;
         aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);
 
-        _SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.nContent.GetIndex() );
+        SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.nContent.GetIndex() );
 
         rNds.MoveRange( aPaM, rInsPos, rDoc.GetNodes() );
 
@@ -397,7 +397,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
         SwNodeRange aRg( rNds, nNodeIdx, rNds, (pEndNdIdx
                         ? ((*pEndNdIdx) + 1)
                         : rNds.GetEndOfExtras().GetIndex() ) );
-        rNds._MoveNodes( aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx );
+        rNds.MoveNodes( aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx );
 
     }
     else {

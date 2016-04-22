@@ -65,15 +65,15 @@
 #undef      DEL_ONLY_EMPTY_LINES
 #undef      DEL_EMPTY_BOXES_AT_START_AND_END
 
-struct _CmpLPt
+struct CmpLPt
 {
     Point aPos;
     const SwTableBox* pSelBox;
     bool bVert;
 
-    _CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical );
+    CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical );
 
-    bool operator<( const _CmpLPt& rCmp ) const
+    bool operator<( const CmpLPt& rCmp ) const
     {
         if ( bVert )
             return X() > rCmp.X() || ( X() == rCmp.X() && Y() < rCmp.Y() );
@@ -85,14 +85,14 @@ struct _CmpLPt
     long Y() const { return aPos.Y(); }
 };
 
-typedef o3tl::sorted_vector<_CmpLPt> _MergePos;
+typedef o3tl::sorted_vector<CmpLPt> MergePos;
 
 
-struct _Sort_CellFrame
+struct Sort_CellFrame
 {
     const SwCellFrame* pFrame;
 
-    explicit _Sort_CellFrame( const SwCellFrame& rCFrame )
+    explicit Sort_CellFrame( const SwCellFrame& rCFrame )
         : pFrame( &rCFrame ) {}
 };
 
@@ -483,7 +483,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                 break;
             }
 
-            std::deque< _Sort_CellFrame > aCellFrames;
+            std::deque< Sort_CellFrame > aCellFrames;
 
             // Skip any repeated headlines in the follow:
             const SwLayoutFrame* pRow = pTable->IsFollow() ?
@@ -544,7 +544,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                                 nFrameBottom      <= nUnionBottom+ nYFuzzy )
 
                                 aCellFrames.push_back(
-                                        _Sort_CellFrame( *static_cast<const SwCellFrame*>(pCell)) );
+                                        Sort_CellFrame( *static_cast<const SwCellFrame*>(pCell)) );
                             else
                             {
                                 bValidChartSel = false;
@@ -577,7 +577,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
             for( n = 0 ; n < aCellFrames.size(); ++n )
             {
-                const _Sort_CellFrame& rCF = aCellFrames[ n ];
+                const Sort_CellFrame& rCF = aCellFrames[ n ];
                 if( (rCF.pFrame->Frame().*fnRect->fnGetTop)() != nYPos )
                 {
                     // new row
@@ -840,7 +840,7 @@ bool HasProtectedCells( const SwSelBoxes& rBoxes )
     return bRet;
 }
 
-_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical )
+CmpLPt::CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical )
     : aPos( rPt ), pSelBox( pBox ), bVert( bVertical )
 {}
 
@@ -930,7 +930,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     SwTableNode* pTableNd = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[ 0 ]->
                                         GetSttNd()->FindTableNode());
 
-    _MergePos aPosArr;      // Sort-Array with the frame positions
+    MergePos aPosArr;      // Sort-Array with the frame positions
     long nWidth;
     SwTableBox* pLastBox = nullptr;
 
@@ -984,7 +984,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 pLastBox = pBox;
                                 rBoxes.insert( pBox );
                                 aPosArr.insert(
-                                    _CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
+                                    CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
                                     pBox, bVert ) );
 
                                 pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
@@ -1001,7 +1001,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 pLastBox = pBox;
                                 rBoxes.insert( pBox );
                                 aPosArr.insert(
-                                    _CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
+                                    CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
                                     pBox, bVert ) );
                             }
                         }
@@ -1049,7 +1049,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             pLastBox = pBox;
                             rBoxes.insert( pBox );
                             aPosArr.insert(
-                                _CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
+                                CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
                                 pBox, bVert ) );
 
                             pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos+1 ];
@@ -1090,7 +1090,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
                             pLastBox = pBox;
                             rBoxes.insert( pBox );
-                            aPosArr.insert( _CmpLPt( Point( rUnion.Left(),
+                            aPosArr.insert( CmpLPt( Point( rUnion.Left(),
                                                 pCell->Frame().Top()), pBox, bVert ));
 
                             if( pUndo )
@@ -1139,7 +1139,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         for( n = 0; n < aPosArr.Count(); ++n )
         {
-            const _CmpLPt& rPt = aPosArr[ n ];
+            const CmpLPt& rPt = aPosArr[ n ];
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same Y level?
             {
                 if( bEmptyLine && !IsEmptyBox( *rPt.pSelBox, aPam ))
@@ -1183,7 +1183,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         for( n = 0; n < aPosArr.Count(); ++n )
         {
-            const _CmpLPt& rPt = aPosArr[ n ];
+            const CmpLPt& rPt = aPosArr[ n ];
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same Y level?
             {
                 bool bEmptyBox = IsEmptyBox( *rPt.pSelBox, aPam );
@@ -1274,9 +1274,9 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                       aPosArr[ 0 ].Y() ) :
                   0;
 
-        for( _MergePos::size_type n = 0; n < aPosArr.size(); ++n )
+        for( MergePos::size_type n = 0; n < aPosArr.size(); ++n )
         {
-            const _CmpLPt& rPt = aPosArr[ n ];
+            const CmpLPt& rPt = aPosArr[ n ];
             if( bCalcWidth )
             {
                 if( nY == ( bVert ? rPt.X() : rPt.Y() ) ) // same Y level?
@@ -1388,9 +1388,9 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         pUndo->AddNewBox( (*ppMergeBox)->GetSttIdx() );
 }
 
-static bool lcl_CheckCol(_FndBox const&, bool* pPara);
+static bool lcl_CheckCol(FndBox_ const&, bool* pPara);
 
-static bool lcl_CheckRow( const _FndLine& rFndLine, bool* pPara )
+static bool lcl_CheckRow( const FndLine_& rFndLine, bool* pPara )
 {
     for (auto const& it : rFndLine.GetBoxes())
     {
@@ -1399,7 +1399,7 @@ static bool lcl_CheckRow( const _FndLine& rFndLine, bool* pPara )
     return *pPara;
 }
 
-static bool lcl_CheckCol( _FndBox const& rFndBox, bool* pPara )
+static bool lcl_CheckCol( FndBox_ const& rFndBox, bool* pPara )
 {
     if (!rFndBox.GetBox()->GetSttNd())
     {
@@ -1447,15 +1447,15 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
     {
         eRet = TBLMERGE_OK;
 
-        _FndBox aFndBox( nullptr, nullptr );
-        _FndPara aPara( rBoxes, &aFndBox );
+        FndBox_ aFndBox( nullptr, nullptr );
+        FndPara aPara( rBoxes, &aFndBox );
         const SwTableNode* pTableNd = aPara.rBoxes[0]->GetSttNd()->FindTableNode();
         ForEach_FndLineCopyCol( (SwTableLines&)pTableNd->GetTable().GetTabLines(), &aPara );
         if( !aFndBox.GetLines().empty() )
         {
             bool bMergeSelOk = true;
-            _FndBox* pFndBox = &aFndBox;
-            _FndLine* pFndLine = nullptr;
+            FndBox_* pFndBox = &aFndBox;
+            FndLine_* pFndLine = nullptr;
             while( pFndBox && 1 == pFndBox->GetLines().size() )
             {
                 pFndLine = pFndBox->GetLines().front().get();
@@ -2035,12 +2035,12 @@ static void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrame *pUpper, SwFrame *p
     pRow->RegistFlys();
 }
 
-static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
+static void FndBoxCopyCol( SwTableBox* pBox, FndPara* pFndPara )
 {
-    std::unique_ptr<_FndBox> pFndBox(new _FndBox( pBox, pFndPara->pFndLine ));
+    std::unique_ptr<FndBox_> pFndBox(new FndBox_( pBox, pFndPara->pFndLine ));
     if( pBox->GetTabLines().size() )
     {
-        _FndPara aPara( *pFndPara, pFndBox.get() );
+        FndPara aPara( *pFndPara, pFndBox.get() );
         ForEach_FndLineCopyCol( pFndBox->GetBox()->GetTabLines(), &aPara );
         if( pFndBox->GetLines().empty() )
         {
@@ -2057,26 +2057,26 @@ static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
     pFndPara->pFndLine->GetBoxes().push_back( std::move(pFndBox) );
 }
 
-static void _FndLineCopyCol( SwTableLine* pLine, _FndPara* pFndPara )
+static void FndLineCopyCol( SwTableLine* pLine, FndPara* pFndPara )
 {
-    std::unique_ptr<_FndLine> pFndLine(new _FndLine(pLine, pFndPara->pFndBox));
-    _FndPara aPara(*pFndPara, pFndLine.get());
+    std::unique_ptr<FndLine_> pFndLine(new FndLine_(pLine, pFndPara->pFndBox));
+    FndPara aPara(*pFndPara, pFndLine.get());
     for( SwTableBoxes::iterator it = pFndLine->GetLine()->GetTabBoxes().begin();
              it != pFndLine->GetLine()->GetTabBoxes().end(); ++it)
-        _FndBoxCopyCol(*it, &aPara );
+        FndBoxCopyCol(*it, &aPara );
     if( pFndLine->GetBoxes().size() )
     {
         pFndPara->pFndBox->GetLines().push_back( std::move(pFndLine) );
     }
 }
 
-void ForEach_FndLineCopyCol(SwTableLines& rLines, _FndPara* pFndPara )
+void ForEach_FndLineCopyCol(SwTableLines& rLines, FndPara* pFndPara )
 {
     for( SwTableLines::iterator it = rLines.begin(); it != rLines.end(); ++it )
-        _FndLineCopyCol( *it, pFndPara );
+        FndLineCopyCol( *it, pFndPara );
 }
 
-void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
+void FndBox_::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
 {
     // Set pointers to lines before and after the area to process.
     // If the first/last lines are contained in the area, then the pointers
@@ -2109,7 +2109,7 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
         pLineBehind = rTable.GetTabLines()[nEndPos];
 }
 
-void _FndBox::SetTableLines( const SwTable &rTable )
+void FndBox_::SetTableLines( const SwTable &rTable )
 {
     // Set pointers to lines before and after the area to process.
     // If the first/last lines are contained in the area, then the pointers
@@ -2138,7 +2138,7 @@ inline void UnsetFollow( SwFlowFrame *pTab )
     pTab->m_pPrecede = nullptr;
 }
 
-void _FndBox::DelFrames( SwTable &rTable )
+void FndBox_::DelFrames( SwTable &rTable )
 {
     // All lines between pLineBefore and pLineBehind should be cut
     // from the layout and erased.
@@ -2303,7 +2303,7 @@ static void lcl_UpdateRepeatedHeadlines( SwTabFrame& rTabFrame, bool bCalcLowers
         rTabFrame.SetCalcLowers();
 }
 
-void _FndBox::MakeFrames( SwTable &rTable )
+void FndBox_::MakeFrames( SwTable &rTable )
 {
     // All lines between pLineBefore and pLineBehind should be re-generated in layout.
     // And this for all instances of a table (for example in header/footer).
@@ -2376,7 +2376,7 @@ void _FndBox::MakeFrames( SwTable &rTable )
     }
 }
 
-void _FndBox::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
+void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
                                             const bool bBehind )
 {
     // Create Frames for newly inserted lines
@@ -2516,7 +2516,7 @@ void _FndBox::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
     }
 }
 
-bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
+bool FndBox_::AreLinesToRestore( const SwTable &rTable ) const
 {
     // Should we call MakeFrames here?
 

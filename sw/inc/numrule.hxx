@@ -108,7 +108,7 @@ public:
     };
 
 private:
-    friend void _FinitCore();
+    friend void FinitCore();
 
     static SwNumFormat* maBaseFormats [ RULE_END ][ MAXLEVEL ];
     static const sal_uInt16 maDefNumIndents[ MAXLEVEL ];

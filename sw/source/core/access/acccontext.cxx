@@ -428,15 +428,15 @@ void SwAccessibleContext::DisposeChildren( const SwFrame *pFrame,
     }
 }
 
-void SwAccessibleContext::_InvalidateContent( bool )
+void SwAccessibleContext::InvalidateContent_( bool )
 {
 }
 
-void SwAccessibleContext::_InvalidateCursorPos()
+void SwAccessibleContext::InvalidateCursorPos_()
 {
 }
 
-void SwAccessibleContext::_InvalidateFocus()
+void SwAccessibleContext::InvalidateFocus_()
 {
 }
 
@@ -1147,7 +1147,7 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
         FireVisibleDataEvent();
     }
 
-    // note: InvalidatePosOrSize must call _InvalidateContent so that
+    // note: InvalidatePosOrSize must call InvalidateContent_ so that
     // SwAccessibleParagraph updates its portions, or dispose it
     // (see accmap.cxx: INVALID_CONTENT is contained in POS_CHANGED)
     if( !bIsNewShowingState &&
@@ -1160,7 +1160,7 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
     }
     else
     {
-        _InvalidateContent( true );
+        InvalidateContent_( true );
     }
 }
 
@@ -1260,21 +1260,21 @@ void SwAccessibleContext::InvalidateContent()
 {
     SolarMutexGuard aGuard;
 
-    _InvalidateContent( false );
+    InvalidateContent_( false );
 }
 
 void SwAccessibleContext::InvalidateCursorPos()
 {
     SolarMutexGuard aGuard;
 
-    _InvalidateCursorPos();
+    InvalidateCursorPos_();
 }
 
 void SwAccessibleContext::InvalidateFocus()
 {
     SolarMutexGuard aGuard;
 
-    _InvalidateFocus();
+    InvalidateFocus_();
 }
 
 // #i27301# - use new type definition for <_nStates>

@@ -140,7 +140,7 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
     bIsSelected = IsSelected();
 }
 
-void SwAccessibleFrameBase::_InvalidateCursorPos()
+void SwAccessibleFrameBase::InvalidateCursorPos_()
 {
     bool bNewSelected = IsSelected();
     bool bOldSelected;
@@ -184,7 +184,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
     }
 }
 
-void SwAccessibleFrameBase::_InvalidateFocus()
+void SwAccessibleFrameBase::InvalidateFocus_()
 {
     vcl::Window *pWin = GetWindow();
     if( pWin )

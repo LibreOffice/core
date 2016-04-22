@@ -51,13 +51,13 @@ using namespace ::com::sun::star;
 //Helper functions for this file
 namespace
 {
-    struct _FindItem
+    struct FindItem
     {
         const OUString m_Item;
         SwTableNode* pTableNd;
         SwSectionNode* pSectNd;
 
-        explicit _FindItem(const OUString& rS)
+        explicit FindItem(const OUString& rS)
             : m_Item(rS), pTableNd(nullptr), pSectNd(nullptr)
         {}
      };
@@ -110,7 +110,7 @@ namespace
     }
 
 
-    bool lcl_FindSection( const SwSectionFormat* pSectFormat, _FindItem * const pItem, bool bCaseSensitive )
+    bool lcl_FindSection( const SwSectionFormat* pSectFormat, FindItem * const pItem, bool bCaseSensitive )
     {
         SwSection* pSect = pSectFormat->GetSection();
         if( pSect )
@@ -139,7 +139,7 @@ namespace
         return true;
     }
 
-    bool lcl_FindTable( const SwFrameFormat* pTableFormat, _FindItem * const pItem )
+    bool lcl_FindTable( const SwFrameFormat* pTableFormat, FindItem * const pItem )
     {
         OUString sNm( GetAppCharClass().lowercase( pTableFormat->GetName() ));
         if ( sNm == pItem->m_Item )
@@ -253,7 +253,7 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
 
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
-        _FindItem aPara( sItem );
+        FindItem aPara( sItem );
         for( const SwSectionFormat* pFormat : m_rDoc.GetSections() )
         {
             if (!(lcl_FindSection(pFormat, &aPara, bCaseSensitive)))
@@ -269,7 +269,7 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
         bCaseSensitive = false;
     }
 
-    _FindItem aPara( GetAppCharClass().lowercase( rItem ));
+    FindItem aPara( GetAppCharClass().lowercase( rItem ));
     for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
     {
         if (!(lcl_FindTable(pFormat, &aPara)))
@@ -298,7 +298,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
-        _FindItem aPara( sItem );
+        FindItem aPara( sItem );
         for( const SwSectionFormat* pFormat : m_rDoc.GetSections() )
         {
             if (!(lcl_FindSection(pFormat, &aPara, bCaseSensitive)))
@@ -315,7 +315,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
     }
 
     OUString sItem(GetAppCharClass().lowercase(rItem));
-    _FindItem aPara( sItem );
+    FindItem aPara( sItem );
     for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
     {
         if (!(lcl_FindTable(pFormat, &aPara)))
@@ -346,7 +346,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
         if(pObj)
             return pObj;
 
-        _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
+        FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         // sections
         for( const SwSectionFormat* pFormat : m_rDoc.GetSections() )
         {
@@ -369,7 +369,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
         bCaseSensitive = false;
     }
 
-    _FindItem aPara( GetAppCharClass().lowercase(rItem) );
+    FindItem aPara( GetAppCharClass().lowercase(rItem) );
     // tables
     for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
     {
@@ -454,7 +454,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
         OUString sCmp( sItem.copy( nPos + 1 ));
         sItem = rCC.lowercase( sItem );
 
-        _FindItem aPara( sName );
+        FindItem aPara( sName );
 
         if( sCmp == "table" )
         {
@@ -536,7 +536,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
             return static_cast<bool>(rpPam);
         }
 
-        _FindItem aPara( bCaseSensitive ? sItem : rCC.lowercase( sItem ) );
+        FindItem aPara( bCaseSensitive ? sItem : rCC.lowercase( sItem ) );
 
         if( !m_rDoc.GetSections().empty() )
         {

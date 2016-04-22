@@ -83,7 +83,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     ~ShellResource();
 
 private:
-    void _GetAutoFormatNameLst() const;
+    void GetAutoFormatNameLst_() const;
     mutable std::vector<OUString> *pAutoFormatNameLst;
     OUString        sPageDescFirstName;
     OUString        sPageDescFollowName;
@@ -93,7 +93,7 @@ private:
 inline const std::vector<OUString>& ShellResource::GetAutoFormatNameLst() const
 {
     if( !pAutoFormatNameLst )
-        _GetAutoFormatNameLst();
+        GetAutoFormatNameLst_();
     return *pAutoFormatNameLst;
 }
 

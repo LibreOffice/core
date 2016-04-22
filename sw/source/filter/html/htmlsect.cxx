@@ -117,7 +117,7 @@ void SwHTMLParser::NewDivision( int nToken )
         bAppended = true;
     }
 
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     bool bStyleParsed = false, bPositioned = false;
     SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -259,7 +259,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 bAppended = true;
             }
         }
-        _HTMLAttrs *pPostIts = bAppended ? nullptr : new _HTMLAttrs;
+        HTMLAttrs *pPostIts = bAppended ? nullptr : new HTMLAttrs;
         SetAttr( true, true, pPostIts );
 
         // Namen der Section eindeutig machen
@@ -388,7 +388,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
 {
     // Stack-Eintrag zu dem Token suchen (weil wir noch den Div-Stack
     // haben unterscheiden wir erst einmal nicht zwischen DIV und CENTER
-    _HTMLAttrContext *pCntxt = nullptr;
+    HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     while( !pCntxt && nPos>m_nContextStMin )
     {
@@ -527,7 +527,7 @@ bool SwHTMLParser::EndSections( bool bLFStripped )
     auto nPos = m_aContexts.size();
     while( nPos>m_nContextStMin )
     {
-        _HTMLAttrContext *pCntxt = m_aContexts[--nPos];
+        HTMLAttrContext *pCntxt = m_aContexts[--nPos];
         if( pCntxt->GetSpansSection() && EndSection( bLFStripped ) )
         {
             bSectionClosed = true;
@@ -584,7 +584,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
     }
 
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_MULTICOL_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_MULTICOL_ON );
 
     //.is the multicol element contained in a container? That may be the
     // case for 5.0 documents.
@@ -683,7 +683,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                 bAppended = true;
             }
         }
-        _HTMLAttrs *pPostIts = bAppended ? nullptr : new _HTMLAttrs;
+        HTMLAttrs *pPostIts = bAppended ? nullptr : new HTMLAttrs;
         SetAttr( true, true, pPostIts );
 
         // Make section name unique.
@@ -763,7 +763,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 }
 
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
-                                   _HTMLAttrContext *pCntxt,
+                                   HTMLAttrContext *pCntxt,
                                    const OUString& rName,
                                    sal_uInt16 nFlags )
 {

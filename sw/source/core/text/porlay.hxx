@@ -97,7 +97,7 @@ private:
     bool m_bHanging : 1; // Contains a hanging portion in the margin
     bool m_bUnderscore : 1;
 
-    SwTwips _GetHangingMargin() const;
+    SwTwips GetHangingMargin_() const;
 
 public:
     // From SwLinePortion
@@ -155,7 +155,7 @@ public:
     SwMarginPortion *CalcLeftMargin();
 
     inline SwTwips GetHangingMargin() const
-        { return _GetHangingMargin(); }
+        { return GetHangingMargin_(); }
 
     // For special treatment for empty lines
     virtual bool Format( SwTextFormatInfo &rInf ) override;
@@ -332,7 +332,7 @@ inline void SwParaPortion::FormatReset()
 {
     m_nDelta = 0;
     m_aReformat = SwCharRange(0, COMPLETE_STRING);
-    // bFlys needs to be retained in SwTextFrame::_Format() so that empty
+    // bFlys needs to be retained in SwTextFrame::Format_() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat
     // when the Frame disappears from the Area
     // bFlys = false;

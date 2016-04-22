@@ -171,7 +171,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
                                     SwSectionFormat* pSectFormat )
 {
     if( pSectFormat )
-        _SetSectionAttr( *pSectFormat, rSet );
+        SetSectionAttr_( *pSectFormat, rSet );
     else
     {
         // for all section in the selection
@@ -187,10 +187,10 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
             if( pSttSectNd || pEndSectNd )
             {
                 if( pSttSectNd )
-                    _SetSectionAttr( *pSttSectNd->GetSection().GetFormat(),
+                    SetSectionAttr_( *pSttSectNd->GetSection().GetFormat(),
                                     rSet );
                 if( pEndSectNd && pSttSectNd != pEndSectNd )
-                    _SetSectionAttr( *pEndSectNd->GetSection().GetFormat(),
+                    SetSectionAttr_( *pEndSectNd->GetSection().GetFormat(),
                                     rSet );
 
                 if( pSttSectNd && pEndSectNd )
@@ -210,7 +210,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
                             || ( aSIdx.GetNode().IsEndNode() &&
                                 nullptr != ( pSttSectNd = aSIdx.GetNode().
                                     StartOfSectionNode()->GetSectionNode())) )
-                            _SetSectionAttr( *pSttSectNd->GetSection().GetFormat(),
+                            SetSectionAttr_( *pSttSectNd->GetSection().GetFormat(),
                                             rSet );
                         ++aSIdx;
                     }
@@ -221,7 +221,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
     }
 }
 
-void SwEditShell::_SetSectionAttr( SwSectionFormat& rSectFormat,
+void SwEditShell::SetSectionAttr_( SwSectionFormat& rSectFormat,
                                     const SfxItemSet& rSet )
 {
     StartAllAction();

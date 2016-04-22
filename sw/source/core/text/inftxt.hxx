@@ -302,8 +302,8 @@ public:
     inline const SwTextFrame *GetTextFrame() const { return m_pFrame; }
 
     inline bool HasHint( sal_Int32 nPos ) const
-        { return _HasHint( m_pFrame->GetTextNode(), nPos ); }
-    static bool _HasHint( const SwTextNode* pTextNode, sal_Int32 nPos );
+        { return HasHint_( m_pFrame->GetTextNode(), nPos ); }
+    static bool HasHint_( const SwTextNode* pTextNode, sal_Int32 nPos );
 
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
@@ -367,14 +367,14 @@ class SwTextPaintInfo : public SwTextSizeInfo
     SwRect      aPaintRect; // Original paint rect (from Layout paint)
 
     sal_uInt16 nSpaceIdx;
-    void _DrawText( const OUString &rText, const SwLinePortion &rPor,
+    void DrawText_( const OUString &rText, const SwLinePortion &rPor,
                    const sal_Int32 nIdx, const sal_Int32 nLen,
                    const bool bKern, const bool bWrong = false,
                    const bool bSmartTag = false,
                    const bool bGrammarCheck = false );
 
     SwTextPaintInfo &operator=(const SwTextPaintInfo&) = delete;
-    void _NotifyURL( const SwLinePortion &rPor ) const;
+    void NotifyURL_( const SwLinePortion &rPor ) const;
 
 protected:
     SwTextPaintInfo()
@@ -439,7 +439,7 @@ public:
     void DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const;
 
     inline void NotifyURL( const SwLinePortion &rPor ) const
-        { if( URLNotify() ) _NotifyURL( rPor ); }
+        { if( URLNotify() ) NotifyURL_( rPor ); }
 
     /**
      * Calculate the rectangular area where the portion takes place.
@@ -542,7 +542,7 @@ class SwTextFormatInfo : public SwTextPaintInfo
 
     // Hyphenating ...
     bool InitHyph( const bool bAuto = false );
-    bool _CheckFootnotePortion( SwLineLayout* pCurr );
+    bool CheckFootnotePortion_( SwLineLayout* pCurr );
 
 public:
     void CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const bool bInterHyph = false,
@@ -668,7 +668,7 @@ public:
     const css::beans::PropertyValues & GetHyphValues() const;
 
     bool CheckFootnotePortion( SwLineLayout* pCurr )
-        { return IsFootnoteInside() && _CheckFootnotePortion( pCurr ); }
+        { return IsFootnoteInside() && CheckFootnotePortion_( pCurr ); }
 
     // Dropcaps called by SwTextFormatter::CTOR
     const SwFormatDrop *GetDropFormat() const;
@@ -765,13 +765,13 @@ inline void SwTextPaintInfo::DrawText( const OUString &rText,
                             const sal_Int32 nStart, const sal_Int32 nLength,
                             const bool bKern ) const
 {
-    const_cast<SwTextPaintInfo*>(this)->_DrawText( rText, rPor, nStart, nLength, bKern );
+    const_cast<SwTextPaintInfo*>(this)->DrawText_( rText, rPor, nStart, nLength, bKern );
 }
 
 inline void SwTextPaintInfo::DrawText( const SwLinePortion &rPor,
         const sal_Int32 nLength, const bool bKern ) const
 {
-    const_cast<SwTextPaintInfo*>(this)->_DrawText( *m_pText, rPor, m_nIdx, nLength, bKern );
+    const_cast<SwTextPaintInfo*>(this)->DrawText_( *m_pText, rPor, m_nIdx, nLength, bKern );
 }
 
 inline void SwTextPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
@@ -780,7 +780,7 @@ inline void SwTextPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
                                             const bool bSmartTags,
                                             const bool bGrammarCheck ) const
 {
-    const_cast<SwTextPaintInfo*>(this)->_DrawText( *m_pText, rPor, m_nIdx, nLength, false/*bKern*/, bWrong, bSmartTags, bGrammarCheck );
+    const_cast<SwTextPaintInfo*>(this)->DrawText_( *m_pText, rPor, m_nIdx, nLength, false/*bKern*/, bWrong, bSmartTags, bGrammarCheck );
 }
 
 inline sal_Int32 SwTextFormatInfo::GetReformatStart() const

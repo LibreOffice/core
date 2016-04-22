@@ -171,7 +171,7 @@ SwContentFrame* SwFrame::FindPrevCnt( )
     if ( GetPrev() && GetPrev()->IsContentFrame() )
         return static_cast<SwContentFrame*>(GetPrev());
     else
-        return _FindPrevCnt();
+        return FindPrevCnt_();
 }
 
 const SwContentFrame* SwFrame::FindPrevCnt() const
@@ -179,7 +179,7 @@ const SwContentFrame* SwFrame::FindPrevCnt() const
     if ( GetPrev() && GetPrev()->IsContentFrame() )
         return static_cast<const SwContentFrame*>(GetPrev());
     else
-        return const_cast<SwFrame*>(this)->_FindPrevCnt();
+        return const_cast<SwFrame*>(this)->FindPrevCnt_();
 }
 
 SwContentFrame *SwFrame::FindNextCnt( const bool _bInSameFootnote )
@@ -187,7 +187,7 @@ SwContentFrame *SwFrame::FindNextCnt( const bool _bInSameFootnote )
     if ( mpNext && mpNext->IsContentFrame() )
         return static_cast<SwContentFrame*>(mpNext);
     else
-        return _FindNextCnt( _bInSameFootnote );
+        return FindNextCnt_( _bInSameFootnote );
 }
 
 const SwContentFrame *SwFrame::FindNextCnt( const bool _bInSameFootnote ) const
@@ -195,7 +195,7 @@ const SwContentFrame *SwFrame::FindNextCnt( const bool _bInSameFootnote ) const
     if ( mpNext && mpNext->IsContentFrame() )
         return static_cast<SwContentFrame*>(mpNext);
     else
-        return const_cast<SwFrame*>(this)->_FindNextCnt( _bInSameFootnote );
+        return const_cast<SwFrame*>(this)->FindNextCnt_( _bInSameFootnote );
 }
 
 bool SwLayoutFrame::IsAnLower( const SwFrame *pAssumed ) const
@@ -655,8 +655,8 @@ bool SwFrame::supportsFullDrawingLayerFillAttributeSet() const
 }
 
 /*
- *  SwFrame::_FindNext(), _FindPrev(), InvalidateNextPos()
- *         _FindNextCnt() visits tables and sections and only returns SwContentFrames.
+ *  SwFrame::FindNext_(), FindPrev_(), InvalidateNextPos()
+ *         FindNextCnt_() visits tables and sections and only returns SwContentFrames.
  *
  *  Description         Invalidates the position of the next frame.
  *      This is the direct successor or in case of ContentFrames the next
@@ -701,7 +701,7 @@ static SwFrame* lcl_NextFrame( SwFrame* pFrame )
     return pRet;
 }
 
-SwFrame *SwFrame::_FindNext()
+SwFrame *SwFrame::FindNext_()
 {
     bool bIgnoreTab = false;
     SwFrame *pThis = this;
@@ -832,7 +832,7 @@ SwFrame *SwFrame::_FindNext()
 }
 
 // #i27138# - add parameter <_bInSameFootnote>
-SwContentFrame *SwFrame::_FindNextCnt( const bool _bInSameFootnote )
+SwContentFrame *SwFrame::FindNextCnt_( const bool _bInSameFootnote )
 {
     SwFrame *pThis = this;
 
@@ -890,7 +890,7 @@ SwContentFrame *SwFrame::_FindNextCnt( const bool _bInSameFootnote )
                 const SwFootnoteFrame* pFootnoteFrameOfNext( pNxtCnt->FindFootnoteFrame() );
                 const SwFootnoteFrame* pFootnoteFrameOfCurr( pThis->FindFootnoteFrame() );
                 OSL_ENSURE( pFootnoteFrameOfCurr,
-                        "<SwFrame::_FindNextCnt() - unknown layout situation: current frame has to have an upper footnote frame." );
+                        "<SwFrame::FindNextCnt_() - unknown layout situation: current frame has to have an upper footnote frame." );
                 if ( pFootnoteFrameOfNext == pFootnoteFrameOfCurr )
                 {
                     return pNxtCnt;
@@ -943,7 +943,7 @@ SwContentFrame *SwFrame::_FindNextCnt( const bool _bInSameFootnote )
 
     OD 2005-11-30 #i27138#
 */
-SwContentFrame* SwFrame::_FindPrevCnt()
+SwContentFrame* SwFrame::FindPrevCnt_()
 {
     if ( !IsFlowFrame() )
     {
@@ -1066,9 +1066,9 @@ SwContentFrame* SwFrame::_FindPrevCnt()
                     //       inside a fly frame.
                     //       Thus, method <FindFooterOrHeader()> can be used.
                     OSL_ENSURE( pCurrContentFrame->FindFooterOrHeader(),
-                            "<SwFrame::_FindPrevCnt()> - unknown layout situation: current frame should be in page header or page footer" );
+                            "<SwFrame::FindPrevCnt_()> - unknown layout situation: current frame should be in page header or page footer" );
                     OSL_ENSURE( !pPrevContentFrame->IsInFly(),
-                            "<SwFrame::_FindPrevCnt()> - unknown layout situation: found previous frame should *not* be inside a fly frame." );
+                            "<SwFrame::FindPrevCnt_()> - unknown layout situation: found previous frame should *not* be inside a fly frame." );
                     if ( pPrevContentFrame->FindFooterOrHeader() !=
                                             pCurrContentFrame->FindFooterOrHeader() )
                     {
@@ -1082,7 +1082,7 @@ SwContentFrame* SwFrame::_FindPrevCnt()
     return pPrevContentFrame;
 }
 
-SwFrame *SwFrame::_FindPrev()
+SwFrame *SwFrame::FindPrev_()
 {
     bool bIgnoreTab = false;
     SwFrame *pThis = this;
@@ -1162,7 +1162,7 @@ SwFrame *SwFrame::_FindPrev()
 void SwFrame::ImplInvalidateNextPos( bool bNoFootnote )
 {
     SwFrame *pFrame;
-    if ( nullptr != (pFrame = _FindNext()) )
+    if ( nullptr != (pFrame = FindNext_()) )
     {
         if( pFrame->IsSctFrame() )
         {

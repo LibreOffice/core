@@ -40,14 +40,14 @@ class SwContentFrame: public SwFrame, public SwFlowFrame
 
     // parameter <bObjsInNewUpper>  indicates that objects exist in remaining
     // area of new upper
-    bool _WouldFit( SwTwips nSpace,
+    bool WouldFit_( SwTwips nSpace,
                     SwLayoutFrame *pNewUpper,
                     bool bTstMove,
                     const bool bObjsInNewUpper );
 
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool& ) override;

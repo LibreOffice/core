@@ -69,7 +69,7 @@ SwXMLWriter::~SwXMLWriter()
 {
 }
 
-sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
+sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
                                 const OUString& aDocHierarchicalName )
 {
     // Get service factory
@@ -433,7 +433,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
 
 sal_uLong SwXMLWriter::WriteStorage()
 {
-    return _Write( uno::Reference < task::XStatusIndicator >(), OUString() );
+    return Write_( uno::Reference < task::XStatusIndicator >(), OUString() );
 }
 
 sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
@@ -449,7 +449,7 @@ sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
     if ( pDocHierarchItem )
         aName = pDocHierarchItem->GetValue();
 
-    return _Write( xStatusIndicator, aName );
+    return Write_( xStatusIndicator, aName );
 }
 
 sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,

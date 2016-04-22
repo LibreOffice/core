@@ -1309,9 +1309,9 @@ void SaveBookmark::SetInDoc(
     }
 }
 
-// _DelBookmarks
+// DelBookmarks
 
-void _DelBookmarks(
+void DelBookmarks(
     const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
     ::std::vector<SaveBookmark> * pSaveBkmk,

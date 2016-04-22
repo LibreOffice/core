@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     OUString maName;
     // the NumRule's formats _have_ to be independent of a document
     // (They should always be there!)
-    class SAL_DLLPRIVATE _SwNumFormatGlobal
+    class SAL_DLLPRIVATE SwNumFormatGlobal
     {
         friend class SwNumRulesWithName;
         SwNumFormat aFormat;
@@ -46,17 +46,17 @@ class SW_DLLPUBLIC SwNumRulesWithName
         sal_uInt16 nCharPoolId;
         std::vector<std::unique_ptr<SfxPoolItem>> m_Items;
 
-        _SwNumFormatGlobal& operator=( const _SwNumFormatGlobal& ) = delete;
+        SwNumFormatGlobal& operator=( const SwNumFormatGlobal& ) = delete;
 
     public:
-        _SwNumFormatGlobal( const SwNumFormat& rFormat );
-        _SwNumFormatGlobal( const _SwNumFormatGlobal& );
-        ~_SwNumFormatGlobal();
+        SwNumFormatGlobal( const SwNumFormat& rFormat );
+        SwNumFormatGlobal( const SwNumFormatGlobal& );
+        ~SwNumFormatGlobal();
 
         void ChgNumFormat( SwWrtShell& rSh, SwNumFormat& rChg ) const;
     };
 
-    _SwNumFormatGlobal* aFormats[ MAXLEVEL ];
+    SwNumFormatGlobal* aFormats[ MAXLEVEL ];
 
 protected:
     friend class sw::StoredChapterNumberingRules;

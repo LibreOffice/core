@@ -149,34 +149,34 @@ void MakeSelUnions( SwSelUnions&, const SwLayoutFrame *pStart,
 // These classes copy the current table selections (rBoxes) into a
 // separate structure while keeping the table structure.
 
-class _FndBox;
-class _FndLine;
+class FndBox_;
+class FndLine_;
 
-typedef std::vector<std::unique_ptr<_FndBox>> FndBoxes_t;
-typedef std::vector<std::unique_ptr<_FndLine>> FndLines_t;
+typedef std::vector<std::unique_ptr<FndBox_>> FndBoxes_t;
+typedef std::vector<std::unique_ptr<FndLine_>> FndLines_t;
 
-class _FndBox
+class FndBox_
 {
     SwTableBox* pBox;
     FndLines_t m_Lines;
-    _FndLine* pUpper;
+    FndLine_* pUpper;
 
     SwTableLine *pLineBefore;   // For deleting/restoring the layout.
     SwTableLine *pLineBehind;
 
-    _FndBox(_FndBox const&) = delete;
-    _FndBox& operator=(_FndBox const&) = delete;
+    FndBox_(FndBox_ const&) = delete;
+    FndBox_& operator=(FndBox_ const&) = delete;
 
 public:
-    _FndBox( SwTableBox* pB, _FndLine* pFL ) :
+    FndBox_( SwTableBox* pB, FndLine_* pFL ) :
         pBox(pB), pUpper(pFL), pLineBefore( nullptr ), pLineBehind( nullptr ) {}
 
     const FndLines_t&   GetLines() const    { return m_Lines; }
         FndLines_t&     GetLines()          { return m_Lines; }
     const SwTableBox*   GetBox() const      { return pBox; }
         SwTableBox*     GetBox()            { return pBox; }
-    const _FndLine*     GetUpper() const    { return pUpper; }
-        _FndLine*       GetUpper()          { return pUpper; }
+    const FndLine_*     GetUpper() const    { return pUpper; }
+        FndLine_*       GetUpper()          { return pUpper; }
 
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
@@ -190,42 +190,42 @@ public:
     void ClearLineBehind() { pLineBehind = nullptr; }
 };
 
-class _FndLine
+class FndLine_
 {
     SwTableLine* pLine;
     FndBoxes_t m_Boxes;
-    _FndBox* pUpper;
+    FndBox_* pUpper;
 
-    _FndLine(_FndLine const&) = delete;
-    _FndLine& operator=(_FndLine const&) = delete;
+    FndLine_(FndLine_ const&) = delete;
+    FndLine_& operator=(FndLine_ const&) = delete;
 
 public:
-    _FndLine(SwTableLine* pL, _FndBox* pFB=nullptr) : pLine(pL), pUpper(pFB) {}
+    FndLine_(SwTableLine* pL, FndBox_* pFB=nullptr) : pLine(pL), pUpper(pFB) {}
     const FndBoxes_t&   GetBoxes() const    { return m_Boxes; }
         FndBoxes_t&     GetBoxes()          { return m_Boxes; }
     const SwTableLine*  GetLine() const     { return pLine; }
         SwTableLine*    GetLine()           { return pLine; }
-    const _FndBox*      GetUpper() const    { return pUpper; }
-        _FndBox*        GetUpper()          { return pUpper; }
+    const FndBox_*      GetUpper() const    { return pUpper; }
+        FndBox_*        GetUpper()          { return pUpper; }
 
-    void SetUpper( _FndBox* pUp ) { pUpper = pUp; }
+    void SetUpper( FndBox_* pUp ) { pUpper = pUp; }
 };
 
-struct _FndPara
+struct FndPara
 {
     const SwSelBoxes& rBoxes;
-    _FndLine* pFndLine;
-    _FndBox* pFndBox;
+    FndLine_* pFndLine;
+    FndBox_* pFndBox;
 
-    _FndPara( const SwSelBoxes& rBxs, _FndBox* pFB )
+    FndPara( const SwSelBoxes& rBxs, FndBox_* pFB )
         : rBoxes(rBxs), pFndLine(nullptr), pFndBox(pFB) {}
-    _FndPara( const _FndPara& rPara, _FndBox* pFB )
+    FndPara( const FndPara& rPara, FndBox_* pFB )
         : rBoxes(rPara.rBoxes), pFndLine(rPara.pFndLine), pFndBox(pFB) {}
-    _FndPara( const _FndPara& rPara, _FndLine* pFL )
+    FndPara( const FndPara& rPara, FndLine_* pFL )
         : rBoxes(rPara.rBoxes), pFndLine(pFL), pFndBox(rPara.pFndBox) {}
 };
 
-SW_DLLPUBLIC void ForEach_FndLineCopyCol(SwTableLines& rLines, _FndPara* pFndPara );
+SW_DLLPUBLIC void ForEach_FndLineCopyCol(SwTableLines& rLines, FndPara* pFndPara );
 
 #endif // INCLUDED_SW_INC_TBLSEL_HXX
 

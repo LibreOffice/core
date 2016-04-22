@@ -284,7 +284,7 @@ void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
             aGrfArea = SwRect( Frame().Pos( ), pFly->GetUnclippedFrame( ).SSize( ) );
     }
 
-    aPaintArea._Intersection( aOrigPaint );
+    aPaintArea.Intersection_( aOrigPaint );
 
     SwRect aNormal( Frame().Pos() + Prt().Pos(), Prt().SSize() );
     aNormal.Justify(); // Normalized rectangle for the comparisons
@@ -296,7 +296,7 @@ void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
             ::lcl_ClearArea( *this, rRenderContext, aPaintArea, aNormal );
 
         // The intersection of the PaintArea and the Bitmap contains the absolutely visible area of the Frame
-        aPaintArea._Intersection( aNormal );
+        aPaintArea.Intersection_( aNormal );
 
         if ( bClip )
             rRenderContext.IntersectClipRegion( aPaintArea.SVRect() );
@@ -521,7 +521,7 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
         rRect.Width( 1 );
     }
     else
-        rRect._Intersection( aFrameRect );
+        rRect.Intersection_( aFrameRect );
 
     if ( pCMS )
     {

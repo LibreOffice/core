@@ -177,13 +177,13 @@ static bool lcl_Search( const SwTextNode& rTextNd, SwPaM& rPam,
 }
 
 /// search for multiple text attributes
-struct _SwSrchChrAttr
+struct SwSrchChrAttr
 {
     sal_uInt16 nWhich;
     sal_Int32 nStt;
     sal_Int32 nEnd;
 
-    _SwSrchChrAttr( const SfxPoolItem& rItem,
+    SwSrchChrAttr( const SfxPoolItem& rItem,
                     sal_Int32 nStart, sal_Int32 nAnyEnd )
         : nWhich( rItem.Which() ), nStt( nStart ), nEnd( nAnyEnd )
     {}
@@ -191,7 +191,7 @@ struct _SwSrchChrAttr
 
 class SwAttrCheckArr
 {
-    _SwSrchChrAttr *pFndArr, *pStackArr;
+    SwSrchChrAttr *pFndArr, *pStackArr;
     sal_Int32 nNdStt;
     sal_Int32 nNdEnd;
     sal_uInt16 nArrStart, nArrLen;
@@ -238,11 +238,11 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
     nArrStart = aCmpSet.GetWhichByPos( aIter.GetFirstPos() );
     nArrLen = aCmpSet.GetWhichByPos( aIter.GetLastPos() ) - nArrStart+1;
 
-    char* pFndChar  = new char[ nArrLen * sizeof(_SwSrchChrAttr) ];
-    char* pStackChar = new char[ nArrLen * sizeof(_SwSrchChrAttr) ];
+    char* pFndChar  = new char[ nArrLen * sizeof(SwSrchChrAttr) ];
+    char* pStackChar = new char[ nArrLen * sizeof(SwSrchChrAttr) ];
 
-    pFndArr = reinterpret_cast<_SwSrchChrAttr*>(pFndChar);
-    pStackArr = reinterpret_cast<_SwSrchChrAttr*>(pStackChar);
+    pFndArr = reinterpret_cast<SwSrchChrAttr*>(pFndChar);
+    pStackArr = reinterpret_cast<SwSrchChrAttr*>(pStackChar);
 }
 
 SwAttrCheckArr::~SwAttrCheckArr()
@@ -253,8 +253,8 @@ SwAttrCheckArr::~SwAttrCheckArr()
 
 void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
 {
-    memset( pFndArr, 0, nArrLen * sizeof(_SwSrchChrAttr) );
-    memset( pStackArr, 0, nArrLen * sizeof(_SwSrchChrAttr) );
+    memset( pFndArr, 0, nArrLen * sizeof(SwSrchChrAttr) );
+    memset( pStackArr, 0, nArrLen * sizeof(SwSrchChrAttr) );
     nFound = 0;
     nStackCnt = 0;
 
@@ -295,7 +295,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
                 && !CmpAttr( *pFndItem, rSet.GetPool()->GetDefaultItem( nWhich ) ))
             {
                 pFndArr[ nWhich - nArrStart ] =
-                    _SwSrchChrAttr( *pFndItem, nNdStt, nNdEnd );
+                    SwSrchChrAttr( *pFndItem, nNdStt, nNdEnd );
                 nFound++;
             }
         }
@@ -307,7 +307,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
             if( CmpAttr( rSet.Get( nWhich, !bNoColls ), *pItem ) )
             {
                 pFndArr[ nWhich - nArrStart ] =
-                    _SwSrchChrAttr( *pItem, nNdStt, nNdEnd );
+                    SwSrchChrAttr( *pItem, nNdStt, nNdEnd );
                 nFound++;
             }
         }
@@ -320,7 +320,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
 
 static bool
 lcl_IsAttributeIgnorable(sal_Int32 const nNdStart, sal_Int32 const nNdEnd,
-        _SwSrchChrAttr const& rTmp)
+        SwSrchChrAttr const& rTmp)
 {
     // #i115528#: if there is a paragraph attribute, it has been added by the
     // SwAttrCheckArr ctor, and nFound is 1.
@@ -335,7 +335,7 @@ lcl_IsAttributeIgnorable(sal_Int32 const nNdStart, sal_Int32 const nNdEnd,
 
 bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
 {
-    _SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
+    SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
     if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
@@ -375,10 +375,10 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
         if( SfxItemState::DONTCARE == eState || SfxItemState::SET == eState )
         {
             sal_uInt16 n;
-            _SwSrchChrAttr* pCmp;
+            SwSrchChrAttr* pCmp;
 
             // first delete all up to start position that are already invalid
-            _SwSrchChrAttr* pArrPtr;
+            SwSrchChrAttr* pArrPtr;
             if( nFound )
                 for( pArrPtr = pFndArr, n = 0; n < nArrLen;
                     ++n, ++pArrPtr )
@@ -488,7 +488,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
 
 bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
 {
-    _SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
+    SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
     if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
@@ -528,10 +528,10 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
         if( SfxItemState::DONTCARE == eState || SfxItemState::SET == eState )
         {
             sal_uInt16 n;
-            _SwSrchChrAttr* pCmp;
+            SwSrchChrAttr* pCmp;
 
             // first delete all up to start position that are already invalid
-            _SwSrchChrAttr* pArrPtr;
+            SwSrchChrAttr* pArrPtr;
             if( nFound )
                 for( pArrPtr = pFndArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
                     if( pArrPtr->nWhich && pArrPtr->nStt >= aTmp.nEnd )
@@ -640,7 +640,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
 sal_Int32 SwAttrCheckArr::Start() const
 {
     sal_Int32 nStart = nNdStt;
-    _SwSrchChrAttr* pArrPtr = pFndArr;
+    SwSrchChrAttr* pArrPtr = pFndArr;
     for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nStt > nStart )
             nStart = pArrPtr->nStt;
@@ -650,7 +650,7 @@ sal_Int32 SwAttrCheckArr::Start() const
 
 sal_Int32 SwAttrCheckArr::End() const
 {
-    _SwSrchChrAttr* pArrPtr = pFndArr;
+    SwSrchChrAttr* pArrPtr = pFndArr;
     sal_Int32 nEnd = nNdEnd;
     for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nEnd < nEnd )
@@ -667,7 +667,7 @@ bool SwAttrCheckArr::CheckStack()
     sal_uInt16 n;
     const sal_Int32 nSttPos = Start();
     const sal_Int32 nEndPos = End();
-    _SwSrchChrAttr* pArrPtr;
+    SwSrchChrAttr* pArrPtr;
     for( pArrPtr = pStackArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
     {
         if( !pArrPtr->nWhich )

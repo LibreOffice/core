@@ -236,10 +236,10 @@ class SW_DLLPUBLIC SwFieldType : public SwModify
 
     sal_uInt16 m_nWhich;
 
-    friend void _FinitUI();     ///< In order to delete pointer!
+    friend void FinitUI();     ///< In order to delete pointer!
     static  std::vector<OUString>* s_pFieldNames;
 
-    static void _GetFieldName();  ///< Sets up FieldNames; fldmgr.cxx!
+    static void GetFieldName_();  ///< Sets up FieldNames; fldmgr.cxx!
 
 protected:
     /// Single argument ctors shall be explicit.

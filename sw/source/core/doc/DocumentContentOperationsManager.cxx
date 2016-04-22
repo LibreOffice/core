@@ -124,7 +124,7 @@ namespace
 
     /*
         The lcl_CopyBookmarks function has to copy bookmarks from the source to the destination nodes
-        array. It is called after a call of the _CopyNodes(..) function. But this function does not copy
+        array. It is called after a call of the CopyNodes(..) function. But this function does not copy
         every node (at least at the moment: 2/08/2006 ), section start and end nodes will not be copied
         if the corresponding end/start node is outside the copied pam.
         The lcl_NonCopyCount function counts the number of these nodes, given the copied pam and a node
@@ -196,7 +196,7 @@ namespace
         rChgPos.nContent.Assign( rChgPos.nNode.GetNode().GetContentNode(), nContentPos );
     }
 
-    // TODO: use SaveBookmark (from _DelBookmarks)
+    // TODO: use SaveBookmark (from DelBookmarks)
     void lcl_CopyBookmarks(
         const SwPaM& rPam,
         SwPaM& rCpyPam )
@@ -550,14 +550,14 @@ namespace
         return false;
     }
 
-    struct _SaveRedline
+    struct SaveRedline
     {
         SwRangeRedline* pRedl;
         sal_uInt32 nStt, nEnd;
         sal_Int32 nSttCnt;
         sal_Int32 nEndCnt;
 
-        _SaveRedline( SwRangeRedline* pR, const SwNodeIndex& rSttIdx )
+        SaveRedline( SwRangeRedline* pR, const SwNodeIndex& rSttIdx )
             : pRedl(pR)
             , nEnd(0)
             , nEndCnt(0)
@@ -579,7 +579,7 @@ namespace
             pRedl->GetMark()->nContent.Assign( nullptr, 0 );
         }
 
-        _SaveRedline( SwRangeRedline* pR, const SwPosition& rPos )
+        SaveRedline( SwRangeRedline* pR, const SwPosition& rPos )
             : pRedl(pR)
             , nEnd(0)
             , nEndCnt(0)
@@ -628,7 +628,7 @@ namespace
         }
     };
 
-    typedef std::vector< _SaveRedline > SaveRedlines_t;
+    typedef std::vector< SaveRedline > SaveRedlines_t;
 
     void lcl_SaveRedlines(const SwPaM& aPam, SaveRedlines_t& rArr)
     {
@@ -688,7 +688,7 @@ namespace
                 }
 
                 // save the current redline
-                rArr.push_back(_SaveRedline( pCurrent, *pStart ));
+                rArr.push_back(SaveRedline( pCurrent, *pStart ));
             }
         }
 
@@ -744,7 +744,7 @@ namespace
                     pTmpPos->nContent.Assign(
                                 pTmpPos->nNode.GetNode().GetContentNode(), 0 );
 
-                    rArr.push_back(_SaveRedline(pNewRedl, rRg.aStart));
+                    rArr.push_back(SaveRedline(pNewRedl, rRg.aStart));
 
                     pTmpPos = pTmp->End();
                     pTmpPos->nNode = rRg.aEnd;
@@ -766,7 +766,7 @@ namespace
                     ( pREnd->nNode == rRg.aEnd && !pREnd->nContent.GetIndex()) )
                 {
                     // move everything
-                    rArr.push_back(_SaveRedline( pTmp, rRg.aStart ));
+                    rArr.push_back(SaveRedline( pTmp, rRg.aStart ));
                 }
                 else
                 {
@@ -777,7 +777,7 @@ namespace
                     pTmpPos->nContent.Assign(
                                 pTmpPos->nNode.GetNode().GetContentNode(), 0 );
 
-                    rArr.push_back(_SaveRedline( pNewRedl, rRg.aStart ));
+                    rArr.push_back(SaveRedline( pNewRedl, rRg.aStart ));
 
                     pTmpPos = pTmp->Start();
                     pTmpPos->nNode = rRg.aEnd;
@@ -1733,7 +1733,7 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
     // delete all Flys, Bookmarks, ...
     DelFlyInRange( aSttIdx, aEndIdx );
     m_rDoc.getIDocumentRedlineAccess().DeleteRedline( *pSttNd, true, USHRT_MAX );
-    _DelBookmarks(aSttIdx, aEndIdx);
+    DelBookmarks(aSttIdx, aEndIdx);
 
     {
         // move all Cursor/StackCursor/UnoCursor out of the to-be-deleted area
@@ -1910,8 +1910,8 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         return false;
 
     // Save the paragraph anchored Flys, so that they can be moved.
-    _SaveFlyArr aSaveFlyArr;
-    _SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, bool( SwMoveFlags::ALLFLYS & eMvFlags ) );
+    SaveFlyArr aSaveFlyArr;
+    SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, bool( SwMoveFlags::ALLFLYS & eMvFlags ) );
 
     // save redlines (if DOC_MOVEREDLINES is used)
     SaveRedlines_t aSaveRedl;
@@ -1924,7 +1924,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         //          will change this order. Hence, we delete bookmarks
         //          here without undo.
         ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
-        _DelBookmarks(
+        DelBookmarks(
             pStt->nNode,
             pEnd->nNode,
             nullptr,
@@ -2024,7 +2024,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     // Copy all Bookmarks that are within the Move range into an array,
     // that saves the position as an offset.
     ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
-    _DelBookmarks(
+    DelBookmarks(
         pStt->nNode,
         pEnd->nNode,
         &aSaveBkmks,
@@ -2141,7 +2141,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     *rPaM.GetPoint() = *aSavePam.End();
 
     // Move the Flys to the new position.
-    _RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode, &(rPos.nNode) );
+    RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode, &(rPos.nNode) );
 
     // restore redlines (if DOC_MOVEREDLINES is used)
     if( !aSaveRedl.empty() )
@@ -2217,12 +2217,12 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     // that stores all references to positions as an offset.
     // The final mapping happens after the Move.
     ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
-    _DelBookmarks(rRange.aStart, rRange.aEnd, &aSaveBkmks);
+    DelBookmarks(rRange.aStart, rRange.aEnd, &aSaveBkmks);
 
     // Save the paragraph-bound Flys, so that they can be moved.
-    _SaveFlyArr aSaveFlyArr;
+    SaveFlyArr aSaveFlyArr;
     if( !m_rDoc.GetSpzFrameFormats()->empty() )
-        _SaveFlyInRange( rRange, aSaveFlyArr );
+        SaveFlyInRange( rRange, aSaveFlyArr );
 
     // Set it to before the Position, so that it cannot be moved further.
     SwNodeIndex aIdx( rPos, -1 );
@@ -2233,7 +2233,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     // move the Nodes
     bool bNoDelFrames = bool(SwMoveFlags::NO_DELFRMS & eMvFlags);
-    if( m_rDoc.GetNodes()._MoveNodes( rRange, m_rDoc.GetNodes(), rPos, !bNoDelFrames ) )
+    if( m_rDoc.GetNodes().MoveNodes( rRange, m_rDoc.GetNodes(), rPos, !bNoDelFrames ) )
     {
         ++aIdx;     // again back to old position
         if( pSaveInsPos )
@@ -2248,7 +2248,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     // move the Flys to the new position
     if( !aSaveFlyArr.empty() )
-        _RestFlyInRange( aSaveFlyArr, aIdx, nullptr );
+        RestFlyInRange( aSaveFlyArr, aIdx, nullptr );
 
     // Add the Bookmarks back to the Document
     for(
@@ -2612,7 +2612,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert( const SwPaM &rRg,
                             SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                             rGrfName, rFltName, pGraphic,
                             m_rDoc.GetDfltGrfFormatColl() );
-    SwFlyFrameFormat* pSwFlyFrameFormat = _InsNoTextNode( *rRg.GetPoint(), pSwGrfNode,
+    SwFlyFrameFormat* pSwFlyFrameFormat = InsNoTextNode( *rRg.GetPoint(), pSwGrfNode,
                             pFlyAttrSet, pGrfAttrSet, pFrameFormat );
     return pSwFlyFrameFormat;
 }
@@ -2627,7 +2627,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert( const SwPaM &rRg, co
     SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
                             SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                             rGrfObj, m_rDoc.GetDfltGrfFormatColl() );
-    SwFlyFrameFormat* pSwFlyFrameFormat = _InsNoTextNode( *rRg.GetPoint(), pSwGrfNode,
+    SwFlyFrameFormat* pSwFlyFrameFormat = InsNoTextNode( *rRg.GetPoint(), pSwGrfNode,
                             pFlyAttrSet, pGrfAttrSet, pFrameFormat );
     return pSwFlyFrameFormat;
 }
@@ -2649,7 +2649,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert(const SwPaM &rRg, con
 
         pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( nId );
     }
-    return _InsNoTextNode( *rRg.GetPoint(), m_rDoc.GetNodes().MakeOLENode(
+    return InsNoTextNode( *rRg.GetPoint(), m_rDoc.GetNodes().MakeOLENode(
                             SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                             xObj,
                             m_rDoc.GetDfltGrfFormatColl() ),
@@ -2666,7 +2666,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertOLE(const SwPaM &rRg, 
     if( !pFrameFormat )
         pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_OLE );
 
-    return _InsNoTextNode( *rRg.GetPoint(),
+    return InsNoTextNode( *rRg.GetPoint(),
                             m_rDoc.GetNodes().MakeOLENode(
                                 SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
                                 rObjName,
@@ -3155,11 +3155,11 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 
     SwDoc* pDest = rInsPos.GetNode().GetDoc();
 
-    _SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
+    SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
     SwNodeIndex aSavePos( rInsPos, -1 );
     bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
-    m_rDoc.GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrames, true );
+    m_rDoc.GetNodes().CopyNodes( rRg, rInsPos, bMakeNewFrames, true );
     ++aSavePos;
     if( bEndIsEqualEndPos )
         const_cast<SwNodeIndex&>(rRg.aEnd) = aSavePos;
@@ -3195,7 +3195,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     SwNodeRange aCpyRange( aSavePos, rInsPos );
 
     // Also copy all bookmarks
-    // guess this must be done before the _DelDummyNodes below as that
+    // guess this must be done before the DelDummyNodes below as that
     // deletes nodes so would mess up the index arithmetic
     if( m_rDoc.getIDocumentMarkAccess()->getAllMarksCount() )
     {
@@ -3218,7 +3218,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     if( bDelRedlines && ( nsRedlineMode_t::REDLINE_DELETE_REDLINES & pDest->getIDocumentRedlineAccess().GetRedlineMode() ))
         lcl_DeleteRedlines( rRg, aCpyRange );
 
-    pDest->GetNodes()._DelDummyNodes( aCpyRange );
+    pDest->GetNodes().DelDummyNodes( aCpyRange );
 }
 
 // TODO: there is a limitation here in that it's not possible to pass a start
@@ -3237,7 +3237,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // and then only copy them. This maintains the ordering numbers (which are only
     // managed in the DrawModel).
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
-    ::std::set< _ZSortFly > aSet;
+    ::std::set< ZSortFly > aSet;
     const size_t nArrLen = m_rDoc.GetSpzFrameFormats()->size();
 
     SwTextBoxHelper::SavedLink aOldTextBoxes;
@@ -3322,7 +3322,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             // Make sure draw formats don't refer to content, so that such
             // content can be removed without problems.
             SwTextBoxHelper::resetLink(pFormat, aOldContent);
-            aSet.insert( _ZSortFly( pFormat, pAnchor, nArrLen + aSet.size() ));
+            aSet.insert( ZSortFly( pFormat, pAnchor, nArrLen + aSet.size() ));
         }
     }
 
@@ -3330,7 +3330,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // They are stored as matching the originals, so that we will be later
     // able to build the chains accordingly.
     ::std::vector< SwFrameFormat* > aVecSwFrameFormat;
-    ::std::set< _ZSortFly >::const_iterator it=aSet.begin();
+    ::std::set< ZSortFly >::const_iterator it=aSet.begin();
 
     while (it != aSet.end())
     {
@@ -3343,7 +3343,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         // position can *not* be determined by the difference of the current
         // anchor position to the start of the copied range, because not
         // complete selected sections in the copied range aren't copied - see
-        // method <SwNodes::_CopyNodes(..)>.
+        // method <SwNodes::CopyNodes(..)>.
         // Thus, the new anchor position in the destination document is found
         // by counting the text nodes.
         if ((aAnchor.GetAnchorId() == FLY_AT_PARA) ||
@@ -3448,14 +3448,14 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     if ( aSet.size() == aVecSwFrameFormat.size() )
     {
         size_t n = 0;
-        for (::std::set< _ZSortFly >::const_iterator nIt=aSet.begin() ; nIt != aSet.end(); ++nIt, ++n )
+        for (::std::set< ZSortFly >::const_iterator nIt=aSet.begin() ; nIt != aSet.end(); ++nIt, ++n )
         {
             const SwFrameFormat *pFormatN = (*nIt).GetFormat();
             const SwFormatChain &rChain = pFormatN->GetChain();
             int nCnt = int(nullptr != rChain.GetPrev());
             nCnt += rChain.GetNext() ? 1: 0;
             size_t k = 0;
-            for (::std::set< _ZSortFly >::const_iterator kIt=aSet.begin() ; kIt != aSet.end(); ++kIt, ++k )
+            for (::std::set< ZSortFly >::const_iterator kIt=aSet.begin() ; kIt != aSet.end(); ++kIt, ++k )
             {
                 const SwFrameFormat *pFormatK = (*kIt).GetFormat();
                 if ( rChain.GetPrev() == pFormatK )
@@ -3696,7 +3696,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 
     // Delete and move all "Flys at the paragraph", which are within the Selection
     DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
-    _DelBookmarks(
+    DelBookmarks(
         pStt->nNode,
         pEnd->nNode,
         nullptr,
@@ -4042,7 +4042,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
     return bRet;
 }
 
-SwFlyFrameFormat* DocumentContentOperationsManager::_InsNoTextNode( const SwPosition& rPos, SwNoTextNode* pNode,
+SwFlyFrameFormat* DocumentContentOperationsManager::InsNoTextNode( const SwPosition& rPos, SwNoTextNode* pNode,
                                     const SfxItemSet* pFlyAttrSet,
                                     const SfxItemSet* pGrfAttrSet,
                                     SwFrameFormat* pFrameFormat)
@@ -4050,7 +4050,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::_InsNoTextNode( const SwPosi
     SwFlyFrameFormat *pFormat = nullptr;
     if( pNode )
     {
-        pFormat = m_rDoc._MakeFlySection( rPos, *pNode, FLY_AT_PARA,
+        pFormat = m_rDoc.MakeFlySection_( rPos, *pNode, FLY_AT_PARA,
                                 pFlyAttrSet, pFrameFormat );
         if( pGrfAttrSet )
             pNode->SetAttr( *pGrfAttrSet );

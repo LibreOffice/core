@@ -1778,7 +1778,7 @@ SwAccessibleMap::~SwAccessibleMap()
     delete mpSeletedFrameMap;
 }
 
-uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
+uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView_(
     bool bPagePreview )
 {
     uno::Reference < XAccessible > xAcc;
@@ -1843,7 +1843,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
 
 uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
 {
-    return _GetDocumentView( false );
+    return GetDocumentView_( false );
 }
 
 uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
@@ -1857,7 +1857,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
         mpPreview = new SwAccPreviewData();
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrame, _rPreviewWinSize );
 
-    uno::Reference<XAccessible> xAcc = _GetDocumentView( true );
+    uno::Reference<XAccessible> xAcc = GetDocumentView_( true );
     return xAcc;
 }
 
@@ -2796,7 +2796,7 @@ void SwAccessibleMap::InvalidateFocus()
 {
     if(GetShell()->IsPreview())
     {
-        uno::Reference<XAccessible> xAcc = _GetDocumentView( true );
+        uno::Reference<XAccessible> xAcc = GetDocumentView_( true );
         if (xAcc.get())
         {
             SwAccessiblePreview *pAccPreview = static_cast<SwAccessiblePreview *>(xAcc.get());
@@ -2860,7 +2860,7 @@ void SwAccessibleMap::InvalidateEditableStates( const SwFrame* _pFrame )
     }
 }
 
-void SwAccessibleMap::_InvalidateRelationSet( const SwFrame* pFrame,
+void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
                                               bool bFrom )
 {
     // first, see if this frame is accessible, and if so, get the respective
@@ -2910,15 +2910,15 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrame* pFrame,
 void SwAccessibleMap::InvalidateRelationSet( const SwFrame* pMaster,
                                              const SwFrame* pFollow )
 {
-    _InvalidateRelationSet( pMaster, false );
-    _InvalidateRelationSet( pFollow, true );
+    InvalidateRelationSet_( pMaster, false );
+    InvalidateRelationSet_( pFollow, true );
 }
 
 // invalidation of CONTENT_FLOW_FROM/_TO relation of a paragraph
 void SwAccessibleMap::InvalidateParaFlowRelation( const SwTextFrame& _rTextFrame,
                                                   const bool _bFrom )
 {
-    _InvalidateRelationSet( &_rTextFrame, _bFrom );
+    InvalidateRelationSet_( &_rTextFrame, _bFrom );
 }
 
 // invalidation of text selection of a paragraph
@@ -3358,7 +3358,7 @@ Size SwAccessibleMap::GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const
     which have a selection
     Important note: method has to be used inside a mutual exclusive section
 */
-SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
+SwAccessibleSelectedParas_Impl* SwAccessibleMap::BuildSelectedParas()
 {
     // no accessible contexts, no selection
     if ( !mpFrameMap )
@@ -3455,7 +3455,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
     SwAccessibleSelectedParas_Impl* pPrevSelectedParas( mpSelectedParas );
 
     // determine currently selected paragraphs
-    mpSelectedParas = _BuildSelectedParas();
+    mpSelectedParas = BuildSelectedParas();
 
     // compare currently selected paragraphs with the previously selected
     // paragraphs and submit corresponding TEXT_SELECTION_CHANGED events.

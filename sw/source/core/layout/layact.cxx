@@ -190,7 +190,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
     return bRetPaint;
 }
 
-inline bool SwLayAction::_PaintContent( const SwContentFrame *pContent,
+inline bool SwLayAction::PaintContent_( const SwContentFrame *pContent,
                                       const SwPageFrame *pPage,
                                       const SwRect &rRect )
 {
@@ -218,7 +218,7 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
     if ( pCnt->IsCompletePaint() || !pCnt->IsTextFrame() )
     {
         SwRect aPaint( pCnt->PaintArea() );
-        if ( !_PaintContent( pCnt, pPage, aPaint ) )
+        if ( !PaintContent_( pCnt, pPage, aPaint ) )
             pCnt->ResetCompletePaint();
     }
     else
@@ -235,11 +235,11 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
             if( nOldHeight > nNewHeight )
                 nOldBottom = (pCnt->*fnRect->fnGetPrtBottom)();
             (aDrawRect.*fnRect->fnSetTop)( nOldBottom );
-            _PaintContent( pCnt, pPage, aDrawRect );
+            PaintContent_( pCnt, pPage, aDrawRect );
         }
         // paint content area
         SwRect aPaintRect = static_cast<SwTextFrame*>(const_cast<SwContentFrame*>(pCnt))->Paint();
-        _PaintContent( pCnt, pPage, aPaintRect );
+        PaintContent_( pCnt, pPage, aPaintRect );
     }
 
     if ( pCnt->IsRetouche() && !pCnt->GetNext() )
@@ -253,7 +253,7 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
         }
         SwRect aRect( pTmp->GetUpper()->PaintArea() );
         (aRect.*fnRect->fnSetTop)( (pTmp->*fnRect->fnGetPrtBottom)() );
-        if ( !_PaintContent( pCnt, pPage, aRect ) )
+        if ( !PaintContent_( pCnt, pPage, aRect ) )
             pCnt->ResetRetouche();
     }
 }
@@ -790,7 +790,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         rLayoutAccess.GetLayouter()->EndLoopControl();
 }
 
-bool SwLayAction::_TurboAction( const SwContentFrame *pCnt )
+bool SwLayAction::TurboAction_( const SwContentFrame *pCnt )
 {
 
     const SwPageFrame *pPage = nullptr;
@@ -852,7 +852,7 @@ bool SwLayAction::TurboAction()
 
     if ( m_pRoot->GetTurbo() )
     {
-        if ( !_TurboAction( m_pRoot->GetTurbo() ) )
+        if ( !TurboAction_( m_pRoot->GetTurbo() ) )
         {
             CheckIdleEnd();
             bRet = false;
@@ -1637,7 +1637,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
             const bool bInValid = !pContent->IsValid() || pContent->IsCompletePaint();
             const bool bOldPaint = IsPaint();
             m_bPaint = bOldPaint && !(pTab && pTab == m_pOptTab);
-            _FormatContent( pContent, pPage );
+            FormatContent_( pContent, pPage );
             // #i26945# - reset <bPaint> before format objects
             m_bPaint = bOldPaint;
 
@@ -1795,7 +1795,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
     return !IsInterrupt() || mbFormatContentOnInterrupt;
 }
 
-void SwLayAction::_FormatContent( const SwContentFrame *pContent,
+void SwLayAction::FormatContent_( const SwContentFrame *pContent,
                                 const SwPageFrame  *pPage )
 {
     // We probably only ended up here because the Content holds DrawObjects.
@@ -1827,14 +1827,14 @@ void SwLayAction::_FormatContent( const SwContentFrame *pContent,
 
 /// Returns true if all Contents of the Fly have been processed completely.
 /// Returns false if processing has been interrupted prematurely.
-bool SwLayAction::_FormatFlyContent( const SwFlyFrame *pFly )
+bool SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
 {
     const SwContentFrame *pContent = pFly->ContainsContent();
 
     while ( pContent )
     {
         // OD 2004-05-10 #i28701#
-        _FormatContent( pContent, pContent->FindPageFrame() );
+        FormatContent_( pContent, pContent->FindPageFrame() );
 
         // #i28701# - format floating screen objects
         // at content text frame
@@ -1877,7 +1877,7 @@ bool SwLayAction::_FormatFlyContent( const SwFlyFrame *pFly )
     return !(IsInterrupt() && !mbFormatContentOnInterrupt);
 }
 
-bool SwLayIdle::_DoIdleJob( const SwContentFrame *pCnt, IdleJobType eJob )
+bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
 {
     OSL_ENSURE( pCnt->IsTextFrame(), "NoText neighbour of Text" );
     // robust against misuse by e.g. #i52542#
@@ -1920,7 +1920,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrame *pCnt, IdleJobType eJob )
         {
             case ONLINE_SPELLING :
             {
-                SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->_AutoSpell( pContentNode, nTextPos ) );
+                SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->AutoSpell_( pContentNode, nTextPos ) );
                 // tdf#92036 PENDING should stop idle spell checking
                 bPageValid = bPageValid && (SwTextNode::WrongState::TODO != pTextNode->GetWrongDirty());
                 if( !bPageValid )
@@ -1984,7 +1984,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrame *pCnt, IdleJobType eJob )
                     {
                         if ( pC->IsTextFrame() )
                         {
-                            if ( _DoIdleJob( pC, eJob ) )
+                            if ( DoIdleJob_( pC, eJob ) )
                                 return true;
                         }
                         pC = pC->GetNextContentFrame();
@@ -2043,7 +2043,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
         const SwContentFrame *pCnt = pPage->ContainsContent();
         while( pCnt && pPage->IsAnLower( pCnt ) )
         {
-            if ( _DoIdleJob( pCnt, eJob ) )
+            if ( DoIdleJob_( pCnt, eJob ) )
                 return true;
             pCnt = pCnt->GetNextContentFrame();
         }
@@ -2061,7 +2061,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
                     {
                         if ( pC->IsTextFrame() )
                         {
-                            if ( _DoIdleJob( pC, eJob ) )
+                            if ( DoIdleJob_( pC, eJob ) )
                                 return true;
                         }
                         pC = pC->GetNextContentFrame();

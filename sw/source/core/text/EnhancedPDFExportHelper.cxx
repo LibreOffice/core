@@ -1653,13 +1653,13 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // We have to distinguish between intern and real URLs
                     const bool bIntern = '#' == aURL[0];
 
-                    // _GetCursor() is a SwShellCursor, which is derived from
+                    // GetCursor_() is a SwShellCursor, which is derived from
                     // SwSelPaintRects, therefore the rectangles of the current
                     // selection can be easily obtained:
                     // Note: We make a copy of the rectangles, because they may
                     // be deleted again in JumpToSwMark.
                     SwRects aTmp;
-                    aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::_GetCursor()->begin(), mrSh.SwCursorShell::_GetCursor()->end() );
+                    aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
                     const SwPageFrame* pSelectionPage =
@@ -1838,7 +1838,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     // Link Rectangles
                     SwRects aTmp;
-                    aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::_GetCursor()->begin(), mrSh.SwCursorShell::_GetCursor()->end() );
+                    aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
                     mrSh.SwCursorShell::ClearMark();
@@ -1913,15 +1913,15 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             const SwTextFootnote* pTextFootnote = pDoc->GetFootnoteIdxs()[ nIdx ];
             SwTextNode& rTNd = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
 
-            mrSh._GetCursor()->GetPoint()->nNode = rTNd;
-            mrSh._GetCursor()->GetPoint()->nContent.Assign( &rTNd, pTextFootnote->GetStart() );
+            mrSh.GetCursor_()->GetPoint()->nNode = rTNd;
+            mrSh.GetCursor_()->GetPoint()->nContent.Assign( &rTNd, pTextFootnote->GetStart() );
 
             // 1. Check if the whole paragraph is hidden
             // 2. Check for hidden text attribute
             if ( rTNd.GetTextNode()->IsHidden() || mrSh.SelectHiddenRange() )
                 continue;
 
-            SwCursorSaveState aSaveState( *mrSh._GetCursor() );
+            SwCursorSaveState aSaveState( *mrSh.GetCursor_() );
 
             // Select the footnote:
             mrSh.SwCursorShell::SetMark();
@@ -1929,10 +1929,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
             // Link Rectangle
             SwRects aTmp;
-            aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::_GetCursor()->begin(), mrSh.SwCursorShell::_GetCursor()->end() );
+            aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
             OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
-            mrSh._GetCursor()->RestoreSavePos();
+            mrSh.GetCursor_()->RestoreSavePos();
             mrSh.SwCursorShell::ClearMark();
 
             if (aTmp.empty())

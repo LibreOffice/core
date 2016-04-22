@@ -1514,11 +1514,11 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
         }
     }
     if ( !aRegion.empty() )
-        _PaintDesktop(rRenderContext, aRegion);
+        PaintDesktop_(rRenderContext, aRegion);
 }
 
 // PaintDesktop is split in two, this part is also used by PreviewPage
-void SwViewShell::_PaintDesktop(vcl::RenderContext& /*rRenderContext*/, const SwRegionRects &rRegion)
+void SwViewShell::PaintDesktop_(vcl::RenderContext& /*rRenderContext*/, const SwRegionRects &rRegion)
 {
     // OD 2004-04-23 #116347#
     GetOut()->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
@@ -1955,7 +1955,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
         SwFrame* pPage = GetLayout()->Lower();
         while( pPage )
         {
-            pPage->_InvalidateSize();
+            pPage->InvalidateSize_();
             pPage = pPage->GetNext();
         }
         return;
@@ -1967,7 +1967,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
     SwPageFrame *pPg = static_cast<SwPageFrame*>(GetLayout()->Lower());
     do
     {   pPg->InvalidateSize();
-        pPg->_InvalidatePrt();
+        pPg->InvalidatePrt_();
         pPg->InvaPercentLowers();
         if ( bSizeChanged )
         {
@@ -2355,7 +2355,7 @@ void SwViewShell::InvalidateAccessibleParaFlowRelation( const SwTextFrame* _pFro
 {
     if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
     {
-        Imp()->_InvalidateAccessibleParaFlowRelation( _pFromTextFrame, _pToTextFrame );
+        Imp()->InvalidateAccessibleParaFlowRelation_( _pFromTextFrame, _pToTextFrame );
     }
 }
 
@@ -2366,7 +2366,7 @@ void SwViewShell::InvalidateAccessibleParaTextSelection()
 {
     if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
     {
-        Imp()->_InvalidateAccessibleParaTextSelection();
+        Imp()->InvalidateAccessibleParaTextSelection_();
     }
 }
 
@@ -2377,7 +2377,7 @@ void SwViewShell::InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFrame )
 {
     if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
     {
-        Imp()->_InvalidateAccessibleParaAttrs( rTextFrame );
+        Imp()->InvalidateAccessibleParaAttrs_( rTextFrame );
     }
 }
 

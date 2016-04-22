@@ -32,7 +32,7 @@ struct SwPosition;
 class SwTextField;
 class SwDoc;
 class SwFormatField;
-class _SetGetExpFields;
+class SetGetExpFields;
 class SwEditShell;
 
 /// Forward declaration: get "BodyTextNode" for exp.fld in Fly's headers/footers/footnotes.
@@ -41,32 +41,32 @@ const SwTextNode* GetBodyTextNode( const SwDoc& pDoc, SwPosition& rPos,
 
 OUString ReplacePoint(const OUString& sTmpName, bool bWithCommandType = false);
 
-struct _SeqFieldLstElem
+struct SeqFieldLstElem
 {
     OUString sDlgEntry;
     sal_uInt16 nSeqNo;
 
-    _SeqFieldLstElem( const OUString& rStr, sal_uInt16 nNo )
+    SeqFieldLstElem( const OUString& rStr, sal_uInt16 nNo )
         : sDlgEntry( rStr ), nSeqNo( nNo )
     {}
 };
 
 class SW_DLLPUBLIC SwSeqFieldList
 {
-    std::vector<_SeqFieldLstElem*> maData;
+    std::vector<SeqFieldLstElem*> maData;
 public:
     ~SwSeqFieldList()
     {
-        for( std::vector<_SeqFieldLstElem*>::const_iterator it = maData.begin(); it != maData.end(); ++it )
+        for( std::vector<SeqFieldLstElem*>::const_iterator it = maData.begin(); it != maData.end(); ++it )
             delete *it;
     }
 
-    bool InsertSort(_SeqFieldLstElem* pNew);
-    bool SeekEntry(const _SeqFieldLstElem& rNew, size_t* pPos) const;
+    bool InsertSort(SeqFieldLstElem* pNew);
+    bool SeekEntry(const SeqFieldLstElem& rNew, size_t* pPos) const;
 
     size_t Count() { return maData.size(); }
-    _SeqFieldLstElem* operator[](size_t nIndex) { return maData[nIndex]; }
-    const _SeqFieldLstElem* operator[](size_t nIndex) const { return maData[nIndex]; }
+    SeqFieldLstElem* operator[](size_t nIndex) { return maData[nIndex]; }
+    const SeqFieldLstElem* operator[](size_t nIndex) const { return maData[nIndex]; }
     void Clear() { maData.clear(); }
 };
 
@@ -373,7 +373,7 @@ public:
 
 private:
     SwEditShell*              pSh;
-    _SetGetExpFields*           pSrtLst;
+    SetGetExpFields*           pSrtLst;
     std::set<const SwTextField*> aTmpLst;
 };
 

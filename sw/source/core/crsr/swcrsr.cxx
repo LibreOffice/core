@@ -57,13 +57,13 @@ using namespace ::com::sun::star::i18n;
 
 static const sal_uInt16 coSrchRplcThreshold = 60000;
 
-struct _PercentHdl
+struct PercentHdl
 {
     SwDocShell* pDSh;
     sal_uLong nActPos;
     bool bBack, bNodeIdx;
 
-    _PercentHdl( sal_uLong nStt, sal_uLong nEnd, SwDocShell* pSh )
+    PercentHdl( sal_uLong nStt, sal_uLong nEnd, SwDocShell* pSh )
         : pDSh(pSh), bBack(false), bNodeIdx(false)
     {
         nActPos = nStt;
@@ -74,7 +74,7 @@ struct _PercentHdl
         ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd );
     }
 
-    explicit _PercentHdl( const SwPaM& rPam )
+    explicit PercentHdl( const SwPaM& rPam )
         : pDSh( rPam.GetDoc()->GetDocShell() )
     {
         sal_uLong nStt, nEnd;
@@ -98,7 +98,7 @@ struct _PercentHdl
         ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd, pDSh );
     }
 
-    ~_PercentHdl()                      { ::EndProgress( pDSh ); }
+    ~PercentHdl()                      { ::EndProgress( pDSh ); }
 
     void NextPos( sal_uLong nPos ) const
         { ::SetProgressState( bBack ? nActPos - nPos : nPos, pDSh ); }
@@ -137,7 +137,7 @@ SwCursor::~SwCursor()
 {
     while( m_pSavePos )
     {
-        _SwCursor_SavePos* pNxt = m_pSavePos->pNext;
+        SwCursor_SavePos* pNxt = m_pSavePos->pNext;
         delete m_pSavePos;
         m_pSavePos = pNxt;
     }
@@ -167,7 +167,7 @@ bool SwCursor::IsSkipOverProtectSections() const
 // own SaveObjects if needed and validate them in the virtual check routines.
 void SwCursor::SaveState()
 {
-    _SwCursor_SavePos* pNew = CreateNewSavePos();
+    SwCursor_SavePos* pNew = CreateNewSavePos();
     pNew->pNext = m_pSavePos;
     m_pSavePos = pNew;
 }
@@ -176,15 +176,15 @@ void SwCursor::RestoreState()
 {
     if (m_pSavePos) // Robust
     {
-        _SwCursor_SavePos* pDel = m_pSavePos;
+        SwCursor_SavePos* pDel = m_pSavePos;
         m_pSavePos = m_pSavePos->pNext;
         delete pDel;
     }
 }
 
-_SwCursor_SavePos* SwCursor::CreateNewSavePos() const
+SwCursor_SavePos* SwCursor::CreateNewSavePos() const
 {
-    return new _SwCursor_SavePos( *this );
+    return new SwCursor_SavePos( *this );
 }
 
 /// determine if point is outside of the node-array's content area
@@ -749,14 +749,14 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
 
     // only create progress bar for ShellCursor
     bool bIsUnoCursor = dynamic_cast<SwUnoCursor*>(pCurrentCursor) !=  nullptr;
-    std::unique_ptr<_PercentHdl> pPHdl;
+    std::unique_ptr<PercentHdl> pPHdl;
     sal_uInt16 nCursorCnt = 0;
     if( FND_IN_SEL & eFndRngs )
     {
         while( pCurrentCursor != ( pTmpCursor = pTmpCursor->GetNext() ))
             ++nCursorCnt;
         if( nCursorCnt && !bIsUnoCursor )
-            pPHdl.reset(new _PercentHdl( 0, nCursorCnt, pDoc->GetDocShell() ));
+            pPHdl.reset(new PercentHdl( 0, nCursorCnt, pDoc->GetDocShell() ));
     }
     else
         pSaveCursor = static_cast<SwPaM*>(pSaveCursor->GetPrev());
@@ -774,7 +774,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             aRegion.Exchange();
 
         if( !nCursorCnt && !pPHdl && !bIsUnoCursor )
-            pPHdl.reset(new _PercentHdl( aRegion ));
+            pPHdl.reset(new PercentHdl( aRegion ));
 
         // as long as found and not at same position
         while(  *pSttPos <= *pEndPos &&

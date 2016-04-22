@@ -61,8 +61,8 @@ class SwXMLExport : public SvXMLExport
 
     SwDoc*                      doc; // cached for getDoc()
 
-    void _InitItemExport();
-    void _FinitItemExport();
+    void InitItemExport();
+    void FinitItemExport();
     void ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                  sal_uInt32 nAbsWidth,
                                  sal_uInt32 nBaseWidth,

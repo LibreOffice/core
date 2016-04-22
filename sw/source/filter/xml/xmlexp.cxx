@@ -94,7 +94,7 @@ SwXMLExport::SwXMLExport(
     bSavedShowChanges( false ),
     doc( nullptr )
 {
-    _InitItemExport();
+    InitItemExport();
 }
 
 void SwXMLExport::setBlockMode()
@@ -330,7 +330,7 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
 SwXMLExport::~SwXMLExport()
 {
     DeleteTableLines();
-    _FinitItemExport();
+    FinitItemExport();
 }
 
 void SwXMLExport::ExportFontDecls_()

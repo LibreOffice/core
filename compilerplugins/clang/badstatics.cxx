@@ -117,7 +117,7 @@ public:
                 || name == "s_pGallery" // this is not entirely clear but apparently the GalleryThemeCacheEntry are deleted by GalleryBrowser2::SelectTheme() or GalleryBrowser2::dispose()
                 || name == "s_ExtMgr" // TheExtensionManager::disposing()
                 || name == "s_pDocLockedInsertingLinks" // not owning
-                || name == "s_pVout" // _FrameFinit()
+                || name == "s_pVout" // FrameFinit()
                 || name == "s_pPaintQueue" // SwPaintQueue::Remove()
                 || name == "gProp" // only owned (VclPtr) member cleared again
                 || name == "g_pColumnCacheLastTabFrame" // not owning

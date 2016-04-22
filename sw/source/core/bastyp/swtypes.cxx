@@ -76,7 +76,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTextFrame )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableFormat )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableLineFormat )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFormat )
-IMPL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwCursor_SavePos )
 
 Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
 {

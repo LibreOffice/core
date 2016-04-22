@@ -294,7 +294,7 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
     }
 }
 
-void SwDDEFieldType::_RefCntChgd()
+void SwDDEFieldType::RefCntChgd()
 {
     if( nRefCnt )
     {

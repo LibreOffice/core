@@ -53,7 +53,7 @@ class SW_DLLPUBLIC SwTOXMark
     : public SfxPoolItem
     , public SwModify
 {
-    friend void _InitCore();
+    friend void InitCore();
     friend class SwTextTOXMark;
 
     OUString m_aAltText;    // Text of caption is different.
@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwTOXMark
 
     css::uno::WeakReference<css::text::XDocumentIndexMark> m_wXDocumentIndexMark;
 
-    SwTOXMark();                    // to create the default attribute in _InitCore
+    SwTOXMark();                    // to create the default attribute in InitCore
 
 protected:
     // SwClient

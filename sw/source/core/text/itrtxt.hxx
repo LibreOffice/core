@@ -48,7 +48,7 @@ protected:
     bool m_bLastBlock     : 1;    // Justified text: Also the last line
     bool m_bLastCenter    : 1;    // Justified text: Center last line
 
-    SwLineLayout *_GetPrev();
+    SwLineLayout *GetPrev_();
 
     // Reset in the first line
     void Init();
@@ -269,7 +269,7 @@ class SwTextCursor : public SwTextAdjuster
 
     // Ambiguities
     static bool bRightMargin;
-    void _GetCharRect(SwRect *, const sal_Int32, SwCursorMoveState* );
+    void GetCharRect_(SwRect *, const sal_Int32, SwCursorMoveState* );
 protected:
     void CtorInitTextCursor( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
     explicit SwTextCursor(SwTextNode* pTextNode) : SwTextAdjuster(pTextNode) { }

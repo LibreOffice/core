@@ -106,25 +106,25 @@ private:
 
         @author OD
     */
-    void _Clear();
+    void Clear_();
 
     /** helper method to clear preview page layout sizes
 
         @author OD
     */
-    void _ClearPreviewLayoutSizes();
+    void ClearPreviewLayoutSizes();
 
     /** helper method to clear data in preview page vectors
 
         @author OD
     */
-    void _ClearPreviewPageData();
+    void ClearPreviewPageData();
 
     /** calculate page preview layout sizes
 
         @author OD
     */
-    void _CalcPreviewLayoutSizes();
+    void CalcPreviewLayoutSizes();
 
     /** apply new zoom at given view shell
 
@@ -133,7 +133,7 @@ private:
         @param _aNewZoom
         input parameter - new zoom percentage
     */
-    void _ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom );
+    void ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom );
 
     /** calculate additional paint offset
 
@@ -149,7 +149,7 @@ private:
 
         @author OD
     */
-    void _CalcAdditionalPaintOffset();
+    void CalcAdditionalPaintOffset();
 
     /** calculate painted preview document rectangle
 
@@ -159,11 +159,11 @@ private:
         preconditions:
         (1) paint offset of document preview is calculated.
         (2) size of document preview is calculated.
-        (3) additional paint offset is calculated - see <_CalcAdditionalPaintOffset>.
+        (3) additional paint offset is calculated - see <CalcAdditionalPaintOffset>.
 
         @author OD
     */
-    void _CalcDocPreviewPaintRect();
+    void CalcDocPreviewPaintRect();
 
     /** determines preview data for a given page and a given preview offset
 
@@ -183,7 +183,7 @@ private:
 
         @return boolean, indicating, if calculation was successful.
     */
-    bool _CalcPreviewDataForPage( const SwPageFrame& _rPage,
+    bool CalcPreviewDataForPage( const SwPageFrame& _rPage,
                                   const Point& _rPreviewOffset,
                                   PreviewPage* _opPreviewPage );
 
@@ -196,7 +196,7 @@ private:
 
         @author OD
     */
-    void _CalcPreviewPages();
+    void CalcPreviewPages();
 
     /** get preview page by physical page number
 
@@ -209,13 +209,13 @@ private:
         @return pointer to preview page of current preview pages. If page doesn't
         belongs to current preview pages, <0> is returned.
     */
-    const PreviewPage* _GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const;
+    const PreviewPage* GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const;
 
     /** paint selection mark at page
 
         @author OD
     */
-    void _PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext, const PreviewPage* _aSelectedPreviewPage) const;
+    void PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext, const PreviewPage* _aSelectedPreviewPage) const;
 
 public:
     /** constructor of <SwPagePreviewLayout>
@@ -244,7 +244,7 @@ public:
     */
     inline ~SwPagePreviewLayout()
     {
-        _ClearPreviewPageData();
+        ClearPreviewPageData();
     }
 
     /** init page preview layout

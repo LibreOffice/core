@@ -940,7 +940,7 @@ bool SwScanner::NextWord()
 
 bool SwTextNode::Spell(SwSpellArgs* pArgs)
 {
-    // Die Aehnlichkeiten zu SwTextFrame::_AutoSpell sind beabsichtigt ...
+    // Die Aehnlichkeiten zu SwTextFrame::AutoSpell_ sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
     // modify string according to redline information and hidden text
@@ -1237,7 +1237,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
 
 // Die Aehnlichkeiten zu SwTextNode::Spell sind beabsichtigt ...
 // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-SwRect SwTextFrame::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
+SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos )
 {
     SwRect aRect;
 #if OSL_DEBUG_LEVEL > 1
@@ -1633,7 +1633,7 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         {
             // Das Layout ist nicht robust gegen "Direktformatierung"
             // (7821, 7662, 7408); vgl. layact.cxx,
-            // SwLayAction::_TurboAction(), if( !pCnt->IsValid() ...
+            // SwLayAction::TurboAction_(), if( !pCnt->IsValid() ...
             pFrame->SetCompletePaint();
             return true;
         }

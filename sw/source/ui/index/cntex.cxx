@@ -105,7 +105,7 @@ IMPL_LINK_NOARG_TYPED(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&
         SwXTextDocument* pDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
 
         if( pDoc )
-            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), true );
+            pDoc->GetDocShell()->LoadStyles_( *rSh.GetView().GetDocShell(), true );
 
          uno::Reference< lang::XMultiServiceFactory >  xFact(
                                              xModel, uno::UNO_QUERY);

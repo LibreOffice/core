@@ -500,10 +500,10 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     getIDocumentFieldsAccess().GetSysFieldType(RES_DBNAMEFLD)->UpdateFields();
 }
 
-struct _PostItField : public _SetGetExpField
+struct PostItField_ : public SetGetExpField
 {
-    _PostItField( const SwNodeIndex& rNdIdx, const SwTextField* pField,  const SwIndex* pIdx = nullptr )
-        : _SetGetExpField( rNdIdx, pField, pIdx ) {}
+    PostItField_( const SwNodeIndex& rNdIdx, const SwTextField* pField,  const SwIndex* pIdx = nullptr )
+        : SetGetExpField( rNdIdx, pField, pIdx ) {}
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
             const std::set< sal_Int32 > &rPossiblePages,
@@ -515,7 +515,7 @@ struct _PostItField : public _SetGetExpField
     }
 };
 
-sal_uInt16 _PostItField::GetPageNo(
+sal_uInt16 PostItField_::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,
     const std::set< sal_Int32 > &rPossiblePages,
     /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_uInt16& rLineNo )
@@ -547,7 +547,7 @@ sal_uInt16 _PostItField::GetPageNo(
 
 bool sw_GetPostIts(
     IDocumentFieldsAccess* pIDFA,
-    _SetGetExpFields * pSrtLst )
+    SetGetExpFields * pSrtLst )
 {
     bool bHasPostIts = false;
 
@@ -568,7 +568,7 @@ bool sw_GetPostIts(
                 if (pSrtLst)
                 {
                     SwNodeIndex aIdx( pTextField->GetTextNode() );
-                    _PostItField* pNew = new _PostItField( aIdx, pTextField );
+                    PostItField_* pNew = new PostItField_( aIdx, pTextField );
                     pSrtLst->insert( pNew );
                 }
                 else
@@ -784,7 +784,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     SwPostItMode nPostItMode = static_cast<SwPostItMode>( rOptions.getIntValue( "PrintAnnotationMode", 0 ) );
     OSL_ENSURE(nPostItMode == SwPostItMode::NONE || rData.HasPostItData(),
             "print post-its without post-it data?" );
-    const _SetGetExpFields::size_type nPostItCount =
+    const SetGetExpFields::size_type nPostItCount =
         rData.HasPostItData() ? rData.m_pPostItFields->size() : 0;
     if (nPostItMode != SwPostItMode::NONE && nPostItCount > 0)
     {
@@ -812,9 +812,9 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         // already get them in the correct order
         sal_uInt16 nVirtPg = 0, nLineNo = 0, nLastPageNum = 0, nPhyPageNum = 0;
         bool bIsFirstPostIt = true;
-        for (_SetGetExpFields::size_type i = 0; i < nPostItCount; ++i)
+        for (SetGetExpFields::size_type i = 0; i < nPostItCount; ++i)
         {
-            _PostItField& rPostIt = static_cast<_PostItField&>(*(*rData.m_pPostItFields)[ i ]);
+            PostItField_& rPostIt = static_cast<PostItField_&>(*(*rData.m_pPostItFields)[ i ]);
             nLastPageNum = nPhyPageNum;
             nPhyPageNum = rPostIt.GetPageNo(
                     aRangeEnum, rData.GetValidPagesSet(), nVirtPg, nLineNo );
@@ -1275,7 +1275,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             }
 
             SwNodeRange aRange( *rOutNds[ i ], 0, *rOutNds[ i ], nEndOfs );
-            GetNodes()._Copy( aRange, aEndOfDoc );
+            GetNodes().Copy_( aRange, aEndOfDoc );
         }
         const SwTextFormatColls *pColl = pExtDoc->GetTextFormatColls();
         for( SwTextFormatColls::size_type i = 0; i < pColl->size(); ++i )

@@ -95,7 +95,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
         SWRECTFNX( pNewUpper )
         if( std::abs( (pNewUpper->Prt().*fnRectX->fnGetWidth)() -
                  (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 ) {
-            // In this case, only a _WouldFit with test move is possible
+            // In this case, only a WouldFit_ with test move is possible
             nMoveAnyway = 2;
         }
 
@@ -167,10 +167,10 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
                     // account the widths
                     // and Flys, that in turn influence the footnotes, ...
 
-                    // _WouldFit can only be used if the width is the same and
+                    // WouldFit_ can only be used if the width is the same and
                     // ONLY self-anchored Flys are present.
 
-                    // _WouldFit can also be used if ONLY Flys anchored
+                    // WouldFit_ can also be used if ONLY Flys anchored
                     // somewhere else are present.
                     // In this case, the width doesn't even matter,
                     // because we're running a TestFormat in the new upper.
@@ -179,10 +179,10 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
                     const bool bObjsInNewUpper( nBwdMoveNecessaryResult == 2 ||
                                                 nBwdMoveNecessaryResult == 3 );
 
-                    return _WouldFit( nSpace, pNewUpper, nMoveAnyway == 2,
+                    return WouldFit_( nSpace, pNewUpper, nMoveAnyway == 2,
                                       bObjsInNewUpper );
                 }
-                // It's impossible for _WouldFit to return a usable result if
+                // It's impossible for WouldFit_ to return a usable result if
                 // we have a fresh multi-column section - so we really have to
                 // float back unless there is no space.
                 return pNewUpper->IsInSct() && pNewUpper->IsColBodyFrame() &&
@@ -1367,7 +1367,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             if( (Frame().*fnRect->fnGetPos)() != aOldFramePos ||
                 (Prt().*fnRect->fnGetPos)() != aOldPrtPos )
             {
-                // In this Prepare, an _InvalidateSize() might happen.
+                // In this Prepare, an InvalidateSize_() might happen.
                 // mbValidSize becomes false and Format() gets called.
                 Prepare( PREP_POS_CHGD, static_cast<const void*>(&bFormatted), false );
                 if ( bWidow && GetFollow() )
@@ -1819,7 +1819,7 @@ static bool lcl_IsNextFootnoteBoss( const SwFrame *pFrame, const SwFrame* pNxt )
     return pFrame && pNxt && pFrame->GetNext() == pNxt;
 }
 
-bool SwContentFrame::_WouldFit( SwTwips nSpace,
+bool SwContentFrame::WouldFit_( SwTwips nSpace,
                             SwLayoutFrame *pNewUpper,
                             bool bTstMove,
                             const bool bObjsInNewUpper )
@@ -1993,7 +1993,7 @@ bool SwContentFrame::_WouldFit( SwTwips nSpace,
                 // doesn't makes sense. Thus, return true.
                 if ( IsAnFollow( pFrame ) && !pFrame->IsValid() )
                 {
-                    OSL_FAIL( "Only a warning for task 108824:/n<SwContentFrame::_WouldFit(..) - follow not valid!" );
+                    OSL_FAIL( "Only a warning for task 108824:/n<SwContentFrame::WouldFit_(..) - follow not valid!" );
                     return true;
                 }
             }

@@ -1330,10 +1330,10 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 
 static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 {
-    static struct _SoObjType {
+    static struct SoObjType {
         long nFlag;
         // GlobalNameId
-        struct _GlobalNameIds {
+        struct GlobalNameIds {
             sal_uInt32 n1;
             sal_uInt16 n2, n3;
             sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
@@ -1358,10 +1358,10 @@ static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
     };
 
     long nRet = 0;
-    for( const _SoObjType* pArr = aArr; !nRet && pArr->nFlag; ++pArr )
+    for( const SoObjType* pArr = aArr; !nRet && pArr->nFlag; ++pArr )
         for ( int n = 0; n < 4; ++n )
         {
-            const _SoObjType::_GlobalNameIds& rId = pArr->aGlNmIds[ n ];
+            const SoObjType::GlobalNameIds& rId = pArr->aGlNmIds[ n ];
             if( !rId.n1 )
                 break;
             SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
@@ -1625,7 +1625,7 @@ void SwTOXBaseSection::UpdatePageNum()
                 const SwTextNode* pTextNd = pBase->pTOXNd->GetTextNode();
                 OSL_ENSURE( pTextNd, "no TextNode, wrong TOC" );
 
-                _UpdatePageNum( const_cast<SwTextNode*>(pTextNd), aNums, aDescs, pMainNums,
+                UpdatePageNum_( const_cast<SwTextNode*>(pTextNd), aNums, aDescs, pMainNums,
                                 aIntl );
             }
             DELETEZ(pMainNums);
@@ -1651,7 +1651,7 @@ static bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal
     return false;
 }
 
-void SwTOXBaseSection::_UpdatePageNum( SwTextNode* pNd,
+void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
                                     const std::vector<sal_uInt16>& rNums,
                                     const std::vector<SwPageDesc*>& rDescs,
                                     const std::vector<sal_uInt16>* pMainEntryNums,

@@ -233,7 +233,7 @@ void SwFlyCntPortion::Paint( const SwTextPaintInfo &rInf ) const
         {
             SwRect aRect( GetFlyFrame()->Frame() );
             if( !GetFlyFrame()->IsCompletePaint() )
-                aRect._Intersection( aRepaintRect );
+                aRect.Intersection_( aRepaintRect );
 
             // GetFlyFrame() may change the layout mode at the output device.
             {

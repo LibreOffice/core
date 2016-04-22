@@ -171,10 +171,10 @@ protected:
     // FOCUSABLE(+) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
 
-    virtual void _InvalidateContent( bool bVisibleDataFired ) override;
+    virtual void InvalidateContent_( bool bVisibleDataFired ) override;
 
-    virtual void _InvalidateCursorPos() override;
-    virtual void _InvalidateFocus() override;
+    virtual void InvalidateCursorPos_() override;
+    virtual void InvalidateFocus_() override;
 
     virtual ~SwAccessibleParagraph();
 

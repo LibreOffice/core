@@ -50,10 +50,10 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) // e.g. Blanks at the line end
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTextPortion ) // Attribute change
 
 // Are ONLY used in init.cxx.
-// There we have extern void _TextFinit()
-// and extern void _TextInit(...)
+// There we have extern void TextFinit()
+// and extern void TextInit_(...)
 
-void _TextInit()
+void TextInit_()
 {
     pFntCache = new SwFntCache; // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
     pSwFontCache = new SwFontCache; // Cache for SwTextFormatColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
@@ -67,7 +67,7 @@ void _TextInit()
     PROTOCOL_INIT
 }
 
-void _TextFinit()
+void TextFinit()
 {
     PROTOCOL_STOP
     delete SwTextFrame::GetTextCache();

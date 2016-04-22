@@ -93,7 +93,7 @@ void SwVisibleCursor::Show()
 
         // display at all?
         if( m_pCursorShell->VisArea().IsOver( m_pCursorShell->m_aCharRect ) || comphelper::LibreOfficeKit::isActive() )
-            _SetPosAndShow();
+            SetPosAndShow();
     }
 }
 
@@ -108,7 +108,7 @@ void SwVisibleCursor::Hide()
     }
 }
 
-void SwVisibleCursor::_SetPosAndShow()
+void SwVisibleCursor::SetPosAndShow()
 {
     SwRect aRect;
     long nTmpY = m_pCursorShell->m_aCursorHeight.getY();
@@ -132,7 +132,7 @@ void SwVisibleCursor::_SetPosAndShow()
 
     // check if cursor should show the current cursor bidi level
     m_aTextCursor.SetDirection();
-    const SwCursor* pTmpCursor = m_pCursorShell->_GetCursor();
+    const SwCursor* pTmpCursor = m_pCursorShell->GetCursor_();
 
     if ( pTmpCursor && !m_pCursorShell->IsOverwriteCursor() )
     {

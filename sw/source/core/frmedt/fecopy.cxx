@@ -225,7 +225,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
         bRet = true;
     }
     else
-        bRet = _CopySelToDoc( pClpDoc );     // copy the selections
+        bRet = CopySelToDoc( pClpDoc );     // copy the selections
 
     pClpDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)0 );
     pClpDoc->getIDocumentFieldsAccess().UnlockExpFields();

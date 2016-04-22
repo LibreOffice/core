@@ -71,7 +71,7 @@ private:
     bool m_bJoinBorderWithPrev;
     bool m_bJoinBorderWithNext;
 
-    void _Truncate();
+    void Truncate_();
 
 public:
     explicit inline SwLinePortion(const SwLinePortion &rPortion);
@@ -206,7 +206,7 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
 inline void SwLinePortion::Truncate()
 {
     if ( pPortion )
-        _Truncate();
+        Truncate_();
 }
 
 #endif

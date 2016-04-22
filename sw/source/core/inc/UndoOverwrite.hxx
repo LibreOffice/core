@@ -65,10 +65,10 @@ public:
     bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
 
-struct _UndoTransliterate_Data;
+struct UndoTransliterate_Data;
 class SwUndoTransliterate : public SwUndo, public SwUndRng
 {
-    std::vector< _UndoTransliterate_Data * >    aChanges;
+    std::vector< UndoTransliterate_Data * >    aChanges;
     sal_uInt32 nType;
 
     void DoTransliterate(SwDoc & rDoc, SwPaM & rPam);

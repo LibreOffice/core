@@ -55,7 +55,7 @@
 
 using namespace ::com::sun::star;
 
-bool SwTextFrame::_IsFootnoteNumFrame() const
+bool SwTextFrame::IsFootnoteNumFrame_() const
 {
     const SwFootnoteFrame* pFootnote = FindFootnoteFrame()->GetMaster();
     while( pFootnote && !pFootnote->ContainsContent() )
@@ -292,7 +292,7 @@ SwTwips SwTextFrame::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
  * Calculates the maximum reachable height for the TextFrame in the Footnote Area.
  * The cell's bottom margin with the Footnote Reference limit's this height.
  */
-SwTwips SwTextFrame::_GetFootnoteFrameHeight() const
+SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
 {
     OSL_ENSURE( !IsFollow() && IsInFootnote(), "SwTextFrame::SetFootnoteLine: moon walk" );
 
@@ -642,7 +642,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
             {
                 SwFootnoteFrame *pNew = new SwFootnoteFrame(pDoc->GetDfltFrameFormat(),this,this,pFootnote);
                  SwNodeIndex aIdx( *pFootnote->GetStartNode(), 1 );
-                 ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
+                 ::InsertCnt_( pNew, pDoc, aIdx.GetIndex() );
                 GetNode()->getIDocumentLayoutAccess().GetLayouter()->CollectEndnote( pNew );
             }
             else if( pSrcFrame != this )

@@ -666,7 +666,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                     else//graphic, form, shape, etc.
                     {
                         SwPosition* pPoint =  pCaret->GetPoint();
-                        Point aPt = pCursorShell->_GetCursor()->GetPtPos();
+                        Point aPt = pCursorShell->GetCursor_()->GetPtPos();
                         if( pCursorShell->GetLayout()->GetCursorOfst( pPoint, aPt/*,* &eTmpState*/ ) )
                         {
                             const sal_Int32 nActPos = pPoint->nContent.GetIndex();
@@ -861,7 +861,7 @@ css::uno::Sequence< css::uno::Any >
         SwCursorShell* pCursorShell = GetCursorShell();
         if ( pCursorShell )
         {
-            SwPaM *_pStartCursor = pCursorShell->GetCursor(), *__pStartCursor = _pStartCursor;
+            SwPaM *_pStartCursor = pCursorShell->GetCursor(), *_pStartCursor2 = _pStartCursor;
             SwContentNode* pPrevNode = nullptr;
             std::vector<SwFrame*> vFrameList;
             do
@@ -883,7 +883,7 @@ css::uno::Sequence< css::uno::Any >
                 }
             }
 
-            while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != __pStartCursor) );
+            while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2) );
 
             if ( vFrameList.size() )
             {

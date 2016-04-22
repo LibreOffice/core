@@ -227,7 +227,7 @@ properties are stored per-table, and are lossless.
 */
 class SW_DLLPUBLIC SwTableAutoFormat
 {
-    friend void _FinitCore();       // To destroy default pointer.
+    friend void FinitCore();       // To destroy default pointer.
     static SwBoxAutoFormat* pDfltBoxAutoFormat;
 
     OUString m_aName;

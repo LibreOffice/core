@@ -223,11 +223,11 @@ private:
     SAL_DLLPRIVATE const SwFrame *GetBox( const Point &rPt, bool* pbRow = nullptr, bool* pbCol = nullptr ) const;
 
     // 0 == not in any column.
-    SAL_DLLPRIVATE sal_uInt16 _GetCurColNum( const SwFrame *pFrame,
+    SAL_DLLPRIVATE sal_uInt16 GetCurColNum_( const SwFrame *pFrame,
                           SwGetCurColNumPara* pPara ) const;
 
-    SAL_DLLPRIVATE void _GetTabCols( SwTabCols &rToFill, const SwFrame *pBox ) const;
-    SAL_DLLPRIVATE void _GetTabRows( SwTabCols &rToFill, const SwFrame *pBox ) const;
+    SAL_DLLPRIVATE void GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox ) const;
+    SAL_DLLPRIVATE void GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox ) const;
 
     SAL_DLLPRIVATE bool ImpEndCreate();
 
@@ -240,7 +240,7 @@ private:
 
     /// Get list of marked SdrObjects;
     /// helper method for GetSelFrameType, IsSelContainsControl.
-    SAL_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
+    SAL_DLLPRIVATE const SdrMarkList* GetMarkList_() const;
 
     SAL_DLLPRIVATE bool CheckHeadline( bool bRepeat ) const;
 
@@ -508,7 +508,7 @@ public:
     size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
     bool IsObjSelected( const SdrObject& rObj ) const;
     bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
-    const SdrMarkList* GetMarkList() const{ return _GetMarkList(); };
+    const SdrMarkList* GetMarkList() const{ return GetMarkList_(); };
 
     void EndTextEdit();             ///< Deletes object if required.
 

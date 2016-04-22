@@ -30,7 +30,7 @@
 class SfxItemSet;
 
 struct SwSaveRowSpan;
-class _SaveTable;
+class SaveTable;
 class SwDDEFieldType;
 class SwUndoSaveSections;
 class SwUndoMoves;
@@ -101,7 +101,7 @@ class SwUndoTableToText : public SwUndo
 {
     OUString sTableNm;
     SwDDEFieldType* pDDEFieldType;
-    _SaveTable* pTableSave;
+    SaveTable* pTableSave;
     SwTableToTextSaves* m_pBoxSaves;
     SwHistory* pHistory;
     sal_uLong nSttNd, nEndNd;
@@ -126,7 +126,7 @@ public:
 class SwUndoAttrTable : public SwUndo
 {
     sal_uLong nSttNode;
-    _SaveTable* pSaveTable;
+    SaveTable* pSaveTable;
     bool bClearTabCol : 1;
 
 public:
@@ -143,7 +143,7 @@ class SwUndoTableNumFormat;
 class SwUndoTableAutoFormat : public SwUndo
 {
     sal_uLong nSttNode;
-    _SaveTable* pSaveTable;
+    SaveTable* pSaveTable;
     std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
     bool bSaveContentAttr;
     sal_uInt16 m_nRepeatHeading;
@@ -163,16 +163,16 @@ public:
 
 class SwUndoTableNdsChg : public SwUndo
 {
-    _SaveTable* pSaveTable;
+    SaveTable* pSaveTable;
     std::set<sal_uLong> m_Boxes;
-    struct _BoxMove
+    struct BoxMove
     {
         sal_uLong index;    ///< Index of this box.
         bool      hasMoved; ///< Has this box been moved already.
-        _BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
-        bool operator<(const _BoxMove& other) const { return index < other.index; };
+        BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
+        bool operator<(const BoxMove& other) const { return index < other.index; };
     };
-    std::unique_ptr< std::set<_BoxMove> > pNewSttNds;
+    std::unique_ptr< std::set<BoxMove> > pNewSttNds;
     std::unique_ptr<SwUndoSaveSections> m_pDelSects;
     long nMin, nMax;        // for redo of delete column
     sal_uLong nSttNode, nCurrBox;
@@ -219,7 +219,7 @@ public:
 class SwUndoTableMerge : public SwUndo, private SwUndRng
 {
     sal_uLong nTableNode;
-    _SaveTable* pSaveTable;
+    SaveTable* pSaveTable;
     std::set<sal_uLong> m_Boxes;
     std::vector<sal_uLong> aNewSttNds;
     SwUndoMoves* m_pMoves;
@@ -319,7 +319,7 @@ class SwUndoSplitTable : public SwUndo
 {
     sal_uLong nTableNode, nOffset;
     SwSaveRowSpan* mpSaveRowSpan; // stores row span values at the splitting row
-    _SaveTable* pSavTable;
+    SaveTable* pSavTable;
     SwHistory* pHistory;
     sal_uInt16 nMode, nFormulaEnd;
     bool bCalcNewSize;
@@ -343,7 +343,7 @@ class SwUndoMergeTable : public SwUndo
 {
     OUString aName;
     sal_uLong nTableNode;
-    _SaveTable* pSavTable, *pSavHdl;
+    SaveTable* pSavTable, *pSavHdl;
     SwHistory* pHistory;
     sal_uInt16 nMode;
     bool bWithPrev;

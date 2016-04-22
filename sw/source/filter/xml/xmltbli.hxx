@@ -103,7 +103,7 @@ class SwXMLTableContext : public XMLTextTableContext
                                 sal_uInt32 nTopRow, sal_uInt32 nLeftCol,
                                 sal_uInt32 nBottomRow, sal_uInt32 nRightCol );
 
-    void _MakeTable( SwTableBox *pBox=nullptr );
+    void MakeTable_( SwTableBox *pBox=nullptr );
     void MakeTable( SwTableBox *pBox, sal_Int32 nWidth );
     void MakeTable();
 

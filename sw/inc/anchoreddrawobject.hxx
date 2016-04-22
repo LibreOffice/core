@@ -60,7 +60,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
             @author OD
         */
-        void _MakeObjPosAnchoredAtPara();
+        void MakeObjPosAnchoredAtPara();
 
         /** method for the intrinsic positioning of a at-page|at-frame anchored
             drawing object
@@ -69,7 +69,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
             @author OD
         */
-        void _MakeObjPosAnchoredAtLayout();
+        void MakeObjPosAnchoredAtLayout();
 
             /** method to set positioning attributes (not for as-character anchored)
 
@@ -81,7 +81,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
             @author OD
         */
-        void _SetPositioningAttr();
+        void SetPositioningAttr();
 
         /** method to set internal anchor position of <SdrObject> instance
             of the drawing object
@@ -97,13 +97,13 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
             @author OD
         */
-        void _SetDrawObjAnchor();
+        void SetDrawObjAnchor();
 
         /** method to invalidate the given page frame
 
             @author OD
         */
-        void _InvalidatePage( SwPageFrame* _pPageFrame );
+        void InvalidatePage_( SwPageFrame* _pPageFrame );
 
     protected:
         virtual void ObjectAttachedToAnchorFrame() override;
@@ -115,8 +115,8 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         */
         virtual void RegisterAtCorrectPage() override;
 
-        virtual bool _SetObjTop( const SwTwips _nTop) override;
-        virtual bool _SetObjLeft( const SwTwips _nLeft) override;
+        virtual bool SetObjTop_( const SwTwips _nTop) override;
+        virtual bool SetObjLeft_( const SwTwips _nLeft) override;
 
         virtual const SwRect GetObjBoundRect() const override;
 

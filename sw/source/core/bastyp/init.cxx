@@ -458,7 +458,7 @@ salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
     return &aCalendarWrapper;
 }
 
-void _InitCore()
+void InitCore()
 {
     SfxPoolItem* pItem;
 
@@ -730,11 +730,11 @@ void _InitCore()
     for ( i = 41; i <= 144; ++i )
         SwAttrPool::pVersionMap7[ i-1 ] = i + 4;
 
-    SwBreakIt::_Create( ::comphelper::getProcessComponentContext() );
+    SwBreakIt::Create_( ::comphelper::getProcessComponentContext() );
     pCheckIt = nullptr;
 
-    _FrameInit();
-    _TextInit();
+    FrameInit();
+    TextInit_();
 
     SwSelPaintRects::s_pMapMode = new MapMode;
     SwFntObj::pPixMap = new MapMode;
@@ -753,13 +753,13 @@ void _InitCore()
     }
 }
 
-void _FinitCore()
+void FinitCore()
 {
-    _FrameFinit();
-    _TextFinit();
+    FrameFinit();
+    TextFinit();
 
     sw::proofreadingiterator::dispose();
-    SwBreakIt::_Delete();
+    SwBreakIt::Delete_();
     delete pCheckIt;
     delete pAppCharClass;
     delete pCollator;

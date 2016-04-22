@@ -2075,7 +2075,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     if( !pNew && !pOld && HasWriterListeners() )
     {
         // first collect all SetPageRefFields
-        _SetGetExpFields aTmpLst;
+        SetGetExpFields aTmpLst;
         if( MakeSetList( aTmpLst ) )
         {
             SwIterator<SwFormatField,SwFieldType> aIter( *this );
@@ -2090,7 +2090,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     NotifyClients( pOld, pNew );
 }
 
-bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFields& rTmpLst )
+bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
 {
     SwIterator<SwFormatField,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_REFPAGESETFLD));
     for ( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
@@ -2105,7 +2105,7 @@ bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFields& rTmpLst )
                 Point aPt;
                 const SwContentFrame* pFrame = rTextNd.getLayoutFrame( rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
 
-                _SetGetExpField* pNew;
+                SetGetExpField* pNew;
 
                 if( !pFrame ||
                      pFrame->IsInDocBody() ||
@@ -2115,7 +2115,7 @@ bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFields& rTmpLst )
                 {
                     //  create index for determination of the TextNode
                     SwNodeIndex aIdx( rTextNd );
-                    pNew = new _SetGetExpField( aIdx, pTField );
+                    pNew = new SetGetExpField( aIdx, pTField );
                 }
                 else
                 {
@@ -2124,7 +2124,7 @@ bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFields& rTmpLst )
                     bool const bResult = GetBodyTextNode( *pDoc, aPos, *pFrame );
                     OSL_ENSURE(bResult, "where is the Field?");
                     (void) bResult; // unused in non-debug
-                    pNew = new _SetGetExpField( aPos.nNode, pTField,
+                    pNew = new SetGetExpField( aPos.nNode, pTField,
                                                 &aPos.nContent );
                 }
 
@@ -2137,7 +2137,7 @@ bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFields& rTmpLst )
 }
 
 void SwRefPageGetFieldType::UpdateField( SwTextField* pTextField,
-                                        _SetGetExpFields& rSetList )
+                                        SetGetExpFields& rSetList )
 {
     SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pTextField->GetFormatField().GetField()));
     pGetField->SetText( OUString() );
@@ -2148,9 +2148,9 @@ void SwRefPageGetFieldType::UpdateField( SwTextField* pTextField,
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
     {
         SwNodeIndex aIdx( *pTextNode );
-        _SetGetExpField aEndField( aIdx, pTextField );
+        SetGetExpField aEndField( aIdx, pTextField );
 
-        _SetGetExpFields::const_iterator itLast = rSetList.lower_bound( &aEndField );
+        SetGetExpFields::const_iterator itLast = rSetList.lower_bound( &aEndField );
 
         if( itLast != rSetList.begin() )
         {
@@ -2220,7 +2220,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
     OSL_ENSURE( !pFrame->IsInDocBody(), "Flag incorrect, frame is in DocBody" );
 
     // collect all SetPageRefFields
-    _SetGetExpFields aTmpLst;
+    SetGetExpFields aTmpLst;
     if( !pGetType->MakeSetList( aTmpLst ) )
         return ;
 
@@ -2233,9 +2233,9 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
     if(!pTextNode)
         return;
 
-    _SetGetExpField aEndField( aPos.nNode, pField, &aPos.nContent );
+    SetGetExpField aEndField( aPos.nNode, pField, &aPos.nContent );
 
-    _SetGetExpFields::const_iterator itLast = aTmpLst.lower_bound( &aEndField );
+    SetGetExpFields::const_iterator itLast = aTmpLst.lower_bound( &aEndField );
 
     if( itLast == aTmpLst.begin() )
         return;        // there is no corresponding set-field in front

@@ -344,7 +344,7 @@ void SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     //                              the PrintDoc - will be replaced!
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
-    SwShellCursor *pActCursor = pFESh->_GetCursor();
+    SwShellCursor *pActCursor = pFESh->GetCursor_();
     SwShellCursor *pFirstCursor = dynamic_cast<SwShellCursor*>(pActCursor->GetNext());
     if( !pActCursor->HasMark() ) // with a multi-selection the current cursor might be empty
     {

@@ -310,10 +310,10 @@ void SwNodeNum::HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum )
 
     // unregister all number tree node entries, which correspond to a text node,
     // about the deletion of the number tree root node.
-    _UnregisterMeAndChildrenDueToRootDelete( *pRootNode );
+    UnregisterMeAndChildrenDueToRootDelete( *pRootNode );
 }
 
-void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
+void SwNodeNum::UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
 {
     const bool bIsPhantom( rNodeNum.IsPhantom() );
     tSwNumberTreeChildren::size_type nAllowedChildCount( 0 );
@@ -324,7 +324,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         SwNodeNum* pChildNode( dynamic_cast<SwNodeNum*>((*rNodeNum.mChildren.begin())) );
         if ( !pChildNode )
         {
-            OSL_FAIL( "<SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
+            OSL_FAIL( "<SwNodeNum::UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
             ++nAllowedChildCount;
             continue;
         }
@@ -337,7 +337,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
             bDone = true;
         }
 
-        _UnregisterMeAndChildrenDueToRootDelete( *pChildNode );
+        UnregisterMeAndChildrenDueToRootDelete( *pChildNode );
     }
 
     if ( !bIsPhantom )

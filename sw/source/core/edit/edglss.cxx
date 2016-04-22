@@ -64,7 +64,7 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
     if( rBlks.BeginPutDoc( rShortName, rName ) )
     {
         rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
-        _CopySelToDoc( pGDoc );
+        CopySelToDoc( pGDoc );
         rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)0 );
         return rBlks.PutDoc();
     }
@@ -150,7 +150,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 }
 
 /// copy all selections to the doc
-bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc )
+bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
 {
     OSL_ENSURE( pInsDoc, "no Ins.Document"  );
 
@@ -198,7 +198,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc )
     }
     else
     {
-        bool bColSel = _GetCursor()->IsColumnSelection();
+        bool bColSel = GetCursor_()->IsColumnSelection();
         if( bColSel && pInsDoc->IsClipBoard() )
             pInsDoc->SetColumnSelection( true );
         bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();

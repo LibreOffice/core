@@ -145,8 +145,8 @@ private:
     void createAndAddSecondaryPools();
     void removeAndDeleteSecondaryPools();
 
-    friend void _InitCore();            // For creating/deleting of version maps.
-    friend void _FinitCore();
+    friend void InitCore();            // For creating/deleting of version maps.
+    friend void FinitCore();
     static sal_uInt16* pVersionMap1;
     static sal_uInt16* pVersionMap2;
     static sal_uInt16* pVersionMap3;

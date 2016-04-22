@@ -471,7 +471,7 @@ bool SwTextCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 // pCMS is used for restricting the cursor, if there are different font
 // heights in one line ( first value = offset to y of pOrig, second
 // value = real height of (shortened) cursor
-void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
+void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
     SwCursorMoveState* pCMS )
 {
     const OUString aText = GetInfo().GetText();
@@ -769,7 +769,7 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                 static_cast<SwBidiPortion*>(pPor)->GetLevel() % 2 );
                         }
 
-                        _GetCharRect( pOrig, nOfst, pCMS );
+                        GetCharRect_( pOrig, nOfst, pCMS );
 
                         if ( bChgHeight )
                         {
@@ -1199,7 +1199,7 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     const Point aCharPos( GetTopLeft() );
     bool bRet = true;
 
-    _GetCharRect( pOrig, nFindOfst, pCMS );
+    GetCharRect_( pOrig, nFindOfst, pCMS );
 
     // This actually would have to be "-1 LogicToPixel", but that seems too
     // expensive, so it's a value (-12), that should hopefully be OK.
@@ -1668,7 +1668,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                     ! pPor->InFieldGrp() )
                     aDrawInf.SetKanaComp( nKanaComp );
 
-                nLength = aSizeInf.GetFont()->_GetCursorOfst( aDrawInf );
+                nLength = aSizeInf.GetFont()->GetCursorOfst_( aDrawInf );
 
                 // get position inside field portion?
                 if ( pPor->InFieldGrp() && pCMS && pCMS->m_pSpecialPos )

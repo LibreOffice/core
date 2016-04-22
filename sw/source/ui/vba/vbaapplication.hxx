@@ -55,7 +55,7 @@ public:
     virtual void SAL_CALL setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getEnableCancelKey() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL CentimetersToPoints( float _Centimeters ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL CentimetersToPoints( float Centimeters ) throw (css::uno::RuntimeException, std::exception) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

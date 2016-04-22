@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
 
 class SwXMLWriter : public StgWriter
 {
-    sal_uInt32 _Write( const css::uno::Reference < css::task::XStatusIndicator>&, const OUString&  );
+    sal_uInt32 Write_( const css::uno::Reference < css::task::XStatusIndicator>&, const OUString&  );
 
     using StgWriter::Write;
 

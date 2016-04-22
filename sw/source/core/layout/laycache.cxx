@@ -457,7 +457,7 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
 
 /** helper class, which utilizes the layout cache information
  *  to distribute the document content to the right pages.
- * It's used by the _InsertCnt(..)-function.
+ * It's used by the InsertCnt_(..)-function.
  * If there's no layout cache, the distibution to the pages is more
  * a guess, but a guess with statistical background.
  */
@@ -650,7 +650,7 @@ bool SwLayHelper::CheckInsertPage()
     return false;
 }
 
-/** entry point for the _InsertCnt-function.
+/** entry point for the InsertCnt_-function.
  *  The document content index is checked either it is
  *  in the layout cache either it's time to insert a page
  *  cause the maximal estimation of content per page is reached.
@@ -840,7 +840,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
             SwPageFrame* pLastPage = rpPage;
             if( CheckInsertPage() )
             {
-                _CheckFlyCache( pLastPage );
+                CheckFlyCache_( pLastPage );
                 if( rpPrv && rpPrv->IsTextFrame() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frame().Height( rpPrv->GetUpper()->Prt().Height() );
 
@@ -906,7 +906,7 @@ struct FlyCacheCompare
  * If there are text frames with default position, the fly cache
  * is checked, if these frames are stored in the cache.
  */
-void SwLayHelper::_CheckFlyCache( SwPageFrame* pPage )
+void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
 {
     if( !pImpl || !pPage )
         return;

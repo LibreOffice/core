@@ -431,7 +431,7 @@ void SwWrtShell::DelToStartOfSentence()
     if(IsStartOfDoc())
         return;
     OpenMark();
-    long nRet = _BwdSentence() ? Delete() : 0;
+    long nRet = BwdSentence_() ? Delete() : 0;
     CloseMark( 0 != nRet );
 }
 
@@ -463,7 +463,7 @@ long SwWrtShell::DelToEndOfSentence()
     }
     else
     {
-        nRet = _FwdSentence() ? Delete() : 0;
+        nRet = FwdSentence_() ? Delete() : 0;
     }
     CloseMark( 0 != nRet );
     return nRet;
@@ -478,11 +478,11 @@ void SwWrtShell::DelNxtWord()
     EnterStdMode();
     SetMark();
     if(IsEndWrd() && !IsStartWord())
-        _NxtWrdForDelete(); // #i92468#
+        NxtWrdForDelete(); // #i92468#
     if(IsStartWord() || IsEndPara())
-        _NxtWrdForDelete(); // #i92468#
+        NxtWrdForDelete(); // #i92468#
     else
-        _EndWrd();
+        EndWrd();
 
     long nRet = Delete();
     if( nRet )
@@ -501,12 +501,12 @@ void SwWrtShell::DelPrvWord()
     EnterStdMode();
     SetMark();
     if ( !IsStartWord() ||
-         !_PrvWrdForDelete() ) // #i92468#
+         !PrvWrdForDelete() ) // #i92468#
     {
         if (IsEndWrd() || IsSttPara())
-            _PrvWrdForDelete(); // #i92468#
+            PrvWrdForDelete(); // #i92468#
         else
-            _SttWrd();
+            SttWrd();
     }
     long nRet = Delete();
     if( nRet )

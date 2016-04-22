@@ -44,15 +44,15 @@ class SwSectionFrame: public SwLayoutFrame, public SwFlowFrame
     bool m_bOwnFootnoteNum; // special numbering of footnotes
     bool m_bFootnoteLock; // ftn, don't leave this section bwd
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
-    void _Cut( bool bRemove );
+    void Cut_( bool bRemove );
     // Is there a FootnoteContainer?
     // An empty sectionfrm without FootnoteCont is superfluous
     bool IsSuperfluous() const { return !ContainsAny() && !ContainsFootnoteCont(); }
     void CalcFootnoteAtEndFlag();
     void CalcEndAtEndFlag();
-    const SwSectionFormat* _GetEndSectFormat() const;
+    const SwSectionFormat* GetEndSectFormat_() const;
     bool IsEndnoteAtMyEnd() const;
 
     virtual void DestroyImpl() override;
@@ -102,8 +102,8 @@ public:
     void DelEmpty( bool bRemove ); // Like Cut(), except for that Follow chaining is maintained
     SwFootnoteContFrame* ContainsFootnoteCont( const SwFootnoteContFrame* pCont = nullptr ) const;
     bool Growable() const;
-    SwTwips _Shrink( SwTwips, bool bTst );
-    SwTwips _Grow  ( SwTwips, bool bTst );
+    SwTwips Shrink_( SwTwips, bool bTst );
+    SwTwips Grow_  ( SwTwips, bool bTst );
 
     /**
      * A sectionfrm has to maximize, if he has a follow or a ftncontainer at
@@ -111,7 +111,7 @@ public:
      * if bCheckFollow is set.
      */
     bool ToMaximize( bool bCheckFollow ) const;
-    inline bool _ToMaximize() const {
+    inline bool ToMaximize_() const {
         if( !m_pSection ) return false;
         return ToMaximize( false );
     }
@@ -131,12 +131,12 @@ public:
     SwTwips CalcUndersize() const;
 
     /// Adapt size to surroundings
-    void _CheckClipping( bool bGrow, bool bMaximize );
+    void CheckClipping( bool bGrow, bool bMaximize );
 
     void InvalidateFootnotePos();
     void CollectEndnotes( SwLayouter* pLayouter );
     const SwSectionFormat* GetEndSectFormat() const {
-        if( IsEndnAtEnd() ) return _GetEndSectFormat();
+        if( IsEndnAtEnd() ) return GetEndSectFormat_();
         return nullptr;
     }
 

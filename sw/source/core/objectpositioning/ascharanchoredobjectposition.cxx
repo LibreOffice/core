@@ -164,7 +164,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     const SwTwips nObjBoundHeight = ( mnFlags & AsCharFlags::Rotate )
                                     ? aObjBoundRect.Width()
                                     : aObjBoundRect.Height();
-    const SwTwips nRelPos = _GetRelPosToBase( nObjBoundHeight, rVert );
+    const SwTwips nRelPos = GetRelPosToBase( nObjBoundHeight, rVert );
 
     // for initial positioning:
     // adjust the proposed anchor position by difference between
@@ -207,7 +207,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         {
             // save calculated Y-position value for 'automatic' vertical positioning,
             // in order to avoid a switch to 'manual' vertical positioning in
-            // <SwDrawContact::_Changed(..)>.
+            // <SwDrawContact::Changed_(..)>.
             const sal_Int16 eVertOrient = rVert.GetVertOrient();
             if( rVert.GetPos() != nRelPos && eVertOrient != text::VertOrientation::NONE )
             {
@@ -332,7 +332,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     0 - no feedback; 1|2|3 - proposed formatting of characters
     at top|at center|at bottom of line.
 */
-SwTwips SwAsCharAnchoredObjectPosition::_GetRelPosToBase(
+SwTwips SwAsCharAnchoredObjectPosition::GetRelPosToBase(
                                             const SwTwips _nObjBoundHeight,
                                             const SwFormatVertOrient& _rVert )
 {

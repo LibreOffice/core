@@ -364,7 +364,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
             SwContentFrame* pContent = pFirstFootnoteOfNode->ContainsContent();
             if ( pContent )
             {
-                pContent->_InvalidatePos();
+                pContent->InvalidatePos_();
             }
         }
     }
@@ -378,7 +378,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
     const sal_Int32 nSplitPos = rPos.nContent.GetIndex();
     const sal_Int32 nTextLen = m_Text.getLength();
     SwTextNode* const pNode =
-        _MakeNewTextNode( rPos.nNode, false, nSplitPos==nTextLen );
+        MakeNewTextNode( rPos.nNode, false, nSplitPos==nTextLen );
 
     // the first paragraph gets the XmlId,
     // _except_ if it is empty and the second is not empty
@@ -1185,7 +1185,7 @@ void SwTextNode::Update(
         pSortedObjs->UpdateAll();
 }
 
-void SwTextNode::_ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
+void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
                                         const SwTextFormatColl *pNewColl)
 {
     SwDoc* pDoc = GetDoc();
@@ -2391,7 +2391,7 @@ void SwTextNode::GCAttr()
 }
 
 // #i23726#
-SwNumRule* SwTextNode::_GetNumRule(bool bInParent) const
+SwNumRule* SwTextNode::GetNumRule_(bool bInParent) const
 {
     SwNumRule* pRet = nullptr;
 
@@ -2433,7 +2433,7 @@ SwNumRule* SwTextNode::_GetNumRule(bool bInParent) const
 
 SwNumRule* SwTextNode::GetNumRule(bool bInParent) const
 {
-    return _GetNumRule(bInParent);
+    return GetNumRule_(bInParent);
 }
 
 void SwTextNode::NumRuleChgd()
@@ -2487,7 +2487,7 @@ bool SwTextNode::HasMarkedLabel() const
 }
 // <- #i27615#
 
-SwTextNode* SwTextNode::_MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
+SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
                                        bool bChgFollow )
 {
     /* hartes PageBreak/PageDesc/ColumnBreak aus AUTO-Set ignorieren */
@@ -2587,7 +2587,7 @@ SwTextNode* SwTextNode::_MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         ( bChgFollow && pColl != GetTextColl() ))
         return pNode;       // mehr duerfte nicht gemacht werden oder ????
 
-    pNode->_ChgTextCollUpdateNum( nullptr, pColl ); // fuer Nummerierung/Gliederung
+    pNode->ChgTextCollUpdateNum( nullptr, pColl ); // fuer Nummerierung/Gliederung
     if( bNext || !bChgFollow )
         return pNode;
 
@@ -2617,7 +2617,7 @@ SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
 {
     // Position hinter dem eingefuegt wird
     SwNodeIndex aIdx( rPos.nNode, 1 );
-    SwTextNode* pNew = _MakeNewTextNode( aIdx );
+    SwTextNode* pNew = MakeNewTextNode( aIdx );
 
     // reset list attributes at appended text node
     pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );
@@ -3534,12 +3534,12 @@ void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVa
 
     // Override Modify so that deleting styles works properly (outline
     // numbering!).
-    // Never call _ChgTextCollUpdateNum for Nodes in Undo.
+    // Never call ChgTextCollUpdateNum for Nodes in Undo.
     if( pOldValue && pNewValue && RES_FMT_CHG == pOldValue->Which() &&
         GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat &&
         GetNodes().IsDocNodes() )
     {
-        _ChgTextCollUpdateNum(
+        ChgTextCollUpdateNum(
                         static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat),
                         static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
     }
@@ -3618,7 +3618,7 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
     // nur wenn im normalen Nodes-Array
     if( GetNodes().IsDocNodes() )
     {
-        _ChgTextCollUpdateNum( pOldColl, static_cast<SwTextFormatColl *>(pNewColl) );
+        ChgTextCollUpdateNum( pOldColl, static_cast<SwTextFormatColl *>(pNewColl) );
     }
 
     GetNodes().UpdateOutlineNode(*this);

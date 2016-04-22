@@ -220,10 +220,10 @@ class SwAutoFormat
     bool DoUnderline();
     bool DoTable();
 
-    void _SetRedlineText( sal_uInt16 nId );
+    void SetRedlineText_( sal_uInt16 nId );
     bool SetRedlineText( sal_uInt16 nId ) {
         if( m_aFlags.bWithRedlining )
-            _SetRedlineText( nId );
+            SetRedlineText_( nId );
         return true;
     }
     bool ClearRedlineText() {
@@ -261,7 +261,7 @@ SwTextFrame* SwAutoFormat::GetFrame( const SwTextNode& rTextNd ) const
     return const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->GetFormatted();
 }
 
-void SwAutoFormat::_SetRedlineText( sal_uInt16 nActionId )
+void SwAutoFormat::SetRedlineText_( sal_uInt16 nActionId )
 {
     OUString sText;
     sal_uInt16 nSeqNo = 0;
@@ -1112,7 +1112,7 @@ void SwAutoFormat::DeleteSel( SwPaM& rDelPam )
     if( m_aFlags.bWithRedlining )
     {
         // Add to Shell-Cursor-Ring so that DelPam will be moved as well!
-        SwPaM* pShCursor = m_pEditShell->_GetCursor();
+        SwPaM* pShCursor = m_pEditShell->GetCursor_();
         SwPaM aTmp( *m_pCurTextNd, 0, pShCursor );
 
         SwPaM* pPrev = rDelPam.GetPrev();

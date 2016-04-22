@@ -122,7 +122,7 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
     m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
 }
 
-bool SwAccessibleCell::_InvalidateMyCursorPos()
+bool SwAccessibleCell::InvalidateMyCursorPos()
 {
     bool bNew = IsSelected();
     bool bOld;
@@ -151,7 +151,7 @@ bool SwAccessibleCell::_InvalidateMyCursorPos()
     return bChanged;
 }
 
-bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrame *pFrame )
+bool SwAccessibleCell::InvalidateChildrenCursorPos( const SwFrame *pFrame )
 {
     bool bChanged = false;
 
@@ -171,7 +171,7 @@ bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrame *pFrame )
                 {
                     assert(xAccImpl->GetFrame()->IsCellFrame());
                     bChanged = static_cast< SwAccessibleCell *>(
-                            xAccImpl.get() )->_InvalidateMyCursorPos();
+                            xAccImpl.get() )->InvalidateMyCursorPos();
                 }
                 else
                     bChanged = true; // If the context is not know we
@@ -181,7 +181,7 @@ bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrame *pFrame )
             else
             {
                 // This is a box with sub rows.
-                bChanged |= _InvalidateChildrenCursorPos( pLower );
+                bChanged |= InvalidateChildrenCursorPos( pLower );
             }
         }
         ++aIter;
@@ -190,7 +190,7 @@ bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrame *pFrame )
     return bChanged;
 }
 
-void SwAccessibleCell::_InvalidateCursorPos()
+void SwAccessibleCell::InvalidateCursorPos_()
 {
     if (IsSelected())
     {
@@ -216,7 +216,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
 
     while( pTabFrame )
     {
-        _InvalidateChildrenCursorPos( pTabFrame );
+        InvalidateChildrenCursorPos( pTabFrame );
         pTabFrame = pTabFrame->GetFollow();
     }
     if (m_pAccTable.is())

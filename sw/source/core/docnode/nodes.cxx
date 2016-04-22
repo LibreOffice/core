@@ -403,7 +403,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
  * @param bNewFrames
  * @return
  */
-bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
+bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     const SwNodeIndex& aIndex, bool bNewFrames )
 {
     SwNode * pAktNode;
@@ -1647,7 +1647,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         // move the nodes into the NodesArary
         const sal_uLong nSttDiff = aSttIdx.GetIndex() - pStt->nNode.GetIndex();
         SwNodeRange aRg( aSttIdx, aEndIdx );
-        _MoveNodes( aRg, rNodes, rPos.nNode );
+        MoveNodes( aRg, rNodes, rPos.nNode );
 
         // if in the same node array, all indices are now at new positions (so correct them)
         if( &rNodes == this )
@@ -1675,8 +1675,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 rNodes.IsDocNodes() ? SwFormatFieldHintWhich::INSERTED : SwFormatFieldHintWhich::REMOVED ) );
 }
 
-///@see SwNodes::_MoveNodes (TODO: seems to be C&P programming here)
-void SwNodes::_CopyNodes( const SwNodeRange& rRange,
+///@see SwNodes::MoveNodes (TODO: seems to be C&P programming here)
+void SwNodes::CopyNodes( const SwNodeRange& rRange,
             const SwNodeIndex& rIndex, bool bNewFrames, bool bTableInsDummyNode ) const
 {
     SwDoc* pDoc = rIndex.GetNode().GetDoc();
@@ -1764,7 +1764,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                         new SwPlaceholderNode(aInsPos);
 
                     SwStartNode* pSttNd = aRg.aStart.GetNode().GetStartNode();
-                    _CopyNodes( SwNodeRange( *pSttNd, + 1,
+                    CopyNodes( SwNodeRange( *pSttNd, + 1,
                                             *pSttNd->EndOfSectionNode() ),
                                 aInsPos, bNewFrames );
 
@@ -1883,7 +1883,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
     }
 }
 
-void SwNodes::_DelDummyNodes( const SwNodeRange& rRg )
+void SwNodes::DelDummyNodes( const SwNodeRange& rRg )
 {
     SwNodeIndex aIdx( rRg.aStart );
     while( aIdx.GetIndex() < rRg.aEnd.GetIndex() )

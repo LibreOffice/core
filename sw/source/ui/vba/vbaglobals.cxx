@@ -125,9 +125,9 @@ SwVbaGlobals::getSelection() throw (uno::RuntimeException, std::exception)
     return getApplication()->getSelection();
 }
 
-float SAL_CALL SwVbaGlobals::CentimetersToPoints( float _Centimeters ) throw (uno::RuntimeException, std::exception)
+float SAL_CALL SwVbaGlobals::CentimetersToPoints( float Centimeters ) throw (uno::RuntimeException, std::exception)
 {
-    return getApplication()->CentimetersToPoints( _Centimeters );
+    return getApplication()->CentimetersToPoints( Centimeters );
 }
 
 OUString

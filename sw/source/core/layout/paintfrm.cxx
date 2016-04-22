@@ -2703,21 +2703,21 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 // borders match the subsidiary lines of the upper:
                 if (aStart.X() == aUpper.Left())
                     aPaintStart.X() = aUpperAligned.Left();
-                else if (aStart.X() == aUpper._Right())
-                    aPaintStart.X() = aUpperAligned._Right();
+                else if (aStart.X() == aUpper.Rigth_())
+                    aPaintStart.X() = aUpperAligned.Rigth_();
                 if (aStart.Y() == aUpper.Top())
                     aPaintStart.Y() = aUpperAligned.Top();
-                else if (aStart.Y() == aUpper._Bottom())
-                    aPaintStart.Y() = aUpperAligned._Bottom();
+                else if (aStart.Y() == aUpper.Bottom_())
+                    aPaintStart.Y() = aUpperAligned.Bottom_();
 
                 if (aEnd.X() == aUpper.Left())
                     aPaintEnd.X() = aUpperAligned.Left();
-                else if (aEnd.X() == aUpper._Right())
-                    aPaintEnd.X() = aUpperAligned._Right();
+                else if (aEnd.X() == aUpper.Rigth_())
+                    aPaintEnd.X() = aUpperAligned.Rigth_();
                 if (aEnd.Y() == aUpper.Top())
                     aPaintEnd.Y() = aUpperAligned.Top();
-                else if (aEnd.Y() == aUpper._Bottom())
-                    aPaintEnd.Y() = aUpperAligned._Bottom();
+                else if (aEnd.Y() == aUpper.Bottom_())
+                    aPaintEnd.Y() = aUpperAligned.Bottom_();
             }
 
             // logically vertical lines are painted centered on the line,
@@ -3007,10 +3007,10 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
     aR.MirrorSelf();
     aB.MirrorSelf();
 
-    const SwTwips nLeft   = aBorderRect._Left();
-    const SwTwips nRight  = aBorderRect._Right();
-    const SwTwips nTop    = aBorderRect._Top();
-    const SwTwips nBottom = aBorderRect._Bottom();
+    const SwTwips nLeft   = aBorderRect.Left_();
+    const SwTwips nRight  = aBorderRect.Rigth_();
+    const SwTwips nTop    = aBorderRect.Top_();
+    const SwTwips nBottom = aBorderRect.Bottom_();
 
     aL.SetRefMode( svx::frame::REFMODE_CENTERED );
     aR.SetRefMode( svx::frame::REFMODE_CENTERED );
@@ -3315,7 +3315,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                 }
                 gProp.pBLines = new BorderLines;
 
-                aPaintRect._Intersection( aRect );
+                aPaintRect.Intersection_( aRect );
 
                 if ( bExtraData &&
                      pSh->GetWin() && pSh->IsInEndAction() )
@@ -3327,7 +3327,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                     (aPageRectTemp.*fnRect->fnSetLeftAndWidth)(
                          (pPage->Frame().*fnRect->fnGetLeft)(),
                          (pPage->Frame().*fnRect->fnGetWidth)() );
-                    aPageRectTemp._Intersection( pSh->VisArea() );
+                    aPageRectTemp.Intersection_( pSh->VisArea() );
                     vcl::Region aPageRectRegion( aPageRectTemp.SVRect() );
                     aPageRectRegion.Exclude( aPaintRect.SVRect() );
                     pSh->GetWin()->Invalidate( aPageRectRegion, InvalidateFlags::Children );
@@ -3469,7 +3469,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
 
             SwPageFrame::GetBorderAndShadowBoundRect( aEmptyPageRect, pSh, &rRenderContext, aPaintRect,
                 bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
-            aPaintRect._Intersection( aRect );
+            aPaintRect.Intersection_( aRect );
 
             if ( aRect.IsOver( aEmptyPageRect ) )
             {
@@ -3676,7 +3676,7 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
                 }
             }
             pFrame->ResetCompletePaint();
-            aPaintRect._Intersection( rRect );
+            aPaintRect.Intersection_( rRect );
 
             pFrame->Paint( rRenderContext, aPaintRect );
 
@@ -4143,7 +4143,7 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
     BorderLinesGuard blg; // this should not paint borders added from PaintBaBo
 
     SwRect aRect( rRect );
-    aRect._Intersection( Frame() );
+    aRect.Intersection_( Frame() );
 
     rRenderContext.Push( PushFlags::CLIPREGION );
     rRenderContext.SetClipRegion();
@@ -4235,7 +4235,7 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
                 SwBorderAttrAccess aAccess( SwFrame::GetCache(), pParentFlyFrame );
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
                 SwRect aPaintRect( aRect );
-                aPaintRect._Intersection( pParentFlyFrame->Frame() );
+                aPaintRect.Intersection_( pParentFlyFrame->Frame() );
                 pParentFlyFrame->PaintBackground( aPaintRect, pPage, rAttrs );
 
                 gProp.pSRetoucheFly2 = pOldRet;
@@ -4619,7 +4619,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         aOut = rOut;
         if ( rRect.IsOver( aOut ) && aOut.Height() > 0 && aOut.Width() > 0 )
         {
-            aOut._Intersection( rRect );
+            aOut.Intersection_( rRect );
             pOut->DrawRect( aOut.SVRect() );
         }
     }
@@ -4682,7 +4682,7 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
         return;
 
     SwRect aOut( rOutRect );
-    aOut._Intersection( rRect );
+    aOut.Intersection_( rRect );
 
     const SwTabFrame *pTab = IsCellFrame() ? FindTabFrame() : nullptr;
     sal_uInt8 nSubCol = ( IsCellFrame() || IsRowFrame() ) ? SUBCOL_TAB :
@@ -5987,7 +5987,7 @@ void SwPageFrame::PaintMarginArea( const SwRect& _rOutputRect,
     {
         //UUUU Simplified paint with DrawingLayer FillStyle
         SwRect aPgRect = Frame();
-        aPgRect._Intersection( _rOutputRect );
+        aPgRect.Intersection_( _rOutputRect );
 
         if(!aPgRect.IsEmpty())
         {
@@ -6687,7 +6687,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
     {
         SwRect aFrameRect;
         SwRect aRect( PaintArea() );
-        aRect._Intersection( rRect );
+        aRect.Intersection_( rRect );
         SwRect aBorderRect( aRect );
         SwShortCut aShortCut( *pFrame, aBorderRect );
         do
@@ -7146,7 +7146,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
         return;
 
     SwRect aOut( aOriginal );
-    aOut._Intersection( rRect );
+    aOut.Intersection_( rRect );
 
     const SwTwips nRight = aOut.Right();
     const SwTwips nBottom= aOut.Bottom();

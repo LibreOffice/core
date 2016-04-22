@@ -246,7 +246,7 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
     return nMin;
 }
 
-void SwWrongList::_Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
+void SwWrongList::Invalidate_( sal_Int32 nBegin, sal_Int32 nEnd )
 {
     if ( nBegin < GetBeginInv() )
         nBeginInvalid = nBegin;
@@ -305,7 +305,7 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
             ShiftLeft( nBeginInvalid, nPos, nEnd );
             if( nEndInvalid != COMPLETE_STRING )
                 ShiftLeft( nEndInvalid, nPos, nEnd );
-            _Invalidate( nPos ? nPos - 1 : nPos, nPos + 1 );
+            Invalidate_( nPos ? nPos - 1 : nPos, nPos + 1 );
         }
     }
     else
@@ -431,7 +431,7 @@ void SwWrongList::Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
     if (COMPLETE_STRING == GetBeginInv())
         SetInvalid( nBegin, nEnd );
     else
-        _Invalidate( nBegin, nEnd );
+        Invalidate_( nBegin, nEnd );
 }
 
 bool SwWrongList::InvalidateWrong( )
@@ -471,7 +471,7 @@ SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
             pRet = new SwWrongList( GetWrongListType() );
         pRet->Insert(0, maList.begin(), ( nLst >= maList.size() ? maList.end() : maList.begin() + nLst ) );
         pRet->SetInvalid( GetBeginInv(), GetEndInv() );
-        pRet->_Invalidate( nSplitPos ? nSplitPos - 1 : nSplitPos, nSplitPos );
+        pRet->Invalidate_( nSplitPos ? nSplitPos - 1 : nSplitPos, nSplitPos );
         Remove( 0, nLst );
     }
     if( COMPLETE_STRING == GetBeginInv() )
@@ -481,7 +481,7 @@ SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
         ShiftLeft( nBeginInvalid, 0, nSplitPos );
         if( nEndInvalid != COMPLETE_STRING )
             ShiftLeft( nEndInvalid, 0, nSplitPos );
-        _Invalidate( 0, 1 );
+        Invalidate_( 0, 1 );
     }
     for (nLst = 0; nLst < Count(); ++nLst )
     {

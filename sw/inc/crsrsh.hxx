@@ -236,7 +236,7 @@ private:
 
     SAL_DLLPRIVATE void MoveCursorToNum();
 
-    SAL_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing );
+    SAL_DLLPRIVATE void ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing );
 
     /** Mark a certain list level of a certain list
 
@@ -263,7 +263,7 @@ private:
 typedef bool (SwCursor:: *FNCursor)();
     SAL_DLLPRIVATE bool CallCursorFN( FNCursor );
 
-    SAL_DLLPRIVATE const SwRangeRedline* _GotoRedline( sal_uInt16 nArrPos, bool bSelect );
+    SAL_DLLPRIVATE const SwRangeRedline* GotoRedline_( sal_uInt16 nArrPos, bool bSelect );
 
 protected:
 
@@ -284,7 +284,7 @@ protected:
     };
     int CompareCursor( CursorCompareType eType ) const;
 
-    bool _SelTableRowOrCol( bool bRow, bool bRowSimple = false );
+    bool SelTableRowOrCol( bool bRow, bool bRowSimple = false );
 
     bool SetInFrontOfLabel( bool bNew );
 
@@ -329,8 +329,8 @@ public:
     SwPaM* GetCursor( bool bMakeTableCursor = true ) const;
     inline SwCursor* GetSwCursor() const;
     // return only the current cursor
-          SwShellCursor* _GetCursor()                       { return m_pCurrentCursor; }
-    const SwShellCursor* _GetCursor() const                 { return m_pCurrentCursor; }
+          SwShellCursor* GetCursor_()                       { return m_pCurrentCursor; }
+    const SwShellCursor* GetCursor_() const                 { return m_pCurrentCursor; }
 
     // show passed cursor - for UNO
     void    SetSelection(const SwPaM& rCursor);
@@ -591,8 +591,8 @@ public:
     bool GotoTable( const OUString& rName );
 
     // select a table row, column or box (based on the current cursor)
-    bool SelTableRow() { return _SelTableRowOrCol( true  ); }
-    bool SelTableCol() { return _SelTableRowOrCol( false ); }
+    bool SelTableRow() { return SelTableRowOrCol( true  ); }
+    bool SelTableCol() { return SelTableRowOrCol( false ); }
     bool SelTableBox();
 
     bool SelTable();

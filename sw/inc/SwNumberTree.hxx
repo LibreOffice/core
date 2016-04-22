@@ -439,13 +439,13 @@ protected:
     SwNumberTreeNode& operator=( const SwNumberTreeNode& );
 
     /**
-       Calls _GetNumberVector on parent and adds number of this node
+       Calls GetNumberVector_ on parent and adds number of this node
        at the end.
 
        @param rVector     return value
        @param bValidate   validate the number?
      */
-    void _GetNumberVector( SwNumberTree::tNumberVector& rVector,
+    void GetNumberVector_( SwNumberTree::tNumberVector& rVector,
                            bool bValidate = true ) const;
 
     /**

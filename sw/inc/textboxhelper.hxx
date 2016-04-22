@@ -29,7 +29,7 @@ class SwFrameFormats;
 class SwFormatContent;
 class SwDoc;
 class Rectangle;
-class _ZSortFly;
+class ZSortFly;
 class SwNode;
 
 /**
@@ -95,7 +95,7 @@ public:
     /// Reset the shape -> textbox link on the shape, and save it to the map, so it can be restored later.
     static void resetLink(SwFrameFormat* pShape, std::map<const SwFrameFormat*, SwFormatContent>& rOldContent);
     /// Undo the effect of saveLinks() + individual resetLink() calls.
-    static void restoreLinks(std::set<_ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew, SavedLink& rSavedLinks, SavedContent& rResetContent);
+    static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew, SavedLink& rSavedLinks, SavedContent& rResetContent);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

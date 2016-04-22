@@ -112,7 +112,7 @@ void SwFlyFrameAttrMgr::UpdateAttrMgr()
     ::PrepareBoxInfo( m_aSet, *m_pOwnSh );
 }
 
-void SwFlyFrameAttrMgr::_UpdateFlyFrame()
+void SwFlyFrameAttrMgr::UpdateFlyFrame_()
 {
     const SfxPoolItem* pItem = nullptr;
 
@@ -153,7 +153,7 @@ void SwFlyFrameAttrMgr::UpdateFlyFrame()
         {
             m_pOwnSh->StartAllAction();
             m_pOwnSh->SetFlyFrameAttr( m_aSet );
-            _UpdateFlyFrame();
+            UpdateFlyFrame_();
             m_pOwnSh->EndAllAction();
         }
     }
@@ -169,7 +169,7 @@ void SwFlyFrameAttrMgr::InsertFlyFrame()
     // turn on the right mode at the shell, frame got selected automatically.
     if ( bRet )
     {
-        _UpdateFlyFrame();
+        UpdateFlyFrame_();
         m_pOwnSh->EnterSelFrameMode();
         FrameNotify(m_pOwnSh, FLY_DRAG_START);
     }

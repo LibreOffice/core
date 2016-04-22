@@ -126,7 +126,7 @@ namespace
 OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
     if (!s_pFieldNames)
-        _GetFieldName();
+        GetFieldName_();
 
     if (nTypeId < SwFieldType::s_pFieldNames->size())
         return (*SwFieldType::s_pFieldNames)[nTypeId];

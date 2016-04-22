@@ -34,8 +34,8 @@ class SwTextInputField;
 
 class SwVisibleCursor
 {
-    friend void _InitCore();
-    friend void _FinitCore();
+    friend void InitCore();
+    friend void FinitCore();
 
     bool m_bIsVisible;
     bool m_bIsDragCursor;
@@ -46,7 +46,7 @@ class SwVisibleCursor
     /// For LibreOfficeKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
 
-    void _SetPosAndShow();
+    void SetPosAndShow();
 
 public:
     SwVisibleCursor( const SwCursorShell * pCShell );
@@ -66,8 +66,8 @@ namespace sw { namespace overlay { class OverlayRangesOutline; }}
 
 class SwSelPaintRects : public SwRects
 {
-    friend void _InitCore();
-    friend void _FinitCore();
+    friend void InitCore();
+    friend void FinitCore();
 
     static long s_nPixPtX, s_nPixPtY;
     static MapMode *s_pMapMode;

@@ -189,7 +189,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     // the object and invalidate its position.
     const bool bNotify( !GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) );
 
-    _MoveObjToLayer( true, _pDrawObj );
+    MoveObjToLayer( true, _pDrawObj );
 
     // #i46297#
     if ( bNotify )
@@ -219,7 +219,7 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     // #i46297# - notify background about the leaving of the object.
     const bool bNotify( GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) );
 
-    _MoveObjToLayer( false, _pDrawObj );
+    MoveObjToLayer( false, _pDrawObj );
 
     // #i46297#
     if ( bNotify )
@@ -242,18 +242,18 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     implementation for the public method <MoveObjToVisibleLayer(..)>
     and <MoveObjToInvisibleLayer(..)>
 */
-void SwContact::_MoveObjToLayer( const bool _bToVisible,
+void SwContact::MoveObjToLayer( const bool _bToVisible,
                                  SdrObject* _pDrawObj )
 {
     if ( !_pDrawObj )
     {
-        OSL_FAIL( "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
+        OSL_FAIL( "SwDrawContact::MoveObjToLayer(..) - no drawing object!" );
         return;
     }
 
     if ( !GetRegisteredIn() )
     {
-        OSL_FAIL( "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
+        OSL_FAIL( "SwDrawContact::MoveObjToLayer(..) - no drawing frame format!" );
         return;
     }
 
@@ -304,7 +304,7 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
         {
             for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
             {
-                _MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
+                MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
             }
         }
     }
@@ -1071,13 +1071,13 @@ void SwDrawContact::Changed( const SdrObject& rObj,
             pTmpRoot->StartAllAction();
     }
     SdrObjUserCall::Changed( rObj, eType, rOldBoundRect );
-    _Changed( rObj, eType, &rOldBoundRect );    //Attention, possibly suicidal!
+    Changed_( rObj, eType, &rOldBoundRect );    //Attention, possibly suicidal!
 
     if(!bHasActions)
         pTmpRoot->EndAllAction();
 }
 
-/// helper class for method <SwDrawContact::_Changed(..)> for handling nested
+/// helper class for method <SwDrawContact::Changed_(..)> for handling nested
 /// <SdrObjUserCall> events
 class NestedUserCallHdl
 {
@@ -1142,7 +1142,7 @@ class NestedUserCallHdl
 
                 if ( bTmpAssert )
                 {
-                    OSL_FAIL( "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious." );
+                    OSL_FAIL( "<SwDrawContact::Changed_(..)> - unknown nested <UserCall> event. This is serious." );
                 }
             }
         }
@@ -1163,7 +1163,7 @@ void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 
 // !!!ATTENTION!!! The object may commit suicide!!!
 
-void SwDrawContact::_Changed( const SdrObject& rObj,
+void SwDrawContact::Changed_( const SdrObject& rObj,
                               SdrUserCallType eType,
                               const Rectangle* pOldBoundRect )
 {
@@ -1205,7 +1205,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             {
                 if ( mbDisconnectInProgress )
                 {
-                    OSL_FAIL( "<SwDrawContact::_Changed(..)> - Insert event during disconnection from layout is invalid." );
+                    OSL_FAIL( "<SwDrawContact::Changed_(..)> - Insert event during disconnection from layout is invalid." );
                 }
                 else
                 {
@@ -1341,7 +1341,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     break;
                     default:
                     {
-                        OSL_FAIL( "<SwDrawContact::_Changed(..)> - unsupported layout direction" );
+                        OSL_FAIL( "<SwDrawContact::Changed_(..)> - unsupported layout direction" );
                     }
                 }
                 SfxItemSet aSet( GetFormat()->GetDoc()->GetAttrPool(),
@@ -1382,7 +1382,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 }
                 else if ( aObjRect.SSize() != aOldObjRect.GetSize() )
                 {
-                    _InvalidateObjs();
+                    InvalidateObjs_();
                     // #i35007# - notify anchor frame
                     // of as-character anchored object
                     if ( bAnchoredAsChar )
@@ -1491,7 +1491,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         // --> #i28701# - on change of wrapping style, hell|heaven layer,
         // or wrapping style influence an update of the <SwSortedObjs> list,
         // the drawing object is registered in, has to be performed. This is triggered
-        // by the 1st parameter of method call <_InvalidateObjs(..)>.
+        // by the 1st parameter of method call <InvalidateObjs_(..)>.
         if ( RES_SURROUND == nWhich ||
              RES_OPAQUE == nWhich ||
              RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
@@ -1505,7 +1505,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), nullptr );
             NotifyBackgrdOfAllVirtObjs( nullptr );
-            _InvalidateObjs( true );
+            InvalidateObjs_( true );
         }
         else if ( RES_UL_SPACE == nWhich || RES_LR_SPACE == nWhich ||
                   RES_HORI_ORIENT == nWhich || RES_VERT_ORIENT == nWhich ||
@@ -1525,14 +1525,14 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), nullptr );
             NotifyBackgrdOfAllVirtObjs( nullptr );
-            _InvalidateObjs();
+            InvalidateObjs_();
         }
         // #i35443#
         else if ( RES_ATTRSET_CHG == nWhich )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), nullptr );
             NotifyBackgrdOfAllVirtObjs( nullptr );
-            _InvalidateObjs();
+            InvalidateObjs_();
         }
         else if ( RES_REMOVE_UNO_OBJECT == nWhich )
         {
@@ -1552,7 +1552,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 // #i26791#
 // #i28701# - added parameter <_bUpdateSortedObjsList>
-void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
+void SwDrawContact::InvalidateObjs_( const bool _bUpdateSortedObjsList )
 {
     // invalidate position of existing 'virtual' drawing objects
     for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
@@ -1885,7 +1885,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
     {
         ::setContextWritingMode( maAnchoredDrawObj.DrawObj(), GetAnchorFrame() );
         // #i26791# - invalidate objects instead of direct positioning
-        _InvalidateObjs();
+        InvalidateObjs_();
     }
 }
 
@@ -1959,7 +1959,7 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
     SetMaster( pNewMaster );
     GetMaster()->SetUserCall( this );
 
-    _InvalidateObjs();
+    InvalidateObjs_();
 }
 
 /// get data collection of anchored objects, handled by with contact

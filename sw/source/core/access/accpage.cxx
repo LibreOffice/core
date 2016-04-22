@@ -64,7 +64,7 @@ void SwAccessiblePage::GetStates(
     }
 }
 
-void SwAccessiblePage::_InvalidateCursorPos()
+void SwAccessiblePage::InvalidateCursorPos_()
 {
     bool bNewSelected = IsSelected();
     bool bOldSelected;
@@ -91,7 +91,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
     }
 }
 
-void SwAccessiblePage::_InvalidateFocus()
+void SwAccessiblePage::InvalidateFocus_()
 {
     vcl::Window *pWin = GetWindow();
     if( pWin )

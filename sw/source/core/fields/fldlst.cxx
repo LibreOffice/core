@@ -36,7 +36,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     : pSh(pShell)
 {
     // create sorted list of all  input fields
-    pSrtLst = new _SetGetExpFields();
+    pSrtLst = new SetGetExpFields();
 
     const SwFieldTypes& rFieldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     const size_t nSize = rFieldTypes.size();
@@ -69,7 +69,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
                     else
                     {
                         SwNodeIndex aIdx( rTextNode );
-                        _SetGetExpField* pNew = new _SetGetExpField(aIdx, pTextField );
+                        SetGetExpField* pNew = new SetGetExpField(aIdx, pTextField );
                         pSrtLst->insert( pNew );
                     }
                 }
@@ -155,7 +155,7 @@ bool SwInputFieldList::BuildSortLst()
                     if( aTmpLst.end() == it )
                     {
                         SwNodeIndex aIdx( rTextNode );
-                        _SetGetExpField* pNew = new _SetGetExpField(aIdx, pTextField );
+                        SetGetExpField* pNew = new SetGetExpField(aIdx, pTextField );
                         pSrtLst->insert( pNew );
                     }
                     else

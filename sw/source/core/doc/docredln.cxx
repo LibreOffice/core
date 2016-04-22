@@ -1197,7 +1197,7 @@ void SwRangeRedline::CopyToSection()
 
         // The IsRedlineMove() flag causes the behaviour of the
         // SwDoc::_CopyFlyInFly method to change, which will eventually be
-        // called by the pDoc->Copy line below (through SwDoc::_Copy,
+        // called by the pDoc->Copy line below (through SwDoc::Copy_,
         // SwDoc::CopyWithFlyInFly). This rather obscure bugfix
         // apparently never really worked.
         pDoc->getIDocumentRedlineAccess().SetRedlineMove( pStt->nContent == 0 );

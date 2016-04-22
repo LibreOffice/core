@@ -43,7 +43,7 @@ class SwLayouter
 {
     SwEndnoter* mpEndnoter;
     SwLooping* mpLooping;
-    void _CollectEndnotes( SwSectionFrame* pSect );
+    void CollectEndnotes_( SwSectionFrame* pSect );
     bool StartLooping( SwPageFrame* pPage );
 
     // --> #i28701#

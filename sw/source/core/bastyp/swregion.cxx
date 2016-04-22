@@ -66,7 +66,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
         {
             SwRect aTmp( (*this)[i] );
             SwRect aInter( aTmp );
-            aInter._Intersection( rRect );
+            aInter.Intersection_( rRect );
 
             // The first Rect that should be inserted takes position of i.
             // This avoids one Delete() call.

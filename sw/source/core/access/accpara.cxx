@@ -381,7 +381,7 @@ void SwAccessibleParagraph::GetStates(
     }
 }
 
-void SwAccessibleParagraph::_InvalidateContent( bool bVisibleDataFired )
+void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
 {
     OUString sOldText( GetString() );
 
@@ -463,7 +463,7 @@ void SwAccessibleParagraph::_InvalidateContent( bool bVisibleDataFired )
     }
 }
 
-void SwAccessibleParagraph::_InvalidateCursorPos()
+void SwAccessibleParagraph::InvalidateCursorPos_()
 {
     // The text is changed
     sal_Int32 nNew = GetCaretPos();
@@ -512,7 +512,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     }
 }
 
-void SwAccessibleParagraph::_InvalidateFocus()
+void SwAccessibleParagraph::InvalidateFocus_()
 {
     vcl::Window *pWin = GetWindow();
     if( pWin )

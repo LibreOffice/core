@@ -48,15 +48,15 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
 #endif
 
 /* The SWLayVout class manages the virtual output devices.
- * RootFrame has a static member of this class which is created in _FrameInit
- * and destroyed in _FrameFinit.
+ * RootFrame has a static member of this class which is created in FrameInit
+ * and destroyed in FrameFinit.
  * */
 
 bool SwRootFrame::FlushVout()
 {
     if (SwRootFrame::s_pVout->IsFlushable())
     {
-        SwRootFrame::s_pVout->_Flush();
+        SwRootFrame::s_pVout->Flush_();
         return true;
     }
     return false;
@@ -206,7 +206,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
     }
 }
 
-void SwLayVout::_Flush()
+void SwLayVout::Flush_()
 {
     OSL_ENSURE( pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
     pOut->DrawOutDev( aRect.Pos(), aRect.SSize(),

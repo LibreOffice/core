@@ -612,7 +612,7 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
 
     @author OD
 */
-void SwPagePreview::_ExecPgUpAndPgDown( const bool  _bPgUp,
+void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
                                         SfxRequest* _pReq )
 {
     SwPagePreviewLayout* pPagePreviewLay = GetViewShell()->PagePreviewLayout();
@@ -876,7 +876,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         case FN_PAGEUP:
         case FN_PAGEDOWN:
         {
-            _ExecPgUpAndPgDown( rReq.GetSlot() == FN_PAGEUP, &rReq );
+            ExecPgUpAndPgDown( rReq.GetSlot() == FN_PAGEUP, &rReq );
             break;
         }
         case SID_JUMP_TO_SPECIFIC_PAGE:
@@ -1192,8 +1192,8 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SetName("PageView");
     SetWindow( pViewWin );
     SetHelpId(SW_PAGEPREVIEW);
-    _CreateScrollbar( true );
-    _CreateScrollbar( false );
+    CreateScrollbar( true );
+    CreateScrollbar( false );
 
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
     if ( !pOldSh )
@@ -1270,7 +1270,7 @@ SwDocShell* SwPagePreview::GetDocShell()
     return dynamic_cast<SwDocShell*>( GetViewFrame()->GetObjectShell() );
 }
 
-void SwPagePreview::_CreateScrollbar( bool bHori )
+void SwPagePreview::CreateScrollbar( bool bHori )
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? pHScrollbar : pVScrollbar;

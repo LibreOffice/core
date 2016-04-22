@@ -75,17 +75,17 @@ class SwDropCapsPict : public Control
     sal_uInt16      mnDistance;
     VclPtr<Printer> mpPrinter;
     bool            mbDelPrinter;
-    /// The _ScriptInfo structure holds information on where we change from one
+    /// The ScriptInfo structure holds information on where we change from one
     /// script to another.
-    struct _ScriptInfo
+    struct ScriptInfo
     {
         sal_uLong  textWidth;   ///< Physical width of this segment.
         sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
         sal_Int32 changePos;   ///< Character position where the script changes.
-        _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, sal_Int32 position)
+        ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, sal_Int32 position)
             : textWidth(txtWidth), scriptType(scrptType), changePos(position) {}
     };
-    std::vector<_ScriptInfo> maScriptChanges;
+    std::vector<ScriptInfo> maScriptChanges;
     SvxFont         maFont;
     SvxFont         maCJKFont;
     SvxFont         maCTLFont;
@@ -96,7 +96,7 @@ class SwDropCapsPict : public Control
     void            CheckScript();
     Size            CalcTextSize();
     inline void     InitPrinter();
-    void            _InitPrinter();
+    void            InitPrinter_();
     static void     GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich );
     void            GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
     bool            GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
@@ -176,7 +176,7 @@ void SwDropCapsPict::SetValues( const OUString& rText, sal_uInt8 nLines, sal_uIn
 void SwDropCapsPict::InitPrinter()
 {
     if( !mpPrinter )
-        _InitPrinter();
+        InitPrinter_();
 }
 
 // Create Default-String from character-count (A, AB, ABC, ...)
@@ -446,7 +446,7 @@ void SwDropCapsPict::CheckScript()
     for(;;)
     {
         nChg = xBreak->endOfScript( maText, nChg, nScript );
-        maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
+        maScriptChanges.push_back( ScriptInfo(0, nScript, nChg) );
         if( nChg >= maText.getLength() || nChg < 0 )
             break;
         nScript = xBreak->getScriptType( maText, nChg );
@@ -516,7 +516,7 @@ Size SwDropCapsPict::CalcTextSize()
     return aTextSize;
 }
 
-void SwDropCapsPict::_InitPrinter()
+void SwDropCapsPict::InitPrinter_()
 {
     SfxViewShell* pSh = SfxViewShell::Current();
 

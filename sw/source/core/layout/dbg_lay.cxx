@@ -91,7 +91,7 @@
  *           [frmtype] !0x3FFF 0x4
  *
  * As soon as the logging is in process, one can manipulate many things in
- * SwImplProtocol::_Record(...) using a debugger, especially concerning
+ * SwImplProtocol::Record_(...) using a debugger, especially concerning
  * frame types and FrameIds.
  */
 
@@ -129,7 +129,7 @@ class SwImplProtocol
     sal_uInt16 nMaxLines;           // max lines to be printed
     sal_uInt8 nInitFile;            // range (FrameId,FrameType,Record) during reading of the INI file
     sal_uInt8 nTestMode;            // special for test formatting, logging may only be done in test formatting.
-    void _Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam );
+    void Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     bool NewStream();
     void CheckLine( OString& rLine );
     static void SectFunc( OStringBuffer& rOut, const SwFrame* pFrame, sal_uLong nAct, void* pParam );
@@ -138,7 +138,7 @@ public:
     ~SwImplProtocol();
     // logging
     void Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam )
-        { if( pStream ) _Record( pFrame, nFunction, nAct, pParam ); }
+        { if( pStream ) Record_( pFrame, nFunction, nAct, pParam ); }
     bool InsertFrame( sal_uInt16 nFrameId );    // take FrameId for logging
     bool DeleteFrame( sal_uInt16 nFrameId );    // remove FrameId; don't log him anymore
     void FileInit();                    // read the INI file
@@ -498,7 +498,7 @@ static void lcl_FrameType( OStringBuffer& rOut, const SwFrame* pFrame )
  *
  * In this method we also check if FrameId and frame type should be logged.
  */
-void SwImplProtocol::_Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam )
+void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam )
 {
     sal_uInt16 nSpecial = 0;
     if( nSpecial )  // the possible debugger manipulations

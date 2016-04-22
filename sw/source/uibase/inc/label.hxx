@@ -48,7 +48,7 @@ class SwLabDlg : public SfxTabDialog
     sal_uInt16 m_nCardsId;
     sal_uInt16 m_nBusinessId;
     sal_uInt16 m_nPrivateId;
-    void          _ReplaceGroup( const OUString &rMake );
+    void          ReplaceGroup_( const OUString &rMake );
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 public:
@@ -72,7 +72,7 @@ public:
 
     Printer *GetPrt();
     inline void ReplaceGroup( const OUString &rMake );
-    void UpdateGroup( const OUString &rMake ) {_ReplaceGroup( rMake );}
+    void UpdateGroup( const OUString &rMake ) {ReplaceGroup_( rMake );}
     static void UpdateFieldInformation(css::uno::Reference< css::frame::XModel>& xModel,
                                                                                 const SwLabItem& rItem);
     const OUString& GetBusinessCardStr() const {return m_sBusinessCardDlg;}
@@ -84,7 +84,7 @@ public:
 inline void SwLabDlg::ReplaceGroup( const OUString &rMake )
 {
     if ( rMake != aLstGroup )
-        _ReplaceGroup( rMake );
+        ReplaceGroup_( rMake );
 }
 
 #endif

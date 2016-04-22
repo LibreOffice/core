@@ -32,7 +32,7 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
 {
     friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl, bool bNoCalcFollow );
 
-    // does the special treatment for _Get[Next|Prev]Leaf()
+    // does the special treatment for Get_[Next|Prev]Leaf()
     using SwFrame::GetLeaf;
 
     SwTable * m_pTable;
@@ -93,7 +93,7 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
     bool Join();
 
-    void _UpdateAttr(
+    void UpdateAttr_(
         const SfxPoolItem*,
         const SfxPoolItem*, sal_uInt8 &,
         SwAttrSetChg *pa = nullptr,

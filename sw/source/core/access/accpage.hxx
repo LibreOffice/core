@@ -43,8 +43,8 @@ protected:
     // FOCUSABLE(1) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
 
-    virtual void _InvalidateCursorPos() override;
-    virtual void _InvalidateFocus() override;
+    virtual void InvalidateCursorPos_() override;
+    virtual void InvalidateFocus_() override;
 
     virtual ~SwAccessiblePage();
 

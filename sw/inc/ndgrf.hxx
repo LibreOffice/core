@@ -93,7 +93,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
         new created stream of the embedded graphic, which has to be destroyed
         after its usage. Could be NULL, if the stream isn't found.
     */
-    SvStream* _GetStreamForEmbedGrf(
+    SvStream* GetStreamForEmbedGrf(
             const css::uno::Reference< css::embed::XStorage >& _refPics,
             const OUString& rStreamName ) const;
 
@@ -108,7 +108,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
         @return XStorage
         reference to substorage or the root storage
     */
-    css::uno::Reference< css::embed::XStorage > _GetDocSubstorageOrRoot(
+    css::uno::Reference< css::embed::XStorage > GetDocSubstorageOrRoot(
                                                 const OUString& aStgName ) const;
 
     /// allow reaction on change of content of GraphicObject, so always call

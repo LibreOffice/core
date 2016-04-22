@@ -429,10 +429,10 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // die Attribute der Umgebung am Draw-Objekt setzen
-    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&m_aAttrTab);
-    for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
+    HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
+    for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
-        _HTMLAttr *pAttr = *pHTMLAttributes;
+        HTMLAttr *pAttr = *pHTMLAttributes;
         if( pAttr )
             PutEEPoolItem( aItemSet, pAttr->GetItem() );
     }

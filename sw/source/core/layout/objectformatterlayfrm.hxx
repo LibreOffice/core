@@ -44,7 +44,7 @@ class SwObjectFormatterLayFrame : public SwObjectFormatter
             @return boolean
             indicates, if format was successful
         */
-        bool _AdditionalFormatObjsOnPage();
+        bool AdditionalFormatObjsOnPage();
 
     protected:
 

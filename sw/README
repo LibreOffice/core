@@ -114,7 +114,7 @@ There are multiple model classes involved for fields:
   There are many subclasses of SwFieldType, one for each different type
   of field.
   For most types of fields there is one shared instance of this per type,
-  which is created in DocumentFieldsManager::_InitFieldTypes()
+  which is created in DocumentFieldsManager::InitFieldTypes()
   but for some there are more than one, and they are dynamically created, see
   DocumentFieldsManager::InsertFieldType().  An example for the latter are
   variable fields (RES_GETEXPFLD/RES_SETEXPFLD), with one SwFieldType per

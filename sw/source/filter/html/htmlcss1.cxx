@@ -1537,10 +1537,10 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
 
 // CSS1-sezifisches des SwHTMLParsers
 
-_HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
+HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
 {
     // den zu dem Item gehoehrenden Tabellen-Eintrag ermitteln ...
-    _HTMLAttr **ppAttr = nullptr;
+    HTMLAttr **ppAttr = nullptr;
     switch( nWhich )
     {
     case RES_CHRATR_BLINK:
@@ -2121,9 +2121,9 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
     }
 }
 
-_HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken )
+HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken )
 {
-    _HTMLAttrContexts::size_type nPos = m_aContexts.size();
+    HTMLAttrContexts::size_type nPos = m_aContexts.size();
     if( nPos <= m_nContextStMin )
         return nullptr;
 
@@ -2150,7 +2150,7 @@ _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken )
         nPos--;
     }
 
-    _HTMLAttrContext *pCntxt = nullptr;
+    HTMLAttrContext *pCntxt = nullptr;
     if( bFound )
     {
         pCntxt = m_aContexts[nPos];
@@ -2165,7 +2165,7 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
                                           short& nIndent,
                                           bool bIgnoreTopContext ) const
 {
-    _HTMLAttrContexts::size_type nPos = m_aContexts.size();
+    HTMLAttrContexts::size_type nPos = m_aContexts.size();
     if( bIgnoreTopContext )
     {
         if( !nPos )
@@ -2176,7 +2176,7 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
 
     while( nPos > m_nContextStAttrMin )
     {
-        const _HTMLAttrContext *pCntxt = m_aContexts[--nPos];
+        const HTMLAttrContext *pCntxt = m_aContexts[--nPos];
         if( pCntxt->IsLRSpaceChanged() )
         {
             pCntxt->GetMargins( nLeft, nRight, nIndent );
@@ -2209,10 +2209,10 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
     sal_uInt16 nDfltColl = 0;
     OUString aDfltClass;
 
-    _HTMLAttrContexts::size_type nPos = m_aContexts.size();
+    HTMLAttrContexts::size_type nPos = m_aContexts.size();
     while( nPos > m_nContextStAttrMin )
     {
-        const _HTMLAttrContext *pCntxt = m_aContexts[--nPos];
+        const HTMLAttrContext *pCntxt = m_aContexts[--nPos];
         if( pCntxt->IsULSpaceChanged() )
         {
             pCntxt->GetULSpace( nUpper, nLower );
@@ -2236,16 +2236,16 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
     nLower = rULSpace.GetLower();
 }
 
-void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext )
+void SwHTMLParser::EndContextAttrs( HTMLAttrContext *pContext )
 {
-    _HTMLAttrs &rAttrs = pContext->GetAttrs();
+    HTMLAttrs &rAttrs = pContext->GetAttrs();
     for( auto pAttr : rAttrs )
     {
         if( RES_PARATR_DROP==pAttr->GetItem().Which() )
         {
             // Fuer DropCaps noch die Anzahl der Zeichen anpassen. Wenn
             // es am Ende 0 sind, wird das Attribut invalidiert und dann
-            // von _SetAttr gar nicht erst gesetzt.
+            // von SetAttr_ gar nicht erst gesetzt.
             sal_Int32 nChars = m_pPam->GetPoint()->nContent.GetIndex();
             if( nChars < 1 )
                 pAttr->Invalidate();
@@ -2267,7 +2267,7 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
     {
         // den zu dem Item gehoehrenden Tabellen-Eintrag ermitteln ...
         sal_uInt16 nWhich = pItem->Which();
-        _HTMLAttr **ppAttr = GetAttrTabEntry( nWhich );
+        HTMLAttr **ppAttr = GetAttrTabEntry( nWhich );
 
         if( ppAttr )
         {

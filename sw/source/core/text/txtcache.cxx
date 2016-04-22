@@ -62,7 +62,7 @@ bool SwTextLineAccess::IsAvailable() const
     return pObj && static_cast<SwTextLine*>(pObj)->GetPara();
 }
 
-bool SwTextFrame::_HasPara() const
+bool SwTextFrame::HasPara_() const
 {
     SwTextLine *pTextLine = static_cast<SwTextLine*>(SwTextFrame::GetTextCache()->
                                             Get( this, GetCacheIdx(), false ));

@@ -110,10 +110,10 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     //IvalidateShapeInParaSelection() method is responsible for the updating the selected states of the objects.
     void InvalidateShapeInParaSelection();
 
-    void _InvalidateRelationSet( const SwFrame* pFrame, bool bFrom );
+    void InvalidateRelationSet_( const SwFrame* pFrame, bool bFrom );
 
     css::uno::Reference<css::accessibility::XAccessible>
-            _GetDocumentView( bool bPagePreview );
+            GetDocumentView_( bool bPagePreview );
 
     /** method to build up a new data structure of the accessible paragraphs,
         which have a selection
@@ -122,7 +122,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
         @author OD
     */
-    SwAccessibleSelectedParas_Impl* _BuildSelectedParas();
+    SwAccessibleSelectedParas_Impl* BuildSelectedParas();
 
 public:
 

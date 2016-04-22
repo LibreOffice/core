@@ -82,7 +82,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // #i26791# - get vertical offset to frame anchor position.
         SwTwips nVertOffsetToFrameAnchorPos( 0L );
         SwTwips nRelPosY =
-                _GetVertRelPos( GetAnchorFrame(), GetAnchorFrame(), eVertOrient,
+                GetVertRelPos( GetAnchorFrame(), GetAnchorFrame(), eVertOrient,
                                 aVert.GetRelationOrient(), aVert.GetPos(),
                                 rLR, rUL, nVertOffsetToFrameAnchorPos );
 
@@ -145,7 +145,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         sal_Int16 eHoriOrient = aHori.GetHoriOrient();
         sal_Int16 eRelOrient = aHori.GetRelationOrient();
         // toggle orientation
-        _ToggleHoriOrientAndAlign( bToggle, eHoriOrient, eRelOrient );
+        ToggleHoriOrientAndAlign( bToggle, eHoriOrient, eRelOrient );
 
         // determine alignment values:
         // <nWidth>: 'width' of the alignment area
@@ -154,7 +154,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         SwTwips nWidth, nOffset;
         {
             bool bDummy; // in this context irrelevant output parameter
-            _GetHoriAlignmentValues( GetAnchorFrame(), GetAnchorFrame(),
+            GetHoriAlignmentValues( GetAnchorFrame(), GetAnchorFrame(),
                                      eRelOrient, false,
                                      nWidth, nOffset, bDummy );
         }

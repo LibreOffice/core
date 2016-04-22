@@ -122,9 +122,9 @@ class SW_DLLPUBLIC SwNodes
 
     void UpdateOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.
 
-    void _CopyNodes( const SwNodeRange&, const SwNodeIndex&,
+    void CopyNodes( const SwNodeRange&, const SwNodeIndex&,
                     bool bNewFrames = true, bool bTableInsDummyNode = false ) const;
-    void _DelDummyNodes( const SwNodeRange& rRg );
+    void DelDummyNodes( const SwNodeRange& rRg );
 
     SwNodes(SwNodes const&) = delete;
     SwNodes& operator=(SwNodes const&) = delete;
@@ -170,13 +170,13 @@ public:
     static sal_uInt16 GetSectionLevel(const SwNodeIndex &rIndex);
     void Delete(const SwNodeIndex &rPos, sal_uLong nNodes = 1);
 
-    bool _MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
+    bool MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
                 bool bNewFrames = true );
     void MoveRange( SwPaM&, SwPosition&, SwNodes& rNodes );
 
-    void _Copy( const SwNodeRange& rRg, const SwNodeIndex& rInsPos,
+    void Copy_( const SwNodeRange& rRg, const SwNodeIndex& rInsPos,
                 bool bNewFrames = true ) const
-        {   _CopyNodes( rRg, rInsPos, bNewFrames ); }
+        {   CopyNodes( rRg, rInsPos, bNewFrames ); }
 
     void SectionUp( SwNodeRange *);
     void SectionDown( SwNodeRange *pRange, SwStartNodeType = SwNormalStartNode );

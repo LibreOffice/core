@@ -87,13 +87,13 @@ static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     if( !pTableNd )
         return false;
 
-    _FndBox aFndBox( nullptr, nullptr );
+    FndBox_ aFndBox( nullptr, nullptr );
 
     // look for all boxes / lines
     {
         SwSelBoxes aSelBoxes;
         ::GetTableSel( rSh, aSelBoxes );
-        _FndPara aPara( aSelBoxes, &aFndBox );
+        FndPara aPara( aSelBoxes, &aFndBox );
         const SwTable& rTable = pTableNd->GetTable();
         ForEach_FndLineCopyCol( (SwTableLines&)rTable.GetTabLines(), &aPara );
     }

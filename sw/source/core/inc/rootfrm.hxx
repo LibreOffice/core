@@ -68,8 +68,8 @@ class SwRootFrame: public SwLayoutFrame
     friend inline void SetLastPage( SwPageFrame* );
 
     // For creating and destroying of the virtual output device manager
-    friend void _FrameInit(); // Creates s_pVout
-    friend void _FrameFinit(); // Destroys s_pVout
+    friend void FrameInit(); // Creates s_pVout
+    friend void FrameFinit(); // Destroys s_pVout
 
     std::vector<SwRect> maPageRects;// returns the current rectangle for each page frame
                                     // the rectangle is extended to the top/bottom/left/right
@@ -150,8 +150,8 @@ class SwRootFrame: public SwLayoutFrame
     void ImplCalcBrowseWidth();
     void ImplInvalidateBrowseWidth();
 
-    void _DeleteEmptySct(); // Destroys the registered SectionFrames
-    void _RemoveFromList( SwSectionFrame* pSct ); // Removes SectionFrames from the Delete List
+    void DeleteEmptySct_(); // Destroys the registered SectionFrames
+    void RemoveFromList_( SwSectionFrame* pSct ); // Removes SectionFrames from the Delete List
 
     virtual void DestroyImpl() override;
     virtual ~SwRootFrame();
@@ -351,8 +351,8 @@ public:
      * destroyed later on or deregistered.
      */
     void InsertEmptySct( SwSectionFrame* pDel );
-    void DeleteEmptySct() { if( mpDestroy ) _DeleteEmptySct(); }
-    void RemoveFromList( SwSectionFrame* pSct ) { if( mpDestroy ) _RemoveFromList( pSct ); }
+    void DeleteEmptySct() { if( mpDestroy ) DeleteEmptySct_(); }
+    void RemoveFromList( SwSectionFrame* pSct ) { if( mpDestroy ) RemoveFromList_( pSct ); }
 #ifdef DBG_UTIL
     bool IsInDelList( SwSectionFrame* pSct ) const;
 #endif

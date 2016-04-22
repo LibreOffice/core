@@ -146,7 +146,7 @@ class SwTextFly
         \param[in] rPortion
             Scope: document global.
      */
-    SwRect _GetFrame( const SwRect &rPortion ) const;
+    SwRect GetFrame_( const SwRect &rPortion ) const;
 
     SwAnchoredObjList* InitAnchoredObjList();
 
@@ -172,7 +172,7 @@ class SwTextFly
       \li There is more than 2cm space on both sides and the object
       width is less than 1.5cm: both sides surround (SURROUND_PARALLEL)
      */
-    SwSurround _GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const;
+    SwSurround GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const;
 
     /**
        The right margin is the right margin or it is determined by the
@@ -201,7 +201,7 @@ class SwTextFly
 
     SwTwips CalcMinBottom() const;
 
-    const SwContentFrame* _GetMaster();
+    const SwContentFrame* GetMaster_();
 
 public:
 
@@ -340,7 +340,7 @@ inline SwTwips SwTextFly::GetMinBottom() const
 
 inline const SwContentFrame* SwTextFly::GetMaster() const
 {
-    return pMaster ? pMaster : const_cast<SwTextFly*>(this)->_GetMaster();
+    return pMaster ? pMaster : const_cast<SwTextFly*>(this)->GetMaster_();
 }
 
 inline long SwTextFly::GetNextTop() const
@@ -355,7 +355,7 @@ inline void SwTextFly::SetNextTop( long nNew ) const
 
 inline SwRect SwTextFly::GetFrame( const SwRect &rRect ) const
 {
-    return bOn ? _GetFrame( rRect ) : SwRect();
+    return bOn ? GetFrame_( rRect ) : SwRect();
 }
 
 inline void SwTextFly::SetIgnoreCurrentFrame( bool bNew )

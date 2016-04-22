@@ -395,7 +395,7 @@ SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( 0 );
-    return SwPosSize(m_pFnt->_GetTextSize( aDrawInf ));
+    return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
 SwPosSize SwTextSizeInfo::GetTextSize() const
@@ -416,7 +416,7 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    return SwPosSize(m_pFnt->_GetTextSize( aDrawInf ));
+    return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
 void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
@@ -430,7 +430,7 @@ void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nInde
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    SwPosSize aSize( m_pFnt->_GetTextSize( aDrawInf ) );
+    SwPosSize aSize( m_pFnt->GetTextSize_( aDrawInf ) );
     nMaxSizeDiff = (sal_uInt16)aDrawInf.GetKanaDiff();
     nMinSize = aSize.Width();
 }
@@ -476,7 +476,7 @@ sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
     return m_pFnt->GetTextBreak( aDrawInf, nLineWidth );
 }
 
-bool SwTextSizeInfo::_HasHint( const SwTextNode* pTextNode, sal_Int32 nPos )
+bool SwTextSizeInfo::HasHint_( const SwTextNode* pTextNode, sal_Int32 nPos )
 {
     return pTextNode->GetTextAttrForCharAt(nPos);
 }
@@ -567,7 +567,7 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
     return pCol->IsDark();
 }
 
-void SwTextPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor,
+void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPor,
                                 const sal_Int32 nStart, const sal_Int32 nLength,
                                 const bool bKern, const bool bWrong,
                                 const bool bSmartTag,
@@ -715,13 +715,13 @@ void SwTextPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPo
     {
         aDrawInf.SetPos( aFontPos );
         if( bKern )
-            m_pFnt->_DrawStretchText( aDrawInf );
+            m_pFnt->DrawStretchText_( aDrawInf );
         else
         {
             aDrawInf.SetWrong( bTmpWrong ? pWrongList : nullptr );
             aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : nullptr );
             aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : nullptr );
-            m_pFnt->_DrawText( aDrawInf );
+            m_pFnt->DrawText_( aDrawInf );
         }
     }
 }
@@ -1264,7 +1264,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
     }
 }
 
-void SwTextPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::NotifyURL_( const SwLinePortion &rPor ) const
 {
     OSL_ENSURE( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
 
@@ -1522,7 +1522,7 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     SetFirstMulti( rInf.IsFirstMulti() );
 }
 
-bool SwTextFormatInfo::_CheckFootnotePortion( SwLineLayout* pCurr )
+bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout* pCurr )
 {
     const sal_uInt16 nHeight = pCurr->GetRealHeight();
     for( SwLinePortion *pPor = pCurr->GetPortion(); pPor; pPor = pPor->GetPortion() )

@@ -111,7 +111,7 @@ void PaMCorrAbs( const SwPaM& rRange,
                 } while ( (_pStackCursor != nullptr ) &&
                     ((_pStackCursor = static_cast<SwPaM *>(_pStackCursor->GetNext())) != pCursorShell->GetStackCursor()) );
 
-            for(SwPaM& rPaM : const_cast<SwShellCursor*>(pCursorShell->_GetCursor())->GetRingContainer())
+            for(SwPaM& rPaM : const_cast<SwShellCursor*>(pCursorShell->GetCursor_())->GetRingContainer())
             {
                 lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
             }
@@ -214,7 +214,7 @@ void SwDoc::CorrAbs(
     SwPosition aStart(*rRange.Start());
     SwPosition aEnd(*rRange.End());
 
-    _DelBookmarks( aStart.nNode, aEnd.nNode, nullptr, &aStart.nContent, &aEnd.nContent );
+    DelBookmarks( aStart.nNode, aEnd.nNode, nullptr, &aStart.nContent, &aEnd.nContent );
 
     if(bMoveCursor)
         ::PaMCorrAbs(rRange, rNewPos);
@@ -226,7 +226,7 @@ void SwDoc::CorrAbs(
     const SwPosition& rNewPos,
     bool bMoveCursor )
 {
-    _DelBookmarks( rStartNode, rEndNode );
+    DelBookmarks( rStartNode, rEndNode );
 
     if(bMoveCursor)
     {
@@ -262,7 +262,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
                 } while ( (_pStackCursor != nullptr ) &&
                     ((_pStackCursor = static_cast<SwPaM *>(_pStackCursor->GetNext())) != pCursorShell->GetStackCursor()) );
 
-            SwPaM* pStartPaM = pCursorShell->_GetCursor();
+            SwPaM* pStartPaM = pCursorShell->GetCursor_();
             for(SwPaM& rPaM : pStartPaM->GetRingContainer())
             {
                 lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx);

@@ -70,7 +70,7 @@ class SwPageFrame: public SwFootnoteBossFrame
 
     static const sal_Int8 mnShadowPxWidth;
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     /// Adapt the max. footnote height in each single column

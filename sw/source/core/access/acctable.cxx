@@ -241,7 +241,7 @@ void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrame *pFrame 
 
                 //if the current line is now header line, then return ;
                 sal_Int16 iCurrentRowIndex = mpTabFrame->GetTable()->GetTabLines().GetPos( pLine);
-                if(iCurrentRowIndex >= mpTabFrame->GetTable()->_GetRowsToRepeat())
+                if(iCurrentRowIndex >= mpTabFrame->GetTable()->GetRowsToRepeat_())
                     return ;
 
                 maRows.insert( pLower->Frame().Top() - maTabFramePos.Y() );

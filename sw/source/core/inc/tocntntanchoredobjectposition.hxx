@@ -68,7 +68,7 @@ namespace objectpositioning
                 @return constant reference to <SwFrame> object, at which the
                 horizontal position is determined.
             */
-            const SwFrame& _GetHoriVirtualAnchor( const SwLayoutFrame& _pProposedFrame ) const;
+            const SwFrame& GetHoriVirtualAnchor( const SwLayoutFrame& _pProposedFrame ) const;
 
         public:
             SwToContentAnchoredObjectPosition( SdrObject& _rDrawObj );

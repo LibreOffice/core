@@ -94,21 +94,21 @@ class SwFlowFrame
         optional input parameter - pointer to frame, which should be used
         instead of the direct previous frame.
     */
-    const SwFrame* _GetPrevFrameForUpperSpaceCalc( const SwFrame* _pProposedPrevFrame = nullptr ) const;
+    const SwFrame* GetPrevFrameForUpperSpaceCalc_( const SwFrame* _pProposedPrevFrame = nullptr ) const;
 
     /** method to detemine the upper space amount, which is considered for
         the previous frame
 
         #i11860#
     */
-    SwTwips _GetUpperSpaceAmountConsideredForPrevFrame() const;
+    SwTwips GetUpperSpaceAmountConsideredForPrevFrame() const;
 
     /** method to detemine the upper space amount, which is considered for
         the page grid
 
         #i11860#
     */
-    SwTwips _GetUpperSpaceAmountConsideredForPageGrid(
+    SwTwips GetUpperSpaceAmountConsideredForPageGrid_(
                                 const SwTwips _nUpperSpaceWithoutGrid ) const;
 
 protected:

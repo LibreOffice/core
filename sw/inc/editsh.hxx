@@ -147,18 +147,18 @@ class SW_DLLPUBLIC SwEditShell : public SwCursorShell
 
     /// For the private methods DelRange and those of AutoCorrect.
     friend class SwAutoFormat;
-    friend void _InitCore();
-    friend void _FinitCore();
+    friend void InitCore();
+    friend void FinitCore();
     /// For the PamCorrAbs/-Rel methods.
     friend class SwUndo;
 
     /** Returns pointer to a SwGrfNode
      that will be used by GetGraphic() and GetGraphicSize(). */
-    SAL_DLLPRIVATE SwGrfNode *_GetGrfNode() const ;
+    SAL_DLLPRIVATE SwGrfNode *GetGrfNode_() const ;
 
     SAL_DLLPRIVATE void DeleteSel( SwPaM& rPam, bool* pUndo = nullptr );
 
-    SAL_DLLPRIVATE void _SetSectionAttr( SwSectionFormat& rSectFormat, const SfxItemSet& rSet );
+    SAL_DLLPRIVATE void SetSectionAttr_( SwSectionFormat& rSectFormat, const SfxItemSet& rSet );
 
     using SwViewShell::UpdateFields;
     using SwModify::GetInfo;
@@ -206,7 +206,7 @@ public:
        If table is copied into table, move all cursors away from it.
        Copy and Paste must be in FEShell because of FlyFrames!
        Copy all selections to the document. */
-    bool _CopySelToDoc( SwDoc* pInsDoc );
+    bool CopySelToDoc( SwDoc* pInsDoc );
 
     long SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
     bool AppendTextNode();

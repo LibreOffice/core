@@ -65,18 +65,18 @@ namespace objectpositioning
             member <mbIsObjFly>, <mpAnchoredObj>, <mpAnchorFrame>, <mpContact>
             and <mpFrameFormat> are set
         */
-        void _GetInfoAboutObj();
+        void GetInfoAboutObj();
 
         // #i62875#
         // --> OD 2009-09-01 #mongolianlayout# - add parameter <bVertL2R>
-        SwTwips _ImplAdjustVertRelPos( const SwTwips nTopOfAnch,
+        SwTwips ImplAdjustVertRelPos( const SwTwips nTopOfAnch,
                                        const bool bVert,
                                        const bool bVertL2R,
                                        const SwFrame&  rPageAlignLayFrame,
                                        const SwTwips nProposedRelPosY,
                                        const bool bFollowTextFlow,
                                        const bool bCheckBottom = true ) const;
-        SwTwips _ImplAdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
+        SwTwips ImplAdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
                                        const SwTwips _nProposedRelPosX ) const;
 
     protected:
@@ -126,18 +126,18 @@ namespace objectpositioning
 
             #i11860#
         */
-        SwTwips _GetTopForObjPos( const SwFrame& _rFrame,
+        SwTwips GetTopForObjPos( const SwFrame& _rFrame,
                                   const SwRectFn& _fnRect,
                                   const bool _bVert ) const;
 
-        void _GetVertAlignmentValues( const SwFrame& _rVertOrientFrame,
+        void GetVertAlignmentValues( const SwFrame& _rVertOrientFrame,
                                       const SwFrame& _rPageAlignLayFrame,
                                       const sal_Int16 _eRelOrient,
                                       SwTwips&      _orAlignAreaHeight,
                                       SwTwips&      _orAlignAreaOffset ) const;
 
         // #i26791# - add output parameter <_roVertOffsetToFrameAnchorPos>
-        SwTwips _GetVertRelPos( const SwFrame& _rVertOrientFrame,
+        SwTwips GetVertRelPos( const SwFrame& _rVertOrientFrame,
                                 const SwFrame& _rPageAlignLayFrame,
                                 const sal_Int16 _eVertOrient,
                                 const sal_Int16 _eRelOrient,
@@ -152,7 +152,7 @@ namespace objectpositioning
             #i31805# - add parameter <_bCheckBottom>
             #i26945# - add parameter <_bFollowTextFlow>
             #i62875# - made inline, intrinsic actions moved
-            to private method <_ImplAdjustVertRelPos>, which is only
+            to private method <ImplAdjustVertRelPos>, which is only
             called, if <mbDoNotCaptureAnchoredObj> not set.
             OD 2009-09-01 #mongolianlayout# - add parameter <bVertL2R>
 
@@ -185,7 +185,7 @@ namespace objectpositioning
             object has to be checked and thus, (if needed) the proposed
             relative position has to be adjusted. default value <true>
         */
-        inline SwTwips _AdjustVertRelPos( const SwTwips nTopOfAnch,
+        inline SwTwips AdjustVertRelPos( const SwTwips nTopOfAnch,
                                           const bool bVert,
                                           const bool bVertL2R,
                                           const SwFrame& rPageAlignLayFrame,
@@ -194,7 +194,7 @@ namespace objectpositioning
                                           const bool bCheckBottom = true ) const
         {
             return !mbDoNotCaptureAnchoredObj
-                   ? _ImplAdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
+                   ? ImplAdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
                                             rPageAlignLayFrame,
                                             nProposedRelPosY,
                                             bFollowTextFlow,
@@ -238,7 +238,7 @@ namespace objectpositioning
 
             @return relative horizontal position in SwTwips
         */
-        SwTwips _CalcRelPosX( const SwFrame& _rHoriOrientFrame,
+        SwTwips CalcRelPosX( const SwFrame& _rHoriOrientFrame,
                               const SwEnvironmentOfAnchoredObject& _rEnvOfObj,
                               const SwFormatHoriOrient& _rHoriOrient,
                               const SvxLRSpaceItem& _rLRSpacing,
@@ -252,7 +252,7 @@ namespace objectpositioning
             'page' alignment layout frame for object type position TO_CNTNT
 
             #i62875# - made inline, intrinsic actions moved
-            to private method <_ImplAdjustHoriRelPos>, which is only
+            to private method <ImplAdjustHoriRelPos>, which is only
             called, if <mbDoNotCaptureAnchoredObj> not set.
 
             @param _rPageAlignLayFrame
@@ -265,11 +265,11 @@ namespace objectpositioning
 
             @return adjusted relative horizontal position in SwTwips.
         */
-        inline SwTwips _AdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
+        inline SwTwips AdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
                                           const SwTwips _nProposedRelPosX ) const
         {
             return !mbDoNotCaptureAnchoredObj
-                   ? _ImplAdjustHoriRelPos( _rPageAlignLayFrame, _nProposedRelPosX )
+                   ? ImplAdjustHoriRelPos( _rPageAlignLayFrame, _nProposedRelPosX )
                    : _nProposedRelPosX;
         }
 
@@ -287,7 +287,7 @@ namespace objectpositioning
             optional input/output parameter (default value NULL)
             - if set, relative alignment, that is toggled, if needed.
         */
-        static void _ToggleHoriOrientAndAlign( const bool _bToggleLeftRight,
+        static void ToggleHoriOrientAndAlign( const bool _bToggleLeftRight,
                                         sal_Int16& _ioeHoriOrient,
                                         sal_Int16& _iopeRelOrient
                                       );
@@ -329,7 +329,7 @@ namespace objectpositioning
             output parameter - boolean indicating, that object is aligned
             to 'page area'.
         */
-        void _GetHoriAlignmentValues( const SwFrame&  _rHoriOrientFrame,
+        void GetHoriAlignmentValues( const SwFrame&  _rHoriOrientFrame,
                                       const SwFrame&  _rPageAlignLayFrame,
                                       const sal_Int16 _eRelOrient,
                                       const bool    _bObjWrapThrough,
@@ -368,7 +368,7 @@ namespace objectpositioning
 
             @return adjusted relative horizontal position in SwTwips
         */
-        SwTwips _AdjustHoriRelPosForDrawAside( const SwFrame&  _rHoriOrientFrame,
+        SwTwips AdjustHoriRelPosForDrawAside( const SwFrame&  _rHoriOrientFrame,
                                                const SwTwips _nProposedRelPosX,
                                                const SwTwips _nRelPosY,
                                                const sal_Int16 _eHoriOrient,
@@ -380,7 +380,7 @@ namespace objectpositioning
 
         /** detemine, if object has to draw aside given fly frame
 
-            method used by <_AdjustHoriRelPosForDrawAside(..)>
+            method used by <AdjustHoriRelPosForDrawAside(..)>
 
             @param _pFly
             input parameter - fly frame the draw aside check is done for.
@@ -406,7 +406,7 @@ namespace objectpositioning
             @return boolean indicating, if object has to be drawn aside
             given fly frame.
         */
-        bool _DrawAsideFly( const SwFlyFrame* _pFly,
+        bool DrawAsideFly( const SwFlyFrame* _pFly,
                             const SwRect&   _rObjRect,
                             const SwFrame*    _pObjContext,
                             const sal_uLong     _nObjIndex,
@@ -422,7 +422,7 @@ namespace objectpositioning
             against each other, which one has to be drawn aside the other one.
             depending on parameter _bLeft check is done for left or right
             positioning.
-            method used by <_DrawAsideFly(..)>
+            method used by <DrawAsideFly(..)>
 
             @param _eRelOrient1
             input parameter - alignment 1
@@ -438,7 +438,7 @@ namespace objectpositioning
             <_eRelOrient1> has to be drawn aside an object with an
             alignment <_eRelOrient2>
         */
-        static bool _Minor( sal_Int16 _eRelOrient1,
+        static bool Minor_( sal_Int16 _eRelOrient1,
                      sal_Int16 _eRelOrient2,
                      bool             _bLeft );
 

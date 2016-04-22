@@ -97,18 +97,18 @@ class SwLayAction
                      const SwRect &rOldRect, long nOldBottom );
     bool PaintWithoutFlys( const SwRect &, const SwContentFrame *,
                            const SwPageFrame * );
-    inline bool _PaintContent( const SwContentFrame *, const SwPageFrame *,
+    inline bool PaintContent_( const SwContentFrame *, const SwPageFrame *,
                              const SwRect & );
 
     bool FormatLayout( OutputDevice* pRenderContext, SwLayoutFrame *, bool bAddRect = true );
     bool FormatLayoutTab( SwTabFrame *, bool bAddRect = true );
     bool FormatContent( const SwPageFrame* pPage );
-    void _FormatContent( const SwContentFrame* pContent,
+    void FormatContent_( const SwContentFrame* pContent,
                        const SwPageFrame* pPage );
     bool IsShortCut( SwPageFrame *& );
 
     bool TurboAction();
-    bool _TurboAction( const SwContentFrame * );
+    bool TurboAction_( const SwContentFrame * );
     void InternalAction(OutputDevice* pRenderContext);
 
     static SwPageFrame *CheckFirstVisPage( SwPageFrame *pPage );
@@ -174,7 +174,7 @@ public:
     // delete 2nd parameter, because its not used;
     bool FormatLayoutFly( SwFlyFrame * );
     // #i28701# - method is now public
-    bool _FormatFlyContent( const SwFlyFrame * );
+    bool FormatFlyContent( const SwFlyFrame * );
 
 };
 
@@ -197,7 +197,7 @@ class SwLayIdle
 #endif
 
     enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };
-    bool _DoIdleJob( const SwContentFrame*, IdleJobType );
+    bool DoIdleJob_( const SwContentFrame*, IdleJobType );
     bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
 
 public:

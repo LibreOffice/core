@@ -414,13 +414,13 @@ void SwCursorShell::MarkListLevel( const OUString& sListId,
 
 void SwCursorShell::UpdateMarkedListLevel()
 {
-    SwTextNode * pTextNd = _GetCursor()->GetNode().GetTextNode();
+    SwTextNode * pTextNd = GetCursor_()->GetNode().GetTextNode();
 
     if ( pTextNd )
     {
         if ( !pTextNd->IsNumbered() )
         {
-            m_pCurrentCursor->_SetInFrontOfLabel( false );
+            m_pCurrentCursor->SetInFrontOfLabel_( false );
             MarkListLevel( OUString(), 0 );
         }
         else if ( m_pCurrentCursor->IsInFrontOfLabel() )
@@ -550,13 +550,13 @@ bool SwCursorShell::LRMargin( bool bLeft, bool bAPI)
         m_pBlockCursor->clearPoints();
 
     const bool bWasAtLM =
-            ( 0 == _GetCursor()->GetPoint()->nContent.GetIndex() );
+            ( 0 == GetCursor_()->GetPoint()->nContent.GetIndex() );
 
     bool bRet = pTmpCursor->LeftRightMargin( bLeft, bAPI );
 
-    if ( bLeft && !bTableMode && bRet && bWasAtLM && !_GetCursor()->HasMark() )
+    if ( bLeft && !bTableMode && bRet && bWasAtLM && !GetCursor_()->HasMark() )
     {
-        const SwTextNode * pTextNd = _GetCursor()->GetNode().GetTextNode();
+        const SwTextNode * pTextNd = GetCursor_()->GetNode().GetTextNode();
         if ( pTextNd && pTextNd->HasVisibleNumberingOrBullet() )
             SetInFrontOfLabel( true );
     }
@@ -827,7 +827,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     // #i41424# Only update the marked number levels if necessary
     // Force update of marked number levels if necessary.
     if ( bNewInFrontOfLabel || bOldInFrontOfLabel )
-        m_pCurrentCursor->_SetInFrontOfLabel( !bNewInFrontOfLabel );
+        m_pCurrentCursor->SetInFrontOfLabel_( !bNewInFrontOfLabel );
     SetInFrontOfLabel( bNewInFrontOfLabel );
 
     if( !pCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
@@ -1105,7 +1105,7 @@ bool SwCursorShell::SetInFrontOfLabel( bool bNew )
 {
     if ( bNew != IsInFrontOfLabel() )
     {
-        m_pCurrentCursor->_SetInFrontOfLabel( bNew );
+        m_pCurrentCursor->SetInFrontOfLabel_( bNew );
         UpdateMarkedListLevel();
         return true;
     }
@@ -2493,7 +2493,7 @@ bool SwCursorShell::ParkTableCursor()
     return true;
 }
 
-void SwCursorShell::_ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
+void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
 {
     const SwPosition *pStt = pDelRg->Start(),
         *pEnd = pDelRg->GetPoint() == pStt ? pDelRg->GetMark() : pDelRg->GetPoint();
@@ -2597,9 +2597,9 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
         {
             SwCursorShell* pSh = static_cast<SwCursorShell*>(&rTmp);
             if( pSh->m_pCursorStack )
-                pSh->_ParkPams( pNew, &pSh->m_pCursorStack );
+                pSh->ParkPams( pNew, &pSh->m_pCursorStack );
 
-            pSh->_ParkPams( pNew, &pSh->m_pCurrentCursor );
+            pSh->ParkPams( pNew, &pSh->m_pCurrentCursor );
             if( pSh->m_pTableCursor )
             {
                 // set table cursor always to 0 and the current one always to

@@ -39,20 +39,20 @@ class SwContentNode;
 class SfxPoolItem;
 class SwShareBoxFormats;
 class SwFormatFrameSize;
-struct _CpyPara;
-struct _InsULPara;
+struct CpyPara;
+struct InsULPara;
 
 void sw_LineSetHeadCondColl( const SwTableLine* pLine );
 
 #ifdef DBG_UTIL
-void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
+void CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
 
-void _InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
+void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
                 SwTableLine* pLine, SwTableBoxFormat* pBoxFrameFormat,
                 SwTableBox* pBox, sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
 
-SW_DLLPUBLIC void _DeleteBox( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo = nullptr,
+SW_DLLPUBLIC void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo = nullptr,
                 bool bCalcNewSize = true, const bool bCorrBorder = true,
                 SwShareBoxFormats* pShareFormats = nullptr );
 
@@ -119,26 +119,26 @@ struct SwSaveRowSpan
     SwSaveRowSpan( SwTableBoxes& rBoxes, sal_uInt16 nSplitLn );
 };
 
-struct _SwGCLineBorder
+struct SwGCLineBorder
 {
     const SwTableLines* pLines;
     SwShareBoxFormats* pShareFormats;
     sal_uInt16 nLinePos;
 
-    _SwGCLineBorder( const SwTable& rTable )
+    SwGCLineBorder( const SwTable& rTable )
         : pLines( &rTable.GetTabLines() ), pShareFormats(nullptr), nLinePos( 0 )  {}
 
-    _SwGCLineBorder( const SwTableBox& rBox )
+    SwGCLineBorder( const SwTableBox& rBox )
         : pLines( &rBox.GetTabLines() ), pShareFormats(nullptr), nLinePos( 0 )  {}
     bool IsLastLine() const { return nLinePos + 1 >= (sal_uInt16)pLines->size(); }
 };
 
-class _SwGCBorder_BoxBrd
+class SwGCBorder_BoxBrd
 {
     const editeng::SvxBorderLine* pBrdLn;
     bool bAnyBorderFnd;
 public:
-    _SwGCBorder_BoxBrd() : pBrdLn( nullptr ), bAnyBorderFnd( false ) {}
+    SwGCBorder_BoxBrd() : pBrdLn( nullptr ), bAnyBorderFnd( false ) {}
 
     void SetBorder( const editeng::SvxBorderLine& rBorderLine )
         { pBrdLn = &rBorderLine; bAnyBorderFnd = false; }
@@ -152,7 +152,7 @@ public:
     bool IsAnyBorderFound() const { return bAnyBorderFnd; }
 };
 
-void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara );
+void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara );
 
 class SwShareBoxFormat
 {

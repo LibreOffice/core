@@ -57,7 +57,7 @@ public:
     virtual css::uno::Any SAL_CALL Addins( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL ListGalleries( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL CentimetersToPoints( float _Centimeters ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual float SAL_CALL CentimetersToPoints( float Centimeters ) throw (css::uno::RuntimeException, std::exception) override;
     // XMultiServiceFactory
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 

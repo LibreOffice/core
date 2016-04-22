@@ -1218,7 +1218,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             }
 
             SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), nullptr, aExpand, i, 1 );
-            Size aSize = aTmpFont._GetTextSize( aDrawInf );
+            Size aSize = aTmpFont.GetTextSize_( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
             aPos[ i ] = (sal_uInt16)aSize.Width();
             if( i == nTop ) // enter the second line

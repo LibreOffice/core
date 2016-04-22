@@ -28,7 +28,7 @@ struct SwCursorMoveState;
 
 class SwNoTextFrame: public SwContentFrame
 {
-    friend void _FrameFinit();
+    friend void FrameFinit();
 
     const Size& GetSize() const;
 

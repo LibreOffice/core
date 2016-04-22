@@ -32,8 +32,8 @@
 class SfxItemSet;
 class SwAttrSet;
 class SwDoCapitals;     // DoCapitals
-class SwDrawTextInfo;   // _DrawText
-class SwScriptInfo;     // _GetTextSize
+class SwDrawTextInfo;   // DrawText_
+class SwScriptInfo;     // GetTextSize_
 class SwViewShell;
 class IDocumentSettingAccess;
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
@@ -65,20 +65,20 @@ class SwSubFont : public SvxFont
 
     SwSubFont& operator=( const SwSubFont &rFont );
 
-    short _CheckKerning( );
+    short CheckKerning_( );
 
     bool ChgFnt( SwViewShell const *pSh, OutputDevice& rOut );
     bool IsSymbol( SwViewShell *pSh );
     sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut );
-    Size _GetTextSize( SwDrawTextInfo& rInf );
+    Size GetTextSize_( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
-    void _DrawText( SwDrawTextInfo &rInf, const bool bGrey );
+    void DrawText_( SwDrawTextInfo &rInf, const bool bGrey );
     void DrawCapital( SwDrawTextInfo &rInf );
     void DrawStretchCapital( SwDrawTextInfo &rInf );
     void DoOnCapitals( SwDoCapitals &rDo );
-    void _DrawStretchText( SwDrawTextInfo &rInf );
-    sal_Int32 _GetCursorOfst( SwDrawTextInfo& rInf );
+    void DrawStretchText_( SwDrawTextInfo &rInf );
+    sal_Int32 GetCursorOfst_( SwDrawTextInfo& rInf );
     sal_Int32 GetCapitalCursorOfst( SwDrawTextInfo& rInf );
 
     inline void SetColor( const Color& rColor );
@@ -109,7 +109,7 @@ class SwSubFont : public SvxFont
     inline void SetWeight( const FontWeight eWeight );
     inline void SetLanguage( LanguageType eNewLang );
     inline short CheckKerning()
-    {   return GetFixKerning() >= 0 ? GetFixKerning() : _CheckKerning( ); }
+    {   return GetFixKerning() >= 0 ? GetFixKerning() : CheckKerning_( ); }
     inline void SetPropWidth( const sal_uInt16 nNew )
         { m_pMagic = nullptr; m_nProportionalWidth = nNew; }
 public:
@@ -310,19 +310,19 @@ public:
     void DoOnCapitals( SwDoCapitals &rDo )
         { m_aSub[m_nActual].DoOnCapitals( rDo ); }
 
-    Size _GetTextSize( SwDrawTextInfo& rInf )
-        { rInf.SetFont( this ); return m_aSub[m_nActual]._GetTextSize( rInf ); }
+    Size GetTextSize_( SwDrawTextInfo& rInf )
+        { rInf.SetFont( this ); return m_aSub[m_nActual].GetTextSize_( rInf ); }
 
     sal_Int32 GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
-    sal_Int32 _GetCursorOfst( SwDrawTextInfo& rInf )
-        { return m_aSub[m_nActual]._GetCursorOfst( rInf ); }
+    sal_Int32 GetCursorOfst_( SwDrawTextInfo& rInf )
+        { return m_aSub[m_nActual].GetCursorOfst_( rInf ); }
 
-    inline void _DrawText( SwDrawTextInfo &rInf )
-        { m_aSub[m_nActual]._DrawText( rInf, IsGreyWave() ); }
+    inline void DrawText_( SwDrawTextInfo &rInf )
+        { m_aSub[m_nActual].DrawText_( rInf, IsGreyWave() ); }
 
-    inline void _DrawStretchText( SwDrawTextInfo &rInf )
-        { m_aSub[m_nActual]._DrawStretchText( rInf ); }
+    inline void DrawStretchText_( SwDrawTextInfo &rInf )
+        { m_aSub[m_nActual].DrawStretchText_( rInf ); }
 
     inline short CheckKerning()
         { return m_aSub[m_nActual].CheckKerning(); }

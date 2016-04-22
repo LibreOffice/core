@@ -181,7 +181,7 @@ class SwRubyPortion : public SwMultiPortion
 {
     sal_Int32 nRubyOffset;
     sal_uInt16 nAdjustment;
-    void _Adjust( SwTextFormatInfo &rInf);
+    void Adjust_( SwTextFormatInfo &rInf);
 public:
     SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd );
 
@@ -192,7 +192,7 @@ public:
 
     void CalcRubyOffset();
     inline void Adjust( SwTextFormatInfo &rInf )
-        { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
+        { if(nAdjustment && GetRoot().GetNext()) Adjust_(rInf); }
     inline sal_uInt16 GetAdjustment() const { return nAdjustment; }
     inline sal_Int32 GetRubyOffset() const { return nRubyOffset; }
 };

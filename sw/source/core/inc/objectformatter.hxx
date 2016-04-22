@@ -56,7 +56,7 @@ class SwObjectFormatter
         // #i26945#
         SwPageNumAndTypeOfAnchors* mpPgNumAndTypeOfAnchors;
 
-        /** helper method for method <_FormatObj(..)> - performs the intrinsic
+        /** helper method for method <FormatObj_(..)> - performs the intrinsic
             format of the layout of the given layout frame and all its lower
             layout frames.
 
@@ -66,14 +66,14 @@ class SwObjectFormatter
             <SwLayAction::FormatLayout(..)>. Thus, its code for the formatting have
             to be synchronised.
         */
-        void _FormatLayout( SwLayoutFrame& _rLayoutFrame );
+        void FormatLayout_( SwLayoutFrame& _rLayoutFrame );
 
-        /** helper method for method <_FormatObj(..)> - performs the intrinsic
+        /** helper method for method <FormatObj_(..)> - performs the intrinsic
             format of the content of the given floating screen object.
 
             #i28701#
         */
-        void _FormatObjContent( SwAnchoredObject& _rAnchoredObj );
+        void FormatObjContent( SwAnchoredObject& _rAnchoredObj );
 
     protected:
         SwObjectFormatter( const SwPageFrame& _rPageFrame,
@@ -108,7 +108,7 @@ class SwObjectFormatter
 
         /** performs the intrinsic format of a given floating screen object and its content.
         */
-        void _FormatObj( SwAnchoredObject& _rAnchoredObj );
+        void FormatObj_( SwAnchoredObject& _rAnchoredObj );
 
         /** invokes the intrinsic format method for all floating screen objects,
             anchored at anchor frame on the given page frame
@@ -121,7 +121,7 @@ class SwObjectFormatter
             @param _pMasterTextFrame
             input parameter - pointer to 'master' text frame. default value: NULL
         */
-        bool _FormatObjsAtFrame( SwTextFrame* _pMasterTextFrame = nullptr );
+        bool FormatObjsAtFrame_( SwTextFrame* _pMasterTextFrame = nullptr );
 
         /** accessor to collected anchored object
         */

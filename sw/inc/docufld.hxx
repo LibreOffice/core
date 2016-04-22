@@ -27,7 +27,7 @@
 #include "fldbas.hxx"
 #include "numrule.hxx"
 
-class _SetGetExpFields;
+class SetGetExpFields;
 class SwTextField;
 class SwFrame;
 class OutlinerParaObject;
@@ -596,14 +596,14 @@ class SwRefPageGetFieldType : public SwFieldType
     SwDoc*          pDoc;
     sal_Int16       nNumberingType;
 
-    void UpdateField( SwTextField* pTextField, _SetGetExpFields& rSetList );
+    void UpdateField( SwTextField* pTextField, SetGetExpFields& rSetList );
 protected:
     /// overwritten to update all RefPageGet fields
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const override;
-    bool MakeSetList( _SetGetExpFields& rTmpLst );
+    bool MakeSetList( SetGetExpFields& rTmpLst );
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 

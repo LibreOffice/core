@@ -536,7 +536,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
     return bRet;
 }
 
-const SdrMarkList* SwFEShell::_GetMarkList() const
+const SdrMarkList* SwFEShell::GetMarkList_() const
 {
     const SdrMarkList* pMarkList = nullptr;
     if( Imp()->GetDrawView() != nullptr )
@@ -549,7 +549,7 @@ FrameTypeFlags SwFEShell::GetSelFrameType() const
     FrameTypeFlags eType;
 
     // get marked frame list, and check if anything is selected
-    const SdrMarkList* pMarkList = _GetMarkList();
+    const SdrMarkList* pMarkList = GetMarkList_();
     if( pMarkList == nullptr  ||  pMarkList->GetMarkCount() == 0 )
         eType = FrameTypeFlags::NONE;
     else
@@ -583,7 +583,7 @@ bool SwFEShell::IsSelContainsControl() const
 
     // basically, copy the mechanism from GetSelFrameType(), but call
     // CheckControl... if you get a drawing object
-    const SdrMarkList* pMarkList = _GetMarkList();
+    const SdrMarkList* pMarkList = GetMarkList_();
     if( pMarkList != nullptr  &&  pMarkList->GetMarkCount() == 1 )
     {
         // if we have one marked object, get the SdrObject and check

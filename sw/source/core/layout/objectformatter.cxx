@@ -229,7 +229,7 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
     return bSuccess;
 }
 
-/** helper method for method <_FormatObj(..)> - performs the intrinsic format
+/** helper method for method <FormatObj_(..)> - performs the intrinsic format
     of the layout of the given layout frame and all its lower layout frames.
 
     #i28701#
@@ -238,7 +238,7 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
     <SwLayAction::FormatLayout(..)>. Thus, its code for the formatting have
     to be synchronised.
 */
-void SwObjectFormatter::_FormatLayout( SwLayoutFrame& _rLayoutFrame )
+void SwObjectFormatter::FormatLayout_( SwLayoutFrame& _rLayoutFrame )
 {
     _rLayoutFrame.Calc(_rLayoutFrame.getRootFrame()->GetCurrShell()->GetOut());
 
@@ -247,18 +247,18 @@ void SwObjectFormatter::_FormatLayout( SwLayoutFrame& _rLayoutFrame )
     {
         if ( pLowerFrame->IsLayoutFrame() )
         {
-            _FormatLayout( *(static_cast<SwLayoutFrame*>(pLowerFrame)) );
+            FormatLayout_( *(static_cast<SwLayoutFrame*>(pLowerFrame)) );
         }
         pLowerFrame = pLowerFrame->GetNext();
     }
 }
 
-/** helper method for method <_FormatObj(..)> - performs the intrinsic
+/** helper method for method <FormatObj_(..)> - performs the intrinsic
     format of the content of the given floating screen object.
 
     #i28701#
 */
-void SwObjectFormatter::_FormatObjContent( SwAnchoredObject& _rAnchoredObj )
+void SwObjectFormatter::FormatObjContent( SwAnchoredObject& _rAnchoredObj )
 {
     if ( dynamic_cast<const SwFlyFrame*>( &_rAnchoredObj) ==  nullptr )
     {
@@ -296,7 +296,7 @@ void SwObjectFormatter::_FormatObjContent( SwAnchoredObject& _rAnchoredObj )
 
     #i28701#
 */
-void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
+void SwObjectFormatter::FormatObj_( SwAnchoredObject& _rAnchoredObj )
 {
     // check, if only as-character anchored object have to be formatted, and
     // check the anchor type
@@ -338,7 +338,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             }
             else
             {
-                _FormatLayout( rFlyFrame );
+                FormatLayout_( rFlyFrame );
             }
             // --> #i34753# - prevent further positioning, if
             // to-page|to-fly anchored Writer fly frame is already clipped.
@@ -353,7 +353,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
                                                 mpLayAction );
             if ( mpLayAction )
             {
-                mpLayAction->_FormatFlyContent( &rFlyFrame );
+                mpLayAction->FormatFlyContent( &rFlyFrame );
                 // --> consider, if the layout action
                 // has to be restarted due to a delete of a page frame.
                 if ( mpLayAction->IsAgain() )
@@ -363,12 +363,12 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             }
             else
             {
-                _FormatObjContent( rFlyFrame );
+                FormatObjContent( rFlyFrame );
             }
 
             if ( ++nLoopControlRuns >= nLoopControlMax )
             {
-                OSL_FAIL( "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
+                OSL_FAIL( "LoopControl in SwObjectFormatter::FormatObj_: Stage 3!!!" );
                 rFlyFrame.ValidateThisAndAllLowers( 2 );
                 nLoopControlRuns = 0;
             }
@@ -394,7 +394,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
     Thus, the objects, whose anchor character is inside the follow text
     frame can be formatted.
 */
-bool SwObjectFormatter::_FormatObjsAtFrame( SwTextFrame* _pMasterTextFrame )
+bool SwObjectFormatter::FormatObjsAtFrame_( SwTextFrame* _pMasterTextFrame )
 {
     // --> #i26945#
     SwFrame* pAnchorFrame( nullptr );
@@ -444,7 +444,7 @@ bool SwObjectFormatter::_FormatObjsAtFrame( SwTextFrame* _pMasterTextFrame )
         // have to be checked.
         SwPageFrame* pPageFrameOfAnchor = pAnchoredObj->FindPageFrameOfAnchor();
         OSL_ENSURE( pPageFrameOfAnchor,
-                "<SwObjectFormatter::_FormatObjsAtFrame()> - missing page frame." );
+                "<SwObjectFormatter::FormatObjsAtFrame_()> - missing page frame." );
         // --> #i26945#
         if ( pPageFrameOfAnchor && pPageFrameOfAnchor == &mrPageFrame )
         {

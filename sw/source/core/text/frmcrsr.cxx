@@ -538,10 +538,10 @@ struct SwFillData
     void SetOrient( const sal_Int16 eNew ){ pCMS->m_pFill->eOrient = eNew; }
 };
 
-bool SwTextFrame::_GetCursorOfst(SwPosition* pPos, const Point& rPoint,
+bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
                     const bool bChgFrame, SwCursorMoveState* pCMS ) const
 {
-    // _GetCursorOfst is called by GetCursorOfst and GetKeyCursorOfst.
+    // GetCursorOfst_ is called by GetCursorOfst and GetKeyCursorOfst.
     // Never just a return false.
 
     if( IsLocked() || IsHiddenNow() )
@@ -658,7 +658,7 @@ bool SwTextFrame::GetCursorOfst(SwPosition* pPos, Point& rPoint,
                                SwCursorMoveState* pCMS, bool ) const
 {
     const bool bChgFrame = !(pCMS && MV_UPDOWN == pCMS->m_eState);
-    return _GetCursorOfst( pPos, rPoint, bChgFrame, pCMS );
+    return GetCursorOfst_( pPos, rPoint, bChgFrame, pCMS );
 }
 
 /*
@@ -749,7 +749,7 @@ public:
     inline void SetRight( const bool bNew ) { bRight = bNew; }
 };
 
-bool SwTextFrame::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
+bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
                         bool bSetInReadOnly ) const
 {
     // Set the RightMargin if needed
@@ -1138,7 +1138,7 @@ void SwTextFrame::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCursorLevel,
     ubidi_close( pBidi );
 }
 
-bool SwTextFrame::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
+bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                          bool bSetInReadOnly ) const
 {
 
@@ -1275,10 +1275,10 @@ bool SwTextFrame::UnitUp(SwPaM *pPam, const SwTwips nOffset,
      */
     const SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *(pPam->GetPoint()),
                                            SwTextCursor::IsRightMargin() );
-    const bool bRet = pFrame->_UnitUp( pPam, nOffset, bSetInReadOnly );
+    const bool bRet = pFrame->UnitUp_( pPam, nOffset, bSetInReadOnly );
 
     // No SwTextCursor::SetRightMargin( false );
-    // Instead we have a SwSetToRightMargin in _UnitUp
+    // Instead we have a SwSetToRightMargin in UnitUp_
     return bRet;
 }
 
@@ -1287,7 +1287,7 @@ bool SwTextFrame::UnitDown(SwPaM *pPam, const SwTwips nOffset,
 {
     const SwTextFrame *pFrame = GetAdjFrameAtPos(const_cast<SwTextFrame*>(this), *(pPam->GetPoint()),
                                            SwTextCursor::IsRightMargin() );
-    const bool bRet = pFrame->_UnitDown( pPam, nOffset, bSetInReadOnly );
+    const bool bRet = pFrame->UnitDown_( pPam, nOffset, bSetInReadOnly );
     SwTextCursor::SetRightMargin( false );
     return bRet;
 }
@@ -1467,7 +1467,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 {
                     const OUString aTmp("  ");
                     SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, aTmp, 0, 2 );
-                    nSpace = pFnt->_GetTextSize( aDrawInf ).Width()/2;
+                    nSpace = pFnt->GetTextSize_( aDrawInf ).Width()/2;
                 }
                 if( rFill.X() >= nRight )
                 {

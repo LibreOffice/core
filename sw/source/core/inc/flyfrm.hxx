@@ -64,12 +64,12 @@ class SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
     void InitDrawObj();     // these to methods are called in the
     void FinitDrawObj();    // constructors
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     using SwLayoutFrame::CalcRel;
 
-    sal_uInt32 _GetOrdNumForNewRef( const SwFlyDrawContact* );
+    sal_uInt32 GetOrdNumForNewRef( const SwFlyDrawContact* );
     SwVirtFlyDrawObj* CreateNewRef( SwFlyDrawContact* );
 
 protected:
@@ -141,8 +141,8 @@ protected:
     */
     virtual void RegisterAtCorrectPage() override;
 
-    virtual bool _SetObjTop( const SwTwips _nTop ) override;
-    virtual bool _SetObjLeft( const SwTwips _nLeft ) override;
+    virtual bool SetObjTop_( const SwTwips _nTop ) override;
+    virtual bool SetObjLeft_( const SwTwips _nLeft ) override;
 
     virtual const SwRect GetObjBoundRect() const override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
@@ -168,9 +168,9 @@ public:
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 #endif
 
-    SwTwips _Shrink( SwTwips, bool bTst );
-    SwTwips _Grow  ( SwTwips, bool bTst );
-    void    _Invalidate( SwPageFrame *pPage = nullptr );
+    SwTwips Shrink_( SwTwips, bool bTst );
+    SwTwips Grow_  ( SwTwips, bool bTst );
+    void    Invalidate_( SwPageFrame *pPage = nullptr );
 
     bool FrameSizeChg( const SwFormatFrameSize & );
 

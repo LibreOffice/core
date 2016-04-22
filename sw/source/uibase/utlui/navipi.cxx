@@ -242,13 +242,13 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         case FN_SELECT_CONTENT:
             if(m_pContextWin!=nullptr && m_pContextWin->GetFloatingWindow()!=nullptr)
             {
-                if(_IsZoomedIn() )
+                if(IsZoomedIn() )
                 {
-                    _ZoomOut();
+                    ZoomOut();
                 }
                 else
                 {
-                    _ZoomIn();
+                    ZoomIn();
                 }
             }
             return;
@@ -528,16 +528,16 @@ void SwNavigationPI::MakeMark()
 void SwNavigationPI::GotoPage()
 {
     if (m_pContextWin && m_pContextWin->GetFloatingWindow() && m_pContextWin->GetFloatingWindow()->IsRollUp())
-        _ZoomIn();
+        ZoomIn();
     if(IsGlobalMode())
         ToggleTree();
     UsePage();
     GetPageEdit().GrabFocus();
 }
 
-void SwNavigationPI::_ZoomOut()
+void SwNavigationPI::ZoomOut()
 {
-    if (_IsZoomedIn())
+    if (IsZoomedIn())
     {
         FloatingWindow* pFloat = m_pContextWin!=nullptr ? m_pContextWin->GetFloatingWindow() : nullptr;
         m_bIsZoomedIn = false;
@@ -566,13 +566,13 @@ void SwNavigationPI::_ZoomOut()
     }
 }
 
-void SwNavigationPI::_ZoomIn()
+void SwNavigationPI::ZoomIn()
 {
     if (m_pContextWin != nullptr)
     {
         FloatingWindow* pFloat = m_pContextWin->GetFloatingWindow();
         if (pFloat &&
-            (!_IsZoomedIn() || ( m_pContextWin->GetFloatingWindow()->IsRollUp())))
+            (!IsZoomedIn() || ( m_pContextWin->GetFloatingWindow()->IsRollUp())))
         {
             m_aContentTree->HideTree();
             m_aDocListBox->Hide();
@@ -599,7 +599,7 @@ void SwNavigationPI::_ZoomIn()
 void SwNavigationPI::Resize()
 {
     vcl::Window* pParent = GetParent();
-    if( !_IsZoomedIn() )
+    if( !IsZoomedIn() )
     {
         Size aNewSize (pParent->GetOutputSizePixel());
 
@@ -613,7 +613,7 @@ void SwNavigationPI::Resize()
             {
                 aNewSize = pFloat->GetOutputSizePixel();
                 aMinOutSizePixel.Width() = m_nWishWidth;
-                aMinOutSizePixel.Height() = _IsZoomedIn() ? m_nZoomIn : m_nZoomOutInit;
+                aMinOutSizePixel.Height() = IsZoomedIn() ? m_nZoomIn : m_nZoomOutInit;
             }
             else
             {
@@ -1224,8 +1224,8 @@ bool    SwNavigationPI::ToggleTree()
     if(!IsGlobalMode() && bGlobalDoc)
     {
         SetUpdateMode(false);
-        if(_IsZoomedIn())
-            _ZoomOut();
+        if(IsZoomedIn())
+            ZoomOut();
         m_aGlobalTree->ShowTree();
         m_aGlobalToolBox->Show();
         m_aContentTree->HideTree();
@@ -1238,7 +1238,7 @@ bool    SwNavigationPI::ToggleTree()
     {
         m_aGlobalTree->HideTree();
         m_aGlobalToolBox->Hide();
-        if(!_IsZoomedIn())
+        if(!IsZoomedIn())
         {
             m_aContentTree->ShowTree();
             m_aContentToolBox->Show();
@@ -1320,7 +1320,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
 
     if(GetFloatingWindow() && pNaviConfig->IsSmall())
     {
-        pNavi->_ZoomIn();
+        pNavi->ZoomIn();
     }
 }
 

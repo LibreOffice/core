@@ -82,7 +82,7 @@ namespace sw { namespace mark
     };
 }}
 
-void _DelBookmarks(const SwNodeIndex& rStt,
+void DelBookmarks(const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
     ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =nullptr,
     const SwIndex* pSttIdx =nullptr,
@@ -90,24 +90,24 @@ void _DelBookmarks(const SwNodeIndex& rStt,
 
 /** data structure to temporarily hold fly anchor positions relative to some
  *  location. */
-struct _SaveFly
+struct SaveFly
 {
     sal_uLong nNdDiff;      /// relative node difference
     SwFrameFormat* pFrameFormat;      /// the fly's frame format
     bool bInsertPosition;   /// if true, anchor _at_ insert position
 
-    _SaveFly( sal_uLong nNodeDiff, SwFrameFormat* pFormat, bool bInsert )
+    SaveFly( sal_uLong nNodeDiff, SwFrameFormat* pFormat, bool bInsert )
         : nNdDiff( nNodeDiff ), pFrameFormat( pFormat ), bInsertPosition( bInsert )
     { }
 };
 
-typedef ::std::deque< _SaveFly > _SaveFlyArr;
+typedef ::std::deque< SaveFly > SaveFlyArr;
 
-void _RestFlyInRange( _SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
+void RestFlyInRange( SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsPos );
-void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr );
-void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
-                       _SaveFlyArr& rArr, bool bMoveAllFlys );
+void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr );
+void SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
+                       SaveFlyArr& rArr, bool bMoveAllFlys );
 
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx );
@@ -145,16 +145,16 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
  * Helper to copy paragraph-bound Flys.
  * By sorting by order number, we try to retain the layout.
  */
-class _ZSortFly
+class ZSortFly
 {
     const SwFrameFormat* pFormat;
     const SwFormatAnchor* pAnchor;
     sal_uInt32 nOrdNum;
 
 public:
-    _ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAnchor,
+    ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAnchor,
                 sal_uInt32 nArrOrdNum );
-    _ZSortFly& operator=( const _ZSortFly& rCpy )
+    ZSortFly& operator=( const ZSortFly& rCpy )
     {
         pFormat = rCpy.pFormat;
         pAnchor = rCpy.pAnchor;
@@ -162,8 +162,8 @@ public:
         return *this;
     }
 
-    bool operator==( const _ZSortFly& ) const { return false; }
-    bool operator<( const _ZSortFly& rCmp ) const
+    bool operator==( const ZSortFly& ) const { return false; }
+    bool operator<( const ZSortFly& rCmp ) const
         { return nOrdNum < rCmp.nOrdNum; }
 
     const SwFrameFormat* GetFormat() const              { return pFormat; }
@@ -178,17 +178,17 @@ public:
     ~SwTableNumFormatMerge();
 };
 
-class _SaveRedlEndPosForRestore
+class SaveRedlEndPosForRestore
 {
     std::vector<SwPosition*>* pSavArr;
     SwNodeIndex* pSavIdx;
     sal_Int32 nSavContent;
 
-    void _Restore();
+    void Restore_();
 public:
-    _SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nContent );
-    ~_SaveRedlEndPosForRestore();
-    void Restore() { if( pSavArr ) _Restore(); }
+    SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nContent );
+    ~SaveRedlEndPosForRestore();
+    void Restore() { if( pSavArr ) Restore_(); }
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_MVSAVE_HXX

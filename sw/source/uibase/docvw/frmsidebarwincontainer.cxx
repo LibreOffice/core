@@ -73,12 +73,12 @@ namespace {
         }
     };
 
-    typedef ::std::map < FrameKey, SidebarWinContainer, FrameOrder > _FrameSidebarWinContainer;
+    typedef ::std::map < FrameKey, SidebarWinContainer, FrameOrder > FrameSidebarWinContainer_;
 }
 
 namespace sw { namespace sidebarwindows {
 
-class FrameSidebarWinContainer : public _FrameSidebarWinContainer
+class FrameSidebarWinContainer : public FrameSidebarWinContainer_
 {
 };
 

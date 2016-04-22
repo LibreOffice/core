@@ -40,7 +40,7 @@ class SwNode;
 struct SwPosition;
 
 // Update expression fields
-class _SetGetExpField
+class SetGetExpField
 {
     sal_uLong nNode;
     sal_Int32 nContent;
@@ -53,34 +53,34 @@ class _SetGetExpField
         const SwTextINetFormat* pTextINet;
         const SwFlyFrameFormat* pFlyFormat;
     } CNTNT;
-    enum _SetGetExpFieldType
+    enum SetGetExpFieldType
         {
             TEXTFIELD, TEXTTOXMARK, SECTIONNODE, CRSRPOS, TABLEBOX,
             TEXTINET, FLYFRAME
         } eSetGetExpFieldType;
 
 public:
-    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
+    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
                     const SwIndex* pIdx = nullptr );
 
-    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet,
+    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet,
                     const SwIndex* pIdx = nullptr );
 
-    _SetGetExpField( const SwSectionNode& rSectNode,
+    SetGetExpField( const SwSectionNode& rSectNode,
                     const SwPosition* pPos = nullptr  );
 
-    _SetGetExpField( const SwTableBox& rTableBox,
+    SetGetExpField( const SwTableBox& rTableBox,
                     const SwPosition* pPos = nullptr  );
 
-    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextTOXMark& rTOX,
+    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextTOXMark& rTOX,
                     const SwIndex* pIdx );
 
-    _SetGetExpField( const SwPosition& rPos );
+    SetGetExpField( const SwPosition& rPos );
 
-    _SetGetExpField( const SwFlyFrameFormat& rFlyFormat, const SwPosition* pPos = nullptr );
+    SetGetExpField( const SwFlyFrameFormat& rFlyFormat, const SwPosition* pPos = nullptr );
 
-    bool operator==( const _SetGetExpField& rField ) const;
-    bool operator<( const _SetGetExpField& rField ) const;
+    bool operator==( const SetGetExpField& rField ) const;
+    bool operator<( const SetGetExpField& rField ) const;
 
     const SwTextField* GetTextField() const
         { return TEXTFIELD == eSetGetExpFieldType ? CNTNT.pTextField : nullptr; }
@@ -103,17 +103,17 @@ public:
     void SetBodyPos( const SwContentFrame& rFrame );
 };
 
-class _SetGetExpFields : public o3tl::sorted_vector<_SetGetExpField*, o3tl::less_ptr_to<_SetGetExpField> >
+class SetGetExpFields : public o3tl::sorted_vector<SetGetExpField*, o3tl::less_ptr_to<SetGetExpField> >
 {
 public:
-    ~_SetGetExpFields() { DeleteAndDestroyAll(); }
+    ~SetGetExpFields() { DeleteAndDestroyAll(); }
 };
 
 // struct for saving strings from the SetExp's string fields
-struct _HashStr : public SwHash
+struct HashStr : public SwHash
 {
     OUString aSetStr;
-    _HashStr( const OUString& rName, const OUString& rText, _HashStr* = nullptr );
+    HashStr( const OUString& rName, const OUString& rText, HashStr* = nullptr );
 };
 
 struct SwCalcFieldType : public SwHash
@@ -134,7 +134,7 @@ const int GETFLD_EXPAND     = 2;
 
 class SwDocUpdateField
 {
-    _SetGetExpFields* pFieldSortLst;    // current field list for calculation
+    SetGetExpFields* pFieldSortLst;    // current field list for calculation
     SwCalcFieldType*  aFieldTypeTable[ TBLSZ ];
 
     sal_uLong nNodes;               // if the node count is different
@@ -144,7 +144,7 @@ class SwDocUpdateField
     bool bInUpdateFields : 1;     // currently there is an UpdateFields
     bool bFieldsDirty : 1;        // some fields are invalid
 
-    void _MakeFieldList( SwDoc& pDoc, int eGetMode );
+    void MakeFieldList_( SwDoc& pDoc, int eGetMode );
     void GetBodyNode( const SwTextField& , sal_uInt16 nFieldWhich );
     void GetBodyNode( const SwSectionNode&);
 
@@ -152,7 +152,7 @@ public:
     SwDocUpdateField(SwDoc* pDocument);
     ~SwDocUpdateField();
 
-    const _SetGetExpFields* GetSortLst() const { return pFieldSortLst; }
+    const SetGetExpFields* GetSortLst() const { return pFieldSortLst; }
 
     void MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode );
 

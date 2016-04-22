@@ -79,7 +79,7 @@ OUString SAL_CALL SwAccessiblePreview::getAccessibleName() throw (css::uno::Runt
     return sLclName;
 }
 
-void SwAccessiblePreview::_InvalidateFocus()
+void SwAccessiblePreview::InvalidateFocus_()
 {
     FireStateChangedEvent( css::accessibility::AccessibleStateType::FOCUSED, true );
 }

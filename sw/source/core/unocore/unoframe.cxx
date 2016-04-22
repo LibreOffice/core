@@ -1503,7 +1503,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     // is no contour, or if the contour has been set by the
                     // API itself (or in other words, if the contour isn't
                     // used already).
-                    if( !pNoText->_HasContour() ||
+                    if( !pNoText->HasContour_() ||
                         !pNoText->IsContourMapModeValid() )
                         pNoText->SetPixelContour( *static_cast<sal_Bool const *>(aValue.getValue()) );
                     else

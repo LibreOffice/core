@@ -203,7 +203,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
         pBodyFrame->InvalidatePos();
 
         if ( bBrowseMode )
-            _InvalidateSize();
+            InvalidateSize_();
 
         // insert header/footer,, but only if active.
         if ( pFormat->GetHeader().IsActive() )
@@ -502,7 +502,7 @@ void SwPageFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
         while( true )
         {
-            _UpdateAttr( aOIter.GetCurItem(),
+            UpdateAttr_( aOIter.GetCurItem(),
                          aNIter.GetCurItem(), nInvFlags,
                          &aOldSet, &aNewSet );
             if( aNIter.IsAtEnd() )
@@ -514,13 +514,13 @@ void SwPageFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             SwLayoutFrame::Modify( &aOldSet, &aNewSet );
     }
     else
-        _UpdateAttr( pOld, pNew, nInvFlags );
+        UpdateAttr_( pOld, pNew, nInvFlags );
 
     if ( nInvFlags != 0 )
     {
         InvalidatePage( this );
         if ( nInvFlags & 0x01 )
-            _InvalidatePrt();
+            InvalidatePrt_();
         if ( nInvFlags & 0x02 )
             SetCompletePaint();
         if ( nInvFlags & 0x04 && GetNext() )
@@ -552,7 +552,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         SwClient::SwClientNotify(rModify, rHint);
 }
 
-void SwPageFrame::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
+void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                              sal_uInt8 &rInvFlags,
                              SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
@@ -824,7 +824,7 @@ void SwPageFrame::Cut()
                     {
                         MoveFly( pFly, pAnchPage );
                         pFly->InvalidateSize();
-                        pFly->_InvalidatePos();
+                        pFly->InvalidatePos_();
                         // Do not increment index, in this case
                         continue;
                     }
@@ -884,7 +884,7 @@ void SwPageFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         while ( pPg )
         {
             pPg->IncrPhyPageNum();  //inline ++nPhyPageNum
-            pPg->_InvalidatePos();
+            pPg->InvalidatePos_();
             pPg->InvalidateLayout();
             pPg = static_cast<SwPageFrame*>(pPg->GetNext());
         }
@@ -893,7 +893,7 @@ void SwPageFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         ::SetLastPage( this );
 
     if( Frame().Width() != pParent->Prt().Width() )
-        _InvalidateSize();
+        InvalidateSize_();
 
     InvalidatePos();
 
@@ -1074,7 +1074,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                     // Let's hope that invalidation is enough.
                     SwFootnoteContFrame *pCont = pPage->FindFootnoteCont();
                     if ( pCont && !(pOld->GetFootnoteInfo() == pDesc->GetFootnoteInfo()) )
-                        pCont->_InvalidateAll();
+                        pCont->InvalidateAll_();
                 }
             }
             else if ( pFormatWish && pPage->GetFormat() != pFormatWish )         //5.
@@ -1514,7 +1514,7 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
 Size SwRootFrame::ChgSize( const Size& aNewSize )
 {
     Frame().SSize() = aNewSize;
-    _InvalidatePrt();
+    InvalidatePrt_();
     mbFixSize = false;
     return Frame().SSize();
 }
@@ -2201,7 +2201,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
     maPagesArea.Pos( Frame().Pos() );
     maPagesArea.SSize( aNewSize );
     if ( TWIPS_MAX != nMinPageLeft )
-        maPagesArea._Left( nMinPageLeft );
+        maPagesArea.Left_( nMinPageLeft );
 
     SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }

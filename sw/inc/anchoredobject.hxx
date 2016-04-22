@@ -104,7 +104,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // This boolean is used, if compatibility option 'Consider wrapping style
         // influence on object positioning' is OFF and a positioning loop is
         // detected in method <SwFlyAtContentFrame::MakeAll()> or method
-        // <SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()>.
+        // <SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()>.
         // The boolean is reset to <false>, when the layout process for a
         // page frame starts.
         bool mbTmpConsiderWrapInfluence;
@@ -142,7 +142,7 @@ class SW_DLLPUBLIC SwAnchoredObject
             input parameter - reference to the text frame containing the anchor
             character.
         */
-        void _CheckCharRect( const SwFormatAnchor& _rAnch,
+        void CheckCharRect( const SwFormatAnchor& _rAnch,
                              const SwTextFrame& _rAnchorCharFrame );
 
         /** check top of line
@@ -161,7 +161,7 @@ class SW_DLLPUBLIC SwAnchoredObject
             input parameter - reference to the text frame containing the anchor
             character.
         */
-        void _CheckTopOfLine( const SwFormatAnchor& _rAnch,
+        void CheckTopOfLine( const SwFormatAnchor& _rAnch,
                               const SwTextFrame& _rAnchorCharFrame );
 
         // method <sw_HideObj(..)> sets needed data structure values for the
@@ -202,8 +202,8 @@ class SW_DLLPUBLIC SwAnchoredObject
         */
         void SetTmpConsiderWrapInfluenceOfOtherObjs();
 
-        virtual bool _SetObjTop( const SwTwips _nTop) = 0;
-        virtual bool _SetObjLeft( const SwTwips _nLeft) = 0;
+        virtual bool SetObjTop_( const SwTwips _nTop) = 0;
+        virtual bool SetObjLeft_( const SwTwips _nLeft) = 0;
 
         virtual const SwRect GetObjBoundRect() const = 0;
     public:

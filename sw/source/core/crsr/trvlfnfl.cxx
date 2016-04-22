@@ -79,12 +79,12 @@ bool SwCursorShell::GotoFootnoteText()
     bool bRet = CallCursorFN( &SwCursor::GotoFootnoteText );
     if( !bRet )
     {
-        SwTextNode* pTextNd = _GetCursor() ?
-                   _GetCursor()->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
+        SwTextNode* pTextNd = GetCursor_() ?
+                   GetCursor_()->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
         if( pTextNd )
         {
-            const SwFrame *pFrame = pTextNd->getLayoutFrame( GetLayout(), &_GetCursor()->GetSttPos(),
-                                                 _GetCursor()->Start() );
+            const SwFrame *pFrame = pTextNd->getLayoutFrame( GetLayout(), &GetCursor_()->GetSttPos(),
+                                                 GetCursor_()->Start() );
             const SwFootnoteBossFrame* pFootnoteBoss;
             bool bSkip = pFrame && pFrame->IsInFootnote();
             while( pFrame && nullptr != ( pFootnoteBoss = pFrame->FindFootnoteBossFrame() ) )
@@ -100,8 +100,8 @@ bool SwCursorShell::GotoFootnoteText()
                         if( pCnt )
                         {
                             const SwContentNode* pNode = pCnt->GetNode();
-                            _GetCursor()->GetPoint()->nNode = *pNode;
-                            _GetCursor()->GetPoint()->nContent.Assign(
+                            GetCursor_()->GetPoint()->nNode = *pNode;
+                            GetCursor_()->GetPoint()->nContent.Assign(
                                 const_cast<SwContentNode*>(pNode),
                                 static_cast<const SwTextFrame*>(pCnt)->GetOfst() );
                             UpdateCursor( SwCursorShell::SCROLLWIN |

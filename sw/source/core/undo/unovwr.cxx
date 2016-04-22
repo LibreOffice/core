@@ -323,7 +323,7 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
     return aResult;
 }
 
-struct _UndoTransliterate_Data
+struct UndoTransliterate_Data
 {
     OUString        sText;
     SwHistory*      pHistory;
@@ -331,11 +331,11 @@ struct _UndoTransliterate_Data
     sal_uLong           nNdIdx;
     sal_Int32      nStart, nLen;
 
-    _UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
+    UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
         : sText( rText ), pHistory( nullptr ), pOffsets( nullptr ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
-    ~_UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
+    ~UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
 
     void SetChangeAtNode( SwDoc& rDoc );
 };
@@ -389,7 +389,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
                     uno::Sequence <sal_Int32>& rOffsets )
 {
     long nOffsLen = rOffsets.getLength();
-    _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
+    UndoTransliterate_Data* pNew = new UndoTransliterate_Data(
                         rTNd.GetIndex(), nStart, (sal_Int32)nOffsLen,
                         rTNd.GetText().copy(nStart, nLen));
 
@@ -430,7 +430,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
         // but this data must moved every time to the last in the chain!
         for (size_t i = 0; i + 1 < aChanges.size(); ++i)    // check all changes but not the current one
         {
-            _UndoTransliterate_Data* pD = aChanges[i];
+            UndoTransliterate_Data* pD = aChanges[i];
             if( pD->nNdIdx == pNew->nNdIdx && pD->pHistory )
             {
                 // same node and have a history?
@@ -451,7 +451,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
     }
 }
 
-void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
+void UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
 {
     SwTextNode* pTNd = rDoc.GetNodes()[ nNdIdx ]->GetTextNode();
     if( pTNd )

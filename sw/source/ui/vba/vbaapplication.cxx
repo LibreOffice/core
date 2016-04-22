@@ -149,9 +149,9 @@ void SAL_CALL SwVbaApplication::setEnableCancelKey( sal_Int32/* _enableCancelKey
     // seems not supported in Writer
 }
 
-float SAL_CALL SwVbaApplication::CentimetersToPoints( float _Centimeters ) throw (uno::RuntimeException, std::exception)
+float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters ) throw (uno::RuntimeException, std::exception)
 {
-    return VbaApplicationBase::CentimetersToPoints( _Centimeters );
+    return VbaApplicationBase::CentimetersToPoints( Centimeters );
 }
 
 uno::Reference< frame::XModel >

@@ -117,7 +117,7 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
     {
         const SwNumFormat* pFormat = rCopy.GetNumFormat( n );
         if( pFormat )
-            aFormats[ n ] = new _SwNumFormatGlobal( *pFormat );
+            aFormats[ n ] = new SwNumFormatGlobal( *pFormat );
         else
             aFormats[ n ] = nullptr;
     }
@@ -149,9 +149,9 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
         {
             delete aFormats[ n ];
 
-            _SwNumFormatGlobal* pFormat = rCopy.aFormats[ n ];
+            SwNumFormatGlobal* pFormat = rCopy.aFormats[ n ];
             if( pFormat )
-                aFormats[ n ] = new _SwNumFormatGlobal( *pFormat );
+                aFormats[ n ] = new SwNumFormatGlobal( *pFormat );
             else
                 aFormats[ n ] = nullptr;
         }
@@ -166,7 +166,7 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
     rChg.SetAutoRule( false );
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
-        _SwNumFormatGlobal* pFormat = aFormats[ n ];
+        SwNumFormatGlobal* pFormat = aFormats[ n ];
         if( nullptr != pFormat)
         {
             SwNumFormat aNew;
@@ -187,13 +187,13 @@ void SwNumRulesWithName::SetNumFormat(
         size_t const nIndex, SwNumFormat const& rNumFormat, OUString const& rName)
 {
     delete aFormats[nIndex];
-    aFormats[nIndex] = new _SwNumFormatGlobal(rNumFormat);
+    aFormats[nIndex] = new SwNumFormatGlobal(rNumFormat);
     aFormats[nIndex]->sCharFormatName = rName;
     aFormats[nIndex]->nCharPoolId = USHRT_MAX;
     aFormats[nIndex]->m_Items.clear();
 }
 
-SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const SwNumFormat& rFormat )
+SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFormat )
     : aFormat( rFormat ), nCharPoolId( USHRT_MAX )
 {
     // relative gaps?????
@@ -220,7 +220,7 @@ SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const SwNumFormat& r
     }
 }
 
-SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const _SwNumFormatGlobal& rFormat )
+SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormatGlobal& rFormat )
     :
     aFormat( rFormat.aFormat ),
     sCharFormatName( rFormat.sCharFormatName ),
@@ -232,11 +232,11 @@ SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const _SwNumFormatGl
     }
 }
 
-SwNumRulesWithName::_SwNumFormatGlobal::~_SwNumFormatGlobal()
+SwNumRulesWithName::SwNumFormatGlobal::~SwNumFormatGlobal()
 {
 }
 
-void SwNumRulesWithName::_SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
+void SwNumRulesWithName::SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
                             SwNumFormat& rNew ) const
 {
     SwCharFormat* pFormat = nullptr;

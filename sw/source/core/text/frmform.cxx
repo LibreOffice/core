@@ -112,13 +112,13 @@ void SwTextFrame::ValidateFrame()
 // After a RemoveFootnote the BodyFrame and all Frames contained within it, need to be
 // recalculated, so that the DeadLine is right.
 // First we search outwards, on the way back we calculate everything.
-void _ValidateBodyFrame( SwFrame *pFrame )
+void ValidateBodyFrame_( SwFrame *pFrame )
 {
     vcl::RenderContext* pRenderContext = pFrame ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
     if( pFrame && !pFrame->IsCellFrame() )
     {
         if( !pFrame->IsBodyFrame() && pFrame->GetUpper() )
-            _ValidateBodyFrame( pFrame->GetUpper() );
+            ValidateBodyFrame_( pFrame->GetUpper() );
         if( !pFrame->IsSctFrame() )
             pFrame->Calc(pRenderContext);
         else
@@ -139,14 +139,14 @@ void SwTextFrame::ValidateBodyFrame()
      // See comment in ValidateFrame()
     if ( !IsInFly() && !IsInTab() &&
          !( IsInSct() && FindSctFrame()->Lower()->IsColumnFrame() ) )
-        _ValidateBodyFrame( GetUpper() );
+        ValidateBodyFrame_( GetUpper() );
 }
 
-bool SwTextFrame::_GetDropRect( SwRect &rRect ) const
+bool SwTextFrame::GetDropRect_( SwRect &rRect ) const
 {
     SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
 
-    OSL_ENSURE( HasPara(), "SwTextFrame::_GetDropRect: try again next year." );
+    OSL_ENSURE( HasPara(), "SwTextFrame::GetDropRect_: try again next year." );
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(this) );
     SwTextMargin aLine( const_cast<SwTextFrame*>(this), &aInf );
     if( aLine.GetDropLines() )
@@ -213,7 +213,7 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
             bOldInvaContent  = pPage->IsInvalidContent();
         }
 
-        pMyFollow->_SetOfst( nTextOfst );
+        pMyFollow->SetOfst_( nTextOfst );
         pMyFollow->SetFieldFollow( bFollowField );
         if( HasFootnote() || pMyFollow->HasFootnote() )
         {
@@ -532,7 +532,7 @@ css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips C
 // nOffset holds the Offset in the text string, from which the Master closes
 // and the Follow starts.
 // If it's 0, the FollowFrame is deleted.
-void SwTextFrame::_AdjustFollow( SwTextFormatter &rLine,
+void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
                              const sal_Int32 nOffset, const sal_Int32 nEnd,
                              const sal_uInt8 nMode )
 {
@@ -737,7 +737,7 @@ void SwTextFrame::SplitFrame( const sal_Int32 nTextPos )
     pNew->ManipOfst( nTextPos );
 }
 
-void SwTextFrame::_SetOfst( const sal_Int32 nNewOfst )
+void SwTextFrame::SetOfst_( const sal_Int32 nNewOfst )
 {
     // We do not need to invalidate out Follow.
     // We are a Follow, get formatted right away and call
@@ -1103,7 +1103,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     AdjustFrame( nChg, bHasToFit );
 
     if( HasFollow() || IsInFootnote() )
-        _AdjustFollow( rLine, nEnd, nStrLen, nNew );
+        AdjustFollow_( rLine, nEnd, nStrLen, nNew );
 
     pPara->SetPrepMustFit( false );
 }
@@ -1246,10 +1246,10 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     return 0 != pPara->GetDelta();
 }
 
-void SwTextFrame::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
+void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                         const bool bAdjust )
 {
-    OSL_ENSURE( ! IsVertical() || IsSwapped(),"SwTextFrame::_Format with unswapped frame" );
+    OSL_ENSURE( ! IsVertical() || IsSwapped(),"SwTextFrame::Format_ with unswapped frame" );
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     rLine.SetUnclipped( false );
@@ -1556,7 +1556,7 @@ void SwTextFrame::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
             rLine.Bottom();
             SwTwips nNewBottom = rLine.Y();
             if( nNewBottom < nOldBottom )
-                _SetOfst( 0 );
+                SetOfst_( 0 );
         }
     }
 }
@@ -1585,7 +1585,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
             rLine.SetOnceMore( false );
         SwCharRange aRange( 0, rInf.GetText().getLength() );
         pPara->GetReformat() = aRange;
-        _Format( rLine, rInf );
+        Format_( rLine, rInf );
 
         bGoOn = rLine.IsOnceMore();
         if( bGoOn )
@@ -1615,7 +1615,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
                 rLine.CalcDropHeight( 1 );
                 SwCharRange aTmpRange( 0, rInf.GetText().getLength() );
                 pPara->GetReformat() = aTmpRange;
-                _Format( rLine, rInf, true );
+                Format_( rLine, rInf, true );
                 // We paint everything ...
                 SetCompletePaint();
             }
@@ -1623,7 +1623,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
     }
 }
 
-void SwTextFrame::_Format( vcl::RenderContext* pRenderContext, SwParaPortion *pPara )
+void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pPara )
 {
     const bool bIsEmpty = GetText().isEmpty();
 
@@ -1645,7 +1645,7 @@ void SwTextFrame::_Format( vcl::RenderContext* pRenderContext, SwParaPortion *pP
         pPara->SetPrepMustFit( bMustFit );
     }
 
-    OSL_ENSURE( ! IsSwapped(), "A frame is swapped before _Format" );
+    OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Format_" );
 
     if ( IsVertical() )
         SwapWidthAndHeight();
@@ -1655,7 +1655,7 @@ void SwTextFrame::_Format( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 
     HideAndShowObjects();
 
-    _Format( aLine, aInf );
+    Format_( aLine, aInf );
 
     if( aLine.IsOnceMore() )
         FormatOnceMore( aLine, aInf );
@@ -1663,7 +1663,7 @@ void SwTextFrame::_Format( vcl::RenderContext* pRenderContext, SwParaPortion *pP
     if ( IsVertical() )
         SwapWidthAndHeight();
 
-    OSL_ENSURE( ! IsSwapped(), "A frame is swapped after _Format" );
+    OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Format_" );
 
     if( 1 < aLine.GetDropLines() )
     {
@@ -1790,7 +1790,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         {
             // bSetOfst here means that we have the "red arrow situation"
             if ( bSetOfst )
-                _SetOfst( 0 );
+                SetOfst_( 0 );
 
             const bool bOrphan = IsWidow();
             const SwFootnoteBossFrame* pFootnoteBoss = HasFootnote() ? FindFootnoteBossFrame() : nullptr;
@@ -1802,7 +1802,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             }
             do
             {
-                _Format( pRenderContext, aAccess.GetPara() );
+                Format_( pRenderContext, aAccess.GetPara() );
                 if( pFootnoteBoss && nFootnoteHeight )
                 {
                     const SwFootnoteContFrame* pCont = pFootnoteBoss->FindFootnoteCont();
@@ -1844,7 +1844,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
            pPara->SetPrepMustFit( false );
 
     CalcBaseOfstForFly();
-    _CalcHeightOfLastLine(); // i#11860 - Adjust spacing implementation for
+    CalcHeightOfLastLine(); // i#11860 - Adjust spacing implementation for
                              // object positioning - Compatibility to MS Word
 }
 
@@ -1919,7 +1919,7 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
     {
         // Attention: This situation can occur due to FormatLevel==12. Don't panic!
         const sal_Int32 nStrt = GetOfst();
-        _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
+        InvalidateRange_( SwCharRange( nStrt, nEnd - nStrt) );
         return false;
     }
 

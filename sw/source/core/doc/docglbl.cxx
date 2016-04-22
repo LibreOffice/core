@@ -302,7 +302,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                     SwNodeRange aRg( *pStartNd, 0, aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
-                    GetNodes()._Copy( aRg, aTmpIdx, false );
+                    GetNodes().Copy_( aRg, aTmpIdx, false );
 
                     // Delete the initial TextNode
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -437,7 +437,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             {
                                 SwNodeRange aRg( *pStartNd, *pSectEnd );
                                 SwNodeIndex aIdx( *pSectEnd, 1 );
-                                GetNodes()._MoveNodes( aRg, GetNodes(), aIdx );
+                                GetNodes().MoveNodes( aRg, GetNodes(), aIdx );
                             }
                             pSectNd = pStartNd->FindSectionNode();
                         }
@@ -452,7 +452,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             {
                                 SwNodeRange aRg( *pSectNd, 1, aEndIdx, 1 );
                                 SwNodeIndex aIdx( *pSectNd );
-                                GetNodes()._MoveNodes( aRg, GetNodes(), aIdx );
+                                GetNodes().MoveNodes( aRg, GetNodes(), aIdx );
                             }
 
                             pSectNd = pStartNd->FindSectionNode();

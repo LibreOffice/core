@@ -151,7 +151,7 @@ public:
     void SetOrtho( bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
     /// For the reader
-    void _SetOrtho( bool bNew ) { m_bOrtho = bNew; }
+    void SetOrtho_( bool bNew ) { m_bOrtho = bNew; }
 
     /** Calculates current width of column nCol.
      The ratio of desired width of this column to return value is

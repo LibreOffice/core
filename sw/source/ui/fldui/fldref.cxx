@@ -897,7 +897,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         else if (REFFLDFLAG_FOOTNOTE == nTypeId)        // footnotes
         {
             SwSeqFieldList aArr;
-            _SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
+            SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
 
             size_t nPos = 0;
 
@@ -918,7 +918,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         else if (REFFLDFLAG_ENDNOTE == nTypeId)         // endnotes
         {
             SwSeqFieldList aArr;
-            _SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
+            SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
 
             size_t nPos = 0;
 
@@ -987,7 +987,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
             if( pType )
             {
                 SwSeqFieldList aArr;
-                _SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
+                SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
 
                 size_t nPos = 0;
 

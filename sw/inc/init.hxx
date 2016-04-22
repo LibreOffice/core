@@ -26,8 +26,8 @@
 
 class SwViewShell;
 
-void _InitCore();   // bastyp/init.cxx
-void _FinitCore();
+void InitCore();   // bastyp/init.cxx
+void FinitCore();
 
 namespace sw {
 
@@ -53,13 +53,13 @@ private:
 }
 
 // layout/newfrm.cxx
-void _FrameInit();
-void _FrameFinit();
+void FrameInit();
+void FrameFinit();
 void SetShell( SwViewShell *pSh );
 
 // text/txtfrm.cxx
-void _TextInit();
-void _TextFinit();
+void TextInit_();
+void TextFinit();
 
 #endif
 

@@ -256,7 +256,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -352,7 +352,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         AddParSpace();
 
     // den aktuellen Kontext vom Stack holen
-    _HTMLAttrContext *pCntxt = nToken!=0 ? PopContext( static_cast< sal_uInt16 >(nToken & ~1) ) : nullptr;
+    HTMLAttrContext *pCntxt = nToken!=0 ? PopContext( static_cast< sal_uInt16 >(nToken & ~1) ) : nullptr;
 
     // Keine Liste aufgrund eines Tokens beenden, wenn der Kontext
     // nie angelgt wurde oder nicht beendet werden darf.
@@ -471,7 +471,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
     const bool bCountedInList = nToken != HTML_LISTHEADER_ON;
 
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     OUString aNumRuleName;
     if( GetNumInfo().GetNumRule() )
@@ -558,7 +558,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, bool bSetColl,
         AppendTextNode( AM_NOSPACE );
 
     // Kontext zu dem Token suchen und vom Stack holen
-    _HTMLAttrContext *pCntxt = nullptr;
+    HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     nToken &= ~1;
     while( !pCntxt && nPos>m_nContextStMin )

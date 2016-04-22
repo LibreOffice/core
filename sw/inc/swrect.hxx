@@ -76,7 +76,7 @@ public:
            SwRect &Intersection( const SwRect& rRect );
 
    // Same as Intersection, only assume that Rects are overlapping!
-           SwRect &_Intersection( const SwRect &rRect );
+           SwRect &Intersection_( const SwRect &rRect );
 
            bool IsInside( const Point& rPOINT ) const;
            bool IsNear(const Point& rPoint, long nTolerance ) const;
@@ -101,18 +101,18 @@ public:
     friend SvStream& WriteSwRect( SvStream &rStream, const SwRect &rRect );
 
 
-    void _Top(      const long nTop );
-    void _Bottom(   const long nBottom );
-    void _Left(     const long nLeft );
-    void _Right(    const long nRight );
-    void _Width(    const long nNew );
-    void _Height(   const long nNew );
-    long _Top()     const;
-    long _Bottom()  const;
-    long _Left()    const;
-    long _Right()   const;
-    long _Width()   const;
-    long _Height()  const;
+    void Top_(      const long nTop );
+    void Bottom_(   const long nBottom );
+    void Left_(     const long nLeft );
+    void Rigth_(    const long nRight );
+    void Width_(    const long nNew );
+    void Height_(   const long nNew );
+    long Top_()     const;
+    long Bottom_()  const;
+    long Left_()    const;
+    long Rigth_()   const;
+    long Width_()   const;
+    long Height_()  const;
     void SubTop(    const long nSub );
     void AddBottom( const long nAdd );
     void SubLeft(   const long nSub );

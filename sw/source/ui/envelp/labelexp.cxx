@@ -175,7 +175,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     uno::Reference< text::XTextFieldsSupplier >  xFields(xModel, uno::UNO_QUERY);
     uno::Reference< container::XNameAccess >  xFieldMasters = xFields->getTextFieldMasters();
 
-    static const struct _SwLabItemMap {
+    static const struct SwLabItemMap {
         const char* pName;
         OUString SwLabItem:: *pValue;
     }  aArr[] = {
@@ -216,7 +216,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
 
     try
     {
-        for( const _SwLabItemMap* p = aArr; p->pName; ++p )
+        for( const SwLabItemMap* p = aArr; p->pName; ++p )
         {
             OUString uFieldName(
                 "com.sun.star.text.FieldMaster.User."

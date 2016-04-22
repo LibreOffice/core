@@ -1289,7 +1289,7 @@ SwRegHistory::SwRegHistory( SwHistory* pHst )
     , m_pHistory( pHst )
     , m_nNodeIndex( ULONG_MAX )
 {
-    _MakeSetWhichIds();
+    MakeSetWhichIds();
 }
 
 SwRegHistory::SwRegHistory( SwModify* pRegIn, const SwNode& rNd,
@@ -1298,7 +1298,7 @@ SwRegHistory::SwRegHistory( SwModify* pRegIn, const SwNode& rNd,
     , m_pHistory( pHst )
     , m_nNodeIndex( rNd.GetIndex() )
 {
-    _MakeSetWhichIds();
+    MakeSetWhichIds();
 }
 
 SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
@@ -1306,7 +1306,7 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
     , m_pHistory( pHst )
     , m_nNodeIndex( rNd.GetIndex() )
 {
-    _MakeSetWhichIds();
+    MakeSetWhichIds();
 }
 
 void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
@@ -1410,7 +1410,7 @@ void SwRegHistory::RegisterInModify( SwModify* pRegIn, const SwNode& rNd )
     {
         pRegIn->Add( this );
         m_nNodeIndex = rNd.GetIndex();
-        _MakeSetWhichIds();
+        MakeSetWhichIds();
     }
     else
     {
@@ -1418,7 +1418,7 @@ void SwRegHistory::RegisterInModify( SwModify* pRegIn, const SwNode& rNd )
     }
 }
 
-void SwRegHistory::_MakeSetWhichIds()
+void SwRegHistory::MakeSetWhichIds()
 {
     if (!m_pHistory) return;
 

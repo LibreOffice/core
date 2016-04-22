@@ -266,8 +266,8 @@ public:
     static inline long GetDDStartPosX() { return m_nDDStartPosX; }
     static inline long GetDDStartPosY() { return m_nDDStartPosY; }
 
-    static void _InitStaticData();
-    static void _FinitStaticData();
+    static void InitStaticData();
+    static void FinitStaticData();
 
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     void StopQuickHelp();

@@ -85,7 +85,7 @@ private:
     SwTextNode * mpTextNode;
     SwNumRule * mpNumRule;
 
-    static void _UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
+    static void UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
 
     SwNodeNum( const SwNodeNum& ) = delete;
     SwNodeNum& operator=( const SwNodeNum& ) = delete;

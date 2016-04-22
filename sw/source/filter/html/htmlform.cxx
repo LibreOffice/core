@@ -2090,7 +2090,7 @@ void SwHTMLParser::NewTextArea()
         SetControlSize( xShape, aTextSz, false, false );
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_TEXTAREA_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_TEXTAREA_ON );
 
     // und PRE/Listing/XMP voruebergehend aussetzen
     SplitPREListingXMP( pCntxt );
@@ -2117,7 +2117,7 @@ void SwHTMLParser::EndTextArea()
     m_pFormImpl->ReleaseFCompPropSet();
 
     // den Kontext holen
-    _HTMLAttrContext *pCntxt = PopContext( HTML_TEXTAREA_ON );
+    HTMLAttrContext *pCntxt = PopContext( HTML_TEXTAREA_ON );
     if( pCntxt )
     {
         // und ggf. die Attribute beenden
@@ -2363,7 +2363,7 @@ void SwHTMLParser::NewSelect()
         SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_SELECT_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_SELECT_ON );
 
     // und PRE/Listing/XMP voruebergehend aussetzen
     SplitPREListingXMP( pCntxt );
@@ -2447,7 +2447,7 @@ void SwHTMLParser::EndSelect()
     m_pFormImpl->ReleaseFCompPropSet();
 
     // den Kontext holen
-    _HTMLAttrContext *pCntxt = PopContext( HTML_SELECT_ON );
+    HTMLAttrContext *pCntxt = PopContext( HTML_SELECT_ON );
     if( pCntxt )
     {
         // und ggf. die Attribute beenden
