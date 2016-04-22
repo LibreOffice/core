@@ -13,7 +13,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <osl/thread.h>
-#include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -27,15 +27,23 @@ class LOKInteractionHandler;
 
 namespace desktop {
 
-    class CallbackFlushHandler : public Idle
+    class CallbackFlushHandler : public Timer
     {
     public:
         explicit CallbackFlushHandler(LibreOfficeKitCallback pCallback, void* pData)
-            : Idle( "lokit idle callback" ),
+            : Timer( "lokit timer callback" ),
               m_pCallback(pCallback),
               m_pData(pData)
         {
-            SetPriority(SchedulerPriority::POST_PAINT);
+            SetTimeout(25);
+
+            // Add the states that is safe to skip duplicates on,
+            // even when not consequent.
+            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_START, "");
+            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_END, "");
+            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "");
+            m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "");
+            m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "");
         }
 
         virtual ~CallbackFlushHandler()
@@ -62,27 +70,34 @@ namespace desktop {
             }
         }
 
-        void queue(const int type, const char* payload)
+        void queue(const int type, const char* data)
         {
+            const std::string payload(data ? data : "(nil)");
             std::unique_lock<std::mutex> lock(m_mutex);
 
-            // TODO: Add more state tracking and prune superfluous notifications.
-            if (type == LOK_CALLBACK_INVALIDATE_TILES || type == LOK_CALLBACK_TEXT_SELECTION)
+            const auto stateIt = m_states.find(type);
+            if (stateIt != m_states.end())
             {
-                if (m_queue.empty() || std::get<0>(m_queue.back()) != type)
+                // If the state didn't change, it's safe to ignore.
+                if (stateIt->second == payload)
                 {
-                    m_queue.emplace_back(type, std::string(payload ? payload : "(nil)"));
-
-                    if (!IsActive())
-                    {
-                        Start();
-                    }
+                    return;
                 }
+
+                stateIt->second = payload;
             }
-            else
+
+            if (type == LOK_CALLBACK_INVALIDATE_TILES &&
+                !m_queue.empty() && std::get<0>(m_queue.back()) == type && std::get<1>(m_queue.back()) == payload)
             {
-                m_queue.emplace_back(type, std::string(payload ? payload : "(nil)"));
-                flush();
+                // Supress duplicate invalidation only when they are in sequence.
+                return;
+            }
+
+            m_queue.emplace_back(type, payload);
+            if (!IsActive())
+            {
+                Start();
             }
         }
 
@@ -102,6 +117,7 @@ namespace desktop {
 
     private:
         std::vector<std::tuple<int, std::string>> m_queue;
+        std::map<int, std::string> m_states;
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
         std::mutex m_mutex;
