@@ -416,6 +416,8 @@ public:
 
     void SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak );
 
+    void SetProtectForm( bool _bProtectForm );
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
