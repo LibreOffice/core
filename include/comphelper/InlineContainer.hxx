@@ -19,39 +19,11 @@
 #ifndef INCLUDED_COMPHELPER_INLINECONTAINER_HXX
 #define INCLUDED_COMPHELPER_INLINECONTAINER_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <map>
 #include <set>
 
 namespace comphelper
 {
-
-/** Creates a UNO-Sequence which contains an arbitrary number of elements.
-    Notice, that every call of the operator() issues a realloc, so this is not
-    suitable to create very large sequences.
-
-    usage:
-
-    uno::Sequence< t >( MakeSequence< t >( t_1 )( t_2 )...( t_n ) );
- */
-template < typename T >
-class MakeSequence : public css::uno::Sequence< T >
-{
-public:
-    explicit MakeSequence(const T &a)
-        : css::uno::Sequence< T >( 1 )
-    {
-        this->operator[](0) = a;
-    }
-    MakeSequence& operator()(const T &a)
-    {
-        this->realloc( this->getLength() + 1 );
-        this->operator[]( this->getLength() - 1 ) = a;
-        return *this;
-    }
-};
-
 
 /** Creates a set which contains an arbitrary number of elements.
 
