@@ -907,6 +907,13 @@ void SwViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesW
     }
 }
 
+void SwViewShell::SetProtectForm( bool _bProtectForm )
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::PROTECT_FORM, _bProtectForm );
+}
+
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
