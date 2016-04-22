@@ -276,8 +276,6 @@ private:
 
     VclPtr<MetricField>        m_pScaleWidthMF;
 
-    VclPtr<ListBox>            m_pKerningLB;
-    VclPtr<FixedText>          m_pKerningFT;
     VclPtr<MetricField>        m_pKerningMF;
     VclPtr<CheckBox>           m_pPairKerningBtn;
 
