@@ -324,6 +324,23 @@ struct DffObjData
         bRotateTextWithShape( true ),
         bPageAnchor( true ),
         nCalledByGroup( nClByGroup ){}
+
+    // Clone a DffObjData _o_ by replacing its rSpHd with a shared_ptr to another one
+    DffObjData( const std::shared_ptr<DffRecordHeader>& rObjHd, const DffObjData& o) :
+        rSpHd( *rObjHd ),
+        aBoundRect( o.aBoundRect ),
+        nShapeId( o.nShapeId ),
+        nSpFlags( o.nSpFlags ),
+        eShapeType( o.eShapeType ),
+        bShapeType( o.bShapeType ),
+        bClientAnchor( o.bClientAnchor ),
+        bClientData( o.bClientData ),
+        bChildAnchor( o.bChildAnchor ),
+        bOpt( o.bOpt ),
+        bOpt2( o.bOpt2 ),
+        bRotateTextWithShape( o.bRotateTextWithShape ),
+        bPageAnchor( o.bPageAnchor ),
+        nCalledByGroup( o.nCalledByGroup ){}
 };
 
 #define DFF_RECORD_MANAGER_BUF_SIZE         64
@@ -407,6 +424,13 @@ protected:
     std::vector<FIDCL> maFidcls;
     OffsetMap       maDgOffsetTable;    ///< array of fileoffsets
 
+    /** When importing Excel files, cell anchor computations for non-page-anchored
+        groups must be done after all nested groups have been processed; for each open
+        group, the pending data is stored here. The storage also holds a shared_ptr to
+        the DffObjData ow DffRecordHeader to avoid it going out of scope except whe needed
+     */
+    std::vector< std::pair<DffObjData, std::shared_ptr<DffRecordHeader> > > maPendingGroupData;
+
     friend class DffPropertyReader;
 
     SvStream&       rStCtrl;
@@ -483,6 +507,13 @@ protected:
                                    void* pData,
                                    Rectangle& rTextRect,
                                    SdrObject* pObj = nullptr);
+
+    /** Object finalization, used by the Excel filter to correctly
+        compute the object anchoring after nested objects have been imported.
+    */
+    virtual SdrObject* FinalizeObj(DffObjData& rData,
+                                   SdrObject* pObj = nullptr);
+
     virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
     // Fontwork objects use a new implementation of ReadObjText because the old
