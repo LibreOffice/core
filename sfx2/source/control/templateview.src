@@ -30,7 +30,7 @@ String STR_WELCOME_LINE1
 
 String STR_WELCOME_LINE2
 {
-    Text [ en-US ] = "Use the sidebar to open or create a file.";
+    Text [ en-US ] = "Drop a document here or pick an app from the left side to create one.";
 };
 
 Image IMG_WELCOME
