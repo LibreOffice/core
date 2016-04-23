@@ -237,17 +237,24 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_ATTR_LANGUAGE:
             {
-                rSet.Put(static_cast<const SvxLanguageItem&>(
-                    m_pWrtShell->GetDefault(RES_CHRATR_LANGUAGE)), SID_ATTR_LANGUAGE);
+                std::unique_ptr<SfxPoolItem> pNewItem(static_cast<const SvxLanguageItem&>(
+                    m_pWrtShell->GetDefault(RES_CHRATR_LANGUAGE)).CloneSetWhich(SID_ATTR_LANGUAGE));
+                rSet.Put(*pNewItem);
             }
             break;
             case RES_CHRATR_CJK_LANGUAGE:
-                rSet.Put(static_cast<const SvxLanguageItem&>(
-                    m_pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE)), RES_CHRATR_CJK_LANGUAGE);
+            {
+                std::unique_ptr<SfxPoolItem> pNewItem(static_cast<const SvxLanguageItem&>(
+                    m_pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE)).CloneSetWhich(RES_CHRATR_CJK_LANGUAGE));
+                rSet.Put(*pNewItem);
+            }
             break;
             case RES_CHRATR_CTL_LANGUAGE:
-                rSet.Put(static_cast<const SvxLanguageItem&>(
-                    m_pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE)), RES_CHRATR_CTL_LANGUAGE);
+            {
+                std::unique_ptr<SfxPoolItem> pNewItem(static_cast<const SvxLanguageItem&>(
+                    m_pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE)).CloneSetWhich(RES_CHRATR_CTL_LANGUAGE));
+                rSet.Put(*pNewItem);
+            }
             break;
             case FN_REDLINE_ON:
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
@@ -449,7 +456,10 @@ void SwView::GetState(SfxItemSet &rSet)
                 if(nAlias)
                     GetViewFrame()->GetDispatcher()->QueryState( nAlias, pState );
                 if(pState)
-                    rSet.Put(*pState, nWhich);
+                {
+                    std::unique_ptr<SfxPoolItem> pNewItem(pState->CloneSetWhich(nWhich));
+                    rSet.Put(*pNewItem);
+                }
                 else if(!bDraw)
                     rSet.DisableItem(nWhich);
             }

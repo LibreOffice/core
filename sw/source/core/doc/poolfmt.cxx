@@ -102,9 +102,15 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
     }
 
     if( nWhCJK )
-        rSet.Put( rItem, nWhCJK );
+    {
+        std::unique_ptr<SfxPoolItem> pNewItem(rItem.CloneSetWhich(nWhCJK));
+        rSet.Put( *pNewItem );
+    }
     if( nWhCTL )
-        rSet.Put( rItem, nWhCTL );
+    {
+        std::unique_ptr<SfxPoolItem> pNewItem(rItem.CloneSetWhich(nWhCTL));
+        rSet.Put( *pNewItem );
+    }
 }
 
 /// Return the AutoCollection by its Id. If it doesn't

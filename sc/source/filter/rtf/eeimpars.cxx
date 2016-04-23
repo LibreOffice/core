@@ -267,17 +267,29 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                         if ( nScriptType & nScript )
                         {
                             if ( pFont )
-                                rSet.Put( *pFont, ScGlobal::GetScriptedWhichID(
-                                            nScript, ATTR_FONT ));
+                            {
+                                std::unique_ptr<SfxPoolItem> pNewItem(pFont->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT )));
+                                rSet.Put( *pNewItem );
+                            }
                             if ( pHeight )
-                                rSet.Put( *pHeight, ScGlobal::GetScriptedWhichID(
-                                            nScript, ATTR_FONT_HEIGHT ));
+                            {
+                                std::unique_ptr<SfxPoolItem> pNewItem(pHeight->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_HEIGHT )));
+                                rSet.Put( *pNewItem );
+                            }
                             if ( pWeight )
-                                rSet.Put( *pWeight, ScGlobal::GetScriptedWhichID(
-                                            nScript, ATTR_FONT_WEIGHT ));
+                            {
+                                std::unique_ptr<SfxPoolItem> pNewItem(pWeight->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_WEIGHT )));
+                                rSet.Put( *pNewItem );
+                            }
                             if ( pPosture )
-                                rSet.Put( *pPosture, ScGlobal::GetScriptedWhichID(
-                                            nScript, ATTR_FONT_POSTURE ));
+                            {
+                                std::unique_ptr<SfxPoolItem> pNewItem(pPosture->CloneSetWhich(
+                                        ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_POSTURE )));
+                                rSet.Put( *pNewItem );
+                            }
                         }
                     }
                 }

@@ -1348,7 +1348,8 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 
     // fill Hatch background ItemSet
     XFillBackgroundItem aItem(static_cast<const XFillBackgroundItem&>(m_rOutAttrs.Get( XATTR_FILLBACKGROUND )));
-    m_rXFSet.Put( aItem, XATTR_FILLBACKGROUND );
+    aItem.SetWhich( XATTR_FILLBACKGROUND );
+    m_rXFSet.Put ( aItem );
     if(aItem.GetValue())
     {
         if( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )

@@ -96,7 +96,7 @@ namespace SwLangHelper
         // set sequence as status value
         SfxStringListItem aItem( SID_LANGUAGE_STATUS );
         aItem.SetStringList( aSeq );
-        rSet.Put( aItem, SID_LANGUAGE_STATUS );
+        rSet.Put( aItem );
         return 0;
     }
 

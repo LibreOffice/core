@@ -616,7 +616,7 @@ void SwSpellPopup::checkRedline()
     SfxItemSet aSet(pDoc->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_PREV_CHANGE);
     for (sal_uInt16 nWhich : pRedlineIds)
     {
-        aSet.Put(SfxVoidItem(nWhich), nWhich);
+        aSet.Put(SfxVoidItem(nWhich));
     }
     m_pSh->GetView().GetState(aSet);
 

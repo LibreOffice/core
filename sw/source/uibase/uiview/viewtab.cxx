@@ -1239,7 +1239,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 m_pHRuler->SetDefTabDist( nDefTabDist );
                 m_pVRuler->SetDefTabDist( nDefTabDist );
                 ::lcl_EraseDefTabs(aTabStops);
-                rSet.Put(aTabStops, nWhich);
+                aTabStops.SetWhich(nWhich);
+                rSet.Put(aTabStops);
             }
             break;
         }
@@ -1535,7 +1536,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                 0, 0, true);
                     aColItem.Append(aColDesc);
                 }
-                rSet.Put(aColItem, nWhich);
+                aColItem.SetWhich(nWhich);
+                rSet.Put(aColItem);
             }
             else if ( bFrameSelection || nFrameType & ( FrameTypeFlags::COLUMN | FrameTypeFlags::COLSECT ) )
             {
@@ -1589,7 +1591,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         }
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 
-                        rSet.Put(aColItem, nWhich);
+                        aColItem.SetWhich(nWhich);
+                        rSet.Put(aColItem);
                     }
                 }
                 else if( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
@@ -1629,7 +1632,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 
-                        rSet.Put(aColItem, nWhich);
+                        aColItem.SetWhich(nWhich);
+                        rSet.Put(aColItem);
                     }
                     else
                         rSet.DisableItem(nWhich);
@@ -1682,7 +1686,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                     aColItem.SetOrtho(aColItem.CalcOrtho());
 
-                    rSet.Put(aColItem, nWhich);
+                    aColItem.SetWhich(nWhich);
+                    rSet.Put(aColItem);
                 }
             }
             else
@@ -1770,7 +1775,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                             false );
                 aColItem.Append(aColDesc);
 
-                rSet.Put(aColItem, nWhich);
+                aColItem.SetWhich(nWhich);
+                rSet.Put(aColItem);
             }
             else
                 rSet.DisableItem(nWhich);

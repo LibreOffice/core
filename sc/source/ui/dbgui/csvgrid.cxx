@@ -251,14 +251,23 @@ void ScCsvGrid::InitFonts()
 
     // copy other items from default font
     const SfxPoolItem& rWeightItem = aDefSet.Get( EE_CHAR_WEIGHT );
-    aDefSet.Put( rWeightItem, EE_CHAR_WEIGHT_CJK );
-    aDefSet.Put( rWeightItem, EE_CHAR_WEIGHT_CTL );
+    std::unique_ptr<SfxPoolItem> pNewItem(rWeightItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_WEIGHT_CJK);
+    aDefSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_WEIGHT_CTL);
+    aDefSet.Put( *pNewItem );
     const SfxPoolItem& rItalicItem = aDefSet.Get( EE_CHAR_ITALIC );
-    aDefSet.Put( rItalicItem, EE_CHAR_ITALIC_CJK );
-    aDefSet.Put( rItalicItem, EE_CHAR_ITALIC_CTL );
+    pNewItem.reset(rItalicItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_ITALIC_CJK);
+    aDefSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_ITALIC_CTL);
+    aDefSet.Put( *pNewItem );
     const SfxPoolItem& rLangItem = aDefSet.Get( EE_CHAR_LANGUAGE );
-    aDefSet.Put( rLangItem, EE_CHAR_LANGUAGE_CJK );
-    aDefSet.Put( rLangItem, EE_CHAR_LANGUAGE_CTL );
+    pNewItem.reset(rLangItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_LANGUAGE_CJK);
+    aDefSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_LANGUAGE_CTL);
+    aDefSet.Put( *pNewItem );
 
     mpEditEngine->SetDefaults( aDefSet );
     InvalidateGfx();

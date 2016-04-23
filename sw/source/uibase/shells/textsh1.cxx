@@ -1457,7 +1457,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 // set sequence as status value
                 SfxStringListItem aItem( SID_LANGUAGE_STATUS );
                 aItem.SetStringList( aSeq );
-                rSet.Put( aItem, SID_LANGUAGE_STATUS );
+                rSet.Put( aItem );
             }
         break;
 
@@ -1615,7 +1615,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SfxItemSet aSet( GetPool() );
                 rSh.GetCurAttr( aSet );
                 const SvxColorItem& aColorItem = static_cast< const SvxColorItem& >( aSet.Get(RES_CHRATR_COLOR) );
-                rSet.Put( aColorItem, SID_ATTR_CHAR_COLOR2 );
+                std::unique_ptr<SfxPoolItem> pNewItem(aColorItem.CloneSetWhich(SID_ATTR_CHAR_COLOR2));
+                rSet.Put( *pNewItem );
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:

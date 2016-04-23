@@ -6283,7 +6283,9 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
             nVal2 = -(sal_Int16)( ( nFontHeight * nVal * 8 ) / 100 );
         }
-        rSet.Put( SdrTextFixedCellHeightItem( true ), SDRATTR_TEXT_USEFIXEDCELLHEIGHT );
+        SdrTextFixedCellHeightItem aHeightItem(true);
+        aHeightItem.SetWhich(SDRATTR_TEXT_USEFIXEDCELLHEIGHT);
+        rSet.Put( aHeightItem );
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
         if ( nVal2 <= 0 ) {
             aItem.SetLineHeight( (sal_uInt16)( rManager.ScalePoint( -nVal2 ) / 8 ) );

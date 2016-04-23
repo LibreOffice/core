@@ -195,6 +195,15 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
+
+SfxPoolItem* SfxPoolItem::CloneSetWhich( sal_uInt16 nNewWhich ) const
+{
+    SfxPoolItem* pItem = Clone();
+    pItem->SetWhich(nNewWhich);
+    return pItem;
+}
+
+
 SfxPoolItem* SfxVoidItem::CreateDefault()
 {
     return new SfxVoidItem(0);

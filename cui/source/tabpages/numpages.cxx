@@ -250,7 +250,7 @@ bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet* rSet )
     if( (bPreset || bModified) && pSaveNum)
     {
         *pSaveNum = *pActNum;
-        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SvxNumBulletItem( *pSaveNum, nNumItemId ));
         rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
 
@@ -416,7 +416,7 @@ bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet* rSet )
     if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SvxNumBulletItem( *pSaveNum, nNumItemId ));
         rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
     return bModified;
@@ -618,7 +618,7 @@ bool  SvxNumPickTabPage::FillItemSet( SfxItemSet* rSet )
     if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SvxNumBulletItem( *pSaveNum, nNumItemId ));
         rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
     return bModified;
@@ -916,7 +916,7 @@ bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet* rSet )
     if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SvxNumBulletItem( *pSaveNum, nNumItemId ) );
         rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
 
@@ -1375,7 +1375,7 @@ bool    SvxNumOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     if(bModified && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SvxNumBulletItem( *pSaveNum, nNumItemId ));
         rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
     }
     return bModified;
@@ -3153,7 +3153,7 @@ bool SvxNumPositionTabPage::FillItemSet( SfxItemSet* rSet )
     if(bModified && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SvxNumBulletItem( *pSaveNum, nNumItemId ));
         rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
     }
     return bModified;

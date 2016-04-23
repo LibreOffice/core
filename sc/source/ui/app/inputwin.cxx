@@ -1237,20 +1237,35 @@ void ScTextWnd::StartEditEngine()
 static void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
 {
     const SfxPoolItem& rFontItem = rSet.Get( EE_CHAR_FONTINFO );
-    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CJK );
-    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CTL );
+    std::unique_ptr<SfxPoolItem> pNewItem(rFontItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_FONTINFO_CJK);
+    rSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_FONTINFO_CTL);
+    rSet.Put( *pNewItem );
     const SfxPoolItem& rHeightItem = rSet.Get( EE_CHAR_FONTHEIGHT );
-    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CJK );
-    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CTL );
+    pNewItem.reset(rHeightItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_FONTHEIGHT_CJK);
+    rSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_FONTHEIGHT_CTL);
+    rSet.Put( *pNewItem );
     const SfxPoolItem& rWeightItem = rSet.Get( EE_CHAR_WEIGHT );
-    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CJK );
-    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CTL );
+    pNewItem.reset(rWeightItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_WEIGHT_CJK);
+    rSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_WEIGHT_CTL);
+    rSet.Put( *pNewItem );
     const SfxPoolItem& rItalicItem = rSet.Get( EE_CHAR_ITALIC );
-    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CJK );
-    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CTL );
+    pNewItem.reset(rItalicItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_ITALIC_CJK);
+    rSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_ITALIC_CTL);
+    rSet.Put( *pNewItem );
     const SfxPoolItem& rLangItem = rSet.Get( EE_CHAR_LANGUAGE );
-    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CJK );
-    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CTL );
+    pNewItem.reset(rLangItem.Clone());
+    pNewItem->SetWhich(EE_CHAR_LANGUAGE_CJK);
+    rSet.Put( *pNewItem );
+    pNewItem->SetWhich(EE_CHAR_LANGUAGE_CTL);
+    rSet.Put( *pNewItem );
 }
 
 static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )

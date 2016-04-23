@@ -348,7 +348,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, voi
     {
         // get macros from itemset
         const SvxMacroTableDtor* pMacroTbl = pHyperlinkItem->GetMacroTable();
-        SvxMacroItem aItem ( GetWhich(SID_ATTR_MACROITEM) );
+        SvxMacroItem aItem ( SID_ATTR_MACROITEM );
         if( pMacroTbl )
             aItem.SetMacroTable( *pMacroTbl );
 
@@ -356,7 +356,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, voi
         SfxItemSet* pItemSet = new SfxItemSet(SfxGetpApp()->GetPool(),
                                               SID_ATTR_MACROITEM,
                                               SID_ATTR_MACROITEM );
-        pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
+        pItemSet->Put ( aItem );
 
         /*  disable HyperLinkDlg for input while the MacroAssignDlg is working
             because if no JAVA is installed an error box occurs and then it is possible

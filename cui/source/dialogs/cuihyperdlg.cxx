@@ -117,8 +117,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     mpItemSet = new SfxItemSet( SfxGetpApp()->GetPool(), SID_HYPERLINK_GETLINK,
                                SID_HYPERLINK_SETLINK );
 
-    SvxHyperlinkItem aItem;
-    mpItemSet->Put (aItem, SID_HYPERLINK_GETLINK);
+    SvxHyperlinkItem aItem(SID_HYPERLINK_GETLINK);
+    mpItemSet->Put(aItem);
 
     SetInputSet (mpItemSet);
 

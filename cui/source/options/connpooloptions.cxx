@@ -381,14 +381,14 @@ namespace offapp
         // the enabled flag
         if (m_pEnablePooling->IsValueChangedFromSaved())
         {
-            _rSet->Put(SfxBoolItem(SID_SB_POOLING_ENABLED, m_pEnablePooling->IsChecked()), SID_SB_POOLING_ENABLED);
+            _rSet->Put(SfxBoolItem(SID_SB_POOLING_ENABLED, m_pEnablePooling->IsChecked()));
             bModified = true;
         }
 
         // the settings for the single drivers
         if (m_pDriverList->isModified())
         {
-            _rSet->Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, m_pDriverList->getSettings()), SID_SB_DRIVER_TIMEOUTS);
+            _rSet->Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, m_pDriverList->getSettings()));
             bModified = true;
         }
 
