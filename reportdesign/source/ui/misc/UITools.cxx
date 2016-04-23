@@ -277,7 +277,8 @@ namespace
                 {
                     ::std::unique_ptr<SfxPoolItem> pClone(pItem->Clone());
                     pClone->PutValue(_xShape->getPropertyValue(aIt->sName), aIt->nMemberId);
-                    _rItemSet.Put(*pClone, aIt->nWID);
+                    pClone->SetWhich(aIt->nWID);
+                    _rItemSet.Put(*pClone);
                 }
             }
             ++aIt;

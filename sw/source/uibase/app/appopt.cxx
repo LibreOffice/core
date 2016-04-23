@@ -136,14 +136,17 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
             pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));
         pRet->Put(SwPtrItem(FN_PARAM_WRTSHELL, &rWrtShell));
 
-        pRet->Put(static_cast<const SvxLanguageItem&>(
-            rWrtShell.GetDefault(RES_CHRATR_LANGUAGE)), SID_ATTR_LANGUAGE);
+        std::unique_ptr<SfxPoolItem> pNewItem( static_cast<const SvxLanguageItem&>(
+            rWrtShell.GetDefault(RES_CHRATR_LANGUAGE)).CloneSetWhich(SID_ATTR_LANGUAGE) );
+        pRet->Put(*pNewItem);
 
-        pRet->Put(static_cast<const SvxLanguageItem&>(
-            rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE)), SID_ATTR_CHAR_CJK_LANGUAGE);
+        pNewItem.reset(static_cast<const SvxLanguageItem&>(
+            rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE)).CloneSetWhich(SID_ATTR_CHAR_CJK_LANGUAGE));
+        pRet->Put(*pNewItem);
 
-        pRet->Put(static_cast<const SvxLanguageItem&>(
-            rWrtShell.GetDefault(RES_CHRATR_CTL_LANGUAGE)), SID_ATTR_CHAR_CTL_LANGUAGE);
+        pNewItem.reset(static_cast<const SvxLanguageItem&>(
+            rWrtShell.GetDefault(RES_CHRATR_CTL_LANGUAGE)).CloneSetWhich(SID_ATTR_CHAR_CTL_LANGUAGE));
+        pRet->Put(*pNewItem);
     }
     else
     {

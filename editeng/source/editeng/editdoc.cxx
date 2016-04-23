@@ -949,14 +949,15 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
             if ( eSourceUnit != eDestUnit )
             {
                 SfxPoolItem* pItem = rSource.Get( nSourceWhich ).Clone();
-//              pItem->SetWhich( nWhich );
                 ConvertItem( *pItem, eSourceUnit, eDestUnit );
-                rDest.Put( *pItem, nWhich );
+                pItem->SetWhich(nWhich);
+                rDest.Put( *pItem );
                 delete pItem;
             }
             else
             {
-                rDest.Put( rSource.Get( nSourceWhich ), nWhich );
+                std::unique_ptr<SfxPoolItem> pNewItem(rSource.Get( nSourceWhich ).CloneSetWhich(nWhich));
+                rDest.Put( *pNewItem );
             }
         }
     }
@@ -2322,7 +2323,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     ContentAttribs aContentAttribs( aPaM.GetNode()->GetContentAttribs() );
 
     // for a new paragraph we like to have the bullet/numbering visible by default
-    aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true), EE_PARA_BULLETSTATE );
+    aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true) );
 
     // ContentNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );

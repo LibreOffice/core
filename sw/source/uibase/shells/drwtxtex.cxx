@@ -297,7 +297,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
             else
                 aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
-            aNewAttr.Put( aItem, EE_CHAR_ESCAPEMENT );
+            aNewAttr.Put( aItem );
         }
         break;
         case FN_SET_SUB_SCRIPT:
@@ -310,7 +310,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
             else
                 aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
-            aNewAttr.Put( aItem, EE_CHAR_ESCAPEMENT );
+            aNewAttr.Put( aItem );
         }
         break;
 
@@ -564,7 +564,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             return;
     }
     if(nEEWhich && pNewAttrs)
-        aNewAttr.Put(pNewAttrs->Get(nWhich), nEEWhich);
+    {
+        std::unique_ptr<SfxPoolItem> pNewItem(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
+        aNewAttr.Put(*pNewItem);
+    }
 
     SetAttrToMarked(aNewAttr);
 
@@ -891,7 +894,10 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
                 aSetItem.GetItemSet().Put( aEditAttr, false );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
-                    rSet.Put( *pI, nWhich );
+                {
+                    std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
+                    rSet.Put( *pNewItem );
+                }
                 else
                     rSet.InvalidateItem( nWhich );
             }
@@ -941,7 +947,10 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
             }
         }
         if(nEEWhich)
-            rSet.Put(aEditAttr.Get(nEEWhich), nWhich);
+        {
+            std::unique_ptr<SfxPoolItem> pNewItem(aEditAttr.Get(nEEWhich).CloneSetWhich(nWhich));
+            rSet.Put(*pNewItem);
+        }
 
         nWhich = aIter.NextWhich();
     }

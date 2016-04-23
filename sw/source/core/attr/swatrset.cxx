@@ -178,7 +178,7 @@ SfxItemSet* SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool ) const
                 {
                     const SfxPoolItem* pItem;
                     if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
-                        pTmpSet->Put( *pItem, pItem->Which() );
+                        pTmpSet->Put( *pItem );
                     nWhich = aIter.NextWhich();
                 }
             }

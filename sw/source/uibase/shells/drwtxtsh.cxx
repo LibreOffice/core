@@ -792,11 +792,17 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
                                 EE_CHAR_FONTINFO );
         nScript = g_pBreakIt->GetAllScriptsOfText( sSym );
         if( SvtScriptType::LATIN & nScript )
-            aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO );
+            aFontAttribSet.Put( aFontItem );
         if( SvtScriptType::ASIAN & nScript )
-            aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
+        {
+            aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
+            aFontAttribSet.Put( aFontItem );
+        }
         if( SvtScriptType::COMPLEX & nScript )
-            aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
+        {
+            aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
+            aFontAttribSet.Put( aFontItem );
+        }
         pOLV->SetAttribs(aFontAttribSet);
 
         // Remove selection

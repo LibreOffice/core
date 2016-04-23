@@ -151,17 +151,17 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
     SfxItemSet* pInSet = new SfxItemSet( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND );
     maItemSetVector.push_back( pInSet );
 
-    XLineEndItem aEndMarker;
+    XLineEndItem aEndMarker(XATTR_LINEEND);
     aEndMarker.SetName( aName );
     aEndMarker.PutValue( aElement, 0 );
 
-    pInSet->Put( aEndMarker, XATTR_LINEEND );
+    pInSet->Put( aEndMarker );
 
-    XLineStartItem aStartMarker;
+    XLineStartItem aStartMarker(XATTR_LINESTART);
     aStartMarker.SetName( aName );
     aStartMarker.PutValue( aElement, 0 );
 
-    pInSet->Put( aStartMarker, XATTR_LINESTART );
+    pInSet->Put( aStartMarker );
 }
 
 // XNameContainer
@@ -228,18 +228,18 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
         if( pItem->GetName() == aName )
         {
-            XLineEndItem aEndMarker;
+            XLineEndItem aEndMarker(XATTR_LINEEND);
             aEndMarker.SetName( aName );
             if( !aEndMarker.PutValue( aElement, 0 ) )
                 throw lang::IllegalArgumentException();
 
-            (*aIter)->Put( aEndMarker, XATTR_LINEEND );
+            (*aIter)->Put( aEndMarker );
 
-            XLineStartItem aStartMarker;
+            XLineStartItem aStartMarker(XATTR_LINESTART);
             aStartMarker.SetName( aName );
             aStartMarker.PutValue( aElement, 0 );
 
-            (*aIter)->Put( aStartMarker, XATTR_LINESTART );
+            (*aIter)->Put( aStartMarker );
             return;
         }
         ++aIter;

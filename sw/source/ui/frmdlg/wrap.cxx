@@ -360,7 +360,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
         if(nullptr == (pOldItem = GetOldItem(*rSet, RES_UL_SPACE)) ||
                 aUL != *pOldItem )
         {
-            rSet->Put( aUL, RES_UL_SPACE );
+            rSet->Put( aUL );
             bModified = true;
         }
     }
@@ -377,7 +377,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
         if( nullptr == (pOldItem = GetOldItem(*rSet, RES_LR_SPACE)) ||
                 aLR != *pOldItem )
         {
-            rSet->Put(aLR, RES_LR_SPACE);
+            rSet->Put(aLR);
             bModified = true;
         }
     }

@@ -715,23 +715,21 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             aEditAttribs.Put(   SvxFontItem(
                                     eFam,
                                     SC10TOSTRING( pHeadFootLine->LogFont.lfFaceName ), EMPTY_OUSTRING,
-                                    PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ),
-                                EE_CHAR_FONTINFO );
-            aEditAttribs.Put(   SvxFontHeightItem( std::abs( pHeadFootLine->LogFont.lfHeight ), 100, EE_CHAR_FONTHEIGHT ),
-                                EE_CHAR_FONTHEIGHT);
+                                    PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ) );
+            aEditAttribs.Put(   SvxFontHeightItem( std::abs( pHeadFootLine->LogFont.lfHeight ), 100, EE_CHAR_FONTHEIGHT ) );
 
             Sc10Color nColor = pHeadFootLine->TextColor;
             Color TextColor( nColor.Red, nColor.Green, nColor.Blue );
-            aEditAttribs.Put(SvxColorItem(TextColor, EE_CHAR_COLOR), EE_CHAR_COLOR);
+            aEditAttribs.Put(SvxColorItem(TextColor, EE_CHAR_COLOR));
             // FontAttr
             if (pHeadFootLine->LogFont.lfWeight != fwNormal)
-                aEditAttribs.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT), EE_CHAR_WEIGHT);
+                aEditAttribs.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
             if (pHeadFootLine->LogFont.lfItalic != 0)
-                aEditAttribs.Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC), EE_CHAR_ITALIC);
+                aEditAttribs.Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC));
             if (pHeadFootLine->LogFont.lfUnderline != 0)
-                aEditAttribs.Put(SvxUnderlineItem(LINESTYLE_SINGLE, EE_CHAR_UNDERLINE), EE_CHAR_UNDERLINE);
+                aEditAttribs.Put(SvxUnderlineItem(LINESTYLE_SINGLE, EE_CHAR_UNDERLINE));
             if (pHeadFootLine->LogFont.lfStrikeOut != 0)
-                aEditAttribs.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT), EE_CHAR_STRIKEOUT);
+                aEditAttribs.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT));
             OUString aText( pHeadFootLine->Title, strlen(pHeadFootLine->Title), DEFCHARSET );
             aEditEngine.SetText( aText );
             aEditEngine.QuickSetAttribs( aEditAttribs, ESelection( 0, 0, 0, aText.getLength() ) );

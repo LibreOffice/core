@@ -204,7 +204,7 @@ bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
     }
     if ( m_nOldCount != aRegistrations.size() || m_bModified )
     {
-        rCoreSet->Put(DatabaseMapItem( SID_SB_DB_REGISTER, aRegistrations ), SID_SB_DB_REGISTER);
+        rCoreSet->Put(DatabaseMapItem( SID_SB_DB_REGISTER, aRegistrations ));
         bModified = true;
     }
 

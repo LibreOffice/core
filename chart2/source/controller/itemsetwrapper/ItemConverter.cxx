@@ -114,7 +114,8 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                         }
                         else
                         {
-                            rOutItemSet.Put( *pItem, nWhich );
+                            pItem->SetWhich(nWhich);
+                            rOutItemSet.Put( *pItem );
                             delete pItem;
                         }
                     }
