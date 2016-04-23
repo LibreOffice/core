@@ -203,6 +203,21 @@ public:
             css::sheet::FormulaLanguage::OOXML;
     }
 
+    /// If grammar has an Excel syntax, determined by address convention.
+    static inline bool isExcelSyntax( const Grammar eGrammar )
+    {
+        AddressConvention eConv = extractRefConvention( eGrammar );
+        switch (eConv)
+        {
+            case FormulaGrammar::AddressConvention::CONV_XL_A1:
+            case FormulaGrammar::AddressConvention::CONV_XL_R1C1:
+            case FormulaGrammar::AddressConvention::CONV_XL_OOX:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 };
 
 } // formula
