@@ -2254,7 +2254,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
             {
                 // position of my data cursor is the same as the position our current row points tpo
                 // sync the status, repaint, done
-                DBG_ASSERT(m_xDataRow == m_xCurrentRow, "Fehler in den Datenzeilen");
+                DBG_ASSERT(m_xDataRow == m_xCurrentRow, "Errors in the data row");
                 SAL_INFO("svx.fmcomp", "same position, new state: " << ROWSTATUS(m_xCurrentRow));
                 RowModified(m_nCurrentPos);
                 return;

@@ -136,7 +136,7 @@ End Function
 
 &apos; Opens a Document, checks beforehand, whether it has to be loaded
 &apos; or whether it is already on the desktop.
-&apos; If the parameter bDisposable is set to False then then returned document
+&apos; If the parameter bDisposable is set to False then the returned document
 &apos; should not be disposed afterwards, because it is already opened.
 Function OpenDocument(DocPath as String, Args(), Optional bDisposable as Boolean)
 Dim oComponents as Object

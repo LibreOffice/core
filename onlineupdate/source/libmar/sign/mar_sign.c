@@ -149,7 +149,7 @@ WriteAndUpdateSignatures(FILE *fpDest, void *buffer,
 }
 
 /**
- * Adjusts each entry's content offset in the the passed in index by the
+ * Adjusts each entry's content offset in the passed in index by the
  * specified amount.
  *
  * @param indexBuf     A buffer containing the MAR index
