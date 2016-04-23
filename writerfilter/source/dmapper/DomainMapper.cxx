@@ -989,6 +989,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 switch (nIntValue)
                 {
+                case NS_ooxml::LN_Value_ST_NumberFormat_decimal:
+                    // 1, 2, ...
+                    pSectionContext->SetPageNumberType(style::NumberingType::ARABIC);
+                break;
                 case NS_ooxml::LN_Value_ST_NumberFormat_upperLetter:
                     // A, B, ...
                     pSectionContext->SetPageNumberType(style::NumberingType::CHARS_UPPER_LETTER_N);
