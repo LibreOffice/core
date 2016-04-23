@@ -1565,8 +1565,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 ;
         }
     }
-    else if (eOp >= SC_OPCODE_START_BIN_OP &&
-        eOp <= SC_OPCODE_STOP_UN_OP &&
+    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP &&
         ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
         ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
     {
@@ -1574,8 +1573,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     }
     // only when openCL interpreter is not enabled - the assumption is that
     // the S/W interpreter blacklist is more strict
-    else if (eOp >= SC_OPCODE_START_BIN_OP &&
-        eOp <= SC_OPCODE_STOP_UN_OP &&
+    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP &&
         ScCalcConfig::isSwInterpreterEnabled() &&
         (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
         ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
