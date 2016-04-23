@@ -269,7 +269,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     if ( bInMasterView )
     {
         SfxItemSet aSetAttr( mpViewShell->GetPool(), EE_ITEMS_START, EE_ITEMS_END );
-        aSetAttr.Put(SvxNumBulletItem( *pNumRule ), nNumItemId);
+        aSetAttr.Put(SvxNumBulletItem( *pNumRule, nNumItemId ));
         mpView->SetAttributes(aSetAttr);
     }
 
@@ -344,7 +344,8 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
 
             //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
 
-            aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
+            std::unique_ptr<SfxPoolItem> pNewItem(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
+            aNewAttr.Put(*pNewItem);
 
             if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
             {

@@ -266,8 +266,10 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                                    aFont.GetCharSet(),
                                    EE_CHAR_FONTINFO);
             aSet.Put(aFontItem);
-            aSet.Put(aFontItem, EE_CHAR_FONTINFO_CJK);
-            aSet.Put(aFontItem, EE_CHAR_FONTINFO_CTL);
+            aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
+            aSet.Put(aFontItem);
+            aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
+            aSet.Put(aFontItem);
             pOV->SetAttribs(aSet);
 
             ESelection aSel = pOV->GetSelection();

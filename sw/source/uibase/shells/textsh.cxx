@@ -1006,17 +1006,20 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             if( SvtScriptType::LATIN & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT ) );
-                aSet.Put( aNewFontItem, RES_CHRATR_FONT);
+                aNewFontItem.SetWhich(RES_CHRATR_FONT);
+                aSet.Put( aNewFontItem );
             }
             if( SvtScriptType::ASIAN & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT ) );
-                aSet.Put( aNewFontItem, RES_CHRATR_CJK_FONT );
+                aNewFontItem.SetWhich(RES_CHRATR_CJK_FONT);
+                aSet.Put( aNewFontItem );
             }
             if( SvtScriptType::COMPLEX & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT ) );
-                aSet.Put( aNewFontItem, RES_CHRATR_CTL_FONT );
+                aNewFontItem.SetWhich(RES_CHRATR_CTL_FONT);
+                aSet.Put( aNewFontItem );
             }
 
             rSh.SetMark();

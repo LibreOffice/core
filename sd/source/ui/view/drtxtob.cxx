@@ -215,11 +215,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     {
                         SvxFontHeightItem aFontItem = dynamic_cast<const SvxFontHeightItem&>(*pI);
                         aFontItem.SetHeight(aFontItem.GetHeight(), stretchX, aFontItem.GetPropUnit());
-                        aAttrSet.Put( aFontItem, nWhich );
+                        aFontItem.SetWhich(nWhich);
+                        aAttrSet.Put( aFontItem );
                     }
                     else
                     {
-                        aAttrSet.Put( *pI, nWhich );
+                        std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
+                        aAttrSet.Put( *pNewItem );
                     }
                 }
                 else

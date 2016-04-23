@@ -366,7 +366,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
             else
                 aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
-            aNewAttr.Put( aItem, EE_CHAR_ESCAPEMENT );
+            aNewAttr.Put( aItem );
         }
         break;
         case FN_SET_SUB_SCRIPT:
@@ -379,7 +379,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
             else
                 aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
-            aNewAttr.Put( aItem, EE_CHAR_ESCAPEMENT );
+            aNewAttr.Put( aItem );
         }
         break;
         case SID_HYPERLINK_SETLINK:
@@ -603,7 +603,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     }
 
     if(nEEWhich && pNewAttrs)
-        aNewAttr.Put(pNewAttrs->Get(nWhich), nEEWhich);
+    {
+        std::unique_ptr<SfxPoolItem> pNewItem(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
+        aNewAttr.Put(*pNewItem);
+    }
 
     Rectangle aNullRect;
     Rectangle aOutRect = pOLV->GetOutputArea();
@@ -702,7 +705,10 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     aSetItem.GetItemSet().Put( aEditAttr, false );
                     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                     if( pI )
-                        rSet.Put( *pI, nWhich );
+                    {
+                        std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
+                        rSet.Put( *pNewItem );
+                    }
                     else
                         rSet.InvalidateItem( nWhich );
                 }
@@ -851,15 +857,16 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
 
         if(nEEWhich)
         {
-            rSet.Put(aEditAttr.Get(nEEWhich), nWhich);
-        if(nEEWhich == EE_CHAR_KERNING)
-        {
-            SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING );
-            if ( eState == SfxItemState::DONTCARE )
+            std::unique_ptr<SfxPoolItem> pNewItem(aEditAttr.Get(nEEWhich).CloneSetWhich(nWhich));
+            rSet.Put(*pNewItem);
+            if(nEEWhich == EE_CHAR_KERNING)
             {
-                rSet.InvalidateItem(EE_CHAR_KERNING);
+                SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING );
+                if ( eState == SfxItemState::DONTCARE )
+                {
+                    rSet.InvalidateItem(EE_CHAR_KERNING);
+                }
             }
-        }
         }
 
         if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()==SwPostItHelper::DELETED)
@@ -1774,11 +1781,17 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
                                 EE_CHAR_FONTINFO );
         SvtScriptType nScriptBreak = g_pBreakIt->GetAllScriptsOfText( sSym );
         if( SvtScriptType::LATIN & nScriptBreak )
-            aSetFont.Put( aFontItem, EE_CHAR_FONTINFO );
+            aSetFont.Put( aFontItem );
         if( SvtScriptType::ASIAN & nScriptBreak )
-            aSetFont.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
+        {
+            aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
+            aSetFont.Put( aFontItem );
+        }
         if( SvtScriptType::COMPLEX & nScriptBreak )
-            aSetFont.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
+        {
+            aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
+            aSetFont.Put( aFontItem );
+        }
         pOLV->SetAttribs(aSetFont);
 
         // Erase selection

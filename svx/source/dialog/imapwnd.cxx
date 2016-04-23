@@ -652,7 +652,7 @@ void IMapWindow::DoMacroAssign()
         SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
         IMapObject*     pIMapObj = GetIMapObj( pSdrObj );
         aMacroItem.SetMacroTable( pIMapObj->GetMacroTable() );
-        aSet.Put( aMacroItem, SID_ATTR_MACROITEM );
+        aSet.Put( aMacroItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         std::unique_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));

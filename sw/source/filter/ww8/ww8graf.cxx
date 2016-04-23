@@ -1864,7 +1864,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     }
 
     if (bBrushItemOk)
-        rFlySet.Put(aBrushItem, RES_BACKGROUND);
+        rFlySet.Put(aBrushItem);
 }
 
 void SwWW8ImplReader::AdjustLRWrapForWordMargins(

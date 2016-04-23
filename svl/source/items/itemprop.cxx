@@ -251,7 +251,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
             throw IllegalArgumentException();
         }
         // apply new item
-        rSet.Put( *pNewItem, rEntry.nWID );
+        rSet.Put( *pNewItem );
     }
 }
 

@@ -2064,7 +2064,8 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl, CheckBox&,
     m_pLbHatchBckgrdColor->Enable( m_pCbxHatchBckgrd->IsChecked() );
 
     XFillBackgroundItem aItem( m_pCbxHatchBckgrd->IsChecked() );
-    m_rXFSet.Put ( aItem, XATTR_FILLBACKGROUND );
+    aItem.SetWhich( XATTR_FILLBACKGROUND );
+    m_rXFSet.Put ( aItem );
 
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();

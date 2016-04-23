@@ -192,8 +192,10 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         rHFSet.Put( aHFDistItem );
                         rHFSet.Put( SvxLRSpaceItem( 0,0,0,0, ATTR_LRSPACE ) ); // Set border to Null
 
-                        pSet->Put( aHFSetItem, ATTR_PAGE_HEADERSET );
-                        pSet->Put( aHFSetItem, ATTR_PAGE_FOOTERSET );
+                        aHFSetItem.SetWhich(ATTR_PAGE_HEADERSET);
+                        pSet->Put( aHFSetItem );
+                        aHFSetItem.SetWhich(ATTR_PAGE_FOOTERSET);
+                        pSet->Put( aHFSetItem );
                         pSet->Put( aBoxInfoItem ); // Do not overwrite PoolDefault
                                                    // due to format templates
 
@@ -204,7 +206,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         //  The page default depends on the system language.
                         SvxFrameDirection eDirection = ScGlobal::IsSystemRTL() ?
                                         FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
-                        pSet->Put( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ), ATTR_WRITINGDIR );
+                        pSet->Put( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
 
                         rItemPool.SetPoolDefaultItem( aPageItem );
                         rItemPool.SetPoolDefaultItem( aPaperSizeItem );

@@ -617,7 +617,7 @@ void SwSpellPopup::checkRedline()
     for (size_t i = 0; i < SAL_N_ELEMENTS(pRedlineIds); ++i)
     {
         const sal_uInt16 nWhich = pRedlineIds[i];
-        aSet.Put(SfxVoidItem(nWhich), nWhich);
+        aSet.Put(SfxVoidItem(nWhich));
     }
     m_pSh->GetView().GetState(aSet);
 
