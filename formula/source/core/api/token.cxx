@@ -892,7 +892,7 @@ FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken*
     }
     else
     {
-        t->Delete();
+        t->DeleteIfZeroRef();
         return nullptr;
     }
 }
@@ -912,7 +912,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
     }
     else
     {
-        t->Delete();
+        t->DeleteIfZeroRef();
         if ( nLen == FORMULA_MAXTOKENS - 1 )
         {
             t = new FormulaByteToken( ocStop );

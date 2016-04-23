@@ -107,6 +107,7 @@ public:
     virtual                     ~FormulaToken();
 
     inline  void                Delete()                { delete this; }
+    inline  void                DeleteIfZeroRef()       { if (mnRefCnt == 0) delete this; }
     inline  StackVar            GetType() const         { return eType; }
             bool                IsFunction() const; // pure functions, no operators
 

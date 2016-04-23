@@ -663,9 +663,8 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
     if ( sp >= MAXSTACK )
     {
         SetError( errStackOverflow );
-        if (!p->GetRef())
-            // p is a dangling pointer hereafter!
-            p->Delete();
+        // p may be a dangling pointer hereafter!
+        p->DeleteIfZeroRef();
     }
     else
     {
@@ -678,9 +677,8 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
             }
             else
             {
-                if (!p->GetRef())
-                    // p is a dangling pointer hereafter!
-                    p->Delete();
+                // p may be a dangling pointer hereafter!
+                p->DeleteIfZeroRef();
                 PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
             }
         }
