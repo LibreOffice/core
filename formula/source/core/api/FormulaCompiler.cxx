@@ -1061,6 +1061,7 @@ bool FormulaCompiler::GetToken()
         bStop = true;
     else
     {
+        FormulaTokenRef pSpacesToken;
         short nWasColRowName;
         if ( pArr->nIndex > 0 && pArr->pCode[ pArr->nIndex-1 ]->GetOpCode() == ocColRowName )
              nWasColRowName = 1;
@@ -1069,6 +1070,9 @@ bool FormulaCompiler::GetToken()
         mpToken = pArr->Next();
         while( mpToken && mpToken->GetOpCode() == ocSpaces )
         {
+            // For significant whitespace remember last ocSpaces token. Usually
+            // there's only one even for multiple spaces.
+            pSpacesToken = mpToken;
             if ( nWasColRowName )
                 nWasColRowName++;
             if ( bAutoCorrect && !pStack )
@@ -1093,6 +1097,14 @@ bool FormulaCompiler::GetToken()
             {   // convert an ocSpaces to ocIntersect in RPN
                 mpToken = new FormulaByteToken( ocIntersect );
                 pArr->nIndex--;     // we advanced to the second ocColRowName, step back
+            }
+            else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar))
+            {
+                // Let IntersectionLine() <- Factor() decide how to treat this,
+                // once the actual arguments are determined in RPN.
+                mpToken = pSpacesToken;
+                pArr->nIndex--;     // step back from next non-spaces token
+                return true;
             }
         }
     }
@@ -1562,15 +1574,98 @@ void FormulaCompiler::RangeLine()
     }
 }
 
+namespace {
+
+bool isRangeResultFunction( OpCode eOp )
+{
+    switch (eOp)
+    {
+        case ocIndirect:
+        case ocOffset:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool isRangeResultOpCode( OpCode eOp )
+{
+    switch (eOp)
+    {
+        case ocRange:
+        case ocUnion:
+        case ocIntersect:
+        case ocIndirect:
+        case ocOffset:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool isPotentialRangeType( FormulaToken* pToken, bool bRPN )
+{
+    switch (pToken->GetType())
+    {
+        case svByte:                // could be range result, but only a few
+            if (bRPN)
+                return isRangeResultOpCode( pToken->GetOpCode());
+            else
+                return isRangeResultFunction( pToken->GetOpCode());
+        case svSingleRef:
+        case svDoubleRef:
+        case svIndex:               // could be range
+        //case svRefList:           // um..what?
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        case svExternalName:        // could be range
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool isIntersectable( FormulaToken** pCode1, FormulaToken** pCode2 )
+{
+    FormulaToken* pToken1 = *pCode1;
+    FormulaToken* pToken2 = *pCode2;
+    if (pToken1 && pToken2)
+        return isPotentialRangeType( pToken1, true) && isPotentialRangeType( pToken2, true);
+    return false;
+}
+
+}
+
 void FormulaCompiler::IntersectionLine()
 {
     RangeLine();
-    while (mpToken->GetOpCode() == ocIntersect)
+    while (mpToken->GetOpCode() == ocIntersect || mpToken->GetOpCode() == ocSpaces)
     {
+        sal_uInt16 nCodeIndex = pArr->nIndex - 1;
+        FormulaToken** pCode1 = pCode - 1;
         FormulaTokenRef p = mpToken;
         NextToken();
         RangeLine();
-        PutCode(p);
+        FormulaToken** pCode2 = pCode - 1;
+        if (p->GetOpCode() == ocSpaces)
+        {
+            // Convert to intersection if both left and right are references or
+            // functions (potentially returning references, if not then a space
+            // or no space would be a syntax error anyway), not other operators
+            // or operands. Else discard.
+            if (isIntersectable( pCode1, pCode2))
+            {
+                FormulaTokenRef pIntersect( new FormulaByteToken( ocIntersect));
+                // Replace ocSpaces with ocIntersect so that when switching
+                // formula syntax the correct operator string is created.
+                pArr->ReplaceToken( nCodeIndex, pIntersect.get(), FormulaTokenArray::ReplaceMode::CODE_ONLY);
+                PutCode( pIntersect);
+            }
+        }
+        else
+        {
+            PutCode(p);
+        }
     }
 }
 
@@ -1920,6 +2015,14 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     }
     else if( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
         rBuffer.appendAscii( pInternal[ eOp - ocInternalBegin ] );
+    else if (eOp == ocIntersect)
+    {
+        // Nasty, ugly, horrific, terrifying..
+        if (FormulaGrammar::isExcelSyntax( meGrammar))
+            rBuffer.append(' ');
+        else
+            rBuffer.append( mxSymbols->getSymbol( eOp));
+    }
     else if( (sal_uInt16) eOp < mxSymbols->getSymbolCount())        // Keyword:
         rBuffer.append( mxSymbols->getSymbol( eOp));
     else
@@ -2208,7 +2311,24 @@ OpCode FormulaCompiler::NextToken()
                 }
             }
         }
-        eLastOp = eOp;
+        // Nasty, ugly, horrific, terrifying.. significant whitespace..
+        if (eOp == ocSpaces && FormulaGrammar::isExcelSyntax( meGrammar))
+        {
+            // Fake an intersection op as last op for the next round, but at
+            // least roughly check if it could make sense at all.
+            if (eLastOp == ocPush || eLastOp == ocClose)
+            {
+                FormulaToken* pNext = pArr->PeekNextNoSpaces();
+                if (pNext && isPotentialRangeType( pNext, false))
+                    eLastOp = ocIntersect;
+                else
+                    eLastOp = eOp;
+            }
+            else
+                eLastOp = eOp;
+        }
+        else
+            eLastOp = eOp;
     }
     return eOp;
 }
