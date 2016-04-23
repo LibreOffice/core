@@ -1634,6 +1634,16 @@ bool isIntersectable( FormulaToken** pCode1, FormulaToken** pCode2 )
     return false;
 }
 
+bool isAdjacentRpnEnd( sal_uInt16 nPC,
+        FormulaToken const * const * const pCode,
+        FormulaToken const * const * const pCode1,
+        FormulaToken const * const * const pCode2 )
+{
+    return nPC >= 2 && pCode1 && pCode2 &&
+            (pCode2 - pCode1 == 1) && (pCode - pCode2 == 1) &&
+            (*pCode1 != nullptr) && (*pCode2 != nullptr);
+}
+
 }
 
 void FormulaCompiler::IntersectionLine()
@@ -1653,7 +1663,7 @@ void FormulaCompiler::IntersectionLine()
             // functions (potentially returning references, if not then a space
             // or no space would be a syntax error anyway), not other operators
             // or operands. Else discard.
-            if (isIntersectable( pCode1, pCode2))
+            if (isAdjacentRpnEnd( pc, pCode, pCode1, pCode2) && isIntersectable( pCode1, pCode2))
             {
                 FormulaTokenRef pIntersect( new FormulaByteToken( ocIntersect));
                 // Replace ocSpaces with ocIntersect so that when switching
@@ -1812,12 +1822,10 @@ FormulaTokenRef FormulaCompiler::ExtendRangeReference( FormulaToken & /*rTok1*/,
 
 bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 )
 {
-    FormulaToken *p1, *p2;
-    if (pc < 2 || !pCode1 || !pCode2 ||
-            (pCode2 - pCode1 != 1) || (pCode - pCode2 != 1) ||
-            ((p1 = *pCode1) == nullptr) || ((p2 = *pCode2) == nullptr) )
+    if (!isAdjacentRpnEnd( pc, pCode, pCode1, pCode2))
         return false;
 
+    FormulaToken *p1 = *pCode1, *p2 = *pCode2;
     FormulaTokenRef p = ExtendRangeReference( *p1, *p2);
     if (!p)
         return false;
