@@ -39,6 +39,8 @@ namespace desktop {
 
             // Add the states that are safe to skip duplicates on,
             // even when not consequent.
+            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_START, "NIL");
+            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_END, "NIL");
             m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
             m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
             m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
@@ -92,6 +94,13 @@ namespace desktop {
             {
                 // Supress duplicate invalidation only when they are in sequence.
                 return;
+            }
+
+            if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
+            {
+                // Removing text selection invalidates the start and end as well.
+                m_states[LOK_CALLBACK_TEXT_SELECTION_START] = "";
+                m_states[LOK_CALLBACK_TEXT_SELECTION_END] = "";
             }
 
             m_queue.emplace_back(type, payload);
