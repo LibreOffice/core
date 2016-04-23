@@ -2397,7 +2397,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                     OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef1.Tab(), aTabName, nFileId);
-                    ReplaceToken( j, new ScExternalDoubleRefToken(nFileId, aTabName, rRef), FORWARD_CODE_AND_RPN);
+                    ReplaceToken( j, new ScExternalDoubleRefToken(nFileId, aTabName, rRef), CODE_AND_RPN);
                     // ATTENTION: rRef can't be used after this point
                 }
             }
@@ -2414,7 +2414,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                     OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef.Tab(), aTabName, nFileId);
-                    ReplaceToken( j, new ScExternalSingleRefToken(nFileId, aTabName, rRef), FORWARD_CODE_AND_RPN);
+                    ReplaceToken( j, new ScExternalSingleRefToken(nFileId, aTabName, rRef), CODE_AND_RPN);
                     // ATTENTION: rRef can't be used after this point
                 }
             }

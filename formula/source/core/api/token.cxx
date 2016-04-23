@@ -867,16 +867,13 @@ FormulaToken* FormulaTokenArray::MergeArray( )
 FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken* t,
         FormulaTokenArray::ReplaceMode eMode )
 {
-    if (eMode == BACKWARD_CODE_ONLY)
-        nOffset = nLen - nOffset - 1;
-
     if (nOffset < nLen)
     {
         CheckToken(*t);
         t->IncRef();
         FormulaToken* p = pCode[nOffset];
         pCode[nOffset] = t;
-        if (eMode == FORWARD_CODE_AND_RPN && p->GetRef() > 1)
+        if (eMode == CODE_AND_RPN && p->GetRef() > 1)
         {
             for (sal_uInt16 i=0; i < nRPN; ++i)
             {

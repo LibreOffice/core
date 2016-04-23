@@ -127,23 +127,19 @@ protected:
 public:
     enum ReplaceMode
     {
-        BACKWARD_CODE_ONLY,     ///< offset goes backward, replacement only in pCode
-        FORWARD_CODE_AND_RPN    ///< offset goes forward, replacement in pCode and RPN
+        CODE_ONLY,      ///< replacement only in pCode
+        CODE_AND_RPN    ///< replacement in pCode and pRPN
     };
 
 protected:
     /** Also used by the compiler. The token MUST had been allocated with new!
         @param  nOffset
-                If eMode==BACKWARD_CODE_ONLY negative offset of token, 0==last,
-                1==previous, ...
-                If eMode==FORWARD_CODE_AND_RPN positive offset of token, 0==first,
-                1==second, ...
+                Absolute offset in pCode of the token to be replaced.
         @param  eMode
-                If BACKWARD_CODE_ONLY only the token in pCode at nLen-nOffset-1
-                is replaced.
-                If FORWARD_CODE_AND_RPN the token in pCode at nOffset is
-                replaced; if the original token was also referenced in the RPN
-                array then that reference is replaced with a reference to the new
+                If CODE_ONLY only the token in pCode at nOffset is replaced.
+                If CODE_AND_RPN the token in pCode at nOffset is replaced;
+                if the original token was also referenced in the pRPN array
+                then that reference is replaced with a reference to the new
                 token as well.
      */
     FormulaToken*           ReplaceToken( sal_uInt16 nOffset, FormulaToken*, ReplaceMode eMode );
