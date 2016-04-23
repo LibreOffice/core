@@ -265,8 +265,9 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
          aEnd = m_pParserState->m_aModelMaps.end(); aI != aEnd; ++aI)
     {
         ListBox *pTarget = get<ListBox>(aI->m_sID);
+        // pStore may be empty
         const ListStore *pStore = get_model_by_name(aI->m_sValue);
-        SAL_WARN_IF(!pTarget || !pStore, "vcl", "missing elements of combobox/liststore");
+        SAL_WARN_IF(!pTarget, "vcl", "missing elements of combobox");
         if (pTarget && pStore)
             mungeModel(*pTarget, *pStore, aI->m_nActiveId);
     }
