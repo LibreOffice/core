@@ -1364,12 +1364,7 @@ void ScTable::FillAutoSimple(
                 case CELLTYPE_EDIT:
                     if ( nHeadNoneTail )
                     {
-                        // #i48009# with the "nStringValue+(long)nDelta" expression within the
-                        // lcl_ValueString calls, gcc 3.4.1 makes wrong optimizations (ok in 3.4.3),
-                        // so nNextValue is now calculated ahead.
                         sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
-
-                        OUString aStr;
                         if ( nHeadNoneTail < 0 )
                         {
                             setSuffixCell(
@@ -1379,7 +1374,8 @@ void ScTable::FillAutoSimple(
                         }
                         else
                         {
-                            aStr = aValue + lcl_ValueString( nNextValue, nCellDigits );
+                            OUString aStr = aValue + lcl_ValueString(nNextValue,
+                                                                     nCellDigits );
                             aCol[rCol].SetRawString(rRow, aStr);
                         }
                     }
