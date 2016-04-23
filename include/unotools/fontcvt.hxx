@@ -57,7 +57,7 @@ public:
 };
 
 
-// The converter will allow somewhat dubious mappings to the the windows symbols fonts,
+// The converter will allow somewhat dubious mappings to the windows symbols fonts,
 // that are nevertheless recognizably similar. Even in this mode there will be characters that fail.
 // The users of this might want to make a distinction between failed characters
 // which were inside and those outside the unicode private area.

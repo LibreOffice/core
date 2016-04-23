@@ -1478,7 +1478,7 @@ void FormulaDlg_Impl::UpdateSelection()
 {
     //because its initially hidden, give it its optimal
     //size so clicking the refbutton has an initial
-    //size to work work when retro-fitting this to .ui
+    //size to work when retro-fitting this to .ui
     m_pEdRef->SetSizePixel(m_pEdRef->GetOptimalSize());
     m_pEdRef->Show();
     pTheRefEdit = pEdit;
