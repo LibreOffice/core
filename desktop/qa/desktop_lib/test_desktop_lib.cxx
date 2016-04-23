@@ -71,6 +71,16 @@ public:
     void closeDoc();
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+    void flushTimers()
+    {
+        // Need these to make sure idle tasks are also invoked.
+        // Yielding once is not enough since there are higher
+        // priority timers that take precedence over idle.
+        for (auto i = 0; i < 10; ++i)
+        {
+            Application::Reschedule(true);
+        }
+    }
 
     void testGetStyles();
     void testGetFonts();
@@ -315,7 +325,9 @@ void DesktopLOKTest::testSearchCalc()
         {"SearchItem.Backward", uno::makeAny(false)},
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
+
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    flushTimers();
 
     std::vector<OString> aSelections;
     sal_Int32 nIndex = 0;
@@ -349,8 +361,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
-    Application::Reschedule(true);
-    Scheduler::ProcessTaskScheduling(false);
+    flushTimers();
 
     // This was 1, make sure that we get no notifications about selection changes during search.
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
@@ -569,6 +580,7 @@ void DesktopLOKTest::testCommandResult()
     // the condition var.
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
+    flushTimers();
     m_aCommandResultCondition.wait(&aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
@@ -578,6 +590,7 @@ void DesktopLOKTest::testCommandResult()
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
+    flushTimers();
     m_aCommandResultCondition.wait(&aTimeValue);
 
     boost::property_tree::ptree aTree;
@@ -600,6 +613,8 @@ void DesktopLOKTest::testWriterComments()
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
+    flushTimers();
+
     m_aCommandResultCondition.wait(&aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
     xToolkit->reschedule();
