@@ -42,6 +42,7 @@ namespace desktop {
             m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
             m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
             m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
+            m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL");
 
             Start();
         }
