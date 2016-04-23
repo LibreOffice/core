@@ -1285,12 +1285,14 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 4
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 5
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 6
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 7
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // 7
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 8
     handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Should be dropped.
 
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(8), notifs.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(9), notifs.size());
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[0]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[0]));
@@ -1313,8 +1315,11 @@ void DesktopLOKTest::testNotificationCompression()
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[6]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[6]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[7]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[7]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_MOUSE_POINTER, (int)std::get<0>(notifs[7]));
+    CPPUNIT_ASSERT_EQUAL(std::string("text"), std::get<1>(notifs[7]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[8]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[8]));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
