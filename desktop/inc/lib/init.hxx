@@ -13,7 +13,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <osl/thread.h>
-#include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -27,36 +27,35 @@ class LOKInteractionHandler;
 
 namespace desktop {
 
-    class CallbackFlushHandler : public Timer
+    class CallbackFlushHandler : public Idle
     {
     public:
         explicit CallbackFlushHandler(LibreOfficeKitCallback pCallback, void* pData)
-            : Timer( "lokit timer callback" ),
+            : Idle( "lokit timer callback" ),
               m_pCallback(pCallback),
               m_pData(pData)
         {
-            SetTimeout(25);
+            SetPriority(SchedulerPriority::POST_PAINT);
 
-            // Add the states that is safe to skip duplicates on,
+            // Add the states that are safe to skip duplicates on,
             // even when not consequent.
-            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_START, "");
-            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_END, "");
-            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "");
-            m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "");
-            m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "");
+            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
+            m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
+            m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
+
+            Start();
         }
 
         virtual ~CallbackFlushHandler()
         {
             Stop();
 
-            // Wait for Invoke to finish, if called.
-            std::unique_lock<std::mutex> lock(m_mutex);
+            // We might have important notification (.uno:save?).
+            flush();
         }
 
         virtual void Invoke() override
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
             flush();
         }
 
@@ -95,6 +94,8 @@ namespace desktop {
             }
 
             m_queue.emplace_back(type, payload);
+
+            lock.unlock();
             if (!IsActive())
             {
                 Start();
@@ -106,13 +107,14 @@ namespace desktop {
         {
             if (m_pCallback)
             {
+                std::unique_lock<std::mutex> lock(m_mutex);
                 for (auto& pair : m_queue)
                 {
                     m_pCallback(std::get<0>(pair), std::get<1>(pair).c_str(), m_pData);
                 }
-            }
 
-            m_queue.clear();
+                m_queue.clear();
+            }
         }
 
     private:
