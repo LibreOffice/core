@@ -266,6 +266,17 @@ struct OpCodeMapData
 };
 
 
+bool isPotentialRangeLeftOp( OpCode eOp )
+{
+    switch (eOp)
+    {
+        case ocClose:
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool isRangeResultFunction( OpCode eOp )
 {
     switch (eOp)
@@ -293,15 +304,23 @@ bool isRangeResultOpCode( OpCode eOp )
     }
 }
 
-bool isPotentialRangeType( FormulaToken* pToken, bool bRPN )
+/**
+    @param  bRight
+            If bRPN==false, bRight==false means opcodes for left side are
+            checked, bRight==true means opcodes for right side. If bRPN==true
+            it doesn't matter.
+ */
+bool isPotentialRangeType( FormulaToken* pToken, bool bRPN, bool bRight )
 {
     switch (pToken->GetType())
     {
         case svByte:                // could be range result, but only a few
             if (bRPN)
                 return isRangeResultOpCode( pToken->GetOpCode());
-            else
+            else if (bRight)
                 return isRangeResultFunction( pToken->GetOpCode());
+            else
+                return isPotentialRangeLeftOp( pToken->GetOpCode());
         case svSingleRef:
         case svDoubleRef:
         case svIndex:               // could be range
@@ -311,7 +330,9 @@ bool isPotentialRangeType( FormulaToken* pToken, bool bRPN )
         case svExternalName:        // could be range
             return true;
         default:
-            return false;
+            // Separators are not part of RPN and right opcodes need to be
+            // other StackVarEnum types or functions and thus svByte.
+            return !bRPN && !bRight && isPotentialRangeLeftOp( pToken->GetOpCode());
     }
 }
 
@@ -320,7 +341,7 @@ bool isIntersectable( FormulaToken** pCode1, FormulaToken** pCode2 )
     FormulaToken* pToken1 = *pCode1;
     FormulaToken* pToken2 = *pCode2;
     if (pToken1 && pToken2)
-        return isPotentialRangeType( pToken1, true) && isPotentialRangeType( pToken2, true);
+        return isPotentialRangeType( pToken1, true, false) && isPotentialRangeType( pToken2, true, true);
     return false;
 }
 
@@ -1169,7 +1190,8 @@ bool FormulaCompiler::GetToken()
                 pArr->nIndex--;     // we advanced to the second ocColRowName, step back
             }
             else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
-                    isPotentialRangeType( pCurrToken.get(), false) && isPotentialRangeType( mpToken.get(), false))
+                    isPotentialRangeType( pCurrToken.get(), false, false) &&
+                    isPotentialRangeType( mpToken.get(), false, true))
             {
                 // Let IntersectionLine() <- Factor() decide how to treat this,
                 // once the actual arguments are determined in RPN.
@@ -2323,10 +2345,11 @@ OpCode FormulaCompiler::NextToken()
         {
             // Fake an intersection op as last op for the next round, but at
             // least roughly check if it could make sense at all.
-            if (eLastOp == ocPush || eLastOp == ocClose)
+            FormulaToken* pPrev = pArr->PeekPrevNoSpaces();
+            if (pPrev && isPotentialRangeType( pPrev, false, false))
             {
                 FormulaToken* pNext = pArr->PeekNextNoSpaces();
-                if (pNext && isPotentialRangeType( pNext, false))
+                if (pNext && isPotentialRangeType( pNext, false, true))
                     eLastOp = ocIntersect;
                 else
                     eLastOp = eOp;
