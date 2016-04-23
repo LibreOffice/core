@@ -4370,7 +4370,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
 
         if (nBrackets)
         {
-            FormulaByteToken aToken( ocClose );
+            FormulaToken aToken( svSep, ocClose );
             while( nBrackets-- )
             {
                 if( !pArr->AddToken( aToken ) )
