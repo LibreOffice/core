@@ -686,7 +686,6 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     aSet.Put( XFillColorItem( "", Color(COL_BLACK) ) );
     aSet.Put( XFillTransparenceItem( 20 ) );
     pSdrObj->SetMergedItemSetAndBroadcast(aSet);
-    pSlide->InsertObject(pSdrObj);
 }
 
 Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OUString& sUrl,
