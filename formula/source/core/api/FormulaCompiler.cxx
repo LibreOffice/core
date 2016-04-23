@@ -266,6 +266,75 @@ struct OpCodeMapData
 };
 
 
+bool isRangeResultFunction( OpCode eOp )
+{
+    switch (eOp)
+    {
+        case ocIndirect:
+        case ocOffset:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool isRangeResultOpCode( OpCode eOp )
+{
+    switch (eOp)
+    {
+        case ocRange:
+        case ocUnion:
+        case ocIntersect:
+        case ocIndirect:
+        case ocOffset:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool isPotentialRangeType( FormulaToken* pToken, bool bRPN )
+{
+    switch (pToken->GetType())
+    {
+        case svByte:                // could be range result, but only a few
+            if (bRPN)
+                return isRangeResultOpCode( pToken->GetOpCode());
+            else
+                return isRangeResultFunction( pToken->GetOpCode());
+        case svSingleRef:
+        case svDoubleRef:
+        case svIndex:               // could be range
+        //case svRefList:           // um..what?
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        case svExternalName:        // could be range
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool isIntersectable( FormulaToken** pCode1, FormulaToken** pCode2 )
+{
+    FormulaToken* pToken1 = *pCode1;
+    FormulaToken* pToken2 = *pCode2;
+    if (pToken1 && pToken2)
+        return isPotentialRangeType( pToken1, true) && isPotentialRangeType( pToken2, true);
+    return false;
+}
+
+bool isAdjacentRpnEnd( sal_uInt16 nPC,
+        FormulaToken const * const * const pCode,
+        FormulaToken const * const * const pCode1,
+        FormulaToken const * const * const pCode2 )
+{
+    return nPC >= 2 && pCode1 && pCode2 &&
+            (pCode2 - pCode1 == 1) && (pCode - pCode2 == 1) &&
+            (*pCode1 != nullptr) && (*pCode2 != nullptr);
+}
+
+
 } // namespace
 
 
@@ -1061,6 +1130,7 @@ bool FormulaCompiler::GetToken()
         bStop = true;
     else
     {
+        FormulaTokenRef pCurrToken = mpToken;
         FormulaTokenRef pSpacesToken;
         short nWasColRowName;
         if ( pArr->nIndex > 0 && pArr->pCode[ pArr->nIndex-1 ]->GetOpCode() == ocColRowName )
@@ -1098,7 +1168,8 @@ bool FormulaCompiler::GetToken()
                 mpToken = new FormulaByteToken( ocIntersect );
                 pArr->nIndex--;     // we advanced to the second ocColRowName, step back
             }
-            else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar))
+            else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
+                    isPotentialRangeType( pCurrToken.get(), false) && isPotentialRangeType( mpToken.get(), false))
             {
                 // Let IntersectionLine() <- Factor() decide how to treat this,
                 // once the actual arguments are determined in RPN.
@@ -1572,78 +1643,6 @@ void FormulaCompiler::RangeLine()
         if (!MergeRangeReference( pCode1, pCode2))
             PutCode(p);
     }
-}
-
-namespace {
-
-bool isRangeResultFunction( OpCode eOp )
-{
-    switch (eOp)
-    {
-        case ocIndirect:
-        case ocOffset:
-            return true;
-        default:
-            return false;
-    }
-}
-
-bool isRangeResultOpCode( OpCode eOp )
-{
-    switch (eOp)
-    {
-        case ocRange:
-        case ocUnion:
-        case ocIntersect:
-        case ocIndirect:
-        case ocOffset:
-            return true;
-        default:
-            return false;
-    }
-}
-
-bool isPotentialRangeType( FormulaToken* pToken, bool bRPN )
-{
-    switch (pToken->GetType())
-    {
-        case svByte:                // could be range result, but only a few
-            if (bRPN)
-                return isRangeResultOpCode( pToken->GetOpCode());
-            else
-                return isRangeResultFunction( pToken->GetOpCode());
-        case svSingleRef:
-        case svDoubleRef:
-        case svIndex:               // could be range
-        //case svRefList:           // um..what?
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-        case svExternalName:        // could be range
-            return true;
-        default:
-            return false;
-    }
-}
-
-bool isIntersectable( FormulaToken** pCode1, FormulaToken** pCode2 )
-{
-    FormulaToken* pToken1 = *pCode1;
-    FormulaToken* pToken2 = *pCode2;
-    if (pToken1 && pToken2)
-        return isPotentialRangeType( pToken1, true) && isPotentialRangeType( pToken2, true);
-    return false;
-}
-
-bool isAdjacentRpnEnd( sal_uInt16 nPC,
-        FormulaToken const * const * const pCode,
-        FormulaToken const * const * const pCode1,
-        FormulaToken const * const * const pCode2 )
-{
-    return nPC >= 2 && pCode1 && pCode2 &&
-            (pCode2 - pCode1 == 1) && (pCode - pCode2 == 1) &&
-            (*pCode1 != nullptr) && (*pCode2 != nullptr);
-}
-
 }
 
 void FormulaCompiler::IntersectionLine()
