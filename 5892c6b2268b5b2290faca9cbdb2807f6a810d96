@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_ac2587af",
+        "filename": "onlineupdate/source/update/common/updatehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-04-23T14:08:46Z",
+      "side": 0,
+      "message": "I would not remove the possessive ending, ’s.",
+      "range": {
+        "startLine": 717,
+        "startChar": 31,
+        "endLine": 717,
+        "endChar": 33
+      },
+      "revId": "5892c6b2268b5b2290faca9cbdb2807f6a810d96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_ec1f7f59",
+        "filename": "sot/source/sdstor/ucbstorage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-04-23T14:08:46Z",
+      "side": 0,
+      "message": "*Maybe* a comma was needed here?",
+      "revId": "5892c6b2268b5b2290faca9cbdb2807f6a810d96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
