@@ -159,16 +159,23 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put(SwBackgroundDestinationItem(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
     SvxBrushItem aBrush( RES_BACKGROUND );
     if(rSh.GetRowBackground(aBrush))
-        rSet.Put( aBrush, SID_ATTR_BRUSH_ROW );
+    {
+        aBrush.SetWhich(SID_ATTR_BRUSH_ROW);
+        rSet.Put( aBrush );
+    }
     else
         rSet.InvalidateItem(SID_ATTR_BRUSH_ROW);
     rSh.GetTabBackground(aBrush);
-    rSet.Put( aBrush, SID_ATTR_BRUSH_TABLE );
+    aBrush.SetWhich(SID_ATTR_BRUSH_TABLE);
+    rSet.Put( aBrush );
 
     // text direction in boxes
     SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
-        rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTORIENTATION);
+    {
+        aBoxDirection.SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
+        rSet.Put(aBoxDirection);
+    }
 
     bool bSelectAll = rSh.StartsWithTable() && rSh.ExtendedSelectedAll();
     bool bTableSel = rSh.IsTableMode() || bSelectAll;

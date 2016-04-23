@@ -657,9 +657,15 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
         }
         else
         {
-            rItemSet.Put( rField.GetHeight(), ATTR_CJK_FONT_HEIGHT );
-            rItemSet.Put( rField.GetWeight(), ATTR_CJK_FONT_WEIGHT );
-            rItemSet.Put( rField.GetPosture(), ATTR_CJK_FONT_POSTURE );
+            SvxFontHeightItem aFontHeightItem(rField.GetHeight());
+            aFontHeightItem.SetWhich(ATTR_CJK_FONT_HEIGHT);
+            rItemSet.Put( aFontHeightItem );
+            SvxWeightItem aWeightItem(rField.GetWeight());
+            aWeightItem.SetWhich(ATTR_CJK_FONT_WEIGHT);
+            rItemSet.Put( aWeightItem );
+            SvxPostureItem aPostureItem(rField.GetPosture());
+            aPostureItem.SetWhich(ATTR_CJK_FONT_POSTURE);
+            rItemSet.Put( aPostureItem );
         }
         // do not insert empty CTL font
         const SvxFontItem& rCTLFont = rField.GetCTLFont();
@@ -672,9 +678,15 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
         }
         else
         {
-            rItemSet.Put( rField.GetHeight(), ATTR_CTL_FONT_HEIGHT );
-            rItemSet.Put( rField.GetWeight(), ATTR_CTL_FONT_WEIGHT );
-            rItemSet.Put( rField.GetPosture(), ATTR_CTL_FONT_POSTURE );
+            SvxFontHeightItem aFontHeightItem(rField.GetHeight());
+            aFontHeightItem.SetWhich(ATTR_CTL_FONT_HEIGHT);
+            rItemSet.Put( aFontHeightItem );
+            SvxWeightItem aWeightItem(rField.GetWeight());
+            aWeightItem.SetWhich(ATTR_CTL_FONT_WEIGHT);
+            rItemSet.Put( aWeightItem );
+            SvxPostureItem aPostureItem(rField.GetPosture());
+            aPostureItem.SetWhich(ATTR_CTL_FONT_POSTURE);
+            rItemSet.Put( aPostureItem );
         }
         rItemSet.Put( rField.GetUnderline() );
         rItemSet.Put( rField.GetOverline() );

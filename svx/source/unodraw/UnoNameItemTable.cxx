@@ -85,7 +85,8 @@ void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, cons
     std::unique_ptr<NameOrIndex> pNewItem(createItem());
     pNewItem->SetName( aName );
     pNewItem->PutValue( aElement, mnMemberId );
-    maItemSetVector.back()->Put( *pNewItem, mnWhich );
+    pNewItem->SetWhich(mnWhich);
+    maItemSetVector.back()->Put( *pNewItem );
 }
 
 // XNameContainer

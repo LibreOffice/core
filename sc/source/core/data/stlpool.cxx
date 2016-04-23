@@ -329,8 +329,10 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // distance to header/footer for the sheet
     pHFSetItem = new SvxSetItem( static_cast<const SvxSetItem&>(pSet->Get( ATTR_PAGE_HEADERSET ) ) );
-    pSet->Put( *pHFSetItem, ATTR_PAGE_HEADERSET );
-    pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
+    pHFSetItem->SetWhich(ATTR_PAGE_HEADERSET);
+    pSet->Put( *pHFSetItem );
+    pHFSetItem->SetWhich(ATTR_PAGE_FOOTERSET);
+    pSet->Put( *pHFSetItem );
     delete pHFSetItem;
 
     // Header:
@@ -387,8 +389,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     pHFSet->Put( SvxBrushItem( aColGrey, ATTR_BACKGROUND ) );
     pHFSet->Put( aBoxItem );
     pHFSet->Put( aBoxInfoItem );
-    pSet->Put( *pHFSetItem, ATTR_PAGE_HEADERSET );
-    pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
+    pHFSetItem->SetWhich(ATTR_PAGE_HEADERSET);
+    pSet->Put( *pHFSetItem );
+    pHFSetItem->SetWhich(ATTR_PAGE_FOOTERSET);
+    pSet->Put( *pHFSetItem );
     delete pHFSetItem;
 
     // Footer:

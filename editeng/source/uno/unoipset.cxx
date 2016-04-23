@@ -181,7 +181,8 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
         if( pNewItem->PutValue( aValue, nMemberId ) )
         {
             // Set new item in item set
-            rSet.Put( *pNewItem, pMap->nWID );
+            pNewItem->SetWhich( pMap->nWID );
+            rSet.Put( *pNewItem );
         }
         delete pNewItem;
     }

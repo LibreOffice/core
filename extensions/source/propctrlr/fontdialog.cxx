@@ -248,17 +248,17 @@ namespace pcr
             SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief, CFID_RELIEF);
             SvxEmphasisMarkItem aEmphasisMarkitem((FontEmphasisMark)nFontEmphasisMark, CFID_EMPHASIS);
 
-            _pSet->Put(aFontItem, CFID_FONT);
-            _pSet->Put(aSvxFontHeightItem,CFID_HEIGHT);
-            _pSet->Put(aWeightItem, CFID_WEIGHT);
-            _pSet->Put(aPostureItem, CFID_POSTURE);
-            _pSet->Put(aLanguageItem, CFID_LANGUAGE);
-            _pSet->Put(aUnderlineItem,CFID_UNDERLINE);
-            _pSet->Put(aCrossedOutItem,CFID_STRIKEOUT);
-            _pSet->Put(aWordLineModeItem, CFID_WORDLINEMODE);
-            _pSet->Put(aSvxColorItem, CFID_CHARCOLOR);
-            _pSet->Put(aFontReliefItem, CFID_RELIEF);
-            _pSet->Put(aEmphasisMarkitem, CFID_EMPHASIS);
+            _pSet->Put(aFontItem);
+            _pSet->Put(aSvxFontHeightItem);
+            _pSet->Put(aWeightItem);
+            _pSet->Put(aPostureItem);
+            _pSet->Put(aLanguageItem);
+            _pSet->Put(aUnderlineItem);
+            _pSet->Put(aCrossedOutItem);
+            _pSet->Put(aWordLineModeItem);
+            _pSet->Put(aSvxColorItem);
+            _pSet->Put(aFontReliefItem);
+            _pSet->Put(aEmphasisMarkitem);
 
             aPropExtractor.invalidateItem(PROPERTY_FONT_NAME, CFID_FONT, *_pSet);
             aPropExtractor.invalidateItem(PROPERTY_FONT_HEIGHT, CFID_HEIGHT, *_pSet);

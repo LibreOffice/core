@@ -108,8 +108,10 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
         SvxLanguageItem aLang( (LanguageType)rOpt.GetLanguage(),
                                  RES_CHRATR_LANGUAGE );
         pItemSet->Put( aLang );
-        pItemSet->Put( aLang, RES_CHRATR_CJK_LANGUAGE );
-        pItemSet->Put( aLang, RES_CHRATR_CTL_LANGUAGE );
+        aLang.SetWhich(RES_CHRATR_CJK_LANGUAGE);
+        pItemSet->Put( aLang );
+        aLang.SetWhich(RES_CHRATR_CTL_LANGUAGE);
+        pItemSet->Put( aLang );
     }
     if( !rOpt.GetFontName().isEmpty() )
     {
@@ -119,8 +121,10 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
         SvxFontItem aFont( aTextFont.GetFamilyType(), aTextFont.GetFamilyName(),
                            OUString(), aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
         pItemSet->Put( aFont );
-        pItemSet->Put( aFont, RES_CHRATR_CJK_FONT );
-        pItemSet->Put( aFont, RES_CHRATR_CTL_FONT );
+        aFont.SetWhich(RES_CHRATR_CJK_FONT);
+        pItemSet->Put( aFont );
+        aFont.SetWhich(RES_CHRATR_CTL_FONT);
+        pItemSet->Put( aFont );
     }
 }
 

@@ -1121,9 +1121,9 @@ static void ChangeFontSizeImpl( EditView* pEditView, bool bGrow, const ESelectio
     if( EditView::ChangeFontSize( bGrow, aSet, pFontList ) )
     {
         SfxItemSet aNewSet( pEditView->GetEmptyItemSet() );
-        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT ), EE_CHAR_FONTHEIGHT );
-        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CJK ), EE_CHAR_FONTHEIGHT_CJK );
-        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CTL ), EE_CHAR_FONTHEIGHT_CTL );
+        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT ) );
+        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CJK ) );
+        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CTL ) );
         pEditView->SetAttribs( aNewSet );
     }
 }
@@ -1258,7 +1258,8 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
             if( nHeight != (long)aFontHeightItem.GetHeight() )
             {
                 aFontHeightItem.SetHeight( nHeight );
-                rSet.Put( aFontHeightItem, *pWhich );
+                std::unique_ptr<SfxPoolItem> pNewItem(aFontHeightItem.CloneSetWhich(*pWhich));
+                rSet.Put( *pNewItem );
                 bRet = true;
             }
         }

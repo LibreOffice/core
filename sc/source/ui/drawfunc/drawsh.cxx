@@ -334,11 +334,11 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
 
     // create empty itemset for macro-dlg
     std::unique_ptr<SfxItemSet> pItemSet(new SfxItemSet(SfxGetpApp()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 ));
-    pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
+    pItemSet->Put ( aItem );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
     aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), OUString(), SFX_EVENT_MOUSECLICK_OBJECT );
-    pItemSet->Put( aNamesItem, SID_EVENTCONFIG );
+    pItemSet->Put( aNamesItem );
 
     css::uno::Reference < css::frame::XFrame > xFrame;
     if (GetViewShell())

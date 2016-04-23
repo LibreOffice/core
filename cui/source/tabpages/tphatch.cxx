@@ -338,7 +338,8 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 
             sal_uInt32 nPosBckColor = m_pLbBackgroundColor->GetSelectEntryPos();
             XFillBackgroundItem aItem( m_pLbBackgroundColor->GetSelectEntryColor() != COL_WHITE );
-            rSet->Put( aItem , XATTR_FILLBACKGROUND );
+            aItem.SetWhich( XATTR_FILLBACKGROUND );
+            rSet->Put( aItem );
             if(aItem.GetValue())
             {
                 OUString aBckColorString;
@@ -418,7 +419,8 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
     m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
 
     XFillBackgroundItem aItem( m_pLbBackgroundColor->GetSelectEntryColor() != COL_WHITE );
-    m_rXFSet.Put( aItem, XATTR_FILLBACKGROUND );
+    aItem.SetWhich( XATTR_FILLBACKGROUND );
+    m_rXFSet.Put( aItem );
     if(aItem.GetValue())
         m_rXFSet.Put( XFillColorItem( OUString(), m_pLbBackgroundColor->GetSelectEntryColor() ) );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );

@@ -92,11 +92,15 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
      rSh.GetBoxBackground(aBrush);
     rSet.Put( aBrush );
     if(rSh.GetRowBackground(aBrush))
-        rSet.Put( aBrush, SID_ATTR_BRUSH_ROW );
+    {
+        aBrush.SetWhich(SID_ATTR_BRUSH_ROW);
+        rSet.Put( aBrush );
+    }
     else
         rSet.InvalidateItem(SID_ATTR_BRUSH_ROW);
     rSh.GetTabBackground(aBrush);
-    rSet.Put( aBrush, SID_ATTR_BRUSH_TABLE );
+    aBrush.SetWhich(SID_ATTR_BRUSH_TABLE);
+    rSet.Put( aBrush );
 
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     rSet.Put(aBoxInfo);
@@ -104,7 +108,10 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 
     SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
-        rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTORIENTATION);
+    {
+        aBoxDirection.SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
+        rSet.Put(aBoxDirection);
+    }
 
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));
 

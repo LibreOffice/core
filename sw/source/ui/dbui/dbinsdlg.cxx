@@ -670,8 +670,10 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
 
         SvxBrushItem aBrush( RES_BACKGROUND );
         pTableSet->Put( aBrush );
-        pTableSet->Put( aBrush, SID_ATTR_BRUSH_ROW );
-        pTableSet->Put( aBrush, SID_ATTR_BRUSH_TABLE );
+        aBrush.SetWhich(SID_ATTR_BRUSH_ROW);
+        pTableSet->Put( aBrush );
+        aBrush.SetWhich(SID_ATTR_BRUSH_TABLE);
+        pTableSet->Put( aBrush );
 
         SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
             // table variant, when multiple table cells are selected

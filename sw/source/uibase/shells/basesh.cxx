@@ -2117,7 +2117,10 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
                 aSetItem.GetItemSet().Put( *pFntCoreSet, false );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
-                    rSet.Put( *pI, nWhich );
+                {
+                    std::unique_ptr<SfxPoolItem> pNewItem(pI->CloneSetWhich(nWhich));
+                    rSet.Put( *pNewItem );
+                }
                 else
                     rSet.InvalidateItem( nWhich );
                 // Set input context of the SwEditWin according to the selected font and script type
@@ -2191,13 +2194,14 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
             case SID_BACKGROUND_COLOR:
             {
                 SvxColorItem aColorItem(aBrushItem.GetColor(),SID_BACKGROUND_COLOR);
-                rSet.Put(aColorItem,SID_BACKGROUND_COLOR);
+                rSet.Put(aColorItem);
                 break;
             }
             case SID_ATTR_BRUSH:
             case RES_BACKGROUND:
             {
-                rSet.Put(aBrushItem,GetPool().GetWhich(nWhich));
+                std::unique_ptr<SfxPoolItem> pNewItem(aBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)));
+                rSet.Put(*pNewItem);
                 break;
             }
         }

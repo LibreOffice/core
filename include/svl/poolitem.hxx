@@ -163,7 +163,12 @@ protected:
 public:
     virtual                  ~SfxPoolItem();
 
-    void                     SetWhich( sal_uInt16 nId ) { m_nWhich = nId; }
+    void                     SetWhich( sal_uInt16 nId )
+                             {
+                                 // can only change the Which before we are in a set
+                                 assert(m_nRefCount==0);
+                                 m_nWhich = nId;
+                             }
     sal_uInt16               Which() const { return m_nWhich; }
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
@@ -186,6 +191,8 @@ public:
     virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const = 0;
+    // clone and call SetWhich
+    SfxPoolItem*             CloneSetWhich( sal_uInt16 nNewWhich ) const;
 
     sal_uLong                GetRefCount() const { return m_nRefCount; }
     inline SfxItemKind       GetKind() const { return m_nKind; }
