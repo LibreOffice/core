@@ -90,6 +90,7 @@ public:
     void testContextMenuCalc();
     void testContextMenuWriter();
     void testContextMenuImpress();
+    void testNotificationCompression();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -115,6 +116,7 @@ public:
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testContextMenuImpress);
+    CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1261,6 +1263,58 @@ void DesktopLOKTest::testContextMenuImpress()
     }
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+static void callbackCompressionTest(const int type, const char* payload, void* data)
+{
+    std::vector<std::tuple<int, std::string>>* notifs = reinterpret_cast<std::vector<std::tuple<int, std::string>>*>(data);
+    notifs->emplace_back(type, std::string(payload ? payload : "(nil)"));
+}
+
+void DesktopLOKTest::testNotificationCompression()
+{
+    std::vector<std::tuple<int, std::string>> notifs;
+    std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(callbackCompressionTest, &notifs));
+
+    handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // 1
+    handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // Should be dropped.
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 2
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 3
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 4
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 5
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 6
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 7
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Should be dropped.
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(8), notifs.size());
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[0]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[0]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[1]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[1]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[2]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[2]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[3]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[3]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[4]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[4]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[5]));
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), std::get<1>(notifs[5]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[6]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[6]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[7]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[7]));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
