@@ -3281,7 +3281,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
     }
     break;
-    case RTF_PGNDEC:
     case RTF_PGNBIDIA:
     case RTF_PGNBIDIB:
         // These should be mapped to NS_ooxml::LN_EG_SectPrContents_pgNumType, but dmapper has no API for that at the moment.
@@ -3620,6 +3619,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_PGNLCRM:
     {
         auto pIntValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgNumType, NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
+    }
+    break;
+    case RTF_PGNDEC:
+    {
+        auto pIntValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_NumberFormat_decimal);
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgNumType, NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
     }
     break;
