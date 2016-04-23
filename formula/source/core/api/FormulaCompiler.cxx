@@ -355,6 +355,16 @@ bool isAdjacentRpnEnd( sal_uInt16 nPC,
             (*pCode1 != nullptr) && (*pCode2 != nullptr);
 }
 
+bool isAdjacentOrGapRpnEnd( sal_uInt16 nPC,
+        FormulaToken const * const * const pCode,
+        FormulaToken const * const * const pCode1,
+        FormulaToken const * const * const pCode2 )
+{
+    return nPC >= 2 && pCode1 && pCode2 &&
+            (pCode2 > pCode1) && (pCode - pCode2 == 1) &&
+            (*pCode1 != nullptr) && (*pCode2 != nullptr);
+}
+
 
 } // namespace
 
@@ -1684,7 +1694,7 @@ void FormulaCompiler::IntersectionLine()
             // functions (potentially returning references, if not then a space
             // or no space would be a syntax error anyway), not other operators
             // or operands. Else discard.
-            if (isAdjacentRpnEnd( pc, pCode, pCode1, pCode2) && isIntersectable( pCode1, pCode2))
+            if (isAdjacentOrGapRpnEnd( pc, pCode, pCode1, pCode2) && isIntersectable( pCode1, pCode2))
             {
                 FormulaTokenRef pIntersect( new FormulaByteToken( ocIntersect));
                 // Replace ocSpaces with ocIntersect so that when switching
