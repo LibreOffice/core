@@ -20,9 +20,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_CHARTTYPEDIALOGCONTROLLER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_CHARTTYPEDIALOGCONTROLLER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "ChangingResource.hxx"
 #include "ThreeDHelper.hxx"
-#include <comphelper/InlineContainer.hxx>
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -83,7 +86,7 @@ public:
     bool mbRoundedEdge;
 };
 
-typedef ::comphelper::MakeMap< OUString, ChartTypeParameter > tTemplateServiceChartTypeParameterMap;
+typedef std::map< OUString, ChartTypeParameter > tTemplateServiceChartTypeParameterMap;
 
 class ChartTypeDialogController : public ChangingResource
 {

@@ -45,7 +45,6 @@
 #include <rtl/math.hxx>
 
 #include <algorithm>
-#include <comphelper/InlineContainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>

@@ -22,7 +22,6 @@
 #include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
 
-#include <comphelper/InlineContainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>

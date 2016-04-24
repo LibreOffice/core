@@ -38,7 +38,6 @@
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
-#include <comphelper/InlineContainer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -1206,20 +1205,17 @@ enum eServiceType
 };
 
 typedef ::std::map< OUString, enum eServiceType > tServiceNameMap;
-typedef ::comphelper::MakeMap< OUString, enum eServiceType > tMakeServiceNameMap;
 
 tServiceNameMap & lcl_getStaticServiceNameMap()
 {
-    static tServiceNameMap aServiceNameMap(
-        tMakeServiceNameMap
-        ( "com.sun.star.drawing.DashTable",                    SERVICE_DASH_TABLE )
-        ( "com.sun.star.drawing.GradientTable",                SERVICE_GARDIENT_TABLE )
-        ( "com.sun.star.drawing.HatchTable",                   SERVICE_HATCH_TABLE )
-        ( "com.sun.star.drawing.BitmapTable",                  SERVICE_BITMAP_TABLE )
-        ( "com.sun.star.drawing.TransparencyGradientTable",    SERVICE_TRANSP_GRADIENT_TABLE )
-        ( "com.sun.star.drawing.MarkerTable",                  SERVICE_MARKER_TABLE )
-        ( "com.sun.star.xml.NamespaceMap",                     SERVICE_NAMESPACE_MAP )
-        );
+    static tServiceNameMap aServiceNameMap{
+        {"com.sun.star.drawing.DashTable",                    SERVICE_DASH_TABLE},
+        {"com.sun.star.drawing.GradientTable",                SERVICE_GARDIENT_TABLE},
+        {"com.sun.star.drawing.HatchTable",                   SERVICE_HATCH_TABLE},
+        {"com.sun.star.drawing.BitmapTable",                  SERVICE_BITMAP_TABLE},
+        {"com.sun.star.drawing.TransparencyGradientTable",    SERVICE_TRANSP_GRADIENT_TABLE},
+        {"com.sun.star.drawing.MarkerTable",                  SERVICE_MARKER_TABLE},
+        {"com.sun.star.xml.NamespaceMap",                     SERVICE_NAMESPACE_MAP}};
     return aServiceNameMap;
 }
 }

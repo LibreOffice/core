@@ -24,7 +24,6 @@
 #include "macros.hxx"
 #include "RelativeSizeHelper.hxx"
 #include "PropertyMapper.hxx"
-#include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
@@ -2268,8 +2267,9 @@ uno::Reference< drawing::XShape >
         tPropertyNameValueMap aValueMap;
         //fill line-, fill- and paragraph-properties into the ValueMap
         {
-            tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForParagraphProperties();
-            aNameMap( PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
+            tPropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForParagraphProperties();
+            auto const & add = PropertyMapper::getPropertyNameMapForFillAndLineProperties();
+            aNameMap.insert(add.begin(), add.end());
 
             PropertyMapper::getValueMap( aValueMap, aNameMap, xTextProperties );
         }

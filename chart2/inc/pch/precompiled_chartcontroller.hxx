@@ -309,7 +309,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
-#include <comphelper/InlineContainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>

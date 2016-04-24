@@ -19,18 +19,14 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ITEMPROPERTYMAP_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ITEMPROPERTYMAP_HXX
 
-#include <comphelper/InlineContainer.hxx>
-#include "ItemConverter.hxx"
+#include <sal/config.h>
 
-#define IPM_MAP_ENTRY(wid,uno,mid) (wid, ::std::make_pair< ::chart::wrapper::ItemConverter::tPropertyNameType, ::chart::wrapper::ItemConverter::tMemberIdType >(\
-    uno, mid))
+#include <map>
 
 namespace chart { namespace wrapper {
 
 typedef ::std::map< ItemConverter::tWhichIdType, ::std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
     ItemPropertyMapType;
-typedef ::comphelper::MakeMap< ItemConverter::tWhichIdType, ::std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
-    MakeItemPropertyMap;
 
 }}
 
