@@ -361,17 +361,13 @@ namespace basprov
                     SbModule* pModule = pBasic->FindModule( aModule );
                     if ( pModule )
                     {
-                        SbxArray* pMethods = pModule->GetMethods();
-                        if ( pMethods )
+                        SbMethod* pMethod = pModule->FindMethod( aMethod, SbxClassType::Method );
+                        if ( pMethod && !pMethod->IsHidden() )
                         {
-                            SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxClassType::Method ) );
-                            if ( pMethod && !pMethod->IsHidden() )
-                            {
-                                if ( m_pDocBasicManager == pBasicMgr )
-                                    xScript = new BasicScriptImpl( aDescription, pMethod, *m_pDocBasicManager, m_xInvocationContext );
-                                else
-                                    xScript = new BasicScriptImpl( aDescription, pMethod );
-                            }
+                            if ( m_pDocBasicManager == pBasicMgr )
+                                xScript = new BasicScriptImpl( aDescription, pMethod, *m_pDocBasicManager, m_xInvocationContext );
+                            else
+                                xScript = new BasicScriptImpl( aDescription, pMethod );
                         }
                     }
                 }
