@@ -579,6 +579,12 @@ SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
     return pMeth;
 }
 
+SbMethod* SbModule::FindMethod( const OUString& rName, SbxClassType t )
+{
+    return dynamic_cast<SbMethod*> (pMethods->Find( rName, t ));
+}
+
+
 // request/create property
 
 SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
