@@ -29,6 +29,7 @@ namespace chart
 class VCartesianCoordinateSystem : public VCoordinateSystem
 {
 public:
+    VCartesianCoordinateSystem() = delete;
     explicit VCartesianCoordinateSystem( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
     virtual ~VCartesianCoordinateSystem();
 
@@ -41,9 +42,6 @@ public:
     virtual void updateScalesAndIncrementsOnAxes() override;
 
     virtual void createGridShapes() override;
-
-private:
-    VCartesianCoordinateSystem();
 };
 
 } //namespace chart

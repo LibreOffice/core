@@ -29,6 +29,7 @@ namespace chart
 class VPolarCoordinateSystem : public VCoordinateSystem
 {
 public:
+    VPolarCoordinateSystem() = delete;
     explicit VPolarCoordinateSystem( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
     virtual ~VPolarCoordinateSystem();
 
@@ -45,9 +46,6 @@ public:
     virtual void updateScalesAndIncrementsOnAxes() override;
 
     virtual void createGridShapes() override;
-
-private:
-    VPolarCoordinateSystem();
 };
 
 } //namespace chart

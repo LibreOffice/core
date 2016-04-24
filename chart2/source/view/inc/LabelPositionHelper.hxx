@@ -37,6 +37,7 @@ class AbstractShapeFactory;
 class LabelPositionHelper
 {
 public:
+    LabelPositionHelper() = delete;
     LabelPositionHelper(
           sal_Int32 nDimensionCount
         , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
@@ -53,9 +54,6 @@ public:
 
     static void correctPositionForRotation( const css::uno::Reference< css::drawing::XShape >& xShape2DText
                     , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter );
-
-private:
-    LabelPositionHelper();
 
 protected:
     sal_Int32                m_nDimensionCount;

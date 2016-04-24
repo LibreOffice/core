@@ -32,6 +32,7 @@ class ShapeFactory : public AbstractShapeFactory
         {m_xShapeFactory = xFactory;}
 
 public:
+    ShapeFactory() = delete;
     virtual css::uno::Reference< css::drawing::XShapes >
         createGroup2D(
             const css::uno::Reference< css::drawing::XShapes >& xTarget
@@ -230,8 +231,6 @@ public:
     virtual void clearPage(css::uno::Reference< css::drawing::XShapes > ) override {}
 
 private:
-    ShapeFactory();
-
     css::uno::Reference< css::drawing::XShape >
         impl_createCube( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPosition

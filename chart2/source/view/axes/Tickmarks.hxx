@@ -45,6 +45,7 @@ struct TickInfo
     sal_Int32 nFactorForLimitedTextWidth;//categories in higher levels of complex categories can have more place than a single simple category
 
 //methods:
+    TickInfo() = delete;
     explicit TickInfo( const css::uno::Reference<css::chart2::XScaling>& xInverse );
 
     /**
@@ -54,8 +55,6 @@ struct TickInfo
      */
     double getUnscaledTickValue() const;
     sal_Int32 getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo ) const;
-private:
-    TickInfo();
 };
 
 typedef std::vector<TickInfo>           TickInfoArrayType;

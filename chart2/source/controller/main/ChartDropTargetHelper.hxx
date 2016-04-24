@@ -33,6 +33,7 @@ namespace chart
 class ChartDropTargetHelper : public DropTargetHelper
 {
 public:
+    ChartDropTargetHelper() = delete;
     explicit ChartDropTargetHelper(
         const css::uno::Reference< css::datatransfer::dnd::XDropTarget >& rxDropTarget,
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
@@ -44,9 +45,6 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 private:
-    // not available
-    ChartDropTargetHelper();
-
     bool satisfiesPrerequisites() const;
 
     css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
