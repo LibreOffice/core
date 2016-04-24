@@ -422,7 +422,7 @@ ScDocument::~ScDocument()
     // delete the EditEngine before destroying the xPoolHelper
     delete pCacheFieldEditEngine;
 
-    if ( xPoolHelper.is() && !bIsClip )
+    if ( xPoolHelper.is() && !bIsClip && !bIsUndo)
         xPoolHelper->SourceDocumentGone();
     xPoolHelper.clear();
 
