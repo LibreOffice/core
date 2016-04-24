@@ -29,6 +29,7 @@
 #include <rtl/instance.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_VML_VMLSHAPECONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
+#include <oox/helper/helper.hxx>
 
 namespace oox {
 namespace vml {

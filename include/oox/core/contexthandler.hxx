@@ -20,15 +20,23 @@
 #ifndef INCLUDED_OOX_CORE_CONTEXTHANDLER_HXX
 #define INCLUDED_OOX_CORE_CONTEXTHANDLER_HXX
 
-#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <rtl/ref.hxx>
-#include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
-#include <oox/dllapi.h>
+#include <exception>
 #include <memory>
 
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <oox/dllapi.h>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
 namespace com { namespace sun { namespace star {
+    namespace xml { namespace sax { class XFastAttributeList; } }
     namespace xml { namespace sax { class XLocator; } }
 } } }
 
@@ -38,7 +46,6 @@ namespace oox {
 namespace core {
 
 class XmlFilterBase;
-class FragmentHandler;
 struct Relation;
 class Relations;
 

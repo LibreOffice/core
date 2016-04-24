@@ -15,6 +15,9 @@
 #include <oox/core/relations.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/core/fastparser.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sax/tools/converter.hxx>
 #include <editeng/editobj.hxx>

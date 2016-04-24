@@ -26,6 +26,9 @@
 #include <com/sun/star/animations/XAnimate.hpp>
 
 #include "oox/core/fragmenthandler.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 
 #include "commonbehaviorcontext.hxx"

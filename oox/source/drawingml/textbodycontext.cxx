@@ -25,6 +25,8 @@
 #include "drawingml/textliststylecontext.hxx"
 #include "drawingml/textfield.hxx"
 #include "drawingml/textfieldcontext.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <oox/mathml/import.hxx>
 

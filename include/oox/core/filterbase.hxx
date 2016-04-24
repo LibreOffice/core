@@ -20,40 +20,44 @@
 #ifndef INCLUDED_OOX_CORE_FILTERBASE_HXX
 #define INCLUDED_OOX_CORE_FILTERBASE_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
+#include <exception>
+#include <memory>
+
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/sequenceashashmap.hxx>
+#include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/storagebase.hxx>
-#include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
-    namespace awt { struct DeviceInfo; }
+    namespace beans { struct PropertyValue; }
+    namespace drawing { class XShape; }
     namespace frame { class XFrame; }
     namespace frame { class XModel; }
-    namespace drawing { class XShape; }
-    namespace graphic { class XGraphic; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
-    namespace lang { class XMultiComponentFactory; }
+    namespace lang { class XComponent; }
     namespace lang { class XMultiServiceFactory; }
-    namespace task { class XInteractionHandler; }
     namespace task { class XStatusIndicator; }
     namespace uno { class XComponentContext; }
 } } }
 
 namespace comphelper {
-    class IDocPasswordVerifier;
+    class SequenceAsHashMap;
 }
 namespace utl {
     class MediaDescriptor;

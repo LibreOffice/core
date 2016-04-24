@@ -11,6 +11,8 @@
 
 #include <oox/mathml/importutils.hxx>
 #include <oox/core/contexthandler.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <drawingml/textparagraph.hxx>
 

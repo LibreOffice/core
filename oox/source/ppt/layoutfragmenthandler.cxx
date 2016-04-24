@@ -26,6 +26,9 @@
 #include "headerfootercontext.hxx"
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;

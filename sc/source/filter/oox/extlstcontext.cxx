@@ -10,6 +10,9 @@
 #include "extlstcontext.hxx"
 #include "worksheethelper.hxx"
 #include <oox/core/contexthandler.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include "colorscale.hxx"
 #include "condformatbuffer.hxx"
 #include "condformatcontext.hxx"

@@ -9,6 +9,8 @@
 
 #include <drawingml/ThemeOverrideFragmentHandler.hxx>
 #include "oox/drawingml/theme.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include "drawingml/themeelementscontext.hxx"
 
 using namespace ::oox::core;

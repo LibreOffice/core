@@ -20,12 +20,15 @@
 #ifndef INCLUDED_OOX_CORE_BINARYCODEC_HXX
 #define INCLUDED_OOX_CORE_BINARYCODEC_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-
+#include <com/sun/star/uno/Sequence.h>
+#include <oox/dllapi.h>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
-#include <oox/dllapi.h>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct NamedValue; }
+} } }
 
 namespace oox { class AttributeList; }
 

@@ -19,6 +19,7 @@
 
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include <oox/helper/attributelist.hxx>
 
 namespace oox {
 namespace core {
