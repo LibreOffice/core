@@ -23,7 +23,6 @@
 #include "Chart2ModelContact.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
-#include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include "LinePropertiesHelper.hxx"

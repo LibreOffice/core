@@ -51,66 +51,54 @@ namespace {
 
 ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
 {
-    static ItemPropertyMapType aDataPointPropertyFilledMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLCOLOR, "Color", 0 )
-        IPM_MAP_ENTRY( XATTR_LINECOLOR, "BorderColor", 0 )
-        IPM_MAP_ENTRY( XATTR_LINESTYLE, "BorderStyle", 0 )
-        IPM_MAP_ENTRY( XATTR_LINEWIDTH, "BorderWidth", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEY, "FillBitmapSizeY", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZELOG, "FillBitmapLogicalSize", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETX, "FillBitmapOffsetX", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETY, "FillBitmapOffsetY", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETX, "FillBitmapPositionOffsetX", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETY, "FillBitmapPositionOffsetY", 0 )
-        );
-
+    static ItemPropertyMapType aDataPointPropertyFilledMap{
+        {XATTR_FILLSTYLE, {"FillStyle", 0}},
+        {XATTR_FILLCOLOR, {"Color", 0}},
+        {XATTR_LINECOLOR, {"BorderColor", 0}},
+        {XATTR_LINESTYLE, {"BorderStyle", 0}},
+        {XATTR_LINEWIDTH, {"BorderWidth", 0}},
+        {XATTR_FILLBACKGROUND, {"FillBackground", 0}},
+        {XATTR_FILLBMP_POS, {"FillBitmapRectanglePoint", 0}},
+        {XATTR_FILLBMP_SIZEX, {"FillBitmapSizeX", 0}},
+        {XATTR_FILLBMP_SIZEY, {"FillBitmapSizeY", 0}},
+        {XATTR_FILLBMP_SIZELOG, {"FillBitmapLogicalSize", 0}},
+        {XATTR_FILLBMP_TILEOFFSETX, {"FillBitmapOffsetX", 0}},
+        {XATTR_FILLBMP_TILEOFFSETY, {"FillBitmapOffsetY", 0}},
+        {XATTR_FILLBMP_POSOFFSETX, {"FillBitmapPositionOffsetX", 0}},
+        {XATTR_FILLBMP_POSOFFSETY, {"FillBitmapPositionOffsetY", 0}}};
     return aDataPointPropertyFilledMap;
 }
 ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
 {
-    static ItemPropertyMapType aDataPointPropertyLineMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( XATTR_LINECOLOR, "Color", 0 )
-        IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
-        IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
-        );
-
+    static ItemPropertyMapType aDataPointPropertyLineMap{
+        {XATTR_LINECOLOR, {"Color", 0}},
+        {XATTR_LINESTYLE, {"LineStyle", 0}},
+        {XATTR_LINEWIDTH, {"LineWidth", 0}}};
     return aDataPointPropertyLineMap;
 }
 ItemPropertyMapType & lcl_GetLinePropertyMap()
 {
-    static ItemPropertyMapType aLinePropertyMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
-        IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
-        IPM_MAP_ENTRY( XATTR_LINECOLOR, "LineColor", 0 )
-        IPM_MAP_ENTRY( XATTR_LINEJOINT, "LineJoint", 0 )
-        );
-
+    static ItemPropertyMapType aLinePropertyMap{
+        {XATTR_LINESTYLE, {"LineStyle", 0}},
+        {XATTR_LINEWIDTH, {"LineWidth", 0}},
+        {XATTR_LINECOLOR, {"LineColor", 0}},
+        {XATTR_LINEJOINT, {"LineJoint", 0}}};
     return aLinePropertyMap;
 }
 ItemPropertyMapType & lcl_GetFillPropertyMap()
 {
-    static ItemPropertyMapType aFillPropertyMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLCOLOR, "FillColor", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEY, "FillBitmapSizeY", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_SIZELOG, "FillBitmapLogicalSize", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETX, "FillBitmapOffsetX", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_TILEOFFSETY, "FillBitmapOffsetY", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETX, "FillBitmapPositionOffsetX", 0 )
-        IPM_MAP_ENTRY( XATTR_FILLBMP_POSOFFSETY, "FillBitmapPositionOffsetY", 0 )
-        );
-
+    static ItemPropertyMapType aFillPropertyMap{
+        {XATTR_FILLSTYLE, {"FillStyle", 0}},
+        {XATTR_FILLCOLOR, {"FillColor", 0}},
+        {XATTR_FILLBACKGROUND, {"FillBackground", 0}},
+        {XATTR_FILLBMP_POS, {"FillBitmapRectanglePoint", 0}},
+        {XATTR_FILLBMP_SIZEX, {"FillBitmapSizeX", 0}},
+        {XATTR_FILLBMP_SIZEY, {"FillBitmapSizeY", 0}},
+        {XATTR_FILLBMP_SIZELOG, {"FillBitmapLogicalSize", 0}},
+        {XATTR_FILLBMP_TILEOFFSETX, {"FillBitmapOffsetX", 0}},
+        {XATTR_FILLBMP_TILEOFFSETY, {"FillBitmapOffsetY", 0}},
+        {XATTR_FILLBMP_POSOFFSETX, {"FillBitmapPositionOffsetX", 0}},
+        {XATTR_FILLBMP_POSOFFSETY, {"FillBitmapPositionOffsetY", 0}}};
     return aFillPropertyMap;
 }
 

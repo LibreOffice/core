@@ -43,24 +43,22 @@ namespace {
 
 ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
 {
-    static ItemPropertyMapType aCharacterPropertyMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( EE_CHAR_COLOR, "CharColor", 0 )
-        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE, "CharLocale", MID_LANG_LOCALE )
-        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CJK, "CharLocaleAsian", MID_LANG_LOCALE )
-        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CTL, "CharLocaleComplex", MID_LANG_LOCALE )
+    static ItemPropertyMapType aCharacterPropertyMap{
+        {EE_CHAR_COLOR, {"CharColor", 0}},
+        {EE_CHAR_LANGUAGE, {"CharLocale", MID_LANG_LOCALE}},
+        {EE_CHAR_LANGUAGE_CJK, {"CharLocaleAsian", MID_LANG_LOCALE}},
+        {EE_CHAR_LANGUAGE_CTL, {"CharLocaleComplex", MID_LANG_LOCALE}},
 
-        IPM_MAP_ENTRY( EE_CHAR_STRIKEOUT, "CharStrikeout", MID_CROSS_OUT )
-        IPM_MAP_ENTRY( EE_CHAR_WLM, "CharWordMode", 0 )
-        IPM_MAP_ENTRY( EE_CHAR_SHADOW, "CharShadowed", 0 )
-        IPM_MAP_ENTRY( EE_CHAR_RELIEF, "CharRelief", 0 )
-        IPM_MAP_ENTRY( EE_CHAR_OUTLINE, "CharContoured", 0 )
-        IPM_MAP_ENTRY( EE_CHAR_EMPHASISMARK, "CharEmphasis", 0 )
+        {EE_CHAR_STRIKEOUT, {"CharStrikeout", MID_CROSS_OUT}},
+        {EE_CHAR_WLM, {"CharWordMode", 0}},
+        {EE_CHAR_SHADOW, {"CharShadowed", 0}},
+        {EE_CHAR_RELIEF, {"CharRelief", 0}},
+        {EE_CHAR_OUTLINE, {"CharContoured", 0}},
+        {EE_CHAR_EMPHASISMARK, {"CharEmphasis", 0}},
 
-        IPM_MAP_ENTRY( EE_PARA_WRITINGDIR, "WritingMode", 0 )
+        {EE_PARA_WRITINGDIR, {"WritingMode", 0}},
 
-        IPM_MAP_ENTRY( EE_PARA_ASIANCJKSPACING, "ParaIsCharacterDistance", 0 )
-        );
+        {EE_PARA_ASIANCJKSPACING, {"ParaIsCharacterDistance", 0}}};
 
     return aCharacterPropertyMap;
 }

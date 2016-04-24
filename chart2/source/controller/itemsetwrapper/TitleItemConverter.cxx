@@ -41,11 +41,8 @@ namespace {
 
 ItemPropertyMapType & lcl_GetTitlePropertyMap()
 {
-    static ItemPropertyMapType aTitlePropertyMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED, "StackCharacters", 0 )
-        );
-
+    static ItemPropertyMapType aTitlePropertyMap{
+        {SCHATTR_TEXT_STACKED, {"StackCharacters", 0}}};
     return aTitlePropertyMap;
 };
 

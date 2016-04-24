@@ -51,7 +51,6 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <comphelper/InlineContainer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -66,6 +65,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <map>
 #include <o3tl/functional.hxx>
 
 using namespace ::com::sun::star;
@@ -106,35 +106,32 @@ enum eServiceType
 };
 
 typedef ::std::map< OUString, enum eServiceType > tServiceNameMap;
-typedef ::comphelper::MakeMap< OUString, enum eServiceType > tMakeServiceNameMap;
 
 tServiceNameMap & lcl_getStaticServiceNameMap()
 {
-    static tServiceNameMap aServiceNameMap(
-        tMakeServiceNameMap
-        ( "com.sun.star.chart.AreaDiagram",                    SERVICE_NAME_AREA_DIAGRAM )
-        ( "com.sun.star.chart.BarDiagram",                     SERVICE_NAME_BAR_DIAGRAM )
-        ( "com.sun.star.chart.DonutDiagram",                   SERVICE_NAME_DONUT_DIAGRAM )
-        ( "com.sun.star.chart.LineDiagram",                    SERVICE_NAME_LINE_DIAGRAM )
-        ( "com.sun.star.chart.NetDiagram",                     SERVICE_NAME_NET_DIAGRAM )
-        ( "com.sun.star.chart.FilledNetDiagram",               SERVICE_NAME_FILLED_NET_DIAGRAM )
-        ( "com.sun.star.chart.PieDiagram",                     SERVICE_NAME_PIE_DIAGRAM )
-        ( "com.sun.star.chart.StockDiagram",                   SERVICE_NAME_STOCK_DIAGRAM )
-        ( "com.sun.star.chart.XYDiagram",                      SERVICE_NAME_XY_DIAGRAM )
-        ( "com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM )
-        ( "com.sun.star.chart.GL3DBarDiagram",                 SERVICE_NAME_GL3DBAR_DIAGRAM )
+    static tServiceNameMap aServiceNameMap{
+        {"com.sun.star.chart.AreaDiagram",                    SERVICE_NAME_AREA_DIAGRAM},
+        {"com.sun.star.chart.BarDiagram",                     SERVICE_NAME_BAR_DIAGRAM},
+        {"com.sun.star.chart.DonutDiagram",                   SERVICE_NAME_DONUT_DIAGRAM},
+        {"com.sun.star.chart.LineDiagram",                    SERVICE_NAME_LINE_DIAGRAM},
+        {"com.sun.star.chart.NetDiagram",                     SERVICE_NAME_NET_DIAGRAM},
+        {"com.sun.star.chart.FilledNetDiagram",               SERVICE_NAME_FILLED_NET_DIAGRAM},
+        {"com.sun.star.chart.PieDiagram",                     SERVICE_NAME_PIE_DIAGRAM},
+        {"com.sun.star.chart.StockDiagram",                   SERVICE_NAME_STOCK_DIAGRAM},
+        {"com.sun.star.chart.XYDiagram",                      SERVICE_NAME_XY_DIAGRAM},
+        {"com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM},
+        {"com.sun.star.chart.GL3DBarDiagram",                 SERVICE_NAME_GL3DBAR_DIAGRAM},
 
-        ( "com.sun.star.drawing.DashTable",                    SERVICE_NAME_DASH_TABLE )
-        ( "com.sun.star.drawing.GradientTable",                SERVICE_NAME_GARDIENT_TABLE )
-        ( "com.sun.star.drawing.HatchTable",                   SERVICE_NAME_HATCH_TABLE )
-        ( "com.sun.star.drawing.BitmapTable",                  SERVICE_NAME_BITMAP_TABLE )
-        ( "com.sun.star.drawing.TransparencyGradientTable",    SERVICE_NAME_TRANSP_GRADIENT_TABLE )
-        ( "com.sun.star.drawing.MarkerTable",                  SERVICE_NAME_MARKER_TABLE )
+        {"com.sun.star.drawing.DashTable",                    SERVICE_NAME_DASH_TABLE},
+        {"com.sun.star.drawing.GradientTable",                SERVICE_NAME_GARDIENT_TABLE},
+        {"com.sun.star.drawing.HatchTable",                   SERVICE_NAME_HATCH_TABLE},
+        {"com.sun.star.drawing.BitmapTable",                  SERVICE_NAME_BITMAP_TABLE},
+        {"com.sun.star.drawing.TransparencyGradientTable",    SERVICE_NAME_TRANSP_GRADIENT_TABLE},
+        {"com.sun.star.drawing.MarkerTable",                  SERVICE_NAME_MARKER_TABLE},
 
-        ( "com.sun.star.xml.NamespaceMap",                     SERVICE_NAME_NAMESPACE_MAP )
-        ( "com.sun.star.document.ExportGraphicObjectResolver", SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER )
-        ( "com.sun.star.document.ImportGraphicObjectResolver", SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER )
-        );
+        {"com.sun.star.xml.NamespaceMap",                     SERVICE_NAME_NAMESPACE_MAP},
+        {"com.sun.star.document.ExportGraphicObjectResolver", SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER},
+        {"com.sun.star.document.ImportGraphicObjectResolver", SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER}};
 
     return aServiceNameMap;
 }

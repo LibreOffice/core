@@ -14,7 +14,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>

@@ -22,7 +22,6 @@
 #include "ContainerHelper.hxx"
 #include "Chart2ModelContact.hxx"
 #include "WrappedDirectStateProperty.hxx"
-#include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
