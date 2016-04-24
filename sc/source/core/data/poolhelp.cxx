@@ -113,7 +113,6 @@ SvNumberFormatter* ScPoolHelper::CreateNumberFormatter() const
 void ScPoolHelper::SourceDocumentGone()
 {
     //  reset all pointers to the source document
-    mxStylePool->SetDocument( nullptr );
     if ( pFormTable )
         pFormTable->SetColorLink( Link<sal_uInt16,Color*>() );
 }
