@@ -251,6 +251,29 @@ void TestTextSearch::testWildcardSearch()
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
     CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 0));
+
+    aText = "123123";
+    aOptions.searchString = "*2?";
+    m_xSearch2->setOptions2( aOptions );
+    // match first "123", [0,3)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 3));
+    // match "123123", (6,0]    Yes this looks odd, but it is as searching "?2*" forward.
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 6) && (aRes.endOffset[0] == 0));
+
+    aOptions.searchFlag |= util::SearchFlags::WILD_MATCH_SELECTION;
+    m_xSearch2->setOptions2( aOptions );
+    // match "123123", [0,6) with greedy '*'
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 6));
+    // match "123123", (6,0]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 6) && (aRes.endOffset[0] == 0));
 }
 
 void TestTextSearch::setUp()
