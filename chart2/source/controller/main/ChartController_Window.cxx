@@ -55,7 +55,6 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <comphelper/InlineContainer.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 

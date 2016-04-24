@@ -45,7 +45,6 @@
 #include "ControllerLockGuard.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "DisposeHelper.hxx"
-#include <comphelper/InlineContainer.hxx>
 #include "WrappedAutomaticPositionProperties.hxx"
 #include "CommonConverters.hxx"
 #include <unonames.hxx>
@@ -64,6 +63,7 @@
 #include "SceneProperties.hxx"
 
 #include <algorithm>
+#include <map>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
@@ -589,24 +589,22 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
     return OUString();
 }
 
-typedef ::comphelper::MakeMap< OUString, OUString > tMakeStringStringMap;
+typedef std::map< OUString, OUString > tMakeStringStringMap;
 
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
-    static tMakeStringStringMap g_aChartTypeNameMap =
-        tMakeStringStringMap
-        ( "com.sun.star.chart2.LineChartType", "com.sun.star.chart.LineDiagram" )
-        ( "com.sun.star.chart2.AreaChartType", "com.sun.star.chart.AreaDiagram" )
-        ( "com.sun.star.chart2.ColumnChartType", "com.sun.star.chart.BarDiagram" )
-        ( "com.sun.star.chart2.PieChartType", "com.sun.star.chart.PieDiagram" )
-        ( "com.sun.star.chart2.DonutChartType", "com.sun.star.chart.DonutDiagram" )
-        ( "com.sun.star.chart2.ScatterChartType", "com.sun.star.chart.XYDiagram" )
-        ( "com.sun.star.chart2.FilledNetChartType", "com.sun.star.chart.FilledNetDiagram" )
-        ( "com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram" )
-        ( "com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram" )
-        ( "com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram" )
-        ( "com.sun.star.chart2.GL3DBarChartType", "com.sun.star.chart.GL3DBarDiagram" )
-        ;
+    static tMakeStringStringMap g_aChartTypeNameMap{
+        {"com.sun.star.chart2.LineChartType", "com.sun.star.chart.LineDiagram"},
+        {"com.sun.star.chart2.AreaChartType", "com.sun.star.chart.AreaDiagram"},
+        {"com.sun.star.chart2.ColumnChartType", "com.sun.star.chart.BarDiagram"},
+        {"com.sun.star.chart2.PieChartType", "com.sun.star.chart.PieDiagram"},
+        {"com.sun.star.chart2.DonutChartType", "com.sun.star.chart.DonutDiagram"},
+        {"com.sun.star.chart2.ScatterChartType", "com.sun.star.chart.XYDiagram"},
+        {"com.sun.star.chart2.FilledNetChartType", "com.sun.star.chart.FilledNetDiagram"},
+        {"com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram"},
+        {"com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram"},
+        {"com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram"},
+        {"com.sun.star.chart2.GL3DBarChartType", "com.sun.star.chart.GL3DBarDiagram"}};
     return g_aChartTypeNameMap;
 }
 

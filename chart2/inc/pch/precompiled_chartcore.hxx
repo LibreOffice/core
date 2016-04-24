@@ -159,7 +159,6 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <comphelper/InlineContainer.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>

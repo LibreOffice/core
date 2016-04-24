@@ -39,7 +39,6 @@
 #endif
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
@@ -134,78 +133,76 @@ typedef ::std::map< OUString, TemplateId > tTemplateMapType;
 
 const tTemplateMapType & lcl_DefaultChartTypeMap()
 {
-    static const tTemplateMapType aMap = tTemplateMapType(
-        ::comphelper::MakeMap< tTemplateMapType::key_type, tTemplateMapType::mapped_type >
-        ( "com.sun.star.chart2.template.Symbol",                         TEMPLATE_SYMBOL )
-        ( "com.sun.star.chart2.template.StackedSymbol",                  TEMPLATE_STACKEDSYMBOL )
-        ( "com.sun.star.chart2.template.PercentStackedSymbol",           TEMPLATE_PERCENTSTACKEDSYMBOL )
-        ( "com.sun.star.chart2.template.Line",                           TEMPLATE_LINE )
-        ( "com.sun.star.chart2.template.StackedLine",                    TEMPLATE_STACKEDLINE )
-        ( "com.sun.star.chart2.template.PercentStackedLine",             TEMPLATE_PERCENTSTACKEDLINE )
-        ( "com.sun.star.chart2.template.LineSymbol",                     TEMPLATE_LINESYMBOL )
-        ( "com.sun.star.chart2.template.StackedLineSymbol",              TEMPLATE_STACKEDLINESYMBOL )
-        ( "com.sun.star.chart2.template.PercentStackedLineSymbol",       TEMPLATE_PERCENTSTACKEDLINESYMBOL )
-        ( "com.sun.star.chart2.template.ThreeDLine",                     TEMPLATE_THREEDLINE )
-        ( "com.sun.star.chart2.template.StackedThreeDLine",              TEMPLATE_STACKEDTHREEDLINE )
-        ( "com.sun.star.chart2.template.PercentStackedThreeDLine",       TEMPLATE_PERCENTSTACKEDTHREEDLINE )
-        ( "com.sun.star.chart2.template.ThreeDLineDeep",                 TEMPLATE_THREEDLINEDEEP )
-        ( "com.sun.star.chart2.template.Column",                         TEMPLATE_COLUMN )
-        ( "com.sun.star.chart2.template.StackedColumn",                  TEMPLATE_STACKEDCOLUMN )
-        ( "com.sun.star.chart2.template.PercentStackedColumn",           TEMPLATE_PERCENTSTACKEDCOLUMN )
-        ( "com.sun.star.chart2.template.Bar",                            TEMPLATE_BAR )
-        ( "com.sun.star.chart2.template.StackedBar",                     TEMPLATE_STACKEDBAR )
-        ( "com.sun.star.chart2.template.PercentStackedBar",              TEMPLATE_PERCENTSTACKEDBAR )
-        ( "com.sun.star.chart2.template.ThreeDColumnDeep",               TEMPLATE_THREEDCOLUMNDEEP )
-        ( "com.sun.star.chart2.template.ThreeDColumnFlat",               TEMPLATE_THREEDCOLUMNFLAT )
-        ( "com.sun.star.chart2.template.StackedThreeDColumnFlat",        TEMPLATE_STACKEDTHREEDCOLUMNFLAT )
-        ( "com.sun.star.chart2.template.PercentStackedThreeDColumnFlat", TEMPLATE_PERCENTSTACKEDTHREEDCOLUMNFLAT )
-        ( "com.sun.star.chart2.template.ThreeDBarDeep",                  TEMPLATE_THREEDBARDEEP )
-        ( "com.sun.star.chart2.template.ThreeDBarFlat",                  TEMPLATE_THREEDBARFLAT )
-        ( "com.sun.star.chart2.template.StackedThreeDBarFlat",           TEMPLATE_STACKEDTHREEDBARFLAT )
-        ( "com.sun.star.chart2.template.PercentStackedThreeDBarFlat",    TEMPLATE_PERCENTSTACKEDTHREEDBARFLAT )
-        ( "com.sun.star.chart2.template.ColumnWithLine",                 TEMPLATE_COLUMNWITHLINE )
-        ( "com.sun.star.chart2.template.StackedColumnWithLine",          TEMPLATE_STACKEDCOLUMNWITHLINE )
-        ( "com.sun.star.chart2.template.Area",                           TEMPLATE_AREA )
-        ( "com.sun.star.chart2.template.StackedArea",                    TEMPLATE_STACKEDAREA )
-        ( "com.sun.star.chart2.template.PercentStackedArea",             TEMPLATE_PERCENTSTACKEDAREA )
-        ( "com.sun.star.chart2.template.ThreeDArea",                     TEMPLATE_THREEDAREA )
-        ( "com.sun.star.chart2.template.StackedThreeDArea",              TEMPLATE_STACKEDTHREEDAREA )
-        ( "com.sun.star.chart2.template.PercentStackedThreeDArea",       TEMPLATE_PERCENTSTACKEDTHREEDAREA )
-        ( "com.sun.star.chart2.template.Pie",                            TEMPLATE_PIE )
-        ( "com.sun.star.chart2.template.PieAllExploded",                 TEMPLATE_PIEALLEXPLODED )
-        ( "com.sun.star.chart2.template.Donut",                          TEMPLATE_DONUT )
-        ( "com.sun.star.chart2.template.DonutAllExploded",               TEMPLATE_DONUTALLEXPLODED )
-        ( "com.sun.star.chart2.template.ThreeDPie",                      TEMPLATE_THREEDPIE )
-        ( "com.sun.star.chart2.template.ThreeDPieAllExploded",           TEMPLATE_THREEDPIEALLEXPLODED )
-        ( "com.sun.star.chart2.template.ThreeDDonut",                    TEMPLATE_THREEDDONUT )
-        ( "com.sun.star.chart2.template.ThreeDDonutAllExploded",         TEMPLATE_THREEDDONUTALLEXPLODED )
-        ( "com.sun.star.chart2.template.ScatterLineSymbol",              TEMPLATE_SCATTERLINESYMBOL )
-        ( "com.sun.star.chart2.template.ScatterLine",                    TEMPLATE_SCATTERLINE )
-        ( "com.sun.star.chart2.template.ScatterSymbol",                  TEMPLATE_SCATTERSYMBOL )
-        ( "com.sun.star.chart2.template.ThreeDScatter",                  TEMPLATE_THREEDSCATTER )
-        ( "com.sun.star.chart2.template.Net",                            TEMPLATE_NET )
-        ( "com.sun.star.chart2.template.NetSymbol",                      TEMPLATE_NETSYMBOL )
-        ( "com.sun.star.chart2.template.NetLine",                        TEMPLATE_NETLINE )
-        ( "com.sun.star.chart2.template.StackedNet",                     TEMPLATE_STACKEDNET )
-        ( "com.sun.star.chart2.template.StackedNetSymbol",               TEMPLATE_STACKEDNETSYMBOL )
-        ( "com.sun.star.chart2.template.StackedNetLine",                 TEMPLATE_STACKEDNETLINE )
-        ( "com.sun.star.chart2.template.PercentStackedNet",              TEMPLATE_PERCENTSTACKEDNET )
-        ( "com.sun.star.chart2.template.PercentStackedNetSymbol",        TEMPLATE_PERCENTSTACKEDNETSYMBOL )
-        ( "com.sun.star.chart2.template.PercentStackedNetLine",          TEMPLATE_PERCENTSTACKEDNETLINE )
-        ( "com.sun.star.chart2.template.FilledNet",                      TEMPLATE_FILLEDNET )
-        ( "com.sun.star.chart2.template.StackedFilledNet",               TEMPLATE_STACKEDFILLEDNET )
-        ( "com.sun.star.chart2.template.PercentStackedFilledNet",        TEMPLATE_PERCENTSTACKEDFILLEDNET )
-        ( "com.sun.star.chart2.template.StockLowHighClose",              TEMPLATE_STOCKLOWHIGHCLOSE )
-        ( "com.sun.star.chart2.template.StockOpenLowHighClose",          TEMPLATE_STOCKOPENLOWHIGHCLOSE )
-        ( "com.sun.star.chart2.template.StockVolumeLowHighClose",        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE )
-        ( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose",    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE )
-        ( "com.sun.star.chart2.template.Bubble",                         TEMPLATE_BUBBLE )
-        ( "com.sun.star.chart2.template.GL3DBar",                        TEMPLATE_GL3DBAR )
-        ( "com.sun.star.chart2.template.GL3DBarRoundedRectangle",        TEMPLATE_GL3DBAR_ROUNDED_RECTANGLE )
-//      ( "com.sun.star.chart2.template.Surface",                        TEMPLATE_SURFACE )
-//      ( "com.sun.star.chart2.template.Addin",                          TEMPLATE_ADDIN )
-        );
-
+    static const tTemplateMapType aMap{
+        {"com.sun.star.chart2.template.Symbol",                         TEMPLATE_SYMBOL},
+        {"com.sun.star.chart2.template.StackedSymbol",                  TEMPLATE_STACKEDSYMBOL},
+        {"com.sun.star.chart2.template.PercentStackedSymbol",           TEMPLATE_PERCENTSTACKEDSYMBOL},
+        {"com.sun.star.chart2.template.Line",                           TEMPLATE_LINE},
+        {"com.sun.star.chart2.template.StackedLine",                    TEMPLATE_STACKEDLINE},
+        {"com.sun.star.chart2.template.PercentStackedLine",             TEMPLATE_PERCENTSTACKEDLINE},
+        {"com.sun.star.chart2.template.LineSymbol",                     TEMPLATE_LINESYMBOL},
+        {"com.sun.star.chart2.template.StackedLineSymbol",              TEMPLATE_STACKEDLINESYMBOL},
+        {"com.sun.star.chart2.template.PercentStackedLineSymbol",       TEMPLATE_PERCENTSTACKEDLINESYMBOL},
+        {"com.sun.star.chart2.template.ThreeDLine",                     TEMPLATE_THREEDLINE},
+        {"com.sun.star.chart2.template.StackedThreeDLine",              TEMPLATE_STACKEDTHREEDLINE},
+        {"com.sun.star.chart2.template.PercentStackedThreeDLine",       TEMPLATE_PERCENTSTACKEDTHREEDLINE},
+        {"com.sun.star.chart2.template.ThreeDLineDeep",                 TEMPLATE_THREEDLINEDEEP},
+        {"com.sun.star.chart2.template.Column",                         TEMPLATE_COLUMN},
+        {"com.sun.star.chart2.template.StackedColumn",                  TEMPLATE_STACKEDCOLUMN},
+        {"com.sun.star.chart2.template.PercentStackedColumn",           TEMPLATE_PERCENTSTACKEDCOLUMN},
+        {"com.sun.star.chart2.template.Bar",                            TEMPLATE_BAR},
+        {"com.sun.star.chart2.template.StackedBar",                     TEMPLATE_STACKEDBAR},
+        {"com.sun.star.chart2.template.PercentStackedBar",              TEMPLATE_PERCENTSTACKEDBAR},
+        {"com.sun.star.chart2.template.ThreeDColumnDeep",               TEMPLATE_THREEDCOLUMNDEEP},
+        {"com.sun.star.chart2.template.ThreeDColumnFlat",               TEMPLATE_THREEDCOLUMNFLAT},
+        {"com.sun.star.chart2.template.StackedThreeDColumnFlat",        TEMPLATE_STACKEDTHREEDCOLUMNFLAT},
+        {"com.sun.star.chart2.template.PercentStackedThreeDColumnFlat", TEMPLATE_PERCENTSTACKEDTHREEDCOLUMNFLAT},
+        {"com.sun.star.chart2.template.ThreeDBarDeep",                  TEMPLATE_THREEDBARDEEP},
+        {"com.sun.star.chart2.template.ThreeDBarFlat",                  TEMPLATE_THREEDBARFLAT},
+        {"com.sun.star.chart2.template.StackedThreeDBarFlat",           TEMPLATE_STACKEDTHREEDBARFLAT},
+        {"com.sun.star.chart2.template.PercentStackedThreeDBarFlat",    TEMPLATE_PERCENTSTACKEDTHREEDBARFLAT},
+        {"com.sun.star.chart2.template.ColumnWithLine",                 TEMPLATE_COLUMNWITHLINE},
+        {"com.sun.star.chart2.template.StackedColumnWithLine",          TEMPLATE_STACKEDCOLUMNWITHLINE},
+        {"com.sun.star.chart2.template.Area",                           TEMPLATE_AREA},
+        {"com.sun.star.chart2.template.StackedArea",                    TEMPLATE_STACKEDAREA},
+        {"com.sun.star.chart2.template.PercentStackedArea",             TEMPLATE_PERCENTSTACKEDAREA},
+        {"com.sun.star.chart2.template.ThreeDArea",                     TEMPLATE_THREEDAREA},
+        {"com.sun.star.chart2.template.StackedThreeDArea",              TEMPLATE_STACKEDTHREEDAREA},
+        {"com.sun.star.chart2.template.PercentStackedThreeDArea",       TEMPLATE_PERCENTSTACKEDTHREEDAREA},
+        {"com.sun.star.chart2.template.Pie",                            TEMPLATE_PIE},
+        {"com.sun.star.chart2.template.PieAllExploded",                 TEMPLATE_PIEALLEXPLODED},
+        {"com.sun.star.chart2.template.Donut",                          TEMPLATE_DONUT},
+        {"com.sun.star.chart2.template.DonutAllExploded",               TEMPLATE_DONUTALLEXPLODED},
+        {"com.sun.star.chart2.template.ThreeDPie",                      TEMPLATE_THREEDPIE},
+        {"com.sun.star.chart2.template.ThreeDPieAllExploded",           TEMPLATE_THREEDPIEALLEXPLODED},
+        {"com.sun.star.chart2.template.ThreeDDonut",                    TEMPLATE_THREEDDONUT},
+        {"com.sun.star.chart2.template.ThreeDDonutAllExploded",         TEMPLATE_THREEDDONUTALLEXPLODED},
+        {"com.sun.star.chart2.template.ScatterLineSymbol",              TEMPLATE_SCATTERLINESYMBOL},
+        {"com.sun.star.chart2.template.ScatterLine",                    TEMPLATE_SCATTERLINE},
+        {"com.sun.star.chart2.template.ScatterSymbol",                  TEMPLATE_SCATTERSYMBOL},
+        {"com.sun.star.chart2.template.ThreeDScatter",                  TEMPLATE_THREEDSCATTER},
+        {"com.sun.star.chart2.template.Net",                            TEMPLATE_NET},
+        {"com.sun.star.chart2.template.NetSymbol",                      TEMPLATE_NETSYMBOL},
+        {"com.sun.star.chart2.template.NetLine",                        TEMPLATE_NETLINE},
+        {"com.sun.star.chart2.template.StackedNet",                     TEMPLATE_STACKEDNET},
+        {"com.sun.star.chart2.template.StackedNetSymbol",               TEMPLATE_STACKEDNETSYMBOL},
+        {"com.sun.star.chart2.template.StackedNetLine",                 TEMPLATE_STACKEDNETLINE},
+        {"com.sun.star.chart2.template.PercentStackedNet",              TEMPLATE_PERCENTSTACKEDNET},
+        {"com.sun.star.chart2.template.PercentStackedNetSymbol",        TEMPLATE_PERCENTSTACKEDNETSYMBOL},
+        {"com.sun.star.chart2.template.PercentStackedNetLine",          TEMPLATE_PERCENTSTACKEDNETLINE},
+        {"com.sun.star.chart2.template.FilledNet",                      TEMPLATE_FILLEDNET},
+        {"com.sun.star.chart2.template.StackedFilledNet",               TEMPLATE_STACKEDFILLEDNET},
+        {"com.sun.star.chart2.template.PercentStackedFilledNet",        TEMPLATE_PERCENTSTACKEDFILLEDNET},
+        {"com.sun.star.chart2.template.StockLowHighClose",              TEMPLATE_STOCKLOWHIGHCLOSE},
+        {"com.sun.star.chart2.template.StockOpenLowHighClose",          TEMPLATE_STOCKOPENLOWHIGHCLOSE},
+        {"com.sun.star.chart2.template.StockVolumeLowHighClose",        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE},
+        {"com.sun.star.chart2.template.StockVolumeOpenLowHighClose",    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE},
+        {"com.sun.star.chart2.template.Bubble",                         TEMPLATE_BUBBLE},
+        {"com.sun.star.chart2.template.GL3DBar",                        TEMPLATE_GL3DBAR},
+        {"com.sun.star.chart2.template.GL3DBarRoundedRectangle",        TEMPLATE_GL3DBAR_ROUNDED_RECTANGLE},
+//      {"com.sun.star.chart2.template.Surface",                        TEMPLATE_SURFACE},
+//      {"com.sun.star.chart2.template.Addin",                          TEMPLATE_ADDIN},
+        };
     return aMap;
 }
 

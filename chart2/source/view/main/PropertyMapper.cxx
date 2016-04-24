@@ -184,202 +184,209 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
         , bLimitedHeight ? OUString("TextMaximumFrameHeight") : OUString("TextMaximumFrameWidth") );
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap s_aShapePropertyMapForCharacterProperties =
-        tMakePropertyNameMap
-        ( "CharColor",                "CharColor" )
-        ( "CharContoured",            "CharContoured" )
-        ( "CharEmphasis",             "CharEmphasis" )//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
+    static tPropertyNameMap s_aShapePropertyMapForCharacterProperties{
+        {"CharColor",                "CharColor"},
+        {"CharContoured",            "CharContoured"},
+        {"CharEmphasis",             "CharEmphasis"},//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
 
-        ( "CharFontFamily",           "CharFontFamily" )
-        ( "CharFontFamilyAsian",      "CharFontFamilyAsian" )
-        ( "CharFontFamilyComplex",    "CharFontFamilyComplex" )
-        ( "CharFontCharSet",          "CharFontCharSet" )
-        ( "CharFontCharSetAsian",     "CharFontCharSetAsian" )
-        ( "CharFontCharSetComplex",   "CharFontCharSetComplex" )
-        ( "CharFontName",             "CharFontName" )
-        ( "CharFontNameAsian",        "CharFontNameAsian" )
-        ( "CharFontNameComplex",      "CharFontNameComplex" )
-        ( "CharFontPitch",            "CharFontPitch" )
-        ( "CharFontPitchAsian",       "CharFontPitchAsian" )
-        ( "CharFontPitchComplex",     "CharFontPitchComplex" )
-        ( "CharFontStyleName",        "CharFontStyleName" )
-        ( "CharFontStyleNameAsian",   "CharFontStyleNameAsian" )
-        ( "CharFontStyleNameComplex", "CharFontStyleNameComplex" )
+        {"CharFontFamily",           "CharFontFamily"},
+        {"CharFontFamilyAsian",      "CharFontFamilyAsian"},
+        {"CharFontFamilyComplex",    "CharFontFamilyComplex"},
+        {"CharFontCharSet",          "CharFontCharSet"},
+        {"CharFontCharSetAsian",     "CharFontCharSetAsian"},
+        {"CharFontCharSetComplex",   "CharFontCharSetComplex"},
+        {"CharFontName",             "CharFontName"},
+        {"CharFontNameAsian",        "CharFontNameAsian"},
+        {"CharFontNameComplex",      "CharFontNameComplex"},
+        {"CharFontPitch",            "CharFontPitch"},
+        {"CharFontPitchAsian",       "CharFontPitchAsian"},
+        {"CharFontPitchComplex",     "CharFontPitchComplex"},
+        {"CharFontStyleName",        "CharFontStyleName"},
+        {"CharFontStyleNameAsian",   "CharFontStyleNameAsian"},
+        {"CharFontStyleNameComplex", "CharFontStyleNameComplex"},
 
-        ( "CharHeight",               "CharHeight" )
-        ( "CharHeightAsian",          "CharHeightAsian" )
-        ( "CharHeightComplex",        "CharHeightComplex" )
-        ( "CharKerning",              "CharKerning" )
-        ( "CharLocale",               "CharLocale" )
-        ( "CharLocaleAsian",          "CharLocaleAsian" )
-        ( "CharLocaleComplex",        "CharLocaleComplex" )
-        ( "CharPosture",              "CharPosture" )
-        ( "CharPostureAsian",         "CharPostureAsian" )
-        ( "CharPostureComplex",       "CharPostureComplex" )
-        ( "CharRelief",               "CharRelief" )
-        ( "CharShadowed",             "CharShadowed" )
-        ( "CharStrikeout",            "CharStrikeout" )
-        ( "CharUnderline",            "CharUnderline" )
-        ( "CharUnderlineColor",       "CharUnderlineColor" )
-        ( "CharUnderlineHasColor",    "CharUnderlineHasColor" )
-        ( "CharOverline",             "CharOverline" )
-        ( "CharOverlineColor",        "CharOverlineColor" )
-        ( "CharOverlineHasColor",     "CharOverlineHasColor" )
-        ( "CharWeight",               "CharWeight" )
-        ( "CharWeightAsian",          "CharWeightAsian" )
-        ( "CharWeightComplex",        "CharWeightComplex" )
-        ( "CharWordMode",             "CharWordMode" )
+        {"CharHeight",               "CharHeight"},
+        {"CharHeightAsian",          "CharHeightAsian"},
+        {"CharHeightComplex",        "CharHeightComplex"},
+        {"CharKerning",              "CharKerning"},
+        {"CharLocale",               "CharLocale"},
+        {"CharLocaleAsian",          "CharLocaleAsian"},
+        {"CharLocaleComplex",        "CharLocaleComplex"},
+        {"CharPosture",              "CharPosture"},
+        {"CharPostureAsian",         "CharPostureAsian"},
+        {"CharPostureComplex",       "CharPostureComplex"},
+        {"CharRelief",               "CharRelief"},
+        {"CharShadowed",             "CharShadowed"},
+        {"CharStrikeout",            "CharStrikeout"},
+        {"CharUnderline",            "CharUnderline"},
+        {"CharUnderlineColor",       "CharUnderlineColor"},
+        {"CharUnderlineHasColor",    "CharUnderlineHasColor"},
+        {"CharOverline",             "CharOverline"},
+        {"CharOverlineColor",        "CharOverlineColor"},
+        {"CharOverlineHasColor",     "CharOverlineHasColor"},
+        {"CharWeight",               "CharWeight"},
+        {"CharWeightAsian",          "CharWeightAsian"},
+        {"CharWeightComplex",        "CharWeightComplex"},
+        {"CharWordMode",             "CharWordMode"},
 
-        ( "WritingMode",              "WritingMode" )
+        {"WritingMode",              "WritingMode"},
 
-        ( "ParaIsCharacterDistance",  "ParaIsCharacterDistance" )
-        ;
+        {"ParaIsCharacterDistance",  "ParaIsCharacterDistance"}};
+
     return s_aShapePropertyMapForCharacterProperties;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap s_aShapePropertyMapForParagraphProperties =
-        tMakePropertyNameMap
-        ( "ParaAdjust",          "ParaAdjust" )
-        ( "ParaBottomMargin",    "ParaBottomMargin" )
-        ( "ParaIsHyphenation",   "ParaIsHyphenation" )
-        ( "ParaLastLineAdjust",  "ParaLastLineAdjust" )
-        ( "ParaLeftMargin",      "ParaLeftMargin" )
-        ( "ParaRightMargin",     "ParaRightMargin" )
-        ( "ParaTopMargin",       "ParaTopMargin" )
-        ;
+    static tPropertyNameMap s_aShapePropertyMapForParagraphProperties{
+        {"ParaAdjust",          "ParaAdjust"},
+        {"ParaBottomMargin",    "ParaBottomMargin"},
+        {"ParaIsHyphenation",   "ParaIsHyphenation"},
+        {"ParaLastLineAdjust",  "ParaLastLineAdjust"},
+        {"ParaLeftMargin",      "ParaLeftMargin"},
+        {"ParaRightMargin",     "ParaRightMargin"},
+        {"ParaTopMargin",       "ParaTopMargin"}};
     return s_aShapePropertyMapForParagraphProperties;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap s_aShapePropertyMapForFillProperties =
-        tMakePropertyNameMap
-        ( "FillBackground",               "FillBackground" )
-        ( "FillBitmapName",               "FillBitmapName" )
-        ( "FillColor",                    "FillColor" )
-        ( "FillGradientName",             "FillGradientName" )
-        ( "FillGradientStepCount",        "FillGradientStepCount" )
-        ( "FillHatchName",                "FillHatchName" )
-        ( "FillStyle",                    "FillStyle" )
-        ( "FillTransparence",             "FillTransparence" )
-        ( "FillTransparenceGradientName", "FillTransparenceGradientName" )
+    static tPropertyNameMap s_aShapePropertyMapForFillProperties{
+        {"FillBackground",               "FillBackground"},
+        {"FillBitmapName",               "FillBitmapName"},
+        {"FillColor",                    "FillColor"},
+        {"FillGradientName",             "FillGradientName"},
+        {"FillGradientStepCount",        "FillGradientStepCount"},
+        {"FillHatchName",                "FillHatchName"},
+        {"FillStyle",                    "FillStyle"},
+        {"FillTransparence",             "FillTransparence"},
+        {"FillTransparenceGradientName", "FillTransparenceGradientName"},
         //bitmap properties
-        ( "FillBitmapMode",               "FillBitmapMode" )
-        ( "FillBitmapSizeX",              "FillBitmapSizeX" )
-        ( "FillBitmapSizeY",              "FillBitmapSizeY" )
-        ( "FillBitmapLogicalSize",        "FillBitmapLogicalSize" )
-        ( "FillBitmapOffsetX",            "FillBitmapOffsetX" )
-        ( "FillBitmapOffsetY",            "FillBitmapOffsetY" )
-        ( "FillBitmapRectanglePoint",     "FillBitmapRectanglePoint" )
-        ( "FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX" )
-        ( "FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY" )
-        ;
+        {"FillBitmapMode",               "FillBitmapMode"},
+        {"FillBitmapSizeX",              "FillBitmapSizeX"},
+        {"FillBitmapSizeY",              "FillBitmapSizeY"},
+        {"FillBitmapLogicalSize",        "FillBitmapLogicalSize"},
+        {"FillBitmapOffsetX",            "FillBitmapOffsetX"},
+        {"FillBitmapOffsetY",            "FillBitmapOffsetY"},
+        {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
+        {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
+        {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"}};
     return s_aShapePropertyMapForFillProperties;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap s_aShapePropertyMapForLineProperties =
-        tMakePropertyNameMap
-        ( "LineColor",              "LineColor" )
-        ( "LineDashName",           "LineDashName" )
-        ( "LineJoint",              "LineJoint" )
-        ( "LineStyle",              "LineStyle" )
-        ( "LineTransparence",       "LineTransparence" )
-        ( "LineWidth",              "LineWidth" )
-        ;
+    static tPropertyNameMap s_aShapePropertyMapForLineProperties{
+        {"LineColor",              "LineColor"},
+        {"LineDashName",           "LineDashName"},
+        {"LineJoint",              "LineJoint"},
+        {"LineStyle",              "LineStyle"},
+        {"LineTransparence",       "LineTransparence"},
+        {"LineWidth",              "LineWidth"}};
     return s_aShapePropertyMapForLineProperties;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
+namespace {
+    tPropertyNameMap getPropertyNameMapForFillAndLineProperties_() {
+        auto map = PropertyMapper::getPropertyNameMapForFillProperties();
+        auto const & add
+            = PropertyMapper::getPropertyNameMapForLineProperties();
+        map.insert(add.begin(), add.end());
+        return map;
+    }
+}
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
 {
-    static tMakePropertyNameMap s_aShapePropertyMapForFillAndLineProperties =
-        tMakePropertyNameMap
-        ( PropertyMapper::getPropertyNameMapForFillProperties() )
-        ( PropertyMapper::getPropertyNameMapForLineProperties() )
-        ;
-
+    static tPropertyNameMap s_aShapePropertyMapForFillAndLineProperties
+        = getPropertyNameMapForFillAndLineProperties_();
     return s_aShapePropertyMapForFillAndLineProperties;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties()
+namespace {
+    tPropertyNameMap getPropertyNameMapForTextShapeProperties_() {
+        auto map = PropertyMapper::getPropertyNameMapForCharacterProperties();
+        auto const & add1
+            = PropertyMapper::getPropertyNameMapForFillProperties();
+        map.insert(add1.begin(), add1.end());
+        auto const & add2
+            = PropertyMapper::getPropertyNameMapForLineProperties();
+        map.insert(add2.begin(), add2.end());
+        return map;
+    }
+}
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties()
 {
-    static tMakePropertyNameMap s_aShapePropertyMapForTextShapeProperties =
-        tMakePropertyNameMap
-        ( PropertyMapper::getPropertyNameMapForCharacterProperties() )
-        ( PropertyMapper::getPropertyNameMapForFillProperties() )
-        ( PropertyMapper::getPropertyNameMapForLineProperties() );
-
+    static tPropertyNameMap s_aShapePropertyMapForTextShapeProperties
+        = getPropertyNameMapForTextShapeProperties_();
     return s_aShapePropertyMapForTextShapeProperties;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap s_aShapePropertyMapForLineSeriesProperties =
-        tMakePropertyNameMap
-        ( "LineColor",           "Color" )
-        ( "LineDashName",        "LineDashName" )
-        ( "LineStyle",           "LineStyle" )
-        ( "LineTransparence",    "Transparency" )
-        ( "LineWidth",           "LineWidth" )
-
-        ;
+    static tPropertyNameMap s_aShapePropertyMapForLineSeriesProperties{
+        {"LineColor",           "Color"},
+        {"LineDashName",        "LineDashName"},
+        {"LineStyle",           "LineStyle"},
+        {"LineTransparence",    "Transparency"},
+        {"LineWidth",           "LineWidth"}};
     return s_aShapePropertyMapForLineSeriesProperties;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProperties()
+namespace {
+    tPropertyNameMap getPropertyNameMapForTextLabelProperties_() {
+        auto map = PropertyMapper::getPropertyNameMapForCharacterProperties();
+        map.insert({
+            {"LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE},
+            {"LineWidth", CHART_UNONAME_LABEL_BORDER_WIDTH},
+            {"LineColor", CHART_UNONAME_LABEL_BORDER_COLOR},
+            {"LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS}});
+                // fix the spelling!
+        return map;
+    }
+}
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProperties()
 {
     // target name (drawing layer) : source name (chart model)
-    static tMakePropertyNameMap aMap = tMakePropertyNameMap
-        ( getPropertyNameMapForCharacterProperties() )
-        ( "LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE )
-        ( "LineWidth", CHART_UNONAME_LABEL_BORDER_WIDTH )
-        ( "LineColor", CHART_UNONAME_LABEL_BORDER_COLOR )
-        ( "LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS ) // fix the spelling!
-        ;
+    static tPropertyNameMap aMap = getPropertyNameMapForTextLabelProperties_();
     return aMap;
 }
 
-const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
+const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
     //shape property -- chart model object property
-    static tMakePropertyNameMap s_aShapePropertyMapForFilledSeriesProperties =
-        tMakePropertyNameMap
-        ( "FillBackground",               "FillBackground" )
-        ( "FillBitmapName",               "FillBitmapName" )
-        ( "FillColor",                    "Color" )
-        ( "FillGradientName",             "GradientName" )
-        ( "FillGradientStepCount",        "GradientStepCount" )
-        ( "FillHatchName",                "HatchName" )
-        ( "FillStyle",                    "FillStyle" )
-        ( "FillTransparence",             "Transparency" )
-        ( "FillTransparenceGradientName", "TransparencyGradientName" )
+    static tPropertyNameMap s_aShapePropertyMapForFilledSeriesProperties{
+        {"FillBackground",               "FillBackground"},
+        {"FillBitmapName",               "FillBitmapName"},
+        {"FillColor",                    "Color"},
+        {"FillGradientName",             "GradientName"},
+        {"FillGradientStepCount",        "GradientStepCount"},
+        {"FillHatchName",                "HatchName"},
+        {"FillStyle",                    "FillStyle"},
+        {"FillTransparence",             "Transparency"},
+        {"FillTransparenceGradientName", "TransparencyGradientName"},
         //bitmap properties
-        ( "FillBitmapMode",               "FillBitmapMode" )
-        ( "FillBitmapSizeX",              "FillBitmapSizeX" )
-        ( "FillBitmapSizeY",              "FillBitmapSizeY" )
-        ( "FillBitmapLogicalSize",        "FillBitmapLogicalSize" )
-        ( "FillBitmapOffsetX",            "FillBitmapOffsetX" )
-        ( "FillBitmapOffsetY",            "FillBitmapOffsetY" )
-        ( "FillBitmapRectanglePoint",     "FillBitmapRectanglePoint" )
-        ( "FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX" )
-        ( "FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY" )
+        {"FillBitmapMode",               "FillBitmapMode"},
+        {"FillBitmapSizeX",              "FillBitmapSizeX"},
+        {"FillBitmapSizeY",              "FillBitmapSizeY"},
+        {"FillBitmapLogicalSize",        "FillBitmapLogicalSize"},
+        {"FillBitmapOffsetX",            "FillBitmapOffsetX"},
+        {"FillBitmapOffsetY",            "FillBitmapOffsetY"},
+        {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
+        {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
+        {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"},
         //line properties
-        ( "LineColor",                    "BorderColor" )
-        ( "LineDashName",                 "BorderDashName" )
-        ( "LineStyle",                    "BorderStyle" )
-        ( "LineTransparence",             "BorderTransparency" )
-        ( "LineWidth",                    "BorderWidth" )
-        ;
+        {"LineColor",                    "BorderColor"},
+        {"LineDashName",                 "BorderDashName"},
+        {"LineStyle",                    "BorderStyle"},
+        {"LineTransparence",             "BorderTransparency"},
+        {"LineWidth",                    "BorderWidth"}};
     return s_aShapePropertyMapForFilledSeriesProperties;
 }
 
@@ -441,7 +448,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
 {
     //fill character properties into the ValueMap
     tPropertyNameValueMap aValueMap;
-    tMakePropertyNameMap aNameMap = bSupportsLabelBorder ? PropertyMapper::getPropertyNameMapForTextLabelProperties() : getPropertyNameMapForCharacterProperties();
+    tPropertyNameMap const & aNameMap = bSupportsLabelBorder ? PropertyMapper::getPropertyNameMapForTextLabelProperties() : getPropertyNameMapForCharacterProperties();
 
     PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
 

@@ -38,10 +38,9 @@ Image GL3DBarChartDialogController::getImage()
 const tTemplateServiceChartTypeParameterMap&
 GL3DBarChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap aMap =
-        tTemplateServiceChartTypeParameterMap
-        ("com.sun.star.chart2.template.GL3DBar", ChartTypeParameter(1))
-        ("com.sun.star.chart2.template.GL3DBarRoundedRectangle", ChartTypeParameter(2));
+    static tTemplateServiceChartTypeParameterMap aMap{
+        {"com.sun.star.chart2.template.GL3DBar", ChartTypeParameter(1)},
+        {"com.sun.star.chart2.template.GL3DBarRoundedRectangle", ChartTypeParameter(2)}};
     return aMap;
 }
 

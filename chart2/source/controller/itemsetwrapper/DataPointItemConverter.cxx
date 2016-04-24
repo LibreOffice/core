@@ -61,11 +61,8 @@ namespace {
 
 ItemPropertyMapType & lcl_GetDataPointPropertyMap()
 {
-    static ItemPropertyMapType aDataPointPropertyMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( SCHATTR_STYLE_SHAPE, "Geometry3D", 0 )
-        );
-
+    static ItemPropertyMapType aDataPointPropertyMap{
+        {SCHATTR_STYLE_SHAPE, {"Geometry3D", 0}}};
     return aDataPointPropertyMap;
 };
 

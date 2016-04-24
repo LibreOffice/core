@@ -58,17 +58,14 @@ namespace {
 
 ItemPropertyMapType & lcl_GetAxisPropertyMap()
 {
-    static ItemPropertyMapType aAxisPropertyMap(
-        MakeItemPropertyMap
-        IPM_MAP_ENTRY( SCHATTR_AXIS_SHOWDESCR,     "DisplayLabels",    0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_TICKS,         "MajorTickmarks",   0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_HELPTICKS,     "MinorTickmarks",   0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_LABEL_ORDER,   "ArrangeOrder",     0 )
-        IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED,       "StackCharacters",  0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_LABEL_BREAK,   "TextBreak",        0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_LABEL_OVERLAP, "TextOverlap",      0 )
-        );
-
+    static ItemPropertyMapType aAxisPropertyMap{
+        {SCHATTR_AXIS_SHOWDESCR,     {"DisplayLabels",    0}},
+        {SCHATTR_AXIS_TICKS,         {"MajorTickmarks",   0}},
+        {SCHATTR_AXIS_HELPTICKS,     {"MinorTickmarks",   0}},
+        {SCHATTR_AXIS_LABEL_ORDER,   {"ArrangeOrder",     0}},
+        {SCHATTR_TEXT_STACKED,       {"StackCharacters",  0}},
+        {SCHATTR_AXIS_LABEL_BREAK,   {"TextBreak",        0}},
+        {SCHATTR_AXIS_LABEL_OVERLAP, {"TextOverlap",      0}}};
     return aAxisPropertyMap;
 };
 

@@ -30,7 +30,6 @@
 #include <unonames.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
