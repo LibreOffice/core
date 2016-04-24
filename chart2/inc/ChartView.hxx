@@ -107,6 +107,7 @@ private:
     void init();
 
 public:
+    ChartView() = delete;
     ChartView(css::uno::Reference< css::uno::XComponentContext > const & xContext,
                ChartModel& rModel);
 
@@ -209,8 +210,6 @@ public:
     void updateOpenGLWindow();
 
 private: //methods
-    ChartView();
-
     void createShapes();
     void createShapes2D( const css::awt::Size& rPageSize );
     bool createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
