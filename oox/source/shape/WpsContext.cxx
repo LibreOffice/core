@@ -8,13 +8,19 @@
  */
 
 #include "WpsContext.hxx"
+#include <comphelper/sequenceashashmap.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <drawingml/shapestylecontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <svx/svdtrans.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <boost/optional.hpp>
 

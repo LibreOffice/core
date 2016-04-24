@@ -21,6 +21,8 @@
 
 #include "biffinputstream.hxx"
 #include "querytablebuffer.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace xls {

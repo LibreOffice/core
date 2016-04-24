@@ -28,6 +28,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "oox/ppt/slidepersist.hxx"
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;

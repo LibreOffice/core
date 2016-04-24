@@ -21,6 +21,8 @@
 #include "extlstcontext.hxx"
 
 #include "condformatbuffer.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace xls {

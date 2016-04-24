@@ -38,6 +38,8 @@
 #include "drawingml/chart/seriesconverter.hxx"
 #include "drawingml/chart/typegroupmodel.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace drawingml {

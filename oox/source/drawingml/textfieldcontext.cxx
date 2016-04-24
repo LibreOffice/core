@@ -21,6 +21,9 @@
 #include "drawingml/textparagraphpropertiescontext.hxx"
 #include "drawingml/textcharacterpropertiescontext.hxx"
 #include "drawingml/textfield.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

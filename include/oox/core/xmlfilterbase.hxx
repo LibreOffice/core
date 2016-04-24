@@ -20,22 +20,28 @@
 #ifndef INCLUDED_OOX_CORE_XMLFILTERBASE_HXX
 #define INCLUDED_OOX_CORE_XMLFILTERBASE_HXX
 
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/text/XTextField.hpp>
-#include <rtl/ref.hxx>
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
+#include <memory>
+#include <vector>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/dllapi.h>
+#include <oox/helper/storagebase.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
-    namespace container { class XNameContainer; }
     namespace document { class XDocumentProperties; }
+    namespace io { class XInputStream; }
+    namespace io { class XOutputStream; }
+    namespace io { class XStream; }
+    namespace text { class XText; }
+    namespace text { class XTextCursor; }
+    namespace text { class XTextField; }
+    namespace uno { class XComponentContext; }
     namespace xml { namespace dom { class XDocument; } }
-    namespace xml { namespace sax { class XLocator; } }
-    namespace xml { namespace sax { class XFastDocumentHandler; } }
     namespace xml { namespace sax { class XFastSAXSerializable; } }
 } } }
 
@@ -49,11 +55,15 @@ namespace oox {
     namespace vml { class Drawing; }
 }
 
+namespace rtl { template <class reference_type> class Reference; }
+
 namespace sax_fastparser {
     class FastSerializerHelper;
 
     typedef std::shared_ptr< FastSerializerHelper > FSHelperPtr;
 }
+
+namespace utl { class MediaDescriptor; }
 
 namespace oox {
 namespace core {

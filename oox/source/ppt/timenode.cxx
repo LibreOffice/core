@@ -40,6 +40,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include <oox/ppt/pptfilterhelpers.hxx>
+#include <oox/token/tokens.hxx>
 #include "sal/log.hxx"
 
 using namespace ::oox::core;

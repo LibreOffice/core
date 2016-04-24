@@ -20,10 +20,17 @@
 #ifndef INCLUDED_OOX_CORE_FASTTOKENHANDLER_HXX
 #define INCLUDED_OOX_CORE_FASTTOKENHANDLER_HXX
 
-#include <oox/dllapi.h>
+#include <exception>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <sax/fastattribs.hxx>
 
 namespace oox { class TokenMap; }

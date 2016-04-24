@@ -23,6 +23,9 @@
 #include <rtl/ustring.hxx>
 
 #include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include "texttabstoplistcontext.hxx"
 
 using namespace ::oox::core;

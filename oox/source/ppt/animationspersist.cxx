@@ -27,7 +27,10 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "oox/drawingml/shape.hxx"
+#include <oox/helper/attributelist.hxx>
 #include <oox/helper/addtosequence.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;

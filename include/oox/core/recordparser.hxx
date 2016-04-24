@@ -21,17 +21,24 @@
 #define INCLUDED_OOX_CORE_RECORDPARSER_HXX
 
 #include <map>
+#include <memory>
+
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <rtl/ref.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/core/fragmenthandler.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox {
 namespace core {
 
-namespace prv { class Locator; }
-namespace prv { class ContextStack; }
+namespace prv {
+    class ContextStack;
+    class Locator;
+}
 
 
 struct RecordInputSource

@@ -20,12 +20,28 @@
 #ifndef INCLUDED_OOX_CORE_CONTEXTHANDLER2_HXX
 #define INCLUDED_OOX_CORE_CONTEXTHANDLER2_HXX
 
+#include <cstddef>
+#include <exception>
 #include <memory>
 #include <vector>
-#include <oox/helper/attributelist.hxx>
-#include <oox/helper/binaryinputstream.hxx>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <oox/core/contexthandler.hxx>
 #include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace xml { namespace sax { class XFastAttributeList; } }
+    namespace xml { namespace sax { class XFastContextHandler; } }
+} } }
+
+namespace oox {
+    class AttributeList;
+    class SequenceInputStream;
+}
 
 namespace oox {
 namespace core {

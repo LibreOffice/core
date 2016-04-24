@@ -18,6 +18,7 @@
  */
 
 #include "comphelper/anytostring.hxx"
+#include <comphelper/sequenceashashmap.hxx>
 #include "cppuhelper/exc_hlp.hxx"
 #include <osl/diagnose.h>
 #include <tools/multisel.hxx>
@@ -37,11 +38,14 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include "drawingml/textliststylecontext.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/presentationfragmenthandler.hxx"
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/ppt/pptimport.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>

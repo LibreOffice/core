@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <osl/diagnose.h>
 
+#include <oox/helper/attributelist.hxx>
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "headerfootercontext.hxx"
@@ -39,6 +40,8 @@
 #include "drawingml/clrschemecontext.hxx"
 #include "drawingml/textliststyle.hxx"
 #include "oox/ppt/pptimport.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;

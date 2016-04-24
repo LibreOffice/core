@@ -20,10 +20,12 @@
 #ifndef INCLUDED_OOX_CORE_RELATIONS_HXX
 #define INCLUDED_OOX_CORE_RELATIONS_HXX
 
-#include <oox/helper/helper.hxx>
-#include <oox/dllapi.h>
+#include <cstddef>
 #include <map>
 #include <memory>
+
+#include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
 
 namespace oox {
 namespace core {

@@ -27,6 +27,8 @@
 #include "services.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>

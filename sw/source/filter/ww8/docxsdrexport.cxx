@@ -28,6 +28,7 @@
 #include <docxexportfilter.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 

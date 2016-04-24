@@ -23,6 +23,8 @@
 #include "diagramfragmenthandler.hxx"
 #include "datamodelcontext.hxx"
 #include "drawingml/colorchoicecontext.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;

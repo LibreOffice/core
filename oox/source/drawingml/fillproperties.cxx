@@ -39,7 +39,8 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 
