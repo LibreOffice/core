@@ -3096,7 +3096,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
         memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
         memset( pUnicodesPerGlyph, 0, sizeof(pUnicodesPerGlyph) );
         memset( pEncToUnicodeIndex, 0, sizeof(pEncToUnicodeIndex) );
-        for( Ucs2SIntMap::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
+        for( Ucs2SIntMap::const_reverse_iterator it = pEncoding->rbegin(); it != pEncoding->rend(); ++it )
         {
             if(it->second == -1)
                 continue;
