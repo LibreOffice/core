@@ -26,9 +26,6 @@ CGMChart::CGMChart()
 {
     for ( sal_Int8 i = 0; i < 7; i++ )
     {
-        mDataNode[ i ].nBoxX1 = mDataNode[ i ].nBoxY1 = 0 ;
-        mDataNode[ i ].nBoxX2 = mDataNode[ i ].nBoxY2 = 0 ;
-
         mDataNode[ i ].nZoneEnum = i;
     }
 }
