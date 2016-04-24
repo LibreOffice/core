@@ -1188,7 +1188,7 @@ SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32
             rPattern.iterateCodePoints( &nAfterFakePattern);
     }
 
-    sal_Int32 nString = nStartPos, nPat = -1, nStr = -1;
+    sal_Int32 nString = nStartPos, nPat = -1, nStr = -1, nLastAsterisk = -1;
     sal_uInt32 cPatternAfterAsterisk = 0;
     bool bEscaped = false, bEscapedAfterAsterisk = false;
 
@@ -1215,11 +1215,21 @@ SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32
         }
         else
         {
-            // A trailing '*' is handled below. If the pattern is consumed and
-            // substring match allowed we're good.
+            // A trailing '*' is handled below.
             if (mbWildcardAllowSubstring)
+            {
+                // If the pattern is consumed and substring match allowed we're good.
                 setWildcardMatch( aRes, nStartOffset, nString);
-            return aRes;
+                return aRes;
+            }
+            else if (nString < nEndPos && nLastAsterisk >= 0)
+            {
+                // If substring match is not allowed try a greedy '*' match.
+                nPattern = nLastAsterisk;
+                continue;   // do
+            }
+            else
+                return aRes;
         }
 
         if (cPattern == '*' && !bEscaped)
@@ -1234,6 +1244,8 @@ SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32
                 setWildcardMatch( aRes, nStartOffset, nEndOffset);
                 return aRes;
             }
+
+            nLastAsterisk = nPattern;   // Remember last encountered '*'.
 
             // cPattern will be the next non-'*' character, nPattern
             // incremented.
@@ -1406,7 +1418,7 @@ SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32
             rReversePattern.iterateCodePoints( &nAfterFakePattern, -1);
     }
 
-    sal_Int32 nString = nStartPos, nPat = -1, nStr = -1;
+    sal_Int32 nString = nStartPos, nPat = -1, nStr = -1, nLastAsterisk = -1;
     sal_uInt32 cPatternAfterAsterisk = 0;
     bool bEscaped = false, bEscapedAfterAsterisk = false;
 
@@ -1433,11 +1445,21 @@ SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32
         }
         else
         {
-            // A leading '*' is handled below. If the pattern is consumed and
-            // substring match allowed we're good.
+            // A trailing '*' is handled below.
             if (mbWildcardAllowSubstring)
+            {
+                // If the pattern is consumed and substring match allowed we're good.
                 setWildcardMatch( aRes, nStartOffset, nString);
-            return aRes;
+                return aRes;
+            }
+            else if (nString > nEndPos && nLastAsterisk >= 0)
+            {
+                // If substring match is not allowed try a greedy '*' match.
+                nPattern = nLastAsterisk;
+                continue;   // do
+            }
+            else
+                return aRes;
         }
 
         if (cPattern == '*' && !bEscaped)
@@ -1452,6 +1474,8 @@ SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32
                 setWildcardMatch( aRes, nStartOffset, nEndOffset);
                 return aRes;
             }
+
+            nLastAsterisk = nPattern;   // Remember last encountered '*'.
 
             // cPattern will be the previous non-'*' character, nPattern
             // decremented.
