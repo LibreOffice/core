@@ -276,7 +276,7 @@ SbMethod* MacroChooser::GetMacro()
         if ( pEntry )
         {
             OUString aMacroName( m_pMacroBox->GetEntryText( pEntry ) );
-            pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ));
+            pMethod = pModule->FindMethod( aMacroName, SbxCLASS_METHOD );
         }
     }
     return pMethod;
@@ -377,7 +377,7 @@ SbMethod* MacroChooser::CreateMacro()
         }
 
         OUString aSubName = m_pMacroNameEdit->GetText();
-        DBG_ASSERT( !pModule || !pModule->GetMethods()->Find( aSubName, SbxCLASS_METHOD ), "Macro existiert schon!" );
+        DBG_ASSERT( !pModule || !pModule->FindMethod( aSubName, SbxCLASS_METHOD ), "Macro existiert schon!" );
         pMethod = pModule ? basctl::CreateMacro( pModule, aSubName ) : nullptr;
     }
 

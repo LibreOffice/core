@@ -201,15 +201,9 @@ bool hasMacro( SfxObjectShell* pShell, const OUString& sLibrary, OUString& sMod,
                 if ( !sMod.isEmpty() ) // we wish to find the macro is a specific module
                 {
                     SbModule* pModule = pBasic->FindModule( sMod );
-                    if ( pModule )
+                    if ( pModule && pModule->FindMethod( sMacro, SbxCLASS_METHOD ))
                     {
-                        SbxArray* pMethods = pModule->GetMethods();
-                        if ( pMethods )
-                        {
-                            SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( sMacro, SbxCLASS_METHOD ) );
-                            if ( pMethod )
-                              bFound = true;
-                        }
+                        bFound = true;
                     }
                 }
                 else if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( sMacro, SbxCLASS_METHOD ) ) )
