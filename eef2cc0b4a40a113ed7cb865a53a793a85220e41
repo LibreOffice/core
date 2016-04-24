@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_cc9d635b",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-24T20:05:59Z",
+      "side": 1,
+      "message": "That looks perfect",
+      "revId": "eef2cc0b4a40a113ed7cb865a53a793a85220e41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_0ca01b90",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-24T20:05:59Z",
+      "side": 1,
+      "message": "This is superfluous - see below",
+      "revId": "eef2cc0b4a40a113ed7cb865a53a793a85220e41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_6cad4f88",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-24T20:05:59Z",
+      "side": 1,
+      "message": "This is not correct - the SdrFillAttribute you took this from had quite special semantics, which do not apply to vcl::Font.\n\nThe original operator\u003d\u003d is already exactly covered by cow_wrapper\u0027s operator\u003d\u003d implementation, which is:\n\n    template\u003cclass T, class P\u003e inline bool operator\u003d\u003d( const cow_wrapper\u003cT,P\u003e\u0026 a,\n                                                       const cow_wrapper\u003cT,P\u003e\u0026 b )\n    {\n        return a.same_object(b) || *a \u003d\u003d *b;\n    }",
+      "revId": "eef2cc0b4a40a113ed7cb865a53a793a85220e41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
