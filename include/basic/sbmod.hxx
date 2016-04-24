@@ -132,6 +132,7 @@ public:
     bool     createCOMWrapperForIface( css::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     const SbxArrayRef& GetMethods() { return pMethods;}
+    SbMethod*       FindMethod( const OUString&, SbxClassType );
     static OUString GetKeywordCase( const OUString& sKeyword );
 };
 
