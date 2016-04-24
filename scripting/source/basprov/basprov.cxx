@@ -486,8 +486,6 @@ namespace basprov
 
     sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         return browse::BrowseNodeTypes::CONTAINER;
     }
 
