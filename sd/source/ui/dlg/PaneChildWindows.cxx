@@ -21,7 +21,6 @@
 #include "PaneDockingWindow.hxx"
 #include "ViewShellBase.hxx"
 #include "framework/FrameworkHelper.hxx"
-#include "taskpane/ToolPanelViewShell.hxx"
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
