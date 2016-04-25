@@ -463,6 +463,9 @@ void TableRowUndo::setData( const Data& rData )
     mxRow->mbIsVisible = rData.mbIsVisible;
     mxRow->mbIsStartOfNewPage = rData.mbIsStartOfNewPage;
     mxRow->maName = rData.maName;
+
+    // Trigger re-layout of the table.
+    mxRow->getModel()->setModified(true);
  }
 
 

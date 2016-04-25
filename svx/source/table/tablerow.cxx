@@ -149,6 +149,10 @@ void TableRow::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
     }
 }
 
+TableModelRef TableRow::getModel() const
+{
+    return mxTableModel;
+}
 
 // XCellRange
 

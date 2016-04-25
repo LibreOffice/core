@@ -1410,6 +1410,12 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
         }
 
         bRet = pObj->applySpecialDrag(DragStat());
+        if (DragStat().IsEndDragChangesLayout())
+        {
+            auto pGeoUndo = dynamic_cast<SdrUndoGeoObj*>(pUndo);
+            if (pGeoUndo)
+                pGeoUndo->SetSkipChangeLayout(true);
+        }
 
         if(bRet)
         {

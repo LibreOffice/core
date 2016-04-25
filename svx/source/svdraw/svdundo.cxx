@@ -598,6 +598,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
      , pUndoGeo(nullptr)
      , pRedoGeo(nullptr)
      , pUndoGroup(nullptr)
+     , mbSkipChangeLayout(false)
 {
     SdrObjList* pOL=rNewObj.GetSubList();
     if (pOL!=nullptr && pOL->GetObjCount() && dynamic_cast<const E3dScene* >( &rNewObj) ==  nullptr)
@@ -640,7 +641,13 @@ void SdrUndoGeoObj::Undo()
     {
         delete pRedoGeo;
         pRedoGeo=pObj->GetGeoData();
+
+        auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pObj);
+        if (pTableObj && mbSkipChangeLayout)
+            pTableObj->SetSkipChangeLayout(true);
         pObj->SetGeoData(*pUndoGeo);
+        if (pTableObj && mbSkipChangeLayout && pTableObj)
+            pTableObj->SetSkipChangeLayout(false);
     }
 }
 
