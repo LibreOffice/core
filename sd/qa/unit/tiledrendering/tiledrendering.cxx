@@ -24,6 +24,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
+#include <comphelper/lok.hxx>
+#include <svx/svdotable.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -54,6 +56,7 @@ public:
     void testSearch();
     void testSearchAll();
     void testSearchAllSelections();
+    void testResizeTable();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -68,6 +71,7 @@ public:
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchAll);
     CPPUNIT_TEST(testSearchAllSelections);
+    CPPUNIT_TEST(testResizeTable);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -448,6 +452,54 @@ void SdTiledRenderingTest::testSearchAllSelections()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
     // This was 1: only the first match was highlighted.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSelection.size());
+}
+
+void SdTiledRenderingTest::testResizeTable()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    // Select the table by marking it + starting and ending text edit.
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    pView->SdrEndTextEdit();
+
+    // Remember the original row heights.
+    uno::Reference<table::XColumnRowRange> xTable(pTableObject->getTable(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xRow1(xRows->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nExpectedRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
+    uno::Reference<beans::XPropertySet> xRow2(xRows->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nExpectedRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
+
+    // Resize the upper row, decrease its height by 1 cm.
+    Point aInnerRowEdge = pObject->GetSnapRect().Center();
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY()));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY() - 1000));
+
+    // Remember the resized row heights.
+    sal_Int32 nResizedRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
+    CPPUNIT_ASSERT(nResizedRow1 < nExpectedRow1);
+    sal_Int32 nResizedRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nResizedRow2);
+
+    // Now undo the resize.
+    pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
+
+    // Check the undo result.
+    sal_Int32 nActualRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(nExpectedRow1, nActualRow1);
+    sal_Int32 nActualRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
+    // Expected was 4000, actual was 4572, i.e. the second row after undo was larger than expected.
+    CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nActualRow2);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 #endif
