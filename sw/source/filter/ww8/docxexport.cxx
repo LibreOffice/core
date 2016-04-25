@@ -855,6 +855,12 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::number( m_aSettings.defaultTabStop).getStr(), FSEND );
 
+    // Protect form
+    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ))
+    {
+        pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1",  FSEND );
+    }
+
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Use the setting from the default style.
     SwTextFormatColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);

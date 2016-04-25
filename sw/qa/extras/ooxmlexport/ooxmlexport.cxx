@@ -793,6 +793,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91594, "tdf91594.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
     CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
 }
+DECLARE_OOXMLEXPORT_TEST(testTDF99434, "protectedform.docx")
+{
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    uno::Any aProtect = xSettings->getPropertyValue("ProtectForm");
+    bool bProt = false;
+    aProtect >>= bProt;
+    CPPUNIT_ASSERT(bProt);
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
