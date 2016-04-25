@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_2c02373f",
+        "filename": "filter/source/graphicfilter/icgm/chart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-04-25T05:45:57Z",
+      "side": 1,
+      "message": "Removing the \u003d 0, does not feel right. Have you checked these variables are not used anywhere (in which case they should be removed instead), or are always assigned ?\n\nit is normally a good idea to initialize member variables, since the compiler (sadly enough) do not always do this.",
+      "revId": "b6f7626879c34e8ff6f7fa46b06f098468ed24fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
