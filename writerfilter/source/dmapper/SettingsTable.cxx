@@ -64,6 +64,8 @@ struct SettingsTable_Impl
     bool                m_bWidowControl;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
+    bool                m_bProtectForm;
+
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
     std::vector<beans::PropertyValue> m_aCompatSettings;
@@ -88,6 +90,7 @@ struct SettingsTable_Impl
     , m_bWidowControl(false)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
+    , m_bProtectForm(false)
     , m_pThemeFontLangProps(3)
     , m_pCurrentCompatSetting(3)
     {}
@@ -143,6 +146,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         m_pImpl->m_pCurrentCompatSetting[2].Name = "val";
         m_pImpl->m_pCurrentCompatSetting[2].Value <<= sStringValue;
         break;
+    case NS_ooxml::LN_CT_DocProtect_edit:
+        m_pImpl->m_bProtectForm = val.getInt() == NS_ooxml::LN_Value_doc_ST_DocProtect_forms;
+    break;
     default:
     {
 #ifdef DEBUG_WRITERFILTER
@@ -340,6 +346,10 @@ bool SettingsTable::GetMirrorMarginSettings() const
     return m_pImpl->m_bMirrorMargin;
 }
 
+bool SettingsTable::GetProtectForm() const
+{
+    return m_pImpl->m_bProtectForm;
+}
 uno::Sequence<beans::PropertyValue> SettingsTable::GetThemeFontLangProperties() const
 {
     return m_pImpl->m_pThemeFontLangProps;
