@@ -24,7 +24,8 @@ namespace dbtools
 {
     OPropertyMap::OPropertyMap()
     {
-        m_aPropertyMap = {
+        // MSVC complains about ambiguous operator=
+        m_aPropertyMap.insert({
                 {PROPERTY_ID_QUERYTIMEOUT,         "QueryTimeOut"},
                 {PROPERTY_ID_MAXFIELDSIZE,         "MaxFieldSize"},
                 {PROPERTY_ID_MAXROWS,              "MaxRows"},
@@ -88,7 +89,7 @@ namespace dbtools
                 {PROPERTY_ID_FIELDTYPE,            "FieldType"},
                 {PROPERTY_ID_VALUE,                "Value"},
                 {PROPERTY_ID_ACTIVE_CONNECTION,    "ActiveConnection"},
-            };
+            } );
     }
 
     const OUString& OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
