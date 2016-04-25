@@ -52,7 +52,7 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
                   XML_LIST_NAME,
                   OUString (rBlockList.GetName()));
     {
-        SvXMLElementExport pRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
+        SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
         sal_uInt16 nBlocks= rBlockList.GetCount();
         for ( sal_uInt16 i = 0; i < nBlocks; i++)
         {

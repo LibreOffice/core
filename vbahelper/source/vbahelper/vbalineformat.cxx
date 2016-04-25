@@ -350,64 +350,64 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle ) throw (uno::RuntimeExcepti
     else
     {
         m_xPropertySet->setPropertyValue( "LineStyle" , uno::makeAny( drawing::LineStyle_DASH ) );
-        drawing::LineDash  pLineDash;
+        drawing::LineDash  aLineDash;
         Millimeter aMillimeter( m_nLineWeight );
         sal_Int32 nPixel = static_cast< sal_Int32 >( aMillimeter.getInHundredthsOfOneMillimeter() );
         switch( _dashstyle )
         {
         case office::MsoLineDashStyle::msoLineDashDot:
-            pLineDash.Dots = 1;
-            pLineDash.DotLen = nPixel;
-            pLineDash.Dashes = 1;
-            pLineDash.DashLen = 5 * nPixel;
-            pLineDash.Distance = 4 * nPixel;
+            aLineDash.Dots = 1;
+            aLineDash.DotLen = nPixel;
+            aLineDash.Dashes = 1;
+            aLineDash.DashLen = 5 * nPixel;
+            aLineDash.Distance = 4 * nPixel;
             break;
         case office::MsoLineDashStyle::msoLineLongDashDot:
-            pLineDash.Dots = 1;
-            pLineDash.DotLen = nPixel;
-            pLineDash.Dashes = 1;
-            pLineDash.DashLen = 10 * nPixel;
-            pLineDash.Distance = 4 * nPixel;
+            aLineDash.Dots = 1;
+            aLineDash.DotLen = nPixel;
+            aLineDash.Dashes = 1;
+            aLineDash.DashLen = 10 * nPixel;
+            aLineDash.Distance = 4 * nPixel;
             break;
         case office::MsoLineDashStyle::msoLineDash:
-            pLineDash.Dots = 0;
-            pLineDash.DotLen = 0;
-            pLineDash.Dashes = 1;
-            pLineDash.DashLen = 6 * nPixel;
-            pLineDash.Distance = 4 * nPixel;
+            aLineDash.Dots = 0;
+            aLineDash.DotLen = 0;
+            aLineDash.Dashes = 1;
+            aLineDash.DashLen = 6 * nPixel;
+            aLineDash.Distance = 4 * nPixel;
             break;
         case office::MsoLineDashStyle::msoLineDashDotDot:
-            pLineDash.Dots = 2;
-            pLineDash.DotLen = nPixel;
-            pLineDash.Dashes = 1;
-            pLineDash.DashLen = 10 * nPixel;
-            pLineDash.Distance = 3 * nPixel;
+            aLineDash.Dots = 2;
+            aLineDash.DotLen = nPixel;
+            aLineDash.Dashes = 1;
+            aLineDash.DashLen = 10 * nPixel;
+            aLineDash.Distance = 3 * nPixel;
             break;
         case office::MsoLineDashStyle::msoLineLongDash:
-            pLineDash.Dots = 0;
-            pLineDash.DotLen = 0;
-            pLineDash.Dashes = 1;
-            pLineDash.DashLen = 10 * nPixel;
-            pLineDash.Distance = 4 * nPixel;
+            aLineDash.Dots = 0;
+            aLineDash.DotLen = 0;
+            aLineDash.Dashes = 1;
+            aLineDash.DashLen = 10 * nPixel;
+            aLineDash.Distance = 4 * nPixel;
             break;
         case office::MsoLineDashStyle::msoLineSquareDot:
-            pLineDash.Dots = 1;
-            pLineDash.DotLen = nPixel;
-            pLineDash.Dashes = 0;
-            pLineDash.DashLen = 0;
-            pLineDash.Distance = nPixel;
+            aLineDash.Dots = 1;
+            aLineDash.DotLen = nPixel;
+            aLineDash.Dashes = 0;
+            aLineDash.DashLen = 0;
+            aLineDash.Distance = nPixel;
             break;
         case office::MsoLineDashStyle::msoLineRoundDot:
-            pLineDash.Dots = 1;
-            pLineDash.DotLen = nPixel;
-            pLineDash.Dashes = 0;
-            pLineDash.DashLen = 0;
-            pLineDash.Distance = nPixel;
+            aLineDash.Dots = 1;
+            aLineDash.DotLen = nPixel;
+            aLineDash.Dashes = 0;
+            aLineDash.DashLen = 0;
+            aLineDash.Distance = nPixel;
             break;
         default:
             throw uno::RuntimeException( "this MsoLineDashStyle is not supported." );
         }
-        m_xPropertySet->setPropertyValue( "LineDash" , uno::makeAny( pLineDash ) );
+        m_xPropertySet->setPropertyValue( "LineDash" , uno::makeAny( aLineDash ) );
     }
 }
 

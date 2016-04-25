@@ -108,17 +108,17 @@ namespace XSLT
                 return "Not Found:";// + streamName;
             }
         //The first four byte are the length of the uncompressed data
-        Sequence<sal_Int8> pLength(4);
+        Sequence<sal_Int8> aLength(4);
         Reference<XSeekable> xSeek(subStream, UNO_QUERY);
         xSeek->seek(0);
         //Get the uncompressed length
-        int readbytes = subStream->readBytes(pLength, 4);
+        int readbytes = subStream->readBytes(aLength, 4);
         if (4 != readbytes)
             {
                 return "Can not read the length.";
             }
-        int oleLength = (pLength[0] << 0) + (pLength[1] << 8)
-                + (pLength[2] << 16) + (pLength[3] << 24);
+        int oleLength = (aLength[0] << 0) + (aLength[1] << 8)
+                + (aLength[2] << 16) + (aLength[3] << 24);
         Sequence<sal_Int8> content(oleLength);
         //Read all bytes. The compressed length should less then the uncompressed length
         readbytes = subStream->readBytes(content, oleLength);

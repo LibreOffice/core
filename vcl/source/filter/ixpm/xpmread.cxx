@@ -575,7 +575,7 @@ bool XPMReader::ImplCompare( sal_uInt8 const * pSource, sal_uInt8 const * pDest,
 bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 {
     sal_uInt8   nByte;
-    sal_uLong   pSize = 0;
+    sal_uLong   nSize = 0;
     sal_uInt8*  pPtr = mpStringBuf;
     sal_uLong   nCount = 0;
 
@@ -591,7 +591,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
         nCount = 0xffffffff;
     }
 
-    while ( pSize < mnStringSize )
+    while ( nSize < mnStringSize )
     {
         nByte = *pPtr;
 
@@ -616,7 +616,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
                 nCount++;
             }
         }
-        pSize++;
+        nSize++;
         pPtr++;
     }
     return ( ( nCount == nNumb ) && ( mpPara ) );

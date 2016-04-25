@@ -668,10 +668,10 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         if( aHelpRect.IsInside( aMousePos ) )
         {
             Point delta(2,2);
-            Point pSize( aSz.Width(), aSz.Height() );
-            Point pTest( aMousePos - pSize - delta );
-            if( pTest.X() > aScreenRect.Left() &&  pTest.Y() > aScreenRect.Top() )
-                aPos = pTest;
+            Point aSize( aSz.Width(), aSz.Height() );
+            Point aTest( aMousePos - aSize - delta );
+            if( aTest.X() > aScreenRect.Left() && aTest.Y() > aScreenRect.Top() )
+                aPos = aTest;
             else
                 aPos = aMousePos + delta;
         }

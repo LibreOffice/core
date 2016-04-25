@@ -149,7 +149,7 @@ void TableRow::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
     }
 }
 
-TableModelRef const & TableRow::getModel() const
+const TableModelRef& TableRow::getModel() const
 {
     return mxTableModel;
 }

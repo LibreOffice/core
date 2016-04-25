@@ -1997,21 +1997,18 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                                 bool bAlreadyOpened = false;
                                 if ( pNode->m_aGroupedLeaves.size() > 0 )
                                 {
-                                    for (std::vector<OptionsLeaf*> & m_aGroupedLeave : pNode->m_aGroupedLeaves)
+                                    for (std::vector<OptionsLeaf*> & rGroup : pNode->m_aGroupedLeaves)
                                     {
-                                        if ( m_aGroupedLeave.size() > 0 &&
-                                             m_aGroupedLeave[0]->m_sGroupId
-                                             == sLeafGrpId )
+                                        if ( rGroup.size() > 0 &&
+                                             rGroup[0]->m_sGroupId == sLeafGrpId )
                                         {
                                             sal_uInt32 l = 0;
-                                            for ( ; l < m_aGroupedLeave.size(); ++l )
+                                            for ( ; l < rGroup.size(); ++l )
                                             {
-                                                if ( m_aGroupedLeave[l]->
-                                                     m_nGroupIndex >= nLeafGrpIdx )
+                                                if ( rGroup[l]->m_nGroupIndex >= nLeafGrpIdx )
                                                     break;
                                             }
-                                            m_aGroupedLeave.insert(
-                                                m_aGroupedLeave.begin() + l, pLeaf );
+                                            rGroup.insert( rGroup.begin() + l, pLeaf );
                                             bAlreadyOpened = true;
                                             break;
                                         }

@@ -287,8 +287,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     m_pImpl->m_bParagraphHasDrawing = true;
     m_pImpl->m_pSerializer->startElementNS(XML_w, XML_drawing, FSEND);
 
-    const SvxLRSpaceItem pLRSpaceItem = pFrameFormat->GetLRSpace(false);
-    const SvxULSpaceItem pULSpaceItem = pFrameFormat->GetULSpace(false);
+    const SvxLRSpaceItem aLRSpaceItem = pFrameFormat->GetLRSpace(false);
+    const SvxULSpaceItem aULSpaceItem = pFrameFormat->GetULSpace(false);
 
     bool isAnchor;
 
@@ -364,10 +364,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
-        attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper()) - nTopExt).getStr());
-        attrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower()) - nBottomExt).getStr());
-        attrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft()) - nLeftExt).getStr());
-        attrList->add(XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight()) - nRightExt).getStr());
+        attrList->add(XML_distT, OString::number(TwipsToEMU(aULSpaceItem.GetUpper()) - nTopExt).getStr());
+        attrList->add(XML_distB, OString::number(TwipsToEMU(aULSpaceItem.GetLower()) - nBottomExt).getStr());
+        attrList->add(XML_distL, OString::number(TwipsToEMU(aLRSpaceItem.GetLeft()) - nLeftExt).getStr());
+        attrList->add(XML_distR, OString::number(TwipsToEMU(aLRSpaceItem.GetRight()) - nRightExt).getStr());
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");
@@ -556,10 +556,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     else
     {
         sax_fastparser::FastAttributeList* aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-        aAttrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
-        aAttrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr());
-        aAttrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr());
-        aAttrList->add(XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight())).getStr());
+        aAttrList->add(XML_distT, OString::number(TwipsToEMU(aULSpaceItem.GetUpper())).getStr());
+        aAttrList->add(XML_distB, OString::number(TwipsToEMU(aULSpaceItem.GetLower())).getStr());
+        aAttrList->add(XML_distL, OString::number(TwipsToEMU(aLRSpaceItem.GetLeft())).getStr());
+        aAttrList->add(XML_distR, OString::number(TwipsToEMU(aLRSpaceItem.GetRight())).getStr());
         const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
         if (pObj != nullptr)
         {
@@ -1120,9 +1120,8 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     uno::Sequence< uno::Any > diagramDrawing;
 
     // retrieve the doms from the GrabBag
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue(pName) >>= propList;
+    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
     for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
     {
         OUString propName = propList[nProp].Name;

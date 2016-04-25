@@ -485,10 +485,10 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             const ::std::vector<OUString>& (*pStringsFetchFunc)() = std::get<2>( *entry );
             if ( pStringsFetchFunc )
             {
-                const ::std::vector<OUString>& pStrings = pStringsFetchFunc();
+                const ::std::vector<OUString>& rStrings = pStringsFetchFunc();
                 sal_uInt16 nIndex, nId;
                 for ( nIndex = 0, nId = std::get<0>( *entry ) ; nId < std::get<1>( *entry ) ; nId++, nIndex++ )
-                    (*pHash)[pStrings[nIndex]] = nId;
+                    (*pHash)[rStrings[nIndex]] = nId;
             }
         }
 

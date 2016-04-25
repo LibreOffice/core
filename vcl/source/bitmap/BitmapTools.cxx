@@ -35,11 +35,11 @@ void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
 
     sal_Size nSize = rStream.remainingSize();
-    std::vector<sal_Int8> pBuffer(nSize + 1);
-    rStream.Read(pBuffer.data(), nSize);
-    pBuffer[nSize] = 0;
+    std::vector<sal_Int8> aBuffer(nSize + 1);
+    rStream.Read(aBuffer.data(), nSize);
+    aBuffer[nSize] = 0;
 
-    uno::Sequence<sal_Int8> aData(pBuffer.data(), nSize + 1);
+    uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
     uno::Reference<io::XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
     Primitive2DSequence aPrimitiveSequence = xSvgParser->getDecomposition(aInputStream, sPath);

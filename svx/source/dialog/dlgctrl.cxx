@@ -964,11 +964,11 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
 
     if( !bIsMod )
     {
-        Point pRepaintPoint( aRectSize.Width() *( aFocusPosition.getX() - 1)/ nLines - 1,
+        Point aRepaintPoint( aRectSize.Width() *( aFocusPosition.getX() - 1)/ nLines - 1,
                              aRectSize.Height() *( aFocusPosition.getY() - 1)/ nLines -1
                             );
         Size  aRepaintSize( aRectSize.Width() *3/ nLines + 2,aRectSize.Height() *3/ nLines + 2);
-        Rectangle aRepaintRect( pRepaintPoint, aRepaintSize );
+        Rectangle aRepaintRect( aRepaintPoint, aRepaintSize );
         bool bFocusPosChanged=false;
         switch(nCode)
         {

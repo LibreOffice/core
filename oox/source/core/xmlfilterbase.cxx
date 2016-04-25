@@ -785,8 +785,8 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     {
                         OUStringBuffer buf;
                         ::sax::Converter::convertDuration( buf, aDuration );
-                        OUString pDuration = buf.makeStringAndClear();
-                        writeElement( pAppProps, FSNS( XML_vt, XML_lpwstr ), pDuration );
+                        OUString aDurationStr = buf.makeStringAndClear();
+                        writeElement( pAppProps, FSNS( XML_vt, XML_lpwstr ), aDurationStr );
                     }
                     else if ( ( aprop[n].Value ) >>= aDateTime )
                             writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime );

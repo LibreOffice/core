@@ -661,12 +661,12 @@ sal_uInt32 XclExpPaletteImpl::GetLeastUsedListColor() const
 
     for( sal_uInt32 nIdx = 0, nCount = mxColorList->size(); nIdx < nCount; ++nIdx )
     {
-        XclListColor& pEntry = *mxColorList->at( nIdx ).get();
+        XclListColor& rEntry = *mxColorList->at( nIdx ).get();
         // ignore the base colors
-        if( !pEntry.IsBaseColor() && (pEntry.GetWeighting() < nMinW) )
+        if( !rEntry.IsBaseColor() && (rEntry.GetWeighting() < nMinW) )
         {
             nFound = nIdx;
-            nMinW = pEntry.GetWeighting();
+            nMinW = rEntry.GetWeighting();
         }
     }
     return nFound;

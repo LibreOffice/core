@@ -83,8 +83,8 @@ void LayoutAtom::dump(int level)
     OSL_TRACE( "level = %d - %s of type %s", level,
                OUSTRING_TO_CSTR( msName ),
                typeid(*this).name() );
-    const std::vector<LayoutAtomPtr>& pChildren=getChildren();
-    std::for_each( pChildren.begin(), pChildren.end(),
+    const std::vector<LayoutAtomPtr>& rChildren=getChildren();
+    std::for_each( rChildren.begin(), rChildren.end(),
         [level] (LayoutAtomPtr const& pAtom) { pAtom->dump(level + 1); } );
 }
 
@@ -581,8 +581,8 @@ public:
 
 void ShapeCreationVisitor::defaultVisit(LayoutAtom& rAtom)
 {
-    const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
-    std::for_each( pChildren.begin(), pChildren.end(),
+    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
+    std::for_each( rChildren.begin(), rChildren.end(),
         [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
 }
 
@@ -598,7 +598,7 @@ void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 
 void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
 {
-    const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
+    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
 
     sal_Int32 nChildren=1;
     if( rAtom.iterator().mnPtType == XML_node )
@@ -607,7 +607,7 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
         // attribute that is contained in diagram's
         // getPointsPresNameMap()
         ShallowPresNameVisitor aVisitor(mrDgm);
-        std::for_each( pChildren.begin(), pChildren.end(),
+        std::for_each( rChildren.begin(), rChildren.end(),
             [&] (LayoutAtomPtr const& pAtom) { pAtom->accept(aVisitor); } );
         nChildren = aVisitor.getCount();
     }
@@ -621,7 +621,7 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
     for( mnCurrIdx=0; mnCurrIdx<nCnt && nStep>0; mnCurrIdx+=nStep )
     {
         // TODO there is likely some conditions
-        std::for_each( pChildren.begin(), pChildren.end(),
+        std::for_each( rChildren.begin(), rChildren.end(),
             [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
     }
 
@@ -688,8 +688,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
 {
     // visit all children, one of them needs to be the layout algorithm
-    const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
-    std::for_each( pChildren.begin(), pChildren.end(),
+    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
+    std::for_each( rChildren.begin(), rChildren.end(),
         [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
 }
 
@@ -727,8 +727,8 @@ void ShallowPresNameVisitor::defaultVisit(LayoutAtom& rAtom)
 {
     // visit all children, at least one of them needs to have proper
     // name set
-    const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
-    std::for_each( pChildren.begin(), pChildren.end(),
+    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
+    std::for_each( rChildren.begin(), rChildren.end(),
         [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
 }
 

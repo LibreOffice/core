@@ -70,17 +70,17 @@ EDcrData::EDcrData()
 void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 {
     // Register dynamic identifier
-    EDcrData& pData = TheEDcrData::get();
-    lErrId = (((sal_uIntPtr)pData.nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
+    EDcrData& rData = TheEDcrData::get();
+    lErrId = (((sal_uIntPtr)rData.nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
              pDcr->GetErrorCode();
 
-    if(pData.ppDcr[pData.nNextDcr])
+    if(rData.ppDcr[rData.nNextDcr])
     {
-        delete pData.ppDcr[pData.nNextDcr];
+        delete rData.ppDcr[rData.nNextDcr];
     }
-    pData.ppDcr[pData.nNextDcr] = pDcr;
-    if(++pData.nNextDcr>=ERRCODE_DYNAMIC_COUNT)
-        pData.nNextDcr=0;
+    rData.ppDcr[rData.nNextDcr] = pDcr;
+    if(++rData.nNextDcr>=ERRCODE_DYNAMIC_COUNT)
+        rData.nNextDcr=0;
 }
 
 void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
@@ -187,9 +187,9 @@ ErrorContext *ErrorContext::GetContext()
 ErrorHandler::ErrorHandler()
     : pImpl(new ErrorHandler_Impl)
 {
-    EDcrData &pData = TheEDcrData::get();
-    pData.errorHandlers.insert(pData.errorHandlers.begin(), this);
-    if(!pData.pDsp)
+    EDcrData &rData = TheEDcrData::get();
+    rData.errorHandlers.insert(rData.errorHandlers.begin(), this);
+    if(!rData.pDsp)
         RegisterDisplay(&aDspFunc);
 }
 
@@ -206,16 +206,16 @@ vcl::Window* ErrorContext::GetParent()
 
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
-    EDcrData &pData    = TheEDcrData::get();
-    pData.bIsWindowDsp = true;
-    pData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
+    EDcrData &rData    = TheEDcrData::get();
+    rData.bIsWindowDsp = true;
+    rData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
-    EDcrData &pData    = TheEDcrData::get();
-    pData.bIsWindowDsp = false;
-    pData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
+    EDcrData &rData    = TheEDcrData::get();
+    rData.bIsWindowDsp = false;
+    rData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 /** Handles an error.
@@ -243,14 +243,14 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     OUString aAction;
     if(!lId || lId == ERRCODE_ABORT)
         return 0;
-    EDcrData &pData      = TheEDcrData::get();
+    EDcrData &rData      = TheEDcrData::get();
     vcl::Window *pParent = nullptr;
     ErrorInfo *pInfo     = ErrorInfo::GetErrorInfo(lId);
-    if (!pData.contexts.empty())
+    if (!rData.contexts.empty())
     {
-        pData.contexts.front()->GetString(pInfo->GetErrorCode(), aAction);
+        rData.contexts.front()->GetString(pInfo->GetErrorCode(), aAction);
         // Remove parent from context
-        for(ErrorContext *pCtx : pData.contexts)
+        for(ErrorContext *pCtx : rData.contexts)
             if(pCtx->GetParent())
             {
                 pParent=pCtx->GetParent();
@@ -282,7 +282,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         }
         else
         {
-            if(!pData.pDsp)
+            if(!rData.pDsp)
             {
                 OStringBuffer aStr("Action: ");
                 aStr.append(OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
@@ -293,16 +293,16 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
             else
             {
                 delete pInfo;
-                if(!pData.bIsWindowDsp)
+                if(!rData.bIsWindowDsp)
                 {
-                    (*reinterpret_cast<BasicDisplayErrorFunc*>(pData.pDsp))(aErr,aAction);
+                    (*reinterpret_cast<BasicDisplayErrorFunc*>(rData.pDsp))(aErr,aAction);
                     return 0;
                 }
                 else
                 {
                     if (nFlags != USHRT_MAX)
                         nErrFlags = nFlags;
-                    return (*reinterpret_cast<WindowDisplayErrorFunc*>(pData.pDsp))(
+                    return (*reinterpret_cast<WindowDisplayErrorFunc*>(rData.pDsp))(
                         pParent, nErrFlags, aErr, aAction);
                 }
             }

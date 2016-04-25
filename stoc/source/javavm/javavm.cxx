@@ -788,14 +788,14 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //we search another one. As long as there is a javaldx, we should
             //never come into this situation. javaldx checks always if the JRE
             //still exist.
-            jfw::JavaInfoGuard pJavaInfo;
-            if (JFW_E_NONE == jfw_getSelectedJRE(&pJavaInfo.info))
+            jfw::JavaInfoGuard aJavaInfo;
+            if (JFW_E_NONE == jfw_getSelectedJRE(&aJavaInfo.info))
             {
                 sal_Bool bExist = false;
-                if (JFW_E_NONE == jfw_existJRE(pJavaInfo.info, &bExist))
+                if (JFW_E_NONE == jfw_existJRE(aJavaInfo.info, &bExist))
                 {
                     if (!bExist
-                        && ! (pJavaInfo.info->nRequirements & JFW_REQUIRE_NEEDRESTART))
+                        && ! (aJavaInfo.info->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     {
                         info.clear();
                         javaFrameworkError errFind = jfw_findAndSelectJRE(

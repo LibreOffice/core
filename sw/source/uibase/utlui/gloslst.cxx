@@ -137,11 +137,11 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
             if(rLongName != sLong)
                 continue;
 
-            TripleString pTriple;
-            pTriple.sGroup = pGroup->sName;
-            pTriple.sBlock = sLong;
-            pTriple.sShort = pGroup->sShortNames.getToken(j, STRING_DELIM);
-            aTripleStrings.push_back(pTriple);
+            TripleString aTriple;
+            aTriple.sGroup = pGroup->sName;
+            aTriple.sBlock = sLong;
+            aTriple.sShort = pGroup->sShortNames.getToken(j, STRING_DELIM);
+            aTripleStrings.push_back(aTriple);
         }
     }
 
@@ -149,9 +149,9 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
     nCount = aTripleStrings.size();
     if(1 == nCount)
     {
-        const TripleString& pTriple(aTripleStrings.front());
-        rShortName = pTriple.sShort;
-        rGroupName = pTriple.sGroup;
+        const TripleString& rTriple(aTripleStrings.front());
+        rShortName = rTriple.sShort;
+        rGroupName = rTriple.sGroup;
         bRet = true;
     }
     else if(1 < nCount)
@@ -168,9 +168,9 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
         if(RET_OK == aDlg->Execute() &&
             LISTBOX_ENTRY_NOTFOUND != rLB.GetSelectEntryPos())
         {
-            const TripleString& pTriple(aTripleStrings[rLB.GetSelectEntryPos()]);
-            rShortName = pTriple.sShort;
-            rGroupName = pTriple.sGroup;
+            const TripleString& rTriple(aTripleStrings[rLB.GetSelectEntryPos()]);
+            rShortName = rTriple.sShort;
+            rGroupName = rTriple.sGroup;
             bRet = true;
         }
         else

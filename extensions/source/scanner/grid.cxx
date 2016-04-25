@@ -519,9 +519,9 @@ void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
 
 void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
 {
-    for(impHandle & m_aHandle : m_aHandles)
+    for(impHandle & rHandle : m_aHandles)
     {
-        m_aHandle.draw(rRenderContext, m_aMarkerBitmap);
+        rHandle.draw(rRenderContext, m_aMarkerBitmap);
     }
 }
 

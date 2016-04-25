@@ -211,9 +211,9 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
     }
 
     //Underline the line
-    Point pLeft( left_line, top + height );
-    Point pRight( right_line, top + height );
-    mrDev.DrawLine( pLeft, pRight );
+    Point aLeft( left_line, top + height );
+    Point aRight( right_line, top + height );
+    mrDev.DrawLine( aLeft, aRight );
 }
 
 void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
@@ -241,9 +241,9 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     }
 
     //Underline the line
-    Point pLeft( left_line, top + height );
-    Point pRight( right_line, top + height );
-    mrDev.DrawLine( pLeft, pRight );
+    Point aLeft( left_line, top + height );
+    Point aRight( right_line, top + height );
+    mrDev.DrawLine( aLeft, aRight );
 }
 
 // SmCaretPos2LineVisitor
