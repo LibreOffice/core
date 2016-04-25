@@ -205,6 +205,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tplnedef \
     cui/source/tabpages/tplneend \
     cui/source/tabpages/tpshadow \
+    cui/source/tabpages/tptrans \
     cui/source/tabpages/transfrm \
     cui/source/uno/services \
 ))
