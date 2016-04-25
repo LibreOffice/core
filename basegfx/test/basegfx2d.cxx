@@ -179,7 +179,7 @@ public:
         // B2DPolPolygon again:
         B2DPolyPolygon aReImport;
         CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D", tools::importFromSvgD( aReImport, aExport, false, nullptr));
-        CPPUNIT_ASSERT_MESSAGE("re-imported polygon needs to be identical", aReImport == aPoly);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("re-imported polygon needs to be identical", aReImport, aPoly);
 
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", tools::importFromSvgD( aPoly, aPath2, false, nullptr));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
@@ -199,7 +199,7 @@ public:
             "88-107-533-322-734s-487-301-816-301c-395 0-715 124-960 373s-368 569-368 958q0 577.5 357 900c237 216 557 324 95"
             "8 325 189-1 389-27 600-77 211-52 378-110 503-174q40.5 105 81 210z";
         CPPUNIT_ASSERT_MESSAGE("re-importing '@' from SVG-D", tools::importFromSvgD( aReImport, aExport, false, nullptr));
-        CPPUNIT_ASSERT_MESSAGE("re-imported '@' needs to be identical", aReImport == aPoly);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("re-imported '@' needs to be identical", aReImport, aPoly);
 
         CPPUNIT_ASSERT_MESSAGE("exporting '@' to SVG-D", aExport.equalsAscii(sExportString1));
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D (round-trip",
@@ -264,8 +264,8 @@ private:
 public:
     void check()
     {
-        CPPUNIT_ASSERT_MESSAGE("simple range rounding from double to integer",
-                               fround(B2DRange(1.2, 2.3, 3.5, 4.8)) == B2IRange(1, 2, 4, 5));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("simple range rounding from double to integer",
+                               fround(B2DRange(1.2, 2.3, 3.5, 4.8)), B2IRange(1, 2, 4, 5));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -289,10 +289,10 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE("simple poly range - count",
                                aRange.count() == 2);
-        CPPUNIT_ASSERT_MESSAGE("simple poly range - first element",
-                               std::get<0>(aRange.getElement(0)) == B2DRange(0,0,1,1));
-        CPPUNIT_ASSERT_MESSAGE("simple poly range - second element",
-                               std::get<0>(aRange.getElement(1)) == B2DRange(2,2,3,3));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("simple poly range - first element",
+                               std::get<0>(aRange.getElement(0)), B2DRange(0,0,1,1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("simple poly range - second element",
+                               std::get<0>(aRange.getElement(1)), B2DRange(2,2,3,3));
 
         // B2DPolyRange relies on correctly orientated rects
         const B2DRange aRect(0,0,1,1);
@@ -712,18 +712,18 @@ public:
 
         aPoly.appendBezierSegment(B2DPoint(1,1),B2DPoint(2,2),B2DPoint(3,3));
 
-        CPPUNIT_ASSERT_MESSAGE("#1 first polygon point wrong",
-                               aPoly.getB2DPoint(0) == B2DPoint(3,3));
-        CPPUNIT_ASSERT_MESSAGE("#1 first control point wrong",
-                               aPoly.getPrevControlPoint(0) == B2DPoint(2,2));
-        CPPUNIT_ASSERT_MESSAGE("#1 second control point wrong",
-                               aPoly.getNextControlPoint(0) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#1 first polygon point wrong",
+                               aPoly.getB2DPoint(0), B2DPoint(3,3));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#1 first control point wrong",
+                               aPoly.getPrevControlPoint(0), B2DPoint(2,2));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#1 second control point wrong",
+                               aPoly.getNextControlPoint(0), B2DPoint(3,3));
         CPPUNIT_ASSERT_MESSAGE("next control point not used",
                                !aPoly.isNextControlPointUsed(0));
 
         aPoly.setNextControlPoint(0,B2DPoint(4,4));
-        CPPUNIT_ASSERT_MESSAGE("#1.1 second control point wrong",
-                               aPoly.getNextControlPoint(0) == B2DPoint(4,4));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#1.1 second control point wrong",
+                               aPoly.getNextControlPoint(0), B2DPoint(4,4));
         CPPUNIT_ASSERT_MESSAGE("next control point used",
                                aPoly.isNextControlPointUsed(0));
         CPPUNIT_ASSERT_MESSAGE("areControlPointsUsed() wrong",
@@ -745,18 +745,18 @@ public:
         aPoly.append(B2DPoint(0,0));
         aPoly.appendBezierSegment(B2DPoint(1,1),B2DPoint(2,2),B2DPoint(3,3));
 
-        CPPUNIT_ASSERT_MESSAGE("#2 first polygon point wrong",
-                               aPoly.getB2DPoint(0) == B2DPoint(0,0));
-        CPPUNIT_ASSERT_MESSAGE("#2 first control point wrong",
-                               aPoly.getPrevControlPoint(0) == B2DPoint(0,0));
-        CPPUNIT_ASSERT_MESSAGE("#2 second control point wrong",
-                               aPoly.getNextControlPoint(0) == B2DPoint(1,1));
-        CPPUNIT_ASSERT_MESSAGE("#2 third control point wrong",
-                               aPoly.getPrevControlPoint(1) == B2DPoint(2,2));
-        CPPUNIT_ASSERT_MESSAGE("#2 fourth control point wrong",
-                               aPoly.getNextControlPoint(1) == B2DPoint(3,3));
-        CPPUNIT_ASSERT_MESSAGE("#2 second polygon point wrong",
-                               aPoly.getB2DPoint(1) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#2 first polygon point wrong",
+                               aPoly.getB2DPoint(0), B2DPoint(0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#2 first control point wrong",
+                               aPoly.getPrevControlPoint(0), B2DPoint(0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#2 second control point wrong",
+                               aPoly.getNextControlPoint(0), B2DPoint(1,1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#2 third control point wrong",
+                               aPoly.getPrevControlPoint(1), B2DPoint(2,2));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#2 fourth control point wrong",
+                               aPoly.getNextControlPoint(1), B2DPoint(3,3));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("#2 second polygon point wrong",
+                               aPoly.getB2DPoint(1), B2DPoint(3,3));
     }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
@@ -964,13 +964,13 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE("(0,0) is outside range!",
                                tools::getCohenSutherlandClipFlags(B2IPoint(0,0),aRange) == 0);
-        CPPUNIT_ASSERT_MESSAGE("(-1,-1) is inside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aRange) ==
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(-1,-1) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aRange),
                                (tools::RectClipFlags::LEFT|tools::RectClipFlags::TOP));
         CPPUNIT_ASSERT_MESSAGE("(10,10) is outside range!",
                                tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aRange) == 0);
-        CPPUNIT_ASSERT_MESSAGE("(11,11) is inside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(11,11),aRange) ==
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(11,11) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(11,11),aRange),
                                (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
 
         // just so that this compiles -
@@ -1003,13 +1003,13 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE("(0,0) is outside range!",
                                tools::getCohenSutherlandClipFlags(B2IPoint(0,0),aBox) == 0);
-        CPPUNIT_ASSERT_MESSAGE("(-1,-1) is inside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aBox) ==
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(-1,-1) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aBox),
                                (tools::RectClipFlags::LEFT|tools::RectClipFlags::TOP));
         CPPUNIT_ASSERT_MESSAGE("(9,9) is outside range!",
                                tools::getCohenSutherlandClipFlags(B2IPoint(9,9),aBox) == 0);
-        CPPUNIT_ASSERT_MESSAGE("(10,10) is inside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aBox) ==
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(10,10) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aBox),
                                (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
 
         // just so that this compiles -
