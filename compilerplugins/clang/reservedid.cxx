@@ -59,6 +59,7 @@ void ReservedId::run() {
     if (TraverseDecl(compiler.getASTContext().getTranslationUnitDecl())
         && compiler.hasPreprocessor())
     {
+#if CLANG_VERSION >= 30700
         auto & prep = compiler.getPreprocessor();
         for (auto const & m: prep.macros(false)) {
             auto id = m.first->getName();
@@ -91,6 +92,7 @@ void ReservedId::run() {
                 }
             }
         }
+#endif
     }
 }
 
