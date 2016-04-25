@@ -121,7 +121,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
 
 {
     // init options strings with local resource ids -> so do it before FreeResource()
-    for ( sal_uInt16 nResId = STR_COMP_OPTIONS_START; nResId < STR_COMP_OPTIONS_END; ++nResId )  // martin  COPT_PROTECT_FORM ??????
+    for ( sal_uInt16 nResId = STR_COMP_OPTIONS_START; nResId < STR_COMP_OPTIONS_END; ++nResId )
     {
         String sEntry = String( SW_RES( nResId ) );
         if ( STR_TAB_ALIGNMENT == nResId ||
@@ -464,7 +464,7 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
                 rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) != sal_False,
                 rIDocumentSettingAccess.get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) != sal_False,
                 rIDocumentSettingAccess.get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) != sal_True,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::PROTECT_FORM != sal_False );
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::PROTECT_FORM) != sal_False );
     }
     return nRet;
 }

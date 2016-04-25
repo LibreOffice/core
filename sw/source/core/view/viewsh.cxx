@@ -859,8 +859,14 @@ void ViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWit
 
 void ViewShell::SetProtectForm( bool _bProtectForm )
 {
-    IDocumentSettingAccess* rIDSA = getIDocumentSettingAccess();
-    rIDSA->set(IDocumentSettingAccess::PROTECT_FORM, _bProtectForm );
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::PROTECT_FORM) != _bProtectForm )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
+        pIDSA->set(IDocumentSettingAccess::PROTECT_FORM, _bProtectForm );
+        const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
 }
 
 void ViewShell::Reformat()

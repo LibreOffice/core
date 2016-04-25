@@ -132,6 +132,10 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Text [ en-US ] = "Expand word space on lines with manual line breaks in justified paragraphs";
     };
+    String STR_PROTECTION_FORM
+    {
+        Text [ en-US ] = "Protect form";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
