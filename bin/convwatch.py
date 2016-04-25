@@ -223,6 +223,7 @@ def logExceptionInvoke(connection, test):
     except:
         estr = traceback.format_exc()
         log("logExceptionInvoke: FAILED with exception:\n" + estr)
+        raise
     finally:
         connection.postTest()
 
@@ -246,8 +247,15 @@ def retryInvoke(connection, test):
 def runConnectionTests(connection, invoker, tests):
     try:
         connection.setUp()
+        failed = []
         for test in tests:
-            invoker(connection, test)
+            try:
+                invoker(connection, test)
+            except KeyboardInterrupt:
+                raise # Ctrl+C should work
+            except:
+                failed.append(test.file)
+        return failed
     finally:
         connection.tearDown()
 
@@ -340,14 +348,18 @@ def runLoadPrintFileTests(opts, dirs, suffix, reference):
     tests = (LoadPrintFileTest(file, prtsuffix) for file in files)
     connection = PersistentConnection(opts)
 #    connection = PerTestConnection(opts)
-    runConnectionTests(connection, logExceptionInvoke, tests)
+    failed = runConnectionTests(connection, logExceptionInvoke, tests)
+    print("all printed: FAILURES: " + str(len(failed)))
+    for fail in failed:
+        print(fail)
+    return failed
 
 def mkImages(file, resolution):
     argv = [ "gs", "-r" + resolution, "-sOutputFile=" + file + ".%04d.jpeg",
              "-dNOPROMPT", "-dNOPAUSE", "-dBATCH", "-sDEVICE=jpeg", file ]
     ret = subprocess.check_call(argv)
 
-def mkAllImages(dirs, suffix, resolution, reference):
+def mkAllImages(dirs, suffix, resolution, reference, failed):
     if reference:
         prtsuffix = ".pdf.reference"
     else:
@@ -356,7 +368,10 @@ def mkAllImages(dirs, suffix, resolution, reference):
         files = filelist(dir, suffix)
         log(files)
         for f in files:
-            mkImages(f + prtsuffix, resolution)
+            if f in failed:
+                log("Skipping failed: " + f)
+            else:
+                mkImages(f + prtsuffix, resolution)
 
 def identify(imagefile):
     argv = ["identify", "-format", "%k", imagefile]
@@ -440,8 +455,8 @@ if __name__ == "__main__":
         sys.exit()
     elif "--soffice" in opts:
         reference = "-r" in opts or "--reference" in opts
-        runLoadPrintFileTests(opts, args, ".odt", reference)
-        mkAllImages(args, ".odt", "200", reference)
+        failed = runLoadPrintFileTests(opts, args, ".odt", reference)
+        mkAllImages(args, ".odt", "200", reference, failed)
         if not(reference):
             compareAllImages(args, ".odt")
     else:
