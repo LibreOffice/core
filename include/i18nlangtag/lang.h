@@ -714,6 +714,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ENGLISH_BOTSWANA      0x9809  /* makeLangID( 0x26, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_INTERLINGUE           0x0697  /* no locale */
 #define LANGUAGE_USER_APATANI               0x0698
+#define LANGUAGE_USER_ENGLISH_MAURITIUS     0x9C09  /* makeLangID( 0x27, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
+#define LANGUAGE_USER_FRENCH_MAURITIUS      0x900C  /* makeLangID( 0x24, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
