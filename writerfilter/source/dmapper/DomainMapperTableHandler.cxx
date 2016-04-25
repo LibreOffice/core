@@ -788,7 +788,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 const boost::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
                 if (aHorizontalMergeVal)
                 {
-                    if (aHorizontalMergeVal->second.get<sal_Bool>())
+                    if (aHorizontalMergeVal->second.get<bool>())
                     {
                         // first cell in a merge
                         HorizontallyMergedCell aMerge(nRow, nCell);
