@@ -112,40 +112,40 @@ struct ImplBmpReplaceParam
 };
 
 GDIMetaFile::GDIMetaFile() :
-    nCurrentActionElement( 0 ),
-    aPrefSize   ( 1, 1 ),
-    pPrev       ( nullptr ),
-    pNext       ( nullptr ),
-    pOutDev     ( nullptr ),
-    bPause      ( false ),
-    bRecord     ( false ),
-    bUseCanvas  ( false )
+    m_nCurrentActionElement( 0 ),
+    m_aPrefSize   ( 1, 1 ),
+    m_pPrev       ( nullptr ),
+    m_pNext       ( nullptr ),
+    m_pOutDev     ( nullptr ),
+    m_bPause      ( false ),
+    m_bRecord     ( false ),
+    m_bUseCanvas  ( false )
 {
 }
 
 GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
-    nCurrentActionElement( rMtf.nCurrentActionElement ),
-    aPrefMapMode    ( rMtf.aPrefMapMode ),
-    aPrefSize       ( rMtf.aPrefSize ),
-    pPrev           ( rMtf.pPrev ),
-    pNext           ( rMtf.pNext ),
-    pOutDev         ( nullptr ),
-    bPause          ( false ),
-    bRecord         ( false ),
-    bUseCanvas      ( rMtf.bUseCanvas )
+    m_nCurrentActionElement( rMtf.m_nCurrentActionElement ),
+    m_aPrefMapMode    ( rMtf.m_aPrefMapMode ),
+    m_aPrefSize       ( rMtf.m_aPrefSize ),
+    m_pPrev           ( rMtf.m_pPrev ),
+    m_pNext           ( rMtf.m_pNext ),
+    m_pOutDev         ( nullptr ),
+    m_bPause          ( false ),
+    m_bRecord         ( false ),
+    m_bUseCanvas      ( rMtf.m_bUseCanvas )
 {
     // Increment RefCount of MetaActions
     for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
     {
         rMtf.GetAction( i )->Duplicate();
-        aList.push_back( rMtf.GetAction( i ) );
+        m_aList.push_back( rMtf.GetAction( i ) );
     }
 
-    if( rMtf.bRecord )
+    if( rMtf.m_bRecord )
     {
-        Record( rMtf.pOutDev );
+        Record( rMtf.m_pOutDev );
 
-        if ( rMtf.bPause )
+        if ( rMtf.m_bPause )
             Pause( true );
     }
 }
@@ -157,28 +157,28 @@ GDIMetaFile::~GDIMetaFile()
 
 size_t GDIMetaFile::GetActionSize() const
 {
-    return aList.size();
+    return m_aList.size();
 }
 
 MetaAction* GDIMetaFile::GetAction( size_t nAction ) const
 {
-    return (nAction < aList.size()) ? aList[ nAction ] : nullptr;
+    return (nAction < m_aList.size()) ? m_aList[ nAction ] : nullptr;
 }
 
 MetaAction* GDIMetaFile::FirstAction()
 {
-    nCurrentActionElement = 0;
-    return aList.empty() ? nullptr : aList[ 0 ];
+    m_nCurrentActionElement = 0;
+    return m_aList.empty() ? nullptr : m_aList[ 0 ];
 }
 
 MetaAction* GDIMetaFile::NextAction()
 {
-    return ( nCurrentActionElement + 1 < aList.size() ) ? aList[ ++nCurrentActionElement ] : nullptr;
+    return ( m_nCurrentActionElement + 1 < m_aList.size() ) ? m_aList[ ++m_nCurrentActionElement ] : nullptr;
 }
 
 MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
 {
-    if ( nAction >= aList.size() )
+    if ( nAction >= m_aList.size() )
     {
         // this method takes ownership of pAction and is
         // therefore responsible for deleting it
@@ -187,7 +187,7 @@ MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
     }
     //fdo#39995 This does't increment the incoming action ref-count nor does it
     //decrement the outgoing action ref-count
-    std::swap(pAction, aList[nAction]);
+    std::swap(pAction, m_aList[nAction]);
     return pAction;
 }
 
@@ -201,23 +201,23 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
         for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
         {
             rMtf.GetAction( i )->Duplicate();
-            aList.push_back( rMtf.GetAction( i ) );
+            m_aList.push_back( rMtf.GetAction( i ) );
         }
 
-        aPrefMapMode = rMtf.aPrefMapMode;
-        aPrefSize = rMtf.aPrefSize;
-        pPrev = rMtf.pPrev;
-        pNext = rMtf.pNext;
-        pOutDev = nullptr;
-        bPause = false;
-        bRecord = false;
-        bUseCanvas = rMtf.bUseCanvas;
+        m_aPrefMapMode = rMtf.m_aPrefMapMode;
+        m_aPrefSize = rMtf.m_aPrefSize;
+        m_pPrev = rMtf.m_pPrev;
+        m_pNext = rMtf.m_pNext;
+        m_pOutDev = nullptr;
+        m_bPause = false;
+        m_bRecord = false;
+        m_bUseCanvas = rMtf.m_bUseCanvas;
 
-        if( rMtf.bRecord )
+        if( rMtf.m_bRecord )
         {
-            Record( rMtf.pOutDev );
+            Record( rMtf.m_pOutDev );
 
-            if( rMtf.bPause )
+            if( rMtf.m_bPause )
                 Pause( true );
         }
     }
@@ -227,20 +227,20 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
 
 bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 {
-    const size_t    nObjCount = aList.size();
+    const size_t    nObjCount = m_aList.size();
     bool        bRet = false;
 
     if( this == &rMtf )
         bRet = true;
     else if( rMtf.GetActionSize()  == nObjCount &&
-             rMtf.GetPrefSize()    == aPrefSize &&
-             rMtf.GetPrefMapMode() == aPrefMapMode )
+             rMtf.GetPrefSize()    == m_aPrefSize &&
+             rMtf.GetPrefMapMode() == m_aPrefMapMode )
     {
         bRet = true;
 
         for( size_t n = 0; n < nObjCount; n++ )
         {
-            if( aList[ n ] != rMtf.GetAction( n ) )
+            if( m_aList[ n ] != rMtf.GetAction( n ) )
             {
                 bRet = false;
                 break;
@@ -253,71 +253,71 @@ bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 
 void GDIMetaFile::Clear()
 {
-    if( bRecord )
+    if( m_bRecord )
         Stop();
 
-    for( size_t i = 0, n = aList.size(); i < n; ++i )
-        aList[ i ]->Delete();
-    aList.clear();
+    for( size_t i = 0, n = m_aList.size(); i < n; ++i )
+        m_aList[ i ]->Delete();
+    m_aList.clear();
 }
 
 void GDIMetaFile::Linker( OutputDevice* pOut, bool bLink )
 {
     if( bLink )
     {
-        pNext = nullptr;
-        pPrev = pOut->GetConnectMetaFile();
+        m_pNext = nullptr;
+        m_pPrev = pOut->GetConnectMetaFile();
         pOut->SetConnectMetaFile( this );
 
-        if( pPrev )
-            pPrev->pNext = this;
+        if( m_pPrev )
+            m_pPrev->m_pNext = this;
     }
     else
     {
-        if( pNext )
+        if( m_pNext )
         {
-            pNext->pPrev = pPrev;
+            m_pNext->m_pPrev = m_pPrev;
 
-            if( pPrev )
-                pPrev->pNext = pNext;
+            if( m_pPrev )
+                m_pPrev->m_pNext = m_pNext;
         }
         else
         {
-            if( pPrev )
-                pPrev->pNext = nullptr;
+            if( m_pPrev )
+                m_pPrev->m_pNext = nullptr;
 
-            pOut->SetConnectMetaFile( pPrev );
+            pOut->SetConnectMetaFile( m_pPrev );
         }
 
-        pPrev = nullptr;
-        pNext = nullptr;
+        m_pPrev = nullptr;
+        m_pNext = nullptr;
     }
 }
 
 void GDIMetaFile::Record( OutputDevice* pOut )
 {
-    if( bRecord )
+    if( m_bRecord )
         Stop();
 
-    nCurrentActionElement = aList.empty() ? 0 : (aList.size() - 1);
-    pOutDev = pOut;
-    bRecord = true;
+    m_nCurrentActionElement = m_aList.empty() ? 0 : (m_aList.size() - 1);
+    m_pOutDev = pOut;
+    m_bRecord = true;
     Linker( pOut, true );
 }
 
 void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
 {
-    if ( !bRecord && !rMtf.bRecord )
+    if ( !m_bRecord && !rMtf.m_bRecord )
     {
         MetaAction* pAction = GetCurAction();
-        const size_t nObjCount = aList.size();
+        const size_t nObjCount = m_aList.size();
 
-        rMtf.UseCanvas( rMtf.GetUseCanvas() || bUseCanvas );
+        rMtf.UseCanvas( rMtf.GetUseCanvas() || m_bUseCanvas );
 
         if( nPos > nObjCount )
             nPos = nObjCount;
 
-        for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
+        for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nPos; nCurPos++ )
         {
             if( pAction )
             {
@@ -332,10 +332,10 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
 
 void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 {
-    if( !bRecord )
+    if( !m_bRecord )
     {
         MetaAction* pAction = GetCurAction();
-        const size_t nObjCount = aList.size();
+        const size_t nObjCount = m_aList.size();
         size_t  nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
 
         if( nPos > nObjCount )
@@ -353,7 +353,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 
         if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
             size_t  i  = 0;
-            for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
+            for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nPos; nCurPos++ )
             {
                 if( pAction )
                 {
@@ -384,7 +384,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 
 bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize )
 {
-    if (!bUseCanvas)
+    if (!m_bUseCanvas)
         return false;
 
     Size rDestSize( pOut->LogicToPixel( rLogicDestSize ) );
@@ -589,98 +589,98 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
 
 void GDIMetaFile::Pause( bool _bPause )
 {
-    if( bRecord )
+    if( m_bRecord )
     {
         if( _bPause )
         {
-            if( !bPause )
-                Linker( pOutDev, false );
+            if( !m_bPause )
+                Linker( m_pOutDev, false );
         }
         else
         {
-            if( bPause )
-                Linker( pOutDev, true );
+            if( m_bPause )
+                Linker( m_pOutDev, true );
         }
 
-        bPause = _bPause;
+        m_bPause = _bPause;
     }
 }
 
 void GDIMetaFile::Stop()
 {
-    if( bRecord )
+    if( m_bRecord )
     {
-        bRecord = false;
+        m_bRecord = false;
 
-        if( !bPause )
-            Linker( pOutDev, false );
+        if( !m_bPause )
+            Linker( m_pOutDev, false );
         else
-            bPause = false;
+            m_bPause = false;
     }
 }
 
 void GDIMetaFile::WindStart()
 {
-    if( !bRecord )
-        nCurrentActionElement = 0;
+    if( !m_bRecord )
+        m_nCurrentActionElement = 0;
 }
 
 void GDIMetaFile::WindPrev()
 {
-    if( !bRecord )
-        if ( nCurrentActionElement > 0 )
-            --nCurrentActionElement;
+    if( !m_bRecord )
+        if ( m_nCurrentActionElement > 0 )
+            --m_nCurrentActionElement;
 }
 
 void GDIMetaFile::AddAction( MetaAction* pAction )
 {
-    aList.push_back( pAction );
+    m_aList.push_back( pAction );
 
-    if( pPrev )
+    if( m_pPrev )
     {
         pAction->Duplicate();
-        pPrev->AddAction( pAction );
+        m_pPrev->AddAction( pAction );
     }
 }
 
 void GDIMetaFile::AddAction( MetaAction* pAction, size_t nPos )
 {
-    if ( nPos < aList.size() )
+    if ( nPos < m_aList.size() )
     {
-        ::std::vector< MetaAction* >::iterator it = aList.begin();
+        ::std::vector< MetaAction* >::iterator it = m_aList.begin();
         ::std::advance( it, nPos );
-        aList.insert( it, pAction );
+        m_aList.insert( it, pAction );
     }
     else
     {
-        aList.push_back( pAction );
+        m_aList.push_back( pAction );
     }
 
-    if( pPrev )
+    if( m_pPrev )
     {
         pAction->Duplicate();
-        pPrev->AddAction( pAction, nPos );
+        m_pPrev->AddAction( pAction, nPos );
     }
 }
 
 void GDIMetaFile::push_back( MetaAction* pAction )
 {
-    aList.push_back( pAction );
+    m_aList.push_back( pAction );
 }
 
 void GDIMetaFile::RemoveAction( size_t nPos )
 {
-    if ( nPos < aList.size() )
+    if ( nPos < m_aList.size() )
     {
-        ::std::vector< MetaAction* >::iterator it = aList.begin();
+        ::std::vector< MetaAction* >::iterator it = m_aList.begin();
         ::std::advance( it, nPos );
         (*it)->Delete();
-        aList.erase( it );
+        m_aList.erase( it );
 
     }
 
-    if( pPrev )
-        pPrev->RemoveAction( nPos );
+    if( m_pPrev )
+        m_pPrev->RemoveAction( nPos );
 }
 
 bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
@@ -691,14 +691,26 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
     bool        bRet;
 
     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
-        nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1, fScaleX = -1.0;
+    {
+        nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1;
+        fScaleX = -1.0;
+    }
     else
-        nMoveX = 0, fScaleX = 1.0;
+    {
+        nMoveX = 0;
+        fScaleX = 1.0;
+    }
 
     if( nMirrorFlags & BmpMirrorFlags::Vertical )
-        nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1, fScaleY = -1.0;
+    {
+        nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1;
+        fScaleY = -1.0;
+    }
     else
-        nMoveY = 0, fScaleY = 1.0;
+    {
+        nMoveY = 0;
+        fScaleY = 1.0;
+    }
 
     if( ( fScaleX != 1.0 ) || ( fScaleY != 1.0 ) )
     {
@@ -729,7 +741,7 @@ void GDIMetaFile::Move( long nX, long nY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            aList[ nCurrentActionElement ] = pModAct = pAct->Clone();
+            m_aList[ m_nCurrentActionElement ] = pModAct = pAct->Clone();
             pAct->Delete();
         }
         else
@@ -764,7 +776,7 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            aList[ nCurrentActionElement ] = pModAct = pAct->Clone();
+            m_aList[ m_nCurrentActionElement ] = pModAct = pAct->Clone();
             pAct->Delete();
         }
         else
@@ -798,7 +810,7 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            aList[ nCurrentActionElement ] = pModAct = pAct->Clone();
+            m_aList[ m_nCurrentActionElement ] = pModAct = pAct->Clone();
             pAct->Delete();
         }
         else
@@ -807,8 +819,8 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
         pModAct->Scale( fScaleX, fScaleY );
     }
 
-    aPrefSize.Width() = FRound( aPrefSize.Width() * fScaleX );
-    aPrefSize.Height() = FRound( aPrefSize.Height() * fScaleY );
+    m_aPrefSize.Width() = FRound( m_aPrefSize.Width() * fScaleX );
+    m_aPrefSize.Height() = FRound( m_aPrefSize.Height() * fScaleY );
 }
 
 void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
@@ -842,7 +854,7 @@ void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
             if( pOldAct->IsClipping() )
                 aNewReg.Intersect( pOldAct->GetRegion() );
             MetaClipRegionAction* pNewAct = new MetaClipRegionAction( aNewReg, true );
-            aList[ nCurrentActionElement ] = pNewAct;
+            m_aList[ m_nCurrentActionElement ] = pNewAct;
             pOldAct->Delete();
         }
     }
@@ -1351,16 +1363,16 @@ void GDIMetaFile::Rotate( long nAngle10 )
                         ( MetaActionType::PUSH == nActionType ) ||
                         ( MetaActionType::POP == nActionType ) )
                     {
-                        aRotAnchor = OutputDevice::LogicToLogic( aOrigin, aPrefMapMode, aMapVDev->GetMapMode() );
-                        aRotOffset = OutputDevice::LogicToLogic( aOffset, aPrefMapMode, aMapVDev->GetMapMode() );
+                        aRotAnchor = OutputDevice::LogicToLogic( aOrigin, m_aPrefMapMode, aMapVDev->GetMapMode() );
+                        aRotOffset = OutputDevice::LogicToLogic( aOffset, m_aPrefMapMode, aMapVDev->GetMapMode() );
                     }
                 }
                 break;
             }
         }
 
-        aMtf.aPrefMapMode = aPrefMapMode;
-        aMtf.aPrefSize = aNewBound.GetSize();
+        aMtf.m_aPrefMapMode = m_aPrefMapMode;
+        aMtf.m_aPrefSize = aNewBound.GetSize();
 
         *this = aMtf;
     }
@@ -1912,9 +1924,9 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 {
     GDIMetaFile aMtf;
 
-    aMtf.aPrefSize = aPrefSize;
-    aMtf.aPrefMapMode = aPrefMapMode;
-    aMtf.bUseCanvas = bUseCanvas;
+    aMtf.m_aPrefSize = m_aPrefSize;
+    aMtf.m_aPrefMapMode = m_aPrefMapMode;
+    aMtf.m_bUseCanvas = m_bUseCanvas;
 
     for( MetaAction* pAction = FirstAction(); pAction; pAction = NextAction() )
     {
@@ -2759,8 +2771,8 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
 
             rIStm.ReadUInt32( nStmCompressMode );
-            ReadMapMode( rIStm, rGDIMetaFile.aPrefMapMode );
-            ReadPair( rIStm, rGDIMetaFile.aPrefSize );
+            ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
+            ReadPair( rIStm, rGDIMetaFile.m_aPrefSize );
             rIStm.ReadUInt32( nCount );
 
             pCompat.reset(); // destructor writes stuff into the header
@@ -2857,8 +2869,8 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
 
     rOStm.WriteUInt32( static_cast<sal_uInt32>(nStmCompressMode) );
-    WriteMapMode( rOStm, aPrefMapMode );
-    WritePair( rOStm, aPrefSize );
+    WriteMapMode( rOStm, m_aPrefMapMode );
+    WritePair( rOStm, m_aPrefSize );
     rOStm.WriteUInt32( GetActionSize() );
 
     delete pCompat;
@@ -2948,7 +2960,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, sal_uInt32 nMaximumExtent
 
 void GDIMetaFile::UseCanvas( bool _bUseCanvas )
 {
-    bUseCanvas = _bUseCanvas;
+    m_bUseCanvas = _bUseCanvas;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
