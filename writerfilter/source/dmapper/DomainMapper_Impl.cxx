@@ -5029,6 +5029,7 @@ void DomainMapper_Impl::ApplySettingsTable()
             if( m_pSettingsTable->GetEmbedSystemFonts())
                 xSettings->setPropertyValue( getPropertyName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
             xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
+            xSettings->setPropertyValue("ProtectForm", uno::makeAny(m_pSettingsTable->GetProtectForm() ));
         }
         catch(const uno::Exception&)
         {
