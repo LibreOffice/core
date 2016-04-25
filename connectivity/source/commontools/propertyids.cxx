@@ -24,8 +24,7 @@ namespace dbtools
 {
     OPropertyMap::OPropertyMap()
     {
-        // MSVC complains about ambiguous operator=
-        m_aPropertyMap.insert({
+        m_aPropertyMap.operator =({
                 {PROPERTY_ID_QUERYTIMEOUT,         "QueryTimeOut"},
                 {PROPERTY_ID_MAXFIELDSIZE,         "MaxFieldSize"},
                 {PROPERTY_ID_MAXROWS,              "MaxRows"},
