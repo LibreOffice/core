@@ -57,12 +57,12 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
 bool SFX2_DLLPUBLIC SaveOlePropertySet(
     const css::uno::Reference< css::document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage,
-    const css::uno::Sequence<sal_uInt8> * i_pThumb = nullptr,
-    const css::uno::Sequence<sal_uInt8> * i_pGuid = nullptr,
-    const css::uno::Sequence<sal_uInt8> * i_pHyperlinks = nullptr);
+    const css::uno::Sequence<sal_Int8> * i_pThumb = nullptr,
+    const css::uno::Sequence<sal_Int8> * i_pGuid = nullptr,
+    const css::uno::Sequence<sal_Int8> * i_pHyperlinks = nullptr);
 
 
-css::uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(
+css::uno::Sequence<sal_Int8> SFX2_DLLPUBLIC convertMetaFile(
     GDIMetaFile* i_pThumb);
 
 } // namespace sfx2

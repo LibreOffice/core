@@ -186,7 +186,7 @@ class SfxOleThumbnailProperty : public SfxOlePropertyBase
 {
 public:
     explicit            SfxOleThumbnailProperty( sal_Int32 nPropId,
-                            const uno::Sequence<sal_uInt8> & i_rData);
+                            const uno::Sequence<sal_Int8> & i_rData);
 
     inline bool         IsValid() const { return mData.getLength() > 0; }
 
@@ -195,7 +195,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
-    uno::Sequence<sal_uInt8>    mData;
+    uno::Sequence<sal_Int8>    mData;
 };
 
 
@@ -208,7 +208,7 @@ class SfxOleBlobProperty : public SfxOlePropertyBase
 {
 public:
     explicit            SfxOleBlobProperty( sal_Int32 nPropId,
-                            const uno::Sequence<sal_uInt8> & i_rData);
+                            const uno::Sequence<sal_Int8> & i_rData);
     inline bool         IsValid() const { return mData.getLength() > 0; }
 
 private:
@@ -216,7 +216,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
-    uno::Sequence<sal_uInt8>    mData;
+    uno::Sequence<sal_Int8>    mData;
 };
 
 
@@ -591,7 +591,7 @@ void SfxOleDateProperty::ImplSave( SvStream& rStrm )
 
 
 SfxOleThumbnailProperty::SfxOleThumbnailProperty(
-        sal_Int32 nPropId, const uno::Sequence<sal_uInt8> & i_rData) :
+        sal_Int32 nPropId, const uno::Sequence<sal_Int8> & i_rData) :
     SfxOlePropertyBase( nPropId, PROPTYPE_CLIPFMT ),
     mData(i_rData)
 {
@@ -640,7 +640,7 @@ void SfxOleThumbnailProperty::ImplSave( SvStream& rStrm )
 
 
 SfxOleBlobProperty::SfxOleBlobProperty( sal_Int32 nPropId,
-        const uno::Sequence<sal_uInt8> & i_rData) :
+        const uno::Sequence<sal_Int8> & i_rData) :
     SfxOlePropertyBase( nPropId, PROPTYPE_BLOB ),
     mData(i_rData)
 {
@@ -847,7 +847,7 @@ void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
 }
 
 void SfxOleSection::SetThumbnailValue( sal_Int32 nPropId,
-    const uno::Sequence<sal_uInt8> & i_rData)
+    const uno::Sequence<sal_Int8> & i_rData)
 {
     SfxOleThumbnailProperty* pThumbnail = new SfxOleThumbnailProperty( nPropId, i_rData );
     SfxOlePropertyRef xProp( pThumbnail );  // take ownership
@@ -856,7 +856,7 @@ void SfxOleSection::SetThumbnailValue( sal_Int32 nPropId,
 }
 
 void SfxOleSection::SetBlobValue( sal_Int32 nPropId,
-    const uno::Sequence<sal_uInt8> & i_rData)
+    const uno::Sequence<sal_Int8> & i_rData)
 {
     SfxOleBlobProperty* pBlob( new SfxOleBlobProperty( nPropId, i_rData ) );
     SfxOlePropertyRef xProp( pBlob );

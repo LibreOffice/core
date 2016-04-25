@@ -197,9 +197,9 @@ sal_uInt32 LoadOlePropertySet(
 bool SaveOlePropertySet(
     const uno::Reference< document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage,
-    const uno::Sequence<sal_uInt8> * i_pThumb,
-    const uno::Sequence<sal_uInt8> * i_pGuid,
-    const uno::Sequence<sal_uInt8> * i_pHyperlinks)
+    const uno::Sequence<sal_Int8> * i_pThumb,
+    const uno::Sequence<sal_Int8> * i_pGuid,
+    const uno::Sequence<sal_Int8> * i_pHyperlinks)
 {
     // *** global properties into stream "005SummaryInformation" ***
 
@@ -305,7 +305,7 @@ bool SaveOlePropertySet(
     return (nGlobError == ERRCODE_NONE) && (nDocError == ERRCODE_NONE);
 }
 
-uno::Sequence<sal_uInt8> convertMetaFile(GDIMetaFile* i_pThumb)
+uno::Sequence<sal_Int8> convertMetaFile(GDIMetaFile* i_pThumb)
 {
     if (i_pThumb) {
         BitmapEx aBitmap;
@@ -314,16 +314,16 @@ uno::Sequence<sal_uInt8> convertMetaFile(GDIMetaFile* i_pThumb)
         {
             WriteDIB(aBitmap.GetBitmap(), aStream, false, false);
             aStream.Seek(STREAM_SEEK_TO_END);
-            uno::Sequence<sal_uInt8> aSeq(aStream.Tell());
-            const sal_uInt8* pBlob(
-                static_cast<const sal_uInt8*>(aStream.GetData()));
+            uno::Sequence<sal_Int8> aSeq(aStream.Tell());
+            const sal_Int8* pBlob(
+                static_cast<const sal_Int8*>(aStream.GetData()));
             for (sal_Int32 j = 0; j < aSeq.getLength(); ++j) {
                 aSeq[j] = pBlob[j];
             }
             return aSeq;
         }
     }
-    return uno::Sequence<sal_uInt8>();
+    return uno::Sequence<sal_Int8>();
 }
 
 } // namespace sfx2

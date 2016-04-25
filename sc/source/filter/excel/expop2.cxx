@@ -124,7 +124,7 @@ FltError ExportBiff5::Write()
         {
             std::shared_ptr<GDIMetaFile> xMetaFile =
                 pDocShell->GetPreviewMetaFile();
-            uno::Sequence<sal_uInt8> metaFile(
+            uno::Sequence<sal_Int8> metaFile(
                 sfx2::convertMetaFile(xMetaFile.get()));
             sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);
         }

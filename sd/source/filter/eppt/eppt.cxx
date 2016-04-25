@@ -506,7 +506,7 @@ bool PPTWriter::ImplCreateDocumentSummaryInformation()
     if (xDocProps.is()) {
 
         // no idea what this is...
-        static const sal_uInt8 aGuid[ 0x52 ] =
+        static const sal_Int8 aGuid[ 0x52 ] =
         {
             0x4e, 0x00, 0x00, 0x00,
             '{',0,'D',0,'B',0,'1',0,'A',0,'C',0,'9',0,'6',0,'4',0,'-',0,
@@ -514,25 +514,25 @@ bool PPTWriter::ImplCreateDocumentSummaryInformation()
             'A',0,'1',0,'E',0,'F',0,'-',0,'0',0,'0',0,'6',0,'0',0,'9',0,
             '7',0,'D',0,'A',0,'5',0,'6',0,'8',0,'9',0,'}',0
         };
-        uno::Sequence<sal_uInt8> aGuidSeq(aGuid, 0x52);
+        uno::Sequence<sal_Int8> aGuidSeq(aGuid, 0x52);
 
         SvMemoryStream  aHyperBlob;
         ImplCreateHyperBlob( aHyperBlob );
 
-        uno::Sequence<sal_uInt8> aHyperSeq(aHyperBlob.Tell());
-        const sal_uInt8* pBlob(
-            static_cast<const sal_uInt8*>(aHyperBlob.GetData()));
+        uno::Sequence<sal_Int8> aHyperSeq(aHyperBlob.Tell());
+        const sal_Int8* pBlob(
+            static_cast<const sal_Int8*>(aHyperBlob.GetData()));
         for (sal_Int32 j = 0; j < aHyperSeq.getLength(); ++j) {
             aHyperSeq[j] = pBlob[j];
         }
 
         if ( mnCnvrtFlags & 0x8000 )
         {
-            uno::Sequence<sal_uInt8> aThumbSeq;
+            uno::Sequence<sal_Int8> aThumbSeq;
             if ( GetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, "PreviewBitmap" ) )
             {
                 aThumbSeq =
-                    *static_cast<const uno::Sequence<sal_uInt8>*>(mAny.getValue());
+                    *static_cast<const uno::Sequence<sal_Int8>*>(mAny.getValue());
             }
             sfx2::SaveOlePropertySet( xDocProps, mrStg,
                     &aThumbSeq, &aGuidSeq, &aHyperSeq);
