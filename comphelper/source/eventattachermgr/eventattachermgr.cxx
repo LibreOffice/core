@@ -394,18 +394,12 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
 }
 
 
-::std::deque<AttacherIndex_Impl>::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )
+::std::deque< AttacherIndex_Impl >::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )
 {
-    if (_nIndex < 0)
+    if ( (_nIndex < 0) || (static_cast<sal_uInt32>(_nIndex) >= aIndex.size()) )
         throw IllegalArgumentException();
 
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    for ( sal_Int32 i = 0; (i < _nIndex) && (aIt != aIndex.end()); ++i, ++aIt )
-        ;
-
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
-
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin() + _nIndex;
     return aIt;
 }
 

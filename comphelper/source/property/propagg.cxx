@@ -31,6 +31,7 @@
 
 #include <algorithm>
 #include <set>
+#include <unordered_set>
 #include <memory>
 
 
@@ -61,86 +62,63 @@ namespace comphelper
 OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         const  Sequence< Property >& _rProperties, const  Sequence< Property >& _rAggProperties,
         IPropertyInfoService* _pInfoService, sal_Int32 _nFirstAggregateId )
-    :m_aProperties( comphelper::sequenceToContainer<std::vector<css::beans::Property>>(_rProperties) )
 {
-    sal_Int32 nDelegatorProps = _rProperties.getLength();
-    sal_Int32 nAggregateProps = _rAggProperties.getLength();
+    // if properties are present both at the delegatee and the aggregate, then the former are supposed to win
+    // merge and sort properties by name, delete duplicates (stable sort ensures delegator properties win)
+    m_aProperties.insert( m_aProperties.end(), _rProperties.begin(), _rProperties.end() );
+    m_aProperties.insert( m_aProperties.end(), _rAggProperties.begin(), _rAggProperties.end() );
+    ::std::stable_sort( m_aProperties.begin(), m_aProperties.end(), PropertyCompareByName() );
+    m_aProperties.erase( ::std::unique(m_aProperties.begin(), m_aProperties.end(),
+        []( const css::beans::Property& x, const css::beans::Property& y ) -> bool { return x.Name == y.Name; } ),
+        m_aProperties.end() );
+    m_aProperties.shrink_to_fit();
 
-    // make room for all properties
-    sal_Int32 nMergedProps = nDelegatorProps + nAggregateProps;
-    m_aProperties.resize( nMergedProps );
-
-    const   Property* pAggregateProps   = _rAggProperties.getConstArray();
-    const   Property* pDelegateProps    = _rProperties.getConstArray();
-    std::vector<css::beans::Property>::iterator pMergedProps = m_aProperties.begin();
-
-    // if properties are present both at the delegatee and the aggregate, then the former are supposed to win.
-    // So, we'll need an existence check.
-    ::std::set< OUString > aDelegatorProps;
-
-    // create the map for the delegator properties
-    sal_Int32 nMPLoop = 0;
-    for ( ; nMPLoop < nDelegatorProps; ++nMPLoop, ++pDelegateProps )
+    // fill aDelegatorProps with names from _rProperties for a fast existence check
+    // different kinds of properties are processed differently
+    ::std::unordered_set< OUString, OUStringHash > aDelegatorProps;
+    aDelegatorProps.reserve( _rProperties.getLength() );
+    for( auto &delegateProp: _rProperties )
     {
-        m_aPropertyAccessors[ pDelegateProps->Handle ] = OPropertyAccessor( -1, nMPLoop, false );
-        OSL_ENSURE( aDelegatorProps.find( pDelegateProps->Name ) == aDelegatorProps.end(),
+        const auto inserted = aDelegatorProps.insert( delegateProp.Name );
+        OSL_ENSURE( inserted.second == true,
             "OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper: duplicate delegatee property!" );
-        aDelegatorProps.insert( pDelegateProps->Name );
     }
 
-    // create the map for the aggregate properties
+    ::std::unordered_set< sal_Int32 > existingHandles;
+    existingHandles.reserve( m_aProperties.size() );
     sal_Int32 nAggregateHandle = _nFirstAggregateId;
-    pMergedProps += nDelegatorProps;
-    for ( ; nMPLoop < nMergedProps; ++pAggregateProps )
+    for ( sal_Int32 nMPLoop = 0; nMPLoop < static_cast< sal_Int32 >( m_aProperties.size() ); ++nMPLoop )
     {
-        // if the aggregate property is present at the delegatee already, ignore it
-        if ( aDelegatorProps.find( pAggregateProps->Name ) != aDelegatorProps.end() )
+        auto &prop = m_aProperties[ nMPLoop ];
+        if ( aDelegatorProps.find( prop.Name ) != aDelegatorProps.end() )
         {
-            --nMergedProps;
-            continue;
+            m_aPropertyAccessors[ prop.Handle ] = OPropertyAccessor( -1, nMPLoop, false );
+            existingHandles.insert( prop.Handle );
         }
-
-        // next aggregate property - remember it
-        *pMergedProps = *pAggregateProps;
-
-        // determine the handle for the property which we will expose to the outside world
-        sal_Int32 nHandle = -1;
-        // ask the info service first
-        if ( _pInfoService )
-            nHandle = _pInfoService->getPreferredPropertyId( pMergedProps->Name );
-
-        if ( -1 == nHandle )
-            // no handle from the info service -> default
-            nHandle = nAggregateHandle++;
         else
-        {   // check if we alread have a property with the given handle
-            auto pPropsTilNow = m_aProperties.begin();
-            for ( sal_Int32 nCheck = 0; nCheck < nMPLoop; ++nCheck, ++pPropsTilNow )
-                if ( pPropsTilNow->Handle == nHandle )
-                {   // conflicts -> use another one (which we don't check anymore, assuming _nFirstAggregateId was large enough)
-                    nHandle = nAggregateHandle++;
-                    break;
-                }
+        {
+            // determine the handle for the property which we will expose to the outside world
+            sal_Int32 nHandle = -1;
+            // ask the info service first
+            if ( _pInfoService )
+                nHandle = _pInfoService->getPreferredPropertyId( prop.Name );
+
+            if ( ( -1 == nHandle ) || ( existingHandles.find( nHandle ) != existingHandles.end() ) )
+            {
+                // 1. no handle from the info service -> default
+                // 2. conflicts -> use another one (which we don't check anymore, assuming _nFirstAggregateId was large enough)
+                nHandle = nAggregateHandle++;
+            }
+            else
+            {
+                existingHandles.insert( nHandle );
+            }
+
+            // remember the accessor for this property
+            m_aPropertyAccessors[ nHandle ] = OPropertyAccessor( prop.Handle, nMPLoop, true );
+            prop.Handle = nHandle;
         }
-
-        // remember the accessor for this property
-        m_aPropertyAccessors[ nHandle ] = OPropertyAccessor( pMergedProps->Handle, nMPLoop, true );
-        pMergedProps->Handle = nHandle;
-
-        ++nMPLoop;
-        ++pMergedProps;
     }
-    m_aProperties.resize( nMergedProps );
-    pMergedProps = m_aProperties.begin();    // reset, needed again below
-
-    // sort the properties by name
-    ::std::sort( pMergedProps, pMergedProps+nMergedProps, PropertyCompareByName());
-
-    pMergedProps = m_aProperties.begin();
-
-    // sync the map positions
-    for ( nMPLoop = 0; nMPLoop < nMergedProps; ++nMPLoop, ++pMergedProps )
-        m_aPropertyAccessors[ pMergedProps->Handle ].nPos = nMPLoop;
 }
 
 
