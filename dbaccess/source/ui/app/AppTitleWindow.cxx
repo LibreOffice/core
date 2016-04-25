@@ -41,14 +41,14 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 
     const StyleSettings& rStyle = Application::GetSettings().GetStyleSettings();
     vcl::Window* pWindows[] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
-    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+    for (vcl::Window* pWindow : pWindows)
     {
-        vcl::Font aFont = pWindows[i]->GetControlFont();
+        vcl::Font aFont = pWindow->GetControlFont();
         aFont.SetWeight(WEIGHT_BOLD);
-        pWindows[i]->SetControlFont(aFont);
-        pWindows[i]->SetControlForeground(rStyle.GetLightColor());
-        pWindows[i]->SetControlBackground(rStyle.GetShadowColor());
-        pWindows[i]->Show();
+        pWindow->SetControlFont(aFont);
+        pWindow->SetControlForeground(rStyle.GetLightColor());
+        pWindow->SetControlBackground(rStyle.GetShadowColor());
+        pWindow->Show();
     }
 }
 

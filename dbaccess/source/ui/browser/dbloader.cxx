@@ -174,12 +174,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     Reference< XController2 > xController;
 
     const OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    for ( size_t i=0; i < SAL_N_ELEMENTS( aImplementations ); ++i )
+    for (const ServiceNameToImplName& aImplementation : aImplementations)
     {
-        if ( sComponentURL.equalsAscii( aImplementations[i].pAsciiServiceName ) )
+        if ( sComponentURL.equalsAscii( aImplementation.pAsciiServiceName ) )
         {
             xController.set( m_xContext->getServiceManager()->
-               createInstanceWithContext( OUString::createFromAscii( aImplementations[i].pAsciiImplementationName ), m_xContext), UNO_QUERY_THROW );
+               createInstanceWithContext( OUString::createFromAscii( aImplementation.pAsciiImplementationName ), m_xContext), UNO_QUERY_THROW );
             break;
         }
     }

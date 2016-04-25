@@ -783,11 +783,11 @@ static void doc_iniUnoCommands ()
     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
 
-    for (sal_uInt32 nIterator = 0; nIterator < SAL_N_ELEMENTS(sUnoCommands); nIterator++)
+    for (const auto & sUnoCommand : sUnoCommands)
     {
         const SfxSlot* pSlot = nullptr;
 
-        aCommandURL.Complete = sUnoCommands[nIterator];
+        aCommandURL.Complete = sUnoCommand;
         xParser->parseStrict(aCommandURL);
         pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
 

@@ -275,8 +275,8 @@ void OFieldDescControl::CheckScrollBars()
     // horizontal :
     long lMaxXPosition = 0;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
-    for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(ppAggregates); ++i)
-        getMaxXPosition(ppAggregates[i],lMaxXPosition);
+    for (Control* ppAggregate : ppAggregates)
+        getMaxXPosition(ppAggregate,lMaxXPosition);
 
     lMaxXPosition += m_pHorzScroll->GetThumbPos() * HSCROLL_STEP;
 
@@ -399,8 +399,8 @@ sal_uInt16 OFieldDescControl::CountActiveAggregates() const
 {
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
     sal_uInt16 nVisibleAggregates = 0;
-    for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(ppAggregates); ++i)
-        if (ppAggregates[i])
+    for (Control* pAggregate : ppAggregates)
+        if (pAggregate)
             ++nVisibleAggregates;
     return nVisibleAggregates;
 }
@@ -409,11 +409,11 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
 {
     Size aHeight;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
-    for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(ppAggregates); ++i)
+    for (Control* pAggregate : ppAggregates)
     {
-        if ( ppAggregates[i] )
+        if ( pAggregate )
         {
-            const Size aTemp(ppAggregates[i]->GetOptimalSize());
+            const Size aTemp(pAggregate->GetOptimalSize());
             if ( aTemp.Height() > aHeight.Height() )
                 aHeight.Height() = aTemp.Height();
         }
@@ -662,11 +662,11 @@ void OFieldDescControl::ArrangeAggregates()
     };
 
     long nMaxWidth = 0;
-    for (size_t i=0; i<SAL_N_ELEMENTS(adAggregates); i++)
+    for (const AGGREGATE_DESCRIPTION & adAggregate : adAggregates)
     {
-        if (adAggregates[i].pctrlTextControl)
+        if (adAggregate.pctrlTextControl)
         {
-            nMaxWidth = ::std::max<long>(OutputDevice::GetTextWidth(adAggregates[i].pctrlTextControl->GetText()),nMaxWidth);
+            nMaxWidth = ::std::max<long>(OutputDevice::GetTextWidth(adAggregate.pctrlTextControl->GetText()),nMaxWidth);
         }
     }
 
@@ -675,19 +675,19 @@ void OFieldDescControl::ArrangeAggregates()
     // And go ...
     int nCurrentControlPos = 0;
     Control* pZOrderPredecessor = nullptr;
-    for (size_t i=0; i<SAL_N_ELEMENTS(adAggregates); i++)
+    for (AGGREGATE_DESCRIPTION & adAggregate : adAggregates)
     {
-        if (adAggregates[i].pctrlInputControl)
+        if (adAggregate.pctrlInputControl)
         {
-            SetPosSize(adAggregates[i].pctrlTextControl, nCurrentControlPos, 0);
-            SetPosSize(adAggregates[i].pctrlInputControl, nCurrentControlPos, adAggregates[i].nPosSizeArgument);
+            SetPosSize(adAggregate.pctrlTextControl, nCurrentControlPos, 0);
+            SetPosSize(adAggregate.pctrlInputControl, nCurrentControlPos, adAggregate.nPosSizeArgument);
 
             // Set the z-order in a way such that the Controls can be traversed in the same sequence in which they have been arranged here
-            adAggregates[i].pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? ZOrderFlags::Behind : ZOrderFlags::First);
-            adAggregates[i].pctrlInputControl->SetZOrder(adAggregates[i].pctrlTextControl, ZOrderFlags::Behind );
-            pZOrderPredecessor = adAggregates[i].pctrlInputControl;
+            adAggregate.pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? ZOrderFlags::Behind : ZOrderFlags::First);
+            adAggregate.pctrlInputControl->SetZOrder(adAggregate.pctrlTextControl, ZOrderFlags::Behind );
+            pZOrderPredecessor = adAggregate.pctrlInputControl;
 
-            if (adAggregates[i].pctrlInputControl == pFormatSample)
+            if (adAggregate.pctrlInputControl == pFormatSample)
             {
                 pFormat->SetZOrder(pZOrderPredecessor, ZOrderFlags::Behind);
                 pZOrderPredecessor = pFormat;
