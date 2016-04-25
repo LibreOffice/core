@@ -241,10 +241,6 @@ void Test::testVoid() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -333,14 +329,6 @@ void Test::testBoolean() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        if (boost::is_same< sal_uInt8, sal_Bool >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_uInt8", (a >>= b) && b == 0);
-        } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-        }
     }
     {
         sal_Int16 b = 2;
@@ -432,10 +420,6 @@ void Test::testByte() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", (a >>= b) && b == 1);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -531,10 +515,6 @@ void Test::testShort() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -634,10 +614,6 @@ void Test::testUnsignedShort() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", (a >>= b) && b == 1);
     }
@@ -733,10 +709,6 @@ void Test::testLong() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -826,10 +798,6 @@ void Test::testUnsignedLong() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -923,10 +891,6 @@ void Test::testHyper() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -1016,10 +980,6 @@ void Test::testUnsignedHyper() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -1113,10 +1073,6 @@ void Test::testFloat() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -1206,10 +1162,6 @@ void Test::testDouble() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -1302,10 +1254,6 @@ void Test::testChar() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -1403,10 +1351,6 @@ void Test::testString() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -1496,10 +1440,6 @@ void Test::testType() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -1593,10 +1533,6 @@ void Test::testSequence() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -1696,10 +1632,6 @@ void Test::testEnum() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -1793,10 +1725,6 @@ void Test::testStruct() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
@@ -1915,10 +1843,6 @@ void Test::testException() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -2029,10 +1953,6 @@ void Test::testInterface() {
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
     }
     {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
-    }
-    {
         sal_Int16 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
     }
@@ -2139,10 +2059,6 @@ void Test::testNull() {
     {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
-    }
-    {
-        sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
     }
     {
         sal_Int16 b = 2;
