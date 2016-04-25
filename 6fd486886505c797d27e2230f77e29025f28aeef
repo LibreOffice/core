@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_3772807d",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4145,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-25T17:45:24Z",
+      "side": 1,
+      "message": "Nitpick: please use our braces style, where an opening block brace goes to the start of the next line. Helps in readability and when jumping between matching block braces in an editor it doesn\u0027t make the columns jump around.",
+      "range": {
+        "startLine": 4145,
+        "startChar": 59,
+        "endLine": 4145,
+        "endChar": 61
+      },
+      "revId": "6fd486886505c797d27e2230f77e29025f28aeef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_176f8493",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5514,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-25T17:45:24Z",
+      "side": 1,
+      "message": "We are not short of newlines ;-) so please make this\n\n {\n     return pObj;\n }\n\ninstead. Also note that the trailing ; semicolon after the function block is superfluous.",
+      "range": {
+        "startLine": 5514,
+        "startChar": 1,
+        "endLine": 5514,
+        "endChar": 17
+      },
+      "revId": "6fd486886505c797d27e2230f77e29025f28aeef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_776cf89c",
+        "filename": "include/filter/msfilter/msdffimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-25T17:45:24Z",
+      "side": 1,
+      "message": "For a multiline comment that precedes a member or function, the correct doxygen syntax is to start the comment with /** so\n\n /** When importing ...\n     groups ...\n     ...\n  */\n\nThe ///\u003c actually denotes a comment that goes after an identifier on the same line.",
+      "range": {
+        "startLine": 427,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 91
+      },
+      "revId": "6fd486886505c797d27e2230f77e29025f28aeef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_b704b0c6",
+        "filename": "include/filter/msfilter/msdffimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-25T17:45:24Z",
+      "side": 1,
+      "message": "Multiple lines with an introducing /// can be used instead of one /** block. However, one blank line between the previous code and the comment helps readability.",
+      "range": {
+        "startLine": 509,
+        "startChar": 0,
+        "endLine": 511,
+        "endChar": 67
+      },
+      "revId": "6fd486886505c797d27e2230f77e29025f28aeef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
