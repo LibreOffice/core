@@ -379,7 +379,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName ) 
 
 sal_Bool SAL_CALL ScVbaControlObjectBase::getPrintObject() throw (uno::RuntimeException, std::exception)
 {
-    return mxControlProps->getPropertyValue( "Printable" ).get< sal_Bool >();
+    return mxControlProps->getPropertyValue( "Printable" ).get<bool>();
 }
 
 void SAL_CALL ScVbaControlObjectBase::setPrintObject( sal_Bool bPrintObject ) throw (uno::RuntimeException, std::exception)

@@ -857,7 +857,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                 }
                 else if (rName == SC_UNONAME_ISFIXED)
                 {
-                    SvxDateType eType = rVal.get<sal_Bool>() ? SVXDATETYPE_FIX : SVXDATETYPE_VAR;
+                    SvxDateType eType = rVal.get<bool>() ? SVXDATETYPE_FIX : SVXDATETYPE_VAR;
                     p->SetType(eType);
                 }
                 else if (rName == SC_UNONAME_DATETIME)
@@ -892,7 +892,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                 }
                 else if (rName == SC_UNONAME_ISFIXED)
                 {
-                    SvxTimeType eType = rVal.get<sal_Bool>() ? SVXTIMETYPE_FIX : SVXTIMETYPE_VAR;
+                    SvxTimeType eType = rVal.get<bool>() ? SVXTIMETYPE_FIX : SVXTIMETYPE_VAR;
                     p->SetType(eType);
                 }
                 else if (rName == SC_UNONAME_DATETIME)
@@ -917,9 +917,9 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
     else
     {
         if (rName == SC_UNONAME_ISDATE)
-            mbIsDate = rVal.get<sal_Bool>();
+            mbIsDate = rVal.get<bool>();
         else if (rName == SC_UNONAME_ISFIXED)
-            mbIsFixed = rVal.get<sal_Bool>();
+            mbIsFixed = rVal.get<bool>();
         else if (rName == SC_UNONAME_DATETIME)
             maDateTime = rVal.get<util::DateTime>();
         else if (rName == SC_UNONAME_NUMFMT)
