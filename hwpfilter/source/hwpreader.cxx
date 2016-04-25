@@ -954,43 +954,43 @@ void HwpReader::makeMasterStyles()
 
     int i;
     int nMax = hwpfile.getMaxSettedPage();
-    std::deque<PageSetting> pSet(nMax + 1);
+    std::deque<PageSetting> aSet(nMax + 1);
 
     for( i = 0 ; i < hwpfile.getPageNumberCount() ; i++ )
     {
         ShowPageNum *pn = hwpfile.getPageNumber(i);
-        pSet[pn->m_nPageNumber].pagenumber = pn;
-        pSet[pn->m_nPageNumber].bIsSet = true;
+        aSet[pn->m_nPageNumber].pagenumber = pn;
+        aSet[pn->m_nPageNumber].bIsSet = true;
     }
     for( i = 0 ; i < hwpfile.getHeaderFooterCount() ; i++ )
     {
         HeaderFooter* hf = hwpfile.getHeaderFooter(i);
-        pSet[hf->m_nPageNumber].bIsSet = true;
+        aSet[hf->m_nPageNumber].bIsSet = true;
         if( hf->type == 0 )                       // header
         {
             switch( hf->where )
             {
                 case 0 :
-                    pSet[hf->m_nPageNumber].header = hf;
-                    pSet[hf->m_nPageNumber].header_even = nullptr;
-                    pSet[hf->m_nPageNumber].header_odd = nullptr;
+                    aSet[hf->m_nPageNumber].header = hf;
+                    aSet[hf->m_nPageNumber].header_even = nullptr;
+                    aSet[hf->m_nPageNumber].header_odd = nullptr;
                     break;
                 case 1:
-                    pSet[hf->m_nPageNumber].header_even = hf;
-                    if( pSet[hf->m_nPageNumber].header )
+                    aSet[hf->m_nPageNumber].header_even = hf;
+                    if( aSet[hf->m_nPageNumber].header )
                     {
-                        pSet[hf->m_nPageNumber].header_odd =
-                            pSet[hf->m_nPageNumber].header;
-                        pSet[hf->m_nPageNumber].header = nullptr;
+                        aSet[hf->m_nPageNumber].header_odd =
+                            aSet[hf->m_nPageNumber].header;
+                        aSet[hf->m_nPageNumber].header = nullptr;
                     }
                     break;
                 case 2:
-                    pSet[hf->m_nPageNumber].header_odd = hf;
-                    if( pSet[hf->m_nPageNumber].header )
+                    aSet[hf->m_nPageNumber].header_odd = hf;
+                    if( aSet[hf->m_nPageNumber].header )
                     {
-                        pSet[hf->m_nPageNumber].header_even =
-                            pSet[hf->m_nPageNumber].header;
-                        pSet[hf->m_nPageNumber].header = nullptr;
+                        aSet[hf->m_nPageNumber].header_even =
+                            aSet[hf->m_nPageNumber].header;
+                        aSet[hf->m_nPageNumber].header = nullptr;
                     }
                     break;
             }
@@ -1000,26 +1000,26 @@ void HwpReader::makeMasterStyles()
             switch( hf->where )
             {
                 case 0 :
-                    pSet[hf->m_nPageNumber].footer = hf;
-                    pSet[hf->m_nPageNumber].footer_even = nullptr;
-                    pSet[hf->m_nPageNumber].footer_odd = nullptr;
+                    aSet[hf->m_nPageNumber].footer = hf;
+                    aSet[hf->m_nPageNumber].footer_even = nullptr;
+                    aSet[hf->m_nPageNumber].footer_odd = nullptr;
                     break;
                 case 1:
-                    pSet[hf->m_nPageNumber].footer_even = hf;
-                    if( pSet[hf->m_nPageNumber].footer )
+                    aSet[hf->m_nPageNumber].footer_even = hf;
+                    if( aSet[hf->m_nPageNumber].footer )
                     {
-                        pSet[hf->m_nPageNumber].footer_odd =
-                            pSet[hf->m_nPageNumber].footer;
-                        pSet[hf->m_nPageNumber].footer = nullptr;
+                        aSet[hf->m_nPageNumber].footer_odd =
+                            aSet[hf->m_nPageNumber].footer;
+                        aSet[hf->m_nPageNumber].footer = nullptr;
                     }
                     break;
                 case 2:
-                    pSet[hf->m_nPageNumber].footer_odd = hf;
-                    if( pSet[hf->m_nPageNumber].footer )
+                    aSet[hf->m_nPageNumber].footer_odd = hf;
+                    if( aSet[hf->m_nPageNumber].footer )
                     {
-                        pSet[hf->m_nPageNumber].footer_even =
-                            pSet[hf->m_nPageNumber].footer;
-                        pSet[hf->m_nPageNumber].footer = nullptr;
+                        aSet[hf->m_nPageNumber].footer_even =
+                            aSet[hf->m_nPageNumber].footer;
+                        aSet[hf->m_nPageNumber].footer = nullptr;
                     }
                     break;
             }
@@ -1046,47 +1046,47 @@ void HwpReader::makeMasterStyles()
         rstartEl("style:master-page", rList);
         pList->clear();
 
-        if( pSet[i].bIsSet )                      /* If you've changed the current setting */
+        if( aSet[i].bIsSet )                      /* If you've changed the current setting */
         {
-              if( !pSet[i].pagenumber ){
+              if( !aSet[i].pagenumber ){
                     if( pPrevSet && pPrevSet->pagenumber )
-                         pSet[i].pagenumber = pPrevSet->pagenumber;
+                         aSet[i].pagenumber = pPrevSet->pagenumber;
               }
-            if( pSet[i].pagenumber )
+            if( aSet[i].pagenumber )
             {
-                if( pSet[i].pagenumber->where == 7 && pSet[i].header )
+                if( aSet[i].pagenumber->where == 7 && aSet[i].header )
                 {
-                    pSet[i].header_even = pSet[i].header;
-                    pSet[i].header_odd = pSet[i].header;
-                    pSet[i].header = nullptr;
+                    aSet[i].header_even = aSet[i].header;
+                    aSet[i].header_odd = aSet[i].header;
+                    aSet[i].header = nullptr;
                 }
-                if( pSet[i].pagenumber->where == 8 && pSet[i].footer )
+                if( aSet[i].pagenumber->where == 8 && aSet[i].footer )
                 {
-                    pSet[i].footer_even = pSet[i].footer;
-                    pSet[i].footer_odd = pSet[i].footer;
-                    pSet[i].footer = nullptr;
+                    aSet[i].footer_even = aSet[i].footer;
+                    aSet[i].footer_odd = aSet[i].footer;
+                    aSet[i].footer = nullptr;
                 }
             }
 
-            if( !pSet[i].header_even && pPrevSet && pPrevSet->header_even )
+            if( !aSet[i].header_even && pPrevSet && pPrevSet->header_even )
             {
-                pSet[i].header_even = pPrevSet->header_even;
+                aSet[i].header_even = pPrevSet->header_even;
             }
-            if( !pSet[i].header_odd && pPrevSet && pPrevSet->header_odd )
+            if( !aSet[i].header_odd && pPrevSet && pPrevSet->header_odd )
             {
-                pSet[i].header_odd = pPrevSet->header_odd;
+                aSet[i].header_odd = pPrevSet->header_odd;
             }
-            if( !pSet[i].footer_even && pPrevSet && pPrevSet->footer_even )
+            if( !aSet[i].footer_even && pPrevSet && pPrevSet->footer_even )
             {
-                pSet[i].footer_even = pPrevSet->footer_even;
+                aSet[i].footer_even = pPrevSet->footer_even;
             }
-            if( !pSet[i].footer_odd && pPrevSet && pPrevSet->footer_odd )
+            if( !aSet[i].footer_odd && pPrevSet && pPrevSet->footer_odd )
             {
-                pSet[i].footer_odd = pPrevSet->footer_odd;
+                aSet[i].footer_odd = pPrevSet->footer_odd;
             }
 
-            pPage = &pSet[i];
-            pPrevSet = &pSet[i];
+            pPage = &aSet[i];
+            pPrevSet = &aSet[i];
         }
         else if( pPrevSet )                       /* If the previous setting exists */
         {

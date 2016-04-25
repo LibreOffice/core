@@ -20,9 +20,9 @@ int main(int argc, char **argv)
 {
     try
     {
-        const std::string pLang("-lang");
-        const std::string pModule("-mod");
-        const std::string pDir("-dir");
+        const std::string aLang("-lang");
+        const std::string aModule("-mod");
+        const std::string aDir("-dir");
 
         std::string lang;
         std::string module;
@@ -30,19 +30,19 @@ int main(int argc, char **argv)
 
         bool error = false;
         for (int i = 1; i < argc; ++i) {
-            if (pLang.compare(argv[i]) == 0) {
+            if (aLang.compare(argv[i]) == 0) {
                 if (i + 1 < argc) {
                     lang = argv[++i];
                 } else {
                     error = true;
                 }
-            } else if (pModule.compare(argv[i]) == 0) {
+            } else if (aModule.compare(argv[i]) == 0) {
                 if (i + 1 < argc) {
                     module = argv[++i];
                 } else {
                     error = true;
                 }
-            } else if (pDir.compare(argv[i]) == 0) {
+            } else if (aDir.compare(argv[i]) == 0) {
                 if (i + 1 < argc) {
                     dir = argv[++i];
                 } else {

@@ -212,8 +212,8 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
     SetUniqueId(UID_APP_DETAILPAGE_HELPER);
-    for (VclPtr<DBTreeListBox> & m_pList : m_pLists)
-        m_pList = nullptr;
+    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
+        rpBox = nullptr;
     ImplInitSettings();
 }
 
@@ -235,14 +235,14 @@ void OAppDetailPageHelper::dispose()
         OSL_FAIL("Exception thrown while disposing preview frame!");
     }
 
-    for (VclPtr<DBTreeListBox> & m_pList : m_pLists)
+    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
     {
-        if ( m_pList )
+        if ( rpBox )
         {
-            m_pList->clearCurrentSelection();
-            m_pList->Hide();
-            m_pList->clearCurrentSelection();   // why a second time?
-            m_pList.disposeAndClear();
+            rpBox->clearCurrentSelection();
+            rpBox->Hide();
+            rpBox->clearCurrentSelection();   // why a second time?
+            rpBox.disposeAndClear();
         }
     }
     m_aMenu.reset();
@@ -764,10 +764,10 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
 void OAppDetailPageHelper::clearPages()
 {
     showPreview(nullptr);
-    for (VclPtr<DBTreeListBox> & m_pList : m_pLists)
+    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
     {
-        if ( m_pList )
-            m_pList->Clear();
+        if ( rpBox )
+            rpBox->Clear();
     }
 }
 
@@ -1156,9 +1156,9 @@ IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
                             , SID_DB_APP_VIEW_DOCINFO_PREVIEW
     };
 
-    for(unsigned short pAction : pActions)
+    for(unsigned short nAction : pActions)
     {
-        aMenu->CheckItem(pAction,m_aMenu->IsItemChecked(pAction));
+        aMenu->CheckItem(nAction,m_aMenu->IsItemChecked(nAction));
     }
     aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
 

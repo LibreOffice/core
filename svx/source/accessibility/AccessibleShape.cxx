@@ -422,11 +422,11 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                 css::uno::Reference<XAccessibleStateSet> rState =
                     xTempAccContext->getAccessibleStateSet();
                 if( rState.is() )           {
-                    css::uno::Sequence<short> pStates = rState->getStates();
-                    int count = pStates.getLength();
+                    css::uno::Sequence<short> aStates = rState->getStates();
+                    int count = aStates.getLength();
                     for( int iIndex = 0;iIndex < count;iIndex++ )
                     {
-                        if( pStates[iIndex] == AccessibleStateType::EDITABLE )
+                        if( aStates[iIndex] == AccessibleStateType::EDITABLE )
                         {
                             pStateSet->AddState (AccessibleStateType::EDITABLE);
                             pStateSet->AddState (AccessibleStateType::RESIZABLE);
@@ -465,11 +465,11 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                     css::uno::Reference<XAccessibleStateSet> rState =
                         xTempAccContext->getAccessibleStateSet();
                     if( rState.is() )           {
-                        css::uno::Sequence<short> pStates = rState->getStates();
-                        int count = pStates.getLength();
+                        css::uno::Sequence<short> aStates = rState->getStates();
+                        int count = aStates.getLength();
                         for( int iIndex = 0;iIndex < count;iIndex++ )
                         {
-                            if( pStates[iIndex] == AccessibleStateType::EDITABLE )
+                            if( aStates[iIndex] == AccessibleStateType::EDITABLE )
                             {
                                 pStateSet->AddState (AccessibleStateType::EDITABLE);
                                 pStateSet->AddState (AccessibleStateType::RESIZABLE);
@@ -847,11 +847,11 @@ throw ( IndexOutOfBoundsException,
             if( !pRState.is() )
                 return false;
 
-            uno::Sequence<short> pStates = pRState->getStates();
-            int nCount = pStates.getLength();
+            uno::Sequence<short> aStates = pRState->getStates();
+            int nCount = aStates.getLength();
             for( int i = 0; i < nCount; i++ )
             {
-                if(pStates[i] == AccessibleStateType::SELECTED)
+                if(aStates[i] == AccessibleStateType::SELECTED)
                     return true;
             }
             return false;

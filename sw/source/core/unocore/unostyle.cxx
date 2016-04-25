@@ -1018,10 +1018,10 @@ public:
             { m_vPropertyValues.clear(); }
     void Apply(SwXStyle& rStyle)
     {
-        for(auto& pPropertyPair : m_vPropertyValues)
+        for(const auto& rPropertyPair : m_vPropertyValues)
         {
-            if(pPropertyPair.second.hasValue())
-                rStyle.setPropertyValue(pPropertyPair.first, pPropertyPair.second);
+            if(rPropertyPair.second.hasValue())
+                rStyle.setPropertyValue(rPropertyPair.first, rPropertyPair.second);
         }
     }
     static void GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny )
@@ -1588,34 +1588,34 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEnt
         if(!pFormat)
             continue;
         SwNumFormat aFormat(*pFormat);
-        const auto pCharName(pSwXRules->GetNewCharStyleNames()[i]);
-        if(!pCharName.isEmpty()
-               && !SwXNumberingRules::isInvalidStyle(pCharName)
-               && (!pFormat->GetCharFormat() || pFormat->GetCharFormat()->GetName() != pCharName))
+        const auto& rCharName(pSwXRules->GetNewCharStyleNames()[i]);
+        if(!rCharName.isEmpty()
+               && !SwXNumberingRules::isInvalidStyle(rCharName)
+               && (!pFormat->GetCharFormat() || pFormat->GetCharFormat()->GetName() != rCharName))
         {
             auto pCharFormatIt(std::find_if(m_pDoc->GetCharFormats()->begin(), m_pDoc->GetCharFormats()->end(),
-                    [&pCharName] (SwCharFormat* pF) { return pF->GetName() == pCharName; }));
+                    [&rCharName] (SwCharFormat* pF) { return pF->GetName() == rCharName; }));
             if(pCharFormatIt != m_pDoc->GetCharFormats()->end())
                 aFormat.SetCharFormat(*pCharFormatIt);
             else if(m_pBasePool)
             {
-                auto pBase(static_cast<SfxStyleSheetBasePool*>(m_pBasePool)->Find(pCharName, SFX_STYLE_FAMILY_CHAR));
+                auto pBase(static_cast<SfxStyleSheetBasePool*>(m_pBasePool)->Find(rCharName, SFX_STYLE_FAMILY_CHAR));
                 if(!pBase)
-                    pBase = &m_pBasePool->Make(pCharName, SFX_STYLE_FAMILY_CHAR);
+                    pBase = &m_pBasePool->Make(rCharName, SFX_STYLE_FAMILY_CHAR);
                 aFormat.SetCharFormat(static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat());
             }
             else
                 aFormat.SetCharFormat(nullptr);
         }
         // same for fonts:
-        const auto pBulletName(pSwXRules->GetBulletFontNames()[i]);
-        if(!pBulletName.isEmpty()
-                && !SwXNumberingRules::isInvalidStyle(pBulletName)
-                && (!pFormat->GetBulletFont() || pFormat->GetBulletFont()->GetFamilyName() != pBulletName))
+        const auto& rBulletName(pSwXRules->GetBulletFontNames()[i]);
+        if(!rBulletName.isEmpty()
+                && !SwXNumberingRules::isInvalidStyle(rBulletName)
+                && (!pFormat->GetBulletFont() || pFormat->GetBulletFont()->GetFamilyName() != rBulletName))
         {
             const auto pFontListItem(static_cast<const SvxFontListItem*>(m_pDoc->GetDocShell()->GetItem(SID_ATTR_CHAR_FONTLIST)));
             const auto pList(pFontListItem->GetFontList());
-            FontMetric aFontInfo(pList->Get(pBulletName, WEIGHT_NORMAL, ITALIC_NONE));
+            FontMetric aFontInfo(pList->Get(rBulletName, WEIGHT_NORMAL, ITALIC_NONE));
             vcl::Font aFont(aFontInfo);
             aFormat.SetBulletFont(&aFont);
         }

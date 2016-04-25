@@ -283,15 +283,15 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
     uno::Reference< XSpellChecker1 > xSpell;
 
-    OUString rTerm(qTerm);
-    OUString pTerm(qTerm);
+    OUString aRTerm(qTerm);
+    OUString aPTerm(qTerm);
     CapType ct = CapType::UNKNOWN;
     sal_Int32 stem = 0;
     sal_Int32 stem2 = 0;
 
     sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
 
-    if (LinguIsUnspecified( nLanguage) || rTerm.isEmpty())
+    if (LinguIsUnspecified( nLanguage) || aRTerm.isEmpty())
         return noMeanings;
 
     if (!hasLocale( rLocale ))
@@ -363,8 +363,8 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
     {
         // convert word to all lower case for searching
         if (!stem)
-            ct = capitalType(rTerm, pCC);
-        OUString nTerm(makeLowerCase(rTerm, pCC));
+            ct = capitalType(aRTerm, pCC);
+        OUString nTerm(makeLowerCase(aRTerm, pCC));
         OString aTmp( OU2ENC(nTerm, eEnc) );
         nmean = pTH->Lookup(aTmp.getStr(),aTmp.getLength(),&pmean);
 
@@ -378,7 +378,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         if (stem)
         {
             xTmpRes2 = xSpell->spell( "<?xml?><query type='analyze'><word>" +
-            pTerm + "</word></query>", nLanguage, rProperties );
+                                      aPTerm + "</word></query>", nLanguage, rProperties );
             if (xTmpRes2.is())
             {
                 Sequence<OUString>seq = xTmpRes2->getAlternatives();
@@ -443,7 +443,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                     OUString aAlt( cTerm + catst);
                     pStr[i] = aAlt;
                 }
-                Meaning * pMn = new Meaning(rTerm);
+                Meaning * pMn = new Meaning(aRTerm);
                 OUString dTerm(pe->defn,strlen(pe->defn),eEnc );
                 pMn->SetMeaning(dTerm);
                 pMn->SetSynonyms(aStr);
@@ -471,31 +471,31 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
             return noMeanings;
         Reference< XSpellAlternatives > xTmpRes;
         xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
-            rTerm + "</word></query>", nLanguage, rProperties );
+            aRTerm + "</word></query>", nLanguage, rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
             if (seq.getLength() > 0)
             {
-                rTerm = seq[0];  // XXX Use only the first stem
+                aRTerm = seq[0];  // XXX Use only the first stem
                 continue;
             }
         }
 
         // stem the last word of the synonym (for categories after affixation)
-        rTerm = rTerm.trim();
-        sal_Int32 pos = rTerm.lastIndexOf(' ');
+        aRTerm = aRTerm.trim();
+        sal_Int32 pos = aRTerm.lastIndexOf(' ');
         if (!pos)
             return noMeanings;
         xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
-            rTerm.copy(pos + 1) + "</word></query>", nLanguage, rProperties );
+            aRTerm.copy(pos + 1) + "</word></query>", nLanguage, rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
             if (seq.getLength() > 0)
             {
-                pTerm = rTerm.copy(pos + 1);
-                rTerm = rTerm.copy(0, pos + 1) + seq[0];
+                aPTerm = aRTerm.copy(pos + 1);
+                aRTerm = aRTerm.copy(0, pos + 1) + seq[0];
 #if  0
                 for (int i = 0; i < seq.getLength(); i++)
                 {

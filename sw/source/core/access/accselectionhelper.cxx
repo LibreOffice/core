@@ -125,11 +125,11 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
         Reference<XAccessibleStateSet> pRStateSet = pRContext->getAccessibleStateSet();
         if( pRStateSet.is() )
         {
-            Sequence<short> pStates = pRStateSet->getStates();
-            sal_Int32 count = pStates.getLength();
+            Sequence<short> aStates = pRStateSet->getStates();
+            sal_Int32 count = aStates.getLength();
             for( sal_Int32 i = 0; i < count; i++ )
             {
-                if( pStates[i] == AccessibleStateType::SELECTED)
+                if( aStates[i] == AccessibleStateType::SELECTED)
                     return true;
             }
         }
@@ -300,11 +300,11 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
                 const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
                 if (pFrameFormat)
                 {
-                    const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
-                    if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
+                    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+                    if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
                     {
-                        const SwFrame  *pParaFrame =  SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrame), m_rContext.IsInPagePreview() );
-                        aChild  = pParaFrame;
+                        const SwFrame *pParaFrame = SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrame), m_rContext.IsInPagePreview() );
+                        aChild = pParaFrame;
                     }
                 }
             }

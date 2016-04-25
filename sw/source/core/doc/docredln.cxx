@@ -146,8 +146,8 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
         if (pTableCellRedline)
         {
             const SwTableBox *pRedTabBox = &pTableCellRedline->GetTableBox();
-            const SwTable& pRedTable = pRedTabBox->GetSttNd()->FindTableNode()->GetTable();
-            if ( &pRedTable == &rTable )
+            const SwTable& rRedTable = pRedTabBox->GetSttNd()->FindTableNode()->GetTable();
+            if ( &rRedTable == &rTable )
             {
                 // Redline for this table
                 const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
@@ -169,9 +169,9 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
             if (pTableRowRedline)
             {
                 const SwTableLine *pRedTabLine = &pTableRowRedline->GetTableLine();
-                const SwTableBoxes &pRedTabBoxes = pRedTabLine->GetTabBoxes();
-                const SwTable& pRedTable = pRedTabBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
-                if ( &pRedTable == &rTable )
+                const SwTableBoxes &rRedTabBoxes = pRedTabLine->GetTabBoxes();
+                const SwTable& rRedTable = rRedTabBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
+                if ( &rRedTable == &rTable )
                 {
                     // Redline for this table
                     const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();

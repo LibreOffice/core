@@ -131,11 +131,11 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
         searchTerm = m_pEdit->GetText();
     else
     {
-        for(VclPtr<PushButton> & m_vSearchSuggestion : m_vSearchSuggestions)
+        for(VclPtr<PushButton> & i : m_vSearchSuggestions)
         {
-            if( pButton == m_vSearchSuggestion )
+            if( pButton == i )
             {
-                searchTerm = m_vSearchSuggestion->GetDisplayText();
+                searchTerm = i->GetDisplayText();
                 break;
             }
         }
@@ -288,8 +288,8 @@ void SvxPersonalizationTabPage::dispose()
     m_pDefaultPersona.clear();
     m_pOwnPersona.clear();
     m_pSelectPersona.clear();
-    for (VclPtr<PushButton> & m_vDefaultPersonaImage : m_vDefaultPersonaImages)
-        m_vDefaultPersonaImage.clear();
+    for (VclPtr<PushButton> & i : m_vDefaultPersonaImages)
+        i.clear();
     m_pExtensionPersonaPreview.clear();
     m_pPersonaList.clear();
     m_pExtensionLabel.clear();

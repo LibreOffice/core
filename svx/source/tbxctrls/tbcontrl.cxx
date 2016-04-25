@@ -1905,9 +1905,9 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
                 bIsSymbol = true;
 
             sal_uInt16 nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, aCurrencyEntry, bIsSymbol );
-            OUString& pFormatStr = aStringsDtor[ nDefaultFormat ];
-            m_aFormatEntries.push_back( pFormatStr );
-            if( pFormatStr == m_rSelectedFormat )
+            const OUString& rFormatStr = aStringsDtor[ nDefaultFormat ];
+            m_aFormatEntries.push_back( rFormatStr );
+            if( rFormatStr == m_rSelectedFormat )
                 nSelectedPos = nPos;
             ++nPos;
         }

@@ -498,9 +498,9 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
         ,XML_MAX_ROW_COUNT
         ,XML_SUPPRESS_VERSION_COLUMNS
     };
-    for (::xmloff::token::XMLTokenEnum pSetting : pSettings)
+    for (::xmloff::token::XMLTokenEnum i : pSettings)
     {
-        TSettingsMap::const_iterator aFind = _aSettings.find(pSetting);
+        TSettingsMap::const_iterator aFind = _aSettings.find(i);
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
@@ -531,9 +531,9 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
         ,XML_IS_FIRST_ROW_HEADER_LINE
         ,XML_PARAMETER_NAME_SUBSTITUTION
     };
-    for (::xmloff::token::XMLTokenEnum pSetting : pSettings)
+    for (::xmloff::token::XMLTokenEnum nSetting : pSettings)
     {
-        TSettingsMap::const_iterator aFind = _aSettings.find(pSetting);
+        TSettingsMap::const_iterator aFind = _aSettings.find(nSetting);
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }

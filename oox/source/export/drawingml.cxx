@@ -1824,12 +1824,12 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
                                    FSEND );
         }
 
-        OUString pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
+        OUString aAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
 
-        if (!pAutoNumType.isEmpty())
+        if (!aAutoNumType.isEmpty())
         {
             mpFS->singleElementNS(XML_a, XML_buAutoNum,
-                                  XML_type, OUStringToOString(pAutoNumType, RTL_TEXTENCODING_UTF8).getStr(),
+                                  XML_type, OUStringToOString(aAutoNumType, RTL_TEXTENCODING_UTF8).getStr(),
                                   XML_startAt, nStartWith > 1 ? IS(nStartWith) : nullptr,
                                   FSEND);
         }

@@ -2711,10 +2711,10 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
                             }
                             if ( !hasObjectMarked )
                             {
-                                SwEditWin& pEditWindow = m_pActiveShell->GetView().GetEditWin();
+                                SwEditWin& rEditWindow = m_pActiveShell->GetView().GetEditWin();
                                 vcl::KeyCode tempKeycode( KEY_ESCAPE );
                                 KeyEvent rKEvt( 0 , tempKeycode );
-                                static_cast<vcl::Window*>(&pEditWindow)->KeyInput( rKEvt );
+                                static_cast<vcl::Window*>(&rEditWindow)->KeyInput( rKEvt );
                             }
                         }
                     }

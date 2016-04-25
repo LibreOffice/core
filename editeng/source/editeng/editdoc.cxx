@@ -803,9 +803,9 @@ void ParaPortionList::Reset()
 long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
 {
     long nHeight = 0;
-    for (const auto & maPortion : maPortions)
+    for (const auto & rPortion : maPortions)
     {
-        const ParaPortion* pTmpPortion = maPortion.get();
+        const ParaPortion* pTmpPortion = rPortion.get();
         if ( pTmpPortion == pPPortion )
             return nHeight;
         nHeight += pTmpPortion->GetHeight();

@@ -774,10 +774,10 @@ void DesktopLOKTest::testSheetOperations()
 
     CPPUNIT_ASSERT_EQUAL(pDocument->pClass->getParts(pDocument), 6);
 
-    std::vector<OString> pExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
+    std::vector<OString> aExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
     for (int i = 0; i < 6; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL(pExpected[i], OString(pDocument->pClass->getPartName(pDocument, i)));
+        CPPUNIT_ASSERT_EQUAL(aExpected[i], OString(pDocument->pClass->getPartName(pDocument, i)));
     }
 
     comphelper::LibreOfficeKit::setActive(false);
@@ -831,13 +831,13 @@ void DesktopLOKTest::testSheetSelections()
     {
         char* pUsedMimeType = nullptr;
         char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
-        std::vector<int> pExpected = {5, 6, 7, 8, 9};
+        std::vector<int> aExpected = {5, 6, 7, 8, 9};
         std::istringstream iss(pCopiedContent);
-        for (size_t i = 0; i < pExpected.size(); i++)
+        for (size_t i = 0; i < aExpected.size(); i++)
         {
             std::string token;
             iss >> token;
-            CPPUNIT_ASSERT_EQUAL(pExpected[i], std::stoi(token));
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], std::stoi(token));
         }
 
         free(pUsedMimeType);
@@ -877,13 +877,13 @@ void DesktopLOKTest::testSheetSelections()
     {
         char* pUsedMimeType  = nullptr;
         char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
-        std::vector<int> pExpected = { 8 };
+        std::vector<int> aExpected = { 8 };
         std::istringstream iss(pCopiedContent);
-        for (size_t i = 0; i < pExpected.size(); i++)
+        for (size_t i = 0; i < aExpected.size(); i++)
         {
             std::string token;
             iss >> token;
-            CPPUNIT_ASSERT_EQUAL(pExpected[i], std::stoi(token));
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], std::stoi(token));
         }
 
         free(pUsedMimeType);

@@ -42,8 +42,8 @@ BreakPointList::~BreakPointList()
 
 void BreakPointList::reset()
 {
-    for (BreakPoint* maBreakPoint : maBreakPoints)
-        delete maBreakPoint;
+    for (BreakPoint* pBreakPoint : maBreakPoints)
+        delete pBreakPoint;
     maBreakPoints.clear();
 }
 

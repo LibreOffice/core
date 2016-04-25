@@ -1217,20 +1217,20 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         try
         {
             // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
-            uno::Sequence< beans::PropertyValue > pValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
-            sal_Int32 len = pValues.getLength();
+            uno::Sequence< beans::PropertyValue > aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
+            sal_Int32 len = aValues.getLength();
 
             if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
                 for( int i =0; i < len; ++i )
                 {
-                    if (pValues[i].Name == "CharHidden")
-                        pValues[i].Value = uno::makeAny(false);
+                    if (aValues[i].Name == "CharHidden")
+                        aValues[i].Value = uno::makeAny(false);
                 }
 
             uno::Reference< text::XTextRange > xTextRange;
             if (m_aTextAppendStack.top().xInsertPosition.is())
             {
-                xTextRange = xTextAppend->insertTextPortion(rString, pValues, m_aTextAppendStack.top().xInsertPosition);
+                xTextRange = xTextAppend->insertTextPortion(rString, aValues, m_aTextAppendStack.top().xInsertPosition);
                 m_aTextAppendStack.top().xCursor->gotoRange(xTextRange->getEnd(), true);
             }
             else
@@ -1239,7 +1239,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 {
                     if(m_bInHeaderFooterImport && !m_bStartTOCHeaderFooter)
                     {
-                        xTextRange = xTextAppend->appendTextPortion(rString, pValues);
+                        xTextRange = xTextAppend->appendTextPortion(rString, aValues);
                     }
                     else
                     {
@@ -1251,7 +1251,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         {
                             if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
                                 xTOCTextCursor->goLeft(1, false);
-                            xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
+                            xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                             SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                             if (!xTextRange.is())
                                 throw uno::Exception("insertTextPortion failed", nullptr);
@@ -1261,7 +1261,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         }
                         else
                         {
-                            xTextRange = xTextAppend->appendTextPortion(rString, pValues);
+                            xTextRange = xTextAppend->appendTextPortion(rString, aValues);
                             xTOCTextCursor = xTextAppend->createTextCursor();
                             xTOCTextCursor->gotoRange(xTextRange->getEnd(), false);
                         }
@@ -1269,7 +1269,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                     }
                 }
                 else
-                    xTextRange = xTextAppend->appendTextPortion(rString, pValues);
+                    xTextRange = xTextAppend->appendTextPortion(rString, aValues);
             }
 
             CheckRedline( xTextRange );
