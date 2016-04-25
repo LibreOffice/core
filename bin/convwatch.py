@@ -13,6 +13,7 @@ import subprocess
 import sys
 import time
 import uuid
+import datetime
 try:
     from urllib.parse import quote
 except ImportError:
@@ -282,7 +283,8 @@ class LoadPrintFileTest:
         self.file = file
         self.prtsuffix = prtsuffix
     def run(self, xContext):
-        print("Loading document: " + self.file)
+        start = datetime.datetime.now()
+        print("Time: " + str(start) + " Loading document: " + self.file)
         xDoc = None
         try:
             url = "file://" + quote(self.file)
@@ -291,7 +293,8 @@ class LoadPrintFileTest:
         finally:
             if xDoc:
                 xDoc.close(True)
-            print("...done with: " + self.file)
+            end = datetime.datetime.now()
+            print("...done with: " + self.file + " in: " + str(end - start))
 
 def runLoadPrintFileTests(opts, dirs, suffix, reference):
     if reference:
@@ -392,7 +395,7 @@ def checkTools():
         sys.exit(1)
 
 if __name__ == "__main__":
-#    checkTools()
+    checkTools()
     (opts,args) = parseArgs(sys.argv)
     if len(args) == 0:
         usage()
