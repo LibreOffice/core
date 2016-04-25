@@ -15,6 +15,7 @@ import time
 import uuid
 import datetime
 import traceback
+import threading
 try:
     from urllib.parse import quote
 except ImportError:
@@ -81,19 +82,19 @@ class OfficeConnection:
         if sep != ":":
             raise Exception("soffice parameter does not specify method")
         if method == "path":
-                socket = "pipe,name=pytest" + str(uuid.uuid1())
+                self.socket = "pipe,name=pytest" + str(uuid.uuid1())
                 try:
                     userdir = self.args["--userdir"]
                 except KeyError:
                     raise Exception("'path' method requires --userdir")
                 if not(userdir.startswith("file://")):
                     raise Exception("--userdir must be file URL")
-                self.soffice = self.bootstrap(rest, userdir, socket)
+                self.soffice = self.bootstrap(rest, userdir, self.socket)
         elif method == "connect":
-                socket = rest
+                self.socket = rest
         else:
             raise Exception("unsupported connection method: " + method)
-        self.xContext = self.connect(socket)
+        self.xContext = self.connect(self.socket)
 
     def bootstrap(self, soffice, userdir, socket):
         argv = [ soffice, "--accept=" + socket + ";urp",
@@ -146,10 +147,25 @@ class OfficeConnection:
                 raise Exception("Exit status indicates failure: " + str(ret))
 #            return ret
 
+class WatchDog(threading.Thread):
+    def __init__(self, connection):
+        threading.Thread.__init__(self, name="WatchDog " + connection.socket)
+        self.connection = connection
+    def run(self):
+        try:
+            if self.connection.soffice: # not possible for "connect"
+                self.connection.soffice.wait(timeout=120) # 2 minutes?
+        except subprocess.TimeoutExpired:
+            log("WatchDog: TIMEOUT -> killing soffice")
+            self.connection.soffice.terminate() # actually killing oosplash...
+            self.connection.xContext = None
+            log("WatchDog: killed soffice")
+
 class PerTestConnection:
     def __init__(self, args):
         self.args = args
         self.connection = None
+        self.watchdog = None
     def getContext(self):
         return self.connection.xContext
     def setUp(self):
@@ -158,12 +174,15 @@ class PerTestConnection:
         conn = OfficeConnection(self.args)
         conn.setUp()
         self.connection = conn
+        self.watchdog = WatchDog(self.connection)
+        self.watchdog.start()
     def postTest(self):
         if self.connection:
             try:
                 self.connection.tearDown()
             finally:
                 self.connection = None
+                self.watchdog.join()
     def tearDown(self):
         assert(not(self.connection))
 
