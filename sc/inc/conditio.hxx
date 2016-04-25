@@ -254,7 +254,9 @@ public:
     OUString          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
-    ScTokenArray*   CreateTokenArry( sal_uInt16 nPos ) const;
+                    /** Create a flat copy using ScTokenArray copy-ctor with
+                        shared tokens. */
+    ScTokenArray*   CreateFlatCopiedTokenArray( sal_uInt16 nPos ) const;
 
     void            CompileAll();
     void            CompileXML();

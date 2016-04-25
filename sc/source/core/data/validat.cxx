@@ -811,7 +811,7 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
 
     if( HasSelectionList() )
     {
-        std::unique_ptr<ScTokenArray> pTokArr( CreateTokenArry(0) );
+        std::unique_ptr<ScTokenArray> pTokArr( CreateFlatCopiedTokenArray(0) );
 
         // *** try if formula is a string list ***
 
@@ -864,7 +864,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
         5)  A formula resulting in a cell/range reference or matrix/array.
     */
 
-    std::unique_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
+    std::unique_ptr< ScTokenArray > pTokArr( CreateFlatCopiedTokenArray( 0 ) );
 
     // *** try if formula is a string list ***
 

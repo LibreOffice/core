@@ -1366,7 +1366,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
     return aRet;
 }
 
-ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
+ScTokenArray* ScConditionEntry::CreateFlatCopiedTokenArray( sal_uInt16 nIndex ) const
 {
     assert(nIndex <= 1);
     ScTokenArray* pRet = nullptr;

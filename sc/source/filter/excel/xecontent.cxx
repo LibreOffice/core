@@ -701,12 +701,12 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
 
     XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
-    std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
+    std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateFlatCopiedTokenArray( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
     if (mbFormula2)
     {
-        xScTokArr.reset( mrFormatEntry.CreateTokenArry( 1 ) );
+        xScTokArr.reset( mrFormatEntry.CreateFlatCopiedTokenArray( 1 ) );
         mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
     }
 
@@ -944,7 +944,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         // we need to write the text without quotes
         // we have to actually get the string from
         // the token array for that
-        std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateTokenArry(0));
+        std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateFlatCopiedTokenArray(0));
         if(pTokenArray->GetLen())
             aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString().getString());
     }
@@ -965,14 +965,14 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
-        std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateTokenArry(0));
+        std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateFlatCopiedTokenArray(0));
         rWorksheet->writeEscaped(XclXmlUtils::ToOUString( GetCompileFormulaContext(), mrFormatEntry.GetValidSrcPos(),
                     pTokenArray.get()));
         rWorksheet->endElement( XML_formula );
         if (bFmla2)
         {
             rWorksheet->startElement( XML_formula, FSEND );
-            std::unique_ptr<ScTokenArray> pTokenArray2(mrFormatEntry.CreateTokenArry(1));
+            std::unique_ptr<ScTokenArray> pTokenArray2(mrFormatEntry.CreateFlatCopiedTokenArray(1));
             rWorksheet->writeEscaped(XclXmlUtils::ToOUString( GetCompileFormulaContext(), mrFormatEntry.GetValidSrcPos(),
                         pTokenArray2.get()));
             rWorksheet->endElement( XML_formula );
@@ -1620,7 +1620,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         std::unique_ptr< ScTokenArray > xScTokArr;
 
         // first formula
-        xScTokArr.reset( pValData->CreateTokenArry( 0 ) );
+        xScTokArr.reset( pValData->CreateFlatCopiedTokenArray( 0 ) );
         if( xScTokArr.get() )
         {
             if( pValData->GetDataMode() == SC_VALID_LIST )
@@ -1682,7 +1682,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         }
 
         // second formula
-        xScTokArr.reset( pValData->CreateTokenArry( 1 ) );
+        xScTokArr.reset( pValData->CreateFlatCopiedTokenArray( 1 ) );
         if( xScTokArr.get() )
         {
             if(GetOutput() == EXC_OUTPUT_BINARY)
