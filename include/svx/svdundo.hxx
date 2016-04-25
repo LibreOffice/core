@@ -213,6 +213,8 @@ protected:
     SdrObjGeoData*              pRedoGeo;
     // If we have a group object:
     SdrUndoGroup*               pUndoGroup;
+    /// If we have a table object, should its layout change?
+    bool mbSkipChangeLayout;
 
 public:
     SdrUndoGeoObj(SdrObject& rNewObj);
@@ -222,6 +224,7 @@ public:
     virtual void Redo() override;
 
     virtual OUString GetComment() const override;
+    void SetSkipChangeLayout(bool bOn) { mbSkipChangeLayout=bOn; }
 };
 
 /**

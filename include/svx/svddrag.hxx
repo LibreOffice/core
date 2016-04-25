@@ -55,6 +55,8 @@ protected:
 
     bool      bEndDragChangesAttributes;
     bool      bEndDragChangesGeoAndAttributes;
+    /// Table row drag: table will re-layout itself later.
+    bool      mbEndDragChangesLayout;
     bool      bMouseIsUp;
 
     bool      bShown;    // Xor visible?
@@ -133,6 +135,8 @@ public:
     void         SetEndDragChangesAttributes(bool bOn) { bEndDragChangesAttributes=bOn; }
     bool         IsEndDragChangesGeoAndAttributes() const   { return bEndDragChangesGeoAndAttributes; }
     void         SetEndDragChangesGeoAndAttributes(bool bOn) { bEndDragChangesGeoAndAttributes=bOn; }
+    bool         IsEndDragChangesLayout() const   { return mbEndDragChangesLayout; }
+    void         SetEndDragChangesLayout(bool bOn) { mbEndDragChangesLayout=bOn; }
 
     // Is set by the view and can be evaluated by Obj
     bool         IsMouseDown() const                  { return !bMouseIsUp; }

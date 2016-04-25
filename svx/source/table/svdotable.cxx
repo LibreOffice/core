@@ -206,6 +206,7 @@ public:
     TableStyleSettings maTableStyle;
     Reference< XIndexAccess > mxTableStyle;
     std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
+    bool mbSkipChangeLayout;
 
     void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
 
@@ -262,6 +263,7 @@ sal_Int32 SdrTableObjImpl::lastColCount;
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( nullptr )
 , mpLayouter( nullptr )
+, mbSkipChangeLayout(false)
 {
 }
 
@@ -1950,7 +1952,11 @@ void SdrTableObj::NbcSetLogicRect(const Rectangle& rRect)
     const bool bWidth = maLogicRect.getWidth() != maRect.getWidth();
     const bool bHeight = maLogicRect.getHeight() != maRect.getHeight();
     maRect = maLogicRect;
-    NbcAdjustTextFrameWidthAndHeight( !bHeight, !bWidth );
+    if (mpImpl->mbSkipChangeLayout)
+        // Avoid distributing newly available space between existing cells.
+        NbcAdjustTextFrameWidthAndHeight();
+    else
+        NbcAdjustTextFrameWidthAndHeight(!bHeight, !bWidth);
     SetRectsDirty();
 }
 
@@ -2096,6 +2102,11 @@ WritingMode SdrTableObj::GetWritingMode() const
 void SdrTableObj::AddUndo(SdrUndoAction* pUndo)
 {
     mpImpl->maUndos.push_back(std::unique_ptr<SdrUndoAction>(pUndo));
+}
+
+void SdrTableObj::SetSkipChangeLayout(bool bSkipChangeLayout)
+{
+    mpImpl->mbSkipChangeLayout = bSkipChangeLayout;
 }
 
 
@@ -2341,6 +2352,7 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
                 if( GetModel() && IsInserted() )
                 {
                     rDrag.SetEndDragChangesAttributes(true);
+                    rDrag.SetEndDragChangesLayout(true);
                 }
 
                 mpImpl->DragEdge( pEdgeHdl->IsHorizontalEdge(), pEdgeHdl->GetPointNum(), pEdgeHdl->GetValidDragOffset( rDrag ) );

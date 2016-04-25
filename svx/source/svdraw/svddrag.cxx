@@ -50,6 +50,7 @@ void SdrDragStat::Reset()
     pDragMethod=nullptr;
     bEndDragChangesAttributes=false;
     bEndDragChangesGeoAndAttributes=false;
+    mbEndDragChangesLayout=false;
     bMouseIsUp=false;
     Clear(true);
     aActionRect=Rectangle();
