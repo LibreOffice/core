@@ -235,7 +235,7 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::bean
     aFilterData = findPropertyValue<Sequence< PropertyValue > >(aDescriptor, "FilterData", aFilterData);
 
     // #i56084# check if selection shall be exported only; if yes, get the selected page and the selection itself
-    if(findPropertyValue<sal_Bool>(aDescriptor, "SelectionOnly", false))
+    if(findPropertyValue<bool>(aDescriptor, "SelectionOnly", false))
     {
         Reference< XDesktop2 > xDesktop(Desktop::create(mxContext));
 
@@ -283,7 +283,7 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::bean
     }
 
     // #i56084# no multiple files (suppress) when selection since selection can only export a single page
-    if (!mbExportSelection && findPropertyValue<sal_Bool>(aFilterData, "ExportMultipleFiles", false ))
+    if (!mbExportSelection && findPropertyValue<bool>(aFilterData, "ExportMultipleFiles", false ))
     {
         ExportAsMultipleFiles(aDescriptor);
     }
@@ -369,7 +369,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
     // AS: Only export the background config if we're exporting all of the pages, otherwise we'll
     //  screw it up.
-    bool bExportAll = findPropertyValue<sal_Bool>(aFilterData, "ExportAll", true);
+    bool bExportAll = findPropertyValue<bool>(aFilterData, "ExportAll", true);
     if (bExportAll)
     {
         osl_removeFile(fullpath.pData);
@@ -387,7 +387,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
         mxSelectedShapes,
         mxSelectedDrawPage,
         findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
-        findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
+        findPropertyValue<bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
     if ( mxStatusIndicator.is() )
@@ -404,17 +404,17 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
             continue;
 
         // AS: Export the background, the background objects, and then the slide contents.
-        if (bExportAll || findPropertyValue<sal_Bool>(aFilterData, "ExportBackgrounds", true))
+        if (bExportAll || findPropertyValue<bool>(aFilterData, "ExportBackgrounds", true))
         {
             backgroundfilename = exportBackground(aFlashExporter, xDrawPage, swfdirpath, nPage, "b");
         }
 
-        if (bExportAll || findPropertyValue<sal_Bool>(aFilterData, "ExportBackgroundObjects", true))
+        if (bExportAll || findPropertyValue<bool>(aFilterData, "ExportBackgroundObjects", true))
         {
             objectsfilename = exportBackground(aFlashExporter, xDrawPage, swfdirpath, nPage, "o");
         }
 
-        if (bExportAll || findPropertyValue<sal_Bool>(aFilterData, "ExportSlideContents", true))
+        if (bExportAll || findPropertyValue<bool>(aFilterData, "ExportSlideContents", true))
         {
             fullpath = swfdirpath + STR("/slide") + VAL(nPage+1) + STR("p.swf");
 
@@ -464,7 +464,7 @@ bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDes
         mxSelectedShapes,
         mxSelectedDrawPage,
         findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
-        findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
+        findPropertyValue<bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     return aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
 }
