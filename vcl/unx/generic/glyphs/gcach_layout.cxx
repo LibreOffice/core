@@ -553,10 +553,12 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 // * If the font has no GDEF table, we just check if the glyph has
                 //   zero advance width, but this is stupid and can be wrong. A
                 //   better way would to check the character's Unicode combining
-                //   class, but unfortunately glyph gives combining marks the
+                //   class, but unfortunately HarfBuzz gives combining marks the
                 //   cluster value of its base character, so nCharPos will be
                 //   pointing to the wrong character (but HarfBuzz might change
                 //   this in the future).
+                //   Newer versions of HarfBuzz can control this behaviour with
+                //   hb_buffer_set_cluster_level().
                 bool bDiacritic = false;
                 if (hb_ot_layout_has_glyph_classes(mpHbFace))
                 {
