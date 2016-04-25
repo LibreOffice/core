@@ -167,7 +167,7 @@ namespace comphelper
             pComparator.reset( new ScalarPredicateLess< sal_Unicode >() );
             break;
         case TypeClass_BOOLEAN:
-            pComparator.reset( new ScalarPredicateLess< sal_Bool >() );
+            pComparator.reset( new ScalarPredicateLess< bool >() );
             break;
         case TypeClass_BYTE:
             pComparator.reset( new ScalarPredicateLess< sal_Int8 >() );
