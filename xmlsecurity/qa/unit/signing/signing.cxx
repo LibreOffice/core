@@ -76,6 +76,8 @@ public:
     void testOOXMLRemove();
     /// Test removing all signatures from a document.
     void testOOXMLRemoveAll();
+    void test96097Calc();
+    void test96097Doc();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -88,10 +90,13 @@ public:
     CPPUNIT_TEST(testOOXMLAppend);
     CPPUNIT_TEST(testOOXMLRemove);
     CPPUNIT_TEST(testOOXMLRemoveAll);
+    CPPUNIT_TEST(test96097Calc);
+    CPPUNIT_TEST(test96097Doc);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     void createDoc(const OUString& rURL = OUString());
+    void createCalc(const OUString& rURL = OUString());
     uno::Reference<security::XCertificate> getCertificate(XMLSignatureHelper& rSignatureHelper);
 };
 
@@ -123,6 +128,16 @@ void SigningTest::createDoc(const OUString& rURL)
         mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     else
         mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument");
+}
+
+void SigningTest::createCalc(const OUString& rURL)
+{
+    if (mxComponent.is())
+        mxComponent->dispose();
+    if (rURL.isEmpty())
+        mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.sheet.SpreadsheetDocument");
+    else
+        mxComponent = loadFromDesktop(rURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 uno::Reference<security::XCertificate> SigningTest::getCertificate(XMLSignatureHelper& rSignatureHelper)
@@ -362,6 +377,102 @@ void SigningTest::testOOXMLBroken()
     CPPUNIT_ASSERT(pObjectShell);
     // This was SignatureState::NOTVALIDATED/PARTIAL_OK as we did not validate manifest references.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
+}
+
+void SigningTest::test96097Calc()
+{
+    createCalc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf96097.ods");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document base model", pBaseModel);
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pObjectShell);
+
+    SignatureState nActual = pObjectShell->GetScriptingSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(
+             static_cast<std::underlying_type<SignatureState>::type>(nActual))
+         .getStr()),
+        (nActual == SignatureState::OK
+         || nActual == SignatureState::NOTVALIDATED
+         || nActual == SignatureState::INVALID));
+
+
+    uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDocStorable.is());
+
+    // Save a copy
+    utl::TempFile aTempFileSaveCopy;
+    aTempFileSaveCopy.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> descSaveACopy(2);
+    descSaveACopy[0].Name = "SaveACopy";
+    descSaveACopy[0].Value <<= uno::makeAny(true);
+    descSaveACopy[1].Name = "FilterName";
+    descSaveACopy[1].Value <<= OUString("calc8");
+    xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);
+
+    try
+    {
+        // Save As
+        utl::TempFile aTempFileSaveAs;
+        aTempFileSaveAs.EnableKillingFile();
+        uno::Sequence<beans::PropertyValue> descSaveAs(1);
+        descSaveAs[0].Name = "FilterName";
+        descSaveAs[0].Value <<= OUString("calc8");
+        xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
+    }
+    catch(...)
+    {
+        CPPUNIT_FAIL("Fail to save as the document");
+    }
+}
+
+void SigningTest::test96097Doc()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf96097.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+
+    SignatureState nActual = pObjectShell->GetScriptingSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(
+             static_cast<std::underlying_type<SignatureState>::type>(nActual))
+         .getStr()),
+        (nActual == SignatureState::OK
+         || nActual == SignatureState::NOTVALIDATED
+         || nActual == SignatureState::INVALID));
+
+
+
+    uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDocStorable.is());
+
+    // Save a copy
+    utl::TempFile aTempFileSaveCopy;
+    aTempFileSaveCopy.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> descSaveACopy(2);
+    descSaveACopy[0].Name = "SaveACopy";
+    descSaveACopy[0].Value <<= uno::makeAny(true);
+    descSaveACopy[1].Name = "FilterName";
+    descSaveACopy[1].Value <<= OUString("writer8");
+    xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);
+
+    try
+    {
+        // Save As
+        utl::TempFile aTempFileSaveAs;
+        aTempFileSaveAs.EnableKillingFile();
+        uno::Sequence<beans::PropertyValue> descSaveAs(1);
+        descSaveAs[0].Name = "FilterName";
+        descSaveAs[0].Value <<= OUString("writer8");
+        xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
+    }
+    catch(...)
+    {
+        CPPUNIT_FAIL("Fail to save as the document");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SigningTest);
