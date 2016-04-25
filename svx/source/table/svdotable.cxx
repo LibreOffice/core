@@ -1872,7 +1872,7 @@ void SdrTableObj::NbcSetLogicRect(const Rectangle& rRect)
     maRect = maLogicRect;
     if (mpImpl->mbSkipChangeLayout)
         // Avoid distributing newly available space between existing cells.
-        NbcAdjustTextFrameWidthAndHeight(true, true);
+        NbcAdjustTextFrameWidthAndHeight();
     else
         NbcAdjustTextFrameWidthAndHeight(!bHeight, !bWidth);
     SetRectsDirty();
