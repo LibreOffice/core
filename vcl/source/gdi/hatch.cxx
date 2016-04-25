@@ -23,7 +23,6 @@
 #include <vcl/hatch.hxx>
 
 ImplHatch::ImplHatch() :
-    mnRefCount  ( 1 ),
     maColor     ( COL_BLACK ),
     meStyle     ( HATCH_SINGLE ),
     mnDistance  ( 1 ),
@@ -32,7 +31,6 @@ ImplHatch::ImplHatch() :
 }
 
 ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
-    mnRefCount  ( 1 ),
     maColor     ( rImplHatch.maColor ),
     meStyle     ( rImplHatch.meStyle ),
     mnDistance  ( rImplHatch.mnDistance ),
@@ -40,21 +38,27 @@ ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
 {
 }
 
-Hatch::Hatch()
+bool ImplHatch::operator==( const ImplHatch& rImplHatch ) const
 {
-    mpImplHatch = new ImplHatch;
+    if( maColor == rImplHatch.maColor &&
+        meStyle == rImplHatch.meStyle &&
+        mnDistance == rImplHatch.mnDistance &&
+        mnAngle == rImplHatch.mnAngle)
+        return true;
+    return false;
 }
 
-Hatch::Hatch( const Hatch& rHatch )
+Hatch::Hatch() : mpImplHatch()
 {
-    mpImplHatch = rHatch.mpImplHatch;
-    mpImplHatch->mnRefCount++;
+}
+
+Hatch::Hatch( const Hatch& rHatch ) : mpImplHatch( rHatch.mpImplHatch )
+{
 }
 
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
-              long nDistance, sal_uInt16 nAngle10 )
+              long nDistance, sal_uInt16 nAngle10 ) : mpImplHatch()
 {
-    mpImplHatch = new ImplHatch;
     mpImplHatch->maColor = rColor;
     mpImplHatch->meStyle = eStyle;
     mpImplHatch->mnDistance = nDistance;
@@ -63,94 +67,58 @@ Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
 
 Hatch::~Hatch()
 {
-    if( !( --mpImplHatch->mnRefCount ) )
-        delete mpImplHatch;
 }
 
 Hatch& Hatch::operator=( const Hatch& rHatch )
 {
-
-    rHatch.mpImplHatch->mnRefCount++;
-
-    if( !( --mpImplHatch->mnRefCount ) )
-        delete mpImplHatch;
-
     mpImplHatch = rHatch.mpImplHatch;
     return *this;
 }
 
 bool Hatch::operator==( const Hatch& rHatch ) const
 {
-
-    return( mpImplHatch == rHatch.mpImplHatch ||
-            ( mpImplHatch->maColor == rHatch.mpImplHatch->maColor &&
-              mpImplHatch->meStyle == rHatch.mpImplHatch->meStyle &&
-              mpImplHatch->mnDistance == rHatch.mpImplHatch->mnDistance &&
-              mpImplHatch->mnAngle == rHatch.mpImplHatch->mnAngle ) );
+    return mpImplHatch == rHatch.mpImplHatch;
 }
 
-void Hatch::ImplMakeUnique()
-{
-    if( mpImplHatch->mnRefCount != 1 )
-    {
-        if( mpImplHatch->mnRefCount )
-            mpImplHatch->mnRefCount--;
-
-        mpImplHatch = new ImplHatch( *mpImplHatch );
-    }
-}
 
 void Hatch::SetColor( const Color& rColor )
 {
-    ImplMakeUnique();
     mpImplHatch->maColor = rColor;
 }
 
 void Hatch::SetDistance( long nDistance )
 {
-    ImplMakeUnique();
     mpImplHatch->mnDistance = nDistance;
 }
 
 void Hatch::SetAngle( sal_uInt16 nAngle10 )
 {
-    ImplMakeUnique();
     mpImplHatch->mnAngle = nAngle10;
 }
 
-SvStream& ReadImplHatch( SvStream& rIStm, ImplHatch& rImplHatch )
+SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16;
     sal_Int32       nTmp32(0);
 
-    rIStm.ReadUInt16( nTmp16 ); rImplHatch.meStyle = (HatchStyle) nTmp16;
-    ReadColor( rIStm, rImplHatch.maColor ).ReadInt32( nTmp32 ).ReadUInt16( rImplHatch.mnAngle );
-    rImplHatch.mnDistance = nTmp32;
+    rIStm.ReadUInt16( nTmp16 ); rHatch.mpImplHatch->meStyle = (HatchStyle) nTmp16;
+    ReadColor( rIStm, rHatch.mpImplHatch->maColor ).ReadInt32( nTmp32 ).ReadUInt16(
+      rHatch.mpImplHatch->mnAngle );
+    rHatch.mpImplHatch->mnDistance = nTmp32;
 
     return rIStm;
 }
 
-SvStream& WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch )
+SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( rImplHatch.meStyle );
-    WriteColor( rOStm, rImplHatch.maColor );
-    rOStm.WriteInt32( rImplHatch.mnDistance ).WriteUInt16( rImplHatch.mnAngle );
+    rOStm.WriteUInt16( rHatch.mpImplHatch->meStyle );
+    WriteColor( rOStm, rHatch.mpImplHatch->maColor );
+    rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle );
 
     return rOStm;
-}
-
-SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
-{
-    rHatch.ImplMakeUnique();
-    return ReadImplHatch( rIStm, *rHatch.mpImplHatch );
-}
-
-SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
-{
-    return WriteImplHatch( rOStm, *rHatch.mpImplHatch );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
