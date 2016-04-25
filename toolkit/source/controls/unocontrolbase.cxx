@@ -138,7 +138,7 @@ template <typename T> T UnoControlBase::ImplGetPropertyValueClass( sal_uInt16 nP
 
 bool UnoControlBase::ImplGetPropertyValue_BOOL( sal_uInt16 nProp )
 {
-    return ImplGetPropertyValuePOD<sal_Bool>(nProp);
+    return ImplGetPropertyValuePOD<bool>(nProp);
 }
 
 sal_Int16 UnoControlBase::ImplGetPropertyValue_INT16( sal_uInt16 nProp )
