@@ -14,6 +14,7 @@ import sys
 import time
 import uuid
 import datetime
+import traceback
 try:
     from urllib.parse import quote
 except ImportError:
@@ -194,6 +195,18 @@ def simpleInvoke(connection, test):
     finally:
         connection.postTest()
 
+def logExceptionInvoke(connection, test):
+    try:
+        connection.preTest()
+        test.run(connection.getContext())
+    except KeyboardInterrupt:
+        raise # Ctrl+C should work
+    except:
+        estr = traceback.format_exc()
+        log("logExceptionInvoke: FAILED with exception:\n" + estr)
+    finally:
+        connection.postTest()
+
 def retryInvoke(connection, test):
     tries = 5
     while tries > 0:
@@ -308,7 +321,7 @@ def runLoadPrintFileTests(opts, dirs, suffix, reference):
     tests = (LoadPrintFileTest(file, prtsuffix) for file in files)
     connection = PersistentConnection(opts)
 #    connection = PerTestConnection(opts)
-    runConnectionTests(connection, simpleInvoke, tests)
+    runConnectionTests(connection, logExceptionInvoke, tests)
 
 def mkImages(file, resolution):
     argv = [ "gs", "-r" + resolution, "-sOutputFile=" + file + ".%04d.jpeg",
