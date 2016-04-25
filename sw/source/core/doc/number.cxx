@@ -1227,7 +1227,7 @@ namespace numfunc
                         case 1:
                         case 2:
                         {
-                            sal_uInt8 nTmp = 0;
+                            sal_Int16 nTmp = 0;
                             pValues[nProp] >>= nTmp;
                             if ( nProp == 1 )
                                 meFontWeight = static_cast<FontWeight>(nTmp);
