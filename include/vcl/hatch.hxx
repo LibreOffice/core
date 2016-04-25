@@ -24,33 +24,29 @@
 #include <vcl/dllapi.h>
 
 #include <vcl/vclenum.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 
 class SvStream;
 
 struct ImplHatch
 {
-    sal_uInt32          mnRefCount;
     Color               maColor;
     HatchStyle          meStyle;
     long                mnDistance;
     sal_uInt16          mnAngle;
 
-                        ImplHatch();
-                        ImplHatch( const ImplHatch& rImplHatch );
+    ImplHatch();
+    ImplHatch( const ImplHatch& rImplHatch );
+
+    bool operator==( const ImplHatch& rImplHatch ) const;
 
     friend SvStream&    ReadImplHatch( SvStream& rIStm, ImplHatch& rImplHatch );
     friend SvStream&    WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch );
 };
 
-
 class VCL_DLLPUBLIC Hatch
 {
-private:
-
-    ImplHatch*          mpImplHatch;
-    SAL_DLLPRIVATE void ImplMakeUnique();
-
 public:
 
                     Hatch();
@@ -75,6 +71,9 @@ public:
 
     friend VCL_DLLPUBLIC SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
     friend VCL_DLLPUBLIC SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
+
+private:
+    o3tl::cow_wrapper< ImplHatch >          mpImplHatch;
 };
 
 #endif // INCLUDED_VCL_HATCH_HXX
