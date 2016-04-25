@@ -38,6 +38,9 @@ except ImportError:
 
 ### utilities ###
 
+def log(*args):
+    print(*args, flush=True)
+
 def partition(list, pred):
     left = []
     right = []
@@ -54,7 +57,7 @@ def filelist(dir, suffix):
     if not(dir[-1] == "/"):
         dir += "/"
     files = [dir + f for f in os.listdir(dir)]
-#    print(files)
+#    log(files)
     return [f for f in files
                     if os.path.isfile(f) and os.path.splitext(f)[1] == suffix]
 
@@ -105,32 +108,32 @@ class OfficeConnection:
         xUnoResolver = xLocalContext.ServiceManager.createInstanceWithContext(
                 "com.sun.star.bridge.UnoUrlResolver", xLocalContext)
         url = "uno:" + socket + ";urp;StarOffice.ComponentContext"
-        print("OfficeConnection: connecting to: " + url)
+        log("OfficeConnection: connecting to: " + url)
         while True:
             try:
                 xContext = xUnoResolver.resolve(url)
                 return xContext
 #            except com.sun.star.connection.NoConnectException
             except pyuno.getClass("com.sun.star.connection.NoConnectException"):
-                print("NoConnectException: sleeping...")
+                log("NoConnectException: sleeping...")
                 time.sleep(1)
 
     def tearDown(self):
         if self.soffice:
             if self.xContext:
                 try:
-                    print("tearDown: calling terminate()...")
+                    log("tearDown: calling terminate()...")
                     xMgr = self.xContext.ServiceManager
                     xDesktop = xMgr.createInstanceWithContext(
                             "com.sun.star.frame.Desktop", self.xContext)
                     xDesktop.terminate()
-                    print("...done")
+                    log("...done")
 #                except com.sun.star.lang.DisposedException:
                 except pyuno.getClass("com.sun.star.beans.UnknownPropertyException"):
-                    print("caught UnknownPropertyException")
+                    log("caught UnknownPropertyException")
                     pass # ignore, also means disposed
                 except pyuno.getClass("com.sun.star.lang.DisposedException"):
-                    print("caught DisposedException")
+                    log("caught DisposedException")
                     pass # ignore
             else:
                 self.soffice.terminate()
@@ -205,7 +208,7 @@ def retryInvoke(connection, test):
         except KeyboardInterrupt:
             raise # Ctrl+C should work
         except:
-            print("retryInvoke: caught exception")
+            log("retryInvoke: caught exception")
     raise Exception("FAILED retryInvoke")
 
 def runConnectionTests(connection, invoker, tests):
@@ -220,7 +223,7 @@ class EventListener(XDocumentEventListener,unohelper.Base):
     def __init__(self):
         self.layoutFinished = False
     def documentEventOccured(self, event):
-#        print(str(event.EventName))
+#        log(str(event.EventName))
         if event.EventName == "OnLayoutFinished":
             self.layoutFinished = True
     def disposing(event):
@@ -250,14 +253,14 @@ def loadFromURL(xContext, url):
         while time_ < 30:
             if xListener.layoutFinished:
                 return xDoc
-            print("delaying...")
+            log("delaying...")
             time_ += 1
             time.sleep(1)
-        print("timeout: no OnLayoutFinished received")
+        log("timeout: no OnLayoutFinished received")
         return xDoc
     except:
         if xDoc:
-            print("CLOSING")
+            log("CLOSING")
             xDoc.close(True)
         raise
     finally:
@@ -270,13 +273,13 @@ def printDoc(xContext, xDoc, url):
     uno.invoke(xDoc, "print", (tuple(props),)) # damn, that's a keyword!
     busy = True
     while busy:
-        print("printing...")
+        log("printing...")
         time.sleep(1)
         prt = xDoc.getPrinter()
         for value in prt:
             if value.Name == "IsBusy":
                 busy = value.Value
-    print("...done printing")
+    log("...done printing")
 
 class LoadPrintFileTest:
     def __init__(self, file, prtsuffix):
@@ -284,7 +287,7 @@ class LoadPrintFileTest:
         self.prtsuffix = prtsuffix
     def run(self, xContext):
         start = datetime.datetime.now()
-        print("Time: " + str(start) + " Loading document: " + self.file)
+        log("Time: " + str(start) + " Loading document: " + self.file)
         xDoc = None
         try:
             url = "file://" + quote(self.file)
@@ -294,7 +297,7 @@ class LoadPrintFileTest:
             if xDoc:
                 xDoc.close(True)
             end = datetime.datetime.now()
-            print("...done with: " + self.file + " in: " + str(end - start))
+            log("...done with: " + self.file + " in: " + str(end - start))
 
 def runLoadPrintFileTests(opts, dirs, suffix, reference):
     if reference:
@@ -319,7 +322,7 @@ def mkAllImages(dirs, suffix, resolution, reference):
         prtsuffix = ".pdf"
     for dir in dirs:
         files = filelist(dir, suffix)
-        print(files)
+        log(files)
         for f in files:
             mkImages(f + prtsuffix, resolution)
 
@@ -330,8 +333,8 @@ def identify(imagefile):
     if process.wait() != 0:
         raise Exception("identify failed")
     if result.partition(b"\n")[0] != b"1":
-        print("identify result: " + result.decode('utf-8'))
-        print("DIFFERENCE in " + imagefile)
+        log("identify result: " + result.decode('utf-8'))
+        log("DIFFERENCE in " + imagefile)
 
 def compose(refimagefile, imagefile, diffimagefile):
     argv = [ "composite", "-compose", "difference",
@@ -343,24 +346,24 @@ def compareImages(file):
                    if f.startswith(file)]
 #    refimages = [f for f in filelist(os.path.dirname(file), ".jpeg")
 #                   if f.startswith(file + ".reference")]
-#    print("compareImages: allimages:" + str(allimages))
+#    log("compareImages: allimages:" + str(allimages))
     (refimages, images) = partition(sorted(allimages),
             lambda f: f.startswith(file + ".pdf.reference"))
-#    print("compareImages: images" + str(images))
+#    log("compareImages: images" + str(images))
     for (image, refimage) in zip(images, refimages):
         compose(image, refimage, image + ".diff")
         identify(image + ".diff")
     if (len(images) != len(refimages)):
-        print("DIFFERENT NUMBER OF IMAGES FOR: " + file)
+        log("DIFFERENT NUMBER OF IMAGES FOR: " + file)
 
 def compareAllImages(dirs, suffix):
-    print("compareAllImages...")
+    log("compareAllImages...")
     for dir in dirs:
         files = filelist(dir, suffix)
-#        print("compareAllImages:" + str(files))
+#        log("compareAllImages:" + str(files))
         for f in files:
             compareImages(f)
-    print("...compareAllImages done")
+    log("...compareAllImages done")
 
 
 def parseArgs(argv):
