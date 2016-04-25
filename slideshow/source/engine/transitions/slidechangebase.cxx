@@ -446,12 +446,12 @@ void SlideChangeBase::viewsChanged()
     if( mbFinished )
         return;
 
-    for( auto& pView : maViewData )
+    for( auto& rView : maViewData )
     {
         // clear stale info (both bitmaps and sprites prolly need a
         // resize)
-        clearViewEntry( pView );
-        addSprites( pView );
+        clearViewEntry( rView );
+        addSprites( rView );
     }
 }
 

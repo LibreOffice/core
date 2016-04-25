@@ -3808,8 +3808,7 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole() throw (css::uno::R
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 {
     uno::Reference< css::beans::XPropertySet > xPortion = CreateUnoPortion( 0, 0 );
-    OUString pString = "ParaStyleName";
-    uno::Any styleAny = xPortion->getPropertyValue( pString );
+    uno::Any styleAny = xPortion->getPropertyValue( "ParaStyleName" );
     OUString sValue;
     if (styleAny >>= sValue)
     {

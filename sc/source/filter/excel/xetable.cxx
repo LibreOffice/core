@@ -2147,20 +2147,20 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     else
     {
         comphelper::ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
-        std::vector<RowFinalizeTask*> pTasks(nThreads, nullptr);
+        std::vector<RowFinalizeTask*> aTasks(nThreads, nullptr);
         for ( size_t i = 0; i < nThreads; i++ )
-            pTasks[ i ] = new RowFinalizeTask( rColXFIndexes, i == 0 );
+            aTasks[ i ] = new RowFinalizeTask( rColXFIndexes, i == 0 );
 
         RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
         size_t nIdx = 0;
         for ( itr = itrBeg; itr != itrEnd; ++itr, ++nIdx )
-            pTasks[ nIdx % nThreads ]->push_back( itr->second.get() );
+            aTasks[ nIdx % nThreads ]->push_back( itr->second.get() );
 
         for ( size_t i = 1; i < nThreads; i++ )
-            rPool.pushTask( pTasks[ i ] );
+            rPool.pushTask( aTasks[ i ] );
 
         // Progress bar updates must be synchronous to avoid deadlock
-        pTasks[0]->doWork();
+        aTasks[0]->doWork();
 
         rPool.waitUntilEmpty();
     }

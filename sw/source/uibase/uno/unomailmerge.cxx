@@ -418,7 +418,7 @@ public:
     }
     ~MailMergeExecuteFinalizer()
     {
-        osl::MutexGuard pMgrGuard( GetMailMergeMutex() );
+        osl::MutexGuard aMgrGuard( GetMailMergeMutex() );
         m_pMailMerge->m_pMgr = nullptr;
     }
 
@@ -836,7 +836,7 @@ void SAL_CALL SwXMailMerge::cancel() throw (css::uno::RuntimeException, std::exc
 {
     // Cancel may be called from a second thread, so this protects from m_pMgr
     /// cleanup in the execute function.
-    osl::MutexGuard pMgrGuard( GetMailMergeMutex() );
+    osl::MutexGuard aMgrGuard( GetMailMergeMutex() );
     if (m_pMgr)
         m_pMgr->MergeCancel();
 }

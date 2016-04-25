@@ -483,38 +483,38 @@ throw ( css::uno::RuntimeException, std::exception )
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
-                css::uno::Type pType = rEvent.State.getValueType();
+                css::uno::Type aType = rEvent.State.getValueType();
 
-                if ( pType == cppu::UnoType<void>::get() )
+                if ( aType == cppu::UnoType<void>::get() )
                 {
                     pItem = new SfxVoidItem( nSlotId );
                     eState = SfxItemState::UNKNOWN;
                 }
-                else if ( pType == cppu::UnoType<bool>::get() )
+                else if ( aType == cppu::UnoType<bool>::get() )
                 {
                     bool bTemp = false;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotId, bTemp );
                 }
-                else if ( pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
+                else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
                 {
                     sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotId, nTemp );
                 }
-                else if ( pType == cppu::UnoType<sal_uInt32>::get() )
+                else if ( aType == cppu::UnoType<sal_uInt32>::get() )
                 {
                     sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
-                else if ( pType == cppu::UnoType<OUString>::get() )
+                else if ( aType == cppu::UnoType<OUString>::get() )
                 {
                     OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
+                else if ( aType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
@@ -527,7 +527,7 @@ throw ( css::uno::RuntimeException, std::exception )
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == cppu::UnoType< css::frame::status::Visibility>::get() )
+                else if ( aType == cppu::UnoType< css::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;
@@ -825,38 +825,38 @@ throw ( css::uno::RuntimeException, std::exception )
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
-                css::uno::Type pType = rEvent.State.getValueType();
+                css::uno::Type aType = rEvent.State.getValueType();
 
-                if ( pType == cppu::UnoType<void>::get() )
+                if ( aType == cppu::UnoType<void>::get() )
                 {
                     pItem = new SfxVoidItem( nSlotId );
                     eState = SfxItemState::UNKNOWN;
                 }
-                else if ( pType == cppu::UnoType<bool>::get() )
+                else if ( aType == cppu::UnoType<bool>::get() )
                 {
                     bool bTemp = false;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotId, bTemp );
                 }
-                else if ( pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
+                else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get())
                 {
                     sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotId, nTemp );
                 }
-                else if ( pType == cppu::UnoType<sal_uInt32>::get() )
+                else if ( aType == cppu::UnoType<sal_uInt32>::get() )
                 {
                     sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
-                else if ( pType == cppu::UnoType<OUString>::get() )
+                else if ( aType == cppu::UnoType<OUString>::get() )
                 {
                     OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
+                else if ( aType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
@@ -869,7 +869,7 @@ throw ( css::uno::RuntimeException, std::exception )
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == cppu::UnoType< css::frame::status::Visibility>::get() )
+                else if ( aType == cppu::UnoType< css::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;

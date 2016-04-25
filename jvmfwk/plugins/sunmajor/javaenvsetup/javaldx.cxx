@@ -26,7 +26,7 @@
 #include "osl/thread.h"
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
-#include "jvmfwk/framework.h"
+#include "jvmfwk/framework.hxx"
 
 
 static bool hasOption(char const * szOption, int argc, char** argv);
@@ -51,7 +51,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             fprintf(stdout, HELP_TEXT);// default
             return 0;
         }
-        sal_Bool bEnabled = sal_False;
+        sal_Bool bEnabled = false;
         javaFrameworkError errcode = jfw_getEnabled( & bEnabled);
         if (errcode == JFW_E_NONE && !bEnabled)
         {
@@ -64,8 +64,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        JavaInfo * pInfo = nullptr;
-        errcode = jfw_getSelectedJRE( & pInfo);
+        jfw::JavaInfoGuard aInfo;
+        errcode = jfw_getSelectedJRE(&aInfo.info);
 
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
         {
@@ -73,19 +73,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        if (pInfo == nullptr)
+        if (aInfo.info == nullptr)
         {
-            if (!findAndSelect(&pInfo))
+            if (!findAndSelect(&aInfo.info))
                 return -1;
         }
         else
         {
             //check if the JRE was not uninstalled
-            sal_Bool bExist = sal_False;
-            errcode = jfw_existJRE(pInfo, &bExist);
+            sal_Bool bExist = false;
+            errcode = jfw_existJRE(aInfo.info, &bExist);
             if (errcode == JFW_E_NONE)
             {
-                if (!bExist && !findAndSelect(&pInfo))
+                if (!bExist && !findAndSelect(&aInfo.info))
                     return -1;
             }
             else
@@ -95,9 +95,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
         }
 
-        OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
+        OString sPaths = getLD_LIBRARY_PATH(aInfo.info->arVendorData);
         fprintf(stdout, "%s\n", sPaths.getStr());
-        jfw_freeJavaInfo(pInfo);
     }
     catch (const std::exception&)
     {
@@ -151,7 +150,6 @@ static bool findAndSelect(JavaInfo ** ppInfo)
     }
     return true;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

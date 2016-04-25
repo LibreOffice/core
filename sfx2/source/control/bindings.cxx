@@ -1936,27 +1936,27 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                 else
                 {
                     css::uno::Any aAny = pBind->GetStatus().State;
-                    css::uno::Type pType = aAny.getValueType();
+                    css::uno::Type aType = aAny.getValueType();
 
-                    if ( pType == cppu::UnoType<bool>::get() )
+                    if ( aType == cppu::UnoType<bool>::get() )
                     {
                         bool bTemp = false;
                         aAny >>= bTemp ;
                         pItem = new SfxBoolItem( nSlot, bTemp );
                     }
-                    else if ( pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
+                    else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
                     {
                         sal_uInt16 nTemp = 0;
                         aAny >>= nTemp ;
                         pItem = new SfxUInt16Item( nSlot, nTemp );
                     }
-                    else if ( pType == cppu::UnoType<sal_uInt32>::get() )
+                    else if ( aType == cppu::UnoType<sal_uInt32>::get() )
                     {
                         sal_uInt32 nTemp = 0;
                         aAny >>= nTemp ;
                         pItem = new SfxUInt32Item( nSlot, nTemp );
                     }
-                    else if ( pType == cppu::UnoType<OUString>::get() )
+                    else if ( aType == cppu::UnoType<OUString>::get() )
                     {
                         OUString sTemp ;
                         aAny >>= sTemp ;

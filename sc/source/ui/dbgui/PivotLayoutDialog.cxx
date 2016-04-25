@@ -561,25 +561,25 @@ void ScPivotLayoutDialog::ApplyLabelData(ScDPSaveData& rSaveData)
 
     for (it = rLabelDataVector.begin(); it != rLabelDataVector.end(); ++it)
     {
-        const ScDPLabelData& pLabelData = *it->get();
+        const ScDPLabelData& rLabelData = *it->get();
 
-        OUString aUnoName = ScDPUtil::createDuplicateDimensionName(pLabelData.maName, pLabelData.mnDupCount);
+        OUString aUnoName = ScDPUtil::createDuplicateDimensionName(rLabelData.maName, rLabelData.mnDupCount);
         ScDPSaveDimension* pSaveDimensions = rSaveData.GetExistingDimensionByName(aUnoName);
 
         if (pSaveDimensions == nullptr)
             continue;
 
-        pSaveDimensions->SetUsedHierarchy(pLabelData.mnUsedHier);
-        pSaveDimensions->SetShowEmpty(pLabelData.mbShowAll);
-        pSaveDimensions->SetRepeatItemLabels(pLabelData.mbRepeatItemLabels);
-        pSaveDimensions->SetSortInfo(&pLabelData.maSortInfo);
-        pSaveDimensions->SetLayoutInfo(&pLabelData.maLayoutInfo);
-        pSaveDimensions->SetAutoShowInfo(&pLabelData.maShowInfo);
+        pSaveDimensions->SetUsedHierarchy(rLabelData.mnUsedHier);
+        pSaveDimensions->SetShowEmpty(rLabelData.mbShowAll);
+        pSaveDimensions->SetRepeatItemLabels(rLabelData.mbRepeatItemLabels);
+        pSaveDimensions->SetSortInfo(&rLabelData.maSortInfo);
+        pSaveDimensions->SetLayoutInfo(&rLabelData.maLayoutInfo);
+        pSaveDimensions->SetAutoShowInfo(&rLabelData.maShowInfo);
 
-        bool bManualSort = (pLabelData.maSortInfo.Mode == DataPilotFieldSortMode::MANUAL);
+        bool bManualSort = (rLabelData.maSortInfo.Mode == DataPilotFieldSortMode::MANUAL);
 
         std::vector<ScDPLabelData::Member>::const_iterator itMember;
-        for (itMember = pLabelData.maMembers.begin(); itMember != pLabelData.maMembers.end(); ++itMember)
+        for (itMember = rLabelData.maMembers.begin(); itMember != rLabelData.maMembers.end(); ++itMember)
         {
             const ScDPLabelData::Member& rLabelMember = *itMember;
             ScDPSaveMember* pMember = pSaveDimensions->GetMemberByName(rLabelMember.maName);

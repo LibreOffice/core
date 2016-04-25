@@ -4232,9 +4232,9 @@ namespace {
             {
                 mrTextNode.RemoveFromList();
 
-                const SwNumRuleItem& pNumRuleItem =
+                const SwNumRuleItem& rNumRuleItem =
                                 dynamic_cast<const SwNumRuleItem&>(pItem);
-                if ( !pNumRuleItem.GetValue().isEmpty() )
+                if ( !rNumRuleItem.GetValue().isEmpty() )
                 {
                     mbAddTextNodeToList = true;
                     // #i105562#
@@ -4247,12 +4247,12 @@ namespace {
             // handle RES_PARATR_LIST_ID
             case RES_PARATR_LIST_ID:
             {
-                const SfxStringItem& pListIdItem =
+                const SfxStringItem& rListIdItem =
                                         dynamic_cast<const SfxStringItem&>(pItem);
-                OSL_ENSURE( pListIdItem.GetValue().getLength() > 0,
+                OSL_ENSURE( rListIdItem.GetValue().getLength() > 0,
                         "<HandleSetAttrAtTextNode(..)> - empty list id attribute not excepted. Serious defect." );
                 const OUString sListIdOfTextNode = rTextNode.GetListId();
-                if ( pListIdItem.GetValue() != sListIdOfTextNode )
+                if ( rListIdItem.GetValue() != sListIdOfTextNode )
                 {
                     mbAddTextNodeToList = true;
                     if ( mrTextNode.IsInList() )

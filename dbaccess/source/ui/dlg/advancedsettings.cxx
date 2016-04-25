@@ -196,9 +196,9 @@ namespace dbaui
             { std::addressof(m_pRespectDriverResultSetType),   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false }
         };
 
-        for ( const BooleanSettingDesc& pCopy : aSettings )
+        for ( const BooleanSettingDesc& rDesc : aSettings )
         {
-            m_aBooleanSettings.push_back( pCopy );
+            m_aBooleanSettings.push_back( rDesc );
         }
     }
 

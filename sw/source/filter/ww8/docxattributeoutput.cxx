@@ -4736,9 +4736,8 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
 {
     // get interoperability information about embedded objects
     uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
-    xPropSet->getPropertyValue( pName ) >>= aGrabBag;
+    xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
     for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
         if ( aGrabBag[i].Name == "EmbeddedObjects" )
         {
@@ -5032,12 +5031,12 @@ bool DocxAttributeOutput::IsDiagram( const SdrObject* sdrObject )
 
     // if the shape doesn't have the InteropGrabBag property, it's not a diagram
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return false;
 
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( pName ) >>= propList;
+    xPropSet->getPropertyValue( aName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
         // if we find any of the diagram components, it's a diagram

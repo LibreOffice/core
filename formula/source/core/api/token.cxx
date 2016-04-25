@@ -1674,10 +1674,10 @@ const FormulaToken* FormulaTokenIterator::PeekNextOperator()
     }
     if (!t && maStack.size() > 1)
     {
-        FormulaTokenIterator::Item pHere = maStack.back();
+        FormulaTokenIterator::Item aHere = maStack.back();
         maStack.pop_back();
         t = PeekNextOperator();
-        maStack.push_back(pHere);
+        maStack.push_back(aHere);
     }
     return t;
 }

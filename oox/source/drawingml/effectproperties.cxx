@@ -73,9 +73,9 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
 
 css::beans::PropertyValue Effect::getEffect()
 {
-    css::beans::PropertyValue pRet;
+    css::beans::PropertyValue aRet;
     if( msName.isEmpty() )
-        return pRet;
+        return aRet;
 
     css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
     sal_uInt32 i = 0;
@@ -86,10 +86,10 @@ css::beans::PropertyValue Effect::getEffect()
         i++;
     }
 
-    pRet.Name = msName;
-    pRet.Value = css::uno::Any( aSeq );
+    aRet.Name = msName;
+    aRet.Value = css::uno::Any( aSeq );
 
-    return pRet;
+    return aRet;
 }
 
 } // namespace drawingml

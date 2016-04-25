@@ -30,9 +30,6 @@
 #include <algorithm>
 #include <iterator>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <rtl/math.hxx>
-#endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star;
@@ -88,7 +85,7 @@ struct StaticCooSysInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
@@ -188,8 +185,8 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
 {
     try
     {
-        for( tAxisVecVecType::size_type nN=0; nN<m_aAllAxis.size(); nN++ )
-            ModifyListenerHelper::removeListenerFromAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );
+        for(tAxisVecVecType::value_type & i : m_aAllAxis)
+            ModifyListenerHelper::removeListenerFromAllElements( i, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
     }
     catch( const uno::Exception & ex )

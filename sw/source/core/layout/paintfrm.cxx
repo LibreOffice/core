@@ -2165,13 +2165,13 @@ void DrawGraphic(
             GraphicObject *pGrf = const_cast<GraphicObject*>(pBrush->GetGraphicObject());
             if ( bConsiderBackgroundTransparency )
             {
-                GraphicAttr pGrfAttr = pGrf->GetAttr();
-                if ( (pGrfAttr.GetTransparency() != 0) &&
+                GraphicAttr aGrfAttr = pGrf->GetAttr();
+                if ( (aGrfAttr.GetTransparency() != 0) &&
                      (pBrush->GetColor() == COL_TRANSPARENT)
                    )
                 {
                     bTransparentGrfWithNoFillBackgrd = true;
-                    nGrfTransparency = pGrfAttr.GetTransparency();
+                    nGrfTransparency = aGrfAttr.GetTransparency();
                 }
             }
             if ( pGrf->IsTransparent() )

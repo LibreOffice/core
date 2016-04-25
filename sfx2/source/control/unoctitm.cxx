@@ -152,27 +152,27 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const css::frame::FeatureState
         if ( rEvent.IsEnabled )
         {
             eState = SfxItemState::DEFAULT;
-            css::uno::Type pType = rEvent.State.getValueType();
+            css::uno::Type aType = rEvent.State.getValueType();
 
-            if ( pType == cppu::UnoType< bool >::get() )
+            if ( aType == cppu::UnoType< bool >::get() )
             {
                 bool bTemp = false;
                 rEvent.State >>= bTemp ;
                 pItem = new SfxBoolItem( pCtrlItem->GetId(), bTemp );
             }
-            else if ( pType == cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
+            else if ( aType == cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
             {
                 sal_uInt16 nTemp = 0;
                 rEvent.State >>= nTemp ;
                 pItem = new SfxUInt16Item( pCtrlItem->GetId(), nTemp );
             }
-            else if ( pType == cppu::UnoType<sal_uInt32>::get() )
+            else if ( aType == cppu::UnoType<sal_uInt32>::get() )
             {
                 sal_uInt32 nTemp = 0;
                 rEvent.State >>= nTemp ;
                 pItem = new SfxUInt32Item( pCtrlItem->GetId(), nTemp );
             }
-            else if ( pType == cppu::UnoType<OUString>::get() )
+            else if ( aType == cppu::UnoType<OUString>::get() )
             {
                 OUString sTemp ;
                 rEvent.State >>= sTemp ;

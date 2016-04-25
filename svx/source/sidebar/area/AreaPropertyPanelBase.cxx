@@ -1033,24 +1033,24 @@ void AreaPropertyPanelBase::Update()
                     {
                         const OUString aString(mpFillGradientItem->GetName());
                         mpLbFillAttr->SelectEntry(aString);
-                        const XGradient pGradient = mpFillGradientItem->GetGradientValue();
-                        mpLbFillGradFrom->SelectEntry(pGradient.GetStartColor());
+                        const XGradient aGradient = mpFillGradientItem->GetGradientValue();
+                        mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
                         if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
                         {
-                            mpLbFillGradFrom->InsertEntry(pGradient.GetStartColor(), OUString());
-                            mpLbFillGradFrom->SelectEntry(pGradient.GetStartColor());
+                            mpLbFillGradFrom->InsertEntry(aGradient.GetStartColor(), OUString());
+                            mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
                         }
-                        mpLbFillGradTo->SelectEntry(pGradient.GetEndColor());
+                        mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
                         if(mpLbFillGradTo->GetSelectEntryCount() == 0)
                         {
-                            mpLbFillGradTo->InsertEntry(pGradient.GetEndColor(), OUString());
-                            mpLbFillGradTo->SelectEntry(pGradient.GetEndColor());
+                            mpLbFillGradTo->InsertEntry(aGradient.GetEndColor(), OUString());
+                            mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
                         }
-                        mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( pGradient.GetGradientStyle() ));
+                        mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( aGradient.GetGradientStyle() ));
                         if(mpGradientStyle->GetSelectEntryPos() == GradientStyle_RADIAL)
                             mpMTRAngle->Disable();
                         else
-                            mpMTRAngle->SetValue( pGradient.GetAngle() /10 );
+                            mpMTRAngle->SetValue( aGradient.GetAngle() /10 );
                     }
                     else
                     {

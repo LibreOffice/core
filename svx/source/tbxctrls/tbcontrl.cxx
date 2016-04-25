@@ -373,7 +373,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
 
 IMPL_LINK_TYPED( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
-    OUString sEntry = OUString( GetSelectEntry() );
+    OUString sEntry = GetSelectEntry();
     ReleaseFocus(); // It must be after getting entry pos!
     Sequence< PropertyValue > aArgs( 2 );
     aArgs[0].Name   = "Param";
@@ -840,7 +840,7 @@ IMPL_LINK_TYPED(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, ev
 // return is always the Font-Color
 //        when both light or dark, change the Contrast
 //        in other case do not change the origin color
-//        when the color is R=G=B=128 the DecreaseContast make 128 the need a exception
+//        when the color is R=G=B=128 the DecreaseContrast make 128 the need a exception
 Color SvxStyleBox_Impl::TestColorsVisible(const Color &FontCol, const Color &BackCol)
 {
     const sal_uInt8  ChgVal = 60;       // increase/decrease the Contrast
@@ -858,7 +858,6 @@ Color SvxStyleBox_Impl::TestColorsVisible(const Color &FontCol, const Color &Bac
 
     return retCol;
 }
-
 
 
 static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
@@ -2026,7 +2025,7 @@ struct SvxStyleToolBoxControl::Impl
                 Reference<container::XNameAccess> xParaStyles;
                     xStylesSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>=
                     xParaStyles;
-                static const sal_Char* aWriterStyles[] =
+                static const std::vector<OUString> aWriterStyles =
                 {
                     "Text body",
                     "Quotations",
@@ -2036,12 +2035,12 @@ struct SvxStyleToolBoxControl::Impl
                     "Heading 2",
                     "Heading 3"
                 };
-                for( sal_uInt32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
+                for( const OUString& aStyle: aWriterStyles )
                 {
                     try
                     {
                         Reference< beans::XPropertySet > xStyle;
-                        xParaStyles->getByName( OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
+                        xParaStyles->getByName( aStyle ) >>= xStyle;
                         OUString sName;
                         xStyle->getPropertyValue("DisplayName") >>= sName;
                         if( !sName.isEmpty() )
@@ -2065,7 +2064,7 @@ struct SvxStyleToolBoxControl::Impl
                 };
                 Reference<container::XNameAccess> xCellStyles;
                 xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
-                for( sal_uInt32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
+                for( sal_uInt32 nStyle = 0; nStyle < SAL_N_ELEMENTS(aCalcStyles); ++nStyle )
                 {
                     try
                     {

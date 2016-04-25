@@ -1366,13 +1366,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
 
     std::string cat(catalog.hasValue()? rtl::OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sPattern(rtl::OUStringToOString(schemaPattern, m_rConnection.getConnectionEncoding()).getStr()),
-                pNamePattern(rtl::OUStringToOString(procedureNamePattern, m_rConnection.getConnectionEncoding()).getStr());
+                procNamePattern(rtl::OUStringToOString(procedureNamePattern, m_rConnection.getConnectionEncoding()).getStr());
 
 
     try {
         boost::scoped_ptr< sql::ResultSet> rset( meta->getProcedures(cat,
                                                    sPattern.compare("")? sPattern:wild,
-                                                   pNamePattern.compare("")? pNamePattern:wild));
+                                                   procNamePattern.compare("")? procNamePattern:wild));
 
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
@@ -1664,8 +1664,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
         const Any& primaryCatalog,
-        const rtl::OUString& primarySchema,
-        const rtl::OUString& primaryTable,
+        const rtl::OUString& primarySchema_,
+        const rtl::OUString& primaryTable_,
         const Any& foreignCatalog,
         const rtl::OUString& foreignSchema,
         const rtl::OUString& foreignTable)
@@ -1677,14 +1677,14 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
 
     std::string primaryCat(primaryCatalog.hasValue()? rtl::OUStringToOString(getStringFromAny(primaryCatalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 foreignCat(foreignCatalog.hasValue()? rtl::OUStringToOString(getStringFromAny(foreignCatalog), m_rConnection.getConnectionEncoding()).getStr():""),
-                pSchema(rtl::OUStringToOString(primarySchema, m_rConnection.getConnectionEncoding()).getStr()),
-                pTable(rtl::OUStringToOString(primaryTable, m_rConnection.getConnectionEncoding()).getStr()),
+                primarySchema(rtl::OUStringToOString(primarySchema_, m_rConnection.getConnectionEncoding()).getStr()),
+                primaryTable(rtl::OUStringToOString(primaryTable_, m_rConnection.getConnectionEncoding()).getStr()),
                 fSchema(rtl::OUStringToOString(foreignSchema, m_rConnection.getConnectionEncoding()).getStr()),
                 fTable(rtl::OUStringToOString(foreignTable, m_rConnection.getConnectionEncoding()).getStr());
 
     try {
         rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
-        boost::scoped_ptr< sql::ResultSet> rset( meta->getCrossReference(primaryCat, pSchema, pTable, foreignCat, fSchema, fTable));
+        boost::scoped_ptr< sql::ResultSet> rset( meta->getCrossReference(primaryCat, primarySchema, primaryTable, foreignCat, fSchema, fTable));
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {

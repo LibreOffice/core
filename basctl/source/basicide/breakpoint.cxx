@@ -42,8 +42,8 @@ BreakPointList::~BreakPointList()
 
 void BreakPointList::reset()
 {
-    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
-        delete maBreakPoints[ i ];
+    for (BreakPoint* pBreakPoint : maBreakPoints)
+        delete pBreakPoint;
     maBreakPoints.clear();
 }
 
@@ -74,9 +74,8 @@ void BreakPointList::SetBreakPointsInBasic(SbModule* pModule)
 {
     pModule->ClearAllBP();
 
-    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
+    for (BreakPoint* pBrk : maBreakPoints)
     {
-        BreakPoint* pBrk = maBreakPoints[ i ];
         if ( pBrk->bEnabled )
             pModule->SetBP( (sal_uInt16)pBrk->nLine );
     }
@@ -84,9 +83,8 @@ void BreakPointList::SetBreakPointsInBasic(SbModule* pModule)
 
 BreakPoint* BreakPointList::FindBreakPoint(size_t nLine)
 {
-    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
+    for (BreakPoint* pBrk : maBreakPoints)
     {
-        BreakPoint* pBrk = maBreakPoints[ i ];
         if ( pBrk->nLine == nLine )
             return pBrk;
     }
@@ -127,9 +125,8 @@ void BreakPointList::AdjustBreakPoints(size_t nLine, bool bInserted)
 
 void BreakPointList::ResetHitCount()
 {
-    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
+    for (BreakPoint* pBrk : maBreakPoints)
     {
-        BreakPoint* pBrk = maBreakPoints[ i ];
         pBrk->nHitCount = 0;
     }
 }

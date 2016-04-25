@@ -1565,14 +1565,14 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
 
     // #i25545#
     // #i100132# - a number format does not have to exist on given list level
-    SwNumFormat pFormat(rLFOInfo.pNumRule->Get(nLevel));
+    SwNumFormat aFormat(rLFOInfo.pNumRule->Get(nLevel));
 
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
-        if ( pFormat.GetNumAdjust() == SVX_ADJUST_RIGHT)
-            pFormat.SetNumAdjust(SVX_ADJUST_LEFT);
-        else if ( pFormat.GetNumAdjust() == SVX_ADJUST_LEFT)
-            pFormat.SetNumAdjust(SVX_ADJUST_RIGHT);
-        rLFOInfo.pNumRule->Set(nLevel, pFormat);
+        if ( aFormat.GetNumAdjust() == SVX_ADJUST_RIGHT)
+            aFormat.SetNumAdjust(SVX_ADJUST_LEFT);
+        else if ( aFormat.GetNumAdjust() == SVX_ADJUST_LEFT)
+            aFormat.SetNumAdjust(SVX_ADJUST_RIGHT);
+        rLFOInfo.pNumRule->Set(nLevel, aFormat);
     }
     nLastLFOPosition = nLFOPosition;
     /*
@@ -2318,11 +2318,11 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         {
         case RES_CHRATR_COLOR:
             {
-                OUString pNm;
-                if (xPropSetInfo->hasPropertyByName(pNm = "TextColor"))
+                OUString aNm;
+                if (xPropSetInfo->hasPropertyByName(aNm = "TextColor"))
                 {
                     aTmp <<= (sal_Int32)static_cast<const SvxColorItem*>(pItem)->GetValue().GetColor();
-                    rPropSet->setPropertyValue(pNm, aTmp);
+                    rPropSet->setPropertyValue(aNm, aTmp);
                 }
             }
             aFont.SetColor(static_cast<const SvxColorItem*>(pItem)->GetValue());
@@ -2330,26 +2330,26 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         case RES_CHRATR_FONT:
             {
                 const SvxFontItem *pFontItem = static_cast<const SvxFontItem *>(pItem);
-                OUString pNm;
-                if (xPropSetInfo->hasPropertyByName(pNm = "FontStyleName"))
+                OUString aNm;
+                if (xPropSetInfo->hasPropertyByName(aNm = "FontStyleName"))
                 {
                     aTmp <<= OUString( pFontItem->GetStyleName());
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    rPropSet->setPropertyValue( aNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(pNm = "FontFamily"))
+                if (xPropSetInfo->hasPropertyByName(aNm = "FontFamily"))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetFamily();
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    rPropSet->setPropertyValue( aNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(pNm = "FontCharset"))
+                if (xPropSetInfo->hasPropertyByName(aNm = "FontCharset"))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetCharSet();
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    rPropSet->setPropertyValue( aNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(pNm = "FontPitch"))
+                if (xPropSetInfo->hasPropertyByName(aNm = "FontPitch"))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetPitch();
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    rPropSet->setPropertyValue( aNm, aTmp );
                 }
 
                 aTmp <<= OUString( pFontItem->GetFamilyName());

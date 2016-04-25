@@ -842,9 +842,9 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
 
             sal_uLong aReaded = 32000;
 
-            for (sal_uInt64 pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000)
+            for (sal_uInt64 nInd = 0; nInd < aLength && aReaded == 32000 ; nInd += 32000)
             {
-                sal_uLong aToCopy = min( aLength - pInd, 32000 );
+                sal_uLong aToCopy = min( aLength - nInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
                 aResult += m_pStream->Write( aData.getArray(), aReaded );
             }

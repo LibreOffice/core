@@ -894,11 +894,11 @@ void DocxExport::WriteSettings()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( xPropSetInfo->hasPropertyByName( pName ) )
+    OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
         uno::Sequence< beans::PropertyValue > propList;
-        xPropSet->getPropertyValue( pName ) >>= propList;
+        xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
         for( sal_Int32 i=0; i < propList.getLength(); ++i )
         {
             if ( propList[i].Name == "ThemeFontLangProps" )
@@ -973,13 +973,13 @@ void DocxExport::WriteTheme()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 
     uno::Reference<xml::dom::XDocument> themeDom;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( pName ) >>= propList;
+    xPropSet->getPropertyValue( aName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
         OUString propName = propList[nProp].Name;
@@ -1011,14 +1011,14 @@ void DocxExport::WriteGlossary()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 
     uno::Reference<xml::dom::XDocument> glossaryDocDom;
     uno::Sequence< uno::Sequence< uno::Any> > glossaryDomList;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( pName ) >>= propList;
+    xPropSet->getPropertyValue( aName ) >>= propList;
     sal_Int32 collectedProperties = 0;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
@@ -1082,14 +1082,14 @@ void DocxExport::WriteCustomXml()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 
     uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomlist;
     uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomPropslist;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( pName ) >>= propList;
+    xPropSet->getPropertyValue( aName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
         OUString propName = propList[nProp].Name;
@@ -1153,14 +1153,14 @@ void DocxExport::WriteActiveX()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 
     uno::Sequence<uno::Reference<xml::dom::XDocument> > activeXDomlist;
     uno::Sequence<uno::Reference<io::XInputStream> > activeXBinList;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( pName ) >>= propList;
+    xPropSet->getPropertyValue( aName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
         OUString propName = propList[nProp].Name;
@@ -1247,13 +1247,13 @@ void DocxExport::WriteEmbeddings()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 
     uno::Sequence< beans::PropertyValue > embeddingsList;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( pName ) >>= propList;
+    xPropSet->getPropertyValue( aName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
         OUString propName = propList[nProp].Name;

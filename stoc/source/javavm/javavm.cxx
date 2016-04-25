@@ -70,7 +70,7 @@
 #include <sal/types.h>
 #include <uno/current_context.hxx>
 #include <uno/environment.h>
-#include <jvmfwk/framework.h>
+#include <jvmfwk/framework.hxx>
 #include "jni.h"
 
 #include <stack>
@@ -78,7 +78,6 @@
 #include <time.h>
 #include <memory>
 #include <vector>
-#include <boost/noncopyable.hpp>
 
 // Properties of the javavm can be put
 // as a komma separated list in this
@@ -112,14 +111,12 @@ using stoc_javavm::JavaVirtualMachine;
 namespace {
 
 
-
 class NoJavaIniException: public css::uno::Exception
 {
 };
 
 class SingletonFactory:
-    private cppu::WeakImplHelper< css::lang::XEventListener >,
-    private boost::noncopyable
+    private cppu::WeakImplHelper< css::lang::XEventListener >
 {
 public:
     static css::uno::Reference< css::uno::XInterface > getSingleton(
@@ -129,6 +126,9 @@ private:
     inline SingletonFactory() {}
 
     virtual inline ~SingletonFactory() {}
+
+    SingletonFactory(const SingletonFactory&) = delete;
+    SingletonFactory& operator=(const SingletonFactory&) = delete;
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
         throw (css::uno::RuntimeException, std::exception) override;
@@ -276,7 +276,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY);
     if(!xConfRegistry_simple.is()) throw css::uno::RuntimeException("javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
 
-    xConfRegistry_simple->open("org.openoffice.Inet", sal_True, sal_False);
+    xConfRegistry_simple->open("org.openoffice.Inet", true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
 //  if ooInetProxyType is not 0 then read the settings
@@ -370,7 +370,7 @@ void getDefaultLocaleFromConfig(
         throw css::uno::RuntimeException(
             OUString("javavm.cxx: couldn't get ConfigurationRegistry"), nullptr);
 
-    xConfRegistry_simple->open("org.openoffice.Setup", sal_True, sal_False);
+    xConfRegistry_simple->open("org.openoffice.Setup", true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
     // read locale
@@ -405,7 +405,6 @@ void getDefaultLocaleFromConfig(
 }
 
 
-
 void getJavaPropsFromSafetySettings(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
@@ -427,7 +426,7 @@ void getJavaPropsFromSafetySettings(
 
     xConfRegistry_simple->open(
         "org.openoffice.Office.Java",
-        sal_True, sal_False);
+        true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey =
         xConfRegistry_simple->getRootKey();
 
@@ -467,7 +466,7 @@ void getJavaPropsFromSafetySettings(
     xConfRegistry_simple->close();
 }
 
-static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
+void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
     /* A Bug in the Java function
     ** struct Hjava_util_Properties * java_lang_System_initProperties(
     ** struct Hjava_lang_System *this,
@@ -502,24 +501,14 @@ void initVMConfiguration(
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: can not get INetProps cause of >%s<", message.getStr());
-#else
-        (void) exception; // unused
-#endif
+        SAL_INFO("stoc", "can not get INETProps because of >" << exception.Message << "<");
     }
 
     try {
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
     catch(const css::uno::Exception & exception) {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: can not get locale cause of >%s<", message.getStr());
-#else
-        (void) exception; // unused
-#endif
+        SAL_INFO("stoc", "can not get locale because of >" << exception.Message << "<");
     }
 
     try
@@ -527,12 +516,7 @@ void initVMConfiguration(
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
-#else
-        (void) exception; // unused
-#endif
+        SAL_INFO("stoc", "couldn't get safety settings because of >" << exception.Message << "<");
     }
 
     *pjvm= jvm;
@@ -547,7 +531,7 @@ void initVMConfiguration(
     setTimeZone(pjvm);
 }
 
-class DetachCurrentThread: private boost::noncopyable {
+class DetachCurrentThread {
 public:
     explicit DetachCurrentThread(JavaVM * jvm): m_jvm(jvm) {}
 
@@ -556,6 +540,9 @@ public:
             OSL_ASSERT(false);
         }
     }
+
+    DetachCurrentThread(const DetachCurrentThread&) = delete;
+    DetachCurrentThread& operator=(const DetachCurrentThread&) = delete;
 
 private:
     JavaVM * m_jvm;
@@ -659,23 +646,6 @@ JavaVirtualMachine::getSupportedServiceNames()
     return serviceGetSupportedServiceNames();
 }
 
-namespace {
-
-struct JavaInfoGuard: private boost::noncopyable {
-    JavaInfoGuard(): info(nullptr) {}
-
-    ~JavaInfoGuard() { jfw_freeJavaInfo(info); }
-
-    void clear() {
-        jfw_freeJavaInfo(info);
-        info = nullptr;
-    }
-
-    JavaInfo * info;
-};
-
-}
-
 css::uno::Any SAL_CALL
 JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     throw (css::uno::RuntimeException, std::exception)
@@ -700,7 +670,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     if (aId != aProcessId)
         return css::uno::Any();
 
-    JavaInfoGuard info;
+    jfw::JavaInfoGuard info;
     while (!m_xVirtualMachine.is()) // retry until successful
     {
         // This is the second attempt to create Java.  m_bDontCreateJvm is
@@ -818,14 +788,14 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //we search another one. As long as there is a javaldx, we should
             //never come into this situation. javaldx checks always if the JRE
             //still exist.
-            JavaInfo * pJavaInfo = nullptr;
-            if (JFW_E_NONE == jfw_getSelectedJRE(&pJavaInfo))
+            jfw::JavaInfoGuard aJavaInfo;
+            if (JFW_E_NONE == jfw_getSelectedJRE(&aJavaInfo.info))
             {
-                sal_Bool bExist = sal_False;
-                if (JFW_E_NONE == jfw_existJRE(pJavaInfo, &bExist))
+                sal_Bool bExist = false;
+                if (JFW_E_NONE == jfw_existJRE(aJavaInfo.info, &bExist))
                 {
                     if (!bExist
-                        && ! (pJavaInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
+                        && ! (aJavaInfo.info->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     {
                         info.clear();
                         javaFrameworkError errFind = jfw_findAndSelectJRE(
@@ -837,8 +807,6 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                     }
                 }
             }
-
-            jfw_freeJavaInfo(pJavaInfo);
 
             //Error: %PRODUCTNAME requires a Java
             //runtime environment (JRE) to perform this task. The selected JRE
@@ -948,7 +916,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
 //    initVMConfiguration(&aJvm, m_xContext->getServiceManager(), m_xContext);
 //    return aJvm.isEnabled();
     //ToDo
-    sal_Bool bEnabled = sal_False;
+    sal_Bool bEnabled = false;
     if (jfw_getEnabled( & bEnabled) != JFW_E_NONE)
         throw css::uno::RuntimeException();
     return bEnabled;
@@ -1387,12 +1355,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
         }
     }catch(const css::uno::Exception & e)
     {
-#if OSL_DEBUG_LEVEL > 1
-        OString message = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: could not set up listener for Configuration because of >%s<", message.getStr());
-#else
-        (void) e; // unused
-#endif
+        SAL_INFO("stoc", "could not set up listener for Configuration because of >" << e.Message << "<");
     }
 }
 

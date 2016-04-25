@@ -29,6 +29,7 @@
 #include <dialmgr.hxx>
 #include "cuires.hrc"
 
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -85,10 +86,10 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     get( m_vResultList[7], "result8" );
     get( m_vResultList[8], "result9" );
 
-    for (sal_Int32 nIndex = 0; nIndex < 9; ++nIndex)
+    for (VclPtr<PushButton> & nIndex : m_vResultList)
     {
-        m_vResultList[nIndex]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-        m_vResultList[nIndex]->Disable();
+        nIndex->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+        nIndex->Disable();
     }
 }
 
@@ -102,9 +103,9 @@ void SelectPersonaDialog::dispose()
     m_pEdit.clear();
     m_pSearchButton.clear();
     m_pProgressLabel.clear();
-    for (VclPtr<PushButton> vp : m_vResultList)
+    for (VclPtr<PushButton>& vp : m_vResultList)
         vp.clear();
-    for (VclPtr<PushButton> vp : m_vSearchSuggestions)
+    for (VclPtr<PushButton>& vp : m_vSearchSuggestions)
         vp.clear();
     m_pOkButton.clear();
     m_pCancelButton.clear();
@@ -129,11 +130,11 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
         searchTerm = m_pEdit->GetText();
     else
     {
-        for( sal_Int32 nIndex = 0; nIndex < 5; nIndex++ )
+        for(VclPtr<PushButton> & i : m_vSearchSuggestions)
         {
-            if( pButton == m_vSearchSuggestions[nIndex] )
+            if( pButton == i )
             {
-                searchTerm = m_vSearchSuggestions[nIndex]->GetDisplayText();
+                searchTerm = i->GetDisplayText();
                 break;
             }
         }
@@ -142,38 +143,7 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     if( searchTerm.isEmpty( ) )
         return;
 
-    // TODO FIXME!
-    // Before the release, the allizom.org url should be changed to:
-    // OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
-    // The problem why it cannot be done just now is that the SSL negotiation
-    // with services.addons.mozilla.org fails very early - during an early
-    // propfind, SSL returns X509_V_ERR_CERT_UNTRUSTED to neon, causing the
-    // NE_SSL_UNTRUSTED being set in verify_callback in neon/src/ne_openssl.c
-    //
-    // This is not cleared anywhere during the init, and so later, even though
-    // we have found the certificate, this triggers
-    // NeonSession_CertificationNotify callback, that
-    // causes that NE_SSL_UNTRUSTED is ignored in cases when the condition
-    //   if ( pSession->isDomainMatch(
-    //      GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
-    // is true; but that is only when getSubjectName() actually returns a
-    // wildcard, or the exact name.
-    //
-    // In the case of services.addons.mozilla.com, the certificate is for
-    // versioncheck.addons.mozilla.com, but it also has
-    //   X509v3 Subject Alternative Name:
-    //       DNS:services.addons.mozilla.org, DNS:versioncheck-bg.addons.mozilla.org, DNS:pyrepo.addons.mozilla.org, DNS:versioncheck.addons.mozilla.org
-    // So it is all valid; but the early X509_V_ERR_CERT_UNTRUSTED failure
-    // described above just makes this being ignored.
-    //
-    // My suspicion is that this never actually worked, and the
-    //   if ( pSession->isDomainMatch(
-    //      GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
-    // works around the root cause that is there for years, and which makes it
-    // work in most cases.  I guess that we initialize something wrongly or
-    // too late; but I have already spent few hours debugging, and
-    // give up for the moment - need to return to this at some stage.
-    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
+    OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
     m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
     m_rSearchThread->launch();
 }
@@ -266,10 +236,10 @@ void SelectPersonaDialog::ClearSearchResults()
 {
     m_vPersonaSettings.clear();
     m_aSelectedPersona.clear();
-    for( sal_Int32 nIndex = 0; nIndex < 9; nIndex++ )
+    for(VclPtr<PushButton> & nIndex : m_vResultList)
     {
-        m_vResultList[nIndex]->Disable();
-        m_vResultList[nIndex]->SetModeImage(Image());
+        nIndex->Disable();
+        nIndex->SetModeImage(Image());
     }
 }
 
@@ -317,8 +287,8 @@ void SvxPersonalizationTabPage::dispose()
     m_pDefaultPersona.clear();
     m_pOwnPersona.clear();
     m_pSelectPersona.clear();
-    for (int i=0; i<3; ++i)
-        m_vDefaultPersonaImages[i].clear();
+    for (VclPtr<PushButton> & i : m_vDefaultPersonaImages)
+        i.clear();
     m_pExtensionPersonaPreview.clear();
     m_pPersonaList.clear();
     m_pExtensionLabel.clear();

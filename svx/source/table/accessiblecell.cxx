@@ -241,11 +241,11 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet() 
                     css::uno::Reference<XAccessibleStateSet> rState =
                         xTempAccContext->getAccessibleStateSet();
                     if( rState.is() )           {
-                        css::uno::Sequence<short> pStates = rState->getStates();
-                        int count = pStates.getLength();
+                        css::uno::Sequence<short> aStates = rState->getStates();
+                        int count = aStates.getLength();
                         for( int iIndex = 0;iIndex < count;iIndex++ )
                         {
-                            if( pStates[iIndex] == AccessibleStateType::EDITABLE )
+                            if( aStates[iIndex] == AccessibleStateType::EDITABLE )
                             {
                                 pStateSet->AddState (AccessibleStateType::EDITABLE);
                                 pStateSet->AddState (AccessibleStateType::RESIZABLE);

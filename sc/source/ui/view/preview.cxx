@@ -1188,8 +1188,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         const SfxPoolItem* pItem = nullptr;
                         if ( rStyleSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SfxItemState::SET )
                         {
-                            const SfxItemSet& pHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-                            Size  aHeaderSize = static_cast<const SvxSizeItem&>(pHeaderSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                            const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+                            Size  aHeaderSize = static_cast<const SvxSizeItem&>(rHeaderSet.Get(ATTR_PAGE_SIZE)).GetSize();
                             aHeaderSize.Height() = (long)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - aULItem.GetUpper());
                             aHeaderSize.Height() = aHeaderSize.Height() * 100 / mnScale;
                             SvxSetItem  aNewHeader( static_cast<const SvxSetItem&>(rStyleSet.Get(ATTR_PAGE_HEADERSET)) );
@@ -1203,8 +1203,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         const SfxPoolItem* pItem = nullptr;
                         if( rStyleSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SfxItemState::SET )
                         {
-                            const SfxItemSet& pFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-                            Size aFooterSize = static_cast<const SvxSizeItem&>(pFooterSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                            const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+                            Size aFooterSize = static_cast<const SvxSizeItem&>(rFooterSet.Get(ATTR_PAGE_SIZE)).GetSize();
                             aFooterSize.Height() = (long)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - aULItem.GetLower() );
                             aFooterSize.Height() = aFooterSize.Height() * 100 / mnScale;
                             SvxSetItem  aNewFooter( static_cast<const SvxSetItem&>(rStyleSet.Get(ATTR_PAGE_FOOTERSET)) );

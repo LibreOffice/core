@@ -1095,9 +1095,9 @@ public:
     WalkElementBlocksMultipleValues(bool bTextAsZero, const std::vector<std::unique_ptr<_Op>>& aOp) :
         maOp(aOp), mbFirst(true), mbTextAsZero(bTextAsZero)
     {
-        for (const auto& pOp : maOp)
+        for (const auto& rpOp : maOp)
         {
-            maRes.emplace_back(pOp->mInitVal, pOp->mInitVal, 0);
+            maRes.emplace_back(rpOp->mInitVal, rpOp->mInitVal, 0);
         }
         maRes.emplace_back(0.0, 0.0, 0); // count
     }

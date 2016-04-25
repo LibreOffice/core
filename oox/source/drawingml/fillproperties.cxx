@@ -772,9 +772,9 @@ bool ArtisticEffectProperties::isEmpty() const
 
 css::beans::PropertyValue ArtisticEffectProperties::getEffect()
 {
-    css::beans::PropertyValue pRet;
+    css::beans::PropertyValue aRet;
     if( msName.isEmpty() )
-        return pRet;
+        return aRet;
 
     css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() + 1 );
     sal_uInt32 i = 0;
@@ -797,10 +797,10 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
         aSeq[i].Value = uno::makeAny( aGraphicSeq );
     }
 
-    pRet.Name = msName;
-    pRet.Value = css::uno::Any( aSeq );
+    aRet.Name = msName;
+    aRet.Value = css::uno::Any( aSeq );
 
-    return pRet;
+    return aRet;
 }
 
 void ArtisticEffectProperties::assignUsed( const ArtisticEffectProperties& rSourceProps )

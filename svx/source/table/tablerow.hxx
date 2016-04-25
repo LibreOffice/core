@@ -49,7 +49,7 @@ public:
     void insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator* pIter = nullptr );
     void removeColumns( sal_Int32 nIndex, sal_Int32 nCount );
     /// Reference to the table model containing this row.
-    TableModelRef const & getModel() const;
+    const TableModelRef& getModel() const;
 
     // XCellRange
     virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;

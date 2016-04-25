@@ -1803,16 +1803,16 @@ static bool lcl_FindAbbreviation(const SvStringsISortDtor* pList, const OUString
     if( nPos < pList->size() )
     {
         OUString sLowerWord(sWord.toAsciiLowerCase());
-        OUString pAbk;
+        OUString sAbr;
         for( sal_uInt16 n = nPos;
                 n < pList->size() &&
-                '~' == ( pAbk = (*pList)[ n ])[ 0 ];
+                '~' == ( sAbr = (*pList)[ n ])[ 0 ];
             ++n )
         {
             // ~ and ~. are not allowed!
-            if( 2 < pAbk.getLength() && pAbk.getLength() - 1 <= sWord.getLength() )
+            if( 2 < sAbr.getLength() && sAbr.getLength() - 1 <= sWord.getLength() )
             {
-                OUString sLowerAbk(pAbk.toAsciiLowerCase());
+                OUString sLowerAbk(sAbr.toAsciiLowerCase());
                 for (sal_Int32 i = sLowerAbk.getLength(), ii = sLowerWord.getLength(); i;)
                 {
                     if( !--i )      // agrees

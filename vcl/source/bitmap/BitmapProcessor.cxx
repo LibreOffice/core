@@ -137,9 +137,9 @@ void BitmapProcessor::colorizeImage(BitmapEx& rBitmapEx, Color aColor)
         BitmapColor aBitmapColor;
         const long nW = pWriteAccess->Width();
         const long nH = pWriteAccess->Height();
-        std::vector<sal_uInt8> pMapR(256);
-        std::vector<sal_uInt8> pMapG(256);
-        std::vector<sal_uInt8> pMapB(256);
+        std::vector<sal_uInt8> aMapR(256);
+        std::vector<sal_uInt8> aMapG(256);
+        std::vector<sal_uInt8> aMapB(256);
         long nX;
         long nY;
 
@@ -149,9 +149,9 @@ void BitmapProcessor::colorizeImage(BitmapEx& rBitmapEx, Color aColor)
 
         for (nX = 0; nX < 256; ++nX)
         {
-            pMapR[nX] = MinMax((nX + cR) / 2, 0, 255);
-            pMapG[nX] = MinMax((nX + cG) / 2, 0, 255);
-            pMapB[nX] = MinMax((nX + cB) / 2, 0, 255);
+            aMapR[nX] = MinMax((nX + cR) / 2, 0, 255);
+            aMapG[nX] = MinMax((nX + cG) / 2, 0, 255);
+            aMapB[nX] = MinMax((nX + cB) / 2, 0, 255);
         }
 
         if (pWriteAccess->HasPalette())
@@ -159,9 +159,9 @@ void BitmapProcessor::colorizeImage(BitmapEx& rBitmapEx, Color aColor)
             for (sal_uInt16 i = 0, nCount = pWriteAccess->GetPaletteEntryCount(); i < nCount; i++)
             {
                 const BitmapColor& rCol = pWriteAccess->GetPaletteColor(i);
-                aBitmapColor.SetRed(pMapR[rCol.GetRed()]);
-                aBitmapColor.SetGreen(pMapG[rCol.GetGreen()]);
-                aBitmapColor.SetBlue(pMapB[rCol.GetBlue()]);
+                aBitmapColor.SetRed(aMapR[rCol.GetRed()]);
+                aBitmapColor.SetGreen(aMapG[rCol.GetGreen()]);
+                aBitmapColor.SetBlue(aMapB[rCol.GetBlue()]);
                 pWriteAccess->SetPaletteColor(i, aBitmapColor);
             }
         }
@@ -173,9 +173,9 @@ void BitmapProcessor::colorizeImage(BitmapEx& rBitmapEx, Color aColor)
 
                 for (nX = 0; nX < nW; ++nX)
                 {
-                    *pScan = pMapB[*pScan]; pScan++;
-                    *pScan = pMapG[*pScan]; pScan++;
-                    *pScan = pMapR[*pScan]; pScan++;
+                    *pScan = aMapB[*pScan]; pScan++;
+                    *pScan = aMapG[*pScan]; pScan++;
+                    *pScan = aMapR[*pScan]; pScan++;
                 }
             }
         }
@@ -186,9 +186,9 @@ void BitmapProcessor::colorizeImage(BitmapEx& rBitmapEx, Color aColor)
                 for (nX = 0; nX < nW; ++nX)
                 {
                     aBitmapColor = pWriteAccess->GetPixel(nY, nX);
-                    aBitmapColor.SetRed(pMapR[aBitmapColor.GetRed()]);
-                    aBitmapColor.SetGreen(pMapG[aBitmapColor.GetGreen()]);
-                    aBitmapColor.SetBlue(pMapB[aBitmapColor.GetBlue()]);
+                    aBitmapColor.SetRed(aMapR[aBitmapColor.GetRed()]);
+                    aBitmapColor.SetGreen(aMapG[aBitmapColor.GetGreen()]);
+                    aBitmapColor.SetBlue(aMapB[aBitmapColor.GetBlue()]);
                     pWriteAccess->SetPixel(nY, nX, aBitmapColor);
                 }
             }

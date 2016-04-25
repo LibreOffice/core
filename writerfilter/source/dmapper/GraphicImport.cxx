@@ -465,9 +465,9 @@ void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
 
 void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, const uno::Any& aPropertyValue )
 {
-    beans::PropertyValue pProperty;
-    pProperty.Name = sPropertyName;
-    pProperty.Value = aPropertyValue;
+    beans::PropertyValue aProperty;
+    aProperty.Name = sPropertyName;
+    aProperty.Value = aPropertyValue;
 
     if (!m_xShape.is())
         return;
@@ -493,7 +493,7 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
         uno::Sequence<beans::PropertyValue> aTmp;
         xSet->getPropertyValue(aGrabBagPropName) >>= aTmp;
         std::vector<beans::PropertyValue> aGrabBag(comphelper::sequenceToContainer<std::vector<beans::PropertyValue> >(aTmp));
-        aGrabBag.push_back(pProperty);
+        aGrabBag.push_back(aProperty);
 
         xSet->setPropertyValue(aGrabBagPropName, uno::makeAny(comphelper::containerToSequence(aGrabBag)));
     }

@@ -122,15 +122,15 @@ void SvtFontSubstConfig::ImplCommit()
         {
             OUString sPrefix = sNode + "/_" + OUString::number(i) + "/";
 
-            SubstitutionStruct& pSubst = pImpl->aSubstArr[i];
+            SubstitutionStruct& rSubst = pImpl->aSubstArr[i];
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;
-            pSetValues[nSetValue++].Value <<= pSubst.sFont;
+            pSetValues[nSetValue++].Value <<= rSubst.sFont;
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sSubstituteFont;
-            pSetValues[nSetValue++].Value <<= pSubst.sReplaceBy;
+            pSetValues[nSetValue++].Value <<= rSubst.sReplaceBy;
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sAlways;
-            pSetValues[nSetValue++].Value.setValue(&pSubst.bReplaceAlways, rBoolType);
+            pSetValues[nSetValue++].Value.setValue(&rSubst.bReplaceAlways, rBoolType);
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sOnScreenOnly;
-            pSetValues[nSetValue++].Value.setValue(&pSubst.bReplaceOnScreenOnly, rBoolType);
+            pSetValues[nSetValue++].Value.setValue(&rSubst.bReplaceOnScreenOnly, rBoolType);
         }
         ReplaceSetProperties(sNode, aSetValues);
     }

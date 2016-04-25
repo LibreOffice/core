@@ -282,10 +282,10 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
-        sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *mpOStm ,nFormat,&pDeterminedFormat );
+        sal_uInt16 nDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *mpOStm ,nFormat,&nDeterminedFormat );
 
-        if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
+        if (nDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
             //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
             //unzip them and try again
@@ -326,7 +326,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                         if (nStreamLen_)
                         {
                             pDest->Seek(0L);
-                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pDest ,nFormat,&pDeterminedFormat );
+                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pDest ,nFormat,&nDeterminedFormat );
                         }
                     }
                 }

@@ -251,11 +251,11 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUSt
     if (rNewName.isEmpty())
         return;
 
-    SfxItemPool& pPool(GetPool());
-    sal_uInt32 nCount = pPool.GetItemCount2(EE_FEATURE_FIELD);
+    SfxItemPool& rPool(GetPool());
+    sal_uInt32 nCount = rPool.GetItemCount2(EE_FEATURE_FIELD);
     for (sal_uInt32 nOff = 0; nOff < nCount; nOff++)
     {
-        const SfxPoolItem *pItem = pPool.GetItem2(EE_FEATURE_FIELD, nOff);
+        const SfxPoolItem *pItem = rPool.GetItem2(EE_FEATURE_FIELD, nOff);
         const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem * > (pItem);
 
         if(pFldItem)
@@ -295,11 +295,11 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_
 {
     bool bNotes = (pPage->GetPageKind() == PK_NOTES);
 
-    SfxItemPool& pPool(GetPool());
-    sal_uInt32 nCount = pPool.GetItemCount2(EE_FEATURE_FIELD);
+    SfxItemPool& rPool(GetPool());
+    sal_uInt32 nCount = rPool.GetItemCount2(EE_FEATURE_FIELD);
     for (sal_uInt32 nOff = 0; nOff < nCount; nOff++)
     {
-        const SfxPoolItem *pItem = pPool.GetItem2(EE_FEATURE_FIELD, nOff);
+        const SfxPoolItem *pItem = rPool.GetItem2(EE_FEATURE_FIELD, nOff);
         const SvxFieldItem* pFldItem;
 
         if ((pFldItem = dynamic_cast< const SvxFieldItem * > (pItem)) != nullptr)

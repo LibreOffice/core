@@ -105,9 +105,9 @@ public:
 
     void setClosed(bool bNew)
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
+        for(basegfx::B2DPolygon & rPolygon : maPolygons)
         {
-            maPolygons[a].setClosed(bNew);
+            rPolygon.setClosed(bNew);
         }
     }
 
@@ -239,7 +239,7 @@ namespace basegfx
 
     bool B2DPolyPolygon::areControlPointsUsed() const
     {
-        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
             const B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
 
@@ -270,7 +270,7 @@ namespace basegfx
     {
         B2DPolyPolygon aRetval;
 
-        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
             aRetval.append(mpPolyPolygon->getB2DPolygon(a).getDefaultAdaptiveSubdivision());
         }
@@ -282,7 +282,7 @@ namespace basegfx
     {
         B2DRange aRetval;
 
-        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
         {
             aRetval.expand(mpPolyPolygon->getB2DPolygon(a).getB2DRange());
         }
@@ -323,7 +323,7 @@ namespace basegfx
 
         // PolyPOlygon is closed when all contained Polygons are closed or
         // no Polygon exists.
-        for(sal_uInt32 a(0L); bRetval && a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); bRetval && a < mpPolyPolygon->count(); a++)
         {
             if(!(mpPolyPolygon->getB2DPolygon(a)).isClosed())
             {
@@ -352,7 +352,7 @@ namespace basegfx
     {
         bool bRetval(false);
 
-        for(sal_uInt32 a(0L); !bRetval && a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); !bRetval && a < mpPolyPolygon->count(); a++)
         {
             if((mpPolyPolygon->getB2DPolygon(a)).hasDoublePoints())
             {

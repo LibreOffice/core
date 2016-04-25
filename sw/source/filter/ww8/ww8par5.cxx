@@ -531,8 +531,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT ) );
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=nullptr) {
-                const IFieldmark::parameter_map_t& pParametersToAdd = m_aFieldStack.back().getParameters();
-                pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
+                const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
+                pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
             }
         }
         break;
@@ -604,8 +604,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                                 ODF_UNHANDLED );
                     if ( pFieldmark )
                     {
-                        const IFieldmark::parameter_map_t& pParametersToAdd = m_aFieldStack.back().getParameters();
-                        pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
+                        const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
+                        pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
                         OUString sFieldId = OUString::number( m_aFieldStack.back().mnFieldId );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< OUString, uno::Any > (

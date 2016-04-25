@@ -167,8 +167,8 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     file->Extract();
 
     XMLHashMap* aXMLStrHM = file->GetStrings();
-    static  ResData pResData("","");
-    pResData.sResTyp   = "help";
+    static ResData s_ResData("","");
+    s_ResData.sResTyp   = "help";
 
     std::vector<OString> order = file->getOrder();
     std::vector<OString>::iterator pos;
@@ -184,10 +184,10 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
         printf("DBG: sHelpFile = %s\n",sHelpFile.getStr() );
 #endif
 
-        pResData.sGId      =  posm->first;
-        pResData.sFilename  =  sHelpFile;
+        s_ResData.sGId      =  posm->first;
+        s_ResData.sFilename  =  sHelpFile;
 
-        ProcessHelp( aLangHM , sLanguage, &pResData , pMergeDataFile );
+        ProcessHelp( aLangHM , sLanguage, &s_ResData , pMergeDataFile );
      }
 
     file->Write(sPath);

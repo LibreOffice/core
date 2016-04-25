@@ -531,9 +531,9 @@ void OpenGLTexture::Unbind()
 
 void OpenGLTexture::SaveToFile(const OUString& rFileName)
 {
-    std::vector<sal_uInt8> pBuffer(GetWidth() * GetHeight() * 4);
-    Read(GL_BGRA, GL_UNSIGNED_BYTE, pBuffer.data());
-    BitmapEx aBitmap = OpenGLHelper::ConvertBGRABufferToBitmapEx(pBuffer.data(), GetWidth(), GetHeight());
+    std::vector<sal_uInt8> aBuffer(GetWidth() * GetHeight() * 4);
+    Read(GL_BGRA, GL_UNSIGNED_BYTE, aBuffer.data());
+    BitmapEx aBitmap = OpenGLHelper::ConvertBGRABufferToBitmapEx(aBuffer.data(), GetWidth(), GetHeight());
     try
     {
         vcl::PNGWriter aWriter(aBitmap);

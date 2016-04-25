@@ -86,34 +86,34 @@ namespace
 std::vector<char> lcl_escapeLineFeeds(const char* const i_pStr)
 {
     size_t nLength(strlen(i_pStr));
-    std::vector<char> pBuffer;
-    pBuffer.reserve(2*nLength+1);
+    std::vector<char> aBuffer;
+    aBuffer.reserve(2*nLength+1);
 
     const char* pRead = i_pStr;
     while( nLength-- )
     {
         if( *pRead == '\r' )
         {
-            pBuffer.push_back('\\');
-            pBuffer.push_back('r');
+            aBuffer.push_back('\\');
+            aBuffer.push_back('r');
         }
         else if( *pRead == '\n' )
         {
-            pBuffer.push_back('\\');
-            pBuffer.push_back('n');
+            aBuffer.push_back('\\');
+            aBuffer.push_back('n');
         }
         else if( *pRead == '\\' )
         {
-            pBuffer.push_back('\\');
-            pBuffer.push_back('\\');
+            aBuffer.push_back('\\');
+            aBuffer.push_back('\\');
         }
         else
-            pBuffer.push_back(*pRead);
+            aBuffer.push_back(*pRead);
         pRead++;
     }
-    pBuffer.push_back(0);
+    aBuffer.push_back(0);
 
-    return pBuffer;
+    return aBuffer;
 }
 
 }
@@ -574,14 +574,14 @@ void PDFOutDev::processLink(Link* link, Catalog*)
     {
         const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->getCString();
 
-        std::vector<char> pEsc( lcl_escapeLineFeeds(pURI) );
+        std::vector<char> aEsc( lcl_escapeLineFeeds(pURI) );
 
         printf( "drawLink %f %f %f %f %s\n",
                 normalize(x1),
                 normalize(y1),
                 normalize(x2),
                 normalize(y2),
-                pEsc.data() );
+                aEsc.data() );
     }
 }
 
@@ -767,7 +767,7 @@ void PDFOutDev::updateFont(GfxState *state)
 
             aFont = it->second;
 
-            std::vector<char> pEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
+            std::vector<char> aEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
             printf( " %d %d %d %d %f %d %s",
                     aFont.isEmbedded,
                     aFont.isBold,
@@ -775,7 +775,7 @@ void PDFOutDev::updateFont(GfxState *state)
                     aFont.isUnderline,
                     normalize(state->getTransformedFontSize()),
                     nEmbedSize,
-                    pEsc.data() );
+                    aEsc.data() );
         }
         printf( "\n" );
 
@@ -920,8 +920,8 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     for( int i=0; i<uLen; ++i )
     {
         buf[ m_pUtf8Map->mapUnicode(u[i], buf, sizeof(buf)-1) ] = 0;
-        std::vector<char> pEsc( lcl_escapeLineFeeds(buf) );
-        printf( "%s", pEsc.data() );
+        std::vector<char> aEsc( lcl_escapeLineFeeds(buf) );
+        printf( "%s", aEsc.data() );
     }
 
     printf( "\n" );

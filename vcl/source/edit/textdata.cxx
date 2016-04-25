@@ -164,9 +164,9 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_Int32 nChar, bool bInclEnd )
 {
     for ( size_t nLine = 0; nLine < maLines.size(); nLine++ )
     {
-        TextLine& pLine = maLines[ nLine ];
-        if ( ( bInclEnd && ( pLine.GetEnd() >= nChar ) ) ||
-             ( pLine.GetEnd() > nChar ) )
+        TextLine& rLine = maLines[ nLine ];
+        if ( ( bInclEnd && ( rLine.GetEnd() >= nChar ) ) ||
+             ( rLine.GetEnd() > nChar ) )
         {
             return nLine;
         }
@@ -184,10 +184,10 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
     DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Leere Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
-        const TextLine& pLastFormatted = maLines[ nLastFormattedLine ];
-        const TextLine& pUnformatted = maLines[ nLastFormattedLine+1 ];
-        short nPortionDiff = pUnformatted.GetStartPortion() - pLastFormatted.GetEndPortion();
-        sal_Int32 nTextDiff = pUnformatted.GetStart() - pLastFormatted.GetEnd();
+        const TextLine& rLastFormatted = maLines[ nLastFormattedLine ];
+        const TextLine& rUnformatted = maLines[ nLastFormattedLine+1 ];
+        short nPortionDiff = rUnformatted.GetStartPortion() - rLastFormatted.GetEndPortion();
+        sal_Int32 nTextDiff = rUnformatted.GetStart() - rLastFormatted.GetEnd();
         nTextDiff++;    // LastFormatted.GetEnd() was inclusive => subtracted one too much!
 
         // The first unformatted one has to start exactly one portion past the last
@@ -199,15 +199,15 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
         {
             for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
-                TextLine& pLine = maLines[ nL ];
+                TextLine& rLine = maLines[ nL ];
 
-                pLine.GetStartPortion() = pLine.GetStartPortion() + nPDiff;
-                pLine.GetEndPortion() = pLine.GetEndPortion() + nPDiff;
+                rLine.GetStartPortion() = rLine.GetStartPortion() + nPDiff;
+                rLine.GetEndPortion() = rLine.GetEndPortion() + nPDiff;
 
-                pLine.GetStart() = pLine.GetStart() + nTDiff;
-                pLine.GetEnd() = pLine.GetEnd() + nTDiff;
+                rLine.GetStart() = rLine.GetStart() + nTDiff;
+                rLine.GetEnd() = rLine.GetEnd() + nTDiff;
 
-                pLine.SetValid();
+                rLine.SetValid();
             }
         }
     }

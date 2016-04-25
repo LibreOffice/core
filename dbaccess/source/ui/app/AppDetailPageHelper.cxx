@@ -219,8 +219,8 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
     SetUniqueId(UID_APP_DETAILPAGE_HELPER);
-    for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
-        m_pLists[i] = nullptr;
+    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
+        rpBox = nullptr;
     ImplInitSettings();
 }
 
@@ -235,21 +235,21 @@ void OAppDetailPageHelper::dispose()
     {
         Reference< ::util::XCloseable> xCloseable(m_xFrame,UNO_QUERY);
         if ( xCloseable.is() )
-            xCloseable->close(sal_True);
+            xCloseable->close(true);
     }
     catch(const Exception&)
     {
         OSL_FAIL("Exception thrown while disposing preview frame!");
     }
 
-    for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
+    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
     {
-        if ( m_pLists[i] )
+        if ( rpBox )
         {
-            m_pLists[i]->clearCurrentSelection();
-            m_pLists[i]->Hide();
-            m_pLists[i]->clearCurrentSelection();   // why a second time?
-            m_pLists[i].disposeAndClear();
+            rpBox->clearCurrentSelection();
+            rpBox->Hide();
+            rpBox->clearCurrentSelection();   // why a second time?
+            rpBox.disposeAndClear();
         }
     }
     m_aMenu.reset();
@@ -429,8 +429,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
         pEntry = pList->NextSelected(pEntry);
     }
 
-    _out_rSelectedObjects.realloc( aSelected.size() );
-    ::std::copy( aSelected.begin(), aSelected.end(), _out_rSelectedObjects.getArray() );
+    _out_rSelectedObjects = comphelper::containerToSequence( aSelected );
 }
 
 void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
@@ -686,7 +685,7 @@ namespace
     namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
     namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
-    static sal_Int32 lcl_getFolderIndicatorForType( const ElementType _eType )
+    sal_Int32 lcl_getFolderIndicatorForType( const ElementType _eType )
     {
         const sal_Int32 nFolderIndicator =
                 ( _eType == E_FORM ) ? DatabaseObjectContainer::FORMS_FOLDER
@@ -772,10 +771,10 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
 void OAppDetailPageHelper::clearPages()
 {
     showPreview(nullptr);
-    for (size_t i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
+    for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
     {
-        if ( m_pLists[i] )
-            m_pLists[i]->Clear();
+        if ( rpBox )
+            rpBox->Clear();
     }
 }
 
@@ -794,7 +793,6 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
     {
-        OUString sNewName = _rNewName;
         SvTreeListEntry* pEntry = nullptr;
         switch( _eType )
         {
@@ -816,7 +814,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
         OSL_ENSURE(pEntry,"Do you know that the name isn't existence!");
         if ( pEntry )
         {
-            pTreeView->SetEntryText(pEntry,sNewName);
+            pTreeView->SetEntryText(pEntry,_rNewName);
         }
     }
 }
@@ -1119,10 +1117,10 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         pDispatcher->setTargetFrame( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW) );
 
         ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "Preview", sal_True );
-        aArgs.put( "ReadOnly", sal_True );
-        aArgs.put( "AsTemplate", sal_False );
-        aArgs.put( OUString(PROPERTY_SHOWMENU), sal_False );
+        aArgs.put( "Preview", true );
+        aArgs.put( "ReadOnly", true );
+        aArgs.put( "AsTemplate", false );
+        aArgs.put( OUString(PROPERTY_SHOWMENU), false );
 
         Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
         bool bClearPreview = !xPreview.is();
@@ -1160,14 +1158,14 @@ IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     // execute the menu
     std::unique_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
-    sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
+    const sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
                             , SID_DB_APP_VIEW_DOC_PREVIEW
                             , SID_DB_APP_VIEW_DOCINFO_PREVIEW
     };
 
-    for(size_t i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
+    for(unsigned short nAction : pActions)
     {
-        aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
+        aMenu->CheckItem(nAction,m_aMenu->IsItemChecked(nAction));
     }
     aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
 

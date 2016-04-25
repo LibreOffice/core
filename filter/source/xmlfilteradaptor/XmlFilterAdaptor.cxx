@@ -138,7 +138,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
         Reference< XStyleLoader > xstyleLoader (xstylefamiliessupplier->getStyleFamilies(), UNO_QUERY);
         if(xstyleLoader.is()){
-            Sequence<css::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
+            Sequence<css::beans::PropertyValue> aValue = xstyleLoader->getStyleLoaderOptions();
 
             //Load the Styles from the Template URL Supplied in the TypeDetection file
             if(!comphelper::isFileUrl(msTemplateName))
@@ -149,7 +149,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
                 msTemplateName=PathString.concat(msTemplateName);
             }
 
-            xstyleLoader->loadStylesFromURL(msTemplateName,pValue);
+            xstyleLoader->loadStylesFromURL(msTemplateName,aValue);
         }
     }
 

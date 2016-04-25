@@ -177,14 +177,14 @@ OUString ConvertDateTime_Impl( const OUString& rName,
 {
      Date aD(uDT);
      tools::Time aT(uDT);
-     const OUString pDelim ( ", " );
+     const OUString aDelim( ", " );
      OUString aStr( rWrapper.getDate( aD ) );
-     aStr += pDelim;
+     aStr += aDelim;
      aStr += rWrapper.getTime( aT );
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {
-        aStr += pDelim;
+        aStr += aDelim;
         aStr += aAuthor;
      }
      return aStr;

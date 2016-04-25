@@ -71,8 +71,6 @@
 using namespace ::com::sun::star;
 
 
-
-
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, SvtScriptType nScriptType )
 {
     sal_uInt16 nId = nItemId;
@@ -465,7 +463,7 @@ void TextPortionList::Remove(sal_Int32 nPos)
 
 namespace {
 
-class FindTextPortionByAddress : std::unary_function<std::unique_ptr<TextPortion>, bool>
+class FindTextPortionByAddress : public std::unary_function<std::unique_ptr<TextPortion>, bool>
 {
     const TextPortion* mp;
 public:
@@ -690,8 +688,8 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
 
 namespace {
 
-template<typename _Array, typename _Val>
-sal_Int32 FastGetPos(const _Array& rArray, const _Val* p, sal_Int32& rLastPos)
+template<typename Array, typename Val>
+sal_Int32 FastGetPos(const Array& rArray, const Val* p, sal_Int32& rLastPos)
 {
     sal_Int32 nArrayLen = rArray.size();
 
@@ -805,9 +803,9 @@ void ParaPortionList::Reset()
 long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
 {
     long nHeight = 0;
-    for (sal_Int32 i = 0, n = maPortions.size(); i < n; ++i)
+    for (const auto & rPortion : maPortions)
     {
-        const ParaPortion* pTmpPortion = maPortions[i].get();
+        const ParaPortion* pTmpPortion = rPortion.get();
         if ( pTmpPortion == pPPortion )
             return nHeight;
         nHeight += pTmpPortion->GetHeight();
@@ -1004,7 +1002,6 @@ EditLine::~EditLine()
 }
 
 
-
 EditLine* EditLine::Clone() const
 {
     EditLine* pL = new EditLine;
@@ -1167,7 +1164,6 @@ void EditLineList::Insert(sal_Int32 nPos, EditLine* p)
 EditPaM::EditPaM() : pNode(nullptr), nIndex(0) {}
 EditPaM::EditPaM(const EditPaM& r) : pNode(r.pNode), nIndex(r.nIndex) {}
 EditPaM::EditPaM(ContentNode* p, sal_Int32 n) : pNode(p), nIndex(n) {}
-
 
 
 void EditPaM::SetNode(ContentNode* p)
@@ -1984,7 +1980,7 @@ EditDoc::~EditDoc()
 
 namespace {
 
-class RemoveEachItemFromPool : std::unary_function<std::unique_ptr<ContentNode>, void>
+class RemoveEachItemFromPool : public std::unary_function<std::unique_ptr<ContentNode>, void>
 {
     EditDoc& mrDoc;
 public:
@@ -2328,7 +2324,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     // for a new paragraph we like to have the bullet/numbering visible by default
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true), EE_PARA_BULLETSTATE );
 
-    // ContenNode constructor copies also the paragraph attributes
+    // ContentNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
 
     // Copy the Default Font
@@ -2887,10 +2883,9 @@ bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
 }
 
 
-
 namespace {
 
-class FindByAddress : std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
+class FindByAddress : public std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
 {
     const EditCharAttrib* mpAttr;
 public:
@@ -2978,7 +2973,7 @@ EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nP
 
 namespace {
 
-class FindByStartPos : std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
+class FindByStartPos : public std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
 {
     sal_Int32 mnPos;
 public:
@@ -3008,7 +3003,7 @@ const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
 
 namespace {
 
-class RemoveEmptyAttrItem : std::unary_function<std::unique_ptr<EditCharAttrib>, void>
+class RemoveEmptyAttrItem : public std::unary_function<std::unique_ptr<EditCharAttrib>, void>
 {
     SfxItemPool& mrItemPool;
 public:

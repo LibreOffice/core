@@ -1150,7 +1150,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             while( aIter != aEndIter )
             {
-                SwAccessibleChild pFrame( (*aIter).first );
+                SwAccessibleChild aFrame( (*aIter).first );
 
                 const SwFrameFormat *pFrameFormat = (*aIter).first ? ::FindFrameFormat( (*aIter).first ) : nullptr;
                 if( !pFrameFormat )
@@ -1158,10 +1158,10 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     ++aIter;
                     continue;
                 }
-                const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
-                const SwPosition *pPos = pAnchor.GetContentAnchor();
+                const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+                const SwPosition *pPos = rAnchor.GetContentAnchor();
 
-                if(pAnchor.GetAnchorId() == FLY_AT_PAGE)
+                if(rAnchor.GetAnchorId() == FLY_AT_PAGE)
                 {
                     uno::Reference < XAccessible > xAcc( (*aIter).second );
                     if(xAcc.is())
@@ -1178,7 +1178,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 }
                 if( pPos->nNode.GetNode().GetTextNode() )
                 {
-                    int pIndex = pPos->nContent.GetIndex();
+                    int nIndex = pPos->nContent.GetIndex();
                     bool bMarked = false;
                     if( pCursor != nullptr )
                     {
@@ -1198,10 +1198,10 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                                 if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                                 {
-                                    if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
+                                    if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
                                     {
-                                        if( ( ((nHere == nStartIndex) && (pIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
-                                            &&( ((nHere == nEndIndex) && (pIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) ) )
+                                        if( ( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
+                                            &&( ((nHere == nEndIndex) && (nIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) ) )
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if( xAcc.is() )
@@ -1214,7 +1214,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                                 static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
                                         }
                                     }
-                                    else if( pAnchor.GetAnchorId() == FLY_AT_PARA )
+                                    else if( rAnchor.GetAnchorId() == FLY_AT_PARA )
                                     {
                                         if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
                                             && (nHere < nEndIndex ) )
@@ -1280,8 +1280,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                         const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
                         if (pFrameFormat)
                         {
-                            const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
-                            if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
+                            const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+                            if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
                             {
                                 uno::Reference< XAccessible > xAccParent = pAccFrame->getAccessibleParent();
                                 if (xAccParent.is())
@@ -1551,8 +1551,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
                 SwFrameFormat *pFrameFormat = pObj ? FindFrameFormat( pObj ) : nullptr;
                 if (pFrameFormat)
                 {
-                    const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
-                    if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
+                    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+                    if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
                     {
                         uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
                         if (xPara.is())

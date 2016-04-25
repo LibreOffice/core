@@ -398,8 +398,8 @@ namespace slideshow
             // the whole shape set
 
             // determine new subset range
-            for( const auto& pShape : maSubsetShapes )
-                updateSubsetBounds( pShape );
+            for( const auto& rSubsetShape : maSubsetShapes )
+                updateSubsetBounds( rSubsetShape );
 
             updateSubsets();
 

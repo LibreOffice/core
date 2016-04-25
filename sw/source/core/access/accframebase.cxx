@@ -307,11 +307,11 @@ bool SwAccessibleFrameBase::GetSelectedState( )
     // SELETED.
     SwFlyFrame* pFlyFrame = getFlyFrame();
     const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
-    const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
-    const SwPosition *pPos = pAnchor.GetContentAnchor();
+    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+    const SwPosition *pPos = rAnchor.GetContentAnchor();
     if( !pPos )
         return false;
-    int pIndex = pPos->nContent.GetIndex();
+    int nIndex = pPos->nContent.GetIndex();
     if( pPos->nNode.GetNode().GetTextNode() )
     {
         SwPaM* pCursor = GetCursor();
@@ -334,13 +334,13 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                     sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                     if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                     {
-                        if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
+                        if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
                         {
-                            if( ((nHere == nStartIndex) && (pIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
-                                if( ((nHere == nEndIndex) && (pIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) )
+                            if( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
+                                if( ((nHere == nEndIndex) && (nIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) )
                                     return true;
                         }
-                        else if( pAnchor.GetAnchorId() == FLY_AT_PARA )
+                        else if( rAnchor.GetAnchorId() == FLY_AT_PARA )
                         {
                             if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
                                 && (nHere < nEndIndex ) )

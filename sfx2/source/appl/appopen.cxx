@@ -602,7 +602,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( !pFileNameItem )
     {
         // get FileName from dialog
-        std::vector<OUString> pURLList;
+        std::vector<OUString> aURLList;
         OUString aFilter;
         SfxItemSet* pSet = nullptr;
         OUString aPath;
@@ -640,12 +640,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         sal_uIntPtr nErr = sfx2::FileOpenDialog_Impl(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                SFXWB_MULTISELECTION, OUString(), pURLList,
+                SFXWB_MULTISELECTION, OUString(), aURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
 
         if ( nErr == ERRCODE_ABORT )
         {
-            pURLList.clear();
+            aURLList.clear();
             return;
         }
 
@@ -656,7 +656,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         rReq.AppendItem( SfxStringItem( SID_REFERER, "private:user" ) );
         delete pSet;
 
-        if(!pURLList.empty())
+        if(!aURLList.empty())
         {
             if ( nSID == SID_OPENTEMPLATE )
                 rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, false ) );
@@ -693,7 +693,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem(SfxStringItem(SID_DOC_SERVICE, aDocService));
             }
 
-            for(std::vector<OUString>::const_iterator i = pURLList.begin(); i != pURLList.end(); ++i)
+            for(std::vector<OUString>::const_iterator i = aURLList.begin(); i != aURLList.end(); ++i)
             {
                 rReq.RemoveItem( SID_FILE_NAME );
                 rReq.AppendItem( SfxStringItem( SID_FILE_NAME, *i ) );
@@ -725,10 +725,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 }
             }
 
-            pURLList.clear();
+            aURLList.clear();
             return;
         }
-        pURLList.clear();
+        aURLList.clear();
     }
 
     bool bHyperlinkUsed = false;

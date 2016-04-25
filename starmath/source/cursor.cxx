@@ -717,9 +717,9 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     //Insert into line
     pLineList->insert(it, pBrace);
     //Patch line (I think this is good enough)
-    SmCaretPos pAfter = PatchLineList(pLineList, it);
+    SmCaretPos aAfter = PatchLineList(pLineList, it);
     if( !PosAfterInsert.IsValid() )
-        PosAfterInsert = pAfter;
+        PosAfterInsert = aAfter;
 
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);

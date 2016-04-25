@@ -95,8 +95,8 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell& rShell)
         {
             if (pContent->GetType() == FRM_TAB)
             {
-                SwFormatFrameSize pSize = pLine->GetFrameFormat()->GetFrameSize();
-                pRow->ModifyNotification(nullptr, &pSize);
+                SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
+                pRow->ModifyNotification(nullptr, &aSize);
                 return;
             }
         }

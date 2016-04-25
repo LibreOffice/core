@@ -1252,20 +1252,12 @@ namespace osl_FileStatus
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            Directory pDir( aTmpName3 );
-            nError1 = pDir.open();
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            nError1 = pDir.getNextItem( rItem );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            pDir.close();
-            /*
             Directory aDir( aTmpName3 );
             nError1 = aDir.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            nError1 = aDir.getNextItem( rItem, 0 );
+            nError1 = aDir.getNextItem( rItem );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             aDir.close();
-            */
         }
 
         void tearDown() override

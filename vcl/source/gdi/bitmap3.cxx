@@ -718,9 +718,9 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
             InverseColorMap aColorMap(aPalette);
             BitmapColor aColor;
             ImpErrorQuad aErrQuad;
-            std::vector<ImpErrorQuad> pErrQuad1(nWidth);
-            std::vector<ImpErrorQuad> pErrQuad2(nWidth);
-            ImpErrorQuad* pQLine1 = pErrQuad1.data();
+            std::vector<ImpErrorQuad> aErrQuad1(nWidth);
+            std::vector<ImpErrorQuad> aErrQuad2(nWidth);
+            ImpErrorQuad* pQLine1 = aErrQuad1.data();
             ImpErrorQuad* pQLine2 = nullptr;
             long nYTmp = 0L;
             sal_uInt8 cIndex;
@@ -744,7 +744,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 
             for (long nY = 0L; nY < std::min(nHeight, 2L); nY++, nYTmp++)
             {
-                pQLine2 = !nY ? pErrQuad1.data() : pErrQuad2.data();
+                pQLine2 = !nY ? aErrQuad1.data() : aErrQuad2.data();
                 for (long nX = 0L; nX < nWidth; nX++)
                 {
                     if (pReadAcc->HasPalette())
@@ -782,7 +782,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 
                 // Refill/copy row buffer
                 pQLine1 = pQLine2;
-                pQLine2 = (bQ1 = !bQ1) ? pErrQuad2.data() : pErrQuad1.data();
+                pQLine2 = (bQ1 = !bQ1) ? aErrQuad2.data() : aErrQuad1.data();
 
                 if (nYTmp < nHeight)
                 {

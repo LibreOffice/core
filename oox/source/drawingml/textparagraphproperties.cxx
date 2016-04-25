@@ -518,8 +518,8 @@ void TextParagraphProperties::dump() const
     xStart->gotoEnd( sal_True );
     Reference< XPropertySet > xPropSet( xRange, UNO_QUERY );
     pushToPropSet( nullptr, xPropSet, emptyMap, nullptr, false, 0 );
-    PropertySet pSet( xPropSet );
-    pSet.dump();
+    PropertySet aPropSet( xPropSet );
+    aPropSet.dump();
 }
 #endif
 } }

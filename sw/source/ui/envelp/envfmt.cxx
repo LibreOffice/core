@@ -370,10 +370,10 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl* pColl, bool bSende
         };
 
         // BruteForce merge because MergeRange in SvTools is buggy:
-        std::vector<sal_uInt16> pVec = ::lcl_convertRangesToList(pRanges);
+        std::vector<sal_uInt16> aVec2 = ::lcl_convertRangesToList(pRanges);
         std::vector<sal_uInt16> aVec = ::lcl_convertRangesToList(aRanges);
-        pVec.insert(pVec.end(), aVec.begin(), aVec.end());
-        std::unique_ptr<sal_uInt16[]> pNewRanges(::lcl_convertListToRanges(pVec));
+        aVec2.insert(aVec2.end(), aVec.begin(), aVec.end());
+        std::unique_ptr<sal_uInt16[]> pNewRanges(::lcl_convertListToRanges(aVec2));
 
         pAddrSet = new SfxItemSet(GetParentSwEnvDlg()->pSh->GetView().GetCurShell()->GetPool(),
                                   pNewRanges.get());

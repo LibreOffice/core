@@ -21,7 +21,6 @@
 #include <basegfx/numeric/ftools.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace animation
@@ -35,7 +34,6 @@ namespace drawinglayer
         AnimationEntry::~AnimationEntry()
         {
         }
-
 
 
         AnimationEntryFixed::AnimationEntryFixed(double fDuration, double fState)
@@ -83,7 +81,6 @@ namespace drawinglayer
                 return 0.0;
             }
         }
-
 
 
         AnimationEntryLinear::AnimationEntryLinear(double fDuration, double fFrequency, double fStart, double fStop)
@@ -162,7 +159,6 @@ namespace drawinglayer
         }
 
 
-
         sal_uInt32 AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
         {
             sal_uInt32 nIndex(0L);
@@ -182,9 +178,9 @@ namespace drawinglayer
 
         AnimationEntryList::~AnimationEntryList()
         {
-            for(size_t a(0); a < maEntries.size(); a++)
+            for(AnimationEntry* i : maEntries)
             {
-                delete maEntries[a];
+                delete i;
             }
         }
 
@@ -192,9 +188,9 @@ namespace drawinglayer
         {
             AnimationEntryList* pNew = new AnimationEntryList();
 
-            for(size_t a(0); a < maEntries.size(); a++)
+            for(AnimationEntry* i : maEntries)
             {
-                pNew->append(*maEntries[a]);
+                pNew->append(*i);
             }
 
             return pNew;
@@ -271,7 +267,6 @@ namespace drawinglayer
         }
 
 
-
         AnimationEntryLoop::AnimationEntryLoop(sal_uInt32 nRepeat)
         :   AnimationEntryList(),
             mnRepeat(nRepeat)
@@ -286,9 +281,9 @@ namespace drawinglayer
         {
             AnimationEntryLoop* pNew = new AnimationEntryLoop(mnRepeat);
 
-            for(size_t a(0); a < maEntries.size(); a++)
+            for(AnimationEntry* i : maEntries)
             {
-                pNew->append(*maEntries[a]);
+                pNew->append(*i);
             }
 
             return pNew;

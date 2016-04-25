@@ -1656,12 +1656,12 @@ XFColumnSep* LwpLayout::GetColumnSep()
         return nullptr;
     }
 
-    LwpBorderStuff& pBorderStuff = pLayoutGutters->GetBorderStuff();
+    LwpBorderStuff& rBorderStuff = pLayoutGutters->GetBorderStuff();
 
     LwpBorderStuff::BorderType eType = LwpBorderStuff::LEFT;
-    LwpColor    aColor = pBorderStuff.GetSideColor(eType);
-    double  fWidth = pBorderStuff.GetSideWidth(eType);
-    //sal_uInt16    nType = pBorderStuff->GetSideType(eType);
+    LwpColor    aColor = rBorderStuff.GetSideColor(eType);
+    double  fWidth = rBorderStuff.GetSideWidth(eType);
+    //sal_uInt16    nType = rBorderStuff->GetSideType(eType);
 
     XFColumnSep* pColumnSep = new XFColumnSep();
     XFColor aXFColor(aColor.To24Color());

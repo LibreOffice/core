@@ -1163,7 +1163,7 @@ void SwSidebarWin::SetReadonly(bool bSet)
 
 void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
 {
-    Link<LinkParamNone*,void> pLink = Engine()->GetModifyHdl();
+    Link<LinkParamNone*,void> aLink = Engine()->GetModifyHdl();
     Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
     ESelection aOld = GetOutlinerView()->GetSelection();
 
@@ -1174,7 +1174,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
     GetOutlinerView()->SetAttribs( aEditAttr );
 
     GetOutlinerView()->SetSelection(aOld);
-    Engine()->SetModifyHdl( pLink );
+    Engine()->SetModifyHdl( aLink );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     EEControlBits nCntrl = Engine()->GetControlWord();

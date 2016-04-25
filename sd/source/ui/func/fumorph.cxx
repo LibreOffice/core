@@ -342,14 +342,14 @@ void FuMorph::ImpInsertPolygons(
     long                nStartLineWidth = 0;
     long                nEndLineWidth = 0;
     SdrPageView*        pPageView = mpView->GetSdrPageView();
-    SfxItemPool &       pPool = pObj1->GetObjectItemPool();
-    SfxItemSet          aSet1( pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
+    SfxItemPool &       rPool = pObj1->GetObjectItemPool();
+    SfxItemSet          aSet1( rPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
     SfxItemSet          aSet2( aSet1 );
-    bool            bLineColor = false;
-    bool            bFillColor = false;
-    bool            bLineWidth = false;
-    bool            bIgnoreLine = false;
-    bool            bIgnoreFill = false;
+    bool                bLineColor = false;
+    bool                bFillColor = false;
+    bool                bLineWidth = false;
+    bool                bIgnoreLine = false;
+    bool                bIgnoreFill = false;
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());

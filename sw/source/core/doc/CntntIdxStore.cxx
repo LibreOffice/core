@@ -264,9 +264,9 @@ void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
 
 void ContentIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    SwRedlineTable const & pRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable const & rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     long int nIdx = 0;
-    for (const SwRangeRedline* pRdl : pRedlineTable)
+    for (const SwRangeRedline* pRdl : rRedlineTable)
     {
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nContent );
         int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nContent ) :

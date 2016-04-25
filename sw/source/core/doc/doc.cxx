@@ -1077,8 +1077,8 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
         {
             if( pNames )
             {
-                OUString pTmp(static_cast<const SwFormatRefMark*>(pItem)->GetRefName());
-                pNames->insert(pNames->begin() + nCount, pTmp);
+                OUString aTmp(static_cast<const SwFormatRefMark*>(pItem)->GetRefName());
+                pNames->insert(pNames->begin() + nCount, aTmp);
             }
             ++nCount;
         }

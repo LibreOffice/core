@@ -795,10 +795,10 @@ bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 
     while ( xFilterEnum->hasMoreElements() )
     {
-        uno::Sequence< beans::PropertyValue > pProps;
-        if ( xFilterEnum->nextElement() >>= pProps )
+        uno::Sequence< beans::PropertyValue > aProps;
+        if ( xFilterEnum->nextElement() >>= aProps )
         {
-            ::comphelper::SequenceAsHashMap aPropsHM( pProps );
+            ::comphelper::SequenceAsHashMap aPropsHM( aProps );
             OUString aUIServName = aPropsHM.getUnpackedValueOrDefault(
                                             "UIComponent",
                                             OUString() );

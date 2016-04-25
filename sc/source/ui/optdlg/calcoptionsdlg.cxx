@@ -318,9 +318,9 @@ struct OpenCLTester
         mbOldAutoCalc = mpDoc->GetAutoCalc();
         mpDoc->SetAutoCalc(false);
         mpOldCalcConfig = ScInterpreter::GetGlobalConfig();
-        ScCalcConfig pConfig(mpOldCalcConfig);
-        pConfig.mnOpenCLMinimumFormulaGroupSize = 20;
-        ScInterpreter::SetGlobalConfig(pConfig);
+        ScCalcConfig aConfig(mpOldCalcConfig);
+        aConfig.mnOpenCLMinimumFormulaGroupSize = 20;
+        ScInterpreter::SetGlobalConfig(aConfig);
 
         mpDoc->SetString(ScAddress(0,0,0), "Result:");
     }

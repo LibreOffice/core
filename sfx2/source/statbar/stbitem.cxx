@@ -255,38 +255,38 @@ throw ( css::uno::RuntimeException, std::exception )
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
-                uno::Type pType = rEvent.State.getValueType();
+                uno::Type aType = rEvent.State.getValueType();
 
-                if ( pType == cppu::UnoType<void>::get() )
+                if ( aType == cppu::UnoType<void>::get() )
                 {
                     pItem = new SfxVoidItem( nSlotID );
                     eState = SfxItemState::UNKNOWN;
                 }
-                else if ( pType == cppu::UnoType<bool>::get() )
+                else if ( aType == cppu::UnoType<bool>::get() )
                 {
                     bool bTemp = false;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotID, bTemp );
                 }
-                else if ( pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
+                else if ( aType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
                 {
                     sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotID, nTemp );
                 }
-                else if ( pType == cppu::UnoType<sal_uInt32>::get() )
+                else if ( aType == cppu::UnoType<sal_uInt32>::get() )
                 {
                     sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotID, nTemp );
                 }
-                else if ( pType == cppu::UnoType<OUString>::get() )
+                else if ( aType == cppu::UnoType<OUString>::get() )
                 {
                     OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotID, sTemp );
                 }
-                else if ( pType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
+                else if ( aType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
                 {
                     frame::status::ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;

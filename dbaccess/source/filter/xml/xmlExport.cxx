@@ -54,6 +54,7 @@
 
 #include <boost/optional.hpp>
 #include <memory>
+#include <iterator>
 
 namespace dbaxml
 {
@@ -346,7 +347,7 @@ void ODBExport::exportDataSource()
                 }
             };
 
-            PropertyMap aTokens[] =
+            const PropertyMap aTokens[] =
             {
                 PropertyMap( INFO_TEXTFILEHEADER,       XML_IS_FIRST_ROW_HEADER_LINE,       s_sTrue     ),
                 PropertyMap( INFO_SHOWDELETEDROWS,      XML_SHOW_DELETED,                   s_sFalse    ),
@@ -363,14 +364,14 @@ void ODBExport::exportDataSource()
             };
 
             bool bIsXMLDefault = false;
-            for ( size_t i=0; i < sizeof( aTokens ) / sizeof( aTokens[0] ); ++i )
+            for (const auto & aToken : aTokens)
             {
-                if ( pProperties->Name == aTokens[i].sPropertyName )
+                if ( pProperties->Name == aToken.sPropertyName )
                 {
-                    eToken = aTokens[i].eAttributeToken;
+                    eToken = aToken.eAttributeToken;
 
-                    if  (   !!aTokens[i].aXMLDefault
-                        &&  ( sValue == *aTokens[i].aXMLDefault )
+                    if  (   !!aToken.aXMLDefault
+                        &&  ( sValue == *aToken.aXMLDefault )
                         )
                     {
                         bIsXMLDefault = true;
@@ -497,9 +498,9 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
         ,XML_MAX_ROW_COUNT
         ,XML_SUPPRESS_VERSION_COLUMNS
     };
-    for (size_t i = 0; i< sizeof(pSettings)/sizeof(pSettings[0]); ++i)
+    for (::xmloff::token::XMLTokenEnum i : pSettings)
     {
-        TSettingsMap::const_iterator aFind = _aSettings.find(pSettings[i]);
+        TSettingsMap::const_iterator aFind = _aSettings.find(i);
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
@@ -530,9 +531,9 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
         ,XML_IS_FIRST_ROW_HEADER_LINE
         ,XML_PARAMETER_NAME_SUBSTITUTION
     };
-    for (size_t i = 0; i< sizeof(pSettings)/sizeof(pSettings[0]); ++i)
+    for (::xmloff::token::XMLTokenEnum nSetting : pSettings)
     {
-        TSettingsMap::const_iterator aFind = _aSettings.find(pSettings[i]);
+        TSettingsMap::const_iterator aFind = _aSettings.find(nSetting);
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
@@ -661,7 +662,7 @@ void ODBExport::exportDataSourceSettings()
 
     SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTINGS, true, true);
     ::std::vector< TypedPropertyValue >::iterator aIter = m_aDataSourceSettings.begin();
-    ::std::vector< TypedPropertyValue >::iterator aEnd = m_aDataSourceSettings.end();
+    ::std::vector< TypedPropertyValue >::const_iterator aEnd = m_aDataSourceSettings.end();
     for ( ; aIter != aEnd; ++aIter )
     {
         bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
@@ -905,7 +906,7 @@ void ODBExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt)
 
 void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const uno::Reference<beans::XPropertySet>& _xProp,SvXMLAttributeList& _rAtt,TPropertyStyleMap& _rMap)
 {
-    TPropertyStyleMap::iterator aFind = _rMap.find(_xProp);
+    TPropertyStyleMap::const_iterator aFind = _rMap.find(_xProp);
     if ( aFind != _rMap.end() )
     {
         _rAtt.AddAttribute( GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DB, GetXMLToken(_eToken) ),
@@ -962,7 +963,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
         if ( !xNameAccess->hasElements() )
         {
             Reference< XPropertySet > xComponent(_xColSup,UNO_QUERY);
-            TTableColumnMap::iterator aFind = m_aTableDummyColumns.find(xComponent);
+            TTableColumnMap::const_iterator aFind = m_aTableDummyColumns.find(xComponent);
             if ( aFind != m_aTableDummyColumns.end() )
             {
                 SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, true, true);
@@ -1131,11 +1132,11 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         };
 
         ::std::vector< XMLPropertyState > aPropertyStates;
-        for (size_t i = 0 ; i < sizeof(pExportHelper)/sizeof(pExportHelper[0]); ++i)
+        for (const auto & i : pExportHelper)
         {
-            aPropertyStates = pExportHelper[i].first->Filter(_xProp);
+            aPropertyStates = i.first->Filter(_xProp);
             if ( !aPropertyStates.empty() )
-                pExportHelper[i].second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( pExportHelper[i].second.second, aPropertyStates )));
+                i.second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( i.second.second, aPropertyStates )));
         }
 
         Reference< XNameAccess > xCollection;
@@ -1172,18 +1173,18 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
     }
     else
     { // here I know I have a column
-        TExportPropMapperPair pExportHelper[] = {
+        const TExportPropMapperPair pExportHelper[] = {
              TExportPropMapperPair(m_xColumnExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_COLUMN ))
             ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
         };
-        for (size_t i = 0 ; i < sizeof(pExportHelper)/sizeof(pExportHelper[0]); ++i)
+        for (const auto & i : pExportHelper)
         {
-            ::std::vector< XMLPropertyState > aPropStates = pExportHelper[i].first->Filter( _xProp );
+            ::std::vector< XMLPropertyState > aPropStates = i.first->Filter( _xProp );
             if ( !aPropStates.empty() )
             {
                 ::std::vector< XMLPropertyState >::iterator aItr = aPropStates.begin();
-                ::std::vector< XMLPropertyState >::iterator aEnd = aPropStates.end();
-                const rtl::Reference < XMLPropertySetMapper >& pStyle = pExportHelper[i].first->getPropertySetMapper();
+                ::std::vector< XMLPropertyState >::const_iterator aEnd = aPropStates.end();
+                const rtl::Reference < XMLPropertySetMapper >& pStyle = i.first->getPropertySetMapper();
                 while ( aItr != aEnd )
                 {
                     if ( aItr->mnIndex != -1 )
@@ -1207,10 +1208,10 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                 }
 
             }
-            if ( XML_STYLE_FAMILY_TABLE_CELL == pExportHelper[i].second.second )
+            if ( XML_STYLE_FAMILY_TABLE_CELL == i.second.second )
                 ::std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), ::std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )
-                pExportHelper[i].second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( pExportHelper[i].second.second, aPropStates )));
+                i.second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( i.second.second, aPropStates )));
         }
     }
 }

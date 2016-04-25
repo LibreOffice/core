@@ -1759,10 +1759,10 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
         if( (pSymDef->GetType() != SbxEMPTY) && (pSymDef->GetType() != SbxNULL) )
             aCache.InsertGlobalVar( pSymDef->GetName(), pParser->aGblStrings.Find(pSymDef->GetTypeId()) );
 
-        SbiSymPool& pChildPool = pSymDef->GetPool();
-        for(sal_uInt16 j = 0; j < pChildPool.GetSize(); ++j )
+        SbiSymPool& rChildPool = pSymDef->GetPool();
+        for(sal_uInt16 j = 0; j < rChildPool.GetSize(); ++j )
         {
-            SbiSymDef* pChildSymDef = pChildPool.Get(j);
+            SbiSymDef* pChildSymDef = rChildPool.Get(j);
             //std::cerr << "j: " << j << ", type: " << pChildSymDef->GetType() << "; name:" << pChildSymDef->GetName() << std::endl;
             if( (pChildSymDef->GetType() != SbxEMPTY) && (pChildSymDef->GetType() != SbxNULL) )
                 aCache.InsertLocalVar( pSymDef->GetName(), pChildSymDef->GetName(), pParser->aGblStrings.Find(pChildSymDef->GetTypeId()) );

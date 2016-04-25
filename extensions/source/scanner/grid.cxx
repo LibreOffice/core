@@ -118,7 +118,7 @@ class GridWindow : public vcl::Window
     virtual Size GetOptimalSize() const override;
     void drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2);
 public:
-    GridWindow(vcl::Window* pParent);
+    explicit GridWindow(vcl::Window* pParent);
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
     virtual ~GridWindow();
     virtual void dispose() override;
@@ -262,7 +262,6 @@ double GridWindow::findMinY()
 }
 
 
-
 double GridWindow::findMaxX()
 {
     if( ! m_pXValues )
@@ -275,7 +274,6 @@ double GridWindow::findMaxX()
 }
 
 
-
 double GridWindow::findMaxY()
 {
     if( ! m_pNewYValues )
@@ -286,7 +284,6 @@ double GridWindow::findMaxY()
             fMax = m_pNewYValues[ i ];
     return fMax;
 }
-
 
 
 void GridWindow::computeExtremes()
@@ -309,7 +306,6 @@ void GridWindow::computeExtremes()
         setBoundings( m_fMinX, m_fMinY, m_fMaxX, m_fMaxY );
     }
 }
-
 
 
 Point GridWindow::transform( double x, double y )
@@ -368,7 +364,6 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
 }
 
 
-
 void GridWindow::computeNew()
 {
     if(2L == m_aHandles.size())
@@ -412,7 +407,6 @@ void GridWindow::computeNew()
         }
     }
 }
-
 
 
 double GridWindow::interpolate(
@@ -525,9 +519,9 @@ void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
 
 void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
 {
-    for(size_t i(0L); i < m_aHandles.size(); i++)
+    for(impHandle & rHandle : m_aHandles)
     {
-        m_aHandles[i].draw(rRenderContext, m_aMarkerBitmap);
+        rHandle.draw(rRenderContext, m_aMarkerBitmap);
     }
 }
 
