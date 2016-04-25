@@ -253,6 +253,9 @@ public:
     /// Add an undo action that should be on the undo stack after ending text edit.
     void AddUndo(SdrUndoAction* pUndo);
 
+    /// Next time layouting would be done, skip it (to layout at the end of multiple actions).
+    void SetSkipChangeLayout(bool bSkipChangeLayout);
+
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) override;
 
     // Transformation interface for StarOfficeAPI. This implements support for
