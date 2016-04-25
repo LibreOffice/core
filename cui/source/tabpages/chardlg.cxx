@@ -3178,10 +3178,11 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
     nKerning = (short)m_pKerningMF->Denormalize( nVal );
 
+    SfxItemState eOldKernState = rOldSet.GetItemState( nWhich, false );
     if ( pOld )
     {
         const SvxKerningItem& rItem = *static_cast<const SvxKerningItem*>(pOld);
-        if ( rItem.GetValue() == nKerning )
+        if ( (eOldKernState >= SfxItemState::DEFAULT || m_pKerningMF->GetText().isEmpty()) && rItem.GetValue() == nKerning )
             bChanged = false;
     }
 
@@ -3190,7 +3191,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SvxKerningItem( nKerning, nWhich ) );
         bModified = true;
     }
-    else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
+    else if ( SfxItemState::DEFAULT == eOldKernState )
         rSet->InvalidateItem(nWhich);
 
     // Pair-Kerning
