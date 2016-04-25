@@ -309,11 +309,11 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
 }
 
 //PROP_CHART_STATISTIC_MEAN_VALUE
-class WrappedMeanValueProperty : public WrappedStatisticProperty< sal_Bool >
+class WrappedMeanValueProperty : public WrappedStatisticProperty< bool >
 {
 public:
-    virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& aNewValue ) const override;
+    virtual bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const bool& aNewValue ) const override;
 
     explicit WrappedMeanValueProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType );
@@ -323,14 +323,14 @@ public:
 WrappedMeanValueProperty::WrappedMeanValueProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedStatisticProperty< sal_Bool >( "MeanValue", uno::makeAny( false ), spChart2ModelContact, ePropertyType  )
+        : WrappedStatisticProperty< bool >( "MeanValue", uno::makeAny( false ), spChart2ModelContact, ePropertyType  )
 {
 }
 WrappedMeanValueProperty::~WrappedMeanValueProperty()
 {
 }
 
-sal_Bool WrappedMeanValueProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
+bool WrappedMeanValueProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
     bool bRet = false;
     uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
@@ -339,7 +339,7 @@ sal_Bool WrappedMeanValueProperty::getValueFromSeries( const Reference< beans::X
     return bRet;
 }
 
-void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& aNewValue ) const
+void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const bool& aNewValue ) const
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
     if( xRegCnt.is() )

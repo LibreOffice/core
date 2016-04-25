@@ -89,11 +89,11 @@ public:
     virtual ~WrappedSymbolSizeProperty();
 };
 
-class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< sal_Bool >
+class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< bool >
 {
 public:
-    virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& bDrawLines ) const override;
+    virtual bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const bool& bDrawLines ) const override;
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException) override;
 
@@ -492,7 +492,7 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
 WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedSeriesOrDiagramProperty< sal_Bool >( "Lines"
+        : WrappedSeriesOrDiagramProperty< bool >( "Lines"
             , uno::makeAny( true ), spChart2ModelContact, ePropertyType  )
 {
 }
@@ -501,7 +501,7 @@ WrappedSymbolAndLinesProperty::~WrappedSymbolAndLinesProperty()
 {
 }
 
-sal_Bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& /*xSeriesPropertySet*/ ) const
+bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& /*xSeriesPropertySet*/ ) const
 {
     //do not export this property anymore, instead use a linestyle none for no lines
     return true;
@@ -509,7 +509,7 @@ sal_Bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< bea
 
 void WrappedSymbolAndLinesProperty::setValueToSeries(
     const Reference< beans::XPropertySet >& xSeriesPropertySet,
-    const sal_Bool& bDrawLines ) const
+    const bool& bDrawLines ) const
 {
     if(!xSeriesPropertySet.is())
         return;

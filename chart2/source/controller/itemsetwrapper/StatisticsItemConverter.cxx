@@ -482,7 +482,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
-            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xProperties, "ForceIntercept");
+            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xProperties, "ForceIntercept");
         }
         break;
 
@@ -503,14 +503,14 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), &rItemSet ));
-            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowEquation");
+            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowEquation");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), &rItemSet ));
-            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
+            bChanged = lclConvertToPropertySet<bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
         }
         break;
 
@@ -751,7 +751,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
-            lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xProperties, "ForceIntercept");
+            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xProperties, "ForceIntercept");
         }
         break;
 
@@ -772,14 +772,14 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), nullptr ));
-            lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xEqProp, "ShowEquation");
+            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xEqProp, "ShowEquation");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), nullptr ));
-            lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
+            lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
         }
         break;
 
