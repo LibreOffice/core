@@ -37,20 +37,10 @@ sal_Int32 PropertyInfoService::getPropertyId(const OUString& _rName)
 {
     initialize();
 
-    PropertyAssignment aCompareName(_rName, -1);
-
-    ::std::pair<PropertyMap::iterator,PropertyMap::iterator> aPair = ::std::equal_range(
-        s_AllKnownProperties.begin(),
-        s_AllKnownProperties.end(),
-        aCompareName,
-        PropertyAssignmentNameCompareLess());
-
     sal_Int32 nHandle = -1;
-    if (aPair.first != aPair.second)
-    {   // we found something _and_ we have an identity
-        nHandle = aPair.first->nHandle;
-    }
-
+    const auto foundProperty = s_AllKnownProperties.find(_rName);
+    if (foundProperty != s_AllKnownProperties.end())
+        nHandle = foundProperty->second;
     return nHandle;
 }
 
@@ -62,14 +52,14 @@ sal_Int32 ConcreteInfoService::getPreferredPropertyId(const OUString& _rName)
 
 
 #define ADD_PROP_ASSIGNMENT(varname) \
-    s_AllKnownProperties.push_back(PropertyAssignment(PROPERTY_##varname, PROPERTY_ID_##varname))
+    s_AllKnownProperties.insert({ PROPERTY_##varname, PROPERTY_ID_##varname })
 
 void PropertyInfoService::initialize()
 {
     if (!s_AllKnownProperties.empty())
         return;
 
-    s_AllKnownProperties.reserve(220);
+//    s_AllKnownProperties.reserve(220);
 
     ADD_PROP_ASSIGNMENT(NAME);
     ADD_PROP_ASSIGNMENT(TAG);
@@ -229,14 +219,6 @@ void PropertyInfoService::initialize()
     ADD_PROP_ASSIGNMENT( WRITING_MODE );
     ADD_PROP_ASSIGNMENT( CONTEXT_WRITING_MODE );
     ADD_PROP_ASSIGNMENT( GENERATEVBAEVENTS );
-
-    // now sort the array by name
-
-    std::sort(
-        s_AllKnownProperties.begin(),
-        s_AllKnownProperties.end(),
-        PropertyAssignmentNameCompareLess()
-    );
 }
 
 

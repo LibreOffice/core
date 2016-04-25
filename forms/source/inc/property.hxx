@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <vector>
+#include <unordered_map>
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -60,7 +60,7 @@ class PropertyInfoService
 
     };
 
-    typedef std::vector<PropertyAssignment> PropertyMap;
+    typedef std::unordered_map<OUString, sal_Int32, OUStringHash> PropertyMap;
     static PropertyMap      s_AllKnownProperties;
 
 
