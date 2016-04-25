@@ -1215,7 +1215,10 @@ sal_uInt8 ORowSetValue::getUInt8()    const
             default:
                 {
                     Any aValue = makeAny();
-                    aValue >>= nRet;
+                    // Cf. "There is no TypeClass_UNSIGNED_BYTE" in makeAny:
+                    sal_uInt16 n;
+                    aValue >>= n;
+                    nRet = static_cast<sal_uInt8>(n);
                     break;
                 }
         }
