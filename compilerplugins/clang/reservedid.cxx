@@ -103,8 +103,10 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
         return true;
     }
     auto filename = compiler.getSourceManager().getFilename(spelLoc);
-    if (filename
-        == SRCDIR "/bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx")
+    if ((filename
+         == SRCDIR "/bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx")
+        || (filename
+            == SRCDIR "/bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx"))
     {
         return true;
     }
@@ -129,12 +131,6 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
             && s != "__GLXFBConfigRec" // vcl/unx/glxtest.cxx
             && s != "__PK11_GetKeyData"
                 // xmlsecurity/source/xmlsec/nss/nssrenam.h
-            && s != "__cxa_eh_globals"
-                // bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx
-            && s != "__cxa_exception"
-                // bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx
-            && s != "__cxxabiv1"
-                // bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx
             && s != "__data_start" // sal/osl/unx/system.cxx
             && s != "__lxstat") // setup_native/scripts/source/getuid.c
         {
