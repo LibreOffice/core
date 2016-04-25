@@ -22,88 +22,80 @@
 
 namespace dbtools
 {
-        const OUString& OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
-        {
-            ::std::map<sal_Int32, OUString>::const_iterator aIter = m_aPropertyMap.find(_nIndex);
-            if(aIter == m_aPropertyMap.end())
-            {
-                const_cast<OPropertyMap*>(this)->fillValue(_nIndex);
-                aIter = m_aPropertyMap.find(_nIndex);
-            }
-            return aIter->second;
-        }
+    OPropertyMap::OPropertyMap()
+    {
+        m_aPropertyMap = {
+                {PROPERTY_ID_QUERYTIMEOUT,         "QueryTimeOut"},
+                {PROPERTY_ID_MAXFIELDSIZE,         "MaxFieldSize"},
+                {PROPERTY_ID_MAXROWS,              "MaxRows"},
+                {PROPERTY_ID_CURSORNAME,           "CursorName"},
+                {PROPERTY_ID_RESULTSETCONCURRENCY, "ResultSetConcurrency"},
 
-        void OPropertyMap::fillValue(sal_Int32 _nIndex)
-        {
-            OUString pStr;
-            switch(_nIndex)
-            {
-                case PROPERTY_ID_QUERYTIMEOUT:              pStr = "QueryTimeOut"; break;
-                case PROPERTY_ID_MAXFIELDSIZE:              pStr = "MaxFieldSize"; break;
-                case PROPERTY_ID_MAXROWS:                   pStr = "MaxRows"; break;
-                case PROPERTY_ID_CURSORNAME:                pStr = "CursorName"; break;
-                case PROPERTY_ID_RESULTSETCONCURRENCY:      pStr = "ResultSetConcurrency"; break;
-
-                case PROPERTY_ID_RESULTSETTYPE:             pStr = "ResultSetType"; break;
-                case PROPERTY_ID_FETCHDIRECTION:            pStr = "FetchDirection"; break;
-                case PROPERTY_ID_FETCHSIZE:                 pStr = "FetchSize"; break;
-                case PROPERTY_ID_ESCAPEPROCESSING:          pStr = "EscapeProcessing"; break;
-                case PROPERTY_ID_USEBOOKMARKS:              pStr = "UseBookmarks"; break;
+                {PROPERTY_ID_RESULTSETTYPE,        "ResultSetType"},
+                {PROPERTY_ID_FETCHDIRECTION,       "FetchDirection"},
+                {PROPERTY_ID_FETCHSIZE,            "FetchSize"},
+                {PROPERTY_ID_ESCAPEPROCESSING,     "EscapeProcessing"},
+                {PROPERTY_ID_USEBOOKMARKS,         "UseBookmarks"},
                 // Column
-                case PROPERTY_ID_NAME:                      pStr = "Name"; break;
-                case PROPERTY_ID_TYPE:                      pStr = "Type"; break;
-                case PROPERTY_ID_TYPENAME:                  pStr = "TypeName"; break;
-                case PROPERTY_ID_PRECISION:                 pStr = "Precision"; break;
-                case PROPERTY_ID_SCALE:                     pStr = "Scale"; break;
-                case PROPERTY_ID_ISNULLABLE:                pStr = "IsNullable"; break;
-                case PROPERTY_ID_ISAUTOINCREMENT:           pStr = "IsAutoIncrement"; break;
-                case PROPERTY_ID_ISROWVERSION:              pStr = "IsRowVersion"; break;
-                case PROPERTY_ID_DESCRIPTION:               pStr = "Description"; break;
-                case PROPERTY_ID_DEFAULTVALUE:              pStr = "DefaultValue"; break;
+                {PROPERTY_ID_NAME,                 "Name"},
+                {PROPERTY_ID_TYPE,                 "Type"},
+                {PROPERTY_ID_TYPENAME,             "TypeName"},
+                {PROPERTY_ID_PRECISION,            "Precision"},
+                {PROPERTY_ID_SCALE,                "Scale"},
+                {PROPERTY_ID_ISNULLABLE,           "IsNullable"},
+                {PROPERTY_ID_ISAUTOINCREMENT,      "IsAutoIncrement"},
+                {PROPERTY_ID_ISROWVERSION,         "IsRowVersion"},
+                {PROPERTY_ID_DESCRIPTION,          "Description"},
+                {PROPERTY_ID_DEFAULTVALUE,         "DefaultValue"},
 
-                case PROPERTY_ID_REFERENCEDTABLE:           pStr = "ReferencedTable"; break;
-                case PROPERTY_ID_UPDATERULE:                pStr = "UpdateRule"; break;
-                case PROPERTY_ID_DELETERULE:                pStr = "DeleteRule"; break;
-                case PROPERTY_ID_CATALOG:                   pStr = "Catalog"; break;
-                case PROPERTY_ID_ISUNIQUE:                  pStr = "IsUnique"; break;
-                case PROPERTY_ID_ISPRIMARYKEYINDEX:         pStr = "IsPrimaryKeyIndex"; break;
-                case PROPERTY_ID_ISCLUSTERED:               pStr = "IsClustered"; break;
-                case PROPERTY_ID_ISASCENDING:               pStr = "IsAscending"; break;
-                case PROPERTY_ID_SCHEMANAME:                pStr = "SchemaName"; break;
-                case PROPERTY_ID_CATALOGNAME:               pStr = "CatalogName"; break;
+                {PROPERTY_ID_REFERENCEDTABLE,      "ReferencedTable"},
+                {PROPERTY_ID_UPDATERULE,           "UpdateRule"},
+                {PROPERTY_ID_DELETERULE,           "DeleteRule"},
+                {PROPERTY_ID_CATALOG,              "Catalog"},
+                {PROPERTY_ID_ISUNIQUE,             "IsUnique"},
+                {PROPERTY_ID_ISPRIMARYKEYINDEX,    "IsPrimaryKeyIndex"},
+                {PROPERTY_ID_ISCLUSTERED,          "IsClustered"},
+                {PROPERTY_ID_ISASCENDING,          "IsAscending"},
+                {PROPERTY_ID_SCHEMANAME,           "SchemaName"},
+                {PROPERTY_ID_CATALOGNAME,          "CatalogName"},
 
-                case PROPERTY_ID_COMMAND:                   pStr = "Command"; break;
-                case PROPERTY_ID_CHECKOPTION:               pStr = "CheckOption"; break;
-                case PROPERTY_ID_PASSWORD:                  pStr = "Password"; break;
-                case PROPERTY_ID_RELATEDCOLUMN:             pStr = "RelatedColumn"; break;
+                {PROPERTY_ID_COMMAND,              "Command"},
+                {PROPERTY_ID_CHECKOPTION,          "CheckOption"},
+                {PROPERTY_ID_PASSWORD,             "Password"},
+                {PROPERTY_ID_RELATEDCOLUMN,        "RelatedColumn"},
 
-                case PROPERTY_ID_FUNCTION:                  pStr = "Function"; break;
-                case PROPERTY_ID_AGGREGATEFUNCTION:         pStr = "AggregateFunction"; break;
-                case PROPERTY_ID_TABLENAME:                 pStr = "TableName"; break;
-                case PROPERTY_ID_REALNAME:                  pStr = "RealName"; break;
-                case PROPERTY_ID_DBASEPRECISIONCHANGED:     pStr = "DbasePrecisionChanged"; break;
-                case PROPERTY_ID_ISCURRENCY:                pStr = "IsCurrency"; break;
-                case PROPERTY_ID_ISBOOKMARKABLE:            pStr = "IsBookmarkable"; break;
-                case PROPERTY_ID_HY010:                     pStr = "HY010"; break; // error messages
-                case PROPERTY_ID_DELIMITER:                 pStr = "/"; break;
-                case PROPERTY_ID_FORMATKEY:                 pStr = "FormatKey"; break;
-                case PROPERTY_ID_LOCALE:                    pStr = "Locale"; break;
-                case PROPERTY_ID_AUTOINCREMENTCREATION:     pStr = "AutoIncrementCreation"; break;
-                case PROPERTY_ID_PRIVILEGES:                pStr = "Privileges"; break;
-                case PROPERTY_ID_HAVINGCLAUSE:              pStr = "HavingClause"; break;
-                case PROPERTY_ID_ISSIGNED:                  pStr = "IsSigned"; break;
-                case PROPERTY_ID_ISSEARCHABLE:              pStr = "IsSearchable"; break;
-                case PROPERTY_ID_LABEL:                     pStr = "Label"; break;
-                case PROPERTY_ID_APPLYFILTER:               pStr = "ApplyFilter"; break;
-                case PROPERTY_ID_FILTER:                    pStr = "Filter"; break;
-                case PROPERTY_ID_MASTERFIELDS:              pStr = "MasterFields"; break;
-                case PROPERTY_ID_DETAILFIELDS:              pStr = "DetailFields"; break;
-                case PROPERTY_ID_FIELDTYPE:                 pStr = "FieldType"; break;
-                case PROPERTY_ID_VALUE:                     pStr = "Value"; break;
-                case PROPERTY_ID_ACTIVE_CONNECTION:         pStr = "ActiveConnection"; break;
-            }
-            m_aPropertyMap[_nIndex] = pStr;
-        }
+                {PROPERTY_ID_FUNCTION,             "Function"},
+                {PROPERTY_ID_AGGREGATEFUNCTION,    "AggregateFunction"},
+                {PROPERTY_ID_TABLENAME,            "TableName"},
+                {PROPERTY_ID_REALNAME,             "RealName"},
+                {PROPERTY_ID_DBASEPRECISIONCHANGED,"DbasePrecisionChanged"},
+                {PROPERTY_ID_ISCURRENCY,           "IsCurrency"},
+                {PROPERTY_ID_ISBOOKMARKABLE,       "IsBookmarkable"},
+                {PROPERTY_ID_HY010,                "HY010"}, // error messages
+                {PROPERTY_ID_DELIMITER,            "/"},
+                {PROPERTY_ID_FORMATKEY,            "FormatKey"},
+                {PROPERTY_ID_LOCALE,               "Locale"},
+                {PROPERTY_ID_AUTOINCREMENTCREATION, "AutoIncrementCreation"},
+                {PROPERTY_ID_PRIVILEGES,           "Privileges"},
+                {PROPERTY_ID_HAVINGCLAUSE,         "HavingClause"},
+                {PROPERTY_ID_ISSIGNED,             "IsSigned"},
+                {PROPERTY_ID_ISSEARCHABLE,         "IsSearchable"},
+                {PROPERTY_ID_LABEL,                "Label"},
+                {PROPERTY_ID_APPLYFILTER,          "ApplyFilter"},
+                {PROPERTY_ID_FILTER,               "Filter"},
+                {PROPERTY_ID_MASTERFIELDS,         "MasterFields"},
+                {PROPERTY_ID_DETAILFIELDS,         "DetailFields"},
+                {PROPERTY_ID_FIELDTYPE,            "FieldType"},
+                {PROPERTY_ID_VALUE,                "Value"},
+                {PROPERTY_ID_ACTIVE_CONNECTION,    "ActiveConnection"},
+            };
+    }
+
+    const OUString& OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
+    {
+        ::std::map<sal_Int32, OUString>::const_iterator aIter = m_aPropertyMap.find(_nIndex);
+        return aIter->second;
+    }
 }
 
 
