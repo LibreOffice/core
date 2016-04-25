@@ -50,6 +50,9 @@ public:
     explicit SubToolBarController( const css::uno::Sequence< css::uno::Any >& rxArgs );
     virtual ~SubToolBarController();
 
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rxArgs ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
@@ -74,9 +77,6 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& e ) throw ( css::uno::RuntimeException, std::exception ) override;
-
-    // XUpdatable
-    virtual void SAL_CALL update() throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
@@ -407,10 +407,10 @@ void SubToolBarController::disposing( const css::lang::EventObject& e )
     svt::ToolboxController::disposing( e );
 }
 
-void SubToolBarController::update()
-    throw ( css::uno::RuntimeException, std::exception )
+void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >& rxArgs )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
-    svt::ToolboxController::update();
+    svt::ToolboxController::initialize( rxArgs );
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
