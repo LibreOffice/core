@@ -16,6 +16,24 @@
       "revId": "b6f7626879c34e8ff6f7fa46b06f098468ed24fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_7734f8dd",
+        "filename": "filter/source/graphicfilter/icgm/chart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-04-25T09:14:35Z",
+      "side": 1,
+      "message": "DataNode has a default initializer who sets all members to 0.\nhttps://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dblob;f\u003dfilter/source/graphicfilter/icgm/chart.hxx#l42\n\nSo DataNode a; declares a new variable of type DataNode and initializes all members to 0.\nDataNode mDataNode[7]; declares an array of 7 DataNode, all initialized to 0.\n\nI didn\u0027t check any usage, just saw that nBox** members are initialized to 0 again.",
+      "parentUuid": "1ac06dbe_2c02373f",
+      "revId": "b6f7626879c34e8ff6f7fa46b06f098468ed24fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
