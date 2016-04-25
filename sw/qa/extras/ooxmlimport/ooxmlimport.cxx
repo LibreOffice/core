@@ -1398,7 +1398,7 @@ DECLARE_OOXMLIMPORT_TEST(testTableWidth, "table_width.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Relative width wasn't recognized during import.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xTables->getByIndex(0), "IsWidthRelative")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative")));
 
     uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -1445,7 +1445,7 @@ DECLARE_OOXMLIMPORT_TEST(testN779630, "n779630.docx")
     CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.DateField")));
     CPPUNIT_ASSERT_EQUAL(OUString("date default text"), getProperty<OUString>(xPropertySet, "HelpText"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "Dropdown")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xPropertySet, "Dropdown")));
 
     // Second shape: combo box
     xControlShape.set(getShape(2), uno::UNO_QUERY);
@@ -1454,7 +1454,7 @@ DECLARE_OOXMLIMPORT_TEST(testN779630, "n779630.docx")
     CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
     CPPUNIT_ASSERT_EQUAL(OUString("dropdown default text"), getProperty<OUString>(xPropertySet, "DefaultText"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "Dropdown")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xPropertySet, "Dropdown")));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testIndentation, "indentation.docx")
@@ -1822,9 +1822,9 @@ DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xShape, "Surround"));
 
     // This should be in front of text.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xShape, "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xShape, "Opaque")));
     // And this should be behind the document.
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(getShape(2), "Opaque")));
 }
 
 DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")
@@ -1888,7 +1888,7 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
     // Make sure the shape is not in the background, as we have behindDoc="0" in the doc.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xShape, "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xShape, "Opaque")));
 
     // The 3 paragraphs on the rectangles inside the groupshape ended up in the
     // body text, make sure we don't have multiple paragraphs there anymore.

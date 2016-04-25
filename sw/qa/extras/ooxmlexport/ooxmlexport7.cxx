@@ -899,7 +899,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79591, "fdo79591.docx")
 DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
 {
     // The problem was that the shape in the header wasn't in the background.
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(getShape(1), "Opaque")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo80894, "TextFrameRotation.docx")

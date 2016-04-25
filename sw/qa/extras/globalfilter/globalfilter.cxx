@@ -535,19 +535,19 @@ void Test::testCharHighlightODF()
         {
             case 1: // non-transparent highlight
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(64), getProperty<sal_Int32>(xRun, "CharBackColor"));
-            CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
             case 2: // transparent backcolor
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun, "CharBackColor"));
-            CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
             case 3: // non-transparent backcolor
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(128), getProperty<sal_Int32>(xRun, "CharBackColor"));
-            CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
             case 4: // non-transparent highlight again
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(64), getProperty<sal_Int32>(xRun, "CharBackColor"));
-            CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
         }
     }

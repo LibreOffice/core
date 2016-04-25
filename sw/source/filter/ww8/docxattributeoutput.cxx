@@ -5240,9 +5240,9 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         else if (rGrabBag[i].Name == "locked")
             bLocked = true;
         else if (rGrabBag[i].Name == "default")
-            bDefault = rGrabBag[i].Value.get<sal_Bool>();
+            bDefault = rGrabBag[i].Value.get<bool>();
         else if (rGrabBag[i].Name == "customStyle")
-            bCustomStyle = rGrabBag[i].Value.get<sal_Bool>();
+            bCustomStyle = rGrabBag[i].Value.get<bool>();
         else
             SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
     }

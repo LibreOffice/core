@@ -59,7 +59,7 @@ public:
 
     bool CjkNumberedListTestHelper(sal_Int16& rValue)
     {
-        sal_Bool isNumber = false;
+        bool isNumber = false;
         uno::Reference<text::XTextRange> xPara(getParagraph(1));
         uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
         properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
@@ -696,7 +696,7 @@ DECLARE_RTFEXPORT_TEST(testLineNumbering, "linenumbering.rtf")
 {
     uno::Reference<text::XLineNumberingProperties> xLineNumberingProperties(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet = xLineNumberingProperties->getLineNumberingProperties();
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "IsOn")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xPropertySet, "IsOn")));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), getProperty<sal_Int32>(xPropertySet, "Interval"));
 }
 

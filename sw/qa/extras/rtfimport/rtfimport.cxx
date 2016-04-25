@@ -256,8 +256,8 @@ DECLARE_RTFIMPORT_TEST(testN750757, "n750757.rtf")
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
 
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xParaEnum->nextElement(), "ParaContextMargin")));
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xParaEnum->nextElement(), "ParaContextMargin")));
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin")));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo45563, "fdo45563.rtf")
@@ -568,7 +568,7 @@ DECLARE_RTFIMPORT_TEST(testFdo49501, "fdo49501.rtf")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStyle, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
     sal_Int32 nExpected(convertTwipToMm100(567));
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "LeftMargin"));
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "RightMargin"));
@@ -1795,8 +1795,8 @@ DECLARE_RTFIMPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
 DECLARE_RTFIMPORT_TEST(testBackground, "background.rtf")
 {
     // The first shape wasn't in the foreground.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(getShape(2), "Opaque")));
 }
 
 DECLARE_RTFIMPORT_TEST(testLevelfollow, "levelfollow.rtf")
@@ -2452,25 +2452,25 @@ DECLARE_RTFIMPORT_TEST(testLndscpsxn, "lndscpsxn.rtf")
     xCursor->jumpToFirstPage();
     OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
 
     // check that the second page has no landscape flag
     xCursor->jumpToPage(2);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStylePage, "IsLandscape"));
 
     // check that the third page has landscape flag
     xCursor->jumpToPage(3);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
 
     // check that the last page has no landscape flag
     xCursor->jumpToLastPage();
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStylePage, "IsLandscape"));
 }
 
 DECLARE_RTFIMPORT_TEST(testLandscape, "landscape.rtf")
@@ -2492,19 +2492,19 @@ DECLARE_RTFIMPORT_TEST(testLandscape, "landscape.rtf")
     xCursor->jumpToFirstPage();
     OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
 
     // check that the second page has landscape flag
     xCursor->jumpToPage(2);
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
 
     // check that the last page has landscape flag
     xCursor->jumpToLastPage();
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStylePage, "IsLandscape"));
 }
 
 DECLARE_RTFIMPORT_TEST(testTdf97035, "tdf97035.rtf")
