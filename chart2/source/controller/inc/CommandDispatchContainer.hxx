@@ -126,8 +126,6 @@ private:
     css::uno::Reference< css::frame::XDispatch >          m_xChartDispatcher;
     ::std::set< OUString >                                m_aChartCommands;
 
-    ::std::set< OUString >                                m_aContainerDocumentCommands;
-
     ChartController* m_pChartController;
     DrawCommandDispatch* m_pDrawCommandDispatch;
     ShapeController* m_pShapeController;
