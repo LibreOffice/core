@@ -1570,9 +1570,9 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
     }
 }
 
-::std::set< OUString > ChartController::impl_getAvailableCommands()
+const ::std::set< OUString >& ChartController::impl_getAvailableCommands()
 {
-    return {
+    static ::std::set< OUString > s_AvailableCommands {
         // commands for container forward
         "AddDirect",           "NewDoc",                "Open",
         "Save",                "SaveAs",                "SendMail",
@@ -1635,6 +1635,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         "ArrangeRow",
         "StatusBarVisible",
         "ChartElementSelector"};
+    return s_AvailableCommands;
 }
 
 ViewElementListProvider ChartController::getViewElementListProvider()

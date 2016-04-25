@@ -577,7 +577,7 @@ private:
         const OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
     bool impl_DragDataPoint( const OUString & rCID, double fOffset );
 
-    static std::set< OUString > impl_getAvailableCommands();
+    static const std::set< OUString >& impl_getAvailableCommands();
 
     /** Creates a helper accessibility class that must be initialized via XInitialization.  For
         parameters see
