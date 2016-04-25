@@ -3100,7 +3100,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         m_pKerningMF->SetValue( nKerning );
     }
     else
+    {
+        m_pKerningLB->SetNoSelection();
         m_pKerningMF->SetText( OUString() );
+    }
 
     // Pair kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
