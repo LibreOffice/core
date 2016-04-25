@@ -139,27 +139,33 @@ namespace
 
         bool skipToken( size_t i, const FormulaToken* const * pp )
         {
-            // Handle all tokens in RPN, and code tokens only if they have a
-            // reference count of 1, which means they are not referenced in
-            // RPN.
-            if (i == 0)
-                return (*pp)->GetRef() > 1;
-
-            if (mbSkipRelName)
+            // Handle all code tokens, and tokens in RPN only if they have a
+            // reference count of 1, which means they are not referenced in the
+            // code array. Doing it the other way would skip code tokens that
+            // are held by flat copied token arrays and thus are shared. For
+            // flat copy arrays the caller has to know what it does and should
+            // discard all RPN, update only one array and regenerate all RPN.
+            if (i == 1)
             {
-                // Skip (do not adjust) relative references resulting from
-                // named expressions.
-                switch ((*pp)->GetType())
+                if ((*pp)->GetRef() > 1)
+                    return true;
+
+                if (mbSkipRelName)
                 {
-                    case svSingleRef:
-                        return (*pp)->GetSingleRef()->IsRelName();
-                    case svDoubleRef:
-                        {
-                            const ScComplexRefData& rRef = *(*pp)->GetDoubleRef();
-                            return rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName();
-                        }
-                    default:
-                        ;   // nothing
+                    // Skip (do not adjust) relative references resulting from
+                    // named expressions. Resolved expressions are only in RPN.
+                    switch ((*pp)->GetType())
+                    {
+                        case svSingleRef:
+                            return (*pp)->GetSingleRef()->IsRelName();
+                        case svDoubleRef:
+                            {
+                                const ScComplexRefData& rRef = *(*pp)->GetDoubleRef();
+                                return rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName();
+                            }
+                        default:
+                            ;   // nothing
+                    }
                 }
             }
 
