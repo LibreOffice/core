@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_ac62a714",
+        "filename": "comphelper/source/eventattachermgr/eventattachermgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-25T06:55:35Z",
+      "side": 1,
+      "message": "if you want to avoid warnings about signed/unsigned mismatch in comparison, cast _nIndex to sal_uInt32 (which is known to be mathematically correct at that point) instead of casting aIndex.size() in a way that isn\u0027t obviously correct",
+      "revId": "3671cf727f28f7d89dc7849f6b0be274673e261c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_cc71e3e2",
+        "filename": "comphelper/source/property/propagg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-25T06:55:35Z",
+      "side": 1,
+      "message": "reserve(N) calls are often at least theoretically problematic, as N is often computed in a way that can overflow; here Sequence.getLength() is signed sal_Int32, so computing the sum can cause undefined behavior; therefore, if it doesn\u0027t improve performance significantly, I at least tend to leave such calls out",
+      "revId": "3671cf727f28f7d89dc7849f6b0be274673e261c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_8c67eb24",
+        "filename": "comphelper/source/property/propagg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-25T06:55:35Z",
+      "side": 1,
+      "message": "just use\n\n  x.Name \u003d\u003d y.Name",
+      "range": {
+        "startLine": 75,
+        "startChar": 92,
+        "endLine": 75,
+        "endChar": 123
+      },
+      "revId": "3671cf727f28f7d89dc7849f6b0be274673e261c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_ec6c9f0a",
+        "filename": "comphelper/source/property/propagg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-25T06:55:35Z",
+      "side": 1,
+      "message": "you can OSL_ENSURE on the return value of insert() instead",
+      "revId": "3671cf727f28f7d89dc7849f6b0be274673e261c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_8c4ecb94",
+        "filename": "forms/source/inc/property.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-25T06:55:35Z",
+      "side": 1,
+      "message": "PropertyAssignment and PropertyAssignmentNameCompareLess are unused now and should be removed",
+      "revId": "3671cf727f28f7d89dc7849f6b0be274673e261c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_4c7e93af",
+        "filename": "forms/source/misc/property.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-25T06:55:35Z",
+      "side": 1,
+      "message": "remove instead of commenting out",
+      "revId": "3671cf727f28f7d89dc7849f6b0be274673e261c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_ac490791",
+        "filename": "forms/source/misc/property.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-25T06:55:35Z",
+      "side": 1,
+      "message": "you can even assign from or insert() an initializer_list of all key/value pairs in one swoop here",
+      "revId": "3671cf727f28f7d89dc7849f6b0be274673e261c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
