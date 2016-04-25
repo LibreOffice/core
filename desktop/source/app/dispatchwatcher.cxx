@@ -676,18 +676,18 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         aArgs[1].Name = "SynchronMode";
         aArgs[1].Value <<= true;
 
-        for ( size_t n = 0; n < aDispatches.size(); n++ )
+        for (DispatchHolder & aDispatche : aDispatches)
         {
-            Reference< XDispatch > xDispatch = aDispatches[n].xDispatch;
+            Reference< XDispatch > xDispatch = aDispatche.xDispatch;
             Reference < XNotifyingDispatch > xDisp( xDispatch, UNO_QUERY );
             if ( xDisp.is() )
-                xDisp->dispatchWithNotification( aDispatches[n].aURL, aArgs, this );
+                xDisp->dispatchWithNotification( aDispatche.aURL, aArgs, this );
             else
             {
                 ::osl::ClearableMutexGuard aGuard(m_mutex);
                 m_nRequestCount--;
                 aGuard.clear();
-                xDispatch->dispatch( aDispatches[n].aURL, aArgs );
+                xDispatch->dispatch( aDispatche.aURL, aArgs );
             }
         }
     }

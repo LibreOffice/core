@@ -132,10 +132,10 @@ namespace dbaccess
                 { OUString(PROPERTY_HIDDEN),           PROPERTY_ID_HIDDEN }
             };
 
-            for ( size_t i=0; i < SAL_N_ELEMENTS( aProps ); ++i )
+            for (const auto & aProp : aProps)
             {
-                if ( xPSI->hasPropertyByName( aProps[i].sName ) )
-                    if ( !isDefaulted( aProps[i].nHandle, _rxColumn->getPropertyValue( aProps[i].sName ) ) )
+                if ( xPSI->hasPropertyByName( aProp.sName ) )
+                    if ( !isDefaulted( aProp.nHandle, _rxColumn->getPropertyValue( aProp.sName ) ) )
                         return false;
             }
         }

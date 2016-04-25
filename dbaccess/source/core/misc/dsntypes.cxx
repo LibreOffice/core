@@ -411,11 +411,11 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         KnownPrefix( "sdbc:address:macab",              DST_MACAB,              true )
     };
 
-    for ( size_t i=0; i < SAL_N_ELEMENTS( aKnowPrefixes ); ++i )
+    for (const auto & aKnowPrefixe : aKnowPrefixes)
     {
-        if( aKnowPrefixes[i].match(sDsn) )
+        if( aKnowPrefixe.match(sDsn) )
         {
-            return aKnowPrefixes[i].eType;
+            return aKnowPrefixe.eType;
         }
     }
 

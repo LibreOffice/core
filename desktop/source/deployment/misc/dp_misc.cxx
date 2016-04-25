@@ -432,8 +432,8 @@ OUString generateRandomPipeId()
         throw RuntimeException( "random pool error!?", nullptr );
     }
     OUStringBuffer buf;
-    for ( sal_uInt32 i = 0; i < ARLEN(bytes); ++i ) {
-        buf.append( static_cast<sal_Int32>(bytes[ i ]), 0x10 );
+    for (unsigned char byte : bytes) {
+        buf.append( static_cast<sal_Int32>(byte), 0x10 );
     }
     return buf.makeStringAndClear();
 }

@@ -234,9 +234,9 @@ void OTableEditorCtrl::InitCellController()
 
     Size aHeight;
     const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell,pHelpTextCell};
-    for(sal_Size i= 0; i < SAL_N_ELEMENTS(pControls); ++i)
+    for(const Control* pControl : pControls)
     {
-        const Size aTemp(pControls[i]->GetOptimalSize());
+        const Size aTemp(pControl->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
     }

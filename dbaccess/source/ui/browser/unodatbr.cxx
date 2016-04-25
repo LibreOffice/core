@@ -542,11 +542,11 @@ bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > & i_f
             OUString(PROPERTY_HAVING_CLAUSE),
             OUString(PROPERTY_ORDER)
         };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aTransferProperties); ++i)
+        for (const auto & aTransferPropertie : aTransferProperties)
         {
-            if ( !xPSI->hasPropertyByName( aTransferProperties[i] ) )
+            if ( !xPSI->hasPropertyByName( aTransferPropertie ) )
                 continue;
-            aPropertyValues.put( aTransferProperties[i], pData->xObjectProperties->getPropertyValue( aTransferProperties[i] ) );
+            aPropertyValues.put( aTransferPropertie, pData->xObjectProperties->getPropertyValue( aTransferPropertie ) );
         }
 
         ::std::vector< OUString > aNames( aPropertyValues.getNames() );

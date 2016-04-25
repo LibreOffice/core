@@ -47,13 +47,13 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
         { RID_STR_FORMS_CONTAINER,      E_FORM,     IMG_FORMFOLDER_TREE_L   },
         { RID_STR_REPORTS_CONTAINER,    E_REPORT,   IMG_REPORTFOLDER_TREE_L }
     };
-    for ( size_t i=0; i < SAL_N_ELEMENTS(aCategories); ++i)
+    for (const CategoryDescriptor& aCategorie : aCategories)
     {
         SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
-            OUString( ModuleRes( aCategories[i].nLabelResId ) ) ,
-            Image(  ModuleRes( aCategories[i].nImageResId ) ) );
+            OUString( ModuleRes( aCategorie.nLabelResId ) ) ,
+            Image(  ModuleRes( aCategorie.nImageResId ) ) );
         if ( pEntry )
-            pEntry->SetUserData( new ElementType( aCategories[i].eType ) );
+            pEntry->SetUserData( new ElementType( aCategorie.eType ) );
     }
 
     SetChoiceWithCursor();

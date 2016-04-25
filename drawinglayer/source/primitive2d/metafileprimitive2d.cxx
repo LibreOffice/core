@@ -602,9 +602,9 @@ namespace
             {
                 std::vector< basegfx::B2DPoint > aPositions(rPositions);
 
-                for(size_t a(0); a < aPositions.size(); a++)
+                for(basegfx::B2DPoint & aPosition : aPositions)
                 {
-                    aPositions[a] = rProperties.getTransformation() * aPositions[a];
+                    aPosition = rProperties.getTransformation() * aPosition;
                 }
 
                 rTarget.append(
@@ -1557,9 +1557,9 @@ namespace
                     // add created text primitive to target
                     if(rProperty.getTransformation().isIdentity())
                     {
-                        for(size_t a(0); a < aTargetVector.size(); a++)
+                        for(drawinglayer::primitive2d::BasePrimitive2D* a : aTargetVector)
                         {
-                            rTarget.append(aTargetVector[a]);
+                            rTarget.append(a);
                         }
                     }
                     else
@@ -2055,9 +2055,9 @@ namespace
                                 {
                                     // when derivation is more than 3,5% from default text size,
                                     // scale the DXArray
-                                    for(size_t a(0); a < aTextArray.size(); a++)
+                                    for(double & a : aTextArray)
                                     {
-                                        aTextArray[a] *= fRelative;
+                                        a *= fRelative;
                                     }
                                 }
                             }

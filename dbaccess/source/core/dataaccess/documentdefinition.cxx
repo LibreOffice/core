@@ -1476,12 +1476,12 @@ void ODocumentDefinition::separateOpenCommandArguments( const Sequence< Property
     {
         "RecoveryStorage"
     };
-    for ( size_t i=0; i < SAL_N_ELEMENTS( pObjectDescriptorArgs ); ++i )
+    for (const char* pObjectDescriptorArg : pObjectDescriptorArgs)
     {
-        if ( aOpenCommandArguments.has( pObjectDescriptorArgs[i] ) )
+        if ( aOpenCommandArguments.has( pObjectDescriptorArg ) )
         {
-            o_rEmbeddedObjectDescriptor.put( pObjectDescriptorArgs[i], aOpenCommandArguments.get( pObjectDescriptorArgs[i] ) );
-            aOpenCommandArguments.remove( pObjectDescriptorArgs[i] );
+            o_rEmbeddedObjectDescriptor.put( pObjectDescriptorArg, aOpenCommandArguments.get( pObjectDescriptorArg ) );
+            aOpenCommandArguments.remove( pObjectDescriptorArg );
         }
     }
 
