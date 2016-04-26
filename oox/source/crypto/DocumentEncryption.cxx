@@ -10,15 +10,18 @@
 
 #include "oox/crypto/DocumentEncryption.hxx"
 
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/ole/olestorage.hxx>
 
 namespace oox {
 namespace core {
 
-using namespace css::beans;
 using namespace css::io;
 using namespace css::lang;
 using namespace css::uno;

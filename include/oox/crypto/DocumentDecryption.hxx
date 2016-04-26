@@ -13,20 +13,22 @@
 
 #include <oox/dllapi.h>
 
-#include <oox/ole/olestorage.hxx>
-#include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
-
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-
-#include <oox/crypto/CryptTools.hxx>
-#include <oox/crypto/AgileEngine.hxx>
-#include <oox/crypto/Standard2007Engine.hxx>
-
 #include <memory>
-#include <vector>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
+#include <oox/crypto/CryptoEngine.hxx>
+#include <rtl/ustring.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct NamedValue; }
+    namespace io { class XInputStream; }
+    namespace io { class XStream; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace oox { class BinaryInputStream; }
+namespace oox { namespace ole { class OleStorage; } }
 
 namespace oox {
 namespace core {
