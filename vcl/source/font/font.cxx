@@ -349,45 +349,45 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
     rAttrs.SetSymbolFlag( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
 }
 
-SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
+SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16      nTmp16;
     bool            bTmp;
     sal_uInt8       nTmp8;
 
-    rImplFont.SetFamilyName( rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet()) );
-    rImplFont.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
-    ReadPair( rIStm, rImplFont.maAverageFontSize );
+    rFont.mpImplFont->SetFamilyName( rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet()) );
+    rFont.mpImplFont->maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
+    ReadPair( rIStm, rFont.mpImplFont->maAverageFontSize );
 
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.SetCharSet( (rtl_TextEncoding) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.SetFamilyType( (FontFamily) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.SetPitch( (FontPitch) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.SetWeight( (FontWeight) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.meUnderline = (FontLineStyle) nTmp16;
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.meStrikeout = (FontStrikeout) nTmp16;
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.SetItalic( (FontItalic) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.maLanguageTag.reset( (LanguageType) nTmp16);
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.meWidthType = (FontWidth) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->SetCharSet( (rtl_TextEncoding) nTmp16 );
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->SetFamilyType( (FontFamily) nTmp16 );
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->SetPitch( (FontPitch) nTmp16 );
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->SetWeight( (FontWeight) nTmp16 );
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->meUnderline = (FontLineStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->meStrikeout = (FontStrikeout) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->SetItalic( (FontItalic) nTmp16 );
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->maLanguageTag.reset( (LanguageType) nTmp16);
+    rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->meWidthType = (FontWidth) nTmp16;
 
-    rIStm.ReadInt16( rImplFont.mnOrientation );
+    rIStm.ReadInt16( rFont.mpImplFont->mnOrientation );
 
-    rIStm.ReadCharAsBool( bTmp ); rImplFont.mbWordLine = bTmp;
-    rIStm.ReadCharAsBool( bTmp ); rImplFont.mbOutline = bTmp;
-    rIStm.ReadCharAsBool( bTmp ); rImplFont.mbShadow = bTmp;
-    rIStm.ReadUChar( nTmp8 ); rImplFont.meKerning = static_cast<FontKerning>(nTmp8);
+    rIStm.ReadCharAsBool( bTmp ); rFont.mpImplFont->mbWordLine = bTmp;
+    rIStm.ReadCharAsBool( bTmp ); rFont.mpImplFont->mbOutline = bTmp;
+    rIStm.ReadCharAsBool( bTmp ); rFont.mpImplFont->mbShadow = bTmp;
+    rIStm.ReadUChar( nTmp8 ); rFont.mpImplFont->meKerning = static_cast<FontKerning>(nTmp8);
 
     if( aCompat.GetVersion() >= 2 )
     {
-        rIStm.ReadUChar( nTmp8 );     rImplFont.meRelief = (FontRelief)nTmp8;
-        rIStm.ReadUInt16( nTmp16 );   rImplFont.maCJKLanguageTag.reset( (LanguageType)nTmp16);
-        rIStm.ReadCharAsBool( bTmp ); rImplFont.mbVertical = bTmp;
-        rIStm.ReadUInt16( nTmp16 );   rImplFont.meEmphasisMark = (FontEmphasisMark)nTmp16;
+        rIStm.ReadUChar( nTmp8 );     rFont.mpImplFont->meRelief = (FontRelief)nTmp8;
+        rIStm.ReadUInt16( nTmp16 );   rFont.mpImplFont->maCJKLanguageTag.reset( (LanguageType)nTmp16);
+        rIStm.ReadCharAsBool( bTmp ); rFont.mpImplFont->mbVertical = bTmp;
+        rIStm.ReadUInt16( nTmp16 );   rFont.mpImplFont->meEmphasisMark = (FontEmphasisMark)nTmp16;
     }
 
     if( aCompat.GetVersion() >= 3 )
     {
-        rIStm.ReadUInt16( nTmp16 ); rImplFont.meOverline = (FontLineStyle) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rFont.mpImplFont->meOverline = (FontLineStyle) nTmp16;
     }
 
     // Relief
@@ -396,50 +396,40 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     return rIStm;
 }
 
-SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
-{
-    VersionCompat aCompat( rOStm, StreamMode::WRITE, 3 );
-    rOStm.WriteUniOrByteString( rImplFont.GetFamilyName(), rOStm.GetStreamCharSet() );
-    rOStm.WriteUniOrByteString( rImplFont.GetStyleName(), rOStm.GetStreamCharSet() );
-    WritePair( rOStm, rImplFont.maAverageFontSize );
-
-    rOStm.WriteUInt16( GetStoreCharSet( rImplFont.GetCharSet() ) );
-    rOStm.WriteUInt16( rImplFont.GetFamilyTypeNoAsk() );
-    rOStm.WriteUInt16( rImplFont.GetPitchNoAsk() );
-    rOStm.WriteUInt16( rImplFont.GetWeightNoAsk() );
-    rOStm.WriteUInt16( rImplFont.meUnderline );
-    rOStm.WriteUInt16( rImplFont.meStrikeout );
-    rOStm.WriteUInt16( rImplFont.GetItalicNoAsk() );
-    rOStm.WriteUInt16( rImplFont.maLanguageTag.getLanguageType( false) );
-    rOStm.WriteUInt16( rImplFont.GetWidthTypeNoAsk() );
-
-    rOStm.WriteInt16( rImplFont.mnOrientation );
-
-    rOStm.WriteBool( rImplFont.mbWordLine );
-    rOStm.WriteBool( rImplFont.mbOutline );
-    rOStm.WriteBool( rImplFont.mbShadow );
-    rOStm.WriteUChar( static_cast<sal_uInt8>(rImplFont.meKerning) );
-
-    // new in version 2
-    rOStm.WriteUChar( rImplFont.meRelief );
-    rOStm.WriteUInt16( rImplFont.maCJKLanguageTag.getLanguageType( false) );
-    rOStm.WriteBool( rImplFont.mbVertical );
-    rOStm.WriteUInt16( rImplFont.meEmphasisMark );
-
-    // new in version 3
-    rOStm.WriteUInt16( rImplFont.meOverline );
-
-    return rOStm;
-}
-
-SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
-{
-    return ReadImplFont( rIStm, *rFont.mpImplFont );
-}
-
 SvStream& WriteFont( SvStream& rOStm, const vcl::Font& rFont )
 {
-    return WriteImplFont( rOStm, *rFont.mpImplFont );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 3 );
+    rOStm.WriteUniOrByteString( rFont.mpImplFont->GetFamilyName(), rOStm.GetStreamCharSet() );
+    rOStm.WriteUniOrByteString( rFont.mpImplFont->GetStyleName(), rOStm.GetStreamCharSet() );
+    WritePair( rOStm, rFont.mpImplFont->maAverageFontSize );
+
+    rOStm.WriteUInt16( GetStoreCharSet( rFont.mpImplFont->GetCharSet() ) );
+    rOStm.WriteUInt16( rFont.mpImplFont->GetFamilyTypeNoAsk() );
+    rOStm.WriteUInt16( rFont.mpImplFont->GetPitchNoAsk() );
+    rOStm.WriteUInt16( rFont.mpImplFont->GetWeightNoAsk() );
+    rOStm.WriteUInt16( rFont.mpImplFont->meUnderline );
+    rOStm.WriteUInt16( rFont.mpImplFont->meStrikeout );
+    rOStm.WriteUInt16( rFont.mpImplFont->GetItalicNoAsk() );
+    rOStm.WriteUInt16( rFont.mpImplFont->maLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16( rFont.mpImplFont->GetWidthTypeNoAsk() );
+
+    rOStm.WriteInt16( rFont.mpImplFont->mnOrientation );
+
+    rOStm.WriteBool( rFont.mpImplFont->mbWordLine );
+    rOStm.WriteBool( rFont.mpImplFont->mbOutline );
+    rOStm.WriteBool( rFont.mpImplFont->mbShadow );
+    rOStm.WriteUChar( static_cast<sal_uInt8>(rFont.mpImplFont->meKerning) );
+
+    // new in version 2
+    rOStm.WriteUChar( rFont.mpImplFont->meRelief );
+    rOStm.WriteUInt16( rFont.mpImplFont->maCJKLanguageTag.getLanguageType( false) );
+    rOStm.WriteBool( rFont.mpImplFont->mbVertical );
+    rOStm.WriteUInt16( rFont.mpImplFont->meEmphasisMark );
+
+    // new in version 3
+    rOStm.WriteUInt16( rFont.mpImplFont->meOverline );
+
+    return rOStm;
 }
 
 namespace

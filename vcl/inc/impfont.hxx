@@ -95,13 +95,6 @@ public:
 
     bool                operator==( const ImplFont& ) const;
 
-private:
-    friend class vcl::Font;
-    friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
-    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );
-
-    void                AskConfig();
-
     // Device independent variables
     OUString            maFamilyName;
     OUString            maStyleName;
@@ -147,6 +140,9 @@ private:
     short               mnOrientation;
 
     int                 mnQuality;
+
+private:
+    void                AskConfig();
 
 };
 
