@@ -1532,7 +1532,7 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
     }
 
     if (ppBraceNode) {
-        *ppBraceNode = static_cast<SmBraceNode*>(pBraceNode);
+        *ppBraceNode = pBraceNode;
     }
 
     return true;
