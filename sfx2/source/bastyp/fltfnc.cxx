@@ -579,7 +579,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<c
         if ( pInstallFilter )
         {
             if ( IsFilterInstalled_Impl( pInstallFilter ) )
-                // Maybe the filter was installed was installed afterwards.
+                // Maybe the filter was installed afterwards.
                 pFilter = pInstallFilter;
         }
         else

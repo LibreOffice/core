@@ -3558,7 +3558,7 @@ void UniscribeLayout::Justify( DeviceCoordinate nNewWidth )
 bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
 {
     // we have to find the visual item first since the mpLogClusters[]
-    // needed to find the cluster start is relative to to the visual item
+    // needed to find the cluster start is relative to the visual item
     int nMinGlyphIndex = -1;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {

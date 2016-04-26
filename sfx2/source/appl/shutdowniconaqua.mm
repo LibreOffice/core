@@ -100,7 +100,7 @@
 -(void)dockIconClicked: (NSObject*)pSender
 {
     (void)pSender;
-    // start start module
+    // start module
     ShutdownIcon::OpenURL( STARTMODULE_URL, "_default" );
 }
 

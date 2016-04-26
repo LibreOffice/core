@@ -97,7 +97,7 @@ namespace pdfi
         // xxx refac TODO: move code to visitor
         virtual void emitStructure( int nLevel );
 #endif
-        /** el must be a valid dereferencable iterator of el->Parent->Children
+        /** el must be a valid dereferenceable iterator of el->Parent->Children
             pNewParent must not be NULL
         */
         static void setParent( std::list<Element*>::iterator& el, Element* pNewParent );
