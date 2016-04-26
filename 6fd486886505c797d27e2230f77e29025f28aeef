@@ -108,6 +108,24 @@
       "revId": "6fd486886505c797d27e2230f77e29025f28aeef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_37260017",
+        "filename": "include/filter/msfilter/msdffimp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000790
+      },
+      "writtenOn": "2016-04-26T08:38:54Z",
+      "side": 1,
+      "message": "I opted for mirroring the ProcessObj parameter list, on the basis that other (future) implementations of FinalizeObj might need that same data, and this would allow their implementation without changing the existing implementation. I will switch to a more minimalistic (\"as needed\") list.",
+      "parentUuid": "1ac06dbe_b7031076",
+      "revId": "6fd486886505c797d27e2230f77e29025f28aeef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
