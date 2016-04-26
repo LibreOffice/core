@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_d7396c43",
+        "filename": "sd/uiconfig/sdraw/ui/insertlayer.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-04-26T08:22:40Z",
+      "side": 1,
+      "message": "Please be careful with such changes. They can break everything and make LibreOffice crash. Changing ids in ui files is normally off-limit unless you also make sure the implementation does not use the id.\nIn this case the new id is wrong because the same id is now used for two objects.",
+      "revId": "97ebb84ebfda607e09887d5e959926f20fa2e07d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
