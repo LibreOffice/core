@@ -2554,7 +2554,7 @@ DECLARE_RTFIMPORT_TEST(testClassificatonPasteLevels, "classification-confidentia
     CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
 }
 
-#ifndef WNT
+#if !defined(MACOSX) && !defined(WNT)
 DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
 {
     // Get the second child of the group shape.
