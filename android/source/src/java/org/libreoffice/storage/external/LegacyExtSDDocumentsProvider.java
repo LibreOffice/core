@@ -18,7 +18,7 @@ import java.net.URI;
 /**
  * Legacy document provider for External SD cards, for Android 4.3 and below.
  *
- * Uses the the LocalFile class.
+ * Uses the LocalFile class.
  */
 public class LegacyExtSDDocumentsProvider implements IExternalDocumentProvider,
         SharedPreferences.OnSharedPreferenceChangeListener{

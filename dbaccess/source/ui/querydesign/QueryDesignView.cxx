@@ -519,7 +519,7 @@ namespace
             }
         }
 
-        // when nothing found found look for the "from" window
+        // when nothing found look for the "from" window
         if(aIter == aEnd)
         {
             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());

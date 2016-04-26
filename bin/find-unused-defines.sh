@@ -13,7 +13,7 @@
 # (3) sort and uniq the results, mostly so I have an idea how far along the process is
 # (4) for each result:
 #   (5) grep for the constant
-#   (6) use awk to to check if only one match for a given constant was found
+#   (6) use awk to check if only one match for a given constant was found
 #   (7) if so, generate a sed command to remove the #define
 #
 ( git grep -hP '^\w*#define\s+\w+.*\\' -- "[!e][!x][!t]*" \
