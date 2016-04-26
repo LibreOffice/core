@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_b2731eb4",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 1,
+      "message": "It would be better to check if nParamCount elements are really available on the stack. I\u0027ll do a follow-up commit for this.",
+      "revId": "d92ec2bd4c716aa64cb1bf39a1d05e8430db2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_1265d2e0",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 1,
+      "message": "Rather move the break statement out of the block. It doesn\u0027t matter code-wise but is better for readability if the break statement immediately precedes the next case. I\u0027ll do.",
+      "revId": "d92ec2bd4c716aa64cb1bf39a1d05e8430db2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_726246da",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 1,
+      "message": "Doesn\u0027t Excel handle multiple sheets?",
+      "revId": "d92ec2bd4c716aa64cb1bf39a1d05e8430db2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_525f4a0e",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 1,
+      "message": "I wonder if Excel uses the number format applied to the cell to create the string. Does it?",
+      "revId": "d92ec2bd4c716aa64cb1bf39a1d05e8430db2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_f26d96cd",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 1,
+      "message": "In case an unhandled stack var type is present we need to pop it and set an error, otherwise we\u0027d bump into it for remaining nParamCount times. I\u0027ll do.",
+      "revId": "d92ec2bd4c716aa64cb1bf39a1d05e8430db2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_d2721aad",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 1,
+      "message": "Also here, check availability of nParamCount elements on the stack. I\u0027ll do.",
+      "revId": "d92ec2bd4c716aa64cb1bf39a1d05e8430db2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_b29afec3",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 5
+      },
+      "lineNbr": 11547,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 1,
+      "message": "Don\u0027t use trailing blanks, which look odd in the dialog and specifically function parameter hints while editing a formula. Yes I know, some other functions such as the CONCATENATE above still have it. I\u0027ll fix this on the fly.",
+      "range": {
+        "startLine": 11547,
+        "startChar": 34,
+        "endLine": 11547,
+        "endChar": 35
+      },
+      "revId": "d92ec2bd4c716aa64cb1bf39a1d05e8430db2d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

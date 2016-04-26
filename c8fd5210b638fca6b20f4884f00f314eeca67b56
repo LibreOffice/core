@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_5248ea5b",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-26T15:06:18Z",
+      "side": 0,
+      "message": "Somehow this file got the executable bit permission applied, sometimes happens in Windows, I\u0027ll change that on the fly.",
+      "revId": "c8fd5210b638fca6b20f4884f00f314eeca67b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
