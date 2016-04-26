@@ -258,9 +258,9 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
              *  The master page are put in an unordered set.
              */
             ObjectSet aMasterPageTargetSet;
-            for( size_t i = 0; i < mSelectedPages.size(); ++i )
+            for(uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
             {
-                uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mSelectedPages[i], uno::UNO_QUERY );
+                uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mSelectedPage, uno::UNO_QUERY );
                 if( xMasterPageTarget.is() )
                 {
                     aMasterPageTargetSet.insert( xMasterPageTarget->getMasterPage() );

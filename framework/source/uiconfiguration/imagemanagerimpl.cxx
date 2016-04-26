@@ -544,10 +544,10 @@ void ImageManagerImpl::dispose()
         m_bDisposed = true;
 
         // delete user and default image list on dispose
-        for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
+        for (ImageList*& n : m_pUserImageList)
         {
-            delete m_pUserImageList[n];
-            m_pUserImageList[n] = nullptr;
+            delete n;
+            n = nullptr;
         }
         delete m_pDefaultImageList;
         m_pDefaultImageList = nullptr;
@@ -1253,10 +1253,10 @@ void ImageManagerImpl::clear()
 {
     SolarMutexGuard g;
 
-    for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
+    for (ImageList* & n : m_pUserImageList)
     {
-        delete m_pUserImageList[n];
-        m_pUserImageList[n] = nullptr;
+        delete n;
+        n = nullptr;
     }
 }
 } // namespace framework

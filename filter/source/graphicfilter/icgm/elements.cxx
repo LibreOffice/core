@@ -292,8 +292,8 @@ void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, l
 
 void CGMElements::DeleteAllBundles( BundleList& rList )
 {
-    for ( size_t i = 0, n = rList.size(); i < n; ++i ) {
-        delete rList[ i ];
+    for (Bundle* i : rList) {
+        delete i;
     }
     rList.clear();
 };
@@ -303,9 +303,8 @@ void CGMElements::CopyAllBundles( BundleList& rSource, BundleList& rDest )
 {
     DeleteAllBundles( rDest );
 
-    for ( size_t i = 0, n = rSource.size(); i < n; ++i )
+    for (Bundle* pPtr : rSource)
     {
-        Bundle* pPtr = rSource[ i ];
         Bundle* pTempBundle = pPtr->Clone();
         rDest.push_back( pTempBundle );
     }
@@ -324,9 +323,9 @@ Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBu
 
 Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
 {
-    for ( size_t i = 0, n = rList.size(); i < n; ++i ) {
-        if ( rList[ i ]->GetIndex() == nIndex ) {
-            return rList[ i ];
+    for (Bundle* i : rList) {
+        if ( i->GetIndex() == nIndex ) {
+            return i;
         }
     }
     return nullptr;

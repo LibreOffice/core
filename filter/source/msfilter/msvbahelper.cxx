@@ -695,9 +695,9 @@ awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException
     static MSKeyCodeMap s_KeyCodes;
     if ( s_KeyCodes.empty() )
     {
-        for ( unsigned int i = 0; i < SAL_N_ELEMENTS( aMSKeyCodesData ); ++i )
+        for (KeyCodeEntry & i : aMSKeyCodesData)
         {
-            s_KeyCodes[ OUString::createFromAscii( aMSKeyCodesData[ i ].sName ) ] = aMSKeyCodesData[ i ].nCode;
+            s_KeyCodes[ OUString::createFromAscii( i.sName ) ] = i.nCode;
         }
     }
     OUString sKeyCode;
