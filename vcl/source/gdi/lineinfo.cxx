@@ -28,7 +28,6 @@
 
 
 ImplLineInfo::ImplLineInfo() :
-    mnRefCount  ( 1 ),
     meStyle     ( LINE_SOLID ),
     mnWidth     ( 0 ),
     mnDashCount ( 0 ),
@@ -42,7 +41,6 @@ ImplLineInfo::ImplLineInfo() :
 }
 
 ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
-    mnRefCount  ( 1 ),
     meStyle     ( rImplLineInfo.meStyle ),
     mnWidth     ( rImplLineInfo.mnWidth ),
     mnDashCount ( rImplLineInfo.mnDashCount ),
@@ -69,94 +67,63 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 }
 
 
-LineInfo::LineInfo( LineStyle eStyle, long nWidth )
+LineInfo::LineInfo( LineStyle eStyle, long nWidth ) : mpImplLineInfo()
 {
-    mpImplLineInfo = new ImplLineInfo;
     mpImplLineInfo->meStyle = eStyle;
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-LineInfo::LineInfo( const LineInfo& rLineInfo )
+LineInfo::LineInfo( const LineInfo& rLineInfo ) : mpImplLineInfo(rLineInfo.mpImplLineInfo)
 {
-    mpImplLineInfo = rLineInfo.mpImplLineInfo;
-    mpImplLineInfo->mnRefCount++;
 }
 
 LineInfo::~LineInfo()
 {
-    if( !( --mpImplLineInfo->mnRefCount ) )
-        delete mpImplLineInfo;
 }
 
 LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 {
-
-    rLineInfo.mpImplLineInfo->mnRefCount++;
-
-    if( !( --mpImplLineInfo->mnRefCount ) )
-        delete mpImplLineInfo;
-
     mpImplLineInfo = rLineInfo.mpImplLineInfo;
     return *this;
 }
 
 bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
-
-    return( mpImplLineInfo == rLineInfo.mpImplLineInfo ||
-           *mpImplLineInfo == *rLineInfo.mpImplLineInfo );
-}
-
-void LineInfo::ImplMakeUnique()
-{
-    if( mpImplLineInfo->mnRefCount != 1 )
-    {
-        if( mpImplLineInfo->mnRefCount )
-            mpImplLineInfo->mnRefCount--;
-
-        mpImplLineInfo = new ImplLineInfo( *mpImplLineInfo );
-    }
+    return mpImplLineInfo == rLineInfo.mpImplLineInfo;
 }
 
 void LineInfo::SetStyle( LineStyle eStyle )
 {
-    ImplMakeUnique();
     mpImplLineInfo->meStyle = eStyle;
 }
 
 void LineInfo::SetWidth( long nWidth )
 {
-    ImplMakeUnique();
     mpImplLineInfo->mnWidth = nWidth;
 }
 
 void LineInfo::SetDashCount( sal_uInt16 nDashCount )
 {
-    ImplMakeUnique();
     mpImplLineInfo->mnDashCount = nDashCount;
 }
 
 void LineInfo::SetDashLen( long nDashLen )
 {
-    ImplMakeUnique();
     mpImplLineInfo->mnDashLen = nDashLen;
 }
 
 void LineInfo::SetDotCount( sal_uInt16 nDotCount )
 {
-    ImplMakeUnique();
     mpImplLineInfo->mnDotCount = nDotCount;
 }
 
 void LineInfo::SetDotLen( long nDotLen )
 {
-    ImplMakeUnique();
     mpImplLineInfo->mnDotLen = nDotLen;
 }
 
 void LineInfo::SetDistance( long nDistance )
 {
-    ImplMakeUnique();
     mpImplLineInfo->mnDistance = nDistance;
 }
 
@@ -165,7 +132,6 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 
     if(eLineJoin != mpImplLineInfo->meLineJoin)
     {
-        ImplMakeUnique();
         mpImplLineInfo->meLineJoin = eLineJoin;
     }
 }
@@ -174,7 +140,6 @@ void LineInfo::SetLineCap(css::drawing::LineCap eLineCap)
 {
     if(eLineCap != mpImplLineInfo->meLineCap)
     {
-        ImplMakeUnique();
         mpImplLineInfo->meLineCap = eLineCap;
     }
 }
@@ -186,72 +151,64 @@ bool LineInfo::IsDefault() const
         && ( css::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
 }
 
-SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
+SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16(0);
     sal_Int32       nTmp32(0);
 
-    rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meStyle = (LineStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meStyle = (LineStyle) nTmp16;
     rIStm.ReadInt32( nTmp32 );
-    rImplLineInfo.mnWidth = nTmp32;
+    rLineInfo.mpImplLineInfo->mnWidth = nTmp32;
 
     if( aCompat.GetVersion() >= 2 )
     {
         // version 2
-        rIStm.ReadUInt16( rImplLineInfo.mnDashCount ).ReadInt32( nTmp32 );
-        rImplLineInfo.mnDashLen = nTmp32;
-        rIStm.ReadUInt16( rImplLineInfo.mnDotCount ).ReadInt32( nTmp32 );
-        rImplLineInfo.mnDotLen = nTmp32;
+        rIStm.ReadUInt16( rLineInfo.mpImplLineInfo->mnDashCount ).ReadInt32( nTmp32 );
+        rLineInfo.mpImplLineInfo->mnDashLen = nTmp32;
+        rIStm.ReadUInt16( rLineInfo.mpImplLineInfo->mnDotCount ).ReadInt32( nTmp32 );
+        rLineInfo.mpImplLineInfo->mnDotLen = nTmp32;
         rIStm.ReadInt32( nTmp32 );
-        rImplLineInfo.mnDistance = nTmp32;
+        rLineInfo.mpImplLineInfo->mnDistance = nTmp32;
     }
 
     if( aCompat.GetVersion() >= 3 )
     {
         // version 3
-        rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineJoin = (basegfx::B2DLineJoin) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meLineJoin = (basegfx::B2DLineJoin) nTmp16;
     }
 
     if( aCompat.GetVersion() >= 4 )
     {
         // version 4
-        rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineCap = (css::drawing::LineCap) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rLineInfo.mpImplLineInfo->meLineCap = (css::drawing::LineCap) nTmp16;
     }
 
     return rIStm;
 }
 
-SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
+SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 4 );
 
     // version 1
-    rOStm.WriteUInt16( rImplLineInfo.meStyle ).WriteInt32( rImplLineInfo.mnWidth );
+    rOStm.WriteUInt16( rLineInfo.mpImplLineInfo->meStyle )
+         .WriteInt32( rLineInfo.mpImplLineInfo->mnWidth );
 
     // since version2
-    rOStm.WriteUInt16( rImplLineInfo.mnDashCount ).WriteInt32( rImplLineInfo.mnDashLen );
-    rOStm.WriteUInt16( rImplLineInfo.mnDotCount ).WriteInt32( rImplLineInfo.mnDotLen );
-    rOStm.WriteInt32( rImplLineInfo.mnDistance );
+    rOStm.WriteUInt16( rLineInfo.mpImplLineInfo->mnDashCount )
+         .WriteInt32( rLineInfo.mpImplLineInfo->mnDashLen );
+    rOStm.WriteUInt16( rLineInfo.mpImplLineInfo->mnDotCount )
+         .WriteInt32( rLineInfo.mpImplLineInfo->mnDotLen );
+    rOStm.WriteInt32( rLineInfo.mpImplLineInfo->mnDistance );
 
     // since version3
-    rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplLineInfo.meLineJoin) );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rLineInfo.mpImplLineInfo->meLineJoin) );
 
     // since version4
-    rOStm.WriteUInt16( rImplLineInfo.meLineCap );
+    rOStm.WriteUInt16( rLineInfo.mpImplLineInfo->meLineCap );
 
     return rOStm;
-}
-
-SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
-{
-    rLineInfo.ImplMakeUnique();
-    return ReadImplLineInfo( rIStm, *rLineInfo.mpImplLineInfo );
-}
-
-SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
-{
-    return WriteImplLineInfo( rOStm, *rLineInfo.mpImplLineInfo );
 }
 
 void LineInfo::applyToB2DPolyPolygon(
