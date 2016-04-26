@@ -112,7 +112,7 @@ void addInheritedInterface(
 {
     AstDeclaration * decl = ifc->lookupByName(name);
     AstDeclaration const * resolved = resolveTypedefs(decl);
-    if (resolved != 0 && resolved->getNodeType() == NT_interface) {
+    if (resolved != nullptr && resolved->getNodeType() == NT_interface) {
         if (ErrorHandler::checkPublished(decl)) {
             if (!static_cast< AstInterface const * >(resolved)->isDefined()) {
                 ErrorHandler::inheritanceError(
@@ -152,17 +152,17 @@ AstDeclaration const * createNamedType(
     AstDeclaration * decl = idlc()->scopes()->topNonNull()->lookupByName(
         *scopedName);
     AstDeclaration const * resolved = resolveTypedefs(decl);
-    if (decl == 0) {
+    if (decl == nullptr) {
         ErrorHandler::lookupError(*scopedName);
     } else if (!ErrorHandler::checkPublished(decl)) {
-        decl = 0;
+        decl = nullptr;
     } else if (resolved->getNodeType() == NT_struct) {
         if (static_cast< AstStruct const * >(resolved)->getTypeParameterCount()
-            != (typeArgs == 0 ? 0 : typeArgs->size()))
+            != (typeArgs == nullptr ? 0 : typeArgs->size()))
         {
             ErrorHandler::error0(EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS);
-            decl = 0;
-        } else if (typeArgs != 0) {
+            decl = nullptr;
+        } else if (typeArgs != nullptr) {
             AstScope * global = idlc()->scopes()->bottom();
             AstDeclaration * inst = new AstStructInstance(
                 static_cast< AstType * >(decl), typeArgs, global);
@@ -172,13 +172,13 @@ AstDeclaration const * createNamedType(
             }
         }
     } else if (decl->isType()) {
-        if (typeArgs != 0) {
+        if (typeArgs != nullptr) {
             ErrorHandler::error0(EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS);
-            decl = 0;
+            decl = nullptr;
         }
     } else {
         ErrorHandler::noTypeError(decl);
-        decl = 0;
+        decl = nullptr;
     }
     delete scopedName;
     delete typeArgs;
@@ -186,8 +186,8 @@ AstDeclaration const * createNamedType(
 }
 
 bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
-    OSL_ASSERT(type2 != 0);
-    if (type1 != 0) {
+    OSL_ASSERT(type2 != nullptr);
+    if (type1 != nullptr) {
         if (type1->getNodeType() == NT_instantiated_struct) {
             AstStructInstance const * inst
                 = static_cast< AstStructInstance const * >(type1);
@@ -444,8 +444,8 @@ module_dcl :
         checkIdentifier($3);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstModule*      pModule = NULL;
-        AstDeclaration* pExists = NULL;
+        AstModule*      pModule = nullptr;
+        AstDeclaration* pExists = nullptr;
 
         if ( pScope )
         {
@@ -515,15 +515,15 @@ forward_dcl :
         idlc()->setParseState(PS_ForwardDeclSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstInterface*   pForward = NULL;
-        AstDeclaration* pDecl = NULL;
+        AstInterface*   pForward = nullptr;
+        AstDeclaration* pDecl = nullptr;
 
         /*
          * Make a new forward interface node and add it to its enclosing scope
          */
         if ( pScope && $1 )
         {
-            pForward = new AstInterface(*$1, NULL, pScope);
+            pForward = new AstInterface(*$1, nullptr, pScope);
 
             pDecl = pScope->lookupByName(pForward->getScopedName());
             if ( pDecl )
@@ -554,9 +554,9 @@ interface_dcl :
         idlc()->setParseState(PS_InterfaceHeadSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstInterface*   pInterface = NULL;
-        AstInterface*   pForward = NULL;
-        AstDeclaration* pDecl = NULL;
+        AstInterface*   pInterface = nullptr;
+        AstInterface*   pForward = nullptr;
+        AstDeclaration* pDecl = nullptr;
 
         /*
          * Make a new interface node and add it to its enclosing scope
@@ -666,7 +666,7 @@ interfaceheader :
     {
         idlc()->setParseState(PS_InheritSpecSeen);
 
-        $$ = new FeInheritanceHeader(NT_interface, $1, $2, 0);
+        $$ = new FeInheritanceHeader(NT_interface, $1, $2, nullptr);
         delete $2;
     }
     ;
@@ -682,7 +682,7 @@ inheritance_spec :
     }
     | /* EMPTY */
     {
-        $$ = NULL;
+        $$ = nullptr;
     }
     ;
 
@@ -846,10 +846,10 @@ opt_attribute_block:
     '{' attribute_block_rest { $$ = $2; }
     | /* empty */
     {
-        $$.get.documentation = 0;
-        $$.get.exceptions = 0;
-        $$.set.documentation = 0;
-        $$.set.exceptions = 0;
+        $$.get.documentation = nullptr;
+        $$.get.exceptions = nullptr;
+        $$.set.documentation = nullptr;
+        $$.set.exceptions = nullptr;
     }
     ;
 
@@ -859,10 +859,10 @@ attribute_block_rest:
     {
         yyerror("bad attribute raises block");
         yyerrok;
-        $$.get.documentation = 0;
-        $$.get.exceptions = 0;
-        $$.set.documentation = 0;
-        $$.set.exceptions = 0;
+        $$.get.documentation = nullptr;
+        $$.get.exceptions = nullptr;
+        $$.set.documentation = nullptr;
+        $$.set.exceptions = nullptr;
     }
     ;
 
@@ -881,16 +881,16 @@ opt_attribute_raises:
     }
     | /* empty */
     {
-        $$.get.documentation = 0;
-        $$.get.exceptions = 0;
-        $$.set.documentation = 0;
-        $$.set.exceptions = 0;
+        $$.get.documentation = nullptr;
+        $$.get.exceptions = nullptr;
+        $$.set.documentation = nullptr;
+        $$.set.exceptions = nullptr;
     }
     ;
 
 opt_attribute_get_raises:
     attribute_get_raises
-    | /* empty */ { $$.documentation = 0; $$.exceptions = 0; }
+    | /* empty */ { $$.documentation = nullptr; $$.exceptions = nullptr; }
     ;
 
 attribute_get_raises:
@@ -905,7 +905,7 @@ attribute_get_raises:
 
 opt_attribute_set_raises:
     attribute_set_raises
-    | /* empty */ { $$.documentation = 0; $$.exceptions = 0; }
+    | /* empty */ { $$.documentation = nullptr; $$.exceptions = nullptr; }
     ;
 
 attribute_set_raises:
@@ -938,7 +938,7 @@ operation :
 
         AstInterface * pScope = static_cast< AstInterface * >(
             idlc()->scopes()->top());
-        AstOperation*   pOp = NULL;
+        AstOperation*   pOp = nullptr;
 
         /*
          * Create a node representing an operation on an interface
@@ -984,7 +984,7 @@ operation :
     opt_raises
     {
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstOperation*   pOp = NULL;
+        AstOperation*   pOp = nullptr;
         /*
          * Add exceptions and context to the operation
          */
@@ -1045,7 +1045,7 @@ parameter :
 
         AstOperation * pScope = static_cast< AstOperation * >(
             idlc()->scopes()->top());
-        AstParameter*   pParam = NULL;
+        AstParameter*   pParam = nullptr;
 
         /*
          * Create a node representing an argument to an operation
@@ -1133,7 +1133,7 @@ opt_raises:
     raises
     | /* empty */
     {
-        $$ = 0;
+        $$ = nullptr;
     }
     ;
 
@@ -1175,13 +1175,13 @@ exception_name:
         // attributes), so look up exception names in the next-to-topmost scope:
         AstDeclaration * decl = idlc()->scopes()->nextToTop()->lookupByName(
             *$1);
-        if (decl == 0) {
+        if (decl == nullptr) {
             ErrorHandler::lookupError(*$1);
         } else if (!ErrorHandler::checkPublished(decl)) {
-            decl = 0;
+            decl = nullptr;
         } else if (decl->getNodeType() != NT_exception) {
             ErrorHandler::error1(EIDL_ILLEGAL_RAISES, decl);
-            decl = 0;
+            decl = nullptr;
         }
         delete $1;
         $$ = decl;
@@ -1243,7 +1243,7 @@ constants_export :
         idlc()->setParseState(PS_ConstExprSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstConstant*    pConstant = NULL;
+        AstConstant*    pConstant = nullptr;
 
         if ( $9 && pScope )
         {
@@ -1278,8 +1278,8 @@ constants_dcl :
         idlc()->setParseState(PS_ConstantsSqSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstConstants*   pConstants = NULL;
-        AstDeclaration* pExists = NULL;
+        AstConstants*   pConstants = nullptr;
+        AstDeclaration* pExists = nullptr;
 
         if ( pScope )
         {
@@ -1383,11 +1383,11 @@ unary_expr :
     primary_expr
     | '+' primary_expr
     {
-        $$ = new AstExpression(EC_u_plus, $2, NULL);
+        $$ = new AstExpression(EC_u_plus, $2, nullptr);
     }
     | '-' primary_expr
     {
-        $$ = new AstExpression(EC_u_minus, $2, NULL);
+        $$ = new AstExpression(EC_u_minus, $2, nullptr);
     }
     | '~' primary_expr
     {
@@ -1442,7 +1442,7 @@ const_type :
     | scoped_name
     {
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstDeclaration const * type = 0;
+        AstDeclaration const * type = nullptr;
 
         /*
          * If the constant's type is a scoped name, it must resolve
@@ -1451,7 +1451,7 @@ const_type :
         if ( pScope && (type = pScope->lookupByName(*$1)) ) {
             if (!ErrorHandler::checkPublished(type))
             {
-                type = 0;
+                type = nullptr;
                 $$ = ET_none;
             }
             else
@@ -1483,7 +1483,7 @@ exception_header :
     {
         idlc()->setParseState(PS_InheritSpecSeen);
 
-        $$ = new FeInheritanceHeader(NT_exception, $3, $5, 0);
+        $$ = new FeInheritanceHeader(NT_exception, $3, $5, nullptr);
         delete $5;
     }
     ;
@@ -1494,7 +1494,7 @@ exception_dcl :
         idlc()->setParseState(PS_ExceptHeaderSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstException*   pExcept = NULL;
+        AstException*   pExcept = nullptr;
 
         if ( pScope )
         {
@@ -1536,10 +1536,10 @@ property :
         idlc()->setParseState(PS_PropertyCompleted);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstAttribute*   pAttr = NULL;
+        AstAttribute*   pAttr = nullptr;
         FeDeclList*     pList = $4;
-        FeDeclarator*   pDecl = NULL;
-        AstType const * pType = NULL;
+        FeDeclarator*   pDecl = nullptr;
+        AstType const * pType = nullptr;
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
@@ -1610,8 +1610,8 @@ service_export :
         idlc()->setParseState(PS_ServiceMemberSeen);
 
         AstScope*           pScope = idlc()->scopes()->topNonNull();
-        AstDeclaration*     pDecl = NULL;
-        AstInterfaceMember* pIMember = NULL;
+        AstDeclaration*     pDecl = nullptr;
+        AstInterfaceMember* pIMember = nullptr;
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
@@ -1659,8 +1659,8 @@ service_export :
         idlc()->setParseState(PS_ServiceMemberSeen);
 
         AstScope*         pScope = idlc()->scopes()->topNonNull();
-        AstDeclaration*   pDecl = NULL;
-        AstServiceMember* pSMember = NULL;
+        AstDeclaration*   pDecl = nullptr;
+        AstServiceMember* pSMember = nullptr;
 
         /*
          * Create a node representing a class member.
@@ -1700,8 +1700,8 @@ service_export :
         idlc()->setParseState(PS_ServiceMemberSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstDeclaration* pDecl = NULL;
-        AstObserves*    pObserves = NULL;
+        AstDeclaration* pDecl = nullptr;
+        AstObserves*    pObserves = nullptr;
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
@@ -1741,8 +1741,8 @@ service_export :
         idlc()->setParseState(PS_ServiceMemberSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstDeclaration* pDecl = NULL;
-        AstNeeds*       pNeeds = NULL;
+        AstDeclaration* pDecl = nullptr;
+        AstNeeds*       pNeeds = nullptr;
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
@@ -1825,12 +1825,12 @@ service_dcl :
         checkIdentifier($3);
 
         AstScope*   pScope = idlc()->scopes()->topNonNull();
-        AstService* pService = NULL;
+        AstService* pService = nullptr;
 
         /*
          * Make a new service and add it to the enclosing scope
          */
-        if (pScope != NULL)
+        if (pScope != nullptr)
         {
             pService = new AstService(*$3, pScope);
             pScope->addDeclaration(pService);
@@ -1859,7 +1859,9 @@ service_interface_dfn:
         AstScope * scope = idlc()->scopes()->nextToTop();
             // skip the scope pushed by service_dcl
         AstDeclaration * decl = scope->lookupByName(*$2);
-        if (decl != 0 && resolveTypedefs(decl)->getNodeType() == NT_interface) {
+        if (decl != nullptr
+            && resolveTypedefs(decl)->getNodeType() == NT_interface)
+        {
             if (ErrorHandler::checkPublished(decl)) {
                 idlc()->scopes()->top()->addDeclaration(decl);
             }
@@ -1872,7 +1874,7 @@ service_interface_dfn:
     opt_service_body
     {
         AstService * s = static_cast< AstService * >(idlc()->scopes()->top());
-        if (s != 0) {
+        if (s != nullptr) {
             s->setSingleInterfaceBasedService();
             s->setDefaultConstructor(!$4);
         }
@@ -1900,7 +1902,7 @@ constructor:
     {
         checkIdentifier($1);
         AstScope * scope = idlc()->scopes()->top();
-        AstOperation * ctor = new AstOperation(0, *$1, scope);
+        AstOperation * ctor = new AstOperation(nullptr, *$1, scope);
         delete $1;
         scope->addDeclaration(ctor);
         idlc()->scopes()->push(ctor);
@@ -1934,12 +1936,12 @@ singleton_dcl :
         checkIdentifier($3);
 
         AstScope*   pScope = idlc()->scopes()->topNonNull();
-        AstService* pService = NULL;
+        AstService* pService = nullptr;
 
         /*
          * Make a new service and add it to the enclosing scope
          */
-        if (pScope != NULL)
+        if (pScope != nullptr)
         {
             pService = new AstService(NT_singleton, *$3, pScope);
             pScope->addDeclaration(pService);
@@ -1968,7 +1970,9 @@ singleton_interface_dfn:
         AstScope * scope = idlc()->scopes()->nextToTop();
             // skip the scope (needlessly) pushed by singleton_dcl
         AstDeclaration * decl = scope->lookupByName(*$2);
-        if (decl != 0 && resolveTypedefs(decl)->getNodeType() == NT_interface) {
+        if (decl != nullptr
+            && resolveTypedefs(decl)->getNodeType() == NT_interface)
+        {
             if (ErrorHandler::checkPublished(decl)) {
                 idlc()->scopes()->top()->addDeclaration(decl);
             }
@@ -2015,7 +2019,7 @@ type_declarator :
     type_spec
     {
         idlc()->setParseState(PS_TypeSpecSeen);
-        if ($1 != 0 && $1->getNodeType() == NT_instantiated_struct) {
+        if ($1 != nullptr && $1->getNodeType() == NT_instantiated_struct) {
             ErrorHandler::error0(EIDL_INSTANTIATED_STRUCT_TYPE_TYPEDEF);
         }
     }
@@ -2024,10 +2028,10 @@ type_declarator :
         idlc()->setParseState(PS_DeclaratorsSeen);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstTypeDef*     pTypeDef = NULL;
+        AstTypeDef*     pTypeDef = nullptr;
         FeDeclList*     pList = $3;
-        FeDeclarator*   pDecl = NULL;
-        AstType const * pType = NULL;
+        FeDeclarator*   pDecl = nullptr;
+        AstType const * pType = nullptr;
 
         /*
          * Create nodes representing typedefs and add them to the
@@ -2104,7 +2108,7 @@ declarators :
     }
     | /* EMPTY */
     {
-        $$ = NULL;
+        $$ = nullptr;
     }
     ;
 
@@ -2115,7 +2119,7 @@ declarator :
         // members with illegal names (of the form "m_DataN"); avoid useless
         // warnings about them:
         AstScope * scope = idlc()->scopes()->top();
-        if (scope == 0 || scope->getScopeNodeType() != NT_struct
+        if (scope == nullptr || scope->getScopeNodeType() != NT_struct
             || (scopeAsDecl(scope)->getScopedName()
                 != "com::sun::star::uno::Uik"))
         {
@@ -2168,7 +2172,7 @@ scoped_names :
     }
     | /* EMPTY */
     {
-        $$ = NULL;
+        $$ = nullptr;
     }
     ;
 
@@ -2228,7 +2232,7 @@ fundamental_type:
 
 opt_type_args:
     '<' type_args '>' { $$ = $2; }
-    | /* empty */ { $$ = 0; }
+    | /* empty */ { $$ = nullptr; }
     ;
 
 type_args:
@@ -2247,7 +2251,7 @@ type_args:
 type_arg:
     simple_type_spec
     {
-        if ($1 != 0 && static_cast< AstType const * >($1)->isUnsigned()) {
+        if ($1 != nullptr && static_cast< AstType const * >($1)->isUnsigned()) {
             ErrorHandler::error0(EIDL_UNSIGNED_TYPE_ARGUMENT);
         }
         $$ = $1;
@@ -2365,7 +2369,7 @@ sequence_type_spec :
         /*
          * Push a sequence marker on scopes stack
          */
-        idlc()->scopes()->push(NULL);
+        idlc()->scopes()->push(nullptr);
     }
     '<'
     {
@@ -2381,14 +2385,14 @@ sequence_type_spec :
         /*
          * Remove sequence marker from scopes stack
          */
-        if (idlc()->scopes()->top() == NULL)
+        if (idlc()->scopes()->top() == nullptr)
             idlc()->scopes()->pop();
         /*
          * Create a node representing a sequence
          */
         AstScope* pScope = idlc()->scopes()->bottom();
-        AstDeclaration* pDecl = NULL;
-        AstDeclaration* pSeq = NULL;
+        AstDeclaration* pDecl = nullptr;
+        AstDeclaration* pSeq = nullptr;
 
         if ( $5 )
         {
@@ -2414,7 +2418,7 @@ sequence_type_spec :
     {
         yyerror("sequence declaration");
         yyerrok;
-        $$ = 0;
+        $$ = nullptr;
     }
     ;
 
@@ -2424,7 +2428,7 @@ struct_type :
         idlc()->setParseState(PS_StructHeaderSeen);
 
         AstScope*   pScope = idlc()->scopes()->topNonNull();
-        AstStruct*  pStruct = NULL;
+        AstStruct*  pStruct = nullptr;
 
         if ( pScope )
         {
@@ -2482,7 +2486,7 @@ structure_header :
         // (Note that plain struct types with instantiated polymorphic struct
         // type bases, which might also cause problems in language bindings, are
         // already rejected on a syntactic level.)
-        if ($5 != 0 && $6 != 0) {
+        if ($5 != nullptr && $6 != nullptr) {
             ErrorHandler::error0(EIDL_STRUCT_TYPE_TEMPLATE_WITH_BASE);
         }
 
@@ -2494,7 +2498,7 @@ structure_header :
 
 opt_type_params:
     '<' type_params '>' { $$ = $2; }
-    | /* empty */ { $$ = 0; }
+    | /* empty */ { $$ = nullptr; }
     ;
 
 type_params:
@@ -2536,10 +2540,10 @@ member :
         idlc()->setParseState(PS_MemberDeclsCompleted);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstMember*      pMember = NULL;
+        AstMember*      pMember = nullptr;
         FeDeclList*     pList = $3;
-        FeDeclarator*   pDecl = NULL;
-        AstType const * pType = NULL;
+        FeDeclarator*   pDecl = nullptr;
+        AstType const * pType = nullptr;
 
         // !!! check recursive type
 
@@ -2589,20 +2593,20 @@ type_or_parameter:
     fundamental_type
     | scoped_name opt_type_args
     {
-        AstDeclaration const * decl = 0;
+        AstDeclaration const * decl = nullptr;
         AstStruct * scope = static_cast< AstStruct * >(idlc()->scopes()->top());
-        if (scope != 0 && $2 == 0) {
+        if (scope != nullptr && $2 == nullptr) {
             decl = scope->findTypeParameter(*$1);
         }
-        if (decl != 0) {
+        if (decl != nullptr) {
             delete $1;
             delete $2;
         } else {
             decl = createNamedType($1, $2);
-            if (scope != 0 && includes(decl, scopeAsDecl(scope))) {
+            if (scope != nullptr && includes(decl, scopeAsDecl(scope))) {
                 ErrorHandler::error1(
                     EIDL_RECURSIVE_TYPE, scopeAsDecl(scope));
-                decl = 0;
+                decl = nullptr;
             }
         }
         $$ = decl;
@@ -2620,13 +2624,13 @@ enum_type :
         checkIdentifier($3);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstEnum*        pEnum = NULL;
+        AstEnum*        pEnum = nullptr;
 
         /*
          * Create a node representing an enum and add it to its
          * enclosing scope
          */
-        if (pScope != NULL)
+        if (pScope != nullptr)
         {
             pEnum = new AstEnum(*$3, pScope);
             /*
@@ -2655,8 +2659,8 @@ enum_type :
         /*
          * Done with this enum. Pop its scope from the scopes stack
          */
-        if (idlc()->scopes()->top() == NULL)
-            $$ = NULL;
+        if (idlc()->scopes()->top() == nullptr)
+            $$ = nullptr;
         else
         {
             $$ = static_cast<AstEnum*>(idlc()->scopes()->topNonNull());
@@ -2688,8 +2692,8 @@ enumerator :
         checkIdentifier($1);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstEnum*        pEnum = NULL;
-        AstConstant*    pEnumVal = NULL;
+        AstEnum*        pEnum = nullptr;
+        AstConstant*    pEnumVal = nullptr;
 
         if ( pScope && pScope->getScopeNodeType() == NT_enum)
         {
@@ -2714,8 +2718,8 @@ enumerator :
         checkIdentifier($1);
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
-        AstEnum*        pEnum = NULL;
-        AstConstant*    pEnumVal = NULL;
+        AstEnum*        pEnum = nullptr;
+        AstConstant*    pEnumVal = nullptr;
 
         if ( $3 && pScope && pScope->getScopeNodeType() == NT_enum)
         {
