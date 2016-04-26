@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_d75e8c75",
+        "filename": "vcl/source/gdi/hatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-26T09:28:01Z",
+      "side": 1,
+      "message": "This method now is fully redundant - can you just move it down to ReadHatch, there\u0027s no other usage of it?",
+      "revId": "6e0c9bee8b06123460fdcecba8c5928b30d8a10c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
