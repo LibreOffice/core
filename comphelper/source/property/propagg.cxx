@@ -80,7 +80,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     for( auto &delegateProp: _rProperties )
     {
         const auto inserted = aDelegatorProps.insert( delegateProp.Name );
-        OSL_ENSURE( inserted.second == true,
+        OSL_ENSURE( inserted.second,
             "OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper: duplicate delegatee property!" );
     }
 
