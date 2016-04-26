@@ -692,6 +692,34 @@ DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
     CPPUNIT_ASSERT((fSize.Width != lSize.Width) && (fSize.Height != lSize.Height));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
+{
+    // The bullet colour of paragraph #3 should be COL_AUTO
+    auto xPara = getParagraph(3);
+    uno::Reference<container::XIndexReplace> xNumRules(
+        getProperty< uno::Reference<container::XIndexReplace> >(
+            xPara, "NumberingRules"),
+        uno::UNO_QUERY);
+    int numLevel = getProperty<sal_Int32>(xPara, "NumberingLevel");
+    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    xNumRules->getByIndex(numLevel) >>= aPropertyValues;
+    OUString charStyleName;
+    for(int j = 0 ; j< aPropertyValues.getLength() ; ++j)
+    {
+        auto aProp = aPropertyValues[j];
+        if (aProp.Name == OUString("CharStyleName")) {
+            charStyleName = aProp.Value.get<OUString>();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(charStyleName.getLength());
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles("CharacterStyles")->getByName(charStyleName),
+        uno::UNO_QUERY);
+    ColorData charColor = getProperty<util::Color>(xStyle, "CharColor");
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, charColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
