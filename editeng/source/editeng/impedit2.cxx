@@ -636,9 +636,8 @@ EditPaM ImpEditEngine::RemoveText()
 
     EditPaM aStartPaM = aEditDoc.GetStartPaM();
     EditSelection aEmptySel( aStartPaM, aStartPaM );
-    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+    for (EditView* pView : aEditViews)
     {
-        EditView* pView = aEditViews[nView];
         pView->pImpEditView->SetEditSelection( aEmptySel );
     }
     ResetUndoManager();
@@ -659,9 +658,8 @@ void ImpEditEngine::SetText(const OUString& rText)
     if (!rText.isEmpty())
         aPaM = ImpInsertText( aEmptySel, rText );
 
-    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+    for (EditView* pView : aEditViews)
     {
-        EditView* pView = aEditViews[nView];
         pView->pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
         //  If no text then also no Format&Update
         // => The text remains.
@@ -1684,11 +1682,11 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
 
         // i89825: Use CTL font for numbers embedded into an RTL run:
         WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
-        for ( size_t n = 0; n < rDirInfos.size(); ++n )
+        for (WritingDirectionInfo & rDirInfo : rDirInfos)
         {
-            const sal_Int32 nStart = rDirInfos[n].nStartPos;
-            const sal_Int32 nEnd   = rDirInfos[n].nEndPos;
-            const sal_uInt8 nCurrDirType = rDirInfos[n].nType;
+            const sal_Int32 nStart = rDirInfo.nStartPos;
+            const sal_Int32 nEnd   = rDirInfo.nEndPos;
+            const sal_uInt8 nCurrDirType = rDirInfo.nType;
 
             if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
                 ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( aText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
@@ -1805,15 +1803,15 @@ SvtScriptType ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) cons
                 ++nE;
         }
 
-        for (size_t n = 0; n < rTypes.size(); ++n)
+        for (const ScriptTypePosInfo & rType : rTypes)
         {
-            bool bStartInRange = rTypes[n].nStartPos <= nS && nS < rTypes[n].nEndPos;
-            bool bEndInRange = rTypes[n].nStartPos < nE && nE <= rTypes[n].nEndPos;
+            bool bStartInRange = rType.nStartPos <= nS && nS < rType.nEndPos;
+            bool bEndInRange = rType.nStartPos < nE && nE <= rType.nEndPos;
 
             if (bStartInRange || bEndInRange)
             {
-                if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
-                    nScriptType |= SvtLanguageOptions::FromI18NToSvtScriptType( rTypes[n].nScriptType );
+                if ( rType.nScriptType != i18n::ScriptType::WEAK )
+                    nScriptType |= SvtLanguageOptions::FromI18NToSvtScriptType( rType.nScriptType );
             }
         }
     }
@@ -1833,9 +1831,9 @@ bool ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
         const sal_Int32 nPos = rPaM.GetIndex();
-        for ( size_t n = 0; n < rTypes.size(); n++ )
+        for (const ScriptTypePosInfo & rType : rTypes)
         {
-            if ( rTypes[n].nStartPos == nPos )
+            if ( rType.nStartPos == nPos )
                {
                 bScriptChange = true;
                 break;
@@ -1870,9 +1868,9 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
 
     bool bCTL = false;
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for ( size_t n = 0; n < rTypes.size(); n++ )
+    for (ScriptTypePosInfo & rType : rTypes)
     {
-        if ( rTypes[n].nScriptType == i18n::ScriptType::COMPLEX )
+        if ( rType.nScriptType == i18n::ScriptType::COMPLEX )
            {
             bCTL = true;
             break;
@@ -1984,15 +1982,15 @@ sal_uInt8 ImpEditEngine::GetRightToLeft( sal_Int32 nPara, sal_Int32 nPos, sal_In
             InitWritingDirections( nPara );
 
         WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
-        for ( size_t n = 0; n < rDirInfos.size(); n++ )
+        for (const WritingDirectionInfo & rDirInfo : rDirInfos)
         {
-            if ( ( rDirInfos[n].nStartPos <= nPos ) && ( rDirInfos[n].nEndPos >= nPos ) )
+            if ( ( rDirInfo.nStartPos <= nPos ) && ( rDirInfo.nEndPos >= nPos ) )
             {
-                nRightToLeft = rDirInfos[n].nType;
+                nRightToLeft = rDirInfo.nType;
                 if ( pStart )
-                    *pStart = rDirInfos[n].nStartPos;
+                    *pStart = rDirInfo.nStartPos;
                 if ( pEnd )
-                    *pEnd = rDirInfos[n].nEndPos;
+                    *pEnd = rDirInfo.nEndPos;
                 break;
             }
         }
@@ -2044,9 +2042,9 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
         const sal_Int32 nStart = rPaM.GetIndex();
         const sal_Int32 nEnd = nStart + nChars;
         const CharAttribList::AttribsType& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
-        for (size_t i = 0, n = rAttribs.size(); i < n; ++i)
+        for (const auto & rAttrib : rAttribs)
         {
-            const EditCharAttrib& rAttr = *rAttribs[i].get();
+            const EditCharAttrib& rAttr = *rAttrib.get();
             if (rAttr.GetEnd() >= nStart && rAttr.GetStart() < nEnd)
             {
                 EditSelection aSel( rPaM );
@@ -2919,9 +2917,9 @@ bool ImpEditEngine::UpdateFields()
         ContentNode* pNode = GetEditDoc().GetObject( nPara );
         OSL_ENSURE( pNode, "NULL-Pointer in Doc" );
         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
-        for (size_t nAttr = 0; nAttr < rAttribs.size(); ++nAttr)
+        for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
         {
-            EditCharAttrib& rAttr = *rAttribs[nAttr].get();
+            EditCharAttrib& rAttr = *rAttrib.get();
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 EditCharAttribField& rField = static_cast<EditCharAttribField&>(rAttr);
@@ -3279,14 +3277,13 @@ void ImpEditEngine::UpdateSelections()
 {
     // Check whether one of the selections is at a deleted node...
     // If the node is valid, the index has yet to be examined!
-    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+    for (EditView* pView : aEditViews)
     {
-        EditView* pView = aEditViews[nView];
         EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
         bool bChanged = false;
-        for (size_t i = 0, n = aDeletedNodes.size(); i < n; ++i)
+        for (std::unique_ptr<DeletedNodeInfo> & aDeletedNode : aDeletedNodes)
         {
-            const DeletedNodeInfo& rInf = *aDeletedNodes[i].get();
+            const DeletedNodeInfo& rInf = *aDeletedNode.get();
             if ( ( aCurSel.Min().GetNode() == rInf.GetNode() ) ||
                  ( aCurSel.Max().GetNode() == rInf.GetNode() ) )
             {
