@@ -388,6 +388,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     ,maDialogSize       ( GetSizePixel() )
     ,mbInSelectHdl      ( false )
     ,mbInDeselectHdl    ( false )
+    ,maSelectionIdle    ( "ScConflictsDlg SelectionIdle" )
 {
     get(m_pBtnKeepMine, "keepmine");
     get(m_pBtnKeepOther, "keepother");

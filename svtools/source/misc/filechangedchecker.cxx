@@ -13,7 +13,7 @@
 
 FileChangedChecker::FileChangedChecker(const OUString& rFilename,
         const ::std::function<void ()>& rCallback)
-    : mIdle()
+    : mIdle("SVTools FileChangedChecker Idle")
     , mFileName(rFilename)
     , mLastModTime()
     , mpCallback(rCallback)
