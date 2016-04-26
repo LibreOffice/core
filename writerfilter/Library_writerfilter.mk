@@ -34,6 +34,7 @@ $(eval $(call gb_Library_add_defs,writerfilter,\
 ))
 
 $(eval $(call gb_Library_use_libraries,writerfilter,\
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
