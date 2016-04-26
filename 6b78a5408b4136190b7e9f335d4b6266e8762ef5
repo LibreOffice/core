@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_572c5cab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-04-26T11:53:51Z",
+      "side": 1,
+      "message": "yes might be better to leave it alone - third party libraries often have some headers that are \"officially\" supposed to be included and others that are considered implementation details and should not be included directly; you\u0027d need to read the NSS documentation to verify what changes would be possible here.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 47
+      },
+      "revId": "6b78a5408b4136190b7e9f335d4b6266e8762ef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
