@@ -95,7 +95,8 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     aStrCloselinkmsgMulti( CUI_RES( STR_CLOSELINKMSG_MULTI ) ),
     aStrWaitinglink( CUI_RES( STR_WAITINGLINK ) ),
     pLinkMgr( nullptr ),
-    bHtmlMode(bHtml)
+    bHtmlMode(bHtml),
+    aUpdateIdle("cui SvBaseLinksDlg UpdateIdle")
 {
     get(m_pTbLinks, "TB_LINKS");
     Size aSize(LogicToPixel(Size(257, 87), MAP_APPFONT));

@@ -77,6 +77,8 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
     ScViewData* ptrViewData)
     : SfxModelessDialog(pB, pCW, pParent,
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui"),
+        aSelectionIdle("ScAcceptChgDlg SelectionIdle"),
+        aReOpenIdle("ScAcceptChgDlg ReOpenIdle"),
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aStrInsertCols       (SC_RESSTR(STR_CHG_INSERT_COLS)),

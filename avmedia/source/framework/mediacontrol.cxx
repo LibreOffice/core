@@ -60,6 +60,7 @@ namespace avmedia
 MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle ) :
     Control( pParent ),
     maImageList( SvtMiscOptions().AreCurrentSymbolsLarge() ? AVMEDIA_RESID( AVMEDIA_IMGLST_L ) : AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
+    maIdle( "avmedia MediaControl Idle" ),
     maItem( 0, AVMediaSetMask::ALL ),
     maPlayToolBox( VclPtr<ToolBox>::Create(this, WB_3DLOOK) ),
     maTimeSlider( VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET) ),
