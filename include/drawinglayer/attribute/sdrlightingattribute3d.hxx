@@ -46,7 +46,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC SdrLightingAttribute
         {
         public:
-            typedef o3tl::cow_wrapper< ImpSdrLightingAttribute > ImplType;
+            typedef o3tl::cow_wrapper< ImpSdrLightingAttribute, o3tl::ThreadSafeRefCountingPolicy  > ImplType;
 
         private:
             ImplType mpSdrLightingAttribute;
