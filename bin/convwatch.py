@@ -214,19 +214,6 @@ def simpleInvoke(connection, test):
     finally:
         connection.postTest()
 
-def logExceptionInvoke(connection, test):
-    try:
-        connection.preTest()
-        test.run(connection.getContext())
-    except KeyboardInterrupt:
-        raise # Ctrl+C should work
-    except:
-        estr = traceback.format_exc()
-        log("logExceptionInvoke: FAILED with exception:\n" + estr)
-        raise
-    finally:
-        connection.postTest()
-
 def retryInvoke(connection, test):
     tries = 5
     while tries > 0:
@@ -255,6 +242,8 @@ def runConnectionTests(connection, invoker, tests):
                 raise # Ctrl+C should work
             except:
                 failed.append(test.file)
+                estr = traceback.format_exc()
+                log("... FAILED with exception:\n" + estr)
         return failed
     finally:
         connection.tearDown()
@@ -348,7 +337,7 @@ def runLoadPrintFileTests(opts, dirs, suffix, reference):
     tests = (LoadPrintFileTest(file, prtsuffix) for file in files)
     connection = PersistentConnection(opts)
 #    connection = PerTestConnection(opts)
-    failed = runConnectionTests(connection, logExceptionInvoke, tests)
+    failed = runConnectionTests(connection, simpleInvoke, tests)
     print("all printed: FAILURES: " + str(len(failed)))
     for fail in failed:
         print(fail)
