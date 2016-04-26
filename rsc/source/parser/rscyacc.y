@@ -109,10 +109,10 @@ RscId MakeRscId( RscExpType aExpType )
         sal_Int32 lValue(0);
 
         if( !aExpType.Evaluate( &lValue ) )
-            pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
+            pTC->pEH->Error( ERR_ZERODIVISION, nullptr, RscId() );
         if( lValue < 1 || lValue > (sal_Int32)0x7FFF )
         {
-            pTC->pEH->Error( ERR_IDRANGE, NULL, RscId(),
+            pTC->pEH->Error( ERR_IDRANGE, nullptr, RscId(),
                              rtl::OString::number(lValue).getStr() );
         }
 
@@ -176,9 +176,9 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
                 pTC->pEH->Error( WRN_GLOBALID, pHeader->pClass, aName1 );
 
             if( aCopyInst.IsInst() )
-                S.Push( pHeader->pClass->Create( NULL, aCopyInst ) );
+                S.Push( pHeader->pClass->Create( nullptr, aCopyInst ) );
             else
-                S.Push( pHeader->pClass->Create( NULL, RSCINST() ) );
+                S.Push( pHeader->pClass->Create( nullptr, RSCINST() ) );
 
             pTC->pEH->StdOut( ".", RscVerbosityVerbose );
 
@@ -240,7 +240,7 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
     RSCINST aInst;
     ERRTYPE aErr;
 
-    aErr = rTop.pClass->GetElement( rTop, RscId(), NULL, RSCINST(), &aInst );
+    aErr = rTop.pClass->GetElement( rTop, RscId(), nullptr, RSCINST(), &aInst );
     if( !aErr.IsError() )
         aInst = aInst.pClass->GetTupelVar( aInst, 0, RSCINST() );
     return aInst;
@@ -366,7 +366,7 @@ resource_definitions
       pExp = new RscExpression( aExpType, '+', $2 );
       if( !pExp->Evaluate( &lValue ) )
       {
-          pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
+          pTC->pEH->Error( ERR_ZERODIVISION, nullptr, RscId() );
       }
       delete pExp;
   }
@@ -414,12 +414,13 @@ resource_definition
 
       if( bError )
       {
-          pTC->pEH->Error( ERR_DECLAREDEFINE, NULL, RscId(), $3 );
+          pTC->pEH->Error( ERR_DECLAREDEFINE, nullptr, RscId(), $3 );
       }
   }
   | '#' DEFINE RSCDEFINE macro_expression
   {
-      pTC->pEH->Error( ERR_DOUBLEDEFINE, NULL, RscId(), $3->GetName().getStr() );
+      pTC->pEH->Error(
+          ERR_DOUBLEDEFINE, nullptr, RscId(), $3->GetName().getStr() );
   }
   | '#' INCLUDE STRING
   {
@@ -470,12 +471,12 @@ property_definition
   {
       // Variable anlegen
       Atom nId = pTC->aNmTb.Put( $3, VARNAME );
-      pCurClass->SetVariable( nId, $2, NULL, $1, nCurMask );
+      pCurClass->SetVariable( nId, $2, nullptr, $1, nCurMask );
       nCurMask <<= 1;
   }
   | type_flags type VARNAME
   {
-      pCurClass->SetVariable( $3, $2, NULL, $1, nCurMask );
+      pCurClass->SetVariable( $3, $2, nullptr, $1, nCurMask );
       nCurMask <<= 1;
   }
   ;
@@ -518,7 +519,7 @@ type
       }
       else
       {
-          $$ = NULL;
+          $$ = nullptr;
       }
   }
   ;
@@ -596,7 +597,7 @@ class_header_body
       $$.pClass = $1;
       $$.nName1 = $2;
       $$.nTyp = $3;
-      $$.pRefClass = NULL;
+      $$.pRefClass = nullptr;
       $$.nName2 = $4;
   }
   | CLASSNAME id_expression
@@ -604,7 +605,7 @@ class_header_body
       $$.pClass = $1;
       $$.nName1 = $2;
       $$.nTyp = TYPE_NOTHING;
-      $$.pRefClass = NULL;
+      $$.pRefClass = nullptr;
       $$.nName2.cType = RSCEXP_NOTHING;
   }
   | CLASSNAME copy_ref id_expression
@@ -612,7 +613,7 @@ class_header_body
       $$.pClass = $1;
       $$.nName1.cType = RSCEXP_NOTHING;
       $$.nTyp = $2;
-      $$.pRefClass = NULL;
+      $$.pRefClass = nullptr;
       $$.nName2 = $3;
   }
   | CLASSNAME copy_ref CLASSNAME id_expression
@@ -800,7 +801,8 @@ var_header_class
           ERRTYPE aError;
           RSCINST aIdxInst;
 
-          aError = aInst.pClass->GetArrayEle( aInst, $3.hashid, NULL, &aIdxInst );
+          aError = aInst.pClass->GetArrayEle(
+              aInst, $3.hashid, nullptr, &aIdxInst );
           if( aError.IsError() || aError.IsWarning() )
               pTC->pEH->Error( aError, S.Top().pClass, RscId() );
           if( aError.IsError() )
@@ -829,7 +831,8 @@ var_header_class
           ERRTYPE aError;
           RSCINST aIdxInst;
 
-          aError = aInst.pClass->GetArrayEle( aInst, nNewLang, NULL, &aIdxInst );
+          aError = aInst.pClass->GetArrayEle(
+              aInst, nNewLang, nullptr, &aIdxInst );
           if( aError.IsError() || aError.IsWarning() )
               pTC->pEH->Error( aError, S.Top().pClass, RscId() );
           if( aError.IsError() )
@@ -875,7 +878,8 @@ var_header
           ERRTYPE aError;
           RSCINST aIdxInst;
 
-          aError = aInst.pClass->GetArrayEle( aInst, $3.hashid, NULL, &aIdxInst );
+          aError = aInst.pClass->GetArrayEle(
+              aInst, $3.hashid, nullptr, &aIdxInst );
           if( aError.IsError() || aError.IsWarning() )
               pTC->pEH->Error( aError, S.Top().pClass, RscId() );
           if( aError.IsError() )
@@ -901,7 +905,8 @@ var_header
           ERRTYPE aError;
           RSCINST aIdxInst;
 
-          aError = aInst.pClass->GetArrayEle( aInst, nNewLang, NULL, &aIdxInst );
+          aError = aInst.pClass->GetArrayEle(
+              aInst, nNewLang, nullptr, &aIdxInst );
           if( aError.IsError() || aError.IsWarning() )
               pTC->pEH->Error( aError, S.Top().pClass, RscId() );
           if( aError.IsError() )
@@ -994,12 +999,12 @@ var_list_header
       RSCINST aInst;
 
       aError = S.Top().pClass->GetElement( S.Top(), RscId(),
-                                           NULL, RSCINST(), &aInst );
+                                           nullptr, RSCINST(), &aInst );
       if( aError.IsError() || aError.IsWarning() )
           pTC->pEH->Error( aError, S.Top().pClass, RscId() );
       if( aError.IsError() )
       { // unbedingt Instanz auf den Stack bringen
-          aInst = S.Top().pClass->Create( NULL, RSCINST() );
+          aInst = S.Top().pClass->Create( nullptr, RSCINST() );
       }
       S.Push( aInst );
   }
@@ -1038,7 +1043,7 @@ var_bodysimple
       ERRTYPE aError;
 
       if( !$1.Evaluate( &l ) )
-          pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
+          pTC->pEH->Error( ERR_ZERODIVISION, nullptr, RscId() );
       else
       {
           aError = S.Top().pClass->SetRef( S.Top(), RscId( $1 ) );
@@ -1173,7 +1178,7 @@ long_expression
   : macro_expression
   {
       if( !$1.Evaluate( &$$ ) )
-          pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
+          pTC->pEH->Error( ERR_ZERODIVISION, nullptr, RscId() );
       if( $1.IsExpression() )
           delete $1.aExp.pExp;
   }
@@ -1336,7 +1341,7 @@ id_expression
           sal_Int32       lValue;
 
           if( !$1.Evaluate( &lValue ) )
-              pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
+              pTC->pEH->Error( ERR_ZERODIVISION, nullptr, RscId() );
           delete $1.aExp.pExp;
           $$.cType = RSCEXP_LONG;
           $$.SetLong( lValue );
