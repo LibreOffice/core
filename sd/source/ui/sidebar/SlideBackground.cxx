@@ -64,6 +64,51 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 
+namespace {
+   void lcl_FillPaperSizeListbox ( ListBox &rListBox)
+   {
+       std::map< sal_Int32, Paper > aPaperSizeMap =
+       {
+          { 0, PAPER_A6 },
+          { 1, PAPER_A5 },
+          { 2, PAPER_A4 },
+          { 3, PAPER_A3 },
+          { 4, PAPER_A2 },
+          { 5, PAPER_A1 },
+          { 6, PAPER_A0 },
+          { 7, PAPER_B6_ISO },
+          { 8, PAPER_B5_ISO },
+          { 9, PAPER_B4_ISO },
+          { 10, PAPER_LETTER },
+          { 11, PAPER_LEGAL },
+          { 12, PAPER_FANFOLD_LEGAL_DE },
+          { 13, PAPER_TABLOID },
+          { 14, PAPER_B6_JIS },
+          { 15, PAPER_B5_JIS },
+          { 16, PAPER_B4_JIS },
+          { 17, PAPER_KAI16 },
+          { 18, PAPER_KAI32 },
+          { 19, PAPER_KAI32BIG },
+          { 20, PAPER_USER },
+          { 21, PAPER_ENV_DL },
+          { 22, PAPER_ENV_C6 },
+          { 23, PAPER_ENV_C65 },
+          { 24, PAPER_ENV_C5 },
+          { 25, PAPER_ENV_C4 },
+          { 26, PAPER_SLIDE_DIA },
+          { 27, PAPER_SCREEN_4_3 },
+          { 28, PAPER_SCREEN_16_9 },
+          { 29, PAPER_SCREEN_16_10 },
+          { 30, PAPER_POSTCARD_JP }
+       };
+
+       for ( sal_Int32 nIdx = 0; nIdx < rListBox.GetEntryCount(); nIdx++ )
+       {
+           Paper eSize = aPaperSizeMap[nIdx];
+           rListBox.SetEntryData( nIdx, reinterpret_cast<void*>( (sal_uLong)eSize ));
+       }
+   }
+}
 
 namespace sd { namespace sidebar {
 
@@ -111,6 +156,7 @@ SlideBackground::~SlideBackground()
 
 void SlideBackground::Initialize()
 {
+    lcl_FillPaperSizeListbox( *mpPaperSizeBox );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
 
@@ -332,11 +378,22 @@ void SlideBackground::NotifyItemUpdate(
             {
                 const SvxSizeItem* aSizeItem = dynamic_cast< const SvxSizeItem* >(pState);
                 Size aPaperSize = aSizeItem->GetSize();
-                //Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, MAP_100TH_MM,true);
-                if( aPaperSize.Width() > aPaperSize.Height() )
-                    mpPaperOrientation->SelectEntryPos(0);
-                else
-                    mpPaperOrientation->SelectEntryPos(1);
+                if(mpPaperOrientation->GetSelectEntryPos() == 0)
+                   Swap(aPaperSize);
+
+                Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, static_cast<MapUnit>(meUnit),true);
+                sal_Int32 nEntryCount = mpPaperSizeBox->GetEntryCount();
+
+                for (sal_Int32 i = 0; i < nEntryCount; ++i )
+                {
+                    Paper eTmp = (Paper)reinterpret_cast<sal_uLong>(mpPaperSizeBox->GetEntryData(i));
+
+                    if ( eTmp == ePaper )
+                    {
+                        mpPaperSizeBox->SelectEntryPos(i);
+                        break;
+                    }
+                }
             }
         }
         break;
@@ -383,43 +440,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 {
     sal_uInt32 nPos = mpPaperSizeBox->GetSelectEntryPos();
-    Paper ePaper = PAPER_USER;
-    switch(nPos)
-    {
-        case 0: ePaper = PAPER_A6;break;
-        case 1: ePaper = PAPER_A5;break;
-        case 2: ePaper = PAPER_A4;break;
-        case 3: ePaper = PAPER_A3;break;
-        case 4: ePaper = PAPER_A2;break;
-        case 5: ePaper = PAPER_A1;break;
-        case 6 :ePaper = PAPER_A0;break;
-        case 7: ePaper = PAPER_B6_ISO;break;
-        case 8: ePaper = PAPER_B5_ISO;break;
-        case 9: ePaper = PAPER_B4_ISO;break;
-        case 10: ePaper = PAPER_LETTER;break;
-        case 11: ePaper = PAPER_LEGAL;break;
-        case 12: ePaper = PAPER_FANFOLD_LEGAL_DE;break;
-        case 13: ePaper = PAPER_TABLOID;break;
-        case 14: ePaper = PAPER_B6_JIS;break;
-        case 15: ePaper = PAPER_B5_JIS;break;
-        case 16: ePaper = PAPER_B4_JIS;break;
-        case 17: ePaper = PAPER_KAI16;break;
-        case 18: ePaper = PAPER_KAI32;break;
-        case 19: ePaper = PAPER_KAI32BIG;break;
-        case 20: ePaper = PAPER_USER;break;
-        case 21: ePaper = PAPER_ENV_DL;break;
-        case 22: ePaper = PAPER_ENV_C6;break;
-        case 23: ePaper = PAPER_ENV_C65;break;
-        case 24: ePaper = PAPER_ENV_C5;break;
-        case 25: ePaper = PAPER_ENV_C4;break;
-        case 26: ePaper = PAPER_SLIDE_DIA;break;
-        case 27: ePaper = PAPER_SCREEN_4_3;break;
-        case 28: ePaper = PAPER_SCREEN_16_9;break;
-        case 29: ePaper = PAPER_SCREEN_16_10;break;
-        case 30: ePaper = PAPER_POSTCARD_JP;break;
-        default:
-            break;
-    }
+    Paper ePaper = (Paper)reinterpret_cast<sal_uLong>( mpPaperSizeBox->GetEntryData( nPos ) );
     Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, (MapUnit)(meUnit)));
 
     if(mpPaperOrientation->GetSelectEntryPos() == 0)
