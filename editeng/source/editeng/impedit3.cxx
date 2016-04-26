@@ -276,9 +276,8 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
 
-    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+    for (EditView* pView : aEditViews)
     {
-        EditView* pView = aEditViews[nView];
         pView->HideCursor();
 
         Rectangle aClipRect( aInvalidRect );
@@ -319,9 +318,9 @@ IMPL_LINK_NOARG_TYPED(ImpEditEngine, IdleFormatHdl, Idle *, void)
     // else probably the idle format timer fired while we're already
     // downing
     EditView* pView = aIdleFormatter.GetView();
-    for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+    for (EditView* aEditView : aEditViews)
     {
-        if( aEditViews[nView] == pView )
+        if( aEditView == pView )
         {
             FormatAndUpdate( pView );
             break;
@@ -445,9 +444,8 @@ void ImpEditEngine::FormatDoc()
             CheckAutoPageSize();
         else if ( nDiff )
         {
-            for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+            for (EditView* pView : aEditViews)
             {
-                EditView* pView = aEditViews[nView];
                 ImpEditView* pImpView = pView->pImpEditView;
                 if ( pImpView->DoAutoHeight() )
                 {
@@ -548,9 +546,8 @@ void ImpEditEngine::CheckAutoPageSize()
         aInvalidRect = Rectangle( Point(), aSz );
 
 
-        for (size_t nView = 0; nView < aEditViews.size(); ++nView)
+        for (EditView* pView : aEditViews)
         {
-            EditView* pView = aEditViews[nView];
             pView->pImpEditView->RecalcOutputArea();
         }
     }
@@ -2336,12 +2333,12 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
         InitScriptTypes( GetParaPortions().GetPos( pParaPortion ) );
 
     const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for ( size_t nT = 0; nT < rTypes.size(); nT++ )
-        aPositions.insert( rTypes[nT].nStartPos );
+    for (const ScriptTypePosInfo& rType : rTypes)
+        aPositions.insert( rType.nStartPos );
 
     const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
-    for ( size_t nD = 0; nD < rWritingDirections.size(); nD++ )
-        aPositions.insert( rWritingDirections[nD].nStartPos );
+    for (const WritingDirectionInfo & rWritingDirection : rWritingDirections)
+        aPositions.insert( rWritingDirection.nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
     {
@@ -4429,9 +4426,9 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
             nCompressPercent /= nCompressed;
         }
 
-        for (size_t i = 0, n = aCompressedPortions.size(); i < n; ++i)
+        for (TextPortion* pTP2 : aCompressedPortions)
         {
-            pTP = aCompressedPortions[i];
+            pTP = pTP2;
             pTP->GetExtraInfos()->bCompressed = false;
             pTP->GetSize().Width() = pTP->GetExtraInfos()->nOrgWidth;
             if ( nCompressPercent )

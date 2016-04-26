@@ -229,11 +229,11 @@ namespace pcr
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
         };
 
-        for ( sal_Int32 i = 0; i < 4; ++i )
+        for (const FieldLinkRow* aRow : aRows)
         {
             OUString sDetailField, sMasterField;
-            aRows[ i ]->GetFieldName( FieldLinkRow::eDetailField, sDetailField );
-            aRows[ i ]->GetFieldName( FieldLinkRow::eMasterField, sMasterField );
+            aRow->GetFieldName( FieldLinkRow::eDetailField, sDetailField );
+            aRow->GetFieldName( FieldLinkRow::eMasterField, sMasterField );
             if ( sDetailField.isEmpty() && sMasterField.isEmpty() )
                 continue;
 
@@ -280,10 +280,10 @@ namespace pcr
         FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
         };
-        for ( sal_Int32 i = 0; i < 4 ; ++i )
+        for (FieldLinkRow* aRow : aRows)
         {
-            aRows[i]->fillList( FieldLinkRow::eDetailField, sDetailFields );
-            aRows[i]->fillList( FieldLinkRow::eMasterField, sMasterFields );
+            aRow->fillList( FieldLinkRow::eDetailField, sDetailFields );
+            aRow->fillList( FieldLinkRow::eMasterField, sMasterFields );
         }
 
     }
