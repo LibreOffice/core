@@ -2615,32 +2615,32 @@ interface DrawView
     SID_ATTR_PAGE_SIZE
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetPageProperties ;
     ]
     SID_ATTR_PAGE_COLOR
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState;
+        StateMethod = GetPageProperties;
     ]
     SID_ATTR_PAGE_GRADIENT
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetPageProperties ;
     ]
     SID_ATTR_PAGE_HATCH
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetPageProperties ;
     ]
     SID_ATTR_PAGE_BITMAP
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetPageProperties ;
     ]
     SID_ATTR_PAGE_FILLSTYLE
     [
         ExecMethod = FuTemporary;
-        StateMethod = GetMenuState;
+        StateMethod = GetPageProperties;
     ]
     SID_DISPLAY_MASTER_BACKGROUND
     [

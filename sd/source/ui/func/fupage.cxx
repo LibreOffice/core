@@ -147,7 +147,10 @@ void FuPage::DoExecute( SfxRequest& )
 
         // if we now have arguments, apply them to current page
         if( mpArgs )
+        {
             ApplyItemSet( mpArgs );
+            mpView->SetAttributes( *mpArgs );
+        }
 
         static sal_uInt16 SidArray[] = {
                         SID_ATTR_PAGE_COLOR,

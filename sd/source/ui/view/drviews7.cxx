@@ -30,6 +30,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/sizeitem.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svxids.hrc>
@@ -1545,6 +1546,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     GetModeSwitchingMenuState (rSet);
+}
+
+void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
+{
+    rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, getCurrentPage()->GetSize()));
 }
 
 void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
