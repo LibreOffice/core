@@ -20,11 +20,13 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_UNDOBACK_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_UNDOBACK_HXX
 
+#include <memory>
 #include "sdundo.hxx"
 
 class SdDrawDocument;
 class SdPage;
 class SfxItemSet;
+class SfxPoolItem;
 
 // SdBackgroundObjUndoAction
 class SdBackgroundObjUndoAction : public SdUndoAction
@@ -33,8 +35,12 @@ private:
 
     SdPage&                 mrPage;
     SfxItemSet*             mpItemSet;
+    std::unique_ptr<SfxPoolItem> mpFillBitmapItem;
+    bool                    mbHasFillBitmap;
 
     void                    ImplRestoreBackgroundObj();
+    void                    saveFillBitmap(SfxItemSet &rItemSet);
+    void                    restoreFillBitmap(SfxItemSet &rItemSet);
 
 public:
 
