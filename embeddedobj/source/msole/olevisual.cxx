@@ -303,6 +303,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 
 embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
+                lang::DisposedException,
                 embed::WrongStateException,
                 uno::Exception,
                 uno::RuntimeException, std::exception )

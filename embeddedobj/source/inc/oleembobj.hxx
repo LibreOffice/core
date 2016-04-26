@@ -33,6 +33,7 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -371,6 +372,7 @@ public:
     virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
         throw ( css::lang::IllegalArgumentException,
                 css::embed::WrongStateException,
+                css::lang::DisposedException,
                 css::uno::Exception,
                 css::uno::RuntimeException, std::exception ) override;
 
