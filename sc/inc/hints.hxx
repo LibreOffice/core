@@ -30,9 +30,8 @@ class ScPaintHint : public SfxHint
     sal_uInt16  nParts;
     bool        bPrint;     //  flag indicating whether print/preview if affected
 
-    ScPaintHint(); // disabled
-
 public:
+                    ScPaintHint() = delete;
                     ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
                     virtual ~ScPaintHint();
 

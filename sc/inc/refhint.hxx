@@ -32,12 +32,11 @@ public:
 private:
     Type meType;
 
-    RefHint(); // disabled
-
 protected:
     RefHint( Type eType );
 
 public:
+    RefHint() = delete;
     virtual ~RefHint() = 0;
 
     Type getType() const;

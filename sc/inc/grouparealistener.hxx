@@ -35,10 +35,9 @@ class FormulaGroupAreaListener : public SvtListener
     bool mbStartFixed;
     bool mbEndFixed;
 
-    FormulaGroupAreaListener(); // disabled
-
 public:
 
+    FormulaGroupAreaListener() = delete;
     FormulaGroupAreaListener( const ScRange& rRange, const ScDocument& rDocument,
             const ScAddress& rTopCellPos, SCROW nGroupLen, bool bStartFixed, bool bEndFixed );
 

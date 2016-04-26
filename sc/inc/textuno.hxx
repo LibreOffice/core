@@ -64,12 +64,12 @@ private:
     rtl::Reference<ScHeaderFooterTextObj> mxCenterText;
     rtl::Reference<ScHeaderFooterTextObj> mxRightText;
 
-    ScHeaderFooterContentObj(); // disabled
-
 public:
     ScHeaderFooterContentObj( const EditTextObject* pLeft,
                               const EditTextObject* pCenter,
                               const EditTextObject* pRight );
+
+                            ScHeaderFooterContentObj() = delete;
     virtual                 ~ScHeaderFooterContentObj();
 
                             // for ScPageHFItem (using getImplementation)

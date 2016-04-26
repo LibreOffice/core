@@ -78,9 +78,8 @@ private:
 
     ScTableConditionalEntry*    GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
-
-    ScTableConditionalFormat(); // disable
 public:
+                            ScTableConditionalFormat() = delete;
                             ScTableConditionalFormat(ScDocument* pDoc, sal_uLong nKey,
                                     SCTAB nTab, formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat();
@@ -145,8 +144,8 @@ class ScTableConditionalEntry : public cppu::WeakImplHelper<
 private:
     ScCondFormatEntryItem       aData;
 
-    ScTableConditionalEntry(); // disabled
 public:
+                            ScTableConditionalEntry() = delete;
                             ScTableConditionalEntry(const ScCondFormatEntryItem& aItem);
     virtual                 ~ScTableConditionalEntry();
 
@@ -219,8 +218,9 @@ private:
 
     void                    ClearData_Impl();
 
-    ScTableValidationObj(); // disabled
 public:
+
+                            ScTableValidationObj() = delete;
                             ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                                 const formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj();

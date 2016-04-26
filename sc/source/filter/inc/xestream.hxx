@@ -247,11 +247,12 @@ namespace sc { class CompileFormulaContext; }
 
 class XclXmlUtils
 {
-    XclXmlUtils();
-    ~XclXmlUtils();
+public:
+    XclXmlUtils() = delete;
+    ~XclXmlUtils() = delete;
     XclXmlUtils(const XclXmlUtils&) = delete;
     XclXmlUtils& operator=(const XclXmlUtils&) = delete;
-public:
+
     static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, OUString& rValue);
     static OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
 

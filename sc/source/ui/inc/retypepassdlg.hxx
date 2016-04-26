@@ -44,6 +44,7 @@ public:
     typedef std::shared_ptr<ScDocProtection>    DocProtectionPtr;
     typedef std::shared_ptr<ScTableProtection>  TabProtectionPtr;
 
+    ScRetypePassDlg() = delete;
     explicit ScRetypePassDlg(vcl::Window* pParent);
     virtual ~ScRetypePassDlg();
     virtual void dispose() override;
@@ -58,8 +59,6 @@ public:
     void WriteNewDataToDocument(ScDocument& rDoc) const;
 
 private:
-    ScRetypePassDlg(); // disabled
-
     void Init();
     void PopulateDialog();
     void SetDocData();
@@ -101,6 +100,7 @@ private:
 class ScRetypePassInputDlg : public ModalDialog
 {
 public:
+    ScRetypePassInputDlg() = delete;
     explicit ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected);
     virtual ~ScRetypePassInputDlg();
     virtual void dispose() override;
@@ -111,8 +111,6 @@ public:
     OUString GetNewPassword() const;
 
 private:
-    ScRetypePassInputDlg(); // disabled
-
     void Init();
     void CheckPasswordInput();
 

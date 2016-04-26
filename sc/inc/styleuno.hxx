@@ -231,8 +231,8 @@ private:
                                                   css::uno::RuntimeException,
                                                   std::exception);
 
-    ScStyleObj(); // disabled
 public:
+                            ScStyleObj() = delete;
                             ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName);
     virtual                 ~ScStyleObj();
 
