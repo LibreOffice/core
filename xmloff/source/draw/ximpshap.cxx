@@ -3904,10 +3904,8 @@ void SdXMLCustomShapeContext::EndElement()
 
         if(xPropSet.is())
         {
-            const OUString sFlushCustomShapeUnoApiObjects("FlushCustomShapeUnoApiObjects");
-            uno::Any aAny;
-            aAny <<= true;
-            xPropSet->setPropertyValue(sFlushCustomShapeUnoApiObjects, aAny);
+            xPropSet->setPropertyValue(
+                "FlushCustomShapeUnoApiObjects", css::uno::Any(true));
         }
     }
     catch(const uno::Exception&)
