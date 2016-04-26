@@ -30,6 +30,7 @@ class SC_DLLPUBLIC ScDPOutputGeometry
 public:
     enum FieldType { Column = 0, Row, Page, Data, None };
 
+    ScDPOutputGeometry() = delete;
     ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter);
     ~ScDPOutputGeometry();
 
@@ -51,8 +52,6 @@ public:
     std::pair<FieldType, size_t> getFieldButtonType(const ScAddress& rPos) const;
 
 private:
-    ScDPOutputGeometry(); // disabled
-
     void adjustFieldsForDataLayout(sal_uInt32& rColumnFields, sal_uInt32& rRowFields) const;
 
 private:

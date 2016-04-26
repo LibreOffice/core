@@ -123,7 +123,9 @@ class SvStream;
 class ScfTools
 {
 public:
-// *** noncopyable *** --------------------------------------------------------
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static items. */
+    ScfTools() = delete;
     ScfTools(const ScfTools&) = delete;
     const ScfTools& operator=(const ScfTools&) = delete;
 
@@ -248,10 +250,6 @@ private:
     static const OUString& GetHTMLIndexPrefix();
     /** Returns the prefix for table names. */
     static const OUString& GetHTMLNamePrefix();
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static items. To enforce this, the default constructor
-        is made private */
-    ScfTools();
 };
 
 // Containers =================================================================

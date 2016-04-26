@@ -43,9 +43,9 @@ class ScDPDimensionSaveData;
  */
 class ScSheetSourceDesc
 {
-    ScSheetSourceDesc(); // disabled
-
 public:
+    ScSheetSourceDesc() = delete;
+
     SC_DLLPUBLIC ScSheetSourceDesc(ScDocument* pDoc);
 
     SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);

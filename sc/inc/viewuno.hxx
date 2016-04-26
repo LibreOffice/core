@@ -184,9 +184,9 @@ private:
     void                    EndActivationListening();
     bool                    mbLeftMousePressed;
     bool                    mbPendingSelectionChanged;
-    ScTabViewObj(); // disabled
 public:
                             ScTabViewObj(ScTabViewShell* pViewSh);
+                            ScTabViewObj() = delete;
     virtual                 ~ScTabViewObj();
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

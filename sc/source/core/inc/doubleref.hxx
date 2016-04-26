@@ -39,6 +39,8 @@ class ScDBRangeBase
 public:
     enum RefType { INTERNAL, EXTERNAL }; // TODO: We may not need this after all... (kohei)
 
+    ScDBRangeBase() = delete;
+
     virtual ~ScDBRangeBase() = 0;
 
     bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
@@ -84,8 +86,6 @@ protected:
     static void fillQueryOptions(ScQueryParamBase* pParam);
 
 private:
-    ScDBRangeBase(); // disabled
-
     ScDocument* mpDoc;
 };
 

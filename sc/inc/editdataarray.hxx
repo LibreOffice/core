@@ -34,6 +34,7 @@ public:
     class Item
     {
     public:
+        Item() = delete;
         explicit Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
                       EditTextObject* pOldData, EditTextObject* pNewData);
         ~Item();
@@ -43,9 +44,6 @@ public:
         SCTAB GetTab() const { return mnTab;}
         SCCOL GetCol() const { return mnCol;}
         SCROW GetRow() const { return mnRow;}
-
-    private:
-        Item(); // disabled
 
     private:
         std::shared_ptr<EditTextObject> mpOldData;

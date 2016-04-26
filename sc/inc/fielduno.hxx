@@ -191,6 +191,7 @@ class ScEditFieldObj : public cppu::WeakImplHelper<
                         public ScMutexHelper,
                         public ::cppu::OComponentHelper
 {
+    ScEditFieldObj() = delete;
     ScEditFieldObj(const ScEditFieldObj&) = delete;
     const ScEditFieldObj& operator=(const ScEditFieldObj&) = delete;
 
@@ -208,8 +209,6 @@ class ScEditFieldObj : public cppu::WeakImplHelper<
     bool mbIsFixed:1;
 
 private:
-    ScEditFieldObj(); // disabled
-
     SvxFieldData* getData();
 
     void setPropertyValueURL(const OUString& rName, const css::uno::Any& rVal);

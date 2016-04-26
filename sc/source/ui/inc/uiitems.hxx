@@ -103,6 +103,7 @@ class ScEditViewHint : public SfxHint
     ScAddress                   aCursorPos;
 
 public:
+                    ScEditViewHint() = delete;
                     ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos );
                     virtual ~ScEditViewHint();
 
@@ -110,9 +111,6 @@ public:
     SCROW           GetRow() const      { return aCursorPos.Row(); }
     SCTAB           GetTab() const      { return aCursorPos.Tab(); }
     ScEditEngineDefaulter*  GetEngine() const   { return pEditEngine; }
-
-private:
-    ScEditViewHint(); // disabled
 };
 
 class ScIndexHint : public SfxHint

@@ -41,8 +41,6 @@ class SC_DLLPUBLIC ScDocumentImport
 {
     std::unique_ptr<ScDocumentImportImpl> mpImpl;
 
-    ScDocumentImport(); // disabled
-
 public:
 
     struct SC_DLLPUBLIC Attrs
@@ -55,6 +53,7 @@ public:
         Attrs();
     };
 
+    ScDocumentImport() = delete;
     ScDocumentImport(ScDocument& rDoc);
     ScDocumentImport(const ScDocumentImport&) = delete;
     const ScDocumentImport& operator=(const ScDocumentImport&) = delete;

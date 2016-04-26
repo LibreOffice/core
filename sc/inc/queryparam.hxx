@@ -119,14 +119,13 @@ struct ScDBQueryParamBase : public ScQueryParamBase
 
     DataType        GetType() const { return meType;}
 
+    ScDBQueryParamBase() = delete;
     virtual ~ScDBQueryParamBase();
 
 protected:
     ScDBQueryParamBase(DataType eType);
 
 private:
-    ScDBQueryParamBase();
-
     DataType        meType;
 };
 

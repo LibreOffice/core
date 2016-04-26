@@ -32,8 +32,8 @@ private:
     const ScUnoAddInHelpId*     pCurrHelpIds;       /// Array of function names and help IDs.
     sal_uInt32                  nArrayCount;        /// Count of array entries.
 
-    ScUnoAddInHelpIdGenerator(); // disabled
 public:
+                                ScUnoAddInHelpIdGenerator() = delete;
                                 ScUnoAddInHelpIdGenerator( const OUString& rServiceName );
 
     /** Sets service name of the AddIn. Has to be done before requesting help IDs. */

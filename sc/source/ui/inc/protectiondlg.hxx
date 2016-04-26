@@ -33,6 +33,7 @@ class ScTableProtection;
 class ScTableProtectionDlg : public ModalDialog
 {
 public:
+    ScTableProtectionDlg() = delete;
     explicit ScTableProtectionDlg(vcl::Window* pParent);
     virtual ~ScTableProtectionDlg();
     virtual void dispose() override;
@@ -44,8 +45,6 @@ public:
     void WriteData(ScTableProtection& rData) const;
 
 private:
-    ScTableProtectionDlg(); // disabled
-
     void Init();
 
     void EnableOptionalWidgets(bool bEnable = true);
