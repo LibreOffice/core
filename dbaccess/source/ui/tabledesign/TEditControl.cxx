@@ -108,21 +108,17 @@ void OTableEditorCtrl::Init()
     SetReadOnly( bRead );
 
     // Insert the columns
-    OUString aColumnName( ModuleRes(STR_TAB_FIELD_COLUMN_NAME) );
-    InsertDataColumn( FIELD_NAME, aColumnName, FIELDNAME_WIDTH );
+    InsertDataColumn( FIELD_NAME, ModuleRes(STR_TAB_FIELD_COLUMN_NAME), FIELDNAME_WIDTH );
 
-    aColumnName = ModuleRes(STR_TAB_FIELD_COLUMN_DATATYPE);
-    InsertDataColumn( FIELD_TYPE, aColumnName, FIELDTYPE_WIDTH );
+    InsertDataColumn( FIELD_TYPE, ModuleRes(STR_TAB_FIELD_COLUMN_DATATYPE), FIELDTYPE_WIDTH );
 
     ::dbaccess::ODsnTypeCollection aDsnTypes(GetView()->getController().getORB());
     bool bShowColumnDescription = aDsnTypes.supportsColumnDescription(::comphelper::getString(GetView()->getController().getDataSource()->getPropertyValue(PROPERTY_URL)));
-    aColumnName = ModuleRes(STR_TAB_HELP_TEXT);
-    InsertDataColumn( HELP_TEXT, aColumnName, bShowColumnDescription ? FIELDTYPE_WIDTH : FIELDDESCR_WIDTH );
+    InsertDataColumn( HELP_TEXT, ModuleRes(STR_TAB_HELP_TEXT), bShowColumnDescription ? FIELDTYPE_WIDTH : FIELDDESCR_WIDTH );
 
     if ( bShowColumnDescription )
     {
-        aColumnName = ModuleRes(STR_COLUMN_DESCRIPTION);
-        InsertDataColumn( COLUMN_DESCRIPTION, aColumnName, FIELDTYPE_WIDTH );
+        InsertDataColumn( COLUMN_DESCRIPTION, ModuleRes(STR_COLUMN_DESCRIPTION), FIELDTYPE_WIDTH );
     }
 
     InitCellController();
@@ -510,7 +506,7 @@ void OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
         case FIELD_NAME:
         {
             // If there is no name, do nothing
-            OUString aName(pNameCell->GetText());
+            const OUString aName(pNameCell->GetText());
 
             if( aName.isEmpty() )
             {
@@ -784,7 +780,6 @@ void OTableEditorCtrl::InsertRows( long nRow )
             aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
             aStreamRef->ResetError();
             long nInsertRow = nRow;
-            OUString aFieldName;
              std::shared_ptr<OTableRow>  pRow;
             sal_Int32 nSize = 0;
             (*aStreamRef).ReadInt32( nSize );
@@ -798,8 +793,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
                 if ( pRow->GetActFieldDescr() )
                     pRow->GetActFieldDescr()->SetType(GetView()->getController().getTypeInfoByType(nType));
                 // Adjust the field names
-                aFieldName = GenerateName( pRow->GetActFieldDescr()->GetName() );
-                pRow->GetActFieldDescr()->SetName( aFieldName );
+                pRow->GetActFieldDescr()->SetName( GenerateName( pRow->GetActFieldDescr()->GetName() ) );
                 pRow->SetPos(nInsertRow);
                 m_pRowList->insert( m_pRowList->begin()+nInsertRow,pRow );
                 vInsertedUndoRedoRows.push_back(std::shared_ptr<OTableRow>(new OTableRow(*pRow)));
@@ -967,9 +961,8 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno
 
         case FIELD_PROPERTY_AUTOINC:
             {
-                OUString strYes(ModuleRes(STR_VALUE_YES));
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetAutoIncrement(sValue == strYes);
+                pFieldDescr->SetAutoIncrement(sValue == ModuleRes(STR_VALUE_YES).toString());
             }
             break;
         case FIELD_PROPERTY_SCALE:
@@ -981,7 +974,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno
 
         case FIELD_PROPERTY_BOOL_DEFAULT:
             sValue = GetView()->GetDescWin()->BoolStringPersistent(::comphelper::getString(_rNewData));
-            pFieldDescr->SetControlDefault(makeAny(OUString(sValue)));
+            pFieldDescr->SetControlDefault(makeAny(sValue));
             break;
 
         case FIELD_PROPERTY_FORMAT:
@@ -1073,7 +1066,7 @@ OUString OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 
 sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 {
-    return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth(OUString('0'));
+    return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth("0");
 }
 
 OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
