@@ -1397,10 +1397,12 @@ void ScInterpreter::ScConcat_MS()
 
     //reverse order of parameter stack to simplify concatenation:
     FormulaToken* p;
-    for ( short i = 0; i < short( nParamCount / 2 ); i++ )
+    assert( sp >= nParamCount && " less stack elements than parameters");
+    short nStackParams = std::min<short>( sp, nParamCount);
+    for ( short i = 0; i < short( nStackParams / 2 ); i++ )
     {
-        p = pStack[ sp - ( nParamCount - i ) ];
-        pStack[ sp - ( nParamCount - i ) ] = pStack[ sp - 1 - i ];
+        p = pStack[ sp - ( nStackParams - i ) ];
+        pStack[ sp - ( nStackParams - i ) ] = pStack[ sp - 1 - i ];
         pStack[ sp - 1 - i ] = p;
     }
 
@@ -1430,8 +1432,8 @@ void ScInterpreter::ScConcat_MS()
                             aResBuf.append( OUString::number( aCell.getValue() ) );
                     }
                 }
-                break;
             }
+            break;
             case svDoubleRef :
             case svRefList :
             {
@@ -1474,8 +1476,8 @@ void ScInterpreter::ScConcat_MS()
                         }
                     }
                 }
-                break;
             }
+            break;
             case svMatrix :
             case svExternalSingleRef:
             case svExternalDoubleRef:
@@ -1505,8 +1507,11 @@ void ScInterpreter::ScConcat_MS()
                     }
                 }
             }
+            break;
             default:
-              break;
+                PopError();
+                SetError( errIllegalArgument);
+                break;
         }
     }
     PushString( aResBuf.makeStringAndClear() );
@@ -1520,10 +1525,12 @@ void ScInterpreter::ScTextJoin_MS()
     {
         //reverse order of parameter stack to simplify processing
         FormulaToken* p;
-        for ( short i = 0; i < short( nParamCount / 2 ); i++ )
+        assert( sp >= nParamCount && " less stack elements than parameters");
+        short nStackParams = std::min<short>( sp, nParamCount);
+        for ( short i = 0; i < short( nStackParams / 2 ); i++ )
         {
-            p = pStack[ sp - ( nParamCount - i ) ];
-            pStack[ sp - ( nParamCount - i ) ] = pStack[ sp - 1 - i ];
+            p = pStack[ sp - ( nStackParams - i ) ];
+            pStack[ sp - ( nStackParams - i ) ] = pStack[ sp - 1 - i ];
             pStack[ sp - 1 - i ] = p;
         }
 
@@ -1553,8 +1560,8 @@ void ScInterpreter::ScTextJoin_MS()
                             xDelimiter.push_back( OUString::number( aCell.getValue() ) );
                     }
                 }
-                break;
             }
+            break;
             case svDoubleRef :
             case svRefList :
             {
@@ -1599,8 +1606,8 @@ void ScInterpreter::ScTextJoin_MS()
                             xDelimiter.push_back( "" );
                     }
                 }
-                break;
             }
+            break;
             case svMatrix :
             case svExternalSingleRef:
             case svExternalDoubleRef:
@@ -1635,7 +1642,10 @@ void ScInterpreter::ScTextJoin_MS()
                     }
                 }
             }
+            break;
             default:
+                PopError();
+                SetError( errIllegalArgument);
                 break;
         }
         if ( xDelimiter.empty() )
@@ -1675,8 +1685,8 @@ void ScInterpreter::ScTextJoin_MS()
                             bFirst = false;
                         aResBuf.append( aStr );
                     }
-                    break;
                 }
+                break;
                 case svSingleRef :
                 {
                     ScAddress aAdr;
@@ -1712,8 +1722,8 @@ void ScInterpreter::ScTextJoin_MS()
                             bFirst = false;
                         aResBuf.append( aStr );
                     }
-                    break;
                 }
+                break;
                 case svDoubleRef :
                 case svRefList :
                 {
@@ -1774,8 +1784,8 @@ void ScInterpreter::ScTextJoin_MS()
                             }
                         }
                     }
-                    break;
                 }
+                break;
                 case svMatrix :
                 case svExternalSingleRef:
                 case svExternalDoubleRef:
@@ -1842,9 +1852,11 @@ void ScInterpreter::ScTextJoin_MS()
                         else
                             bFirst = false;
                     }
-                    break;
                 }
+                break;
                 default:
+                    PopError();
+                    SetError( errIllegalArgument);
                     break;
             }
         }

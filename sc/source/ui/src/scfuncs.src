@@ -11520,7 +11520,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "text " ;
+            Text [ en-US ] = "text" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -11544,7 +11544,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1 to last
         {
-            Text [ en-US ] = "text " ;
+            Text [ en-US ] = "text" ;
         };
         String 3 // Description of Parameter 1 to last
         {
@@ -11568,7 +11568,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "delimiter " ;
+            Text [ en-US ] = "delimiter" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -11584,7 +11584,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3 to last
         {
-            Text [ en-US ] = "text " ;
+            Text [ en-US ] = "text" ;
         };
         String 7 // Description of Parameter 3 to last
         {
