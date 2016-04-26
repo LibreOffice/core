@@ -92,11 +92,9 @@ OCopyTable::OCopyTable(vcl::Window * pParent)
 
         m_pFT_KeyName->Enable(false);
         m_pEdKeyName->Enable(false);
-        OUString sKeyName("ID");
-        sKeyName = m_pParent->createUniqueName(sKeyName);
-        m_pEdKeyName->SetText(sKeyName);
+        m_pEdKeyName->SetText(m_pParent->createUniqueName("ID"));
 
-        sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
+        const sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
         m_pEdKeyName->SetMaxTextLen(nMaxLen ? nMaxLen : EDIT_NOLIMIT);
     }
 
@@ -196,8 +194,7 @@ bool OCopyTable::LeavePage()
         sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
         if ( nMaxLength && sTable.getLength() > nMaxLength )
         {
-            OUString sError(ModuleRes(STR_INVALID_TABLE_NAME_LENGTH));
-            m_pParent->showError(sError);
+            m_pParent->showError(ModuleRes(STR_INVALID_TABLE_NAME_LENGTH));
             return false;
         }
 
@@ -205,10 +202,7 @@ bool OCopyTable::LeavePage()
         if (    m_pParent->m_bCreatePrimaryKeyColumn
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
-            OUString aInfoString( ModuleRes(STR_WIZ_NAME_ALREADY_DEFINED) );
-            aInfoString += " ";
-            aInfoString += m_pParent->m_aKeyName;
-            m_pParent->showError(aInfoString);
+            m_pParent->showError(ModuleRes(STR_WIZ_NAME_ALREADY_DEFINED).toString()+" "+m_pParent->m_aKeyName);
             return false;
         }
     }
@@ -239,8 +233,7 @@ bool OCopyTable::LeavePage()
 
     if(m_pParent->m_sName.isEmpty())
     {
-        OUString sError(ModuleRes(STR_INVALID_TABLE_NAME));
-        m_pParent->showError(sError);
+        m_pParent->showError(ModuleRes(STR_INVALID_TABLE_NAME));
         return false;
     }
 
@@ -313,8 +306,7 @@ bool OCopyTable::checkAppendData()
 
     if ( !xTable.is() )
     {
-        OUString sError(ModuleRes(STR_INVALID_TABLE_NAME));
-        m_pParent->showError(sError);
+        m_pParent->showError(ModuleRes(STR_INVALID_TABLE_NAME));
         return false;
     }
     return true;
