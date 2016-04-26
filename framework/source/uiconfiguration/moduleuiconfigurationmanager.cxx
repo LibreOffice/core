@@ -860,8 +860,8 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     , m_xContext( xContext )
     , m_aListenerContainer( m_mutex )
 {
-    for ( int i = 0; i < css::ui::UIElementType::COUNT; i++ )
-        m_pStorageHandler[i] = nullptr;
+    for (PresetHandler* & i : m_pStorageHandler)
+        i = nullptr;
 
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
@@ -926,8 +926,8 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
 
 ModuleUIConfigurationManager::~ModuleUIConfigurationManager()
 {
-    for ( int i = 0; i < css::ui::UIElementType::COUNT; i++ )
-        delete m_pStorageHandler[i];
+    for (PresetHandler* i : m_pStorageHandler)
+        delete i;
 }
 
 // XComponent
@@ -1596,10 +1596,10 @@ void SAL_CALL ModuleUIConfigurationManager::reload() throw (css::uno::Exception,
         aGuard.clear();
 
         // Notify our listeners
-        for ( size_t j = 0; j < aRemoveNotifyContainer.size(); j++ )
-            implts_notifyContainerListener( aRemoveNotifyContainer[j], NotifyOp_Remove );
-        for ( size_t k = 0; k < aReplaceNotifyContainer.size(); k++ )
-            implts_notifyContainerListener( aReplaceNotifyContainer[k], NotifyOp_Replace );
+        for (ui::ConfigurationEvent & j : aRemoveNotifyContainer)
+            implts_notifyContainerListener( j, NotifyOp_Remove );
+        for (ui::ConfigurationEvent & k : aReplaceNotifyContainer)
+            implts_notifyContainerListener( k, NotifyOp_Replace );
     }
 }
 

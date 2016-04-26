@@ -81,8 +81,8 @@ CGM::~CGM()
         mpGDIMetaFile->SetPrefSize( Size( static_cast< long >( mnOutdx ), static_cast< long >( mnOutdy ) ) );
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
-    for( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
-        delete [] maDefRepList[i];
+    for(sal_uInt8* i : maDefRepList)
+        delete [] i;
     maDefRepList.clear();
     maDefRepSizeList.clear();
     delete mpBitmapInUse;

@@ -237,11 +237,11 @@ namespace frm
 
                     ::sfx2::FileDialogHelper aFP( bLoad ? css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE : css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, 0, this );
 
-                    for ( size_t i = 0; i < SAL_N_ELEMENTS( aExportFormats ); ++i )
+                    for (auto & aExportFormat : aExportFormats)
                     {
                         aFP.AddFilter(
-                            OUString::createFromAscii( aExportFormats[i].pDescription ),
-                            OUString::createFromAscii( aExportFormats[i].pExtension ) );
+                            OUString::createFromAscii( aExportFormat.pDescription ),
+                            OUString::createFromAscii( aExportFormat.pExtension ) );
                     }
                     ErrCode nResult = aFP.Execute();
                     if ( nResult == 0 )
@@ -254,11 +254,11 @@ namespace frm
                         {
                             EETextFormat eFormat = EE_FORMAT_XML;
                             OUString sFilter = aFP.GetCurrentFilter();
-                            for ( size_t i = 0; i < SAL_N_ELEMENTS( aExportFormats ); ++i )
+                            for (auto & aExportFormat : aExportFormats)
                             {
-                                if ( sFilter.equalsAscii( aExportFormats[i].pDescription ) )
+                                if ( sFilter.equalsAscii( aExportFormat.pDescription ) )
                                 {
-                                    eFormat = aExportFormats[i].eFormat;
+                                    eFormat = aExportFormat.eFormat;
                                     break;
                                 }
                             }

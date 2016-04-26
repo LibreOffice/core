@@ -418,9 +418,9 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (css::uno::RuntimeE
         fillPopupMenu( m_xPopupMenu );
         m_aURLToDispatchMap.free();
 
-        for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(aCommands); ++i)
+        for (const char* aCommand : aCommands)
         {
-            aTargetURL.Complete = OUString::createFromAscii( aCommands[i] );
+            aTargetURL.Complete = OUString::createFromAscii( aCommand );
             m_xURLTransformer->parseStrict( aTargetURL );
 
             Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );

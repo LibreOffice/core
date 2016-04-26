@@ -575,8 +575,8 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     implRegisterInterface( rPage );
 
                 // create an id for each master page
-                for( size_t i = 0; i < mMasterPageTargets.size(); ++i )
-                    implRegisterInterface( mMasterPageTargets[i] );
+                for(uno::Reference<drawing::XDrawPage> & mMasterPageTarget : mMasterPageTargets)
+                    implRegisterInterface( mMasterPageTarget );
 
                 try
                 {
@@ -1132,20 +1132,17 @@ void SVGFilter::implGenerateMetaData()
                 }
                 if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
                 {
-                    for( sal_Int32 i = 0, nSize = aFieldSet.size(); i < nSize; ++i )
+                    for(TextField* i : aFieldSet)
                     {
-                        aFieldSet[i]->growCharSet( mTextFieldCharSets );
+                        i->growCharSet( mTextFieldCharSets );
                     }
                 }
             }
 
             // text fields are used only for generating meta info so we don't need them anymore
-            for( size_t i = 0; i < aFieldSet.size(); ++i )
+            for(TextField* i : aFieldSet)
             {
-                if( aFieldSet[i] != nullptr )
-                {
-                    delete aFieldSet[i];
-                }
+               delete i;
             }
         }
     }
@@ -1157,9 +1154,9 @@ void SVGFilter::implExportAnimations()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation-animations" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
-    for( size_t i = 0; i < mSelectedPages.size(); ++i )
+    for(uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
     {
-        Reference< XPropertySet > xProps( mSelectedPages[i], UNO_QUERY );
+        Reference< XPropertySet > xProps( mSelectedPage, UNO_QUERY );
 
         if( xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName( "TransitionType" ) )
         {
@@ -1168,7 +1165,7 @@ void SVGFilter::implExportAnimations()
             // we have a slide transition ?
             bool bHasEffects = ( nTransition != 0 );
 
-            Reference< XAnimationNodeSupplier > xAnimNodeSupplier( mSelectedPages[i], UNO_QUERY );
+            Reference< XAnimationNodeSupplier > xAnimNodeSupplier( mSelectedPage, UNO_QUERY );
             if( xAnimNodeSupplier.is() )
             {
                 Reference< XAnimationNode > xRootNode = xAnimNodeSupplier->getAnimationNode();
@@ -1193,7 +1190,7 @@ void SVGFilter::implExportAnimations()
                     }
                     if( bHasEffects )
                     {
-                        OUString sId = implGetValidIDFromInterface( mSelectedPages[i] );
+                        OUString sId = implGetValidIDFromInterface( mSelectedPage );
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, sId  );
                         sId += "-animations";
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId  );
