@@ -386,6 +386,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     ,mpSharedTrack      ( nullptr )
     ,mrConflictsList    ( rConflictsList )
     ,maDialogSize       ( GetSizePixel() )
+    ,maSelectionIdle    ( "ScConflictsDlg SelectionIdle" )
     ,mbInSelectHdl      ( false )
     ,mbInDeselectHdl    ( false )
 {

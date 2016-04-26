@@ -20,6 +20,7 @@ using namespace sfx2::sidebar;
 
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
+    , m_aPanelLayoutIdle("svx sidebar PanelLayoutIdle")
     , m_bInClose(false)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
