@@ -1669,6 +1669,11 @@ setGraphicSelectionInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    std::stringstream ss;
+    ss << "lok::Document::setGraphicSelection(" << pLOEvent->m_nSetGraphicSelectionType;
+    ss << ", " << pLOEvent->m_nSetGraphicSelectionX;
+    ss << ", " << pLOEvent->m_nSetGraphicSelectionY << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument,
                                                    pLOEvent->m_nSetGraphicSelectionType,
                                                    pLOEvent->m_nSetGraphicSelectionX,
