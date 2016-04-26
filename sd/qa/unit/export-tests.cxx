@@ -143,6 +143,7 @@ public:
     void testSlideNameField();
     void testExtFileField();
     void testAuthorField();
+    void testAuthorFieldFormatODP();
 
     void testFdo90607();
     void testTdf91378();
@@ -208,6 +209,7 @@ public:
     CPPUNIT_TEST(testSlideNameField);
     CPPUNIT_TEST(testExtFileField);
     CPPUNIT_TEST(testAuthorField);
+    CPPUNIT_TEST(testAuthorFieldFormatODP);
     CPPUNIT_TEST(testTdf99224);
 
     CPPUNIT_TEST_SUITE_END();
@@ -1688,6 +1690,39 @@ void SdExportTest::testAuthorField()
 
     uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testAuthorFieldFormatODP()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/author_format.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef, ODP );
+
+    for(sal_uInt16 i = 0; i <= 3; ++i)
+    {
+        uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, i, xDocShRef);
+        CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+        uno::Reference< beans::XPropertySet > xPropSet( xField, uno::UNO_QUERY_THROW );
+        sal_Int32 nAuthorFmt;
+        xPropSet->getPropertyValue("AuthorFormat") >>= nAuthorFmt;
+        switch( i )
+        {
+            case 0:     // Full name
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("Author formats don't match", sal_Int32(0), nAuthorFmt);
+                        break;
+            case 1:     // Last name
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("Author formats don't match", sal_Int32(1), nAuthorFmt);
+                        break;
+            case 2:     // First name
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("Author formats don't match", sal_Int32(2), nAuthorFmt);
+                        break;
+            case 3:     // Initials
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("Author formats don't match", sal_Int32(3), nAuthorFmt);
+        }
+    }
 
     xDocShRef->DoClose();
 }
