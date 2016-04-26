@@ -797,7 +797,7 @@ bool ImplicitBoolConversion::TraverseCXXStdInitializerListExpr(
     bool ret = RecursiveASTVisitor::TraverseCXXStdInitializerListExpr(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
-        if (!std::find(e->begin(), e->end(), i)) {
+        if (std::find(e->begin(), e->end(), i) == e->end()) {
             reportWarning(i);
         }
     }
