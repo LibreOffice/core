@@ -25,10 +25,6 @@
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 #include <vcl/bitmapex.hxx>
 
-namespace basegfx {
-    class BZPixelRaster;
-}
-
 namespace drawinglayer {
     namespace attribute {
         class SdrSceneAttribute;
@@ -42,6 +38,7 @@ namespace drawinglayer {
 
 class ZBufferRasterConverter3D;
 class RasterPrimitive3D;
+typedef std::shared_ptr< RasterPrimitive3D > RasterPrimitive3DSharedPtr;
 
 namespace drawinglayer
 {
@@ -55,13 +52,10 @@ namespace drawinglayer
         class ZBufferProcessor3D : public DefaultProcessor3D
         {
         private:
-            /// the raster target, a Z-Buffer
-            basegfx::BZPixelRaster* mpBZPixelRaster;
-
             /// inverse of EyeToView for rasterconversion with evtl. Phong shading
             basegfx::B3DHomMatrix maInvEyeToView;
 
-            /// The raster converter for Z-Buffer
+            /// The raster converter for Z-Buffer and it's size
             ZBufferRasterConverter3D* mpZBufferRasterConverter3D;
 
             /*  AA value. Defines how many oversamples will be used in X and Y. Values 0, 1
@@ -72,7 +66,7 @@ namespace drawinglayer
             /*  remembered RasterPrimitive3D's which need to be painted back to front
                 for transparent 3D parts
              */
-            std::vector< RasterPrimitive3D >* mpRasterPrimitive3Ds;
+            std::vector< RasterPrimitive3DSharedPtr > maRasterPrimitive3Ds;
 
             // rasterconversions for filled and non-filled polygons
 
