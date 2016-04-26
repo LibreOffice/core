@@ -51,7 +51,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(if $(5),$(gb_COMPILER_PLUGINS)) \
 		$(2) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
@@ -75,7 +75,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
 		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
@@ -92,7 +92,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
 		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
@@ -112,7 +112,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
@@ -129,7 +129,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
 		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \

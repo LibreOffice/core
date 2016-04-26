@@ -216,9 +216,12 @@ endif
 endif
 # extra EF variable to make the command line shorter (just like is done with $(SRCDIR) etc.)
 gb_COMPILER_PLUGINS_SETUP := EF=$(SRCDIR)/include/sal/log-areas.dox && ICECC_EXTRAFILES=$$EF CCACHE_EXTRAFILES=$$EF
+gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
+    -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
 else
 gb_COMPILER_PLUGINS :=
 gb_COMPILER_PLUGINS_SETUP :=
+gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS :=
 endif
 
 # Executable class

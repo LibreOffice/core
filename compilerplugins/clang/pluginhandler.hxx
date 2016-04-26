@@ -45,6 +45,7 @@ class PluginHandler
         set< SourceLocation > removals;
         string scope;
         string warningsOnly;
+        bool warningsAsErrors;
     };
 
 /**
