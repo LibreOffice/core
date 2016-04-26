@@ -56,7 +56,7 @@ static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 // Copied from sal/types.h to circumvent problems with precompiled headers
 // and redefinitions of BOOL, INT32 and other types. Unfortunately tools
 // also define these type incompatible with Win32 types which leads from
-// time to time to very nasty compilation errors. If someone finds a better
+// time to very nasty compilation errors. If someone finds a better
 // way to solve these probs please remove this copied part!
 typedef unsigned short sal_uInt16;
 #if ( defined(WIN32) && !defined(__MINGW32__) )

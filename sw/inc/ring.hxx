@@ -227,7 +227,7 @@ namespace sw
             value_type& dereference() const
                 { return m_pCurrent ? *m_pCurrent : * m_pStart; }
             /**
-             * value_type is is:
+             * value_type is:
              * - pointing to the current item in the iteration in general
              * - nullptr if on the first item (begin())
              * - m_pStart when beyond the last item (end())

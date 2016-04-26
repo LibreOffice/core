@@ -420,7 +420,7 @@ sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
  *     -> invisible, neighbors unchanged
  *  2) SoftHyph is in the line, ViewOpt on
  *     -> visible, neighbors unchanged
- *  3) SoftHyph is at the end of the line, ViewOpt or or off
+ *  3) SoftHyph is at the end of the line, ViewOpt on or off
  *     -> always visible, neighbors unchanged
  */
 void SwSoftHyphPortion::Paint( const SwTextPaintInfo &rInf ) const

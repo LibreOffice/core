@@ -55,8 +55,8 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XC
 
 ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 {
-    // we do this here cause the base class' call to destroyDialog won't reach us anymore : we're within an dtor,
-    // so this virtual-method-call the base class does does not work, we're already dead then ...
+    // we do this here cause the base class' call to destroyDialog won't reach us anymore: we're within an dtor,
+    // so this virtual-method-call the base class does not work, we're already dead then...
     if (m_pDialog)
     {
         ::osl::MutexGuard aGuard(m_aMutex);

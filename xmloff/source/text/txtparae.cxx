@@ -3101,7 +3101,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     rPropSet->getPropertyValue( sGraphicURL ) >>= sOrigURL;
     OUString sURL(GetExport().AddEmbeddedGraphicObject( sOrigURL ));
 
-    // If there still is no url, then then graphic is empty
+    // If there still is no url, then graphic is empty
     if( !sURL.isEmpty() )
     {
         GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
@@ -3132,7 +3132,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     {
         const OUString sReplacementURL(GetExport().AddEmbeddedGraphicObject( sReplacementOrigURL ));
 
-        // If there is no url, then then graphic is empty
+        // If there is no url, then graphic is empty
         if(sReplacementURL.getLength())
         {
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sReplacementURL);

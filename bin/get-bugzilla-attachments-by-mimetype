@@ -357,7 +357,7 @@ rss_bugzillas = (
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
 redhatbug = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 
-#Novell Bugzilla requires users to log in in order to get details of the bugs such as attachment bodies etc.
+#Novell Bugzilla requires users to log in, in order to get details of the bugs such as attachment bodies etc.
 #As a dirty workaround, we parse comments containing "Created an attachment (id=xxxxxx)" and download attachments manually
 #python-bugzilla claims that it supports Novell bugzilla login but it's not working right now and novell bugzilla login
 #system is a nightmare

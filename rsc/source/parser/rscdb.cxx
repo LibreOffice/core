@@ -410,7 +410,7 @@ void RscEnumerateObj::WriteRcFile( RscWriteRc & rMem, FILE * fOut )
     sal_uInt32 nId = rMem.GetLong( 0 );
     sal_uInt32 nRT = rMem.GetLong( 4 );
 
-    // table is filled with with nId and nRT
+    // table is filled with nId and nRT
     pTypCont->PutTranslatorKey( (sal_uInt64(nRT) << 32) + sal_uInt64(nId) );
 
     if( nRT == RSC_VERSIONCONTROL )

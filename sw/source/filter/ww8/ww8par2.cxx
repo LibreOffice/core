@@ -480,11 +480,11 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     /*
     #i1140#
     If I have a table and apply a style to one of its frames that should cause
-    a paragraph that its applied to it to only exist as a separate floating
+    a paragraph that it is applied to it to only exist as a separate floating
     frame, then the behaviour depends on which cell that it has been applied
-    to. If its the first cell of a row then the whole table row jumps into the
-    new frame, if its not then then the paragraph attributes are applied
-    "except" for the floating frame stuff. i.e. its ignored. So if theres a
+    to. If it is the first cell of a row then the whole table row jumps into the
+    new frame, if it isn't then the paragraph attributes are applied
+    "except" for the floating frame stuff. i.e. it's ignored. So if there's a
     table, and we're not in the first cell then we ignore the fact that the
     paragraph style wants to be in a different frame.
 

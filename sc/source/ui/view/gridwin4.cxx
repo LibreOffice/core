@@ -81,7 +81,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, bool bLayoutRTL )
 {
-    // pButtonViewData is only used to set the the button size,
+    // pButtonViewData is only used to set the button size,
     // can otherwise be NULL!
 
     Rectangle aInner = rInnerPixel;
@@ -925,7 +925,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         pEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()))), &rDevice);
         rDevice.SetMapMode(MAP_PIXEL);
 
-        // restore the cursor it it was originally visible
+        // restore the cursor it was originally visible
         if (bVisCursor)
             pCrsr->Show();
     }

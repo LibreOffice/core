@@ -629,7 +629,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
 
     if( !pDef )
     {
-        // pExp is always always owned and must be deleted after used
+        // pExp is always owned and must be deleted after used
         delete pExp;
     }
     return pDef;

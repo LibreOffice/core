@@ -766,11 +766,11 @@ OUString SfxObjectShell::GetTitle
 
                                 6 (==SFX_TITLE_PICKLIST)
                                 returns the Title, just like MB now would
-                                display it in the in the PickList
+                                display it in the PickList
 
                                 7 (==SFX_TITLE_HISTORY)
                                 returns the Title just like MB now would
-                                display it in the in the History
+                                display it in the History
 
                                 10 bis USHRT_MAX
                                 provides the 'nMaxLength' of the logical

@@ -13040,7 +13040,7 @@ place yourself in a working directory of you choice.
  build_w32.bat --without-guile
 
 should result in a WinRel/gnumake.exe.
-Copy it to to the Cygwin /opt/lo/bin directory as make.exe
+Copy it to the Cygwin /opt/lo/bin directory as make.exe
 
 Then re-run autogen.sh
 

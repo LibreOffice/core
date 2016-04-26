@@ -377,7 +377,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
     for ( int i = 0; i < seqNames.getLength(); i++ )
     {
         uno::Any anyNode = m_xNameAccessNodes->getByName( seqNames[i] );
-        //If we have a node then then it must contain the set of leaves. This is part of OptionsDialog.xcs
+        //If we have a node then it must contain the set of leaves. This is part of OptionsDialog.xcs
         uno::Reference< XInterface> xIntNode = anyNode.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xNode( xIntNode, uno::UNO_QUERY_THROW );
 

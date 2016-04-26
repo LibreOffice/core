@@ -71,7 +71,7 @@ void lru_map_test::testReplaceValue()
     // check if map is empty
     CPPUNIT_ASSERT_EQUAL(size_t(0), lru.size());
 
-    // check if inserting entry with with same key replaces the value
+    // check if inserting entry with same key replaces the value
 
     // inserting new entry
     lru.insert(std::make_pair<int, int>(1, 2));

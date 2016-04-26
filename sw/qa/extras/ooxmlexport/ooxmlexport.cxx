@@ -561,7 +561,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
 DECLARE_OOXMLEXPORT_TEST(testParagraphMarkNonempty, "paragraph-mark-nonempty.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport())
-        // There were two <w:sz> elements, make sure the 40 one is is dropped and the 20 one is kept.
+        // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.
         assertXPath(pXmlDoc, "//w:p/w:pPr/w:rPr/w:sz", "val", "20");
 }
 

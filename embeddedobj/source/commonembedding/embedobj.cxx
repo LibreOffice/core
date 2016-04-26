@@ -153,7 +153,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sa
 
 void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 {
-    // TODO: may be needs interaction handler to detect wherether the object state
+    // TODO: may be needs interaction handler to detect whether the object state
     //         can be changed even after errors
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )

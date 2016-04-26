@@ -218,7 +218,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
         if (xGroup->mnLength == 2)
         {
-            // Group consists only only two cells. Mark the second one non-shared.
+            // Group consists of only two cells. Mark the second one non-shared.
 #if DEBUG_COLUMN_STORAGE
             if (aPos.second+1 >= aPos.first->size)
             {

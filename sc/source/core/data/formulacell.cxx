@@ -1469,7 +1469,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     }
 
     // DoubleRefs for binary operators were always a Matrix before version v5.0.
-    // Now this is only the case when when in an array formula, otherwise it's an implicit intersection
+    // Now this is only the case when in an array formula, otherwise it's an implicit intersection
     if ( pDocument->GetSrcVersion() < SC_MATRIX_DOUBLEREF &&
             GetMatrixFlag() == MM_NONE && pCode->HasMatrixDoubleRefOps() )
     {

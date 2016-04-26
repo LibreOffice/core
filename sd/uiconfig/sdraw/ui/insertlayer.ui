@@ -191,7 +191,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="descriptio">
+                  <object class="GtkLabel" id="description">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Description</property>

@@ -30,7 +30,7 @@ module com { module sun { module star { module accessibility {
     accessible.
 
     <p>It is used to provide access to the XAccessibleContext
-    interface but allows at the same time that that interface is implemented
+    interface but allows at the same time that the interface is implemented
     by another class.</p>
 
     <p>The distinction between the interfaces XAccessible and

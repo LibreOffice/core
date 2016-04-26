@@ -192,7 +192,7 @@ constants AccessibleStateType
     /** Object information is stale and might not be up to date
 
         <p>Indicates that the information that is returned from this object
-        might be out of sync with with the application.</p>
+        might be out of sync with the application.</p>
     */
     const short STALE = 27;
 

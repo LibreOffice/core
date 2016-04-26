@@ -185,7 +185,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
        - minVersion, maxVersion, excludeVersions - for that specific vendor).
    @param ppInfo
        [out] if the JAVA_HOME environment variable is set and points to a suitable
-       JRE, then then <code>ppInfo</code> contains
+       JRE, then <code>ppInfo</code> contains
         on return a pointer to its <code>JavaInfo</code> object.
 
    @return
