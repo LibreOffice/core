@@ -25,6 +25,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <memory>
 #include <vector>
 #include <svl/lstner.hxx>
 #include <svx/xit.hxx>
@@ -35,7 +36,7 @@ class SdrModel;
 class SfxItemPool;
 class SfxItemSet;
 
-typedef std::vector< SfxItemSet* > ItemPoolVector;
+typedef std::vector< std::unique_ptr< SfxItemSet > > ItemPoolVector;
 class SvxUnoNameItemTable : public cppu::WeakImplHelper< css::container::XNameContainer, css::lang::XServiceInfo >,
                             public SfxListener
 {

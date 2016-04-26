@@ -19,6 +19,9 @@
 
 
 #include <set>
+
+#include <o3tl/make_unique.hxx>
+
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -59,14 +62,6 @@ bool SvxUnoNameItemTable::isValid( const NameOrIndex* pItem ) const
 
 void SvxUnoNameItemTable::dispose()
 {
-    ItemPoolVector::iterator aIter = maItemSetVector.begin();
-    const ItemPoolVector::iterator aEnd = maItemSetVector.end();
-
-    while( aIter != aEnd )
-    {
-        delete (*aIter++);
-    }
-
     maItemSetVector.clear();
 }
 
@@ -85,13 +80,12 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
 
 void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    SfxItemSet* pInSet = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
-    maItemSetVector.push_back( pInSet );
+    maItemSetVector.push_back( o3tl::make_unique< SfxItemSet >( *mpModelPool, mnWhich, mnWhich ) );
 
     std::unique_ptr<NameOrIndex> pNewItem(createItem());
     pNewItem->SetName( aName );
     pNewItem->PutValue( aElement, mnMemberId );
-    pInSet->Put( *pNewItem, mnWhich );
+    maItemSetVector.back()->Put( *pNewItem, mnWhich );
 }
 
 // XNameContainer
@@ -133,7 +127,6 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
         if (sName.equals(pItem->GetName()))
         {
-            delete (*aIter);
             maItemSetVector.erase( aIter );
             return;
         }
