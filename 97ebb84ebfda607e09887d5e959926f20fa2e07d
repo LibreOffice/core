@@ -16,6 +16,24 @@
       "revId": "97ebb84ebfda607e09887d5e959926f20fa2e07d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_b71150b2",
+        "filename": "sd/uiconfig/sdraw/ui/insertlayer.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2016-04-26T08:29:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ac06dbe_d7396c43",
+      "revId": "97ebb84ebfda607e09887d5e959926f20fa2e07d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
