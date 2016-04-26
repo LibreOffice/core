@@ -1,4 +1,4 @@
-From d1d8d2e18825756d7b21b26c8e74e331e38c66ff Mon Sep 17 00:00:00 2001
+From e91666c3d84ca8e945f0a8f408365496cfba0a22 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:09:39 +0100
 Subject: [PATCH] xmlsec1-nssmangleciphers.patch
@@ -10,7 +10,7 @@ Conflicts:
  1 file changed, 480 insertions(+), 379 deletions(-)
 
 diff --git a/src/nss/ciphers.c b/src/nss/ciphers.c
-index 54bd2af..03af759 100644
+index cf67936..c063c04 100644
 --- a/src/nss/ciphers.c
 +++ b/src/nss/ciphers.c
 @@ -11,180 +11,422 @@
@@ -1141,5 +1141,5 @@ index 54bd2af..03af759 100644
          xmlSecError(XMLSEC_ERRORS_HERE,
                      xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
 -- 
-2.6.2
+2.6.6
 
