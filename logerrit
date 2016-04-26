@@ -45,12 +45,7 @@ case "$1" in
         echo
         echo " --- for submitters:"
         echo "             submit [BRANCH]         submit your change for review"
-        echo "             resubmit [BRANCH]       create a new Change-Id and submit your change for review"
-        echo "                                     (yes, this modifies your last commit)"
         echo "             submit-draft [BRANCH]   submit your change as draft"
-        echo "             resubmit-draft [BRANCH] create a new Change-Id and submit your change as draft"
-        echo "                                     (yes, this modifies your last commit)"
-        echo "                                     (yes, this modifies your last commit)"
         echo "             nextchange [BRANCH]     reset branch to the remote to start with the next change"
         echo "             testfeature [BRANCH]    trigger a test of a feature branch on gerrit"
         echo "Note: drafts are only visibly to yourself and those that you explicitly add as reviewers."
@@ -136,15 +131,7 @@ case "$1" in
     submit)
         submit 'for' $2
     ;;
-    resubmit)
-        git log -1 --pretty=%B | grep -v ^Change-Id: | git commit --amend -F -
-        submit 'for' $2
-    ;;
     submit-draft)
-        submit drafts $2
-    ;;
-    resubmit-draft)
-        git log -1 --pretty=%B | grep -v ^Change-Id: | git commit --amend -F -
         submit drafts $2
     ;;
     nextchange)
