@@ -27,7 +27,7 @@ if appropriate.
 */
 
 SalLogAreas::SalLogAreas( const InstantiationData& data )
-    : Plugin( data )
+    : Plugin(data), inFunction(nullptr)
     {
     }
 
