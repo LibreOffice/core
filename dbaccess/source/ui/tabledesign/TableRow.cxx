@@ -146,13 +146,9 @@ namespace dbaui
         {
             OFieldDescription* pFieldDesc = new OFieldDescription();
             _rRow.m_pActFieldDescr = pFieldDesc;
-            OUString sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
-            pFieldDesc->SetName(sValue);
-
-            sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
-            pFieldDesc->SetDescription(sValue);
-            sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
-            pFieldDesc->SetHelpText(sValue);
+            pFieldDesc->SetName(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
+            pFieldDesc->SetDescription(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
+            pFieldDesc->SetHelpText(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
 
             _rStr.ReadInt32( nValue );
             Any aControlDefault;
@@ -166,8 +162,7 @@ namespace dbaui
                     break;
                 }
                 case 2:
-                    sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
-                    aControlDefault <<= OUString(sValue);
+                    aControlDefault <<= _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
                     break;
             }
 
