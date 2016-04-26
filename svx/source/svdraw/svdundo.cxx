@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <svl/lstner.hxx>
 
@@ -27,6 +28,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
+#include <svx/xfillit0.hxx>
 #include "svx/svdstr.hrc"
 #include "svdglob.hxx"
 #include <svx/scene3d.hxx>
@@ -1445,8 +1447,23 @@ SdrUndoPageList::~SdrUndoPageList()
 SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     : SdrUndoPageList(rNewPg)
     , pUndoGroup(nullptr)
+    , mbHasFillBitmap(false)
 {
     bItsMine = true;
+
+    // keep fill bitmap separately to remove it from pool if not used elsewhere
+    if (mrPage.IsMasterPage())
+    {
+        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        if (pStyleSheet)
+            queryFillBitmap(pStyleSheet->GetItemSet());
+    }
+    else
+    {
+        queryFillBitmap(mrPage.getSdrPageProperties().GetItemSet());
+    }
+    if (bool(mpFillBitmapItem))
+        clearFillBitmap();
 
     // now remember the master page relationships
     if(mrPage.IsMasterPage())
@@ -1482,6 +1499,8 @@ SdrUndoDelPage::~SdrUndoDelPage()
 
 void SdrUndoDelPage::Undo()
 {
+    if (bool(mpFillBitmapItem))
+        restoreFillBitmap();
     ImpInsertPage(nPageNum);
     if (pUndoGroup!=nullptr)
     {
@@ -1495,6 +1514,8 @@ void SdrUndoDelPage::Undo()
 void SdrUndoDelPage::Redo()
 {
     ImpRemovePage(nPageNum);
+    if (bool(mpFillBitmapItem))
+        clearFillBitmap();
     // master page relations are dissolved automatically
     DBG_ASSERT(!bItsMine,"RedoDeletePage: mrPage already belongs to UndoAction.");
     bItsMine=true;
@@ -1521,6 +1542,55 @@ void SdrUndoDelPage::SdrRepeat(SdrView& /*rView*/)
 bool SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
     return false;
+}
+
+void SdrUndoDelPage::queryFillBitmap(const SfxItemSet& rItemSet)
+{
+    const SfxPoolItem *pItem = nullptr;
+    if (rItemSet.GetItemState(XATTR_FILLBITMAP, false, &pItem) == SfxItemState::SET)
+        mpFillBitmapItem.reset(pItem->Clone());
+    if (rItemSet.GetItemState(XATTR_FILLSTYLE, false, &pItem) == SfxItemState::SET)
+        mbHasFillBitmap = static_cast<const XFillStyleItem*>(pItem)->GetValue() == css::drawing::FillStyle_BITMAP;
+}
+
+void SdrUndoDelPage::clearFillBitmap()
+{
+    if (mrPage.IsMasterPage())
+    {
+        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        assert(bool(pStyleSheet)); // who took away my stylesheet?
+        SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+        rItemSet.ClearItem(XATTR_FILLBITMAP);
+        if (mbHasFillBitmap)
+            rItemSet.ClearItem(XATTR_FILLSTYLE);
+    }
+    else
+    {
+        SdrPageProperties &rPageProps = mrPage.getSdrPageProperties();
+        rPageProps.ClearItem(XATTR_FILLBITMAP);
+        if (mbHasFillBitmap)
+            rPageProps.ClearItem(XATTR_FILLSTYLE);
+    }
+}
+
+void SdrUndoDelPage::restoreFillBitmap()
+{
+    if (mrPage.IsMasterPage())
+    {
+        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        assert(bool(pStyleSheet)); // who took away my stylesheet?
+        SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+        rItemSet.Put(*mpFillBitmapItem);
+        if (mbHasFillBitmap)
+            rItemSet.Put(XFillStyleItem(css::drawing::FillStyle_BITMAP));
+    }
+    else
+    {
+        SdrPageProperties &rPageProps = mrPage.getSdrPageProperties();
+        rPageProps.PutItem(*mpFillBitmapItem);
+        if (mbHasFillBitmap)
+            rPageProps.PutItem(XFillStyleItem(css::drawing::FillStyle_BITMAP));
+    }
 }
 
 

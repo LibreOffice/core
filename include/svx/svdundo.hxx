@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
 
 #include <svl/solar.hrc>
@@ -33,6 +34,7 @@
 #include <svx/svxdllapi.h>
 
 class SfxItemSet;
+class SfxPoolItem;
 class SfxStyleSheet;
 class SdrView;
 class SdrPageView;
@@ -584,6 +586,8 @@ class SVX_DLLPUBLIC SdrUndoDelPage : public SdrUndoPageList
     // When deleting a MasterPage, we remember all relations of the
     // Character Page with the MasterPage in this UndoGroup.
     SdrUndoGroup*               pUndoGroup;
+    std::unique_ptr<SfxPoolItem> mpFillBitmapItem;
+    bool mbHasFillBitmap;
 
 public:
     SdrUndoDelPage(SdrPage& rNewPg);
@@ -597,6 +601,11 @@ public:
 
     virtual void SdrRepeat(SdrView& rView) override;
     virtual bool CanSdrRepeat(SdrView& rView) const override;
+
+private:
+    void queryFillBitmap(const SfxItemSet &rItemSet);
+    void clearFillBitmap();
+    void restoreFillBitmap();
 };
 
 /**
