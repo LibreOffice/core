@@ -498,18 +498,18 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
 
     ApplySettings(rRenderContext);
 
-    OUString aText = ImplGetText();
-    sal_Int32 nLen = aText.getLength();
+    const OUString aText = ImplGetText();
+    const sal_Int32 nLen = aText.getLength();
 
     long nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
     long* pDX = nDXBuffer;
 
-    if (!aText.isEmpty())
+    if (nLen)
     {
-        if ((size_t) (2 * aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer))
+        if ((size_t) (2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
         {
-            pDXBuffer.reset(new long[2 * (aText.getLength() + 1)]);
+            pDXBuffer.reset(new long[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -573,8 +573,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
         Selection aTmpSel(maSelection);
         aTmpSel.Justify();
         // selection is highlighted
-        int i;
-        for(i = 0; i < aText.getLength(); i++)
+        for(sal_Int32 i = 0; i < nLen; ++i)
         {
             Rectangle aRect(aPos, Size(10, nTH));
             aRect.Left() = pDX[2 * i] + mnXOffset + ImplGetExtraXOffset();
@@ -647,7 +646,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
                     aRegion = aHiglightClipRegion;
                 }
 
-                for(i = 0; i < mpIMEInfos->nLen; )
+                for(int i = 0; i < mpIMEInfos->nLen; )
                 {
                     sal_uInt16 nAttr = mpIMEInfos->pAttribs[i];
                     vcl::Region aClip;
@@ -703,12 +702,12 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
 
 void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode )
 {
-    OUString aText = ImplGetText();
+    const sal_Int32 nTextLen = ImplGetText().getLength();
 
     // loeschen moeglich?
     if ( !rSelection.Len() &&
          (((rSelection.Min() == 0) && (nDirection == EDIT_DEL_LEFT)) ||
-          ((rSelection.Max() == aText.getLength()) && (nDirection == EDIT_DEL_RIGHT))) )
+          ((rSelection.Max() == nTextLen) && (nDirection == EDIT_DEL_RIGHT))) )
         return;
 
     ImplClearLayoutData();
@@ -751,7 +750,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             }
             else if ( nMode == EDIT_DELMODE_RESTOFCONTENT )
             {
-                aSelection.Max() = aText.getLength();
+                aSelection.Max() = nTextLen;
             }
             else
             {
@@ -858,7 +857,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
 
             // the text that needs to be checked is only the one
             // before the current cursor position
-            OUString aOldText( maText.getStr(), nTmpPos);
+            const OUString aOldText( maText.getStr(), nTmpPos);
             OUString aTmpText( aOldText );
             if (officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingTypeAndReplace::get())
             {
@@ -874,7 +873,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
                         pOldTxt[nChgPos] == pTmpTxt[nChgPos] )
                     ++nChgPos;
 
-                OUString aChgText( aTmpText.copy( nChgPos ) );
+                const OUString aChgText( aTmpText.copy( nChgPos ) );
 
                 // remove text from first pos to be changed to current pos
                 maText.remove( nChgPos, nTmpPos - nChgPos );
@@ -2362,8 +2361,8 @@ OUString TextFilter::filter(const OUString &rText)
 void Edit::filterText()
 {
     Selection aSel = GetSelection();
-    OUString sOrig = GetText();
-    OUString sNew = mpFilterText->filter(GetText());
+    const OUString sOrig = GetText();
+    const OUString sNew = mpFilterText->filter(GetText());
     if (sOrig != sNew)
     {
         sal_Int32 nDiff = sOrig.getLength() - sNew.getLength();
@@ -2635,7 +2634,7 @@ void Edit::Undo()
         mpSubEdit->Undo();
     else
     {
-        OUString aText( maText.toString() );
+        const OUString aText( maText.toString() );
         ImplDelete( Selection( 0, aText.getLength() ), EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
         ImplInsertText( maUndoText );
         ImplSetSelection( Selection( 0, maUndoText.getLength() ) );
@@ -2671,9 +2670,7 @@ OUString Edit::GetText() const
 }
 
 void Edit::SetCursorAtLast(){
-    OUString str = GetText();
-    sal_Int32 len = str.getLength();
-    ImplSetCursorPos( len, false );
+    ImplSetCursorPos( GetText().getLength(), false );
 }
 
 void Edit::SetPlaceholderText( const OUString& rStr )
@@ -2799,7 +2796,7 @@ Size Edit::CalcSize(sal_Int32 nChars) const
 {
     // width for N characters, independent from content.
     // works only correct for fixed fonts, average otherwise
-    Size aSz( GetTextWidth( OUString('x') ), GetTextHeight() );
+    Size aSz( GetTextWidth( "x" ), GetTextHeight() );
     aSz.Width() *= nChars;
     aSz.Width() += ImplGetExtraXOffset() * 2;
     aSz = CalcWindowSize( aSz );
@@ -2810,7 +2807,7 @@ sal_Int32 Edit::GetMaxVisChars() const
 {
     const vcl::Window* pW = mpSubEdit ? mpSubEdit : this;
     sal_Int32 nOutWidth = pW->GetOutputSizePixel().Width();
-    sal_Int32 nCharWidth = GetTextWidth( OUString('x') );
+    sal_Int32 nCharWidth = GetTextWidth( "x" );
     return nCharWidth ? nOutWidth/nCharWidth : 0;
 }
 
@@ -2983,7 +2980,7 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
     for( sal_Int32 i = 0; i < nEle; i++ )
     {
         sal_Int32 nIndex = 0;
-        OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
+        const OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
         if ( aMimetype == "text/plain" )
         {
             mpDDInfo->bIsStringSupported = true;
