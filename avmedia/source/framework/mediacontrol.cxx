@@ -69,7 +69,8 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomListBox( VclPtr<ListBox>::Create( maZoomToolBox.get(), WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ),
     maTimeEdit( VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK | WB_READONLY) ),
     meControlStyle( eControlStyle ),
-    mbLocked( false )
+    mbLocked( false ),
+    maIdle( "avmedia MediaControl Idle" )
 {
     const OUString aTimeText( " 00:00:00/00:00:00 " );
 

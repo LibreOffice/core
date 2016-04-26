@@ -21,6 +21,7 @@ using namespace sfx2::sidebar;
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
     , m_bInClose(false)
+    , m_aPanelLayoutIdle("svx sidebar PanelLayoutIdle")
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);

@@ -46,6 +46,7 @@ BreakDlg::BreakDlg(
     sal_uLong nObjCount )
     : SfxModalDialog(pWindow, "BreakDialog", "modules/sdraw/ui/breakdialog.ui")
     , mpProgress( nullptr )
+    , aIdle("sd BreakDlg Idle")
 {
     get(m_pFiObjInfo, "metafiles");
     get(m_pFiActInfo, "metaobjects");

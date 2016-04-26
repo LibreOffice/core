@@ -37,7 +37,7 @@ ThreadManager::ThreadManager( uno::Reference< util::XJobManager >& rThreadJoiner
       mnThreadIDCounter( 0 ),
       maWaitingForStartThreads(),
       maStartedThreads(),
-      maStartNewThreadIdle(),
+      maStartNewThreadIdle("SW ThreadManager StartNewThreadIdle"),
       mbStartingOfThreadsSuspended( false )
 {
 }

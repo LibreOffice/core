@@ -379,7 +379,8 @@ namespace sdr
         :   OverlayManager(rOutputDevice),
             mpBufferDevice(VclPtr<VirtualDevice>::Create()),
             mpOutputBufferDevice(VclPtr<VirtualDevice>::Create()),
-            mbRefreshWithPreRendering(bRefreshWithPreRendering)
+            mbRefreshWithPreRendering(bRefreshWithPreRendering),
+            maBufferIdle("sdr overlay OverlayManagerBuffered Idle")
         {
             // Init timer
             maBufferIdle.SetPriority( SchedulerPriority::POST_PAINT );

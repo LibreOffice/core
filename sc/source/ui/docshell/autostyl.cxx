@@ -60,6 +60,8 @@ struct FindNonZeroTimeout : public ::std::unary_function<ScAutoStyleData, bool>
 ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell)
     : pDocSh(pShell)
     , nTimerStart(0)
+    , aTimer("ScAutoStyleList Timer")
+    , aInitIdle("ScAutoStyleList InitIdle")
 {
     aTimer.SetTimeoutHdl( LINK( this, ScAutoStyleList, TimerHdl ) );
     aInitIdle.SetIdleHdl( LINK( this, ScAutoStyleList, InitHdl ) );

@@ -102,7 +102,9 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
         bIgnoreMsg(false),
         bNoSelection(false),
         bHasFilterEntry(false),
-        bUseColor(false)
+        bUseColor(false),
+        aSelectionIdle("ScAcceptChgDlg SelectionIdle"),
+        aReOpenIdle("ScAcceptChgDlg ReOpenIdle")
 {
     m_pAcceptChgCtr = VclPtr<SvxAcceptChgCtr>::Create(get_content_area(), this);
     nAcceptCount=0;

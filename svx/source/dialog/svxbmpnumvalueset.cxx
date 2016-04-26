@@ -461,6 +461,7 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
 
 SvxBmpNumValueSet::SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     : SvxNumValueSet(pParent, nWinBits)
+    , aFormatIdle("SvxBmpNumValueSet FormatIdle")
 {
     init();
 }

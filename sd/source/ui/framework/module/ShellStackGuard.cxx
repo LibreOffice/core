@@ -43,7 +43,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
       mxConfigurationController(),
       mpBase(nullptr),
       mpUpdateLock(),
-      maPrinterPollingIdle()
+      maPrinterPollingIdle("sd ShellStackGuard PrinterPollingIdle")
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
     if (xControllerManager.is())
