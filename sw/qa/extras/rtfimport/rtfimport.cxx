@@ -2554,6 +2554,25 @@ DECLARE_RTFIMPORT_TEST(testClassificatonPasteLevels, "classification-confidentia
     CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
 }
 
+#ifndef WNT
+DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
+{
+    // Get the second child of the group shape.
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Sequence< uno::Sequence<awt::Point> > aPolyPolySequence;
+    xShape->getPropertyValue("PolyPolygon") >>= aPolyPolySequence;
+    uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+    // Vertical flip for the line shape was ignored, so Y coordinates were swapped.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2819), rPolygon[0].X);
+    // This was 1619.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1963), rPolygon[0].Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3181), rPolygon[1].X);
+    // This was 1962.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1620), rPolygon[1].Y);
+}
+#endif
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
