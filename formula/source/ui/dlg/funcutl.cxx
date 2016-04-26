@@ -429,6 +429,7 @@ void EditBox::UpdateOldSel()
 
 RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle )
     : Edit( _pParent, nStyle )
+    , aIdle("formula RefEdit Idle")
     , pAnyRefDlg( nullptr )
     , pLabelWidget(pShrinkModeLabel)
 {
@@ -439,6 +440,7 @@ RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits 
 RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
     vcl::Window* pShrinkModeLabel, const ResId& rResId )
     : Edit( _pParent, rResId )
+    , aIdle("formula RefEdit Idle")
     , pAnyRefDlg( pParent )
     , pLabelWidget(pShrinkModeLabel)
 {

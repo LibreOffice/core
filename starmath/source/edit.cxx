@@ -84,7 +84,9 @@ bool SmEditWindow::IsInlineEditEnabled()
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin),
     DropTargetHelper    ( this ),
-    rCmdBox             (rMyCmdBoxWin)
+    rCmdBox             (rMyCmdBoxWin),
+    aModifyIdle         ("SmEditWindow ModifyIdle"),
+    aCursorMoveIdle     ("SmEditWindow CursorMoveIdle")
 {
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MAP_PIXEL);

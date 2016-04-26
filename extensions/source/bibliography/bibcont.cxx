@@ -121,7 +121,8 @@ bool BibWindowContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
 BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
     BibSplitWindow(pParent,nStyle),
     pTopWin(nullptr),
-    pBottomWin(nullptr)
+    pBottomWin(nullptr),
+    aIdle("extensions BibBookContainer Split Idle")
 {
     pBibMod = OpenBibModul();
     aIdle.SetIdleHdl(LINK( this, BibBookContainer, SplitHdl));

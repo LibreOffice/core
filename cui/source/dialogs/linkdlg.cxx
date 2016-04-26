@@ -94,6 +94,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     aStrCloselinkmsg( CUI_RES( STR_CLOSELINKMSG ) ),
     aStrCloselinkmsgMulti( CUI_RES( STR_CLOSELINKMSG_MULTI ) ),
     aStrWaitinglink( CUI_RES( STR_WAITINGLINK ) ),
+    aUpdateIdle("cui SvBaseLinksDlg UpdateIdle"),
     pLinkMgr( nullptr ),
     bHtmlMode(bHtml)
 {
