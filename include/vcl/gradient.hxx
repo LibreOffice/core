@@ -35,7 +35,6 @@ class SvStream;
 class Impl_Gradient
 {
 public:
-    sal_uInt32          mnRefCount;
     GradientStyle       meStyle;
     Color               maStartColor;
     Color               maEndColor;
@@ -46,9 +45,6 @@ public:
     sal_uInt16          mnIntensityStart;
     sal_uInt16          mnIntensityEnd;
     sal_uInt16          mnStepCount;
-
-    friend SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImplGradient );
-    friend SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImplGradient );
 
     Impl_Gradient();
     Impl_Gradient( const Impl_Gradient& rImplGradient );

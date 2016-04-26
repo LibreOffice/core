@@ -27,7 +27,6 @@ Impl_Gradient::Impl_Gradient() :
     maStartColor( COL_BLACK ),
     maEndColor( COL_WHITE )
 {
-    mnRefCount          = 1;
     meStyle             = GradientStyle_LINEAR;
     mnAngle             = 0;
     mnBorder            = 0;
@@ -42,7 +41,6 @@ Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
     maStartColor( rImplGradient.maStartColor ),
     maEndColor( rImplGradient.maEndColor )
 {
-    mnRefCount          = 1;
     meStyle             = rImplGradient.meStyle;
     mnAngle             = rImplGradient.mnAngle;
     mnBorder            = rImplGradient.mnBorder;
@@ -232,46 +230,42 @@ bool Gradient::operator==( const Gradient& rGradient ) const
     return mpImplGradient == rGradient.mpImplGradient;
 }
 
-SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
+SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16;
 
-    rIStm.ReadUInt16( nTmp16 ); rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rGradient.mpImplGradient->meStyle = (GradientStyle) nTmp16;
 
-    ReadColor( rIStm, rImpl_Gradient.maStartColor );
-    ReadColor( rIStm, rImpl_Gradient.maEndColor );
-    rIStm.ReadUInt16( rImpl_Gradient.mnAngle ).             ReadUInt16( rImpl_Gradient.mnBorder ).             ReadUInt16( rImpl_Gradient.mnOfsX ).             ReadUInt16( rImpl_Gradient.mnOfsY ).             ReadUInt16( rImpl_Gradient.mnIntensityStart ).             ReadUInt16( rImpl_Gradient.mnIntensityEnd ).             ReadUInt16( rImpl_Gradient.mnStepCount );
+    ReadColor( rIStm, rGradient.mpImplGradient->maStartColor );
+    ReadColor( rIStm, rGradient.mpImplGradient->maEndColor );
+    rIStm.ReadUInt16( rGradient.mpImplGradient->mnAngle )
+         .ReadUInt16( rGradient.mpImplGradient->mnBorder )
+         .ReadUInt16( rGradient.mpImplGradient->mnOfsX )
+         .ReadUInt16( rGradient.mpImplGradient->mnOfsY )
+         .ReadUInt16( rGradient.mpImplGradient->mnIntensityStart )
+         .ReadUInt16( rGradient.mpImplGradient->mnIntensityEnd )
+         .ReadUInt16( rGradient.mpImplGradient->mnStepCount );
 
     return rIStm;
 }
 
-SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
+SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( rImpl_Gradient.meStyle );
-    WriteColor( rOStm, rImpl_Gradient.maStartColor );
-    WriteColor( rOStm, rImpl_Gradient.maEndColor );
-    rOStm.WriteUInt16( rImpl_Gradient.mnAngle )
-         .WriteUInt16( rImpl_Gradient.mnBorder )
-         .WriteUInt16( rImpl_Gradient.mnOfsX )
-         .WriteUInt16( rImpl_Gradient.mnOfsY )
-         .WriteUInt16( rImpl_Gradient.mnIntensityStart )
-         .WriteUInt16( rImpl_Gradient.mnIntensityEnd )
-         .WriteUInt16( rImpl_Gradient.mnStepCount );
+    rOStm.WriteUInt16( rGradient.mpImplGradient->meStyle );
+    WriteColor( rOStm, rGradient.mpImplGradient->maStartColor );
+    WriteColor( rOStm, rGradient.mpImplGradient->maEndColor );
+    rOStm.WriteUInt16( rGradient.mpImplGradient->mnAngle )
+         .WriteUInt16( rGradient.mpImplGradient->mnBorder )
+         .WriteUInt16( rGradient.mpImplGradient->mnOfsX )
+         .WriteUInt16( rGradient.mpImplGradient->mnOfsY )
+         .WriteUInt16( rGradient.mpImplGradient->mnIntensityStart )
+         .WriteUInt16( rGradient.mpImplGradient->mnIntensityEnd )
+         .WriteUInt16( rGradient.mpImplGradient->mnStepCount );
 
     return rOStm;
-}
-
-SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient )
-{
-    return ReadImpl_Gradient( rIStm, *rGradient.mpImplGradient );
-}
-
-SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient )
-{
-    return WriteImpl_Gradient( rOStm, *rGradient.mpImplGradient );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
