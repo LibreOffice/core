@@ -2090,7 +2090,7 @@ ProcessReplaceRequest()
   }
 
 #ifdef MACOSX
-  // On OS X, we we need to remove the staging directory after its Contents
+  // On OS X, we need to remove the staging directory after its Contents
   // directory has been moved.
   NS_tchar updatedAppDir[MAXPATHLEN];
   NS_tsnprintf(updatedAppDir, sizeof(updatedAppDir)/sizeof(updatedAppDir[0]),

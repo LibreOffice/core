@@ -326,7 +326,7 @@ End Function
 
 
 &apos; Note: When using this Sub it must be ensured that the
-&apos; &apos;RemoveItem&apos; appears only only once in the Listbox
+&apos; &apos;RemoveItem&apos; appears only once in the Listbox
 Sub RemoveListboxItemByName(oListbox as Object, RemoveItem as String)
 Dim OldList() as String
 Dim NullList() as String

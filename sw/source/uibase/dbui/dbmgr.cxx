@@ -918,7 +918,7 @@ static bool lcl_SaveDoc(
 
     bool bAnyError = !xObjectShell->DoSaveAs(*pDstMed);
     // Actually this should be a bool... so in case of email and individual
-    // files, where this is set, we skip the the recently used handling
+    // files, where this is set, we skip the recently used handling
     bAnyError |= !xObjectShell->DoSaveCompleted( pDstMed, !decodedURL );
     bAnyError |= (0 != xObjectShell->GetError());
     if( bAnyError )

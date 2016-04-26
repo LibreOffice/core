@@ -217,10 +217,10 @@
       </prop>
       <prop oor:name="GroupIndex" oor:type="xs:int" oor:nillable="false">
         <info>
-          <desc>The index of the Leaf within the group. The index starts with 
-	    null. If this property is set then GroupId must also have 
-	    a value. If there are two Leaf|s with the same index in the same 
-	    group then then their order is undefined.
+          <desc>The index of the Leaf within the group. The index starts with
+	    null. If this property is set then GroupId must also have
+	    a value. If there are two Leaf|s with the same index in the same
+	    group then their order is undefined.
 	    The value -1 is regarded as nil.</desc>
         </info>
         <value>-1</value>
