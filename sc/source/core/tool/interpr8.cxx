@@ -1706,7 +1706,7 @@ void ScInterpreter::ScTextJoin_MS()
                         }
                     }
                     else
-                        aStr = "";
+                        aStr.clear();
                     if ( !aStr.isEmpty() || !bSkipEmpty )
                     {
                         if ( !bFirst )
@@ -1766,7 +1766,7 @@ void ScInterpreter::ScTextJoin_MS()
                                 }
                             }
                             else
-                                aStr = "";
+                                aStr.clear();
                             if ( !aStr.isEmpty() || !bSkipEmpty )
                             {
                                 if ( !bFirst )
@@ -1815,7 +1815,7 @@ void ScInterpreter::ScTextJoin_MS()
                                         }
                                     }
                                     else
-                                        aStr = "";
+                                        aStr.clear();
                                     if ( !aStr.isEmpty() || !bSkipEmpty )
                                     {
                                         if ( !bFirst )
