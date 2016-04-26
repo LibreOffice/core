@@ -13,8 +13,13 @@
 
 #include <vector>
 
-#include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace oox {
+    class BinaryXInputStream;
+    class BinaryXOutputStream;
+}
 
 namespace oox {
 namespace core {

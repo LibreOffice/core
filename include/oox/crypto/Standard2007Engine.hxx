@@ -11,8 +11,14 @@
 #ifndef INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 #define INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 
-#include <oox/crypto/CryptTools.hxx>
 #include <oox/crypto/CryptoEngine.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace oox {
+    class BinaryXInputStream;
+    class BinaryXOutputStream;
+}
 
 namespace oox {
 namespace core {

@@ -15,11 +15,17 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <oox/crypto/AgileEngine.hxx>
+#include <oox/crypto/Standard2007Engine.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/ole/olestorage.hxx>
 
 namespace oox {
 namespace core {

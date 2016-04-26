@@ -44,6 +44,7 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
+#include <oox/ole/olestorage.hxx>
 #include <oox/token/namespaces.hxx>
 #include "oox/token/properties.hxx"
 #include <oox/token/tokens.hxx>

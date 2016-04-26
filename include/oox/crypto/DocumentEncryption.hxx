@@ -13,16 +13,15 @@
 
 #include <oox/dllapi.h>
 
-#include <oox/ole/olestorage.hxx>
-
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-
-#include <oox/crypto/CryptTools.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <oox/crypto/Standard2007Engine.hxx>
+#include <rtl/ustring.hxx>
 
-#include <vector>
+namespace com { namespace sun { namespace star {
+    namespace io { class XStream; }
+} } }
 
+namespace oox { namespace ole { class OleStorage; } }
 
 namespace oox {
 namespace core {
