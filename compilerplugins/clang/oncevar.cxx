@@ -28,7 +28,7 @@ class OnceVar:
     public RecursiveASTVisitor<OnceVar>, public loplugin::Plugin
 {
 public:
-    explicit OnceVar(InstantiationData const & data): Plugin(data) {}
+    explicit OnceVar(InstantiationData const & data): Plugin(data), mbChecking(false) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

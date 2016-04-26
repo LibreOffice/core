@@ -25,7 +25,7 @@ class MemoryVar:
     public RecursiveASTVisitor<MemoryVar>, public loplugin::Plugin
 {
 public:
-    explicit MemoryVar(InstantiationData const & data): Plugin(data) {}
+    explicit MemoryVar(InstantiationData const & data): Plugin(data), mbChecking(false) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

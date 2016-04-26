@@ -21,7 +21,7 @@ class StaticAnonymous
     , public Plugin
     {
     public:
-        StaticAnonymous( const InstantiationData& data );
+        explicit StaticAnonymous( const InstantiationData& data );
         virtual void run() override;
         bool VisitFunctionDecl( FunctionDecl* func );
 

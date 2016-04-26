@@ -112,7 +112,7 @@ class RewritePlugin
             : public Rewriter::RewriteOptions
             {
             RewriteOptions();
-            RewriteOptions( RewriteOption option );
+            explicit RewriteOptions( RewriteOption option );
             const int flags;
             };
         // syntactic sugar to be able to write 'RemoveLineIfEmpty | RemoveWholeStatement'
