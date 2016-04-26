@@ -1407,7 +1407,7 @@ void ScInterpreter::ScConcat_MS()
     }
 
     size_t nRefInList = 0;
-    while ( nParamCount-- > 0 )
+    while ( nParamCount-- > 0 && !nGlobalError )
     {
         switch ( GetStackType() )
         {
