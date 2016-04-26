@@ -335,8 +335,8 @@ def runLoadPrintFileTests(opts, dirs, suffix, reference):
         prtsuffix = ".pdf"
     files = getFiles(dirs, suffix)
     tests = (LoadPrintFileTest(file, prtsuffix) for file in files)
-    connection = PersistentConnection(opts)
-#    connection = PerTestConnection(opts)
+#    connection = PersistentConnection(opts)
+    connection = PerTestConnection(opts)
     failed = runConnectionTests(connection, simpleInvoke, tests)
     print("all printed: FAILURES: " + str(len(failed)))
     for fail in failed:
