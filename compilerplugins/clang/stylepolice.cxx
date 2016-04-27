@@ -108,11 +108,15 @@ bool StylePolice::VisitVarDecl(const VarDecl * varDecl)
         && !startswith(typeName, "rtl::Reference")
         && !startswith(typeName, "ScopedVclPtr")
         && !startswith(typeName, "std::mem_fun")
+        && !startswith(typeName, "std::__1::mem_fun")
         && !startswith(typeName, "std::shared_ptr")
+        && !startswith(typeName, "std::__1::shared_ptr")
         && !startswith(typeName, "shared_ptr") // weird issue in slideshow
         && !startswith(typeName, "std::unique_ptr")
+        && !startswith(typeName, "std::__1::unique_ptr")
         && !startswith(typeName, "unique_ptr") // weird issue in include/vcl/threadex.hxx
         && !startswith(typeName, "std::weak_ptr")
+        && !startswith(typeName, "std::__1::weak_ptr")
         && !startswith(typeName, "struct _LOKDocViewPrivate")
         && !startswith(typeName, "sw::UnoCursorPointer")
         && !startswith(typeName, "tools::SvRef")
@@ -120,6 +124,8 @@ bool StylePolice::VisitVarDecl(const VarDecl * varDecl)
         && !startswith(typeName, "vcl::ScopedBitmapAccess")
         // lots of the code seems to regard iterator objects as being "pointer-like"
         && typeName.find("iterator<") == std::string::npos
+        && typeName.find("iter<") == std::string::npos
+            // libc++ std::__1::__wrap_iter<...>
         && aOriginalTypeName != "sal_IntPtr" )
     {
         if (aFileName.startswith(SRCDIR "/bridges/") ) {
