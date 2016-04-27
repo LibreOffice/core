@@ -1382,10 +1382,14 @@ void RTFDocumentImpl::prepareProperties(
     }
 
     // Table width.
-    auto pUnitValue = std::make_shared<RTFValue>(3);
-    lcl_putNestedAttribute(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
-    auto pWValue = std::make_shared<RTFValue>(nCurrentCellX);
-    lcl_putNestedAttribute(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pWValue);
+    RTFValue::Pointer_t const pTableWidthProps = rState.aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblW);
+    if (!pTableWidthProps.get())
+    {
+        auto pUnitValue = std::make_shared<RTFValue>(3);
+        lcl_putNestedAttribute(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
+        auto pWValue = std::make_shared<RTFValue>(nCurrentCellX);
+        lcl_putNestedAttribute(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pWValue);
+    }
 
     auto pRowValue = std::make_shared<RTFValue>(1);
     if (nCells > 0)
@@ -4845,6 +4849,12 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left, std::make_shared<RTFValue>(aAttributes));
             lcl_putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_right, std::make_shared<RTFValue>(aAttributes));
         }
+        break;
+    case RTF_TRFTSWIDTH:
+        lcl_putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_type, pIntValue);
+        break;
+    case RTF_TRWWIDTH:
+        lcl_putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pIntValue);
         break;
     case RTF_PROPTYPE:
     {
