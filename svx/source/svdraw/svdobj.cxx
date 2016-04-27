@@ -448,11 +448,12 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     SdrPage* pOldPage = pPage;
 
     pPage=pNewPage;
-    if (pPage!=nullptr) {
+    if (pPage!=nullptr)
+    {
         SdrModel* pMod=pPage->GetModel();
-        if (pMod!=pModel && pMod!=nullptr) {
+        if (pMod!=pModel && pMod!=nullptr)
             SetModel(pMod);
-        }}
+    }
 
     // The creation of the UNO shape in SdrObject::getUnoShape is influenced
     // by pPage, so when the page changes we need to discard the cached UNO
