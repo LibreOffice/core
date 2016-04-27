@@ -88,7 +88,7 @@ TextEngine::TextEngine()
     mnCurTextHeight = 0;
 
     mpUndoManager   = nullptr;
-       mpIMEInfos       = nullptr;
+    mpIMEInfos      = nullptr;
     mpLocaleDataWrapper = nullptr;
 
     mpIdleFormatter = new IdleFormatter;
@@ -241,9 +241,15 @@ static inline const sal_Unicode* static_getLineEndText( LineEnd aLineEnd )
 
     switch( aLineEnd )
     {
-    case LINEEND_LF: pRet = static_aLFText;break;
-    case LINEEND_CR: pRet = static_aCRText;break;
-    case LINEEND_CRLF: pRet = static_aCRLFText;break;
+        case LINEEND_LF:
+            pRet = static_aLFText;
+            break;
+        case LINEEND_CR:
+            pRet = static_aCRText;
+            break;
+        case LINEEND_CRLF:
+            pRet = static_aCRLFText;
+            break;
     }
     return pRet;
 }
@@ -328,10 +334,12 @@ bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
             case KeyFuncType::UNDO:
             case KeyFuncType::REDO:
             case KeyFuncType::CUT:
-            case KeyFuncType::PASTE: bDoesChange = true;
-            break;
-            default:    // might get handled below
-                        eFunc = KeyFuncType::DONTKNOW;
+            case KeyFuncType::PASTE:
+                bDoesChange = true;
+                break;
+            default:
+                // might get handled below
+                eFunc = KeyFuncType::DONTKNOW;
         }
     }
     if ( eFunc == KeyFuncType::DONTKNOW )
@@ -340,22 +348,16 @@ bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
         {
             case KEY_DELETE:
             case KEY_BACKSPACE:
-            {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() )
                     bDoesChange = true;
-            }
-            break;
+                break;
             case KEY_RETURN:
             case KEY_TAB:
-            {
                 if ( !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
                     bDoesChange = true;
-            }
-            break;
+                break;
             default:
-            {
                 bDoesChange = TextEngine::IsSimpleCharInput( rKeyEvent );
-            }
         }
     }
     return bDoesChange;
@@ -499,7 +501,7 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars )
                 break;  // for
             }
         }
-            InsertUndo( new TextUndoRemoveChars( this, rPaM, aStr ) );
+        InsertUndo( new TextUndoRemoveChars( this, rPaM, aStr ) );
     }
 
     mpDoc->RemoveChars( rPaM, nChars );
@@ -625,8 +627,7 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSeque
 {
     if ( !mxISC.is() )
     {
-        mxISC = i18n::InputSequenceChecker::create(
-                ::comphelper::getProcessComponentContext() );
+        mxISC = i18n::InputSequenceChecker::create( ::comphelper::getProcessComponentContext() );
     }
     return mxISC;
 }
@@ -665,10 +666,9 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
     TextPaM aPaM( rCurSel.GetStart() );
     TextNode* pNode = mpDoc->GetNodes()[ aPaM.GetPara() ];
 
-    bool bDoOverwrite = ( bOverwrite &&
-            ( aPaM.GetIndex() < pNode->GetText().getLength() ) );
+    bool bDoOverwrite = bOverwrite && ( aPaM.GetIndex() < pNode->GetText().getLength() );
 
-    bool bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
+    bool bUndoAction = rCurSel.HasRange() || bDoOverwrite;
 
     if ( bUndoAction )
         UndoActionStart();
@@ -1152,7 +1152,7 @@ long TextEngine::GetTextHeight( sal_uInt32 nParagraph ) const
 {
     DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
 
-      if ( !IsFormatted() && !IsFormatting() )
+    if ( !IsFormatted() && !IsFormatting() )
         const_cast<TextEngine*>(this)->FormatAndUpdate();
 
     return CalcParaHeight( nParagraph );
@@ -1355,12 +1355,12 @@ void TextEngine::InsertContent( TextNode* pNode, sal_uInt32 nPara )
 
 TextPaM TextEngine::SplitContent( sal_uInt32 nNode, sal_Int32 nSepPos )
 {
-    #ifdef DBG_UTIL
+#ifdef DBG_UTIL
     TextNode* pNode = mpDoc->GetNodes()[ nNode ];
     DBG_ASSERT( pNode, "SplitContent: Invalid Node!" );
     DBG_ASSERT( IsInUndo(), "SplitContent: only in Undo()!" );
     DBG_ASSERT( nSepPos <= pNode->GetText().getLength(), "SplitContent: Bad index" );
-    #endif
+#endif
     TextPaM aPaM( nNode, nSepPos );
     return ImpInsertParaBreak( aPaM );
 }
@@ -1439,7 +1439,7 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
 void TextEngine::FormatAndUpdate( TextView* pCurView )
 {
     if ( mbDowning )
-        return ;
+        return;
 
     if ( IsInUndo() )
         IdleFormatAndUpdate( pCurView );
@@ -1632,7 +1632,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     if ( bLineBreak )
     {
         // -2: The new one is already inserted.
-        sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1 ;
+        sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1;
         aTmpLine.SetStartPortion( nPos );
         aTmpLine.SetEndPortion( nPos );
     }
@@ -1839,7 +1839,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
             if ( nStartPos )
                 nNewPortionPos = SplitTextPortion( nPara, nStartPos ) + 1;
 
-           // Here could be an empty Portion if the paragraph was empty,
+            // Here could be an empty Portion if the paragraph was empty,
             // or a new line was created by a hard line-break.
             if ( ( nNewPortionPos < pTEParaPortion->GetTextPortions().size() ) &&
                     !pTEParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() )
@@ -1974,7 +1974,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                             switch ( pTextPortion->GetKind() )
                             {
                                 case PORTIONKIND_TEXT:
-                                {
                                     {
                                         vcl::Font aFont;
                                         SeekCursor( nPara, nIndex+1, aFont, pOutDev );
@@ -2052,11 +2051,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nEnd-nTmpIndex );
                                         }
                                     }
-
-                                }
-                                break;
+                                    break;
                                 case PORTIONKIND_TAB:
-                                {
                                     // for HideSelection() only Range, pSelection = 0.
                                     if ( pSelStart || pPaintRange )
                                     {
@@ -2081,9 +2077,9 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             pOutDev->Erase( aTabArea );
                                         }
                                     }
-                                }
-                                break;
-                                default:    OSL_FAIL( "ImpPaint: Unknown Portion-Type !" );
+                                    break;
+                                default:
+                                    OSL_FAIL( "ImpPaint: Unknown Portion-Type !" );
                             }
                         }
 
@@ -2582,6 +2578,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara )
         }
     }
 }
+
 void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
 {
     if ( nPara < mpDoc->GetNodes().size() )
@@ -2603,6 +2600,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
         }
     }
 }
+
 void TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
 {
     if ( nPara < mpDoc->GetNodes().size() )
