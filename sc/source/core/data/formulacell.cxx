@@ -636,22 +636,25 @@ ScRangeData* copyRangeNames( SheetIndexMap& rSheetIndexMap, std::vector<ScRangeD
     return pRangeData;
 }
 
-void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc,
-        const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal)
+/** Adjust or copy name.
+    @return TRUE if copied and caller may need to evaluate rpRangeData and rNewSheet.
+            FALSE if nothing to be done.
+ */
+bool adjustCopyRangeName( const SCTAB nOldSheet, const sal_uInt16 nOldIndex,
+        ScRangeData*& rpRangeData, SCTAB& rNewSheet, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+        const ScAddress& rNewPos, const ScAddress& rOldPos, const bool bGlobalNamesToLocal)
 {
-    bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(pOldDoc)->GetPool());
-    const SCTAB nOldSheet = pToken->GetSheet();
+    const bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(pOldDoc)->GetPool());
     if (bSameDoc && ((nOldSheet < 0 && !bGlobalNamesToLocal) || (nOldSheet >= 0 && nOldSheet != rOldPos.Tab())))
         // Same doc and global name, if not copied to local name, or
         // sheet-local name on other sheet stays the same.
-        return;
+        return false;
 
     SAL_WARN_IF( !bSameDoc && nOldSheet >= 0 && nOldSheet != rOldPos.Tab(),
-            "sc.core", "adjustRangeName - sheet-local name was on other sheet in other document");
+            "sc.core", "adjustCopyRangeName - sheet-local name was on other sheet in other document");
     /* TODO: can we do something about that? e.g. loop over sheets? */
 
     OUString aRangeName;
-    const sal_uInt16 nOldIndex = pToken->GetIndex();
     ScRangeData* pOldRangeData = nullptr;
 
     // XXX bGlobalNamesToLocal is also a synonym for copied sheet.
@@ -673,42 +676,41 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
         const ScRangeName* pRangeName = pOldDoc->GetRangeName(nOldTab);
         pOldRangeData = pRangeName ? pRangeName->findByIndex(nOldIndex) : nullptr;
         if (!pOldRangeData)
-            return;     // might be an error in the formula array
+            return false;     // might be an error in the formula array
         aRangeName = pOldRangeData->GetUpperName();
     }
     else
     {
         pOldRangeData = pOldDoc->GetRangeName()->findByIndex(nOldIndex);
         if (!pOldRangeData)
-            return;     // might be an error in the formula array
+            return false;     // might be an error in the formula array
         aRangeName = pOldRangeData->GetUpperName();
     }
 
     // Find corresponding range name in new document.
     // First search for local range name then global range names.
-    SCTAB nNewSheet = rNewPos.Tab();
-    ScRangeName* pRangeName = rNewDoc.GetRangeName(nNewSheet);
-    ScRangeData* pRangeData = nullptr;
+    rNewSheet = rNewPos.Tab();
+    ScRangeName* pRangeName = rNewDoc.GetRangeName(rNewSheet);
     // Search local range names.
     if (pRangeName)
     {
-        pRangeData = pRangeName->findByUpperName(aRangeName);
+        rpRangeData = pRangeName->findByUpperName(aRangeName);
     }
     // Search global range names.
-    if (!pRangeData && !bGlobalNamesToLocal)
+    if (!rpRangeData && !bGlobalNamesToLocal)
     {
-        nNewSheet = -1;
+        rNewSheet = -1;
         pRangeName = rNewDoc.GetRangeName();
         if (pRangeName)
-            pRangeData = pRangeName->findByUpperName(aRangeName);
+            rpRangeData = pRangeName->findByUpperName(aRangeName);
     }
     // If no range name was found copy it.
-    if (!pRangeData)
+    if (!rpRangeData)
     {
         bool bEarlyBailOut = (nOldSheet < 0 && bSameDoc);
         MightReferenceSheet eMightReference = mightRangeNameReferenceSheet( pOldRangeData, nOldTab);
         if (bEarlyBailOut && eMightReference == MightReferenceSheet::NONE)
-            return;
+            return false;
 
         if (eMightReference == MightReferenceSheet::NAME)
         {
@@ -721,17 +723,17 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
             findRangeNamesReferencingSheet( aReferencingNames, nOldSheet, nOldIndex, pOldDoc,
                     nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, 0);
             if (bEarlyBailOut && aReferencingNames.isEmpty(-1) && aReferencingNames.isEmpty(nOldTokenTabReplacement))
-                return;
+                return false;
 
             SheetIndexMap aSheetIndexMap;
             std::vector<ScRangeData*> aRangeDataVec;
             if (!aReferencingNames.isEmpty(nOldTokenTabReplacement))
             {
                 const SCTAB nTmpOldSheet = (nOldSheet < 0 ? nOldTab : nOldSheet);
-                nNewSheet = rNewPos.Tab();
-                pRangeData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, nOldTab,
+                rNewSheet = rNewPos.Tab();
+                rpRangeData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, nOldTab,
                         pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos,
-                        bGlobalNamesToLocal, nTmpOldSheet, nNewSheet, bSameDoc);
+                        bGlobalNamesToLocal, nTmpOldSheet, rNewSheet, bSameDoc);
             }
             if ((bGlobalNamesToLocal || !bSameDoc) && !aReferencingNames.isEmpty(-1))
             {
@@ -740,10 +742,10 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
                 ScRangeData* pTmpData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, -1,
                         pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos,
                         bGlobalNamesToLocal, nTmpOldSheet, nTmpNewSheet, bSameDoc);
-                if (!pRangeData)
+                if (!rpRangeData)
                 {
-                    pRangeData = pTmpData;
-                    nNewSheet = nTmpNewSheet;
+                    rpRangeData = pTmpData;
+                    rNewSheet = nTmpNewSheet;
                 }
             }
 
@@ -765,7 +767,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
                             }
                             else if (!bSameDoc)
                             {
-                                SAL_WARN("sc.core","adjustRangeName - mapping to new name in other doc missing");
+                                SAL_WARN("sc.core","adjustCopyRangeName - mapping to new name in other doc missing");
                                 p->SetIndex(0);     // #NAME? error instead of arbitrary name.
                             }
                         }
@@ -775,19 +777,31 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
         }
         else
         {
-            nNewSheet = ((nOldSheet < 0 && !bGlobalNamesToLocal) ? -1 : rNewPos.Tab());
-            pRangeData = copyRangeName( pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos, bGlobalNamesToLocal,
-                    nOldSheet, nNewSheet, bSameDoc);
-        }
-
-        if (!pRangeData)
-        {
-            // If this happened we have a real problem.
-            pToken->SetIndex(0);
-            OSL_FAIL("inserting the range name should not fail");
-            return;
+            rNewSheet = ((nOldSheet < 0 && !bGlobalNamesToLocal) ? -1 : rNewPos.Tab());
+            rpRangeData = copyRangeName( pOldRangeData, rNewDoc, pOldDoc, rNewPos, rOldPos, bGlobalNamesToLocal,
+                    nOldSheet, rNewSheet, bSameDoc);
         }
     }
+    return true;
+}
+
+void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+        const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal)
+{
+    ScRangeData* pRangeData = nullptr;
+    SCTAB nNewSheet = rNewPos.Tab();
+    if (!adjustCopyRangeName( pToken->GetSheet(), pToken->GetIndex(), pRangeData, nNewSheet, rNewDoc, pOldDoc,
+                rNewPos, rOldPos, bGlobalNamesToLocal))
+        return; // nothing to do
+
+    if (!pRangeData)
+    {
+        // If this happened we have a real problem.
+        pToken->SetIndex(0);
+        OSL_FAIL("inserting the range name should not fail");
+        return;
+    }
+
     sal_Int32 nIndex = pRangeData->GetIndex();
     pToken->SetIndex(nIndex);
     pToken->SetSheet(nNewSheet);
