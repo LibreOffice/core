@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_81315aef",
+        "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-27T11:24:45Z",
+      "side": 1,
+      "message": "There are unfortunately no nice wrappers in the STL for complex data structures (that I am aware of), it is required to wrap their access in some other kind of lock.\n\nBTW I really like this work - should make a really nice difference on modern hardware!",
+      "parentUuid": "da7fb54a_413752e3",
+      "revId": "d2ad7ee47825d390fe4bfd282e1a77d0a68e50ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ac06dbe_52a74a4f",
         "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
         "patchSetId": 1
