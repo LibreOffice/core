@@ -120,7 +120,8 @@ SlideBackground::SlideBackground(
      ) :
     PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame ),
     mrBase( rBase ),
-    maPaperController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
+    maPaperSizeController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
+    maPaperOrientationController(SID_ATTR_PAGE, *pBindings, *this),
     maBckColorController(SID_ATTR_PAGE_COLOR, *pBindings, *this),
     maBckGradientController(SID_ATTR_PAGE_GRADIENT, *pBindings, *this),
     maBckHatchController(SID_ATTR_PAGE_HATCH, *pBindings, *this),
@@ -158,7 +159,7 @@ void SlideBackground::Initialize()
 {
     lcl_FillPaperSizeListbox( *mpPaperSizeBox );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
-    mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
+    mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperOrientationModifyHdl));
 
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = pDocSh->GetDoc();
@@ -174,7 +175,7 @@ void SlideBackground::Initialize()
         }
     }
 
-    meUnit = maPaperController.GetCoreMetric();
+    meUnit = maPaperSizeController.GetCoreMetric();
 
     mpMasterSlide->SetSelectHdl(LINK(this, SlideBackground, AssignMasterPage));
 
@@ -269,7 +270,8 @@ void SlideBackground::dispose()
     mpDspMasterBackground.clear();
     mpDspMasterObjects.clear();
 
-    maPaperController.dispose();
+    maPaperSizeController.dispose();
+    maPaperOrientationController.dispose();
     maBckColorController.dispose();
     maBckGradientController.dispose();
     maBckHatchController.dispose();
@@ -398,6 +400,18 @@ void SlideBackground::NotifyItemUpdate(
         }
         break;
 
+        case SID_ATTR_PAGE:
+        {
+            if(eState >= SfxItemState::DEFAULT)
+            {
+                const SvxPageItem* aPageItem = dynamic_cast< const SvxPageItem* >(pState);
+                bool bIsLandscape = aPageItem->IsLandscape();
+
+                mpPaperOrientation->SelectEntryPos( bIsLandscape ? 0 : 1 );
+            }
+        }
+        break;
+
         case SID_DISPLAY_MASTER_BACKGROUND:
         {
             if(eState >= SfxItemState::DEFAULT)
@@ -432,6 +446,7 @@ void SlideBackground::NotifyItemUpdate(
             break;
     }
 }
+
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
@@ -439,6 +454,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
     Update();
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::RECORD, { &aXFillStyleItem });
 }
+
 IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 {
     sal_uInt32 nPos = mpPaperSizeBox->GetSelectEntryPos();
@@ -450,6 +466,14 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE,aSize);
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
+}
+
+IMPL_LINK_NOARG_TYPED(SlideBackground, PaperOrientationModifyHdl, ListBox&, void)
+{
+    SvxPageItem aPageItem(SID_ATTR_PAGE);
+    aPageItem.SetLandscape( mpPaperOrientation->GetSelectEntryPos() == 0 );
+
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD,{ &aPageItem });
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
