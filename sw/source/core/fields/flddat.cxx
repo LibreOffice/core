@@ -63,6 +63,8 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
 
 OUString SwDateTimeField::ExpandImpl(SwRootFrame const*const) const
 {
+    const_cast<SwDateTimeField*>(this)->m_nSubType |= FIXEDFLD; //HACK
+
     double fVal;
 
     if (!(IsFixed()))
@@ -131,6 +133,8 @@ double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
 
 double SwDateTimeField::GetValue() const
 {
+    const_cast<SwDateTimeField*>(this)->m_nSubType |= FIXEDFLD; //HACK
+
     if (IsFixed())
         return SwValueField::GetValue();
     else
