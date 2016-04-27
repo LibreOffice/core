@@ -181,12 +181,12 @@ namespace DOM
         OUString sOldValue = getValue();
 
         OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
-        xmlChar const * xValue = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlChar const * pValue = reinterpret_cast<xmlChar const *>(o1.getStr());
         // this does not work if the attribute was created anew
         // xmlNodePtr pNode = m_aAttrPtr->parent;
-        // xmlSetProp(pNode, m_aAttrPtr->name, xValue);
+        // xmlSetProp(pNode, m_aAttrPtr->name, pValue);
         std::shared_ptr<xmlChar const> const buffer(
-                xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, xValue), xmlFree);
+                xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, pValue), xmlFree);
         xmlFreeNodeList(m_aAttrPtr->children);
         m_aAttrPtr->children =
             xmlStringGetNodeList(m_aAttrPtr->doc, buffer.get());

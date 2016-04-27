@@ -150,10 +150,10 @@ namespace XPath
         while (pNode != nullptr) {
             xmlNsPtr curDef = pNode->nsDef;
             while (curDef != nullptr) {
-                const xmlChar* xHref = curDef->href;
-                OUString aURI(reinterpret_cast<char const *>(xHref), strlen(reinterpret_cast<char const *>(xHref)), RTL_TEXTENCODING_UTF8);
-                const xmlChar* xPre = curDef->prefix;
-                OUString aPrefix(reinterpret_cast<char const *>(xPre), strlen(reinterpret_cast<char const *>(xPre)), RTL_TEXTENCODING_UTF8);
+                const xmlChar* pHref = curDef->href;
+                OUString aURI(reinterpret_cast<char const *>(pHref), strlen(reinterpret_cast<char const *>(pHref)), RTL_TEXTENCODING_UTF8);
+                const xmlChar* pPre = curDef->prefix;
+                OUString aPrefix(reinterpret_cast<char const *>(pPre), strlen(reinterpret_cast<char const *>(pPre)), RTL_TEXTENCODING_UTF8);
                 // we could already have this prefix from a child node
                 if (rNamespaces.find(aPrefix) == rNamespaces.end())
                 {
@@ -372,9 +372,9 @@ namespace XPath
 
         /* run the query */
         OString o1 = OUStringToOString(expr, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xStr = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlChar const *pStr = reinterpret_cast<xmlChar const *>(o1.getStr());
         std::shared_ptr<xmlXPathObject> const xpathObj(
-                xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
+                xmlXPathEval(pStr, xpathCtx.get()), xmlXPathFreeObject);
         xmlSetGenericErrorFunc(nullptr, nullptr);
         if (nullptr == xpathObj) {
             // OSL_ENSURE(xpathCtx->lastError == NULL, xpathCtx->lastError->message);

@@ -227,12 +227,12 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rt
         else if (aIt->IsStorage())
         {
             const rtl::OUString aPath = concatPath(rPath, aIt->GetName());
-            SotStorageRefWrapper xStorage;
-            xStorage.ref = rStorage->OpenSotStorage(aIt->GetName(), STREAM_STD_READ);
-            maStorageMap[aPath] = xStorage;
+            SotStorageRefWrapper aStorage;
+            aStorage.ref = rStorage->OpenSotStorage(aIt->GetName(), STREAM_STD_READ);
+            maStorageMap[aPath] = aStorage;
 
             // deep-first traversal
-            traverse(xStorage.ref, aPath);
+            traverse(aStorage.ref, aPath);
         }
         else
         {

@@ -172,8 +172,8 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     m_aAllAxis.resize(rSource.m_aAllAxis.size());
     tAxisVecVecType::size_type nN=0;
     for( nN=0; nN<m_aAllAxis.size(); nN++ )
-        CloneHelper::CloneRefVector< Reference< chart2::XAxis > >( rSource.m_aAllAxis[nN], m_aAllAxis[nN] );
-    CloneHelper::CloneRefVector< Reference< chart2::XChartType > >( rSource.m_aChartTypes, m_aChartTypes );
+        CloneHelper::CloneRefVector<chart2::XAxis>( rSource.m_aAllAxis[nN], m_aAllAxis[nN] );
+    CloneHelper::CloneRefVector<chart2::XChartType>( rSource.m_aChartTypes, m_aChartTypes );
 
     for( nN=0; nN<m_aAllAxis.size(); nN++ )
         ModifyListenerHelper::addListenerToAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );

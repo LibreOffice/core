@@ -15,6 +15,10 @@
 #include "plugin.hxx"
 
 // Check for some basic naming mismatches which make the code harder to read
+//
+// This plugin is deliberately fairly lax, and only targets the most egregeriously faulty code,
+// since we have a broad range of styles in our code and we don't want to generate unnecessary
+// churn.
 
 namespace {
 
@@ -52,6 +56,9 @@ bool isIdentifierLetter(char c) {
 }
 bool matchPointerVar(const std::string& s) {
     return s.size() > 2 && s[0] == 'p' && isUpperLetter(s[1]);
+}
+bool matchRefCountedPointerVar(const std::string& s) {
+    return s.size() > 2 && s[0] == 'x' && isUpperLetter(s[1]);
 }
 bool matchMember(const std::string& s) {
     return s.size() > 3 && s[0] == 'm'
@@ -95,7 +102,12 @@ bool StylePolice::VisitVarDecl(const VarDecl * varDecl)
         typeName = typeName.substr(6);
     if (startswith(typeName, "class "))
         typeName = typeName.substr(6);
+    if (startswith(typeName, "struct "))
+        typeName = typeName.substr(7);
     std::string aOriginalTypeName = varDecl->getType().getAsString();
+    if (startswith(aOriginalTypeName, "const "))
+        aOriginalTypeName = aOriginalTypeName.substr(6);
+
     if (!qt->isPointerType() && !qt->isArrayType() && !qt->isFunctionPointerType() && !qt->isMemberPointerType()
         && matchPointerVar(name)
         && !startswith(typeName, "boost::intrusive_ptr")
@@ -107,17 +119,11 @@ bool StylePolice::VisitVarDecl(const VarDecl * varDecl)
         && aOriginalTypeName != "GLXPixmap"
         && !startswith(typeName, "rtl::Reference")
         && !startswith(typeName, "ScopedVclPtr")
-        && !startswith(typeName, "std::mem_fun")
-        && !startswith(typeName, "std::__1::mem_fun")
-        && !startswith(typeName, "std::shared_ptr")
-        && !startswith(typeName, "std::__1::shared_ptr")
-        && !startswith(typeName, "shared_ptr") // weird issue in slideshow
-        && !startswith(typeName, "std::unique_ptr")
-        && !startswith(typeName, "std::__1::unique_ptr")
-        && !startswith(typeName, "unique_ptr") // weird issue in include/vcl/threadex.hxx
-        && !startswith(typeName, "std::weak_ptr")
-        && !startswith(typeName, "std::__1::weak_ptr")
-        && !startswith(typeName, "struct _LOKDocViewPrivate")
+        && typeName.find("::mem_fun") == std::string::npos
+        && typeName.find("shared_ptr") == std::string::npos
+        && typeName.find("unique_ptr") == std::string::npos
+        && typeName.find("::weak_ptr") == std::string::npos
+        && !startswith(typeName, "_LOKDocViewPrivate")
         && !startswith(typeName, "sw::UnoCursorPointer")
         && !startswith(typeName, "tools::SvRef")
         && !startswith(typeName, "VclPtr")
@@ -138,6 +144,47 @@ bool StylePolice::VisitVarDecl(const VarDecl * varDecl)
                  << typeName << aOriginalTypeName << varDecl->getSourceRange();
         }
     }
+
+
+    if (matchRefCountedPointerVar(name)
+        && !startswith(typeName, "boost::intrusive_ptr")
+        && !startswith(typeName, "com::sun::star::uno::Reference")
+        && !startswith(typeName, "com::sun::star::uno::Sequence")
+        && !startswith(typeName, "com::sun::star::uno::WeakReference")
+        && !startswith(typeName, "drawinglayer::primitive2d::Primitive2DContainer")
+        && !startswith(typeName, "drawinglayer::primitive3d::Primitive3DContainer")
+        && !startswith(typeName, "jfw::CXPathObjectPtr")
+        && !startswith(typeName, "_LOKDocViewPrivate")
+        && !startswith(typeName, "oox::dump::BinaryInputStreamRef")
+        && !startswith(typeName, "oox::drawingml::chart::ModelRef")
+        && !startswith(typeName, "rtl::Reference")
+        && !startswith(typeName, "Reference")
+        && !startswith(typeName, "SfxObjectShellLock")
+        && !startswith(typeName, "store::PageHolderObject")
+        && !startswith(typeName, "store::ResourceHolder")
+        && !startswith(typeName, "store::OStoreHandle")
+        && typeName.find("unique_ptr") == std::string::npos
+        && typeName.find("shared_ptr") == std::string::npos
+        && !startswith(typeName, "ScopedVclPtr")
+        && !startswith(typeName, "svt::EmbeddedObjectRef")
+        && !startswith(typeName, "tools::SvRef")
+        && !startswith(typeName, "tools::WeakReference")
+        && !startswith(typeName, "utl::SharedUNOComponent")
+        && !startswith(typeName, "VclPtr")
+        && !startswith(typeName, "vcl::DeleteOnDeinit")
+        && !startswith(typeName, "vcl::DeleteUnoReferenceOnDeinit")
+        // there are lots of coordinate/position vars that start with "x"
+        && !qt->isArithmeticType()
+        )
+    {
+            report(
+                DiagnosticsEngine::Warning,
+                "this local variable of type '%0' follows our ref-counted-pointer naming convention, but it is not a ref-counted-pointer, %1",
+                varDecl->getLocation())
+                 << typeName << aOriginalTypeName << varDecl->getSourceRange();
+    }
+
+
     return true;
 }
 

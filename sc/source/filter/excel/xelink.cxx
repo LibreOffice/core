@@ -2089,13 +2089,13 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 
         sal_uInt16 nId = xRef->GetFileId();
         const OUString& rUrl = xRef->GetUrl();
-        ::std::pair< ::std::map< sal_uInt16, OUString >::iterator, bool > xInsert(
+        ::std::pair< ::std::map< sal_uInt16, OUString >::iterator, bool > aInsert(
                 aMap.insert( ::std::make_pair( nId, rUrl)));
-        if (!xInsert.second)
+        if (!aInsert.second)
         {
             SAL_WARN( "sc.filter", "XclExpSupbookBuffer::SaveXml: file ID already used: " << nId <<
-                    " wanted for " << rUrl << " and is " << (*xInsert.first).second <<
-                    (rUrl == (*xInsert.first).second ? " multiple Supbook not supported" : ""));
+                    " wanted for " << rUrl << " and is " << (*aInsert.first).second <<
+                    (rUrl == (*aInsert.first).second ? " multiple Supbook not supported" : ""));
             continue;
         }
 

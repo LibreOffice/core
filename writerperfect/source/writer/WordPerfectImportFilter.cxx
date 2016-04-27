@@ -140,10 +140,10 @@ throw (RuntimeException, std::exception)
 
     // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
     // writes to in-memory target doc
-    DocumentHandler xHandler(xInternalHandler);
+    DocumentHandler aHandler(xInternalHandler);
 
     OdtGenerator collector;
-    collector.addDocumentHandler(&xHandler, ODF_FLAT_XML);
+    collector.addDocumentHandler(&aHandler, ODF_FLAT_XML);
     collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
     collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
     if (libwpd::WPD_OK == libwpd::WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? nullptr : aUtf8Passwd.getStr()))

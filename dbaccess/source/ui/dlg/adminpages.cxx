@@ -240,10 +240,10 @@ namespace dbaui
             bool bShowMessage = true;
             try
             {
-                ::std::pair< Reference<XConnection>,sal_Bool> xConnection = m_pAdminDialog->createConnection();
-                bShowMessage = xConnection.second;
-                bSuccess = xConnection.first.is();
-                ::comphelper::disposeComponent(xConnection.first);
+                ::std::pair< Reference<XConnection>,sal_Bool> aConnectionPair = m_pAdminDialog->createConnection();
+                bShowMessage = aConnectionPair.second;
+                bSuccess = aConnectionPair.first.is();
+                ::comphelper::disposeComponent(aConnectionPair.first);
             }
             catch(Exception&)
             {

@@ -239,9 +239,9 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     if( xCategories.is() )
         aResultVector.push_back( xCategories );
 
-    ::std::vector< Reference< chart2::XDataSeries > > xSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     uno::Reference< chart2::data::XDataSource > xSeriesSource(
-        DataSeriesHelper::getDataSource( comphelper::containerToSequence(xSeriesVector) ) );
+        DataSeriesHelper::getDataSource( comphelper::containerToSequence(aSeriesVector) ) );
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSeqences( xSeriesSource->getDataSequences() );
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format

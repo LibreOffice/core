@@ -1653,18 +1653,18 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
 
         const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
 
-        std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet ) );
+        std::vector< XMLPropertyState > aPropStates( aMapperRef->Filter( xPropSet ) );
 
-        if( !xPropStates.empty() )
+        if( !aPropStates.empty() )
         {
             // there are filtered properties -> hard attributes
             // try to find this style in AutoStylePool
-            sStyleName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
+            sStyleName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
 
             if(sStyleName.isEmpty())
             {
                 // Style did not exist, add it to AutoStalePool
-                sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
+                sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
             }
         }
     }

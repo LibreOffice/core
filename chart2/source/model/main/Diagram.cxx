@@ -333,10 +333,10 @@ Diagram::Diagram( const Diagram & rOther ) :
         lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
     ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
 
-    m_xWall.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xWall ));
-    m_xFloor.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xFloor ));
-    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
-    m_xLegend.set( CloneHelper::CreateRefClone< Reference< chart2::XLegend > >()( rOther.m_xLegend ));
+    m_xWall.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xWall ));
+    m_xFloor.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xFloor ));
+    m_xTitle.set( CloneHelper::CreateRefClone< chart2::XTitle >()( rOther.m_xTitle ));
+    m_xLegend.set( CloneHelper::CreateRefClone< chart2::XLegend >()( rOther.m_xLegend ));
 
     ModifyListenerHelper::addListener( m_xWall, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xFloor, m_xModifyEventForwarder );

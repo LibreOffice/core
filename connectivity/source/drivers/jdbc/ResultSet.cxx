@@ -661,7 +661,7 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
 
         {
             jbyteArray aArray = t.pEnv->NewByteArray(x.getLength());
-            jbyte * xData = reinterpret_cast<jbyte *>(
+            jbyte * pData = reinterpret_cast<jbyte *>(
                 const_cast<sal_Int8 *>(x.getConstArray()));
             // 4th param of Set*ArrayRegion changed from pointer to non-const to
             // pointer to const between <http://docs.oracle.com/javase/6/docs/
@@ -669,7 +669,7 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
             // <http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/
             // functions.html#wp22933>; work around that difference in a way
             // that doesn't trigger loplugin:redundantcast
-            t.pEnv->SetByteArrayRegion(aArray,0,x.getLength(),xData);
+            t.pEnv->SetByteArrayRegion(aArray,0,x.getLength(),pData);
             // convert parameter
             t.pEnv->CallVoidMethod( object, mID,columnIndex,aArray);
             t.pEnv->DeleteLocalRef(aArray);

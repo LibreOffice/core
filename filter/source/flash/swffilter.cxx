@@ -365,7 +365,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
     fullpath = swfdirpath + STR("/backgroundconfig.txt");
 
-    oslFileHandle xBackgroundConfig( nullptr );
+    oslFileHandle aBackgroundConfig( nullptr );
 
     // AS: Only export the background config if we're exporting all of the pages, otherwise we'll
     //  screw it up.
@@ -373,10 +373,10 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
     if (bExportAll)
     {
         osl_removeFile(fullpath.pData);
-        osl_openFile( fullpath.pData, &xBackgroundConfig, osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
+        osl_openFile( fullpath.pData, &aBackgroundConfig, osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
 
         sal_uInt64 bytesWritten;
-        err = osl_writeFile(xBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
+        err = osl_writeFile(aBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
     }
 
     // TODO: check for errors
@@ -435,15 +435,15 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
             OString ASCIItemp(temp.getStr(), temp.getLength(), RTL_TEXTENCODING_ASCII_US);
 
             sal_uInt64 bytesWritten;
-            osl_writeFile(xBackgroundConfig, ASCIItemp.getStr(), ASCIItemp.getLength(), &bytesWritten);
+            osl_writeFile(aBackgroundConfig, ASCIItemp.getStr(), ASCIItemp.getLength(), &bytesWritten);
 
             if (nPage < nPageCount - 1)
-                osl_writeFile(xBackgroundConfig, "|", 1, &bytesWritten);
+                osl_writeFile(aBackgroundConfig, "|", 1, &bytesWritten);
         }
     }
 
     if (bExportAll)
-        osl_closeFile(xBackgroundConfig);
+        osl_closeFile(aBackgroundConfig);
 
     return true;
 }

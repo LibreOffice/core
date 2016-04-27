@@ -22,17 +22,17 @@ namespace apitest {
 void XSheetAnnotation::testGetPosition()
 {
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
-    table::CellAddress xResultCellAddress = aSheetAnnotation->getPosition();
+    table::CellAddress aResultCellAddress = aSheetAnnotation->getPosition();
 
     //expected result
-    table::CellAddress xExpectedCellAddress;
-    xExpectedCellAddress.Sheet = 0;
-    xExpectedCellAddress.Row = 1;
-    xExpectedCellAddress.Column = 2;
+    table::CellAddress aExpectedCellAddress;
+    aExpectedCellAddress.Sheet = 0;
+    aExpectedCellAddress.Row = 1;
+    aExpectedCellAddress.Column = 2;
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", xResultCellAddress.Sheet == xExpectedCellAddress.Sheet);
-    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", xResultCellAddress.Column == xExpectedCellAddress.Column);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", xResultCellAddress.Row == xExpectedCellAddress.Row);
+    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", aResultCellAddress.Sheet == aExpectedCellAddress.Sheet);
+    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", aResultCellAddress.Column == aExpectedCellAddress.Column);
+    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", aResultCellAddress.Row == aExpectedCellAddress.Row);
 }
 
 void XSheetAnnotation::testGetAuthor()

@@ -1005,7 +1005,7 @@ void OResultSet::fillRowData()
 
     MQueryExpression queryExpression;
 
-    OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
+    OConnection* pConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
     m_xColumns = m_pSQLIterator->getSelectColumns();
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
@@ -1045,7 +1045,7 @@ void OResultSet::fillRowData()
     OUString aStr(  m_pTable->getName() );
     m_aQueryHelper.setAddressbook( aStr );
 
-    sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection, queryExpression);
+    sal_Int32 rv = m_aQueryHelper.executeQuery(pConnection, queryExpression);
     if ( rv == -1 ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERR_EXECUTING_QUERY, *this );
     }
@@ -1114,11 +1114,11 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     OSL_ENSURE( m_pTable, "Need a Table object");
     if(!m_pTable)
     {
-        const OSQLTables& xTabs = m_pSQLIterator->getTables();
-        if (xTabs.empty() || !xTabs.begin()->second.is())
+        const OSQLTables& rTabs = m_pSQLIterator->getTables();
+        if (rTabs.empty() || !rTabs.begin()->second.is())
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
-        m_pTable = static_cast< OTable* > ((xTabs.begin()->second).get());
+        m_pTable = static_cast< OTable* > ((rTabs.begin()->second).get());
 
     }
 

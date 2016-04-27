@@ -140,16 +140,16 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
     {
         m_pSQLIterator->setParseTree(m_pParseTree);
         m_pSQLIterator->traverseAll();
-        const OSQLTables& xTabs = m_pSQLIterator->getTables();
+        const OSQLTables& rTabs = m_pSQLIterator->getTables();
 
-        if (xTabs.empty())
+        if (rTabs.empty())
         {
             getOwnConnection()->throwSQLException( STR_QUERY_AT_LEAST_ONE_TABLES, *this );
         }
 
 #if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
-        for( citer = xTabs.begin(); citer != xTabs.end(); ++citer ) {
+        for( citer = rTabs.begin(); citer != rTabs.end(); ++citer ) {
             OSL_TRACE("SELECT Table : %s", OUtoCStr(citer->first) );
         }
 #endif
@@ -161,9 +161,9 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
 
             // at this moment we support only one table per select statement
 
-            OSL_ENSURE( xTabs.begin() != xTabs.end(), "Need a Table");
+            OSL_ENSURE( rTabs.begin() != rTabs.end(), "Need a Table");
 
-            m_pTable = static_cast< OTable* > (xTabs.begin()->second.get());
+            m_pTable = static_cast< OTable* > (rTabs.begin()->second.get());
             m_xColNames     = m_pTable->getColumns();
             xNames.set(m_xColNames,UNO_QUERY);
             // set the binding of the resultrow

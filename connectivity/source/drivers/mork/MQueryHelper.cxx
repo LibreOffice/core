@@ -158,10 +158,10 @@ bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
 
 bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType )
 {
-    MQueryHelperResultEntry* xResEntry = getByIndex( nDBRow );
+    MQueryHelperResultEntry* pResEntry = getByIndex( nDBRow );
 
-    OSL_ENSURE( xResEntry != nullptr, "xResEntry == NULL");
-    if (xResEntry == nullptr )
+    OSL_ENSURE( pResEntry != nullptr, "xResEntry == NULL");
+    if (pResEntry == nullptr )
     {
         rValue.setNull();
         return false;
@@ -169,7 +169,7 @@ bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUS
     switch ( nType )
     {
         case DataType::VARCHAR:
-            rValue = xResEntry->getValue( m_rColumnAlias.getProgrammaticNameOrFallbackToUTF8Alias( aDBColumnName ) );
+            rValue = pResEntry->getValue( m_rColumnAlias.getProgrammaticNameOrFallbackToUTF8Alias( aDBColumnName ) );
             break;
 
         default:
@@ -187,30 +187,30 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );
     std::set<int> listRecords;
     bool handleListTable = false;
-    MorkParser* xMork;
+    MorkParser* pMork;
 
     // check if we are retrieving the default table
     if (oStringTable == "AddressBook" || oStringTable == "CollectedAddressBook")
     {
-        xMork = xConnection->getMorkParser(oStringTable);
+        pMork = xConnection->getMorkParser(oStringTable);
     }
     else
     {
         // Let's try to retrieve the list in Collected Addresses book
-        xMork = xConnection->getMorkParser(OString("CollectedAddressBook"));
-        if (std::find(xMork->lists_.begin(), xMork->lists_.end(), m_aAddressbook) == xMork->lists_.end())
+        pMork = xConnection->getMorkParser(OString("CollectedAddressBook"));
+        if (std::find(pMork->lists_.begin(), pMork->lists_.end(), m_aAddressbook) == pMork->lists_.end())
         {
             // so the list is in Address book
             // TODO : manage case where an address book has been created
-            xMork = xConnection->getMorkParser(OString("AddressBook"));
+            pMork = xConnection->getMorkParser(OString("AddressBook"));
         }
         handleListTable = true;
         // retrieve row ids for that list table
         std::string listTable = oStringTable.getStr();
-        xMork->getRecordKeysForListTable(listTable, listRecords);
+        pMork->getRecordKeysForListTable(listTable, listRecords);
     }
     MorkTableMap::Map::iterator tableIter;
-    MorkTableMap *Tables = xMork->getTables( 0x80 );
+    MorkTableMap *Tables = pMork->getTables( 0x80 );
     if (!Tables)
         return -1;
     MorkRowMap *Rows = nullptr;
@@ -243,8 +243,8 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 for (MorkCells::const_iterator CellsIter = rowIter->second.begin();
                      CellsIter != rowIter->second.end(); ++CellsIter )
                 {
-                    std::string column = xMork->getColumn(CellsIter->first);
-                    std::string value = xMork->getValue(CellsIter->second);
+                    std::string column = pMork->getColumn(CellsIter->first);
+                    std::string value = pMork->getValue(CellsIter->second);
                     OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
                     OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
                     OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );

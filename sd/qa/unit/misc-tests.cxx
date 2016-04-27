@@ -111,12 +111,12 @@ void SdMiscTest::testTdf96206()
     sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
-    auto& xSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
 
     const sal_uInt16 nMasterPageCnt1 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nMasterPageCnt1);
-    xSSController.GetClipboard().DoCopy();
-    xSSController.GetClipboard().DoPaste();
+    rSSController.GetClipboard().DoCopy();
+    rSSController.GetClipboard().DoPaste();
     const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
     CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
 
@@ -128,19 +128,19 @@ void SdMiscTest::testTdf96708()
     sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
-    auto& xSSController = pSSVS->GetSlideSorter().GetController();
-    auto& xPageSelector = xSSController.GetPageSelector();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rPageSelector = rSSController.GetPageSelector();
 
     const sal_uInt16 nMasterPageCnt1 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), nMasterPageCnt1);
-    xPageSelector.SelectAllPages();
-    xSSController.GetClipboard().DoCopy();
+    rPageSelector.SelectAllPages();
+    rSSController.GetClipboard().DoCopy();
 
     // Now wait for timers to trigger creation of auto-layout
     osl::Thread::wait(std::chrono::milliseconds(100));
     Scheduler::ProcessTaskScheduling(true);
 
-    xSSController.GetClipboard().DoPaste();
+    rSSController.GetClipboard().DoPaste();
     const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
     CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
 

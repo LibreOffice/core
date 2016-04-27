@@ -433,7 +433,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray pByteArray = t.pEnv->NewByteArray(x.getLength());
-        jbyte * xData = reinterpret_cast<jbyte *>(
+        jbyte * pData = reinterpret_cast<jbyte *>(
             const_cast<sal_Int8 *>(x.getConstArray()));
             // 4th param of Set*ArrayRegion changed from pointer to non-const to
             // pointer to const between <http://docs.oracle.com/javase/6/docs/
@@ -441,7 +441,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
             // <http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/
             // functions.html#wp22933>; work around that difference in a way
             // that doesn't trigger loplugin:redundantcast
-        t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),xData);
+        t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),pData);
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,pByteArray);
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );

@@ -289,9 +289,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
     aStoreMedium.SetFilter(pExportFilter);
     SfxItemSet* pExportSet = aStoreMedium.GetItemSet();
     uno::Sequence< beans::NamedValue > aEncryptionData = comphelper::OStorageHelper::CreatePackageEncryptionData( "test" );
-    uno::Any xEncryptionData;
-    xEncryptionData <<= aEncryptionData;
-    pExportSet->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, xEncryptionData));
+    pExportSet->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, makeAny(aEncryptionData)));
 
     uno::Reference< embed::XStorage > xMedStorage = aStoreMedium.GetStorage();
     ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
@@ -1114,18 +1112,18 @@ void ScExportTest::testRichTextCellFormat()
     CPPUNIT_ASSERT(pStyles);
 
     OString nFormatIdx = OString::number( aCellFormat.toInt32() + 1 );
-    const OString xPath1( "/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx + "]/x:alignment" );
+    const OString aXPath1( "/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx + "]/x:alignment" );
     // formatting record is set to wrap text
-    assertXPath(pStyles, xPath1, "wrapText", "true");
+    assertXPath(pStyles, aXPath1, "wrapText", "true");
 
     // see what font it references
-    const OString xPath2( "/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx +"]" );
-    OUString aFontId = getXPath(pStyles, xPath2, "fontId");
+    const OString aXPath2( "/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx +"]" );
+    OUString aFontId = getXPath(pStyles, aXPath2, "fontId");
     OString nFontIdx = OString::number( aFontId.toInt32() + 1 );
 
     // that font should be bold
-    const OString xPath3("/x:styleSheet/x:fonts/x:font[" + nFontIdx + "]/x:b");
-    assertXPath(pStyles, xPath3, "val", "true");
+    const OString aXPath3("/x:styleSheet/x:fonts/x:font[" + nFontIdx + "]/x:b");
+    assertXPath(pStyles, aXPath3, "val", "true");
 
     xDocSh->DoClose();
 }

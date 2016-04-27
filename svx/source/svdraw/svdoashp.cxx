@@ -601,7 +601,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const bool bBezierAl
 
 std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandles() const
 {
-    std::vector< SdrCustomShapeInteraction > xRet;
+    std::vector< SdrCustomShapeInteraction > aRet;
     try
     {
         Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
@@ -676,7 +676,7 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                         default: break;
                     }
                     aSdrCustomShapeInteraction.nMode = nMode;
-                    xRet.push_back( aSdrCustomShapeInteraction );
+                    aRet.push_back( aSdrCustomShapeInteraction );
                 }
             }
         }
@@ -684,7 +684,7 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
     catch( const uno::RuntimeException& )
     {
     }
-    return xRet;
+    return aRet;
 }
 
 

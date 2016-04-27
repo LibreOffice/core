@@ -100,7 +100,7 @@ ImplOPropertySet::ImplOPropertySet( const ImplOPropertySet & rOther )
     ::std::copy( rOther.m_aProperties.begin(), rOther.m_aProperties.end(),
                  ::std::inserter( m_aProperties, m_aProperties.begin() ));
     cloneInterfaceProperties();
-    m_xStyle.set( ::chart::CloneHelper::CreateRefClone< Reference< style::XStyle > >()( rOther.m_xStyle ));
+    m_xStyle.set( ::chart::CloneHelper::CreateRefClone< style::XStyle >()( rOther.m_xStyle ));
 }
 
 beans::PropertyState ImplOPropertySet::GetPropertyStateByHandle( sal_Int32 nHandle ) const

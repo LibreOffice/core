@@ -139,12 +139,12 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
 {
     if( ! rOther.m_aDataSequences.empty())
     {
-        CloneHelper::CloneRefVector< tDataSequenceContainer::value_type >(
+        CloneHelper::CloneRefVector<css::chart2::data::XLabeledDataSequence>(
             rOther.m_aDataSequences, m_aDataSequences );
         ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
     }
 
-    CloneHelper::CloneRefVector< Reference< chart2::XRegressionCurve > >( rOther.m_aRegressionCurves, m_aRegressionCurves );
+    CloneHelper::CloneRefVector< chart2::XRegressionCurve >( rOther.m_aRegressionCurves, m_aRegressionCurves );
     ModifyListenerHelper::addListenerToAllElements( m_aRegressionCurves, m_xModifyEventForwarder );
 
     // add as listener to XPropertySet properties

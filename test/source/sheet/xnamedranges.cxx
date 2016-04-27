@@ -176,12 +176,12 @@ void XNamedRanges::testRemoveByName()
 
 void XNamedRanges::testOutputList()
 {
-    table::CellAddress xCellAddress = table::CellAddress (0,2,0);
+    table::CellAddress aCellAddress = table::CellAddress (0,2,0);
     uno::Reference< sheet::XNamedRanges > xNamedRanges(init(), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xNamedRangesIndex(init(), UNO_QUERY_THROW);
     sal_Int32 nElementsCount = xNamedRangesIndex->getCount();
 
-    xNamedRanges->outputList(xCellAddress);
+    xNamedRanges->outputList(aCellAddress);
 
     OUString aString;
     uno::Reference< table::XCell > xCell;

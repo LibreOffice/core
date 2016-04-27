@@ -168,11 +168,11 @@ ChartModel::ChartModel( const ChartModel & rOther )
         m_xOldModelAgg->setDelegator( *this );
 
         Reference< util::XModifyListener > xListener;
-        Reference< chart2::XTitle > xNewTitle = CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle );
-        Reference< chart2::XDiagram > xNewDiagram = CreateRefClone< Reference< chart2::XDiagram > >()( rOther.m_xDiagram );
-        Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground );
-        Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager );
-        Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap );
+        Reference< chart2::XTitle > xNewTitle = CreateRefClone< chart2::XTitle >()( rOther.m_xTitle );
+        Reference< chart2::XDiagram > xNewDiagram = CreateRefClone< chart2::XDiagram >()( rOther.m_xDiagram );
+        Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< beans::XPropertySet >()( rOther.m_xPageBackground );
+        Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< chart2::XChartTypeManager >()( rOther.m_xChartTypeManager );
+        Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< container::XNameAccess >()( rOther.m_xXMLNamespaceMap );
 
         {
             MutexGuard aGuard( m_aModelMutex );

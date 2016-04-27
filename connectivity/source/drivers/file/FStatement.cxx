@@ -394,14 +394,14 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
     {
         m_aSQLIterator.setParseTree(m_pParseTree);
         m_aSQLIterator.traverseAll();
-        const OSQLTables& xTabs = m_aSQLIterator.getTables();
+        const OSQLTables& rTabs = m_aSQLIterator.getTables();
 
         // sanity checks
-        if ( xTabs.empty() )
+        if ( rTabs.empty() )
             // no tables -> nothing to operate on -> error
             m_pConnection->throwGenericSQLException(STR_QUERY_NO_TABLE,*this);
 
-        if ( xTabs.size() > 1 || m_aSQLIterator.hasErrors() )
+        if ( rTabs.size() > 1 || m_aSQLIterator.hasErrors() )
             // more than one table -> can't operate on them -> error
             m_pConnection->throwGenericSQLException(STR_QUERY_MORE_TABLES,*this);
 
@@ -421,7 +421,7 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
         }
 
         // at this moment we support only one table per select statement
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
+        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
         if(xTunnel.is())
         {
             if(m_pTable)

@@ -7712,10 +7712,10 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     cmsSaveProfileToMem(hProfile, nullptr, &nBytesNeeded);
     if (!nBytesNeeded)
       return 0;
-    std::vector<unsigned char> xBuffer(nBytesNeeded);
-    cmsSaveProfileToMem(hProfile, &xBuffer[0], &nBytesNeeded);
+    std::vector<unsigned char> aBuffer(nBytesNeeded);
+    cmsSaveProfileToMem(hProfile, &aBuffer[0], &nBytesNeeded);
     cmsCloseProfile(hProfile);
-    bool written = writeBuffer( &xBuffer[0], (sal_Int32) xBuffer.size() );
+    bool written = writeBuffer( &aBuffer[0], (sal_Int32) aBuffer.size() );
     disableStreamEncryption();
     endCompression();
     sal_uInt64 nEndStreamPos = 0;

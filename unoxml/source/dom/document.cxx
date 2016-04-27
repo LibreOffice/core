@@ -438,8 +438,8 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
-        xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, xName, nullptr);
+        xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, pName, nullptr);
         ::rtl::Reference< CAttr > const pCAttr(
             dynamic_cast< CAttr* >(GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()));
@@ -509,8 +509,8 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xData = reinterpret_cast<xmlChar const *>(o1.getStr());
-        xmlNodePtr pComment = xmlNewDocComment(m_aDocPtr, xData);
+        xmlChar const *pData = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlNodePtr pComment = xmlNewDocComment(m_aDocPtr, pData);
         Reference< XComment > const xRet(
             static_cast< XNode* >(GetCNode(pComment).get()),
             UNO_QUERY_THROW);
@@ -537,8 +537,8 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         OString o1 = OUStringToOString(tagName, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
-        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, nullptr, xName, nullptr);
+        xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, nullptr, pName, nullptr);
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
@@ -554,27 +554,27 @@ namespace DOM
 
         sal_Int32 i = qname.indexOf(':');
         if (ns.isEmpty()) throw RuntimeException();
-        xmlChar const *xPrefix;
-        xmlChar const *xName;
+        xmlChar const *pPrefix;
+        xmlChar const *pName;
         OString o1, o2, o3;
         if ( i != -1) {
             o1 = OUStringToOString(qname.copy(0, i), RTL_TEXTENCODING_UTF8);
-            xPrefix = reinterpret_cast<xmlChar const *>(o1.getStr());
+            pPrefix = reinterpret_cast<xmlChar const *>(o1.getStr());
             o2 = OUStringToOString(qname.copy(i+1, qname.getLength()-i-1), RTL_TEXTENCODING_UTF8);
-            xName = reinterpret_cast<xmlChar const *>(o2.getStr());
+            pName = reinterpret_cast<xmlChar const *>(o2.getStr());
         } else {
             // default prefix
-            xPrefix = reinterpret_cast<xmlChar const *>("");
+            pPrefix = reinterpret_cast<xmlChar const *>("");
             o2 = OUStringToOString(qname, RTL_TEXTENCODING_UTF8);
-            xName = reinterpret_cast<xmlChar const *>(o2.getStr());
+            pName = reinterpret_cast<xmlChar const *>(o2.getStr());
         }
         o3 = OUStringToOString(ns, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xUri = reinterpret_cast<xmlChar const *>(o3.getStr());
+        xmlChar const *pUri = reinterpret_cast<xmlChar const *>(o3.getStr());
 
         // xmlNsPtr aNsPtr = xmlNewReconciledNs?
         // xmlNsPtr aNsPtr = xmlNewGlobalNs?
-        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, nullptr, xName, nullptr);
-        xmlNsPtr const pNs = xmlNewNs(pNode, xUri, xPrefix);
+        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, nullptr, pName, nullptr);
+        xmlNsPtr const pNs = xmlNewNs(pNode, pUri, pPrefix);
         xmlSetNs(pNode, pNs);
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
@@ -589,8 +589,8 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
-        xmlNodePtr const pNode = xmlNewReference(m_aDocPtr, xName);
+        xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlNodePtr const pNode = xmlNewReference(m_aDocPtr, pName);
         Reference< XEntityReference > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
@@ -606,10 +606,10 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         OString o1 = OUStringToOString(target, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xTarget = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlChar const *pTarget = reinterpret_cast<xmlChar const *>(o1.getStr());
         OString o2 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xData = reinterpret_cast<xmlChar const *>(o2.getStr());
-        xmlNodePtr const pNode = xmlNewDocPI(m_aDocPtr, xTarget, xData);
+        xmlChar const *pData = reinterpret_cast<xmlChar const *>(o2.getStr());
+        xmlNodePtr const pNode = xmlNewDocPI(m_aDocPtr, pTarget, pData);
         pNode->doc = m_aDocPtr;
         Reference< XProcessingInstruction > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
@@ -624,8 +624,8 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xData = reinterpret_cast<xmlChar const *>(o1.getStr());
-        xmlNodePtr const pNode = xmlNewDocText(m_aDocPtr, xData);
+        xmlChar const *pData = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlNodePtr const pNode = xmlNewDocText(m_aDocPtr, pData);
         Reference< XText > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
@@ -696,10 +696,10 @@ namespace DOM
 
         // search the tree for an element with the given ID
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xId = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlChar const *pId = reinterpret_cast<xmlChar const *>(o1.getStr());
         xmlNodePtr const pStart = lcl_getDocumentRootPtr(m_aDocPtr);
         if (!pStart) { return nullptr; }
-        xmlNodePtr const pNode = lcl_search_element_by_id(pStart, xId);
+        xmlNodePtr const pNode = lcl_search_element_by_id(pStart, pId);
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY);

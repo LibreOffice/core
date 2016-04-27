@@ -157,9 +157,9 @@ BlipContext::BlipContext( ContextHandler2Helper& rParent,
         // code rework.
         OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
-        SfxMedium xMed( aTargetLink, STREAM_STD_READ );
-        xMed.Download();
-        Reference< io::XInputStream > xInStrm = xMed.GetInputStream();
+        SfxMedium aMed( aTargetLink, STREAM_STD_READ );
+        aMed.Download();
+        Reference< io::XInputStream > xInStrm = aMed.GetInputStream();
         if ( xInStrm.is() )
             mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importGraphic( xInStrm );
     }

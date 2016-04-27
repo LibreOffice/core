@@ -116,7 +116,7 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     if( ! rOther.m_aDataSequences.empty())
     {
         if( lcl_isInternalData( rOther.m_aDataSequences.front()))
-            CloneHelper::CloneRefVector< tDataSequenceContainer::value_type >(
+            CloneHelper::CloneRefVector< css::chart2::data::XLabeledDataSequence >(
                 rOther.m_aDataSequences, m_aDataSequences );
         else
             m_aDataSequences = rOther.m_aDataSequences;

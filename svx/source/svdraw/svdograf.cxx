@@ -71,10 +71,10 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
 {
     Graphic aGraphic;
 
-    SfxMedium xMed( aFileName, aReferer, STREAM_STD_READ );
-    xMed.Download();
+    SfxMedium aMed( aFileName, aReferer, STREAM_STD_READ );
+    aMed.Download();
 
-    SvStream* pInStrm = xMed.GetInStream();
+    SvStream* pInStrm = aMed.GetInStream();
     if ( pInStrm )
     {
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );

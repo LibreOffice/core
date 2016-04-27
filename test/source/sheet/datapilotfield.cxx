@@ -39,29 +39,29 @@ void DataPilotField::testSortInfo()
     aSortInfoValue.Field = "Col1";
     aSortInfoValue.IsAscending = false;
     aSortInfoValue.Mode = sheet::DataPilotFieldSortMode::MANUAL;
-    uno::Any xValue;
-    xValue <<= aSortInfoValue;
-    xPropSet->setPropertyValue(aSortInfo, xValue);
+    uno::Any aValue;
+    aValue <<= aSortInfoValue;
+    xPropSet->setPropertyValue(aSortInfo, aValue);
 
     sheet::DataPilotFieldSortInfo aNewSortInfoValue;
-    xValue = xPropSet->getPropertyValue(aSortInfo);
-    CPPUNIT_ASSERT( xValue >>= aNewSortInfoValue );
+    aValue = xPropSet->getPropertyValue(aSortInfo);
+    CPPUNIT_ASSERT( aValue >>= aNewSortInfoValue );
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as got value", aNewSortInfoValue.Field == aSortInfoValue.Field
             && aNewSortInfoValue.Mode == aSortInfoValue.Mode && aNewSortInfoValue.IsAscending == aSortInfoValue.IsAscending);
 
     //setting HasSortInfo only makes sense for false, for true the uno implementation does nothing
     bool bHasSortInfo(false);
     OUString aHasSortInfo("HasSortInfo");
-    xValue = xPropSet->getPropertyValue(aHasSortInfo);
-    CPPUNIT_ASSERT( xValue >>= bHasSortInfo );
+    aValue = xPropSet->getPropertyValue(aHasSortInfo);
+    CPPUNIT_ASSERT( aValue >>= bHasSortInfo );
     CPPUNIT_ASSERT_MESSAGE("should have sort info", bHasSortInfo);
 
     bHasSortInfo = false;
-    xValue <<= bHasSortInfo;
-    xPropSet->setPropertyValue(aHasSortInfo, xValue);
+    aValue <<= bHasSortInfo;
+    xPropSet->setPropertyValue(aHasSortInfo, aValue);
 
-    xValue = xPropSet->getPropertyValue(aHasSortInfo);
-    CPPUNIT_ASSERT( xValue >>= bHasSortInfo );
+    aValue = xPropSet->getPropertyValue(aHasSortInfo);
+    CPPUNIT_ASSERT( aValue >>= bHasSortInfo );
     CPPUNIT_ASSERT_MESSAGE("should have no sort info", !bHasSortInfo);
 }
 
@@ -72,29 +72,29 @@ void DataPilotField::testLayoutInfo()
     OUString aLayoutInfo("LayoutInfo");
     aLayoutInfoValue.AddEmptyLines = false;
     aLayoutInfoValue.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
-    uno::Any xValue;
-    xValue <<= aLayoutInfoValue;
-    xPropSet->setPropertyValue(aLayoutInfo, xValue);
+    uno::Any aValue;
+    aValue <<= aLayoutInfoValue;
+    xPropSet->setPropertyValue(aLayoutInfo, aValue);
 
     sheet::DataPilotFieldLayoutInfo aNewLayoutInfoValue;
-    xValue = xPropSet->getPropertyValue(aLayoutInfo);
-    CPPUNIT_ASSERT( xValue >>= aNewLayoutInfoValue );
+    aValue = xPropSet->getPropertyValue(aLayoutInfo);
+    CPPUNIT_ASSERT( aValue >>= aNewLayoutInfoValue );
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aNewLayoutInfoValue.LayoutMode == aLayoutInfoValue.LayoutMode &&
             aNewLayoutInfoValue.AddEmptyLines == aLayoutInfoValue.AddEmptyLines);
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     bool bHasLayoutInfo(false);
     OUString aHasLayoutInfo("HasLayoutInfo");
-    xValue = xPropSet->getPropertyValue(aHasLayoutInfo);
-    CPPUNIT_ASSERT( xValue >>= bHasLayoutInfo );
+    aValue = xPropSet->getPropertyValue(aHasLayoutInfo);
+    CPPUNIT_ASSERT( aValue >>= bHasLayoutInfo );
     CPPUNIT_ASSERT_MESSAGE("should have layout information", bHasLayoutInfo);
 
     bHasLayoutInfo = false;
-    xValue <<= bHasLayoutInfo;
-    xPropSet->setPropertyValue(aHasLayoutInfo, xValue);
+    aValue <<= bHasLayoutInfo;
+    xPropSet->setPropertyValue(aHasLayoutInfo, aValue);
 
-    xValue = xPropSet->getPropertyValue(aHasLayoutInfo);
-    CPPUNIT_ASSERT( xValue >>= bHasLayoutInfo );
+    aValue = xPropSet->getPropertyValue(aHasLayoutInfo);
+    CPPUNIT_ASSERT( aValue >>= bHasLayoutInfo );
     CPPUNIT_ASSERT_MESSAGE("should have no longer sort information", !bHasLayoutInfo);
 }
 
@@ -105,29 +105,29 @@ void DataPilotField::testAutoShowInfo()
     aAutoShowInfoValue.DataField = "Col1";
     aAutoShowInfoValue.IsEnabled = true;
     OUString aAutoShowInfo("AutoShowInfo");
-    uno::Any xValue;
-    xValue <<= aAutoShowInfoValue;
-    xPropSet->setPropertyValue(aAutoShowInfo, xValue);
+    uno::Any aValue;
+    aValue <<= aAutoShowInfoValue;
+    xPropSet->setPropertyValue(aAutoShowInfo, aValue);
 
     sheet::DataPilotFieldAutoShowInfo aNewAutoShowInfoValue;
-    xValue = xPropSet->getPropertyValue(aAutoShowInfo);
-    CPPUNIT_ASSERT( xValue >>= aNewAutoShowInfoValue );
+    aValue = xPropSet->getPropertyValue(aAutoShowInfo);
+    CPPUNIT_ASSERT( aValue >>= aNewAutoShowInfoValue );
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aNewAutoShowInfoValue.DataField == aAutoShowInfoValue.DataField &&
             aNewAutoShowInfoValue.IsEnabled == aAutoShowInfoValue.IsEnabled);
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     bool bHasAutoShowInfo(false);
     OUString aHasAutoShowInfo("HasAutoShowInfo");
-    xValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
-    CPPUNIT_ASSERT( xValue >>= bHasAutoShowInfo );
+    aValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
+    CPPUNIT_ASSERT( aValue >>= bHasAutoShowInfo );
     CPPUNIT_ASSERT_MESSAGE("should have AutoShow information", bHasAutoShowInfo);
 
     bHasAutoShowInfo = false;
-    xValue <<= bHasAutoShowInfo;
-    xPropSet->setPropertyValue(aHasAutoShowInfo, xValue);
+    aValue <<= bHasAutoShowInfo;
+    xPropSet->setPropertyValue(aHasAutoShowInfo, aValue);
 
-    xValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
-    CPPUNIT_ASSERT( xValue >>= bHasAutoShowInfo );
+    aValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
+    CPPUNIT_ASSERT( aValue >>= bHasAutoShowInfo );
     CPPUNIT_ASSERT_MESSAGE("should have no longer AutoShow information", !bHasAutoShowInfo);
 }
 
@@ -138,50 +138,50 @@ void DataPilotField::testReference()
     aReferenceValue.ReferenceField = "Col1";
     aReferenceValue.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
     OUString aReference("Reference");
-    uno::Any xValue;
-    xValue <<= aReferenceValue;
-    xPropSet->setPropertyValue(aReference, xValue);
+    uno::Any aValue;
+    aValue <<= aReferenceValue;
+    xPropSet->setPropertyValue(aReference, aValue);
 
     sheet::DataPilotFieldReference aNewReferenceValue;
-    xValue = xPropSet->getPropertyValue(aReference);
-    CPPUNIT_ASSERT( xValue >>= aNewReferenceValue );
+    aValue = xPropSet->getPropertyValue(aReference);
+    CPPUNIT_ASSERT( aValue >>= aNewReferenceValue );
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aReferenceValue.ReferenceField == aNewReferenceValue.ReferenceField
             && aReferenceValue.ReferenceItemType == aNewReferenceValue.ReferenceItemType);
 
     //setting HasReference only makes sense for false, tor true the uno implementation does nothing
     bool bHasReference(false);
     OUString aHasReference("HasReference");
-    xValue = xPropSet->getPropertyValue(aHasReference);
-    CPPUNIT_ASSERT( xValue >>= bHasReference );
+    aValue = xPropSet->getPropertyValue(aHasReference);
+    CPPUNIT_ASSERT( aValue >>= bHasReference );
     CPPUNIT_ASSERT_MESSAGE("should have Reference information", bHasReference);
 
     bHasReference = false;
-    xValue <<= bHasReference;
-    xPropSet->setPropertyValue(aHasReference, xValue);
+    aValue <<= bHasReference;
+    xPropSet->setPropertyValue(aHasReference, aValue);
 
-    xValue = xPropSet->getPropertyValue(aHasReference);
-    CPPUNIT_ASSERT( xValue >>= bHasReference );
+    aValue = xPropSet->getPropertyValue(aHasReference);
+    CPPUNIT_ASSERT( aValue >>= bHasReference );
     CPPUNIT_ASSERT_MESSAGE("should have no longer reference information", !bHasReference);
 }
 
 void DataPilotField::testIsGroupField()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
-    uno::Any xValue;
+    uno::Any aValue;
     OUString aIsGroupField("IsGroupField");
     bool bIsGroupField(false);
 
-    xValue = xPropSet->getPropertyValue(aIsGroupField);
-    CPPUNIT_ASSERT( xValue >>= bIsGroupField);
+    aValue = xPropSet->getPropertyValue(aIsGroupField);
+    CPPUNIT_ASSERT( aValue >>= bIsGroupField);
     //only setting to false is supported
     if (bIsGroupField)
     {
         bIsGroupField = false;
-        xValue <<= bIsGroupField;
+        aValue <<= bIsGroupField;
 
-        xPropSet->setPropertyValue(aIsGroupField, xValue);
-        xValue = xPropSet->getPropertyValue(aIsGroupField);
-        CPPUNIT_ASSERT(xValue >>= bIsGroupField);
+        xPropSet->setPropertyValue(aIsGroupField, aValue);
+        aValue = xPropSet->getPropertyValue(aIsGroupField);
+        CPPUNIT_ASSERT(aValue >>= bIsGroupField);
         CPPUNIT_ASSERT_MESSAGE("setting IsGroupField is supported and should have happened", !bIsGroupField);
     }
     else

@@ -44,14 +44,14 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
     {
 
         OUString empty;
-        Any xException( makeAny(InteractiveAppException(empty,
+        Any aException( makeAny(InteractiveAppException(empty,
                 Reference <XInterface> (),
                 InteractionClassification_QUERY,
                  ERRCODE_SVX_EXPORT_FILTER_CRYPT)));
 
         Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
-                        xException,
+                        aException,
                         ucbhelper::CONTINUATION_APPROVE
                             | ucbhelper::CONTINUATION_DISAPPROVE );
 

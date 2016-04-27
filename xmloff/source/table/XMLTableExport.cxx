@@ -210,11 +210,11 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
          for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn ) try
         {
              Reference< XPropertySet > xPropSet( xIndexAccessCols->getByIndex(nColumn) , UNO_QUERY_THROW );
-            std::vector< XMLPropertyState > xPropStates( mxColumnExportPropertySetMapper->Filter( xPropSet ) );
+            std::vector< XMLPropertyState > aPropStates( mxColumnExportPropertySetMapper->Filter( xPropSet ) );
 
-            if( has_states( xPropStates ) )
+            if( has_states( aPropStates ) )
             {
-                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, xPropStates) );
+                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, aPropStates) );
                 Reference< XInterface > xKey( xPropSet, UNO_QUERY );
                 xTableInfo->maColumnStyleMap[xKey] = sStyleName;
             }
@@ -233,11 +233,11 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
          for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow ) try
         {
              Reference< XPropertySet > xPropSet( xIndexAccessRows->getByIndex(nRow) , UNO_QUERY_THROW );
-            std::vector< XMLPropertyState > xRowPropStates( mxRowExportPropertySetMapper->Filter( xPropSet ) );
+            std::vector< XMLPropertyState > aRowPropStates( mxRowExportPropertySetMapper->Filter( xPropSet ) );
 
-            if( has_states( xRowPropStates ) )
+            if( has_states( aRowPropStates ) )
             {
-                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, xRowPropStates) );
+                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, aRowPropStates) );
                 Reference< XInterface > xKey( xPropSet, UNO_QUERY );
                 xTableInfo->maRowStyleMap[xKey] = sStyleName;
             }
@@ -261,9 +261,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
                 // create auto style, if needed
                 OUString sStyleName;
-                std::vector< XMLPropertyState > xCellPropStates( mxCellExportPropertySetMapper->Filter( xCellSet ) );
-                if( has_states( xCellPropStates ) )
-                    sStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, xCellPropStates);
+                std::vector< XMLPropertyState > aCellPropStates( mxCellExportPropertySetMapper->Filter( xCellSet ) );
+                if( has_states( aCellPropStates ) )
+                    sStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, aCellPropStates);
                 else
                     sStyleName = sParentStyleName;
 

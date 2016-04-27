@@ -371,7 +371,7 @@ Axis::Axis( const Axis & rOther ) :
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
     m_aScaleData( rOther.m_aScaleData )
 {
-    m_xGrid.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xGrid ));
+    m_xGrid.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xGrid ));
     if( m_xGrid.is())
         ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
 
@@ -382,7 +382,7 @@ Axis::Axis( const Axis & rOther ) :
         lcl_CloneSubGrids( rOther.m_aSubGridProperties, m_aSubGridProperties );
     ModifyListenerHelper::addListenerToAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
 
-    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
+    m_xTitle.set( CloneHelper::CreateRefClone< chart2::XTitle >()( rOther.m_xTitle ));
     if( m_xTitle.is())
         ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
 }
