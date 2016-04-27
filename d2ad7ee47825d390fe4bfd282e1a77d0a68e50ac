@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_e108662b",
+        "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-27T11:10:32Z",
+      "side": 1,
+      "message": "Hi Noel,\nYes, I know that and used mbFinished here by purpose (single mem read). The same with maJobs.empty(), AFAIK this is internal no real list access, but only a count \u003d\u003d 0 check (or even simpler). Despite that, I have secured the real list change/access below.\nIf you are sure that this is not sufficient in this case, please reply and I will change then. BTW: Tried on Win and Linux, both stable.",
+      "parentUuid": "1ac06dbe_72aa461b",
+      "revId": "d2ad7ee47825d390fe4bfd282e1a77d0a68e50ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ac06dbe_52a74a4f",
         "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-04-27T06:58:23Z",
       "side": 1,
       "message": "parallell-\u003eparallel",
+      "revId": "d2ad7ee47825d390fe4bfd282e1a77d0a68e50ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_010e2a34",
+        "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-04-27T11:10:32Z",
+      "side": 1,
+      "message": "Will do when you say I have to secure it above ;-)",
+      "parentUuid": "1ac06dbe_52a74a4f",
       "revId": "d2ad7ee47825d390fe4bfd282e1a77d0a68e50ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
