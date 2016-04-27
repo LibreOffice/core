@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_c12a827e",
+        "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-27T11:17:57Z",
+      "side": 1,
+      "message": "You are correct, your current code is most probably safe. Just be aware that it\u0027s not that robust against any refactoring that may occur in the future - anybody who changes code like this will have to reconsider all the paths through it to be sure they did the right thing.\nAnd relying on internal knowledge of std::list to be sure that your multi-threaded access is correct is also fairly advanced knowledge.",
+      "parentUuid": "da7fb54a_e108662b",
+      "revId": "d2ad7ee47825d390fe4bfd282e1a77d0a68e50ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ac06dbe_52a74a4f",
         "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
         "patchSetId": 1
