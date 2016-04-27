@@ -60,7 +60,8 @@ extern Reference< XInterface > SAL_CALL create_MyService1Impl(
 
 static Sequence< OUString > getSupportedServiceNames_MyService2Impl()
 {
-    Sequence<OUString> names { "my_module.MyService2" };
+    Sequence<OUString> names(1);
+    names[0] = "my_module.MyService2";
     return names;
 }
 

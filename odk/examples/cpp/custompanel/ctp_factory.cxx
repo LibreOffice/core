@@ -108,7 +108,8 @@ namespace sd { namespace colortoolpanel
 
     Sequence< OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames_static() throw (RuntimeException)
     {
-        Sequence< OUString > aServiceNames { "org.openoffice.example.colorpanel.ToolPanelFactory" };
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = "org.openoffice.example.colorpanel.ToolPanelFactory";
         return aServiceNames;
     }
 

@@ -39,12 +39,14 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplNa
 
     if (sImplName == MYLISTENER_IMPLEMENTATIONNAME)
     {
-        css::uno::Sequence<OUString> lNames { MYLISTENER_IMPLEMENTATIONNAME };
+        css::uno::Sequence< ::rtl::OUString > lNames(1);
+        lNames[0] = MYLISTENER_IMPLEMENTATIONNAME;
         xFactory = ::cppu::createSingleFactory(xSMGR, sImplName, MyListener::st_createInstance, lNames);
     }
     else if (sImplName == MYPROTOCOLHANDLER_IMPLEMENTATIONNAME)
     {
-        css::uno::Sequence<OUString> lNames { MYPROTOCOLHANDLER_SERVICENAME };
+        css::uno::Sequence< ::rtl::OUString > lNames(1);
+        lNames[0] = MYPROTOCOLHANDLER_SERVICENAME;
         xFactory = ::cppu::createSingleComponentFactory(MyProtocolHandler_createInstance, sImplName, lNames);
     }
 
