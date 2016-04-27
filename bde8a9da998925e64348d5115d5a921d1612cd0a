@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_e10b067c",
+        "filename": "vcl/source/gdi/lineinfo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T21:39:18Z",
+      "side": 1,
+      "message": "Tiny nit - slightly more idiomatic for a copy ctor would be initializing the mpImplLineInfo from the initializer list - i.e. mpImplLineInfo(rLineInfo.mpImplLineInfo)",
+      "revId": "bde8a9da998925e64348d5115d5a921d1612cd0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
