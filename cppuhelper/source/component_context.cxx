@@ -17,15 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef DIAG
-#define CONTEXT_DIAG
-#endif
-
 #include <unordered_map>
-#ifdef CONTEXT_DIAG
-#include <map>
-#endif
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -67,202 +59,6 @@ using rtl::OUStringHash;
 
 namespace cppu
 {
-
-#ifdef CONTEXT_DIAG
-
-static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * pTypeRef )
-{
-    OSL_ASSERT( pVal );
-    if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
-        return "void";
-
-    OUStringBuffer buf( 64 );
-    buf.append( "(" + pTypeRef->pTypeName + ")" );
-
-    switch (pTypeRef->eTypeClass)
-    {
-    case typelib_TypeClass_INTERFACE:
-        buf.append( "0x" );
-        buf.append( (sal_Int64)*(void **)pVal, 16 );
-        break;
-    case typelib_TypeClass_STRUCT:
-    case typelib_TypeClass_EXCEPTION:
-    {
-        buf.append( "{ " );
-        typelib_TypeDescription * pTypeDescr = 0;
-        ::typelib_typedescriptionreference_getDescription( &pTypeDescr, pTypeRef );
-        OSL_ASSERT( pTypeDescr );
-        if (! pTypeDescr->bComplete)
-            ::typelib_typedescription_complete( &pTypeDescr );
-
-        typelib_CompoundTypeDescription * pCompType = (typelib_CompoundTypeDescription *)pTypeDescr;
-        sal_Int32 nDescr = pCompType->nMembers;
-
-        if (pCompType->pBaseTypeDescription)
-        {
-            buf.append( val2str( pVal, ((typelib_TypeDescription *)pCompType->pBaseTypeDescription)->pWeakRef ) );
-            if (nDescr)
-                buf.append( ", " );
-        }
-
-        typelib_TypeDescriptionReference ** ppTypeRefs = pCompType->ppTypeRefs;
-        sal_Int32 * pMemberOffsets = pCompType->pMemberOffsets;
-        rtl_uString ** ppMemberNames = pCompType->ppMemberNames;
-
-        for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
-        {
-            buf.append( ppMemberNames[ nPos ] );
-            buf.append( " = " );
-            typelib_TypeDescription * pMemberType = 0;
-            TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[ nPos ] );
-            buf.append( val2str( (char *)pVal + pMemberOffsets[ nPos ], pMemberType->pWeakRef ) );
-            TYPELIB_DANGER_RELEASE( pMemberType );
-            if (nPos < (nDescr -1))
-                buf.append( ", " );
-        }
-
-        ::typelib_typedescription_release( pTypeDescr );
-
-        buf.append( " }" );
-        break;
-    }
-    case typelib_TypeClass_SEQUENCE:
-    {
-        typelib_TypeDescription * pTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
-
-        uno_Sequence * pSequence = *(uno_Sequence **)pVal;
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
-
-        sal_Int32 nElementSize = pElementTypeDescr->nSize;
-        sal_Int32 nElements    = pSequence->nElements;
-
-        if (nElements)
-        {
-            buf.append( "{ " );
-            char * pElements = pSequence->elements;
-            for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
-            {
-                buf.append( val2str( pElements + (nElementSize * nPos), pElementTypeDescr->pWeakRef ) );
-                if (nPos < (nElements -1))
-                    buf.append( ", " );
-            }
-            buf.append( " }" );
-        }
-        else
-        {
-            buf.append( "{}" );
-        }
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        TYPELIB_DANGER_RELEASE( pTypeDescr );
-        break;
-    }
-    case typelib_TypeClass_ANY:
-        buf.append( "{ " );
-        buf.append( val2str( ((uno_Any *)pVal)->pData,
-                             ((uno_Any *)pVal)->pType ) );
-        buf.append( " }" );
-        break;
-    case typelib_TypeClass_TYPE:
-        buf.append( (*(typelib_TypeDescriptionReference **)pVal)->pTypeName );
-        break;
-    case typelib_TypeClass_STRING:
-        buf.append( '\"' );
-        buf.append( *(rtl_uString **)pVal );
-        buf.append( '\"' );
-        break;
-    case typelib_TypeClass_ENUM:
-    {
-        typelib_TypeDescription * pTypeDescr = 0;
-        ::typelib_typedescriptionreference_getDescription( &pTypeDescr, pTypeRef );
-        OSL_ASSERT( pTypeDescr );
-        if (! pTypeDescr->bComplete)
-            ::typelib_typedescription_complete( &pTypeDescr );
-
-        sal_Int32 * pValues = ((typelib_EnumTypeDescription *)pTypeDescr)->pEnumValues;
-        sal_Int32 nPos = ((typelib_EnumTypeDescription *)pTypeDescr)->nEnumValues;
-        while (nPos--)
-        {
-            if (pValues[ nPos ] == *(sal_Int32 *)pVal)
-                break;
-        }
-        if (nPos >= 0)
-            buf.append( ((typelib_EnumTypeDescription *)pTypeDescr)->ppEnumNames[ nPos ] );
-        else
-            buf.append( '?' );
-
-        ::typelib_typedescription_release( pTypeDescr );
-        break;
-    }
-    case typelib_TypeClass_BOOLEAN:
-        if (*(sal_Bool *)pVal)
-            buf.append( "true" );
-        else
-            buf.append( "false" );
-        break;
-    case typelib_TypeClass_CHAR:
-        buf.append( '\'' );
-        buf.append( *(sal_Unicode *)pVal );
-        buf.append( '\'' );
-        break;
-    case typelib_TypeClass_FLOAT:
-        buf.append( *(float *)pVal );
-        break;
-    case typelib_TypeClass_DOUBLE:
-        buf.append( *(double *)pVal );
-        break;
-    case typelib_TypeClass_BYTE:
-        buf.append( "0x" );
-        buf.append( (sal_Int32)*(sal_Int8 *)pVal, 16 );
-        break;
-    case typelib_TypeClass_SHORT:
-        buf.append( "0x" );
-        buf.append( (sal_Int32)*(sal_Int16 *)pVal, 16 );
-        break;
-    case typelib_TypeClass_UNSIGNED_SHORT:
-        buf.append( "0x" );
-        buf.append( (sal_Int32)*(sal_uInt16 *)pVal, 16 );
-        break;
-    case typelib_TypeClass_LONG:
-        buf.append( "0x" );
-        buf.append( *(sal_Int32 *)pVal, 16 );
-        break;
-    case typelib_TypeClass_UNSIGNED_LONG:
-        buf.append( "0x" );
-        buf.append( (sal_Int64)*(sal_uInt32 *)pVal, 16 );
-        break;
-    case typelib_TypeClass_HYPER:
-    case typelib_TypeClass_UNSIGNED_HYPER:
-        buf.append( "0x" );
-#if defined(__GNUC__) && defined(SPARC)
-// I guess this really should check if there are strict alignment
-// requirements, not just "GCC on SPARC".
-        {
-            sal_Int64 aVal;
-            *(sal_Int32 *)&aVal = *(sal_Int32 *)pVal;
-            *((sal_Int32 *)&aVal +1)= *((sal_Int32 *)pVal +1);
-            buf.append( aVal, 16 );
-        }
-#else
-        buf.append( *(sal_Int64 *)pVal, 16 );
-#endif
-        break;
-    default:
-        buf.append( '?' );
-    }
-
-    return buf.makeStringAndClear();
-}
-
-static void dumpEntry( OUString const & key, Any const & value )
-{
-    OUString val( val2str( value.getValue(), value.getValueTypeRef() ) );
-    OString key_str( OUStringToOString( key, RTL_TEXTENCODING_ASCII_US ) );
-    OString val_str( OUStringToOString( val, RTL_TEXTENCODING_ASCII_US ) );
-    ::fprintf( stderr, "| %s = %s\n", key_str.getStr(), val_str.getStr() );
-}
-#endif
 
 static inline void try_dispose( Reference< XInterface > const & xInstance )
 {
@@ -504,26 +300,6 @@ sal_Bool ComponentContext::hasElements() throw (RuntimeException, std::exception
 
 Any ComponentContext::lookupMap( OUString const & rName )
 {
-#ifdef CONTEXT_DIAG
-    if ( rName == "dump_maps" )
-    {
-        ::fprintf( stderr, ">>> dumping out ComponentContext %p m_map:\n", this );
-        typedef ::std::map< OUString, ContextEntry * > t_sorted; // sorted map
-        t_sorted sorted;
-        for ( t_map::const_iterator iPos( m_map.begin() ); iPos != m_map.end(); ++iPos )
-        {
-            sorted[ iPos->first ] = iPos->second;
-        }
-        {
-        for ( t_sorted::const_iterator iPos( sorted.begin() ); iPos != sorted.end(); ++iPos )
-        {
-            dumpEntry( iPos->first, iPos->second->value );
-        }
-        }
-        return Any();
-    }
-#endif
-
     ResettableMutexGuard guard( m_mutex );
     t_map::const_iterator iFind( m_map.find( rName ) );
     if (iFind == m_map.end())
@@ -652,9 +428,6 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 
 ComponentContext::~ComponentContext()
 {
-#ifdef CONTEXT_DIAG
-    ::fprintf( stderr, "> destructed context %p\n", this );
-#endif
     t_map::const_iterator iPos( m_map.begin() );
     t_map::const_iterator const iEnd( m_map.end() );
     for ( ; iPos != iEnd; ++iPos )
@@ -664,10 +437,6 @@ ComponentContext::~ComponentContext()
 
 void ComponentContext::disposing()
 {
-#ifdef CONTEXT_DIAG
-    ::fprintf( stderr, "> disposing context %p\n", this );
-#endif
-
     Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
 
     // dispose all context objects
