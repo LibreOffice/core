@@ -228,7 +228,8 @@ bool Image::operator==(const Image& rImage) const
 
 void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize)
 {
-    if (mpImplData == nullptr || !mpImplData->mpBitmapEx || !pOutDev->IsDeviceOutputNecessary())
+    if (mpImplData == nullptr || !mpImplData->mpBitmapEx ||
+        (!pOutDev->IsDeviceOutputNecessary() && pOutDev->GetConnectMetaFile() == nullptr))
         return;
 
     const Point aSrcPos(0, 0);
