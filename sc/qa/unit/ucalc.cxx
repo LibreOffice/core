@@ -2504,8 +2504,10 @@ void Test::testFunctionLists()
         "IF",
         "IFERROR",
         "IFNA",
+        "IFS",
         "NOT",
         "OR",
+        "SWITCH",
         "TRUE",
         "XOR",
         nullptr
