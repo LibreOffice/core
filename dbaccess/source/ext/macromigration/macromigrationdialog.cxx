@@ -135,7 +135,7 @@ namespace dbmm
         describeState( STATE_MIGRATE,           sTitleMigrate, &ProgressPage::Create      );
         describeState( STATE_SUMMARY,           sTitleSummary, &ResultPage::Create        );
 
-        declarePath( PATH_DEFAULT, STATE_CLOSE_SUB_DOCS, STATE_BACKUP_DBDOC, STATE_MIGRATE, STATE_SUMMARY, WZS_INVALID_STATE );
+        declarePath( PATH_DEFAULT, {STATE_CLOSE_SUB_DOCS, STATE_BACKUP_DBDOC, STATE_MIGRATE, STATE_SUMMARY} );
 
         SetPageSizePixel( LogicToPixel( ::Size( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT ), MAP_APPFONT ) );
         SetRoadmapInteractive( true );

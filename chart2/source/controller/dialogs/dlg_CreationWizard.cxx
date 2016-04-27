@@ -65,11 +65,10 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
     this->setTitleBase(SCH_RESSTR(STR_DLG_CHART_WIZARD));
 
     declarePath( PATH_FULL
-        , STATE_CHARTTYPE
+        , {STATE_CHARTTYPE
         , STATE_SIMPLE_RANGE
         , STATE_DATA_SERIES
-        , STATE_OBJECTS
-        , WZS_INVALID_STATE
+        , STATE_OBJECTS}
     );
     this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
     this->SetRoadmapInteractive( true );

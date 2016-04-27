@@ -24,8 +24,6 @@
 #include <roadmap.hxx>
 #include <tools/debug.hxx>
 
-#include <stdarg.h>
-
 #include <vector>
 #include <map>
 #include <set>
@@ -179,35 +177,6 @@ namespace svt
             activatePath( _nPathId );
         else
             implUpdateRoadmap( );
-    }
-
-
-    void RoadmapWizard::declarePath( PathId _nPathId, WizardState _nFirstState, ... )
-    {
-
-        DBG_ASSERT( _nFirstState != WZS_INVALID_STATE, "RoadmapWizard::declarePath: there should be at least one state in the path!" );
-        if ( _nFirstState == WZS_INVALID_STATE )
-            return;
-
-        WizardPath aNewPath;
-
-        // collect the elements of the path
-        va_list aStateList;
-        va_start( aStateList, _nFirstState );
-
-        WizardState nState = _nFirstState;
-        while ( nState != WZS_INVALID_STATE )
-        {
-            aNewPath.push_back( nState );
-            nState = sal::static_int_cast< WizardState >(
-                va_arg( aStateList, int ));
-        }
-        va_end( aStateList );
-
-        DBG_ASSERT( _nFirstState == 0, "RoadmapWizard::declarePath: first state must be NULL." );
-            // The WizardDialog (our very base class) always starts with a mnCurLevel == 0
-
-        declarePath( _nPathId, aNewPath );
     }
 
 

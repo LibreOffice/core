@@ -107,13 +107,7 @@ namespace svt
             @param _nId
                 the unique id you wish to give this path. This id can later on be used
                 to refer to the path which you just declared
-
-            @param _nFirstState
-                the first state in this path. Must not be WZS_INVALID_STATE.<br/>
-                Declare an arbitrary number of states after this one, and terminate the sequence
-                with a WZS_INVALID_STATE.
         */
-        void    declarePath( PathId _nPathId, WizardState _nFirstState, ... );
         void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
 
         /** provides basic information about a state

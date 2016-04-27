@@ -64,21 +64,19 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
     if(rItem.IsMailAvailable())
         declarePath(
             0,
-            MM_DOCUMENTSELECTPAGE,
+            {MM_DOCUMENTSELECTPAGE,
             MM_OUTPUTTYPETPAGE,
             MM_ADDRESSBLOCKPAGE,
             MM_GREETINGSPAGE,
-            MM_LAYOUTPAGE,
-            WZS_INVALID_STATE
+            MM_LAYOUTPAGE}
         );
     else
         declarePath(
             0,
-            MM_DOCUMENTSELECTPAGE,
+            {MM_DOCUMENTSELECTPAGE,
             MM_ADDRESSBLOCKPAGE,
             MM_GREETINGSPAGE,
-            MM_LAYOUTPAGE,
-            WZS_INVALID_STATE
+            MM_LAYOUTPAGE}
         );
 
     ActivatePage();

@@ -64,32 +64,28 @@ namespace abp
         SetPageSizePixel(LogicToPixel(Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
 
         declarePath( PATH_COMPLETE,
-            STATE_SELECT_ABTYPE,
+            {STATE_SELECT_ABTYPE,
             STATE_INVOKE_ADMIN_DIALOG,
             STATE_TABLE_SELECTION,
             STATE_MANUAL_FIELD_MAPPING,
-            STATE_FINAL_CONFIRM,
-            WZS_INVALID_STATE
+            STATE_FINAL_CONFIRM}
         );
         declarePath( PATH_NO_SETTINGS,
-            STATE_SELECT_ABTYPE,
+            {STATE_SELECT_ABTYPE,
             STATE_TABLE_SELECTION,
             STATE_MANUAL_FIELD_MAPPING,
-            STATE_FINAL_CONFIRM,
-            WZS_INVALID_STATE
+            STATE_FINAL_CONFIRM}
         );
         declarePath( PATH_NO_FIELDS,
-            STATE_SELECT_ABTYPE,
+            {STATE_SELECT_ABTYPE,
             STATE_INVOKE_ADMIN_DIALOG,
             STATE_TABLE_SELECTION,
-            STATE_FINAL_CONFIRM,
-            WZS_INVALID_STATE
+            STATE_FINAL_CONFIRM}
         );
         declarePath( PATH_NO_SETTINGS_NO_FIELDS,
-            STATE_SELECT_ABTYPE,
+            {STATE_SELECT_ABTYPE,
             STATE_TABLE_SELECTION,
-            STATE_FINAL_CONFIRM,
-            WZS_INVALID_STATE
+            STATE_FINAL_CONFIRM}
         );
 
         m_pPrevPage->SetHelpId(HID_ABSPILOT_PREVIOUS);
