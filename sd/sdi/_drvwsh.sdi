@@ -2612,6 +2612,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_ATTR_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetPageProperties ;
+    ]
     SID_ATTR_PAGE_SIZE
     [
         ExecMethod = FuTemporary ;
