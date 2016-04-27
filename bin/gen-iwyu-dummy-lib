@@ -37,12 +37,12 @@ echo '$(eval $(call gb_Module_add_targets,iwyudummy,StaticLibrary_iwyudummy))' >
 
 # prevent some common configuration errors
 echo 'ifneq ($(COMPILER_PLUGINS),)' > ${iwyu_LIB}
-echo '    $(call gb_Output_error,--enable-compiler-plugins does not work well with this: bailing out)' > ${iwyu_LIB}
-echo 'endif' > ${iwyu_LIB}
+echo '    $(call gb_Output_error,--enable-compiler-plugins does not work well with this: bailing out)' >> ${iwyu_LIB}
+echo 'endif' >> ${iwyu_LIB}
 
-echo '$(eval $(call gb_StaticLibrary_StaticLibrary,iwyudummy))' > ${iwyu_LIB}
+echo '$(eval $(call gb_StaticLibrary_StaticLibrary,iwyudummy))' >> ${iwyu_LIB}
 # clang will "compile" headers to .gch by default
-echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++ -Wno-unused-macros))' >> ${iwyu_LIB}
+echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++ -Wno-unused-macros -Wno-unused-const-variable))' >> ${iwyu_LIB}
 echo '$(eval $(call gb_StaticLibrary_use_custom_headers,iwyudummy,officecfg/registry))' >> ${iwyu_LIB}
 echo '$(eval $(call gb_StaticLibrary_use_sdk_api,iwyudummy))' >> ${iwyu_LIB}
 echo '$(eval $(call gb_StaticLibrary_use_externals,iwyudummy,\' >> ${iwyu_LIB}
