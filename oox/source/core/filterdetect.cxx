@@ -387,11 +387,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     OUString aFilterName;
     MediaDescriptor aMediaDescriptor( rMediaDescSeq );
 
-    /*  Check that the user has not chosen to abort detection, e.g. by hitting
-        'Cancel' in the password input dialog. This may happen because this
-        filter detection is used by different filters. */
-    bool bAborted = aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED(), false );
-    if( !bAborted ) try
+    try
     {
         aMediaDescriptor.addInputStream();
 
@@ -420,6 +416,18 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     }
     catch( const Exception& )
     {
+        if ( aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED(), false ) )
+            /*  The user chose to abort detection, e.g. by hitting 'Cancel' in the password input dialog,
+                so we have to return non-empty type name to abort the detection loop. The loading code is
+                supposed to check whether the "Aborted" flag is present in the descriptor, and to not attempt
+                to actually load the file then.
+
+                The returned type name is the one we got as an input, which typically was detected by the flat
+                detection (i.e. by file extension), so normally that's the correct one. Also at this point we
+                already know that the file is OLE encrypted package, so trying with other type detectors doesn't
+                make much sense anyway.
+            */
+            aFilterName = aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
     }
 
     // write back changed media descriptor members

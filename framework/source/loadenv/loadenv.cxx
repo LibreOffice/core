@@ -781,6 +781,11 @@ void LoadEnv::impl_detectTypeAndFilter()
     aWriteLock.clear();
     // <- SAFE
 
+    // We do have potentially correct type, but the detection process was aborted.
+    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED(), false))
+        throw LoadEnvException(
+            LoadEnvException::ID_UNSUPPORTED_CONTENT, "type detection aborted");
+
     // But the type isn't enough. For loading sometimes we need more information.
     // E.g. for our "_default" feature, where we recycle any frame which contains
     // and "Untitled" document, we must know if the new document is based on a template!
