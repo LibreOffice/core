@@ -129,7 +129,7 @@ struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 typedef std::unordered_map<
     OUString, MappingEntry *, OUStringHash > t_OUString2Entry;
 typedef std::unordered_map<
-    uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
+    uno_Mapping *, MappingEntry *, FctPtrHash > t_Mapping2Entry;
 
 typedef set< uno_getMappingFunc > t_CallbackSet;
 typedef set< OUString > t_OUStringSet;
