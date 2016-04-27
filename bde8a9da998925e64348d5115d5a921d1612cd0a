@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_614e16c3",
+        "filename": "vcl/source/gdi/mapmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T23:31:23Z",
+      "side": 0,
+      "message": "Urk. Wow. This is terrible. You unearthed quite a wart here -",
+      "revId": "bde8a9da998925e64348d5115d5a921d1612cd0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_811ddabf",
+        "filename": "include/vcl/mapmod.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T23:31:23Z",
+      "side": 1,
+      "message": "That public now is redundant",
+      "revId": "e2350c243aa96a8018521f21db20590e097635f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_814b1ab0",
+        "filename": "vcl/source/gdi/mapmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T23:31:23Z",
+      "side": 1,
+      "message": "In the light of the code below, perhaps this could even be true?",
+      "revId": "e2350c243aa96a8018521f21db20590e097635f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a1c65e14",
+        "filename": "vcl/source/gdi/mapmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T23:31:23Z",
+      "side": 1,
+      "message": "With the redux to ImplMapMode, why not use the compiler-provided copy ctor?\n\nThis unconditional mbSimple \u003d false looks rather wrong to me.",
+      "revId": "e2350c243aa96a8018521f21db20590e097635f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_21db2eef",
+        "filename": "vcl/source/gdi/mapmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T23:31:23Z",
+      "side": 1,
+      "message": "This is a slight deviation from the original code - which used static instances for all 14 or so map units.\n\nThe old long array + reinterpret cast is just sheer horror, so no immediate objection to bin that; still perhaps worth profiling (or just tracing \u0026 counting the lines) how often this ctor here gets called.\n\nIf this is on critical paths, then replicating the more common cases would be in order. Happy to suggest ways then.",
+      "revId": "e2350c243aa96a8018521f21db20590e097635f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_41d832f0",
+        "filename": "vcl/source/gdi/mapmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T23:31:23Z",
+      "side": 1,
+      "message": "If you change the mbSimple default above, then this code here needs an amendment ;)",
+      "revId": "e2350c243aa96a8018521f21db20590e097635f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_61e536a7",
+        "filename": "vcl/source/gdi/mapmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-04-27T23:31:23Z",
+      "side": 1,
+      "message": "Or just a thought - use the code you earlier looked at in drawinglayer SdrFillAttribute?",
+      "revId": "e2350c243aa96a8018521f21db20590e097635f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
