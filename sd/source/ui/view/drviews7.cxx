@@ -1550,7 +1550,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
 void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
 {
-    rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, getCurrentPage()->GetSize()));
+    SdPage *pPage = getCurrentPage();
+    SvxPageItem aPageItem(SID_ATTR_PAGE);
+    aPageItem.SetLandscape( pPage->GetOrientation() == ORIENTATION_LANDSCAPE );
+
+    rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize()));
+    rSet.Put( aPageItem );
 }
 
 void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
