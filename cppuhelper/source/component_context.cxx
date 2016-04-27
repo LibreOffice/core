@@ -22,10 +22,6 @@
 #define CONTEXT_DIAG
 #endif
 
-#if OSL_DEBUG_LEVEL > 0
-#include <stdio.h>
-#endif
-
 #include <unordered_map>
 #ifdef CONTEXT_DIAG
 #include <map>
@@ -565,11 +561,6 @@ Any ComponentContext::lookupMap( OUString const & rName )
             if (usesService >>= xFac2)
             {
                 // try via old XSingleServiceFactory
-#if OSL_DEBUG_LEVEL > 0
-                ::fprintf(
-                    stderr,
-                    "### omitting context for service instantiation!\n" );
-#endif
                 xInstance = args.getLength()
                     ? xFac2->createInstanceWithArguments( args )
                     : xFac2->createInstance();
