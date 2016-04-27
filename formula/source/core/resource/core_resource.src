@@ -289,6 +289,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CONCAT { Text = "CONCATENATE" ; };
     String SC_OPCODE_CONCAT_MS { Text = "COM.MICROSOFT.CONCAT" ; };
     String SC_OPCODE_TEXTJOIN_MS { Text = "COM.MICROSOFT.TEXTJOIN" ; };
+    String SC_OPCODE_IFS_MS { Text = "COM.MICROSOFT.IFS" ; };
+    String SC_OPCODE_SWITCH_MS { Text = "COM.MICROSOFT.SWITCH" ; };
     String SC_OPCODE_MAT_VALUE { Text = "MVALUE" ; };
     String SC_OPCODE_MAT_DET { Text = "MDETERM" ; };
     String SC_OPCODE_MAT_INV { Text = "MINVERSE" ; };
@@ -725,6 +727,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CONCAT { Text = "CONCATENATE" ; };
     String SC_OPCODE_CONCAT_MS { Text = "_xlfn.CONCAT" ; };
     String SC_OPCODE_TEXTJOIN_MS { Text = "_xlfn.TEXTJOIN" ; };
+    String SC_OPCODE_IFS_MS { Text = "_xlfn.IFS" ; };
+    String SC_OPCODE_SWITCH_MS { Text = "_xlfn.SWITCH" ; };
     String SC_OPCODE_MAT_VALUE { Text = "MVALUE" ; };
     String SC_OPCODE_MAT_DET { Text = "MDETERM" ; };
     String SC_OPCODE_MAT_INV { Text = "MINVERSE" ; };
@@ -1161,6 +1165,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CONCAT { Text = "CONCATENATE" ; };
     String SC_OPCODE_CONCAT_MS { Text = "CONCAT" ; };
     String SC_OPCODE_TEXTJOIN_MS { Text = "TEXTJOIN" ; };
+    String SC_OPCODE_IFS_MS { Text = "IFS" ; };
+    String SC_OPCODE_SWITCH_MS { Text = "SWITCH" ; };
     String SC_OPCODE_MAT_VALUE { Text = "MVALUE" ; };
     String SC_OPCODE_MAT_DET { Text = "MDETERM" ; };
     String SC_OPCODE_MAT_INV { Text = "MINVERSE" ; };
@@ -2334,6 +2340,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_TEXTJOIN_MS
     {
         Text [ en-US ] = "TEXTJOIN" ;
+    };
+    String SC_OPCODE_IFS_MS
+    {
+        Text [ en-US ] = "IFS" ;
+    };
+    String SC_OPCODE_SWITCH_MS
+    {
+        Text [ en-US ] = "SWITCH" ;
     };
     String SC_OPCODE_MAT_VALUE
     {

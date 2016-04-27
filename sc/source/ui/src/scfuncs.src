@@ -11591,6 +11591,78 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Text and/or cell ranges for the concatenation." ;
         };
     };
+     // -=*# Resource for function IFS #*=-
+    Resource SC_OPCODE_IFS_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Checks 1 or more conditions and returns a value corresponding to the first true condition." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_LOGIC;
+            HID_FUNC_IFS_MS;
+            PAIRED_VAR_ARGS;  0; 0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Test" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Any value or expression which can be either TRUE or FALSE." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "result" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The result of the function if test is TRUE." ;
+        };
+    };
+     // -=*# Resource for function SWITCH #*=-
+    Resource SC_OPCODE_SWITCH_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Checks 1 or more conditions and returns a value corresponding to the first true condition." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_LOGIC;
+            HID_FUNC_SWITCH_MS;
+            PAIRED_VAR_ARGS + 1;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "expression" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Value that will be compared against value1-valueN." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "value " ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Value that will be compared against expression." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "result" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Value to return when corresponding value argument matches expression." ;
+        };
+    };
      // -=*# Resource for function EXACT #*=-
     Resource SC_OPCODE_EXACT
     {
