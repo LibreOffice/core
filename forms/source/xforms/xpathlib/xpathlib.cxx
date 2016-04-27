@@ -277,8 +277,11 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     be omitted or, if present, the time zone must be Coordinated Universal tools::Time (UTC)
     indicated by a "Z".
     */
-    DateTime aDateTime( DateTime::SYSTEM );
-    OString aDateTimeString = makeDateTimeString(aDateTime);
+    OString aDateTimeString;
+    if (std::getenv("STABLE_FIELDS_HACK"))
+        aDateTimeString = makeDateTimeString(DateTime(DateTime::EMPTY));
+    else
+        aDateTimeString = makeDateTimeString(DateTime(DateTime::SYSTEM));
     xmlChar *pString = static_cast<xmlChar*>(xmlMalloc(aDateTimeString.getLength()+1));
     strncpy(reinterpret_cast<char*>(pString), aDateTimeString.getStr(), aDateTimeString.getLength());
     pString[aDateTimeString.getLength()] = 0;

@@ -945,8 +945,11 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             else if( nSub == DI_PRINT )
             {
                 aName = xDocProps->getPrintedBy();
-                uDT = xDocProps->getPrintDate();
-                aDate = DateTime(uDT);
+                if ( !std::getenv("STABLE_FIELDS_HACK") )
+                {
+                    uDT = xDocProps->getPrintDate();
+                    aDate = DateTime(uDT);
+                }
             }
             else
                 break;
