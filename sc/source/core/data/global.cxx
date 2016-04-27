@@ -676,6 +676,11 @@ rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
     else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
     else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
     else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
+    // Some wrong "help" on the net mentions UTF8 and even unoconv uses it,
+    // which worked accidentally if the system encoding is UTF-8 anyway, so
+    // support it ;) but only when reading.
+    else if (rCharSet.equalsIgnoreAsciiCase("UTF8"))      return RTL_TEXTENCODING_UTF8;
+    else if (rCharSet.equalsIgnoreAsciiCase("UTF-8"))     return RTL_TEXTENCODING_UTF8;
     else return osl_getThreadTextEncoding();
 }
 
