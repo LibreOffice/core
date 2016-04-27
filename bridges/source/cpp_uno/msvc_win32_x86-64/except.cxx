@@ -309,7 +309,7 @@ static inline OUString toRTTIname(
 
 //RTTI simulation
 
-typedef std::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
+typedef std::unordered_map< OUString, void *, OUStringHash > t_string2PtrMap;
 class __type_info_descriptor;
 
 class RTTInfos
