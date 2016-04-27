@@ -553,6 +553,20 @@ DECLARE_WW8IMPORT_TEST(testTdf99120, "tdf99120.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf74328, "tdf74328.doc")
+{
+/*
+reading page numbers at sections > 255, in this case 256
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xTextCursor(textDocument->getText()->createTextCursor( ), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProps(xTextCursor, uno::UNO_QUERY);
+    uno::Any aOffset = xProps->getPropertyValue("PageNumberOffset");
+    sal_Int16 nOffset = 0;
+    aOffset >>= nOffset;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(256), nOffset);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
