@@ -2497,6 +2497,17 @@ DECLARE_RTFIMPORT_TEST(testTdf96308Tabpos, "tdf96308-tabpos.rtf")
     CPPUNIT_ASSERT(!aTabStops.hasElements());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf99498, "tdf99498.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+
+    // Table width was a tiny sub one char wide 145twips, it should now be a table wide
+    // enough to see all the text in the first column without breaking into multiple lines
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7056), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+}
+
+
 DECLARE_RTFIMPORT_TEST(testTdf87034, "tdf87034.rtf")
 {
     // This was A1BC34D, i.e. the first "super" text portion was mis-imported,
