@@ -377,6 +377,8 @@ formula::StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 formula::StackVar GetStackType( sal_uInt8 nParam );
 sal_uInt8 GetByte() { return cPar; }
+// reverse order of stack
+void ReverseStack( sal_uInt8 nParamCount );
 // generates a position-dependent SingleRef out of a DoubleRef
 bool DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDoubleFromMatrix(const ScMatrixRef& pMat);
@@ -604,6 +606,8 @@ void ScRept();
 void ScConcat();
 void ScConcat_MS();
 void ScTextJoin_MS();
+void ScIfs_MS();
+void ScSwitch_MS();
 void ScExternal();
 void ScMissing();
 void ScMacro();
