@@ -99,7 +99,8 @@ public class LocalOfficeConnection
             catch (Throwable e)
             {
                 // loading twice would fail
-                System.err.println( "cannot find uwinapi" );
+                System.err.println("cannot find uwinapi:");
+                e.printStackTrace();
             }
 
             try
@@ -109,7 +110,8 @@ public class LocalOfficeConnection
             catch (Throwable e)
             {
                 // loading twice would fail
-                System.err.println( "cannot find jawt" );
+                System.err.println("cannot find jawt:");
+                e.printStackTrace();
             }
         }
 
@@ -773,3 +775,5 @@ public class LocalOfficeConnection
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
