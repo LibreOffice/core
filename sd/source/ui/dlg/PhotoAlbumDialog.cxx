@@ -116,6 +116,11 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
 
+        // determine if to use Captions (use TitleObject) and choose the correct AutoLayout
+        // from the beginning
+        const bool bCreateCaptions(pCapCheck->IsChecked());
+        const AutoLayout aAutoLayout(bCreateCaptions ? AUTOLAYOUT_TITLE_ONLY : AUTOLAYOUT_NONE);
+
         // get the option
         const sal_Int32 nOpt = pInsTypeCombo->GetSelectEntryPos();
         if ( nOpt == ONE_IMAGE )
@@ -126,7 +131,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 OUString const * pData = static_cast<OUString const *>(pImagesLst->GetEntryData(i));
                 sUrl = *pData;
 
-                Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
+                Reference< drawing::XDrawPage > xSlide = appendNewSlide(aAutoLayout, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
 
                 Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl, xProvider);
@@ -168,7 +173,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                 xShape->setPosition(aPicPos);
                 xSlide->add(xShape);
-                if(pCapCheck->IsChecked())
+                if(bCreateCaptions)
                     createCaption( aPageSize );
             }
         }
@@ -182,7 +187,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 OUString const * pData = nullptr;
 
                 // create the slide
-                Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
+                Reference< drawing::XDrawPage > xSlide = appendNewSlide(aAutoLayout, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
                 //Slide dimensions
                 ::awt::Size aPageSize;
@@ -270,7 +275,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
-                    if(pCapCheck->IsChecked())
+                    if(bCreateCaptions)
                         createCaption( aPageSize );
 
                 }
@@ -287,7 +292,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
             {
                 OUString* pData = nullptr;
                 // create the slide
-                Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
+                Reference< drawing::XDrawPage > xSlide = appendNewSlide(aAutoLayout, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
                 //Slide dimensions
                 ::awt::Size aPageSize;
@@ -453,7 +458,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
-                    if(pCapCheck->IsChecked())
+                    if(bCreateCaptions)
                         createCaption( aPageSize );
 
                 }
@@ -678,14 +683,39 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     CapPos.X() = 0;
     CapPos.Y() = aPageSize.Height - CapSize.Height();
     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD );
-    Rectangle rRect(CapPos,CapSize);
-    SdrObject* pSdrObj = pSlide->CreatePresObj(PRESOBJ_TITLE,false,rRect);
-    SdrModel* pSdrModel = pDoc->AllocModel();
-    SfxItemSet aSet(pSdrModel->GetItemPool() );
-    aSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
-    aSet.Put( XFillColorItem( "", Color(COL_BLACK) ) );
-    aSet.Put( XFillTransparenceItem( 20 ) );
-    pSdrObj->SetMergedItemSetAndBroadcast(aSet);
+
+    // try to get existing PresObj
+    const Rectangle rRect(CapPos,CapSize);
+    SdrObject* pSdrObj = pSlide->GetPresObj(PRESOBJ_TITLE, 1);
+
+    if(!pSdrObj)
+    {
+        // if not exists, create. Beware: It is already inserted to the SdPage
+        pSdrObj = pSlide->CreatePresObj(PRESOBJ_TITLE,false,rRect);
+    }
+    else
+    {
+        // if exists, bring to front and position it
+        const size_t nObjNum(pSlide->GetObjCount());
+
+        if(nObjNum)
+        {
+            pSlide->SetObjectOrdNum(pSdrObj->GetOrdNum(), nObjNum - 1);
+        }
+
+        pSdrObj->SetSnapRect(rRect);
+    }
+
+    if(pSdrObj)
+    {
+        // set color, style and some transparency
+        SfxItemSet aSet(pDoc->GetItemPool() );
+
+        aSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
+        aSet.Put( XFillColorItem( "", Color(COL_BLACK) ) );
+        aSet.Put( XFillTransparenceItem( 20 ) );
+        pSdrObj->SetMergedItemSetAndBroadcast(aSet);
+    }
 }
 
 Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OUString& sUrl,
