@@ -249,6 +249,11 @@ template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
 
 /** Template function to generically construct an any from a C++ value.
 
+    This can be useful with an explicitly specified template parameter, when the
+    (UNO) type recorded in the Any instance shall be different from what would
+    be deduced from the (C++) type of the argument if no template parameter were
+    specified explicitly.
+
     @tparam C value type
     @param value a value
     @return an any
