@@ -997,7 +997,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         /*sprmSDxaRight*/       0xB022,
         /*sprmSDzaGutter*/      0xB025,
         /*sprmSFPgnRestart*/    0x3011,
-        /*sprmSPgnStart*/       0x501C,
+        /*sprmSPgnStart97*/     0x501C,
            /*sprmSDmBinFirst*/     0x5007,
         /*sprmSDmBinOther*/     0x5008
     };
@@ -1035,7 +1035,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
     // Page Number Restarts - sprmSFPgnRestart
     aNewSection.maSep.fPgnRestart = ReadBSprm(pSep, pIds[6], 0);
 
-    aNewSection.maSep.pgnStart = ReadBSprm( pSep, pIds[7], 0 );
+    aNewSection.maSep.pgnStart = ReadUSprm( pSep, pIds[7], 0 );
 
     if (eVer >= ww::eWW6)
     {
