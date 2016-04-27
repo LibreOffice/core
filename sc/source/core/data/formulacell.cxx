@@ -450,17 +450,20 @@ MightReferenceSheet mightRangeNameReferenceSheet( ScRangeData* pData, SCTAB nRef
 
 // See also lcl_FindRangeNamesInUse() below.
 /** Recursively find all named expressions that directly or indirectly (nested)
-    reference a given sheet.
+    reference a given sheet, starting from a given named expression
+    nTokenTab/nTokenIndex.
 
-    @param  pToken
-            A token of type svIndex with OpCode ocName.
+    @param  nTokenTab
+            Tab/sheet on which to find the name, -1 if global scope. Obtained
+            from ocName token.
+
+    @param  nTokenIndex
+            Index of named expression. Obtained from ocName token.
  */
-bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const FormulaToken* pToken,
+bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, SCTAB nTokenTab, const sal_uInt16 nTokenIndex,
         const ScDocument* pDoc, SCTAB nGlobalRefTab, SCTAB nLocalRefTab,
         SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement, bool bSameDoc, int nRecursion)
 {
-    const sal_uInt16 nTokenIndex = pToken->GetIndex();
-    SCTAB nTokenTab = pToken->GetSheet();
     if (nTokenTab < -1)
     {
         SAL_WARN("sc.core", "findRangeNamesReferencingSheet - nTokenTab < -1 : " <<
@@ -500,8 +503,8 @@ bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const Form
         {
             if (p->GetOpCode() == ocName)
             {
-                bRef |= findRangeNamesReferencingSheet( rIndexes, p, pDoc, nGlobalRefTab, nLocalRefTab,
-                        nOldTokenTab, nOldTokenTabReplacement, bSameDoc, nRecursion+1);
+                bRef |= findRangeNamesReferencingSheet( rIndexes, p->GetSheet(), p->GetIndex(), pDoc,
+                        nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, nRecursion+1);
             }
         }
     }
@@ -648,7 +651,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     /* TODO: can we do something about that? e.g. loop over sheets? */
 
     OUString aRangeName;
-    int nOldIndex = pToken->GetIndex();
+    const sal_uInt16 nOldIndex = pToken->GetIndex();
     ScRangeData* pOldRangeData = nullptr;
 
     // XXX bGlobalNamesToLocal is also a synonym for copied sheet.
@@ -715,7 +718,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
             const SCTAB nOldTokenTab = (nOldSheet < 0 ? (bInsertingBefore ? nOldTab-1 : nOldTab) : nOldSheet);
             const SCTAB nOldTokenTabReplacement = nOldTab;
             sc::UpdatedRangeNames aReferencingNames;
-            findRangeNamesReferencingSheet( aReferencingNames, pToken, pOldDoc,
+            findRangeNamesReferencingSheet( aReferencingNames, nOldSheet, nOldIndex, pOldDoc,
                     nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, 0);
             if (bEarlyBailOut && aReferencingNames.isEmpty(-1) && aReferencingNames.isEmpty(nOldTokenTabReplacement))
                 return;
