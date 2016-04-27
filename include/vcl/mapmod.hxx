@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/mapunit.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 class Point;
 class Fraction;
@@ -35,12 +36,6 @@ class VCL_DLLPUBLIC MapMode
 
 public:
     struct ImplMapMode;
-
-private:
-    ImplMapMode*        mpImplMapMode;
-
-    SAL_DLLPRIVATE void ImplMakeUnique();
-    SAL_DLLPRIVATE bool IsSimple() const;
 
 public:
                     MapMode();
@@ -72,6 +67,13 @@ public:
 
     friend VCL_DLLPUBLIC SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
     friend VCL_DLLPUBLIC SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );
+
+    typedef o3tl::cow_wrapper< ImplMapMode > ImplType;
+
+private:
+    ImplType        mpImplMapMode;
+
+    SAL_DLLPRIVATE bool IsSimple() const;
 };
 
 #endif // INCLUDED_VCL_MAPMOD_HXX
