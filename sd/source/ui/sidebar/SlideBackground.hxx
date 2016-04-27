@@ -79,7 +79,8 @@ private:
     VclPtr<CheckBox> mpDspMasterBackground;
     VclPtr<CheckBox> mpDspMasterObjects;
 
-    ::sfx2::sidebar::ControllerItem maPaperController;
+    ::sfx2::sidebar::ControllerItem maPaperSizeController;
+    ::sfx2::sidebar::ControllerItem maPaperOrientationController;
     ::sfx2::sidebar::ControllerItem maBckColorController;
     ::sfx2::sidebar::ControllerItem maBckGradientController;
     ::sfx2::sidebar::ControllerItem maBckHatchController;
@@ -103,6 +104,7 @@ private:
     DECL_LINK_TYPED(FillBackgroundHdl, ListBox&, void);
     DECL_LINK_TYPED(FillStyleModifyHdl, ListBox&, void);
     DECL_LINK_TYPED(PaperSizeModifyHdl, ListBox&, void);
+    DECL_LINK_TYPED(PaperOrientationModifyHdl, ListBox&, void);
     DECL_LINK_TYPED(FillColorHdl, ListBox&, void);
     DECL_LINK_TYPED(AssignMasterPage, ListBox&, void);
     DECL_LINK_TYPED(DspBackground, Button*, void);
