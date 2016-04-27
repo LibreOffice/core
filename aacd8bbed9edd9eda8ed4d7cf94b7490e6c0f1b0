@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_92c0a2e2",
+        "filename": "compilerplugins/clang/implicitboolconversion.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-27T06:44:02Z",
+      "side": 1,
+      "message": "ha, good find\nhowever, for one, the order of arguments to the comparison operator should be reversed, for readability\u0027s sake\nand, for another, the comparison operator should be \u003d\u003d, not !\u003d",
+      "revId": "aacd8bbed9edd9eda8ed4d7cf94b7490e6c0f1b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_f2b5967e",
+        "filename": "compilerplugins/clang/sallogareas.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-04-27T06:44:02Z",
+      "side": 1,
+      "message": "please be consistent with the spacing; either a space on both sides of \"nullptr\" or none at all",
+      "revId": "aacd8bbed9edd9eda8ed4d7cf94b7490e6c0f1b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
