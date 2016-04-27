@@ -1704,6 +1704,14 @@ postMouseEventInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    std::stringstream ss;
+    ss << "lok::Document::postMouseEvent(" << pLOEvent->m_nPostMouseEventType;
+    ss << ", " << pLOEvent->m_nPostMouseEventX;
+    ss << ", " << pLOEvent->m_nPostMouseEventY;
+    ss << ", " << pLOEvent->m_nPostMouseEventCount;
+    ss << ", " << pLOEvent->m_nPostMouseEventButton;
+    ss << ", " << pLOEvent->m_nPostMouseEventModifier << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->postMouseEvent(priv->m_pDocument,
                                               pLOEvent->m_nPostMouseEventType,
                                               pLOEvent->m_nPostMouseEventX,
