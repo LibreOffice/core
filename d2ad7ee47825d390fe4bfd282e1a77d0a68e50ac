@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac06dbe_72aa461b",
+        "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-27T06:58:23Z",
+      "side": 1,
+      "message": "you\u0027re reading mbFinished without holding the mutex.\n\nIf it\u0027s not critical that it be read immediately, make it volatile, otherwise make std::atomic\u003cbool\u003e and then you can read and write it without holding a mutex.\n\nMore importantly, you\u0027re also reading maJobs without prote tion, which means the CPU could see inconsistent pointers and potentially crash.\nSee:\nhttp://stackoverflow.com/questions/11341834/stdlist-thread-safety\nfor a nice explanation.",
+      "revId": "d2ad7ee47825d390fe4bfd282e1a77d0a68e50ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ac06dbe_52a74a4f",
+        "filename": "drawinglayer/source/processor3d/zbufferprocessor3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-27T06:58:23Z",
+      "side": 1,
+      "message": "parallell-\u003eparallel",
+      "revId": "d2ad7ee47825d390fe4bfd282e1a77d0a68e50ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
