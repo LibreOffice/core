@@ -694,7 +694,7 @@ bool ScValidationData::GetSelectionFromFormula(
         }
         else if (eOpCode == ocName)
         {
-            const ScRangeData* pName = pDocument->FindRangeNameByIndexAndSheet( t->GetIndex(), t->GetSheet());
+            const ScRangeData* pName = pDocument->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
             if (pName && pName->IsReference(aRange))
             {
                 bRef = true;

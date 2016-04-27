@@ -4435,7 +4435,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUStrin
 
 ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 {
-    return pDoc->FindRangeNameByIndexAndSheet( rToken.GetIndex(), rToken.GetSheet());
+    return pDoc->FindRangeNameBySheetAndIndex( rToken.GetSheet(), rToken.GetIndex());
 }
 
 bool ScCompiler::HandleRange()

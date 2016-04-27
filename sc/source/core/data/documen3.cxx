@@ -244,7 +244,7 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString*
     return pData;
 }
 
-ScRangeData* ScDocument::FindRangeNameByIndexAndSheet( sal_uInt16 nIndex, SCTAB nTab ) const
+ScRangeData* ScDocument::FindRangeNameBySheetAndIndex( SCTAB nTab, sal_uInt16 nIndex ) const
 {
     const ScRangeName* pRN = (nTab < 0 ? GetRangeName() : GetRangeName(nTab));
     return (pRN ? pRN->findByIndex( nIndex) : nullptr);

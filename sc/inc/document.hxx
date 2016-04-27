@@ -543,13 +543,13 @@ public:
     void SetRangeName( ScRangeName* pNewRangeName );
 
     /** Find a named expression / range name in either global or a local scope.
-        @param  nIndex
-                Index of named expression / range name.
         @param  nTab
                 If <0 search nIndex in global scope, if >=0 search nIndex in scope of nTab.
+        @param  nIndex
+                Index of named expression / range name.
         @return nullptr if indexed name not found.
      */
-    ScRangeData* FindRangeNameByIndexAndSheet( sal_uInt16 nIndex, SCTAB nTab ) const;
+    ScRangeData* FindRangeNameBySheetAndIndex( SCTAB nTab, sal_uInt16 nIndex ) const;
 
     /**
      * Call this immediately before updating all named ranges.

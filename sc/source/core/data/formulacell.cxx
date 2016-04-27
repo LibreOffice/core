@@ -466,7 +466,7 @@ bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const Form
         SAL_WARN("sc.core", "findRangeNamesReferencingSheet - nTokenTab < -1 : " <<
                 nTokenTab << ", nTokenIndex " << nTokenIndex << " Fix the creator!");
 #if OSL_DEBUG_LEVEL > 0
-        const ScRangeData* pData = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTokenTab);
+        const ScRangeData* pData = pDoc->FindRangeNameBySheetAndIndex( nTokenTab, nTokenIndex);
         SAL_WARN_IF( pData, "sc.core", "findRangeNamesReferencingSheet - named expression is: " << pData->GetName());
 #endif
         nTokenTab = -1;
@@ -485,7 +485,7 @@ bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, const Form
     if (rIndexes.isNameUpdated( nTokenTab, nTokenIndex))
         return true;
 
-    ScRangeData* pData = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTokenTab);
+    ScRangeData* pData = pDoc->FindRangeNameBySheetAndIndex( nTokenTab, nTokenIndex);
     if (!pData)
         return false;
 
@@ -1235,7 +1235,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
             }
             else if ( t->GetType() == svIndex )
             {
-                const ScRangeData* pRangeData = rDoc.FindRangeNameByIndexAndSheet( t->GetIndex(), t->GetSheet());
+                const ScRangeData* pRangeData = rDoc.FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
                 if( pRangeData )
                 {
                     if( pRangeData->HasReferences() )
@@ -3899,7 +3899,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if( t->GetOpCode() == ocName )
         {
-            const ScRangeData* pName = pDocument->FindRangeNameByIndexAndSheet( t->GetIndex(), t->GetSheet());
+            const ScRangeData* pName = pDocument->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
             if (pName)
             {
                 if (pName->IsModified())
@@ -3953,7 +3953,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     {
         if( t->GetOpCode() == ocName )
         {
-            const ScRangeData* pName = pDocument->FindRangeNameByIndexAndSheet( t->GetIndex(), t->GetSheet());
+            const ScRangeData* pName = pDocument->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
             if (pName)
             {
                 if (pName->IsModified())
@@ -3998,7 +3998,7 @@ static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArra
 
             if (nRecursion < 126)   // whatever.. 42*3
             {
-                ScRangeData* pSubName = pDoc->FindRangeNameByIndexAndSheet( nTokenIndex, nTab);
+                ScRangeData* pSubName = pDoc->FindRangeNameBySheetAndIndex( nTab, nTokenIndex);
                 if (pSubName)
                     lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pDoc, nRecursion+1);
             }
