@@ -1206,6 +1206,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_PAGE_FILLSTYLE:
         case SID_SELECT_BACKGROUND:
         case SID_ATTR_PAGE_SIZE:
+        case SID_ATTR_PAGE:
         case SID_PAGESETUP:  // BASIC ??
         {
             SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
