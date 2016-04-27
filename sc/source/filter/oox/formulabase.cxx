@@ -911,7 +911,9 @@ static const FunctionData saFuncTable2016[] =
     { "COM.MICROSOFT.FORECAST.ETS.STAT",        "FORECAST.ETS.STAT",        NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FORECAST.LINEAR",          "FORECAST.LINEAR",          NOID,   NOID,   3,  3,  V, { VR, VA }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.CONCAT",                   "CONCAT",                   NOID,   NOID,   1,  MX, V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.TEXTJOIN",                 "TEXTJOIN",                 NOID,   NOID,   3,  MX, V, { VR }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.TEXTJOIN",                 "TEXTJOIN",                 NOID,   NOID,   3,  MX, V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.IFS",                      "IFS",                      NOID,   NOID,   2,  MX, R, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.SWITCH",                   "SWITCH",                   NOID,   NOID,   3,  MX, R, { VO, RO }, FUNCFLAG_MACROCALL_NEW }
 };
 
 
