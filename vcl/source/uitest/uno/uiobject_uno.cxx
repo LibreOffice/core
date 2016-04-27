@@ -69,6 +69,15 @@ css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
     return aProps;
 }
 
+OUString SAL_CALL UIObjectUnoObj::getType()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    if (!mpObj)
+        throw css::uno::RuntimeException();
+
+    return mpObj->get_type();
+}
+
 OUString SAL_CALL UIObjectUnoObj::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
