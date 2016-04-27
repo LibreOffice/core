@@ -24,10 +24,10 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
+#include <rtl/instance.hxx>
 
 struct MapMode::ImplMapMode
 {
-    sal_uLong       mnRefCount;
     MapUnit         meUnit;
     Point           maOrigin;
     // NOTE: these Fraction must NOT have more than 32 bits precision
@@ -38,13 +38,10 @@ struct MapMode::ImplMapMode
     Fraction        maScaleY;
     bool            mbSimple;
 
-    friend SvStream& ReadImplMapMode(SvStream& rIStm, ImplMapMode& rMapMode);
-    friend SvStream& WriteImplMapMode(SvStream& rOStm, const ImplMapMode& rMapMode);
-
-    static ImplMapMode* ImplGetStaticMapMode( MapUnit eUnit );
-
     ImplMapMode();
     ImplMapMode(const ImplMapMode& rImpMapMode);
+
+    bool operator==( const ImplMapMode& rImpMapMode ) const;
 };
 
 MapMode::ImplMapMode::ImplMapMode() :
@@ -52,157 +49,81 @@ MapMode::ImplMapMode::ImplMapMode() :
     maScaleX( 1, 1 ),
     maScaleY( 1, 1 )
 {
-    mnRefCount  = 1;
     meUnit      = MAP_PIXEL;
-    mbSimple    = false;
+    mbSimple    = true;
 }
 
 MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
+    meUnit( rImplMapMode.meUnit ),
     maOrigin( rImplMapMode.maOrigin ),
     maScaleX( rImplMapMode.maScaleX ),
     maScaleY( rImplMapMode.maScaleY )
 {
-    mnRefCount      = 1;
-    meUnit          = rImplMapMode.meUnit;
-    mbSimple        = false;
 }
 
-SvStream& ReadImplMapMode(SvStream& rIStm, MapMode::ImplMapMode& rImplMapMode)
+bool MapMode::ImplMapMode::operator==( const ImplMapMode& rImpMapMode ) const
 {
-    VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt16          nTmp16;
-
-    rIStm.ReadUInt16( nTmp16 ); rImplMapMode.meUnit = (MapUnit) nTmp16;
-    ReadPair( rIStm, rImplMapMode.maOrigin );
-    ReadFraction( rIStm, rImplMapMode.maScaleX );
-    ReadFraction( rIStm, rImplMapMode.maScaleY );
-    rIStm.ReadCharAsBool( rImplMapMode.mbSimple );
-
-    return rIStm;
+    if (meUnit   == rImpMapMode.meUnit
+        && maOrigin == rImpMapMode.maOrigin
+        && maScaleX == rImpMapMode.maScaleX
+        && maScaleY == rImpMapMode.maScaleY)
+        return true;
+    return false;
 }
 
-SvStream& WriteImplMapMode(SvStream& rOStm, const MapMode::ImplMapMode& rImplMapMode)
+namespace
 {
-    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
-
-    rOStm.WriteUInt16( rImplMapMode.meUnit );
-    WritePair( rOStm, rImplMapMode.maOrigin );
-    WriteFraction( rOStm, rImplMapMode.maScaleX );
-    WriteFraction( rOStm, rImplMapMode.maScaleY );
-    rOStm.WriteBool( rImplMapMode.mbSimple );
-
-    return rOStm;
+    struct theGlobalDefault :
+        public rtl::Static< MapMode::ImplType, theGlobalDefault > {};
 }
 
-MapMode::ImplMapMode *
-MapMode::ImplMapMode::ImplGetStaticMapMode(MapUnit eUnit)
+MapMode::MapMode() : mpImplMapMode(theGlobalDefault::get())
 {
-    static long aStaticImplMapModeAry[(MAP_LASTENUMDUMMY)*sizeof(ImplMapMode)/sizeof(long)];
-
-    // #i19496 check for out-of-bounds
-     if( eUnit >= MAP_LASTENUMDUMMY )
-        return reinterpret_cast<ImplMapMode*>(aStaticImplMapModeAry);
-
-    ImplMapMode* pImplMapMode = reinterpret_cast<ImplMapMode*>(aStaticImplMapModeAry)+eUnit;
-    if ( !pImplMapMode->mbSimple )
-    {
-        Fraction aDefFraction( 1, 1 );
-        pImplMapMode->maScaleX  = aDefFraction;
-        pImplMapMode->maScaleY  = aDefFraction;
-        pImplMapMode->meUnit    = eUnit;
-        pImplMapMode->mbSimple  = true;
-    }
-
-    return pImplMapMode;
 }
 
-inline void MapMode::ImplMakeUnique()
+MapMode::MapMode( const MapMode& rMapMode ) : mpImplMapMode( rMapMode.mpImplMapMode )
 {
-    // If there are other references, copy
-    if ( mpImplMapMode->mnRefCount != 1 )
-    {
-        if ( mpImplMapMode->mnRefCount )
-            mpImplMapMode->mnRefCount--;
-        mpImplMapMode = new ImplMapMode( *mpImplMapMode );
-    }
 }
 
-MapMode::MapMode()
+MapMode::MapMode( MapUnit eUnit ) : mpImplMapMode()
 {
-
-    mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
-}
-
-MapMode::MapMode( const MapMode& rMapMode )
-{
-    DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
-
-    // Take over Shared Instance Data and increment refcount
-    mpImplMapMode = rMapMode.mpImplMapMode;
-    // RefCount == 0 for static objects
-    if ( mpImplMapMode->mnRefCount )
-        mpImplMapMode->mnRefCount++;
-}
-
-MapMode::MapMode( MapUnit eUnit )
-{
-
-    mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( eUnit );
+    mpImplMapMode->meUnit   = eUnit;
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
                   const Fraction& rScaleX, const Fraction& rScaleY )
 {
-
-    mpImplMapMode           = new ImplMapMode;
     mpImplMapMode->meUnit   = eUnit;
     mpImplMapMode->maOrigin = rLogicOrg;
     mpImplMapMode->maScaleX = rScaleX;
     mpImplMapMode->maScaleY = rScaleY;
     mpImplMapMode->maScaleX.ReduceInaccurate(32);
     mpImplMapMode->maScaleY.ReduceInaccurate(32);
+    mpImplMapMode->mbSimple    = false;
 }
 
 MapMode::~MapMode()
 {
-
-    // If it's not static ImpData and it's the last reference, delete it,
-    // else decrement refcounter
-    if ( mpImplMapMode->mnRefCount )
-    {
-        if ( mpImplMapMode->mnRefCount == 1 )
-            delete mpImplMapMode;
-        else
-            mpImplMapMode->mnRefCount--;
-    }
 }
 
 void MapMode::SetMapUnit( MapUnit eUnit )
 {
-
-    ImplMakeUnique();
     mpImplMapMode->meUnit = eUnit;
 }
 
 void MapMode::SetOrigin( const Point& rLogicOrg )
 {
-
-    ImplMakeUnique();
     mpImplMapMode->maOrigin = rLogicOrg;
 }
 
 void MapMode::SetScaleX( const Fraction& rScaleX )
 {
-
-    ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
     mpImplMapMode->maScaleX.ReduceInaccurate(32);
 }
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
 {
-
-    ImplMakeUnique();
     mpImplMapMode->maScaleY = rScaleY;
     mpImplMapMode->maScaleY.ReduceInaccurate(32);
 }
@@ -255,68 +176,45 @@ double MapMode::GetUnitMultiplier() const
 
 MapMode& MapMode::operator=( const MapMode& rMapMode )
 {
-    DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
-
-    // First increment refcount so that we can reference ourselves
-    // RefCount == 0 for static objects
-    if ( rMapMode.mpImplMapMode->mnRefCount )
-        rMapMode.mpImplMapMode->mnRefCount++;
-
-    // If it's not static ImpData and it's the last reference, delete it,
-    // else decrement refcounter
-    if ( mpImplMapMode->mnRefCount )
-    {
-        if ( mpImplMapMode->mnRefCount == 1 )
-            delete mpImplMapMode;
-        else
-            mpImplMapMode->mnRefCount--;
-    }
-
     mpImplMapMode = rMapMode.mpImplMapMode;
-
     return *this;
 }
 
 bool MapMode::operator==( const MapMode& rMapMode ) const
 {
-
-    if ( mpImplMapMode == rMapMode.mpImplMapMode )
-        return true;
-
-    if ( (mpImplMapMode->meUnit   == rMapMode.mpImplMapMode->meUnit)   &&
-         (mpImplMapMode->maOrigin == rMapMode.mpImplMapMode->maOrigin) &&
-         (mpImplMapMode->maScaleX == rMapMode.mpImplMapMode->maScaleX) &&
-         (mpImplMapMode->maScaleY == rMapMode.mpImplMapMode->maScaleY) )
-        return true;
-    else
-        return false;
+   return mpImplMapMode == rMapMode.mpImplMapMode;
 }
 
 bool MapMode::IsDefault() const
 {
-
-    ImplMapMode* pDefMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
-    if ( mpImplMapMode == pDefMapMode )
-        return true;
-
-    if ( (mpImplMapMode->meUnit   == pDefMapMode->meUnit)   &&
-         (mpImplMapMode->maOrigin == pDefMapMode->maOrigin) &&
-         (mpImplMapMode->maScaleX == pDefMapMode->maScaleX) &&
-         (mpImplMapMode->maScaleY == pDefMapMode->maScaleY) )
-        return true;
-    else
-        return false;
+    return mpImplMapMode.same_object(theGlobalDefault::get());
 }
 
 SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 {
-    rMapMode.ImplMakeUnique();
-    return ReadImplMapMode( rIStm, *rMapMode.mpImplMapMode );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
+    sal_uInt16          nTmp16;
+
+    rIStm.ReadUInt16( nTmp16 ); rMapMode.mpImplMapMode->meUnit = (MapUnit) nTmp16;
+    ReadPair( rIStm, rMapMode.mpImplMapMode->maOrigin );
+    ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleX );
+    ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleY );
+    rIStm.ReadCharAsBool( rMapMode.mpImplMapMode->mbSimple );
+
+    return rIStm;
 }
 
 SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
-    return WriteImplMapMode( rOStm, *rMapMode.mpImplMapMode );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
+
+    rOStm.WriteUInt16( rMapMode.mpImplMapMode->meUnit );
+    WritePair( rOStm, rMapMode.mpImplMapMode->maOrigin );
+    WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleX );
+    WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleY );
+    rOStm.WriteBool( rMapMode.mpImplMapMode->mbSimple );
+
+    return rOStm;
 }
 
 
