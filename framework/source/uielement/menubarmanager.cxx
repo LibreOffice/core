@@ -1500,7 +1500,10 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
         const sal_uInt32 nCount = aMenuShortCuts.size();
         for ( sal_uInt32 i = 0; i < nCount; ++i )
         {
-            aSeq[i] = aMenuShortCuts[i]->aMenuItemURL;
+            rtl::OUString aItemURL = aMenuShortCuts[i]->aMenuItemURL;
+            if( aItemURL.isEmpty() && aMenuShortCuts[i]->xSubMenuManager.is())
+                aItemURL = "-"; // tdf#99527 prevent throw in case of empty commands
+            aSeq[i] = aItemURL;
             aMenuShortCuts[i]->aKeyCode = aEmptyKeyCode;
         }
 
