@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_a1257eaf",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-27T11:18:42Z",
+      "side": 1,
+      "message": "I intend to use ScInterpreter::ReverseStack in ScInterpreter::ScConcat_MS() and ScInterpreter::ScTextJoin_MS as well.",
+      "revId": "06d3f9273cdec8b351e0efb97d4c474a731b462a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_01254aaa",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 11664,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-27T11:18:42Z",
+      "side": 1,
+      "message": "SWITCH has an optional last argument, default value, which is returned if no previous value matched. However, I have not been able to add that argument to the function wizard.",
+      "revId": "06d3f9273cdec8b351e0efb97d4c474a731b462a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
