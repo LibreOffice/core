@@ -20,6 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_SERVICEINFOHELPER_HXX
 #define INCLUDED_COMPHELPER_SERVICEINFOHELPER_HXX
 
+#include <sal/config.h>
+
+#include <initializer_list>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/comphelperdllapi.h>
 
@@ -39,7 +43,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // helper
-    static void addToSequence( css::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* sal_Char* */... ) throw();
+    static void addToSequence( css::uno::Sequence< OUString >& rSeq, std::initializer_list<OUString> services ) throw();
 
 protected:
     ~ServiceInfoHelper() {}

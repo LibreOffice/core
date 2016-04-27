@@ -1511,9 +1511,9 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq( SvxFmDrawPage::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.drawing.GenericDrawPage",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.GenericDrawPage",
                                                   "com.sun.star.document.LinkTarget",
-                                                  "com.sun.star.document.LinkTargetSupplier");
+                                                  "com.sun.star.document.LinkTargetSupplier"});
     return aSeq;
 }
 
@@ -2244,10 +2244,10 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::
     throwIfDisposed();
 
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.DrawPage" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.DrawPage"} );
 
     if( mbIsImpressDocument )
-        comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.DrawPage" );
+        comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.DrawPage"} );
 
     return aSeq;
 }
@@ -2794,10 +2794,10 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno
     throwIfDisposed();
 
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.MasterPage"} );
 
     if( SvxFmDrawPage::mpPage && static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetPageKind() == PK_HANDOUT )
-        comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.HandoutMasterPage" );
+        comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.HandoutMasterPage"} );
 
     return aSeq;
 }

@@ -19,7 +19,6 @@
 
 
 #include <comphelper/serviceinfohelper.hxx>
-#include <stdarg.h>
 
 // #####################################################################
 
@@ -39,20 +38,17 @@ css::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames() thr
     return aSeq;
 }
 
-/** this method adds a variable number of char pointer to a given Sequence
+/** this method adds a variable number of OUString to a given Sequence
  */
-void ServiceInfoHelper::addToSequence( css::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* char * */ ... ) throw()
+void ServiceInfoHelper::addToSequence( css::uno::Sequence< OUString >& rSeq, std::initializer_list<OUString> services ) throw()
 {
     sal_uInt32 nCount = rSeq.getLength();
 
-    rSeq.realloc( nCount + nServices );
+    rSeq.realloc( nCount + services.size() );
     OUString* pStrings = rSeq.getArray();
 
-    va_list marker;
-    va_start( marker, nServices );
-    for( sal_uInt16 i = 0 ; i < nServices; i++ )
-        pStrings[nCount++] = OUString::createFromAscii(va_arg( marker, char*));
-    va_end( marker );
+    for( auto const & s: services )
+        pStrings[nCount++] = s;
 }
 
 }

@@ -862,8 +862,8 @@ uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames() throw(cs
 {
     uno::Sequence< OUString > aSeq( mpShape->_getSupportedServiceNames() );
 
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.Shape",
-                                                  "com.sun.star.document.LinkTarget" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.Shape",
+                                                  "com.sun.star.document.LinkTarget"} );
 
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj && pObj->GetObjInventor() == SdrInventor )
@@ -872,10 +872,10 @@ uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames() throw(cs
         switch( nInventor )
         {
         case OBJ_TITLETEXT:
-            comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.TitleTextShape" );
+            comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.TitleTextShape"} );
             break;
         case OBJ_OUTLINETEXT:
-            comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.OutlinerShape" );
+            comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.OutlinerShape"} );
             break;
         }
     }

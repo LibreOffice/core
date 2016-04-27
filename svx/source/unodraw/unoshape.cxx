@@ -3104,49 +3104,49 @@ OUString SAL_CALL SvxShape::getImplementationName()
 
 #define STAR_NAMESPACE "com.sun.star."
 
-const char* sUNO_service_style_ParagraphProperties          = STAR_NAMESPACE "style.ParagraphProperties";
-const char* sUNO_service_style_ParagraphPropertiesComplex   = STAR_NAMESPACE "style.ParagraphPropertiesComplex";
-const char* sUNO_service_style_ParagraphPropertiesAsian     = STAR_NAMESPACE "style.ParagraphPropertiesAsian";
-const char* sUNO_service_style_CharacterProperties          = STAR_NAMESPACE "style.CharacterProperties";
-const char* sUNO_service_style_CharacterPropertiesComplex   = STAR_NAMESPACE "style.CharacterPropertiesComplex";
-const char* sUNO_service_style_CharacterPropertiesAsian     = STAR_NAMESPACE "style.CharacterPropertiesAsian";
+const char sUNO_service_style_ParagraphProperties[]          = STAR_NAMESPACE "style.ParagraphProperties";
+const char sUNO_service_style_ParagraphPropertiesComplex[]   = STAR_NAMESPACE "style.ParagraphPropertiesComplex";
+const char sUNO_service_style_ParagraphPropertiesAsian[]     = STAR_NAMESPACE "style.ParagraphPropertiesAsian";
+const char sUNO_service_style_CharacterProperties[]          = STAR_NAMESPACE "style.CharacterProperties";
+const char sUNO_service_style_CharacterPropertiesComplex[]   = STAR_NAMESPACE "style.CharacterPropertiesComplex";
+const char sUNO_service_style_CharacterPropertiesAsian[]     = STAR_NAMESPACE "style.CharacterPropertiesAsian";
 
-const char* sUNO_service_drawing_FillProperties             = STAR_NAMESPACE "drawing.FillProperties";
-const char* sUNO_service_drawing_TextProperties             = STAR_NAMESPACE "drawing.TextProperties";
-const char* sUNO_service_drawing_LineProperties             = STAR_NAMESPACE "drawing.LineProperties";
-const char* sUNO_service_drawing_ConnectorProperties        = STAR_NAMESPACE "drawing.ConnectorProperties";
-const char* sUNO_service_drawing_MeasureProperties          = STAR_NAMESPACE "drawing.MeasureProperties";
-const char* sUNO_service_drawing_ShadowProperties           = STAR_NAMESPACE "drawing.ShadowProperties";
+const char sUNO_service_drawing_FillProperties[]             = STAR_NAMESPACE "drawing.FillProperties";
+const char sUNO_service_drawing_TextProperties[]             = STAR_NAMESPACE "drawing.TextProperties";
+const char sUNO_service_drawing_LineProperties[]             = STAR_NAMESPACE "drawing.LineProperties";
+const char sUNO_service_drawing_ConnectorProperties[]        = STAR_NAMESPACE "drawing.ConnectorProperties";
+const char sUNO_service_drawing_MeasureProperties[]          = STAR_NAMESPACE "drawing.MeasureProperties";
+const char sUNO_service_drawing_ShadowProperties[]           = STAR_NAMESPACE "drawing.ShadowProperties";
 
-const char* sUNO_service_drawing_RotationDescriptor         = STAR_NAMESPACE "drawing.RotationDescriptor";
+const char sUNO_service_drawing_RotationDescriptor[]         = STAR_NAMESPACE "drawing.RotationDescriptor";
 
-const char* sUNO_service_drawing_Text                       = STAR_NAMESPACE "drawing.Text";
-const char* sUNO_service_drawing_GroupShape                 = STAR_NAMESPACE "drawing.GroupShape";
+const char sUNO_service_drawing_Text[]                       = STAR_NAMESPACE "drawing.Text";
+const char sUNO_service_drawing_GroupShape[]                 = STAR_NAMESPACE "drawing.GroupShape";
 
-const char* sUNO_service_drawing_CustomShapeProperties      = STAR_NAMESPACE "drawing.CustomShapeProperties";
-const char* sUNO_service_drawing_CustomShape                    = STAR_NAMESPACE "drawing.CustomShape";
+const char sUNO_service_drawing_CustomShapeProperties[]      = STAR_NAMESPACE "drawing.CustomShapeProperties";
+const char sUNO_service_drawing_CustomShape[]                    = STAR_NAMESPACE "drawing.CustomShape";
 
-const char* sUNO_service_drawing_PolyPolygonDescriptor      = STAR_NAMESPACE "drawing.PolyPolygonDescriptor";
-const char* sUNO_service_drawing_PolyPolygonBezierDescriptor= STAR_NAMESPACE "drawing.PolyPolygonBezierDescriptor";
+const char sUNO_service_drawing_PolyPolygonDescriptor[]      = STAR_NAMESPACE "drawing.PolyPolygonDescriptor";
+const char sUNO_service_drawing_PolyPolygonBezierDescriptor[]= STAR_NAMESPACE "drawing.PolyPolygonBezierDescriptor";
 
-const char* sUNO_service_drawing_LineShape                  = STAR_NAMESPACE "drawing.LineShape";
-const char* sUNO_service_drawing_Shape                      = STAR_NAMESPACE "drawing.Shape";
-const char* sUNO_service_drawing_RectangleShape             = STAR_NAMESPACE "drawing.RectangleShape";
-const char* sUNO_service_drawing_EllipseShape               = STAR_NAMESPACE "drawing.EllipseShape";
-const char* sUNO_service_drawing_PolyPolygonShape           = STAR_NAMESPACE "drawing.PolyPolygonShape";
-const char* sUNO_service_drawing_PolyLineShape              = STAR_NAMESPACE "drawing.PolyLineShape";
-const char* sUNO_service_drawing_OpenBezierShape            = STAR_NAMESPACE "drawing.OpenBezierShape";
-const char* sUNO_service_drawing_ClosedBezierShape          = STAR_NAMESPACE "drawing.ClosedBezierShape";
-const char* sUNO_service_drawing_TextShape                  = STAR_NAMESPACE "drawing.TextShape";
-const char* sUNO_service_drawing_GraphicObjectShape         = STAR_NAMESPACE "drawing.GraphicObjectShape";
-const char* sUNO_service_drawing_OLE2Shape                  = STAR_NAMESPACE "drawing.OLE2Shape";
-const char* sUNO_service_drawing_PageShape                  = STAR_NAMESPACE "drawing.PageShape";
-const char* sUNO_service_drawing_CaptionShape               = STAR_NAMESPACE "drawing.CaptionShape";
-const char* sUNO_service_drawing_MeasureShape               = STAR_NAMESPACE "drawing.MeasureShape";
-const char* sUNO_service_drawing_FrameShape                 = STAR_NAMESPACE "drawing.FrameShape";
-const char* sUNO_service_drawing_ControlShape               = STAR_NAMESPACE "drawing.ControlShape";
-const char* sUNO_service_drawing_ConnectorShape             = STAR_NAMESPACE "drawing.ConnectorShape";
-const char* sUNO_service_drawing_MediaShape                 = STAR_NAMESPACE "drawing.MediaShape";
+const char sUNO_service_drawing_LineShape[]                  = STAR_NAMESPACE "drawing.LineShape";
+const char sUNO_service_drawing_Shape[]                      = STAR_NAMESPACE "drawing.Shape";
+const char sUNO_service_drawing_RectangleShape[]             = STAR_NAMESPACE "drawing.RectangleShape";
+const char sUNO_service_drawing_EllipseShape[]               = STAR_NAMESPACE "drawing.EllipseShape";
+const char sUNO_service_drawing_PolyPolygonShape[]           = STAR_NAMESPACE "drawing.PolyPolygonShape";
+const char sUNO_service_drawing_PolyLineShape[]              = STAR_NAMESPACE "drawing.PolyLineShape";
+const char sUNO_service_drawing_OpenBezierShape[]            = STAR_NAMESPACE "drawing.OpenBezierShape";
+const char sUNO_service_drawing_ClosedBezierShape[]          = STAR_NAMESPACE "drawing.ClosedBezierShape";
+const char sUNO_service_drawing_TextShape[]                  = STAR_NAMESPACE "drawing.TextShape";
+const char sUNO_service_drawing_GraphicObjectShape[]         = STAR_NAMESPACE "drawing.GraphicObjectShape";
+const char sUNO_service_drawing_OLE2Shape[]                  = STAR_NAMESPACE "drawing.OLE2Shape";
+const char sUNO_service_drawing_PageShape[]                  = STAR_NAMESPACE "drawing.PageShape";
+const char sUNO_service_drawing_CaptionShape[]               = STAR_NAMESPACE "drawing.CaptionShape";
+const char sUNO_service_drawing_MeasureShape[]               = STAR_NAMESPACE "drawing.MeasureShape";
+const char sUNO_service_drawing_FrameShape[]                 = STAR_NAMESPACE "drawing.FrameShape";
+const char sUNO_service_drawing_ControlShape[]               = STAR_NAMESPACE "drawing.ControlShape";
+const char sUNO_service_drawing_ConnectorShape[]             = STAR_NAMESPACE "drawing.ConnectorShape";
+const char sUNO_service_drawing_MediaShape[]                 = STAR_NAMESPACE "drawing.MediaShape";
 
 
 uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
@@ -3180,9 +3180,9 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_GroupServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_GroupServices, 2,
-                            sUNO_service_drawing_GroupShape,
-                              sUNO_service_drawing_Shape );
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_GroupServices,
+                            {sUNO_service_drawing_GroupShape,
+                              sUNO_service_drawing_Shape} );
 
                         pSeq = &SvxShape_GroupServices;
                 }
@@ -3196,8 +3196,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_CustomShapeServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_CustomShapeServices, 13,
-                            sUNO_service_drawing_CustomShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_CustomShapeServices,
+                            {sUNO_service_drawing_CustomShape,
                               sUNO_service_drawing_Shape,
                             sUNO_service_drawing_CustomShapeProperties,
                             sUNO_service_drawing_FillProperties,
@@ -3211,7 +3211,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
                         pSeq = &SvxShape_CustomShapeServices;
                 }
                 return *pSeq;
@@ -3223,8 +3223,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_LineServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_LineServices,14,
-                            sUNO_service_drawing_LineShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_LineServices,
+                            {sUNO_service_drawing_LineShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3240,7 +3240,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_LineServices;
                 }
@@ -3254,8 +3254,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_RectServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_RectServices,14,
-                            sUNO_service_drawing_RectangleShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_RectServices,
+                            {sUNO_service_drawing_RectangleShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3270,7 +3270,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
                         pSeq = &SvxShape_RectServices;
                 }
                 return *pSeq;
@@ -3286,8 +3286,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_CircServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_CircServices,14,
-                            sUNO_service_drawing_EllipseShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_CircServices,
+                            {sUNO_service_drawing_EllipseShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3303,7 +3303,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_CircServices;
                 }
@@ -3318,8 +3318,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 if( nullptr == pSeq )
                 {
                         static uno::Sequence< OUString > SvxShape_PathServices;
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_PathServices,14,
-                            sUNO_service_drawing_PolyLineShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_PathServices,
+                            {sUNO_service_drawing_PolyLineShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3336,7 +3336,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
                         pSeq = &SvxShape_PathServices;
                 }
                 return *pSeq;
@@ -3349,8 +3349,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 if( nullptr == pSeq )
                 {
                         static uno::Sequence< OUString > SvxShape_PolyServices;
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_PolyServices,15,
-                            sUNO_service_drawing_PolyPolygonShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_PolyServices,
+                            {sUNO_service_drawing_PolyPolygonShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3368,7 +3368,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_PolyServices;
                 }
@@ -3383,8 +3383,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_FreeLineServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_FreeLineServices,15,
-                            sUNO_service_drawing_OpenBezierShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_FreeLineServices,
+                            {sUNO_service_drawing_OpenBezierShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3402,7 +3402,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_FreeLineServices;
                 }
@@ -3417,8 +3417,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 if( nullptr == pSeq )
                 {
                         static uno::Sequence< OUString > SvxShape_FreeFillServices;
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_FreeFillServices,15,
-                            sUNO_service_drawing_ClosedBezierShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_FreeFillServices,
+                            {sUNO_service_drawing_ClosedBezierShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_LineProperties,
@@ -3436,7 +3436,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_FreeFillServices;
                 }
@@ -3451,8 +3451,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 if( nullptr == pSeq )
                 {
                         static uno::Sequence< OUString > SvxShape_TextServices;
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_TextServices,14,
-                            sUNO_service_drawing_TextShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_TextServices,
+                            {sUNO_service_drawing_TextShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3468,7 +3468,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_TextServices;
                 }
@@ -3481,8 +3481,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 if( nullptr == pSeq )
                 {
                         static uno::Sequence< OUString > SvxShape_GrafServices;
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_GrafServices, 12,
-                            sUNO_service_drawing_GraphicObjectShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_GrafServices,
+                            {sUNO_service_drawing_GraphicObjectShape,
 
                             sUNO_service_drawing_Shape,
 
@@ -3496,7 +3496,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_GrafServices;
                 }
@@ -3510,8 +3510,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_Ole2Services;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_Ole2Services, 12,
-                            sUNO_service_drawing_OLE2Shape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_Ole2Services,
+                            {sUNO_service_drawing_OLE2Shape,
                             sUNO_service_drawing_Shape,
 
                             // #i118485# Added Text, Shadow and Rotation
@@ -3525,7 +3525,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_Ole2Services;
                 }
@@ -3539,8 +3539,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_CaptionServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_CaptionServices,14,
-                            sUNO_service_drawing_CaptionShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_CaptionServices,
+                            {sUNO_service_drawing_CaptionShape,
 
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
@@ -3556,7 +3556,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_CaptionServices;
                 }
@@ -3571,9 +3571,9 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_PageServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_PageServices, 2,
-                            sUNO_service_drawing_PageShape,
-                            sUNO_service_drawing_Shape );
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_PageServices,
+                            {sUNO_service_drawing_PageShape,
+                            sUNO_service_drawing_Shape} );
 
                         pSeq = &SvxShape_PageServices;
                 }
@@ -3587,8 +3587,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 if( nullptr == pSeq )
                 {
                         static uno::Sequence< OUString > SvxShape_MeasureServices;
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_MeasureServices,15,
-                            sUNO_service_drawing_MeasureShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_MeasureServices,
+                            {sUNO_service_drawing_MeasureShape,
 
                             sUNO_service_drawing_MeasureProperties,
 
@@ -3606,7 +3606,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_MeasureServices;
                 }
@@ -3621,9 +3621,9 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_FrameServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_FrameServices, 2,
-                            sUNO_service_drawing_FrameShape,
-                            sUNO_service_drawing_Shape );
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_FrameServices,
+                            {sUNO_service_drawing_FrameShape,
+                            sUNO_service_drawing_Shape} );
 
                         pSeq = &SvxShape_FrameServices;
                 }
@@ -3637,9 +3637,9 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 if( nullptr == pSeq )
                 {
                         static uno::Sequence< OUString > SvxShape_UnoServices;
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
-                            sUNO_service_drawing_ControlShape,
-                            sUNO_service_drawing_Shape );
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_UnoServices,
+                            {sUNO_service_drawing_ControlShape,
+                            sUNO_service_drawing_Shape} );
 
                         pSeq = &SvxShape_UnoServices;
                 }
@@ -3653,8 +3653,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_EdgeServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_EdgeServices,15,
-                            sUNO_service_drawing_ConnectorShape,
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_EdgeServices,
+                            {sUNO_service_drawing_ConnectorShape,
                             sUNO_service_drawing_ConnectorProperties,
 
                             sUNO_service_drawing_Shape,
@@ -3671,7 +3671,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
                             sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor);
+                            sUNO_service_drawing_RotationDescriptor});
 
                         pSeq = &SvxShape_EdgeServices;
                 }
@@ -3684,9 +3684,9 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 {
                         static uno::Sequence< OUString > SvxShape_MediaServices;
 
-                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_MediaServices, 2,
-                            sUNO_service_drawing_MediaShape,
-                            sUNO_service_drawing_Shape);
+                        comphelper::ServiceInfoHelper::addToSequence( SvxShape_MediaServices,
+                            {sUNO_service_drawing_MediaShape,
+                            sUNO_service_drawing_Shape});
 
                         pSeq = &SvxShape_MediaServices;
                 }
@@ -3704,9 +3704,9 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
         if( nullptr == pSeq )
         {
                 static uno::Sequence< OUString > SvxShape_UnoServices;
-                comphelper::ServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
-                    sUNO_service_drawing_ControlShape,
-                    sUNO_service_drawing_Shape );
+                comphelper::ServiceInfoHelper::addToSequence( SvxShape_UnoServices,
+                    {sUNO_service_drawing_ControlShape,
+                    sUNO_service_drawing_Shape} );
 
                 pSeq = &SvxShape_UnoServices;
         }

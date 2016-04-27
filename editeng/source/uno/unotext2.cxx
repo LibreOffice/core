@@ -367,11 +367,11 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( SvxUnoTextRangeBase::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 5, "com.sun.star.style.ParagraphProperties",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.style.ParagraphProperties",
                                                   "com.sun.star.style.ParagraphPropertiesComplex",
                                                   "com.sun.star.style.ParagraphPropertiesAsian",
                                                   "com.sun.star.text.TextContent",
-                                                  "com.sun.star.text.Paragraph");
+                                                  "com.sun.star.text.Paragraph"});
     return aSeq;
 }
 
@@ -666,10 +666,10 @@ sal_Bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName
 uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( SvxUnoTextRangeBase::getSupportedServiceNames() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 4,"com.sun.star.style.ParagraphProperties",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.style.ParagraphProperties",
                                                   "com.sun.star.style.ParagraphPropertiesComplex",
                                                   "com.sun.star.style.ParagraphPropertiesAsian",
-                                                 "com.sun.star.text.TextCursor");
+                                                 "com.sun.star.text.TextCursor"});
     return aSeq;
 }
 

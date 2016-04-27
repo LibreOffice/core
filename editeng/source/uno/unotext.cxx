@@ -2249,7 +2249,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames(  )
 uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Static(  )
 {
     uno::Sequence< OUString > aSeq( SvxUnoTextRangeBase::getSupportedServiceNames_Static() );
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.text.Text" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.text.Text"} );
     return aSeq;
 }
 
