@@ -62,13 +62,13 @@ void XMLPageExport::collectPageMasterAutoStyle(
     DBG_ASSERT( xPageMasterPropSetMapper.is(), "page master family/XMLPageMasterPropSetMapper not found" );
     if( xPageMasterPropSetMapper.is() )
     {
-        ::std::vector<XMLPropertyState> xPropStates = xPageMasterExportPropMapper->Filter( rPropSet );
-        if( !xPropStates.empty())
+        ::std::vector<XMLPropertyState> aPropStates = xPageMasterExportPropMapper->Filter( rPropSet );
+        if( !aPropStates.empty())
         {
             OUString sParent;
-            rPageMasterName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates );
+            rPageMasterName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, aPropStates );
             if (rPageMasterName.isEmpty())
-                rPageMasterName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates);
+                rPageMasterName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, aPropStates);
         }
     }
 }
@@ -229,12 +229,12 @@ void XMLPageExport::exportDefaultStyle()
             // <style:default-style ...>
             GetExport().CheckAttrList();
 
-            ::std::vector< XMLPropertyState > xPropStates =
+            ::std::vector< XMLPropertyState > aPropStates =
                 xPageMasterExportPropMapper->FilterDefaults( xPropSet );
 
             bool bExport = false;
             rtl::Reference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
-            for( ::std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin(); aIter != xPropStates.end(); ++aIter )
+            for( ::std::vector< XMLPropertyState >::iterator aIter = aPropStates.begin(); aIter != aPropStates.end(); ++aIter )
             {
                 XMLPropertyState *pProp = &(*aIter);
                 sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
@@ -255,7 +255,7 @@ void XMLPageExport::exportDefaultStyle()
                                           XML_DEFAULT_PAGE_LAYOUT,
                                           true, true );
 
-                xPageMasterExportPropMapper->exportXML( GetExport(), xPropStates,
+                xPageMasterExportPropMapper->exportXML( GetExport(), aPropStates,
                                              SvXmlExportFlags::IGN_WS );
             }
         }

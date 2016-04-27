@@ -126,11 +126,11 @@ void ScConditionalFormatTest::testUndoAnchor()
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
-    ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
 
     // Check whether graphic imported well
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
@@ -147,7 +147,7 @@ void ScConditionalFormatTest::testUndoAnchor()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     // Get the document controller
-    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell);
 
     // Get the draw view of the document

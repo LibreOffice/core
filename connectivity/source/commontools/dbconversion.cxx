@@ -339,33 +339,33 @@ namespace dbtools
         else
             nSign = 1;
 
-        css::util::Time xRet;
+        css::util::Time aRet;
         // normalize time
         // we have to sal_Int32 here because otherwise we get an overflow
         sal_Int64 nNanoSeconds      = nNS;
         sal_Int32 nSeconds          = nNanoSeconds / nanoSecInSec;
         sal_Int32 nMinutes          = nSeconds / secInMin;
 
-        xRet.NanoSeconds            = nNanoSeconds % nanoSecInSec;
-        xRet.Seconds                = nSeconds % secInMin;
-        xRet.Hours                  = nMinutes / minInHour;
-        xRet.Minutes                = nMinutes % minInHour;
+        aRet.NanoSeconds            = nNanoSeconds % nanoSecInSec;
+        aRet.Seconds                = nSeconds % secInMin;
+        aRet.Hours                  = nMinutes / minInHour;
+        aRet.Minutes                = nMinutes % minInHour;
 
         // assemble time
         sal_Int64 nTime = nSign *
-                          (xRet.NanoSeconds +
-                           xRet.Seconds * secMask +
-                           xRet.Minutes * minMask +
-                           xRet.Hours   * hourMask);
+                          (aRet.NanoSeconds +
+                           aRet.Seconds * secMask +
+                           aRet.Minutes * minMask +
+                           aRet.Hours   * hourMask);
 
         if(nTime < 0)
         {
-            xRet.NanoSeconds  = nanoSecInSec-1;
-            xRet.Seconds      = secInMin-1;
-            xRet.Minutes      = minInHour-1;
-            xRet.Hours        = 23;
+            aRet.NanoSeconds  = nanoSecInSec-1;
+            aRet.Seconds      = secInMin-1;
+            aRet.Minutes      = minInHour-1;
+            aRet.Hours        = 23;
         }
-        return xRet;
+        return aRet;
     }
 
     css::util::DateTime DBTypeConversion::toDateTime(double dVal, const css::util::Date& _rNullDate)
@@ -377,19 +377,19 @@ namespace dbtools
         // 12:59:59.999999790
         css::util::Time aTime = toTime(dVal, 6);
 
-        css::util::DateTime xRet;
+        css::util::DateTime aRet;
 
-        xRet.Day          = aDate.Day;
-        xRet.Month        = aDate.Month;
-        xRet.Year         = aDate.Year;
+        aRet.Day          = aDate.Day;
+        aRet.Month        = aDate.Month;
+        aRet.Year         = aDate.Year;
 
-        xRet.NanoSeconds  = aTime.NanoSeconds;
-        xRet.Minutes      = aTime.Minutes;
-        xRet.Seconds      = aTime.Seconds;
-        xRet.Hours        = aTime.Hours;
+        aRet.NanoSeconds  = aTime.NanoSeconds;
+        aRet.Minutes      = aTime.Minutes;
+        aRet.Seconds      = aTime.Seconds;
+        aRet.Hours        = aTime.Hours;
 
 
-        return xRet;
+        return aRet;
     }
 
     css::util::Date DBTypeConversion::toDate(const OUString& _sSQLString)

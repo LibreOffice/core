@@ -88,12 +88,12 @@ uno::Reference< uno::XInterface > ScAnnontationObj::init()
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());
 
     // tested annotation is in sheet 0 cell C2
-    table::CellAddress xCellAddress;
-    xCellAddress.Sheet = 0;
-    xCellAddress.Row = 1;
-    xCellAddress.Column = 2;
+    table::CellAddress aCellAddress;
+    aCellAddress.Sheet = 0;
+    aCellAddress.Row = 1;
+    aCellAddress.Column = 2;
 
-    return getAnnotation(xCellAddress);
+    return getAnnotation(aCellAddress);
 }
 
 void ScAnnontationObj::setUp()

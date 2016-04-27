@@ -80,8 +80,8 @@ void ScMacrosTest::testMSP()
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh != nullptr);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh != nullptr);
 
     SfxObjectShell::CallXScript(
         xComponent,
@@ -92,7 +92,7 @@ void ScMacrosTest::testMSP()
 
     SAL_INFO("sc.qa", "Result is " << sResult );
     CPPUNIT_ASSERT_MESSAGE("TestMSP ( for fdo#67547) failed", sResult == "OK" );
-    xDocSh->DoClose();
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testPasswordProtectedStarBasic()
@@ -112,8 +112,8 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
 
 
     // User defined types
@@ -147,7 +147,7 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     CPPUNIT_ASSERT_MESSAGE("Far Method script did not change the value of Sheet1.C1", aValue == "success");
 
 
-    xDocSh->DoClose();
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testStarBasic()
@@ -167,8 +167,8 @@ void ScMacrosTest::testStarBasic()
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
 
     SfxObjectShell::CallXScript(
         xComponent,
@@ -177,7 +177,7 @@ void ScMacrosTest::testStarBasic()
     double aValue;
     rDoc.GetValue(0,0,0,aValue);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
-    xDocSh->DoClose();
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testVba()

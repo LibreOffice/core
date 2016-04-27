@@ -485,8 +485,8 @@ namespace DOM
             (m_aNodePtr->type == XML_ELEMENT_NODE || m_aNodePtr->type == XML_ATTRIBUTE_NODE) &&
             m_aNodePtr->ns != nullptr)
         {
-            const xmlChar* xHref = m_aNodePtr->ns->href;
-            aURI = OUString(reinterpret_cast<char const *>(xHref), strlen(reinterpret_cast<char const *>(xHref)), RTL_TEXTENCODING_UTF8);
+            const xmlChar* pHref = m_aNodePtr->ns->href;
+            aURI = OUString(reinterpret_cast<char const *>(pHref), strlen(reinterpret_cast<char const *>(pHref)), RTL_TEXTENCODING_UTF8);
         }
         return aURI;
     }
@@ -600,9 +600,9 @@ namespace DOM
             (m_aNodePtr->type == XML_ELEMENT_NODE || m_aNodePtr->type == XML_ATTRIBUTE_NODE) &&
             m_aNodePtr->ns != nullptr)
         {
-            const xmlChar* xPrefix = m_aNodePtr->ns->prefix;
-            if( xPrefix != nullptr )
-                aPrefix = OUString(reinterpret_cast<char const *>(xPrefix), strlen(reinterpret_cast<char const *>(xPrefix)), RTL_TEXTENCODING_UTF8);
+            const xmlChar* pPrefix = m_aNodePtr->ns->prefix;
+            if( pPrefix != nullptr )
+                aPrefix = OUString(reinterpret_cast<char const *>(pPrefix), strlen(reinterpret_cast<char const *>(pPrefix)), RTL_TEXTENCODING_UTF8);
         }
         return aPrefix;
 

@@ -467,19 +467,19 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
 
-    vector< XMLPropertyState > xPropStates =
+    vector< XMLPropertyState > aPropStates =
             xPropMapper->Filter( rPropSet );
 
     if( ppAddStates )
     {
         while( *ppAddStates )
         {
-            xPropStates.push_back( **ppAddStates );
+            aPropStates.push_back( **ppAddStates );
             ppAddStates++;
         }
     }
 
-    if( !xPropStates.empty() )
+    if( !aPropStates.empty() )
     {
         Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
         OUString sParent, sCondParent;
@@ -536,8 +536,8 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             {
                 // Get parent and remove hyperlinks (they aren't of interest)
                 rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
-                for( ::std::vector< XMLPropertyState >::iterator i(xPropStates.begin());
-                      nIgnoreProps < 2 && i != xPropStates.end(); )
+                for( ::std::vector< XMLPropertyState >::iterator i(aPropStates.begin());
+                      nIgnoreProps < 2 && i != aPropStates.end(); )
                 {
                     if( i->mnIndex == -1 )
                     {
@@ -551,7 +551,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     case CTF_HYPERLINK_URL:
                         i->mnIndex = -1;
                         nIgnoreProps++;
-                        i = xPropStates.erase( i );
+                        i = aPropStates.erase( i );
                         break;
                     default:
                         ++i;
@@ -571,11 +571,11 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             ; // section styles have no parents
             break;
         }
-        if( (xPropStates.size() - nIgnoreProps) > 0 )
+        if( (aPropStates.size() - nIgnoreProps) > 0 )
         {
-            GetAutoStylePool().Add( nFamily, sParent, xPropStates, bDontSeek );
+            GetAutoStylePool().Add( nFamily, sParent, aPropStates, bDontSeek );
             if( !sCondParent.isEmpty() && sParent != sCondParent )
-                GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
+                GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
         }
     }
 }
@@ -598,7 +598,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
 
-    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
+    vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
 
     if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
     {
@@ -638,7 +638,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
     }
 
-    if( !xPropStates.empty() )
+    if( !aPropStates.empty() )
     {
         OUString sParent, sCondParent;
         switch( nFamily )
@@ -658,11 +658,11 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             break;
         }
 
-        if( std::any_of( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) )
+        if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
         {
-            GetAutoStylePool().Add( nFamily, sParent, xPropStates );
+            GetAutoStylePool().Add( nFamily, sParent, aPropStates );
             if( !sCondParent.isEmpty() && sParent != sCondParent )
-                GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
+                GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
         }
     }
 }
@@ -693,17 +693,17 @@ OUString XMLTextParagraphExport::Find(
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
     if( !xPropMapper.is() )
         return sName;
-    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
+    vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
     if( ppAddStates )
     {
         while( *ppAddStates )
         {
-            xPropStates.push_back( **ppAddStates );
+            aPropStates.push_back( **ppAddStates );
             ++ppAddStates;
         }
     }
-    if( std::any_of( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) )
-        sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
+    if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
+        sName = GetAutoStylePool().Find( nFamily, sName, aPropStates );
 
     return sName;
 }
@@ -716,19 +716,19 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         const XMLPropertyState** ppAddStates ) const
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
-    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
+    vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
 
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;
     rbHyperlink = rbHasCharStyle = rbHasAutoStyle = false;
     sal_uInt16 nIgnoreProps = 0;
     rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
-    ::std::vector< XMLPropertyState >::iterator aFirstDel = xPropStates.end();
-    ::std::vector< XMLPropertyState >::iterator aSecondDel = xPropStates.end();
+    ::std::vector< XMLPropertyState >::iterator aFirstDel = aPropStates.end();
+    ::std::vector< XMLPropertyState >::iterator aSecondDel = aPropStates.end();
 
     for( ::std::vector< XMLPropertyState >::iterator
-            i = xPropStates.begin();
-         nIgnoreProps < 2 && i != xPropStates.end();
+            i = aPropStates.begin();
+         nIgnoreProps < 2 && i != aPropStates.end();
          ++i )
     {
         if( i->mnIndex == -1 )
@@ -761,11 +761,11 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
     {
         while( *ppAddStates )
         {
-            xPropStates.push_back( **ppAddStates );
+            aPropStates.push_back( **ppAddStates );
             ppAddStates++;
         }
     }
-    if( (xPropStates.size() - nIgnoreProps) > 0L )
+    if( (aPropStates.size() - nIgnoreProps) > 0L )
     {
         // erase the character style, otherwise the autostyle cannot be found!
         // erase the hyperlink, otherwise the autostyle cannot be found!
@@ -774,11 +774,11 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
             // If two elements of a vector have to be deleted,
             // we should delete the second one first.
             if( --nIgnoreProps )
-                xPropStates.erase( aSecondDel );
-            xPropStates.erase( aFirstDel );
+                aPropStates.erase( aSecondDel );
+            aPropStates.erase( aFirstDel );
         }
         OUString sParent; // AutoStyles should not have parents!
-        sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates );
+        sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, aPropStates );
         rbHasAutoStyle = true;
     }
 

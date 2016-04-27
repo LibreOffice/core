@@ -653,21 +653,21 @@ shell::open( sal_Int32 CommandId,
              const OUString& aUnqPath,
              bool bLock )
 {
-    XInputStream_impl* xInputStream = new XInputStream_impl( aUnqPath, bLock ); // from filinpstr.hxx
+    XInputStream_impl* pInputStream = new XInputStream_impl( aUnqPath, bLock ); // from filinpstr.hxx
 
-    sal_Int32 ErrorCode = xInputStream->CtorSuccess();
+    sal_Int32 ErrorCode = pInputStream->CtorSuccess();
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
     {
         installError( CommandId,
                       ErrorCode,
-                      xInputStream->getMinorError() );
+                      pInputStream->getMinorError() );
 
-        delete xInputStream;
-        xInputStream = nullptr;
+        delete pInputStream;
+        pInputStream = nullptr;
     }
 
-    return uno::Reference< io::XInputStream >( xInputStream );
+    return uno::Reference< io::XInputStream >( pInputStream );
 }
 
 
@@ -686,20 +686,20 @@ shell::open_rw( sal_Int32 CommandId,
                 const OUString& aUnqPath,
                 bool bLock )
 {
-    XStream_impl* xStream = new XStream_impl( aUnqPath, bLock );  // from filstr.hxx
+    XStream_impl* pStream = new XStream_impl( aUnqPath, bLock );  // from filstr.hxx
 
-    sal_Int32 ErrorCode = xStream->CtorSuccess();
+    sal_Int32 ErrorCode = pStream->CtorSuccess();
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
     {
         installError( CommandId,
                       ErrorCode,
-                      xStream->getMinorError() );
+                      pStream->getMinorError() );
 
-        delete xStream;
-        xStream = nullptr;
+        delete pStream;
+        pStream = nullptr;
     }
-    return uno::Reference< io::XStream >( xStream );
+    return uno::Reference< io::XStream >( pStream );
 }
 
 

@@ -1726,7 +1726,8 @@ static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XSt
 {
     OUString aPropName( PROPERTY_RESOURCERESOLVER );
 
-    Any xNewStringResourceResolver; xNewStringResourceResolver <<= xStringResourceResolver;
+    Any aNewStringResourceResolver;
+    aNewStringResourceResolver <<= xStringResourceResolver;
 
     Sequence< OUString > aPropNames { aPropName };
 
@@ -1755,7 +1756,7 @@ static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XSt
                 xMultiPropSet->firePropertiesChangeEvent( aPropNames, xListener );
             }
             else
-                xPropertySet->setPropertyValue( aPropName, xNewStringResourceResolver );
+                xPropertySet->setPropertyValue( aPropName, aNewStringResourceResolver );
         }
         catch (const Exception&)
         {

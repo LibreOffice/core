@@ -206,7 +206,7 @@ RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther 
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    m_xEquationProperties.set( CloneHelper::CreateRefClone< uno::Reference< beans::XPropertySet > >()( rOther.m_xEquationProperties ));
+    m_xEquationProperties.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xEquationProperties ));
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
 }
 

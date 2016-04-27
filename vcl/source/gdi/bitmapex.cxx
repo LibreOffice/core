@@ -1214,16 +1214,16 @@ BitmapEx createBlendFrame(
 
         aContent.Erase(COL_BLACK);
 
-        BitmapWriteAccess* xContent = aContent.AcquireWriteAccess();
+        BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
         BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
 
-        if(xContent && pAlpha)
+        if(pContent && pAlpha)
         {
             long x(0);
             long y(0);
 
             // x == 0, y == 0, top-left corner
-            xContent->SetPixel(0, 0, aColorTopLeft);
+            pContent->SetPixel(0, 0, aColorTopLeft);
             pAlpha->SetPixelIndex(0, 0, nAlpha);
 
             // y == 0, top line left to right
@@ -1232,7 +1232,7 @@ BitmapEx createBlendFrame(
                 Color aMix(aColorTopLeft);
 
                 aMix.Merge(aColorTopRight, 255 - sal_uInt8((x * 255) / nW));
-                xContent->SetPixel(0, x, aMix);
+                pContent->SetPixel(0, x, aMix);
                 pAlpha->SetPixelIndex(0, x, nAlpha);
             }
 
@@ -1240,7 +1240,7 @@ BitmapEx createBlendFrame(
             // #i123690# Caution! When nW is 1, x == nW is possible (!)
             if(x < nW)
             {
-                xContent->SetPixel(0, x, aColorTopRight);
+                pContent->SetPixel(0, x, aColorTopRight);
                 pAlpha->SetPixelIndex(0, x, nAlpha);
             }
 
@@ -1250,7 +1250,7 @@ BitmapEx createBlendFrame(
                 Color aMixA(aColorTopLeft);
 
                 aMixA.Merge(aColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
-                xContent->SetPixel(y, 0, aMixA);
+                pContent->SetPixel(y, 0, aMixA);
                 pAlpha->SetPixelIndex(y, 0, nAlpha);
 
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
@@ -1259,7 +1259,7 @@ BitmapEx createBlendFrame(
                     Color aMixB(aColorTopRight);
 
                     aMixB.Merge(aColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
-                    xContent->SetPixel(y, x, aMixB);
+                    pContent->SetPixel(y, x, aMixB);
                     pAlpha->SetPixelIndex(y, x, nAlpha);
                 }
             }
@@ -1268,7 +1268,7 @@ BitmapEx createBlendFrame(
             if(y < nH)
             {
                 // x == 0, y == nH - 1, bottom-left corner
-                xContent->SetPixel(y, 0, aColorBottomLeft);
+                pContent->SetPixel(y, 0, aColorBottomLeft);
                 pAlpha->SetPixelIndex(y, 0, nAlpha);
 
                 // y == nH - 1, bottom line left to right
@@ -1277,7 +1277,7 @@ BitmapEx createBlendFrame(
                     Color aMix(aColorBottomLeft);
 
                     aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
-                    xContent->SetPixel(y, x, aMix);
+                    pContent->SetPixel(y, x, aMix);
                     pAlpha->SetPixelIndex(y, x, nAlpha);
                 }
 
@@ -1285,21 +1285,21 @@ BitmapEx createBlendFrame(
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
                 if(x < nW)
                 {
-                    xContent->SetPixel(y, x, aColorBottomRight);
+                    pContent->SetPixel(y, x, aColorBottomRight);
                     pAlpha->SetPixelIndex(y, x, nAlpha);
                 }
             }
 
-            Bitmap::ReleaseAccess(xContent);
+            Bitmap::ReleaseAccess(pContent);
             Bitmap::ReleaseAccess(pAlpha);
 
             pBlendFrameCache->m_aLastResult = BitmapEx(aContent, aAlpha);
         }
         else
         {
-            if(xContent)
+            if(pContent)
             {
-                Bitmap::ReleaseAccess(xContent);
+                Bitmap::ReleaseAccess(pContent);
             }
 
             if(pAlpha)

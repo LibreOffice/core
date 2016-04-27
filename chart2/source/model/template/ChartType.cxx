@@ -57,7 +57,7 @@ ChartType::ChartType( const ChartType & rOther ) :
 {
     {
         SolarMutexGuard g; // access to rOther.m_aDataSeries
-        CloneHelper::CloneRefVector<Reference<chart2::XDataSeries> >(
+        CloneHelper::CloneRefVector<css::chart2::XDataSeries>(
                 rOther.m_aDataSeries, m_aDataSeries);
     }
     ModifyListenerHelper::addListenerToAllElements( m_aDataSeries, m_xModifyEventForwarder );

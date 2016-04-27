@@ -1230,8 +1230,8 @@ Reference< XInterface > SAL_CALL SfxBaseModel::getCurrentSelection() throw(Runti
         Reference< view::XSelectionSupplier >  xDocView( xController, UNO_QUERY );
         if ( xDocView.is() )
         {
-            Any xSel = xDocView->getSelection();
-            xSel >>= xReturn ;
+            Any aSel = xDocView->getSelection();
+            aSel >>= xReturn ;
         }
     }
 

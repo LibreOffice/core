@@ -392,11 +392,11 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const css::uno::Reference
 
             // set anys
             aAny <<= pCtx->GetDiffuseColor();
-            drawing::Direction3D xLightDir;
-            xLightDir.DirectionX = pCtx->GetDirection().getX();
-            xLightDir.DirectionY = pCtx->GetDirection().getY();
-            xLightDir.DirectionZ = pCtx->GetDirection().getZ();
-            aAny2 <<= xLightDir;
+            drawing::Direction3D aLightDir;
+            aLightDir.DirectionX = pCtx->GetDirection().getX();
+            aLightDir.DirectionY = pCtx->GetDirection().getY();
+            aLightDir.DirectionZ = pCtx->GetDirection().getZ();
+            aAny2 <<= aLightDir;
             aAny3 <<= pCtx->GetEnabled();
 
             switch(a)

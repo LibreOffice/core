@@ -264,8 +264,8 @@ void XSpreadsheets2::testImportCellStyle()
     uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier (xDestDoc, UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xFamiliesNameAccess (xFamiliesSupplier->getStyleFamilies(), UNO_QUERY_THROW);
     OUString aCellFamilyName("CellStyles");
-    uno::Any xCellStylesFamily = xFamiliesNameAccess->getByName(aCellFamilyName);
-    uno::Reference< container::XNameContainer > xCellStylesFamilyNameAccess (xCellStylesFamily, UNO_QUERY_THROW);
+    uno::Any aCellStylesFamily = xFamiliesNameAccess->getByName(aCellFamilyName);
+    uno::Reference< container::XNameContainer > xCellStylesFamilyNameAccess (aCellStylesFamily, UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("New cell style not present", xCellStylesFamilyNameAccess->hasByName(aDestStyleName));
 

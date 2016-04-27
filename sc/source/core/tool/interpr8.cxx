@@ -1534,14 +1534,14 @@ void ScInterpreter::ScTextJoin_MS()
             pStack[ sp - 1 - i ] = p;
         }
 
-        // get xDelimiter and bSkipEmpty
-        std::vector< OUString > xDelimiter;
+        // get aDelimiters and bSkipEmpty
+        std::vector< OUString > aDelimiters;
         size_t nRefInList = 0;
         switch ( GetStackType() )
         {
             case svString:
             case svDouble:
-                xDelimiter.push_back( PopString().getString() );
+                aDelimiters.push_back( PopString().getString() );
                 break;
             case svSingleRef :
             {
@@ -1553,11 +1553,11 @@ void ScInterpreter::ScTextJoin_MS()
                 if ( !aCell.isEmpty() )
                 {
                     if ( aCell.hasString() )
-                        xDelimiter.push_back( aCell.getString( pDok ) );
+                        aDelimiters.push_back( aCell.getString( pDok ) );
                     else
                     {
                         if ( !aCell.hasEmptyValue() )
-                            xDelimiter.push_back( OUString::number( aCell.getValue() ) );
+                            aDelimiters.push_back( OUString::number( aCell.getValue() ) );
                     }
                 }
             }
@@ -1595,15 +1595,15 @@ void ScInterpreter::ScTextJoin_MS()
                         if ( !aCell.isEmpty() )
                         {
                             if ( aCell.hasString() )
-                                xDelimiter.push_back( aCell.getString( pDok ) );
+                                aDelimiters.push_back( aCell.getString( pDok ) );
                             else
                             {
                                 if ( !aCell.hasEmptyValue() )
-                                    xDelimiter.push_back( OUString::number( aCell.getValue() ) );
+                                    aDelimiters.push_back( OUString::number( aCell.getValue() ) );
                             }
                         }
                         else
-                            xDelimiter.push_back( "" );
+                            aDelimiters.push_back( "" );
                     }
                 }
             }
@@ -1628,15 +1628,15 @@ void ScInterpreter::ScTextJoin_MS()
                                 if ( !pMat->IsEmpty( j, k ) )
                                 {
                                     if ( pMat->IsString( j, k ) )
-                                        xDelimiter.push_back( pMat->GetString( j, k ).getString() );
+                                        aDelimiters.push_back( pMat->GetString( j, k ).getString() );
                                     else
                                     {
                                         if ( pMat->IsValue( j, k ) )
-                                            xDelimiter.push_back( OUString::number( pMat->GetDouble( j, k ) ) );
+                                            aDelimiters.push_back( OUString::number( pMat->GetDouble( j, k ) ) );
                                     }
                                 }
                                 else
-                                    xDelimiter.push_back( "" );
+                                    aDelimiters.push_back( "" );
                             }
                         }
                     }
@@ -1648,12 +1648,12 @@ void ScInterpreter::ScTextJoin_MS()
                 SetError( errIllegalArgument);
                 break;
         }
-        if ( xDelimiter.empty() )
+        if ( aDelimiters.empty() )
         {
             PushIllegalArgument();
             return;
         }
-        SCSIZE nSize = xDelimiter.size();
+        SCSIZE nSize = aDelimiters.size();
         bool bSkipEmpty = static_cast< bool >( GetDouble() );
         nParamCount -= 2;
 
@@ -1674,7 +1674,7 @@ void ScInterpreter::ScTextJoin_MS()
                     {
                         if ( !bFirst )
                         {
-                            aResBuf.append( xDelimiter[ nIdx ] );
+                            aResBuf.append( aDelimiters[ nIdx ] );
                             if ( nSize > 1 )
                             {
                                 if ( ++nIdx >= nSize )
@@ -1711,7 +1711,7 @@ void ScInterpreter::ScTextJoin_MS()
                     {
                         if ( !bFirst )
                         {
-                            aResBuf.append( xDelimiter[ nIdx ] );
+                            aResBuf.append( aDelimiters[ nIdx ] );
                             if ( nSize > 1 )
                             {
                                 if ( ++nIdx >= nSize )
@@ -1771,7 +1771,7 @@ void ScInterpreter::ScTextJoin_MS()
                             {
                                 if ( !bFirst )
                                 {
-                                    aResBuf.append( xDelimiter[ nIdx ] );
+                                    aResBuf.append( aDelimiters[ nIdx ] );
                                     if ( nSize > 1 )
                                     {
                                         if ( ++nIdx >= nSize )
@@ -1820,7 +1820,7 @@ void ScInterpreter::ScTextJoin_MS()
                                     {
                                         if ( !bFirst )
                                         {
-                                            aResBuf.append( xDelimiter[ nIdx ] );
+                                            aResBuf.append( aDelimiters[ nIdx ] );
                                             if ( nSize > 1 )
                                             {
                                                 if ( ++nIdx >= nSize )
@@ -1842,7 +1842,7 @@ void ScInterpreter::ScTextJoin_MS()
                     {
                         if ( !bFirst )
                         {
-                            aResBuf.append( xDelimiter[ nIdx ] );
+                            aResBuf.append( aDelimiters[ nIdx ] );
                             if ( nSize > 1 )
                             {
                                 if ( ++nIdx >= nSize )

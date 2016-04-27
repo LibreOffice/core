@@ -243,7 +243,7 @@ Title::Title( const Title & rOther ) :
         ::property::OPropertySet( rOther, m_aMutex ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    CloneHelper::CloneRefSequence< uno::Reference< chart2::XFormattedString > >(
+    CloneHelper::CloneRefSequence<chart2::XFormattedString>(
         rOther.m_aStrings, m_aStrings );
     ModifyListenerHelper::addListenerToAllElements(
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );

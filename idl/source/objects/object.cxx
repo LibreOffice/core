@@ -49,14 +49,14 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvMetaClass * pClass = rBase.ReadKnownClass( rInStm );
         if( !pClass )
             throw SvParseException( rInStm, "unknown imported interface" );
-        SvClassElement xEle;
-        xEle.SetClass( pClass );
-        aClassElementList.push_back( xEle );
+        SvClassElement aEle;
+        aEle.SetClass( pClass );
+        aClassElementList.push_back( aEle );
 
         rTok = rInStm.GetToken();
         if( rTok.IsString() )
         {
-            xEle.SetPrefix( rTok.GetString() );
+            aEle.SetPrefix( rTok.GetString() );
             rInStm.GetToken_Next();
         }
         return;

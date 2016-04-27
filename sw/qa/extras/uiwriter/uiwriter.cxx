@@ -3418,8 +3418,8 @@ void SwUiWriterTest::testTdf96479()
         OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>();
 
     SwDoc* pDoc = createDoc();
-    SwXTextDocument *xTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(xTextDoc);
+    SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
 
     // So we can clean up all references for reload
     {
@@ -3483,9 +3483,9 @@ void SwUiWriterTest::testTdf96479()
         utl::TempFile aTempFile;
         save("writer8", aTempFile);
         loadURL(aTempFile.GetURL(), nullptr);
-        xTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT(xTextDoc);
-        pDoc = xTextDoc->GetDocShell()->GetDoc();
+        pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        pDoc = pTextDoc->GetDocShell()->GetDoc();
 
         // Lookup "replacement" bookmark
         IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();

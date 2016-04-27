@@ -550,8 +550,8 @@ bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const css::uno::Reference<
     SvGlobalName aName;
     OUString sId = exportHelper.getGUID();
     aName.MakeId(sId);
-    BinaryXOutputStream xOut( xOutStrm, false );
-    OleHelper::exportGuid( xOut, aName );
+    BinaryXOutputStream aOut( xOutStrm, false );
+    OleHelper::exportGuid( aOut, aName );
     exportHelper.exportControl( xOutStrm, rSize );
     return true;
 }

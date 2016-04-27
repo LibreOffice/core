@@ -1598,8 +1598,8 @@ SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
 
 void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 {
-    ::basegfx::B2DPolyPolygon xPolyPoly;
-    if( ::basegfx::tools::importFromSvgD( xPolyPoly, getPath(), true, nullptr ) )
+    ::basegfx::B2DPolyPolygon aPolyPoly;
+    if( ::basegfx::tools::importFromSvgD( aPolyPoly, getPath(), true, nullptr ) )
     {
         SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
         if( pObj )
@@ -1608,21 +1608,21 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
             if( pPage )
             {
                 const Size aPageSize( pPage->GetSize() );
-                xPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
+                aPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
             }
 
             const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const Point aCenter( aBoundRect.Center() );
-            xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
+            aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
         }
     }
 
-    rPathObj.SetPathPoly( xPolyPoly );
+    rPathObj.SetPathPoly( aPolyPoly );
 }
 
 void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj )
 {
-    ::basegfx::B2DPolyPolygon xPolyPoly( rPathObj.GetPathPoly() );
+    ::basegfx::B2DPolyPolygon aPolyPoly( rPathObj.GetPathPoly() );
 
     SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
     if( pObj )
@@ -1642,18 +1642,18 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
 
         const Point aCenter( aBoundRect.Center() );
 
-        xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
+        aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
 
         SdrPage* pPage = pObj->GetPage();
         if( pPage )
         {
             const Size aPageSize( pPage->GetSize() );
-            xPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(
+            aPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(
                 1.0 / (double)aPageSize.Width(), 1.0 / (double)aPageSize.Height()));
         }
     }
 
-    setPath( ::basegfx::tools::exportToSvgD( xPolyPoly, true, true, true) );
+    setPath( ::basegfx::tools::exportToSvgD( aPolyPoly, true, true, true) );
 }
 
 EffectSequenceHelper::EffectSequenceHelper()

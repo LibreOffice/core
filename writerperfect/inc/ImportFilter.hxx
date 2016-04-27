@@ -89,12 +89,12 @@ public:
 
         // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
         // writes to in-memory target doc
-        DocumentHandler xHandler(xInternalHandler);
+        DocumentHandler aHandler(xInternalHandler);
 
         WPXSvInputStream input(xInputStream);
 
         Generator exporter;
-        exporter.addDocumentHandler(&xHandler, ODF_FLAT_XML);
+        exporter.addDocumentHandler(&aHandler, ODF_FLAT_XML);
 
         this->doRegisterHandlers(exporter);
 

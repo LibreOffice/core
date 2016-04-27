@@ -194,13 +194,13 @@ ScVbaNames::Add( const css::uno::Any& Name ,
 
         uno::Reference< excel::XRange > xArea( xRange->Areas( uno::makeAny( sal_Int32(1) ) ), uno::UNO_QUERY );
 
-        uno::Any xAny = xArea->getCellRange() ;
+        uno::Any aAny = xArea->getCellRange() ;
 
-        uno::Reference< sheet::XCellRangeAddressable > thisRangeAdd( xAny, ::uno::UNO_QUERY_THROW);
+        uno::Reference< sheet::XCellRangeAddressable > thisRangeAdd( aAny, ::uno::UNO_QUERY_THROW);
 
         table::CellRangeAddress aAddr = thisRangeAdd->getRangeAddress();
         ScAddress aPos( static_cast< SCCOL >( aAddr.StartColumn ) , static_cast< SCROW >( aAddr.StartRow ) , static_cast< SCTAB >(aAddr.Sheet ) );
-        uno::Any xAny2 ;
+        uno::Any aAny2 ;
         if ( mxNames.is() )
         {
             sal_Int32 nUnoType = 0;
@@ -213,7 +213,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             {
                 xArea.set( xRange->Areas( uno::makeAny( nArea ) ), uno::UNO_QUERY_THROW );
 
-                OUString sRangeAdd = xArea->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
+                OUString sRangeAdd = xArea->Address( aAny2, aAny2 , aAny2 , aAny2, aAny2 );
                 if ( nArea > 1 )
                     sTmp += ",";
                 sTmp = sTmp + "'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd;

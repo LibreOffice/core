@@ -52,9 +52,9 @@ void ScRecordChangesTest::testSetRecordChanges()
     CPPUNIT_ASSERT_MESSAGE("a new document does not protect record changes", !protectionValue);
 
     // now activate recording
-    uno::Any xValue;
-    xValue <<= true;
-    xDocSettingsPropSet->setPropertyValue("RecordChanges", xValue);
+    uno::Any aValue;
+    aValue <<= true;
+    xDocSettingsPropSet->setPropertyValue("RecordChanges", aValue);
 
     CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("RecordChanges") >>= recordChangesValue);
     CPPUNIT_ASSERT_MESSAGE("the document should record changes", recordChangesValue);
@@ -82,9 +82,9 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
     CPPUNIT_ASSERT_MESSAGE("the protection should be active", protectionValue);
 
     // try to de-activate recording
-    uno::Any xValue;
-    xValue <<= false;
-    xDocSettingsPropSet->setPropertyValue("RecordChanges", xValue);
+    uno::Any aValue;
+    aValue <<= false;
+    xDocSettingsPropSet->setPropertyValue("RecordChanges", aValue);
 
     CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("RecordChanges") >>= recordChangesValue);
     CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("IsRecordChangesProtected") >>= protectionValue);

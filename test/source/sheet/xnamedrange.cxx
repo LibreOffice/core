@@ -105,11 +105,11 @@ void XNamedRange::testGetReferencePosition()
     OUString aTestedNamedRangeString("initial2");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
-    table::CellAddress xCellAddress = xNamedRange->getReferencePosition();
+    table::CellAddress aCellAddress = xNamedRange->getReferencePosition();
     // the expected address is on B1, as it was the active cell when intial2 created
-    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", xCellAddress.Sheet == 0);
-    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", xCellAddress.Column == 1);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", xCellAddress.Row == 0);
+    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", aCellAddress.Sheet == 0);
+    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", aCellAddress.Column == 1);
+    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", aCellAddress.Row == 0);
 }
 
 void XNamedRange::testSetReferencePosition()
@@ -121,10 +121,10 @@ void XNamedRange::testSetReferencePosition()
 
     xNamedRange->setReferencePosition(aBaseAddress);
 
-    table::CellAddress xCellAddress = xNamedRange->getReferencePosition();
-    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position after setting it", xCellAddress.Sheet == 1);
-    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position after setting it", xCellAddress.Column == 2);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position after setting it", xCellAddress.Row == 3);
+    table::CellAddress aCellAddress = xNamedRange->getReferencePosition();
+    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position after setting it", aCellAddress.Sheet == 1);
+    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position after setting it", aCellAddress.Column == 2);
+    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position after setting it", aCellAddress.Row == 3);
 }
 
 }

@@ -413,8 +413,8 @@ void ChartAreaPanel::updateData()
     {
        OUString aGradientName;
        xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
-       XGradient xGradient = getXGradientForName(mxModel, aGradientName);
-       XFillGradientItem aGradientItem(aGradientName, xGradient);
+       XGradient aGradient = getXGradientForName(mxModel, aGradientName);
+       XFillGradientItem aGradientItem(aGradientName, aGradient);
        updateFillGradient(false, true, &aGradientItem);
     }
 
@@ -422,8 +422,8 @@ void ChartAreaPanel::updateData()
     {
         OUString aHatchName;
         xPropSet->getPropertyValue("FillHatchName") >>= aHatchName;
-        XHatch xHatch = getXHatchFromName(mxModel, aHatchName);
-        XFillHatchItem aHatchItem(aHatchName, xHatch);
+        XHatch aHatch = getXHatchFromName(mxModel, aHatchName);
+        XFillHatchItem aHatchItem(aHatchName, aHatch);
         updateFillHatch(false, true, &aHatchItem);
     }
 
@@ -431,8 +431,8 @@ void ChartAreaPanel::updateData()
     {
         OUString aBitmapName;
         xPropSet->getPropertyValue("FillBitmapName") >>= aBitmapName;
-        GraphicObject xBitmap = getXBitmapFromName(mxModel, aBitmapName);
-        XFillBitmapItem aBitmapItem(aBitmapName, xBitmap);
+        GraphicObject aBitmap = getXBitmapFromName(mxModel, aBitmapName);
+        XFillBitmapItem aBitmapItem(aBitmapName, aBitmap);
         XFillBitmapItem* pBitmapItem = nullptr;
         DrawModelWrapper* pModelWrapper = nullptr;
         try

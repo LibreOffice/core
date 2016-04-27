@@ -68,59 +68,59 @@ void XDatabaseRange::testGetSortDescriptor()
     uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
     for (sal_Int32 i = 0; i < xSortDescr.getLength(); ++i)
     {
-        beans::PropertyValue xProp = xSortDescr[i];
-        //std::cout << "Prop " << i << " Name: " << OUString(xProp.Name) << std::endl;
+        beans::PropertyValue aProp = xSortDescr[i];
+        //std::cout << "Prop " << i << " Name: " << OUString(aProp.Name) << std::endl;
 
-        if (xProp.Name == "IsSortColumns")
+        if (aProp.Name == "IsSortColumns")
         {
             bool bIsSortColumns = true;
-            xProp.Value >>= bIsSortColumns;
+            aProp.Value >>= bIsSortColumns;
             CPPUNIT_ASSERT(bIsSortColumns);
         }
-        else if (xProp.Name == "ContainsHeader")
+        else if (aProp.Name == "ContainsHeader")
         {
             bool bContainsHeader = true;
-            xProp.Value >>= bContainsHeader;
+            aProp.Value >>= bContainsHeader;
             CPPUNIT_ASSERT(bContainsHeader);
         }
-        else if (xProp.Name == "MaxFieldCount")
+        else if (aProp.Name == "MaxFieldCount")
         {
             sal_Int32 nMaxFieldCount = 0;
-            xProp.Value >>= nMaxFieldCount;
+            aProp.Value >>= nMaxFieldCount;
             std::cout << "Value: " << nMaxFieldCount << std::endl;
 
         }
-        else if (xProp.Name == "SortFields")
+        else if (aProp.Name == "SortFields")
         {
 
         }
-        else if (xProp.Name == "BindFormatsToContent")
+        else if (aProp.Name == "BindFormatsToContent")
         {
             bool bBindFormatsToContent = false;
-            xProp.Value >>= bBindFormatsToContent;
+            aProp.Value >>= bBindFormatsToContent;
             CPPUNIT_ASSERT(bBindFormatsToContent);
         }
-        else if (xProp.Name == "CopyOutputData")
+        else if (aProp.Name == "CopyOutputData")
         {
             bool bCopyOutputData = true;
-            xProp.Value >>= bCopyOutputData;
+            aProp.Value >>= bCopyOutputData;
             CPPUNIT_ASSERT(!bCopyOutputData);
         }
-        else if (xProp.Name == "OutputPosition")
+        else if (aProp.Name == "OutputPosition")
         {
 
         }
-        else if (xProp.Name == "IsUserListEnabled")
+        else if (aProp.Name == "IsUserListEnabled")
         {
             bool bIsUserListEnabled  = true;
-            xProp.Value >>= bIsUserListEnabled;
+            aProp.Value >>= bIsUserListEnabled;
             CPPUNIT_ASSERT(!bIsUserListEnabled);
 
         }
-        else if (xProp.Name == "UserListIndex")
+        else if (aProp.Name == "UserListIndex")
         {
             sal_Int32 nUserListIndex = 1;
-            xProp.Value >>= nUserListIndex;
+            aProp.Value >>= nUserListIndex;
             CPPUNIT_ASSERT(nUserListIndex == 0);
         }
     }

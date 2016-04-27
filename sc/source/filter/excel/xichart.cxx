@@ -2740,8 +2740,8 @@ bool XclImpChTypeGroup::HasConnectorLines() const
     // existence of connector lines (only in stacked bar charts)
     if ( !(maType.IsStacked() || maType.IsPercent()) || (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_BAR) )
         return false;
-    XclImpChLineFormatMap::const_iterator xConLine = m_ChartLines.find(EXC_CHCHARTLINE_CONNECT);
-    return (xConLine != m_ChartLines.end() && xConLine->second.HasLine());
+    XclImpChLineFormatMap::const_iterator aConLine = m_ChartLines.find(EXC_CHCHARTLINE_CONNECT);
+    return (aConLine != m_ChartLines.end() && aConLine->second.HasLine());
 }
 
 OUString XclImpChTypeGroup::GetSingleSeriesTitle() const
@@ -2817,9 +2817,9 @@ void XclImpChTypeGroup::ReadChChartLine( XclImpStream& rStrm )
     sal_uInt16 nLineId = rStrm.ReaduInt16();
     if( (rStrm.GetNextRecId() == EXC_ID_CHLINEFORMAT) && rStrm.StartNextRecord() )
     {
-        XclImpChLineFormat xLineFmt;
-        xLineFmt.ReadChLineFormat( rStrm );
-        m_ChartLines[ nLineId ] = xLineFmt;
+        XclImpChLineFormat aLineFmt;
+        aLineFmt.ReadChLineFormat( rStrm );
+        m_ChartLines[ nLineId ] = aLineFmt;
     }
 }
 
@@ -2919,11 +2919,11 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, s
         aTypeProp.SetBoolProperty( EXC_CHPROP_SHOWFIRST, HasDropBars() );
         aTypeProp.SetBoolProperty( EXC_CHPROP_SHOWHIGHLOW, true );
         // hi-lo line format
-        XclImpChLineFormatMap::const_iterator xHiLoLine = m_ChartLines.find( EXC_CHCHARTLINE_HILO );
-        if (xHiLoLine != m_ChartLines.end())
+        XclImpChLineFormatMap::const_iterator aHiLoLine = m_ChartLines.find( EXC_CHCHARTLINE_HILO );
+        if (aHiLoLine != m_ChartLines.end())
         {
             ScfPropertySet aSeriesProp( xDataSeries );
-            xHiLoLine->second.Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
+            aHiLoLine->second.Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         }
         // white dropbar format
         XclImpChDropBarMap::const_iterator itr = m_DropBars.find(EXC_CHDROPBAR_UP);

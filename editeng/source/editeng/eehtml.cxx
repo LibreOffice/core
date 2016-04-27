@@ -103,11 +103,6 @@ SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
 
 void EditHTMLParser::NextToken( int nToken )
 {
-    #ifdef DBG_UTIL
-        HTML_TOKEN_IDS xID = (HTML_TOKEN_IDS)nToken;
-        (void)xID;
-    #endif
-
     switch( nToken )
     {
     case HTML_META:

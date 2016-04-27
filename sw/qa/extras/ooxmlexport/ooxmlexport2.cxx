@@ -370,7 +370,7 @@ DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")
 {
-    sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
+    sal_Int32 aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
     sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -386,7 +386,7 @@ DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")
         uno::Reference<text::XTextViewCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
         awt::Point pos = xCursor->getPosition();
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect X coord computed from docx",
-            xCoordsFromOffice[i], pos.X, 1);
+            aXCoordsFromOffice[i], pos.X, 1);
 
         // Verify left margin of 1st cell :
         //  * Office left margins are measured relative to the right of the border

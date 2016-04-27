@@ -35,9 +35,9 @@ namespace CloneHelper
 template< class Interface >
     struct CreateRefClone : public ::std::unary_function< Interface, Interface >
 {
-    Interface operator() ( const Interface & xOther )
+    css::uno::Reference<Interface> operator() ( const css::uno::Reference<Interface> & xOther )
     {
-        Interface xResult;
+        css::uno::Reference<Interface> xResult;
         css::uno::Reference< css::util::XCloneable >
               xCloneable( xOther, css::uno::UNO_QUERY );
         if( xCloneable.is())
@@ -50,8 +50,8 @@ template< class Interface >
 /// clones a vector of UNO-References
 template< class Interface >
     void CloneRefVector(
-        const ::std::vector< Interface > & rSource,
-        ::std::vector< Interface > & rDestination )
+        const ::std::vector< css::uno::Reference< Interface > > & rSource,
+        ::std::vector< css::uno::Reference< Interface > > & rDestination )
 {
     ::std::transform( rSource.begin(), rSource.end(),
                       ::std::back_inserter( rDestination ),
@@ -61,8 +61,8 @@ template< class Interface >
 /// clones a UNO-sequence of UNO-References
 template< class Interface >
     void CloneRefSequence(
-        const css::uno::Sequence< Interface > & rSource,
-        css::uno::Sequence< Interface > & rDestination )
+        const css::uno::Sequence< css::uno::Reference<Interface> > & rSource,
+        css::uno::Sequence< css::uno::Reference<Interface> > & rDestination )
 {
     rDestination.realloc( rSource.getLength());
     ::std::transform( rSource.getConstArray(), rSource.getConstArray() + rSource.getLength(),

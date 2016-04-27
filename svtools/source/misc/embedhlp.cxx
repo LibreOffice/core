@@ -86,33 +86,33 @@ public:
 
 EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
 {
-    EmbedEventListener_Impl* xRet = new EmbedEventListener_Impl( p );
-    xRet->acquire();
+    EmbedEventListener_Impl* pRet = new EmbedEventListener_Impl( p );
+    pRet->acquire();
 
     if ( p->GetObject().is() )
     {
-        p->GetObject()->addStateChangeListener( xRet );
+        p->GetObject()->addStateChangeListener( pRet );
 
         uno::Reference < util::XCloseable > xClose( p->GetObject(), uno::UNO_QUERY );
         DBG_ASSERT( xClose.is(), "Object does not support XCloseable!" );
         if ( xClose.is() )
-            xClose->addCloseListener( xRet );
+            xClose->addCloseListener( pRet );
 
         uno::Reference < document::XEventBroadcaster > xBrd( p->GetObject(), uno::UNO_QUERY );
         if ( xBrd.is() )
-            xBrd->addEventListener( xRet );
+            xBrd->addEventListener( pRet );
 
-        xRet->nState = p->GetObject()->getCurrentState();
-        if ( xRet->nState == embed::EmbedStates::RUNNING )
+        pRet->nState = p->GetObject()->getCurrentState();
+        if ( pRet->nState == embed::EmbedStates::RUNNING )
         {
             uno::Reference < util::XModifiable > xMod( p->GetObject()->getComponent(), uno::UNO_QUERY );
             if ( xMod.is() )
                 // listen for changes in running state (update replacements in case of changes)
-                xMod->addModifyListener( xRet );
+                xMod->addModifyListener( pRet );
         }
     }
 
-    return xRet;
+    return pRet;
 }
 
 void SAL_CALL EmbedEventListener_Impl::changingState( const lang::EventObject&,

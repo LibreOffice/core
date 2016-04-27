@@ -2003,9 +2003,9 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69649, "fdo69649.docx")
     uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor( ), uno::UNO_QUERY);
     xTextCursor->gotoRange(xTextRange->getStart(),false);
     xTextCursor->gotoRange(xTextRange->getEnd(),true);
-    OUString xTocString(xTextCursor->getString());
-    xTocString = xTocString.copy(256);
-    CPPUNIT_ASSERT(xTocString.startsWithIgnoreAsciiCase( "Heading 15.1:\t15" ) );
+    OUString aTocString(xTextCursor->getString());
+    aTocString = aTocString.copy(256);
+    CPPUNIT_ASSERT(aTocString.startsWithIgnoreAsciiCase( "Heading 15.1:\t15" ) );
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo73389,"fdo73389.docx")

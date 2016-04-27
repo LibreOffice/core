@@ -70,11 +70,11 @@ namespace DOM
         if (pNode != nullptr)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar const * xName = reinterpret_cast<xmlChar const *>(o1.getStr());
+            xmlChar const * pName = reinterpret_cast<xmlChar const *>(o1.getStr());
             xmlAttrPtr cur = pNode->properties;
             while (cur != nullptr)
             {
-                if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0)
+                if( strcmp(reinterpret_cast<char const *>(pName), reinterpret_cast<char const *>(cur->name)) == 0)
                 {
                     aNode.set( m_pElement->GetOwnerDocument().GetCNode(
                                    reinterpret_cast<xmlNodePtr>(cur)).get() );
@@ -101,15 +101,15 @@ namespace DOM
         if (pNode != nullptr)
         {
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar const * xName = reinterpret_cast<xmlChar const *>(o1.getStr());
+            xmlChar const * pName = reinterpret_cast<xmlChar const *>(o1.getStr());
             OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar const*const xNs =
+            xmlChar const* pSearchNs =
                 reinterpret_cast<xmlChar const*>(o2.getStr());
-            xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, xNs);
+            xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, pSearchNs);
             xmlAttrPtr cur = pNode->properties;
             while (cur != nullptr && pNs != nullptr)
             {
-                if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0 &&
+                if( strcmp(reinterpret_cast<char const *>(pName), reinterpret_cast<char const *>(cur->name)) == 0 &&
                     cur->ns == pNs)
                 {
                     aNode.set( m_pElement->GetOwnerDocument().GetCNode(

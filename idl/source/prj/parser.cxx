@@ -299,14 +299,14 @@ void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
     if( rTok.Is( SvHash_import() ) )
     {
         SvMetaClass * pClass = ReadKnownClass();
-        SvClassElement xEle(pClass);
+        SvClassElement aEle(pClass);
         rTok = rInStm.GetToken();
         if( rTok.IsString() )
         {
-            xEle.SetPrefix( rTok.GetString() );
+            aEle.SetPrefix( rTok.GetString() );
             rInStm.GetToken_Next();
         }
-        rClass.aClassElementList.push_back( xEle );
+        rClass.aClassElementList.push_back( aEle );
         return;
     }
     else

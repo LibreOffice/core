@@ -34,8 +34,8 @@ void XSheetAnnotations::testCount()
     uno::Reference< sheet::XSheetAnnotations > xSheet2Annotations( getAnnotations(1), UNO_QUERY_THROW);
 
     // insert a note on sheet 2
-    table::CellAddress xTargetCellAddress (1,0,0);
-    xSheet2Annotations->insertNew(xTargetCellAddress, "an inserted annotation on sheet 2");
+    table::CellAddress aTargetCellAddress (1,0,0);
+    xSheet2Annotations->insertNew(aTargetCellAddress, "an inserted annotation on sheet 2");
 
     // count again on sheet 1
     sal_Int32 nAfter = xAnnotationsIndex->getCount();
@@ -55,8 +55,8 @@ void XSheetAnnotations::testInsertNew()
         "There should already be one note", sal_Int32(1), nBefore );
 
     // insert the annotation
-    table::CellAddress xTargetCellAddress (0,3,4);
-    aSheetAnnotations->insertNew(xTargetCellAddress, "an inserted annotation");
+    table::CellAddress aTargetCellAddress (0,3,4);
+    aSheetAnnotations->insertNew(aTargetCellAddress, "an inserted annotation");
 
     // count after inserting
     //uno::Reference< container::XIndexAccess > xAnnotationsIndexAfter (aSheetAnnotations, UNO_QUERY_THROW);
@@ -67,17 +67,17 @@ void XSheetAnnotations::testInsertNew()
 
     // is the position ok ?
     uno::Reference< sheet::XSheetAnnotation > aLastSheetAnnotation (xAnnotationsIndex->getByIndex(nAfter-1), UNO_QUERY_THROW);
-    table::CellAddress xResultCellAddress = aLastSheetAnnotation->getPosition();
+    table::CellAddress aResultCellAddress = aLastSheetAnnotation->getPosition();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Insert Annotation - Wrong SHEET reference position",
-        xTargetCellAddress.Sheet, xResultCellAddress.Sheet);
+        aTargetCellAddress.Sheet, aResultCellAddress.Sheet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Insert Annotation - Wrong COLUMN reference position",
-        xTargetCellAddress.Column, xResultCellAddress.Column);
+        aTargetCellAddress.Column, aResultCellAddress.Column);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Insert Annotation - Wrong ROW reference position",
-        xTargetCellAddress.Row, xResultCellAddress.Row);
+        aTargetCellAddress.Row, aResultCellAddress.Row);
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aTextSheetAnnotation(aLastSheetAnnotation, UNO_QUERY_THROW);
@@ -94,12 +94,12 @@ void XSheetAnnotations::testRemoveByIndex()
     uno::Reference< sheet::XSheetAnnotations > aSheetAnnotations (init(), UNO_QUERY_THROW);
 
     // insert some annotations
-    table::CellAddress xTargetCellAddress (0,4,5);
-    aSheetAnnotations->insertNew(xTargetCellAddress, "an inserted annotation 1");
-    table::CellAddress xToBeRemovedCellAddress (0,5,6);
-    aSheetAnnotations->insertNew(xToBeRemovedCellAddress, "an inserted annotation 2");
-    table::CellAddress xOtherCellAddress (0,7,8);
-    aSheetAnnotations->insertNew(xOtherCellAddress, "an inserted annotation 3");
+    table::CellAddress aTargetCellAddress (0,4,5);
+    aSheetAnnotations->insertNew(aTargetCellAddress, "an inserted annotation 1");
+    table::CellAddress aToBeRemovedCellAddress (0,5,6);
+    aSheetAnnotations->insertNew(aToBeRemovedCellAddress, "an inserted annotation 2");
+    table::CellAddress aOtherCellAddress (0,7,8);
+    aSheetAnnotations->insertNew(aOtherCellAddress, "an inserted annotation 3");
 
     // count before removing
     uno::Reference< container::XIndexAccess > xAnnotationsIndex (aSheetAnnotations, UNO_QUERY_THROW);
@@ -114,17 +114,17 @@ void XSheetAnnotations::testRemoveByIndex()
 
     // the last position should be xOtherCellAddress
     uno::Reference< sheet::XSheetAnnotation > aLastSheetAnnotation (xAnnotationsIndex->getByIndex(nAfter-1), UNO_QUERY_THROW);
-    table::CellAddress xResultCellAddress = aLastSheetAnnotation->getPosition();
+    table::CellAddress aResultCellAddress = aLastSheetAnnotation->getPosition();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong SHEET reference position",
-        xOtherCellAddress.Sheet, xResultCellAddress.Sheet);
+        aOtherCellAddress.Sheet, aResultCellAddress.Sheet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong COLUMN reference position",
-        xOtherCellAddress.Column, xResultCellAddress.Column);
+        aOtherCellAddress.Column, aResultCellAddress.Column);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong ROW reference position",
-        xOtherCellAddress.Row, xResultCellAddress.Row);
+        aOtherCellAddress.Row, aResultCellAddress.Row);
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aLastTextSheetAnnotation(aLastSheetAnnotation, UNO_QUERY_THROW);
@@ -136,17 +136,17 @@ void XSheetAnnotations::testRemoveByIndex()
 
     // the previous should be xTargetCellAddress
     uno::Reference< sheet::XSheetAnnotation > aPreviousSheetAnnotation (xAnnotationsIndex->getByIndex(nAfter-2), UNO_QUERY_THROW);
-    table::CellAddress xPreviousCellAddress = aPreviousSheetAnnotation->getPosition();
+    table::CellAddress aPreviousCellAddress = aPreviousSheetAnnotation->getPosition();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong SHEET reference position",
-        xTargetCellAddress.Sheet, xPreviousCellAddress.Sheet);
+        aTargetCellAddress.Sheet, aPreviousCellAddress.Sheet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong COLUMN reference position",
-        xTargetCellAddress.Column, xPreviousCellAddress.Column);
+        aTargetCellAddress.Column, aPreviousCellAddress.Column);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong ROW reference position",
-        xTargetCellAddress.Row, xPreviousCellAddress.Row);
+        aTargetCellAddress.Row, aPreviousCellAddress.Row);
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aPreviousTextSheetAnnotation(aPreviousSheetAnnotation, UNO_QUERY_THROW);
@@ -164,39 +164,39 @@ void XSheetAnnotations::testGetByIndex()
 
     // insert annotations in first sheet
     uno::Reference< sheet::XSheetAnnotations > aSheet0Annotations (init(), UNO_QUERY_THROW);
-    table::CellAddress xTargetCellAddress0 (0,0,1);
-    aSheet0Annotations->insertNew(xTargetCellAddress0, "an inserted annotation 1 on sheet 1");
-    table::CellAddress xSecondTargetCellAddress0 (0,0,2);
-    aSheet0Annotations->insertNew(xSecondTargetCellAddress0, "an inserted annotation 2 on sheet 1");
-    table::CellAddress xThirdCellAddress0 (0,0,3);
-    aSheet0Annotations->insertNew(xThirdCellAddress0, "an inserted annotation 3 on sheet 1");
+    table::CellAddress aTargetCellAddress0 (0,0,1);
+    aSheet0Annotations->insertNew(aTargetCellAddress0, "an inserted annotation 1 on sheet 1");
+    table::CellAddress aSecondTargetCellAddress0 (0,0,2);
+    aSheet0Annotations->insertNew(aSecondTargetCellAddress0, "an inserted annotation 2 on sheet 1");
+    table::CellAddress aThirdCellAddress0 (0,0,3);
+    aSheet0Annotations->insertNew(aThirdCellAddress0, "an inserted annotation 3 on sheet 1");
 
     // insert annotations in third sheet
     uno::Reference< sheet::XSheetAnnotations > aSheet2Annotations (getAnnotations(2), UNO_QUERY_THROW);
-    table::CellAddress xTargetCellAddress2 (2,4,5);
-    aSheet2Annotations->insertNew(xTargetCellAddress2, "an inserted annotation 1 on sheet 3");
-    table::CellAddress xSecondTargetCellAddress2 (2,5,6);
-    aSheet2Annotations->insertNew(xSecondTargetCellAddress2, "an inserted annotation 2 on sheet 3");
-    table::CellAddress xThirdCellAddress2 (2,7,8);
-    aSheet2Annotations->insertNew(xThirdCellAddress2, "an inserted annotation 3 on sheet 3");
+    table::CellAddress aTargetCellAddress2 (2,4,5);
+    aSheet2Annotations->insertNew(aTargetCellAddress2, "an inserted annotation 1 on sheet 3");
+    table::CellAddress aSecondTargetCellAddress2 (2,5,6);
+    aSheet2Annotations->insertNew(aSecondTargetCellAddress2, "an inserted annotation 2 on sheet 3");
+    table::CellAddress aThirdCellAddress2 (2,7,8);
+    aSheet2Annotations->insertNew(aThirdCellAddress2, "an inserted annotation 3 on sheet 3");
 
     // get second annotation for second sheet
     uno::Reference< sheet::XSheetAnnotations > aSheetAnnotations (getAnnotations(2), UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xAnnotationsIndex (aSheetAnnotations, UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetAnnotation > aAnnotation (xAnnotationsIndex->getByIndex(1), UNO_QUERY_THROW);
 
-    table::CellAddress xToBeAnalyzedCellAddress = aAnnotation->getPosition();
+    table::CellAddress aToBeAnalyzedCellAddress = aAnnotation->getPosition();
 
     // is the CellAddress ok ?
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "GetByIndex Annotation - Wrong SHEET reference position",
-        xSecondTargetCellAddress2.Sheet, xToBeAnalyzedCellAddress.Sheet);
+        aSecondTargetCellAddress2.Sheet, aToBeAnalyzedCellAddress.Sheet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "GetByIndex Annotation - Wrong COLUMN reference position",
-        xSecondTargetCellAddress2.Column, xToBeAnalyzedCellAddress.Column);
+        aSecondTargetCellAddress2.Column, aToBeAnalyzedCellAddress.Column);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "GetByIndex Annotation - Wrong ROW reference position",
-        xSecondTargetCellAddress2.Row, xToBeAnalyzedCellAddress.Row);
+        aSecondTargetCellAddress2.Row, aToBeAnalyzedCellAddress.Row);
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aTextSheetAnnotation(aAnnotation, UNO_QUERY_THROW);

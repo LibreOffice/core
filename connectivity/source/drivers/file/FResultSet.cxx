@@ -1182,14 +1182,14 @@ bool OResultSet::OpenImpl()
     OSL_ENSURE(m_pSQLAnalyzer,"No analyzer set with setSqlAnalyzer!");
     if(!m_pTable)
     {
-        const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        if (xTabs.empty() || !xTabs.begin()->second.is())
+        const OSQLTables& rTabs = m_aSQLIterator.getTables();
+        if (rTabs.empty() || !rTabs.begin()->second.is())
             lcl_throwError(STR_QUERY_TOO_COMPLEX,*this);
 
-        if ( xTabs.size() > 1 || m_aSQLIterator.hasErrors() )
+        if ( rTabs.size() > 1 || m_aSQLIterator.hasErrors() )
             lcl_throwError(STR_QUERY_MORE_TABLES,*this);
 
-        OSQLTable xTable = xTabs.begin()->second;
+        OSQLTable xTable = rTabs.begin()->second;
         m_xColumns = m_aSQLIterator.getSelectColumns();
 
         m_xColNames = xTable->getColumns();

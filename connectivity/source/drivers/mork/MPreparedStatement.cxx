@@ -443,10 +443,10 @@ void OPreparedStatement::describeParameter()
     if(!aParseNodes.empty())
     {
         m_xParamColumns = new OSQLColumns();
-        const OSQLTables& xTabs = m_pSQLIterator->getTables();
-        if(xTabs.size())
+        const OSQLTables& rTabs = m_pSQLIterator->getTables();
+        if(rTabs.size())
         {
-            OSQLTable xTable = xTabs.begin()->second;
+            OSQLTable xTable = rTabs.begin()->second;
             ::std::vector< OSQLParseNode*>::const_iterator aIter =
 aParseNodes.begin();
             for (;aIter != aParseNodes.end();++aIter )

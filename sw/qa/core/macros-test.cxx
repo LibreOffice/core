@@ -524,7 +524,7 @@ void SwMacrosTest::testFindReplace()
     Reference<lang::XComponent> const xComponent =
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
-    const ::comphelper::ScopeGuard xComponentScopeGuard(
+    const ::comphelper::ScopeGuard aComponentScopeGuard(
         [&xComponent]() { xComponent->dispose(); } );
 
     SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());

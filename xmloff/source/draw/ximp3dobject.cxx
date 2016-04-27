@@ -358,14 +358,14 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
                         aPolyPolygon));
 
                 // convert to UNO API class PolyPolygonShape3D
-                drawing::PolyPolygonShape3D xPolyPolygon3D;
+                drawing::PolyPolygonShape3D aPolyPolygon3D;
                 basegfx::tools::B3DPolyPolygonToUnoPolyPolygonShape3D(
                     aB3DPolyPolygon,
-                    xPolyPolygon3D);
+                    aPolyPolygon3D);
 
                 // set polygon data
                 uno::Any aAny;
-                aAny <<= xPolyPolygon3D;
+                aAny <<= aPolyPolygon3D;
                 xPropSet->setPropertyValue("D3DPolyPolygon3D", aAny);
             }
             else
