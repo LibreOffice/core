@@ -1848,6 +1848,20 @@ StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
     return eRes;
 }
 
+void ScInterpreter::ReverseStack( sal_uInt8 nParamCount )
+{
+    //reverse order of parameter stack
+    FormulaToken* p;
+    assert( sp >= nParamCount && " less stack elements than parameters");
+    short nStackParams = std::min<short>( sp, nParamCount);
+    for ( short i = 0; i < short( nStackParams / 2 ); i++ )
+    {
+        p = pStack[ sp - ( nStackParams - i ) ];
+        pStack[ sp - ( nStackParams - i ) ] = pStack[ sp - 1 - i ];
+        pStack[ sp - 1 - i ] = p;
+    }
+}
+
 bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
 {
     // Check for a singleton first - no implicit intersection for them.
@@ -3926,6 +3940,8 @@ StackVar ScInterpreter::Interpret()
                 case ocConcat           : ScConcat();                   break;
                 case ocConcat_MS        : ScConcat_MS();                break;
                 case ocTextJoin_MS      : ScTextJoin_MS();              break;
+                case ocIfs_MS           : ScIfs_MS();                   break;
+                case ocSwitch_MS        : ScSwitch_MS();                break;
                 case ocMatValue         : ScMatValue();                 break;
                 case ocMatrixUnit       : ScEMat();                     break;
                 case ocMatDet           : ScMatDet();                   break;

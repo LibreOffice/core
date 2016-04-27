@@ -581,7 +581,9 @@ static const XclFunctionInfo saFuncTable_2016[] =
     EXC_FUNCENTRY_V_VR(  ocForecast_ETS_STA,    3,  6,  0,  "FORECAST.ETS.STAT" ),
     EXC_FUNCENTRY_V_VR(  ocForecast_LIN,        3,  3,  0,  "FORECAST.LINEAR" ),
     EXC_FUNCENTRY_V_VR(  ocConcat_MS,           1,  MX, 0,  "CONCAT" ),
-    EXC_FUNCENTRY_V_VR(  ocTextJoin_MS,         3,  MX, 0,  "TEXTJOIN" )
+    EXC_FUNCENTRY_V_VR(  ocTextJoin_MS,         3,  MX, 0,  "TEXTJOIN" ),
+    EXC_FUNCENTRY_V_VR(  ocIfs_MS,              2,  MX, 0,  "IFS" ),
+    EXC_FUNCENTRY_V_VR(  ocSwitch_MS,           3,  MX, 0,  "SWITCH" )
 };
 
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \

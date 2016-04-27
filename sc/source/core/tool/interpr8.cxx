@@ -1865,4 +1865,166 @@ void ScInterpreter::ScTextJoin_MS()
     }
 }
 
+
+void ScInterpreter::ScIfs_MS()
+{
+    short nParamCount = GetByte();
+
+    ReverseStack( nParamCount );
+
+    bool bFinished = false;
+    while ( nParamCount > 0 && !bFinished && !nGlobalError )
+    {
+        bool bVal = GetBool();
+        nParamCount--;
+        if ( bVal )
+        {
+            // TRUE
+            if ( nParamCount < 1 )
+            {
+                // no parameter given for THEN
+                PushParameterExpected();
+                return;
+            }
+            bFinished = true;
+        }
+        else
+        {
+            // FALSE
+            if ( nParamCount >= 3 )
+            {
+                // ELSEIF path
+                Pop();
+                nParamCount--;
+            }
+            else
+            {
+                // no parameter given for ELSE
+                PushNA();
+                return;
+            }
+        }
+    }
+
+    if ( nGlobalError || !bFinished  )
+    {
+        if ( !bFinished )
+            PushNA(); // no true expression found
+        if ( nGlobalError )
+            PushNoValue(); // expression returned something other than true or false
+        return;
+    }
+
+    //push result :
+    FormulaTokenRef xToken( PopToken() );
+    if ( xToken )
+        PushTempToken( xToken.get() );
+    else
+        PushError( errUnknownStackVariable );
+}
+
+
+void ScInterpreter::ScSwitch_MS()
+{
+    short nParamCount = GetByte();
+
+    ReverseStack( nParamCount );
+
+    bool isValue = false;
+    double fRefVal = 0;
+    svl::SharedString aRefStr;
+    switch ( GetStackType() )
+    {
+        case svDouble:
+            isValue = true;
+            fRefVal = GetDouble();
+            break;
+        case svString:
+            isValue = false;
+            aRefStr = GetString();
+            break;
+        case svSingleRef :
+        case svDoubleRef :
+            {
+                ScAddress aAdr;
+                PopDoubleRefOrSingleRef( aAdr );
+                if ( nGlobalError )
+                    break;
+                ScRefCellValue aCell( *pDok, aAdr );
+                isValue = !( aCell.hasString() || aCell.hasEmptyValue() || aCell.isEmpty() );
+                if ( isValue )
+                    fRefVal = aCell.getValue();
+                else
+                    aRefStr = aCell.getString( pDok );
+            }
+            break;
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        case svMatrix:
+            isValue = ScMatrix::IsValueType( GetDoubleOrStringFromMatrix( fRefVal, aRefStr ) );
+            break;
+        default :
+            PushIllegalArgument();
+            return;
+    }
+    nParamCount--;
+    bool bFinished = false;
+    while ( nParamCount > 1 && !bFinished && !nGlobalError )
+    {
+        double fVal = 0;
+        svl::SharedString aStr;
+        if ( isValue )
+            fVal = GetDouble();
+        else
+            aStr = GetString();
+        nParamCount--;
+        if ( ( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
+             ( !isValue && aRefStr.getDataIgnoreCase() == aStr.getDataIgnoreCase() ) )
+        {
+            // TRUE
+            if ( nParamCount < 1 )
+            {
+                // no parameter given for THEN
+                PushParameterExpected();
+                return;
+            }
+            bFinished = true;
+        }
+        else
+        {
+            // FALSE
+            if ( nParamCount >= 2 )
+            {
+                // ELSEIF path
+                Pop();
+                nParamCount--;
+                // if nParamCount equals 1: default value  to be returned
+                bFinished = ( nParamCount == 1 );
+            }
+            else
+            {
+                // no parameter given for ELSE
+                PushNA();
+                return;
+            }
+        }
+    }
+
+    if ( nGlobalError || !bFinished  )
+    {
+        if ( !bFinished )
+            PushNA(); // no true expression found
+        if ( nGlobalError )
+            PushNoValue(); // expression returned something other than true or false
+        return;
+    }
+
+    // push result
+    FormulaTokenRef xToken( PopToken() );
+    if ( xToken )
+        PushTempToken( xToken.get() );
+    else
+        PushError( errUnknownStackVariable );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
