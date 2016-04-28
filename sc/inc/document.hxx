@@ -600,6 +600,40 @@ public:
             SCTAB nGlobalRefTab, SCTAB nLocalRefTab, SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement,
             bool bSameDoc, int nRecursion ) const;
 
+    /** If necessary (name references sheet rOldPos.Tab()) copy and adjust
+        named expression/range from sheet-local to sheet-local, or global to
+        sheet-local if bGlobalNamesToLocal==true.
+
+        Also copies nested names and adjusts the ocName tokens of the calling name.
+
+        @param  rSheet
+                On entry, the original sheet of the named expression/range, <0 global.
+                On return TRUE, the new sheet. Else unchanged.
+
+        @param  rIndex
+                On entry, the original index of the named expression/range.
+                On return TRUE, the new index, or 0 if a new copied name couldn't be inserted. Else unchanged.
+
+        @param  rpRangeData
+                On entry, the pointer to the original named expression/range.
+                On return TRUE, the pointer to the new copied name, or nullptr if hit shappened.
+
+        @param  rNewPos
+                New position of formula cell if called for that, else new base
+                position of a to be created new name adjusted for Tab.
+                rNewPos.nTab MUST point to the new sheet copied to.
+
+        @param  rOldPos
+                Old position of formula cell if called for that, else base
+                position of the existing name adjusted for Tab.
+                rOldPos.nTab MUST point to the old sheet copied from.
+
+        @return TRUE if copied and caller may need to evaluate rpRangeData and rSheet and rIndex.
+                FALSE if nothing to be done.
+     */
+    bool CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRangeData*& rpRangeData, ScDocument& rNewDoc,
+            const ScAddress& rNewPos, const ScAddress& rOldPos, const bool bGlobalNamesToLocal) const;
+
     /**
      * Call this immediately before updating all named ranges.
      */
