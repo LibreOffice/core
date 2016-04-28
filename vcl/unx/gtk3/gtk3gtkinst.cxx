@@ -590,7 +590,7 @@ void VclGtkClipboard::setContents(
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    std::list< Reference< datatransfer::clipboard::XClipboardListener > > xListeners( m_aListeners );
+    std::list< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
 
     if (m_aContents.is())
@@ -624,7 +624,7 @@ void VclGtkClipboard::setContents(
     if( xOldOwner.is() && xOldOwner != xClipboardOwner )
         xOldOwner->lostOwnership( this, xOldContents );
     for( std::list< Reference< datatransfer::clipboard::XClipboardListener > >::iterator it =
-         xListeners.begin(); it != xListeners.end() ; ++it )
+         aListeners.begin(); it != aListeners.end() ; ++it )
     {
         (*it)->changedContents( aEv );
     }
