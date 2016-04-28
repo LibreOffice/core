@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_843168ef",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-28T08:37:35Z",
+      "side": 1,
+      "message": "An approach with less magic constants: use empty brackets here ... nObjBorderLineStyles[]",
+      "revId": "258b29a51486105230e0ea33ca3f463bf11c8250",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a44cac77",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-28T08:37:35Z",
+      "side": 1,
+      "message": "... then you will not need this constant ...",
+      "revId": "258b29a51486105230e0ea33ca3f463bf11c8250",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_c451b010",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-04-28T08:37:35Z",
+      "side": 1,
+      "message": "... and in the loop you can use SAL_N_ELEMENTS macro\n\nfor (  i\u003d0; i \u003c SAL_N_ELEMENTS(nObjBorderLineStyles); ...)\n\nso that next time someone adds/removes the elements from the array, they don\u0027t have to adjust code on multiple places",
+      "revId": "258b29a51486105230e0ea33ca3f463bf11c8250",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
