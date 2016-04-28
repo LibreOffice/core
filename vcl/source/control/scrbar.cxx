@@ -863,6 +863,11 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
         ImplUpdateRects();
         if ( mbFullDrag && (nOldPos != mnThumbPos) )
         {
+            // When dragging in windows the repaint request gets starved so dragging
+            // the scrollbar feels slower than it actually is. Let's force an immediate
+            // repaint of the scrollbar.
+            ImplDraw(*this, SCRBAR_DRAW_ALL);
+
             mnDelta = mnThumbPos-nOldPos;
             Scroll();
             mnDelta = 0;
