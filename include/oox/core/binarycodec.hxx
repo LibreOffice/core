@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_CORE_BINARYCODEC_HXX
 #define INCLUDED_OOX_CORE_BINARYCODEC_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
