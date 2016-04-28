@@ -60,10 +60,9 @@
 #include "xftabstyle.hxx"
 
 XFTabStyle::XFTabStyle()
-{
-    m_eType = enumXFTabNone;
-    m_fLength = 0;
-}
+    : m_eType(enumXFTabNone)
+    , m_fLength(0)
+{}
 
 void XFTabStyle::ToXml(IXFStream *pStrm)
 {

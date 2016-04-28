@@ -60,12 +60,11 @@
 #include "xfdrawareastyle.hxx"
 
 XFDrawAreaStyle::XFDrawAreaStyle()
-{
-    m_eAreaStyle = enumXFAreaSolid;
-    m_eLineStyle = enumXFAreaLineSingle;
-    m_nAngle = 0;
-    m_fSpace = 0.18;
-}
+    : m_eAreaStyle(enumXFAreaSolid)
+    , m_eLineStyle(enumXFAreaLineSingle)
+    , m_nAngle(0)
+    , m_fSpace(0.18)
+{}
 
 enumXFStyle XFDrawAreaStyle::GetStyleFamily()
 {

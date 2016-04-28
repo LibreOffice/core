@@ -65,11 +65,10 @@
 #include "xfentry.hxx"
 
 XFEntry::XFEntry()
-{
-    m_eType = enumXFEntryTOC;
-    m_bMainEntry = false;
-    m_nOutlineLevel = 1;
-}
+    : m_eType(enumXFEntryTOC)
+    , m_bMainEntry(false)
+    , m_nOutlineLevel(1)
+{}
 
 void    XFEntry::ToXml(IXFStream *pStrm)
 {
