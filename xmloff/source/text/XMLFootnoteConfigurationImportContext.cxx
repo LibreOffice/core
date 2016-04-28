@@ -407,8 +407,7 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
 
     if (!bIsEndnote)
     {
-        aAny.setValue(&bPosition, cppu::UnoType<bool>::get());
-        rConfig->setPropertyValue(sPropertyPositionEndOfDoc, aAny);
+        rConfig->setPropertyValue(sPropertyPositionEndOfDoc, makeAny(bPosition));
 
         aAny <<= nNumbering;
         rConfig->setPropertyValue(sPropertyFootnoteCounting, aAny);

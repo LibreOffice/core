@@ -31,7 +31,6 @@
 #include <svx/unoshape.hxx>
 
 #include "unopback.hxx"
-#include "unohelp.hxx"
 #include "drawdoc.hxx"
 #include "unokywds.hxx"
 

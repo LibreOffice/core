@@ -37,8 +37,7 @@
 #include "unoprnms.hxx"
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <svx/svdpool.hxx>
-#include "unohelp.hxx"
-#include "FrameView.hxx"
+    #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
 #include "View.hxx"
 #include "ViewShell.hxx"
@@ -243,6 +242,11 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         pLayerManager->GetDocShell()->SetModified();
 }
 
+inline void bool2any( bool bBool, css::uno::Any& rAny )
+{
+    rAny.setValue( &bBool, cppu::UnoType<bool>::get() );
+}
+
 uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -258,13 +262,13 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
     switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_LAYER_LOCKED:
-        sd::bool2any( get( LOCKED ), aValue );
+        bool2any( get( LOCKED ), aValue );
         break;
     case WID_LAYER_PRINTABLE:
-        sd::bool2any( get( PRINTABLE ), aValue );
+        bool2any( get( PRINTABLE ), aValue );
         break;
     case WID_LAYER_VISIBLE:
-        sd::bool2any( get( VISIBLE ), aValue );
+        bool2any( get( VISIBLE ), aValue );
         break;
     case WID_LAYER_NAME:
     {
