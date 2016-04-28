@@ -143,7 +143,6 @@ namespace vcl
 
             VclPtr<PushButton>                      mpSetupButton;
 
-            VclPtr<FixedLine>                       mpCopySpacer;
             VclPtr<NumericField>                    mpCopyCountField;
             VclPtr<CheckBox>                        mpCollateBox;
             VclPtr<FixedImage>                      mpCollateImage;

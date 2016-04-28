@@ -488,7 +488,6 @@ PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
     pUIBuilder->get(mpLocationTxt, "location");
     pUIBuilder->get(mpCommentTxt, "comment");
     pUIBuilder->get(mpSetupButton, "setup");
-    pUIBuilder->get(mpCopySpacer, "copyspacer");
     pUIBuilder->get(mpCopyCountField, "copycount");
     pUIBuilder->get(mpCollateBox, "collate");
     pUIBuilder->get(mpCollateImage, "collateimage");
@@ -1191,7 +1190,6 @@ void PrintDialog::setupOptionalUI()
     // print range not shown (currently math only) -> hide spacer line and reverse order
     if (!pPageRange || !pPageRange->IsVisible())
     {
-        maJobPage.mpCopySpacer->Show( false );
         maJobPage.mpReverseOrderBox->Show( false );
     }
 
