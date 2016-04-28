@@ -34,26 +34,26 @@ void MoveXPoly(XPolygon& rPoly, const Size& S)
 
 void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact)
 {
-    Fraction xFact(rxFact);
-    Fraction yFact(ryFact);
+    Fraction aXFact(rxFact);
+    Fraction aYFact(ryFact);
 
-    if (!xFact.IsValid()) {
+    if (!aXFact.IsValid()) {
         SAL_WARN( "svx.svdraw", "invalid fraction xFract, using Fraction(1,1)" );
-        xFact = Fraction(1,1);
+        aXFact = Fraction(1,1);
         long nWdt = rRect.Right() - rRect.Left();
         if (nWdt == 0) rRect.Right()++;
     }
-    rRect.Left()  = rRef.X() + svx::Round( (rRect.Left()  - rRef.X()) * double(xFact) );
-    rRect.Right() = rRef.X() + svx::Round( (rRect.Right() - rRef.X()) * double(xFact) );
+    rRect.Left()  = rRef.X() + svx::Round( (rRect.Left()  - rRef.X()) * double(aXFact) );
+    rRect.Right() = rRef.X() + svx::Round( (rRect.Right() - rRef.X()) * double(aXFact) );
 
-    if (!yFact.IsValid()) {
+    if (!aYFact.IsValid()) {
         SAL_WARN( "svx.svdraw", "invalid fraction yFract, using Fraction(1,1)" );
-        yFact = Fraction(1,1);
+        aYFact = Fraction(1,1);
         long nHgt = rRect.Bottom() - rRect.Top();
         if (nHgt == 0) rRect.Bottom()++;
     }
-    rRect.Top()    = rRef.Y() + svx::Round( (rRect.Top()    - rRef.Y()) * double(yFact) );
-    rRect.Bottom() = rRef.Y() + svx::Round( (rRect.Bottom() - rRef.Y()) * double(yFact) );
+    rRect.Top()    = rRef.Y() + svx::Round( (rRect.Top()    - rRef.Y()) * double(aYFact) );
+    rRect.Bottom() = rRef.Y() + svx::Round( (rRect.Bottom() - rRef.Y()) * double(aYFact) );
 
     rRect.Justify();
 }

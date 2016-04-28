@@ -175,6 +175,7 @@ bool StylePolice::VisitVarDecl(const VarDecl * varDecl)
         && !startswith(typeName, "vcl::DeleteUnoReferenceOnDeinit")
         // there are lots of coordinate/position vars that start with "x"
         && !qt->isArithmeticType()
+        && !startswith(typeName, "float [")
         )
     {
             report(

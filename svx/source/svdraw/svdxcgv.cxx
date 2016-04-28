@@ -266,13 +266,13 @@ bool SdrExchangeView::Paste(
     MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
     MapUnit eDstUnit=mpModel->GetScaleUnit();
     bool bResize=eSrcUnit!=eDstUnit;
-    Fraction xResize,yResize;
+    Fraction aXResize,aYResize;
     Point aPt0;
     if (bResize)
     {
         FrPair aResize(GetMapFactor(eSrcUnit,eDstUnit));
-        xResize=aResize.X();
-        yResize=aResize.Y();
+        aXResize=aResize.X();
+        aYResize=aResize.Y();
     }
     SdrObjList*  pDstLst=pLst;
     sal_uInt16 nPg,nPgAnz=pSrcMod->GetPageCount();
@@ -284,7 +284,7 @@ bool SdrExchangeView::Paste(
         Rectangle aR=pSrcPg->GetAllObjSnapRect();
 
         if (bResize)
-            ResizeRect(aR,aPt0,xResize,yResize);
+            ResizeRect(aR,aPt0,aXResize,aYResize);
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
         size_t nCloneErrCnt = 0;
@@ -306,7 +306,7 @@ bool SdrExchangeView::Paste(
                 if(bResize)
                 {
                     pNeuObj->GetModel()->SetPasteResize(true);
-                    pNeuObj->NbcResize(aPt0,xResize,yResize);
+                    pNeuObj->NbcResize(aPt0,aXResize,aYResize);
                     pNeuObj->GetModel()->SetPasteResize(false);
                 }
 
