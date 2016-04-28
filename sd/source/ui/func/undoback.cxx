@@ -18,6 +18,7 @@
  */
 
 #include "undoback.hxx"
+
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
@@ -36,7 +37,7 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     const SfxItemSet& rItemSet)
 :   SdUndoAction(&rDoc),
     mrPage(rPage),
-    mpItemSet(new SfxItemSet(rItemSet)),
+    mpItemSet(o3tl::make_unique<SfxItemSet>(rItemSet)),
     mbHasFillBitmap(false)
 {
     OUString aString( SdResId( STR_UNDO_CHANGE_PAGEFORMAT ) );
@@ -44,22 +45,16 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     saveFillBitmap(*mpItemSet);
 }
 
-SdBackgroundObjUndoAction::~SdBackgroundObjUndoAction()
-{
-    delete mpItemSet;
-}
-
 void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
 {
-    SfxItemSet* pNew = new SfxItemSet(mrPage.getSdrPageProperties().GetItemSet());
+    std::unique_ptr<SfxItemSet> pNew = o3tl::make_unique<SfxItemSet>(mrPage.getSdrPageProperties().GetItemSet());
     mrPage.getSdrPageProperties().ClearItem();
     if (bool(mpFillBitmapItem))
         restoreFillBitmap(*mpItemSet);
     mpFillBitmapItem.reset();
     mbHasFillBitmap = false;
     mrPage.getSdrPageProperties().PutItemSet(*mpItemSet);
-    delete mpItemSet;
-    mpItemSet = pNew;
+    mpItemSet = std::move(pNew);
     saveFillBitmap(*mpItemSet);
 
     // tell the page that it's visualization has changed

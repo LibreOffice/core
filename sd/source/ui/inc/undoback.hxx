@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_UNDOBACK_HXX
 
 #include <memory>
+
 #include "sdundo.hxx"
 
 class SdDrawDocument;
@@ -34,7 +35,7 @@ class SdBackgroundObjUndoAction : public SdUndoAction
 private:
 
     SdPage&                 mrPage;
-    SfxItemSet*             mpItemSet;
+    std::unique_ptr<SfxItemSet> mpItemSet;
     std::unique_ptr<SfxPoolItem> mpFillBitmapItem;
     bool                    mbHasFillBitmap;
 
@@ -49,7 +50,6 @@ public:
                                 SdDrawDocument& rDoc,
                                 SdPage& rPage,
                                 const SfxItemSet& rItemSet);
-    virtual                 ~SdBackgroundObjUndoAction();
 
     virtual void            Undo() override;
     virtual void            Redo() override;
