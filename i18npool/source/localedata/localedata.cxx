@@ -543,43 +543,43 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             (void) pOutCachedItem;
 
             if( strcmp(pFunction, "getAllCalendars") == 0 )
-                return aLibTable[i].getAllCalendars;
+                return i.getAllCalendars;
             else if( strcmp(pFunction, "getAllCurrencies") == 0 )
-                return aLibTable[i].getAllCurrencies;
+                return i.getAllCurrencies;
             else if( strcmp(pFunction, "getAllFormats0") == 0 )
-                return aLibTable[i].getAllFormats0;
+                return i.getAllFormats0;
             else if( strcmp(pFunction, "getBreakIteratorRules") == 0 )
-                return aLibTable[i].getBreakIteratorRules;
+                return i.getBreakIteratorRules;
             else if( strcmp(pFunction, "getCollationOptions") == 0 )
-                return aLibTable[i].getCollationOptions;
+                return i.getCollationOptions;
             else if( strcmp(pFunction, "getCollatorImplementation") == 0 )
-                return aLibTable[i].getCollatorImplementation;
+                return i.getCollatorImplementation;
             else if( strcmp(pFunction, "getContinuousNumberingLevels") == 0 )
-                return aLibTable[i].getContinuousNumberingLevels;
+                return i.getContinuousNumberingLevels;
             else if( strcmp(pFunction, "getDateAcceptancePatterns") == 0 )
-                return aLibTable[i].getDateAcceptancePatterns;
+                return i.getDateAcceptancePatterns;
             else if( strcmp(pFunction, "getFollowPageWords") == 0 )
-                return aLibTable[i].getFollowPageWords;
+                return i.getFollowPageWords;
             else if( strcmp(pFunction, "getForbiddenCharacters") == 0 )
-                return aLibTable[i].getForbiddenCharacters;
+                return i.getForbiddenCharacters;
             else if( strcmp(pFunction, "getIndexAlgorithm") == 0 )
-                return aLibTable[i].getIndexAlgorithm;
+                return i.getIndexAlgorithm;
             else if( strcmp(pFunction, "getLCInfo") == 0 )
-                return aLibTable[i].getLCInfo;
+                return i.getLCInfo;
             else if( strcmp(pFunction, "getLocaleItem") == 0 )
-                return aLibTable[i].getLocaleItem;
+                return i.getLocaleItem;
             else if( strcmp(pFunction, "getOutlineNumberingLevels") == 0 )
-                return aLibTable[i].getOutlineNumberingLevels;
+                return i.getOutlineNumberingLevels;
             else if( strcmp(pFunction, "getReservedWords") == 0 )
-                return aLibTable[i].getReservedWords;
+                return i.getReservedWords;
             else if( strcmp(pFunction, "getSearchOptions") == 0 )
-                return aLibTable[i].getSearchOptions;
+                return i.getSearchOptions;
             else if( strcmp(pFunction, "getTransliterations") == 0 )
-                return aLibTable[i].getTransliterations;
+                return i.getTransliterations;
             else if( strcmp(pFunction, "getUnicodeScripts") == 0 )
-                return aLibTable[i].getUnicodeScripts;
+                return i.getUnicodeScripts;
             else if( strcmp(pFunction, "getAllFormats1") == 0 )
-                return aLibTable[i].getAllFormats1;
+                return i.getAllFormats1;
 #endif
         }
     }
