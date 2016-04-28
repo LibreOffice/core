@@ -30,11 +30,11 @@ class SdDrawDocument;
 
 class StyleSheetUndoAction : public SdUndoAction
 {
-    SfxStyleSheet*  pStyleSheet;
+    SfxStyleSheet*  mpStyleSheet;
 
-    std::unique_ptr<SfxItemSet> pNewSet;
-    std::unique_ptr<SfxItemSet> pOldSet;
-    OUString        aComment;
+    std::unique_ptr<SfxItemSet> mpNewSet;
+    std::unique_ptr<SfxItemSet> mpOldSet;
+    OUString        maComment;
 
 public:
     StyleSheetUndoAction(SdDrawDocument* pTheDoc,
