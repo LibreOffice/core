@@ -203,6 +203,8 @@ public class CheckXTitle
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
         utils.waitForEventIdle(m_xMSF);
 
+        Thread.sleep(250); // FIXME why is this needed?
+
         // close document
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         try{
