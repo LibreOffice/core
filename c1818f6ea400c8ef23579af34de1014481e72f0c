@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_817ebaac",
+        "filename": "vcl/inc/impfont.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-04-28T06:47:38Z",
+      "side": 1,
+      "message": "you\u0027ve just made a whole chunk of fields unnecessarily public",
+      "revId": "c1818f6ea400c8ef23579af34de1014481e72f0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
