@@ -13,7 +13,7 @@
 
 #include <oox/dllapi.h>
 
-#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/crypto/Standard2007Engine.hxx>
 #include <rtl/ustring.hxx>
 
