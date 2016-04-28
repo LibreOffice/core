@@ -795,8 +795,8 @@ bool OpenGLContext::ImplInit()
     m_aGLWin.GLExtensions = glGetString( GL_EXTENSIONS );
     SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
 
-    XWindowAttributes xWinAttr;
-    if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr ) )
+    XWindowAttributes aWinAttr;
+    if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &aWinAttr ) )
     {
         SAL_WARN("vcl.opengl", "Failed to get window attributes on " << m_aGLWin.win);
         m_aGLWin.Width = 0;
@@ -804,8 +804,8 @@ bool OpenGLContext::ImplInit()
     }
     else
     {
-        m_aGLWin.Width = xWinAttr.width;
-        m_aGLWin.Height = xWinAttr.height;
+        m_aGLWin.Width = aWinAttr.width;
+        m_aGLWin.Height = aWinAttr.height;
     }
 
     if( m_aGLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
