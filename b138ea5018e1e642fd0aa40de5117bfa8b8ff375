@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_e40eb4e4",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-28T15:55:46Z",
+      "side": 1,
+      "message": "I couldn\u0027t think of anything else that fits in 1 cell. Anyway, your next comment/suggestion looks much neater.",
+      "parentUuid": "da7fb54a_44da007a",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_64e70441",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-04-28T13:18:43Z",
       "side": 1,
       "message": "Actually the entire switch block and resolving arguments is unnecessary, instead simply pop the token and push it again (to catch and promote errors), like in\n\n FormulaTokenRef xToken( PopToken());\n if (xToken)\n     PushTempToken( xToken.get());\n else\n     PushError( errUnknownStackVariable);\n\nThe next function receiving the result as argument (or the formula cell result if it was the final result) will take care of resolving the token.",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_041478f3",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1955,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-28T15:55:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_64e70441",
       "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_24f97cc9",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-28T15:55:46Z",
+      "side": 1,
+      "message": "I kept these out because I thought that these cannot be of a proper type for this argument. IMHO ranges and matrixes cannot be used here.\nI will add them and see if someone is able to pass these types a argument (I could learn from that).",
+      "parentUuid": "da7fb54a_a4cf4cb2",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_24c41c91",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2016-04-28T13:18:43Z",
       "side": 1,
       "message": "The arguments can be of a different type than to be matched one, for example trying to pop a string if there is none will set nGlobalError (e.g. SWITCH(\"x\",1,\"x1\",\"other\") fails with Err:502). Instead, use GetString()",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_44f680d8",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-28T15:55:46Z",
+      "side": 1,
+      "message": "Right. Shall I change the PopString.getString() calls in ScConcat_MS() and SCTextJoin_MS() too in a separate patch?",
+      "parentUuid": "da7fb54a_24c41c91",
       "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_640384b9",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-28T15:55:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_44c12080",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_84e4083c",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -98,6 +188,24 @@
       "writtenOn": "2016-04-28T13:18:43Z",
       "side": 1,
       "message": "Same here as for IFS(), instead of the switch block pop and push the token.",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_840088ac",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-04-28T15:55:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_84e4083c",
       "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
