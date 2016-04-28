@@ -626,10 +626,10 @@ void DicList::CreateDicList()
     // look for dictionaries
     const OUString aWriteablePath( GetDictionaryWriteablePath() );
     std::vector< OUString > aPaths( GetDictionaryPaths() );
-    for (size_t i = 0;  i < aPaths.size();  ++i)
+    for (OUString & aPath : aPaths)
     {
-        const bool bIsWriteablePath = (aPaths[i] == aWriteablePath);
-        SearchForDictionaries( aDicList, aPaths[i], bIsWriteablePath );
+        const bool bIsWriteablePath = (aPath == aWriteablePath);
+        SearchForDictionaries( aDicList, aPath, bIsWriteablePath );
     }
 
     // create IgnoreAllList dictionary with empty URL (non persistent)

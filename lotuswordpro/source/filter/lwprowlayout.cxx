@@ -445,10 +445,8 @@ void LwpRowLayout::CollectMergeInfo()
  */
 void LwpRowLayout::SetCellSplit(sal_uInt16 nEffectRows)
 {
-    LwpConnectedCellLayout* pConnCell;
-    for (size_t i=0; i<m_ConnCellList.size(); i++)
+    for (LwpConnectedCellLayout* pConnCell : m_ConnCellList)
     {
-        pConnCell = m_ConnCellList[i];
         sal_uInt16 nRowSpan = pConnCell->GetRowID()+pConnCell->GetNumrows();
         if ( nRowSpan > nEffectRows )
         {

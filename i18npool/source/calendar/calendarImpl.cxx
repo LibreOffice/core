@@ -36,8 +36,8 @@ CalendarImpl::CalendarImpl(const Reference< XComponentContext > &rxContext) : m_
 CalendarImpl::~CalendarImpl()
 {
     // Clear lookuptable
-    for (size_t l = 0; l < lookupTable.size(); l++)
-        delete lookupTable[l];
+    for (lookupTableItem* p : lookupTable)
+        delete p;
     lookupTable.clear();
 }
 

@@ -79,9 +79,9 @@ void LwpSortOption::Read(LwpObjectStream *pStrm)
     m_nCount = pStrm->QuickReaduInt16();
     m_nFlags = pStrm->QuickReaduInt16();
     m_nText = pStrm->QuickReaduInt8();
-    for(sal_uInt8 i=0; i<3; i++)
+    for(LwpSortKey & key : m_Keys)
     {
-        m_Keys[i].Read(pStrm);
+        key.Read(pStrm);
     }
     pStrm->SkipExtra();
 }
