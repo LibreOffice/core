@@ -29,6 +29,8 @@
 #include "opengl/framebuffer.hxx"
 #include "opengl/texture.hxx"
 #include "opengl/zone.hxx"
+#include "opengl/RenderState.hxx"
+
 namespace
 {
 
@@ -47,10 +49,11 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
 {
     OpenGLVCLContextZone aContextZone;
 
-    glGenTextures( 1, &mnTexture );
-    CHECK_GL_ERROR();
-    glBindTexture( GL_TEXTURE_2D, mnTexture );
-    CHECK_GL_ERROR();
+    auto& rState = OpenGLContext::getVCLContext()->state();
+    rState->texture().generate(mnTexture);
+    rState->texture().active(0);
+    rState->texture().bind(mnTexture);
+
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
@@ -64,8 +67,6 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
         glTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
         CHECK_GL_ERROR();
     }
-    glBindTexture( GL_TEXTURE_2D, 0 );
-    CHECK_GL_ERROR();
 
     VCL_GL_INFO( "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " allocate" );
 }
@@ -84,10 +85,11 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     // FIXME We need the window height here
     // nY = GetHeight() - nHeight - nY;
 
-    glGenTextures( 1, &mnTexture );
-    CHECK_GL_ERROR();
-    glBindTexture( GL_TEXTURE_2D, mnTexture );
-    CHECK_GL_ERROR();
+    auto& rState = OpenGLContext::getVCLContext()->state();
+    rState->texture().generate(mnTexture);
+    rState->texture().active(0);
+    rState->texture().bind(mnTexture);
+
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
@@ -97,8 +99,6 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     CHECK_GL_ERROR();
     glCopyTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, nX, nY, nWidth, nHeight, 0 );
-    CHECK_GL_ERROR();
-    glBindTexture( GL_TEXTURE_2D, 0 );
     CHECK_GL_ERROR();
 
     VCL_GL_INFO( "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from x" << nX << ", y" << nY );
@@ -115,10 +115,11 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
 {
     OpenGLVCLContextZone aContextZone;
 
-    glGenTextures( 1, &mnTexture );
-    CHECK_GL_ERROR();
-    glBindTexture( GL_TEXTURE_2D, mnTexture );
-    CHECK_GL_ERROR();
+    auto& rState = OpenGLContext::getVCLContext()->state();
+    rState->texture().generate(mnTexture);
+    rState->texture().active(0);
+    rState->texture().bind(mnTexture);
+
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
     CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -130,8 +131,6 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     CHECK_GL_ERROR();
     glTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, mnWidth, mnHeight, 0, nFormat, nType, pData );
-    CHECK_GL_ERROR();
-    glBindTexture( GL_TEXTURE_2D, 0 );
     CHECK_GL_ERROR();
 
     VCL_GL_INFO( "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from data" );
@@ -187,8 +186,8 @@ void ImplOpenGLTexture::Dispose()
                 glDeleteRenderbuffers( 1, &mnOptStencil );
                 mnOptStencil = 0;
             }
-            glDeleteTextures( 1, &mnTexture );
-
+            auto& rState = pContext->state();
+            rState->texture().unbindAndDelete(mnTexture);
             mnTexture = 0;
         }
         else
@@ -203,13 +202,14 @@ bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, in
 {
     if (!pData || mnTexture == 0)
         return false;
-    glBindTexture(GL_TEXTURE_2D, mnTexture);
-    CHECK_GL_ERROR();
+
+    rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
+    xContext->state()->texture().active(0);
+    xContext->state()->texture().bind(mnTexture);
+
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     CHECK_GL_ERROR();
     glTexSubImage2D(GL_TEXTURE_2D, 0, nX, mnHeight - nY - nHeight, nWidth, nHeight, nFormat, nType, pData);
-    CHECK_GL_ERROR();
-    glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
 
     VCL_GL_INFO( "OpenGLTexture " << mnTexture << " Insert buff. to " << nX << " " << nY
@@ -492,10 +492,10 @@ void OpenGLTexture::SetFilter( GLenum nFilter )
 
 void OpenGLTexture::Bind()
 {
-    if( mpImpl )
+    if (mpImpl)
     {
-        glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
-        CHECK_GL_ERROR();
+        std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
+        rState->texture().bind(mpImpl->mnTexture);
     }
     else
         VCL_GL_INFO( "OpenGLTexture::Binding invalid texture" );
@@ -505,10 +505,10 @@ void OpenGLTexture::Bind()
 
 void OpenGLTexture::Unbind()
 {
-    if( mpImpl )
+    if (mpImpl)
     {
-        glBindTexture( GL_TEXTURE_2D, 0 );
-        CHECK_GL_ERROR();
+        std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
+        rState->texture().unbind(mpImpl->mnTexture);
     }
 }
 

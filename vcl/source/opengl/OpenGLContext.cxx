@@ -41,6 +41,8 @@
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 
+#include "opengl/RenderState.hxx"
+
 using namespace com::sun::star;
 
 #define MAX_FRAMEBUFFER_COUNT 30
@@ -74,6 +76,7 @@ OpenGLContext::OpenGLContext():
     mpFirstFramebuffer(nullptr),
     mpLastFramebuffer(nullptr),
     mpCurrentProgram(nullptr),
+    mpRenderState(new RenderState),
     mnPainting(0),
     mpPrevContext(nullptr),
     mpNextContext(nullptr)
