@@ -34,6 +34,7 @@
 #include "svdata.hxx"
 #include "opengl/zone.hxx"
 #include "opengl/salbmp.hxx"
+#include "opengl/RenderState.hxx"
 
 #include <vector>
 
@@ -233,11 +234,6 @@ void OpenGLSalGraphicsImpl::PostDraw()
         CHECK_GL_ERROR();
     }
 
-    if( mbUseScissor )
-    {
-        glDisable( GL_SCISSOR_TEST );
-        CHECK_GL_ERROR();
-    }
     if( mbUseStencil )
     {
         glDisable( GL_STENCIL_TEST );
@@ -274,6 +270,7 @@ void OpenGLSalGraphicsImpl::freeResources()
         VCL_GL_INFO( "freeResources" );
         mpContext->makeCurrent();
         FlushDeferredDrawing();
+        mpContext->state()->scissor().disable();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
     }
     ReleaseContext();
@@ -327,27 +324,27 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
 void OpenGLSalGraphicsImpl::ImplInitClipRegion()
 {
     // make sure the context has the right clipping set
-    if( maClipRegion != mpContext->maClipRegion )
+    if (maClipRegion != mpContext->maClipRegion)
     {
         mpContext->maClipRegion = maClipRegion;
-        if( mbUseScissor )
+        if (mbUseStencil)
         {
-            Rectangle aRect( maClipRegion.GetBoundRect() );
-            glScissor( aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight() );
-            CHECK_GL_ERROR();
-        }
-        else if( !maClipRegion.IsEmpty() )
-        {
-            ImplSetClipBit( maClipRegion, 0x01 );
+            ImplSetClipBit(maClipRegion, 0x01);
         }
     }
 
-    if( mbUseScissor )
+    if (mbUseScissor)
     {
-        glEnable( GL_SCISSOR_TEST );
-        CHECK_GL_ERROR();
+        Rectangle aRect(maClipRegion.GetBoundRect());
+        mpContext->state()->scissor().set(aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight());
+        mpContext->state()->scissor().enable();
     }
-    if( mbUseStencil )
+    else
+    {
+        mpContext->state()->scissor().disable();
+    }
+
+    if (mbUseStencil)
     {
         glStencilFunc( GL_EQUAL, 1, 0x1 );
         CHECK_GL_ERROR();
@@ -377,9 +374,9 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 
     mbUseStencil = false;
     mbUseScissor = false;
-    if( maClipRegion.IsRectangle() )
+    if (maClipRegion.IsRectangle())
         mbUseScissor = true;
-    else if ( !maClipRegion.IsEmpty() )
+    else if (!maClipRegion.IsEmpty())
         mbUseStencil = true;
 
     return true;
@@ -1503,7 +1500,7 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
             // The scissor area is set to the current window size in PreDraw,
             // so if we do not disable the scissor test, the texture produced
             // by the first downscaling is clipped to the current window size.
-            glDisable(GL_SCISSOR_TEST);
+            mpContext->state()->scissor().disable();
             CHECK_GL_ERROR();
 
             // Maybe it can give problems too.
@@ -1529,10 +1526,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
 
             // Re-enable scissor and stencil tests if needed.
             if (mbUseScissor)
-            {
-                glEnable(GL_SCISSOR_TEST);
-                CHECK_GL_ERROR();
-            }
+                mpContext->state()->scissor().enable();
+
             if (mbUseStencil)
             {
                 glEnable(GL_STENCIL_TEST);
@@ -2511,6 +2506,8 @@ void OpenGLSalGraphicsImpl::flush()
 {
     FlushDeferredDrawing();
 
+    mpContext->state()->scissor().disable();
+
     if( IsOffscreen() )
         return;
 
@@ -2526,6 +2523,8 @@ void OpenGLSalGraphicsImpl::flush()
 void OpenGLSalGraphicsImpl::doFlush()
 {
     FlushDeferredDrawing();
+
+    mpContext->state()->scissor().disable();
 
     if( IsOffscreen() )
         return;
@@ -2569,6 +2568,8 @@ void OpenGLSalGraphicsImpl::doFlush()
 
     glViewport( 0, 0, GetWidth(), GetHeight() );
     CHECK_GL_ERROR();
+
+    mpWindowContext->state()->scissor().disable();
 
 #if OSL_DEBUG_LEVEL > 0 // random background glClear
     glClearColor((float)rand()/RAND_MAX, (float)rand()/RAND_MAX,

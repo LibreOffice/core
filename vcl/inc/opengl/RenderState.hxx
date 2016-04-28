@@ -13,15 +13,73 @@
 
 #include "opengl/TextureState.hxx"
 
+class ScissorState
+{
+    bool mbTest;
+    int mX;
+    int mY;
+    int mWidth;
+    int mHeight;
+
+public:
+
+    ScissorState()
+        : mbTest(false)
+        , mX(0)
+        , mY(0)
+        , mWidth(0)
+        , mHeight(0)
+    {
+        glDisable(GL_SCISSOR_TEST);
+        CHECK_GL_ERROR();
+    }
+
+    void set(int x, int y, int width, int height)
+    {
+        if (x != mX || y != mY || width != mWidth || height != mHeight)
+        {
+            glScissor(x, y, width, height);
+            CHECK_GL_ERROR();
+
+            mX = x;
+            mY = y;
+            mWidth = width;
+            mHeight = height;
+        }
+    }
+
+    void enable()
+    {
+        if (!mbTest)
+        {
+            glEnable(GL_SCISSOR_TEST);
+            CHECK_GL_ERROR();
+            mbTest = true;
+        }
+    }
+
+    void disable()
+    {
+        if (mbTest)
+        {
+            glDisable(GL_SCISSOR_TEST);
+            CHECK_GL_ERROR();
+            mbTest = false;
+        }
+    }
+};
+
 class RenderState
 {
     TextureState maTexture;
+    ScissorState maScissor;
 
 public:
     RenderState()
     {}
 
     TextureState& texture() { return maTexture; }
+    ScissorState& scissor() { return maScissor; }
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
