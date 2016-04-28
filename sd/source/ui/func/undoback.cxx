@@ -33,10 +33,10 @@
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SdDrawDocument& rDoc,
     SdPage& rPage,
-    const SfxItemSet& rItenSet)
+    const SfxItemSet& rItemSet)
 :   SdUndoAction(&rDoc),
     mrPage(rPage),
-    mpItemSet(new SfxItemSet(rItenSet)),
+    mpItemSet(new SfxItemSet(rItemSet)),
     mbHasFillBitmap(false)
 {
     OUString aString( SdResId( STR_UNDO_CHANGE_PAGEFORMAT ) );

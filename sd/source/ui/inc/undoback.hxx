@@ -48,7 +48,7 @@ public:
                             SdBackgroundObjUndoAction(
                                 SdDrawDocument& rDoc,
                                 SdPage& rPage,
-                                const SfxItemSet& rItenSet);
+                                const SfxItemSet& rItemSet);
     virtual                 ~SdBackgroundObjUndoAction();
 
     virtual void            Undo() override;
