@@ -74,11 +74,10 @@ class XFColumn
 {
 public:
     XFColumn()
-    {
-        m_nRelWidth = 0;
-        m_fMarginLeft = 0;
-        m_fMarginRight = 0;
-    }
+        : m_nRelWidth(0)
+        , m_fMarginLeft(0)
+        , m_fMarginRight(0)
+    {}
 
 public:
     /**
@@ -108,11 +107,10 @@ class XFColumnSep
 {
 public:
     XFColumnSep()
-    {
-        m_nRelHeight = 100;
-        m_fWidth = 0;
-        m_eVertAlign = enumXFAlignMiddle;
-    }
+        : m_nRelHeight(100)
+        , m_fWidth(0)
+        , m_eVertAlign(enumXFAlignMiddle)
+    {}
 public:
     void    SetRelHeight(sal_Int32 height);
     void    SetWidth(double width);

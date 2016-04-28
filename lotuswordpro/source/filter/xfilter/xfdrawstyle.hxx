@@ -122,7 +122,6 @@ public:
 private:
     XFFontWorkStyle* m_pFontWorkStyle;
     enumXFWrap  m_eWrap;
-    sal_Int32   m_nWrapLines;
     XFDrawLineStyle *m_pLineStyle;
     XFDrawAreaStyle *m_pAreaStyle;
     OUString   m_strArrowStart;

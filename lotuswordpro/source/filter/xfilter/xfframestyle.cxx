@@ -64,28 +64,24 @@
 #include "xfbgimage.hxx"
 
 XFFrameStyle::XFFrameStyle()
-{
-    m_eWrap = enumXFWrapNone;
-    m_nWrapLines = 0;   //not limited.
-    m_pBorders = nullptr;
-    m_pColumns = nullptr;
-    m_pShadow = nullptr;
-    m_pBGImage = nullptr;
-
-    m_bProtectContent = false;
-    m_bProtectSize = false;
-    m_bProtectPos = false;
-    m_bEditable = false;
-    m_bPrintable = true;
-    m_bBackground = false;
-    m_nTransparency = 0;
-
-    m_eTextDir = enumXFTextDirNone;
-    m_eXPos = enumXFFrameXPosCenter;
-    m_eXRel = enumXFFrameXRelParaContent;
-    m_eYPos = enumXFFrameYPosTop;
-    m_eYRel = enumXFFrameYRelPage;
-}
+    : m_eWrap(enumXFWrapNone)
+    , m_pBorders(nullptr)
+    , m_pColumns(nullptr)
+    , m_pShadow(nullptr)
+    , m_pBGImage(nullptr)
+    , m_bProtectContent(false)
+    , m_bProtectSize(false)
+    , m_bProtectPos(false)
+    , m_bEditable(false)
+    , m_bPrintable(true)
+    , m_bBackground(false)
+    , m_nTransparency(0)
+    , m_eTextDir(enumXFTextDirNone)
+    , m_eXPos(enumXFFrameXPosCenter)
+    , m_eXRel(enumXFFrameXRelParaContent)
+    , m_eYPos(enumXFFrameYPosTop)
+    , m_eYRel(enumXFFrameYRelPage)
+{}
 
 XFFrameStyle::~XFFrameStyle()
 {

@@ -62,22 +62,21 @@
 #include "xfshadow.hxx"
 
 XFImageStyle::XFImageStyle()
-{
-    m_nBrightness = 0;
-    m_nContrast = 0;
-    m_nGamma = 0;
-    m_nTransparent = 0;
-    m_nAdjustRed = 0;
-    m_nAdjustGreen = 0;
-    m_nAdjustBlue = 0;
-    m_fClipLeft = 0;
-    m_fClipRight = 0;
-    m_fClipTop = 0;
-    m_fClipBottom = 0;
-    m_bHoriFlip = false;
-    m_bVertFlip = false;
-    m_eColorMode = enumXFColorStandard;
-}
+    : m_nBrightness(0)
+    , m_nContrast(0)
+    , m_nGamma(0)
+    , m_nTransparent(0)
+    , m_nAdjustRed(0)
+    , m_nAdjustGreen(0)
+    , m_nAdjustBlue(0)
+    , m_fClipLeft(0)
+    , m_fClipRight(0)
+    , m_fClipTop(0)
+    , m_fClipBottom(0)
+    , m_bHoriFlip(false)
+    , m_bVertFlip(false)
+    , m_eColorMode(enumXFColorStandard)
+{}
 
 void XFImageStyle::ToXml(IXFStream *pStrm)
 {

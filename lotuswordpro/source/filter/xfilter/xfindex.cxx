@@ -61,27 +61,15 @@
 #include "xfparagraph.hxx"
 
 XFIndex::XFIndex()
-{
-    m_pTitle = nullptr;
-    m_eType = enumXFIndexTOC;
-    m_bProtect = true;
-    m_bSeparator = false;
-    m_nMaxLevel = 0;
-
-    for(sal_uInt16 i=1;i<MAX_TOC_LEVEL+1;i++)
-    {
-        m_aTOCSource[i].clear();
-    }
-}
+    : m_eType(enumXFIndexTOC)
+    , m_bProtect(true)
+    , m_bSeparator(false)
+    , m_pTitle(nullptr)
+{}
 
 XFIndex::~XFIndex()
 {
     delete m_pTitle;
-
-    for(sal_uInt16 i=1;i<MAX_TOC_LEVEL+1;i++)
-    {
-        m_aTOCSource[i].clear();
-    }
 
     while(m_aTemplates.size()>0)
     {

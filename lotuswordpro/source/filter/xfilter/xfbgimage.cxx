@@ -61,14 +61,13 @@
 #include "xfbase64.hxx"
 
 XFBGImage::XFBGImage()
-{
-    m_bUserFileLink = false;
-    m_bRepeate = false;
-    m_bStretch = false;
-    m_bPosition = true;
-    m_eHoriAlign = enumXFAlignCenter;
-    m_eVertAlign = enumXFAlignCenter;
-}
+    : m_bUserFileLink(false)
+    , m_bRepeate(false)
+    , m_bStretch(false)
+    , m_bPosition(true)
+    , m_eHoriAlign(enumXFAlignCenter)
+    , m_eVertAlign(enumXFAlignCenter)
+{}
 
 void XFBGImage::SetImageData(sal_uInt8 *buf, int len)
 {

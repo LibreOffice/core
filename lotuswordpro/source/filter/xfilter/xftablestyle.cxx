@@ -61,11 +61,10 @@
 #include "xfbgimage.hxx"
 
 XFTableStyle::XFTableStyle()
-{
-    m_fWidth = 2;
-    m_eAlign = enumXFAlignStart;
-    m_pBGImage = nullptr;
-}
+    : m_fWidth(2)
+    , m_pBGImage(nullptr)
+    , m_eAlign(enumXFAlignStart)
+{}
 
 XFTableStyle::~XFTableStyle()
 {
