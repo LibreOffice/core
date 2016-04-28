@@ -149,7 +149,6 @@ public:
 
 protected:
     enumXFWrap  m_eWrap;
-    sal_Int32   m_nWrapLines;
     XFPadding   m_aPad;
     XFMargins   m_aMargins;
     XFBorders   *m_pBorders;

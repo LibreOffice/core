@@ -59,11 +59,11 @@
  ************************************************************************/
 #include "xfshadow.hxx"
 
-XFShadow::XFShadow():m_aColor(128,128,0)
-{
-    m_ePosition = enumXFShadowNone;
-    m_fOffset = 0.18;
-}
+XFShadow::XFShadow()
+    : m_ePosition(enumXFShadowNone)
+    , m_fOffset(0.18)
+    , m_aColor(128,128,0)
+{}
 
 OUString XFShadow::ToString()
 {

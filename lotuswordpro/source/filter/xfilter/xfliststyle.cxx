@@ -60,15 +60,14 @@
 #include "xfliststyle.hxx"
 
 XFListLevel::XFListLevel()
-{
-    m_nLevel = 0;
-    m_nDisplayLevel = 0;
-    m_fIndent = 0;
-    m_fMinLabelWidth = 0.499;
-    m_fMinLabelDistance = 0;
-    m_eAlign = enumXFAlignStart;
-    m_eListType = enumXFListLevelNumber;
-}
+    : m_nLevel(0)
+    , m_nDisplayLevel(0)
+    , m_fIndent(0)
+    , m_fMinLabelWidth(0.499)
+    , m_fMinLabelDistance(0)
+    , m_eAlign(enumXFAlignStart)
+    , m_eListType(enumXFListLevelNumber)
+{}
 
 void XFListLevel::ToXml(IXFStream * /*pStrm*/)
 {
