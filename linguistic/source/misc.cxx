@@ -680,16 +680,14 @@ static const sal_uInt32 the_aDigitZeroes [] =
 
 bool HasDigits( const OUString &rText )
 {
-    static const int nNumDigitZeroes = SAL_N_ELEMENTS(the_aDigitZeroes);
     const sal_Int32 nLen = rText.getLength();
 
     sal_Int32 i = 0;
     while (i < nLen) // for all characters ...
     {
         const sal_uInt32 nCodePoint = rText.iterateCodePoints( &i );    // handle unicode surrogates correctly...
-        for (int j = 0; j < nNumDigitZeroes; ++j)   // ... check in all 0..9 ranges
+        for (unsigned int nDigitZero : the_aDigitZeroes)   // ... check in all 0..9 ranges
         {
-            sal_uInt32 nDigitZero = the_aDigitZeroes[ j ];
             if (nDigitZero > nCodePoint)
                 break;
             if (/*nDigitZero <= nCodePoint &&*/ nCodePoint <= nDigitZero + 9)

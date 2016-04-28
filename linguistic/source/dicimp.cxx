@@ -470,9 +470,9 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     pStream->WriteLine(OString("---"));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
-    for (size_t i = 0;  i < aEntries.size();  i++)
+    for (Reference<XDictionaryEntry> & aEntrie : aEntries)
     {
-        OString aOutStr = formatForSave(aEntries[i], eEnc);
+        OString aOutStr = formatForSave(aEntrie, eEnc);
         pStream->WriteLine (aOutStr);
         if (0 != (nErr = pStream->GetError()))
             break;

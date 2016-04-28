@@ -460,9 +460,9 @@ bool HelpCompiler::compile()
     std::string title;
     // returns a clone of the document with switch-cases resolved
     std::string appl = module.substr(1);
-    for (size_t i = 0; i < appl.length(); ++i)
+    for (char & i : appl)
     {
-        appl[i]=toupper(appl[i]);
+        i=toupper(i);
     }
     xmlNodePtr docResolved = clone(xmlDocGetRootElement(docResolvedOrg), appl);
     myparser aparser(documentId, fileName, title);

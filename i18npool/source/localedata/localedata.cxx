@@ -484,26 +484,25 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             aFallback = LocaleDataImpl::getFirstLocaleServiceName( aFbLocale);
     }
 
-    for ( sal_Int16 i = 0; i < nbOfLocales; i++)
+    for (const auto & i : aLibTable)
     {
-        if (localeName.equalsAscii(aLibTable[i].pLocale) ||
-                (bFallback && aFallback.equalsAscii(aLibTable[i].pLocale)))
+        if (localeName.equalsAscii(i.pLocale) ||
+                (bFallback && aFallback.equalsAscii(i.pLocale)))
         {
 #ifndef DISABLE_DYNLOADING
             OUStringBuffer aBuf(sal::static_int_cast<int>(
-                        strlen(aLibTable[i].pLocale) + 1 + strlen(pFunction)));
+                        strlen(i.pLocale) + 1 + strlen(pFunction)));
             {
                 ::osl::MutexGuard aGuard( maMutex );
-                for (size_t l = 0; l < maLookupTable.size(); l++)
+                for (LocaleDataLookupTableItem* pCurrent : maLookupTable)
                 {
-                    LocaleDataLookupTableItem* pCurrent = maLookupTable[l];
-                    if (pCurrent->dllName == aLibTable[i].pLib)
+                    if (pCurrent->dllName == i.pLib)
                     {
                         OSL_ASSERT( pOutCachedItem );
                         if( pOutCachedItem )
                         {
                             (*pOutCachedItem) = new LocaleDataLookupTableItem( *pCurrent );
-                            (*pOutCachedItem)->localeName = aLibTable[i].pLocale;
+                            (*pOutCachedItem)->localeName = i.pLocale;
                             return (*pOutCachedItem)->module->getFunctionSymbol(
                                     aBuf.appendAscii( pFunction).append( cUnder).
                                     appendAscii( (*pOutCachedItem)->localeName).makeStringAndClear());
@@ -515,17 +514,17 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             }
             // Library not loaded, load it and add it to the list.
 #ifdef SAL_DLLPREFIX
-            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 6);    // mostly "lib*.so"
-            aBuf.append( SAL_DLLPREFIX ).appendAscii(aLibTable[i].pLib).append( SAL_DLLEXTENSION );
+            aBuf.ensureCapacity(strlen(i.pLib) + 6);    // mostly "lib*.so"
+            aBuf.append( SAL_DLLPREFIX ).appendAscii(i.pLib).append( SAL_DLLEXTENSION );
 #else
-            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 4);    // mostly "*.dll"
-            aBuf.appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
+            aBuf.ensureCapacity(strlen(i.pLib) + 4);    // mostly "*.dll"
+            aBuf.appendAscii(i.pLib).appendAscii( SAL_DLLEXTENSION );
 #endif
             osl::Module *module = new osl::Module();
             if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
             {
                 ::osl::MutexGuard aGuard( maMutex );
-                LocaleDataLookupTableItem* pNewItem = new LocaleDataLookupTableItem(aLibTable[i].pLib, module, aLibTable[i].pLocale);
+                LocaleDataLookupTableItem* pNewItem = new LocaleDataLookupTableItem(i.pLib, module, i.pLocale);
                 maLookupTable.push_back(pNewItem);
                 OSL_ASSERT( pOutCachedItem );
                 if( pOutCachedItem )
@@ -844,15 +843,15 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale ) throw(RuntimeException, s
 
     Sequence< FormatElement > seq(formatCount);
     sal_Int32 f = 0;
-    for (int s = 0; s < SECTIONS; ++s)
+    for (FormatSection & s : section)
     {
-        sal_Unicode const * const * const formatArray = section[s].formatArray;
+        sal_Unicode const * const * const formatArray = s.formatArray;
         if ( formatArray )
         {
-            for (int i = 0, nOff = 0; i < section[s].formatCount; ++i, nOff += 7, ++f)
+            for (int i = 0, nOff = 0; i < s.formatCount; ++i, nOff += 7, ++f)
             {
                 FormatElement elem(
-                        OUString(formatArray[nOff]).replaceAll(section[s].from, section[s].to),
+                        OUString(formatArray[nOff]).replaceAll(s.from, s.to),
                         formatArray[nOff + 1],
                         formatArray[nOff + 2],
                         formatArray[nOff + 3],
@@ -1468,8 +1467,8 @@ LocaleDataImpl::getAllInstalledLocaleNames() throw(RuntimeException, std::except
     Sequence< lang::Locale > seq( nbOfLocales );
     sal_Int16 nInstalled = 0;
 
-    for( sal_Int16 i=0; i<nbOfLocales; i++ ) {
-        OUString name = OUString::createFromAscii( aLibTable[i].pLocale );
+    for(const auto & i : aLibTable) {
+        OUString name = OUString::createFromAscii( i.pLocale );
 
         // Check if the locale is really available and not just in the table,
         // don't allow fall backs.

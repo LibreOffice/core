@@ -36,8 +36,8 @@ CharacterClassificationImpl::CharacterClassificationImpl(
 
 CharacterClassificationImpl::~CharacterClassificationImpl() {
         // Clear lookuptable
-        for (size_t l = 0; l < lookupTable.size(); l++)
-            delete lookupTable[l];
+        for (lookupTableItem* p : lookupTable)
+            delete p;
         lookupTable.clear();
 }
 
@@ -160,8 +160,8 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
     if (cachedItem && cachedItem->equals(rLocale))
         return cachedItem->xCI;
     else {
-        for (size_t i = 0; i < lookupTable.size(); i++) {
-            cachedItem = lookupTable[i];
+        for (lookupTableItem* i : lookupTable) {
+            cachedItem = i;
             if (cachedItem->equals(rLocale))
                 return cachedItem->xCI;
         }

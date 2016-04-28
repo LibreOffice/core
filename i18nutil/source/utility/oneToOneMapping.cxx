@@ -69,8 +69,8 @@ oneToOneMappingWithFlag::~oneToOneMappingWithFlag()
 {
     if( mbHasIndex )
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(mpIndex); ++i)
-            delete [] mpIndex[i];
+        for (UnicodePairWithFlag** i : mpIndex)
+            delete [] i;
     }
 }
 
@@ -80,8 +80,8 @@ void oneToOneMappingWithFlag::makeIndex()
     {
         int current = -1;
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(mpIndex); ++i)
-            mpIndex[i] = nullptr;
+        for (UnicodePairWithFlag**& i : mpIndex)
+            i = nullptr;
 
         for( size_t k = 0; k < mnSize; k++ )
         {

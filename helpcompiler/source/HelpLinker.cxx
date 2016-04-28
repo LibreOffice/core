@@ -210,9 +210,8 @@ namespace URLEncoder
         static const char hex[17] = "0123456789ABCDEF";
 
         std::string result;
-        for (size_t i=0; i < rIn.length(); ++i)
+        for (char c : rIn)
         {
-            unsigned char c = rIn[i];
             if (isalnum (c) || strchr (good, c))
                 result += c;
             else {
@@ -242,21 +241,21 @@ void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
     std::vector<unsigned char> dataB(dataLen);
     size_t i = 0;
     dataB[i++] = static_cast<unsigned char>(fileLen);
-    for (size_t j = 0; j < fileB.length(); ++j)
-        dataB[i++] = static_cast<unsigned char>(fileB[j]);
+    for (char j : fileB)
+        dataB[i++] = static_cast<unsigned char>(j);
     if (!anchorB.empty())
     {
         dataB[i++] = '#';
-        for (size_t j = 0; j < anchorB.length(); ++j)
-            dataB[i++] = anchorB[j];
+        for (char j : anchorB)
+            dataB[i++] = j;
     }
     dataB[i++] = static_cast<unsigned char>(jarfileB.length());
-    for (size_t j = 0; j < jarfileB.length(); ++j)
-        dataB[i++] = jarfileB[j];
+    for (char j : jarfileB)
+        dataB[i++] = j;
 
     dataB[i++] = static_cast<unsigned char>(titleB.length());
-    for (size_t j = 0; j < titleB.length(); ++j)
-        dataB[i++] = titleB[j];
+    for (char j : titleB)
+        dataB[i++] = j;
 
     if( pFile_DBHelp != nullptr )
     {
