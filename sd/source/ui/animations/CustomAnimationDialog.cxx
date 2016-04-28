@@ -1841,9 +1841,9 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationDurationTabPage, DurationModifiedHdl, Edit&
     {
         double duration_value = static_cast<double>(mpCBXDuration->GetValue());
         if(duration_value <= 0.0)
-        {
             mpCBXDuration->SetValue(1);
-        }
+        else
+            mpCBXDuration->SetValue(duration_value);
     }
 }
 
