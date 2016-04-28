@@ -22,6 +22,7 @@
 #include <opengl/texture.hxx>
 #include <opengl/x11/gdiimpl.hxx>
 #include <opengl/x11/salvd.hxx>
+#include "opengl/RenderState.hxx"
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -144,8 +145,8 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask
 
     rCombo.mpTexture.reset(new OpenGLTexture(pPixmap->GetWidth(), pPixmap->GetHeight(), false));
 
-    glActiveTexture( GL_TEXTURE0 );
-    CHECK_GL_ERROR();
+    mpContext->state()->texture().active(0);
+
     rCombo.mpTexture->Bind();
     glXBindTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT, nullptr );
     rCombo.mpTexture->Unbind();

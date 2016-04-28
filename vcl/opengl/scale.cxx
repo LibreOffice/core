@@ -27,6 +27,7 @@
 #include "opengl/salbmp.hxx"
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
+#include "opengl/RenderState.hxx"
 
 #include <ResampleKernel.hxx>
 
@@ -330,6 +331,8 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
     maUserBuffer.reset();
     OpenGLVCLContextZone aContextZone;
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
+    xContext->state()->scissor().disable();
+    xContext->state()->stencil().disable();
 
     if (rScaleX <= 1 && rScaleY <= 1)
     {

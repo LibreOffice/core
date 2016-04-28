@@ -62,6 +62,7 @@ class OpenGLProgram;
 class OpenGLTexture;
 class SalGraphicsImpl;
 class OpenGLTests;
+class RenderState;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -169,6 +170,11 @@ public:
     OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
     void                UseNoProgram();
 
+    std::unique_ptr<RenderState>& state()
+    {
+        return mpRenderState;
+    }
+
     /// Is this GL context the current context ?
     bool isCurrent();
     /// release bound resources from the current context
@@ -259,6 +265,8 @@ private:
 #ifdef DBG_UTIL
     std::set<SalGraphicsImpl*> maParents;
 #endif
+
+    std::unique_ptr<RenderState> mpRenderState;
 
 public:
     vcl::Region maClipRegion;

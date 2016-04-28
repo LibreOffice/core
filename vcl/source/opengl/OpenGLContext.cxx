@@ -40,6 +40,8 @@
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 
+#include "opengl/RenderState.hxx"
+
 using namespace com::sun::star;
 
 #define MAX_FRAMEBUFFER_COUNT 30
@@ -73,6 +75,7 @@ OpenGLContext::OpenGLContext():
     mpFirstFramebuffer(nullptr),
     mpLastFramebuffer(nullptr),
     mpCurrentProgram(nullptr),
+    mpRenderState(new RenderState),
     mnPainting(0),
     mpPrevContext(nullptr),
     mpNextContext(nullptr)
@@ -1225,6 +1228,7 @@ void OpenGLContext::reset()
 
     // reset the clip region
     maClipRegion.SetEmpty();
+    mpRenderState.reset(new RenderState);
 
     // destroy all framebuffers
     if( mpLastFramebuffer )
@@ -1679,8 +1683,8 @@ OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rText
     assert( pFramebuffer );
     BindFramebuffer( pFramebuffer );
     pFramebuffer->AttachTexture( rTexture );
-    glViewport( 0, 0, rTexture.GetWidth(), rTexture.GetHeight() );
-    CHECK_GL_ERROR();
+
+    state()->viewport(Rectangle(Point(), Size(rTexture.GetWidth(), rTexture.GetHeight())));
 
     return pFramebuffer;
 }
