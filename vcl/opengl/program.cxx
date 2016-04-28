@@ -7,9 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <opengl/program.hxx>
+#include "opengl/program.hxx"
+#include "opengl/RenderState.hxx"
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -62,19 +64,11 @@ bool OpenGLProgram::Use()
 bool OpenGLProgram::Clean()
 {
     // unbind all textures
-    if( !maTextures.empty() )
+    for (OpenGLTexture& rTexture : maTextures)
     {
-        int nIndex( maTextures.size() - 1 );
-        TextureList::reverse_iterator it( maTextures.rbegin() );
-        while( it != maTextures.rend() )
-        {
-            glActiveTexture( GL_TEXTURE0 + nIndex-- );
-            CHECK_GL_ERROR();
-            it->Unbind();
-            ++it;
-        }
-        maTextures.clear();
+        rTexture.Unbind();
     }
+    maTextures.clear();
 
     // disable any enabled vertex attrib array
     if( mnEnabledAttribs )
@@ -252,10 +246,12 @@ void OpenGLProgram::SetTexture( const OString& rName, OpenGLTexture& rTexture )
 
     glUniform1i( nUniform, nIndex );
     CHECK_GL_ERROR();
-    glActiveTexture( GL_TEXTURE0 + nIndex );
-    CHECK_GL_ERROR();
+
+    std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
+    rState->texture().active(nIndex);
+
     rTexture.Bind();
-    maTextures.push_back( rTexture );
+    maTextures.push_back(rTexture);
 }
 
 void OpenGLProgram::SetTransform(
