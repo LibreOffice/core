@@ -541,6 +541,7 @@ bool OpenGLSalBitmap::ReadTexture()
 
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
     xContext->state()->scissor().disable();
+    xContext->state()->stencil().disable();
 
     if (mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
     {
@@ -624,6 +625,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
 
     rtl::Reference< OpenGLContext > xContext = OpenGLContext::getVCLContext();
     xContext->state()->scissor().disable();
+    xContext->state()->stencil().disable();
 
     static vcl::DeleteOnDeinit<OpenGLTexture> gCRCTableTexture(
         new OpenGLTexture(512, 1, GL_RGBA, GL_UNSIGNED_BYTE,
@@ -893,6 +895,7 @@ bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceC
     OpenGLZone aZone;
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
     xContext->state()->scissor().disable();
+    xContext->state()->stencil().disable();
 
     OpenGLFramebuffer* pFramebuffer;
     OpenGLProgram* pProgram;
@@ -932,6 +935,7 @@ bool OpenGLSalBitmap::ConvertToGreyscale()
     OpenGLZone aZone;
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
     xContext->state()->scissor().disable();
+    xContext->state()->stencil().disable();
 
     OpenGLFramebuffer* pFramebuffer;
     OpenGLProgram* pProgram;

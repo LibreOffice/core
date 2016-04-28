@@ -234,11 +234,6 @@ void OpenGLSalGraphicsImpl::PostDraw()
         CHECK_GL_ERROR();
     }
 
-    if( mbUseStencil )
-    {
-        glDisable( GL_STENCIL_TEST );
-        CHECK_GL_ERROR();
-    }
     if( mpProgram )
     {
         mpProgram->Clean();
@@ -271,6 +266,7 @@ void OpenGLSalGraphicsImpl::freeResources()
         mpContext->makeCurrent();
         FlushDeferredDrawing();
         mpContext->state()->scissor().disable();
+        mpContext->state()->stencil().disable();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
     }
     ReleaseContext();
@@ -278,7 +274,7 @@ void OpenGLSalGraphicsImpl::freeResources()
 
 void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMask )
 {
-    glEnable( GL_STENCIL_TEST );
+    mpContext->state()->stencil().enable();
 
     VCL_GL_INFO( "Adding complex clip / stencil" );
     GLuint nStencil = maOffscreenTex.StencilId();
@@ -317,8 +313,8 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
     CHECK_GL_ERROR();
     glStencilMask( 0x00 );
     CHECK_GL_ERROR();
-    glDisable( GL_STENCIL_TEST );
-    CHECK_GL_ERROR();
+
+    mpContext->state()->stencil().disable();
 }
 
 void OpenGLSalGraphicsImpl::ImplInitClipRegion()
@@ -348,8 +344,11 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
     {
         glStencilFunc( GL_EQUAL, 1, 0x1 );
         CHECK_GL_ERROR();
-        glEnable( GL_STENCIL_TEST );
-        CHECK_GL_ERROR();
+        mpContext->state()->stencil().enable();
+    }
+    else
+    {
+        mpContext->state()->stencil().disable();
     }
 }
 
@@ -1503,11 +1502,7 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
             // so if we do not disable the scissor test, the texture produced
             // by the first downscaling is clipped to the current window size.
             mpContext->state()->scissor().disable();
-            CHECK_GL_ERROR();
-
-            // Maybe it can give problems too.
-            glDisable(GL_STENCIL_TEST);
-            CHECK_GL_ERROR();
+            mpContext->state()->stencil().disable();
 
             // the square root of the whole inverted scale ratio
             double ixscalesqrt = std::floor(std::sqrt(ixscale));
@@ -1531,10 +1526,7 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
                 mpContext->state()->scissor().enable();
 
             if (mbUseStencil)
-            {
-                glEnable(GL_STENCIL_TEST);
-                CHECK_GL_ERROR();
-            }
+                mpContext->state()->stencil().enable();
         }
     }
 
@@ -2508,6 +2500,7 @@ void OpenGLSalGraphicsImpl::flush()
     FlushDeferredDrawing();
 
     mpContext->state()->scissor().disable();
+    mpContext->state()->stencil().disable();
 
     if( IsOffscreen() )
         return;
@@ -2526,6 +2519,7 @@ void OpenGLSalGraphicsImpl::doFlush()
     FlushDeferredDrawing();
 
     mpContext->state()->scissor().disable();
+    mpContext->state()->stencil().disable();
 
     if( IsOffscreen() )
         return;
@@ -2571,6 +2565,7 @@ void OpenGLSalGraphicsImpl::doFlush()
     CHECK_GL_ERROR();
 
     mpWindowContext->state()->scissor().disable();
+    mpWindowContext->state()->stencil().disable();
 
 #if OSL_DEBUG_LEVEL > 0 // random background glClear
     glClearColor((float)rand()/RAND_MAX, (float)rand()/RAND_MAX,
