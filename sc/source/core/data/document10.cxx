@@ -23,6 +23,7 @@
 
 #include "dociter.hxx"
 #include "patattr.hxx"
+#include "refupdatecontext.hxx"
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
 #include "scitems.hxx"
@@ -447,6 +448,69 @@ void ScDocument::finalizeOutlineImport()
         ScTable* p = *it;
         p->finalizeOutlineImport();
     }
+}
+
+bool ScDocument::FindRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes,
+        SCTAB nTokenTab, const sal_uInt16 nTokenIndex,
+        SCTAB nGlobalRefTab, SCTAB nLocalRefTab, SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement,
+        bool bSameDoc, int nRecursion) const
+{
+    if (nTokenTab < -1)
+    {
+        SAL_WARN("sc.core", "ScDocument::FindRangeNamesReferencingSheet - nTokenTab < -1 : " <<
+                nTokenTab << ", nTokenIndex " << nTokenIndex << " Fix the creator!");
+#if OSL_DEBUG_LEVEL > 0
+        const ScRangeData* pData = FindRangeNameBySheetAndIndex( nTokenTab, nTokenIndex);
+        SAL_WARN_IF( pData, "sc.core", "ScDocument::FindRangeNamesReferencingSheet - named expression is: " << pData->GetName());
+#endif
+        nTokenTab = -1;
+    }
+    SCTAB nRefTab = nGlobalRefTab;
+    if (nTokenTab == nOldTokenTab)
+    {
+        nTokenTab = nOldTokenTabReplacement;
+        nRefTab = nLocalRefTab;
+    }
+    else if (nTokenTab == nOldTokenTabReplacement)
+    {
+        nRefTab = nLocalRefTab;
+    }
+
+    if (rIndexes.isNameUpdated( nTokenTab, nTokenIndex))
+        return true;
+
+    ScRangeData* pData = FindRangeNameBySheetAndIndex( nTokenTab, nTokenIndex);
+    if (!pData)
+        return false;
+
+    ScTokenArray* pCode = pData->GetCode();
+    if (!pCode)
+        return false;
+
+    bool bRef = !bSameDoc;  // include every name used when copying to other doc
+    if (nRecursion < 126)   // whatever.. 42*3
+    {
+        for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+        {
+            if (p->GetOpCode() == ocName)
+            {
+                bRef |= FindRangeNamesReferencingSheet( rIndexes, p->GetSheet(), p->GetIndex(),
+                        nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, nRecursion+1);
+            }
+        }
+    }
+
+    if (!bRef)
+    {
+        SCTAB nPosTab = pData->GetPos().Tab();
+        if (nPosTab == nOldTokenTab)
+            nPosTab = nOldTokenTabReplacement;
+        bRef = pCode->ReferencesSheet( nRefTab, nPosTab);
+    }
+    if (bRef)
+        rIndexes.setUpdatedName( nTokenTab, nTokenIndex);
+
+    return bRef;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

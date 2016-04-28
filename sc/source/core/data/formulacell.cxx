@@ -448,80 +448,6 @@ MightReferenceSheet mightRangeNameReferenceSheet( ScRangeData* pData, SCTAB nRef
         MightReferenceSheet::CODE : MightReferenceSheet::NONE;
 }
 
-// See also lcl_FindRangeNamesInUse() below.
-/** Recursively find all named expressions that directly or indirectly (nested)
-    reference a given sheet, starting from a given named expression
-    nTokenTab/nTokenIndex.
-
-    @param  nTokenTab
-            Tab/sheet on which to find the name, -1 if global scope. Obtained
-            from ocName token.
-
-    @param  nTokenIndex
-            Index of named expression. Obtained from ocName token.
- */
-bool findRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes, SCTAB nTokenTab, const sal_uInt16 nTokenIndex,
-        const ScDocument* pDoc, SCTAB nGlobalRefTab, SCTAB nLocalRefTab,
-        SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement, bool bSameDoc, int nRecursion)
-{
-    if (nTokenTab < -1)
-    {
-        SAL_WARN("sc.core", "findRangeNamesReferencingSheet - nTokenTab < -1 : " <<
-                nTokenTab << ", nTokenIndex " << nTokenIndex << " Fix the creator!");
-#if OSL_DEBUG_LEVEL > 0
-        const ScRangeData* pData = pDoc->FindRangeNameBySheetAndIndex( nTokenTab, nTokenIndex);
-        SAL_WARN_IF( pData, "sc.core", "findRangeNamesReferencingSheet - named expression is: " << pData->GetName());
-#endif
-        nTokenTab = -1;
-    }
-    SCTAB nRefTab = nGlobalRefTab;
-    if (nTokenTab == nOldTokenTab)
-    {
-        nTokenTab = nOldTokenTabReplacement;
-        nRefTab = nLocalRefTab;
-    }
-    else if (nTokenTab == nOldTokenTabReplacement)
-    {
-        nRefTab = nLocalRefTab;
-    }
-
-    if (rIndexes.isNameUpdated( nTokenTab, nTokenIndex))
-        return true;
-
-    ScRangeData* pData = pDoc->FindRangeNameBySheetAndIndex( nTokenTab, nTokenIndex);
-    if (!pData)
-        return false;
-
-    ScTokenArray* pCode = pData->GetCode();
-    if (!pCode)
-        return false;
-
-    bool bRef = !bSameDoc;  // include every name used when copying to other doc
-    if (nRecursion < 126)   // whatever.. 42*3
-    {
-        for (const FormulaToken* p = pCode->First(); p; p = pCode->Next())
-        {
-            if (p->GetOpCode() == ocName)
-            {
-                bRef |= findRangeNamesReferencingSheet( rIndexes, p->GetSheet(), p->GetIndex(), pDoc,
-                        nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, nRecursion+1);
-            }
-        }
-    }
-
-    if (!bRef)
-    {
-        SCTAB nPosTab = pData->GetPos().Tab();
-        if (nPosTab == nOldTokenTab)
-            nPosTab = nOldTokenTabReplacement;
-        bRef = pCode->ReferencesSheet( nRefTab, nPosTab);
-    }
-    if (bRef)
-        rIndexes.setUpdatedName( nTokenTab, nTokenIndex);
-
-    return bRef;
-}
-
 ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument* pOldDoc,
         const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal,
         SCTAB nOldSheet, const SCTAB nNewSheet, bool bSameDoc)
@@ -738,7 +664,7 @@ bool adjustCopyRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRangeData*& rpRan
             const SCTAB nOldTokenTab = (nOldSheet < 0 ? (bInsertingBefore ? nOldTab-1 : nOldTab) : nOldSheet);
             const SCTAB nOldTokenTabReplacement = nOldTab;
             sc::UpdatedRangeNames aReferencingNames;
-            findRangeNamesReferencingSheet( aReferencingNames, nOldSheet, nOldIndex, pOldDoc,
+            pOldDoc->FindRangeNamesReferencingSheet( aReferencingNames, nOldSheet, nOldIndex,
                     nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, 0);
             if (bEarlyBailOut && aReferencingNames.isEmpty(-1) && aReferencingNames.isEmpty(nOldTokenTabReplacement))
                 return false;
@@ -4020,7 +3946,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         StartListeningTo( pDocument ); // Listener as previous
 }
 
-// See also findRangeNamesReferencingSheet() above.
+// See also ScDocument::FindRangeNamesReferencingSheet()
 static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc,
         int nRecursion)
 {

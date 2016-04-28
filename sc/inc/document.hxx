@@ -80,6 +80,7 @@ struct SortUndoParam;
 struct ReorderParam;
 class FormulaGroupAreaListener;
 class ColumnSet;
+class UpdatedRangeNames;
 
 }
 
@@ -550,6 +551,54 @@ public:
         @return nullptr if indexed name not found.
      */
     ScRangeData* FindRangeNameBySheetAndIndex( SCTAB nTab, sal_uInt16 nIndex ) const;
+
+    /** Recursively find all named expressions that directly or indirectly
+        (nested) reference a given sheet, starting from a given named
+        expression nTokenTab/nTokenIndex.
+
+        Used to collect all named expressions/ranges that will need to be
+        copied along when copying sheets.
+
+        The different tab/sheets passed cater for the situation that a sheet is
+        copied and was already inserted and global names are already adjusted
+        but the sheet-local names of the shifted original sheet are not yet. If
+        no sheet was inserted and global and local names' references not
+        updated yet, then all 4 tab arguments would be identical.
+
+        @param  nTokenTab
+                Tab/sheet on which to find the name, -1 if global scope.
+                For example obtained from ocName token.
+
+        @param  nTokenIndex
+                Index of named expression. For example obtained from ocName token.
+
+        @param  nGlobalRefTab
+                Tab to check if used in global names.
+
+        @param  nLocalRefTab
+                Tab to check if used in sheet-local names.
+
+        @param  nOldTokenTab
+                The original tab of the copied sheet, used as sheet-local
+                base position for relative references.
+
+        @param  nOldTokenTabReplacement
+                The replacement to use for relative references if the name
+                encountered uses nOldTokenTab as base position.
+
+        @param  bSameDoc
+                FALSE if collecting names for a sheet to be copied to another
+                document. Then all names encountered are considered to be
+                referencing the sheet. Else TRUE if collecting names to be
+                copied into the same document.
+
+        @param  nRecursion
+                Recursion guard, initialize with 0.
+      */
+    bool FindRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes,
+            SCTAB nTokenTab, const sal_uInt16 nTokenIndex,
+            SCTAB nGlobalRefTab, SCTAB nLocalRefTab, SCTAB nOldTokenTab, SCTAB nOldTokenTabReplacement,
+            bool bSameDoc, int nRecursion ) const;
 
     /**
      * Call this immediately before updating all named ranges.
