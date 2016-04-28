@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
+
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
@@ -43,11 +45,11 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
     // Create ItemSets; Attention, it is possible that the new one is from a,
     // different pool. Therefore we clone it with its items.
-    pNewSet = new SfxItemSet(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pTheNewItemSet->GetRanges());
-    SdrModel::MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
+    pNewSet = o3tl::make_unique<SfxItemSet>(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pTheNewItemSet->GetRanges());
+    SdrModel::MigrateItemSet( pTheNewItemSet, pNewSet.get(), pTheDoc );
 
-    pOldSet = new SfxItemSet(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pStyleSheet->GetItemSet().GetRanges());
-    SdrModel::MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
+    pOldSet = o3tl::make_unique<SfxItemSet>(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pStyleSheet->GetItemSet().GetRanges());
+    SdrModel::MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet.get(), pTheDoc );
 
     aComment = SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT);
     OUString aName(pStyleSheet->GetName());
@@ -95,7 +97,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 void StyleSheetUndoAction::Undo()
 {
     SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
-    SdrModel::MigrateItemSet( pOldSet, &aNewSet, mpDoc );
+    SdrModel::MigrateItemSet( pOldSet.get(), &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
@@ -107,19 +109,13 @@ void StyleSheetUndoAction::Undo()
 void StyleSheetUndoAction::Redo()
 {
     SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
-    SdrModel::MigrateItemSet( pNewSet, &aNewSet, mpDoc );
+    SdrModel::MigrateItemSet( pNewSet.get(), &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
         static_cast<SdStyleSheet*>(pStyleSheet)->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-}
-
-StyleSheetUndoAction::~StyleSheetUndoAction()
-{
-    delete pNewSet;
-    delete pOldSet;
 }
 
 OUString StyleSheetUndoAction::GetComment() const
