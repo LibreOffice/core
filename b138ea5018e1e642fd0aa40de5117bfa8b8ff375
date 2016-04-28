@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_44da007a",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-28T13:18:43Z",
+      "side": 1,
+      "message": "Why illegal? IMHO anything can be the result.",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_64e70441",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1955,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-28T13:18:43Z",
+      "side": 1,
+      "message": "Actually the entire switch block and resolving arguments is unnecessary, instead simply pop the token and push it again (to catch and promote errors), like in\n\n FormulaTokenRef xToken( PopToken());\n if (xToken)\n     PushTempToken( xToken.get());\n else\n     PushError( errUnknownStackVariable);\n\nThe next function receiving the result as argument (or the formula cell result if it was the final result) will take care of resolving the token.",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a4cf4cb2",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-28T13:18:43Z",
+      "side": 1,
+      "message": "This is lacking at least the cases of svDoubleRef, svExternalDoubleRef and svMatrix.\n\nsvExternalSingleRef, svExternalDoubleRef and svMatrix can be handled together using GetDoubleOrStringFromMatrix().\n\nsvSingleRef and svDoubleRef can be handled together using PopDoubleRefOrSingleRef()",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_24c41c91",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-28T13:18:43Z",
+      "side": 1,
+      "message": "The arguments can be of a different type than to be matched one, for example trying to pop a string if there is none will set nGlobalError (e.g. SWITCH(\"x\",1,\"x1\",\"other\") fails with Err:502). Instead, use GetString()",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_44c12080",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-28T13:18:43Z",
+      "side": 1,
+      "message": "This compares the strings case significant. Rather both strings should be kept as SharedString, which they already were, and comparison be done case insensitive (if that is what Excel does? I assume), i.e.\n\n aStr.getDataIgnoreCase() \u003d\u003d aRefStr.getDataIgnoreCase()\n\nAlso, comparison of double values should use rtl::math::approxEqual()",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_84e4083c",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-04-28T13:18:43Z",
+      "side": 1,
+      "message": "Same here as for IFS(), instead of the switch block pop and push the token.",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
