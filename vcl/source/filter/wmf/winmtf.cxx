@@ -531,10 +531,10 @@ tools::PolyPolygon& WinMtfOutput::ImplMap( tools::PolyPolygon& rPolyPolygon )
 
 void WinMtfOutput::SelectObject( sal_Int32 nIndex )
 {
-    GDIObj* pGDIObj = nullptr;
+    std::shared_ptr<GDIObj> pGDIObj;
 
     if ( nIndex & ENHMETA_STOCK_OBJECT )
-        pGDIObj = new GDIObj();
+        pGDIObj = std::make_shared<GDIObj>();
     else
     {
         nIndex &= 0xffff;       // safety check: don't allow index to be > 65535
@@ -543,7 +543,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
             pGDIObj = vGDIObj[ nIndex ];
     }
 
-    if( pGDIObj == nullptr )
+    if( !pGDIObj )
         return;
 
     if ( nIndex & ENHMETA_STOCK_OBJECT )
@@ -616,8 +616,6 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
             break;  //  -Wall many options not handled.
         }
     }
-    if ( nIndex & ENHMETA_STOCK_OBJECT )
-        delete pGDIObj;
 }
 
 
@@ -648,7 +646,7 @@ void WinMtfOutput::SetTextAlign( sal_uInt32 nAlign )
 
 void WinMtfOutput::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
 {
-    vGDIObj.resize(nNewEntrys, nullptr);
+    vGDIObj.resize(nNewEntrys);
 }
 
 void WinMtfOutput::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
@@ -702,13 +700,13 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
     sal_uInt32 nIndex;
     for ( nIndex = 0; nIndex < vGDIObj.size(); nIndex++ )
     {
-        if ( vGDIObj[ nIndex ] == nullptr )
+        if ( !vGDIObj[ nIndex ] )
             break;
     }
     if ( nIndex == vGDIObj.size() )
         ImplResizeObjectArry( vGDIObj.size() + 16 );
 
-    vGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
+    vGDIObj[ nIndex ] = std::make_shared<GDIObj>( eType, pStyle );
 }
 
 void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pStyle )
@@ -744,10 +742,7 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )
             ImplResizeObjectArry( nIndex + 16 );
 
-        if ( vGDIObj[ nIndex ] != nullptr )
-            delete vGDIObj[ nIndex ];
-
-        vGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
+        vGDIObj[ nIndex ] = std::make_shared<GDIObj>( eType, pStyle );
     }
     else
     {
@@ -776,8 +771,7 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
     {
         if ( (sal_uInt32)nIndex < vGDIObj.size() )
         {
-            delete vGDIObj[ nIndex ];
-            vGDIObj[ nIndex ] = nullptr;
+            vGDIObj[ nIndex ].reset();
         }
     }
 }
@@ -883,9 +877,6 @@ WinMtfOutput::~WinMtfOutput()
         mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
     else
         mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
-
-    for ( size_t i = 0; i < vGDIObj.size(); i++ )
-        delete vGDIObj[ i ];
 }
 
 void WinMtfOutput::UpdateClipRegion()
