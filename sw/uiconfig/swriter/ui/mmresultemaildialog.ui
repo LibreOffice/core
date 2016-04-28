@@ -370,7 +370,7 @@
                           <object class="GtkSpinButton" id="from-nospin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">1</property>
+                            <property name="text" translatable="no">1</property>
                             <accessibility>
                               <relation type="labelled-by" target="fromrb"/>
                             </accessibility>
