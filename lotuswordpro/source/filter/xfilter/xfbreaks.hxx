@@ -90,14 +90,11 @@ private:
     enumXFBreaks    m_eBreaks;
 };
 
-inline XFBreaks::XFBreaks()
-{
-    m_eBreaks = enumXFBreakAuto;
-}
+inline XFBreaks::XFBreaks() : m_eBreaks(enumXFBreakAuto)
+{}
 
-inline XFBreaks::XFBreaks(enumXFBreaks breaks):m_eBreaks(breaks)
-{
-}
+inline XFBreaks::XFBreaks(enumXFBreaks breaks) : m_eBreaks(breaks)
+{}
 
 inline void XFBreaks::SetBreakType(enumXFBreaks breaks)
 {

@@ -173,8 +173,6 @@ private:
 
     #define MAX_TOC_LEVEL 10
     std::vector<OUString> m_aTOCSource[MAX_TOC_LEVEL+1];
-
-    sal_uInt32      m_nMaxLevel;
 };
 
 inline XFIndexTemplate::XFIndexTemplate()

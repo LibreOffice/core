@@ -68,10 +68,9 @@ class XFDateTimePart : public XFStyle
 {
 public:
     XFDateTimePart()
-    {
-        m_ePart = enumXFDateUnknown;
-        m_bLongFmt = false;
-    }
+        : m_ePart(enumXFDateUnknown)
+        , m_bLongFmt(false)
+    {}
 
     virtual ~XFDateTimePart(){}
 public:
