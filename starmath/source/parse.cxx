@@ -1420,8 +1420,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                 {
                     // We have several concatenated identifiers and numbers.
                     // Let's group them into one SmExpressionNode.
-                    SmNodeArray nodeArray;
-                    nodeArray.resize(nTokens);
+                    SmNodeArray nodeArray(nTokens);
                     while (nTokens > 0)
                     {
                         nodeArray[nTokens-1] = popOrZero(m_aNodeStack);
@@ -2178,7 +2177,6 @@ void SmParser::DoBinom()
 
 void SmParser::DoStack()
 {
-    SmNodeArray  ExpressionArray;
     NextToken();
     if (m_aCurToken.eType == TLGROUP)
     {
@@ -2192,7 +2190,7 @@ void SmParser::DoStack()
         }
         while (m_aCurToken.eType == TPOUND);
 
-        ExpressionArray.resize(n);
+        SmNodeArray ExpressionArray(n);
 
         for (sal_uInt16 i = 0; i < n; i++)
         {
@@ -2218,8 +2216,6 @@ void SmParser::DoStack()
 
 void SmParser::DoMatrix()
 {
-    SmNodeArray  ExpressionArray;
-
     NextToken();
     if (m_aCurToken.eType == TLGROUP)
     {
@@ -2257,7 +2253,7 @@ void SmParser::DoMatrix()
 
         size_t nRC = static_cast<size_t>(r) * c;
 
-        ExpressionArray.resize(nRC);
+        SmNodeArray ExpressionArray(nRC);
 
         for (size_t i = 0; i < (nRC); ++i)
         {
