@@ -1112,10 +1112,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
         if( xPropSetInfo.is() &&
             xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
         {
-            Any aAny;
-            sal_Bool bTmp = bConsecutive;
-            aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-            xPropSet->setPropertyValue( sIsContinuousNumbering, aAny );
+            xPropSet->setPropertyValue( sIsContinuousNumbering, Any(bConsecutive) );
         }
     }
     catch (const Exception&)

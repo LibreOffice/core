@@ -137,14 +137,9 @@ void XMLIndexTOCSourceContext::EndElement()
 {
     Any aAny;
 
-    aAny.setValue(&bUseMarks, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromMarks, aAny);
-
-    aAny.setValue(&bUseOutline, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromOutline, aAny);
-
-    aAny.setValue(&bUseParagraphStyles, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
+    rIndexPropertySet->setPropertyValue(sCreateFromMarks, css::uno::Any(bUseMarks));
+    rIndexPropertySet->setPropertyValue(sCreateFromOutline, css::uno::Any(bUseOutline));
+    rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, css::uno::Any(bUseParagraphStyles));
 
     aAny <<= (sal_Int16)nOutlineLevel;
     rIndexPropertySet->setPropertyValue(sLevel, aAny);

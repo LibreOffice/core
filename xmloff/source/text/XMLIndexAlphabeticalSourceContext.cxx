@@ -199,29 +199,14 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
         rIndexPropertySet->setPropertyValue(sMainEntryCharacterStyleName,aAny);
     }
 
-    aAny.setValue(&bSeparators, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sUseAlphabeticalSeparators, aAny);
-
-    aAny.setValue(&bCombineEntries, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sUseCombinedEntries, aAny);
-
-    aAny.setValue(&bCaseSensitive, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sIsCaseSensitive, aAny);
-
-    aAny.setValue(&bEntry, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sUseKeyAsEntry, aAny);
-
-    aAny.setValue(&bUpperCase, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sUseUpperCase, aAny);
-
-    aAny.setValue(&bCombineDash, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sUseDash, aAny);
-
-    aAny.setValue(&bCombinePP, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sUsePP, aAny);
-
-    aAny.setValue(&bCommaSeparated, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sIsCommaSeparated, aAny);
+    rIndexPropertySet->setPropertyValue(sUseAlphabeticalSeparators, css::uno::Any(bSeparators));
+    rIndexPropertySet->setPropertyValue(sUseCombinedEntries, css::uno::Any(bCombineEntries));
+    rIndexPropertySet->setPropertyValue(sIsCaseSensitive, css::uno::Any(bCaseSensitive));
+    rIndexPropertySet->setPropertyValue(sUseKeyAsEntry, css::uno::Any(bEntry));
+    rIndexPropertySet->setPropertyValue(sUseUpperCase, css::uno::Any(bUpperCase));
+    rIndexPropertySet->setPropertyValue(sUseDash, css::uno::Any(bCombineDash));
+    rIndexPropertySet->setPropertyValue(sUsePP, css::uno::Any(bCombinePP));
+    rIndexPropertySet->setPropertyValue(sIsCommaSeparated, css::uno::Any(bCommaSeparated));
 
 
     if (!sAlgorithm.isEmpty())

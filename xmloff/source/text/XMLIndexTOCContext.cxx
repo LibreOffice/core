@@ -131,7 +131,7 @@ void XMLIndexTOCContext::StartElement(
         // find text:protected and set value
         // find text:name and set value (if not empty)
         sal_Int16 nCount = xAttrList->getLength();
-        sal_Bool bProtected = false;
+        bool bProtected = false;
         OUString sIndexName;
         OUString sXmlId;
         XMLPropStyleContext* pStyle(nullptr);
@@ -241,8 +241,7 @@ void XMLIndexTOCContext::StartElement(
         }
 
         Any aAny;
-        aAny.setValue( &bProtected, cppu::UnoType<bool>::get() );
-        xTOCPropertySet->setPropertyValue( sIsProtected, aAny );
+        xTOCPropertySet->setPropertyValue( sIsProtected, Any(bProtected) );
 
         if (!sIndexName.isEmpty())
         {

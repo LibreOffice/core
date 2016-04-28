@@ -216,13 +216,8 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
 
 void XMLIndexSourceBaseContext::EndElement()
 {
-    Any aAny;
-
-    aAny.setValue(&bRelativeTabs, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sIsRelativeTabstops, aAny);
-
-    aAny.setValue(&bChapterIndex, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromChapter, aAny);
+    rIndexPropertySet->setPropertyValue(sIsRelativeTabstops, css::uno::Any(bRelativeTabs));
+    rIndexPropertySet->setPropertyValue(sCreateFromChapter, css::uno::Any(bChapterIndex));
 }
 
 SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(

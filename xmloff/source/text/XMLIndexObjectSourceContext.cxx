@@ -128,22 +128,11 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
 
 void XMLIndexObjectSourceContext::EndElement()
 {
-    Any aAny;
-
-    aAny.setValue(&bUseCalc, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromStarCalc, aAny);
-
-    aAny.setValue(&bUseChart, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromStarChart, aAny);
-
-    aAny.setValue(&bUseDraw, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromStarDraw, aAny);
-
-    aAny.setValue(&bUseMath, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromStarMath, aAny);
-
-    aAny.setValue(&bUseOtherObjects, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromOtherEmbeddedObjects, aAny);
+    rIndexPropertySet->setPropertyValue(sCreateFromStarCalc, css::uno::Any(bUseCalc));
+    rIndexPropertySet->setPropertyValue(sCreateFromStarChart, css::uno::Any(bUseChart));
+    rIndexPropertySet->setPropertyValue(sCreateFromStarDraw, css::uno::Any(bUseDraw));
+    rIndexPropertySet->setPropertyValue(sCreateFromStarMath, css::uno::Any(bUseMath));
+    rIndexPropertySet->setPropertyValue(sCreateFromOtherEmbeddedObjects, css::uno::Any(bUseOtherObjects));
 
     XMLIndexSourceBaseContext::EndElement();
 }

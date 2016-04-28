@@ -78,7 +78,6 @@
 #include <sdpage.hxx>
 
 #include <strings.hrc>
-#include "unohelp.hxx"
 #include <unolayer.hxx>
 #include <unoprnms.hxx>
 #include <unopage.hxx>

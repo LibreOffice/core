@@ -27,7 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include "createunocustomshow.hxx"
-#include "unohelp.hxx"
 #include "unomodel.hxx"
 #include "drawdoc.hxx"
 #include "unocpres.hxx"

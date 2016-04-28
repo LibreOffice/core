@@ -161,10 +161,8 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 
     SvtSaveOptions aSaveOpt;
     OUString sUsePrettyPrinting("UsePrettyPrinting");
-    sal_Bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
-    Any aAny;
-    aAny.setValue( &bUsePrettyPrinting, cppu::UnoType<bool>::get() );
-    xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
+    bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
+    xInfoSet->setPropertyValue( sUsePrettyPrinting, Any(bUsePrettyPrinting) );
 
     // Set base URI
     OUString sPropName( "BaseURI" );
@@ -337,9 +335,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 
     // all streams must be encrypted in encrypted document
     OUString aTmpPropName( "UseCommonStoragePasswordEncryption" );
-    sal_Bool bTrue = true;
-    aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
-    xSet->setPropertyValue( aTmpPropName, aAny );
+    xSet->setPropertyValue( aTmpPropName, Any(true) );
 
     // set Base URL
     if ( rPropSet.is() )

@@ -225,7 +225,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 {
     OUString sD, sPoints, sViewBox;
     bool bPixelWidth = false, bPixelHeight = false;
-    sal_Bool bAuto = false;
+    bool bAuto = false;
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
 
@@ -325,16 +325,14 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
         if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
         {
-            aAny.setValue( &bPixelWidth, cppu::UnoType<bool>::get() );
-            xPropSet->setPropertyValue( sIsPixelContour, aAny );
+            xPropSet->setPropertyValue( sIsPixelContour, Any(bPixelWidth) );
         }
 
         const OUString sIsAutomaticContour("IsAutomaticContour");
 
         if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
         {
-            aAny.setValue( &bAuto, cppu::UnoType<bool>::get() );
-            xPropSet->setPropertyValue( sIsAutomaticContour, aAny );
+            xPropSet->setPropertyValue( sIsAutomaticContour, Any(bAuto) );
         }
     }
 }
@@ -663,9 +661,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     }
     if( bSyncWidth || nWidth > 0 )
     {
-        sal_Bool bTmp = bSyncWidth;
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue( sIsSyncWidthToHeight, aAny );
+        xPropSet->setPropertyValue( sIsSyncWidthToHeight, Any(bSyncWidth) );
     }
     if( xPropSetInfo->hasPropertyByName( sWidthType ) &&
         (bMinWidth || nWidth > 0 || nRelWidth > 0 ) )
@@ -689,9 +685,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     }
     if( bSyncHeight || nHeight > 0 )
     {
-        sal_Bool bTmp = bSyncHeight;
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue( sIsSyncHeightToWidth, aAny );
+        xPropSet->setPropertyValue( sIsSyncHeightToWidth, Any(bSyncHeight) );
     }
     if( xPropSetInfo->hasPropertyByName( sSizeType ) &&
         (bMinHeight || nHeight > 0 || nRelHeight > 0 ) )
@@ -1295,8 +1289,7 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
 
     if (xPropSetInfo->hasPropertyByName(s_ServerMap))
     {
-        aAny.setValue( &bMap, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue(s_ServerMap, aAny);
+        xPropSet->setPropertyValue(s_ServerMap, Any(bMap));
     }
 }
 

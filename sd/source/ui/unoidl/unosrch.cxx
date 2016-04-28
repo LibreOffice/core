@@ -27,7 +27,6 @@
 
 #include <comphelper/extract.hxx>
 
-#include "unohelp.hxx"
 #include "unoprnms.hxx"
 #include "unosrch.hxx"
 

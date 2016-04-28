@@ -254,17 +254,10 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
                 xLineNumbering->setPropertyValue(sSeparatorInterval, aAny);
             }
 
-            aAny.setValue(&bNumberLines, cppu::UnoType<bool>::get());
-            xLineNumbering->setPropertyValue(sIsOn, aAny);
-
-            aAny.setValue(&bCountEmptyLines, cppu::UnoType<bool>::get());
-            xLineNumbering->setPropertyValue(sCountEmptyLines, aAny);
-
-            aAny.setValue(&bCountInFloatingFrames, cppu::UnoType<bool>::get());
-            xLineNumbering->setPropertyValue(sCountLinesInFrames, aAny);
-
-            aAny.setValue(&bRestartNumbering, cppu::UnoType<bool>::get());
-            xLineNumbering->setPropertyValue(sRestartAtEachPage, aAny);
+            xLineNumbering->setPropertyValue(sIsOn, Any(bNumberLines));
+            xLineNumbering->setPropertyValue(sCountEmptyLines, Any(bCountEmptyLines));
+            xLineNumbering->setPropertyValue(sCountLinesInFrames, Any(bCountInFloatingFrames));
+            xLineNumbering->setPropertyValue(sRestartAtEachPage, Any(bRestartNumbering));
 
             sal_Int16 nNumType = NumberingType::ARABIC;
             GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
