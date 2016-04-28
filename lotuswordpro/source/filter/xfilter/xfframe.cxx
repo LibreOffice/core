@@ -60,31 +60,22 @@
 #include "xfframe.hxx"
 #include "xfparagraph.hxx"
 #define     ZINDEX_MIN 0
+
 XFFrame::XFFrame()
-{
-    m_isTextBox = false;
-    m_eAnchor = enumXFAnchorPara;
-    m_nAnchorPage = 0;
-    m_nZIndex = ZINDEX_MIN;
-    //give it a default name:
-    m_strName = XFGlobal::GenFrameName();
-    m_fMinHeight = 0;
-    m_fMaxHeight = 0;
-    m_nFlag = 0;
-    m_eType = enumXFFrameTextbox;
-}
-XFFrame::XFFrame(bool isTextBox):m_isTextBox(isTextBox)
-{
-    m_eAnchor = enumXFAnchorPara;
-    m_nAnchorPage = 0;
-    m_nZIndex = ZINDEX_MIN;
-    //give it a default name:
-    m_strName = XFGlobal::GenFrameName();
-    m_fMinHeight = 0;
-    m_fMaxHeight = 0;
-    m_nFlag = 0;
-    m_eType = enumXFFrameTextbox;
-}
+    : XFFrame::XFFrame(false)
+{}
+
+XFFrame::XFFrame(bool isTextBox)
+    : m_eAnchor(enumXFAnchorPara)
+    , m_nAnchorPage(0)
+    , m_strName(XFGlobal::GenFrameName())  // give it a default name
+    , m_nZIndex(ZINDEX_MIN)
+    , m_fMinHeight(0)
+    , m_fMaxHeight(0)
+    , m_eType(enumXFFrameTextbox)
+    , m_nFlag(0)
+    , m_isTextBox(isTextBox)
+{}
 
 XFFrame::~XFFrame()
 {

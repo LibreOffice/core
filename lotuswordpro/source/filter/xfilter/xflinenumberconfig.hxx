@@ -94,15 +94,14 @@ private:
 };
 
 inline XFLineNumberConfig::XFLineNumberConfig()
-{
-    m_ePosition = enumXFLineNumberLeft;
-    m_fOffset = 0;
-    m_nIncrement = 5;
-    m_nSepIncrement = 3;
-    m_bRestartOnPage = false;
-    m_bCountEmptyLines = true;
-    m_bCountFrameLines = false;
-}
+    : m_ePosition(enumXFLineNumberLeft)
+    , m_fOffset(0)
+    , m_nIncrement(5)
+    , m_nSepIncrement(3)
+    , m_bRestartOnPage(false)
+    , m_bCountEmptyLines(true)
+    , m_bCountFrameLines(false)
+{}
 
 inline void XFLineNumberConfig::SetNumberOffset(double offset)
 {

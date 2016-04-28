@@ -63,14 +63,13 @@
 #include "xfbgimage.hxx"
 
 XFCellStyle::XFCellStyle()
-{
-    m_eHoriAlign = enumXFAlignNone;
-    m_eVertAlign = enumXFAlignNone;
-    m_fTextIndent = 0;
-    m_pBorders = nullptr;
-    m_pBackImage = nullptr;
-    m_bWrapText = false;
-}
+    : m_eHoriAlign(enumXFAlignNone)
+    , m_eVertAlign(enumXFAlignNone)
+    , m_fTextIndent(0)
+    , m_pBackImage(nullptr)
+    , m_pBorders(nullptr)
+    , m_bWrapText(false)
+{}
 
 XFCellStyle::~XFCellStyle()
 {

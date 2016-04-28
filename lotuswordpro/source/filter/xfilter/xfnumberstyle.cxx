@@ -59,16 +59,17 @@
  ************************************************************************/
 #include "xfnumberstyle.hxx"
 
-XFNumberStyle::XFNumberStyle():m_aColor(0,0,0),m_aNegativeColor(255,0,0)
-{
-    m_eType = enumXFNumberNumber;
-    m_nDecimalDigits = 0;
-    m_nMinInteger = 1;
-    m_nMinExponent = 2;
-    m_bGroup = false;
-    m_bRedIfNegative = false;
-    m_bCurrencySymbolPost = false;
-}
+XFNumberStyle::XFNumberStyle()
+    : m_eType(enumXFNumberNumber)
+    , m_nDecimalDigits(0)
+    , m_nMinInteger(1)
+    , m_nMinExponent(2)
+    , m_bGroup(false)
+    , m_aColor(0,0,0)
+    , m_bCurrencySymbolPost(false)
+    , m_bRedIfNegative(false)
+    , m_aNegativeColor(255,0,0)
+{}
 
 enumXFStyle XFNumberStyle::GetStyleFamily()
 {

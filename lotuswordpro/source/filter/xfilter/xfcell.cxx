@@ -66,15 +66,14 @@
 #include "xfrow.hxx"
 
 XFCell::XFCell()
-{
-    m_pSubTable = nullptr;
-    m_pOwnerRow = nullptr;
-    m_nCol = 0;
-    m_nColSpaned = 1;
-    m_nRepeated = 0;
-    m_eValueType = enumXFValueTypeNone;
-    m_bProtect = false;
-}
+    : m_pOwnerRow(nullptr)
+    , m_pSubTable(nullptr)
+    , m_nCol(0)
+    , m_nColSpaned(1)
+    , m_nRepeated(0)
+    , m_eValueType(enumXFValueTypeNone)
+    , m_bProtect(false)
+{}
 
 XFCell::~XFCell()
 {

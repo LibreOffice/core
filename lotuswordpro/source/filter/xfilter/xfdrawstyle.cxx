@@ -64,20 +64,15 @@
 #include "xffontworkstyle.hxx"
 #include "../lwpglobalmgr.hxx"
 XFDrawStyle::XFDrawStyle()
-{
-    m_eWrap = enumXFWrapNone;
-    m_nWrapLines = 0;   //not limited.
-
-    m_pLineStyle = nullptr;
-    m_pAreaStyle = nullptr;
-
-    m_pFontWorkStyle = nullptr;
-
-    m_fArrowStartSize = 0.3;
-    m_fArrowEndSize = 0.3;
-    m_bArrowStartCenter = false;
-    m_bArrowEndCenter = false;
-}
+    : m_pFontWorkStyle(nullptr)
+    , m_eWrap(enumXFWrapNone)
+    , m_pLineStyle(nullptr)
+    , m_pAreaStyle(nullptr)
+    , m_fArrowStartSize(0.3)
+    , m_fArrowEndSize(0.3)
+    , m_bArrowStartCenter(false)
+    , m_bArrowEndCenter(false)
+{}
 
 XFDrawStyle::~XFDrawStyle()
 {
