@@ -1369,9 +1369,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
                 xPropSet->setPropertyValue("StringItemList", aAny);
 
-                sal_Bool bTrue = true;
-                aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
-                xPropSet->setPropertyValue( "Dropdown", aAny );
+                xPropSet->setPropertyValue( "Dropdown", Any(true) );
             }
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );

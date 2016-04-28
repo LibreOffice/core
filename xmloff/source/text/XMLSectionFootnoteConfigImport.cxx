@@ -65,9 +65,9 @@ XMLSectionFootnoteConfigImport::~XMLSectionFootnoteConfigImport()
 void XMLSectionFootnoteConfigImport::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    sal_Bool bEnd = true;   // we're inside the element, so this is true
-    sal_Bool bNumOwn = false;
-    sal_Bool bNumRestart = false;
+    bool bEnd = true;   // we're inside the element, so this is true
+    bool bNumOwn = false;
+    bool bNumRestart = false;
     bool bEndnote = false;
     sal_Int16 nNumRestartAt = 0;
     OUString sNumPrefix;
@@ -130,16 +130,14 @@ void XMLSectionFootnoteConfigImport::StartElement(
     // OK, now we have all values and can fill the XMLPropertyState vector
     Any aAny;
 
-    aAny.setValue( &bNumOwn, cppu::UnoType<bool>::get() );
     sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_OWN : CTF_SECTION_FOOTNOTE_NUM_OWN );
-    XMLPropertyState aNumOwn( nIndex, aAny );
+    XMLPropertyState aNumOwn( nIndex, css::uno::Any(bNumOwn) );
     rProperties.push_back( aNumOwn );
 
-    aAny.setValue( &bNumRestart, cppu::UnoType<bool>::get() );
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_RESTART : CTF_SECTION_FOOTNOTE_NUM_RESTART );
-    XMLPropertyState aNumRestart( nIndex, aAny );
+    XMLPropertyState aNumRestart( nIndex, css::uno::Any(bNumRestart) );
     rProperties.push_back( aNumRestart );
 
     aAny <<= nNumRestartAt;
@@ -171,10 +169,9 @@ void XMLSectionFootnoteConfigImport::StartElement(
     XMLPropertyState aSuffixState( nIndex, aAny );
     rProperties.push_back( aSuffixState );
 
-    aAny.setValue( &bEnd, cppu::UnoType<bool>::get() );
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_END : CTF_SECTION_FOOTNOTE_END );
-    XMLPropertyState aEndState( nIndex, aAny );
+    XMLPropertyState aEndState( nIndex, css::uno::Any(bEnd) );
     rProperties.push_back( aEndState );
 }
 

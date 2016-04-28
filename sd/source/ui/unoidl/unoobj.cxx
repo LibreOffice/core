@@ -59,7 +59,6 @@
 #include <svx/svdogrp.hxx>
 
 #include "anminfo.hxx"
-#include "unohelp.hxx"
 #include "unoobj.hxx"
 #include "unoprnms.hxx"
 #include "unomodel.hxx"

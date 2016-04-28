@@ -187,10 +187,8 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
         OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
-            Any aVal;
-            sal_Bool bVal = !m_pCharKerningRB->IsChecked();
-            aVal.setValue(&bVal, cppu::UnoType<bool>::get());
-            pImpl->xPrSet->setPropertyValue(sPunct, aVal);
+            bool bVal = !m_pCharKerningRB->IsChecked();
+            pImpl->xPrSet->setPropertyValue(sPunct, Any(bVal));
         }
     }
 

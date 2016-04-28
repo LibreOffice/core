@@ -241,10 +241,8 @@ void XMLVarFieldImportContext::PrepareField(
 
     if (bSetVisible && bDisplayOK)
     {
-        Any aAny;
-        sal_Bool bTmp = ! (bDisplayNone && bDisplayOK);
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get());
-        xPropertySet->setPropertyValue(sPropertyIsVisible, aAny);
+        bool bTmp = ! (bDisplayNone && bDisplayOK);
+        xPropertySet->setPropertyValue(sPropertyIsVisible, Any(bTmp));
     }
 
     // workaround for #no-bug#: display formula by default
@@ -259,10 +257,8 @@ void XMLVarFieldImportContext::PrepareField(
 
     if (bSetDisplayFormula)
     {
-        Any aAny;
-        sal_Bool bTmp = bDisplayFormula && bDisplayOK;
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get());
-        xPropertySet->setPropertyValue(sPropertyIsDisplayFormula, aAny);
+        bool bTmp = bDisplayFormula && bDisplayOK;
+        xPropertySet->setPropertyValue(sPropertyIsDisplayFormula, Any(bTmp));
     }
 
     // delegate to value helper
@@ -489,9 +485,7 @@ void XMLVariableInputFieldImportContext::PrepareField(
 {
     // set type (input field)
     Any aAny;
-    sal_Bool bTrue = true;
-    aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
-    xPropertySet->setPropertyValue(sPropertyIsInput, aAny);
+    xPropertySet->setPropertyValue(sPropertyIsInput, Any(true));
 
     // set type
     aAny <<= (IsStringValue()? SetVariableType::STRING : SetVariableType::VAR);
@@ -698,8 +692,7 @@ void XMLTableFormulaImportContext::PrepareField(
     Any aAny;
 
     // set 'show formula' and presentation
-    aAny.setValue( &bIsShowFormula, cppu::UnoType<bool>::get() );
-    xPropertySet->setPropertyValue( sPropertyIsShowFormula, aAny );
+    xPropertySet->setPropertyValue( sPropertyIsShowFormula, Any(bIsShowFormula) );
 
     aAny <<= GetContent();
     xPropertySet->setPropertyValue( sPropertyCurrentPresentation, aAny );
@@ -867,9 +860,8 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 break;
             case VarTypeUserField:
             {
-                sal_Bool bTmp = !aValueHelper.IsStringValue();
-                aAny.setValue(&bTmp, cppu::UnoType<bool>::get());
-                xFieldMaster->setPropertyValue(sPropertyIsExpression, aAny);
+                bool bTmp = !aValueHelper.IsStringValue();
+                xFieldMaster->setPropertyValue(sPropertyIsExpression, Any(bTmp));
                 aValueHelper.PrepareField(xFieldMaster);
                 break;
             }
@@ -1112,9 +1104,8 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         GetImportHelper().InsertTextContent(xTextContent);
 
                         // prepare field: format from database?
-                        sal_Bool bTmp = !aValueHelper.IsFormatOK();
-                        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-                        xField->setPropertyValue(sPropertyDatabaseFormat,aAny);
+                        bool bTmp = !aValueHelper.IsFormatOK();
+                        xField->setPropertyValue(sPropertyDatabaseFormat, Any(bTmp));
 
                         // value, value-type and format done by value helper
                         aValueHelper.PrepareField(xField);
@@ -1122,8 +1113,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         // visibility
                         if( bDisplayOK )
                         {
-                            aAny.setValue( &bDisplay, cppu::UnoType<bool>::get() );
-                            xField->setPropertyValue(sPropertyIsVisible, aAny);
+                            xField->setPropertyValue(sPropertyIsVisible, Any(bDisplay));
                         }
 
                         // set presentation
@@ -1361,9 +1351,8 @@ void XMLValueImportHelper::PrepareField(
         if( xPropertySet->getPropertySetInfo()->
                 hasPropertyByName( sPropertyIsFixedLanguage ) )
         {
-            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
-            aAny.setValue( &bIsFixedLanguage, cppu::UnoType<bool>::get() );
-            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+            bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, Any(bIsFixedLanguage) );
         }
     }
 

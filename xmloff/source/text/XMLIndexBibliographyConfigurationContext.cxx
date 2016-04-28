@@ -158,7 +158,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
     const Reference<XAttributeList> & xAttrList )
 {
     OUString sKey;
-    sal_Bool bSort(true);
+    bool bSort(true);
 
     // process children here and use default context!
     if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&
@@ -207,8 +207,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
             PropertyValue aSortValue;
             aSortValue.Name = sIsSortAscending;
-            aAny.setValue(&bSort, cppu::UnoType<bool>::get());
-            aSortValue.Value = aAny;
+            aSortValue.Value = Any(bSort);
             aKey[1] = aSortValue;
 
             aSortKeys.push_back(aKey);
@@ -257,11 +256,9 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
                 aAny <<= sPrefix;
                 xPropSet->setPropertyValue(sBracketBefore, aAny);
 
-                aAny.setValue(&bNumberedEntries, cppu::UnoType<bool>::get());
-                xPropSet->setPropertyValue(sIsNumberEntries, aAny);
+                xPropSet->setPropertyValue(sIsNumberEntries, Any(bNumberedEntries));
 
-                aAny.setValue(&bSortByPosition, cppu::UnoType<bool>::get());
-                xPropSet->setPropertyValue(sIsSortByPosition, aAny);
+                xPropSet->setPropertyValue(sIsSortByPosition, Any(bSortByPosition));
 
                 if( !maLanguageTagODF.isEmpty() )
                 {

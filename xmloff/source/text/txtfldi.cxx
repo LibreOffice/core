@@ -712,8 +712,7 @@ void XMLSenderFieldImportContext::PrepareField(
     rPropSet->setPropertyValue(sPropertyFieldSubType, aAny);
 
     // set fixed
-    aAny.setValue( &bFixed, cppu::UnoType<bool>::get() );
-    rPropSet->setPropertyValue(sPropertyFixed, aAny);
+    rPropSet->setPropertyValue(sPropertyFixed, Any(bFixed));
 
     // set content if fixed
     if (bFixed)
@@ -766,11 +765,9 @@ void XMLAuthorFieldImportContext::PrepareField(
 {
     // set members
     Any aAny;
-    aAny.setValue( &bAuthorFullName, cppu::UnoType<bool>::get() );
-    rPropSet->setPropertyValue(sPropertyAuthorFullName, aAny);
+    rPropSet->setPropertyValue(sPropertyAuthorFullName, Any(bAuthorFullName));
 
-    aAny.setValue( &bFixed, cppu::UnoType<bool>::get() );
-    rPropSet->setPropertyValue(sPropertyFixed, aAny);
+    rPropSet->setPropertyValue(sPropertyFixed, Any(bFixed));
 
     // set content if fixed
     if (bFixed)
@@ -1128,12 +1125,10 @@ void XMLTimeFieldImportContext::PrepareField(
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
     {
-        aAny.setValue( &bFixed, cppu::UnoType<bool>::get() );
-        rPropertySet->setPropertyValue(sPropertyFixed, aAny);
+        rPropertySet->setPropertyValue(sPropertyFixed, Any(bFixed));
     }
 
-    aAny.setValue( &bIsDate, cppu::UnoType<bool>::get() );
-    rPropertySet->setPropertyValue(sPropertyIsDate, aAny);
+    rPropertySet->setPropertyValue(sPropertyIsDate, Any(bIsDate));
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyAdjust))
     {
@@ -1177,9 +1172,8 @@ void XMLTimeFieldImportContext::PrepareField(
 
         if( xPropertySetInfo->hasPropertyByName( sPropertyIsFixedLanguage ) )
         {
-            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
-            aAny.setValue( &bIsFixedLanguage, cppu::UnoType<bool>::get() );
-            rPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+            bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            rPropertySet->setPropertyValue( sPropertyIsFixedLanguage, Any(bIsFixedLanguage) );
         }
     }
 }
@@ -1363,8 +1357,7 @@ void XMLDatabaseFieldImportContext::PrepareField(
 
     if( bUseDisplay && bDisplayOK )
     {
-        aAny.setValue( &bDisplay, cppu::UnoType<bool>::get() );
-        xPropertySet->setPropertyValue( sPropertyIsVisible, aAny );
+        xPropertySet->setPropertyValue( sPropertyIsVisible, Any(bDisplay) );
     }
 }
 
@@ -1612,8 +1605,7 @@ void XMLSimpleDocInfoImportContext::PrepareField(
     if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
     {
         Any aAny;
-        aAny.setValue(&bFixed, cppu::UnoType<bool>::get() );
-        rPropertySet->setPropertyValue(sPropertyFixed, aAny);
+        rPropertySet->setPropertyValue(sPropertyFixed, Any(bFixed));
 
         // set Content and CurrentPresentation (if fixed)
         if (bFixed)
@@ -1837,8 +1829,7 @@ void XMLDateTimeDocInfoImportContext::PrepareField(
 
     if (bHasDateTime)
     {
-        aAny.setValue( &bIsDate, cppu::UnoType<bool>::get());
-        xPropertySet->setPropertyValue(sPropertyIsDate, aAny);
+        xPropertySet->setPropertyValue(sPropertyIsDate, Any(bIsDate));
     }
 
     if (bFormatOK)
@@ -1849,9 +1840,8 @@ void XMLDateTimeDocInfoImportContext::PrepareField(
         if( xPropertySet->getPropertySetInfo()->
                 hasPropertyByName( sPropertyIsFixedLanguage ) )
         {
-            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
-            aAny.setValue( &bIsFixedLanguage, cppu::UnoType<bool>::get() );
-            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+            bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, Any(bIsFixedLanguage) );
         }
     }
 
@@ -1932,9 +1922,8 @@ void XMLUserDocInfoImportContext::PrepareField(
 
         if( xPropertySetInfo->hasPropertyByName( sPropertyIsFixedLanguage ) )
         {
-            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
-            aAny.setValue( &bIsFixedLanguage, cppu::UnoType<bool>::get() );
-            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+            bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, Any(bIsFixedLanguage) );
         }
     }
 
@@ -1992,8 +1981,7 @@ void XMLHiddenParagraphImportContext::PrepareField(
     aAny <<= sCondition;
     xPropertySet->setPropertyValue(sPropertyCondition, aAny);
 
-    aAny.setValue( &bIsHidden, cppu::UnoType<bool>::get() );
-    xPropertySet->setPropertyValue(sPropertyIsHidden, aAny);
+    xPropertySet->setPropertyValue(sPropertyIsHidden, Any(bIsHidden));
 }
 
 
@@ -2073,8 +2061,7 @@ void XMLConditionalTextImportContext::PrepareField(
     aAny <<= sTrueContent;
     xPropertySet->setPropertyValue(sPropertyTrueContent, aAny);
 
-    aAny.setValue( &bCurrentValue, cppu::UnoType<bool>::get() );
-    xPropertySet->setPropertyValue(sPropertyIsConditionTrue, aAny);
+    xPropertySet->setPropertyValue(sPropertyIsConditionTrue, Any(bCurrentValue));
 
     aAny <<= GetContent();
     xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
@@ -2147,8 +2134,7 @@ void XMLHiddenTextImportContext::PrepareField(
     aAny <<= sString;
     xPropertySet->setPropertyValue(sPropertyContent, aAny);
 
-    aAny.setValue( &bIsHidden, cppu::UnoType<bool>::get() );
-    xPropertySet->setPropertyValue(sPropertyIsHidden, aAny);
+    xPropertySet->setPropertyValue(sPropertyIsHidden, Any(bIsHidden));
 }
 
 
@@ -2577,8 +2563,7 @@ void XMLPageVarSetFieldImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny.setValue(&bActive, cppu::UnoType<bool>::get());
-    xPropertySet->setPropertyValue(sPropertyOn, aAny);
+    xPropertySet->setPropertyValue(sPropertyOn, Any(bActive));
 
     aAny <<= nAdjust;
     xPropertySet->setPropertyValue(sPropertyOffset, aAny);
@@ -2933,7 +2918,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
     OUString sCommandTopic;
     OUString sCommandItem;
 
-    sal_Bool bUpdate = false;
+    bool bUpdate = false;
     bool bNameOK = false;
     bool bCommandApplicationOK = false;
     bool bCommandTopicOK = false;
@@ -3024,9 +3009,8 @@ void XMLDdeFieldDeclImportContext::StartElement(
                         xPropSet->setPropertyValue(sPropertyDDECommandElement,
                                                    aAny);
 
-                        aAny.setValue(&bUpdate, cppu::UnoType<bool>::get());
                         xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
-                                                   aAny);
+                                                   Any(bUpdate));
                     }
                     // else: ignore (can't get XPropertySet, or DDE
                     //               properties are not supported)
@@ -3772,8 +3756,7 @@ void XMLScriptImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertyContent, aAny);
 
     // URL or script text? We use URL if we have an href-attribute
-    aAny.setValue(&bContentOK, cppu::UnoType<bool>::get());
-    xPropertySet->setPropertyValue(sPropertyURLContent, aAny);
+    xPropertySet->setPropertyValue(sPropertyURLContent, Any(bContentOK));
 
     aAny <<= sScriptType;
     xPropertySet->setPropertyValue(sPropertyScriptType, aAny);

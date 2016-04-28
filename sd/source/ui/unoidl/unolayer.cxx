@@ -37,7 +37,6 @@
 #include "unoprnms.hxx"
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <svx/svdpool.hxx>
-#include "unohelp.hxx"
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
 #include "View.hxx"
@@ -258,13 +257,13 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
     switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_LAYER_LOCKED:
-        sd::bool2any( get( LOCKED ), aValue );
+        aValue <<= get( LOCKED );
         break;
     case WID_LAYER_PRINTABLE:
-        sd::bool2any( get( PRINTABLE ), aValue );
+        aValue <<= get( PRINTABLE );
         break;
     case WID_LAYER_VISIBLE:
-        sd::bool2any( get( VISIBLE ), aValue );
+        aValue <<= get( VISIBLE );
         break;
     case WID_LAYER_NAME:
     {

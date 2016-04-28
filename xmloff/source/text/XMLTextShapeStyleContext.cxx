@@ -212,10 +212,8 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
                 xPropSet->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
-        Any aAny;
-        sal_Bool bTmp = bAutoUpdate;
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue( sIsAutoUpdate, aAny );
+        bool bTmp = bAutoUpdate;
+        xPropSet->setPropertyValue( sIsAutoUpdate, Any(bTmp) );
     }
 
     // tell the style about it's events (if applicable)

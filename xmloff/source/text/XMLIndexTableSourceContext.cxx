@@ -128,8 +128,7 @@ void XMLIndexTableSourceContext::EndElement()
 {
     Any aAny;
 
-    aAny.setValue(&bUseCaption, cppu::UnoType<bool>::get());
-    rIndexPropertySet->setPropertyValue(sCreateFromLabels, aAny);
+    rIndexPropertySet->setPropertyValue(sCreateFromLabels, css::uno::Any(bUseCaption));
 
     if (bSequenceOK)
     {

@@ -800,8 +800,7 @@ SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
 void SvtLoadOptions_Impl::ImplCommit()
 {
     Sequence< OUString > aNames { cUserDefinedSettings };
-    Sequence< Any > aValues( 1 );
-    aValues[0].setValue(&bLoadUserDefinedSettings, cppu::UnoType<bool>::get());
+    Sequence< Any > aValues { Any(bLoadUserDefinedSettings) };
     PutProperties( aNames, aValues );
 }
 

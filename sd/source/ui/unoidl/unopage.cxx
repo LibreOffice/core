@@ -70,7 +70,6 @@
 #include "res_bmp.hrc"
 #include "unokywds.hxx"
 #include "unopback.hxx"
-#include "unohelp.hxx"
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoashp.hxx>

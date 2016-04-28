@@ -215,10 +215,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
                 xPropSet->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
-        Any aAny;
-        sal_Bool bTmp = bAutoUpdate;
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue( sIsAutoUpdate, aAny );
+        xPropSet->setPropertyValue( sIsAutoUpdate, Any(bAutoUpdate) );
     }
 
     sal_uInt16 nCategory = ParagraphStyleCategory::TEXT;
