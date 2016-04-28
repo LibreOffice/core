@@ -707,7 +707,7 @@ DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
     for(int j = 0 ; j< aPropertyValues.getLength() ; ++j)
     {
         auto aProp = aPropertyValues[j];
-        if (aProp.Name == OUString("CharStyleName")) {
+        if (aProp.Name == "CharStyleName") {
             charStyleName = aProp.Value.get<OUString>();
             break;
         }
