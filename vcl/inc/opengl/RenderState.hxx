@@ -69,10 +69,44 @@ public:
     }
 };
 
+class StencilState
+{
+    bool mbTest;
+public:
+
+    StencilState()
+        : mbTest(false)
+    {
+        glDisable(GL_STENCIL_TEST);
+        CHECK_GL_ERROR();
+    }
+
+    void enable()
+    {
+        if (!mbTest)
+        {
+            glEnable(GL_STENCIL_TEST);
+            CHECK_GL_ERROR();
+            mbTest = true;
+        }
+    }
+
+    void disable()
+    {
+        if (mbTest)
+        {
+            glDisable(GL_STENCIL_TEST);
+            CHECK_GL_ERROR();
+            mbTest = false;
+        }
+    }
+};
+
 class RenderState
 {
     TextureState maTexture;
     ScissorState maScissor;
+    StencilState maStencil;
 
 public:
     RenderState()
@@ -80,6 +114,7 @@ public:
 
     TextureState& texture() { return maTexture; }
     ScissorState& scissor() { return maScissor; }
+    StencilState& stencil() { return maStencil; }
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
