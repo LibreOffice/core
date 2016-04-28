@@ -29,7 +29,6 @@ class SdPage;
 class SfxItemSet;
 class SfxPoolItem;
 
-// SdBackgroundObjUndoAction
 class SdBackgroundObjUndoAction : public SdUndoAction
 {
 private:
@@ -44,8 +43,6 @@ private:
     void                    restoreFillBitmap(SfxItemSet &rItemSet);
 
 public:
-
-
                             SdBackgroundObjUndoAction(
                                 SdDrawDocument& rDoc,
                                 SdPage& rPage,
