@@ -1226,6 +1226,7 @@ void OpenGLContext::reset()
 
     // reset the clip region
     maClipRegion.SetEmpty();
+    mpRenderState.reset(new RenderState);
 
     // destroy all framebuffers
     if( mpLastFramebuffer )
