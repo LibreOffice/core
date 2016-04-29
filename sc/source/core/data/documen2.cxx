@@ -873,10 +873,18 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     if (bValid)
     {
         SetNoListening( true );     // noch nicht bei CopyToTable/Insert
+
+        const bool bGlobalNamesToLocal = true;
+        const SCTAB nRealOldPos = (nNewPos < nOldPos) ? nOldPos - 1 : nOldPos;
+        const ScRangeName* pNames = GetRangeName( nOldPos);
+        if (pNames)
+            pNames->CopyUsedNames( nOldPos, nRealOldPos, nNewPos, *this, *this, bGlobalNamesToLocal);
+        GetRangeName()->CopyUsedNames( -1, nRealOldPos, nNewPos, *this, *this, bGlobalNamesToLocal);
+
         sc::CopyToDocContext aCopyDocCxt(*this);
         maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, InsertDeleteFlags::ALL,
                 (pOnlyMarked != nullptr), maTabs[nNewPos], pOnlyMarked,
-                false /*bAsLink*/, true /*bColRowFlags*/, true /*bGlobalNamesToLocal*/ );
+                false /*bAsLink*/, true /*bColRowFlags*/, bGlobalNamesToLocal );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
         SCTAB nDz = nNewPos - nOldPos;
