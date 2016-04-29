@@ -290,7 +290,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     createRepositoryMenu();
     createDefaultTemplateMenu();
 
-    //setSaveMode(); //Uncomment this line to put template manager into Save As mode
+    //setSaveMode(); //Uncomment this line to put templates dialog into Save As mode
 
     mpLocalView->Populate();
     mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
@@ -352,7 +352,7 @@ void SfxTemplateManagerDlg::setSaveMode()
     // only with .src dialogs, as the tab pages could have existed even
     // without TabControl containing them.  This is not possible with .ui
     // definitions any more (and rightly so!), so leave just one tab here for
-    // now, until we do a bigger Template manager rework.
+    // now, until we do a bigger rework of the templates dialog.
     while (mpTabControl->GetPageCount() > 1)
         mpTabControl->RemovePage(mpTabControl->GetPageId(1));
 

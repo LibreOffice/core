@@ -5769,12 +5769,12 @@
       </prop>
       <prop oor:name="TemplateRepositoryUrls" oor:type="oor:string-list" oor:nillable="false">
         <info>
-          <desc>List of template repositories URLs bookmarked in the template manager dialog.</desc>
+          <desc>List of template repositories URLs bookmarked in the Templates dialog.</desc>
         </info>
       </prop>
       <prop oor:name="TemplateRepositoryNames" oor:type="oor:string-list" oor:nillable="false">
         <info>
-          <desc>List of template repositories names bookmarked in the template manager dialog.</desc>
+          <desc>List of template repositories names bookmarked in the Templates dialog.</desc>
         </info>
       </prop>
       <prop oor:name="FilePickerPlacesUrls" oor:type="oor:string-list" oor:nillable="false">
