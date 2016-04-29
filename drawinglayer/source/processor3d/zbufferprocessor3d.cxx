@@ -19,7 +19,6 @@
 
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
 #include <basegfx/raster/bpixelraster.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <basegfx/raster/rasterconvert3d.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
@@ -34,100 +33,6 @@
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 
 using namespace com::sun::star;
-
-namespace
-{
-    BitmapEx BPixelRasterToBitmapEx(const basegfx::BPixelRaster& rRaster, sal_uInt16 mnAntiAlialize)
-    {
-        BitmapEx aRetval;
-        const sal_uInt32 nWidth(mnAntiAlialize ? rRaster.getWidth()/mnAntiAlialize : rRaster.getWidth());
-        const sal_uInt32 nHeight(mnAntiAlialize ? rRaster.getHeight()/mnAntiAlialize : rRaster.getHeight());
-
-        if(nWidth && nHeight)
-        {
-            const Size aDestSize(nWidth, nHeight);
-            sal_uInt8 nInitAlpha(255);
-            Bitmap aContent(aDestSize, 24);
-            AlphaMask aAlpha(aDestSize, &nInitAlpha);
-            BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
-            BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
-
-            if (pContent && pAlpha)
-            {
-                if(mnAntiAlialize)
-                {
-                    const sal_uInt16 nDivisor(mnAntiAlialize * mnAntiAlialize);
-
-                    for(sal_uInt32 y(0L); y < nHeight; y++)
-                    {
-                        for(sal_uInt32 x(0L); x < nWidth; x++)
-                        {
-                            sal_uInt16 nRed(0);
-                            sal_uInt16 nGreen(0);
-                            sal_uInt16 nBlue(0);
-                            sal_uInt16 nOpacity(0);
-                            sal_uInt32 nIndex(rRaster.getIndexFromXY(x * mnAntiAlialize, y * mnAntiAlialize));
-
-                            for(sal_uInt32 c(0); c < mnAntiAlialize; c++)
-                            {
-                                for(sal_uInt32 d(0); d < mnAntiAlialize; d++)
-                                {
-                                    const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-                                    nRed = nRed + rPixel.getRed();
-                                    nGreen = nGreen + rPixel.getGreen();
-                                    nBlue = nBlue + rPixel.getBlue();
-                                    nOpacity = nOpacity + rPixel.getOpacity();
-                                }
-
-                                nIndex += rRaster.getWidth() - mnAntiAlialize;
-                            }
-
-                            nOpacity = nOpacity / nDivisor;
-
-                            if(nOpacity)
-                            {
-                                pContent->SetPixel(y, x, BitmapColor(
-                                    (sal_uInt8)(nRed / nDivisor),
-                                    (sal_uInt8)(nGreen / nDivisor),
-                                    (sal_uInt8)(nBlue / nDivisor)));
-                                pAlpha->SetPixel(y, x, BitmapColor(255 - (sal_uInt8)nOpacity));
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    sal_uInt32 nIndex(0L);
-
-                    for(sal_uInt32 y(0L); y < nHeight; y++)
-                    {
-                        for(sal_uInt32 x(0L); x < nWidth; x++)
-                        {
-                            const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-
-                            if(rPixel.getOpacity())
-                            {
-                                pContent->SetPixel(y, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
-                                pAlpha->SetPixel(y, x, BitmapColor(255 - rPixel.getOpacity()));
-                            }
-                        }
-                    }
-                }
-            }
-
-            aAlpha.ReleaseAccess(pAlpha);
-            Bitmap::ReleaseAccess(pContent);
-
-            aRetval = BitmapEx(aContent, aAlpha);
-
-            // #i101811# set PrefMapMode and PrefSize at newly created Bitmap
-            aRetval.SetPrefMapMode(MAP_PIXEL);
-            aRetval.SetPrefSize(Size(nWidth, nHeight));
-        }
-
-        return aRetval;
-    }
-} // end of anonymous namespace
 
 class ZBufferRasterConverter3D : public basegfx::RasterConverter3D
 {
@@ -536,211 +441,188 @@ namespace drawinglayer
     {
         void ZBufferProcessor3D::rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const
         {
-            if(mpBZPixelRaster)
+            if(getTransparenceCounter())
             {
-                if(getTransparenceCounter())
+                // transparent output; record for later sorting and painting from
+                // back to front
+                if(!mpRasterPrimitive3Ds)
                 {
-                    // transparent output; record for later sorting and painting from
-                    // back to front
-                    if(!mpRasterPrimitive3Ds)
-                    {
-                        const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
-                    }
-
-                    mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
-                        getGeoTexSvx(),
-                        getTransparenceGeoTexSvx(),
-                        rMaterial,
-                        basegfx::B3DPolyPolygon(rHairline),
-                        getModulate(),
-                        getFilter(),
-                        getSimpleTextureActive(),
-                        true));
+                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
                 }
-                else
+
+                mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
+                    getGeoTexSvx(),
+                    getTransparenceGeoTexSvx(),
+                    rMaterial,
+                    basegfx::B3DPolyPolygon(rHairline),
+                    getModulate(),
+                    getFilter(),
+                    getSimpleTextureActive(),
+                    true));
+            }
+            else
+            {
+                // do rasterconversion
+                mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
+
+                if(mnAntiAlialize > 1)
                 {
-                    // do rasterconversion
-                    mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
+                    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
 
-                    if(mnAntiAlialize > 1)
+                    if(bForceLineSnap)
                     {
-                        const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+                        basegfx::B3DHomMatrix aTransform;
+                        basegfx::B3DPolygon aSnappedHairline(rHairline);
+                        const double fScaleDown(1.0 / mnAntiAlialize);
+                        const double fScaleUp(mnAntiAlialize);
 
-                        if(bForceLineSnap)
-                        {
-                            basegfx::B3DHomMatrix aTransform;
-                            basegfx::B3DPolygon aSnappedHairline(rHairline);
-                            const double fScaleDown(1.0 / mnAntiAlialize);
-                            const double fScaleUp(mnAntiAlialize);
+                        // take oversampling out
+                        aTransform.scale(fScaleDown, fScaleDown, 1.0);
+                        aSnappedHairline.transform(aTransform);
 
-                            // take oversampling out
-                            aTransform.scale(fScaleDown, fScaleDown, 1.0);
-                            aSnappedHairline.transform(aTransform);
+                        // snap to integer
+                        aSnappedHairline = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
 
-                            // snap to integer
-                            aSnappedHairline = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
+                        // add oversampling again
+                        aTransform.identity();
+                        aTransform.scale(fScaleUp, fScaleUp, 1.0);
 
-                            // add oversampling again
-                            aTransform.identity();
-                            aTransform.scale(fScaleUp, fScaleUp, 1.0);
+                        aSnappedHairline.transform(aTransform);
 
-                            aSnappedHairline.transform(aTransform);
-
-                            mpZBufferRasterConverter3D->rasterconvertB3DPolygon(aSnappedHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
-                        }
-                        else
-                        {
-                            mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
-                        }
+                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(aSnappedHairline, mnStartLine, mnStopLine, mnAntiAlialize);
                     }
                     else
                     {
-                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, 0, mpBZPixelRaster->getHeight(), 1);
+                        mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, mnStartLine, mnStopLine, mnAntiAlialize);
                     }
+                }
+                else
+                {
+                    mpZBufferRasterConverter3D->rasterconvertB3DPolygon(rHairline, mnStartLine, mnStopLine, 1);
                 }
             }
         }
 
         void ZBufferProcessor3D::rasterconvertB3DPolyPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolyPolygon& rFill) const
         {
-            if(mpBZPixelRaster)
+            if(getTransparenceCounter())
             {
-                if(getTransparenceCounter())
+                // transparent output; record for later sorting and painting from
+                // back to front
+                if(!mpRasterPrimitive3Ds)
                 {
-                    // transparent output; record for later sorting and painting from
-                    // back to front
-                    if(!mpRasterPrimitive3Ds)
-                    {
-                        const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
-                    }
+                    const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
+                }
 
-                    mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
-                        getGeoTexSvx(),
-                        getTransparenceGeoTexSvx(),
-                        rMaterial,
-                        rFill,
-                        getModulate(),
-                        getFilter(),
-                        getSimpleTextureActive(),
-                        false));
-                }
-                else
-                {
-                    mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
-                    mpZBufferRasterConverter3D->rasterconvertB3DPolyPolygon(rFill, &maInvEyeToView, 0, mpBZPixelRaster->getHeight());
-                }
+                mpRasterPrimitive3Ds->push_back(RasterPrimitive3D(
+                    getGeoTexSvx(),
+                    getTransparenceGeoTexSvx(),
+                    rMaterial,
+                    rFill,
+                    getModulate(),
+                    getFilter(),
+                    getSimpleTextureActive(),
+                    false));
+            }
+            else
+            {
+                mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
+                mpZBufferRasterConverter3D->rasterconvertB3DPolyPolygon(rFill, &maInvEyeToView, mnStartLine, mnStopLine);
             }
         }
 
         ZBufferProcessor3D::ZBufferProcessor3D(
             const geometry::ViewInformation3D& rViewInformation3D,
-            const geometry::ViewInformation2D& rViewInformation2D,
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
-            double fSizeX,
-            double fSizeY,
             const basegfx::B2DRange& rVisiblePart,
-            sal_uInt16 nAntiAlialize)
+            sal_uInt16 nAntiAlialize,
+            double fFullViewSizeX,
+            double fFullViewSizeY,
+            basegfx::BZPixelRaster& rBZPixelRaster,
+            sal_uInt32 nStartLine,
+            sal_uInt32 nStopLine)
         :   DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
-            mpBZPixelRaster(nullptr),
+            mrBZPixelRaster(rBZPixelRaster),
             maInvEyeToView(),
             mpZBufferRasterConverter3D(nullptr),
             mnAntiAlialize(nAntiAlialize),
-            mpRasterPrimitive3Ds(nullptr)
+            mpRasterPrimitive3Ds(nullptr),
+            mnStartLine(nStartLine),
+            mnStopLine(nStopLine)
         {
-            // generate ViewSizes
-            const double fFullViewSizeX((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
-            const double fFullViewSizeY((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
-            const double fViewSizeX(fFullViewSizeX * rVisiblePart.getWidth());
-            const double fViewSizeY(fFullViewSizeY * rVisiblePart.getHeight());
+            // create DeviceToView for Z-Buffer renderer since Z is handled
+            // different from standard 3D transformations (Z is mirrored). Also
+            // the transformation includes the step from unit device coordinates
+            // to discrete units ([-1.0 .. 1.0] -> [minDiscrete .. maxDiscrete]
+            basegfx::B3DHomMatrix aDeviceToView;
 
-            // generate RasterWidth and RasterHeight
-            const sal_uInt32 nRasterWidth((sal_uInt32)basegfx::fround(fViewSizeX) + 1);
-            const sal_uInt32 nRasterHeight((sal_uInt32)basegfx::fround(fViewSizeY) + 1);
-
-            if(nRasterWidth && nRasterHeight)
             {
-                // create view unit buffer
-                mpBZPixelRaster = new basegfx::BZPixelRaster(
-                    mnAntiAlialize ? nRasterWidth * mnAntiAlialize : nRasterWidth,
-                    mnAntiAlialize ? nRasterHeight * mnAntiAlialize : nRasterHeight);
-                OSL_ENSURE(mpBZPixelRaster, "ZBufferProcessor3D: Could not allocate basegfx::BZPixelRaster (!)");
+                // step one:
+                //
+                // bring from [-1.0 .. 1.0] in X,Y and Z to [0.0 .. 1.0]. Also
+                // necessary to
+                // - flip Y due to screen orientation
+                // - flip Z due to Z-Buffer orientation from back to front
 
-                // create DeviceToView for Z-Buffer renderer since Z is handled
-                // different from standard 3D transformations (Z is mirrored). Also
-                // the transformation includes the step from unit device coordinates
-                // to discrete units ([-1.0 .. 1.0] -> [minDiscrete .. maxDiscrete]
-
-                basegfx::B3DHomMatrix aDeviceToView;
-
-                {
-                    // step one:
-                    //
-                    // bring from [-1.0 .. 1.0] in X,Y and Z to [0.0 .. 1.0]. Also
-                    // necessary to
-                    // - flip Y due to screen orientation
-                    // - flip Z due to Z-Buffer orientation from back to front
-
-                    aDeviceToView.scale(0.5, -0.5, -0.5);
-                    aDeviceToView.translate(0.5, 0.5, 0.5);
-                }
-
-                {
-                    // step two:
-                    //
-                    // bring from [0.0 .. 1.0] in X,Y and Z to view coordinates
-                    //
-                    // #i102611#
-                    // also: scale Z to [1.5 .. 65534.5]. Normally, a range of [0.0 .. 65535.0]
-                    // could be used, but a 'unused' value is needed, so '0' is used what reduces
-                    // the range to [1.0 .. 65535.0]. It has also shown that small numerical errors
-                    // (smaller as basegfx::fTools::mfSmallValue, which is 0.000000001) happen.
-                    // Instead of checking those by basegfx::fTools methods which would cost
-                    // runtime, just add another 0.5 tolerance to the start and end of the Z-Buffer
-                    // range, thus resulting in [1.5 .. 65534.5]
-                    const double fMaxZDepth(65533.0);
-                    aDeviceToView.translate(-rVisiblePart.getMinX(), -rVisiblePart.getMinY(), 0.0);
-
-                    if(mnAntiAlialize)
-                        aDeviceToView.scale(fFullViewSizeX * mnAntiAlialize, fFullViewSizeY * mnAntiAlialize, fMaxZDepth);
-                    else
-                        aDeviceToView.scale(fFullViewSizeX, fFullViewSizeY, fMaxZDepth);
-
-                    aDeviceToView.translate(0.0, 0.0, 1.5);
-                }
-
-                // update local ViewInformation3D with own DeviceToView
-                const geometry::ViewInformation3D aNewViewInformation3D(
-                    getViewInformation3D().getObjectTransformation(),
-                    getViewInformation3D().getOrientation(),
-                    getViewInformation3D().getProjection(),
-                    aDeviceToView,
-                    getViewInformation3D().getViewTime(),
-                    getViewInformation3D().getExtendedInformationSequence());
-                updateViewInformation(aNewViewInformation3D);
-
-                // prepare inverse EyeToView transformation. This can be done in constructor
-                // since changes in object transformations when processing TransformPrimitive3Ds
-                // do not influence this prepared partial transformation
-                maInvEyeToView = getViewInformation3D().getDeviceToView() * getViewInformation3D().getProjection();
-                maInvEyeToView.invert();
-
-                // prepare maRasterRange
-                maRasterRange.reset();
-                maRasterRange.expand(basegfx::B2DPoint(0.0, 0.0));
-                maRasterRange.expand(basegfx::B2DPoint(mpBZPixelRaster->getWidth(), mpBZPixelRaster->getHeight()));
-
-                // create the raster converter
-                mpZBufferRasterConverter3D = new ZBufferRasterConverter3D(*mpBZPixelRaster, *this);
+                aDeviceToView.scale(0.5, -0.5, -0.5);
+                aDeviceToView.translate(0.5, 0.5, 0.5);
             }
+
+            {
+                // step two:
+                //
+                // bring from [0.0 .. 1.0] in X,Y and Z to view coordinates
+                //
+                // #i102611#
+                // also: scale Z to [1.5 .. 65534.5]. Normally, a range of [0.0 .. 65535.0]
+                // could be used, but a 'unused' value is needed, so '0' is used what reduces
+                // the range to [1.0 .. 65535.0]. It has also shown that small numerical errors
+                // (smaller as basegfx::fTools::mfSmallValue, which is 0.000000001) happen.
+                // Instead of checking those by basegfx::fTools methods which would cost
+                // runtime, just add another 0.5 tolerance to the start and end of the Z-Buffer
+                // range, thus resulting in [1.5 .. 65534.5]
+                const double fMaxZDepth(65533.0);
+                aDeviceToView.translate(-rVisiblePart.getMinX(), -rVisiblePart.getMinY(), 0.0);
+
+                if(mnAntiAlialize)
+                    aDeviceToView.scale(fFullViewSizeX * mnAntiAlialize, fFullViewSizeY * mnAntiAlialize, fMaxZDepth);
+                else
+                    aDeviceToView.scale(fFullViewSizeX, fFullViewSizeY, fMaxZDepth);
+
+                aDeviceToView.translate(0.0, 0.0, 1.5);
+            }
+
+            // update local ViewInformation3D with own DeviceToView
+            const geometry::ViewInformation3D aNewViewInformation3D(
+                getViewInformation3D().getObjectTransformation(),
+                getViewInformation3D().getOrientation(),
+                getViewInformation3D().getProjection(),
+                aDeviceToView,
+                getViewInformation3D().getViewTime(),
+                getViewInformation3D().getExtendedInformationSequence());
+            updateViewInformation(aNewViewInformation3D);
+
+            // prepare inverse EyeToView transformation. This can be done in constructor
+            // since changes in object transformations when processing TransformPrimitive3Ds
+            // do not influence this prepared partial transformation
+            maInvEyeToView = getViewInformation3D().getDeviceToView() * getViewInformation3D().getProjection();
+            maInvEyeToView.invert();
+
+            // prepare maRasterRange
+            maRasterRange.reset();
+            maRasterRange.expand(basegfx::B2DPoint(0.0, nStartLine));
+            maRasterRange.expand(basegfx::B2DPoint(mrBZPixelRaster.getWidth(), nStopLine));
+
+            // create the raster converter
+            mpZBufferRasterConverter3D = new ZBufferRasterConverter3D(mrBZPixelRaster, *this);
         }
 
         ZBufferProcessor3D::~ZBufferProcessor3D()
         {
-            if(mpBZPixelRaster)
+            if(mpZBufferRasterConverter3D)
             {
                 delete mpZBufferRasterConverter3D;
-                delete mpBZPixelRaster;
             }
 
             if(mpRasterPrimitive3Ds)
@@ -794,16 +676,6 @@ namespace drawinglayer
                 delete mpRasterPrimitive3Ds;
                 mpRasterPrimitive3Ds = nullptr;
             }
-        }
-
-        BitmapEx ZBufferProcessor3D::getBitmapEx() const
-        {
-            if(mpBZPixelRaster)
-            {
-                return BPixelRasterToBitmapEx(*mpBZPixelRaster, mnAntiAlialize);
-            }
-
-            return BitmapEx();
         }
     } // end of namespace processor3d
 } // end of namespace drawinglayer

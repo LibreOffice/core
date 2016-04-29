@@ -42,7 +42,7 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC B3DPolygon
     {
     public:
-        typedef o3tl::cow_wrapper< ImplB3DPolygon > ImplType;
+        typedef o3tl::cow_wrapper< ImplB3DPolygon, o3tl::ThreadSafeRefCountingPolicy > ImplType;
 
     private:
         // internal data.

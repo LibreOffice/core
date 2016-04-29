@@ -51,6 +51,12 @@ namespace drawinglayer
                 mfOffsetX(fOffsetX),
                 mfOffsetY(fOffsetY)
             {
+                // access once to ensure that the buffered bitmap exists, else
+                // the SolarMutex may be needed to create it. This may not be
+                // available when a renderer works with multi-treading.
+                // When changing this, please check if it is still possible to
+                // use a metafile as texture for a 3D object
+                maGraphic.GetBitmapEx();
             }
 
             ImpFillGraphicAttribute()

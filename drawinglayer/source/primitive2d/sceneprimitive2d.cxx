@@ -32,10 +32,105 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <drawinglayer/processor3d/geometry2dextractor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-
+#include <basegfx/raster/bzpixelraster.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <comphelper/threadpool.hxx>
 
 using namespace com::sun::star;
 
+namespace
+{
+    BitmapEx BPixelRasterToBitmapEx(const basegfx::BPixelRaster& rRaster, sal_uInt16 mnAntiAlialize)
+    {
+        BitmapEx aRetval;
+        const sal_uInt32 nWidth(mnAntiAlialize ? rRaster.getWidth()/mnAntiAlialize : rRaster.getWidth());
+        const sal_uInt32 nHeight(mnAntiAlialize ? rRaster.getHeight()/mnAntiAlialize : rRaster.getHeight());
+
+        if(nWidth && nHeight)
+        {
+            const Size aDestSize(nWidth, nHeight);
+            sal_uInt8 nInitAlpha(255);
+            Bitmap aContent(aDestSize, 24);
+            AlphaMask aAlpha(aDestSize, &nInitAlpha);
+            BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
+            BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
+
+            if (pContent && pAlpha)
+            {
+                if(mnAntiAlialize)
+                {
+                    const sal_uInt16 nDivisor(mnAntiAlialize * mnAntiAlialize);
+
+                    for(sal_uInt32 y(0L); y < nHeight; y++)
+                    {
+                        for(sal_uInt32 x(0L); x < nWidth; x++)
+                        {
+                            sal_uInt16 nRed(0);
+                            sal_uInt16 nGreen(0);
+                            sal_uInt16 nBlue(0);
+                            sal_uInt16 nOpacity(0);
+                            sal_uInt32 nIndex(rRaster.getIndexFromXY(x * mnAntiAlialize, y * mnAntiAlialize));
+
+                            for(sal_uInt32 c(0); c < mnAntiAlialize; c++)
+                            {
+                                for(sal_uInt32 d(0); d < mnAntiAlialize; d++)
+                                {
+                                    const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
+                                    nRed = nRed + rPixel.getRed();
+                                    nGreen = nGreen + rPixel.getGreen();
+                                    nBlue = nBlue + rPixel.getBlue();
+                                    nOpacity = nOpacity + rPixel.getOpacity();
+                                }
+
+                                nIndex += rRaster.getWidth() - mnAntiAlialize;
+                            }
+
+                            nOpacity = nOpacity / nDivisor;
+
+                            if(nOpacity)
+                            {
+                                pContent->SetPixel(y, x, BitmapColor(
+                                    (sal_uInt8)(nRed / nDivisor),
+                                    (sal_uInt8)(nGreen / nDivisor),
+                                    (sal_uInt8)(nBlue / nDivisor)));
+                                pAlpha->SetPixel(y, x, BitmapColor(255 - (sal_uInt8)nOpacity));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    sal_uInt32 nIndex(0L);
+
+                    for(sal_uInt32 y(0L); y < nHeight; y++)
+                    {
+                        for(sal_uInt32 x(0L); x < nWidth; x++)
+                        {
+                            const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
+
+                            if(rPixel.getOpacity())
+                            {
+                                pContent->SetPixel(y, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
+                                pAlpha->SetPixel(y, x, BitmapColor(255 - rPixel.getOpacity()));
+                            }
+                        }
+                    }
+                }
+            }
+
+            aAlpha.ReleaseAccess(pAlpha);
+            Bitmap::ReleaseAccess(pContent);
+
+            aRetval = BitmapEx(aContent, aAlpha);
+
+            // #i101811# set PrefMapMode and PrefSize at newly created Bitmap
+            aRetval.SetPrefMapMode(MAP_PIXEL);
+            aRetval.SetPrefSize(Size(nWidth, nHeight));
+        }
+
+        return aRetval;
+    }
+} // end of anonymous namespace
 
 namespace drawinglayer
 {
@@ -263,49 +358,135 @@ namespace drawinglayer
                 const double fLogicX((aInverseOToV * basegfx::B2DVector(aDiscreteRange.getWidth() * fReduceFactor, 0.0)).getLength());
                 const double fLogicY((aInverseOToV * basegfx::B2DVector(0.0, aDiscreteRange.getHeight() * fReduceFactor)).getLength());
 
-                // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
-                processor3d::ZBufferProcessor3D aZBufferProcessor3D(
-                    aViewInformation3D,
-                    rViewInformation,
-                    getSdrSceneAttribute(),
-                    getSdrLightingAttribute(),
-                    fLogicX,
-                    fLogicY,
-                    aUnitVisibleRange,
-                    nOversampleValue);
+                // generate ViewSizes
+                const double fFullViewSizeX((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(fLogicX, 0.0)).getLength());
+                const double fFullViewSizeY((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fLogicY)).getLength());
 
-                aZBufferProcessor3D.process(getChildren3D());
-                aZBufferProcessor3D.finish();
+                // generate RasterWidth and RasterHeight for visible part
+                const sal_Int32 nRasterWidth((sal_Int32)basegfx::fround(fFullViewSizeX * aUnitVisibleRange.getWidth()) + 1);
+                const sal_Int32 nRasterHeight((sal_Int32)basegfx::fround(fFullViewSizeY * aUnitVisibleRange.getHeight()) + 1);
 
-                const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = aZBufferProcessor3D.getBitmapEx();
-                const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
-
-                if(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight())
+                if(nRasterWidth && nRasterHeight)
                 {
-                    // create transform for the created bitmap in discrete coordinates first.
-                    basegfx::B2DHomMatrix aNew2DTransform;
+                    // create view unit buffer
+                    basegfx::BZPixelRaster aBZPixelRaster(
+                        nOversampleValue ? nRasterWidth * nOversampleValue : nRasterWidth,
+                        nOversampleValue ? nRasterHeight * nOversampleValue : nRasterHeight);
 
-                    aNew2DTransform.set(0, 0, aVisibleDiscreteRange.getWidth());
-                    aNew2DTransform.set(1, 1, aVisibleDiscreteRange.getHeight());
-                    aNew2DTransform.set(0, 2, aVisibleDiscreteRange.getMinX());
-                    aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
+                    // check for parallel execution possibilities
+                    static bool bMultithreadAllowed = true;
+                    sal_Int32 nThreadCount(0);
+                    comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
 
-                    // transform back to world coordinates for usage in primitive creation
-                    aNew2DTransform *= aInverseOToV;
-
-                    // create bitmap primitive and add
-                    const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
-                    aRetval.push_back(xRef);
-
-                    // test: Allow to add an outline in the debugger when tests are needed
-                    static bool bAddOutlineToCreated3DSceneRepresentation(false);
-
-                    if(bAddOutlineToCreated3DSceneRepresentation)
+                    if(bMultithreadAllowed)
                     {
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
-                        aOutline.transform(aNew2DTransform);
-                        const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
-                        aRetval.push_back(xRef2);
+                        nThreadCount = rThreadPool.getWorkerCount();
+
+                        if(nThreadCount > 1)
+                        {
+                            // at least use 10px per processor, so limit number of processors to
+                            // target pixel size divided by 10 (which might be zero what is okay)
+                            nThreadCount = std::min(nThreadCount, nRasterHeight / 10);
+                        }
+                    }
+
+                    if(nThreadCount > 1)
+                    {
+                        class Executor : public comphelper::ThreadTask
+                        {
+                        private:
+                            processor3d::ZBufferProcessor3D*            mpZBufferProcessor3D;
+                            const primitive3d::Primitive3DContainer&    mrChildren3D;
+
+                        public:
+                            explicit Executor(
+                                processor3d::ZBufferProcessor3D* pZBufferProcessor3D,
+                                const primitive3d::Primitive3DContainer& rChildren3D)
+                            :   mpZBufferProcessor3D(pZBufferProcessor3D),
+                                mrChildren3D(rChildren3D)
+                            {
+                            }
+
+                            virtual void doWork() override
+                            {
+                                mpZBufferProcessor3D->process(mrChildren3D);
+                                mpZBufferProcessor3D->finish();
+                                delete mpZBufferProcessor3D;
+                            }
+                        };
+
+                        std::vector< processor3d::ZBufferProcessor3D* > aProcessors;
+                        const sal_uInt32 nLinesPerThread(aBZPixelRaster.getHeight() / nThreadCount);
+
+                        for(sal_Int32 a(0); a < nThreadCount; a++)
+                        {
+                            processor3d::ZBufferProcessor3D* pNewZBufferProcessor3D = new processor3d::ZBufferProcessor3D(
+                                aViewInformation3D,
+                                getSdrSceneAttribute(),
+                                getSdrLightingAttribute(),
+                                aUnitVisibleRange,
+                                nOversampleValue,
+                                fFullViewSizeX,
+                                fFullViewSizeY,
+                                aBZPixelRaster,
+                                nLinesPerThread * a,
+                                a + 1 == nThreadCount ? aBZPixelRaster.getHeight() : nLinesPerThread * (a + 1));
+                            aProcessors.push_back(pNewZBufferProcessor3D);
+                            Executor* pExecutor = new Executor(pNewZBufferProcessor3D, getChildren3D());
+                            rThreadPool.pushTask(pExecutor);
+                        }
+
+                        rThreadPool.waitUntilEmpty();
+                    }
+                    else
+                    {
+                        // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
+                        processor3d::ZBufferProcessor3D aZBufferProcessor3D(
+                            aViewInformation3D,
+                            getSdrSceneAttribute(),
+                            getSdrLightingAttribute(),
+                            aUnitVisibleRange,
+                            nOversampleValue,
+                            fFullViewSizeX,
+                            fFullViewSizeY,
+                            aBZPixelRaster,
+                            0,
+                            aBZPixelRaster.getHeight());
+
+                        aZBufferProcessor3D.process(getChildren3D());
+                        aZBufferProcessor3D.finish();
+                    }
+
+                    const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = BPixelRasterToBitmapEx(aBZPixelRaster, nOversampleValue);
+                    const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
+
+                    if(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight())
+                    {
+                        // create transform for the created bitmap in discrete coordinates first.
+                        basegfx::B2DHomMatrix aNew2DTransform;
+
+                        aNew2DTransform.set(0, 0, aVisibleDiscreteRange.getWidth());
+                        aNew2DTransform.set(1, 1, aVisibleDiscreteRange.getHeight());
+                        aNew2DTransform.set(0, 2, aVisibleDiscreteRange.getMinX());
+                        aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
+
+                        // transform back to world coordinates for usage in primitive creation
+                        aNew2DTransform *= aInverseOToV;
+
+                        // create bitmap primitive and add
+                        const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
+                        aRetval.push_back(xRef);
+
+                        // test: Allow to add an outline in the debugger when tests are needed
+                        static bool bAddOutlineToCreated3DSceneRepresentation(false);
+
+                        if(bAddOutlineToCreated3DSceneRepresentation)
+                        {
+                            basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
+                            aOutline.transform(aNew2DTransform);
+                            const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
+                            aRetval.push_back(xRef2);
+                        }
                     }
                 }
             }
