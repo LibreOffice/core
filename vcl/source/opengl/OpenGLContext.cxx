@@ -1679,8 +1679,8 @@ OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rText
     assert( pFramebuffer );
     BindFramebuffer( pFramebuffer );
     pFramebuffer->AttachTexture( rTexture );
-    glViewport( 0, 0, rTexture.GetWidth(), rTexture.GetHeight() );
-    CHECK_GL_ERROR();
+
+    state()->viewport(Rectangle(Point(), Size(rTexture.GetWidth(), rTexture.GetHeight())));
 
     return pFramebuffer;
 }
