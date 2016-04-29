@@ -98,6 +98,11 @@ namespace drawinglayer
         {
         }
 
+        FillGraphicAttribute::FillGraphicAttribute()
+        :   mpFillGraphicAttribute(theGlobalDefault::get())
+        {
+        }
+
         FillGraphicAttribute::FillGraphicAttribute(const FillGraphicAttribute& rCandidate)
         :   mpFillGraphicAttribute(rCandidate.mpFillGraphicAttribute)
         {
