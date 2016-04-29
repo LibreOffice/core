@@ -162,6 +162,7 @@ void SdMiscTest::testTdf99396()
 
     // Set the vertical alignment of the cells to bottom.
     sdr::table::SvxTableController* pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+    CPPUNIT_ASSERT(pTableController);
     SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
     pTableController->Execute(aRequest);
     // This was 0, it wasn't possible to undo a vertical alignment change.
@@ -178,6 +179,7 @@ void SdMiscTest::testTdf99396TextEdit()
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pObject, pView->GetSdrPageView());
 
@@ -199,6 +201,7 @@ void SdMiscTest::testTdf99396TextEdit()
     }
     {
         auto pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
+        CPPUNIT_ASSERT(pTableController);
         SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
         pTableController->Execute(aRequest);
     }
