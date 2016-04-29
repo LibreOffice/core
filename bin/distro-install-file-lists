@@ -62,7 +62,7 @@ merge_flists()
 if ! test -f $DESTDIR/gid_Module_Root; then
     echo "Error: Failed to generate package file lists";
     echo "       Have you defined DESTDIR?"
-    exit 1;
+    exit
 fi
 
 
