@@ -551,7 +551,7 @@ class WinMtfOutput
     RasterOp            meLatestRasterOp;
     RasterOp            meRasterOp;
 
-    std::vector< GDIObj* > vGDIObj;
+    std::vector< std::unique_ptr<GDIObj> > vGDIObj;
 
     Point               maActPos;
 
