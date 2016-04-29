@@ -1836,6 +1836,7 @@ void ScInterpreter::ScTextJoin_MS()
                         }
                     }
                 }
+                break;
                 case svMissing :
                 {
                     if ( !bSkipEmpty )
