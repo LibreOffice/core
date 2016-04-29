@@ -520,6 +520,11 @@ interface FormTextAttributeShell
         ExecMethod = ExecuteTextAttribute;
         StateMethod = GetTextAttributeState;
     ]
+    SID_ATTR_CHAR_SPACING
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
     SID_ATTR_ULSPACE
     [
         ExecMethod = ExecuteTextAttribute;
