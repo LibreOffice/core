@@ -1375,9 +1375,9 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
     if (!pTextNode)
         return false;
 
-    if ( pTextNode->GetpSwpHints() && m_pHistory )
+    if (m_pHistory)
     {
-        pTextNode->GetpSwpHints()->Register( this );
+        pTextNode->GetOrCreateSwpHints().Register(this);
     }
 
     const bool bInserted = pTextNode->SetAttr( rSet, nStart, nEnd, nFlags );
@@ -1392,16 +1392,29 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
         pTextNode->GetpSwpHints()->DeRegister();
     }
 
-    // if (m_pHistory->Count()) return true, then it shouldn't to be pushed into
-    // the m_pHistory->m_SwpHstry again, or Undo Action will do the same thing twice
-    if ( m_pHistory && bInserted && !m_pHistory->Count() )
+#ifndef NDEBUG
+    if ( m_pHistory && bInserted )
     {
-        SwHistoryHint* pNewHstr = new SwHistoryResetAttrSet( rSet,
-                                    pTextNode->GetIndex(), nStart, nEnd );
-        // the NodeIndex might be moved!
-
-        m_pHistory->m_SwpHstry.push_back( pNewHstr );
+        SfxItemIter aIter(rSet);
+        for (SfxPoolItem const* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+        {   // check that the history recorded a hint to reset every item
+            sal_uInt16 const nWhich(pItem->Which());
+            RES_TXTATR const nExpected(
+                (isCHRATR(nWhich) || RES_TXTATR_UNKNOWN_CONTAINER == nWhich)
+                    ? RES_TXTATR_AUTOFMT
+                    : static_cast<RES_TXTATR>(nWhich));
+            if (RES_TXTATR_AUTOFMT == nExpected && 0 == nStart && pTextNode->Len() == nEnd)
+                continue; // special case, may get set on text node itself
+            assert(std::find_if(
+                m_pHistory->m_SwpHstry.begin(), m_pHistory->m_SwpHstry.end(),
+                [nExpected](SwHistoryHint *const pHint) -> bool {
+                    SwHistoryResetText const*const pReset(
+                            dynamic_cast<SwHistoryResetText const*>(pHint));
+                    return (pReset) ? pReset->GetWhich() == nExpected : false;
+                }) != m_pHistory->m_SwpHstry.end());
+        }
     }
+#endif
 
     return bInserted;
 }

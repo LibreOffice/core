@@ -2004,7 +2004,8 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         {
             m_pSwpHints->MergePortions(*this);
         }
-        TryDeleteSwpHints();
+        SAL_WARN_IF(m_pSwpHints->CanBeDeleted(), "sw.core",
+                "SwTextNode::InsertText: unexpected loss of hints");
     }
 
     if ( HasWriterListeners() )

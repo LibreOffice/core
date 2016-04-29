@@ -3173,6 +3173,7 @@ bool SwpHints::TryInsertHint(
     if( !pHtEnd )
     {
         Insert( pHint );
+        NoteInHistory(pHint, true);
         CalcFlags();
 #ifdef DBG_UTIL
         if( !rNode.GetDoc()->IsInReading() )
