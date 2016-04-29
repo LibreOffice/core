@@ -437,7 +437,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
     if ( pImpl->mpTempObjectContainer )
     {
         EmbeddedObjectContainerNameMap::iterator aEnd = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.end();
-        for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.end();
+        for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.begin();
              aIter != aEnd;
              ++aIter )
         {
