@@ -65,6 +65,7 @@
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
+ <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:helpid="27346"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:helpid="27347"/>
  <toolbar:toolbarseparator/>

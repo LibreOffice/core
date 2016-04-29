@@ -7760,7 +7760,7 @@ SvxKerningItem Spacing SID_ATTR_CHAR_KERNING
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
