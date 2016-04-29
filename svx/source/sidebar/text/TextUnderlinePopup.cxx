@@ -16,34 +16,33 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "TextUnderlinePopup.hxx"
+#include <svx/TextUnderlinePopup.hxx>
 #include "TextUnderlineControl.hxx"
+#include <editeng/udlnitem.hxx>
+#include <vcl/toolbox.hxx>
 
-namespace svx { namespace sidebar {
+using namespace svx;
 
-TextUnderlinePopup::TextUnderlinePopup (
-    vcl::Window* pParent,
-    const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator)
-    : Popup(
-        pParent,
-        rControlCreator,
-        OUString( "Underline"))
+SFX_IMPL_TOOLBOX_CONTROL(TextUnderlinePopup, SvxTextLineItem);
+
+TextUnderlinePopup::TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
 TextUnderlinePopup::~TextUnderlinePopup()
 {
 }
 
-void TextUnderlinePopup::Rearrange (FontLineStyle eLine)
+VclPtr<SfxPopupWindow> TextUnderlinePopup::CreatePopupWindow()
 {
-    ProvideContainerAndControl();
+    VclPtr<TextUnderlineControl> pControl = VclPtr<TextUnderlineControl>::Create(GetSlotId());
+    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
+    SetPopupWindow(pControl);
 
-    TextUnderlineControl* pControl = dynamic_cast<TextUnderlineControl*>(mxControl.get());
-    if (pControl != nullptr)
-        pControl->Rearrange(eLine);
+    return pControl;
 }
 
-} } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

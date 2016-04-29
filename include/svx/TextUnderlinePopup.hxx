@@ -16,30 +16,30 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINEPOPUP_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINEPOPUP_HXX
+#ifndef INCLUDED_SVX_SIDEBAR_TEXT_TEXTUNDERLINEPOPUP_HXX
+#define INCLUDED_SVX_SIDEBAR_TEXT_TEXTUNDERLINEPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
+#include <sfx2/tbxctrl.hxx>
+#include <svx/svxdllapi.h>
 
 #include <vcl/vclenum.hxx>
 
 #include <functional>
 
-namespace svx { namespace sidebar {
+namespace svx {
 
-class TextUnderlinePopup
-    : public Popup
+class SVX_DLLPUBLIC TextUnderlinePopup : public SfxToolBoxControl
 {
 public:
-    TextUnderlinePopup (
-        vcl::Window* pParent,
-        const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator);
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~TextUnderlinePopup();
 
-    void Rearrange (FontLineStyle eLine);
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx
 
 #endif
 

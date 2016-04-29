@@ -34,6 +34,7 @@
 #include <comphelper/types.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/TextCharacterSpacingPopup.hxx>
+#include <svx/TextUnderlinePopup.hxx>
 
 #include <svtools/parhtml.hxx>
 #include <sot/formats.hxx>
@@ -171,6 +172,7 @@ void ScDLL::Init()
     SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
     svx::ParaLineSpacingPopup       ::RegisterControl(SID_ATTR_PARA_LINESPACE,  pMod );
     svx::TextCharacterSpacingPopup  ::RegisterControl(SID_ATTR_CHAR_KERNING,    pMod );
+    svx::TextUnderlinePopup         ::RegisterControl(SID_ATTR_CHAR_UNDERLINE,  pMod );
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
