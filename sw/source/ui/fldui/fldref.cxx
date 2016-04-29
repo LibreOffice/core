@@ -49,9 +49,9 @@ static sal_uInt16 nFieldDlgFormatSel = 0;
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
+SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet )
     : SwFieldPage(pParent, "FieldRefPage",
-        "modules/swriter/ui/fldrefpage.ui", rCoreSet)
+        "modules/swriter/ui/fldrefpage.ui", pCoreSet)
     , maOutlineNodes()
     , maNumItems()
     , mpSavedSelectedTextNode(nullptr)
@@ -1029,9 +1029,9 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 }
 
 VclPtr<SfxTabPage> SwFieldRefPage::Create( vcl::Window* pParent,
-                                         const SfxItemSet* rAttrSet )
+                                         const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldRefPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwFieldRefPage>::Create( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldRefPage::GetGroup()

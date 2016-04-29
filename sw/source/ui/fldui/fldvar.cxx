@@ -39,9 +39,9 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldVarPage::SwFieldVarPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
+SwFieldVarPage::SwFieldVarPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet )
     : SwFieldPage(pParent, "FieldVarPage",
-        "modules/swriter/ui/fldvarpage.ui", rCoreSet)
+        "modules/swriter/ui/fldvarpage.ui", pCoreSet)
     , nOldFormat(0)
     , bInit(true)
 {
@@ -1240,9 +1240,9 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
 }
 
 VclPtr<SfxTabPage> SwFieldVarPage::Create( vcl::Window* pParent,
-                                         const SfxItemSet* rAttrSet )
+                                         const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldVarPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwFieldVarPage>::Create( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldVarPage::GetGroup()

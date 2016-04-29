@@ -78,7 +78,7 @@ protected:
 
 public:
     SwFieldPage(vcl::Window *pParent, const OString& rID,
-        const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet);
+        const OUString& rUIXMLDescription, const SfxItemSet *pAttrSet);
 
     virtual ~SwFieldPage();
 
