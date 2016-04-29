@@ -37,9 +37,9 @@
 
 using namespace ::com::sun::star;
 
-SwFieldFuncPage::SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
+SwFieldFuncPage::SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet)
     : SwFieldPage(pParent, "FieldFuncPage",
-        "modules/swriter/ui/fldfuncpage.ui", rCoreSet)
+        "modules/swriter/ui/fldfuncpage.ui", pCoreSet)
     , nOldFormat(0)
     , bDropDownLBChanged(false)
 {
@@ -630,9 +630,9 @@ OUString SwFieldFuncPage::TurnMacroString(const OUString &rMacro)
 }
 
 VclPtr<SfxTabPage> SwFieldFuncPage::Create( vcl::Window* pParent,
-                                          const SfxItemSet* rAttrSet )
+                                          const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldFuncPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwFieldFuncPage>::Create( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldFuncPage::GetGroup()

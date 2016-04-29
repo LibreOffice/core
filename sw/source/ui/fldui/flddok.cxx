@@ -34,9 +34,9 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldDokPage::SwFieldDokPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
+SwFieldDokPage::SwFieldDokPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet)
     : SwFieldPage(pParent, "FieldDocumentPage",
-        "modules/swriter/ui/flddocumentpage.ui", rCoreSet)
+        "modules/swriter/ui/flddocumentpage.ui", pCoreSet)
     , nOldSel(0)
     , nOldFormat(0)
 {
@@ -648,9 +648,9 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
 }
 
 VclPtr<SfxTabPage> SwFieldDokPage::Create( vcl::Window* pParent,
-                                         const SfxItemSet* rAttrSet )
+                                         const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldDokPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwFieldDokPage>::Create( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldDokPage::GetGroup()
