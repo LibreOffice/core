@@ -129,10 +129,10 @@
                           <object class="GtkLabel" id="mailtoft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">T_o</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">mailto</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -167,10 +167,10 @@
                           <object class="GtkLabel" id="subjectft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">S_ubject</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">subject</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -192,10 +192,10 @@
                           <object class="GtkLabel" id="sendasft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Sen_d as</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">sendas</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -261,10 +261,10 @@
                           <object class="GtkLabel" id="attachft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Name of the a_ttachment</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">attach</property>
+                            <property name="xalign">0</property>
                           </object>
                         </child>
                       </object>
@@ -370,7 +370,7 @@
                           <object class="GtkSpinButton" id="from-nospin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">1</property>
+                            <property name="text">1</property>
                             <accessibility>
                               <relation type="labelled-by" target="fromrb"/>
                             </accessibility>
@@ -385,6 +385,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="text">1</property>
+                            <property name="input_purpose">number</property>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
