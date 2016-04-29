@@ -434,7 +434,7 @@ ds_status pickBestDevice(std::unique_ptr<ds_profile>& profile, int& rBestDeviceI
             rBestDeviceIndex = d;
         }
     }
-    if (profile->devices[rBestDeviceIndex].eType == DeviceType::OpenCLDevice)
+    if (rBestDeviceIndex != -1 && profile->devices[rBestDeviceIndex].eType == DeviceType::OpenCLDevice)
     {
         SAL_INFO("opencl.device", "Selected Device[" << rBestDeviceIndex << "]: " << profile->devices[rBestDeviceIndex].sDeviceName << "(OpenCL).");
     }

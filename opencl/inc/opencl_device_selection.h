@@ -326,6 +326,9 @@ private:
 
 public:
     XmlWalker()
+        : mpDocPtr(nullptr)
+        , mpRoot(nullptr)
+        , mpCurrent(nullptr)
     {}
 
     ~XmlWalker()
