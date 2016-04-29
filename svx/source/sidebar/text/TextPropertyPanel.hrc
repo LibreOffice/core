@@ -18,53 +18,6 @@
  */
 #include "svx/dialogs.hrc"
 
-#define VS_SPACING_WIDTH        80
-#define CUSTOM_HEIGHT           CBOX_HEIGHT +  MBOX_HEIGHT + POPUPPANEL_MARGIN_LARGE * 3 + POPUPPANEL_MARGIN_SMALL * 2 + TEXT_HEIGHT * 2
-#define CUSTOM_WIDTH            VS_SPACING_WIDTH - 8
-#define CUSTOM_X                POPUPPANEL_MARGIN_LARGE + OFFSET_X + 1
-#define CUSTOM_Y                OFFSET_Y + POPUPPANEL_MARGIN_SMALL * 3 + 15 * 6 + TEXT_HEIGHT
-#define VS_UNDERLINE_WIDTH  57
-#define VS_UNDERLINE_HEIGHT  12 * 10
-
-//popup window underline
-#define VS_UNDERLINE            1
-#define PB_OPTIONS              2
-
-#define IMG_SINGLE              10
-#define IMG_DOUBLE              11
-#define IMG_BOLD2               12
-#define IMG_DOT                 13
-#define IMG_DOT_BOLD            14
-#define IMG_DASH                15
-#define IMG_DASH_LONG           16
-#define IMG_DASH_DOT            17
-#define IMG_DASH_DOT_DOT        18
-#define IMG_WAVE                19
-
-#define STR_SINGLE              20
-#define STR_DOUBLE              21
-#define STR_BOLD                22
-#define STR_DOT                 23
-#define STR_DOT_BOLD            24
-#define STR_DASH                25
-#define STR_DASH_LONG           26
-#define STR_DASH_DOT            27
-#define STR_DASH_DOT_DOT        28
-#define STR_WAVE                29
-
-#define IMG_SINGLE_SEL          40
-#define IMG_DOUBLE_SEL          41
-#define IMG_BOLD2_SEL           42
-#define IMG_DOT_SEL             43
-#define IMG_DOT_BOLD_SEL        44
-#define IMG_DASH_SEL            45
-#define IMG_DASH_LONG_SEL       46
-#define IMG_DASH_DOT_SEL        47
-#define IMG_DASH_DOT_DOT_SEL    48
-#define IMG_WAVE_SEL            49
-
-#define STR_WITHOUT             50
-
 //help ids
 #define HID_UNDERLINE_BTN               "SVX_HID_UNDERLINE_BTN"
 #define HID_SPACING_CB_KERN             "SVX_HID_SPACING_CB_KERN"

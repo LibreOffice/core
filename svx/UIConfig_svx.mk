@@ -71,6 +71,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/textcharacterspacingcontrol \
 	svx/uiconfig/ui/textcontrolchardialog \
 	svx/uiconfig/ui/textcontrolparadialog \
+	svx/uiconfig/ui/textunderlinecontrol \
 	svx/uiconfig/ui/xformspage \
 ))
 
