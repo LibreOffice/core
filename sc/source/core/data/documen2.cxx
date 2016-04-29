@@ -987,6 +987,14 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             nDestPos = std::min(nDestPos, (SCTAB)(GetTableCount() - 1));
             {   // scope for bulk broadcast
                 ScBulkBroadcast aBulkBroadcast( pBASM);
+                if (!bResultsOnly)
+                {
+                    const bool bGlobalNamesToLocal = false;
+                    const ScRangeName* pNames = pSrcDoc->GetRangeName( nSrcPos);
+                    if (pNames)
+                        pNames->CopyUsedNames( nSrcPos, nSrcPos, nDestPos, *pSrcDoc, *this, bGlobalNamesToLocal);
+                    pSrcDoc->GetRangeName()->CopyUsedNames( -1, nSrcPos, nDestPos, *pSrcDoc, *this, bGlobalNamesToLocal);
+                }
                 pSrcDoc->maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW,
                         ( bResultsOnly ? InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA : InsertDeleteFlags::ALL),
                         false, maTabs[nDestPos] );

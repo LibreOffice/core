@@ -797,7 +797,7 @@ void ScRangeName::CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, con
         ScAddress aNewPos( aOldPos);
         aNewPos.SetTab( nNewTab);
         ScRangeData* pRangeData = nullptr;
-        rOldDoc.CopyAdjustRangeName( nSheet, nIndex, pRangeData, rNewDoc, aNewPos, aOldPos, bGlobalNamesToLocal);
+        rOldDoc.CopyAdjustRangeName( nSheet, nIndex, pRangeData, rNewDoc, aNewPos, aOldPos, bGlobalNamesToLocal, false);
     }
 }
 

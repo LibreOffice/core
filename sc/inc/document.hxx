@@ -628,11 +628,21 @@ public:
                 position of the existing name adjusted for Tab.
                 rOldPos.nTab MUST point to the old sheet copied from.
 
+        @param  bGlobalNamesToLocal
+                If TRUE, affected global names are copied to sheet-local names.
+                If FALSE, global names are copied to global names in another document.
+
+        @param  bUsedByFormula
+                If TRUE, forces a global name to be affected/used.
+                If FALSE, a global name is only affected if it evaluates to be
+                referencing the sheet.
+
         @return TRUE if copied and caller may need to evaluate rpRangeData and rSheet and rIndex.
                 FALSE if nothing to be done.
      */
     bool CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRangeData*& rpRangeData, ScDocument& rNewDoc,
-            const ScAddress& rNewPos, const ScAddress& rOldPos, const bool bGlobalNamesToLocal) const;
+            const ScAddress& rNewPos, const ScAddress& rOldPos, const bool bGlobalNamesToLocal,
+            const bool bUsedByFormula ) const;
 
     /**
      * Call this immediately before updating all named ranges.

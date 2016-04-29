@@ -656,7 +656,8 @@ ScRangeData* copyRangeNames( SheetIndexMap& rSheetIndexMap, std::vector<ScRangeD
 }   // namespace
 
 bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRangeData*& rpRangeData,
-        ScDocument& rNewDoc, const ScAddress& rNewPos, const ScAddress& rOldPos, const bool bGlobalNamesToLocal) const
+        ScDocument& rNewDoc, const ScAddress& rNewPos, const ScAddress& rOldPos, const bool bGlobalNamesToLocal,
+        const bool bUsedByFormula ) const
 {
     const bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(this)->GetPool());
     if (bSameDoc && ((rSheet < 0 && !bGlobalNamesToLocal) || (rSheet >= 0 && rSheet != rOldPos.Tab())))
@@ -725,7 +726,9 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
     // If no range name was found copy it.
     if (!rpRangeData)
     {
-        bool bEarlyBailOut = (nOldSheet < 0 && bSameDoc);
+        // Do not copy global name if it doesn't reference sheet or is not used
+        // by a formula copied to another document.
+        bool bEarlyBailOut = (nOldSheet < 0 && (bSameDoc || !bUsedByFormula));
         MightReferenceSheet eMightReference = mightRangeNameReferenceSheet( pOldRangeData, nOldTab);
         if (bEarlyBailOut && eMightReference == MightReferenceSheet::NONE)
             return false;

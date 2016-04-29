@@ -430,7 +430,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     ScRangeData* pRangeData = nullptr;
     SCTAB nSheet = pToken->GetSheet();
     sal_uInt16 nIndex = pToken->GetIndex();
-    if (!pOldDoc->CopyAdjustRangeName( nSheet, nIndex, pRangeData, rNewDoc, rNewPos, rOldPos, bGlobalNamesToLocal))
+    if (!pOldDoc->CopyAdjustRangeName( nSheet, nIndex, pRangeData, rNewDoc, rNewPos, rOldPos, bGlobalNamesToLocal, true))
         return; // nothing to do
 
     if (!pRangeData)
