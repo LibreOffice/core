@@ -211,8 +211,7 @@ void OpenGLSalGraphicsImpl::InitializePreDrawState(XOROption eOpt)
     CheckOffscreenTexture();
     CHECK_GL_ERROR();
 
-    glViewport( 0, 0, GetWidth(), GetHeight() );
-    CHECK_GL_ERROR();
+    mpContext->state()->viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
 
     ImplInitClipRegion();
     CHECK_GL_ERROR();
@@ -2563,9 +2562,7 @@ void OpenGLSalGraphicsImpl::doFlush()
     mpWindowContext->AcquireDefaultFramebuffer();
     CHECK_GL_ERROR();
 
-    glViewport( 0, 0, GetWidth(), GetHeight() );
-    CHECK_GL_ERROR();
-
+    mpWindowContext->state()->viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
     mpWindowContext->state()->scissor().disable();
     mpWindowContext->state()->stencil().disable();
 

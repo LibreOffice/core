@@ -123,9 +123,21 @@ class RenderState
     ScissorState maScissor;
     StencilState maStencil;
 
+    Rectangle maCurrentViewport;
+
 public:
     RenderState()
     {}
+
+    void viewport(Rectangle aViewPort)
+    {
+        if (aViewPort != maCurrentViewport)
+        {
+            glViewport(aViewPort.Left(), aViewPort.Top(), aViewPort.GetWidth(), aViewPort.GetHeight());
+            CHECK_GL_ERROR();
+            maCurrentViewport = aViewPort;
+        }
+    }
 
     TextureState& texture() { return maTexture; }
     ScissorState& scissor() { return maScissor; }
