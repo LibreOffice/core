@@ -1413,7 +1413,7 @@ void ScInterpreter::ScConcat_MS()
         {
             case svString:
             case svDouble:
-                aResBuf.append( PopString().getString() );
+                aResBuf.append( GetString().getString() );
                 break;
             case svSingleRef :
             {
@@ -1541,7 +1541,7 @@ void ScInterpreter::ScTextJoin_MS()
         {
             case svString:
             case svDouble:
-                aDelimiters.push_back( PopString().getString() );
+                aDelimiters.push_back( GetString().getString() );
                 break;
             case svSingleRef :
             {
@@ -1669,7 +1669,7 @@ void ScInterpreter::ScTextJoin_MS()
                 case svString:
                 case svDouble:
                 {
-                    OUString aStr = PopString().getString();
+                    OUString aStr = GetString().getString();
                     if ( !aStr.isEmpty() || !bSkipEmpty )
                     {
                         if ( !bFirst )
