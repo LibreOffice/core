@@ -71,6 +71,9 @@ namespace drawinglayer
             FontAttribute& operator=(const FontAttribute& rCandidate);
             ~FontAttribute();
 
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
+
             // compare operator
             bool operator==(const FontAttribute& rCandidate) const;
 
