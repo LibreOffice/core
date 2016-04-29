@@ -937,7 +937,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ModifyHdl, Edit&, void)
                 bInsert = false;
         }
 
-        if( !nLen && ( nTypeId == TYP_SETFLD ||
+        if (!nLen && (nTypeId == TYP_SETFLD || nTypeId == TYP_INPUTFLD ||
                         (!IsFieldEdit() && nTypeId == TYP_GETFLD ) ) )
             bInsert = false;
 
