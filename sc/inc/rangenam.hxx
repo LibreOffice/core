@@ -213,6 +213,26 @@ public:
      */
     void CompileUnresolvedXML( sc::CompileFormulaContext& rCxt );
 
+    /** Copy names while copying a sheet if they reference the sheet to be copied.
+
+        Assumes that new sheet was already inserted, global names have been
+        updated/adjusted, but sheet-local names on nOldTab are not, as is the
+        case in ScDocument::CopyTab()
+
+        @param  nLocalTab
+                -1 when operating on global names, else sheet/tab of
+                sheet-local name scope. The already adjusted tab on which to
+                find the name.
+
+        @param  nOldTab
+                The original unadjusted tab position.
+
+        @param  nNewTab
+                The new tab position.
+     */
+    void CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, const SCTAB nNewTab,
+            const ScDocument& rOldDoc, ScDocument& rNewDoc, const bool bGlobalNamesToLocal ) const;
+
     SC_DLLPUBLIC const_iterator begin() const;
     SC_DLLPUBLIC const_iterator end() const;
     SC_DLLPUBLIC iterator begin();

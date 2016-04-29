@@ -785,6 +785,22 @@ void ScRangeName::CompileUnresolvedXML( sc::CompileFormulaContext& rCxt )
     }
 }
 
+void ScRangeName::CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, const SCTAB nNewTab,
+        const ScDocument& rOldDoc, ScDocument& rNewDoc, const bool bGlobalNamesToLocal ) const
+{
+    for (auto const& itr : m_Data)
+    {
+        SCTAB nSheet = (nLocalTab < 0) ? nLocalTab : nOldTab;
+        sal_uInt16 nIndex = itr.second->GetIndex();
+        ScAddress aOldPos( itr.second->GetPos());
+        aOldPos.SetTab( nOldTab);
+        ScAddress aNewPos( aOldPos);
+        aNewPos.SetTab( nNewTab);
+        ScRangeData* pRangeData = nullptr;
+        rOldDoc.CopyAdjustRangeName( nSheet, nIndex, pRangeData, rNewDoc, aNewPos, aOldPos, bGlobalNamesToLocal);
+    }
+}
+
 ScRangeName::const_iterator ScRangeName::begin() const
 {
     return m_Data.begin();
