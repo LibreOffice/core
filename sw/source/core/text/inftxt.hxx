@@ -721,7 +721,7 @@ class SwFontSave
 public:
     SwFontSave( const SwTextSizeInfo &rInf, SwFont *pFnt,
                 SwAttrIter* pItr = nullptr );
-   ~SwFontSave();
+    ~SwFontSave();
 };
 
 inline sal_uInt16 SwTextSizeInfo::GetAscent() const

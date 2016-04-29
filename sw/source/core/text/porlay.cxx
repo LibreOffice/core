@@ -133,8 +133,8 @@ SwLineLayout::~SwLineLayout()
 
 SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
 {
-   // First attribute change: copy mass and length from *pIns into the first
-   // text portion
+    // First attribute change: copy mass and length from *pIns into the first
+    // text portion
     if( !pPortion )
     {
         if( GetLen() )

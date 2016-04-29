@@ -421,7 +421,7 @@ void SigningTest::test96097Calc()
         descSaveAs[0].Value <<= OUString("calc8");
         xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
     }
-    catch(...)
+    catch (...)
     {
         CPPUNIT_FAIL("Fail to save as the document");
     }
@@ -469,7 +469,7 @@ void SigningTest::test96097Doc()
         descSaveAs[0].Value <<= OUString("writer8");
         xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
     }
-    catch(...)
+    catch (...)
     {
         CPPUNIT_FAIL("Fail to save as the document");
     }

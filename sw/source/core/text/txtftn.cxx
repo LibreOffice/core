@@ -1237,7 +1237,7 @@ public:
                const SwTextFootnote *pTextFootnote,
                const bool bApplyGivenScriptType,
                const SwFontScript nGivenScriptType );
-   ~SwFootnoteSave();
+    ~SwFootnoteSave();
 };
 
 SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,

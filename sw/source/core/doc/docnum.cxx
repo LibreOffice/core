@@ -430,7 +430,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     int nOutLineLevel = MAXLEVEL;
     SwNode* pSrch = &aSttRg.GetNode();
 
-   if( pSrch->IsTextNode())
+    if( pSrch->IsTextNode())
         nOutLineLevel = static_cast<sal_uInt8>(pSrch->GetTextNode()->GetAttrOutlineLevel()-1);
     SwNode* pEndSrch = &aEndRg.GetNode();
     if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
