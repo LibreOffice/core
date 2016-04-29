@@ -127,7 +127,6 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:FieldDialog"/>
       <menu:menuitem menu:id=".uno:LinkDialog"/>
-      <menu:menuitem menu:id=".uno:PlugInsActive"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>

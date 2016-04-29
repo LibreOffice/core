@@ -2421,14 +2421,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:PlugInsActive" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">P~lug-in</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:HFixedLine" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Horizontal Line</value>

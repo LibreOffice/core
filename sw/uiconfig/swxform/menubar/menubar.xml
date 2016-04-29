@@ -121,7 +121,6 @@
       <menu:menuitem menu:id=".uno:EditHyperlink"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:LinkDialog"/>
-      <menu:menuitem menu:id=".uno:PlugInsActive"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
       <menu:menuseparator/>
