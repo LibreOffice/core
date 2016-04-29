@@ -90,7 +90,6 @@
       <menu:menuitem menu:id=".uno:DeletePage"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ManageLinks"/>
-      <menu:menuitem menu:id=".uno:PlugInsActive"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
       <menu:menuitem menu:id=".uno:EditHyperlink"/>

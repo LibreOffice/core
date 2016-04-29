@@ -154,7 +154,7 @@
 #define SID_BOOKMARK_URL                    (SID_SFX_START + 1311)
 #define SID_EDITDOC                         (SID_SFX_START + 1312)
 #define SID_BROWSER_MODE                    (SID_SFX_START + 1313)
-#define SID_PLUGINS_ACTIVE                  (SID_SFX_START + 1314)
+// FREE (was SID_PLUGINS_ACTIVE)                  (SID_SFX_START + 1314)
 #define SID_BROWSER                         (SID_SFX_START + 1318)
 #define SID_MACROEXECMODE                   (SID_SFX_START + 1319)
 

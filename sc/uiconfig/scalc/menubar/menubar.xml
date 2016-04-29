@@ -98,7 +98,6 @@
             <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
-            <menu:menuitem menu:id=".uno:PlugInsActive"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
             <menu:menuseparator/>

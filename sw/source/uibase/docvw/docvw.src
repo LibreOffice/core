@@ -169,12 +169,6 @@ Menu MN_READONLY_POPUP
             HelpID = HID_MN_READONLY_GRAPHICOFF ;
             Text [ en-US ] = "Image Off" ;
         };
-        MenuItem
-        {
-            Identifier = MN_READONLY_PLUGINOFF ;
-            HelpID = HID_MN_READONLY_PLUGINOFF ;
-            Text [ en-US ] = "Plug-ins Off" ;
-        };
         SEPARATOR
         MenuItem
         {
