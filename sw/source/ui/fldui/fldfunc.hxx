@@ -86,7 +86,7 @@ protected:
     virtual sal_uInt16      GetGroup() override;
 
 public:
-                        SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet& rSet);
+                        SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet* pSet);
 
                         virtual ~SwFieldFuncPage();
     virtual void        dispose() override;

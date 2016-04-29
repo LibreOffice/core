@@ -69,7 +69,7 @@ protected:
     virtual sal_uInt16      GetGroup() override;
 
 public:
-                        SwFieldDBPage(vcl::Window* pParent, const SfxItemSet& rSet);
+                        SwFieldDBPage(vcl::Window* pParent, const SfxItemSet* rSet);
 
                         virtual ~SwFieldDBPage();
     virtual void        dispose() override;

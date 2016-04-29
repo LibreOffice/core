@@ -159,9 +159,9 @@ void SwFieldDlg::Initialize(SfxChildWinInfo *pInfo)
 
 SfxItemSet* SwFieldDlg::CreateInputItemSet( sal_uInt16 nID  )
 {
-    if ( nID == m_nDokInf )
+    SwDocShell *const pDocSh(static_cast<SwDocShell*>(SfxObjectShell::Current()));
+    if (nID == m_nDokInf && pDocSh) // might not have a shell if the dialog is restored on startup
     {
-        SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
         SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
         using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
