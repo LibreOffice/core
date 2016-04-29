@@ -26,6 +26,7 @@
 #include <svtools/ehdl.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/TextCharacterSpacingPopup.hxx>
+#include <svx/TextUnderlinePopup.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
@@ -286,6 +287,7 @@ void SwDLL::RegisterControls()
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
     svx::TextCharacterSpacingPopup::RegisterControl(SID_ATTR_CHAR_KERNING, pMod);
+    svx::TextUnderlinePopup::RegisterControl(SID_ATTR_CHAR_UNDERLINE, pMod);
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
