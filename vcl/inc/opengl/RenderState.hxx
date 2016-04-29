@@ -13,26 +13,88 @@
 
 #include "opengl/TextureState.hxx"
 
-class ScissorState
+template<GLenum ENUM_TYPE, typename TYPE>
+class GenericCapabilityState
 {
+protected:
     bool mbTest;
+
+    bool readState()
+    {
+        return (glIsEnabled(ENUM_TYPE) == GL_TRUE);
+    };
+
+public:
+    void sync()
+    {
+        mbTest = readState();
+    }
+
+    void enable()
+    {
+        if (!mbTest)
+        {
+            glEnable(ENUM_TYPE);
+            CHECK_GL_ERROR();
+            mbTest = true;
+        }
+        else
+        {
+            VCL_GL_INFO(TYPE::className() << ": enable called but already set");
+        }
+#ifdef DBG_UTIL
+        checkState();
+#endif
+    }
+
+    void disable()
+    {
+        if (mbTest)
+        {
+            glDisable(ENUM_TYPE);
+            CHECK_GL_ERROR();
+            mbTest = false;
+        }
+        else
+        {
+            VCL_GL_INFO(TYPE::className() << ": disable called but already set");
+        }
+#ifdef DBG_UTIL
+        checkState();
+#endif
+    }
+
+#ifdef DBG_UTIL
+    void checkState()
+    {
+        bool bRealState = readState();
+        if (mbTest != bRealState)
+        {
+            VCL_GL_INFO(TYPE::className() << " mismatch! "
+                            << "Expected: " << (mbTest ? "enabled" : "disabled")
+                            << " but is: "        << (bRealState ? "enabled" : "disabled"));
+        }
+    }
+#endif
+};
+
+class ScissorState : public GenericCapabilityState<GL_SCISSOR_TEST, ScissorState>
+{
+private:
     int mX;
     int mY;
     int mWidth;
     int mHeight;
 
 public:
+    static std::string className() { return std::string("ScissorState"); }
 
     ScissorState()
-        : mbTest(false)
-        , mX(0)
+        : mX(0)
         , mY(0)
         , mWidth(0)
         , mHeight(0)
-    {
-        glDisable(GL_SCISSOR_TEST);
-        CHECK_GL_ERROR();
-    }
+    {}
 
     void set(int x, int y, int width, int height)
     {
@@ -47,59 +109,12 @@ public:
             mHeight = height;
         }
     }
-
-    void enable()
-    {
-        if (!mbTest)
-        {
-            glEnable(GL_SCISSOR_TEST);
-            CHECK_GL_ERROR();
-            mbTest = true;
-        }
-    }
-
-    void disable()
-    {
-        if (mbTest)
-        {
-            glDisable(GL_SCISSOR_TEST);
-            CHECK_GL_ERROR();
-            mbTest = false;
-        }
-    }
 };
 
-class StencilState
+class StencilState : public GenericCapabilityState<GL_STENCIL_TEST, StencilState>
 {
-    bool mbTest;
 public:
-
-    StencilState()
-        : mbTest(false)
-    {
-        glDisable(GL_STENCIL_TEST);
-        CHECK_GL_ERROR();
-    }
-
-    void enable()
-    {
-        if (!mbTest)
-        {
-            glEnable(GL_STENCIL_TEST);
-            CHECK_GL_ERROR();
-            mbTest = true;
-        }
-    }
-
-    void disable()
-    {
-        if (mbTest)
-        {
-            glDisable(GL_STENCIL_TEST);
-            CHECK_GL_ERROR();
-            mbTest = false;
-        }
-    }
+    static std::string className() { return std::string("StencilState"); }
 };
 
 class RenderState
@@ -115,6 +130,13 @@ public:
     TextureState& texture() { return maTexture; }
     ScissorState& scissor() { return maScissor; }
     StencilState& stencil() { return maStencil; }
+
+    void sync()
+    {
+        VCL_GL_INFO("RenderState::sync");
+        maScissor.sync();
+        maStencil.sync();
+    }
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
