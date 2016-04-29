@@ -161,7 +161,6 @@
 #define HID_MN_READONLY_COPYGRAPHIC                             "SW_HID_MN_READONLY_COPYGRAPHIC"
 #define HID_MN_READONLY_LOADGRAPHIC                             "SW_HID_MN_READONLY_LOADGRAPHIC"
 #define HID_MN_READONLY_GRAPHICOFF                              "SW_HID_MN_READONLY_GRAPHICOFF"
-#define HID_MN_READONLY_PLUGINOFF                               "SW_HID_MN_READONLY_PLUGINOFF"
 
 #define HID_LINGU_ADD_WORD                                      "SW_HID_LINGU_ADD_WORD"
 #define HID_LINGU_IGNORE_WORD                                   "SW_HID_LINGU_IGNORE_WORD"

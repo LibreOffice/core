@@ -242,7 +242,6 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_nPrinterLocks(0)
 ,   m_bCanPrint(nFlags & SfxViewShellFlags::CAN_PRINT)
 ,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
-,   m_bPlugInsActive(true)
 ,   m_bIsShowView(!(nFlags & SfxViewShellFlags::NO_SHOW))
 ,   m_bGotOwnership(false)
 ,   m_bGotFrameOwnership(false)
@@ -680,70 +679,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 return;
             }
         }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_PLUGINS_ACTIVE:
-        {
-            const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(nId);
-            bool const bActive = (pShowItem)
-                ? pShowItem->GetValue()
-                : !pImp->m_bPlugInsActive;
-            // ggf. recorden
-            if ( !rReq.IsAPI() )
-                rReq.AppendItem( SfxBoolItem( nId, bActive ) );
-
-            // Jetzt schon DONE aufrufen, da die Argumente evtl. einen Pool
-            // benutzen, der demn"achst weg ist
-            rReq.Done(true);
-
-            // ausfuehren
-            if (!pShowItem || (bActive != pImp->m_bPlugInsActive))
-            {
-                SfxFrame* pTopFrame = &GetFrame()->GetTopFrame();
-                if ( pTopFrame != &GetFrame()->GetFrame() )
-                {
-                    // FramesetDocument
-                    SfxViewShell *pShell = pTopFrame->GetCurrentViewFrame()->GetViewShell();
-                    if ( pShell->GetInterface()->GetSlot( nId ) )
-                        pShell->ExecuteSlot( rReq );
-                    break;
-                }
-
-                SfxFrameIterator aIter( *pTopFrame );
-                while ( pTopFrame )
-                {
-                    if ( pTopFrame->GetCurrentViewFrame() )
-                    {
-                        SfxViewShell *pView = pTopFrame->GetCurrentViewFrame()->GetViewShell();
-                        if ( pView )
-                        {
-                            pView->pImp->m_bPlugInsActive = bActive;
-                            Rectangle aVisArea = GetObjectShell()->GetVisArea();
-                            VisAreaChanged(aVisArea);
-
-                            // the plugins might need change in their state
-                            SfxInPlaceClientList *pClients = pView->pImp->GetIPClientList_Impl(false);
-                            if ( pClients )
-                            {
-                                for ( size_t n = 0; n < pClients->size(); n++)
-                                {
-                                    SfxInPlaceClient* pIPClient = pClients->at( n );
-                                    if ( pIPClient )
-                                        pView->CheckIPClient_Impl( pIPClient, aVisArea );
-                                }
-                            }
-                        }
-                    }
-
-                    if ( !pTopFrame->GetParentFrame() )
-                        pTopFrame = aIter.FirstFrame();
-                    else
-                        pTopFrame = aIter.NextFrame( *pTopFrame );
-                }
-            }
-
-            break;
-        }
     }
 }
 
@@ -801,13 +736,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                         }
                     }
                 }
-                break;
-            }
-
-            // PlugIns running
-            case SID_PLUGINS_ACTIVE:
-            {
-                rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE, !pImp->m_bPlugInsActive) );
                 break;
             }
             case SID_STYLE_FAMILY :
@@ -1175,11 +1103,6 @@ SfxViewShell::SfxViewShell
 ,   mbPrinterSettingsModified(false)
 {
 
-    if ( pViewFrame->GetParentViewFrame() )
-    {
-        pImp->m_bPlugInsActive = pViewFrame->GetParentViewFrame()
-            ->GetViewShell()->pImp->m_bPlugInsActive;
-    }
     SetMargin( pViewFrame->GetMargin_Impl() );
 
     SetPool( &pViewFrame->GetObjectShell()->GetPool() );
@@ -1641,7 +1564,7 @@ void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 }
 
 
-void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectangle& rVisArea )
+void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient )
 {
     if ( GetObjectShell()->IsInClose() )
         return;
@@ -1651,32 +1574,11 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
     bool bActiveWhenVisible =
         ( (( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 ) ||
          svt::EmbeddedObjectRef::IsGLChart(pIPClient->GetObject()));
-
-    // this method is called when either a client is created or the "Edit/Plugins" checkbox is checked
-    if ( !pIPClient->IsObjectInPlaceActive() && pImp->m_bPlugInsActive )
-    {
-        // object in client is currently not active
-        // check if the object wants to be activated always or when it becomes at least partially visible
-        // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
-        if ( bAlwaysActive || (bActiveWhenVisible && rVisArea.IsOver(pIPClient->GetObjArea())) )
-        {
-            try
-            {
-                pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
-            }
-            catch (const uno::Exception&)
-            {
-            }
-        }
-    }
-    else if (!pImp->m_bPlugInsActive)
-    {
-        // object in client is currently active and "Edit/Plugins" checkbox is selected
-        // check if the object wants to be activated always or when it becomes at least partially visible
-        // in this case selecting of the "Edit/Plugin" checkbox should let such objects deactivate
-        if ( bAlwaysActive || bActiveWhenVisible )
-            pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-    }
+    // object in client is currently active
+    // check if the object wants to be activated always or when it becomes at least partially visible
+    // in this case selecting of the "Edit/Plugin" checkbox should let such objects deactivate
+    if ( bAlwaysActive || bActiveWhenVisible )
+        pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
 }
 
 

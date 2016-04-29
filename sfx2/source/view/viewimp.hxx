@@ -48,7 +48,6 @@ struct SfxViewShell_Impl
     sal_uInt16                  m_nPrinterLocks;
     bool                        m_bCanPrint;
     bool                        m_bHasPrintOptions;
-    bool                        m_bPlugInsActive;
     bool                        m_bIsShowView;
     bool                        m_bGotOwnership;
     bool                        m_bGotFrameOwnership;

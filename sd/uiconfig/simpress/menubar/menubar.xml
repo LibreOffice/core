@@ -88,7 +88,6 @@
             <menu:menuitem menu:id=".uno:EditHyperlink"/>
             <menu:menuitem menu:id=".uno:ModifyField"/>
             <menu:menuitem menu:id=".uno:ManageLinks"/>
-            <menu:menuitem menu:id=".uno:PlugInsActive"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
             <menu:menuseparator/>
