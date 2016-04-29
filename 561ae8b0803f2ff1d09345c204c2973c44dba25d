@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_84e2489e",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-04-29T06:11:05Z",
+      "side": 0,
+      "message": "Actually this seems to make sense as there is obviously no process killing, but directory deleting",
+      "revId": "561ae8b0803f2ff1d09345c204c2973c44dba25d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
