@@ -47,9 +47,9 @@
 using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
 
-SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
+SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet)
     :  SwFieldPage(pParent, "FieldDocInfoPage",
-        "modules/swriter/ui/flddocinfopage.ui", rCoreSet)
+        "modules/swriter/ui/flddocinfopage.ui", pCoreSet)
     , pSelEntry(nullptr)
     , nOldSel(0)
     , nOldFormat(0)
@@ -82,7 +82,9 @@ SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet& rCo
     //enable 'active' language selection
     m_pFormatLB->SetShowLanguageControl(true);
 
-    const SfxUnoAnyItem* pItem = rCoreSet.GetItem<SfxUnoAnyItem>(SID_DOCINFO, false);
+    const SfxUnoAnyItem* pItem = (pCoreSet)
+        ? pCoreSet->GetItem<SfxUnoAnyItem>(SID_DOCINFO, false)
+        : nullptr;
     if ( pItem )
         pItem->GetValue() >>= xCustomPropertySet;
 }
@@ -459,9 +461,9 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
 }
 
 VclPtr<SfxTabPage> SwFieldDokInfPage::Create( vcl::Window* pParent,
-                                            const SfxItemSet* rAttrSet )
+                                            const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldDokInfPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SwFieldDokInfPage>::Create( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldDokInfPage::GetGroup()
