@@ -27,23 +27,13 @@
 #include <svtools/unitconv.hxx>
 
 #include <vcl/toolbox.hxx>
-#include "TextCharacterSpacingControl.hxx"
-#include "TextUnderlineControl.hxx"
-#include "TextUnderlinePopup.hxx"
 #include <svx/sidebar/PopupContainer.hxx>
 
 
 using namespace css;
 using namespace css::uno;
 
-const char UNO_UNDERLINE[] = ".uno:Underline";
-
 namespace svx { namespace sidebar {
-
-VclPtr<PopupControl> TextPropertyPanel::CreateUnderlinePopupControl (PopupContainer* pParent)
-{
-    return VclPtrInstance<TextUnderlineControl>(pParent, *this, mpBindings);
-}
 
 VclPtr<vcl::Window> TextPropertyPanel::Create (
     vcl::Window* pParent,
@@ -68,11 +58,8 @@ VclPtr<vcl::Window> TextPropertyPanel::Create (
 TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
         maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
-        maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),
 
-        maUnderlinePopup(this, [this] (PopupContainer *const pContainer) { return this->CreateUnderlinePopupControl(pContainer); }),
-        maContext(),
-        mpBindings(pBindings)
+        maContext()
 {
     get(mpToolBoxFont, "fonteffects");
     get(mpToolBoxIncDec, "fontadjust");
@@ -81,14 +68,8 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     get(mpToolBoxFontColor, "colorbar_others");
     get(mpToolBoxBackgroundColor, "colorbar_background");
 
-    //toolbox
-    SetupToolboxItems();
-    InitToolBoxFont();
-
     //init state
     mpHeightItem = nullptr;
-    meUnderline = LINESTYLE_NONE;
-    meUnderlineColor = COL_AUTO;
 }
 
 TextPropertyPanel::~TextPropertyPanel()
@@ -105,9 +86,6 @@ void TextPropertyPanel::dispose()
     mpToolBoxFontColor.clear();
 
     maFontSizeControl.dispose();
-    maUnderlineControl.dispose();
-
-    maUnderlinePopup.dispose();
 
     PanelLayout::dispose();
 }
@@ -163,40 +141,6 @@ void TextPropertyPanel::HandleContextChange (
     mpToolBoxBackgroundColor->Show(bDrawText);
 }
 
-void TextPropertyPanel::DataChanged (const DataChangedEvent& /*rEvent*/)
-{
-    SetupToolboxItems();
-}
-
-void TextPropertyPanel::EndUnderlinePopupMode()
-{
-    maUnderlinePopup.Hide();
-}
-
-void TextPropertyPanel::InitToolBoxFont()
-{
-    Link<ToolBox *, void> aLink = LINK(this, TextPropertyPanel, UnderlineClickHdl);
-    mpToolBoxFont->SetDropdownClickHdl(aLink);
-}
-
-void TextPropertyPanel::SetupToolboxItems()
-{
-    maUnderlineControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_UNDERLINE));
-}
-
-IMPL_LINK_TYPED(TextPropertyPanel, UnderlineClickHdl, ToolBox*, pToolBox, void)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
-
-    if (aCommand == UNO_UNDERLINE)
-    {
-        pToolBox->SetItemDown( nId, true );
-        maUnderlinePopup.Rearrange(meUnderline);
-        maUnderlinePopup.Show(*pToolBox);
-    }
-}
-
 void TextPropertyPanel::NotifyItemUpdate (
     const sal_uInt16 nSID,
     const SfxItemState eState,
@@ -211,18 +155,6 @@ void TextPropertyPanel::NotifyItemUpdate (
                 mpHeightItem = const_cast<SvxFontHeightItem*>(static_cast<const SvxFontHeightItem*>(pState));
             else
                 mpHeightItem = nullptr;
-        }
-        break;
-    case SID_ATTR_CHAR_UNDERLINE:
-        {
-            if( eState >= SfxItemState::DEFAULT && dynamic_cast<const SvxUnderlineItem*>( pState) !=  nullptr )
-            {
-                const SvxUnderlineItem* pItem = static_cast<const SvxUnderlineItem*>(pState);
-                meUnderline = (FontLineStyle)pItem->GetValue();
-                meUnderlineColor = pItem->GetColor();
-            }
-            else
-                meUnderline = LINESTYLE_NONE;
         }
         break;
     case SID_ATTR_CHAR_KERNING:

@@ -26,43 +26,39 @@
 #include <editeng/udlnitem.hxx>
 #include <vcl/settings.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx {
 
-TextUnderlineControl::TextUnderlineControl (
-    vcl::Window* pParent,
-    svx::sidebar::TextPropertyPanel& rPanel,
-    SfxBindings* pBindings)
-:   svx::sidebar::PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_UNDERLINE))
-,   mrTextPropertyPanel(rPanel)
-,   mpBindings(pBindings)
-,   maVSUnderline(VclPtr<ValueSet>::Create(this, SVX_RES(VS_UNDERLINE)))
-,   maPBOptions (VclPtr<PushButton>::Create(this, SVX_RES(PB_OPTIONS)))
-
-,   maIMGSingle     (SVX_RES(IMG_SINGLE))
-,   maIMGDouble     (SVX_RES(IMG_DOUBLE))
-,   maIMGBold       (SVX_RES(IMG_BOLD2))
-,   maIMGDot        (SVX_RES(IMG_DOT))
-,   maIMGDotBold    (SVX_RES(IMG_DOT_BOLD))
-,   maIMGDash       (SVX_RES(IMG_DASH))
-,   maIMGDashLong   (SVX_RES(IMG_DASH_LONG))
-,   maIMGDashDot    (SVX_RES(IMG_DASH_DOT))
-,   maIMGDashDotDot (SVX_RES(IMG_DASH_DOT_DOT))
-,   maIMGWave       (SVX_RES(IMG_WAVE))
-
-,   maIMGSingleSel      (SVX_RES(IMG_SINGLE_SEL))
-,   maIMGDoubleSel      (SVX_RES(IMG_DOUBLE_SEL))
-,   maIMGBoldSel        (SVX_RES(IMG_BOLD2_SEL))
-,   maIMGDotSel         (SVX_RES(IMG_DOT_SEL))
-,   maIMGDotBoldSel     (SVX_RES(IMG_DOT_BOLD_SEL))
-,   maIMGDashSel        (SVX_RES(IMG_DASH_SEL))
-,   maIMGDashLongSel    (SVX_RES(IMG_DASH_LONG_SEL))
-,   maIMGDashDotSel     (SVX_RES(IMG_DASH_DOT_SEL))
-,   maIMGDashDotDotSel  (SVX_RES(IMG_DASH_DOT_DOT_SEL))
-,   maIMGWaveSel        (SVX_RES(IMG_WAVE_SEL))
-
+TextUnderlineControl::TextUnderlineControl(sal_uInt16 nId)
+:   SfxPopupWindow(nId, "TextUnderlineControl", "svx/ui/textunderlinecontrol.ui")
 {
-    initial();
-    FreeResource();
+    get(maNone, "none");
+    get(maSingle, "single");
+    get(maDouble, "double");
+    get(maBold, "bold");
+    get(maDot, "dot");
+    get(maDotBold, "dotbold");
+    get(maDash, "dash");
+    get(maDashLong, "dashlong");
+    get(maDashDot, "dashdot");
+    get(maDashDotDot, "dashdotdot");
+    get(maWave, "wave");
+    get(maMoreOptions, "moreoptions");
+
+    maMoreOptions->SetHelpId(HID_UNDERLINE_BTN);
+
+    Link<Button*,void> aLink = LINK(this, TextUnderlineControl, PBClickHdl);
+    maNone->SetClickHdl(aLink);
+    maSingle->SetClickHdl(aLink);
+    maDouble->SetClickHdl(aLink);
+    maBold->SetClickHdl(aLink);
+    maDot->SetClickHdl(aLink);
+    maDotBold->SetClickHdl(aLink);
+    maDash->SetClickHdl(aLink);
+    maDashLong->SetClickHdl(aLink);
+    maDashDot->SetClickHdl(aLink);
+    maDashDotDot->SetClickHdl(aLink);
+    maWave->SetClickHdl(aLink);
+    maMoreOptions->SetClickHdl(aLink);
 }
 
 TextUnderlineControl::~TextUnderlineControl()
@@ -72,174 +68,84 @@ TextUnderlineControl::~TextUnderlineControl()
 
 void TextUnderlineControl::dispose()
 {
-    maVSUnderline.disposeAndClear();
-    maPBOptions.disposeAndClear();
-    svx::sidebar::PopupControl::dispose();
+    maNone.clear();
+    maSingle.clear();
+    maDouble.clear();
+    maBold.clear();
+    maDot.clear();
+    maDotBold.clear();
+    maDash.clear();
+    maDashLong.clear();
+    maDashDot.clear();
+    maDashDotDot.clear();
+    maWave.clear();
+    maMoreOptions.clear();
+
+    SfxPopupWindow::dispose();
 }
 
-void TextUnderlineControl::initial()
+FontLineStyle TextUnderlineControl::getLineStyle(Button* pButton)
 {
-    maVSUnderline->SetColor(GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        GetSettings().GetStyleSettings().GetMenuColor() :
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-    maVSUnderline->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        GetSettings().GetStyleSettings().GetMenuColor() :
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+    if(pButton == maSingle)
+        return LINESTYLE_SINGLE;
+    else if(pButton == maDouble)
+        return LINESTYLE_DOUBLE;
+    else if(pButton == maBold)
+        return LINESTYLE_BOLD;
+    else if(pButton == maDot)
+        return LINESTYLE_DOTTED;
+    else if(pButton == maDotBold)
+        return LINESTYLE_BOLDDOTTED;
+    else if(pButton == maDash)
+        return LINESTYLE_DASH;
+    else if(pButton == maDashLong)
+        return LINESTYLE_LONGDASH;
+    else if(pButton == maDashDot)
+        return LINESTYLE_DASHDOT;
+    else if(pButton == maDashDotDot)
+        return LINESTYLE_DASHDOTDOT;
+    else if(pButton == maWave)
+        return LINESTYLE_WAVE;
 
-    Link<Button*,void> aLink = LINK( this, TextUnderlineControl, PBClickHdl ) ;
-    maPBOptions->SetClickHdl(aLink);
-
-    maVSUnderline->SetStyle( maVSUnderline->GetStyle()| WB_3DLOOK | WB_NO_DIRECTSELECT );
-
-    // 'none' item
-    maVSUnderline->SetStyle( maVSUnderline->GetStyle()| WB_NONEFIELD | WB_MENUSTYLEVALUESET );
-    maVSUnderline->SetText( SVX_RESSTR(STR_WITHOUT) );
-
-    maVSUnderline->InsertItem(1, maIMGSingle, SVX_RESSTR(STR_SINGLE));
-    maVSUnderline->SetItemData(1, reinterpret_cast<void*>(LINESTYLE_SINGLE));
-
-    maVSUnderline->InsertItem(2, maIMGDouble, SVX_RESSTR(STR_DOUBLE));
-    maVSUnderline->SetItemData(2, reinterpret_cast<void*>(LINESTYLE_DOUBLE));
-
-    maVSUnderline->InsertItem(3, maIMGBold, SVX_RESSTR(STR_BOLD));
-    maVSUnderline->SetItemData(3, reinterpret_cast<void*>(LINESTYLE_BOLD));
-
-    maVSUnderline->InsertItem(4, maIMGDot, SVX_RESSTR(STR_DOT));
-    maVSUnderline->SetItemData(4, reinterpret_cast<void*>(LINESTYLE_DOTTED));
-
-    maVSUnderline->InsertItem(5, maIMGDotBold, SVX_RESSTR(STR_DOT_BOLD));
-    maVSUnderline->SetItemData(5, reinterpret_cast<void*>(LINESTYLE_BOLDDOTTED));
-
-    maVSUnderline->InsertItem(6, maIMGDash, SVX_RESSTR(STR_DASH));
-    maVSUnderline->SetItemData(6, reinterpret_cast<void*>(LINESTYLE_DASH));
-
-    maVSUnderline->InsertItem(7, maIMGDashLong, SVX_RESSTR(STR_DASH_LONG));
-    maVSUnderline->SetItemData(7, reinterpret_cast<void*>(LINESTYLE_LONGDASH));
-
-    maVSUnderline->InsertItem(8, maIMGDashDot, SVX_RESSTR(STR_DASH_DOT));
-    maVSUnderline->SetItemData(8, reinterpret_cast<void*>(LINESTYLE_DASHDOT));
-
-    maVSUnderline->InsertItem(9, maIMGDashDotDot, SVX_RESSTR(STR_DASH_DOT_DOT));
-    maVSUnderline->SetItemData(9, reinterpret_cast<void*>(LINESTYLE_DASHDOTDOT));
-
-    maVSUnderline->InsertItem(10, maIMGWave, SVX_RESSTR(STR_WAVE));
-    maVSUnderline->SetItemData(10, reinterpret_cast<void*>(LINESTYLE_WAVE));
-
-    maVSUnderline->SetColCount();
-    maVSUnderline->SetSelectHdl(LINK( this, TextUnderlineControl, VSSelectHdl ));
-
-    maVSUnderline->StartSelection();
-    maVSUnderline->Show();
+    return LINESTYLE_NONE;
 }
 
-void TextUnderlineControl::Rearrange(FontLineStyle eLine)
+Color TextUnderlineControl::GetUnderlineColor()
 {
-    maVSUnderline->SetItemImage(1, maIMGSingle);
-    maVSUnderline->SetItemImage(2, maIMGDouble );
-    maVSUnderline->SetItemImage(3, maIMGBold);
-    maVSUnderline->SetItemImage(4, maIMGDot);
-    maVSUnderline->SetItemImage(5, maIMGDotBold);
-    maVSUnderline->SetItemImage(6, maIMGDash);
-    maVSUnderline->SetItemImage(7, maIMGDashLong);
-    maVSUnderline->SetItemImage(8, maIMGDashDot);
-    maVSUnderline->SetItemImage(9, maIMGDashDotDot);
-    maVSUnderline->SetItemImage(10, maIMGWave);
+    const SfxPoolItem* pItem;
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, pItem);
 
-    switch(eLine)
+    const SvxUnderlineItem* pUnderlineItem = static_cast<const SvxUnderlineItem*>(pItem);
+
+    if(pUnderlineItem)
+        return pUnderlineItem->GetColor();
+
+    return COL_AUTO;
+}
+
+IMPL_LINK_TYPED(TextUnderlineControl, PBClickHdl, Button*, pButton, void)
+{
+    if(pButton == maMoreOptions)
     {
-    case LINESTYLE_SINGLE:
-        maVSUnderline->SetItemImage(1, maIMGSingleSel);
-        maVSUnderline->SelectItem(1);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_DOUBLE:
-        maVSUnderline->SetItemImage(2, maIMGDoubleSel);
-        maVSUnderline->SelectItem(2);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_BOLD:
-        maVSUnderline->SetItemImage(3, maIMGBoldSel);
-        maVSUnderline->SelectItem(3);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_DOTTED:
-        maVSUnderline->SetItemImage(4, maIMGDotSel);
-        maVSUnderline->SelectItem(4);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_BOLDDOTTED:
-        maVSUnderline->SetItemImage(5, maIMGDotBoldSel);
-        maVSUnderline->SelectItem(5);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_DASH:
-        maVSUnderline->SetItemImage(6, maIMGDashSel);
-        maVSUnderline->SelectItem(6);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_LONGDASH:
-        maVSUnderline->SetItemImage(7, maIMGDashLongSel);
-        maVSUnderline->SelectItem(7);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_DASHDOT:
-        maVSUnderline->SetItemImage(8, maIMGDashDotSel);
-        maVSUnderline->SelectItem(8);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_DASHDOTDOT:
-        maVSUnderline->SetItemImage(9, maIMGDashDotDotSel);
-        maVSUnderline->SelectItem(9);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_WAVE:
-        maVSUnderline->SetItemImage(10, maIMGWaveSel);
-        maVSUnderline->SelectItem(10);
-        maVSUnderline->GrabFocus();
-        break;
-    case LINESTYLE_NONE:
-        maVSUnderline->SelectItem(0);
-        maVSUnderline->GrabFocus();
-        break;
-    default:
-        maVSUnderline->SelectItem(1);
-        maVSUnderline->SetNoSelection();
-        maPBOptions->GrabFocus();
+        SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
+        pDisp->Execute(SID_CHAR_DLG_EFFECT, SfxCallMode::ASYNCHRON);
+
+        EndPopupMode();
     }
-    maVSUnderline->StartSelection();
-}
-
-IMPL_LINK_TYPED(TextUnderlineControl, VSSelectHdl, ValueSet*, pControl, void)
-{
-    if ( pControl == maVSUnderline.get() )
+    else
     {
-        const sal_uInt16 iPos = maVSUnderline->GetSelectItemId();
-        const FontLineStyle eUnderline = ( iPos == 0 )
-                                         ? LINESTYLE_NONE
-                                         : static_cast<FontLineStyle>(reinterpret_cast<sal_uInt64>(maVSUnderline->GetItemData( iPos )));
+        const FontLineStyle eUnderline = getLineStyle(pButton);
 
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
+        aLineItem.SetColor(GetUnderlineColor());
 
-        aLineItem.SetColor(mrTextPropertyPanel.GetUnderlineColor());
-        mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_CHAR_UNDERLINE,
-                SfxCallMode::RECORD, { &aLineItem });
-        mrTextPropertyPanel.EndUnderlinePopupMode();
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_UNDERLINE,
+               SfxCallMode::RECORD, { &aLineItem });
+
+        EndPopupMode();
     }
 }
 
-IMPL_LINK_TYPED(TextUnderlineControl, PBClickHdl, Button *, pPBtn, void)
-{
-    if(pPBtn == maPBOptions.get())
-    {
-        if (mpBindings)
-        {
-            SfxDispatcher* pDisp = mpBindings->GetDispatcher();
-            pDisp->Execute( SID_CHAR_DLG_EFFECT, SfxCallMode::ASYNCHRON );
-        }
-        mrTextPropertyPanel.EndUnderlinePopupMode();
-    }
 }
-
-}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
