@@ -79,6 +79,7 @@ namespace param
               ::connectivity::ORowSetValue& Value()       { return m_aValue; }
 
     public:
+        ParameterWrapper() = delete;
         ParameterWrapper(
             const css::uno::Reference< css::beans::XPropertySet >& _rxColumn
         );
@@ -114,9 +115,6 @@ namespace param
 
     private:
         OUString impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const;
-
-    private:
-        ParameterWrapper(); // not implemented
     };
 
 

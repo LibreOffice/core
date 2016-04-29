@@ -65,18 +65,16 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
 
     std::unique_ptr<EditTextObjectImpl> mpImpl;
 
-    EditTextObject&      operator=( const EditTextObject& ) = delete;
-
-    EditTextObject(); // disabled
-
     EditTextObject( SfxItemPool* pPool );
 
     void StoreData( SvStream& rStrm ) const;
     void CreateData( SvStream& rStrm );
 
 public:
+    EditTextObject() = delete;
     EditTextObject( const EditTextObject& r );
     virtual ~EditTextObject();
+    EditTextObject&      operator=( const EditTextObject& ) = delete;
 
     /**
      * Set paragraph strings to the shared string pool.

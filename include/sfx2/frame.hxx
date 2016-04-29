@@ -107,10 +107,11 @@ protected:
 
     SAL_DLLPRIVATE void RemoveChildFrame_Impl( SfxFrame* );
 
-                        SfxFrame( );    // not implemented
     SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow );
 
 public:
+                        SfxFrame() = delete;
+
     static SfxFrame*    Create( const css::uno::Reference< css::frame::XFrame >& xFrame );
     static css::uno::Reference< css::frame::XFrame >
                         CreateBlankFrame();

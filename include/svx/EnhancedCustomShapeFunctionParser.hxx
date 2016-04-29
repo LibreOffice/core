@@ -190,11 +190,8 @@ public:
 
     SVX_DLLPUBLIC static ExpressionNodeSharedPtr parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
 
-private:
-    // disabled constructor/destructor, since this is
-    // supposed to be a singleton
-    FunctionParser();
-
+    // this is a singleton
+    FunctionParser() = delete;
     FunctionParser(const FunctionParser&) = delete;
     FunctionParser& operator=( const FunctionParser& ) = delete;
 };

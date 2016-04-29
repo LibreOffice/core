@@ -45,11 +45,10 @@ private:
     bool                    bModified;
     bool                    bThemeNameFromResource;
 
-                            GalleryThemeEntry();
     static INetURLObject    ImplGetURLIgnoreCase( const INetURLObject& rURL );
 
 public:
-
+                            GalleryThemeEntry() = delete;
                             GalleryThemeEntry( bool bCreateUniqueURL,
                                                const INetURLObject& rBaseURL,
                                                const OUString& rName,
