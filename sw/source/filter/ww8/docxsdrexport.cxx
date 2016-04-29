@@ -38,7 +38,7 @@ using namespace oox;
 namespace
 {
 
-uno::Sequence<beans::PropertyValue> lclGetProperty(uno::Reference<drawing::XShape> rShape, const OUString& rPropName)
+uno::Sequence<beans::PropertyValue> lclGetProperty(const uno::Reference<drawing::XShape>& rShape, const OUString& rPropName)
 {
     uno::Sequence<beans::PropertyValue> aResult;
     uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
@@ -177,7 +177,7 @@ struct DocxSdrExport::Impl
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
     void textFrameShadow(const SwFrameFormat& rFrameFormat);
-    static bool isSupportedDMLShape(uno::Reference<drawing::XShape> xShape);
+    static bool isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
     bool checkFrameBtlr(SwNode* pStartNode, bool bDML);
 };
@@ -191,7 +191,7 @@ DocxSdrExport::~DocxSdrExport()
 {
 }
 
-void DocxSdrExport::setSerializer(sax_fastparser::FSHelperPtr pSerializer)
+void DocxSdrExport::setSerializer(const sax_fastparser::FSHelperPtr& pSerializer)
 {
     m_pImpl->m_pSerializer = pSerializer;
 }
@@ -783,7 +783,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
         const_cast< SdrObject* >(sdrObj)->SetPage(nullptr);
 }
 
-bool lcl_isLockedCanvas(uno::Reference<drawing::XShape> xShape)
+bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
 {
     bool bRet = false;
     uno::Sequence< beans::PropertyValue > propList =
@@ -915,7 +915,7 @@ void DocxSdrExport::Impl::textFrameShadow(const SwFrameFormat& rFrameFormat)
                                    FSEND);
 }
 
-bool DocxSdrExport::Impl::isSupportedDMLShape(uno::Reference<drawing::XShape> xShape)
+bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape)
 {
     bool supported = true;
 
@@ -1031,9 +1031,9 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
 
 }
 
-void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
+void DocxSdrExport::writeDiagramRels(const uno::Reference<xml::dom::XDocument>& xDom,
                                      const uno::Sequence< uno::Sequence< uno::Any > >& xRelSeq,
-                                     uno::Reference< io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName,
+                                     const uno::Reference<io::XOutputStream>& xOutStream, const OUString& sGrabBagProperyName,
                                      int nAnchorId)
 {
     // add image relationships of OOXData, OOXDiagram

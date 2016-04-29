@@ -58,7 +58,7 @@ public:
     DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML);
     ~DocxSdrExport();
 
-    void setSerializer(sax_fastparser::FSHelperPtr pSerializer);
+    void setSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* getFlyFrameSize();
     bool getTextFrameSyntax();
@@ -96,9 +96,9 @@ public:
     void writeDMLEffectLst(const SwFrameFormat& rFrameFormat);
     /// Writes a diagram (smartart).
     void writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat, int nAnchorId);
-    void writeDiagramRels(css::uno::Reference<css::xml::dom::XDocument> xDom,
+    void writeDiagramRels(const css::uno::Reference<css::xml::dom::XDocument>& xDom,
                           const css::uno::Sequence< css::uno::Sequence<css::uno::Any> >& xRelSeq,
-                          css::uno::Reference<css::io::XOutputStream> xOutStream, const OUString& sGrabBagProperyName,
+                          const css::uno::Reference<css::io::XOutputStream>& xOutStream, const OUString& sGrabBagProperyName,
                           int nAnchorId);
     /// Writes text frame in DML format.
     void writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);
