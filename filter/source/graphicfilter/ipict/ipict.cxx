@@ -38,11 +38,12 @@ namespace PictReaderInternal {
   class Pattern {
   public:
     //! constructor
-    Pattern() {
-      isColor = false; isRead = false;
-      penStyle=PEN_SOLID; brushStyle = BRUSH_SOLID;
-      nBitCount = 64;
-    }
+    Pattern() : penStyle(PEN_SOLID),
+                brushStyle(BRUSH_SOLID),
+                nBitCount(64),
+                isColor(false),
+                isRead(false)
+    {}
 
     //! reads black/white pattern from SvStream
     sal_uLong read(SvStream &stream);

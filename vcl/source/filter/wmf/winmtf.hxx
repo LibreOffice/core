@@ -485,10 +485,9 @@ struct GDIObj
     {}
 
     GDIObj(GDIObjectType eT, void* pS)
-    {
-        pStyle = pS;
-        eType = eT;
-    }
+        : pStyle(pS)
+        , eType(eT)
+    {}
 
     void Set(GDIObjectType eT, void* pS)
     {
