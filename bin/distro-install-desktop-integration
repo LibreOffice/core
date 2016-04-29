@@ -52,7 +52,7 @@ install_man()
     echo "Install $MANDIR/man1/$1.1.gz"
 
     mkdir -p $DESTDIR$MANDIR/man1
-    cp sysui/desktop/man/$1.1 $DESTDIR$MANDIR/man1 || exit 1;
+    cp "${SRCDIR?}"/sysui/desktop/man/$1.1 $DESTDIR$MANDIR/man1 || exit 1;
     gzip -f $DESTDIR$MANDIR/man1/$1.1
     test -f "$DESTDIR/$2" && echo "$MANDIR/man1/$1.1.gz" >>"$DESTDIR/$2"
 }
@@ -96,8 +96,7 @@ add_wrapper()
 # install desktop integration from plain packages
 sysui_temp=`mktemp -d -t distro-pack-desktop-integration-XXXXXX`
 cp -a workdir/CustomTarget/sysui/share/libreoffice/* "$sysui_temp"
-cp -a sysui/desktop/share/create_tree.sh "$sysui_temp"
-builddir=`pwd`
+cp -a "${SRCDIR?}"/sysui/desktop/share/create_tree.sh "$sysui_temp"
 cd $sysui_temp
 # we want non-versioned stuff in the distro packages
 sed -i \
@@ -110,13 +109,13 @@ sed -i \
     export OFFICE_PREFIX=$LIBDIR
     export PREFIX=$INSTALLDIRNAME
     export ICON_PREFIX=$INSTALLDIRNAME
-    export ICON_SOURCE_DIR=$builddir/sysui/desktop/icons
+    export ICON_SOURCE_DIR="${SRCDIR?}"/sysui/desktop/icons
     export PRODUCTVERSION=
     export KDEMAINDIR=$PREFIXDIR
     export PREFIXDIR=${PREFIXDIR}
     export GNOMEDIR=$PREFIXDIR
     export GNOME_MIME_THEME=hicolor
-    export APPDATA_SOURCE_DIR=$builddir/sysui/desktop/appstream-appdata
+    export APPDATA_SOURCE_DIR="${SRCDIR?}"/sysui/desktop/appstream-appdata
     bash ./create_tree.sh
 )
 cd -
@@ -179,16 +178,16 @@ test -f $DESTDIR/gid_Module_Root_Brand && echo "$PREFIXDIR/bin/soffice" >>$DESTD
 
 # create bash completion
 mkdir -p $DESTDIR/usr/share/bash-completion/completions
-./bin/generate-bash-completion bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh
+"${SRCDIR?}"/bin/generate-bash-completion bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh
 test -f $DESTDIR/gid_Module_Root_Brand && echo "/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh" >>$DESTDIR/gid_Module_Root_Brand
 if test "$WITH_COMPAT_OOWRAPPERS" = "TRUE" ; then
-    ./bin/generate-bash-completion --compat-oowrappers bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/ooffice.sh
+    "${SRCDIR?}"/bin/generate-bash-completion --compat-oowrappers bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/ooffice.sh
     test -f $DESTDIR/gid_Module_Root_Brand && echo "/usr/share/bash-completion/completions/ooffice.sh" >>$DESTDIR/gid_Module_Root_Brand
 fi
 
 echo "Install $OOINSTDIR/basis$VERSION/program/java-set-classpath";
 mkdir -p $DESTDIR$INSTALLDIR/program
-sed -e "s|@INSTALLDIR@|$INSTALLDIR|g" bin/java-set-classpath.in >| "$DESTDIR$INSTALLDIR/program/java-set-classpath" || exit 1;
+sed -e "s|@INSTALLDIR@|$INSTALLDIR|g" "${SRCDIR?}"/bin/java-set-classpath.in >| "$DESTDIR$INSTALLDIR/program/java-set-classpath" || exit 1;
 chmod 755 "$DESTDIR$INSTALLDIR/program/java-set-classpath"
 test -f $DESTDIR/gid_Module_Root_Brand && echo "$INSTALLDIR/program/java-set-classpath" >>$DESTDIR/gid_Module_Root_Brand
 
