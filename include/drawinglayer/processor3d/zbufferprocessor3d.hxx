@@ -56,7 +56,7 @@ namespace drawinglayer
         {
         private:
             /// the raster target, a Z-Buffer
-            basegfx::BZPixelRaster* mpBZPixelRaster;
+            basegfx::BZPixelRaster& mrBZPixelRaster;
 
             /// inverse of EyeToView for rasterconversion with evtl. Phong shading
             basegfx::B3DHomMatrix maInvEyeToView;
@@ -74,6 +74,9 @@ namespace drawinglayer
              */
             std::vector< RasterPrimitive3D >* mpRasterPrimitive3Ds;
 
+            sal_uInt32 mnStartLine;
+            sal_uInt32 mnStopLine;
+
             // rasterconversions for filled and non-filled polygons
 
             virtual void rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const override;
@@ -82,19 +85,18 @@ namespace drawinglayer
         public:
             ZBufferProcessor3D(
                 const geometry::ViewInformation3D& rViewInformation3D,
-                const geometry::ViewInformation2D& rViewInformation2D,
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute,
-                double fSizeX,
-                double fSizeY,
                 const basegfx::B2DRange& rVisiblePart,
-                sal_uInt16 nAntiAlialize);
+                sal_uInt16 nAntiAlialize,
+                double fFullViewSizeX,
+                double fFullViewSizeY,
+                basegfx::BZPixelRaster& rBZPixelRaster,
+                sal_uInt32 nStartLine,
+                sal_uInt32 nStopLine);
             virtual ~ZBufferProcessor3D();
 
             void finish();
-
-            /// get the result as bitmapEx
-            BitmapEx getBitmapEx() const;
         };
     }
 }

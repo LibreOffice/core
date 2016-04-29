@@ -34,7 +34,7 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC B3DHomMatrix
     {
     public:
-        typedef o3tl::cow_wrapper< Impl3DHomMatrix > ImplType;
+        typedef o3tl::cow_wrapper< Impl3DHomMatrix, o3tl::ThreadSafeRefCountingPolicy > ImplType;
 
     private:
         ImplType                                     mpImpl;
