@@ -816,22 +816,6 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
         }
         break;
 
-        case HSTRY_RESETATTRSET: {
-            SwHistoryResetAttrSet * pHistoryHint
-                = static_cast<SwHistoryResetAttrSet*>(pHstHint);
-            nContent = pHistoryHint->GetContent();
-            if ( COMPLETE_STRING != nContent ) {
-                const std::vector<sal_uInt16>& rArr = pHistoryHint->GetArr();
-                for ( size_t i = rArr.size(); i; ) {
-                    if ( RES_TXTATR_FTN == rArr[ --i ] ) {
-                        nNode = pHistoryHint->GetNode();
-                        break;
-                    }
-                }
-            }
-        }
-        break;
-
         default:
             break;
         }

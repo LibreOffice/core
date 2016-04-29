@@ -70,7 +70,6 @@ enum HISTORY_HINT {
     HSTRY_FLYCNT,
     HSTRY_BOOKMARK,
     HSTRY_SETATTRSET,
-    HSTRY_RESETATTRSET,
     HSTRY_CHGFLYANCHOR,
     HSTRY_CHGFLYCHAIN,
     HSTRY_CHGCHARFMT,
@@ -273,25 +272,6 @@ public:
     SwHistorySetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
                          const std::set<sal_uInt16> &rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
-
-};
-
-class SwHistoryResetAttrSet : public SwHistoryHint
-{
-    const sal_uLong m_nNodeIndex;
-    const sal_Int32 m_nStart;
-    const sal_Int32 m_nEnd;
-    std::vector<sal_uInt16> m_Array;
-
-public:
-    SwHistoryResetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
-                        sal_Int32 nStt,
-                        sal_Int32 nEnd);
-    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
-
-    const std::vector<sal_uInt16>& GetArr() const { return m_Array; }
-    sal_uLong GetNode() const               { return m_nNodeIndex; }
-    sal_Int32 GetContent() const         { return m_nStart; }
 
 };
 
