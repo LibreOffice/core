@@ -310,6 +310,7 @@ public class LocalOfficeConnection
             Object aInitialObject = null;
             try
             {
+                System.out.println("debug, LocalOfficeConnection: mURL is '"+mURL+"'");
                 aInitialObject = resolve(xLocalContext, mURL);
             }
             catch( com.sun.star.connection.NoConnectException e )
