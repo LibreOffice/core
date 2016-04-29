@@ -38,15 +38,12 @@ namespace comphelper
     public:
         typedef sal_uInt32  TClientId;
 
-    protected:
-        AccessibleEventNotifier( );     // never implemented
-        ~AccessibleEventNotifier( );    // never implemented
-
-    private:
+    public:
+        AccessibleEventNotifier() = delete;
+        ~AccessibleEventNotifier() = delete;
         AccessibleEventNotifier( const AccessibleEventNotifier& ) = delete;
         AccessibleEventNotifier& operator=( const AccessibleEventNotifier& ) = delete;
 
-    public:
         /** registers a client of this class, means a broadcaster of AccessibleEvents
 
             <p>No precaution is taken to care for disposal of this component. When the component

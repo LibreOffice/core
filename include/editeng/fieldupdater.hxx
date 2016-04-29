@@ -27,10 +27,10 @@ class EDITENG_DLLPUBLIC FieldUpdater
 {
     std::unique_ptr<FieldUpdaterImpl> mpImpl;
 
-    FieldUpdater(); // disabled
 public:
     FieldUpdater(EditTextObject& rObj);
     FieldUpdater(const FieldUpdater& r);
+    FieldUpdater() = delete;
     ~FieldUpdater();
 
     /**

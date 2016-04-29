@@ -76,6 +76,7 @@ namespace dbaui
         virtual void     impl_onModifyChanged();
 
     public:
+        DBSubComponentController() = delete;
 
         bool            isReadOnly()            const;
         bool            isEditable()            const;
@@ -188,9 +189,6 @@ namespace dbaui
 
     protected:
         sal_Int32 getCurrentStartNumber() const;
-
-    private:
-        DBSubComponentController();    // never implemented
     };
 
 
