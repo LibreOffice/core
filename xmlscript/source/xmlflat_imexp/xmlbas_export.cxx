@@ -52,17 +52,6 @@ namespace xmlscript
         return aNames;
     }
 
-    OUString getImplementationName_XMLOasisBasicExporter()
-    {
-        return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" );
-    }
-
-    Sequence< OUString > getSupportedServiceNames_XMLOasisBasicExporter()
-    {
-        Sequence< OUString > aNames { "com.sun.star.document.XMLOasisBasicExporter" };
-        return aNames;
-    }
-
     // XMLBasicExporterBase
 
     XMLBasicExporterBase::XMLBasicExporterBase( bool bOasis )
@@ -399,12 +388,13 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        return getImplementationName_XMLOasisBasicExporter();
+        return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" );
     }
 
     Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_XMLOasisBasicExporter();
+        Sequence< OUString > aNames { "com.sun.star.document.XMLOasisBasicExporter" };
+        return aNames;
     }
 
     // component operations
@@ -415,12 +405,15 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return static_cast< lang::XTypeProvider * >( new XMLBasicExporter );
     }
 
-    Reference< XInterface > SAL_CALL create_XMLOasisBasicExporter(
-        Reference< XComponentContext > const &  )
-    {
-        return static_cast< lang::XTypeProvider * >( new XMLOasisBasicExporter );
-    }
-
 }   // namespace xmlscript
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_xmlscript_XMLOasisBasicExporter(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+
+    return cppu::acquire(new xmlscript::XMLOasisBasicExporter());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
