@@ -918,7 +918,7 @@ public:
     LanguageType        GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos = nullptr ) const;
     css::lang::Locale   GetLocale( const EditPaM& rPaM ) const;
 
-    void DoOnlineSpelling( ContentNode* pThisNodeOnly = nullptr, bool bSpellAtCursorPos = false, bool bInteruptable = true );
+    void DoOnlineSpelling( ContentNode* pThisNodeOnly = nullptr, bool bSpellAtCursorPos = false, bool bInterruptible = true );
     EESpellState        Spell( EditView* pEditView, bool bMultipleDoc );
     EESpellState        HasSpellErrors();
     void                ClearSpellErrors();
