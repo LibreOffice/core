@@ -24,7 +24,7 @@
 
 namespace {
 // Don't bother with buffer overhead for less than y rows.
-const SCSIZE kBufferThreshhold = 128;
+const SCSIZE kBufferThreshold = 128;
 }
 
 ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
@@ -207,14 +207,14 @@ void ScJumpMatrix::FlushBufferOtherThan( ScJumpMatrix::BufferType eType, SCSIZE 
 
 ScMatrix* ScJumpMatrix::GetResultMatrix()
 {
-    if (nResMatRows >= kBufferThreshhold)
+    if (nResMatRows >= kBufferThreshold)
         FlushBufferOtherThan( BUFFER_NONE, 0, 0);
     return pMat.get();
 }
 
 void ScJumpMatrix::PutResultDouble( double fVal, SCSIZE nC, SCSIZE nR )
 {
-    if (nResMatRows < kBufferThreshhold)
+    if (nResMatRows < kBufferThreshold)
         pMat->PutDouble( fVal, nC, nR);
     else
     {
@@ -230,7 +230,7 @@ void ScJumpMatrix::PutResultDouble( double fVal, SCSIZE nC, SCSIZE nR )
 
 void ScJumpMatrix::PutResultString( const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR )
 {
-    if (nResMatRows < kBufferThreshhold)
+    if (nResMatRows < kBufferThreshold)
         pMat->PutString( rStr, nC, nR);
     else
     {
@@ -246,7 +246,7 @@ void ScJumpMatrix::PutResultString( const svl::SharedString& rStr, SCSIZE nC, SC
 
 void ScJumpMatrix::PutResultEmpty( SCSIZE nC, SCSIZE nR )
 {
-    if (nResMatRows < kBufferThreshhold)
+    if (nResMatRows < kBufferThreshold)
         pMat->PutEmpty( nC, nR);
     else
     {
@@ -262,7 +262,7 @@ void ScJumpMatrix::PutResultEmpty( SCSIZE nC, SCSIZE nR )
 
 void ScJumpMatrix::PutResultEmptyPath( SCSIZE nC, SCSIZE nR )
 {
-    if (nResMatRows < kBufferThreshhold)
+    if (nResMatRows < kBufferThreshold)
         pMat->PutEmptyPath( nC, nR);
     else
     {
