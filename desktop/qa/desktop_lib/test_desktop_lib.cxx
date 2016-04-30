@@ -1297,10 +1297,18 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 12
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // 13
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // 14
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // 15
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // 16
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 17
+    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 18
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // Should be dropped.
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
 
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(15), notifs.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(19), notifs.size());
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[0]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[0]));
@@ -1346,6 +1354,18 @@ void DesktopLOKTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_END, (int)std::get<0>(notifs[14]));
     CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[14]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_CURSOR, (int)std::get<0>(notifs[15]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[15]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CURSOR_VISIBLE, (int)std::get<0>(notifs[16]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[16]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_FORMULA, (int)std::get<0>(notifs[17]));
+    CPPUNIT_ASSERT_EQUAL(std::string("blah"), std::get<1>(notifs[17]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_SET_PART, (int)std::get<0>(notifs[18]));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[18]));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
