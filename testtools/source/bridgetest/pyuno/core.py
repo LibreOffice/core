@@ -210,7 +210,7 @@ class TestCase( unittest.TestCase):
                 raise ioExc( "huhuh" , self.tobj )
           except unoExc , instance:
                 wasHere = 1
-                self.failUnless( wasHere , "exceptiont test 1" )
+                self.failUnless( wasHere , "exception test 1" )
 
           wasHere = 0
           try:
