@@ -599,7 +599,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
             - optional digits in the exponent
             - percent-character found?
             - () for negative leading sign?
-            - exponetial-notation?
+            - exponential-notation?
             - shall thousand-separators be generated?
             - is a percent-character being found? --> dNumber *= 100.0;
             - are there thousand-separators in a row?

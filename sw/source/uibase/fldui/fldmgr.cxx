@@ -1158,7 +1158,7 @@ bool SwFieldMgr::InsertField(
                 SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>(
                     pCurShell->GetFieldType(RES_SETEXPFLD, rData.m_sPar1) );
 
-                // no Experssion Type with this name existing -> create
+                // no Expression Type with this name existing -> create
                 if(pTyp)
                 {
                     SwSetExpField* pExpField =

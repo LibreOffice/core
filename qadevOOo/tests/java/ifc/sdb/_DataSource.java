@@ -55,7 +55,7 @@ public class _DataSource extends MultiPropertyTest {
     *
     * After testing old value is set for this property. <p>
     *
-    * Result is OK: if property successfully changed with no excepions.
+    * Result is OK: if property successfully changed with no exceptions.
     * @see com.sun.star.beans.PropertyValue
     */
     public void _Info() {
