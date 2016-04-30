@@ -312,6 +312,9 @@ bool isRangeResultOpCode( OpCode eOp )
  */
 bool isPotentialRangeType( FormulaToken* pToken, bool bRPN, bool bRight )
 {
+    if (!pToken)
+        return false;
+
     switch (pToken->GetType())
     {
         case svByte:                // could be range result, but only a few
