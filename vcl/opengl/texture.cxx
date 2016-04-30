@@ -457,7 +457,9 @@ void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
 
 OpenGLTexture OpenGLTexture::GetWholeTexture()
 {
-    return OpenGLTexture(mpImpl, Rectangle(Point(0, 0), Size(mpImpl->mnWidth, mpImpl->mnHeight)), -1);
+    if (mpImpl)
+        return OpenGLTexture(mpImpl, Rectangle(Point(0, 0), Size(mpImpl->mnWidth, mpImpl->mnHeight)), -1);
+    return OpenGLTexture();
 }
 
 GLenum OpenGLTexture::GetFilter() const
