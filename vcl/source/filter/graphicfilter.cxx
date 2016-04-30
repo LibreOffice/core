@@ -202,7 +202,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 
         if (x1 > x2 || y1 > y2 || // bad bdbox
             (x1 == x2 && y1 == y2) || // 1 pixel picture
-            x2-x1 > 2048 || y2-y1 > 2048 ) // picture anormaly big
+            x2-x1 > 2048 || y2-y1 > 2048 ) // picture abnormally big
           bdBoxOk = false;
 
         // read version op

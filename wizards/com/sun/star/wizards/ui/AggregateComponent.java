@@ -53,7 +53,7 @@ public class AggregateComponent extends ControlScroller
     private ArrayList<ControlRow> ControlRowVector;
     private int lastHelpIndex;
 
-    /** Creates a new instance of AggrgateComponent */
+    /** Creates a new instance of AggregateComponent */
     public AggregateComponent(WizardDialog _CurUnoDialog, QueryMetaData _CurDBMetaData, int _iStep, int _iPosX, int _iPosY, int _iWidth, int _uitextfieldcount, int _firstHelpID)
     {
         super(_CurUnoDialog, _iStep, _iPosX + 10, _iPosY, _iWidth - 12, _uitextfieldcount, 18, _firstHelpID + 2);

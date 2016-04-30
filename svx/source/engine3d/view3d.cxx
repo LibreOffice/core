@@ -1082,7 +1082,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
 
                         if(bOverlap)
                         {
-                            // second ciriteria: is another fillstyle or color used?
+                            // second criteria: is another fillstyle or color used?
                             const SfxItemSet& rCompareSet = pAct->mpObj->GetMergedItemSet();
 
                             drawing::FillStyle eCompareFillStyle = ITEMVALUE(rCompareSet, XATTR_FILLSTYLE, XFillStyleItem);

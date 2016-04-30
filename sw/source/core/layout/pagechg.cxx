@@ -2225,7 +2225,7 @@ const SwPageFrame& SwPageFrame::GetFormatPage() const
         // #i88035#
         // Typically a right empty page frame has a next non-empty page frame and
         // a left empty page frame has a previous non-empty page frame.
-        // But under certain cirsumstances this assumption is not true -
+        // But under certain circumstances this assumption is not true -
         // e.g. during insertion of a left page at the end of the document right
         // after a left page in an intermediate state a right empty page does not
         // have a next page frame.

@@ -137,7 +137,7 @@ class OGroup
     std::vector<OGroupCompAcc> m_aCompAccArray;
 
     OUString    m_aGroupName;
-    sal_uInt16  m_nInsertPos; // The insertion position of the GroupComps is determind by the Group
+    sal_uInt16  m_nInsertPos; // The insertion position of the GroupComps is determined by the Group
 
     friend class OGroupLess;
 
