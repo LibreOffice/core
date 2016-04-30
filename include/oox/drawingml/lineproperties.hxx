@@ -20,12 +20,22 @@
 #ifndef INCLUDED_OOX_DRAWINGML_LINEPROPERTIES_HXX
 #define INCLUDED_OOX_DRAWINGML_LINEPROPERTIES_HXX
 
+#include <utility>
+#include <vector>
+
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <oox/dllapi.h>
+#include <oox/helper/helper.hxx>
 #include <oox/drawingml/fillproperties.hxx>
+#include <sal/types.h>
+
+namespace oox { class GraphicHelper; }
 
 namespace oox {
 namespace drawingml {
+
+class ShapePropertyMap;
 
 struct LineArrowProperties
 {

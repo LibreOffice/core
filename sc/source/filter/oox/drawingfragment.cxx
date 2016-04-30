@@ -19,6 +19,7 @@
 
 #include "drawingfragment.hxx"
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -29,6 +30,7 @@
 #include <svx/svdobj.hxx>
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include <oox/core/filterbase.hxx>
 #include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/helper/attributelist.hxx>

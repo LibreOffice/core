@@ -21,6 +21,8 @@
 
 #include <osl/diagnose.h>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"

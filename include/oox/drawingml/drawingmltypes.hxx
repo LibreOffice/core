@@ -21,16 +21,22 @@
 #define INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
 
 #include <memory>
-#include <com/sun/star/style/TabAlign.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
-#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/style/TabAlign.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace drawing { struct Hatch; }
+    namespace xml { namespace sax { class XFastAttributeList; } }
+} } }
 
 namespace oox {
 namespace drawingml {
@@ -57,8 +63,6 @@ typedef std::shared_ptr< Shape3DProperties > Shape3DPropertiesPtr;
 
 struct TextCharacterProperties;
 typedef std::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPtr;
-
-struct TextBodyProperties;
 
 struct EffectProperties;
 typedef std::shared_ptr< EffectProperties > EffectPropertiesPtr;

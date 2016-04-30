@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 
 #include "ShapeContextHandler.hxx"
@@ -25,6 +26,7 @@
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
 #include "services.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include <oox/token/namespaces.hxx>

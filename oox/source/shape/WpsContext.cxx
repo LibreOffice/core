@@ -8,6 +8,7 @@
  */
 
 #include "WpsContext.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
