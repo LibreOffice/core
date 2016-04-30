@@ -109,6 +109,35 @@ namespace desktop {
 
             m_queue.emplace_back(type, payload);
 
+            // These are safe to use the latest state and ignore previous
+            // ones (if any) since the last overrides previous ones.
+            switch (type)
+            {
+                case LOK_CALLBACK_TEXT_SELECTION_START:
+                case LOK_CALLBACK_TEXT_SELECTION_END:
+                case LOK_CALLBACK_TEXT_SELECTION:
+                case LOK_CALLBACK_MOUSE_POINTER:
+                case LOK_CALLBACK_CELL_CURSOR:
+                case LOK_CALLBACK_CELL_FORMULA:
+                case LOK_CALLBACK_CURSOR_VISIBLE:
+                case LOK_CALLBACK_SET_PART:
+                case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+                    removeAllButLast(type);
+                break;
+
+                // These come with rects, so drop earlier
+                // only when the latter includes former ones.
+                case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+                case LOK_CALLBACK_INVALIDATE_TILES:
+                    if (payload.empty())
+                    {
+                        // Invalidating everything means previous
+                        // invalidated tiles can be dropped.
+                        removeAllButLast(type);
+                    }
+                break;
+            }
+
             lock.unlock();
             if (!IsActive())
             {
@@ -128,6 +157,28 @@ namespace desktop {
                 }
 
                 m_queue.clear();
+            }
+        }
+
+        void removeAllButLast(const int type)
+        {
+            int i = m_queue.size() - 1;
+            for (; i >= 0; --i)
+            {
+                if (m_queue[i].first == type)
+                {
+                    SAL_WARN("idle", "Found [" + std::to_string(type) + "] at " + std::to_string(i));
+                    break;
+                }
+            }
+
+            for (--i; i >= 0; --i)
+            {
+                if (m_queue[i].first == type)
+                {
+                    SAL_WARN("idle", "Removing [" + std::to_string(type) + "] at " + std::to_string(i));
+                    m_queue.erase(m_queue.begin() + i);
+                }
             }
         }
 
