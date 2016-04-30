@@ -1039,7 +1039,7 @@ void SAL_CALL cli_proxy_dispatch(
                     {
                         uno_any_construct( (uno_Any *)uno_ret, 0, 0, 0 );
                     }
-                    // no excetpion occurred
+                    // no exception occurred
                     *uno_exc = 0;
                 }
                 else

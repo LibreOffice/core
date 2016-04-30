@@ -45,7 +45,7 @@ not by actual end users.
 
 Debugging / playing with winaccessibility
 
-You need to enable 'experiemental mode' in Tools->Options. After
+You need to enable 'experimental mode' in Tools->Options. After
 that NVDA should work as expected. In order to use 'accprobe' to debug
 it is necessary to override the check for whether an AT (like NVDA) is
 running; to do that use:

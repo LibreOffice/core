@@ -99,7 +99,7 @@ namespace dbaccess
                 specifies a warnings container (May be <NULL/>)
 
                 Any errors which occur during the lifetime of the query container,
-                which cannot be reported as exceptionts (for instance in methods where throwing an SQLException is
+                which cannot be reported as exceptions (for instance in methods where throwing an SQLException is
                 not allowed) will be appended to this container.</p>
                 <p>The caller is responsible for ensuring the lifetime of the object pointed to by this parameter.
         */
