@@ -1456,9 +1456,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             case css::util::NumberFormat::FRACTION:
                                 {
                                     sal_Int32 nInteger = nLeading;
-                                    if ( pElemStr && (*pElemStr)[0] == '?' )
+                                    if ( rFormat.GetNumForNumberElementCount( nPart ) == 3 )
                                     {
-                                        //  If the first digit character is a question mark,
+                                        //  If there is only two numbers + fraction in format string
                                         //  the fraction doesn't have an integer part, and no
                                         //  min-integer-digits attribute must be written.
                                         nInteger = -1;

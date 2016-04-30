@@ -273,6 +273,8 @@ public:
             }
             return false;
         }
+    /** Get the count of numbers among string elements **/
+    sal_uInt16 GetNumForNumberElementCount( sal_uInt16 nNumFor ) const;
 
     /** Get the scanned type of the specified subformat. */
     short GetNumForInfoScannedType( sal_uInt16 nNumFor ) const

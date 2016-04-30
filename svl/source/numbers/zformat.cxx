@@ -5059,6 +5059,16 @@ sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
     return nLen; // End of String
 }
 
+sal_uInt16 SvNumberformat::GetNumForNumberElementCount( sal_uInt16 nNumFor ) const
+{
+    if ( nNumFor < 4 )
+    {
+        sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
+        return nAnz - ImpGetNumForStringElementCount( nNumFor );
+    }
+    return 0;
+}
+
 sal_uInt16 SvNumberformat::ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) const
 {
     sal_uInt16 nCnt = 0;
