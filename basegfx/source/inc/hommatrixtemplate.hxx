@@ -205,7 +205,7 @@ namespace basegfx
                 }
             }
 
-            // Left-upper decompositon
+            // Left-upper decomposition
             bool ludcmp(sal_uInt16 nIndex[], sal_Int16& nParity)
             {
                 double fBig, fSum, fDum;
