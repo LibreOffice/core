@@ -94,7 +94,7 @@ namespace desktop {
             }
 
             if (type == LOK_CALLBACK_INVALIDATE_TILES &&
-                !m_queue.empty() && std::get<0>(m_queue.back()) == type && std::get<1>(m_queue.back()) == payload)
+                !m_queue.empty() && m_queue.back().first == type && m_queue.back().second == payload)
             {
                 // Supress duplicate invalidation only when they are in sequence.
                 return;
@@ -124,7 +124,7 @@ namespace desktop {
                 std::unique_lock<std::mutex> lock(m_mutex);
                 for (auto& pair : m_queue)
                 {
-                    m_pCallback(std::get<0>(pair), std::get<1>(pair).c_str(), m_pData);
+                    m_pCallback(pair.first, pair.second.c_str(), m_pData);
                 }
 
                 m_queue.clear();
@@ -132,7 +132,7 @@ namespace desktop {
         }
 
     private:
-        std::vector<std::tuple<int, std::string>> m_queue;
+        std::vector<std::pair<int, std::string>> m_queue;
         std::map<int, std::string> m_states;
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
