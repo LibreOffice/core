@@ -63,7 +63,7 @@ uses, and which --with-system-mysqlcppconn could use
 (see https://mariadb.atlassian.net/browse/CONC-104).
 Use a version where the above incompatibility has been solved.
 
-Alternativaly, MySQL Client Library from official MySQL
+Alternatively, MySQL Client Library from official MySQL
 packages are at http://dev.mysql.com/downloads/connector/c/ .
 
 You can also install the MySQL Client Library (libmysql) as part of

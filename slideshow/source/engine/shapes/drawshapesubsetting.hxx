@@ -61,7 +61,7 @@ namespace slideshow
             DrawShapeSubsetting( const DocTreeNode&                         rShapeSubset,
                                  const ::std::shared_ptr< GDIMetaFile >&  rMtf );
 
-            /// Forbid copy copstruction
+            /// Forbid copy construction
             DrawShapeSubsetting(const DrawShapeSubsetting&) = delete;
 
             /// Forbid copy assignment

@@ -129,7 +129,7 @@ service Axis
      */
     [optional, property] boolean DisplayUnits;
 
-    /** Determintes built in display unit value for axis
+    /** Determines built in display unit value for axis
 
         @since LibreOffice 4.3
      */

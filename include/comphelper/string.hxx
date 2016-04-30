@@ -41,7 +41,7 @@ namespace comphelper { namespace string {
 /** Compare an OUString to a single char
 
     @param rIn      The input OUString
-    @param c        The character to compare againsg
+    @param c        The character to compare against
 
     @return         true if rIn has one char and its equal to c
  */
