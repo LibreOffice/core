@@ -54,11 +54,11 @@ private:
     SchXML3DSceneAttributesHelper();
 };
 
-class SchXMLPositonAttributesHelper
+class SchXMLPositionAttributesHelper
 {
 public:
-    explicit SchXMLPositonAttributesHelper( SvXMLImport& rImporter );
-    ~SchXMLPositonAttributesHelper();
+    explicit SchXMLPositionAttributesHelper( SvXMLImport& rImporter );
+    ~SchXMLPositionAttributesHelper();
 
     void readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
     void readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
@@ -123,8 +123,8 @@ private:
     GlobalSeriesImportInfo m_aGlobalSeriesImportInfo;
 
     SchXML3DSceneAttributesHelper maSceneImportHelper;
-    SchXMLPositonAttributesHelper m_aOuterPositioning;//including axes and axes titles
-    SchXMLPositonAttributesHelper m_aInnerPositioning;//excluding axes and axes titles
+    SchXMLPositionAttributesHelper m_aOuterPositioning;//including axes and axes titles
+    SchXMLPositionAttributesHelper m_aInnerPositioning;//excluding axes and axes titles
     bool mbPercentStacked;
     bool m_bAxisPositionAttributeImported;
     OUString msAutoStyleName;
@@ -168,12 +168,12 @@ public:
             SvXMLImport& rImport
             , sal_uInt16 nPrefix
             , const OUString& rLocalName
-            , SchXMLPositonAttributesHelper& rPositioning );
+            , SchXMLPositionAttributesHelper& rPositioning );
     virtual ~SchXMLCoordinateRegionContext();
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
-    SchXMLPositonAttributesHelper& m_rPositioning;
+    SchXMLPositionAttributesHelper& m_rPositioning;
 };
 
 class SchXMLWallFloorContext : public SvXMLImportContext

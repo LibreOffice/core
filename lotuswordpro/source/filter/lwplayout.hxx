@@ -429,7 +429,7 @@ protected:
     void Read() override;
 protected:
     LwpUseWhen* m_pUseWhen;
-    LwpObjectID m_Positon;
+    LwpObjectID m_Position;
     LwpObjectID m_LayColumns;
     LwpObjectID m_LayGutterStuff;
     LwpObjectID m_LayJoinStuff;
@@ -457,7 +457,7 @@ public:
     virtual bool IsUseOnAllEvenPages() override;
     virtual bool IsUseOnAllOddPages() override;
     virtual bool IsUseOnPage() override;
-    LwpObjectID& GetPosition(){ return m_Positon;}
+    LwpObjectID& GetPosition(){ return m_Position;}
     virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() override;
 };
 
