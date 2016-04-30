@@ -19,10 +19,10 @@ class GenericCapabilityState
 protected:
     bool mbTest;
 
-    bool readState()
+    static bool readState()
     {
-        return (glIsEnabled(ENUM_TYPE) == GL_TRUE);
-    };
+        return (glIsEnabled(ENUM_TYPE) == static_cast<GLboolean>(GL_TRUE));
+    }
 
 public:
     void sync()
