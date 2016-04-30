@@ -58,6 +58,7 @@ enum
     PROP_TITLE_PARA_TOP_MARGIN,
     PROP_TITLE_PARA_BOTTOM_MARGIN,
     PROP_TITLE_PARA_IS_HYPHENATION,
+    PROP_TITLE_VISIBLE,
 
     PROP_TITLE_TEXT_ROTATION,
     PROP_TITLE_TEXT_STACKED,
@@ -118,6 +119,14 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
+
+    rOutProperties.push_back(
+        Property( "Visible",
+                  PROP_TITLE_VISIBLE,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_TITLE_TEXT_ROTATION,
@@ -170,6 +179,7 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_TOP_MARGIN, 0 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_BOTTOM_MARGIN, 0 );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_IS_HYPHENATION, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_VISIBLE, true );
 
         // own properties
         ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_TITLE_TEXT_ROTATION, 0.0 );
