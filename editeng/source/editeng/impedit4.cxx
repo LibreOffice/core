@@ -2244,7 +2244,7 @@ void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 }
 
 
-void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtCursorPos, bool bInteruptable )
+void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtCursorPos, bool bInterruptible )
 {
     /*
      It will iterate over all the paragraphs, paragraphs with only
@@ -2428,7 +2428,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             }
             // After two corrected nodes give up the control ...
             nInvalids++;
-            if ( bInteruptable && ( nInvalids >= 2 ) )
+            if ( bInterruptible && ( nInvalids >= 2 ) )
             {
                 bRestartTimer = true;
                 break;
