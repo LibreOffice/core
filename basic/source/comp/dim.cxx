@@ -204,7 +204,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
 {
     SbiSymPool* pOldPool = pPool;
     bool bSwitchPool = false;
-    bool bPersistantGlobal = false;
+    bool bPersistentGlobal = false;
     SbiToken eFirstTok = eCurTok;
 
     if( pProc && ( eCurTok == GLOBAL || eCurTok == PUBLIC || eCurTok == PRIVATE ) )
@@ -213,12 +213,12 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     {
         bSwitchPool = true;     // at the right moment switch to the global pool
         if( eCurTok == GLOBAL )
-            bPersistantGlobal = true;
+            bPersistentGlobal = true;
     }
     // behavior in VBA is that a module scope variable's lifetime is
     // tied to the document. e.g. a module scope variable is global
        if(  GetBasic()->IsDocBasic() && bVBASupportOn && !pProc )
-        bPersistantGlobal = true;
+        bPersistentGlobal = true;
     // PRIVATE is a synonymous for DIM
     // _CONST_?
     bool bConst = false;
@@ -366,9 +366,9 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             SbiOpcode eOp2;
             switch ( pDef->GetScope() )
             {
-                case SbGLOBAL:  eOp2 = bPersistantGlobal ? SbiOpcode::GLOBAL_P_ : SbiOpcode::GLOBAL_;
+                case SbGLOBAL:  eOp2 = bPersistentGlobal ? SbiOpcode::GLOBAL_P_ : SbiOpcode::GLOBAL_;
                                 goto global;
-                case SbPUBLIC:  eOp2 = bPersistantGlobal ? SbiOpcode::PUBLIC_P_ : SbiOpcode::PUBLIC_;
+                case SbPUBLIC:  eOp2 = bPersistentGlobal ? SbiOpcode::PUBLIC_P_ : SbiOpcode::PUBLIC_;
                                 // #40689, no own Opcode anymore
                                 if( bVBASupportOn && bStatic )
                                 {
@@ -509,7 +509,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                     aGen.Gen( SbiOpcode::REDIMP_ERASE_ );
                 }
                 pDef->SetDims( pDim->GetDims() );
-                if( bPersistantGlobal )
+                if( bPersistentGlobal )
                     pDef->SetGlobal( true );
                 SbiExpression aExpr( this, *pDef, std::move(pDim) );
                 aExpr.Gen();
