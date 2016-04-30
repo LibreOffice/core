@@ -7176,4 +7176,36 @@ void Test::testMatConcatReplication()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testRefR1C1WholeCol()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    ScAddress aPos(1, 1, 1);
+    ScCompiler aComp(m_pDoc, aPos);
+    aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+    std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=C[10]"));
+    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    OUString aFormula = pTokens->CreateString(aCxt, aPos);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("L:L"), aFormula);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testRefR1C1WholeRow()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    ScAddress aPos(1, 1, 1);
+    ScCompiler aComp(m_pDoc, aPos);
+    aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+    std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=R[3]"));
+    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    OUString aFormula = pTokens->CreateString(aCxt, aPos);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("5:5"), aFormula);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
