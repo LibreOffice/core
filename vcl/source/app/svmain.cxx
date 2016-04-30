@@ -99,7 +99,7 @@ static bool isInitVCL();
 
 oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
-    static bool bIn = false;
+    static volatile bool bIn = false;
 
     // if we crash again, bail out immediately
     if ( !bIn )
