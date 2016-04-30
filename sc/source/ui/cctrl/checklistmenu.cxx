@@ -1138,6 +1138,7 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
     {
         aParents.insert(maMembers[i].mpParent);
     }
+
     for (auto itr = aParents.begin(), itrEnd = aParents.end(); itr != itrEnd; ++itr)
     {
         if (!(*itr))
@@ -1146,6 +1147,9 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
             for( sal_uInt16 i = 0; i < nCount; ++i)
             {
                 SvTreeListEntry* pEntry = maChecks->GetEntry(i);
+                if (!pEntry)
+                    continue;
+
                 maChecks->CheckEntry(pEntry, bSet);
             }
         }
