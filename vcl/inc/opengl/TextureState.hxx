@@ -25,7 +25,7 @@ public:
         , maBoundTextures(4, 0)
     {}
 
-    void generate(GLuint& nTexture)
+    static void generate(GLuint& nTexture)
     {
         glGenTextures(1, &nTexture);
         CHECK_GL_ERROR();
