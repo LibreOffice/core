@@ -198,6 +198,8 @@ public:
     void testFuncMDETERM();
     void testMatConcat();
     void testMatConcatReplication();
+    void testRefR1C1WholeCol();
+    void testRefR1C1WholeRow();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -550,6 +552,8 @@ public:
     CPPUNIT_TEST(testFuncIFERROR);
     CPPUNIT_TEST(testFuncGETPIVOTDATA);
     CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
+    CPPUNIT_TEST(testRefR1C1WholeCol);
+    CPPUNIT_TEST(testRefR1C1WholeRow);
     CPPUNIT_TEST(testMatrixOp);
     CPPUNIT_TEST(testFuncRangeOp);
     CPPUNIT_TEST(testFuncFORMULA);
