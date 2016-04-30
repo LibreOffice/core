@@ -60,8 +60,10 @@ public class ExtsdDocumentsProvider implements IExternalDocumentProvider,
 
         for (File option: options) {
             String optionPath = option.getAbsolutePath();
-            if(!optionPath.contains(internalSDPath))
+
+            if(optionPath.contains(internalSDPath))
                 return option.toURI().toString();
+
         }
 
         return "";
