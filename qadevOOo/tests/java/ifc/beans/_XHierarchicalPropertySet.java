@@ -62,7 +62,7 @@ public class _XHierarchicalPropertySet extends MultiMethodTest {
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 log.println(" is illegal");
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println(" throws expeption " + e.getMessage());
+                log.println(" throws exception " + e.getMessage());
             }
         }
 
