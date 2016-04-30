@@ -21,11 +21,21 @@
 #define INCLUDED_OOX_DRAWINGML_FILLPROPERTIES_HXX
 
 #include <map>
-#include <com/sun/star/graphic/XGraphic.hpp>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/ole/oleobjecthelper.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace graphic { class XGraphic; }
+} } }
 
 namespace oox {
     class GraphicHelper;

@@ -20,8 +20,12 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_DATASOURCEMODEL_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCEMODEL_HXX
 
+#include <map>
+
 #include <com/sun/star/uno/Any.hxx>
 #include <oox/drawingml/chart/modelbase.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox {
 namespace drawingml {

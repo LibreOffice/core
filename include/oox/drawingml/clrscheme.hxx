@@ -20,11 +20,14 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CLRSCHEME_HXX
 #define INCLUDED_OOX_DRAWINGML_CLRSCHEME_HXX
 
+#include <cstddef>
 #include <map>
 #include <memory>
+#include <utility>
 #include <vector>
-#include <oox/drawingml/color.hxx>
+
 #include <oox/dllapi.h>
+#include <sal/types.h>
 
 namespace oox { namespace drawingml {
 

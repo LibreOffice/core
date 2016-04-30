@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include "oox/ppt/dgmlayout.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"

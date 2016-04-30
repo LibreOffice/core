@@ -20,10 +20,14 @@
 #ifndef INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
 #define INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
 
-#include <oox/helper/propertymap.hxx>
-#include <oox/dllapi.h>
-
+#include <cstddef>
 #include <vector>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <oox/dllapi.h>
+#include <oox/helper/propertymap.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox { class ModelObjectHelper; }
 

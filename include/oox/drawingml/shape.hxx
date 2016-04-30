@@ -20,24 +20,48 @@
 #ifndef INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 #define INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 
-#include <oox/helper/propertymap.hxx>
-#include <oox/core/xmlfilterbase.hxx>
+#include <map>
+#include <memory>
+#include <vector>
+
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <oox/dllapi.h>
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <memory>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vector>
-#include <map>
-#include <oox/dllapi.h>
+namespace basegfx { class B2DHomMatrix; }
+
+namespace com { namespace sun { namespace star {
+    namespace awt { struct Rectangle; }
+    namespace drawing { class XShape; }
+    namespace drawing { class XShapes; }
+    namespace uno { class Any; }
+} } }
+
+namespace oox { namespace core {
+    class XmlFilterBase;
+} }
 
 namespace oox { namespace vml {
     struct OleObjectInfo;
 } }
 
 namespace oox { namespace drawingml {
+
+class Theme;
+struct EffectProperties;
+struct FillProperties;
+struct GraphicProperties;
+struct LineProperties;
+struct Shape3DProperties;
 
 class CustomShapeProperties;
 typedef std::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;

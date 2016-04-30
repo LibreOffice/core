@@ -20,15 +20,28 @@
 #ifndef INCLUDED_OOX_DRAWINGML_THEME_HXX
 #define INCLUDED_OOX_DRAWINGML_THEME_HXX
 
+#include <functional>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/shape.hxx>
-#include <oox/helper/refvector.hxx>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <oox/dllapi.h>
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace xml { namespace dom { class XDocument; } }
+} } }
 
 namespace oox {
 namespace drawingml {
 
+struct EffectProperties;
+struct FillProperties;
+struct LineProperties;
+struct TextCharacterProperties;
 
 const sal_Int32 THEMED_STYLE_SUBTLE     = 1;
 const sal_Int32 THEMED_STYLE_MODERATE   = 2;

@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include <oox/core/xmlfilterbase.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/pptgraphicshapecontext.hxx"

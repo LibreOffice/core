@@ -20,9 +20,14 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
 
-#include <oox/drawingml/shape.hxx>
-#include <oox/drawingml/shapecontext.hxx>
+#include <oox/core/contexthandler.hxx>
 #include <oox/dllapi.h>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/shapecontext.hxx>
+#include <sal/types.h>
+
+namespace oox { class AttributeList; }
+namespace oox { namespace core { class ContextHandler2Helper; } }
 
 namespace oox { namespace drawingml {
 
