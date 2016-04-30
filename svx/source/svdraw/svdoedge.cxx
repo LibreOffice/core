@@ -1715,21 +1715,21 @@ basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
 sal_uInt32 SdrEdgeObj::GetHdlCount() const
 {
     SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
-    sal_uInt32 nHdlAnz(0L);
+    sal_uInt32 nHdlAnz(0);
     sal_uInt32 nPointCount(pEdgeTrack->GetPointCount());
 
     if(nPointCount)
     {
-        nHdlAnz = 2L;
+        nHdlAnz = 2;
 
-        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPointCount >= 4L)
+        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPointCount >= 4)
         {
-            sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0L ? aEdgeInfo.nObj1Lines - 1L : 0L);
-            sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0L ? aEdgeInfo.nObj2Lines - 1L : 0L);
-            sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1L : 0L);
+            sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0 ? aEdgeInfo.nObj1Lines - 1 : 0);
+            sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0 ? aEdgeInfo.nObj2Lines - 1 : 0);
+            sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
             nHdlAnz += nO1 + nO2 + nM;
         }
-        else if (eKind==SDREDGE_THREELINES && nPointCount == 4L)
+        else if (eKind==SDREDGE_THREELINES && nPointCount == 4)
         {
             if(GetConnectedNode(true))
                 nHdlAnz++;
@@ -1756,14 +1756,14 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
         } else {
             SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
             if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
-                sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0L ? aEdgeInfo.nObj1Lines - 1L : 0L);
-                sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0L ? aEdgeInfo.nObj2Lines - 1L : 0L);
-                sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1L : 0L);
-                sal_uInt32 nNum(nHdlNum - 2L);
-                sal_Int32 nPt(0L);
+                sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0 ? aEdgeInfo.nObj1Lines - 1 : 0);
+                sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0 ? aEdgeInfo.nObj2Lines - 1 : 0);
+                sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
+                sal_uInt32 nNum(nHdlNum - 2);
+                sal_Int32 nPt(0);
                 pHdl=new ImpEdgeHdl(Point(),HDL_POLY);
                 if (nNum<nO1) {
-                    nPt=nNum+1L;
+                    nPt=nNum+1;
                     if (nNum==0) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ1LINE2);
                     if (nNum==1) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ1LINE3);
                 } else {
@@ -2378,7 +2378,7 @@ SdrObject* SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
 sal_uInt32 SdrEdgeObj::GetSnapPointCount() const
 {
-    return 2L;
+    return 2;
 }
 
 Point SdrEdgeObj::GetSnapPoint(sal_uInt32 i) const
@@ -2396,14 +2396,14 @@ bool SdrEdgeObj::IsPolyObj() const
 
 sal_uInt32 SdrEdgeObj::GetPointCount() const
 {
-    return 0L;
+    return 0;
 }
 
 Point SdrEdgeObj::GetPoint(sal_uInt32 i) const
 {
     const_cast<SdrEdgeObj*>(this)->ImpUndirtyEdgeTrack();
     sal_uInt16 nCount=pEdgeTrack->GetPointCount();
-    if (0L == i)
+    if (0 == i)
         return (*pEdgeTrack)[0];
     else
         return (*pEdgeTrack)[nCount-1];
@@ -2414,9 +2414,9 @@ void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     // TODO: Need an implementation to connect differently.
     ImpUndirtyEdgeTrack();
     sal_uInt16 nCount=pEdgeTrack->GetPointCount();
-    if (0L == i)
+    if (0 == i)
         (*pEdgeTrack)[0]=rPnt;
-    if (1L == i)
+    if (1 == i)
         (*pEdgeTrack)[nCount-1]=rPnt;
     SetEdgeTrackDirty();
     SetRectsDirty();
