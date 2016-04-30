@@ -18,6 +18,7 @@
  */
 
 #include "fusel.hxx"
+#include <svl/undo.hxx>
 #include <basic/sbstar.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdpagv.hxx>
@@ -1487,6 +1488,13 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 */
 bool FuSelection::cancel()
 {
+
+    SfxObjectShell* pShell = mpViewShell->GetViewFrame()->GetObjectShell();
+    DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
+    ::svl::IUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():nullptr;
+    if(pUndoMgr)
+        pUndoMgr->Undo();
+
     if (mpView->Is3DRotationCreationActive())
     {
         mpView->ResetCreationActive();
