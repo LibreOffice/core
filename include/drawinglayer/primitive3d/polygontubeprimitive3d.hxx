@@ -47,7 +47,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC PolygonTubePrimitive3D : public PolygonHairlinePrimitive3D
         {
         private:
-            /// hold the last decompositon since it's expensive
+            /// hold the last decomposition since it's expensive
             Primitive3DContainer                         maLast3DDecomposition;
 
             /// visualisation parameters
