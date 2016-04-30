@@ -45,8 +45,8 @@ static bool CallPrePro( const OString& rInput,
                         const OString& rOutput, RscPtrPtr * pCmdLine,
                         bool bResponse )
 {
-    RscPtrPtr       aNewCmdL;   // Kommandozeile
-    RscPtrPtr       aRespCmdL;   // Kommandozeile
+    RscPtrPtr       aNewCmdL;
+    RscPtrPtr       aRespCmdL;
     RscPtrPtr *     pCmdL = &aNewCmdL;
     int             i, nRet;
     FILE*           fRspFile = nullptr;
@@ -261,11 +261,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             if( !rsc_stricmp( (*ppStr) + 1, "p" )
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
-            { // kein Preprozessor
+            { // no pre-processor
                 bPrePro = false;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "h" ) )
-            { // Hilfe anzeigen
+            { // print help
                 bHelp = true;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "presponse", 9 ) )
@@ -273,18 +273,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 bResponse = true;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fo=", 3 ) )
-            { // anderer Name fuer .res-file
+            { // another Name for .res-file
                 aResName = (*ppStr) + 4;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
-            { // anderer Name fuer .srs-file
+            { // another Name for .srs-file
                 bSetSrs  = true;
                 aSrsName = (*ppStr);
             }
         }
         else
         {
-            // Eingabedatei
             aInputList.push_back( new OString(*ppStr) );
         }
         ppStr++;
@@ -293,7 +292,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if( !aInputList.empty() )
     {
-        /* build the output file names          */
+        // build the output file names
         if (!aResName.getLength())
             aResName = OutputFile( *aInputList[ 0 ], "res" );
         if( ! bSetSrs )
