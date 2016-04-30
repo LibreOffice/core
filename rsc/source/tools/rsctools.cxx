@@ -36,40 +36,14 @@
 /* case insensitive compare of two strings up to a given length */
 int rsc_strnicmp( const char *string1, const char *string2, size_t count )
 {
-    size_t i;
-
-    for( i = 0; ( i < count ) && string1[ i ] && string2[ i ] ; i++ )
-    {
-        if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-            return -1;
-        else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-            return 1;
-    }
-    if( i == count )
-        return 0;
-    else if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-        return -1;
-    else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-        return 1;
-    return 0;
+    return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+                string1, strlen (string1), string2, strlen (string2), count);
 }
 
 /* case insensitive compare of two strings */
-int rsc_stricmp( const char *string1, const char *string2 ){
-    int i;
-
-    for( i = 0; string1[ i ] && string2[ i ]; i++ )
-    {
-        if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-            return -1;
-        else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-            return 1;
-    }
-    if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-        return -1;
-    else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-        return 1;
-    return 0;
+int rsc_stricmp( const char *string1, const char *string2 )
+{
+    return rtl_str_compareIgnoreAsciiCase( string1, string2 );
 }
 
 char* rsc_strdup( const char* pStr )
