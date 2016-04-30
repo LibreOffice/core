@@ -242,7 +242,7 @@ void l10nMem::setLanguage(const string& sLanguage,
         throw showError("language " + sLanguage + " not loaded");
 
     // create language
-    mcLangList.push_back(sLanguage);
+    mcLangList.push_back(l10nMem_lang_list_entry(sLanguage));
 
     // add language to all ENUS entries
     iSize = mcENUSlist.size();
