@@ -489,7 +489,7 @@ namespace dbaui
             @param  _pTree
                 The tree list box.
             @return
-                <TRUE/> if the cotainer could be changed otherwise <FALSE/>
+                <TRUE/> if the container could be changed otherwise <FALSE/>
         */
         bool onContainerSelect(ElementType _eType);
         /** called when an entry in a tree view has been selected

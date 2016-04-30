@@ -415,7 +415,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf90230, "empty.odt", "10-testing-addresses.od
 DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses.ods", "testing-addresses")
 {
     // Copying bookmarks for MM was broken because of the StartOfContent node copy
-    // copyied marks were off by one
+    // copied marks were off by one
     executeMailMerge();
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());

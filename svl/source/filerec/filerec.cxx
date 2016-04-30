@@ -97,7 +97,7 @@ sal_uInt32 SfxMiniRecordWriter::Close(bool bSeekToEndOfRec)
 }
 
 /**
-    Internal method for belatedly processsing a header read externally.
+    Internal method for belatedly processing a header read externally.
     If the header corresponds to an End-Of-Record tag, an error
     code is set on the stream and sal_False is returned.
     But the stream will not be reset to the record start in case of an error.

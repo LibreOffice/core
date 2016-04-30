@@ -191,7 +191,7 @@ private:
 };
 
 /** Collect all values concerning the logical and visual properties of the
-    insertion position that is used for drag-and-drop and copy-and-past.
+    insertion position that is used for drag-and-drop and copy-and-paste.
 */
 class InsertPosition
 {
