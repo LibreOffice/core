@@ -1277,95 +1277,81 @@ void DesktopLOKTest::testNotificationCompression()
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(callbackCompressionTest, &notifs));
 
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // 1
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // Should be dropped.
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 2
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 1
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 3
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // Superseeded.
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 2
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 3
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 4
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 5
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 6
-    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // 7
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 8
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // 5
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 6
     handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // 9
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // 10
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // 11
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Superseedd.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 12
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // 13
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // 14
-    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // 15
-    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // 16
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 7
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // 8
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // 9
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // 10
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // 11
     handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 17
-    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 18
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 12
+    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 13
     handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // Should be dropped.
     handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
     handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
 
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(19), notifs.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), notifs.size());
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[0]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[0]));
+    size_t i = 0;
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[1]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[1]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[2]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[2]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[3]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[3]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[4]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[4]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[5]));
-    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), std::get<1>(notifs[5]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_MOUSE_POINTER, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("text"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[6]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[6]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_MOUSE_POINTER, (int)std::get<0>(notifs[7]));
-    CPPUNIT_ASSERT_EQUAL(std::string("text"), std::get<1>(notifs[7]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[8]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[8]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_START, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_START, (int)std::get<0>(notifs[9]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[9]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_END, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_END, (int)std::get<0>(notifs[10]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[10]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_CURSOR, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[11]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[11]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CURSOR_VISIBLE, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[12]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[12]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_FORMULA, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("blah"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_START, (int)std::get<0>(notifs[13]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[13]));
-
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_END, (int)std::get<0>(notifs[14]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[14]));
-
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_CURSOR, (int)std::get<0>(notifs[15]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[15]));
-
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CURSOR_VISIBLE, (int)std::get<0>(notifs[16]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[16]));
-
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_FORMULA, (int)std::get<0>(notifs[17]));
-    CPPUNIT_ASSERT_EQUAL(std::string("blah"), std::get<1>(notifs[17]));
-
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_SET_PART, (int)std::get<0>(notifs[18]));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[18]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_SET_PART, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[i++]));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
