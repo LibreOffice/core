@@ -655,7 +655,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     mrIndex += nRepeat;
 }
 
-SchXMLPositonAttributesHelper::SchXMLPositonAttributesHelper( SvXMLImport& rImporter )
+SchXMLPositionAttributesHelper::SchXMLPositionAttributesHelper( SvXMLImport& rImporter )
     : m_rImport( rImporter )
     , m_aPosition(0,0)
     , m_aSize(0,0)
@@ -668,28 +668,28 @@ SchXMLPositonAttributesHelper::SchXMLPositonAttributesHelper( SvXMLImport& rImpo
 {
 }
 
-SchXMLPositonAttributesHelper::~SchXMLPositonAttributesHelper()
+SchXMLPositionAttributesHelper::~SchXMLPositionAttributesHelper()
 {
 }
 
-bool SchXMLPositonAttributesHelper::hasSize() const
+bool SchXMLPositionAttributesHelper::hasSize() const
 {
     return m_bHasSizeWidth && m_bHasSizeHeight;
 }
-bool SchXMLPositonAttributesHelper::hasPosition() const
+bool SchXMLPositionAttributesHelper::hasPosition() const
 {
     return m_bHasPositionX && m_bHasPositionY;
 }
-bool SchXMLPositonAttributesHelper::hasPosSize() const
+bool SchXMLPositionAttributesHelper::hasPosSize() const
 {
     return hasPosition() && hasSize();
 }
-bool SchXMLPositonAttributesHelper::isAutomatic() const
+bool SchXMLPositionAttributesHelper::isAutomatic() const
 {
     return m_bAutoSize || m_bAutoPosition;
 }
 
-void SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
+void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_SVG == nPrefix )
     {
@@ -720,7 +720,7 @@ void SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
     }
 }
 
-void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+void SchXMLPositionAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
     if( pPropStyleContext && pStylesCtxt )
     {
@@ -736,7 +736,7 @@ SchXMLCoordinateRegionContext::SchXMLCoordinateRegionContext(
           SvXMLImport& rImport
         , sal_uInt16 nPrefix
         , const OUString& rLocalName
-        , SchXMLPositonAttributesHelper& rPositioning )
+        , SchXMLPositionAttributesHelper& rPositioning )
         : SvXMLImportContext( rImport, nPrefix, rLocalName )
         , m_rPositioning( rPositioning )
 {
