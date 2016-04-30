@@ -75,8 +75,8 @@ struct hash_ptr
     inline size_t operator() ( void * p ) const
         { return reinterpret_cast<size_t>(p); }
 };
-typedef std::unordered_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
-typedef std::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
+typedef std::unordered_set< void *, hash_ptr > t_ptr_set;
+typedef std::unordered_map< void *, t_ptr_set, hash_ptr > t_ptr_map;
 
 
 class FactoryImpl
