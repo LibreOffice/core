@@ -88,9 +88,12 @@ public:
         maEntries.clear();
     }
 
-    void insert(OpenGLTexture& rTexture, const SalColor& aColor, const SalTwoRect& r2Rect)
+    bool insert(OpenGLTexture& rTexture, const SalColor& aColor, const SalTwoRect& r2Rect)
     {
         GLuint nTextureId = rTexture.Id();
+
+        if (!rTexture)
+            return false;
 
         if (maEntries.find(nTextureId) == maEntries.end())
         {
@@ -100,6 +103,8 @@ public:
 
         std::unique_ptr<AccumulatedTexturesEntry>& rEntry = maEntries[nTextureId];
         rEntry->insert(rTexture, aColor, r2Rect);
+
+        return true;
     }
 
     AccumulatedTexturesMap& getAccumulatedTexturesMap()

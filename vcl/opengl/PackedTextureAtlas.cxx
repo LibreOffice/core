@@ -110,7 +110,7 @@ Node* Node::insert(int nWidth, int nHeight, int nPadding)
 
 struct PackedTexture
 {
-    ImplOpenGLTexture* mpTexture;
+    std::unique_ptr<ImplOpenGLTexture> mpTexture;
     std::unique_ptr<Node> mpRootNode;
     int mnDeallocatedArea;
 
@@ -132,7 +132,7 @@ PackedTextureAtlasManager::~PackedTextureAtlasManager()
     for (std::unique_ptr<PackedTexture>& pPackedTexture : maPackedTextures)
     {
         // Free texture early in VCL shutdown while we have a context.
-        delete pPackedTexture->mpTexture;
+        pPackedTexture->mpTexture.reset();
     }
 }
 
@@ -152,7 +152,7 @@ OpenGLTexture PackedTextureAtlasManager::Reserve(int nWidth, int nHeight)
         Node* pNode = pPackedTexture->mpRootNode->insert(nWidth, nHeight, 1);
         if (pNode != nullptr)
         {
-            return OpenGLTexture(pPackedTexture->mpTexture, pNode->mRectangle, -1);
+            return OpenGLTexture(pPackedTexture->mpTexture.get(), pNode->mRectangle, -1);
         }
     }
     CreateNewTexture();
@@ -160,7 +160,7 @@ OpenGLTexture PackedTextureAtlasManager::Reserve(int nWidth, int nHeight)
     Node* pNode = pPackedTexture->mpRootNode->insert(nWidth, nHeight, 1);
     if (pNode != nullptr)
     {
-        return OpenGLTexture(pPackedTexture->mpTexture, pNode->mRectangle, -1);
+        return OpenGLTexture(pPackedTexture->mpTexture.get(), pNode->mRectangle, -1);
     }
     return OpenGLTexture();
 }
