@@ -370,9 +370,9 @@ ScVbaShape::Delete() throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Int32 nOrderPositon;
+    sal_Int32 nOrderPosition;
     uno::Any aOrderPostion = m_xPropertySet->getPropertyValue( "ZOrder" );
-    aOrderPostion >>= nOrderPositon;
+    aOrderPostion >>= nOrderPosition;
     switch( ZOrderCmd )
     {
     case office::MsoZOrderCmd::msoBringToFront:
@@ -382,14 +382,14 @@ ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException, std::exc
         m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( (sal_Int32)0 ) );
         break;
     case office::MsoZOrderCmd::msoBringForward:
-        nOrderPositon += 1;
-        m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( nOrderPositon ) );
+        nOrderPosition += 1;
+        m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( nOrderPosition ) );
         break;
     case office::MsoZOrderCmd::msoSendBackward:
-        if( nOrderPositon > 0 )
+        if( nOrderPosition > 0 )
         {
-            nOrderPositon -= 1;
-            m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( nOrderPositon ) );
+            nOrderPosition -= 1;
+            m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( nOrderPosition ) );
         }
         break;
     // below two commands use with Writer for text and image object.

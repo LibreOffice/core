@@ -1499,7 +1499,7 @@ void LwpLayout::Read()
 
             sal_uInt8 nFlag = pStrm->QuickReaduInt8();
             if (nFlag)
-                m_Positon.ReadIndexed(pStrm);
+                m_Position.ReadIndexed(pStrm);
         }
 
         m_LayColumns.ReadIndexed(pStrm);
