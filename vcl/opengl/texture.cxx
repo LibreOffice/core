@@ -413,11 +413,11 @@ void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& aCoord, const
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
-    double fTextureWidth(mpImpl->mnWidth);
-    double fTextureHeight(mpImpl->mnHeight);
-
     if (mpImpl)
     {
+        double fTextureWidth(mpImpl->mnWidth);
+        double fTextureHeight(mpImpl->mnHeight);
+
         x1 = (maRect.Left() + rPosAry.mnSrcX) / fTextureWidth;
         x2 = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / fTextureWidth;
 
@@ -472,7 +472,9 @@ void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
 
 OpenGLTexture OpenGLTexture::GetWholeTexture()
 {
-    return OpenGLTexture(mpImpl, Rectangle(Point(0, 0), Size(mpImpl->mnWidth, mpImpl->mnHeight)), -1);
+    if (mpImpl)
+        return OpenGLTexture(mpImpl, Rectangle(Point(0, 0), Size(mpImpl->mnWidth, mpImpl->mnHeight)), -1);
+    return OpenGLTexture();
 }
 
 GLenum OpenGLTexture::GetFilter() const

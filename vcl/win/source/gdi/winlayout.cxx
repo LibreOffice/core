@@ -127,10 +127,12 @@ public:
         gGlobalGlyphCache.get()->maGlyphCaches.erase(this);
     }
 
-    void ReserveTextureSpace(OpenGLGlyphDrawElement& rElement, int nWidth, int nHeight)
+    bool ReserveTextureSpace(OpenGLGlyphDrawElement& rElement, int nWidth, int nHeight)
     {
         GlobalGlyphCache* pGlobalGlyphCache = gGlobalGlyphCache.get();
         rElement.maTexture = pGlobalGlyphCache->maPackedTextureAtlas.Reserve(nWidth, nHeight);
+        if (!rElement.maTexture)
+            return false;
         std::vector<GLuint> aTextureIDs = pGlobalGlyphCache->maPackedTextureAtlas.ReduceTextureNumber(8);
         if (!aTextureIDs.empty())
         {
@@ -139,6 +141,7 @@ public:
                 pGlyphCache->RemoveTextures(aTextureIDs);
             }
         }
+        return true;
     }
 
     void RemoveTextures(std::vector<GLuint>& rTextureIDs)
@@ -508,8 +511,11 @@ bool ImplWinFontEntry::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex
 
     pTxt->ReleaseFont();
 
-    maGlyphCache.ReserveTextureSpace(aElement, nBitmapWidth, nBitmapHeight);
-    aDC.copyToTexture(aElement.maTexture);
+    if (!maGlyphCache.ReserveTextureSpace(aElement, nBitmapWidth, nBitmapHeight))
+        return false;
+    if (!aDC.copyToTexture(aElement.maTexture))
+        return false;
+
     maGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
 
     SelectFont(aDC.getCompatibleHDC(), hOrigFont);
@@ -1459,11 +1465,11 @@ bool SimpleWinLayout::CacheGlyphs(SalGraphics& rGraphics) const
             nCodePoint = mpOutGlyphs[i];
         }
 
-        if (mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
-            continue;
-
-        if (!mrWinFontEntry.CacheGlyphToAtlas(false, nCodePoint, *this, rGraphics))
-            return false;
+        if (!mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
+        {
+            if (!mrWinFontEntry.CacheGlyphToAtlas(false, nCodePoint, *this, rGraphics))
+                return false;
+        }
     }
 
     return true;
@@ -1507,6 +1513,9 @@ bool SimpleWinLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
 
         OpenGLGlyphDrawElement& rElement(mrWinFontEntry.GetGlyphCache().GetDrawElement(nCodePoint));
         OpenGLTexture& rTexture = rElement.maTexture;
+
+        if (!rTexture)
+            return false;
 
         SalTwoRect a2Rects(0, 0,
                            rTexture.GetWidth(), rTexture.GetHeight(),
@@ -2729,12 +2738,11 @@ bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
         for (int i = 0; i < mnGlyphCount; i++)
         {
             int nCodePoint = mpOutGlyphs[i];
-
-            if (mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
-                continue;
-
-            if (!mrWinFontEntry.CacheGlyphToAtlas(true, nCodePoint, *this, rGraphics))
-                return false;
+            if (!mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
+            {
+                if (!mrWinFontEntry.CacheGlyphToAtlas(true, nCodePoint, *this, rGraphics))
+                    return false;
+            }
         }
     }
 
@@ -2993,6 +3001,9 @@ bool UniscribeLayout::DrawCachedGlyphsUsingTextures(SalGraphics& rGraphics) cons
 
             OpenGLGlyphDrawElement& rElement = mrWinFontEntry.GetGlyphCache().GetDrawElement(mpOutGlyphs[i]);
             OpenGLTexture& rTexture = rElement.maTexture;
+
+            if (!rTexture)
+                return false;
 
             if (rElement.mbVertical)
             {

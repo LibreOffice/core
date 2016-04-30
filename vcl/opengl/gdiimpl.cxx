@@ -2497,8 +2497,11 @@ void OpenGLSalGraphicsImpl::doFlush()
 {
     FlushDeferredDrawing();
 
-    mpContext->state()->scissor().disable();
-    mpContext->state()->stencil().disable();
+    if (OpenGLContext::hasCurrent())
+    {
+        mpContext->state()->scissor().disable();
+        mpContext->state()->stencil().disable();
+    }
 
     if( IsOffscreen() )
         return;
