@@ -1287,7 +1287,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (css::io::IO
     // skip data of new version
     skipBytes( nLen - m_rMarkable->offsetToMark( nMark ) );
 
-    bool bLoadSuccesfull = true;
+    bool bLoadSuccessful = true;
     if( nId )
     {
         if( !aName.isEmpty() )
@@ -1312,14 +1312,14 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (css::io::IO
             else
             {
                 // no service with this name could be instantiated
-                bLoadSuccesfull = false;
+                bLoadSuccessful = false;
             }
         }
         else {
             if( m_aPersistVector.size() < nId )
             {
                 // id unknown, load failure !
-                bLoadSuccesfull = false;
+                bLoadSuccessful = false;
             }
             else
             {
@@ -1333,7 +1333,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (css::io::IO
     skipBytes( nObjLen + nLen - m_rMarkable->offsetToMark( nMark ) );
     m_rMarkable->deleteMark( nMark );
 
-    if( ! bLoadSuccesfull )
+    if( ! bLoadSuccessful )
     {
         throw WrongFormatException();
     }
