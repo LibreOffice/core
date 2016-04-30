@@ -35,7 +35,7 @@
 #include <numeric>
 
 
-// decompositon helpers for extrude/lathe (rotation) objects
+// decomposition helpers for extrude/lathe (rotation) objects
 
 namespace
 {
