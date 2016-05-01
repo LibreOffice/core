@@ -338,8 +338,8 @@ void BackingWindow::initializeLocalView()
     {
         mbLocalViewInitialized = true;
         mpLocalView->Populate();
-        mpLocalView->showRootRegion();
         mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
+        mpLocalView->showAllTemplates();
     }
 }
 
