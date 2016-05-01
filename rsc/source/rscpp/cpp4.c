@@ -465,7 +465,7 @@ void expand(DEFBUF* tokenp)
 /*
  * Collect the actual parameters for this macro.  TRUE if ok.
  */
-FILE_LOCAL int expcollect()
+int expcollect()
 {
     int c;
     int paren;                  /* For embedded ()'s    */
@@ -533,7 +533,7 @@ FILE_LOCAL int expcollect()
 /*
  * Stuff the macro body, replacing formal parameters by actual parameters.
  */
-FILE_LOCAL void expstuff(DEFBUF* tokenp)
+void expstuff(DEFBUF* tokenp)
 {
     int c;                      /* Current character    */
     char* inp;                  /* -> repl string       */
