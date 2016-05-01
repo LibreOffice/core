@@ -42,7 +42,7 @@ namespace abp
         return pFilter;
     }
 
-    FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
+    FinalPage::FinalPage( OAddressBookSourcePilot* _pParent )
         : AddressBookSourcePage(_pParent, "DataSourcePage",
             "modules/sabpilot/ui/datasourcepage.ui")
     {

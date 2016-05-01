@@ -26,7 +26,7 @@
 
 namespace abp
 {
-    FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
+    FieldMappingPage::FieldMappingPage( OAddressBookSourcePilot* _pParent )
         : AddressBookSourcePage(_pParent, "FieldAssignPage",
             "modules/sabpilot/ui/fieldassignpage.ui")
     {

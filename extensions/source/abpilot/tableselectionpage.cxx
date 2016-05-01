@@ -27,7 +27,7 @@
 namespace abp
 {
 
-    TableSelectionPage::TableSelectionPage( OAddessBookSourcePilot* _pParent )
+    TableSelectionPage::TableSelectionPage( OAddressBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, "SelectTablePage",
           "modules/sabpilot/ui/selecttablepage.ui")
     {

@@ -32,7 +32,7 @@ namespace abp
         VclPtr<FixedText>  m_pErrorMessage;
 
     public:
-        explicit AdminDialogInvokationPage(OAddessBookSourcePilot* _pParent);
+        explicit AdminDialogInvokationPage(OAddressBookSourcePilot* _pParent);
         virtual ~AdminDialogInvokationPage();
         virtual void dispose() override;
     protected:

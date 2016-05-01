@@ -29,8 +29,8 @@
 namespace abp
 {
 
-    typedef ::svt::RoadmapWizard OAddessBookSourcePilot_Base;
-    class OAddessBookSourcePilot : public OAddessBookSourcePilot_Base
+    typedef ::svt::RoadmapWizard OAddressBookSourcePilot_Base;
+    class OAddressBookSourcePilot : public OAddressBookSourcePilot_Base
     {
     protected:
         css::uno::Reference< css::uno::XComponentContext >
@@ -42,7 +42,7 @@ namespace abp
 
     public:
         /// ctor
-        OAddessBookSourcePilot(
+        OAddressBookSourcePilot(
             vcl::Window* _pParent,
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
@@ -56,7 +56,7 @@ namespace abp
 
         bool                connectToDataSource( bool _bForceReConnect );
 
-        void                    travelNext( ) { OAddessBookSourcePilot_Base::travelNext(); }
+        void                    travelNext( ) { OAddressBookSourcePilot_Base::travelNext(); }
 
         /// to be called when the selected type changed
         void                    typeSelectionChanged( AddressSourceType _eType );

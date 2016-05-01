@@ -114,7 +114,7 @@ namespace abp
 
     VclPtr<Dialog> OABSPilotUno::createDialog(vcl::Window* _pParent)
     {
-        return VclPtr<OAddessBookSourcePilot>::Create(_pParent, m_aContext );
+        return VclPtr<OAddressBookSourcePilot>::Create(_pParent, m_aContext );
     }
 
 
@@ -137,7 +137,7 @@ namespace abp
     {
         if ( _nExecutionResult == RET_OK )
         {
-            const AddressSettings& aSettings = static_cast<OAddessBookSourcePilot*>(m_pDialog.get())->getSettings();
+            const AddressSettings& aSettings = static_cast<OAddressBookSourcePilot*>(m_pDialog.get())->getSettings();
             m_sDataSourceName = aSettings.bRegisterDataSource ? aSettings.sRegisteredDataSourceName : aSettings.sDataSourceName;
         }
     }
