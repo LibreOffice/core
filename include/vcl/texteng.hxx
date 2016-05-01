@@ -114,11 +114,11 @@ private:
 
     vcl::Font           maFont;
     Color               maTextColor;
-    long                mnCharHeight;
     sal_uInt16          mnFixCharWidth100;
 
     sal_Int32           mnMaxTextLen;
     long                mnMaxTextWidth;
+    long                mnCharHeight;
     long                mnCurTextWidth;
     long                mnCurTextHeight;
     long                mnDefTab;
