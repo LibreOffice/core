@@ -39,6 +39,8 @@ def create_range_name(xContext):
     xAddBtn = xAddNameDlg.getChild("add")
     xAddBtn.executeAction("CLICK", tuple())
 
+    ui_test.close_doc()
+
 def create_local_range_name(xContext):
     xUITest = xContext.ServiceManager.createInstanceWithContext(
             "org.libreoffice.uitest.UITest", xContext)
