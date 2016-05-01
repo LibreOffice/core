@@ -42,11 +42,6 @@ namespace xmlscript
             getSupportedServiceNames_XMLBasicImporter, ::cppu::createSingleComponentFactory,
             nullptr, 0
         },
-        {
-            create_XMLOasisBasicImporter, getImplementationName_XMLOasisBasicImporter,
-            getSupportedServiceNames_XMLOasisBasicImporter, ::cppu::createSingleComponentFactory,
-            nullptr, 0
-        },
         { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 }

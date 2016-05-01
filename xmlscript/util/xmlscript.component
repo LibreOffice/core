@@ -32,7 +32,8 @@
      constructor="com_sun_star_comp_xmlscript_XMLOasisBasicExporter">
     <service name="com.sun.star.document.XMLOasisBasicExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.xmlscript.XMLOasisBasicImporter">
+  <implementation name="com.sun.star.comp.xmlscript.XMLOasisBasicImporter"
+     constructor="com_sun_star_comp_xmlscript_XMLOasisBasicImporter">
     <service name="com.sun.star.document.XMLOasisBasicImporter"/>
   </implementation>
 </component>

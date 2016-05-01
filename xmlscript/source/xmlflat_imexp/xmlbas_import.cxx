@@ -510,17 +510,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return aNames;
     }
 
-    OUString getImplementationName_XMLOasisBasicImporter()
-    {
-        return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" );
-    }
-
-    Sequence< OUString > getSupportedServiceNames_XMLOasisBasicImporter()
-    {
-        Sequence< OUString > aNames { "com.sun.star.document.XMLOasisBasicImporter" };
-        return aNames;
-    }
-
     // XMLBasicImporterBase
 
     XMLBasicImporterBase::XMLBasicImporterBase( const Reference< XComponentContext >& rxContext, bool bOasis )
@@ -679,12 +668,13 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     OUString XMLOasisBasicImporter::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        return getImplementationName_XMLOasisBasicImporter();
+        return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" );
     }
 
     Sequence< OUString > XMLOasisBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_XMLOasisBasicImporter();
+        Sequence< OUString > aNames { "com.sun.star.document.XMLOasisBasicImporter" };
+        return aNames;
     }
 
     // component operations
@@ -695,12 +685,14 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return static_cast< lang::XTypeProvider * >( new XMLBasicImporter( xContext ) );
     }
 
-    Reference< XInterface > SAL_CALL create_XMLOasisBasicImporter(
-        Reference< XComponentContext > const & xContext )
-    {
-        return static_cast< lang::XTypeProvider * >( new XMLOasisBasicImporter( xContext ) );
-    }
-
 }   // namespace xmlscript
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_xmlscript_XMLOasisBasicImporter(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new xmlscript::XMLOasisBasicImporter(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
