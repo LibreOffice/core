@@ -56,6 +56,7 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
 
 GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             Control         ( pParent, nStyle ),
+            aUpdateIdle     ( "svx GraphCtrl Update" ),
             aMap100         ( MAP_100TH_MM ),
             nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
