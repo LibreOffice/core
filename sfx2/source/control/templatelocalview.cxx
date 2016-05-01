@@ -10,7 +10,10 @@
 #include <sfx2/templatelocalview.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <sfx2/doctempl.hxx>
+#include <sfx2/inputdlg.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <svl/inettype.hxx>
@@ -26,6 +29,16 @@
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+#include "../doc/doc.hrc"
+
+#define MNI_OPEN               1
+#define MNI_EDIT               2
+#define MNI_DEFAULT_TEMPLATE   3
+#define MNI_DELETE             4
+#define MNI_RENAME             5
+#define MNI_PROPERTIES         6
+#define MNI_SAVE               1
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -52,6 +65,8 @@ void TemplateLocalView::dispose()
 
     maRegions.clear();
 
+    maAllTemplates.clear();
+
     delete mpDocTemplates;
     TemplateAbstractView::dispose();
 }
@@ -62,6 +77,8 @@ void TemplateLocalView::Populate ()
         delete pRegion;
 
     maRegions.clear();
+
+    maAllTemplates.clear();
 
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -91,6 +108,7 @@ void TemplateLocalView::Populate ()
                                                                           getThumbnailHeight());
 
             pItem->maTemplates.push_back(aProperties);
+            maAllTemplates.push_back(aProperties);
         }
 
         lcl_updateThumbnails(pItem);
@@ -120,44 +138,19 @@ void TemplateLocalView::reload ()
         }
     }
     else
-        showRootRegion();
+        showAllTemplates();
 }
 
-void TemplateLocalView::showRootRegion()
+void TemplateLocalView::showAllTemplates()
 {
-    mnHeaderHeight = 0;
-    mnCurRegionId = 0;
-    maCurRegionName.clear();
-
-    // Clone root region items so they don't get invalidated when we open another region
-    std::vector<ThumbnailViewItem*> items(maRegions.size());
-    for (int i = 0, n = maRegions.size(); i < n; ++i)
-    {
-        TemplateContainerItem *pCur = maRegions[i];
-        TemplateContainerItem *pItem = new TemplateContainerItem(*this, pCur->mnId);
-        pItem->mnRegionId = pCur->mnRegionId;
-        pItem->maTitle = pCur->maTitle;
-        pItem->maTemplates = pCur->maTemplates;
-
-        items[i] = pItem;
-    }
-
-    maAllButton->Show(false);
-    maFTName->Show(false);
-
-    updateItems(items);
-
+    insertItems(maAllTemplates);
     maOpenRegionHdl.Call(nullptr);
 }
 
 void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
 {
-    mnHeaderHeight = maAllButton->GetSizePixel().getHeight() + maAllButton->GetPosPixel().Y() * 2;
-
     mnCurRegionId = static_cast<TemplateContainerItem*>(pItem)->mnRegionId+1;
     maCurRegionName = pItem->maTitle;
-    maAllButton->Show();
-    maFTName->Show();
 
     insertItems(reinterpret_cast<TemplateContainerItem*>(pItem)->maTemplates);
 
@@ -170,11 +163,88 @@ void TemplateLocalView::showRegion(const OUString &rName)
     {
         if (pRegion->maTitle == rName)
         {
-            maFTName->SetText(rName);
             showRegion(pRegion);
             break;
         }
     }
+}
+
+void TemplateLocalView::createManageModeContextMenu()
+{
+    std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
+    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
+    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
+    pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+    pItemMenu->InsertSeparator();
+    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
+    pItemMenu->InsertItem(MNI_RENAME,SfxResId(STR_RENAME).toString());
+    pItemMenu->InsertSeparator();
+    pItemMenu->InsertItem(MNI_PROPERTIES,SfxResId(STR_PROPERTIES).toString());
+    deselectItems();
+    maSelectedItem->setSelection(true);
+    pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
+    pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    Invalidate();
+}
+
+IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    switch(nMenuId)
+    {
+    case MNI_OPEN:
+        maOpenTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_EDIT:
+        maEditTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_DELETE:
+        maDeleteTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_RENAME:
+    {
+        ScopedVclPtrInstance< InputDialog > m_pTitleEditDlg( SfxResId(STR_RENAME_TEMPLATE).toString(), this);
+        OUString sOldTitle = maSelectedItem->getHelpText();
+        m_pTitleEditDlg->SetEntryText( sOldTitle );
+        m_pTitleEditDlg->HideHelpBtn();
+
+        if(!m_pTitleEditDlg->Execute())
+            break;
+        OUString sNewTitle = comphelper::string::strip( m_pTitleEditDlg->GetEntryText(), ' ');
+
+        if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
+        {
+            maSelectedItem->setTitle(sNewTitle);
+            maSelectedItem->setEditTitle(true);
+        }
+    }
+        break;
+    case MNI_DEFAULT_TEMPLATE:
+        maDefaultTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_PROPERTIES:
+        //TODO
+        break;
+    default:
+        break;
+    }
+
+    return false;
+}
+
+void TemplateLocalView::createSaveModeContextMenu()
+{
+    std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
+    pItemMenu->InsertItem(MNI_SAVE,SfxResId(STR_SAVEDOC).toString());
+    pItemMenu->InsertSeparator();
+    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_PROPERTIES).toString());
+    pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+    deselectItems();
+    maSelectedItem->setSelection(true);
+    pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
+    pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    Invalidate();
 }
 
 sal_uInt16 TemplateLocalView::getCurRegionItemId() const
