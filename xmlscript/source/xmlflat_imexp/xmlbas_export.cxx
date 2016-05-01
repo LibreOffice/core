@@ -41,17 +41,6 @@ namespace xmlscript
 
     // component operations
 
-    OUString getImplementationName_XMLBasicExporter()
-    {
-        return OUString( "com.sun.star.comp.xmlscript.XMLBasicExporter" );
-    }
-
-    Sequence< OUString > getSupportedServiceNames_XMLBasicExporter()
-    {
-        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicExporter" };
-        return aNames;
-    }
-
     OUString getImplementationName_XMLOasisBasicExporter()
     {
         return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" );
@@ -376,12 +365,13 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        return getImplementationName_XMLBasicExporter();
+        return OUString( "com.sun.star.comp.xmlscript.XMLBasicExporter" );
     }
 
     Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_XMLBasicExporter();
+        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicExporter" };
+        return aNames;
     }
 
     // XMLOasisBasicExporter
@@ -409,12 +399,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     // component operations
 
-    Reference< XInterface > SAL_CALL create_XMLBasicExporter(
-        Reference< XComponentContext > const &  )
-    {
-        return static_cast< lang::XTypeProvider * >( new XMLBasicExporter );
-    }
-
     Reference< XInterface > SAL_CALL create_XMLOasisBasicExporter(
         Reference< XComponentContext > const &  )
     {
@@ -422,5 +406,13 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     }
 
 }   // namespace xmlscript
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_xmlscript_XMLBasicExporter(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new xmlscript::XMLBasicExporter());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
