@@ -305,7 +305,7 @@ int control(int counter)
  * is always suppressed, so we don't need to evaluate anything.  This
  * suppresses unnecessary warnings.
  */
-FILE_LOCAL void doif(int hash)
+void doif(int hash)
 {
     int c;
     int found;
@@ -358,7 +358,7 @@ FILE_LOCAL void doif(int hash)
  * Note: the November 12 draft forbids '>' in the #include <file> format.
  * This restriction is unnecessary and not implemented.
  */
-FILE_LOCAL void doinclude()
+void doinclude()
 {
     int c;
     int delim;
@@ -406,7 +406,7 @@ FILE_LOCAL void doinclude()
  * active files.  Returns TRUE if the file was opened, FALSE
  * if openinclude() fails.  No error message is printed.
  */
-FILE_LOCAL int openinclude(char* filename, int searchlocal)
+int openinclude(char* filename, int searchlocal)
 {
     char** incptr;
     char tmpname[NFWORK]; /* Filename work area   */
@@ -500,7 +500,7 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
  * node/device/directory part of the string is copied to result and
  * hasdirectory returns TRUE.  Else, nothing is copied and it returns FALSE.
  */
-FILE_LOCAL int hasdirectory(char* source, char* result, int max)
+int hasdirectory(char* source, char* result, int max)
 {
 #if HOST == SYS_UNIX
     char* tp;

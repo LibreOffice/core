@@ -69,11 +69,6 @@
  *              This should be defined as "" if cpp is to replace
  *              the "standard" C pre-processor.
  *
- * FILE_LOCAL   marks functions which are referenced only in the
- *              file they reside.  Some C compilers allow these
- *              to be marked "static" even though they are referenced
- *              by "extern" statements elsewhere.
- *
  * OK_DATE      Predefines the compilation date if set TRUE.
  *              Not permitted by the Nov. 12, 1984 Draft Standard.
  *
@@ -175,10 +170,6 @@
 #define VT                      '\013'          /* Vertical Tab CTRL/K  */
 #endif
 
-
-#ifndef FILE_LOCAL
-#define FILE_LOCAL                              /* Others are global    */
-#endif
 
 #endif // INCLUDED_RSC_SOURCE_RSCPP_CPPDEF_H
 

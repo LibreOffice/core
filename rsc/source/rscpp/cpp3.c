@@ -369,7 +369,7 @@ int readoptions(char* filename, char*** pfargv)
  * This routine forces the -D and -U arguments to uppercase.
  * It is called only on cpp startup by dooptions().
  */
-FILE_LOCAL void zap_uc(char* ap)
+void zap_uc(char* ap)
 {
     while (*ap != EOS)
     {
