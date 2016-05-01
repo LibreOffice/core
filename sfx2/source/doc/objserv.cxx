@@ -848,11 +848,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            ScopedVclPtrInstance< SfxTemplateManagerDlg > aDlg;
-            aDlg->setDocumentModel(GetModel());
-            aDlg->setSaveMode();
-            aDlg->Execute();
-
+            // new dialog is to be created
+            // meanwhile, remove the save feature of templates
             break;
         }
 
