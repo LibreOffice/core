@@ -481,7 +481,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         {
             static_cast<SvxAuthorField*>(pData)->SetFormat( SVXAUTHORFORMAT_SHORTNAME );
         }
-        else if( mpImpl->mnInt16 >= SVXAUTHORFORMAT_FULLNAME || mpImpl->mnInt16 <= SVXAUTHORFORMAT_SHORTNAME )
+        else if( mpImpl->mnInt16 >= SVXAUTHORFORMAT_FULLNAME && mpImpl->mnInt16 <= SVXAUTHORFORMAT_SHORTNAME )
         {
             static_cast<SvxAuthorField*>(pData)->SetFormat( (SvxAuthorFormat) mpImpl->mnInt16 );
         }
