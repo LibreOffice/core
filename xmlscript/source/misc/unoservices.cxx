@@ -32,11 +32,6 @@ namespace xmlscript
             getSupportedServiceNames_DocumentHandlerImpl, ::cppu::createSingleComponentFactory,
             nullptr, 0
         },
-        {
-            create_XMLBasicExporter, getImplementationName_XMLBasicExporter,
-            getSupportedServiceNames_XMLBasicExporter, ::cppu::createSingleComponentFactory,
-            nullptr, 0
-        },
         { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 }
