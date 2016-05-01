@@ -52,6 +52,8 @@ void TemplateLocalView::dispose()
 
     maRegions.clear();
 
+    maAllTemplates.clear();
+
     delete mpDocTemplates;
     TemplateAbstractView::dispose();
 }
@@ -62,6 +64,8 @@ void TemplateLocalView::Populate ()
         delete pRegion;
 
     maRegions.clear();
+
+    maAllTemplates.clear();
 
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -91,6 +95,7 @@ void TemplateLocalView::Populate ()
                                                                           getThumbnailHeight());
 
             pItem->maTemplates.push_back(aProperties);
+            maAllTemplates.push_back(aProperties);
         }
 
         lcl_updateThumbnails(pItem);
@@ -120,44 +125,19 @@ void TemplateLocalView::reload ()
         }
     }
     else
-        showRootRegion();
+        showAllTemplates();
 }
 
-void TemplateLocalView::showRootRegion()
+void TemplateLocalView::showAllTemplates()
 {
-    mnHeaderHeight = 0;
-    mnCurRegionId = 0;
-    maCurRegionName.clear();
-
-    // Clone root region items so they don't get invalidated when we open another region
-    std::vector<ThumbnailViewItem*> items(maRegions.size());
-    for (int i = 0, n = maRegions.size(); i < n; ++i)
-    {
-        TemplateContainerItem *pCur = maRegions[i];
-        TemplateContainerItem *pItem = new TemplateContainerItem(*this, pCur->mnId);
-        pItem->mnRegionId = pCur->mnRegionId;
-        pItem->maTitle = pCur->maTitle;
-        pItem->maTemplates = pCur->maTemplates;
-
-        items[i] = pItem;
-    }
-
-    maAllButton->Show(false);
-    maFTName->Show(false);
-
-    updateItems(items);
-
+    insertItems(maAllTemplates);
     maOpenRegionHdl.Call(nullptr);
 }
 
 void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
 {
-    mnHeaderHeight = maAllButton->GetSizePixel().getHeight() + maAllButton->GetPosPixel().Y() * 2;
-
     mnCurRegionId = static_cast<TemplateContainerItem*>(pItem)->mnRegionId+1;
     maCurRegionName = pItem->maTitle;
-    maAllButton->Show();
-    maFTName->Show();
 
     insertItems(reinterpret_cast<TemplateContainerItem*>(pItem)->maTemplates);
 
@@ -170,7 +150,6 @@ void TemplateLocalView::showRegion(const OUString &rName)
     {
         if (pRegion->maTitle == rName)
         {
-            maFTName->SetText(rName);
             showRegion(pRegion);
             break;
         }
