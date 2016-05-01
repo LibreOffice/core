@@ -12,6 +12,9 @@
 
 #include <sfx2/thumbnailview.hxx>
 
+class TemplateViewItem;
+class PopupMenu;
+
 class TemplateSearchView : public ThumbnailView
 {
 public:
@@ -20,6 +23,18 @@ public:
 
     void setOpenTemplateHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
+    DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
+
+    void setRightClickHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void createContextMenu();
+
     void AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
                     const OUString &rTitle, const OUString &rSubtitle,
                     const OUString &rPath, const BitmapEx &rImage );
@@ -27,8 +42,18 @@ public:
 protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+
 protected:
+    TemplateViewItem *maSelectedItem;
+
+    Point maPosition;
+
     Link<ThumbnailViewItem*, void> maOpenTemplateHdl;
+    Link<ThumbnailViewItem*, void> maRightClickHdl;
+    Link<ThumbnailViewItem*,void> maEditTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEW_HXX

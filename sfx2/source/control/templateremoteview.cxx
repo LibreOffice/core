@@ -60,12 +60,12 @@ VCL_BUILDER_DECL_FACTORY(TemplateRemoteView)
     rRet = VclPtr<TemplateRemoteView>::Create(pParent, WB_VSCROLL, false);
 }
 
-void TemplateRemoteView::showRootRegion()
+void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
 {
     //TODO:
 }
 
-void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
+void TemplateRemoteView::showAllTemplates()
 {
     //TODO:
 }
@@ -83,7 +83,6 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem)
 
     mnCurRegionId = pItem->mnId;
     maCurRegionName = pItem->maTitle;
-    maFTName->SetText(maCurRegionName);
 
     OUString aURL = pItem->getURL();
 
@@ -170,16 +169,6 @@ sal_uInt16 TemplateRemoteView::createRegion(const OUString &/*rName*/)
 {
     // TODO: Create new folder in current remote repository
     return 0;
-}
-
-bool TemplateRemoteView::isNestedRegionAllowed() const
-{
-    return true;
-}
-
-bool TemplateRemoteView::isImportAllowed() const
-{
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
