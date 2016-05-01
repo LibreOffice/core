@@ -24,6 +24,8 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 /* do_pagein */
 static void do_pagein (const char * filename)
@@ -42,11 +44,38 @@ static void do_pagein (const char * filename)
     file_image_close (&image);
 }
 
+int isRotational(char const * path)
+{
+#ifdef LINUX
+    FILE * fp = NULL;
+    char fullpath[4096];
+    struct stat out;
+    int major, minor;
+    char type;
+    if( !stat( path , &out ) == 0)
+        return 1;
+    major = major(out.st_dev);
+    minor = 0; /* minor(out.st_dev); only the device itself has a queue */
+    sprintf(fullpath,"/sys/dev/block/%d:%d/queue/rotational",major,minor);
+    if ((fp = fopen (fullpath, "r")))
+    {
+        if (fgets(&type, 1, fp))
+        {
+            fclose(fp);
+            return type == '1';
+        }
+    }
+#endif
+    return 1;
+}
+
 void pagein_execute(char const * path, char const * file)
 {
     char fullpath[4096];
     char *p = NULL;
     FILE   * fp = NULL;
+    if(!isRotational(path))
+        return;
     memset(fullpath, 0, sizeof(fullpath));
     strncpy (fullpath, path, 3000);
     if (!(p = strrchr (fullpath, '/')))
