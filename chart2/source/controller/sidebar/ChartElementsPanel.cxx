@@ -116,7 +116,14 @@ void setLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel, boo
 
 bool isTitleVisisble(const css::uno::Reference<css::frame::XModel>& xModel, TitleHelper::eTitleType eTitle)
 {
-    return TitleHelper::getTitle(eTitle, xModel).is();
+    css::uno::Reference<css::uno::XInterface> xTitle = TitleHelper::getTitle(eTitle, xModel);
+    if (!xTitle.is())
+        return false;
+
+    css::uno::Reference<css::beans::XPropertySet> xPropSet(xTitle, css::uno::UNO_QUERY_THROW);
+    css::uno::Any aAny = xPropSet->getPropertyValue("Visible");
+    bool bVisible = aAny.get<bool>();
+    return bVisible;
 }
 
 bool isGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridType eType)
@@ -581,11 +588,11 @@ void ChartElementsPanel::setTitleVisible(TitleHelper::eTitleType eTitle, bool bV
     if (bVisible)
     {
         OUString aText = eTitle == TitleHelper::SUB_TITLE ? maTextSubTitle : maTextTitle;
-        TitleHelper::createTitle(eTitle, aText, mxModel, comphelper::getProcessComponentContext());
+        TitleHelper::createOrShowTitle(eTitle, aText, mxModel, comphelper::getProcessComponentContext());
     }
     else
     {
-        TitleHelper::removeTitle(eTitle, mxModel);
+        TitleHelper::hideTitle(eTitle, mxModel);
     }
 }
 
