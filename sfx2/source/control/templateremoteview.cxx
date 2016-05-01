@@ -70,6 +70,11 @@ void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
     //TODO:
 }
 
+void TemplateRemoteView::showAllTemplates()
+{
+    //TODO:
+}
+
 bool TemplateRemoteView::loadRepository (TemplateRepository* pItem)
 {
     if (!pItem)

@@ -62,7 +62,7 @@
 
 const char TM_SETTING_MANAGER[] = "TemplateManager";
 const char TM_SETTING_LASTFOLDER[] = "LastFolder";
-const char TM_SETTING_FILTER[] = "SelectedFilter";
+const char TM_SETTING_LASTAPPLICATION[] = "LastApplication";
 
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
@@ -86,6 +86,13 @@ const char FILTER_SHEETS[] = "filter_sheets";
 const char FILTER_PRESENTATIONS[] = "filter_presentations";
 const char FILTER_DRAWINGS[] = "filter_draws";
 
+const char ALL_APP_TEMPLATES[] = "All Applications";
+const char WRITER_TEMPLATES[] = "Documents";
+const char CALC_TEMPLATES[] = "Spreadsheets";
+const char IMPRESS_TEMPLATES[] = "Presentations";
+const char DRAW_TEMPLATES[] = "Drawings";
+const char ALL_CATEGORY_TEMPLATES[] = "All Categories";
+
 #define MNI_ACTION_SORT_NAME 1
 #define MNI_ACTION_REFRESH   2
 #define MNI_ACTION_DEFAULT   3
@@ -94,6 +101,10 @@ const char FILTER_DRAWINGS[] = "filter_draws";
 #define MNI_REPOSITORY_LOCAL 1
 #define MNI_REPOSITORY_NEW   2
 #define MNI_REPOSITORY_BASE  3
+#define MNI_WRITER           1
+#define MNI_CALC             2
+#define MNI_IMPRESS          3
+#define MNI_DRAW             4
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -182,6 +193,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
       maRepositories()
 {
     get(mpTabControl, "tab_control");
+    get(mpSearchFilter, "search_filter");
+    get(mpSearchEdit, "search_edit");
+    get(mpCBApp, "filter_application");
+    get(mpCBFolder, "filter_folder");
     get(mpSearchEdit, "search_edit");
     get(mpViewBar, "action_view");
     get(mpActionBar, "action_action");
@@ -245,8 +260,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
                               TEMPLATE_ITEM_PADDING);
 
     mpLocalView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
-    mpLocalView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg,OpenRegionHdl));
-    mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    mpLocalView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg, OpenRegionHdl));
+    mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg, OpenTemplateHdl));
+    mpLocalView->setEditTemplateHdl(LINK(this,SfxTemplateManagerDlg, EditTemplateHdl));
+    mpLocalView->setDeleteTemplateHdl(LINK(this,SfxTemplateManagerDlg, DeleteTemplateHdl));
+    mpLocalView->setDefaultTemplateHdl(LINK(this,SfxTemplateManagerDlg, DefaultTemplateHdl));
 
     // Set online view position and dimensions
     mpRemoteView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -293,15 +311,21 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     //setSaveMode(); //Uncomment this line to put template manager into Save As mode
 
     mpLocalView->Populate();
-    mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
-
-    readSettings();
+    mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
 
     if(!mbIsSaveMode)
         mpOKButton->Disable();
 
     if(mbIsSaveMode)
         mpOKButton->SetText( SfxResId(STR_SAVEDOC).toString() );
+
+    fillAppComboBox();
+    fillFolderComboBox();
+
+    mpCBApp->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectApplicationHdl));
+    mpCBFolder->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectRegionHdl));
+
+    readSettings();
 
     mpLocalView->Show();
 }
@@ -392,10 +416,50 @@ FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentFilter()
     return FILTER_APPLICATION::NONE;
 }
 
+FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter()
+{
+    const OUString nCurAppId = mpCBApp->GetSelectEntry();
+
+    if (nCurAppId.match(WRITER_TEMPLATES))
+        return FILTER_APPLICATION::WRITER;
+    else if (nCurAppId.match(IMPRESS_TEMPLATES))
+        return FILTER_APPLICATION::IMPRESS;
+    else if (nCurAppId.match(CALC_TEMPLATES))
+        return FILTER_APPLICATION::CALC;
+    else if (nCurAppId.match(DRAW_TEMPLATES))
+        return FILTER_APPLICATION::DRAW;
+
+    return FILTER_APPLICATION::NONE;
+}
+
+void SfxTemplateManagerDlg::fillAppComboBox()
+{
+    mpCBApp->InsertEntry(OUString(ALL_APP_TEMPLATES));
+    mpCBApp->InsertEntry(OUString(WRITER_TEMPLATES), MNI_WRITER);
+    mpCBApp->InsertEntry(OUString(CALC_TEMPLATES), MNI_CALC);
+    mpCBApp->InsertEntry(OUString(IMPRESS_TEMPLATES), MNI_IMPRESS);
+    mpCBApp->InsertEntry(OUString(DRAW_TEMPLATES), MNI_DRAW);
+
+    mpCBApp->SelectEntryPos(0);
+}
+
+void SfxTemplateManagerDlg::fillFolderComboBox()
+{
+    std::vector<OUString> aFolderNames = mpLocalView->getFolderNames();
+
+    mpCBFolder->InsertEntry(OUString(ALL_CATEGORY_TEMPLATES));
+    if (!aFolderNames.empty())
+    {
+        for (size_t i = 0, n = aFolderNames.size(); i < n; ++i)
+            mpCBFolder->InsertEntry(aFolderNames[i]);
+    }
+    mpCBFolder->SelectEntryPos(0);
+}
+
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ActivatePageHdl, TabControl*, void)
 {
     mpCurView->filterItems(ViewFilter_Application(getCurrentFilter()));
-    mpCurView->showRootRegion(); // fdo#60586 show the root region of the applied filter
+    mpCurView->showAllTemplates(); // fdo#60586 show the root region of the applied filter
 
     if (mpSearchView->IsVisible())
         SearchUpdateHdl(*mpSearchEdit);
@@ -404,39 +468,44 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ActivatePageHdl, TabControl*, void)
 void SfxTemplateManagerDlg::readSettings ()
 {
     OUString aLastFolder;
-    sal_uInt16 nPageId = 0;
     SvtViewOptions aViewSettings( E_DIALOG, TM_SETTING_MANAGER );
 
     if ( aViewSettings.Exists() )
     {
         sal_uInt16 nTmp = 0;
         aViewSettings.GetUserItem(TM_SETTING_LASTFOLDER) >>= aLastFolder;
-        aViewSettings.GetUserItem(TM_SETTING_FILTER) >>= nTmp;
-        FILTER_APPLICATION nFilter = static_cast<FILTER_APPLICATION>(nTmp);
-        switch (nFilter)
+        aViewSettings.GetUserItem(TM_SETTING_LASTAPPLICATION) >>= nTmp;
+        switch (nTmp)
         {
-            case FILTER_APPLICATION::WRITER:
-                nPageId = mpTabControl->GetPageId(FILTER_DOCS);
+            case MNI_WRITER:
+                mpCBApp->SelectEntry(WRITER_TEMPLATES);
                 break;
-            case FILTER_APPLICATION::IMPRESS:
-                nPageId = mpTabControl->GetPageId(FILTER_PRESENTATIONS);
+            case MNI_CALC:
+                mpCBApp->SelectEntry(CALC_TEMPLATES);
                 break;
-            case FILTER_APPLICATION::CALC:
-                nPageId = mpTabControl->GetPageId(FILTER_SHEETS);
+            case MNI_IMPRESS:
+                mpCBApp->SelectEntry(IMPRESS_TEMPLATES);
                 break;
-            case FILTER_APPLICATION::DRAW:
-                nPageId = mpTabControl->GetPageId(FILTER_DRAWINGS);
+            case MNI_DRAW:
+                mpCBApp->SelectEntry(DRAW_TEMPLATES);
                 break;
-            default: break;
+            default:
+                mpCBApp->SelectEntry(ALL_APP_TEMPLATES);
         }
     }
 
-    if (!aLastFolder.getLength())
-        mpLocalView->showRootRegion();
-    else
-        mpLocalView->showRegion(aLastFolder);
+    mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
 
-    mpTabControl->SelectTabPage(nPageId);
+    if (!aLastFolder.getLength())
+    {
+        mpCBFolder->SelectEntry(ALL_CATEGORY_TEMPLATES);
+        mpLocalView->showAllTemplates();
+    }
+    else
+    {
+        mpCBFolder->SelectEntry(aLastFolder);
+        mpLocalView->showRegion(aLastFolder);
+    }
 }
 
 void SfxTemplateManagerDlg::writeSettings ()
@@ -450,12 +519,34 @@ void SfxTemplateManagerDlg::writeSettings ()
     Sequence< NamedValue > aSettings
     {
         { TM_SETTING_LASTFOLDER, css::uno::makeAny(aLastFolder) },
-        { TM_SETTING_FILTER,     css::uno::makeAny(sal_uInt16(getCurrentFilter())) }
+        { TM_SETTING_LASTAPPLICATION,     css::uno::makeAny(sal_uInt16(mpCBApp->GetSelectEntryPos())) }
     };
 
     // write
     SvtViewOptions aViewSettings(E_DIALOG, TM_SETTING_MANAGER);
     aViewSettings.SetUserData(aSettings);
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, void)
+{
+    if(mpCurView == mpLocalView)
+    {
+        mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpCurView->showAllTemplates();
+        mpCBFolder->SelectEntryPos(0);
+    }
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
+{
+    if(mpCurView == mpLocalView)
+    {
+        const OUString sSelectedRegion = mpCBFolder->GetSelectEntry();
+        if(mpCBFolder->GetSelectEntryPos() == 0)
+            mpLocalView->showAllTemplates();
+        else
+            mpLocalView->showRegion(sSelectedRegion);
+    }
 }
 
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg,TBXViewHdl, ToolBox *, void)
@@ -724,6 +815,70 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pIte
         }
 
         Close();
+    }
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    if(!mbIsSaveMode)
+    {
+        uno::Sequence< PropertyValue > aArgs(3);
+        aArgs[0].Name = "AsTemplate";
+        aArgs[0].Value <<= false;
+        aArgs[1].Name = "MacroExecutionMode";
+        aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+        aArgs[2].Name = "UpdateDocMode";
+        aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+
+        uno::Reference< XStorable > xStorable;
+        TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+        try
+        {
+            xStorable.set( mxDesktop->loadComponentFromURL(pViewItem->getPath(),"_default", 0, aArgs ),
+                           uno::UNO_QUERY );
+        }
+        catch( const uno::Exception& )
+        {
+        }
+
+        Close();
+    }
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+
+    if ( aQueryDlg->Execute() != RET_YES )
+        return;
+
+    OUString aDeletedTemplate;
+    sal_uInt16 nRegionItemId = mpLocalView->getCurRegionItemId();
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+    if (!mpLocalView->removeTemplate((pViewItem)->mnId,nRegionItemId))
+    {
+        aDeletedTemplate = (pItem)->maTitle;
+   }
+
+    if (!aDeletedTemplate.isEmpty())
+    {
+        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
+        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
+    }
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+    OUString aServiceName;
+    if (lcl_getServiceName(pViewItem->getPath(),aServiceName))
+    {
+        SfxObjectFactory::SetStandardTemplate(aServiceName,pViewItem->getPath());
+
+        createDefaultTemplateMenu();
     }
 }
 

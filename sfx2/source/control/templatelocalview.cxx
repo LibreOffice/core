@@ -52,6 +52,8 @@ void TemplateLocalView::dispose()
 
     maRegions.clear();
 
+    maAllTemplates.clear();
+
     delete mpDocTemplates;
     TemplateAbstractView::dispose();
 }
@@ -62,6 +64,8 @@ void TemplateLocalView::Populate ()
         delete maRegions[i];
 
     maRegions.clear();
+
+    maAllTemplates.clear();
 
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -91,6 +95,7 @@ void TemplateLocalView::Populate ()
                                                                           getThumbnailHeight());
 
             pItem->maTemplates.push_back(aProperties);
+            maAllTemplates.push_back(aProperties);
         }
 
         lcl_updateThumbnails(pItem);
@@ -120,7 +125,7 @@ void TemplateLocalView::reload ()
         }
     }
     else
-        showRootRegion();
+        showAllTemplates();
 }
 
 void TemplateLocalView::showRootRegion()
@@ -147,6 +152,12 @@ void TemplateLocalView::showRootRegion()
 
     updateItems(items);
 
+    maOpenRegionHdl.Call(nullptr);
+}
+
+void TemplateLocalView::showAllTemplates()
+{
+    insertItems(maAllTemplates);
     maOpenRegionHdl.Call(nullptr);
 }
 
