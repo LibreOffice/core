@@ -22,7 +22,8 @@
   <implementation name="com.sun.star.comp.xml.input.SaxDocumentHandler">
     <service name="com.sun.star.xml.input.SaxDocumentHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.xmlscript.XMLBasicExporter">
+  <implementation name="com.sun.star.comp.xmlscript.XMLBasicExporter"
+      constructor="com_sun_star_comp_xmlscript_XMLBasicExporter">
     <service name="com.sun.star.document.XMLBasicExporter"/>
   </implementation>
   <implementation name="com.sun.star.comp.xmlscript.XMLBasicImporter"
