@@ -175,6 +175,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
                                      vcl::Window* _pParent)
     : SfxDockingWindow(pBindinx, pCW, _pParent, "DockingFontwork", "svx/ui/dockingfontwork.ui")
     , rBindings(*pBindinx)
+    , aInputIdle("SvxFontWorkDialog Input")
     , nLastStyleTbxId(0)
     , nLastAdjustTbxId(0)
     , nLastShadowTbxId(0)

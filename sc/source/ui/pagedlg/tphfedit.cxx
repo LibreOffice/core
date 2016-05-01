@@ -333,7 +333,9 @@ css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAcces
 }
 
 ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
-    : ImageButton(pParent,nBits), pPopupMenu(nullptr)
+    : ImageButton(pParent,nBits),
+    aIdle("sc pagedlg ScExtIButton"),
+    pPopupMenu(nullptr)
 {
     nSelected=0;
     aIdle.SetPriority(SchedulerPriority::LOWEST);

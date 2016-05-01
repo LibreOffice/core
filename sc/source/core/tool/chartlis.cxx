@@ -404,6 +404,7 @@ ScChartHiddenRangeListener::~ScChartHiddenRangeListener()
 
 ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
+    aIdle( "sc ScChartListenerCollection" ),
     pDoc( pDocP )
 {
     aIdle.SetIdleHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
@@ -412,6 +413,7 @@ ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
 ScChartListenerCollection::ScChartListenerCollection(
         const ScChartListenerCollection& rColl ) :
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
+    aIdle( "sc ScChartListenerCollection" ),
     pDoc( rColl.pDoc )
 {
     aIdle.SetIdleHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );

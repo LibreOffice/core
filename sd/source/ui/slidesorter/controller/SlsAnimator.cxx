@@ -60,7 +60,7 @@ public:
 
 Animator::Animator (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      maIdle(),
+      maIdle("sd slidesorter controller Animator"),
       mbIsDisposed(false),
       maAnimations(),
       maElapsedTime(),

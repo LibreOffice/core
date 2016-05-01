@@ -294,6 +294,7 @@ void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 SwLabFormatPage::SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelFormatPage",
         "modules/swriter/ui/labelformatpage.ui", &rSet)
+    , aPreviewIdle("SwLabFormatPage Preview")
     , bModified(false)
     , aItem(static_cast<const SwLabItem&>( rSet.Get(FN_LABEL) ))
 {
