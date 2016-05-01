@@ -605,7 +605,7 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
         BitmapBuffer aDstBuf;
         aDstBuf.mnFormat = BMP_FORMAT_32BIT_TC_ARGB;
         aDstBuf.mpBits = pDestData;
-        aSrcBuf.mnBitCount = nDestBits;
+        aDstBuf.mnBitCount = nDestBits;
         aDstBuf.mnScanlineSize = nDestBytesPerRow;
 
         aSrcBuf.mnWidth = aDstBuf.mnWidth = nWidth;
