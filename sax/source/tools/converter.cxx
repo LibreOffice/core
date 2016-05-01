@@ -125,10 +125,11 @@ bool Converter::convertMeasure( sal_Int32& rValue,
         else
         {
             OSL_ENSURE( MeasureUnit::TWIP == nTargetUnit || MeasureUnit::POINT == nTargetUnit ||
-                        MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit, "unit is not supported");
-            const sal_Char *aCmpsL[2] = { nullptr, nullptr };
-            const sal_Char *aCmpsU[2] = { nullptr, nullptr };
-            double aScales[2] = { 1., 1. };
+                        MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit ||
+                        MeasureUnit::PIXEL == nTargetUnit, "unit is not supported");
+            const sal_Char *aCmpsL[3] = { nullptr, nullptr, nullptr };
+            const sal_Char *aCmpsU[3] = { nullptr, nullptr, nullptr };
+            double aScales[3] = { 1., 1., 1. };
 
             if( MeasureUnit::TWIP == nTargetUnit )
             {
@@ -196,6 +197,10 @@ bool Converter::convertMeasure( sal_Int32& rValue,
                     aCmpsL[1] = "pc";
                     aCmpsU[1] = "PC";
                     aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
+
+                    aCmpsL[2] = "px";
+                    aCmpsU[2] = "PX";
+                    aScales[2] = 0.28 * nScaleFactor; // mm/100
                     break;
                 }
             }
@@ -213,22 +218,23 @@ bool Converter::convertMeasure( sal_Int32& rValue,
                 return false;
 
             double nScale = 0.;
-            for( sal_uInt16 i= 0; i < 2; i++ )
+            for( sal_uInt16 i= 0; i < 3; i++ )
             {
+                sal_Int32 nTmp = nPos; // come back to the initial position before each iteration
                 const sal_Char *pL = aCmpsL[i];
                 if( pL )
                 {
                     const sal_Char *pU = aCmpsU[i];
-                    while( nPos < nLen && *pL )
+                    while( nTmp < nLen && *pL )
                     {
-                        sal_Unicode c = rString[nPos];
+                        sal_Unicode c = rString[nTmp];
                         if( c != *pL && c != *pU )
                             break;
                         pL++;
                         pU++;
-                        nPos++;
+                        nTmp++;
                     }
-                    if( !*pL && (nPos == nLen || ' ' == rString[nPos]) )
+                    if( !*pL && (nTmp == nLen || ' ' == rString[nTmp]) )
                     {
                         nScale = aScales[i];
                         break;
