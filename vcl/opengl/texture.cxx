@@ -50,7 +50,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     OpenGLVCLContextZone aContextZone;
 
     auto& rState = OpenGLContext::getVCLContext()->state();
-    rState->texture().generate(mnTexture);
+    TextureState::generate(mnTexture);
     rState->texture().active(0);
     rState->texture().bind(mnTexture);
 
@@ -86,7 +86,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     // nY = GetHeight() - nHeight - nY;
 
     auto& rState = OpenGLContext::getVCLContext()->state();
-    rState->texture().generate(mnTexture);
+    TextureState::generate(mnTexture);
     rState->texture().active(0);
     rState->texture().bind(mnTexture);
 
@@ -116,7 +116,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     OpenGLVCLContextZone aContextZone;
 
     auto& rState = OpenGLContext::getVCLContext()->state();
-    rState->texture().generate(mnTexture);
+    TextureState::generate(mnTexture);
     rState->texture().active(0);
     rState->texture().bind(mnTexture);
 
