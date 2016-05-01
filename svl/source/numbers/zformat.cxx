@@ -1109,13 +1109,18 @@ SvNumberformat::~SvNumberformat()
  * ---------------+-------------------+----------------------------+---------------
  *  Old State     | Symbol read       | Event                      | New state
  * ---------------+-------------------+----------------------------+---------------
- *  SsStart       | ;                 | Pos--                      | SsGetString
+ *  SsStart       | "                 | Symbol += Character        | SsGetQuoted
+ *                | ;                 | Pos--                      | SsGetString
  *                | [                 | Symbol += Character        | SsGetBracketed
  *                | ]                 | Error                      | SsStop
  *                | BLANK             |                            |
  *                | Else              | Symbol += Character        | SsGetString
  * ---------------+-------------------+----------------------------+---------------
- *  SsGetString   | ;                 |                            | SsStop
+ *  SsGetString   | "                 | Symbol += Character        | SsGetQuoted
+ *                | ;                 |                            | SsStop
+ *                | Else              | Symbol += Character        |
+ * ---------------+-------------------+----------------------------+---------------
+ *  SsGetQuoted   | "                 | Symbol += Character        | SsGetString
  *                | Else              | Symbol += Character        |
  * ---------------+-------------------+----------------------------+---------------
  * SsGetBracketed | <, > =            | del [                      |
@@ -1146,7 +1151,8 @@ enum ScanState
     SsGetString,        // format string
     SsGetPrefix,        // color or NatNumN
     SsGetTime,          // [HH] for time
-    SsGetBracketed      // any [...] not decided yet
+    SsGetBracketed,     // any [...] not decided yet
+    SsGetQuoted         // quoted text
 };
 
 // read a string until ']' and delete spaces in input
@@ -1350,7 +1356,12 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
         switch (eState)
         {
         case SsStart:
-            if (cToken == '[')
+            if (cToken == '\"')
+            {
+                eState = SsGetQuoted;
+                sBuffSymbol.append(cToken);
+            }
+            else if (cToken == '[')
             {
                 eState = SsGetBracketed;
                 sBuffSymbol.append(cToken);
@@ -1478,9 +1489,25 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
             }
             break;
         case SsGetString:
-            if (cToken == ';' && (nPos < 2 || !IsCombiningSymbol( rString, nPos-2)))
+            if (cToken == '\"')
+            {
+                eState = SsGetQuoted;
+                sBuffSymbol.append(cToken);
+            }
+            else if (cToken == ';' && (nPos < 2 || !IsCombiningSymbol( rString, nPos-2)))
             {
                 eState = SsStop;
+            }
+            else
+            {
+                sBuffSymbol.append(cToken);
+            }
+            break;
+        case SsGetQuoted:
+            if (cToken == '\"')
+            {
+                eState = SsGetString;
+                sBuffSymbol.append(cToken);
             }
             else
             {
