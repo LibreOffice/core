@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6afc2b3f",
+        "filename": "dbaccess/source/ui/dlg/DBSetupConnectionPages.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2016-05-01T21:27:22Z",
+      "side": 1,
+      "message": "Indeed, this instruction makes the destructor recursive.",
+      "range": {
+        "startLine": 877,
+        "startChar": 8,
+        "endLine": 877,
+        "endChar": 50
+      },
+      "revId": "0adc0966aa553db982b63da336aa22d67af24f5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
