@@ -91,6 +91,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_layoutwriter \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_globalfilter \
+    CppunitTest_sw_accessible_relation_set \
 ))
 
 ifneq ($(ENABLE_HEADLESS),TRUE)
