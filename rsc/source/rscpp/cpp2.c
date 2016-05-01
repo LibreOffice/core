@@ -22,6 +22,11 @@
 #include "cppdef.h"
 #include "cpp.h"
 
+static void doinclude( void );
+static void doif( int hash );
+static int openinclude( char*, int );
+static int hasdirectory( char*, char*, int );
+
 /*
  * Generate (by hand-inspection) a set of unique values for each control
  * operator.  Note that this is not guaranteed to work for non-Ascii
@@ -305,7 +310,7 @@ int control(int counter)
  * is always suppressed, so we don't need to evaluate anything.  This
  * suppresses unnecessary warnings.
  */
-void doif(int hash)
+static void doif(int hash)
 {
     int c;
     int found;
@@ -358,7 +363,7 @@ void doif(int hash)
  * Note: the November 12 draft forbids '>' in the #include <file> format.
  * This restriction is unnecessary and not implemented.
  */
-void doinclude()
+static void doinclude()
 {
     int c;
     int delim;
@@ -406,7 +411,7 @@ void doinclude()
  * active files.  Returns TRUE if the file was opened, FALSE
  * if openinclude() fails.  No error message is printed.
  */
-int openinclude(char* filename, int searchlocal)
+static int openinclude(char* filename, int searchlocal)
 {
     char** incptr;
     char tmpname[NFWORK]; /* Filename work area   */
@@ -500,7 +505,7 @@ int openinclude(char* filename, int searchlocal)
  * node/device/directory part of the string is copied to result and
  * hasdirectory returns TRUE.  Else, nothing is copied and it returns FALSE.
  */
-int hasdirectory(char* source, char* result, int max)
+static int hasdirectory(char* source, char* result, int max)
 {
 #if HOST == SYS_UNIX
     char* tp;
