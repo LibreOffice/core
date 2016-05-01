@@ -32,6 +32,7 @@ class EventListener(XDocumentEventListener,unohelper.Base):
             "com.sun.star.frame.GlobalEventBroadcaster", xContext)
         self.xContext = xContext
         self.executed = False
+        self.eventExecuted = []
         if isinstance(eventNames, str):
             self.eventNames = [eventNames]
         elif isinstance(eventNames, list):
@@ -48,6 +49,10 @@ class EventListener(XDocumentEventListener,unohelper.Base):
         print(str(event.EventName))
         if event.EventName in self.eventNames:
             self.executed = True
+            self.eventExecuted.append(event.EventName)
+
+    def hasExecuted(self, eventName):
+        return eventName in self.eventExecuted
 
     def disposing(event):
         pass
