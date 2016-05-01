@@ -14,6 +14,7 @@
 #include "templatesearchviewitem.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/app.hxx>
@@ -62,38 +63,31 @@
 
 const char TM_SETTING_MANAGER[] = "TemplateManager";
 const char TM_SETTING_LASTFOLDER[] = "LastFolder";
-const char TM_SETTING_FILTER[] = "SelectedFilter";
+const char TM_SETTING_LASTAPPLICATION[] = "LastApplication";
 
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 const char VIEWBAR_REPOSITORY[] = "repository";
-const char VIEWBAR_IMPORT[] = "import";
-const char VIEWBAR_DELETE[] = "delete";
-const char VIEWBAR_SAVE[] = "save";
-const char VIEWBAR_NEW_FOLDER[] = "new_folder";
-const char TEMPLATEBAR_SAVE[] = "template_save";
-const char TEMPLATEBAR_OPEN[] = "open";
-const char TEMPLATEBAR_EDIT[] = "edit";
-const char TEMPLATEBAR_DEFAULT[] = "default";
-const char TEMPLATEBAR_MOVE[] = "move";
-const char TEMPLATEBAR_EXPORT[] = "export";
-const char TEMPLATEBAR_DELETE[] = "template_delete";
-const char ACTIONBAR_SEARCH[] = "search";
 const char ACTIONBAR_ACTION[] = "action_menu";
-const char ACTIONBAR_TEMPLATE[] = "template_link";
-const char FILTER_DOCS[] = "filter_docs";
-const char FILTER_SHEETS[] = "filter_sheets";
-const char FILTER_PRESENTATIONS[] = "filter_presentations";
-const char FILTER_DRAWINGS[] = "filter_draws";
 
-#define MNI_ACTION_SORT_NAME 1
-#define MNI_ACTION_REFRESH   2
+const char ALL_APP_TEMPLATES[] = "All Applications";
+const char WRITER_TEMPLATES[] = "Documents";
+const char CALC_TEMPLATES[] = "Spreadsheets";
+const char IMPRESS_TEMPLATES[] = "Presentations";
+const char DRAW_TEMPLATES[] = "Drawings";
+const char ALL_CATEGORY_TEMPLATES[] = "All Categories";
+
+#define MNI_ACTION_NEW_FOLDER 1
+#define MNI_ACTION_DELETE_FOLDER 2
+#define MNI_ACTION_REFRESH   3
 #define MNI_ACTION_DEFAULT   3
-#define MNI_MOVE_NEW         1
-#define MNI_MOVE_FOLDER_BASE 2
 #define MNI_REPOSITORY_LOCAL 1
 #define MNI_REPOSITORY_NEW   2
 #define MNI_REPOSITORY_BASE  3
+#define MNI_WRITER           1
+#define MNI_CALC             2
+#define MNI_IMPRESS          3
+#define MNI_DRAW             4
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -107,17 +101,6 @@ using namespace ::com::sun::star::document;
 static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
 static std::vector<OUString> lcl_getAllFactoryURLs ();
-
-// Sort by name in ascending order
-class SortView_Name
-{
-public:
-
-    bool operator() (const ThumbnailViewItem *pItem1, const ThumbnailViewItem *pItem2)
-    {
-        return (pItem1->maTitle.compareTo(pItem2->maTitle) < 0);
-    }
-};
 
 class SearchView_Keyword
 {
@@ -175,36 +158,32 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     : ModalDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
       maSelTemplates(cmpSelectionItems),
-      maSelFolders(cmpSelectionItems),
-      mbIsSaveMode(false),
       mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
       mbIsSynced(false),
       maRepositories()
 {
-    get(mpTabControl, "tab_control");
-    get(mpSearchEdit, "search_edit");
+    get(mpSearchFilter, "search_filter");
+    get(mpCBApp, "filter_application");
+    get(mpCBFolder, "filter_folder");
     get(mpViewBar, "action_view");
     get(mpActionBar, "action_action");
-    get(mpTemplateBar, "action_templates");
     get(mpLocalView, "template_view");
     get(mpSearchView, "search_view");
     get(mpRemoteView, "remote_view");
     get(mpOKButton, "ok");
-
-    TabPage *pTabPage = mpTabControl->GetTabPage(mpTabControl->GetPageId("filter_docs"));
-    pTabPage->Show();
-    mpTabControl->SetTabPage(mpTabControl->GetPageId("filter_sheets"), pTabPage);
-    pTabPage->Show();
-    mpTabControl->SetTabPage(mpTabControl->GetPageId("filter_presentations"), pTabPage);
-    pTabPage->Show();
-    mpTabControl->SetTabPage(mpTabControl->GetPageId("filter_draws"), pTabPage);
-    pTabPage->Show();
+    get(mpMoveButton, "move_btn");
+    get(mpExportButton, "export_btn");
+    get(mpImportButton, "import_btn");
+    get(mpLinkButton, "online_link");
 
     // Create popup menus
     mpActionMenu = new PopupMenu;
-    mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,
-        SfxResId(STR_ACTION_SORT_NAME).toString(),
-        Image(SfxResId(IMG_ACTION_SORT)));
+    mpActionMenu->InsertItem(MNI_ACTION_NEW_FOLDER,
+        SfxResId(STR_CATEGORY_NEW).toString(),
+        Image(SfxResId(IMG_ACTION_REFRESH)));
+    mpActionMenu->InsertItem(MNI_ACTION_DELETE_FOLDER,
+        SfxResId(STR_CATEGORY_DELETE).toString());
+    mpActionMenu->InsertSeparator();
     mpActionMenu->InsertItem(MNI_ACTION_REFRESH,
         SfxResId(STR_ACTION_REFRESH).toString(),
         Image(SfxResId(IMG_ACTION_REFRESH)));
@@ -220,22 +199,14 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
     // Set toolbox styles
     mpViewBar->SetButtonType(ButtonType::SYMBOLTEXT);
-    mpTemplateBar->SetButtonType(ButtonType::SYMBOLTEXT);
 
     // Set toolbox button bits
     mpViewBar->SetItemBits(mpViewBar->GetItemId(VIEWBAR_REPOSITORY), ToolBoxItemBits::DROPDOWNONLY);
     mpActionBar->SetItemBits(mpActionBar->GetItemId(ACTIONBAR_ACTION), ToolBoxItemBits::DROPDOWNONLY);
-    mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), ToolBoxItemBits::DROPDOWNONLY);
 
     // Set toolbox handlers
-    mpViewBar->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
     mpViewBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
-    mpActionBar->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
     mpActionBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
-    mpTemplateBar->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
-    mpTemplateBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
-    mpSearchEdit->SetUpdateDataHdl(LINK(this,SfxTemplateManagerDlg,SearchUpdateHdl));
-    mpSearchEdit->EnableUpdateData();
 
     mpLocalView->SetStyle(mpLocalView->GetStyle() | WB_VSCROLL);
     mpLocalView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -245,8 +216,12 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
                               TEMPLATE_ITEM_PADDING);
 
     mpLocalView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
-    mpLocalView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg,OpenRegionHdl));
-    mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    mpLocalView->setRightClickHdl(LINK(this,SfxTemplateManagerDlg, RightClickHdl));
+    mpLocalView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg, OpenRegionHdl));
+    mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg, OpenTemplateHdl));
+    mpLocalView->setEditTemplateHdl(LINK(this,SfxTemplateManagerDlg, EditTemplateHdl));
+    mpLocalView->setDeleteTemplateHdl(LINK(this,SfxTemplateManagerDlg, DeleteTemplateHdl));
+    mpLocalView->setDefaultTemplateHdl(LINK(this,SfxTemplateManagerDlg, DefaultTemplateHdl));
 
     // Set online view position and dimensions
     mpRemoteView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -266,11 +241,20 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
                                     TEMPLATE_ITEM_PADDING);
 
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
+    mpSearchView->setRightClickHdl(LINK(this,SfxTemplateManagerDlg, RightClickHdl));
     mpSearchView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
-
-    mpTabControl->SetActivatePageHdl(LINK(this, SfxTemplateManagerDlg, ActivatePageHdl));
+    mpSearchView->setEditTemplateHdl(LINK(this,SfxTemplateManagerDlg, EditTemplateHdl));
+    mpSearchView->setDeleteTemplateHdl(LINK(this,SfxTemplateManagerDlg, DeleteTemplateHdl));
+    mpSearchView->setDefaultTemplateHdl(LINK(this,SfxTemplateManagerDlg, DefaultTemplateHdl));
 
     mpOKButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
+    mpMoveButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, MoveClickHdl));
+    mpExportButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, ExportClickHdl));
+    mpImportButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, ImportClickHdl));
+    mpLinkButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
+
+    mpSearchFilter->SetUpdateDataHdl(LINK(this, SfxTemplateManagerDlg, SearchUpdateHdl));
+    mpSearchFilter->EnableUpdateData();
 
     SvtMiscOptions aMiscOptions;
     if ( !aMiscOptions.IsExperimentalMode() )
@@ -282,7 +266,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpViewBar->Show();
     mpActionBar->Show();
 
-
     switchMainView(true);
 
     loadRepositories();
@@ -290,18 +273,20 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     createRepositoryMenu();
     createDefaultTemplateMenu();
 
-    //setSaveMode(); //Uncomment this line to put templates dialog into Save As mode
-
     mpLocalView->Populate();
-    mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
+    mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
+
+    fillAppComboBox();
+    fillFolderComboBox();
+
+    mpExportButton->Disable();
+    mpMoveButton->Disable();
+    mpOKButton->SetText(SfxResId(STR_OPEN).toString());
+
+    mpCBApp->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectApplicationHdl));
+    mpCBFolder->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectRegionHdl));
 
     readSettings();
-
-    if(!mbIsSaveMode)
-        mpOKButton->Disable();
-
-    if(mbIsSaveMode)
-        mpOKButton->SetText( SfxResId(STR_SAVEDOC).toString() );
 
     mpLocalView->Show();
 }
@@ -332,11 +317,16 @@ void SfxTemplateManagerDlg::dispose()
     mpSearchView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
     mpSearchView->setOpenTemplateHdl(Link<ThumbnailViewItem*, void>());
 
-    mpTabControl.clear();
-    mpSearchEdit.clear();
+    mpOKButton.clear();
+    mpMoveButton.clear();
+    mpExportButton.clear();
+    mpImportButton.clear();
+    mpLinkButton.clear();
+    mpSearchFilter.clear();
+    mpCBApp.clear();
+    mpCBFolder.clear();
     mpViewBar.clear();
     mpActionBar.clear();
-    mpTemplateBar.clear();
     mpSearchView.clear();
     mpCurView.clear();
     mpLocalView.clear();
@@ -344,99 +334,92 @@ void SfxTemplateManagerDlg::dispose()
     ModalDialog::dispose();
 }
 
-void SfxTemplateManagerDlg::setSaveMode()
-{
-    mbIsSaveMode = true;
-
-    // FIXME We used to call just mpTabControl->Clear() here; but that worked
-    // only with .src dialogs, as the tab pages could have existed even
-    // without TabControl containing them.  This is not possible with .ui
-    // definitions any more (and rightly so!), so leave just one tab here for
-    // now, until we do a bigger rework of the templates dialog.
-    while (mpTabControl->GetPageCount() > 1)
-        mpTabControl->RemovePage(mpTabControl->GetPageId(1));
-
-    mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
-
-    mpViewBar->ShowItem(VIEWBAR_SAVE);
-    mpViewBar->HideItem(VIEWBAR_IMPORT);
-    mpViewBar->HideItem(VIEWBAR_REPOSITORY);
-
-    mpTemplateBar->ShowItem(TEMPLATEBAR_SAVE);
-    mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
-    mpTemplateBar->HideItem(TEMPLATEBAR_OPEN);
-    mpTemplateBar->HideItem(TEMPLATEBAR_EDIT);
-    mpTemplateBar->HideItem(TEMPLATEBAR_MOVE);
-    mpTemplateBar->HideItem(TEMPLATEBAR_EXPORT);
-    mpTemplateBar->HideItem(TEMPLATEBAR_DELETE);
-}
-
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
 {
     m_xModel = rModel;
 }
 
-FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentFilter()
+FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter()
 {
-    const sal_uInt16 nCurPageId = mpTabControl->GetCurPageId();
+    const OUString nCurAppId = mpCBApp->GetSelectEntry();
 
-    if (nCurPageId == mpTabControl->GetPageId(FILTER_DOCS))
+    if (nCurAppId.match(WRITER_TEMPLATES))
         return FILTER_APPLICATION::WRITER;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_PRESENTATIONS))
+    else if (nCurAppId.match(IMPRESS_TEMPLATES))
         return FILTER_APPLICATION::IMPRESS;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_SHEETS))
+    else if (nCurAppId.match(CALC_TEMPLATES))
         return FILTER_APPLICATION::CALC;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_DRAWINGS))
+    else if (nCurAppId.match(DRAW_TEMPLATES))
         return FILTER_APPLICATION::DRAW;
 
     return FILTER_APPLICATION::NONE;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ActivatePageHdl, TabControl*, void)
+void SfxTemplateManagerDlg::fillAppComboBox()
 {
-    mpCurView->filterItems(ViewFilter_Application(getCurrentFilter()));
-    mpCurView->showRootRegion(); // fdo#60586 show the root region of the applied filter
+    mpCBApp->InsertEntry(OUString(ALL_APP_TEMPLATES));
+    mpCBApp->InsertEntry(OUString(WRITER_TEMPLATES), MNI_WRITER);
+    mpCBApp->InsertEntry(OUString(CALC_TEMPLATES), MNI_CALC);
+    mpCBApp->InsertEntry(OUString(IMPRESS_TEMPLATES), MNI_IMPRESS);
+    mpCBApp->InsertEntry(OUString(DRAW_TEMPLATES), MNI_DRAW);
 
-    if (mpSearchView->IsVisible())
-        SearchUpdateHdl(*mpSearchEdit);
+    mpCBApp->SelectEntryPos(0);
+}
+
+void SfxTemplateManagerDlg::fillFolderComboBox()
+{
+    std::vector<OUString> aFolderNames = mpLocalView->getFolderNames();
+
+    mpCBFolder->InsertEntry(OUString(ALL_CATEGORY_TEMPLATES), 0);
+    if (!aFolderNames.empty())
+    {
+        for (size_t i = 0, n = aFolderNames.size(); i < n; ++i)
+            mpCBFolder->InsertEntry(aFolderNames[i], i+1);
+    }
+    mpCBFolder->SelectEntryPos(0);
 }
 
 void SfxTemplateManagerDlg::readSettings ()
 {
     OUString aLastFolder;
-    sal_uInt16 nPageId = 0;
     SvtViewOptions aViewSettings( E_DIALOG, TM_SETTING_MANAGER );
 
     if ( aViewSettings.Exists() )
     {
         sal_uInt16 nTmp = 0;
         aViewSettings.GetUserItem(TM_SETTING_LASTFOLDER) >>= aLastFolder;
-        aViewSettings.GetUserItem(TM_SETTING_FILTER) >>= nTmp;
-        FILTER_APPLICATION nFilter = static_cast<FILTER_APPLICATION>(nTmp);
-        switch (nFilter)
+        aViewSettings.GetUserItem(TM_SETTING_LASTAPPLICATION) >>= nTmp;
+        switch (nTmp)
         {
-            case FILTER_APPLICATION::WRITER:
-                nPageId = mpTabControl->GetPageId(FILTER_DOCS);
+            case MNI_WRITER:
+                mpCBApp->SelectEntry(WRITER_TEMPLATES);
                 break;
-            case FILTER_APPLICATION::IMPRESS:
-                nPageId = mpTabControl->GetPageId(FILTER_PRESENTATIONS);
+            case MNI_CALC:
+                mpCBApp->SelectEntry(CALC_TEMPLATES);
                 break;
-            case FILTER_APPLICATION::CALC:
-                nPageId = mpTabControl->GetPageId(FILTER_SHEETS);
+            case MNI_IMPRESS:
+                mpCBApp->SelectEntry(IMPRESS_TEMPLATES);
                 break;
-            case FILTER_APPLICATION::DRAW:
-                nPageId = mpTabControl->GetPageId(FILTER_DRAWINGS);
+            case MNI_DRAW:
+                mpCBApp->SelectEntry(DRAW_TEMPLATES);
                 break;
-            default: break;
+            default:
+                mpCBApp->SelectEntry(ALL_APP_TEMPLATES);
         }
     }
 
-    if (!aLastFolder.getLength())
-        mpLocalView->showRootRegion();
-    else
-        mpLocalView->showRegion(aLastFolder);
+    mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
 
-    mpTabControl->SelectTabPage(nPageId);
+    if (!aLastFolder.getLength())
+    {
+        mpCBFolder->SelectEntry(ALL_CATEGORY_TEMPLATES);
+        mpLocalView->showAllTemplates();
+    }
+    else
+    {
+        mpCBFolder->SelectEntry(aLastFolder);
+        mpLocalView->showRegion(aLastFolder);
+    }
 }
 
 void SfxTemplateManagerDlg::writeSettings ()
@@ -450,7 +433,7 @@ void SfxTemplateManagerDlg::writeSettings ()
     Sequence< NamedValue > aSettings
     {
         { TM_SETTING_LASTFOLDER, css::uno::makeAny(aLastFolder) },
-        { TM_SETTING_FILTER,     css::uno::makeAny(sal_uInt16(getCurrentFilter())) }
+        { TM_SETTING_LASTAPPLICATION,     css::uno::makeAny(sal_uInt16(mpCBApp->GetSelectEntryPos())) }
     };
 
     // write
@@ -458,49 +441,32 @@ void SfxTemplateManagerDlg::writeSettings ()
     aViewSettings.SetUserData(aSettings);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg,TBXViewHdl, ToolBox *, void)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, void)
 {
-    const sal_uInt16 nCurItemId = mpViewBar->GetCurItemId();
-
-    if (nCurItemId == mpViewBar->GetItemId(VIEWBAR_IMPORT))
-        OnTemplateImport();
-    else if (nCurItemId == mpViewBar->GetItemId(VIEWBAR_DELETE))
+    if(mpCurView == mpLocalView && mpCurView->IsVisible())
     {
-        if (mpCurView == mpLocalView)
-            OnFolderDelete();
-        else
-            OnRepositoryDelete();
+        mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpCurView->showAllTemplates();
+        mpCBFolder->SelectEntryPos(0);
     }
-    else if (nCurItemId == mpViewBar->GetItemId(VIEWBAR_NEW_FOLDER))
-        OnFolderNew();
-    else if (nCurItemId == mpViewBar->GetItemId(VIEWBAR_SAVE))
-        OnTemplateSaveAs();
+
+    if(mpSearchView->IsVisible())
+        SearchUpdateHdl(*mpSearchFilter);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXActionHdl, ToolBox *, void)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
 {
-    const sal_uInt16 nCurItemId = mpActionBar->GetCurItemId();
+    if(mpCurView == mpLocalView)
+    {
+        const OUString sSelectedRegion = mpCBFolder->GetSelectEntry();
+        if(mpCBFolder->GetSelectEntryPos() == 0)
+            mpLocalView->showAllTemplates();
+        else
+            mpLocalView->showRegion(sSelectedRegion);
+    }
 
-    if (nCurItemId == mpActionBar->GetItemId(ACTIONBAR_SEARCH))
-        OnTemplateSearch();
-    else if (nCurItemId == mpActionBar->GetItemId(ACTIONBAR_TEMPLATE))
-        OnTemplateLink();
-}
-
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXTemplateHdl, ToolBox *, void)
-{
-    const sal_uInt16 nCurItemId = mpTemplateBar->GetCurItemId();
-
-    if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_OPEN))
-        OnTemplateOpen();
-    else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EDIT))
-        OnTemplateEdit();
-    else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DELETE))
-        OnTemplateDelete();
-    else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DEFAULT))
-        OnTemplateAsDefault();
-    else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EXPORT))
-        OnTemplateExport();
+    if(mpSearchView->IsVisible())
+        SearchUpdateHdl(*mpSearchFilter);
 }
 
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
@@ -512,33 +478,6 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
         pBox->SetItemDown( nCurItemId, true );
 
         mpActionMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
-
-        pBox->SetItemDown( nCurItemId, false );
-        pBox->EndSelection();
-        pBox->Invalidate();
-    }
-    else if (pBox == mpTemplateBar && nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE))
-    {
-        pBox->SetItemDown( nCurItemId, true );
-
-        std::vector<OUString> aNames = mpLocalView->getFolderNames();
-
-        PopupMenu *pMoveMenu = new PopupMenu;
-        pMoveMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MoveMenuSelectHdl));
-
-        if (!aNames.empty())
-        {
-            for (size_t i = 0, n = aNames.size(); i < n; ++i)
-                pMoveMenu->InsertItem(MNI_MOVE_FOLDER_BASE+i,aNames[i]);
-        }
-
-        pMoveMenu->InsertSeparator();
-
-        pMoveMenu->InsertItem(MNI_MOVE_NEW, SfxResId(STR_MOVE_NEW));
-
-        pMoveMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
-
-        delete pMoveMenu;
 
         pBox->SetItemDown( nCurItemId, false );
         pBox->EndSelection();
@@ -558,11 +497,9 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
 
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem, void)
 {
-    const TemplateContainerItem *pCntItem = dynamic_cast<const TemplateContainerItem*>(pItem);
+    const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
 
-    if (pCntItem)
-        OnRegionState(pItem);
-    else
+    if (pViewItem)
         OnTemplateState(pItem);
 }
 
@@ -572,36 +509,17 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu, bool)
 
     switch(nMenuId)
     {
-    case MNI_ACTION_SORT_NAME:
-        mpLocalView->sortItems(SortView_Name());
+    case MNI_ACTION_NEW_FOLDER:
+        OnCategoryNew();
+        break;
+    case MNI_ACTION_DELETE_FOLDER:
+        OnCategoryDelete();
         break;
     case MNI_ACTION_REFRESH:
         mpCurView->reload();
         break;
     default:
         break;
-    }
-
-    return false;
-}
-
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu, bool)
-{
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
-
-    if (mpSearchView->IsVisible())
-    {
-        // Check if we are searching the local or remote templates
-        if (mpCurView == mpLocalView)
-            localSearchMoveTo(nMenuId);
-    }
-    else
-    {
-        // Check if we are displaying the local or remote templates
-        if (mpCurView == mpLocalView)
-            localMoveTo(nMenuId);
-        else
-            remoteMoveTo(nMenuId);
     }
 
     return false;
@@ -672,64 +590,232 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMen
 
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OkClickHdl, Button*, void)
 {
-   if(!mbIsSaveMode)
-   {
-       OnTemplateOpen();
-       EndDialog(RET_OK);
-   }
-   else
-       OnTemplateSaveAs();
+   OnTemplateOpen();
+   EndDialog(RET_OK);
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
+{
+    // modal dialog to select templates category
+    ScopedVclPtrInstance<SfxTemplateCategoryDialog> aDlg;
+    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
+
+    size_t nItemId = 0;
+
+    if(aDlg->Execute() == RET_OK)
+    {
+        OUString sCategory = aDlg->GetSelectedCategory();
+        bool bIsNewCategory = aDlg->IsNewCategoryCreated();
+        if(bIsNewCategory)
+        {
+            if (!sCategory.isEmpty())
+                nItemId = mpLocalView->createRegion(sCategory);
+        }
+        else
+        {
+            nItemId = mpLocalView->getRegionId(sCategory);
+        }
+    }
+
+    if(nItemId)
+    {
+        if (mpSearchView->IsVisible())
+        {
+            // Check if we are searching the local or remote templates
+            if (mpCurView == mpLocalView)
+                localSearchMoveTo(nItemId);
+        }
+        else
+        {
+            // Check if we are displaying the local or remote templates
+            if (mpCurView == mpLocalView)
+                localMoveTo(nItemId);
+            else
+                remoteMoveTo(nItemId);
+        }
+    }
+
+    mpLocalView->reload();
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ExportClickHdl, Button*, void)
+{
+    OnTemplateExport();
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
+{
+    //Modal Dialog to select Category
+    ScopedVclPtrInstance<SfxTemplateCategoryDialog> aDlg;
+    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
+
+    if(aDlg->Execute() == RET_OK)
+    {
+        OUString sCategory = aDlg->GetSelectedCategory();
+        bool bIsNewCategory = aDlg->IsNewCategoryCreated();
+        if(bIsNewCategory)
+        {
+            if(mpCurView->createRegion(sCategory))
+            {
+                mpCBFolder->InsertEntry(sCategory);
+                OnTemplateImportCategory(sCategory);
+            }
+            else
+            {
+                OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
+                ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", sCategory))->Execute();
+                return;
+            }
+        }
+        else
+        {
+            aDlg->Close();
+            OnTemplateImportCategory(sCategory);
+        }
+    }
+
+    mpLocalView->reload();
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, LinkClickHdl, Button*, void)
+{
+    OnTemplateLink();
 }
 
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
 {
-    maSelFolders.clear();
     maSelTemplates.clear();
 
-    mpViewBar->ShowItem(VIEWBAR_NEW_FOLDER, mpCurView->isNestedRegionAllowed());
+    mpOKButton->Disable();
 
-    if (!mbIsSaveMode)
-    {
-        mpViewBar->ShowItem(VIEWBAR_IMPORT, mpCurView->isImportAllowed());
-        mpOKButton->Disable();
-    }
-
-    mpTemplateBar->Hide();
     mpViewBar->Show();
     mpActionBar->Show();
 }
 
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, RightClickHdl, ThumbnailViewItem*, pItem, void)
+{
+    const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
+
+    if (pViewItem)
+    {
+        if(mpCurView == mpLocalView)
+        {
+            if(mpSearchView->IsVisible())
+                mpSearchView->createContextMenu();
+            else
+                mpLocalView->createContextMenu();
+        }
+    }
+}
+
+
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    if (!mbIsSaveMode)
+    uno::Sequence< PropertyValue > aArgs(4);
+    aArgs[0].Name = "AsTemplate";
+    aArgs[0].Value <<= true;
+    aArgs[1].Name = "MacroExecutionMode";
+    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+    aArgs[2].Name = "UpdateDocMode";
+    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+    aArgs[3].Name = "InteractionHandler";
+    aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
+
+    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+
+    try
     {
-        uno::Sequence< PropertyValue > aArgs(4);
-        aArgs[0].Name = "AsTemplate";
-        aArgs[0].Value <<= true;
-        aArgs[1].Name = "MacroExecutionMode";
-        aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-        aArgs[2].Name = "UpdateDocMode";
-        aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
-        aArgs[3].Name = "InteractionHandler";
-        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
+        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
+    }
+    catch( const uno::Exception& )
+    {
+    }
 
-        TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+    Close();
+}
 
-        try
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    uno::Sequence< PropertyValue > aArgs(3);
+    aArgs[0].Name = "AsTemplate";
+    aArgs[0].Value <<= false;
+    aArgs[1].Name = "MacroExecutionMode";
+    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+    aArgs[2].Name = "UpdateDocMode";
+    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+
+    uno::Reference< XStorable > xStorable;
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+    try
+    {
+        xStorable.set( mxDesktop->loadComponentFromURL(pViewItem->getPath(),"_default", 0, aArgs ),
+                       uno::UNO_QUERY );
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
+    Close();
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+
+    if ( aQueryDlg->Execute() != RET_YES )
+        return;
+
+    OUString aDeletedTemplate;
+
+    if(mpSearchView->IsVisible())
+    {
+        TemplateSearchViewItem *pSrchItem = static_cast<TemplateSearchViewItem*>(pItem);
+
+        if (!mpLocalView->removeTemplate((pSrchItem)->mnAssocId, pSrchItem->mnRegionId))
         {
-            mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
+            aDeletedTemplate = (pSrchItem)->maTitle;
         }
-        catch( const uno::Exception& )
-        {
-        }
+    }
+    else
+    {
+        TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+        sal_uInt16 nRegionItemId = mpLocalView->getRegionId(pViewItem->mnRegionId);
 
-        Close();
+        if (!mpLocalView->removeTemplate((pViewItem)->mnId,nRegionItemId))
+        {
+            aDeletedTemplate = (pItem)->maTitle;
+        }
+    }
+
+    if (!aDeletedTemplate.isEmpty())
+    {
+        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
+        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
+    }
+
+    mpLocalView->reload();
+
+    if(mpSearchView->IsVisible())
+        SearchUpdateHdl(*mpSearchFilter);
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+    OUString aServiceName;
+    if (lcl_getServiceName(pViewItem->getPath(),aServiceName))
+    {
+        SfxObjectFactory::SetStandardTemplate(aServiceName,pViewItem->getPath());
+
+        createDefaultTemplateMenu();
     }
 }
 
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
 {
-    OUString aKeyword = mpSearchEdit->GetText();
+    OUString aKeyword = mpSearchFilter->GetText();
 
     if (!aKeyword.isEmpty())
     {
@@ -743,17 +829,14 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
             mpCurView->Hide();
         }
 
-        bool bDisplayFolder = !mpCurView->isNonRootRegionVisible();
-
         std::vector<TemplateItemProperties> aItems =
-                mpLocalView->getFilteredItems(SearchView_Keyword(aKeyword, getCurrentFilter()));
+                mpLocalView->getFilteredItems(SearchView_Keyword(aKeyword, getCurrentApplicationFilter()));
 
         for (TemplateItemProperties& rItem : aItems)
         {
             OUString aFolderName;
 
-            if (bDisplayFolder)
-                aFolderName = mpLocalView->getRegionName(rItem.nRegionId);
+            aFolderName = mpLocalView->getRegionName(rItem.nRegionId);
 
             mpSearchView->AppendItem(rItem.nId,mpLocalView->getRegionId(rItem.nRegionId),
                                      rItem.nDocId,
@@ -770,36 +853,12 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
         mpSearchView->deselectItems();
         mpSearchView->Hide();
         mpCurView->Show();
-    }
-}
-
-void SfxTemplateManagerDlg::OnRegionState (const ThumbnailViewItem *pItem)
-{
-    if (pItem->isSelected())
-    {
-        if (maSelFolders.empty() && !mbIsSaveMode)
+        mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        if(mpCurView == mpLocalView)
         {
-            mpViewBar->ShowItem(VIEWBAR_IMPORT);
-            mpViewBar->ShowItem(VIEWBAR_DELETE);
-            mpViewBar->HideItem(VIEWBAR_NEW_FOLDER);
+            OUString sLastFolder = mpCBFolder->GetSelectEntry();
+            mpLocalView->showRegion(sLastFolder);
         }
-
-        maSelFolders.insert(pItem);
-        if(mbIsSaveMode)
-            mpOKButton->Enable();
-    }
-    else
-    {
-        maSelFolders.erase(pItem);
-
-        if (maSelFolders.empty() && !mbIsSaveMode)
-        {
-            mpViewBar->HideItem(VIEWBAR_IMPORT);
-            mpViewBar->HideItem(VIEWBAR_DELETE);
-            mpViewBar->ShowItem(VIEWBAR_NEW_FOLDER);
-        }
-        if(!mbIsSaveMode)
-            mpOKButton->Disable();
     }
 }
 
@@ -811,25 +870,11 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
     {
         if (maSelTemplates.empty())
         {
-            mpViewBar->Show(false);
-            mpTemplateBar->Show();
             mpOKButton->Enable();
         }
         else if (maSelTemplates.size() != 1 || !bInSelection)
         {
-            if (!mbIsSaveMode)
-            {
-                mpTemplateBar->HideItem(TEMPLATEBAR_OPEN);
-                mpTemplateBar->HideItem(TEMPLATEBAR_EDIT);
-                mpTemplateBar->HideItem(TEMPLATEBAR_DEFAULT);
-            }
-            else
-            {
-                mpTemplateBar->HideItem(TEMPLATEBAR_SAVE);
-                mpTemplateBar->HideItem(TEMPLATEBAR_DEFAULT);
-            }
-            if( !mbIsSaveMode )
-                mpOKButton->Disable();
+            mpOKButton->Disable();
         }
 
         if (!bInSelection)
@@ -843,31 +888,28 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
 
             if (maSelTemplates.empty())
             {
-                mpTemplateBar->Show(false);
-                mpViewBar->Show();
-                if(!mbIsSaveMode)
-                    mpOKButton->Disable();
+                mpOKButton->Disable();
             }
             else if (maSelTemplates.size() == 1)
             {
-                if (!mbIsSaveMode)
-                {
-                    mpTemplateBar->ShowItem(TEMPLATEBAR_OPEN);
-                    mpTemplateBar->ShowItem(TEMPLATEBAR_EDIT);
-                    mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
-                }
-                else
-                {
-                    mpTemplateBar->ShowItem(TEMPLATEBAR_SAVE);
-                    mpTemplateBar->ShowItem(TEMPLATEBAR_DEFAULT);
-                }
                 mpOKButton->Enable();
             }
         }
     }
+
+    if(maSelTemplates.empty())
+    {
+        mpMoveButton->Disable();
+        mpExportButton->Disable();
+    }
+    else
+    {
+        mpMoveButton->Enable();
+        mpExportButton->Enable();
+    }
 }
 
-void SfxTemplateManagerDlg::OnTemplateImport ()
+void SfxTemplateManagerDlg::OnTemplateImportCategory(OUString sCategory)
 {
     sal_Int16 nDialogType =
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
@@ -931,41 +973,15 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
         if (aFiles.hasElements())
         {
-            if (!maSelFolders.empty())
+            //Import to the selected regions
+            TemplateContainerItem* pContItem = const_cast<TemplateContainerItem*>(static_cast<const TemplateContainerItem*>(mpLocalView->getRegion(sCategory)));
+            if(pContItem)
             {
-                //Import to the selected regions
-                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
-                {
-                    OUString aTemplateList;
-                    TemplateContainerItem *pFolder = const_cast<TemplateContainerItem*>(static_cast<const TemplateContainerItem*>(*pIter));
-
-                    for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
-                    {
-                        if(!mpLocalView->copyFrom(pFolder,aFiles[i]))
-                        {
-                            if (aTemplateList.isEmpty())
-                                aTemplateList = aFiles[i];
-                            else
-                                aTemplateList = aTemplateList + "\n" + aFiles[i];
-                        }
-                    }
-
-                    if (!aTemplateList.isEmpty())
-                    {
-                        OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
-                        aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
-                        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
-                    }
-                }
-            }
-            else
-            {
-                //Import to current region
                 OUString aTemplateList;
+
                 for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
                 {
-                    if(!mpLocalView->copyFrom(aFiles[i]))
+                    if(!mpLocalView->copyFrom(pContItem,aFiles[i]))
                     {
                         if (aTemplateList.isEmpty())
                             aTemplateList = aFiles[i];
@@ -977,12 +993,10 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 if (!aTemplateList.isEmpty())
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
-                    aMsg = aMsg.replaceFirst("$1",mpLocalView->getCurRegionName());
+                    aMsg = aMsg.replaceFirst("$1",pContItem->maTitle);
                     ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
                 }
             }
-
-            mpLocalView->Invalidate(InvalidateFlags::NoErase);
         }
     }
 }
@@ -1036,7 +1050,6 @@ void SfxTemplateManagerDlg::OnTemplateExport()
             // export templates from the current view
 
             sal_uInt16 i = 1;
-            sal_uInt16 nRegionItemId = mpLocalView->getCurRegionItemId();
 
             std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
             for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
@@ -1052,7 +1065,9 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
                 OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                if (!mpLocalView->exportTo(pItem->mnId,nRegionItemId,aPath))
+                if (!mpLocalView->exportTo(pItem->mnId,
+                    mpLocalView->getRegionId(pItem->mnRegionId), //pItem->mnRegionId does not store actual region Id
+                    aPath))
                 {
                     if (aTemplateList.isEmpty())
                         aTemplateList = pItem->maTitle;
@@ -1070,30 +1085,6 @@ void SfxTemplateManagerDlg::OnTemplateExport()
             ScopedVclPtrInstance<MessageDialog>::Create(this, aText.replaceFirst("$1",aTemplateList))->Execute();
         }
     }
-}
-
-void SfxTemplateManagerDlg::OnTemplateSearch ()
-{
-    bool bVisible = mpSearchEdit->IsVisible();
-
-    mpActionBar->SetItemState(mpActionBar->GetItemId(ACTIONBAR_SEARCH),
-            bVisible? TRISTATE_FALSE: TRISTATE_TRUE);
-
-    // fdo#74782 We are switching views. No matter to which state,
-    // deselect and hide our current SearchView items.
-    mpSearchView->deselectItems();
-    mpSearchView->Hide();
-
-    // Hide search view
-    if (bVisible)
-    {
-        mpCurView->Show();
-    }
-
-    mpSearchEdit->Show(!bVisible);
-    mpSearchEdit->SetText(OUString());
-    if (!bVisible)
-        mpSearchEdit->GrabFocus();
 }
 
 void SfxTemplateManagerDlg::OnTemplateLink ()
@@ -1134,37 +1125,6 @@ void SfxTemplateManagerDlg::OnTemplateOpen ()
     ThumbnailViewItem *pItem = const_cast<ThumbnailViewItem*>(*maSelTemplates.begin());
 
     OpenTemplateHdl(pItem);
-}
-
-void SfxTemplateManagerDlg::OnTemplateEdit ()
-{
-    uno::Sequence< PropertyValue > aArgs(3);
-    aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= false;
-    aArgs[1].Name = "MacroExecutionMode";
-    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-    aArgs[2].Name = "UpdateDocMode";
-    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
-
-    uno::Reference< XStorable > xStorable;
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates(
-            maSelTemplates); // Avoids invalid iterators from LoseFocus
-    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-    for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
-    {
-        const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
-
-        try
-        {
-            xStorable.set( mxDesktop->loadComponentFromURL(pItem->getPath(),"_default", 0, aArgs ),
-                           uno::UNO_QUERY );
-        }
-        catch( const uno::Exception& )
-        {
-        }
-    }
-
-    Close();
 }
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
@@ -1222,23 +1182,7 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     }
 }
 
-void SfxTemplateManagerDlg::OnTemplateAsDefault ()
-{
-    if (!maSelTemplates.empty())
-    {
-        const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*(maSelTemplates.begin()));
-
-        OUString aServiceName;
-        if (lcl_getServiceName(pItem->getPath(),aServiceName))
-        {
-            SfxObjectFactory::SetStandardTemplate(aServiceName,pItem->getPath());
-
-            createDefaultTemplateMenu();
-        }
-    }
-}
-
-void SfxTemplateManagerDlg::OnFolderNew()
+void SfxTemplateManagerDlg::OnCategoryNew()
 {
     ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
@@ -1248,42 +1192,51 @@ void SfxTemplateManagerDlg::OnFolderNew()
     {
         OUString aName = dlg->GetEntryText();
 
-        mpCurView->createRegion(aName);
+        if(mpCurView->createRegion(aName))
+            mpCBFolder->InsertEntry(aName);
+        else
+        {
+            OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
+            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", aName))->Execute();
+        }
     }
 }
 
-void SfxTemplateManagerDlg::OnFolderDelete()
+void SfxTemplateManagerDlg::OnCategoryDelete()
 {
-    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    ScopedVclPtrInstance< SfxTemplateCategoryDialog > aDlg;
+    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
+    aDlg->HideNewCategoryOption();
+    aDlg->SetText(SfxResId(STR_CATEGORY_DELETE).toString());
+    aDlg->SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT).toString());
 
-    if ( aQueryDlg->Execute() != RET_YES )
-        return;
-
-    OUString aFolderList;
-
-    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders; //Copy to avoid invalidating an iterator
-
-    for (pIter = aSelFolders.begin(); pIter != aSelFolders.end(); ++pIter)
+    if(aDlg->Execute() == RET_OK)
     {
-        if (!mpLocalView->removeRegion((*pIter)->mnId))
-        {
-            if (aFolderList.isEmpty())
-                aFolderList = (*pIter)->maTitle;
-            else
-                aFolderList = aFolderList + "\n" + (*pIter)->maTitle;
+        OUString sCategory = aDlg->GetSelectedCategory();
+        aDlg->Close();
+        ScopedVclPtrInstance< MessageDialog > popupDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE),
+            VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
-            ++pIter;
-            if (pIter == aSelFolders.end())
-                break;
+        if ( popupDlg->Execute() != RET_YES )
+            return;
+
+        sal_Int16 nItemId = mpLocalView->getRegionId(sCategory);
+
+        if (!mpLocalView->removeRegion(nItemId))
+        {
+            OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
+            ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg.replaceFirst("$1",sCategory))->Execute();
+        }
+        else
+        {
+            mpCBFolder->RemoveEntry(sCategory);
         }
     }
 
-    if (!aFolderList.isEmpty())
-    {
-        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
-        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aFolderList))->Execute();
-    }
+    mpLocalView->reload();
+    mpLocalView->showAllTemplates();
+    mpCBApp->SelectEntryPos(0);
+    mpCBFolder->SelectEntryPos(0);
 }
 
 void SfxTemplateManagerDlg::OnRepositoryDelete()
@@ -1294,80 +1247,6 @@ void SfxTemplateManagerDlg::OnRepositoryDelete()
         switchMainView(true);
 
         createRepositoryMenu();
-    }
-}
-
-void SfxTemplateManagerDlg::OnTemplateSaveAs()
-{
-    assert(m_xModel.is());
-
-    if (!mpLocalView->isNonRootRegionVisible() && maSelFolders.empty())
-    {
-        ScopedVclPtrInstance<MessageDialog>::Create(this, SfxResId(STR_MSG_ERROR_SELECT_FOLDER))->Execute();
-        return;
-    }
-
-    ScopedVclPtrInstance< InputDialog > aDlg(SfxResId(STR_INPUT_TEMPLATE_NEW).toString(),this);
-
-    if (aDlg->Execute())
-    {
-        OUString aName = aDlg->GetEntryText();
-
-        if (!aName.isEmpty())
-        {
-            OUString aFolderList;
-            OUString aQMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE).toString());
-            ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, OUString(), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-
-            if (mpLocalView->isNonRootRegionVisible())
-            {
-                sal_uInt16 nRegionItemId = mpLocalView->getRegionId(mpLocalView->getCurRegionId()-1);
-
-                if (!mpLocalView->isTemplateNameUnique(nRegionItemId,aName))
-                {
-                    aQMsg = aQMsg.replaceFirst("$1",aName);
-                    aQueryDlg->set_primary_text(aQMsg.replaceFirst("$2",mpLocalView->getCurRegionName()));
-
-                    if (aQueryDlg->Execute() == RET_NO)
-                        return;
-                }
-
-                if (!mpLocalView->saveTemplateAs(nRegionItemId,m_xModel,aName))
-                    aFolderList = mpLocalView->getCurRegionName();
-            }
-            else
-            {
-                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
-                {
-                    TemplateContainerItem *pItem = const_cast<TemplateContainerItem*>(static_cast<const TemplateContainerItem*>(*pIter));
-
-                    if (!mpLocalView->isTemplateNameUnique(pItem->mnId,aName))
-                    {
-                        OUString aDQMsg = aQMsg.replaceFirst("$1",aName);
-                        aQueryDlg->set_primary_text(aDQMsg.replaceFirst("$2",pItem->maTitle));
-
-                        if (aQueryDlg->Execute() == RET_NO)
-                            continue;
-                    }
-
-                    if (!mpLocalView->saveTemplateAs(pItem,m_xModel,aName))
-                    {
-                        if (aFolderList.isEmpty())
-                            aFolderList = (*pIter)->maTitle;
-                        else
-                            aFolderList = aFolderList + "\n" + (*pIter)->maTitle;
-                    }
-                }
-            }
-
-            if (!aFolderList.isEmpty())
-            {
-            }
-
-            // After save file, just close the dialog
-            Close();
-        }
     }
 }
 
@@ -1415,53 +1294,19 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
     {
         mpCurView = mpLocalView.get();
 
-        mpViewBar->HideItem(VIEWBAR_DELETE);
-
-        // Enable deleting and exporting items from the filesystem
-        mpTemplateBar->ShowItem(TEMPLATEBAR_EXPORT);
-        mpTemplateBar->ShowItem(TEMPLATEBAR_DELETE);
-
         mpRemoteView->Hide();
         mpLocalView->Show();
     }
     else
     {
         mpCurView = mpRemoteView.get();
-
-        mpViewBar->ShowItem(VIEWBAR_DELETE);
-
-        // Disable deleting and exporting items from remote repositories
-        mpTemplateBar->HideItem(TEMPLATEBAR_EXPORT);
-        mpTemplateBar->HideItem(TEMPLATEBAR_DELETE);
-
         mpLocalView->Hide();
         mpRemoteView->Show();
     }
 }
 
-void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
+void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nItemId)
 {
-    sal_uInt16 nItemId = 0;
-
-    if (nMenuId == MNI_MOVE_NEW)
-    {
-        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
-
-        int ret = dlg->Execute();
-
-        if (ret)
-        {
-            OUString aName = dlg->GetEntryText();
-
-            if (!aName.isEmpty())
-                nItemId = mpLocalView->createRegion(aName);
-        }
-    }
-    else
-    {
-        nItemId = mpLocalView->getRegionId(nMenuId-MNI_MOVE_FOLDER_BASE);
-    }
-
     if (nItemId)
     {
         // Move templates to desired folder if for some reason move fails
@@ -1487,29 +1332,8 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
     }
 }
 
-void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
+void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nItemId)
 {
-    sal_uInt16 nItemId = 0;
-
-    if (nMenuId == MNI_MOVE_NEW)
-    {
-        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
-
-        int ret = dlg->Execute();
-
-        if (ret)
-        {
-            OUString aName = dlg->GetEntryText();
-
-            if (!aName.isEmpty())
-                nItemId = mpLocalView->createRegion(aName);
-        }
-    }
-    else
-    {
-        nItemId = mpLocalView->getRegionId(nMenuId-MNI_MOVE_FOLDER_BASE);
-    }
-
     if (nItemId)
     {
         OUString aTemplateList;
@@ -1541,29 +1365,8 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
     }
 }
 
-void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
+void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nItemId)
 {
-    sal_uInt16 nItemId = 0;
-
-    if (nMenuId == MNI_MOVE_NEW)
-    {
-        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
-
-        int ret = dlg->Execute();
-
-        if (ret)
-        {
-            OUString aName = dlg->GetEntryText();
-
-            if (!aName.isEmpty())
-                nItemId = mpLocalView->createRegion(aName);
-        }
-    }
-    else
-    {
-        nItemId = mpLocalView->getRegionId(nMenuId-MNI_MOVE_FOLDER_BASE);
-    }
-
     if (nItemId)
     {
         OUString aTemplateList;
@@ -1599,7 +1402,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     // Deselect all items and update search results
     mpSearchView->deselectItems();
 
-    SearchUpdateHdl(*mpSearchEdit);
+    SearchUpdateHdl(*mpSearchFilter);
 }
 
 void SfxTemplateManagerDlg::loadRepositories()
@@ -1734,5 +1537,90 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 
     return aList;
 }
+
+
+//   Class SfxTemplateCategoryDialog --------------------------------------------------
+
+SfxTemplateCategoryDialog::SfxTemplateCategoryDialog( vcl::Window* pParent):
+        ModalDialog(pParent, "TemplatesCategoryDialog", "sfx/ui/templatecategorydlg.ui"),
+        msSelectedCategory(OUString()),
+        mbIsNewCategory(false)
+{
+    get(mpLBCategory, "categorylb");
+    get(mpNewCategoryEdit, "category_entry");
+    get(mpOKButton, "ok");
+    get(mpSelectLabel, "select_label");
+    get(mpCreateLabel, "create_label");
+
+    mpNewCategoryEdit->SetModifyHdl(LINK(this, SfxTemplateCategoryDialog, NewCategoryEditHdl));
+    mpLBCategory->SetSelectHdl(LINK(this, SfxTemplateCategoryDialog, SelectCategoryHdl));
+
+    mpOKButton->Disable();
+}
+
+SfxTemplateCategoryDialog::~SfxTemplateCategoryDialog()
+{
+    disposeOnce();
+}
+
+void SfxTemplateCategoryDialog::dispose()
+{
+    mpLBCategory.clear();
+    mpNewCategoryEdit.clear();
+    mpOKButton.clear();
+
+    ModalDialog::dispose();
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, NewCategoryEditHdl, Edit&, void)
+{
+    OUString sParam = comphelper::string::strip(mpNewCategoryEdit->GetText(), ' ');
+    mpLBCategory->Enable(sParam.isEmpty());
+    if(!sParam.isEmpty())
+    {
+        msSelectedCategory = sParam;
+        mbIsNewCategory = true;
+        mpOKButton->Enable();
+    }
+    else
+    {
+        SelectCategoryHdl(*mpLBCategory);
+        mbIsNewCategory = false;
+    }
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, void)
+{
+    if(mpLBCategory->GetSelectEntryPos() == 0)
+    {
+        msSelectedCategory = OUString();
+        mpOKButton->Disable();
+    }
+    else
+    {
+        msSelectedCategory = mpLBCategory->GetSelectEntry();
+        mpOKButton->Enable();
+    }
+
+    mbIsNewCategory = false;
+}
+
+void SfxTemplateCategoryDialog::SetCategoryLBEntries(std::vector<OUString> aFolderNames)
+{
+    mpLBCategory->InsertEntry(OUString("None"), 0);
+    if (!aFolderNames.empty())
+    {
+        for (size_t i = 0, n = aFolderNames.size(); i < n; ++i)
+            mpLBCategory->InsertEntry(aFolderNames[i], i+1);
+    }
+    mpLBCategory->SelectEntryPos(0);
+}
+
+void SfxTemplateCategoryDialog::HideNewCategoryOption()
+{
+    mpCreateLabel->Hide();
+    mpNewCategoryEdit->Hide();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
