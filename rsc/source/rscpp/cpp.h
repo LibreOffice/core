@@ -278,11 +278,7 @@ int outputEval( int c );
 
 /* cpp2.c */
 int control( int counter );
-void doinclude( void );
 void dodefine( void );
-void doif( int hash );
-int openinclude( char*, int );
-int hasdirectory( char*, char*, int );
 int openfile( char* );
 
 /* cpp3.c */
@@ -296,8 +292,6 @@ int readoptions( char* filename, char*** pfargv );
 
 /* cpp4.c */
 void checkparm( int c, DEFBUF* dp );
-int expcollect( void );
-void expstuff( DEFBUF* dp );
 
 void stparmscan( int delim );
 #if OSL_DEBUG_LEVEL > 1
@@ -311,12 +305,6 @@ void expand( DEFBUF* tokenp );
 
 /* cpp5.c */
 int eval( void );
-int evallex( int );
-int *evaleval( int*, int, int );
-int evalchar( int );
-int dosizeof( void );
-int evalnum( int c );
-int bittest( int );
 
 /* cpp6.c */
 
