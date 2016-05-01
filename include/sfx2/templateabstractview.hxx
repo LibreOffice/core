@@ -104,6 +104,12 @@ public:
 
     void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
+    void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
     void updateThumbnailDimensions(long itemMaxSize);
 
     long getThumbnailWidth() const  { return mnThumbnailWidth;}
@@ -136,6 +142,9 @@ protected:
 
     Link<void*,void>              maOpenRegionHdl;
     Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
+    Link<ThumbnailViewItem*,void> maEditTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEABSTRACTVIEW_HXX
