@@ -46,6 +46,9 @@ public:
         case svtools::RESTART_REASON_LANGUAGE_CHANGE:
             get(reason_, "reason_language_change");
             break;
+        case svtools::RESTART_REASON_ADDING_PATH:
+            get(reason_, "reason_adding_path");
+            break;
         default:
             assert(false); // this cannot happen
         }

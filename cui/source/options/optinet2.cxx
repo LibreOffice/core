@@ -91,6 +91,9 @@
 #include "certpath.hxx"
 #include "tsaurls.hxx"
 
+#include <svtools/restartdialog.hxx>
+#include <comphelper/solarmutex.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
@@ -804,8 +807,8 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
 
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
     {
-        ScopedVclPtrInstance< MessageDialog > aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
-        aWarnBox->Execute();
+        SolarMutexGuard aGuard;
+        svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ADDING_PATH);
     }
 }
 
