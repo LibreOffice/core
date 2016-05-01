@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_aab553d1",
+        "filename": "dbaccess/source/ui/dlg/DBSetupConnectionPages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-05-01T13:30:01Z",
+      "side": 1,
+      "message": "Since the text is trimmed, and set as trimmed, in the previous line, trimming again after fetching it is not useful.",
+      "revId": "69fc1e65e66cad0b7e704d8cffa8d5262ed3dc44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8aaa4f6f",
+        "filename": "dbaccess/source/ui/dlg/detailpages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-05-01T13:30:01Z",
+      "side": 1,
+      "message": "Since the text is trimmed, and set in trimmed form, in the previous line, trimming again after getting it is not useful",
+      "range": {
+        "startLine": 536,
+        "startChar": 16,
+        "endLine": 536,
+        "endChar": 24
+      },
+      "revId": "69fc1e65e66cad0b7e704d8cffa8d5262ed3dc44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
