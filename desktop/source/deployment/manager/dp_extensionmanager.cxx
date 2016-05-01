@@ -53,8 +53,11 @@
 #include "dp_properties.hxx"
 
 #include <vcl/layout.hxx>
-#include "desktop.hrc"
-#include "desktopresid.hxx"
+#include <svtools/restartdialog.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/solarmutex.hxx>
+#include <vcl/svapp.hxx>
+#include <svtools/apearcfg.hxx>
 
 #include <list>
 #include <algorithm>
@@ -69,7 +72,7 @@ namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 
 using ::com::sun::star::uno::Reference;
-
+using namespace ::svt;
 namespace {
 
 struct CompIdentifiers
@@ -601,10 +604,6 @@ bool ExtensionManager::doChecksForAddExtension(
 
         bCanInstall = xTmpExtension->checkPrerequisites(
             xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0;
-        if(bCanInstall == true){
-            ScopedVclPtrInstance<MessageDialog> aWarnBox(nullptr, desktop::DesktopResId(STR_LO_MUST_BE_RESTARTED), VCL_MESSAGE_INFO);
-            aWarnBox->Execute();
-        }
         return bCanInstall;
     }
     catch ( const css::deployment::DeploymentException& ) {
@@ -1502,6 +1501,8 @@ void ExtensionManager::fireModified()
         pContainer->forEach<util::XModifyListener>(
             [this] (uno::Reference<util::XModifyListener> const& xListener)
                 { return xListener->modified(lang::EventObject(static_cast<OWeakObject *>(this))); });
+       SolarMutexGuard aGuard;
+       ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_EXTENSION_INSTALL);
     }
 }
 

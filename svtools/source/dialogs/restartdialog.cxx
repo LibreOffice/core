@@ -43,6 +43,9 @@ public:
         case svtools::RESTART_REASON_MAILMERGE_INSTALL:
             get(reason_, "reason_mailmerge_install");
             break;
+        case svtools::RESTART_REASON_EXTENSION_INSTALL:
+            get(reason_, "reason_extension_install");
+            break;
         default:
             assert(false); // this cannot happen
         }
