@@ -60,12 +60,12 @@ VCL_BUILDER_DECL_FACTORY(TemplateRemoteView)
     rRet = VclPtr<TemplateRemoteView>::Create(pParent, WB_VSCROLL, false);
 }
 
-void TemplateRemoteView::showRootRegion()
+void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
 {
     //TODO:
 }
 
-void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
+void TemplateRemoteView::showAllTemplates()
 {
     //TODO:
 }
@@ -83,7 +83,6 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem)
 
     mnCurRegionId = pItem->mnId;
     maCurRegionName = pItem->maTitle;
-    maFTName->SetText(maCurRegionName);
 
     OUString aURL = pItem->getURL();
 
