@@ -44,6 +44,8 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/singletabdialog \
 	sfx2/uiconfig/ui/startcenter \
 	sfx2/uiconfig/ui/templatedlg \
+	sfx2/uiconfig/ui/saveastemplatedlg \
+	sfx2/uiconfig/ui/templatecategorydlg \
 	sfx2/uiconfig/ui/versionsofdialog \
 	sfx2/uiconfig/ui/versioncommentdialog \
 	sfx2/uiconfig/ui/versionscmis \

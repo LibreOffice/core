@@ -10,9 +10,9 @@
 #include <sfx2/templateabstractview.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
@@ -71,80 +71,27 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
     if (pTempItem)
         return isValid(pTempItem->getPath());
 
-    TemplateContainerItem *pContainerItem = const_cast<TemplateContainerItem*>(dynamic_cast<const TemplateContainerItem*>(pItem));
-    if (pContainerItem)
-    {
-        std::vector<TemplateItemProperties> &rTemplates = pContainerItem->maTemplates;
-
-        size_t nVisCount = 0;
-
-        // Clear thumbnails
-        pContainerItem->maPreview1.Clear();
-        pContainerItem->maPreview2.Clear();
-        pContainerItem->maPreview3.Clear();
-        pContainerItem->maPreview4.Clear();
-
-        for (size_t i = 0, n = rTemplates.size(); i < n && pContainerItem->HasMissingPreview(); ++i)
-        {
-            if (isValid(rTemplates[i].aPath))
-            {
-                ++nVisCount;
-                if ( pContainerItem->maPreview1.IsEmpty( ) )
-                {
-                    pContainerItem->maPreview1 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
-                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
-                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
-                }
-                else if ( pContainerItem->maPreview2.IsEmpty() )
-                {
-                    pContainerItem->maPreview2 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
-                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
-                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
-                }
-                else if ( pContainerItem->maPreview3.IsEmpty() )
-                {
-                    pContainerItem->maPreview3 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
-                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
-                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
-                }
-                else if ( pContainerItem->maPreview4.IsEmpty() )
-                {
-                    pContainerItem->maPreview4 = TemplateAbstractView::scaleImg(rTemplates[i].aThumbnail,
-                                                                       TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
-                                                                       TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
-                }
-            }
-        }
-    }
     return true;
 }
 
 TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mnCurRegionId(0),
+      maSelectedItem(nullptr),
       mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH),
       mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT),
-      maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
-      maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
+      maPosition(0,0)
 {
-    maAllButton->Hide();
-    maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);
-    maAllButton->SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
-    maFTName->Hide();
 }
 
 TemplateAbstractView::TemplateAbstractView(vcl::Window *pParent)
     : ThumbnailView(pParent),
       mnCurRegionId(0),
+      maSelectedItem(nullptr),
       mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH),
       mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT),
-      maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
-      maFTName(VclPtr<FixedText>::Create(this, SfxResId(FT_NAME)))
+      maPosition(0,0)
 {
-    maAllButton->Hide();
-    maAllButton->SetStyle(maAllButton->GetStyle() | WB_FLATBUTTON);
-    maAllButton->SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
-    maFTName->Hide();
 }
 
 TemplateAbstractView::~TemplateAbstractView()
@@ -154,8 +101,6 @@ TemplateAbstractView::~TemplateAbstractView()
 
 void TemplateAbstractView::dispose()
 {
-    maAllButton.disposeAndClear();
-    maFTName.disposeAndClear();
     ThumbnailView::dispose();
 }
 
@@ -187,7 +132,6 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
     std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
-        //TODO: CHECK IF THE ITEM IS A FOLDER OR NOT
         const TemplateItemProperties *pCur = &rTemplates[i];
 
         TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);
@@ -215,14 +159,56 @@ void TemplateAbstractView::updateThumbnailDimensions(long itemMaxSize)
     mnThumbnailHeight = itemMaxSize;
 }
 
+
+void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (rMEvt.IsRight())
+    {
+        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+        Point aPosition (rMEvt.GetPosPixel());
+        maPosition = aPosition;
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+
+        if(pViewItem)
+        {
+            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+            maRightClickHdl.Call(pItem);
+        }
+    }
+
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+
 void TemplateAbstractView::setOpenRegionHdl(const Link<void*,void> &rLink)
 {
     maOpenRegionHdl = rLink;
 }
 
+void TemplateAbstractView::setRightClickHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maRightClickHdl = rLink;
+}
+
 void TemplateAbstractView::setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
 {
     maOpenTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maEditTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDeleteTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDefaultTemplateHdl = rLink;
 }
 
 BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long height)
@@ -271,11 +257,6 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
     return TemplateAbstractView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
 }
 
-IMPL_LINK_NOARG_TYPED(TemplateAbstractView, ShowRootRegionHdl, Button*, void)
-{
-    showRootRegion();
-}
-
 void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
 {
     //Check if the item is a TemplateContainerItem (Folder) or a TemplateViewItem (File)
@@ -284,36 +265,14 @@ void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
     if ( pContainerItem )
     {
         // Fill templates
-
         mnCurRegionId = pContainerItem->mnRegionId+1;
         maCurRegionName = pContainerItem->maTitle;
-        maFTName->SetText(maCurRegionName);
         showRegion(pItem);
     }
     else
     {
         maOpenTemplateHdl.Call(pItem);
     }
-}
-
-void TemplateAbstractView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    ThumbnailView::Paint(rRenderContext, rRect);
-
-    Rectangle aRect(rRect.TopLeft(),
-                    Point(rRect.BottomRight().X(),
-                          mnHeaderHeight));
-
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
-            new PolyPolygonColorPrimitive2D(B2DPolyPolygon(::tools::Polygon(aRect).getB2DPolygon()),
-                                            maFillColor.getBColor()));
-
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
-
-    pProcessor->process(aSeq);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

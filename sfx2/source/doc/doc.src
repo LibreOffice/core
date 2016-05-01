@@ -48,9 +48,33 @@ String STR_CLOSEDOC_ANDRETURN
 {
     Text [ en-US ] = "~Close & Return to " ;
 };
-String STR_EDIT
+String STR_OPEN
+{
+    Text [ en-US ] = "Open" ;
+};
+String STR_EDIT_TEMPLATE
 {
     Text [ en-US ] = "Edit" ;
+};
+String STR_DEFAULT_TEMPLATE
+{
+    Text [ en-US ] = "Set As Default" ;
+};
+String STR_DELETE
+{
+    Text [ en-US ] = "Delete" ;
+};
+String STR_RENAME
+{
+    Text [ en-US ] = "Rename" ;
+};
+String STR_PROPERTIES
+{
+    Text [ en-US ] = "Properties" ;
+};
+String STR_RENAME_TEMPLATE
+{
+    Text [ en-US ] = "Enter New Name: " ;
 };
 String STR_AUTOMATICVERSION
 {
@@ -211,9 +235,34 @@ String STR_MOVE_NEW
     Text [ en-US ] = "New folder";
 };
 
+String STR_CATEGORY_NEW
+{
+    Text [ en-US ] = "New Category";
+};
+
+String STR_CATEGORY_DELETE
+{
+    Text [ en-US ] = "Delete Category";
+};
+
+String STR_CATEGORY_SELECT
+{
+    Text [ en-US ] = "Select Category";
+};
+
+String STR_CREATE_ERROR
+{
+    Text [ en-US ] = "Cannot create category: $1";
+};
+
+String STR_ERROR_SAVEAS
+{
+    Text [ en-US ] = "Cannot save template: $1";
+};
+
 String STR_INPUT_NEW
 {
-    Text [ en-US ] = "Enter folder name:";
+    Text [ en-US ] = "Enter category name:";
 };
 
 String STR_REPOSITORY_LOCAL
