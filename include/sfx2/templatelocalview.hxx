@@ -17,6 +17,7 @@
 
 class SfxDocumentTemplates;
 class TemplateContainerItem;
+class PopupMenu;
 
 namespace com {
     namespace sun { namespace star { namespace frame {
@@ -40,15 +41,23 @@ public:
 
     virtual void reload () override;
 
-    virtual void showRootRegion () override;
+    virtual void showAllTemplates () override;
 
     virtual void showRegion (ThumbnailViewItem *pItem) override;
 
     void showRegion (const OUString &rName);
 
+    void createContextMenu();
+
+    DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
+
     sal_uInt16 getCurRegionItemId () const;
 
+    ThumbnailViewItem* getRegion(OUString sStr);
+
     sal_uInt16 getRegionId (size_t pos) const;
+
+    sal_uInt16 getRegionId (OUString sRegionName) const;
 
     OUString getRegionName(const sal_uInt16 nRegionId) const;
 
@@ -60,10 +69,6 @@ public:
         getFilteredItems (const std::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
     virtual sal_uInt16 createRegion (const OUString &rName) override;
-
-    virtual bool isNestedRegionAllowed () const override;
-
-    virtual bool isImportAllowed () const override;
 
     bool removeRegion (const sal_uInt16 nItemId);
 
@@ -83,22 +88,13 @@ public:
 
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
 
-    bool saveTemplateAs (sal_uInt16 nItemId,
-                         css::uno::Reference<css::frame::XModel> &rModel,
-                         const OUString &rName);
-
-    bool saveTemplateAs (TemplateContainerItem *pDstItem,
-                         css::uno::Reference<css::frame::XModel> &rModel,
-                         const OUString &rName);
-
-    bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;
-
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
 
 private:
 
     SfxDocumentTemplates *mpDocTemplates;
     std::vector<TemplateContainerItem* > maRegions;
+    std::vector<TemplateItemProperties > maAllTemplates;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX

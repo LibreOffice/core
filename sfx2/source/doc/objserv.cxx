@@ -99,7 +99,7 @@
 #include "helpid.hrc"
 
 #include "guisaveas.hxx"
-#include <sfx2/templatedlg.hxx>
+#include <sfx2/saveastemplatedlg.hxx>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
 
@@ -848,11 +848,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            ScopedVclPtrInstance< SfxTemplateManagerDlg > aDlg;
+            ScopedVclPtrInstance<SfxSaveAsTemplateDialog> aDlg;
             aDlg->setDocumentModel(GetModel());
-            aDlg->setSaveMode();
             aDlg->Execute();
-
             break;
         }
 
