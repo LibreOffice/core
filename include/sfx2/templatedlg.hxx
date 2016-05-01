@@ -17,8 +17,6 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 
 #include <sfx2/templateabstractview.hxx>
@@ -56,18 +54,21 @@ public:
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
 
-    DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void);
-
 private:
 
     void readSettings ();
 
     void writeSettings ();
 
+    void fillAppComboBox();
+    void fillFolderComboBox();
+
     DECL_LINK_TYPED(TBXViewHdl, ToolBox*, void);
     DECL_LINK_TYPED(TBXActionHdl, ToolBox*, void);
-    DECL_LINK_TYPED(TBXTemplateHdl, ToolBox*, void);
     DECL_LINK_TYPED(TBXDropdownHdl, ToolBox*, void);
+
+    DECL_LINK_TYPED(SelectApplicationHdl, ListBox&, void);
+    DECL_LINK_TYPED(SelectRegionHdl, ListBox&, void);
 
     DECL_LINK_TYPED(OkClickHdl, Button*, void);
 
@@ -79,17 +80,18 @@ private:
     DECL_LINK_TYPED(DefaultTemplateMenuSelectHdl, Menu*, bool);
 
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
+    DECL_LINK_TYPED(RightClickHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(DeleteTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(DefaultTemplateHdl, ThumbnailViewItem*, void);
 
     DECL_LINK_TYPED(SearchUpdateHdl, Edit&, void);
 
     void OnTemplateImport ();
-    void OnTemplateSearch ();
     static void OnTemplateLink ();
     void OnTemplateOpen ();
-    void OnTemplateEdit ();
     void OnTemplateDelete ();
-    void OnTemplateAsDefault ();
     void OnTemplateExport ();
 
     void OnTemplateState (const ThumbnailViewItem *pItem);
@@ -138,18 +140,22 @@ private:
 
     void syncRepositories () const;
 
-    /// Return filter according to the currently selected tab page.
-    FILTER_APPLICATION getCurrentFilter();
+    /// Return filter according to the currently selected application filter.
+    FILTER_APPLICATION getCurrentApplicationFilter();
 
 private:
 
-    VclPtr<TabControl> mpTabControl;
+    VclPtr<Edit> mpSearchFilter;
+    VclPtr<ListBox> mpCBApp;
+    VclPtr<ListBox> mpCBFolder;
 
-    VclPtr<Edit> mpSearchEdit;
     VclPtr<PushButton> mpOKButton;
+    VclPtr<PushButton> mpMoveButton;
+    VclPtr<PushButton> mpExportButton;
+    VclPtr<PushButton> mpImportButton;
+    VclPtr<PushButton> mpLinkButton;
     VclPtr<ToolBox> mpViewBar;
     VclPtr<ToolBox> mpActionBar;
-    VclPtr<ToolBox> mpTemplateBar;
     VclPtr<TemplateSearchView> mpSearchView;
     VclPtr<TemplateAbstractView> mpCurView;
     VclPtr<TemplateLocalView> mpLocalView;
