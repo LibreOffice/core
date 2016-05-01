@@ -541,6 +541,7 @@ void IndexBox_Impl::SelectExecutableEntry()
 IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpIndexPage",
         "sfx/ui/helpindexpage.ui")
+    , aFactoryIdle("sfx2 appl IndexTabPage_Impl Factory")
     , bIsActivated(false)
 {
     get(m_pIndexCB, "terms");
@@ -1405,6 +1406,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHi
 
 SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     : Window(_pParent, 0)
+    , aIdle("sfx2 appl SfxHelpIndexWindow_Impl")
     , aIndexKeywordLink(LINK(this, SfxHelpIndexWindow_Impl, KeywordHdl))
     , pParentWin(_pParent)
     , pCPage(nullptr)
@@ -1853,6 +1855,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     aToolBox            ( VclPtr<ToolBox>::Create(this, 0) ),
     aOnStartupCB        ( VclPtr<CheckBox>::Create(this, SfxResId( RID_HELP_ONSTARTUP_BOX )) ),
+    aSelectIdle         ( "sfx2 appl SfxHelpTextWindow_Impl Select" ),
     aIndexOnImage       ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
     aIndexOffImage      ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
     aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ).toString() ),

@@ -250,7 +250,8 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
     nStartLine(USHRT_MAX),
     eSourceEncoding(osl_getThreadTextEncoding()),
     bDoSyntaxHighlight(true),
-    bHighlighting(false)
+    bHighlighting(false),
+    aSyntaxIdle("sw uibase SwSrcEditWindow Syntax")
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();

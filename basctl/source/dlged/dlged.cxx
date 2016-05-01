@@ -196,6 +196,7 @@ DlgEditor::DlgEditor (
     ,bGridSnap(true)
     ,bCreateOK(true)
     ,bDialogModelChanged(false)
+    ,aMarkIdle("basctl DlgEditor Mark")
     ,mnPaintGuard(0)
     ,m_xDocument( xModel )
 {

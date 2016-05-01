@@ -67,6 +67,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         const Link<SwOneExampleFrame&,void>* pInitializedLink,
                                         const OUString* pURL ) :
     aTopWindow(VclPtr<SwFrameCtrlWindow>::Create(&rWin, this)),
+    aLoadedIdle("sw uibase SwOneExampleFrame Loaded"),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
     nStyleFlags(nFlags),

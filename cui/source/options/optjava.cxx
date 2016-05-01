@@ -142,6 +142,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     , m_nInfoSize(0)
     , m_nParamSize(0)
 #endif
+    , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
     , xDialogListener(new ::svt::DialogClosedListener())
 {
     get(m_pJavaEnableCB, "javaenabled");

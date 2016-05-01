@@ -518,6 +518,7 @@ GL3DBarChart::GL3DBarChart(
     mnPreSelectBarId(0),
     miScrollRate(0),
     mbScrollFlg(false),
+    maIdle("chart2 view GL3DBarChart"),
     mbScreenTextNewRender(false),
     maFPS(OUString("Render FPS: 0")),
     maDataUpdateFPS(OUString("Data Update FPS: 0")),

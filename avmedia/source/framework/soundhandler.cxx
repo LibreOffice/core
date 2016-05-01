@@ -145,6 +145,7 @@ SoundHandler::SoundHandler()
         ,   ::cppu::OWeakObject (          )
         // Init member
     ,   m_bError        ( false    )
+    ,   m_aUpdateIdle   ( "avmedia SoundHandler Update" )
 {
     m_aUpdateIdle.SetIdleHdl(LINK(this, SoundHandler, implts_PlayerNotify));
 }

@@ -1072,6 +1072,7 @@ void SdrItemBrowserWindow::GetFocus()
 
 SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     SdrItemBrowserWindow(ImpGetViewWin(rView)),
+    aIdle("svx svdraw SdrItemBrowser"),
     pView(&rView),
     bDirty(false)
 {
