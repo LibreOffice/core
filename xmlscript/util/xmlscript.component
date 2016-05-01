@@ -25,7 +25,8 @@
   <implementation name="com.sun.star.comp.xmlscript.XMLBasicExporter">
     <service name="com.sun.star.document.XMLBasicExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.xmlscript.XMLBasicImporter">
+  <implementation name="com.sun.star.comp.xmlscript.XMLBasicImporter"
+     constructor="com_sun_star_comp_xmlscript_XMLBasicImporter">
     <service name="com.sun.star.document.XMLBasicImporter"/>
   </implementation>
   <implementation name="com.sun.star.comp.xmlscript.XMLOasisBasicExporter"

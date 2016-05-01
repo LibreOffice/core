@@ -497,19 +497,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return xElement;
     }
 
-    // component operations
-
-    OUString getImplementationName_XMLBasicImporter()
-    {
-        return OUString( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
-    }
-
-    Sequence< OUString > getSupportedServiceNames_XMLBasicImporter()
-    {
-        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicImporter" };
-        return aNames;
-    }
-
     // XMLBasicImporterBase
 
     XMLBasicImporterBase::XMLBasicImporterBase( const Reference< XComponentContext >& rxContext, bool bOasis )
@@ -645,12 +632,13 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     OUString XMLBasicImporter::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        return getImplementationName_XMLBasicImporter();
+        return OUString( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
     }
 
     Sequence< OUString > XMLBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_XMLBasicImporter();
+        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicImporter" };
+        return aNames;
     }
 
     // XMLOasisBasicImporter
@@ -677,15 +665,15 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return aNames;
     }
 
-    // component operations
-
-    Reference< XInterface > SAL_CALL create_XMLBasicImporter(
-        Reference< XComponentContext > const & xContext )
-    {
-        return static_cast< lang::XTypeProvider * >( new XMLBasicImporter( xContext ) );
-    }
-
 }   // namespace xmlscript
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_xmlscript_XMLBasicImporter(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new xmlscript::XMLBasicImporter(context));
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_xmlscript_XMLOasisBasicImporter(
