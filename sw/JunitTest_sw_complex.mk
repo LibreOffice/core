@@ -25,7 +25,6 @@ $(eval $(call gb_JunitTest_set_defs,sw_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
-    sw/qa/complex/accessibility/AccessibleRelationSet \
     sw/qa/complex/indeterminateState/CheckIndeterminateState \
     sw/qa/complex/writer/CheckBookmarks \
     sw/qa/complex/writer/TestDocument \
@@ -41,7 +40,6 @@ $(eval $(call gb_JunitTest_use_jars,sw_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sw_complex,\
-    complex.accessibility.AccessibleRelationSet \
     complex.writer.CheckBookmarks \
     complex.writer.TextPortionEnumerationTest \
 ))
