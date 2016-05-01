@@ -1943,7 +1943,8 @@ vcl::Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
 
 void SvxLineWindow_Impl::GetFocus()
 {
-    m_aLineStyleLb->GrabFocus();
+    if ( m_aLineStyleLb )
+        m_aLineStyleLb->GrabFocus();
 }
 
 void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
