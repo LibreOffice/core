@@ -499,17 +499,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // component operations
 
-    OUString getImplementationName_XMLBasicImporter()
-    {
-        return OUString( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
-    }
-
-    Sequence< OUString > getSupportedServiceNames_XMLBasicImporter()
-    {
-        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicImporter" };
-        return aNames;
-    }
-
     OUString getImplementationName_XMLOasisBasicImporter()
     {
         return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" );
@@ -656,12 +645,13 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     OUString XMLBasicImporter::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        return getImplementationName_XMLBasicImporter();
+        return OUString( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
     }
 
     Sequence< OUString > XMLBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_XMLBasicImporter();
+        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicImporter" };
+        return aNames;
     }
 
     // XMLOasisBasicImporter
@@ -689,12 +679,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // component operations
 
-    Reference< XInterface > SAL_CALL create_XMLBasicImporter(
-        Reference< XComponentContext > const & xContext )
-    {
-        return static_cast< lang::XTypeProvider * >( new XMLBasicImporter( xContext ) );
-    }
-
     Reference< XInterface > SAL_CALL create_XMLOasisBasicImporter(
         Reference< XComponentContext > const & xContext )
     {
@@ -702,5 +686,13 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     }
 
 }   // namespace xmlscript
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_xmlscript_XMLBasicImporter(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new xmlscript::XMLBasicImporter(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

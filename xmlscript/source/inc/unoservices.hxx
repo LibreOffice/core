@@ -59,14 +59,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL create_XMLOasisBasicExporter(
     css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 css::uno::Sequence<OUString> SAL_CALL
-getSupportedServiceNames_XMLBasicImporter();
-
-OUString SAL_CALL getImplementationName_XMLBasicImporter();
-
-css::uno::Reference<css::uno::XInterface> SAL_CALL create_XMLBasicImporter(
-    css::uno::Reference<css::uno::XComponentContext> const & xContext);
-
-css::uno::Sequence<OUString> SAL_CALL
 getSupportedServiceNames_XMLOasisBasicImporter();
 
 OUString SAL_CALL getImplementationName_XMLOasisBasicImporter();
