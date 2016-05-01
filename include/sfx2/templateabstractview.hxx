@@ -30,6 +30,8 @@
 #define TEMPLATE_THUMBNAIL_MAX_WIDTH TEMPLATE_ITEM_MAX_WIDTH - 2*TEMPLATE_ITEM_PADDING
 
 class SfxDocumentTemplates;
+class TemplateViewItem;
+class PopupMenu;
 
 enum class FILTER_APPLICATION
 {
@@ -81,7 +83,9 @@ public:
 
     virtual void reload () { }
 
-    virtual void showRootRegion () = 0;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+
+    virtual void showAllTemplates () = 0;
 
     virtual void showRegion (ThumbnailViewItem *pItem) = 0;
 
@@ -102,7 +106,15 @@ public:
 
     void setOpenRegionHdl(const Link<void*,void> &rLink);
 
+    void setRightClickHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
     void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
     void updateThumbnailDimensions(long itemMaxSize);
 
@@ -117,25 +129,26 @@ public:
 
 protected:
 
-    DECL_LINK_TYPED(ShowRootRegionHdl, Button*, void);
-
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
-
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
 protected:
 
     sal_uInt16 mnCurRegionId;
     OUString maCurRegionName;
 
+    TemplateViewItem *maSelectedItem;
+
     long mnThumbnailWidth;
     long mnThumbnailHeight;
 
-    VclPtr<PushButton> maAllButton;
-    VclPtr<FixedText>  maFTName;
+    Point maPosition;
 
     Link<void*,void>              maOpenRegionHdl;
+    Link<ThumbnailViewItem*,void> maRightClickHdl;
     Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
+    Link<ThumbnailViewItem*,void> maEditTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEABSTRACTVIEW_HXX
