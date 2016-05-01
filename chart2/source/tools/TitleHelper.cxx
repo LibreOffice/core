@@ -170,6 +170,26 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
     return nullptr;
 }
 
+uno::Reference< XTitle > TitleHelper::createOrShowTitle(
+      TitleHelper::eTitleType eTitleType
+    , const OUString& rTitleText
+    , const uno::Reference< frame::XModel >& xModel
+    , const uno::Reference< uno::XComponentContext > & xContext
+    , ReferenceSizeProvider * pRefSizeProvider )
+{
+    uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
+    if( xTitled.is())
+    {
+        css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
+        xProps->setPropertyValue("Visible",css::uno::makeAny(true));
+        return xTitled;
+    }
+    else
+    {
+        return createTitle(eTitleType, rTitleText, xModel, xContext, pRefSizeProvider);
+    }
+}
+
 uno::Reference< XTitle > TitleHelper::createTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
@@ -370,6 +390,17 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
     if( xTitled.is())
     {
         xTitled->setTitleObject(nullptr);
+    }
+}
+
+void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
+                    , const css::uno::Reference< css::frame::XModel >& xModel )
+{
+    uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
+    if( xTitled.is())
+    {
+        css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
+        xProps->setPropertyValue("Visible",css::uno::makeAny(false));
     }
 }
 

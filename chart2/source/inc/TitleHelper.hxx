@@ -66,9 +66,20 @@ public:
                     , const css::uno::Reference< css::frame::XModel >& xModel
                     , const css::uno::Reference< css::uno::XComponentContext > & xContext
                     , ReferenceSizeProvider * pRefSizeProvider = nullptr );
+    static css::uno::Reference<
+            css::chart2::XTitle >
+          createOrShowTitle(  eTitleType nTitleIndex
+                    , const OUString& rTitleText
+                    , const css::uno::Reference< css::frame::XModel >& xModel
+                    , const css::uno::Reference< css::uno::XComponentContext > & xContext
+                    , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void removeTitle( eTitleType nTitleIndex
                     , const css::uno::Reference< css::frame::XModel >& xModel );
+
+    static void hideTitle( eTitleType nTitleIndex
+                    , const css::uno::Reference< css::frame::XModel >& xModel );
+
 
     static OUString getCompleteString( const css::uno::Reference< css::chart2::XTitle >& xTitle );
     static void setCompleteString( const OUString& rNewText
