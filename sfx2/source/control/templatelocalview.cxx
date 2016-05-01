@@ -18,6 +18,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
+#include <sfx2/sfxresid.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -27,14 +28,24 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
+#include <../doc/doc.hrc>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
+
+#define MNI_OPEN               1
+#define MNI_EDIT               2
+#define MNI_DEFAULT_TEMPLATE   3
+#define MNI_DELETE             4
+#define MNI_RENAME             5
+#define MNI_PROPERTIES         6
 
 static void lcl_updateThumbnails (TemplateContainerItem *pItem);
 
 TemplateLocalView::TemplateLocalView ( vcl::Window* pParent)
     : TemplateAbstractView(pParent),
-      mpDocTemplates(new SfxDocumentTemplates)
+      mpDocTemplates(new SfxDocumentTemplates),
+      maSelectedItem(nullptr)
 {
 }
 
@@ -175,6 +186,68 @@ void TemplateLocalView::showRegion(const OUString &rName)
             break;
         }
     }
+}
+
+void TemplateLocalView::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (rMEvt.IsRight())
+    {
+        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+        Point aPosition (rMEvt.GetPosPixel());
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+
+        if(pViewItem)
+        {
+            PopupMenu* pItemMenu = new PopupMenu;
+            pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
+            pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
+            pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+            pItemMenu->InsertSeparator();
+            pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
+            pItemMenu->InsertItem(MNI_RENAME,SfxResId(STR_RENAME).toString());
+            pItemMenu->InsertSeparator();
+            pItemMenu->InsertItem(MNI_PROPERTIES,SfxResId(STR_PROPERTIES).toString());
+            deselectItems();
+            pItem->setSelection(true);
+            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+            pItemMenu->Execute(this, Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+            pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
+            Invalidate();
+        }
+    }
+
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    switch(nMenuId)
+    {
+    case MNI_OPEN:
+        OnTemplateOpen();
+        break;
+    case MNI_EDIT:
+        break;
+    case MNI_DELETE:
+        break;
+    case MNI_RENAME:
+        break;
+    case MNI_DEFAULT_TEMPLATE:
+        break;
+    case MNI_PROPERTIES:
+        break;
+    default:
+        break;
+    }
+
+    return false;
+}
+
+void TemplateLocalView::OnTemplateOpen()
+{
 }
 
 sal_uInt16 TemplateLocalView::getCurRegionItemId() const
