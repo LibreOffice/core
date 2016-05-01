@@ -533,7 +533,7 @@ namespace dbaui
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
                 m_pEDDriverClass->SetText(m_pEDDriverClass->GetText().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pEDDriverClass->GetText());
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pEDDriverClass->GetText().trim());
             }
         }
         catch(Exception&)

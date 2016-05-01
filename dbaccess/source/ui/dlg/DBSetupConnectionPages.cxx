@@ -529,7 +529,7 @@ using namespace ::com::sun::star;
         }
         callModifiedHdl();
 
-        bool bRoadmapState = ((!m_pETDatabasename->GetText().isEmpty() ) && (!m_pETHostname->GetText().isEmpty()) && (!m_pNFPortNumber->GetText().isEmpty() ) && ( !m_pETDriverClass->GetText().isEmpty() ));
+        bool bRoadmapState = ((!m_pETDatabasename->GetText().isEmpty() ) && (!m_pETHostname->GetText().isEmpty()) && (!m_pNFPortNumber->GetText().isEmpty() ) && ( !m_pETDriverClass->GetText().trim().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
     }
 
@@ -546,7 +546,7 @@ using namespace ::com::sun::star;
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
                 m_pETDriverClass->SetText(m_pETDriverClass->GetText().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText());
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText().trim());
             }
         }
         catch(css::uno::Exception&)
@@ -651,7 +651,7 @@ using namespace ::com::sun::star;
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bEnableTestConnection = !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
-        bEnableTestConnection = bEnableTestConnection && (!m_pETDriverClass->GetText().isEmpty());
+        bEnableTestConnection = bEnableTestConnection && (!m_pETDriverClass->GetText().trim().isEmpty());
         return bEnableTestConnection;
     }
 
@@ -662,12 +662,12 @@ using namespace ::com::sun::star;
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_pETDriverClass->GetText().isEmpty() )
+            if ( !m_pETDriverClass->GetText().trim().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
                 m_pETDriverClass->SetText(m_pETDriverClass->GetText().trim()); // fdo#68341
-                bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText());
+                bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText().trim());
             }
         }
         catch(css::uno::Exception&)
@@ -682,7 +682,7 @@ using namespace ::com::sun::star;
     IMPL_LINK_TYPED(OJDBCConnectionPageSetup, OnEditModified, Edit&, _rEdit, void)
     {
         if ( &_rEdit == m_pETDriverClass )
-            m_pPBTestJavaDriver->Enable( !m_pETDriverClass->GetText().isEmpty() );
+            m_pPBTestJavaDriver->Enable( !m_pETDriverClass->GetText().trim().isEmpty() );
         SetRoadmapStateValue(checkTestConnection());
         // tell the listener we were modified
         callModifiedHdl();
