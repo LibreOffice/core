@@ -31,7 +31,7 @@ namespace abp
     using namespace ::com::sun::star::sdbc;
 
     // TypeSelectionPage
-    TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
+    TypeSelectionPage::TypeSelectionPage( OAddressBookSourcePilot* _pParent )
       : AddressBookSourcePage(_pParent, "SelectTypePage",
           "modules/sabpilot/ui/selecttypepage.ui")
     {

@@ -29,7 +29,7 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    AddressBookSourcePage::AddressBookSourcePage(OAddessBookSourcePilot* _pParent, const OString& rID, const OUString& rUIXMLDescription)
+    AddressBookSourcePage::AddressBookSourcePage(OAddressBookSourcePilot* _pParent, const OString& rID, const OUString& rUIXMLDescription)
         :AddressBookSourcePage_Base(_pParent, rID, rUIXMLDescription)
     {
     }
@@ -41,15 +41,15 @@ namespace abp
     }
 
 
-    OAddessBookSourcePilot* AddressBookSourcePage::getDialog()
+    OAddressBookSourcePilot* AddressBookSourcePage::getDialog()
     {
-        return static_cast<OAddessBookSourcePilot*>(GetParent());
+        return static_cast<OAddressBookSourcePilot*>(GetParent());
     }
 
 
-    const OAddessBookSourcePilot* AddressBookSourcePage::getDialog() const
+    const OAddressBookSourcePilot* AddressBookSourcePage::getDialog() const
     {
-        return static_cast<const OAddessBookSourcePilot*>(GetParent());
+        return static_cast<const OAddressBookSourcePilot*>(GetParent());
     }
 
 

@@ -31,7 +31,7 @@ namespace abp
 {
 
 
-    class OAddessBookSourcePilot;
+    class OAddressBookSourcePilot;
     struct AddressSettings;
 
     typedef ::svt::OWizardPage AddressBookSourcePage_Base;
@@ -39,12 +39,12 @@ namespace abp
     class AddressBookSourcePage : public AddressBookSourcePage_Base
     {
     protected:
-        AddressBookSourcePage(OAddessBookSourcePilot *pParent, const OString& rID, const OUString& rUIXMLDescription);
+        AddressBookSourcePage(OAddressBookSourcePilot *pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     protected:
         // helper
-        OAddessBookSourcePilot* getDialog();
-        const OAddessBookSourcePilot*   getDialog() const;
+        OAddressBookSourcePilot* getDialog();
+        const OAddressBookSourcePilot*   getDialog() const;
         const css::uno::Reference< css::uno::XComponentContext > &
                                 getORB();
         AddressSettings&        getSettings();

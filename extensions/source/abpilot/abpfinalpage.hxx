@@ -50,7 +50,7 @@ namespace abp
         StringBag       m_aInvalidDataSourceNames;
 
     public:
-        explicit FinalPage(OAddessBookSourcePilot* _pParent);
+        explicit FinalPage(OAddressBookSourcePilot* _pParent);
         virtual ~FinalPage();
         virtual void dispose() override;
 

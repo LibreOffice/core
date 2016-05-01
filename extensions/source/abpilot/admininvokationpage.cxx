@@ -24,7 +24,7 @@
 
 namespace abp
 {
-    AdminDialogInvokationPage::AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent )
+    AdminDialogInvokationPage::AdminDialogInvokationPage( OAddressBookSourcePilot* _pParent )
         : AddressBookSourcePage(_pParent, "InvokeAdminPage",
             "modules/sabpilot/ui/invokeadminpage.ui")
     {
