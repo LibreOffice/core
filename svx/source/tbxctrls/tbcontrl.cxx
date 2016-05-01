@@ -2037,7 +2037,8 @@ bool SvxLineWindow_Impl::Close()
 
 void SvxLineWindow_Impl::GetFocus()
 {
-    m_aLineStyleLb->GrabFocus();
+    if ( m_aLineStyleLb )
+        m_aLineStyleLb->GrabFocus();
 }
 
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(

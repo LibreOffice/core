@@ -581,7 +581,8 @@ void SvxLineEndWindow::GetFocus()
     SfxPopupWindow::GetFocus();
     // Grab the focus to the line ends value set so that it can be controlled
     // with the keyboard.
-    aLineEndSet->GrabFocus();
+    if ( aLineEndSet )
+        aLineEndSet->GrabFocus();
 }
 
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) :
