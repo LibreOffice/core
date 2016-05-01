@@ -111,6 +111,19 @@
 #define IMG_ACTION_SORT                     (RID_SFX_DOC_START+149)
 #define IMG_ACTION_REFRESH                  (RID_SFX_DOC_START+150)
 
+#define STR_OPEN                            (RID_SFX_DOC_START+151)
+#define STR_EDIT_TEMPLATE                   (RID_SFX_DOC_START+152)
+#define STR_DEFAULT_TEMPLATE                (RID_SFX_DOC_START+153)
+#define STR_RENAME                          (RID_SFX_DOC_START+154)
+#define STR_DELETE                          (RID_SFX_DOC_START+155)
+#define STR_PROPERTIES                      (RID_SFX_DOC_START+156)
+#define STR_RENAME_TEMPLATE                 (RID_SFX_DOC_START+157)
+
+#define STR_CATEGORY_NEW                    (RID_SFX_DOC_START+158)
+#define STR_CATEGORY_SELECT                 (RID_SFX_DOC_START+100)
+#define STR_CATEGORY_DELETE                 (RID_SFX_DOC_START+101)
+#define STR_CREATE_ERROR                    (RID_SFX_DOC_START+103)
+
 // please update to the last id
 #define ACT_SFX_DOC_END IMG_ACTION_REFRESH
 #if ACT_SFX_DOC_END > RID_SFX_DOC_END
