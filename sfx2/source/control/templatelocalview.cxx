@@ -91,6 +91,7 @@ void TemplateLocalView::Populate ()
                                                                           getThumbnailHeight());
 
             pItem->maTemplates.push_back(aProperties);
+            maAllTemplates.push_back(aProperties);
         }
 
         lcl_updateThumbnails(pItem);
@@ -147,6 +148,12 @@ void TemplateLocalView::showRootRegion()
 
     updateItems(items);
 
+    maOpenRegionHdl.Call(nullptr);
+}
+
+void TemplateLocalView::showAllTemplates()
+{
+    insertItems(maAllTemplates);
     maOpenRegionHdl.Call(nullptr);
 }
 

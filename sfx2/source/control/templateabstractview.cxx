@@ -13,9 +13,11 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
+#include <sfx2/inputdlg.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
+#include <comphelper/string.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -34,6 +36,13 @@
 
 using namespace basegfx;
 using namespace drawinglayer::primitive2d;
+
+#define MNI_OPEN               1
+#define MNI_EDIT               2
+#define MNI_DEFAULT_TEMPLATE   3
+#define MNI_DELETE             4
+#define MNI_RENAME             5
+#define MNI_PROPERTIES         6
 
 bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
 {
@@ -122,6 +131,7 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
 TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mnCurRegionId(0),
+      maSelectedItem(nullptr),
       mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH),
       mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT),
       maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
@@ -136,6 +146,7 @@ TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinSt
 TemplateAbstractView::TemplateAbstractView(vcl::Window *pParent)
     : ThumbnailView(pParent),
       mnCurRegionId(0),
+      maSelectedItem(nullptr),
       mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH),
       mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT),
       maAllButton(VclPtr<PushButton>::Create(this, SfxResId(BTN_ALL_TEMPLATES))),
@@ -215,6 +226,86 @@ void TemplateAbstractView::updateThumbnailDimensions(long itemMaxSize)
     mnThumbnailHeight = itemMaxSize;
 }
 
+
+void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (rMEvt.IsRight())
+    {
+        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+        Point aPosition (rMEvt.GetPosPixel());
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+
+        if(pViewItem)
+        {
+            std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
+            pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
+            pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
+            pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+            pItemMenu->InsertSeparator();
+            pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
+            pItemMenu->InsertItem(MNI_RENAME,SfxResId(STR_RENAME).toString());
+            pItemMenu->InsertSeparator();
+            pItemMenu->InsertItem(MNI_PROPERTIES,SfxResId(STR_PROPERTIES).toString());
+            deselectItems();
+            pItem->setSelection(true);
+            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+            pItemMenu->SetSelectHdl(LINK(this, TemplateAbstractView, ContextMenuSelectHdl));
+            pItemMenu->Execute(this, Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+            Invalidate();
+        }
+    }
+
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+IMPL_LINK_TYPED(TemplateAbstractView, ContextMenuSelectHdl, Menu*, pMenu, bool)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    switch(nMenuId)
+    {
+    case MNI_OPEN:
+        maOpenTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_EDIT:
+        maEditTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_DELETE:
+        maDeleteTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_RENAME:
+    {
+        ScopedVclPtrInstance< InputDialog > m_pTitleEditDlg( SfxResId(STR_RENAME_TEMPLATE).toString(), this);
+        OUString sOldTitle = maSelectedItem->getHelpText();
+        m_pTitleEditDlg->SetEntryText( sOldTitle );
+        m_pTitleEditDlg->HideHelpBtn();
+
+        if(!m_pTitleEditDlg->Execute())
+            break;
+        OUString sNewTitle = comphelper::string::strip( m_pTitleEditDlg->GetEntryText(), ' ');
+
+        if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
+        {
+            maSelectedItem->setTitle(sNewTitle);
+            maSelectedItem->setEditTitle(true);
+        }
+    }
+        break;
+    case MNI_DEFAULT_TEMPLATE:
+        maDefaultTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_PROPERTIES:
+        //TODO
+        break;
+    default:
+        break;
+    }
+
+    return false;
+}
+
+
 void TemplateAbstractView::setOpenRegionHdl(const Link<void*,void> &rLink)
 {
     maOpenRegionHdl = rLink;
@@ -223,6 +314,21 @@ void TemplateAbstractView::setOpenRegionHdl(const Link<void*,void> &rLink)
 void TemplateAbstractView::setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
 {
     maOpenTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maEditTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDeleteTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDefaultTemplateHdl = rLink;
 }
 
 BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long height)

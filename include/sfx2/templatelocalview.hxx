@@ -42,6 +42,8 @@ public:
 
     virtual void showRootRegion () override;
 
+    virtual void showAllTemplates () override;
+
     virtual void showRegion (ThumbnailViewItem *pItem) override;
 
     void showRegion (const OUString &rName);
@@ -99,6 +101,7 @@ private:
 
     SfxDocumentTemplates *mpDocTemplates;
     std::vector<TemplateContainerItem* > maRegions;
+    std::vector<TemplateItemProperties > maAllTemplates;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
