@@ -1326,7 +1326,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
                 [nExpected](SwHistoryHint *const pHint) -> bool {
                     SwHistoryResetText const*const pReset(
                             dynamic_cast<SwHistoryResetText const*>(pHint));
-                    return (pReset) ? pReset->GetWhich() == nExpected : false;
+                    return pReset && (pReset->GetWhich() == nExpected);
                 }) != m_pHistory->m_SwpHstry.end());
         }
     }
