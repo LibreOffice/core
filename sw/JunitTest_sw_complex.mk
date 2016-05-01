@@ -20,7 +20,6 @@
 $(eval $(call gb_JunitTest_JunitTest,sw_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
-    sw/qa/complex/accessibility/AccessibleRelationSet \
     sw/qa/complex/indeterminateState/CheckIndeterminateState \
 ))
 
@@ -33,7 +32,6 @@ $(eval $(call gb_JunitTest_use_jars,sw_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sw_complex,\
-    complex.accessibility.AccessibleRelationSet \
 ))
 
 # vim: set noet sw=4 ts=4:
