@@ -105,6 +105,8 @@ core_constructor_list = [
     "com_sun_star_comp_task_OfficeRestartManager",
     "IndexedPropertyValuesContainer_get_implementation",
     "NamedPropertyValuesContainer_get_implementation",
+    "com_sun_star_comp_SequenceInputStreamService",
+    "com_sun_star_comp_SequenceOutputStreamService",
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
