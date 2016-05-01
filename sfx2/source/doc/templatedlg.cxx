@@ -245,8 +245,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
                               TEMPLATE_ITEM_PADDING);
 
     mpLocalView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
-    mpLocalView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg,OpenRegionHdl));
-    mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    mpLocalView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg, OpenRegionHdl));
+    mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg, OpenTemplateHdl));
+    mpLocalView->setEditTemplateHdl(LINK(this,SfxTemplateManagerDlg, EditTemplateHdl));
+    mpLocalView->setDeleteTemplateHdl(LINK(this,SfxTemplateManagerDlg, DeleteTemplateHdl));
+    mpLocalView->setDefaultTemplateHdl(LINK(this,SfxTemplateManagerDlg, DefaultTemplateHdl));
 
     // Set online view position and dimensions
     mpRemoteView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -724,6 +727,70 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pIte
         }
 
         Close();
+    }
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    if(!mbIsSaveMode)
+    {
+        uno::Sequence< PropertyValue > aArgs(3);
+        aArgs[0].Name = "AsTemplate";
+        aArgs[0].Value <<= false;
+        aArgs[1].Name = "MacroExecutionMode";
+        aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+        aArgs[2].Name = "UpdateDocMode";
+        aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+
+        uno::Reference< XStorable > xStorable;
+        TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+        try
+        {
+            xStorable.set( mxDesktop->loadComponentFromURL(pViewItem->getPath(),"_default", 0, aArgs ),
+                           uno::UNO_QUERY );
+        }
+        catch( const uno::Exception& )
+        {
+        }
+
+        Close();
+    }
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+
+    if ( aQueryDlg->Execute() != RET_YES )
+        return;
+
+    OUString aDeletedTemplate;
+    sal_uInt16 nRegionItemId = mpLocalView->getCurRegionItemId();
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+    if (!mpLocalView->removeTemplate((pViewItem)->mnId,nRegionItemId))
+    {
+        aDeletedTemplate = (pItem)->maTitle;
+   }
+
+    if (!aDeletedTemplate.isEmpty())
+    {
+        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
+        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
+    }
+}
+
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+
+    OUString aServiceName;
+    if (lcl_getServiceName(pViewItem->getPath(),aServiceName))
+    {
+        SfxObjectFactory::SetStandardTemplate(aServiceName,pViewItem->getPath());
+
+        createDefaultTemplateMenu();
     }
 }
 

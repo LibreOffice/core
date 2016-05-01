@@ -80,6 +80,9 @@ private:
 
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(DeleteTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(DefaultTemplateHdl, ThumbnailViewItem*, void);
 
     DECL_LINK_TYPED(SearchUpdateHdl, Edit&, void);
 

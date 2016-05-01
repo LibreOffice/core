@@ -225,6 +225,21 @@ void TemplateAbstractView::setOpenTemplateHdl(const Link<ThumbnailViewItem*,void
     maOpenTemplateHdl = rLink;
 }
 
+void TemplateAbstractView::setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maEditTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDeleteTemplateHdl = rLink;
+}
+
+void TemplateAbstractView::setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDefaultTemplateHdl = rLink;
+}
+
 BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long height)
 {
     BitmapEx aImg = rImg;
