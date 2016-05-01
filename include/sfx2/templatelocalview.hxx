@@ -17,6 +17,7 @@
 
 class SfxDocumentTemplates;
 class TemplateContainerItem;
+class PopupMenu;
 
 namespace com {
     namespace sun { namespace star { namespace frame {
@@ -40,11 +41,17 @@ public:
 
     virtual void reload () override;
 
-    virtual void showRootRegion () override;
+    virtual void showAllTemplates () override;
 
     virtual void showRegion (ThumbnailViewItem *pItem) override;
 
     void showRegion (const OUString &rName);
+
+    void createManageModeContextMenu();
+
+    void createSaveModeContextMenu();
+
+    DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
 
     sal_uInt16 getCurRegionItemId () const;
 
@@ -99,6 +106,7 @@ private:
 
     SfxDocumentTemplates *mpDocTemplates;
     std::vector<TemplateContainerItem* > maRegions;
+    std::vector<TemplateItemProperties > maAllTemplates;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX

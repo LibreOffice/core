@@ -48,9 +48,33 @@ String STR_CLOSEDOC_ANDRETURN
 {
     Text [ en-US ] = "~Close & Return to " ;
 };
-String STR_EDIT
+String STR_OPEN
+{
+    Text [ en-US ] = "Open" ;
+};
+String STR_EDIT_TEMPLATE
 {
     Text [ en-US ] = "Edit" ;
+};
+String STR_DEFAULT_TEMPLATE
+{
+    Text [ en-US ] = "Set As Default" ;
+};
+String STR_DELETE
+{
+    Text [ en-US ] = "Delete" ;
+};
+String STR_RENAME
+{
+    Text [ en-US ] = "Rename" ;
+};
+String STR_PROPERTIES
+{
+    Text [ en-US ] = "Properties" ;
+};
+String STR_RENAME_TEMPLATE
+{
+    Text [ en-US ] = "Enter New Name: " ;
 };
 String STR_AUTOMATICVERSION
 {
