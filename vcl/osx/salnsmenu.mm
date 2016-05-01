@@ -79,6 +79,26 @@
     (void)aSender;
     SolarMutexGuard aGuard;
 
+    // tdf#49853 Keyboard shortcuts are also handled by the menu bar, but at least some of them
+    // must still end up in the view. This is necessary to handle common edit actions in docked
+    // windows (e.g. in toolbar fields).
+    NSEvent* pEvent = [NSApp currentEvent];
+    if( pEvent && [pEvent type] == NSKeyDown )
+    {
+        unsigned int nModMask = ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask));
+        NSString* charactersIgnoringModifiers = [pEvent charactersIgnoringModifiers];
+        if( nModMask == NSCommandKeyMask &&
+          ( [charactersIgnoringModifiers isEqualToString: @"v"] ||
+            [charactersIgnoringModifiers isEqualToString: @"c"] ||
+            [charactersIgnoringModifiers isEqualToString: @"x"] ||
+            [charactersIgnoringModifiers isEqualToString: @"a"] ||
+            [charactersIgnoringModifiers isEqualToString: @"z"] ) )
+        {
+            [[[NSApp keyWindow] contentView] keyDown: pEvent];
+            return;
+        }
+    }
+
     const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : nullptr;
     if( pFrame && AquaSalFrame::isAlive( pFrame ) && ! pFrame->GetWindow()->IsInModalMode() )
     {
