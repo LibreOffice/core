@@ -18,6 +18,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
+#include <sfx2/sfxresid.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -26,6 +27,8 @@
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+#include <../doc/doc.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;

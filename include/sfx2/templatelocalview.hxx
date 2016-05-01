@@ -17,6 +17,8 @@
 
 class SfxDocumentTemplates;
 class TemplateContainerItem;
+class TemplateViewItem;
+class PopupMenu;
 
 namespace com {
     namespace sun { namespace star { namespace frame {
