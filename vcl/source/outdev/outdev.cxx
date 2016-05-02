@@ -42,7 +42,6 @@ namespace {
 // Begin initializer and accessor public functions
 
 OutputDevice::OutputDevice() :
-    mnRefCnt(1), // cf. VclPtrInstance and README.lifecycle
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
