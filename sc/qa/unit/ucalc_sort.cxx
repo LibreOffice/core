@@ -1695,6 +1695,82 @@ void Test::testSortBroadcaster()
     m_pDoc->DeleteTab(0);
 }
 
+// tdf#99417 check that formulas are tracked that *only* indirectly depend on
+// sorted data and no other broadcasting than BroadcastBroadcasters is
+// involved (for which this test can not be included in testSortBroadcaster()).
+void Test::testSortBroadcastBroadcaster()
+{
+    SortRefNoUpdateSetter aUpdateSet;
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Sort");
+
+    {
+        const char* aData[][3] = {
+            { "1", "=A1", "=B1" },
+            { "2", "=A2", "=B2" },
+        };
+
+        ScAddress aPos(0,0,0);
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
+
+        {
+            // Expected output table content.  0 = empty cell
+            const char* aOutputCheck[][3] = {
+                { "1", "1", "1" },
+                { "2", "2", "2" },
+            };
+
+            bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+            CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        }
+
+        // Sort A1:A2.
+        m_pDoc->SetAnonymousDBData(
+                0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 1));
+
+        ScDBDocFunc aFunc(getDocShell());
+
+        // Sort A1:A2 by column A descending.
+        ScSortParam aSortData;
+        aSortData.nCol1 = 0;
+        aSortData.nCol2 = 0;
+        aSortData.nRow1 = 0;
+        aSortData.nRow2 = 1;
+        aSortData.bHasHeader = false;
+        aSortData.bByRow = true;
+        aSortData.maKeyState[0].bDoSort = true;
+        aSortData.maKeyState[0].nField = 0;
+        aSortData.maKeyState[0].bAscending = false;
+        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        CPPUNIT_ASSERT(bSorted);
+
+        {
+            // Expected output table content.  0 = empty cell
+            const char* aOutputCheck[][3] = {
+                { "2", "2", "2" },
+                { "1", "1", "1" },
+            };
+
+            bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+            CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        }
+
+        // Make sure that the formulas in B1:C2 are not adjusted.
+        if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A1"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "A2"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(2,0,0), "B1"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "B2"))
+            CPPUNIT_FAIL("Wrong formula!");
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSortOutOfPlaceResult()
 {
     m_pDoc->InsertTab(0, "Sort");
