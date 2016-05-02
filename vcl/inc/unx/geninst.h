@@ -90,7 +90,7 @@ public:
 
     // Printing
     virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,
-                                                         ImplJobSetup* pSetupData ) override;
+                                                         const ImplJobSetup* pSetupData ) override;
     virtual void                DestroyInfoPrinter     ( SalInfoPrinter* pPrinter ) override;
     virtual SalPrinter*         CreatePrinter          ( SalInfoPrinter* pInfoPrinter ) override;
     virtual void                DestroyPrinter         ( SalPrinter* pPrinter ) override;
@@ -114,7 +114,7 @@ public:
 protected:
     static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
                                   SalPrinterQueueInfo* pQueueInfo,
-                                  ImplJobSetup* pSetupData );
+                                  const ImplJobSetup* pSetupData );
 };
 
 inline SalGenericInstance *GetGenericInstance()

@@ -32,6 +32,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "view.hrc"
+#include "vcl/jobset.h"
 
 // struct SfxPrinter_Impl ------------------------------------------------
 
@@ -115,13 +116,13 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const JobSetup& rTheOrigJobSetup ) :
 
-    Printer         ( rTheOrigJobSetup.GetPrinterName() ),
+    Printer         ( rTheOrigJobSetup.ImplGetConstData()->GetPrinterName() ),
     pOptions        ( pTheOptions )
 
 {
     assert(pOptions);
     pImpl = new SfxPrinter_Impl;
-    bKnown = GetName() == rTheOrigJobSetup.GetPrinterName();
+    bKnown = GetName() == rTheOrigJobSetup.ImplGetConstData()->GetPrinterName();
 
     if ( bKnown )
         SetJobSetup( rTheOrigJobSetup );

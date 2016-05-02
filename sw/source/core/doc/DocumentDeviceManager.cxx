@@ -44,6 +44,7 @@
 #include <viewopt.hxx>
 #include <swwait.hxx>
 #include <fntcache.hxx>
+#include "vcl/jobset.h"
 
 class SwDocShell;
 class SwWait;
@@ -190,7 +191,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 
     if ( mpPrt )
     {
-        if ( mpPrt->GetName() == rJobSetup.GetPrinterName() )
+        if ( mpPrt->GetName() == rJobSetup.ImplGetConstData()->GetPrinterName() )
         {
             if ( mpPrt->GetJobSetup() != rJobSetup )
             {

@@ -24,14 +24,14 @@ public:
     using PspSalPrinter::StartJob;
     virtual bool StartJob(
             const OUString* i_pFileName, const OUString& i_rJobName,
-            const OUString& i_rAppName, ImplJobSetup* io_pSetupData,
+            const OUString& i_rAppName, const ImplJobSetup* io_pSetupData,
             vcl::PrinterController& io_rController) override;
     virtual bool EndJob() override;
 
 private:
     bool impl_doJob(
             const OUString* i_pFileName, const OUString& i_rJobName,
-            const OUString& i_rAppName, ImplJobSetup* io_pSetupData,
+            const OUString& i_rAppName, const ImplJobSetup* io_pSetupData,
             int i_nCopies, bool i_bCollate, vcl::PrinterController& io_rController);
 
 private:
