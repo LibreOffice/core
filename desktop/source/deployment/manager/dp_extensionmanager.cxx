@@ -52,6 +52,13 @@
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
 
+#include <vcl/layout.hxx>
+#include <svtools/restartdialog.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/solarmutex.hxx>
+#include <vcl/svapp.hxx>
+#include <svtools/apearcfg.hxx>
+
 #include <list>
 #include <algorithm>
 #include <set>
@@ -65,6 +72,7 @@ namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 
 using ::com::sun::star::uno::Reference;
+using namespace ::svt;
 
 namespace {
 
@@ -1493,6 +1501,8 @@ void ExtensionManager::fireModified()
         pContainer->forEach<util::XModifyListener>(
             [this] (uno::Reference<util::XModifyListener> const& xListener)
                 { return xListener->modified(lang::EventObject(static_cast<OWeakObject *>(this))); });
+        SolarMutexGuard aGuard;
+        ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_EXTENSION_INSTALL);
     }
 }
 
