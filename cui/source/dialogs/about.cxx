@@ -119,7 +119,7 @@ IMPL_LINK( AboutDialog, HandleClick, Button*, pButton, void )
     else if (pButton == m_pWebsiteButton)
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
-        localizeWebserviceURI(sURL);
+        // localizeWebserviceURI(sURL);
     }
 
     // If the URL is empty, don't do anything
