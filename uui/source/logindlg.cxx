@@ -61,6 +61,12 @@ void LoginDialog::dispose()
     ModalDialog::dispose();
 }
 
+void LoginDialog::SetPassword( const OUString& rNew )
+{
+    m_pPasswordED->SetText( rNew );
+    SetRequest();
+}
+
 void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
 {
     if ( ( nFlags & LF_NO_PATH ) == LF_NO_PATH )
@@ -128,6 +134,23 @@ void LoginDialog::EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled )
     m_pAccountED->Enable( !bUseSysCredsEnabled );
 }
 
+void LoginDialog::SetRequest()
+{
+    bool oldPwd = !m_pPasswordED->GetText().isEmpty();
+    OUString aRequest;
+    if (m_pAccountFT->IsVisible() && !m_realm.isEmpty())
+    {
+        aRequest = get<FixedText>(oldPwd ? "wrongloginrealm" : "loginrealm")
+            ->GetText();
+        aRequest = aRequest.replaceAll("%2", m_realm);
+    }
+    else
+        aRequest = get<FixedText>(oldPwd ? "wrongrequestinfo" : "requestinfo")
+            ->GetText();
+    aRequest = aRequest.replaceAll("%1", m_server);
+    m_pRequestInfo->SetText(aRequest);
+}
+
 IMPL_LINK_NOARG_TYPED(LoginDialog, OKHdl_Impl, Button*, void)
 {
     // trim the strings
@@ -165,7 +188,8 @@ IMPL_LINK_NOARG_TYPED(LoginDialog, UseSysCredsHdl_Impl, Button*, void)
 
 LoginDialog::LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
     const OUString& rServer, const OUString& rRealm)
-    : ModalDialog(pParent, "LoginDialog", "uui/ui/logindialog.ui")
+    : ModalDialog(pParent, "LoginDialog", "uui/ui/logindialog.ui"),
+      m_server(rServer), m_realm(rRealm)
 {
     get(m_pErrorFT, "errorft");
     get(m_pErrorInfo, "errorinfo");
@@ -183,20 +207,10 @@ LoginDialog::LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
     get(m_pUseSysCredsCB, "syscreds");
     get(m_pOKBtn, "ok");
 
-    OUString aRequest;
-    if ((nFlags & LF_NO_ACCOUNT) != 0 && !rRealm.isEmpty())
-    {
-        aRequest = get<FixedText>("loginrealm")->GetText();
-        aRequest = aRequest.replaceAll("%2", rRealm);
-    }
-    else
-        aRequest = m_pRequestInfo->GetText();
-
     if ( !( ( nFlags & LF_NO_USESYSCREDS ) == LF_NO_USESYSCREDS ) )
       EnableUseSysCredsControls_Impl( m_pUseSysCredsCB->IsChecked() );
 
-    aRequest = aRequest.replaceAll("%1", rServer);
-    m_pRequestInfo->SetText(aRequest);
+    SetRequest();
 
     m_pPathED->SetMaxTextLen( _MAX_PATH );
     m_pNameED->SetMaxTextLen( _MAX_PATH );
