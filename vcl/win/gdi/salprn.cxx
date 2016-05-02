@@ -94,9 +94,9 @@ static char aImplDevice[]  = "device";
 static LPDEVMODEW SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
 {
     LPDEVMODEW pRet = NULL;
-    SalDriverData* pDrv = (SalDriverData*)pSetupData->mpDriverData;
-    if( pSetupData->mnDriverDataLen >= sizeof(DEVMODEW)+sizeof(SalDriverData)-1 )
-        pRet = ((LPDEVMODEW)((pSetupData->mpDriverData) + (pDrv->mnDriverOffset)));
+    SalDriverData* pDrv = (SalDriverData*)pSetupData->GetDriverData();
+    if( pSetupData->GetDriverDataLen() >= sizeof(DEVMODEW)+sizeof(SalDriverData)-1 )
+        pRet = ((LPDEVMODEW)((pSetupData->GetDriverData()) + (pDrv->mnDriverOffset)));
     return pRet;
 }
 
@@ -262,7 +262,7 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
                              BYTE* pOutput, const ImplJobSetup* pSetupData )
 {
     DEVMODEW* pDevMode;
-    if ( !pSetupData || !pSetupData->mpDriverData )
+    if ( !pSetupData || !pSetupData->GetDriverData() )
         pDevMode = NULL;
     else
         pDevMode = SAL_DEVMODE_W( pSetupData );
@@ -273,9 +273,9 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
 }
 
 static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
-                                 ImplJobSetup* pSetupData, bool bDelete )
+                                 const ImplJobSetup* pSetupData, bool bDelete )
 {
-    if ( pSetupData && pSetupData->mpDriverData )
+    if ( pSetupData && pSetupData->GetDriverData() )
     {
         // signature and size must fit to avoid using
         // JobSetups from a wrong system
@@ -285,7 +285,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
         DEVMODEW* pDevModeW = NULL;
         LONG dmSpecVersion = -1;
         LONG dmDriverVersion = -1;
-        SalDriverData* pSalDriverData = (SalDriverData*)pSetupData->mpDriverData;
+        SalDriverData* pSalDriverData = (SalDriverData*)pSetupData->GetDriverData();
         BYTE* pDriverData = ((BYTE*)pSalDriverData) + pSalDriverData->mnDriverOffset;
         pDevModeW = (DEVMODEW*)pDriverData;
 
@@ -332,11 +332,11 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
 
             ClosePrinter( hPrn );
         }
-        SalDriverData* pSetupDriverData = (SalDriverData*)(pSetupData->mpDriverData);
-        if ( (pSetupData->mnSystem == JOBSETUP_SYSTEM_WINDOWS) &&
-             (pPrinter->maDriverName == pSetupData->maDriver) &&
-             (pSetupData->mnDriverDataLen > sizeof( SalDriverData )) &&
-             (long)(pSetupData->mnDriverDataLen - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
+        SalDriverData* pSetupDriverData = (SalDriverData*)(pSetupData->GetDriverData());
+        if ( (pSetupData->GetSystem() == JOBSETUP_SYSTEM_WINDOWS) &&
+             (pPrinter->maDriverName == pSetupData->GetDriver()) &&
+             (pSetupData->GetDriverDataLen() > sizeof( SalDriverData )) &&
+             (long)(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
              pSetupDriverData->mnSysSignature == SAL_DRIVERDATA_SYSSIGN )
         {
             if( pDevModeW &&
@@ -346,16 +346,16 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
         }
         if ( bDelete )
         {
-            rtl_freeMemory( pSetupData->mpDriverData );
-            pSetupData->mpDriverData = NULL;
-            pSetupData->mnDriverDataLen = 0;
+            rtl_freeMemory( pSetupData->GetDriverData() );
+            pSetupData->SetDriverData( NULL );
+            pSetupData->SetDriverDataLen( 0 );
         }
     }
 
     return FALSE;
 }
 
-static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData,
+static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData,
                                    bool bIn, WinSalFrame* pVisibleDlgParent )
 {
     HANDLE hPrn;
@@ -393,7 +393,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     // check if we have a suitable input buffer
     if ( bIn && ImplTestSalJobSetup( pPrinter, pSetupData, FALSE ) )
     {
-        pInBuffer = (BYTE*)pSetupData->mpDriverData + ((SalDriverData*)pSetupData->mpDriverData)->mnDriverOffset;
+        pInBuffer = (BYTE*)pSetupData->GetDriverData() + ((SalDriverData*)pSetupData->GetDriverData())->mnDriverOffset;
         nMode |= DM_IN_BUFFER;
     }
 
@@ -438,11 +438,11 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 
     // update data
-    if ( pSetupData->mpDriverData )
-        rtl_freeMemory( pSetupData->mpDriverData );
-    pSetupData->mnDriverDataLen = nDriverDataLen;
-    pSetupData->mpDriverData    = (BYTE*)pOutBuffer;
-    pSetupData->mnSystem        = JOBSETUP_SYSTEM_WINDOWS;
+    if ( pSetupData->GetDriverData() )
+        rtl_freeMemory( pSetupData->GetDriverData() );
+    pSetupData->SetDriverDataLen( nDriverDataLen );
+    pSetupData->SetDriverData((BYTE*)pOutBuffer );
+    pSetupData->SetSystem( JOBSETUP_SYSTEM_WINDOWS );
 
     return TRUE;
 }
@@ -455,9 +455,9 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 #define CHOOSE_DEVMODE(i)\
     (pDevModeW->i)
 
-static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
+static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
-    if ( !pSetupData || !pSetupData->mpDriverData )
+    if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
 
     DECLARE_DEVMODE( pSetupData );
@@ -466,9 +466,9 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     if ( nFlags & JobSetFlags::ORIENTATION )
     {
         if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_PORTRAIT )
-            pSetupData->meOrientation = ORIENTATION_PORTRAIT;
+            pSetupData->SetOrientation( ORIENTATION_PORTRAIT );
         else if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_LANDSCAPE )
-            pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
+            pSetupData->SetOrientation( ORIENTATION_LANDSCAPE );
     }
 
     // PaperBin
@@ -480,14 +480,14 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         {
             WORD* pBins = (WORD*)rtl_allocateZeroMemory( nCount*sizeof(WORD) );
             ImplDeviceCaps( pPrinter, DC_BINS, (BYTE*)pBins, pSetupData );
-            pSetupData->mnPaperBin = 0;
+            pSetupData->SetPaperBin( 0 );
 
             // search the right bin and assign index to mnPaperBin
             for( DWORD i = 0; i < nCount; ++i )
             {
                 if( CHOOSE_DEVMODE(dmDefaultSource) == pBins[ i ] )
                 {
-                    pSetupData->mnPaperBin = (sal_uInt16)i;
+                    pSetupData->SetPaperBin( (sal_uInt16)i );
                     break;
                 }
             }
@@ -501,8 +501,8 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     {
         if( (CHOOSE_DEVMODE(dmFields) & (DM_PAPERWIDTH|DM_PAPERLENGTH)) == (DM_PAPERWIDTH|DM_PAPERLENGTH) )
         {
-            pSetupData->mnPaperWidth  = CHOOSE_DEVMODE(dmPaperWidth)*10;
-            pSetupData->mnPaperHeight = CHOOSE_DEVMODE(dmPaperLength)*10;
+            pSetupData->SetPaperWidth( CHOOSE_DEVMODE(dmPaperWidth)*10 );
+            pSetupData->SetPaperHeight( CHOOSE_DEVMODE(dmPaperLength)*10 );
         }
         else
         {
@@ -526,8 +526,8 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 {
                     if( pPapers[ i ] == CHOOSE_DEVMODE(dmPaperSize) )
                     {
-                        pSetupData->mnPaperWidth  = pPaperSizes[ i ].x*10;
-                        pSetupData->mnPaperHeight = pPaperSizes[ i ].y*10;
+                        pSetupData->SetPaperWidth( pPaperSizes[ i ].x*10 );
+                        pSetupData->SetPaperHeight( pPaperSizes[ i ].y*10 );
                         break;
                     }
                 }
@@ -540,31 +540,31 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         switch( CHOOSE_DEVMODE(dmPaperSize) )
         {
             case DMPAPER_LETTER:
-                pSetupData->mePaperFormat = PAPER_LETTER;
+                pSetupData->SetPaperFormat( PAPER_LETTER );
                 break;
             case DMPAPER_TABLOID:
-                pSetupData->mePaperFormat = PAPER_TABLOID;
+                pSetupData->SetPaperFormat( PAPER_TABLOID );
                 break;
             case DMPAPER_LEDGER:
-                pSetupData->mePaperFormat = PAPER_LEDGER;
+                pSetupData->SetPaperFormat( PAPER_LEDGER );
                 break;
             case DMPAPER_LEGAL:
-                pSetupData->mePaperFormat = PAPER_LEGAL;
+                pSetupData->SetPaperFormat( PAPER_LEGAL );
                 break;
             case DMPAPER_STATEMENT:
-                pSetupData->mePaperFormat = PAPER_STATEMENT;
+                pSetupData->SetPaperFormat( PAPER_STATEMENT );
                 break;
             case DMPAPER_EXECUTIVE:
-                pSetupData->mePaperFormat = PAPER_EXECUTIVE;
+                pSetupData->SetPaperFormat( PAPER_EXECUTIVE );
                 break;
             case DMPAPER_A3:
-                pSetupData->mePaperFormat = PAPER_A3;
+                pSetupData->SetPaperFormat( PAPER_A3 );
                 break;
             case DMPAPER_A4:
-                pSetupData->mePaperFormat = PAPER_A4;
+                pSetupData->SetPaperFormat( PAPER_A4 );
                 break;
             case DMPAPER_A5:
-                pSetupData->mePaperFormat = PAPER_A5;
+                pSetupData->SetPaperFormat( PAPER_A5 );
                 break;
             //See http://wiki.openoffice.org/wiki/DefaultPaperSize
             //i.e.
@@ -580,127 +580,127 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             //which is bogus as it's either JIS 257 x 364 or ISO 250 x 353
             //(cmc)
             case DMPAPER_B4:
-                pSetupData->mePaperFormat = PAPER_B4_JIS;
+                pSetupData->SetPaperFormat( PAPER_B4_JIS );
                 break;
             case DMPAPER_B5:
-                pSetupData->mePaperFormat = PAPER_B5_JIS;
+                pSetupData->SetPaperFormat( PAPER_B5_JIS );
                 break;
             case DMPAPER_QUARTO:
-                pSetupData->mePaperFormat = PAPER_QUARTO;
+                pSetupData->SetPaperFormat( PAPER_QUARTO );
                 break;
             case DMPAPER_10X14:
-                pSetupData->mePaperFormat = PAPER_10x14;
+                pSetupData->SetPaperFormat( PAPER_10x14 );
                 break;
             case DMPAPER_NOTE:
-                pSetupData->mePaperFormat = PAPER_LETTER;
+                pSetupData->SetPaperFormat( PAPER_LETTER );
                 break;
             case DMPAPER_ENV_9:
-                pSetupData->mePaperFormat = PAPER_ENV_9;
+                pSetupData->SetPaperFormat( PAPER_ENV_9 );
                 break;
             case DMPAPER_ENV_10:
-                pSetupData->mePaperFormat = PAPER_ENV_10;
+                pSetupData->SetPaperFormat( PAPER_ENV_10 );
                 break;
             case DMPAPER_ENV_11:
-                pSetupData->mePaperFormat = PAPER_ENV_11;
+                pSetupData->SetPaperFormat( PAPER_ENV_11 );
                 break;
             case DMPAPER_ENV_12:
-                pSetupData->mePaperFormat = PAPER_ENV_12;
+                pSetupData->SetPaperFormat( PAPER_ENV_12 );
                 break;
             case DMPAPER_ENV_14:
-                pSetupData->mePaperFormat = PAPER_ENV_14;
+                pSetupData->SetPaperFormat( PAPER_ENV_14 );
                 break;
             case DMPAPER_CSHEET:
-                pSetupData->mePaperFormat = PAPER_C;
+                pSetupData->SetPaperFormat( PAPER_C );
                 break;
             case DMPAPER_DSHEET:
-                pSetupData->mePaperFormat = PAPER_D;
+                pSetupData->SetPaperFormat( PAPER_D );
                 break;
             case DMPAPER_ESHEET:
-                pSetupData->mePaperFormat = PAPER_E;
+                pSetupData->SetPaperFormat( PAPER_E );
                 break;
             case DMPAPER_ENV_DL:
-                pSetupData->mePaperFormat = PAPER_ENV_DL;
+                pSetupData->SetPaperFormat( PAPER_ENV_DL );
                 break;
             case DMPAPER_ENV_C5:
-                pSetupData->mePaperFormat = PAPER_ENV_C5;
+                pSetupData->SetPaperFormat( PAPER_ENV_C5 );
                 break;
             case DMPAPER_ENV_C3:
-                pSetupData->mePaperFormat = PAPER_ENV_C3;
+                pSetupData->SetPaperFormat( PAPER_ENV_C3 );
                 break;
             case DMPAPER_ENV_C4:
-                pSetupData->mePaperFormat = PAPER_ENV_C4;
+                pSetupData->SetPaperFormat( PAPER_ENV_C4 );
                 break;
             case DMPAPER_ENV_C6:
-                pSetupData->mePaperFormat = PAPER_ENV_C6;
+                pSetupData->SetPaperFormat( PAPER_ENV_C6 );
                 break;
             case DMPAPER_ENV_C65:
-                pSetupData->mePaperFormat = PAPER_ENV_C65;
+                pSetupData->SetPaperFormat( PAPER_ENV_C65 );
                 break;
             case DMPAPER_ENV_ITALY:
-                pSetupData->mePaperFormat = PAPER_ENV_ITALY;
+                pSetupData->SetPaperFormat( PAPER_ENV_ITALY );
                 break;
             case DMPAPER_ENV_MONARCH:
-                pSetupData->mePaperFormat = PAPER_ENV_MONARCH;
+                pSetupData->SetPaperFormat( PAPER_ENV_MONARCH );
                 break;
             case DMPAPER_ENV_PERSONAL:
-                pSetupData->mePaperFormat = PAPER_ENV_PERSONAL;
+                pSetupData->SetPaperFormat( PAPER_ENV_PERSONAL );
                 break;
             case DMPAPER_FANFOLD_US:
-                pSetupData->mePaperFormat = PAPER_FANFOLD_US;
+                pSetupData->SetPaperFormat( PAPER_FANFOLD_US );
                 break;
             case DMPAPER_FANFOLD_STD_GERMAN:
-                pSetupData->mePaperFormat = PAPER_FANFOLD_DE;
+                pSetupData->SetPaperFormat( PAPER_FANFOLD_DE );
                 break;
             case DMPAPER_FANFOLD_LGL_GERMAN:
-                pSetupData->mePaperFormat = PAPER_FANFOLD_LEGAL_DE;
+                pSetupData->SetPaperFormat( PAPER_FANFOLD_LEGAL_DE );
                 break;
             case DMPAPER_ISO_B4:
-                pSetupData->mePaperFormat = PAPER_B4_ISO;
+                pSetupData->SetPaperFormat( PAPER_B4_ISO );
                 break;
             case DMPAPER_JAPANESE_POSTCARD:
-                pSetupData->mePaperFormat = PAPER_POSTCARD_JP;
+                pSetupData->SetPaperFormat( PAPER_POSTCARD_JP );
                 break;
             case DMPAPER_9X11:
-                pSetupData->mePaperFormat = PAPER_9x11;
+                pSetupData->SetPaperFormat( PAPER_9x11 );
                 break;
             case DMPAPER_10X11:
-                pSetupData->mePaperFormat = PAPER_10x11;
+                pSetupData->SetPaperFormat( PAPER_10x11 );
                 break;
             case DMPAPER_15X11:
-                pSetupData->mePaperFormat = PAPER_15x11;
+                pSetupData->SetPaperFormat( PAPER_15x11 );
                 break;
             case DMPAPER_ENV_INVITE:
-                pSetupData->mePaperFormat = PAPER_ENV_INVITE;
+                pSetupData->SetPaperFormat( PAPER_ENV_INVITE );
                 break;
             case DMPAPER_A_PLUS:
-                pSetupData->mePaperFormat = PAPER_A_PLUS;
+                pSetupData->SetPaperFormat( PAPER_A_PLUS );
                 break;
             case DMPAPER_B_PLUS:
-                pSetupData->mePaperFormat = PAPER_B_PLUS;
+                pSetupData->SetPaperFormat( PAPER_B_PLUS );
                 break;
             case DMPAPER_LETTER_PLUS:
-                pSetupData->mePaperFormat = PAPER_LETTER_PLUS;
+                pSetupData->SetPaperFormat( PAPER_LETTER_PLUS );
                 break;
             case DMPAPER_A4_PLUS:
-                pSetupData->mePaperFormat = PAPER_A4_PLUS;
+                pSetupData->SetPaperFormat( PAPER_A4_PLUS );
                 break;
             case DMPAPER_A2:
-                pSetupData->mePaperFormat = PAPER_A2;
+                pSetupData->SetPaperFormat( PAPER_A2 );
                 break;
             case DMPAPER_DBL_JAPANESE_POSTCARD:
-                pSetupData->mePaperFormat = PAPER_DOUBLEPOSTCARD_JP;
+                pSetupData->SetPaperFormat( PAPER_DOUBLEPOSTCARD_JP );
                 break;
             case DMPAPER_A6:
-                pSetupData->mePaperFormat = PAPER_A6;
+                pSetupData->SetPaperFormat( PAPER_A6 );
                 break;
             case DMPAPER_B6_JIS:
-                pSetupData->mePaperFormat = PAPER_B6_JIS;
+                pSetupData->SetPaperFormat( PAPER_B6_JIS );
                 break;
             case DMPAPER_12X11:
-                pSetupData->mePaperFormat = PAPER_12x11;
+                pSetupData->SetPaperFormat( PAPER_12x11 );
                 break;
             default:
-                pSetupData->mePaperFormat = PAPER_USER;
+                pSetupData->SetPaperFormat( PAPER_USER );
                 break;
         }
     }
@@ -717,13 +717,13 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             else if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_HORIZONTAL )
                 eDuplex = DUPLEX_SHORTEDGE;
         }
-        pSetupData->meDuplexMode = eDuplex;
+        pSetupData->SetDuplexMode( eDuplex );
     }
 }
 
-static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
+static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
-    if ( !pSetupData || !pSetupData->mpDriverData )
+    if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
 
     DECLARE_DEVMODE( pSetupData );
@@ -732,7 +732,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     if ( nFlags & JobSetFlags::ORIENTATION )
     {
         CHOOSE_DEVMODE(dmFields) |= DM_ORIENTATION;
-        if ( pSetupData->meOrientation == ORIENTATION_PORTRAIT )
+        if ( pSetupData->GetOrientation() == ORIENTATION_PORTRAIT )
             CHOOSE_DEVMODE(dmOrientation) = DMORIENT_PORTRAIT;
         else
             CHOOSE_DEVMODE(dmOrientation) = DMORIENT_LANDSCAPE;
@@ -748,7 +748,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             WORD* pBins = (WORD*)rtl_allocateZeroMemory(nCount*sizeof(WORD));
             ImplDeviceCaps( pPrinter, DC_BINS, (BYTE*)pBins, pSetupData );
             CHOOSE_DEVMODE(dmFields) |= DM_DEFAULTSOURCE;
-            CHOOSE_DEVMODE(dmDefaultSource) = pBins[ pSetupData->mnPaperBin ];
+            CHOOSE_DEVMODE(dmDefaultSource) = pBins[ pSetupData->GetPaperBin() ];
             rtl_freeMemory( pBins );
         }
     }
@@ -760,7 +760,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         CHOOSE_DEVMODE(dmPaperWidth)     = 0;
         CHOOSE_DEVMODE(dmPaperLength)    = 0;
 
-        switch( pSetupData->mePaperFormat )
+        switch( pSetupData->GetPaperFormat() )
         {
             case PAPER_A2:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A2;
@@ -936,7 +936,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 }
                 if ( (nPaperSizeCount == nPaperCount) && pPapers && pPaperSizes )
                 {
-                    PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
+                    PaperInfo aInfo(pSetupData->GetPaperWidth(), pSetupData->GetPaperHeight());
                     // compare paper formats and select a good match
                     for ( DWORD i = 0; i < nPaperCount; ++i )
                     {
@@ -952,7 +952,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                     // all paper sizes with portrait orientation only!!
                     if ( !nPaper && nLandscapeAngle != 0 )
                     {
-                        PaperInfo aRotatedInfo(pSetupData->mnPaperHeight, pSetupData->mnPaperWidth);
+                        PaperInfo aRotatedInfo(pSetupData->GetPaperHeight(), pSetupData->GetPaperWidth());
                         for ( DWORD i = 0; i < nPaperCount; ++i )
                         {
                             if ( aRotatedInfo.sloppyEqual(PaperInfo(pPaperSizes[i].x*10, pPaperSizes[i].y*10)) )
@@ -971,8 +971,8 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 {
                     CHOOSE_DEVMODE(dmFields)       |= DM_PAPERLENGTH | DM_PAPERWIDTH;
                     CHOOSE_DEVMODE(dmPaperSize)     = DMPAPER_USER;
-                    CHOOSE_DEVMODE(dmPaperWidth)    = (short)(pSetupData->mnPaperWidth/10);
-                    CHOOSE_DEVMODE(dmPaperLength)   = (short)(pSetupData->mnPaperHeight/10);
+                    CHOOSE_DEVMODE(dmPaperWidth)    = (short)(pSetupData->GetPaperWidth()/10);
+                    CHOOSE_DEVMODE(dmPaperLength)   = (short)(pSetupData->GetPaperHeight()/10);
                 }
 
                 if ( pPapers )
@@ -986,7 +986,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
     if( (nFlags & JobSetFlags::DUPLEXMODE) )
     {
-        switch( pSetupData->meDuplexMode )
+        switch( pSetupData->GetDuplexMode() )
         {
         case DUPLEX_OFF:
             CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
@@ -1017,11 +1017,11 @@ static HDC ImplCreateICW_WithCatch( LPWSTR pDriver,
     return hDC;
 }
 
-static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
+static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData )
 {
     HDC hDC = 0;
     LPDEVMODEW pDevMode;
-    if ( pSetupData && pSetupData->mpDriverData )
+    if ( pSetupData && pSetupData->GetDriverData() )
         pDevMode = SAL_DEVMODE_W( pSetupData );
     else
         pDevMode = NULL;
@@ -1050,7 +1050,7 @@ static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
     return pGraphics;
 }
 
-static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
+static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData )
 {
     HDC hNewDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
     if ( !hNewDC )
@@ -1071,7 +1071,7 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
 
 SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                                   ImplJobSetup* pSetupData )
+                                                   const ImplJobSetup* pSetupData )
 {
     WinSalInfoPrinter* pPrinter = new WinSalInfoPrinter;
     if( ! pQueueInfo->mpSysData )
@@ -1094,10 +1094,10 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
 
     pPrinter->mpGraphics = ImplCreateSalPrnGraphics( hDC );
     pPrinter->mhDC      = hDC;
-    if ( !pSetupData->mpDriverData )
+    if ( !pSetupData->GetDriverData() )
         ImplUpdateSalJobSetup( pPrinter, pSetupData, FALSE, NULL );
     ImplDevModeToJobSetup( pPrinter, pSetupData, JobSetFlags::ALL );
-    pSetupData->mnSystem = JOBSETUP_SYSTEM_WINDOWS;
+    pSetupData->SetSystem( JOBSETUP_SYSTEM_WINDOWS );
 
     return pPrinter;
 }
@@ -1178,7 +1178,7 @@ void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )
     mbGraphics = FALSE;
 }
 
-bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::Setup( SalFrame* pFrame, const ImplJobSetup* pSetupData )
 {
     if ( ImplUpdateSalJobSetup( this, pSetupData, TRUE, static_cast<WinSalFrame*>(pFrame) ) )
     {
@@ -1189,14 +1189,14 @@ bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
     return FALSE;
 }
 
-bool WinSalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::SetPrinterData( const ImplJobSetup* pSetupData )
 {
     if ( !ImplTestSalJobSetup( this, pSetupData, FALSE ) )
         return FALSE;
     return ImplUpdateSalPrnIC( this, pSetupData );
 }
 
-bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, const ImplJobSetup* pSetupData )
 {
     ImplJobSetupToDevMode( this, pSetupData, nFlags );
     if ( ImplUpdateSalJobSetup( this, pSetupData, TRUE, NULL ) )
@@ -1448,7 +1448,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
                            sal_uInt32 nCopies,
                            bool bCollate,
                            bool /*bDirect*/,
-                           ImplJobSetup* pSetupData )
+                           const ImplJobSetup* pSetupData )
 {
     mnError     = 0;
     mbAbort     = FALSE;
@@ -1458,7 +1458,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     LPDEVMODEW  pOrgDevModeW = NULL;
     LPDEVMODEW  pDevModeW = NULL;
     HDC hDC = 0;
-    if ( pSetupData && pSetupData->mpDriverData )
+    if ( pSetupData && pSetupData->GetDriverData() )
     {
         pOrgDevModeW = SAL_DEVMODE_W( pSetupData );
         pDevModeW = ImplSalSetCopies( pOrgDevModeW, nCopies, bCollate );
@@ -1604,13 +1604,13 @@ bool WinSalPrinter::EndJob()
     return TRUE;
 }
 
-SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobData )
+SalGraphics* WinSalPrinter::StartPage( const ImplJobSetup* pSetupData, bool bNewJobData )
 {
     if( ! isValid() || mhDC == 0 )
         return NULL;
 
     HDC hDC = mhDC;
-    if ( pSetupData && pSetupData->mpDriverData && bNewJobData )
+    if ( pSetupData && pSetupData->GetDriverData() && bNewJobData )
     {
         LPDEVMODEW  pOrgDevModeW;
         LPDEVMODEW  pDevModeW;
