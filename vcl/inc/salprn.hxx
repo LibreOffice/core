@@ -28,7 +28,7 @@
 
 class SalGraphics;
 class SalFrame;
-struct ImplJobSetup;
+class ImplJobSetup;
 namespace vcl { class PrinterController; }
 
 struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
