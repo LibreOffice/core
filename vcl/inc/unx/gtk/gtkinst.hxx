@@ -206,7 +206,7 @@ public:
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) override;
     virtual SalSystem*          CreateSalSystem() override;
-    virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup) override;
+    virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, const ImplJobSetup* pJobSetup) override;
     virtual SalPrinter*         CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
     virtual SalMenu*            CreateMenu( bool, Menu* ) override;
     virtual void                DestroyMenu( SalMenu* pMenu ) override;
