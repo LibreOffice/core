@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/types.h>
+#include <vcl/jobset.h>
 
 #include "printdlg.hxx"
 #include "svdata.hxx"
@@ -317,7 +318,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     // if no specific printer is already set, create the default printer
     if (!xController->getPrinter())
     {
-        OUString aPrinterName( i_rInitSetup.GetPrinterName() );
+        OUString aPrinterName( i_rInitSetup.ImplGetConstData()->GetPrinterName() );
         VclPtrInstance<Printer> xPrinter( aPrinterName );
         xPrinter->SetJobSetup(i_rInitSetup);
         xController->setPrinter(xPrinter);
