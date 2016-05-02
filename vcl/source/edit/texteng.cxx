@@ -193,16 +193,12 @@ void TextEngine::SetFont( const vcl::Font& rFont )
 
         maFont.SetAlignment( ALIGN_TOP );
         mpRefDev->SetFont( maFont );
-        Size aTextSize;
-        aTextSize.Width() = mpRefDev->GetTextWidth("    ");
-        aTextSize.Height() = mpRefDev->GetTextHeight();
-        if ( !aTextSize.Width() )
-            aTextSize.Width() = mpRefDev->GetTextWidth("XXXX");
-
-        mnDefTab = aTextSize.Width();
+        mnDefTab = mpRefDev->GetTextWidth("    ");
+        if ( !mnDefTab )
+            mnDefTab = mpRefDev->GetTextWidth("XXXX");
         if ( !mnDefTab )
             mnDefTab = 1;
-        mnCharHeight = aTextSize.Height();
+        mnCharHeight = mpRefDev->GetTextHeight();
         mnFixCharWidth100 = 0;
 
         FormatFullDoc();
