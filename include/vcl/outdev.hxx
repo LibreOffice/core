@@ -40,6 +40,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
+#include <vcl/VclReferenceBase.hxx>
 
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -100,6 +101,7 @@ struct BitmapSystemData;
 
 namespace vcl
 {
+    class VclReferenceBase;
     class PDFWriterImpl;
     class ExtOutDevData;
     class ITextLayout;
@@ -318,7 +320,7 @@ namespace vcl {
     typedef OutputDevice RenderContext;
 }
 
-class VCL_DLLPUBLIC OutputDevice
+class VCL_DLLPUBLIC OutputDevice :public VclReferenceBase
 {
     friend class Printer;
     friend class VirtualDevice;
@@ -331,23 +333,10 @@ class VCL_DLLPUBLIC OutputDevice
     // or a shared base-class as/when we can break the
     // OutputDevice -> Window inheritance.
 private:
-    mutable int mnRefCnt;         // reference count
 
     template<typename T> friend class ::rtl::Reference;
     template<typename T> friend class ::VclPtr;
 
-    inline void acquire() const
-    {
-        assert(mnRefCnt>0);
-        mnRefCnt++;
-    }
-
-    inline void release() const
-    {
-        assert(mnRefCnt>0);
-        if (!--mnRefCnt)
-            delete this;
-    }
 
 private:
     OutputDevice(const OutputDevice&) = delete;
@@ -447,15 +436,11 @@ protected:
                                 OutputDevice();
 public:
     virtual                     ~OutputDevice();
-
 protected:
-    /// release all references to other objects.
-    virtual void                dispose();
+      virtual void                dispose();
 
 public:
-    /// call the dispose() method if we have not already been disposed.
     void                        disposeOnce();
-    bool                        isDisposed() const { return mbDisposed; }
 
 public:
 

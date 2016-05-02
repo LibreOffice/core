@@ -121,7 +121,7 @@ struct MenuLogo
 
 typedef void (*MenuUserDataReleaseFunction)(sal_uLong);
 
-class VCL_DLLPUBLIC Menu : public Resource
+class VCL_DLLPUBLIC Menu : public ::VclReferenceBase, public Resource
 {
     friend class MenuBar;
     friend class MenuBarWindow;

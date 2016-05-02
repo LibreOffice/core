@@ -241,6 +241,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/gradient \
     vcl/source/outdev/curvedshapes \
     vcl/source/outdev/wallpaper \
+    vcl/source/outdev/VclReferenceBase \
     vcl/source/outdev/nativecontrols \
     vcl/source/outdev/map \
     vcl/source/gdi/alpha \
