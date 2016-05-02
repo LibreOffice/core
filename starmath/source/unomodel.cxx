@@ -550,7 +550,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 *pValues >>= nVal;
                 if(nVal < 0 || nVal > 2)
                     throw IllegalArgumentException();
-                aFormat.SetHorAlign((SmHorAlign)nVal);
+                aFormat.SetHorAlign(static_cast<SmHorAlign>(nVal));
             }
             break;
 
