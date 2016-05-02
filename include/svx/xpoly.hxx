@@ -21,6 +21,7 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 class Point;
 class Rectangle;
@@ -50,17 +51,16 @@ class ImpXPolygon;
 class SVX_DLLPUBLIC XPolygon
 {
 protected:
-    ImpXPolygon*    pImpXPolygon;
-
-    // check ImpXPolygon-ReferenceCount and decouple if necessary
-    void    CheckReference();
+    o3tl::cow_wrapper< ImpXPolygon >    pImpXPolygon;
 
     // auxiliary functions for Bezier conversion
     void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
     void    GenBezArc(const Point& rCenter, long nRx, long nRy,
-                      long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
-                      sal_uInt16 nQuad, sal_uInt16 nFirst);
+                long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
+                sal_uInt16 nQuad, sal_uInt16 nFirst);
     static bool CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
+
+    ImpXPolygon* ImplGetImpXPolygon() const;
 
 public:
     XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );
@@ -121,16 +121,12 @@ class ImpXPolyPolygon;
 class SVX_DLLPUBLIC XPolyPolygon
 {
 protected:
-    ImpXPolyPolygon* pImpXPolyPolygon;
-
-    // check ImpXPolyPolygon-ReferenceCount and decouple if necessary
-    void    CheckReference();
+    o3tl::cow_wrapper< ImpXPolyPolygon > pImpXPolyPolygon;
 
 public:
-                    XPolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
-                    XPolyPolygon( const XPolyPolygon& rXPolyPoly );
-
-                    ~XPolyPolygon();
+    XPolyPolygon();
+    XPolyPolygon( const XPolyPolygon& rXPolyPoly );
+    ~XPolyPolygon();
 
     void            Insert( const XPolygon& rXPoly );
     void            Insert( const XPolyPolygon& rXPoly );
@@ -138,7 +134,7 @@ public:
     const XPolygon& GetObject( sal_uInt16 nPos ) const;
 
     void            Clear();
-    sal_uInt16          Count() const;
+    sal_uInt16      Count() const;
 
     Rectangle       GetBoundRect() const;
 
