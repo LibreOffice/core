@@ -440,7 +440,7 @@ void TextEngine::SetText( const OUString& rText )
 {
     ImpRemoveText();
 
-    bool bUndoCurrentlyEnabled = IsUndoEnabled();
+    const bool bUndoCurrentlyEnabled = IsUndoEnabled();
     // the manually inserted text cannot be reversed by the user
     EnableUndo( false );
 
@@ -701,8 +701,8 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
                 xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );
 
                 // find position of first character that has changed
-                sal_Int32 nOldLen = aOldText.getLength();
-                sal_Int32 nNewLen = aNewText.getLength();
+                const sal_Int32 nOldLen = aOldText.getLength();
+                const sal_Int32 nNewLen = aNewText.getLength();
                 const sal_Unicode *pOldTxt = aOldText.getStr();
                 const sal_Unicode *pNewTxt = aNewText.getStr();
                 sal_Int32 nChgPos = 0;
@@ -1470,8 +1470,8 @@ void TextEngine::UpdateViews( TextView* pCurView )
         pView->HideCursor();
 
         Rectangle aClipRect( maInvalidRect );
-        Size aOutSz = pView->GetWindow()->GetOutputSizePixel();
-        Rectangle aVisArea( pView->GetStartDocPos(), aOutSz );
+        const Size aOutSz = pView->GetWindow()->GetOutputSizePixel();
+        const Rectangle aVisArea( pView->GetStartDocPos(), aOutSz );
         aClipRect.Intersection( aVisArea );
         if ( !aClipRect.IsEmpty() )
         {
@@ -1508,7 +1508,7 @@ void TextEngine::FormatFullDoc()
     for ( sal_uInt32 nPortion = 0; nPortion < mpTEParaPortions->Count(); ++nPortion )
     {
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPortion );
-        sal_Int32 nLen = pTEParaPortion->GetNode()->GetText().getLength();
+        const sal_Int32 nLen = pTEParaPortion->GetNode()->GetText().getLength();
         pTEParaPortion->MarkSelectionInvalid( 0, nLen );
     }
     mbFormatted = false;
@@ -1546,7 +1546,7 @@ void TextEngine::FormatDoc()
                 const long nWidth = mnMaxTextWidth
                     ? mnMaxTextWidth
                     : std::numeric_limits<long>::max();
-                Range aInvRange( GetInvalidYOffsets( nPara ) );
+                const Range aInvRange( GetInvalidYOffsets( nPara ) );
                 maInvalidRect = Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
             }
@@ -1576,7 +1576,7 @@ void TextEngine::FormatDoc()
     if ( !maInvalidRect.IsEmpty() )
     {
         const long nNewHeight = CalcTextHeight();
-        long nDiff = nNewHeight - mnCurTextHeight;
+        const long nDiff = nNewHeight - mnCurTextHeight;
         if ( nNewHeight < mnCurTextHeight )
         {
             maInvalidRect.Bottom() = std::max( nNewHeight, mnCurTextHeight );
@@ -1628,7 +1628,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     if ( bLineBreak )
     {
         // -2: The new one is already inserted.
-        sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1;
+        const sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1;
         aTmpLine.SetStartPortion( nPos );
         aTmpLine.SetEndPortion( nPos );
     }
@@ -1669,12 +1669,11 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
 
     // the damaged Portion is the End Portion
     pLine->SetEnd( nBreakPos );
-    sal_uInt16 nEndPortion = SplitTextPortion( nPara, nBreakPos );
+    const sal_uInt16 nEndPortion = SplitTextPortion( nPara, nBreakPos );
 
-    bool bBlankSeparator = ( nBreakPos >= pLine->GetStart() &&
-                             nBreakPos < pNode->GetText().getLength() &&
-                             pNode->GetText()[ nBreakPos ] == ' ' );
-    if ( bBlankSeparator )
+    if ( nBreakPos >= pLine->GetStart() &&
+         nBreakPos < pNode->GetText().getLength() &&
+         pNode->GetText()[ nBreakPos ] == ' ' )
     {
         // generally suppress blanks at the end of line
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
@@ -1731,7 +1730,7 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
     std::set<sal_Int32>::iterator aPositionsIt;
     aPositions.insert(0);
 
-    sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
+    const sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib& rAttrib = pNode->GetCharAttribs().GetAttrib( nAttr );
@@ -1868,7 +1867,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
         // thus: nStartPos <= nPos <= nStartPos - nNewChars(neg.)
         size_t nPortion = 0;
         sal_Int32 nPos = 0;
-        sal_Int32 nEnd = nStartPos-nNewChars;
+        const sal_Int32 nEnd = nStartPos-nNewChars;
         const size_t nPortions = pTEParaPortion->GetTextPortions().size();
         TETextPortion* pTP = nullptr;
         for ( nPortion = 0; nPortion < nPortions; nPortion++ )
@@ -1907,8 +1906,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
     if ( !IsFormatted() )
         FormatDoc();
 
-    vcl::Window* pOutWin = dynamic_cast<vcl::Window*>(pOutDev);
-    bool bTransparent = (pOutWin && pOutWin->IsPaintTransparent());
+    vcl::Window* const pOutWin = dynamic_cast<vcl::Window*>(pOutDev);
+    const bool bTransparent = (pOutWin && pOutWin->IsPaintTransparent());
 
     long nY = rStartPos.Y();
 
@@ -1916,7 +1915,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
     TextPaM const* pSelEnd = nullptr;
     if ( pSelection && pSelection->HasRange() )
     {
-        bool bInvers = pSelection->GetEnd() < pSelection->GetStart();
+        const bool bInvers = pSelection->GetEnd() < pSelection->GetStart();
         pSelStart = !bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
         pSelEnd = bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
     }
@@ -1958,7 +1957,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
 
                         ImpInitLayoutMode( pOutDev /*, pTextPortion->IsRightToLeft() */);
 
-                        long nTxtWidth = pTextPortion->GetWidth();
+                        const long nTxtWidth = pTextPortion->GetWidth();
                         aTmpPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nIndex, nIndex );
 
                         // only print if starting in the visible region
@@ -2001,8 +2000,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                         if ( pSelStart )
                                         {
                                             // is a part of it in the selection?
-                                            TextPaM aTextStart( nPara, nTmpIndex );
-                                            TextPaM aTextEnd( nPara, nEnd );
+                                            const TextPaM aTextStart( nPara, nTmpIndex );
+                                            const TextPaM aTextEnd( nPara, nEnd );
                                             if ( ( aTextStart < *pSelEnd ) && ( aTextEnd > *pSelStart ) )
                                             {
                                                 // 1) vcl::Region before Selection
@@ -2021,7 +2020,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     nL = pSelEnd->GetIndex() - nTmpIndex;
                                                 if ( nL )
                                                 {
-                                                    Color aOldTextColor = pOutDev->GetTextColor();
+                                                    const Color aOldTextColor = pOutDev->GetTextColor();
                                                     pOutDev->SetTextColor( rStyleSettings.GetHighlightTextColor() );
                                                     pOutDev->SetTextFillColor( rStyleSettings.GetHighlightColor() );
                                                     aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nTmpIndex+nL );
@@ -2052,16 +2051,16 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                     // for HideSelection() only Range, pSelection = 0.
                                     if ( pSelStart || pPaintRange )
                                     {
-                                        Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
+                                        const Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
                                         bool bDone = false;
                                         if ( pSelStart )
                                         {
                                             // is the Tab in the Selection???
-                                            TextPaM aTextStart( nPara, nIndex );
-                                            TextPaM aTextEnd( nPara, nIndex+1 );
+                                            const TextPaM aTextStart( nPara, nIndex );
+                                            const TextPaM aTextEnd( nPara, nIndex+1 );
                                             if ( ( aTextStart < *pSelEnd ) && ( aTextEnd > *pSelStart ) )
                                             {
-                                                Color aOldColor = pOutDev->GetFillColor();
+                                                const Color aOldColor = pOutDev->GetFillColor();
                                                 pOutDev->SetFillColor( rStyleSettings.GetHighlightColor() );
                                                 pOutDev->DrawRect( aTabArea );
                                                 pOutDev->SetFillColor( aOldColor );
@@ -2284,7 +2283,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         else if ( !bEOL )
         {
             DBG_ASSERT( (nPortionEnd-nPortionStart) == pPortion->GetLen(), "CreateLines: There is a Portion after all?!" );
-            long nRemainingWidth = mnMaxTextWidth - nTmpWidth;
+            const long nRemainingWidth = mnMaxTextWidth - nTmpWidth;
             ImpBreakLine( nPara, pLine, pPortion, nPortionStart, nRemainingWidth );
         }
 
@@ -2297,7 +2296,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
                 TETextPortion* pTextPortion = pTEParaPortion->GetTextPortions()[ nTP ];
                 nTextWidth += pTextPortion->GetWidth();
             }
-            long nSpace = mnMaxTextWidth - nTextWidth;
+            const long nSpace = mnMaxTextWidth - nTextWidth;
             if ( nSpace > 0 )
             {
                 if ( ImpGetAlign() == TXTALIGN_CENTER )
@@ -2362,7 +2361,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         nIndex = pLine->GetEnd();   // next line Start = previous line End
                                     // because nEnd is past the last char!
 
-        sal_uInt16 nEndPortion = pLine->GetEndPortion();
+        const sal_uInt16 nEndPortion = pLine->GetEndPortion();
 
         // next line or new line
         pLine = nullptr;
@@ -2427,7 +2426,7 @@ OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
 
 bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
 {
-    bool bUpdate = GetUpdateMode();
+    const bool bUpdate = GetUpdateMode();
     SetUpdateMode( false );
 
     UndoActionStart();
@@ -2436,7 +2435,7 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
         aSel = *pSel;
     else
     {
-        sal_uInt32 nParas = static_cast<sal_uInt32>(mpDoc->GetNodes().size());
+        const sal_uInt32 nParas = static_cast<sal_uInt32>(mpDoc->GetNodes().size());
         TextNode* pNode = mpDoc->GetNodes()[ nParas - 1 ];
         aSel = TextPaM( nParas-1 , pNode->GetText().getLength() );
     }
@@ -2458,7 +2457,7 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
 
     UndoActionEnd();
 
-    TextSelection aNewSel( aSel.GetEnd(), aSel.GetEnd() );
+    const TextSelection aNewSel( aSel.GetEnd(), aSel.GetEnd() );
 
     // so that FormatAndUpdate does not access the invalid selection
     if ( GetActiveView() )
@@ -2477,7 +2476,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
         aSel = *pSel;
     else
     {
-        sal_uInt32 nParas = static_cast<sal_uInt32>(mpDoc->GetNodes().size());
+        const sal_uInt32 nParas = static_cast<sal_uInt32>(mpDoc->GetNodes().size());
         TextNode* pNode = mpDoc->GetNodes()[ nParas - 1 ];
         aSel.GetStart() = TextPaM( 0, 0 );
         aSel.GetEnd() = TextPaM( nParas-1, pNode->GetText().getLength() );
@@ -2583,8 +2582,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
         if ( pNode->GetCharAttribs().Count() )
         {
             TextCharAttribList& rAttribs = pNode->GetCharAttribs();
-            sal_uInt16 nAttrCount = rAttribs.Count();
-            for(sal_uInt16 nAttr = nAttrCount; nAttr; --nAttr)
+            for(sal_uInt16 nAttr = rAttribs.Count(); nAttr; --nAttr)
             {
                 if(rAttribs.GetAttrib( nAttr - 1 ).Which() == nWhich)
                     rAttribs.RemoveAttrib( nAttr -1 );
@@ -2605,8 +2603,7 @@ void TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
         if ( pNode->GetCharAttribs().Count() )
         {
             TextCharAttribList& rAttribs = pNode->GetCharAttribs();
-            sal_uInt16 nAttrCount = rAttribs.Count();
-            for(sal_uInt16 nAttr = nAttrCount; nAttr; --nAttr)
+            for(sal_uInt16 nAttr = rAttribs.Count(); nAttr; --nAttr)
             {
                 if(&(rAttribs.GetAttrib( nAttr - 1 )) == &rAttrib)
                 {
@@ -3017,7 +3014,7 @@ long TextEngine::ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int3
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
 
     sal_Int32 nPortionStart {0};
-    sal_uInt16 nPortion = pPortion->GetTextPortions().FindPortion( nIndex, nPortionStart, true );
+    const sal_uInt16 nPortion = pPortion->GetTextPortions().FindPortion( nIndex, nPortionStart, true );
 
     TETextPortion* pTextPortion = pPortion->GetTextPortions()[ nPortion ];
 
@@ -3038,7 +3035,7 @@ long TextEngine::ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int3
         nX = ImpGetXPos( nPara, pLine, nIndex, nIndex == nPortionStart );
         if ( nIndex2 != nIndex )
         {
-            long nX2 = ImpGetXPos( nPara, pLine, nIndex2 );
+            const long nX2 = ImpGetXPos( nPara, pLine, nIndex2 );
             if ( ( !IsRightToLeft() && ( nX2 < nX ) ) ||
                  ( IsRightToLeft() && ( nX2 > nX ) ) )
             {
