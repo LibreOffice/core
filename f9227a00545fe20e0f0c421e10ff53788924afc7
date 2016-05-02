@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_5510ec4e",
+        "filename": "comphelper/source/streaming/memorystream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-02T06:57:54Z",
+      "side": 1,
+      "message": "What I meant is to make UNOMemoryStream actually derive from XServiceInfo (by adding XServiceInfo to the list of template arguments to UNOMemoryStream\u0027s base class WeakImplHelper\u003c...\u003e), and to implement the three XServiceInfo functions getImplementationName, supportsService, and getSupportedServiceNames (which, if they had already originally been implemented, would have used the get..._static functions that have now been removed; for how to implement supportsService see include/cppuhelper/supportsservice.hxx).",
+      "revId": "f9227a00545fe20e0f0c421e10ff53788924afc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
