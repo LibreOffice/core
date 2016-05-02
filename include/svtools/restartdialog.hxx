@@ -38,9 +38,9 @@ enum RestartReason {
     RESTART_REASON_LANGUAGE_CHANGE,
         // "For the updated language settings to take effect,
         // %PRODUCTNAME must be restarted."
-    RESTART_REASON_ADDING_PATH
-        // "For the added path to take effect,
-        // %PRODUCTNAME must be restarted."
+    RESTART_REASON_EXTENSION_INSTALL
+       //  "For the extension to work properly,
+       //  %PRODUCTNAME must be restarted."
 };
 
 // Must be called with the solar mutex locked:
