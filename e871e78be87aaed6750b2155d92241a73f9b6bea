@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_55f62cd8",
+        "filename": "cui/source/options/optasian.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-02T14:28:45Z",
+      "side": 1,
+      "message": "instead of makeAny you can simply use the Any ctor template, which feels like it looks less clumsy; makeAny is only really useful if you need to explicitly give its template argument, see e02a29c0a733e4c2a98ed9c7c290928314bb307d \"Improve documentation\"",
+      "revId": "e871e78be87aaed6750b2155d92241a73f9b6bea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_35f9a8c9",
+        "filename": "sd/source/ui/unoidl/unolayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-02T14:28:45Z",
+      "side": 1,
+      "message": "why not simply\n\n  aValue \u003c\u003c\u003d get(LOCKED);",
+      "revId": "e871e78be87aaed6750b2155d92241a73f9b6bea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
