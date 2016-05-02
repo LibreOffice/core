@@ -2956,7 +2956,7 @@
       </node>
       <node oor:name=".uno:OpenSmartTagMenuOnCursor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Open Smart Tag Menu</value>
+          <value xml:lang="en-US">Smart Tags</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertImage" oor:op="replace">
