@@ -79,14 +79,14 @@ public:
                                               sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
-                                              ImplJobSetup* pSetupData ) override;
+                                              const ImplJobSetup* pSetupData ) override;
     virtual bool                    StartJob( const OUString*,
                                               const OUString&,
                                               const OUString&,
-                                              ImplJobSetup*,
+                                              const ImplJobSetup*,
                                               vcl::PrinterController& i_rController ) override;
     virtual bool                    EndJob() override;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) override;
+    virtual SalGraphics*            StartPage( const ImplJobSetup* pSetupData, bool bNewJobData ) override;
     virtual void                    EndPage() override;
     virtual sal_uIntPtr                 GetErrorCode() override;
 };
