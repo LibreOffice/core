@@ -572,7 +572,8 @@ private:
                                  sal_Int32 k,
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
-                                 sal_Int32 nDigCnt );
+                                 sal_Int32 nDigCnt,
+                                 bool bAddDecSep = true );
 
     // Helper function to fill in the group (AKA thousand) separators
     // or to skip additional digits

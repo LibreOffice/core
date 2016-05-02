@@ -3982,13 +3982,13 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                                    bool bInteger)         // is integer
 {
     bool bRes = false;
+    bool bFilled = false;               // Was filled?
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     sal_Int32 k = sStr.getLength();     // After last figure
                                         // Decimal places:
     if (rInfo.nCntPost > 0)
     {
         bool bTrailing = true;          // Trailing zeros?
-        bool bFilled = false;           // Was filled?
         short nType;
         while (j > 0 &&                 // Backwards
                (nType = rInfo.nTypeArray[j]) != NF_SYMBOLTYPE_DECSEP)
@@ -4028,6 +4028,7 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                     if ( sStr[k] != '0' )
                     {
                         bTrailing = false;
+                        bFilled = true;
                     }
                     if (bTrailing)
                     {
@@ -4075,16 +4076,7 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
     } // of decimal places
 
     bRes |= ImpNumberFillWithThousands(sStr, rNumber, k, j, nIx, // Fill with . if needed
-                                       rInfo.nCntPre);
-    if ( rInfo.nCntPost > 0 )
-    {
-        const OUString& rDecSep = GetFormatter().GetNumDecimalSep();
-        sal_Int32 nLen = rDecSep.getLength();
-        if ( sStr.getLength() > nLen && ( sStr.indexOf( rDecSep, sStr.getLength() - nLen) == sStr.getLength() - nLen) )
-        {
-            sStr.truncate( sStr.getLength() - nLen ); // no decimals => strip DecSep
-        }
-    }
+                                       rInfo.nCntPre, bFilled );
 
     return bRes;
 }
@@ -4094,7 +4086,8 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
                                                  sal_Int32 k,           // position within string
                                                  sal_uInt16 j,          // symbol index within format code
                                                  sal_uInt16 nIx,        // subformat index
-                                                 sal_Int32 nDigCnt)     // count of integer digits in format
+                                                 sal_Int32 nDigCnt,     // count of integer digits in format
+                                                 bool bAddDecSep)       // add decimal separator if necessary
 {
     bool bRes = false;
     sal_Int32 nLeadingStringChars = 0; // inserted StringChars before number
@@ -4119,7 +4112,8 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
         case NF_SYMBOLTYPE_PERCENT:
-            sBuff.insert(k, rInfo.sStrArray[j]);
+            if ( rInfo.nTypeArray[j] != NF_SYMBOLTYPE_DECSEP || bAddDecSep )
+                sBuff.insert(k, rInfo.sStrArray[j]);
             if ( k == 0 )
             {
                 nLeadingStringChars = nLeadingStringChars + rInfo.sStrArray[j].getLength();
