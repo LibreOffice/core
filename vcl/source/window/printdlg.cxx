@@ -20,7 +20,6 @@
 #include "printdlg.hxx"
 #include "svdata.hxx"
 #include "svids.hrc"
-#include "jobset.h"
 
 #include <vcl/print.hxx>
 #include <vcl/dialog.hxx>
@@ -35,6 +34,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include "jobset.h"
 
 #include "unotools/localedatawrapper.hxx"
 
