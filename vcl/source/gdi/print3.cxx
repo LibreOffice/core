@@ -603,7 +603,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
         if( mpPrinter->StartJob( pPrintFile,
                                  i_rJobName,
                                  Application::GetDisplayName(),
-                                 maJobSetup.ImplGetConstData(),
+                                 maJobSetup.ImplGetData(),
                                  *i_xController) )
         {
             EndJob();
@@ -660,7 +660,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
                                      nCopies,
                                      bCollateCopy,
                                      i_xController->isDirectPrint(),
-                                     maJobSetup.ImplGetConstData() ) )
+                                     maJobSetup.ImplGetData() ) )
             {
                 bool bAborted = false;
                 mbJobActive             = true;

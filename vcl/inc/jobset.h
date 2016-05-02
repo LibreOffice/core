@@ -31,11 +31,12 @@
 
 struct ImplJobSetup
 {
-                    ImplJobSetup();
-                    ImplJobSetup( const ImplJobSetup& rJobSetup );
-                    ~ImplJobSetup();
+    ImplJobSetup();
+    ImplJobSetup( const ImplJobSetup& rJobSetup );
+    ~ImplJobSetup();
 
-    sal_uInt16      mnRefCount;         //< RefCount (only independent data)
+    bool operator==( const ImplJobSetup& rImplJobSetup ) const;
+
     sal_uInt16      mnSystem;           //< System - JOBSETUP_SYSTEM_xxxx
     OUString        maPrinterName;      //< Printer-Name
     OUString        maDriver;           //< Driver-Name

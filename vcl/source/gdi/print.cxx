@@ -65,7 +65,7 @@ namespace
 
 void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 {
-    const ImplJobSetup* pConstData = rJobSetup.ImplGetConstData();
+    const ImplJobSetup* pConstData = rJobSetup.ImplGetData();
 
     if ( !pConstData->mnPaperWidth || !pConstData->mnPaperHeight )
     {
@@ -1683,7 +1683,7 @@ void Printer::ImplStartPage()
 
     if ( mpPrinter )
     {
-        SalGraphics* pGraphics = mpPrinter->StartPage( maJobSetup.ImplGetConstData(), mbNewJobSetup );
+        SalGraphics* pGraphics = mpPrinter->StartPage( maJobSetup.ImplGetData(), mbNewJobSetup );
         if ( pGraphics )
         {
             ReleaseGraphics();
