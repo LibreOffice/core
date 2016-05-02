@@ -29,7 +29,9 @@ using namespace std;
 
 
 convert_src::convert_src(l10nMem& crMemory)
-                        : convert_gen(crMemory),
+                        : convert_gen(crMemory)
+#if 0
+    ,
                           mbExpectValue(false),
                           mbEnUs(false),
                           mbExpectName(false),
@@ -38,6 +40,7 @@ convert_src::convert_src(l10nMem& crMemory)
                           mbValuePresent(false),
                           mbInList(false),
                           mbInListItem(false)
+#endif
 {
 }
 
@@ -50,112 +53,116 @@ void convert_src::doExecute()
 
 
 
-void convert_src::setValue(char *syyText, char *sbuildValue)
+void convert_src::setValue(string& syyText)
 {
-    copySource(syyText);
-
-    if (mbInList && !mbInListItem) {
-        setListItem("", true);
-        setListItem("", false);
+    int stackSize = mcStack.size();
+    string cleanValue = syyText.substr(1, syyText.size() - 1);
+    {
+        cout << "test value\n";
+        for (int i = 0; i < stackSize; i++)
+            cout << mcStack[i] << "\n";
     }
-    msValue        = sbuildValue;
-    if (mbInListItem)
-        msGroup = msValue;
-    mbValuePresent = true;
-    mbExpectValue  = false;
+    string subid = (stackSize > 3) ? mcStack[2] : mcStack[0];
+    l10nMem::keyToLower(subid);
+
+    mcMemory.setSourceKey(miLineNo, msSourceFile, mcStack[1], cleanValue, "", subid, mcStack[stackSize-1], false);
+    mcStack.pop_back();
 }
 
 
 
-void convert_src::setLang(char *syyText, bool bEnUs)
+bool convert_src::setLang(string& syyText)
 {
-    string useText = copySource(syyText) + " is no en-US language";
-
-    mbEnUs = bEnUs;
-    if (!bEnUs && mbExpectValue)
-        l10nMem::showError(useText);
+    if (syyText == "en-US")
+        return true;
+    else if (syyText != "x-comment")
+        l10nMem::showError(syyText + " non legal language");
+    return false;
 }
 
 
 
+void convert_src::setName(string& syyText)
+{
+    mcStack.push_back(syyText);
+}
+
+
+
+void convert_src::setCmd(string& syyText)
+{
+    mcStack.push_back(syyText);
+}
+
+
+
+void convert_src::startBlock()
+{
+}
+
+
+
+void convert_src::stopBlock()
+{
+    // check for correct node/prop relations
+    if (mcStack.size())
+        mcStack.pop_back();
+}
+
+
+
+#if 0
 void convert_src::setId(char *syyText, bool bId)
 {
     copySource(syyText);
     if (bId || !mcStack.back().size())
         mbExpectName = mbAutoPush = true;
 }
+#endif
 
 
 
+#if 0
 void convert_src::setText(char *syyText)
 {
-    msTextName    = copySource(syyText);
+    msTextName = copySource(syyText);
     mbExpectValue = true;
-    mbEnUs        = false;
+    mbEnUs = false;
     trim(msTextName);
 }
+#endif
 
 
 
-void convert_src::setName(char *syyText)
-{
-    string useText = copySource(syyText);
-
-    trim(useText);
-    if (mbExpectName) {
-        mbExpectName = false;
-        if (!mbAutoPush) {
-            if (msName.length())
-                msGroup = useText;
-            else
-                msName = useText;
-        }
-        else {
-            mbAutoPush = false;
-            if (mcStack.size())
-                mcStack.pop_back();
-            mcStack.push_back(useText);
-        }
-    }
-}
-
-
-
-void convert_src::setCmd(char *syyText)
-{
-    msCmd        = copySource(syyText);
-    mbExpectName = true;
-    mbInList     = false;
-    trim(msCmd);
-    l10nMem::keyToLower(msCmd);
-}
-
-
-
+#if 0
 void convert_src::setMacro(char *syyText)
 {
-    msCmd         = copySource(syyText);
-    mbExpectName  =
-    mbExpectMacro =
-    mbAutoPush    = true;
-    miMacroLevel  = mcStack.size();
+    msCmd = copySource(syyText);
+    mbExpectName =
+        mbExpectMacro =
+        mbAutoPush = true;
+    miMacroLevel = mcStack.size();
     mcStack.push_back("");
     trim(msCmd);
 }
+#endif
 
 
 
+#if 0
 void convert_src::setList(char *syyText)
 {
-    msCmd       = copySource(syyText);
+    msCmd = copySource(syyText);
     miListCount = 0;
-    mbInList    = true;
+    mbInList = true;
     trim(msCmd);
     l10nMem::keyToLower(msCmd);
 }
+#endif
 
 
 
+#if 0
 void convert_src::setNL(char *syyText, bool bMacro)
 {
     int         nL;
@@ -168,19 +175,19 @@ void convert_src::setNL(char *syyText, bool bMacro)
         buildKey(sKey);
 
         for (nL = -1;;) {
-            nL = msValue.find("\\\"", nL+1);
+            nL = msValue.find("\\\"", nL + 1);
             if (nL == (int)string::npos)
                 break;
-            msValue.erase(nL,1);
+            msValue.erase(nL, 1);
         }
         for (nL = -1;;) {
-            nL = msValue.find("\\\\", nL+1);
+            nL = msValue.find("\\\\", nL + 1);
             if (nL == (int)string::npos)
                 break;
-            msValue.erase(nL,1);
+            msValue.erase(nL, 1);
         }
 
-//FIX        sKey += "." + msCmd + "." + msTextName;
+        //FIX        sKey += "." + msCmd + "." + msTextName;
         if (msValue.size() && msValue != "-") {
             mcMemory.setSourceKey(miLineNo, msSourceFile, sKey, msValue, "", msCmd, msGroup, mbMergeMode);
             if (mbMergeMode)
@@ -192,43 +199,21 @@ void convert_src::setNL(char *syyText, bool bMacro)
     if (!bMacro && mbExpectMacro) {
         while ((int)mcStack.size() > miMacroLevel)
             mcStack.pop_back();
-        mbEnUs        =
-        mbExpectMacro = false;
+        mbEnUs =
+            mbExpectMacro = false;
     }
 
     mbValuePresent =
-    mbExpectName   =
-    mbAutoPush     = false;
+        mbExpectName =
+        mbAutoPush = false;
     msValue.clear();
     msTextName.clear();
 }
+#endif
 
 
 
-void convert_src::startBlock(char *syyText)
-{
-    copySource(syyText);
-
-    mcStack.push_back(msName);
-}
-
-
-
-void convert_src::stopBlock(char *syyText)
-{
-    copySource(syyText);
-
-    // check for correct node/prop relations
-    if (mcStack.size())
-        mcStack.pop_back();
-
-    mbInList =
-    mbEnUs   = false;
-    msName.clear();
-}
-
-
-
+#if 0
 void convert_src::setListItem(char const *syyText, bool bIsStart)
 {
     copySource(syyText);
@@ -266,9 +251,11 @@ void convert_src::setListItem(char const *syyText, bool bIsStart)
         }
     }
 }
+#endif
 
 
 
+#if 0
 void convert_src::trim(string& sText)
 {
     int nL;
@@ -281,9 +268,11 @@ void convert_src::trim(string& sText)
     if (nL != (int)sText.size())
         sText.erase(nL);
 }
+#endif
 
 
 
+#if 0
 void convert_src::buildKey(string& sKey)
 {
     int nL;
@@ -297,9 +286,11 @@ void convert_src::buildKey(string& sKey)
     // FIX jan
     sKey = mcStack[0];
 }
+#endif
 
 
 
+#if 0
 void convert_src::insertLanguagePart(string& sKey, string& sTextType)
 {
     string sLang, sText, sTagText;
@@ -317,3 +308,4 @@ void convert_src::insertLanguagePart(string& sKey, string& sTextType)
         writeSourceFile(sTagText);
     }
 }
+#endif

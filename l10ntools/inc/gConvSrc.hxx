@@ -28,26 +28,29 @@ extern int srclex(void);
 class convert_src : public convert_gen
 {
     public:
-        bool mbExpectValue;
+//        bool mbExpectValue;
 
         convert_src(l10nMem& crMemory);
         ~convert_src() override {};
 
-        void setValue      (char *syyText, char *sbuildValue);
-        void setLang       (char *syyText, bool bEnUs);
-        void setId         (char *syyText, bool bIde);
-        void setText       (char *syyText);
-        void setName       (char *syyText);
-        void setCmd        (char *syyText);
-        void setMacro      (char *syyText);
-        void setList       (char *syyText);
-        void setListItem   (char const *syyText, bool bIsStart);
-        void setNL         (char *syyText, bool bMacro);
-        void startBlock    (char *syyText);
-        void stopBlock     (char *syyText);
+        void setValue(string& syyText);
+        bool setLang(string& syyText);
+        void setName(string& syyText);
+        void setCmd(string& syyText);
+        void startBlock();
+        void stopBlock();
+
+//        void setId         (char *syyText, bool bIde);
+//        void setText       (char *syyText);
+//        void setMacro      (char *syyText);
+//        void setList       (char *syyText);
+//        void setListItem   (char const *syyText, bool bIsStart);
+//        void setNL         (char *syyText, bool bMacro);
 
     private:
         vector<string> mcStack;
+        void doExecute() override;
+#if 0
         string              msValue;
         string              msName;
         string              msTextName;
@@ -62,9 +65,10 @@ class convert_src : public convert_gen
         bool                     mbInListItem;
         int                      miListCount;
         int                      miMacroLevel;
-        void doExecute() override;
+
         static void trim(string& sText);
         void buildKey(string& sKey);
         void insertLanguagePart(string& sKey, string& sTextType);
+#endif
 };
 #endif

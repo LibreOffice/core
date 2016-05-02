@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ${LODE_HOME}/dev/work
+cd ${LODE_HOME}/dev/core
 
 MYCMD='./workdir/LinkTarget/Executable/genlang.exe extract -s --target workdir/jan '
 
