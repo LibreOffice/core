@@ -811,7 +811,7 @@ bool SmCursor::InsertRow() {
     int nTableIndex = nParentIndex;
     if(pLineParent->GetType() == NTABLE)
         pTable = static_cast<SmTableNode*>(pLineParent);
-    //If it's warped in a SmLineNode, we can still insert a newline
+    //If it's wrapped in a SmLineNode, we can still insert a newline
     else if(pLineParent->GetType() == NLINE &&
             pLineParent->GetParent() &&
             pLineParent->GetParent()->GetType() == NTABLE) {
