@@ -30,20 +30,17 @@ private:
     Gradient*       mpGradient;
     Rectangle*      mpRect;
     WallpaperStyle  meStyle;
-    sal_uLong       mnRefCount;
     BitmapEx*       mpCache;
+
+public:
+    ImplWallpaper();
+    ImplWallpaper( const ImplWallpaper& rImplWallpaper );
+    ~ImplWallpaper();
+
+    bool operator==( const ImplWallpaper& rImplWallpaper ) const;
 
     friend SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
     friend SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );
-
-public:
-                    ImplWallpaper();
-                    ImplWallpaper( const ImplWallpaper& rImplWallpaper );
-                    ~ImplWallpaper();
-
-    void            ImplSetCachedBitmap( BitmapEx& rBmp );
-    const BitmapEx* ImplGetCachedBitmap() { return mpCache; }
-    void            ImplReleaseCachedBitmap();
 };
 
 #endif // INCLUDED_VCL_INC_WALL2_HXX

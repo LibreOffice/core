@@ -112,7 +112,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     assert(!is_double_buffered_window());
 
     BitmapEx aBmpEx;
-    const BitmapEx* pCached = rWallpaper.ImplGetImpWallpaper()->ImplGetCachedBitmap();
+    const BitmapEx* pCached = rWallpaper.ImplGetCachedBitmap();
     Point aPos;
     Size aSize;
     GDIMetaFile* pOldMetaFile = mpMetaFile;
@@ -191,7 +191,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         if( !pCached || ( pCached->GetSizePixel() != aSize ) )
         {
             if( pCached )
-                rWallpaper.ImplGetImpWallpaper()->ImplReleaseCachedBitmap();
+                rWallpaper.ImplReleaseCachedBitmap();
 
             aBmpEx = rWallpaper.GetBitmap();
             aBmpEx.Scale( aSize );
@@ -336,7 +336,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         DrawBitmapEx( aPos, aBmpEx );
     }
 
-    rWallpaper.ImplGetImpWallpaper()->ImplSetCachedBitmap( aBmpEx );
+    rWallpaper.ImplSetCachedBitmap( aBmpEx );
 
     Pop();
     EnableMapMode( bOldMap );
