@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/jobset.hxx>
-
 #include <jobset.h>
 #include <memory>
 
@@ -51,7 +50,6 @@ struct Impl364JobSetupData
 
 ImplJobSetup::ImplJobSetup()
 {
-    mnRefCount          = 1;
     mnSystem            = 0;
     meOrientation       = ORIENTATION_PORTRAIT;
     meDuplexMode        = DUPLEX_UNKNOWN;
@@ -65,27 +63,26 @@ ImplJobSetup::ImplJobSetup()
 }
 
 ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
-    maPrinterName( rJobSetup.maPrinterName ),
-    maDriver( rJobSetup.maDriver )
+    mnSystem( rJobSetup.GetSystem() ),
+    maPrinterName( rJobSetup.GetPrinterName() ),
+    maDriver( rJobSetup.GetDriver() ),
+    meOrientation( rJobSetup.GetOrientation() ),
+    meDuplexMode( rJobSetup.GetDuplexMode() ),
+    mnPaperBin( rJobSetup.GetPaperBin() ),
+    mePaperFormat( rJobSetup.GetPaperFormat() ),
+    mnPaperWidth( rJobSetup.GetPaperWidth() ),
+    mnPaperHeight( rJobSetup.GetPaperHeight() ),
+    mnDriverDataLen( rJobSetup.GetDriverDataLen() )
 {
-    mnRefCount          = 1;
-    mnSystem            = rJobSetup.mnSystem;
-    meOrientation       = rJobSetup.meOrientation;
-    meDuplexMode        = rJobSetup.meDuplexMode;
-    mnPaperBin          = rJobSetup.mnPaperBin;
-    mePaperFormat       = rJobSetup.mePaperFormat;
-    mnPaperWidth        = rJobSetup.mnPaperWidth;
-    mnPaperHeight       = rJobSetup.mnPaperHeight;
-    mnDriverDataLen     = rJobSetup.mnDriverDataLen;
-    if ( rJobSetup.mpDriverData )
+    if ( rJobSetup.GetDriverData() )
     {
         mpDriverData = static_cast<sal_uInt8*>(rtl_allocateMemory( mnDriverDataLen ));
-        memcpy( mpDriverData, rJobSetup.mpDriverData, mnDriverDataLen );
+        memcpy( mpDriverData, rJobSetup.GetDriverData(), mnDriverDataLen );
     }
     else
         mpDriverData = nullptr;
-    mbPapersizeFromSetup = rJobSetup.mbPapersizeFromSetup;
-    maValueMap          = rJobSetup.maValueMap;
+    mbPapersizeFromSetup = rJobSetup.GetPapersizeFromSetup();
+    rJobSetup.GetValueMap(maValueMap);
 }
 
 ImplJobSetup::~ImplJobSetup()
@@ -93,131 +90,191 @@ ImplJobSetup::~ImplJobSetup()
     rtl_freeMemory( mpDriverData );
 }
 
-ImplJobSetup* JobSetup::ImplGetData()
+sal_uInt16 ImplJobSetup::GetSystem() const
 {
-    if ( !mpData )
-        mpData = new ImplJobSetup;
-    else if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplJobSetup( *mpData );
-    }
-
-    return mpData;
+    return mnSystem;
 }
 
-ImplJobSetup* JobSetup::ImplGetConstData()
+void ImplJobSetup::SetSystem(sal_uInt16 rSystem) const
 {
-    if ( !mpData )
-        mpData = new ImplJobSetup;
-    return mpData;
+    const_cast< ImplJobSetup* >(this)->mnSystem = rSystem;
 }
 
-const ImplJobSetup* JobSetup::ImplGetConstData() const
+OUString ImplJobSetup::GetPrinterName() const
 {
-    if ( !mpData )
-        const_cast<JobSetup*>(this)->mpData = new ImplJobSetup;
-    return mpData;
+    return maPrinterName;
 }
 
-JobSetup::JobSetup()
+void ImplJobSetup::SetPrinterName(OUString rPrinterName) const
 {
-
-    mpData = nullptr;
+    const_cast< ImplJobSetup* >(this)->maPrinterName = rPrinterName;
 }
 
-JobSetup::JobSetup( const JobSetup& rJobSetup )
+OUString ImplJobSetup::GetDriver() const
 {
-    SAL_WARN_IF( rJobSetup.mpData && (rJobSetup.mpData->mnRefCount >= 0xFFFE), "vcl", "JobSetup: RefCount overflow" );
-
-    mpData = rJobSetup.mpData;
-    if ( mpData )
-        mpData->mnRefCount++;
+    return maDriver;
 }
 
-JobSetup::~JobSetup()
+void ImplJobSetup::SetDriver(OUString rDriver) const
 {
-
-    if ( mpData )
-    {
-        if ( mpData->mnRefCount == 1 )
-            delete mpData;
-        else
-            mpData->mnRefCount--;
-    }
+    const_cast< ImplJobSetup* >(this)->maDriver = rDriver;
 }
 
-OUString JobSetup::GetPrinterName() const
+Orientation ImplJobSetup::GetOrientation() const
 {
-    if ( mpData )
-        return mpData->maPrinterName;
-    else
-        return OUString();
+    return meOrientation;
 }
 
-OUString JobSetup::GetDriverName() const
+void ImplJobSetup::SetOrientation(Orientation rOrientation) const
 {
-    if ( mpData )
-        return mpData->maDriver;
-    else
-        return OUString();
+    const_cast< ImplJobSetup* >(this)->meOrientation = rOrientation;
+}
+
+DuplexMode ImplJobSetup::GetDuplexMode() const
+{
+    return meDuplexMode;
+}
+
+void ImplJobSetup::SetDuplexMode(DuplexMode rDuplexMode) const
+{
+    const_cast< ImplJobSetup* >(this)->meDuplexMode = rDuplexMode;
+}
+
+sal_uInt16 ImplJobSetup::GetPaperBin() const
+{
+    return mnPaperBin;
+}
+
+void ImplJobSetup::SetPaperBin(sal_uInt16 rPaperBin) const
+{
+    const_cast< ImplJobSetup* >(this)->mnPaperBin = rPaperBin;
+}
+
+Paper ImplJobSetup::GetPaperFormat() const
+{
+    return mePaperFormat;
+}
+
+void ImplJobSetup::SetPaperFormat(Paper rPaperFormat) const
+{
+    const_cast< ImplJobSetup* >(this)->mePaperFormat = rPaperFormat;
+}
+
+long ImplJobSetup::GetPaperWidth() const
+{
+    return mnPaperWidth;
+}
+
+void ImplJobSetup::SetPaperWidth(long rPaperWidth) const
+{
+    const_cast< ImplJobSetup* >(this)->mnPaperWidth = rPaperWidth;
+}
+
+long ImplJobSetup::GetPaperHeight() const
+{
+    return mnPaperHeight;
+}
+
+void ImplJobSetup::SetPaperHeight(long rPaperHeight) const
+{
+    const_cast< ImplJobSetup* >(this)->mnPaperHeight = rPaperHeight;
+}
+
+sal_uInt32 ImplJobSetup::GetDriverDataLen() const
+{
+    return mnDriverDataLen;
+}
+
+void ImplJobSetup::SetDriverDataLen(sal_uInt32 rDriverDataLen) const
+{
+    const_cast< ImplJobSetup* >(this)->mnDriverDataLen = rDriverDataLen;
+}
+
+sal_uInt8* ImplJobSetup::GetDriverData() const
+{
+    return mpDriverData;
+}
+
+void ImplJobSetup::SetDriverData(sal_uInt8* rDriverData) const
+{
+    const_cast< ImplJobSetup* >(this)->mpDriverData = rDriverData;
+}
+
+bool ImplJobSetup::GetPapersizeFromSetup() const
+{
+    return mbPapersizeFromSetup;
+}
+
+void ImplJobSetup::SetPapersizeFromSetup(bool rPapersizeFromSetup) const
+{
+    const_cast< ImplJobSetup* >(this)->mbPapersizeFromSetup = rPapersizeFromSetup;
+}
+
+void ImplJobSetup::GetValueMap(
+    std::unordered_map< OUString, OUString, OUStringHash >& rValueMap) const
+{
+    rValueMap = maValueMap;
+}
+
+
+void ImplJobSetup::SetValueMap( OUString rKey, OUString rValue ) const
+{
+    const_cast< ImplJobSetup* >(this)->maValueMap [ rKey ] = rValue;
 }
 
 JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 {
-    SAL_WARN_IF( rJobSetup.mpData && (rJobSetup.mpData->mnRefCount) >= 0xFFFE, "vcl", "JobSetup: RefCount overflow" );
-
-    // Increment refcount first, so that we can assign to ourselves
-    if ( rJobSetup.mpData )
-        rJobSetup.mpData->mnRefCount++;
-
-    // If it's not static ImpData and the last reference, delete it, else
-    // decrement refcount
-    if ( mpData )
-    {
-        if ( mpData->mnRefCount == 1 )
-            delete mpData;
-        else
-            mpData->mnRefCount--;
-    }
-
     mpData = rJobSetup.mpData;
-
     return *this;
+}
+
+bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
+{
+    if ( mnSystem          == rImplJobSetup.mnSystem        &&
+         maPrinterName     == rImplJobSetup.maPrinterName   &&
+         maDriver          == rImplJobSetup.maDriver        &&
+         meOrientation     == rImplJobSetup.meOrientation   &&
+         meDuplexMode      == rImplJobSetup.meDuplexMode    &&
+         mnPaperBin        == rImplJobSetup.mnPaperBin      &&
+         mePaperFormat     == rImplJobSetup.mePaperFormat   &&
+         mnPaperWidth      == rImplJobSetup.mnPaperWidth    &&
+         mnPaperHeight     == rImplJobSetup.mnPaperHeight   &&
+         mnDriverDataLen   == rImplJobSetup.mnDriverDataLen &&
+         maValueMap        == rImplJobSetup.maValueMap      &&
+         memcmp( mpDriverData, rImplJobSetup.mpDriverData, mnDriverDataLen ) == 0)
+        return true;
+    return false;
+}
+
+JobSetup::JobSetup() : mpData()
+{
+}
+
+JobSetup::JobSetup( const JobSetup& rJobSetup ) : mpData(rJobSetup.mpData)
+{
+}
+
+JobSetup::~JobSetup()
+{
 }
 
 bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 {
+    return mpData == rJobSetup.mpData;
+}
 
-    if ( mpData == rJobSetup.mpData )
-        return true;
+const ImplJobSetup* JobSetup::ImplGetConstData() const
+{
+    return mpData.get();
+}
 
-    if ( !mpData || !rJobSetup.mpData )
-        return false;
-
-    ImplJobSetup* pData1 = mpData;
-    ImplJobSetup* pData2 = rJobSetup.mpData;
-    if ( (pData1->mnSystem          == pData2->mnSystem)                &&
-         (pData1->maPrinterName     == pData2->maPrinterName)           &&
-         (pData1->maDriver          == pData2->maDriver)                &&
-         (pData1->meOrientation     == pData2->meOrientation)           &&
-         (pData1->meDuplexMode      == pData2->meDuplexMode)            &&
-         (pData1->mnPaperBin        == pData2->mnPaperBin)              &&
-         (pData1->mePaperFormat     == pData2->mePaperFormat)           &&
-         (pData1->mnPaperWidth      == pData2->mnPaperWidth)            &&
-         (pData1->mnPaperHeight     == pData2->mnPaperHeight)           &&
-         (pData1->mnDriverDataLen   == pData2->mnDriverDataLen)         &&
-         (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0)                                                           &&
-         (pData1->maValueMap        == pData2->maValueMap)
-         )
-        return true;
-
-    return false;
+OUString JobSetup::GetPrinterName() const
+{
+    return mpData.get()->GetPrinterName();
 }
 
 SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 {
-
     {
         sal_uInt16 nLen = 0;
         rIStream.ReadUInt16( nLen );
@@ -239,22 +296,15 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
         if (nRead >= sizeof(ImplOldJobSetupData))
         {
             ImplOldJobSetupData* pData = reinterpret_cast<ImplOldJobSetupData*>(pTempBuf.get());
-            if ( rJobSetup.mpData )
-            {
-                if ( rJobSetup.mpData->mnRefCount == 1 )
-                    delete rJobSetup.mpData;
-                else
-                    rJobSetup.mpData->mnRefCount--;
-            }
 
             rtl_TextEncoding aStreamEncoding = RTL_TEXTENCODING_UTF8;
             if( nSystem == JOBSET_FILE364_SYSTEM )
                 aStreamEncoding = rIStream.GetStreamCharSet();
 
-            rJobSetup.mpData = new ImplJobSetup;
-            ImplJobSetup* pJobData = rJobSetup.mpData;
-            pJobData->maPrinterName = OStringToOUString(pData->cPrinterName, aStreamEncoding);
-            pJobData->maDriver = OStringToOUString(pData->cDriverName, aStreamEncoding);
+            const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
+
+            pJobData->SetPrinterName( OStringToOUString(pData->cPrinterName, aStreamEncoding) );
+            pJobData->SetDriver( OStringToOUString(pData->cDriverName, aStreamEncoding) );
 
             // Are these our new JobSetup files?
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
@@ -262,23 +312,25 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             {
                 Impl364JobSetupData* pOldJobData    = reinterpret_cast<Impl364JobSetupData*>(pTempBuf.get() + sizeof( ImplOldJobSetupData ));
                 sal_uInt16 nOldJobDataSize          = SVBT16ToShort( pOldJobData->nSize );
-                pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
-                pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
-                pJobData->meOrientation             = (Orientation)SVBT16ToShort( pOldJobData->nOrientation );
-                pJobData->meDuplexMode              = DUPLEX_UNKNOWN;
-                pJobData->mnPaperBin                = SVBT16ToShort( pOldJobData->nPaperBin );
-                pJobData->mePaperFormat             = (Paper)SVBT16ToShort( pOldJobData->nPaperFormat );
-                pJobData->mnPaperWidth              = (long)SVBT32ToUInt32( pOldJobData->nPaperWidth );
-                pJobData->mnPaperHeight             = (long)SVBT32ToUInt32( pOldJobData->nPaperHeight );
-                if ( pJobData->mnDriverDataLen )
+                pJobData->SetSystem( SVBT16ToShort( pOldJobData->nSystem ) );
+                pJobData->SetDriverDataLen( SVBT32ToUInt32( pOldJobData->nDriverDataLen ) );
+                pJobData->SetOrientation( (Orientation)SVBT16ToShort( pOldJobData->nOrientation ) );
+                pJobData->SetDuplexMode( DUPLEX_UNKNOWN );
+                pJobData->SetPaperBin( SVBT16ToShort( pOldJobData->nPaperBin ) );
+                pJobData->SetPaperFormat( (Paper)SVBT16ToShort( pOldJobData->nPaperFormat ) );
+                pJobData->SetPaperWidth( (long)SVBT32ToUInt32( pOldJobData->nPaperWidth ) );
+                pJobData->SetPaperHeight( (long)SVBT32ToUInt32( pOldJobData->nPaperHeight ) );
+                if ( pJobData->GetDriverDataLen() )
                 {
                     sal_uInt8* pDriverData = reinterpret_cast<sal_uInt8*>(pOldJobData) + nOldJobDataSize;
-                    pJobData->mpDriverData = static_cast<sal_uInt8*>(rtl_allocateMemory( pJobData->mnDriverDataLen ));
-                    memcpy( pJobData->mpDriverData, pDriverData, pJobData->mnDriverDataLen );
+                    pJobData->SetDriverData( static_cast<sal_uInt8*>(
+                        rtl_allocateMemory( pJobData->GetDriverDataLen() )));
+                    memcpy( pJobData->GetDriverData(), pDriverData, pJobData->GetDriverDataLen() );
                 }
                 if( nSystem == JOBSET_FILE605_SYSTEM )
                 {
-                    rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
+                    rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) +
+                        sizeof( Impl364JobSetupData ) + pJobData->GetDriverDataLen() );
                     while( rIStream.Tell() < nFirstPos + nRead )
                     {
                         OUString aKey = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
@@ -286,16 +338,16 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                         if( aKey == "COMPAT_DUPLEX_MODE" )
                         {
                             if( aValue == "DUPLEX_UNKNOWN" )
-                                pJobData->meDuplexMode = DUPLEX_UNKNOWN;
+                                pJobData->SetDuplexMode( DUPLEX_UNKNOWN );
                             else if( aValue == "DUPLEX_OFF" )
-                                pJobData->meDuplexMode = DUPLEX_OFF;
+                                pJobData->SetDuplexMode( DUPLEX_OFF );
                             else if( aValue == "DUPLEX_SHORTEDGE" )
-                                pJobData->meDuplexMode = DUPLEX_SHORTEDGE;
+                                pJobData->SetDuplexMode( DUPLEX_SHORTEDGE );
                             else if( aValue == "DUPLEX_LONGEDGE" )
-                                pJobData->meDuplexMode = DUPLEX_LONGEDGE;
+                                pJobData->SetDuplexMode( DUPLEX_LONGEDGE );
                         }
                         else
-                            pJobData->maValueMap[ aKey ] = aValue;
+                            pJobData->SetValueMap(aKey, aValue);
                     }
                     SAL_WARN_IF( rIStream.Tell() != nFirstPos+nRead, "vcl", "corrupted job setup" );
                     // ensure correct stream position
@@ -310,67 +362,63 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 
 SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
 {
-
     {
-        sal_uInt16 nLen = 0;
-        if ( !rJobSetup.mpData )
-            rOStream.WriteUInt16( nLen );
-        else
+        sal_uInt16 nSystem = JOBSET_FILE605_SYSTEM;
+
+        const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
+        Impl364JobSetupData aOldJobData;
+        sal_uInt16 nOldJobDataSize = sizeof( aOldJobData );
+        ShortToSVBT16( nOldJobDataSize, aOldJobData.nSize );
+        ShortToSVBT16( pJobData->GetSystem(), aOldJobData.nSystem );
+        UInt32ToSVBT32( pJobData->GetDriverDataLen(), aOldJobData.nDriverDataLen );
+        ShortToSVBT16( (sal_uInt16)(pJobData->GetOrientation()), aOldJobData.nOrientation );
+        ShortToSVBT16( pJobData->GetPaperBin(), aOldJobData.nPaperBin );
+        ShortToSVBT16( (sal_uInt16)(pJobData->GetPaperFormat()), aOldJobData.nPaperFormat );
+        UInt32ToSVBT32( (sal_uLong)(pJobData->GetPaperWidth()), aOldJobData.nPaperWidth );
+        UInt32ToSVBT32( (sal_uLong)(pJobData->GetPaperHeight()), aOldJobData.nPaperHeight );
+
+        ImplOldJobSetupData aOldData;
+        memset( &aOldData, 0, sizeof( aOldData ) );
+        OString aPrnByteName(OUStringToOString(pJobData->GetPrinterName(), RTL_TEXTENCODING_UTF8));
+        strncpy( aOldData.cPrinterName, aPrnByteName.getStr(), 63 );
+        OString aDriverByteName(OUStringToOString(pJobData->GetDriver(), RTL_TEXTENCODING_UTF8));
+        strncpy( aOldData.cDriverName, aDriverByteName.getStr(), 31 );
+        int nPos = rOStream.Tell();
+        rOStream.WriteUInt16( 0 );
+        rOStream.WriteUInt16( nSystem );
+        rOStream.WriteBytes( &aOldData, sizeof( aOldData ) );
+        rOStream.WriteBytes( &aOldJobData, nOldJobDataSize );
+        rOStream.WriteBytes( pJobData->GetDriverData(), pJobData->GetDriverDataLen() );
+
+        std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
+        std::unordered_map< OUString, OUString, OUStringHash > maValueMap;
+        pJobData->GetValueMap(maValueMap);
+
+        for( it = maValueMap.begin(); it != maValueMap.end(); ++it )
         {
-            sal_uInt16 nSystem = JOBSET_FILE605_SYSTEM;
-
-            const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
-            Impl364JobSetupData aOldJobData;
-            sal_uInt16 nOldJobDataSize = sizeof( aOldJobData );
-            ShortToSVBT16( nOldJobDataSize, aOldJobData.nSize );
-            ShortToSVBT16( pJobData->mnSystem, aOldJobData.nSystem );
-            UInt32ToSVBT32( pJobData->mnDriverDataLen, aOldJobData.nDriverDataLen );
-            ShortToSVBT16( (sal_uInt16)(pJobData->meOrientation), aOldJobData.nOrientation );
-            ShortToSVBT16( pJobData->mnPaperBin, aOldJobData.nPaperBin );
-            ShortToSVBT16( (sal_uInt16)(pJobData->mePaperFormat), aOldJobData.nPaperFormat );
-            UInt32ToSVBT32( (sal_uLong)(pJobData->mnPaperWidth), aOldJobData.nPaperWidth );
-            UInt32ToSVBT32( (sal_uLong)(pJobData->mnPaperHeight), aOldJobData.nPaperHeight );
-
-            ImplOldJobSetupData aOldData;
-            memset( &aOldData, 0, sizeof( aOldData ) );
-            OString aPrnByteName(OUStringToOString(rJobSetup.GetPrinterName(), RTL_TEXTENCODING_UTF8));
-            strncpy( aOldData.cPrinterName, aPrnByteName.getStr(), 63 );
-            OString aDriverByteName(OUStringToOString(rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8));
-            strncpy( aOldData.cDriverName, aDriverByteName.getStr(), 31 );
-//          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
-            int nPos = rOStream.Tell();
-            rOStream.WriteUInt16( nLen );
-            rOStream.WriteUInt16( nSystem );
-            rOStream.WriteBytes( &aOldData, sizeof( aOldData ) );
-            rOStream.WriteBytes( &aOldJobData, nOldJobDataSize );
-            rOStream.WriteBytes( pJobData->mpDriverData, pJobData->mnDriverDataLen );
-            std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
-            for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
-            {
-                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->first, RTL_TEXTENCODING_UTF8);
-                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->second, RTL_TEXTENCODING_UTF8);
-            }
-            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "COMPAT_DUPLEX_MODE");
-            switch( pJobData->meDuplexMode )
-            {
-                case DUPLEX_UNKNOWN:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_UNKNOWN");
-                    break;
-                case DUPLEX_OFF:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_OFF");
-                    break;
-                case DUPLEX_SHORTEDGE:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_SHORTEDGE");
-                    break;
-                case DUPLEX_LONGEDGE:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_LONGEDGE");
-                    break;
-            }
-            nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);
-            rOStream.Seek( nPos );
-            rOStream.WriteUInt16( nLen );
-            rOStream.Seek( nPos + nLen );
+            write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->first, RTL_TEXTENCODING_UTF8);
+            write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->second, RTL_TEXTENCODING_UTF8);
         }
+        write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "COMPAT_DUPLEX_MODE");
+        switch( pJobData->GetDuplexMode() )
+        {
+            case DUPLEX_UNKNOWN:
+                write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_UNKNOWN");
+                break;
+            case DUPLEX_OFF:
+                write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_OFF");
+                break;
+            case DUPLEX_SHORTEDGE:
+                write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_SHORTEDGE");
+                break;
+            case DUPLEX_LONGEDGE:
+                write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_LONGEDGE");
+                break;
+        }
+        sal_uInt16 nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);
+        rOStream.Seek( nPos );
+        rOStream.WriteUInt16( nLen );
+        rOStream.Seek( nPos + nLen );
     }
 
     return rOStream;
