@@ -28,7 +28,7 @@
 
 class SalGraphics;
 class SalFrame;
-struct ImplJobSetup;
+class ImplJobSetup;
 namespace vcl { class PrinterController; }
 
 struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
@@ -59,15 +59,15 @@ public:
     virtual SalGraphics*            AcquireGraphics() = 0;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
-    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    Setup( SalFrame* pFrame, const ImplJobSetup* pSetupData ) = 0;
     // This function set the driver data and
     // set the new indepen data in pSetupData
-    virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    SetPrinterData( const ImplJobSetup* pSetupData ) = 0;
     // This function merged the indepen driver data
     // and set the new indepen data in pSetupData
     // Only the data must changed, where the bit
     // in nFlags is set
-    virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    SetData( JobSetFlags nFlags, const ImplJobSetup* pSetupData ) = 0;
 
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
@@ -94,18 +94,18 @@ public:
                                               sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
-                                              ImplJobSetup* pSetupData ) = 0;
+                                              const ImplJobSetup* pSetupData ) = 0;
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns false
     virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
-                                              ImplJobSetup* pSetupData,
+                                              const ImplJobSetup* pSetupData,
                                               vcl::PrinterController& rController );
 
     virtual bool                    EndJob() = 0;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
+    virtual SalGraphics*            StartPage( const ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
     virtual void                    EndPage() = 0;
     virtual sal_uLong               GetErrorCode() = 0;
 
