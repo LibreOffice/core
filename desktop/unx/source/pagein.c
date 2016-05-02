@@ -52,7 +52,7 @@ int isRotational(char const * path)
     struct stat out;
     int major, minor;
     char type;
-    if( !stat( path , &out ) == 0)
+    if(stat( path , &out ) == -1)
         return 1;
     major = major(out.st_dev);
     minor = 0; /* minor(out.st_dev); only the device itself has a queue */
