@@ -95,9 +95,9 @@ public:
                                               sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
-                                              ImplJobSetup* pSetupData ) override;
+                                              const ImplJobSetup* pSetupData ) override;
     virtual bool                    EndJob() override;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) override;
+    virtual SalGraphics*            StartPage( const ImplJobSetup* pSetupData, bool bNewJobData ) override;
     virtual void                    EndPage() override;
     virtual sal_uIntPtr             GetErrorCode() override;
 

@@ -35,7 +35,7 @@
 namespace comphelper { class SolarMutex; }
 struct SystemParentData;
 struct SalPrinterQueueInfo;
-struct ImplJobSetup;
+class ImplJobSetup;
 class OpenGLContext;
 class SalGraphics;
 class SalFrame;

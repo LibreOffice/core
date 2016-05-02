@@ -28,7 +28,7 @@
 
 class SalGraphics;
 class SalFrame;
-struct ImplJobSetup;
+class ImplJobSetup;
 namespace vcl { class PrinterController; }
 
 struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
@@ -94,18 +94,18 @@ public:
                                               sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
-                                              ImplJobSetup* pSetupData ) = 0;
+                                              const ImplJobSetup* pSetupData ) = 0;
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns false
     virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
-                                              ImplJobSetup* pSetupData,
+                                              const ImplJobSetup* pSetupData,
                                               vcl::PrinterController& rController );
 
     virtual bool                    EndJob() = 0;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
+    virtual SalGraphics*            StartPage( const ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
     virtual void                    EndPage() = 0;
     virtual sal_uLong               GetErrorCode() = 0;
 
