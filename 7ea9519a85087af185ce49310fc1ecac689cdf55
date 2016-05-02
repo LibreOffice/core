@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1573c4b2",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-02T08:36:25Z",
+      "side": 1,
+      "message": "Mhm, I\u0027m not sure if this is going to work if this fun GrafPrefMapMode of the object is something else than pixels.\n\nSince I don\u0027t know this part of the code so well, to be on the safe side, I\u0027d suggest to:\n1) factor out the code calculating the original size used in View::SetMarkedOriginalSize(), make it e.g. a member function of SdrGrafObj \n2) and then use it here as well as in View::SetMarkedOriginalSize()",
+      "revId": "7ea9519a85087af185ce49310fc1ecac689cdf55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
