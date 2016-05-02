@@ -33,18 +33,15 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-
-ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
+ImpXPolygon::ImpXPolygon()
     : pPointAry(nullptr)
     , pFlagAry(nullptr)
     , pOldPointAry(nullptr)
     , bDeleteOldPoints(false)
     , nSize(0)
-    , nResize(_nResize)
+    , nResize(16)
     , nPoints(0)
-    , nRefCount(1)
 {
-    Resize(nInitSize);
 }
 
 ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
@@ -55,7 +52,6 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
     , nSize(0)
     , nResize(rImpXPoly.nResize)
     , nPoints(0)
-    , nRefCount(1)
 {
     ( (ImpXPolygon&) rImpXPoly ).CheckPointDelete();
 
@@ -81,6 +77,15 @@ bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
            (nPoints==0 ||
             (memcmp(pPointAry,rImpXPoly.pPointAry,nPoints*sizeof(Point))==0 &&
              memcmp(pFlagAry,rImpXPoly.pFlagAry,nPoints)==0));
+}
+
+void ImpXPolygon::CheckPointDelete()
+{
+    if ( bDeleteOldPoints )
+    {
+        delete[] reinterpret_cast<char*>(pOldPointAry);
+        bDeleteOldPoints = false;
+    }
 }
 
 /** Change polygon size
@@ -135,8 +140,10 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
             if( nPoints > nSize )
                 nPoints = nSize;
         }
-        if ( bDeletePoints )    delete[] reinterpret_cast<char*>(pOldPointAry);
-        else                    bDeleteOldPoints = true;
+        if ( bDeletePoints )
+            delete[] reinterpret_cast<char*>(pOldPointAry);
+        else
+            bDeleteOldPoints = true;
         delete[] pOldFlagAry;
     }
 }
@@ -186,23 +193,24 @@ void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
     }
 }
 
-XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize )
+XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize ) :
+    pImpXPolygon()
 {
-    pImpXPolygon = new ImpXPolygon( nSize, nResize );
+    pImpXPolygon->nResize = nResize;
+    pImpXPolygon->Resize(nSize);
 }
 
-XPolygon::XPolygon( const XPolygon& rXPoly )
+XPolygon::XPolygon( const XPolygon& rXPoly ) :
+    pImpXPolygon( rXPoly.pImpXPolygon )
 {
-    pImpXPolygon = rXPoly.pImpXPolygon;
-    pImpXPolygon->nRefCount++;
 }
 
 /// create a XPolygon out of a standard polygon
-XPolygon::XPolygon( const tools::Polygon& rPoly )
+XPolygon::XPolygon( const tools::Polygon& rPoly ) :
+    pImpXPolygon()
 {
-
     sal_uInt16 nSize = rPoly.GetSize();
-    pImpXPolygon = new ImpXPolygon( nSize );
+    pImpXPolygon->Resize(nSize);
     pImpXPolygon->nPoints = nSize;
 
     for( sal_uInt16 i = 0; i < nSize;  i++ )
@@ -213,9 +221,10 @@ XPolygon::XPolygon( const tools::Polygon& rPoly )
 }
 
 /// create a rectangle (also with rounded corners) as a Bézier polygon
-XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
+XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy) :
+    pImpXPolygon()
 {
-    pImpXPolygon = new ImpXPolygon(17);
+    pImpXPolygon->Resize(17);
     long nWh = (rRect.GetWidth()  - 1) / 2;
     long nHh = (rRect.GetHeight() - 1) / 2;
 
@@ -274,10 +283,10 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
 
 /// create a ellipse (curve) as Bézier polygon
 XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
-                   sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, bool bClose)
+    sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, bool bClose) :
+        pImpXPolygon()
 {
-    pImpXPolygon = new ImpXPolygon(17);
-
+    pImpXPolygon->Resize(17);
     nStartAngle %= 3600;
     if ( nEndAngle > 3600 ) nEndAngle %= 3600;
     bool bFull = (nStartAngle == 0 && nEndAngle == 3600);
@@ -315,26 +324,11 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 
 XPolygon::~XPolygon()
 {
-    if( pImpXPolygon->nRefCount > 1 )
-        pImpXPolygon->nRefCount--;
-    else
-        delete pImpXPolygon;
-}
-
-/// check reference counter and decouple if > 1
-void XPolygon::CheckReference()
-{
-    if( pImpXPolygon->nRefCount > 1 )
-    {
-        pImpXPolygon->nRefCount--;
-        pImpXPolygon = new ImpXPolygon( *pImpXPolygon );
-    }
 }
 
 void XPolygon::SetPointCount( sal_uInt16 nPoints )
 {
-    pImpXPolygon->CheckPointDelete();
-    CheckReference();
+    ImplGetImpXPolygon()->CheckPointDelete();
 
     if( pImpXPolygon->nSize < nPoints )
         pImpXPolygon->Resize( nPoints );
@@ -350,19 +344,18 @@ void XPolygon::SetPointCount( sal_uInt16 nPoints )
 
 sal_uInt16 XPolygon::GetSize() const
 {
-    pImpXPolygon->CheckPointDelete();
+    ImplGetImpXPolygon()->CheckPointDelete();
     return pImpXPolygon->nSize;
 }
 
 sal_uInt16 XPolygon::GetPointCount() const
 {
-    pImpXPolygon->CheckPointDelete();
+    ImplGetImpXPolygon()->CheckPointDelete();
     return pImpXPolygon->nPoints;
 }
 
 void XPolygon::Insert( sal_uInt16 nPos, const Point& rPt, XPolyFlags eFlags )
 {
-    CheckReference();
     if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
     pImpXPolygon->InsertSpace( nPos, 1 );
     pImpXPolygon->pPointAry[nPos] = rPt;
@@ -371,7 +364,6 @@ void XPolygon::Insert( sal_uInt16 nPos, const Point& rPt, XPolyFlags eFlags )
 
 void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
 {
-    CheckReference();
     if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
 
     sal_uInt16 nPoints = rXPoly.GetPointCount();
@@ -388,7 +380,6 @@ void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
 
 void XPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 {
-    CheckReference();
     pImpXPolygon->Remove( nPos, nCount );
 }
 
@@ -396,8 +387,6 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
 {
     if ( !nHorzMove && !nVertMove )
         return;
-
-    CheckReference();
 
     // move points
     sal_uInt16 nCount = pImpXPolygon->nPoints;
@@ -411,7 +400,7 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
 
 Rectangle XPolygon::GetBoundRect() const
 {
-    pImpXPolygon->CheckPointDelete();
+    ImplGetImpXPolygon()->CheckPointDelete();
     Rectangle aRetval;
 
     if(pImpXPolygon->nPoints)
@@ -435,14 +424,13 @@ const Point& XPolygon::operator[]( sal_uInt16 nPos ) const
 {
     DBG_ASSERT(nPos < pImpXPolygon->nPoints, "Ungueltiger Index bei const-Arrayzugriff auf XPolygon");
 
-    pImpXPolygon->CheckPointDelete();
+    ImplGetImpXPolygon()->CheckPointDelete();
     return pImpXPolygon->pPointAry[nPos];
 }
 
 Point& XPolygon::operator[]( sal_uInt16 nPos )
 {
-    pImpXPolygon->CheckPointDelete();
-    CheckReference();
+    ImplGetImpXPolygon()->CheckPointDelete();
 
     if( nPos >= pImpXPolygon->nSize )
     {
@@ -457,41 +445,28 @@ Point& XPolygon::operator[]( sal_uInt16 nPos )
 
 XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
 {
-    if (this == &rXPoly)
-        return *this;
-
-    pImpXPolygon->CheckPointDelete();
-
-    rXPoly.pImpXPolygon->nRefCount++;
-
-    if( pImpXPolygon->nRefCount > 1 )
-        pImpXPolygon->nRefCount--;
-    else
-        delete pImpXPolygon;
-
+    ImplGetImpXPolygon()->CheckPointDelete();
     pImpXPolygon = rXPoly.pImpXPolygon;
     return *this;
 }
 
 bool XPolygon::operator==( const XPolygon& rXPoly ) const
 {
-    pImpXPolygon->CheckPointDelete();
-    if (rXPoly.pImpXPolygon==pImpXPolygon) return true;
-    return *rXPoly.pImpXPolygon == *pImpXPolygon;
+    ImplGetImpXPolygon()->CheckPointDelete();
+    return rXPoly.pImpXPolygon == pImpXPolygon;
 }
 
 /// get the flags for the point at the given position
 XPolyFlags XPolygon::GetFlags( sal_uInt16 nPos ) const
 {
-    pImpXPolygon->CheckPointDelete();
+    ImplGetImpXPolygon()->CheckPointDelete();
     return (XPolyFlags) pImpXPolygon->pFlagAry[nPos];
 }
 
 /// set the flags for the point at the given position
 void XPolygon::SetFlags( sal_uInt16 nPos, XPolyFlags eFlags )
 {
-    pImpXPolygon->CheckPointDelete();
-    CheckReference();
+    ImplGetImpXPolygon()->CheckPointDelete();
     pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) eFlags;
 }
 
@@ -630,6 +605,11 @@ bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1,
     return (nStPrev < nEnd && nStart >= nEnd);
 }
 
+ImpXPolygon* XPolygon::ImplGetImpXPolygon() const
+{
+    return const_cast< ImpXPolygon* >(pImpXPolygon.get());
+}
+
 /** Calculate a smooth transition to connect two Bézier curves
  *
  * This is done by projecting the corresponding point onto a line between
@@ -643,8 +623,6 @@ bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1,
  */
 void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 nPnt)
 {
-    CheckReference();
-
     // If nPoint is no control point, i.e. cannot be moved, than
     // move nDrag instead on the line between nCenter and nPnt
     if ( !IsControl(nPnt) )
@@ -678,8 +656,6 @@ void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 n
  */
 void XPolygon::CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNext)
 {
-    CheckReference();
-
     double fAbsLen = CalcDistance(nNext, nPrev);
 
     if ( fAbsLen )
@@ -716,8 +692,6 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
     if ( nFirst > pImpXPolygon->nPoints - 4 || IsControl(nFirst) ||
          IsControl(nFirst+1) || IsControl(nFirst+2) || IsControl(nFirst+3) )
         return;
-
-    CheckReference();
 
     fTx1 = pPoints[nFirst+1].X();
     fTy1 = pPoints[nFirst+1].Y();
@@ -776,8 +750,7 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 /// scale in X- and/or Y-direction
 void XPolygon::Scale(double fSx, double fSy)
 {
-    pImpXPolygon->CheckPointDelete();
-    CheckReference();
+    ImplGetImpXPolygon()->CheckPointDelete();
 
     sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
@@ -802,8 +775,7 @@ void XPolygon::Scale(double fSx, double fSy)
 void XPolygon::Distort(const Rectangle& rRefRect,
                        const XPolygon& rDistortedRect)
 {
-    pImpXPolygon->CheckPointDelete();
-    CheckReference();
+    ImplGetImpXPolygon()->CheckPointDelete();
 
     long    Xr, Wr;
     long    Yr, Hr;
@@ -851,16 +823,12 @@ void XPolygon::Distort(const Rectangle& rRefRect,
 
 basegfx::B2DPolygon XPolygon::getB2DPolygon() const
 {
-    // #i74631# use tools Polygon class for conversion to not have the code doubled
-    // here. This needs one more conversion but avoids different convertors in
-    // the long run
-    DBG_ASSERT(pImpXPolygon != nullptr, "XPolygon::getB2DPolygon(): XPolygon has no implementation incarnated (!)");
     const tools::Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry);
-
     return aSource.getB2DPolygon();
 }
 
-XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
+XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon) :
+    pImpXPolygon()
 {
     // #i74631# use tools Polygon class for conversion to not have the code doubled
     // here. This needs one more conversion but avoids different convertors in
@@ -868,7 +836,7 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 
     const tools::Polygon aSource(rPolygon);
     sal_uInt16 nSize = aSource.GetSize();
-    pImpXPolygon = new ImpXPolygon( nSize );
+    pImpXPolygon->Resize( nSize );
     pImpXPolygon->nPoints = nSize;
 
     for( sal_uInt16 i = 0; i < nSize;  i++ )
@@ -883,8 +851,6 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
                      aXPolyList( rImpXPolyPoly.aXPolyList )
 {
-    nRefCount = 1;
-
     // duplicate elements
     for (XPolygon*& rp : aXPolyList)
         rp = new XPolygon( *rp );
@@ -897,38 +863,22 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
     aXPolyList.clear();
 }
 
-XPolyPolygon::XPolyPolygon( sal_uInt16 /*nInitSize*/, sal_uInt16 /*nResize*/ )
+XPolyPolygon::XPolyPolygon() :
+    pImpXPolyPolygon()
 {
-    pImpXPolyPolygon = new ImpXPolyPolygon();
 }
 
-XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
+XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly ) :
+    pImpXPolyPolygon(rXPolyPoly.pImpXPolyPolygon)
 {
-    pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
-    pImpXPolyPolygon->nRefCount++;
 }
 
 XPolyPolygon::~XPolyPolygon()
 {
-    if( pImpXPolyPolygon->nRefCount > 1 )
-        pImpXPolyPolygon->nRefCount--;
-    else
-        delete pImpXPolyPolygon;
-}
-
-/// check reference counter and decouple if > 1
-void XPolyPolygon::CheckReference()
-{
-    if( pImpXPolyPolygon->nRefCount > 1 )
-    {
-        pImpXPolyPolygon->nRefCount--;
-        pImpXPolyPolygon = new ImpXPolyPolygon( *pImpXPolyPolygon );
-    }
 }
 
 void XPolyPolygon::Insert( const XPolygon& rXPoly )
 {
-    CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
     pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
 }
@@ -936,8 +886,6 @@ void XPolyPolygon::Insert( const XPolygon& rXPoly )
 /// insert all XPolygons of a XPolyPolygon
 void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 {
-    CheckReference();
-
     for ( size_t i = 0; i < rXPolyPoly.Count(); i++)
     {
         XPolygon* pXPoly = new XPolygon( rXPolyPoly[i] );
@@ -948,7 +896,6 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 
 XPolygon XPolyPolygon::Remove( sal_uInt16 nPos )
 {
-    CheckReference();
     XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
     ::std::advance( it, nPos );
     XPolygon* pTmpXPoly = *it;
@@ -965,17 +912,9 @@ const XPolygon& XPolyPolygon::GetObject( sal_uInt16 nPos ) const
 
 void XPolyPolygon::Clear()
 {
-    if ( pImpXPolyPolygon->nRefCount > 1 )
-    {
-        pImpXPolyPolygon->nRefCount--;
-        pImpXPolyPolygon = new ImpXPolyPolygon();
-    }
-    else
-    {
-        for(XPolygon* p : pImpXPolyPolygon->aXPolyList)
-            delete p;
-        pImpXPolyPolygon->aXPolyList.clear();
-    }
+    for(XPolygon* p : pImpXPolyPolygon->aXPolyList)
+        delete p;
+    pImpXPolyPolygon->aXPolyList.clear();
 }
 
 sal_uInt16 XPolyPolygon::Count() const
@@ -999,19 +938,11 @@ Rectangle XPolyPolygon::GetBoundRect() const
 
 XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 {
-    CheckReference();
     return *( pImpXPolyPolygon->aXPolyList[ nPos ] );
 }
 
 XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 {
-    rXPolyPoly.pImpXPolyPolygon->nRefCount++;
-
-    if( pImpXPolyPolygon->nRefCount > 1 )
-        pImpXPolyPolygon->nRefCount--;
-    else
-        delete pImpXPolyPolygon;
-
     pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
     return *this;
 }
@@ -1029,8 +960,6 @@ XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 void XPolyPolygon::Distort(const Rectangle& rRefRect,
                            const XPolygon& rDistortedRect)
 {
-    CheckReference();
-
     for (size_t i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList[ i ]->Distort(rRefRect, rDistortedRect);
 }
@@ -1048,10 +977,9 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
     return aRetval;
 }
 
-XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
+XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon) :
+    pImpXPolyPolygon()
 {
-    pImpXPolyPolygon = new ImpXPolyPolygon();
-
     for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
     {
         basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
