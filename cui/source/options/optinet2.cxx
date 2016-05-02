@@ -807,8 +807,8 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
 
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
     {
-        SolarMutexGuard aGuard;
-        svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ADDING_PATH);
+        ScopedVclPtrInstance< MessageDialog > aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
+        aWarnBox->Execute();
     }
 }
 
