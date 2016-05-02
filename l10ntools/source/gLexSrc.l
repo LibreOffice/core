@@ -118,6 +118,13 @@ f
 
 
 
+<LANG>{SPACE}"=" {
+    LOCptr->copySource(yytext);
+	BEGIN(INITIAL);
+}
+
+
+
 <LANG2>{IDENT} {
     if (LOCptr->setLang(LOCptr->copySource(yytext))) {
 	    BEGIN(LANG3);
@@ -157,10 +164,13 @@ f
 }
 
 
-
-[mM][eE][nN][uU]                 |
-[mM][eE][nN][uU][iI][tT][eE][mM] |
-[sS][tT][rR][iI][nN][gG]         {
+"#define"                             |
+[fF][iI][xX][eE][dD][tT][eE][xX][tT]  |
+[mM][eE][nN][uU]                      |
+[mM][eE][nN][uU][iI][tT][eE][mM]      |
+[rR][eE][sS][oO][uU][rR][cC][eE]      |
+[sS][tT][rR][iI][nN][gG]              |
+[wW][iI][nN][dD][oO][wW]              {
     LOCptr->setCmd(LOCptr->copySource(yytext));
     BEGIN(CMD);
 }
@@ -186,8 +196,22 @@ f
 }
 
 
+\n {
+    LOCptr->copySource(yytext);
+    LOCptr->endMacro();
+}
 
-. {
+
+
+\\[\r]*\n {
+    LOCptr->copySource(yytext);
+    LOCptr->defMacro();
+}
+
+
+
+"#include".* |
+.            {
     LOCptr->copySource(yytext);
 
     // Just to please compiler.
@@ -221,18 +245,6 @@ KEYID [a-zA-Z0-9_-]+
 
 
 
-\n {
-    LOCptr->setNL(yytext, false);
-}
-
-
-
-\\[\r]*\n {
-    LOCptr->setNL(yytext, true);
-}
-
-
-
 {PRE}[bB][iI][tT][mM][aA][pP]{SUF}                                                 |
 {PRE}[bB][uU][tT][tT][oO][nN][iI][mM][aA][gG][eE]{SUF}                             |
 {PRE}[cC][aA][nN][cC][eE][lL][bB][uU][tT][tT][oO][nN]{SUF}                         |
@@ -242,7 +254,6 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[dD][oO][cC][kK][iI][nN][gG][wW][iI][nN][dD][oO][wW]{SUF}                     |
 {PRE}[eE][dD][iI][tT]{SUF}                                                         |
 {PRE}[eE][rR][rR][oO][rR][bB][oO][xX]{SUF}                                         |
-{PRE}[fF][iI][xX][eE][dD][tT][eE][xX][tT]{SUF}                                     |
 {PRE}[fF][iI][xX][eE][dD][lL][iI][nN][eE]{SUF}                                     |
 {PRE}[fF][lL][oO][aA][tT][iI][nN][gG][wW][iI][nN][dD][oO][wW]{SUF}                 |
 {PRE}[gG][rR][oO][uU][pP][bB][oO][xX]{SUF}                                         |
@@ -268,7 +279,6 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[pP][uU][sS][hH][bB][uU][tT][tT][oO][nN]{SUF}                                 |
 {PRE}[qQ][uU][eE][rR][yY][bB][oO][xX]{SUF}                                         |
 {PRE}[rR][aA][dD][iI][oO][bB][uU][tT][tT][oO][nN]{SUF}                             |
-{PRE}[rR][eE][sS][oO][uU][rR][cC][eE]{SUF}                                         |
 {PRE}[sS][fF][xX][sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][iI][eS][sS]{SUF}         |
 {PRE}[sS][fF][xX][sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][yY][iI][tT][eE][mM]{SUF} |
 {PRE}[sS][pP][iI][nN][fF][iI][eE][lL][dD]{SUF}                                     |
@@ -281,7 +291,6 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[tT][oO][oO][lL][bB][oO][xX][iI][tT][eE][mM]{SUF}                             |
 {PRE}[tT][rR][iI][sS][tT][aA][tT][eE][bB][oO][xX]{SUF}                             |
 {PRE}[wW][aA][rR][nN][iI][nN][gG][bB][oO][xX]{SUF}                                 |
-{PRE}[wW][iI][nN][dD][oO][wW]{SUF}                                                 |
 {PRE}[wW][oO][rR][kK][wW][iI][nN][dD][oO][wW]{SUF}                                 {
 
 
@@ -322,14 +331,6 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[sS][tT][rR][iI][nN][gG][lL][iI][sS][tT]{SUFT}  {
     yyless(strlen(yytext)-1);
     LOCptr->setList(yytext);
-}
-
-
-
-{PRE}"#define"{SUF} {
-    yyless(strlen(yytext)-1);
-    LOCptr->setMacro(yytext);
-    BEGIN(CMD);
 }
 
 

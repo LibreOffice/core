@@ -412,7 +412,7 @@ ${MYCMD} --files svx/source/sidebar/area/AreaPropertyPanel.src
 
 ${MYCMD} --files svx/source/sidebar/EmptyPanel.src
 
-${MYCMD} --files svx/source/sidebar/line/LinePropertyPanel.src
+#${MYCMD} --files svx/source/sidebar/line/LinePropertyPanel.src
 
 ${MYCMD} --files svx/source/sidebar/text/TextPropertyPanel.src
 

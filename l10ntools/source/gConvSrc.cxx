@@ -29,13 +29,13 @@ using namespace std;
 
 
 convert_src::convert_src(l10nMem& crMemory)
-                        : convert_gen(crMemory)
+                        : convert_gen(crMemory),
+                          miLevel(0),
+                          mbMacroActive(false)
 #if 0
-    ,
                           mbExpectValue(false),
                           mbEnUs(false),
                           mbExpectName(false),
-                          mbExpectMacro(false),
                           mbAutoPush(false),
                           mbValuePresent(false),
                           mbInList(false),
@@ -62,11 +62,11 @@ void convert_src::setValue(string& syyText)
         for (int i = 0; i < stackSize; i++)
             cout << mcStack[i] << "\n";
     }
-    string subid = (stackSize > 3) ? mcStack[2] : mcStack[0];
-    l10nMem::keyToLower(subid);
+    string subid = (stackSize > 3) ? mcStack[stackSize - 1] : "";
+    string stringid = mcStack[stackSize - 2];
+    l10nMem::keyToLower(stringid);
 
-    mcMemory.setSourceKey(miLineNo, msSourceFile, mcStack[1], cleanValue, "", subid, mcStack[stackSize-1], false);
-    mcStack.pop_back();
+    mcMemory.setSourceKey(miLineNo, msSourceFile, mcStack[1], cleanValue, "", stringid, subid, false);
 }
 
 
@@ -98,17 +98,49 @@ void convert_src::setCmd(string& syyText)
 
 void convert_src::startBlock()
 {
+    unsigned int cnt = 2 * ++miLevel;
+
+    while (cnt > mcStack.size())
+        mcStack.push_back("");
 }
 
 
 
 void convert_src::stopBlock()
 {
+    if (miLevel > 0)
+        miLevel--;
+
     // check for correct node/prop relations
-    if (mcStack.size())
-        mcStack.pop_back();
+    if (mcStack.size()) {
+        if (miLevel) {
+            mcStack.pop_back();
+            mcStack.pop_back();
+        }
+        else
+            mcStack.clear();
+    }
 }
 
+
+
+void convert_src::defMacro()
+{
+    if (!miLevel)
+        miLevel++;
+    mbMacroActive = true;
+}
+
+
+
+void convert_src::endMacro()
+{
+    if (mbMacroActive) {
+        mbMacroActive = false;
+        miLevel = 0;
+        mcStack.clear();
+    }
+}
 
 
 #if 0
@@ -129,21 +161,6 @@ void convert_src::setText(char *syyText)
     mbExpectValue = true;
     mbEnUs = false;
     trim(msTextName);
-}
-#endif
-
-
-
-#if 0
-void convert_src::setMacro(char *syyText)
-{
-    msCmd = copySource(syyText);
-    mbExpectName =
-        mbExpectMacro =
-        mbAutoPush = true;
-    miMacroLevel = mcStack.size();
-    mcStack.push_back("");
-    trim(msCmd);
 }
 #endif
 

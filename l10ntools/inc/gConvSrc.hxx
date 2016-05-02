@@ -39,16 +39,19 @@ class convert_src : public convert_gen
         void setCmd(string& syyText);
         void startBlock();
         void stopBlock();
+        void defMacro();
+        void endMacro();
 
 //        void setId         (char *syyText, bool bIde);
 //        void setText       (char *syyText);
-//        void setMacro      (char *syyText);
 //        void setList       (char *syyText);
 //        void setListItem   (char const *syyText, bool bIsStart);
 //        void setNL         (char *syyText, bool bMacro);
 
     private:
         vector<string> mcStack;
+        int  miLevel;
+        bool mbMacroActive;
         void doExecute() override;
 #if 0
         string              msValue;
@@ -58,13 +61,11 @@ class convert_src : public convert_gen
         string              msGroup;
         bool                     mbEnUs;
         bool                     mbExpectName;
-        bool                     mbExpectMacro;
         bool                     mbAutoPush;
         bool                     mbValuePresent;
         bool                     mbInList;
         bool                     mbInListItem;
         int                      miListCount;
-        int                      miMacroLevel;
 
         static void trim(string& sText);
         void buildKey(string& sKey);
