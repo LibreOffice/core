@@ -22,29 +22,24 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 class SvStream;
-struct ImplJobSetup;
+class ImplJobSetup;
 
 class VCL_DLLPUBLIC JobSetup
 {
     friend class Printer;
 
 private:
-    ImplJobSetup*       mpData;
+    o3tl::cow_wrapper< ImplJobSetup >   mpData;
 
 public:
-    SAL_DLLPRIVATE ImplJobSetup*        ImplGetData();
-    SAL_DLLPRIVATE ImplJobSetup*        ImplGetConstData();
     SAL_DLLPRIVATE const ImplJobSetup*  ImplGetConstData() const;
 
-public:
-                        JobSetup();
-                        JobSetup( const JobSetup& rJob );
-                        ~JobSetup();
-
-    OUString              GetPrinterName() const;
-    OUString              GetDriverName() const;
+    JobSetup();
+    JobSetup( const JobSetup& rJob );
+    ~JobSetup();
 
     JobSetup&           operator=( const JobSetup& rJob );
 

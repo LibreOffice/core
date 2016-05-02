@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/jobset.hxx>
+#include "vcl/jobset.h"
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
@@ -816,7 +817,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     // that would only lead to questionable results after expensive
     // reformatting (Preview!)
     JobSetup *pOrig = nullptr;
-    if ( !rSetup.GetPrinterName().isEmpty() && ASPECT_THUMBNAIL != nAspect )
+    if ( !rSetup.ImplGetConstData()->GetPrinterName().isEmpty() && ASPECT_THUMBNAIL != nAspect )
     {
         pOrig = const_cast<JobSetup*>(m_pDoc->getIDocumentDeviceAccess().getJobsetup());
         if( pOrig )         // then we copy that
