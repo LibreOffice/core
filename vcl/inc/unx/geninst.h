@@ -113,8 +113,8 @@ public:
 
 protected:
     static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
-                                  SalPrinterQueueInfo* pQueueInfo,
-                                  ImplJobSetup* pSetupData );
+                                         SalPrinterQueueInfo* pQueueInfo,
+                                         ImplJobSetup* pSetupData );
 };
 
 inline SalGenericInstance *GetGenericInstance()
