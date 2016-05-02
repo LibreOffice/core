@@ -23,6 +23,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 class Gradient;
 class BitmapEx;
@@ -48,15 +49,15 @@ enum class WallpaperStyle
 
 class VCL_DLLPUBLIC Wallpaper
 {
-private:
-    ImplWallpaper*  mpImplWallpaper;
-
-    SAL_DLLPRIVATE void           ImplMakeUnique( bool bReleaseCache = true );
-    SAL_DLLPRIVATE Gradient       ImplGetApplicationGradient() const;
-
 public:
-    SAL_DLLPRIVATE ImplWallpaper* ImplGetImpWallpaper() const { return mpImplWallpaper; }
+    typedef o3tl::cow_wrapper<ImplWallpaper> ImplType;
 
+    SAL_DLLPRIVATE ImplWallpaper* ImplGetImpWallpaper() const;
+
+private:
+    ImplType  mpImplWallpaper;
+
+    SAL_DLLPRIVATE Gradient       ImplGetApplicationGradient() const;
 
 public:
                     Wallpaper();
