@@ -22,7 +22,6 @@
 
 class ImplWallpaper
 {
-    friend class Wallpaper;
 
 private:
     Color           maColor;
@@ -30,11 +29,7 @@ private:
     Gradient*       mpGradient;
     Rectangle*      mpRect;
     WallpaperStyle  meStyle;
-    sal_uLong       mnRefCount;
     BitmapEx*       mpCache;
-
-    friend SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
-    friend SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );
 
 public:
                     ImplWallpaper();
