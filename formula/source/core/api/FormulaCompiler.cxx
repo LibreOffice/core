@@ -305,6 +305,9 @@ bool isRangeResultOpCode( OpCode eOp )
 }
 
 /**
+    @param  pToken
+            MUST be a valid token, caller has to ensure.
+
     @param  bRight
             If bRPN==false, bRight==false means opcodes for left side are
             checked, bRight==true means opcodes for right side. If bRPN==true
@@ -1200,6 +1203,7 @@ bool FormulaCompiler::GetToken()
                 pArr->nIndex--;     // we advanced to the second ocColRowName, step back
             }
             else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
+                    pCurrToken && mpToken &&
                     isPotentialRangeType( pCurrToken.get(), false, false) &&
                     isPotentialRangeType( mpToken.get(), false, true))
             {
