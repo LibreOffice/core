@@ -21,7 +21,7 @@ protected:
 
     static bool readState()
     {
-        return (glIsEnabled(ENUM_TYPE) == static_cast<GLboolean>(GL_TRUE));
+        return glIsEnabled(ENUM_TYPE);
     }
 
 public:
