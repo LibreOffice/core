@@ -1829,7 +1829,7 @@ public:     // really private, but can only be done public
     bool ForceFieldLanguage(SwField &rField, sal_uInt16 nLang);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_FileName( WW8FieldDesc*, OUString& rStr);
-    eF_ResT Read_F_Anz( WW8FieldDesc* pF, OUString& );
+    eF_ResT Read_F_Num( WW8FieldDesc* pF, OUString& );
     eF_ResT Read_F_CurPage( WW8FieldDesc*, OUString& );
     eF_ResT Read_F_Ref( WW8FieldDesc* pF, OUString& );
 

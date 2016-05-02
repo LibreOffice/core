@@ -644,7 +644,7 @@ void WW8AttributeOutput::StartStyles()
         ++nCurPos;
     }
     rFib.fcStshfOrig = rFib.fcStshf = nCurPos;
-    m_nStyAnzPos = nCurPos + 2;     // Anzahl wird nachgetragen
+    m_nStyleCountPos = nCurPos + 2;     // Anzahl wird nachgetragen
 
     static sal_uInt8 aStShi[] = {
         0x12, 0x00,
@@ -660,7 +660,7 @@ void WW8AttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
     WW8Fib& rFib = *m_rWW8Export.pFib;
 
     rFib.lcbStshfOrig = rFib.lcbStshf = m_rWW8Export.pTableStrm->Tell() - rFib.fcStshf;
-    SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, m_nStyAnzPos, nNumberOfStyles );
+    SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, m_nStyleCountPos, nNumberOfStyles );
 }
 
 void MSWordStyles::OutputStylesTable()

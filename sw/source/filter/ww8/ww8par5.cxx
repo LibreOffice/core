@@ -756,9 +756,9 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_DocInfo,           // 23
         &SwWW8ImplReader::Read_F_DocInfo,           // 24
         &SwWW8ImplReader::Read_F_DocInfo,           // 25
-        &SwWW8ImplReader::Read_F_Anz,               // 26
-        &SwWW8ImplReader::Read_F_Anz,               // 27
-        &SwWW8ImplReader::Read_F_Anz,               // 28
+        &SwWW8ImplReader::Read_F_Num,               // 26
+        &SwWW8ImplReader::Read_F_Num,               // 27
+        &SwWW8ImplReader::Read_F_Num,               // 28
         &SwWW8ImplReader::Read_F_FileName,          // 29
         &SwWW8ImplReader::Read_F_TemplName,         // 30
         &SwWW8ImplReader::Read_F_DateTime,          // 31
@@ -1815,7 +1815,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, OUString &rStr)
     return FLD_OK;
 }
 
-eF_ResT SwWW8ImplReader::Read_F_Anz( WW8FieldDesc* pF, OUString& rStr )
+eF_ResT SwWW8ImplReader::Read_F_Num( WW8FieldDesc* pF, OUString& rStr )
 {
     sal_uInt16 nSub = DS_PAGE;                  // page number
     switch ( pF->nId ){

@@ -419,7 +419,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     size_t m_nParaCnt;
     size_t m_nContextStMin;           // Untergrenze fuer PopContext
     size_t m_nContextStAttrMin;       // Untergrenze fuer Attributierung
-    sal_uInt16  m_nSelectEntryCnt;    // Anzahl der Eintraege der akt. Listbox
+    sal_uInt16  m_nSelectEntryCnt;    // Number of entries in the actual listbox
     sal_uInt16  m_nOpenParaToken;     // ein geoeffnetes Absatz-Element
 
     enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
