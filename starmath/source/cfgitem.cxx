@@ -846,7 +846,7 @@ void SmMathConfig::LoadFormat()
         ++pVal;
         // StandardFormat/HorizontalAlignment
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-            pFormat->SetHorAlign( (SmHorAlign) nTmp16 );
+            pFormat->SetHorAlign( static_cast<SmHorAlign>(nTmp16) );
         ++pVal;
         // StandardFormat/BaseSize
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
