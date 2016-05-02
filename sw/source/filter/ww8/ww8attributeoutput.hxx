@@ -445,7 +445,7 @@ protected:
     /// For output of styles.
     ///
     /// Used between StartStyles() and EndStyles().
-    sal_uLong m_nStyAnzPos;
+    sal_uLong m_nStyleCountPos;
 
     /// For output of run properties.
     ///
@@ -463,7 +463,7 @@ public:
         , nPOPosStdLen2(0)
         , m_nStyleStartSize(0)
         , m_nStyleLenPos(0)
-        , m_nStyAnzPos(0)
+        , m_nStyleCountPos(0)
         , m_nFieldResults(0)
         , mbOnTOXEnding(false)
     {
