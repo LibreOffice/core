@@ -63,33 +63,34 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 TextEngine::TextEngine()
+    : mpDoc {nullptr}
+    , mpTEParaPortions {nullptr}
+    , mpViews {nullptr}
+    , mpActiveView {nullptr}
+    , mpUndoManager {nullptr}
+    , mpIdleFormatter {nullptr}
+    , mpIMEInfos {nullptr}
+    , mpLocaleDataWrapper {nullptr}
+    , maTextColor {COL_BLACK}
+    , mnFixCharWidth100 {0}
+    , mnMaxTextLen {0}
+    , mnMaxTextWidth {0}
+    , mnCharHeight {0}
+    , mnCurTextWidth {-1}
+    , mnCurTextHeight {0}
+    , mnDefTab {0}
+    , meAlign {TXTALIGN_LEFT}
+    , mbIsFormatting {false}
+    , mbFormatted {false}
+    , mbUpdate {true}
+    , mbModified {false}
+    , mbUndoEnabled {false}
+    , mbIsInUndo {false}
+    , mbDowning {false}
+    , mbRightToLeft {false}
+    , mbHasMultiLineParas {false}
 {
-    mpDoc = nullptr;
-    mpTEParaPortions = nullptr;
-
     mpViews = new TextViews;
-    mpActiveView = nullptr;
-
-    mbIsFormatting      = false;
-    mbFormatted         = false;
-    mbUpdate            = true;
-    mbModified          = false;
-    mbUndoEnabled       = false;
-    mbIsInUndo          = false;
-    mbDowning           = false;
-    mbRightToLeft       = false;
-    mbHasMultiLineParas = false;
-
-    meAlign         = TXTALIGN_LEFT;
-
-    mnMaxTextWidth  = 0;
-    mnMaxTextLen    = 0;
-    mnCurTextWidth  = -1;
-    mnCurTextHeight = 0;
-
-    mpUndoManager   = nullptr;
-    mpIMEInfos      = nullptr;
-    mpLocaleDataWrapper = nullptr;
 
     mpIdleFormatter = new IdleFormatter;
     mpIdleFormatter->SetIdleHdl( LINK( this, TextEngine, IdleFormatHdl ) );
@@ -100,7 +101,6 @@ TextEngine::TextEngine()
 
     ImpInitDoc();
 
-    maTextColor = COL_BLACK;
     vcl::Font aFont;
     aFont.SetTransparent( false );
     Color aFillColor( aFont.GetFillColor() );
