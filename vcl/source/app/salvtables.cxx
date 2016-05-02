@@ -109,7 +109,7 @@ SalPrinter::~SalPrinter()
 }
 
 bool SalPrinter::StartJob( const OUString*, const OUString&, const OUString&,
-                           ImplJobSetup*, vcl::PrinterController& )
+                           const ImplJobSetup*, vcl::PrinterController& )
 {
     return false;
 }
