@@ -3908,8 +3908,20 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
             // different OpCode values.
             case formula::svIndex:
                 {
-                    if (pThisTok->GetIndex() != pOtherTok->GetIndex() || pThisTok->GetSheet() != pOtherTok->GetSheet())
+                    if (pThisTok->GetIndex() != pOtherTok->GetIndex())
                         return NotEqual;
+                    switch (pThisTok->GetOpCode())
+                    {
+                        case ocTableRef:
+                            // nothing, sheet value assumed as -1, silence
+                            // ScTableRefToken::GetSheet() SAL_WARN about
+                            // unhandled
+                            ;
+                            break;
+                        default:    // ocName, ocDBArea
+                            if (pThisTok->GetSheet() != pOtherTok->GetSheet())
+                                return NotEqual;
+                    }
                 }
                 break;
             default:
