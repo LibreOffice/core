@@ -138,7 +138,6 @@ SAL_IMPLEMENT_MAIN()
 
     sal_uInt32 nPos = 0;
     OUString arg, sOption;
-    sal_Bool bOption=false;
 
     // check command
     rtl_getAppCommandArg(nPos++, &arg.pData);
@@ -155,12 +154,12 @@ SAL_IMPLEMENT_MAIN()
         options.dump = false;
         options.shortnames = true;
         options.componenttype = 3;
-    } else if ( readOption( &bOption, "h", &nPos, arg) ||
-                readOption( &bOption, "help", &nPos, arg) ) {
+    } else if ( readOption( "h", &nPos, arg) ||
+                readOption( "help", &nPos, arg) ) {
         printUsageAndExit(programname, version);
         exit(EXIT_SUCCESS);
-    } else if ( readOption( &bOption, "V", &nPos, arg) ||
-                readOption( &bOption, "version", &nPos, arg) ) {
+    } else if ( readOption( "V", &nPos, arg) ||
+                readOption( "version", &nPos, arg) ) {
         std::cerr << "\n Sun Microsystems (R) " << programname
                   << " Version " << version << "\n\n";
         exit(EXIT_SUCCESS);
@@ -178,39 +177,39 @@ SAL_IMPLEMENT_MAIN()
     {
         rtl_getAppCommandArg(nPos, &arg.pData);
 
-        if ( readOption( &bOption, "a", &nPos, arg) ||
-             readOption( &bOption, "all", &nPos, arg) ) {
+        if ( readOption( "a", &nPos, arg) ||
+             readOption( "all", &nPos, arg) ) {
             options.all = true;
             continue;
         }
-        if ( readOption( &bOption, "java4", &nPos, arg) ) {
+        if ( readOption( "java4", &nPos, arg) ) {
             std::cerr <<
               "\nError: Java 1.4 is no longer supported, use --java5 instead\n";
         }
-        if ( readOption( &bOption, "java5", &nPos, arg) ) {
+        if ( readOption( "java5", &nPos, arg) ) {
             options.language = 1;
             continue;
         }
-        if ( readOption( &bOption, "cpp", &nPos, arg) ) {
+        if ( readOption( "cpp", &nPos, arg) ) {
             options.language = 2;
             continue;
         }
-        if ( readOption( &bOption, "sn", &nPos, arg) ||
-             readOption( &bOption, "shortnames", &nPos, arg) ) {
+        if ( readOption( "sn", &nPos, arg) ||
+             readOption( "shortnames", &nPos, arg) ) {
             options.shortnames = true;
             continue;
         }
-        if ( readOption( &bOption, "lh", &nPos, arg) ||
-             readOption( &bOption, "licenseheader", &nPos, arg) ) {
+        if ( readOption( "lh", &nPos, arg) ||
+             readOption( "licenseheader", &nPos, arg) ) {
             options.license = true;
             continue;
         }
-        if ( readOption( &bOption, "bc", &nPos, arg) ||
-             readOption( &bOption, "backward-compatible", &nPos, arg) ) {
+        if ( readOption( "bc", &nPos, arg) ||
+             readOption( "backward-compatible", &nPos, arg) ) {
             options.backwardcompatible = true;
             continue;
         }
-        if ( readOption( &bOption, "propertysetmixin", &nPos, arg) ) {
+        if ( readOption( "propertysetmixin", &nPos, arg) ) {
             options.supportpropertysetmixin = true;
             continue;
         }

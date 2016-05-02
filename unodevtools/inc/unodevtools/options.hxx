@@ -32,7 +32,7 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
     // throws CannotDumpException
 
 
-bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
+bool readOption( const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg);
 
 } // end of namespace unodevtools

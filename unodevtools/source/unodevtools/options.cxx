@@ -65,7 +65,7 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
 }
 
 
-bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
+bool readOption( const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
     OUString aOpt = OUString::createFromAscii(pOpt);
@@ -74,7 +74,6 @@ bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
        (aArg.startsWith("--") && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
     {
         ++(*pnIndex);
-        *pbOpt = true;
         SAL_INFO("unodevtools", "identified option --" << pOpt);
         return true;
     }
