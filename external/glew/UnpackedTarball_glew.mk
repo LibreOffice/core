@@ -41,4 +41,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 ))
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,glew,\
+	external/glew/glew-tmpdir.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:

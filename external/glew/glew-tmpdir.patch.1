@@ -1,0 +1,13 @@
+diff -ur glew.org/Makefile glew/Makefile
+--- glew.org/Makefile	2016-05-02 06:25:53.521291677 +0200
++++ glew/Makefile	2016-05-02 06:31:10.325035494 +0200
+@@ -55,7 +55,8 @@
+ DIST_SRC_TGZ ?= $(shell pwd)/$(DIST_NAME).tgz
+ DIST_WIN32   ?= $(shell pwd)/$(DIST_NAME)-win32.zip
+ 
+-DIST_DIR := $(shell mktemp -d /tmp/glew.XXXXXX)/$(DIST_NAME)
++TMPDIR ?= /tmp
++DIST_DIR := $(shell mktemp -d $(TMPDIR)/glew.XXXXXX)/$(DIST_NAME)
+ 
+ # To disable stripping of binaries either:
+ #   - use STRIP= on gmake command-line
