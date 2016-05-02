@@ -3173,7 +3173,14 @@ void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
                 sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
                 // Broadcast all broadcasters in range.
                 ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow1, nTab));
-                BroadcastBroadcasters( nRow1, nRow2, aHint);
+                if (BroadcastBroadcasters( nRow1, nRow2, aHint))
+                {
+                    // SetDirtyOnRangeHandler implicitly tracks notified
+                    // formulas via ScDocument::Broadcast(), which
+                    // BroadcastBroadcastersHandler doesn't, so explicitly
+                    // track them here.
+                    pDocument->TrackFormulas();
+                }
             }
             break;
     }
