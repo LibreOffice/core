@@ -1,0 +1,17 @@
+diff a/vcl/source/gdi/print.cxx b/vcl/source/gdi/print.cxx	(rejected hunks)
+@@ -1328,12 +1330,12 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
+     // If the printer supports landscape orientation, check paper sizes again
+     // with landscape orientation. This is necessary as a printer driver provides
+     // all paper sizes with portrait orientation only!!
+-    if ( pSetupData->mePaperFormat == PAPER_USER &&
++    if ( pConstData->GetPaperFormat() == PAPER_USER &&
+          nLandscapeAngle != 0 &&
+          HasSupport( SUPPORT_SET_ORIENTATION ))
+     {
+-        const long nRotatedWidth = pSetupData->mnPaperHeight;
+-        const long nRotatedHeight = pSetupData->mnPaperWidth;
++        const long nRotatedWidth = pConstData->GetPaperHeight();
++        const long nRotatedHeight = pConstData->GetPaperWidth();
+         PaperInfo aRotatedInfo(nRotatedWidth, nRotatedHeight);
+ 
+         for ( int i = 0; i < nPaperCount; i++ )

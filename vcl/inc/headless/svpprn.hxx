@@ -30,7 +30,7 @@
 class SvpSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
-    virtual bool Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
+    virtual bool Setup( SalFrame* pFrame, const ImplJobSetup* pSetupData ) override;
 };
 
 class SvpSalPrinter : public PspSalPrinter
