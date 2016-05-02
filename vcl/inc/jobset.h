@@ -29,13 +29,9 @@
 #define JOBSETUP_SYSTEM_UNIX        3
 #define JOBSETUP_SYSTEM_MAC         4
 
-struct ImplJobSetup
+class ImplJobSetup
 {
-                    ImplJobSetup();
-                    ImplJobSetup( const ImplJobSetup& rJobSetup );
-                    ~ImplJobSetup();
-
-    sal_uInt16      mnRefCount;         //< RefCount (only independent data)
+private:
     sal_uInt16      mnSystem;           //< System - JOBSETUP_SYSTEM_xxxx
     OUString        maPrinterName;      //< Printer-Name
     OUString        maDriver;           //< Driver-Name
@@ -49,6 +45,53 @@ struct ImplJobSetup
     sal_uInt8*      mpDriverData;       //< system specific data (will be streamed a byte block)
     bool            mbPapersizeFromSetup;
     std::unordered_map< OUString, OUString, OUStringHash > maValueMap;
+
+public:
+    ImplJobSetup();
+    ImplJobSetup( const ImplJobSetup& rJobSetup );
+    ~ImplJobSetup();
+
+    bool operator==( const ImplJobSetup& rImplJobSetup ) const;
+
+    sal_uInt16       GetSystem() const { return mnSystem; }
+    void             SetSystem(sal_uInt16 nSystem);
+
+    const OUString&  GetPrinterName() const { return maPrinterName; }
+    void             SetPrinterName(const OUString& rPrinterName);
+
+    const OUString&  GetDriver() const { return maDriver; }
+    void             SetDriver(const OUString& rDriver);
+
+    Orientation      GetOrientation() const { return meOrientation; }
+    void             SetOrientation(Orientation eOrientation);
+
+    DuplexMode       GetDuplexMode() const { return meDuplexMode; }
+    void             SetDuplexMode(DuplexMode eDuplexMode);
+
+    sal_uInt16       GetPaperBin() const { return mnPaperBin; }
+    void             SetPaperBin(sal_uInt16 nPaperBin);
+
+    Paper            GetPaperFormat() const { return mePaperFormat; }
+    void             SetPaperFormat(Paper ePaperFormat);
+
+    long             GetPaperWidth() const { return mnPaperWidth; }
+    void             SetPaperWidth(long nWidth);
+
+    long             GetPaperHeight() const { return mnPaperHeight; }
+    void             SetPaperHeight(long nHeight);
+
+    sal_uInt32       GetDriverDataLen() const { return mnDriverDataLen; }
+    void             SetDriverDataLen(sal_uInt32 nDriverDataLen);
+
+    const sal_uInt8* GetDriverData() const { return mpDriverData; }
+    void             SetDriverData(sal_uInt8* pDriverData);
+
+    bool             GetPapersizeFromSetup() const { return mbPapersizeFromSetup; }
+    void             SetPapersizeFromSetup(bool bPapersizeFromSetup);
+
+    const std::unordered_map< OUString, OUString, OUStringHash >& GetValueMap() const
+                    { return maValueMap; }
+    void            SetValueMap(const OUString& rKey, const OUString& rValue);
 };
 
 // If paper format is PAPER_USER, in the system-independent part it will
