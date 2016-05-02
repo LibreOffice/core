@@ -68,9 +68,9 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* i_pGraphics ) override;
-    virtual bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData ) override;
-    virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) override;
-    virtual bool                SetData( JobSetFlags i_nFlags, ImplJobSetup* i_pSetupData ) override;
+    virtual bool                Setup( SalFrame* i_pFrame, const ImplJobSetup* i_pSetupData ) override;
+    virtual bool                SetPrinterData( const ImplJobSetup* pSetupData ) override;
+    virtual bool                SetData( JobSetFlags i_nFlags, const ImplJobSetup* i_pSetupData ) override;
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
                                              long& o_rOutWidth, long& o_rOutHeight,
                                              long& o_rPageOffX, long& o_rPageOffY,
@@ -89,11 +89,11 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     bool                        StartJob( const OUString* i_pFileName,
                                           const OUString& rJobName,
                                           const OUString& i_rAppName,
-                                          ImplJobSetup* i_pSetupData,
+                                          const ImplJobSetup* i_pSetupData,
                                           vcl::PrinterController& i_rController );
     bool                        EndJob();
     bool                        AbortJob();
-    SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
+    SalGraphics*                StartPage( const ImplJobSetup* i_pSetupData, bool i_bNewJobData );
     bool                        EndPage();
     static sal_uLong            GetErrorCode();
 
@@ -125,16 +125,16 @@ class AquaSalPrinter : public SalPrinter
                                               sal_uInt32 i_nCopies,
                                               bool i_bCollate,
                                               bool i_bDirect,
-                                              ImplJobSetup* i_pSetupData ) override;
+                                              const ImplJobSetup* i_pSetupData ) override;
     // implement pull model print system
     virtual bool                    StartJob( const OUString* i_pFileName,
                                               const OUString& rJobName,
                                               const OUString& i_rAppName,
-                                              ImplJobSetup* i_pSetupData,
+                                              const ImplJobSetup* i_pSetupData,
                                               vcl::PrinterController& i_rListener ) override;
 
     virtual bool                    EndJob() override;
-    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;
+    virtual SalGraphics*            StartPage( const ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;
     virtual void                    EndPage() override;
     virtual sal_uLong               GetErrorCode() override;
 

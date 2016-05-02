@@ -55,9 +55,9 @@ public:
 
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
-    virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) override;
-    virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) override;
+    virtual bool                    Setup( SalFrame* pFrame, const ImplJobSetup* pSetupData ) override;
+    virtual bool                    SetPrinterData( const ImplJobSetup* pSetupData ) override;
+    virtual bool                    SetData( JobSetFlags nFlags, const ImplJobSetup* pSetupData ) override;
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
@@ -95,9 +95,9 @@ public:
                                               sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
-                                              ImplJobSetup* pSetupData ) override;
+                                              const ImplJobSetup* pSetupData ) override;
     virtual bool                    EndJob() override;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) override;
+    virtual SalGraphics*            StartPage( const ImplJobSetup* pSetupData, bool bNewJobData ) override;
     virtual void                    EndPage() override;
     virtual sal_uIntPtr             GetErrorCode() override;
 

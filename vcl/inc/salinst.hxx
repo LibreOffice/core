@@ -35,7 +35,7 @@
 namespace comphelper { class SolarMutex; }
 struct SystemParentData;
 struct SalPrinterQueueInfo;
-struct ImplJobSetup;
+class ImplJobSetup;
 class OpenGLContext;
 class SalGraphics;
 class SalFrame;
@@ -100,7 +100,7 @@ public:
     // pSetupData must be updatet with the current
     // JobSetup
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData ) = 0;
+                                               const ImplJobSetup* pSetupData ) = 0;
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) = 0;
     virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter ) = 0;
     virtual void            DestroyPrinter( SalPrinter* pPrinter ) = 0;

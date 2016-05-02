@@ -169,7 +169,7 @@ GtkSalPrinter::impl_doJob(
         const OUString* const i_pFileName,
         const OUString& i_rJobName,
         const OUString& i_rAppName,
-        ImplJobSetup* const io_pSetupData,
+        const ImplJobSetup* const io_pSetupData,
         const int i_nCopies,
         const bool i_bCollate,
         vcl::PrinterController& io_rController)
@@ -202,7 +202,7 @@ GtkSalPrinter::StartJob(
         const OUString* const i_pFileName,
         const OUString& i_rJobName,
         const OUString& i_rAppName,
-        ImplJobSetup* io_pSetupData,
+        const ImplJobSetup* io_pSetupData,
         vcl::PrinterController& io_rController)
 {
     if (!lcl_useSystemPrintDialog())
