@@ -186,9 +186,9 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     return true;
 }
 
-bool JobData::constructFromStreamBuffer( void* pData, sal_uInt32 bytes, JobData& rJobData )
+bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, JobData& rJobData )
 {
-    SvMemoryStream aStream( pData, bytes, StreamMode::READ );
+    SvMemoryStream aStream( const_cast<void*>(pData), bytes, StreamMode::READ );
     OString aLine;
     bool bVersion       = false;
     bool bPrinter       = false;
