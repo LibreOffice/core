@@ -264,7 +264,7 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
 }
 
 SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-    ImplJobSetup* pSetupData )
+    const ImplJobSetup* pSetupData )
 {
     EnsureInit();
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
