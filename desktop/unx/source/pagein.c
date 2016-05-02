@@ -48,15 +48,16 @@ int isRotational(char const * path)
 {
 #ifdef LINUX
     FILE * fp = NULL;
-    char fullpath[4096];
+    char fullpath[128];
     struct stat out;
     int major, minor;
     char type;
+
     if(stat( path , &out ) == -1)
         return 1;
     major = major(out.st_dev);
     minor = 0; /* minor(out.st_dev); only the device itself has a queue */
-    sprintf(fullpath,"/sys/dev/block/%d:%d/queue/rotational",major,minor);
+    snprintf(fullpath, 128, "/sys/dev/block/%d:%d/queue/rotational",major,minor);
     if ((fp = fopen (fullpath, "r")))
     {
         if (fgets(&type, 1, fp))
@@ -76,22 +77,23 @@ void pagein_execute(char const * path, char const * file)
     FILE   * fp = NULL;
     if(!isRotational(path))
         return;
-    memset(fullpath, 0, sizeof(fullpath));
     strncpy (fullpath, path, 3000);
+    fullpath[3000] = 0;
     if (!(p = strrchr (fullpath, '/')))
         p = fullpath;
     else
         p++;
     strncpy(p, file, 1024);
-    p[strlen(p)] = '\0';
+    p[1024] = 0;
+
     if ((fp = fopen (fullpath, "r")) == NULL)
     {
-
         fprintf (stderr, "fopen %s: %s\n", fullpath, strerror(errno));
         return;
     }
     while (fgets (p, 1024, fp) != NULL)
     {
+        /* trim the trailing \n */
         p[strlen(p) - 1] = '\0';
 
         /* paths relative to the location of the pagein file */
