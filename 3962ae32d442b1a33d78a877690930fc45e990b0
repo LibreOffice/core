@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b5e85818",
+        "filename": "sfx2/source/doc/doctemplateslocal.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-02T09:22:02Z",
+      "side": 1,
+      "message": "I guess there is a typo here (\"groupinames\" instead of \"groupuinames\"), leaving the generated XML still invalid?",
+      "revId": "3962ae32d442b1a33d78a877690930fc45e990b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
