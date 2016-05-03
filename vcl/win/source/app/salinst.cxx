@@ -696,7 +696,10 @@ SalYieldResult WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
     }
     else
     {
-        eDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
+        if (nReleased == 0) // tdf#99383 ReAcquireSolarMutex shouldn't Yield
+        {
+            eDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
+        }
 
         n = nCount;
         while ( n )
