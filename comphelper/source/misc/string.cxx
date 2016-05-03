@@ -253,19 +253,30 @@ OUString convertCommaSeparated(
     return buf.makeStringAndClear();
 }
 
-uno::Sequence< OUString >
-    convertCommaSeparated( OUString const& i_rString )
+std::vector<OUString>
+    split(const OUString& rStr, sal_Unicode cSeparator)
 {
     std::vector< OUString > vec;
     sal_Int32 idx = 0;
-    do {
-      OUString kw =
-        i_rString.getToken(0, static_cast<sal_Unicode> (','), idx);
-      kw = kw.trim();
-      if (!kw.isEmpty()) {
-          vec.push_back(kw);
-      }
+    do
+    {
+        OUString kw =
+            rStr.getToken(0, cSeparator, idx);
+        kw = kw.trim();
+        if (!kw.isEmpty())
+        {
+            vec.push_back(kw);
+        }
+
     } while (idx >= 0);
+
+    return vec;
+}
+
+uno::Sequence< OUString >
+    convertCommaSeparated( OUString const& i_rString )
+{
+    std::vector< OUString > vec = split(i_rString, ',');
     return comphelper::containerToSequence(vec);
 }
 
