@@ -293,20 +293,15 @@ static const SmTokenTableEntry aTokenTable[] =
 
 const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 {
-    const SmTokenTableEntry * pRes = nullptr;
     if (!rName.isEmpty())
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aTokenTable); ++i)
+        for (auto const &token : aTokenTable)
         {
-            if (rName.equalsIgnoreAsciiCase( OUString::createFromAscii(aTokenTable[i].pIdent) ))
-            {
-                pRes = &aTokenTable[i];
-                break;
-            }
+            if (rName.equalsIgnoreAsciiCase( OUString::createFromAscii(token.pIdent) ))
+                return &token;
         }
     }
-
-    return pRes;
+    return nullptr;
 }
 
 namespace {
@@ -326,21 +321,17 @@ bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     {
         ' ',  '\t', '\n', '\r', '+',  '-',  '*',  '/',  '=',  '#',
         '%',  '\\', '"',  '~',  '`',  '>',  '<',  '&',  '|',  '(',
-        ')',  '{',  '}',  '[',  ']',  '^',  '_',
-        '\0'    // end of list symbol
+        ')',  '{',  '}',  '[',  ']',  '^',  '_'
     };
-    const sal_Unicode *pDelim = &aDelimiterTable[0];
-    for ( ;  *pDelim != 0;  pDelim++)
-        if (*pDelim == cChar)
-            break;
-
+    for (auto const &cDelimiter : aDelimiterTable)
+    {
+        if (cDelimiter == cChar)
+            return true;
+    }
 
     sal_Int16 nTypJp = SM_MOD()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
-    bool bIsDelim = (*pDelim != 0 ||
-            nTypJp == css::i18n::UnicodeType::SPACE_SEPARATOR ||
-            nTypJp == css::i18n::UnicodeType::CONTROL);
-
-    return bIsDelim;
+    return ( nTypJp == css::i18n::UnicodeType::SPACE_SEPARATOR ||
+             nTypJp == css::i18n::UnicodeType::CONTROL);
 }
 
 }
@@ -965,12 +956,10 @@ void SmParser::DoTable()
     if (m_aCurToken.eType != TEND)
         Error(PE_UNEXPECTED_CHAR);
 
-    SmNodeArray  LineArray;
-    while (!m_aNodeStack.empty())
+    SmNodeArray  LineArray(m_aNodeStack.size());
+    for (auto rIt = LineArray.rbegin(), rEnd = LineArray.rend(); rIt != rEnd; ++rIt)
     {
-        auto pNode = std::move(m_aNodeStack.back());
-        m_aNodeStack.pop_back();
-        LineArray.push_back(pNode.release());
+        *rIt = popOrZero(m_aNodeStack);
     }
 
     std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
@@ -1212,11 +1201,8 @@ void SmParser::DoSubSup(sal_uLong nActiveGroup)
     pNode->SetUseLimits(nActiveGroup == TGLIMIT);
 
     // initialize subnodes array
-    SmNodeArray  aSubNodes;
-    aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
+    SmNodeArray aSubNodes(1 + SUBSUP_NUM_ENTRIES, nullptr);
     aSubNodes[0] = popOrZero(m_aNodeStack);
-    for (size_t i = 1;  i < aSubNodes.size();  i++)
-        aSubNodes[i] = nullptr;
 
     // process all sub-/supscripts
     int  nIndex = 0;
@@ -1420,10 +1406,9 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                     // We have several concatenated identifiers and numbers.
                     // Let's group them into one SmExpressionNode.
                     SmNodeArray nodeArray(nTokens);
-                    while (nTokens > 0)
+                    for (auto rIt = nodeArray.rbegin(), rEnd = nodeArray.rend(); rIt != rEnd; ++rIt)
                     {
-                        nodeArray[nTokens-1] = popOrZero(m_aNodeStack);
-                        nTokens--;
+                        *rIt = popOrZero(m_aNodeStack);
                     }
                     std::unique_ptr<SmExpressionNode> pNode(new SmExpressionNode(SmToken()));
                     pNode->SetSubNodes(nodeArray);
@@ -2060,7 +2045,6 @@ void SmParser::DoBrace()
 void SmParser::DoBracebody(bool bIsLeftRight)
 {
     std::unique_ptr<SmStructureNode> pBody(new SmBracebodyNode(m_aCurToken));
-    SmNodeArray      aNodes;
     sal_uInt16           nNum = 0;
 
     // get body if any
@@ -2106,10 +2090,10 @@ void SmParser::DoBracebody(bool bIsLeftRight)
     }
 
     // build argument vector in parsing order
-    aNodes.resize(nNum);
-    for (sal_uInt16 i = 0;  i < nNum;  i++)
+    SmNodeArray aNodes(nNum);
+    for (auto rIt = aNodes.rbegin(), rEnd = aNodes.rend(); rIt != rEnd; ++rIt)
     {
-        aNodes[nNum - 1 - i] = popOrZero(m_aNodeStack);
+        *rIt = popOrZero(m_aNodeStack);
     }
 
     pBody->SetSubNodes(aNodes);
@@ -2155,7 +2139,6 @@ void SmParser::DoFunction()
 
 void SmParser::DoBinom()
 {
-    SmNodeArray  ExpressionArray;
     std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
 
     NextToken();
@@ -2163,12 +2146,9 @@ void SmParser::DoBinom()
     DoSum();
     DoSum();
 
-    ExpressionArray.resize(2);
-
-    for (int i = 0;  i < 2;  i++)
-    {
-        ExpressionArray[2 - (i + 1)] = popOrZero(m_aNodeStack);
-    }
+    SmNodeArray ExpressionArray(2);
+    ExpressionArray[1] = popOrZero(m_aNodeStack);
+    ExpressionArray[0] = popOrZero(m_aNodeStack);
 
     pSNode->SetSubNodes(ExpressionArray);
     m_aNodeStack.push_front(std::move(pSNode));
@@ -2190,10 +2170,9 @@ void SmParser::DoStack()
         while (m_aCurToken.eType == TPOUND);
 
         SmNodeArray ExpressionArray(n);
-
-        for (sal_uInt16 i = 0; i < n; i++)
+        for (auto rIt = ExpressionArray.rbegin(), rEnd = ExpressionArray.rend(); rIt != rEnd; ++rIt)
         {
-            ExpressionArray[n - (i + 1)] = popOrZero(m_aNodeStack);
+            *rIt = popOrZero(m_aNodeStack);
         }
 
         if (m_aCurToken.eType != TRGROUP)
@@ -2253,10 +2232,9 @@ void SmParser::DoMatrix()
         size_t nRC = static_cast<size_t>(r) * c;
 
         SmNodeArray ExpressionArray(nRC);
-
-        for (size_t i = 0; i < (nRC); ++i)
+        for (auto rIt = ExpressionArray.rbegin(), rEnd = ExpressionArray.rend(); rIt != rEnd; ++rIt)
         {
-            ExpressionArray[(nRC) - (i + 1)] = popOrZero(m_aNodeStack);
+            *rIt = popOrZero(m_aNodeStack);
         }
 
         if (m_aCurToken.eType != TRGROUP)
