@@ -167,7 +167,6 @@ void XMLSectionImportContext::StartElement(
                 // IsVisible and condition (not for index headers)
                 if (! bIsIndexHeader)
                 {
-                    Any aAny;
                     xPropSet->setPropertyValue( sIsVisible, Any(bIsVisible) );
 
                     // #97450# hidden sections must be hidden on reload
@@ -180,8 +179,7 @@ void XMLSectionImportContext::StartElement(
 
                     if (bCondOK)
                     {
-                        aAny <<= sCond;
-                        xPropSet->setPropertyValue( sCondition, aAny );
+                        xPropSet->setPropertyValue( sCondition, Any(sCond) );
                     }
                 }
 
@@ -189,9 +187,7 @@ void XMLSectionImportContext::StartElement(
                 if ( bSequenceOK &&
                      IsXMLToken(GetLocalName(), XML_SECTION) )
                 {
-                    Any aAny;
-                    aAny <<= aSequence;
-                    xPropSet->setPropertyValue(sProtectionKey, aAny);
+                    xPropSet->setPropertyValue(sProtectionKey, Any(aSequence));
                 }
 
                 // protection

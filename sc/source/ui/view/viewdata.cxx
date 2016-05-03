@@ -2651,11 +2651,9 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
                 maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
                 OUString sTabName;
                 GetDocument()->GetName( nTab, sTabName );
-                uno::Any aAny;
-                aAny <<= aTableViewSettings;
                 try
                 {
-                    xNameContainer->insertByName(sTabName, aAny);
+                    xNameContainer->insertByName(sTabName, uno::Any(aTableViewSettings));
                 }
                 //#101739#; two tables with the same name are possible
                 catch ( container::ElementExistException& )

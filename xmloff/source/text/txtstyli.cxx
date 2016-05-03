@@ -224,9 +224,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
          xPropSetInfo->hasPropertyByName( sCategory ) &&
           SvXMLUnitConverter::convertEnum( nCategory, sCategoryVal, aCategoryMap ) )
     {
-        Any aAny;
-        aAny <<= (sal_Int16)nCategory;
-        xPropSet->setPropertyValue( sCategory, aAny );
+        xPropSet->setPropertyValue( sCategory, Any((sal_Int16)nCategory) );
     }
 
     // tell the style about it's events (if applicable)
@@ -283,11 +281,9 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
 
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ))
     {
-        Any aAny;
         if( nOutlineLevel >= 0 )
         {
-            aAny <<= nOutlineLevel;
-            xPropSet->setPropertyValue( sOutlineLevel, aAny );
+            xPropSet->setPropertyValue( sOutlineLevel, Any(nOutlineLevel) );
         }
     }
 
@@ -325,9 +321,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         {
             if ( sListStyleName.isEmpty() )
             {
-                Any aAny;
-                aAny <<= sListStyleName /* empty string */;
-                xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+                xPropSet->setPropertyValue( sNumberingStyleName, Any(sListStyleName) ); /* empty string */;
             }
             else
             {
@@ -343,9 +337,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
                 if ( rNumStyles.is() &&
                      rNumStyles->hasByName( sDisplayListStyleName ) )
                 {
-                    Any aAny;
-                    aAny <<= sDisplayListStyleName;
-                    xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+                    xPropSet->setPropertyValue( sNumberingStyleName, Any(sDisplayListStyleName) );
                 }
             }
         }
@@ -364,9 +356,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
             rTextStyles->hasByName( sDisplayDropCapTextStyleName ) &&
             xPropSetInfo->hasPropertyByName( sDropCapCharStyleName ) )
         {
-            Any aAny;
-            aAny <<= sDisplayDropCapTextStyleName;
-            xPropSet->setPropertyValue( sDropCapCharStyleName, aAny );
+            xPropSet->setPropertyValue( sDropCapCharStyleName, Any(sDisplayDropCapTextStyleName) );
         }
     }
 
@@ -383,9 +373,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
                rPageStyles->hasByName( sDisplayName )) ) &&
             xPropSetInfo->hasPropertyByName( sPageDescName ) )
         {
-            Any aAny;
-            aAny <<= sDisplayName;
-            xPropSet->setPropertyValue( sPageDescName, aAny );
+            xPropSet->setPropertyValue( sPageDescName, Any(sDisplayName) );
         }
     }
 }

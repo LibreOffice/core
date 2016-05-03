@@ -262,9 +262,7 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType )
         Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aOLEType );
         if( xOLEObject.is() )
         {
-            Any aAny;
-            aAny <<= xOLEObject;
-            pUnoObj = new SbUnoObject( aType, aAny );
+            pUnoObj = new SbUnoObject( aType, Any(xOLEObject) );
             OUString sDfltPropName;
 
             if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
@@ -2991,11 +2989,8 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
     {
-        Any aAny;
-        aAny <<= xInterface;
-
         // Create a SbUnoObject out of it and return it
-        SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, aAny );
+        SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, Any(xInterface) );
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
             // return the object
@@ -3046,11 +3041,8 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
     {
-        Any aAny;
-        aAny <<= xInterface;
-
         // Create a SbUnoObject out of it and return it
-        SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, aAny );
+        SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, Any(xInterface) );
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
             // return the object
@@ -3076,11 +3068,9 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool 
 
     // get the global service manager
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
-    Any aAny;
-    aAny <<= xFactory;
 
     // Create a SbUnoObject out of it and return it
-    SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "ProcessServiceManager" ), aAny );
+    SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "ProcessServiceManager" ), Any(xFactory) );
     refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
 }
 

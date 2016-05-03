@@ -1427,9 +1427,7 @@ namespace svxform
     {
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID( static_cast< sal_Int32 >( m_pTabCtrl->GetCurPageId() ) );
-        Any aAny;
-        aAny <<= m_bShowDetails;
-        aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS,aAny);
+        aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS, Any(m_bShowDetails));
 
         m_pInstPage.disposeAndClear();
         m_pSubmissionPage.disposeAndClear();

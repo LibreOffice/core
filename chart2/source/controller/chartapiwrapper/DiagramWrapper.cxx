@@ -1396,9 +1396,7 @@ Any WrappedStackingProperty::getPropertyValue( const Reference< beans::XProperty
     if( detectInnerValue( eInnerStackMode ) )
     {
         bool bValue = (eInnerStackMode == m_eStackMode);
-        Any aAny;
-        aAny <<= bValue;
-        return aAny;
+        return Any(bValue);
     }
     return m_aOuterValue;
 }
@@ -2011,9 +2009,7 @@ Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans:
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bValue = ChartModelHelper::isIncludeHiddenCells( m_spChart2ModelContact->getChartModel() );
-    uno::Any aAny;
-    aAny <<= bValue;
-    return aAny;
+    return uno::Any(bValue);
 }
 
 // ____ XDiagramProvider ____

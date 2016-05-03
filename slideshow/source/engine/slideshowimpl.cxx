@@ -1494,24 +1494,20 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     aXPropSet->setPropertyValue("PolyPolygon", aParam );
 
                     //LineStyle : SOLID by default
-                    uno::Any            aAny;
                     drawing::LineStyle  eLS;
                     eLS = drawing::LineStyle_SOLID;
-                    aAny <<= eLS;
-                    aXPropSet->setPropertyValue("LineStyle", aAny );
+                    aXPropSet->setPropertyValue("LineStyle", uno::Any(eLS) );
 
                     //LineColor
                     sal_uInt32          nLineColor;
                     nLineColor = pPolyPoly->getRGBALineColor();
                     //Transform polygon color from RRGGBBAA to AARRGGBB
-                    aAny <<= RGBAColor2UnoColor(nLineColor);
-                    aXPropSet->setPropertyValue("LineColor", aAny );
+                    aXPropSet->setPropertyValue("LineColor", uno::Any(RGBAColor2UnoColor(nLineColor)) );
 
                     //LineWidth
                     double              fLineWidth;
                     fLineWidth = pPolyPoly->getStrokeWidth();
-                    aAny <<= (sal_Int32)fLineWidth;
-                    aXPropSet->setPropertyValue("LineWidth", aAny );
+                    aXPropSet->setPropertyValue("LineWidth", uno::Any((sal_Int32)fLineWidth) );
 
                     // make polygons special
                     xLayerManager->attachShapeToLayer(rPolyShape, xDrawnInSlideshow);

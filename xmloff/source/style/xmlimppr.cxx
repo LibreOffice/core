@@ -282,9 +282,7 @@ void SvXMLImportPropertyMapper::importXML(
                         // #106963#; use userdefined attribute only if it is in the specified property range
                         if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
                         {
-                            Any aAny;
-                            aAny <<= xAttrContainer;
-                            XMLPropertyState aNewProperty( nIndex, aAny );
+                            XMLPropertyState aNewProperty( nIndex, Any(xAttrContainer) );
 
                             // push it on our stack so we export it later
                             rProperties.push_back( aNewProperty );
@@ -307,9 +305,7 @@ void SvXMLImportPropertyMapper::importXML(
 
                         sName.append( aLocalName );
 
-                        Any aAny;
-                        aAny <<= aData;
-                        xAttrContainer->insertByName( sName.makeStringAndClear(), aAny );
+                        xAttrContainer->insertByName( sName.makeStringAndClear(), Any(aData) );
                     }
                 }
             }

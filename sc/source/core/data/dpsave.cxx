@@ -562,26 +562,22 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     if ( xDimProp.is() )
     {
         // exceptions are caught at ScDPSaveData::WriteToSource
-        uno::Any aAny;
 
         sheet::DataPilotFieldOrientation eOrient = (sheet::DataPilotFieldOrientation)nOrientation;
-        aAny <<= eOrient;
-        xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, aAny );
+        xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(eOrient) );
 
         sheet::GeneralFunction eFunc = (sheet::GeneralFunction)nFunction;
-        aAny <<= eFunc;
-        xDimProp->setPropertyValue( SC_UNO_DP_FUNCTION, aAny );
+        xDimProp->setPropertyValue( SC_UNO_DP_FUNCTION, uno::Any(eFunc) );
 
         if ( nUsedHierarchy >= 0 )
         {
-            aAny <<= (sal_Int32)nUsedHierarchy;
-            xDimProp->setPropertyValue( SC_UNO_DP_USEDHIERARCHY, aAny );
+            xDimProp->setPropertyValue( SC_UNO_DP_USEDHIERARCHY, uno::Any((sal_Int32)nUsedHierarchy) );
         }
 
         if ( pReferenceValue )
         {
-            aAny <<= *pReferenceValue;
-            xDimProp->setPropertyValue( SC_UNO_DP_REFVALUE, aAny );
+            ;
+            xDimProp->setPropertyValue( SC_UNO_DP_REFVALUE, uno::Any(*pReferenceValue) );
         }
 
         if (mpLayoutName)
@@ -631,7 +627,6 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             OSL_ENSURE( xLevProp.is(), "no properties at level" );
             if ( xLevProp.is() )
             {
-                uno::Any aAny;
                 if ( !bSubTotalDefault )
                 {
                     if ( !pSubTotalFuncs )
@@ -641,8 +636,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     sheet::GeneralFunction* pArray = aSeq.getArray();
                     for (long i=0; i<nSubTotalCount; i++)
                         pArray[i] = (sheet::GeneralFunction)pSubTotalFuncs[i];
-                    aAny <<= aSeq;
-                    xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL, aAny );
+                    xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL, uno::Any(aSeq) );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
@@ -1148,9 +1142,7 @@ static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& x
         uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
         if (xDimProp.is())
         {
-            uno::Any aAny;
-            aAny <<= eOrient;
-            xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, aAny );
+            xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(eOrient) );
         }
     }
 }

@@ -353,9 +353,7 @@ uno::Any SwAccessibleCell::getCurrentValue( )
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
-    uno::Any aAny;
-    aAny <<= GetTableBoxFormat()->GetTableBoxValue().GetValue();
-    return aAny;
+    return uno::Any( GetTableBoxFormat()->GetTableBoxValue().GetValue() );
 }
 
 sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
@@ -377,17 +375,13 @@ sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
 uno::Any SwAccessibleCell::getMaximumValue( )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Any aAny;
-    aAny <<= DBL_MAX;
-    return aAny;
+    return uno::Any(DBL_MAX);
 }
 
 uno::Any SwAccessibleCell::getMinimumValue(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Any aAny;
-    aAny <<= -DBL_MAX;
-    return aAny;
+    return uno::Any(-DBL_MAX);
 }
 
 static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& replacedChar, const OUString& replaceStr)

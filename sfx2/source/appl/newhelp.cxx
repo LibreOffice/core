@@ -2182,9 +2182,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
                 Reference < XSelectionSupplier > xSelectionSup( xController, UNO_QUERY );
                 if ( xSelectionSup.is() )
                 {
-                    Any aAny;
-                    aAny <<= xSelection;
-                    xSelectionSup->select( aAny );
+                    xSelectionSup->select( Any(xSelection) );
                 }
             }
         }
@@ -2249,9 +2247,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                     Reference < XSelectionSupplier > xSelectionSup( xController, UNO_QUERY );
                     if ( xSelectionSup.is() )
                     {
-                        Any aAny;
-                        aAny <<= xSelection;
-                        xSelectionSup->select( aAny );
+                        xSelectionSup->select( Any(xSelection) );
                     }
                 }
                 else if ( pDlg->IsWrapAround() && !bWrapAround )

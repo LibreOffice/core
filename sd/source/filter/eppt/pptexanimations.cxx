@@ -1155,9 +1155,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
                 {
                     if ( eTranslateMode & TRANSLATE_NUMBER_TO_STRING )
                     {
-                        Any aAny;
                         OUString aNumber( OUString::number( fVal ) );
-                        aAny <<= aNumber;
                         exportAnimPropertyString( rStrm, nPropertyId, aNumber, eTranslateMode );
                     }
                     else

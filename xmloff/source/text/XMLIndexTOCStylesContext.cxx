@@ -106,8 +106,7 @@ void XMLIndexTOCStylesContext::EndElement()
         aAny >>= xIndexReplace;
 
         // set style names
-        aAny <<= aStyleNamesSequence;
-        xIndexReplace->replaceByIndex(nOutlineLevel, aAny);
+        xIndexReplace->replaceByIndex(nOutlineLevel, Any(aStyleNamesSequence));
     }
 }
 

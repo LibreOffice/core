@@ -126,20 +126,16 @@ void XMLIndexTableSourceContext::ProcessAttribute(
 
 void XMLIndexTableSourceContext::EndElement()
 {
-    Any aAny;
-
     rIndexPropertySet->setPropertyValue(sCreateFromLabels, css::uno::Any(bUseCaption));
 
     if (bSequenceOK)
     {
-        aAny <<= sSequence;
-        rIndexPropertySet->setPropertyValue(sLabelCategory, aAny);
+        rIndexPropertySet->setPropertyValue(sLabelCategory, css::uno::Any(sSequence));
     }
 
     if (bDisplayFormatOK)
     {
-        aAny <<= nDisplayFormat;
-        rIndexPropertySet->setPropertyValue(sLabelDisplayType, aAny);
+        rIndexPropertySet->setPropertyValue(sLabelDisplayType, css::uno::Any(nDisplayFormat));
     }
 
     XMLIndexSourceBaseContext::EndElement();

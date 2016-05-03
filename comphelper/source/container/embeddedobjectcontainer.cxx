@@ -1198,9 +1198,7 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
 
         xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                     uno::makeAny( true ) );
-        uno::Any aAny;
-        aAny <<= rMediaType;
-        xPropSet->setPropertyValue("MediaType", aAny );
+        xPropSet->setPropertyValue("MediaType", uno::Any(rMediaType) );
 
         xPropSet->setPropertyValue("Compressed",
                                     uno::makeAny( true ) );

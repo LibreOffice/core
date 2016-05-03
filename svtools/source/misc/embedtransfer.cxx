@@ -131,7 +131,6 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                                 xStg->openStorageElement( aName, embed::ElementModes::READ )->copyToStorage( xStor );
                             }
 
-                            css::uno::Any                  aAny;
                             const sal_uInt32               nLen = pStream->Seek( STREAM_SEEK_TO_END );
                             css::uno::Sequence< sal_Int8 > aSeq( nLen );
 
@@ -142,8 +141,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
 
                             if( ( bRet = ( aSeq.getLength() > 0 ) ) )
                             {
-                                aAny <<= aSeq;
-                                SetAny( aAny, rFlavor );
+                                SetAny( uno::Any(aSeq), rFlavor );
                             }
                         }
                         else

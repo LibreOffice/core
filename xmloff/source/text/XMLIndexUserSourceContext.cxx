@@ -151,8 +151,6 @@ void XMLIndexUserSourceContext::ProcessAttribute(
 
 void XMLIndexUserSourceContext::EndElement()
 {
-    Any aAny;
-
     rIndexPropertySet->setPropertyValue(sCreateFromEmbeddedObjects, css::uno::Any(bUseObjects));
     rIndexPropertySet->setPropertyValue(sCreateFromGraphicObjects, css::uno::Any(bUseGraphic));
     rIndexPropertySet->setPropertyValue(sUseLevelFromSource, css::uno::Any(bUseLevelFromSource));
@@ -163,8 +161,7 @@ void XMLIndexUserSourceContext::EndElement()
 
     if( !sIndexName.isEmpty() )
     {
-        aAny <<= sIndexName;
-        rIndexPropertySet->setPropertyValue(sUserIndexName, aAny);
+        rIndexPropertySet->setPropertyValue(sUserIndexName, css::uno::Any(sIndexName));
     }
 
     XMLIndexSourceBaseContext::EndElement();

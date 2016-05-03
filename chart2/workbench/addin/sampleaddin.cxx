@@ -350,9 +350,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     uno::Reference< beans::XPropertySet > xShapeProp( mxMyRedLine, uno::UNO_QUERY );
                     if( xShapeProp.is())
                     {
-                        uno::Any aAny;
-                        aAny <<= aPtSeq;
-                        xShapeProp->setPropertyValue( "PolyPolygon" , aAny );
+                        xShapeProp->setPropertyValue( "PolyPolygon" , Any(aPtSeq) );
                     }
                 }
                 if( mxMyText.is())
