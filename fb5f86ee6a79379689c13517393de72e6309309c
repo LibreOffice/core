@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d5679c23",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1963,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-03T12:43:18Z",
+      "side": 1,
+      "message": "This needs to evaluate the ScMatValType return value of GetDoubleOrStringFromMatrix() to determine whether the result is numeric or text.",
+      "revId": "fb5f86ee6a79379689c13517393de72e6309309c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
