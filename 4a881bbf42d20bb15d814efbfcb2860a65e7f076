@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_155f4473",
+        "filename": "vcl/source/gdi/wall.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-03T09:40:00Z",
+      "side": 1,
+      "message": "I\u0027d simply not copy the cache here, and handle the cases where you need it explicitely. See below",
+      "revId": "4a881bbf42d20bb15d814efbfcb2860a65e7f076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_553c6c2f",
+        "filename": "vcl/source/gdi/wall.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-03T09:40:00Z",
+      "side": 1,
+      "message": "Ah, heh, that does something perhaps unexpected - in a non-const environment, cow_wrapper::get() will make the impl object unique. This is not what happens in the original code.\n\nBut this entire setup is butt-ugly anyway - I suggest to write three methods for the three calls from outside this class. Gives much better control about what actually happens with the impl ptr.",
+      "revId": "4a881bbf42d20bb15d814efbfcb2860a65e7f076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_151104ad",
+        "filename": "vcl/source/gdi/wall.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-03T09:40:00Z",
+      "side": 1,
+      "message": "Here\u0027s a thought (similarly applies to the cases below) - why not encode the cache bitmap purge into the copy ctor of the impl object?\n\nAnd then revert the default - most cases here seem to purge the cache bitmap, so best make that the default",
+      "revId": "4a881bbf42d20bb15d814efbfcb2860a65e7f076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_35544853",
+        "filename": "vcl/source/gdi/wall.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-03T09:40:00Z",
+      "side": 1,
+      "message": "So the original code copies the cache Bitmap here. Unclear how much that saves - any chance to profile?\n\nOther than that, you can get yourself a copy from the old, shared object at this line:\n\nBitmapEx* pOldBmp\u003dmpImplWallpaper-\u003empCache",
+      "revId": "4a881bbf42d20bb15d814efbfcb2860a65e7f076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_5551cc61",
+        "filename": "vcl/source/gdi/wall.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-03T09:40:00Z",
+      "side": 1,
+      "message": "and then copy it into the new object here (calling operator-\u003e in a non-const context as above will uniquefy mpImplWallpaper)\n\nBeware of corner cases though - SetStyle might have been called on an already-unique object ;)",
+      "revId": "4a881bbf42d20bb15d814efbfcb2860a65e7f076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
