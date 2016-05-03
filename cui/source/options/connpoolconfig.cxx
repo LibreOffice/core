@@ -186,7 +186,7 @@ namespace offapp
 
                 // set the values
                 aThisDriverSettings.setNodeValue(getDriverNameNodeName(), makeAny(sThisDriverName));
-                aThisDriverSettings.setNodeValue(getEnableNodeName(), Any(&aLoop->bEnabled, cppu::UnoType<bool>::get()));
+                aThisDriverSettings.setNodeValue(getEnableNodeName(), Any(aLoop->bEnabled));
                 aThisDriverSettings.setNodeValue(getTimeoutNodeName(), makeAny(aLoop->nTimeoutSeconds));
             }
             bNeedCommit = true;

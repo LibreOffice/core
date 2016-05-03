@@ -19,6 +19,10 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_ANY_H
 #define INCLUDED_COM_SUN_STAR_UNO_ANY_H
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <uno/any2.h>
 #include <typelib/typedescription.h>
 #include <cppu/unotype.hxx>
@@ -100,6 +104,18 @@ public:
         @param pType_ type of value
     */
     inline Any( const void * pData_, typelib_TypeDescriptionReference * pType_ );
+
+#if defined LIBO_INTERNAL_ONLY
+    Any(bool const *, Type const &) = delete;
+    Any(bool const *, typelib_TypeDescription *) = delete;
+    Any(bool const *, typelib_TypeDescriptionReference *) = delete;
+    Any(std::nullptr_t, Type const & type):
+        Any(static_cast<void *>(nullptr), type) {}
+    Any(std::nullptr_t, typelib_TypeDescription * type):
+        Any(static_cast<void *>(nullptr), type) {}
+    Any(std::nullptr_t, typelib_TypeDescriptionReference * type):
+        Any(static_cast<void *>(nullptr), type) {}
+#endif
 
     /** Destructor: Destructs any content and frees memory.
     */
