@@ -30,6 +30,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <templateview.hrc>
 
 #include <officecfg/Office/Common.hxx>
@@ -321,7 +322,17 @@ IMPL_STATIC_LINK_TYPED( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
-        pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
+        css::uno::Reference< css::frame::XSynchronousDispatch > xSyncDispatch( pLoadRecentFile->xDispatch, css::uno::UNO_QUERY );
+        if ( xSyncDispatch.is() )
+        {
+            css::uno::Reference< css::lang::XComponent > xComponent;
+            auto aReturn = xSyncDispatch->dispatchWithReturnValue( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
+            if ( !( aReturn >>= xComponent ) && pLoadRecentFile->pView && !pLoadRecentFile->pView->isDisposed() )
+                pLoadRecentFile->pView->SetPointer( PointerStyle::Arrow );
+        }
+        else
+            //TODO: Is this fallback really needed - assuming that only load dispatcher will be ever called here?
+            pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
     }
     catch ( const Exception& )
     {
