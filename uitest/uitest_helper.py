@@ -60,7 +60,6 @@ class UITest(object):
         # report a failure here
 
     def close_doc(self):
-        # also need to handle "OnViewClosed" event
         with EventListener(self._xContext, ["DialogExecute", "OnViewClosed"] ) as event:
             self._xUITest.executeCommand(".uno:CloseDoc")
             time_ = 0
