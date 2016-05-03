@@ -73,7 +73,8 @@ enum class RTFBmpStyle
 {
     NONE,
     PNG,
-    JPEG
+    JPEG,
+    DIBITMAP
 };
 
 enum class RTFFieldStatus

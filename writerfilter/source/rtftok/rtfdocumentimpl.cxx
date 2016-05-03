@@ -782,6 +782,24 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
         // No destination text? Then we'll get it later.
         return RTFError::OK;
 
+    SvMemoryStream aDIBStream;
+    if (m_aStates.top().aPicture.eStyle == RTFBmpStyle::DIBITMAP)
+    {
+        // Construct a BITMAPFILEHEADER structure before the real data.
+        SvStream& rBodyStream = *pStream;
+        aDIBStream.WriteChar('B');
+        aDIBStream.WriteChar('M');
+        // The size of the real data.
+        aDIBStream.WriteUInt32(rBodyStream.Tell());
+        // Reserved.
+        aDIBStream.WriteUInt32(0);
+        // The offset of the real data, i.e. the size of the header, including this number.
+        aDIBStream.WriteUInt32(14);
+        rBodyStream.Seek(0);
+        aDIBStream.WriteStream(rBodyStream);
+        pStream = &aDIBStream;
+    }
+
     // Store, and get its URL.
     pStream->Seek(0);
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
@@ -4819,6 +4837,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
     case RTF_TRWWIDTH:
         lcl_putNestedAttribute(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pIntValue);
+        break;
+    case RTF_DIBITMAP:
+        m_aStates.top().aPicture.eStyle = RTFBmpStyle::DIBITMAP;
         break;
     default:
     {
