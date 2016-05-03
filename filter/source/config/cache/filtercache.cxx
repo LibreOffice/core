@@ -145,7 +145,7 @@ std::unique_ptr<FilterCache> FilterCache::clone() const
     pClone->m_lChangedFrameLoaders       = m_lChangedFrameLoaders;
     pClone->m_lChangedContentHandlers    = m_lChangedContentHandlers;
 
-    return std::move(pClone);
+    return pClone;
     // <- SAFE ----------------------------------
 }
 
