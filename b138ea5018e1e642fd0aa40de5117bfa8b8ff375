@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_35b0c88b",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-03T12:35:03Z",
+      "side": 1,
+      "message": "A range can be passed for any parameter that expects a scalar value, in which case an implicit intersection with the formula cell position is created. For example, for ABS(A1:A3) entered in row 2 the intersection is A2; entered in row 4 results in error. PopDoubleRefOrSingleRef() takes care of that using DoubleRefToPosSingleRef() for an svDoubleRef token.\n\nA matrix could be the nested interim result in an array formula, GetDoubleOrStringFromMatrix() takes care of the various position dependent conditions, including a JumpMatrix resulting from IF() and the like.",
+      "parentUuid": "da7fb54a_24f97cc9",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_24c41c91",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 2
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "Right. Shall I change the PopString.getString() calls in ScConcat_MS() and SCTextJoin_MS() too in a separate patch?",
       "parentUuid": "da7fb54a_24c41c91",
+      "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_55ad4c30",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-03T12:35:03Z",
+      "side": 1,
+      "message": "Yup, as already done ;-)",
+      "parentUuid": "da7fb54a_44f680d8",
       "revId": "b138ea5018e1e642fd0aa40de5117bfa8b8ff375",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
