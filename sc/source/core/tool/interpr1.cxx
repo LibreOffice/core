@@ -5249,6 +5249,8 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
         double fMem = 0.0;
         double fRes = 0.0;
         double fCount = 0.0;
+        double fMin = std::numeric_limits<double>::max();
+        double fMax = std::numeric_limits<double>::min();
         short nParam = 1;
         size_t nRefInList = 0;
         SCCOL nDimensionCols = 0;
@@ -5484,7 +5486,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
         if (nGlobalError)
             return 0;   // bail out
 
-        // main range - only for AVERAGEIFS and SUMIFS
+        // main range - only for AVERAGEIFS, SUMIFS, MINIFS and MAXIFS
         if (nParamCount == 1)
         {
             nParam = 1;
@@ -5587,6 +5589,10 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     }
                     else
                         fSum += fVal;
+                    if ( fMin > fVal )
+                        fMin = fVal;
+                    if ( fMax < fVal )
+                        fMax = fVal;
                 }
             }
             else
@@ -5612,6 +5618,10 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                                 }
                                 else
                                     fSum += fVal;
+                                if ( fMin > fVal )
+                                    fMin = fVal;
+                                if ( fMax < fVal )
+                                    fMax = fVal;
                             }
                         }
                     }
@@ -5631,6 +5641,8 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             case ifSUMIFS:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
             case ifAVERAGEIFS: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
             case ifCOUNTIFS:   fRes = fCount; break;
+            case ifMINIFS:     fRes = ( fMin < std::numeric_limits<double>::max() ? fMin : 0 ); break;
+            case ifMAXIFS:     fRes = ( fMax > std::numeric_limits<double>::min() ? fMax : 0 ); break;
             default: ; // nothing
         }
         return fRes;

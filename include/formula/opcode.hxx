@@ -284,6 +284,8 @@ enum OpCode : sal_uInt16
         ocRawSubtract       = SC_OPCODE_RAWSUBTRACT,
         ocIfs_MS            = SC_OPCODE_IFS_MS,
         ocSwitch_MS         = SC_OPCODE_SWITCH_MS,
+        ocMinIfs_MS         = SC_OPCODE_MINIFS_MS,
+        ocMaxIfs_MS         = SC_OPCODE_MAXIFS_MS,
     // Database functions
         ocDBSum             = SC_OPCODE_DB_SUM,
         ocDBCount           = SC_OPCODE_DB_COUNT,

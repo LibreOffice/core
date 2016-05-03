@@ -11663,6 +11663,84 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value to return when corresponding value argument matches expression." ;
         };
     };
+    Resource SC_OPCODE_MINIFS_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the minimum value in a range that meet multiple criteria in multiple ranges." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_MINIFS_MS;
+            PAIRED_VAR_ARGS + 1;  0; 0; 0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "min_range" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The range from which the minimum will be determined." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "range" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The range from which the minimum value is to be taken." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "criteria" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given." ;
+        };
+    };
+    Resource SC_OPCODE_MAXIFS_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the maximum value in a range that meet multiple criteria in multiple ranges." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_MAXIFS_MS;
+            PAIRED_VAR_ARGS + 1;  0; 0; 0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "max_range" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The range from which the maximum will be determined." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "range" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The range from which the minimum value is to be taken." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "criteria" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given." ;
+        };
+    };
      // -=*# Resource for function EXACT #*=-
     Resource SC_OPCODE_EXACT
     {
