@@ -1940,6 +1940,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 
     if ( HasHints() )
     {
+        bool const bHadHints(!m_pSwpHints->CanBeDeleted());
         bool bMergePortionsNeeded(false);
         for ( size_t i = 0; i < m_pSwpHints->Count() &&
                 rIdx >= m_pSwpHints->Get(i)->GetStart(); ++i )
@@ -2004,7 +2005,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         {
             m_pSwpHints->MergePortions(*this);
         }
-        SAL_WARN_IF(m_pSwpHints->CanBeDeleted(), "sw.core",
+        SAL_WARN_IF(bHadHints && m_pSwpHints->CanBeDeleted(), "sw.core",
                 "SwTextNode::InsertText: unexpected loss of hints");
     }
 

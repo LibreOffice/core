@@ -112,6 +112,7 @@ public:
     void testFdo75110();
     void testFdo75898();
     void testFdo74981();
+    void testTdf98512();
     void testShapeTextboxSelect();
     void testShapeTextboxDelete();
     void testCp1000071();
@@ -211,6 +212,7 @@ public:
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
+    CPPUNIT_TEST(testTdf98512);
     CPPUNIT_TEST(testShapeTextboxSelect);
     CPPUNIT_TEST(testShapeTextboxDelete);
     CPPUNIT_TEST(testCp1000071);
@@ -699,6 +701,44 @@ void SwUiWriterTest::testFdo74981()
     --aIdx;
     pTextNode = aIdx.GetNode().GetTextNode();
     CPPUNIT_ASSERT(!pTextNode->HasHints());
+}
+
+void SwUiWriterTest::testTdf98512()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInputFieldType *const pType(static_cast<SwInputFieldType*>(
+                pWrtShell->GetFieldType(0, RES_INPUTFLD)));
+    SwInputField aField1(pType, OUString("foo"), OUString("bar"), INP_TXT, 0);
+    pWrtShell->Insert(aField1);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    SwInputField aField2(pType, OUString("baz"), OUString("quux"), INP_TXT, 0);
+    pWrtShell->Insert(aField2);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SetMark();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    OUString const expected1(
+        OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + "foo" + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>());
+    OUString const expected2(
+        OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + "baz" + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>()
+        + expected1);
+    CPPUNIT_ASSERT_EQUAL(expected2, pWrtShell->getShellCursor(false)->GetText());
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SetMark();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    CPPUNIT_ASSERT_EQUAL(expected1, pWrtShell->getShellCursor(false)->GetText());
+    rUndoManager.Redo();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SetMark();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    CPPUNIT_ASSERT_EQUAL(expected2, pWrtShell->getShellCursor(false)->GetText());
+    rUndoManager.Undo();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SetMark();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    CPPUNIT_ASSERT_EQUAL(expected1, pWrtShell->getShellCursor(false)->GetText());
 }
 
 void SwUiWriterTest::testShapeTextboxSelect()
