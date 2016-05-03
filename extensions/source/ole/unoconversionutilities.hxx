@@ -398,7 +398,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                 }
                 break;
             case TypeClass_VOID:
-                rAny.setValue(NULL,Type());
+                rAny.setValue(nullptr,Type());
                 break;
             case TypeClass_ANY:     //  Any
                 // There could be a JScript Array that needs special handling
@@ -1478,10 +1478,10 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 switch (var.vt)
                 {
                 case VT_EMPTY:
-                    rAny.setValue(NULL, Type());
+                    rAny.setValue(nullptr, Type());
                     break;
                 case VT_NULL:
-                    rAny.setValue(NULL, Type());
+                    rAny.setValue(nullptr, Type());
                     break;
                 case VT_I2:
                     rAny.setValue( & var.iVal, cppu::UnoType<sal_Int16>::get());
@@ -1580,7 +1580,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                     rAny.setValue( & var.uintVal, cppu::UnoType<sal_uInt32>::get());
                     break;
                 case VT_VOID:
-                    rAny.setValue( NULL, Type());
+                    rAny.setValue( nullptr, Type());
                     break;
                 case VT_DECIMAL:
                 {
