@@ -23,13 +23,12 @@
 
 #include <cstddef>
 
+#include <rtl/ustring.hxx>
 #include <uno/any2.h>
 #include <typelib/typedescription.h>
 #include <cppu/unotype.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <rtl/alloc.h>
-
-namespace rtl { class OUString; }
 
 namespace com
 {
@@ -77,6 +76,11 @@ public:
     explicit inline Any( T const & value );
     /// Ctor support for C++ bool.
     explicit inline Any( bool value );
+
+#if defined LIBO_INTERNAL_ONLY
+    template<typename T1, typename T2>
+    explicit inline Any(rtl::OUStringConcat<T1, T2> const & value);
+#endif
 
     /** Copy constructor: Sets value of the given any.
 
@@ -289,9 +293,7 @@ template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
 template< class C >
 inline Any SAL_CALL makeAny( const C & value );
 
-// additionally specialized for C++ bool
-template<>
-inline Any SAL_CALL makeAny( bool const & value );
+template<> inline Any SAL_CALL makeAny(sal_uInt16 const & value);
 
 template<> Any SAL_CALL makeAny(Any const &) SAL_DELETED_FUNCTION;
 
