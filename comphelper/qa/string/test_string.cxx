@@ -43,6 +43,7 @@ public:
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
     void testReverseString();
+    void testSplit();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testNatural);
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testReverseString);
+    CPPUNIT_TEST(testSplit);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -392,6 +394,16 @@ void TestString::testReverseString()
     OString aOut = ::comphelper::string::reverseString(aIn);
 
     CPPUNIT_ASSERT(aOut == "CBA");
+}
+
+void TestString::testSplit()
+{
+    OUString aIn("CTRL+ALT+F1");
+    std::vector<OUString> aRet = ::comphelper::string::split(aIn, '+');
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aRet.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("CTRL"), aRet[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("ALT"), aRet[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("F1"), aRet[2]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);
