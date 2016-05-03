@@ -2584,6 +2584,12 @@ DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
 }
 #endif
 
+DECLARE_RTFIMPORT_TEST(testTdf95707, "tdf95707.rtf")
+{
+    // Graphic was replaced with a "Read-Error" placeholder.
+    CPPUNIT_ASSERT(getProperty<OUString>(getShape(1), "GraphicURL") != "vnd.sun.star.GraphicObject:0000000000000000000000000000000000000000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
