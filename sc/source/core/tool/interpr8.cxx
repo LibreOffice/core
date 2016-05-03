@@ -1872,6 +1872,7 @@ void ScInterpreter::ScIfs_MS()
 
     ReverseStack( nParamCount );
 
+    nGlobalError = 0;   // propagate only for condition or active result path
     bool bFinished = false;
     while ( nParamCount > 0 && !bFinished && !nGlobalError )
     {
@@ -1930,6 +1931,7 @@ void ScInterpreter::ScSwitch_MS()
 
     ReverseStack( nParamCount );
 
+    nGlobalError = 0;   // propagate only for match or active result path
     bool isValue = false;
     double fRefVal = 0;
     svl::SharedString aRefStr;
@@ -1968,6 +1970,7 @@ void ScInterpreter::ScSwitch_MS()
             return;
     }
     nParamCount--;
+    sal_uInt16 nFirstMatchError = 0;
     bool bFinished = false;
     while ( nParamCount > 1 && !bFinished && !nGlobalError )
     {
@@ -1977,14 +1980,17 @@ void ScInterpreter::ScSwitch_MS()
             fVal = GetDouble();
         else
             aStr = GetString();
+        if (!nFirstMatchError)
+            nFirstMatchError = nGlobalError;
         nParamCount--;
-        if ( ( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
-             ( !isValue && aRefStr.getDataIgnoreCase() == aStr.getDataIgnoreCase() ) )
+        if ( !nGlobalError && (( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
+             ( !isValue && aRefStr.getDataIgnoreCase() == aStr.getDataIgnoreCase() )) )
         {
             // TRUE
             if ( nParamCount < 1 )
             {
                 // no parameter given for THEN
+                nGlobalError = nFirstMatchError;
                 PushParameterExpected();
                 return;
             }
@@ -2007,11 +2013,13 @@ void ScInterpreter::ScSwitch_MS()
                 PushNA();
                 return;
             }
+            nGlobalError = 0;
         }
     }
 
     if ( nGlobalError || !bFinished  )
     {
+        nGlobalError = nFirstMatchError;
         if ( !bFinished )
             PushNA(); // no true expression found
         if ( nGlobalError )

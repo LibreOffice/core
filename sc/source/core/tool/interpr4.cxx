@@ -3601,6 +3601,8 @@ bool IsErrFunc(OpCode oc)
         case ocIfError :
         case ocIfNA :
         case ocErrorType_ODF :
+        case ocIfs_MS:
+        case ocSwitch_MS:
             return true;
         default:
             return false;
