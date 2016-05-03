@@ -20,6 +20,8 @@
 #ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
 
+#include <memory>
+
 #include "cacheitem.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -292,11 +294,8 @@ class FilterCache : public BaseLock
                     All internal structures will be copied here. But the internal used
                     configuration (update) access wont be copied. The cloned instance contains
                     a different one.
-
-            @note   The cloned instance is created on the heap. The user of this instance
-                    has to remove it later.
          */
-        FilterCache* clone() const;
+        std::unique_ptr<FilterCache> clone() const;
 
 
         /** @short  copy the cache content or rClone back to this instance.

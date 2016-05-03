@@ -19,6 +19,8 @@
 #ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_BASECONTAINER_HXX
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_BASECONTAINER_HXX
 
+#include <memory>
+
 #include "filtercache.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -87,7 +89,7 @@ class BaseContainer : public BaseLock
                     m_rCache listen on the global configuration, where m_pFlushCache
                     write its data. m_rCache update itself automatically.
          */
-        FilterCache* m_pFlushCache;
+        std::unique_ptr<FilterCache> m_pFlushCache;
 
         /** @short  specify, which sub container of the used filter cache
                     must be wrapped by this container interface. */

@@ -36,7 +36,7 @@ namespace filter{
 
 BaseContainer::BaseContainer()
     : BaseLock     (       )
-    , m_pFlushCache(nullptr   )
+    , m_pFlushCache()
     , m_eType()
     , m_lListener  (m_aLock)
 {
@@ -120,7 +120,7 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (m_pFlushCache)
-        return m_pFlushCache;
+        return m_pFlushCache.get();
     else
         return &TheFilterCache::get();
     // <- SAFE
@@ -471,8 +471,7 @@ void SAL_CALL BaseContainer::flush()
                 css::uno::makeAny(ex));
     }
 
-    delete m_pFlushCache;
-    m_pFlushCache = nullptr;
+    m_pFlushCache.reset();
 
     css::uno::Reference< css::util::XRefreshable > xRefreshBroadcaster = m_xRefreshBroadcaster;
 

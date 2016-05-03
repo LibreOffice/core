@@ -43,6 +43,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
@@ -116,12 +118,12 @@ FilterCache::~FilterCache()
 }
 
 
-FilterCache* FilterCache::clone() const
+std::unique_ptr<FilterCache> FilterCache::clone() const
 {
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    FilterCache* pClone = new FilterCache();
+    auto pClone = o3tl::make_unique<FilterCache>();
 
     // Don't copy the configuration access points here.
     // They will be created on demand inside the cloned instance,
@@ -143,7 +145,7 @@ FilterCache* FilterCache::clone() const
     pClone->m_lChangedFrameLoaders       = m_lChangedFrameLoaders;
     pClone->m_lChangedContentHandlers    = m_lChangedContentHandlers;
 
-    return pClone;
+    return std::move(pClone);
     // <- SAFE ----------------------------------
 }
 
