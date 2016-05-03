@@ -50,13 +50,14 @@ FIN   [^/>]*">"
 "component-data" {
     LOCptr->addLevel();
     LOCptr->pushKey("");
-//    LOCptr->copySource(yytext, false);
+    LOCptr->copySource(yytext, false);
 }
 
 
 
 "<oor:component-data"{NAME} {
     LOCptr->addLevel();
+    LOCptr->pushKey("");
     LOCptr->pushKey(yytext);
 }
 

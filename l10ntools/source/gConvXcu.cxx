@@ -125,8 +125,12 @@ void convert_xcu::stopCollectData(char *syyText)
 
     if (useText.size()) {
         // locate key and extract it
-        for (nL = 0; nL < (int)mcStack.size() -1; ++nL)
-            useKey += "." + mcStack[nL];
+        int max = (int)mcStack.size() - 1;
+        for (nL = 0; nL < max; ++nL) {
+            useKey += mcStack[nL];
+            if (nL < max -1)
+                useKey += ".";
+        }
         mcMemory.setSourceKey(miLineNo, msSourceFile, useKey, useText, "", "value", mcStack[nL], mbMergeMode);
     }
 
