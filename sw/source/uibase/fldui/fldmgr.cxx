@@ -1185,9 +1185,6 @@ bool SwFieldMgr::InsertField(
                     new SwInputField( pTyp, rData.m_sPar1, rData.m_sPar2, nSubType|nsSwExtendedSubType::SUB_INVISIBLE, nFormatId);
                 pField = pInpField;
             }
-
-            // start dialog
-            pCurShell->StartInputFieldDlg(pField, false, rData.m_pParent);
             break;
         }
 
@@ -1328,6 +1325,14 @@ bool SwFieldMgr::InsertField(
     pCurShell->StartAllAction();
 
     pCurShell->Insert( *pField );
+
+    if (TYP_INPUTFLD == rData.m_nTypeId)
+    {
+        // start dialog, not before the field is inserted tdf#99529
+        pCurShell->Left(CRSR_SKIP_CHARS,
+                false, (INP_VAR == (nSubType & 0xff)) ? 1 : 2, false );
+        pCurShell->StartInputFieldDlg(pField, false, rData.m_pParent);
+    }
 
     if(bExp && bEvalExp)
         pCurShell->UpdateExpFields(true);
