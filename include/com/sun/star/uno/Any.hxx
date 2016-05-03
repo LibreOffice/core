@@ -191,8 +191,10 @@ inline Any SAL_CALL makeAny( const C & value )
     return Any(value);
 }
 
+#if !defined LIBO_INTERNAL_ONLY
 template<> Any makeAny(sal_uInt16 const & value)
 { return Any(&value, cppu::UnoType<cppu::UnoUnsignedShortType>::get()); }
+#endif
 
 template<typename T> Any toAny(T const & value) { return makeAny(value); }
 

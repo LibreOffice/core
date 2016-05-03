@@ -267,17 +267,21 @@ public:
     inline bool SAL_CALL operator != ( const Any & rAny ) const;
 
 private:
+#if !defined LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
     // Forbid use with ambiguous type (sal_Unicode, sal_uInt16):
     explicit Any(sal_uInt16) SAL_DELETED_FUNCTION;
     /// @endcond
+#endif
 };
 
+#if !defined LIBO_INTERNAL_ONLY
 /// @cond INTERNAL
 // Forbid use with ambiguous type (sal_Unicode, sal_uInt16):
 template<> sal_uInt16 Any::get<sal_uInt16>() const SAL_DELETED_FUNCTION;
 template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
 /// @endcond
+#endif
 
 /** Template function to generically construct an any from a C++ value.
 
@@ -293,7 +297,9 @@ template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
 template< class C >
 inline Any SAL_CALL makeAny( const C & value );
 
+#if !defined LIBO_INTERNAL_ONLY
 template<> inline Any SAL_CALL makeAny(sal_uInt16 const & value);
+#endif
 
 template<> Any SAL_CALL makeAny(Any const &) SAL_DELETED_FUNCTION;
 
