@@ -2534,7 +2534,7 @@ DECLARE_RTFIMPORT_TEST(testTdf97035, "tdf97035.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2299), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
 }
 
-#ifndef WNT
+#if !defined(WNT) && !defined(MACOSX)
 DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
 {
     // Get the second child of the group shape.
@@ -2552,6 +2552,12 @@ DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1620), rPolygon[1].Y);
 }
 #endif
+
+DECLARE_RTFIMPORT_TEST(testTdf95707, "tdf95707.rtf")
+{
+    // Graphic was replaced with a "Read-Error" placeholder.
+    CPPUNIT_ASSERT(getProperty<OUString>(getShape(1), "GraphicURL") != "vnd.sun.star.GraphicObject:0000000000000000000000000000000000000000");
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
