@@ -1219,14 +1219,11 @@ bool ScTokenArray::AddFormulaToken(
                         rToken.Data >>= aTokenData;
                         if ( eOpCode == ocName )
                         {
-                            /* TODO: new token type with sheet number */
-                            if (aTokenData.Global)
-                                AddRangeName(aTokenData.Index, -1);
-                            else
-                                bError = true;
-                            /* FIXME: resolve the non-global case to the
-                             * current position's sheet as it implicitly was
-                             * before, currently this is broken. */
+                            SAL_WARN_IF( aTokenData.Sheet < -1 || std::numeric_limits<sal_Int16>::max() < aTokenData.Sheet,
+                                    "sc.core",
+                                    "ScTokenArray::AddFormulaToken - NameToken.Sheet out of limits: " << aTokenData.Sheet);
+                            sal_Int16 nSheet = static_cast<sal_Int16>(aTokenData.Sheet);
+                            AddRangeName(aTokenData.Index, nSheet);
                         }
                         else if (eOpCode == ocDBArea)
                             AddDBRange(aTokenData.Index);
