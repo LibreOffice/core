@@ -1713,7 +1713,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
         if( aType.getTypeClass() == TypeClass_INTERFACE)
             ret.setValue( &xInt, aType);
         else if( aType.getTypeClass() == TypeClass_STRUCT)
-            ret.setValue( NULL, aType);
+            ret.setValue( nullptr, aType);
         else
             ret <<= xInt;
         return ret;
