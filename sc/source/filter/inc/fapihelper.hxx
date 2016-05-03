@@ -180,7 +180,7 @@ public:
 
     /** Puts the passed Boolean value into the property set. */
     inline void         SetBoolProperty( const OUString& rPropName, bool bValue )
-                            { SetAnyProperty( rPropName, ::comphelper::makeBoolAny( bValue ) ); }
+                            { SetAnyProperty( rPropName, css::uno::Any( bValue ) ); }
 
     /** Puts the passed string into the property set. */
     inline void         SetStringProperty( const OUString& rPropName, const OUString& rValue )

@@ -295,7 +295,7 @@ bool XMLPMPropHdl_Print::importXML(
     }
     while ( (nTokenIndex >= 0) && !bFound );
 
-    setBOOL( rValue, bFound );
+    rValue <<= bFound;
     return true;
 }
 

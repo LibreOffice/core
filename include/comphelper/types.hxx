@@ -92,15 +92,6 @@ namespace comphelper
 
     COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const css::uno::Any& _rAny) throw(css::lang::IllegalArgumentException);
 
-//= replacement of some former UsrAny.setXXX methods - can be used with rvalues
-    inline void setBOOL(css::uno::Any& _rAny, bool _b)
-    { _rAny.setValue(&_b, cppu::UnoType<bool>::get()); }
-
-//= extension of ::cppu::makeAny()
-    inline css::uno::Any makeBoolAny(bool _b)
-    { return css::uno::Any(&_b, cppu::UnoType<bool>::get()); }
-
-
 }   // namespace comphelper
 
 

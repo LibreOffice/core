@@ -1671,7 +1671,7 @@ void SbaXDataBrowserController::applyParserFilter(const OUString& _rOldFilter, b
         FormErrorHelper aError(this);
         xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(_xParser->getFilter()));
         xFormSet->setPropertyValue(PROPERTY_HAVING_CLAUSE, makeAny(_xParser->getHavingClause()));
-        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(true));
+        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, css::uno::Any(true));
 
         bSuccess = reloadForm(m_xLoadable);
     }
@@ -1683,7 +1683,7 @@ void SbaXDataBrowserController::applyParserFilter(const OUString& _rOldFilter, b
     {
         xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(_rOldFilter));
         xFormSet->setPropertyValue(PROPERTY_HAVING_CLAUSE, makeAny(_sOldHaving));
-        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(_bOldFilterApplied));
+        xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, css::uno::Any(_bOldFilterApplied));
 
         try
         {
@@ -1834,8 +1834,8 @@ void SbaXDataBrowserController::ExecuteSearch()
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
-    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(false));
-    xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(true));
+    xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(false));
+    xModelSet->setPropertyValue("AlwaysShowCursor", css::uno::Any(true));
     xModelSet->setPropertyValue("CursorColor", makeAny(sal_Int32(COL_LIGHTRED)));
 
     Reference< css::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
@@ -1859,8 +1859,8 @@ void SbaXDataBrowserController::ExecuteSearch()
     }
 
     // restore the grid's normal operating state
-    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
-    xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(false));
+    xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(true));
+    xModelSet->setPropertyValue("AlwaysShowCursor", css::uno::Any(false));
     xModelSet->setPropertyValue("CursorColor", Any());
 }
 
@@ -1912,7 +1912,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             {
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
                 bool bApplied = ::comphelper::getBOOL(xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER));
-                xActiveSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(!bApplied));
+                xActiveSet->setPropertyValue(PROPERTY_APPLYFILTER, css::uno::Any(!bApplied));
                 reloadForm(m_xLoadable);
             }
             InvalidateFeature(ID_BROWSER_FILTERED);
@@ -2376,7 +2376,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
     Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
-    xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
+    xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(true));
     xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
 
     // and move to the field
@@ -2420,7 +2420,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInfo
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
         OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
         Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
-        xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
+        xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(true));
         xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
     }
     catch( const Exception& )

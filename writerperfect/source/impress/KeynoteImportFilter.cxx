@@ -209,7 +209,7 @@ throw(css::uno::RuntimeException, std::exception)
             lComponentDataNV.realloc(nCDSize + 1);
             beans::NamedValue aValue;
             aValue.Name = "IsPackage";
-            aValue.Value = comphelper::makeBoolAny(true);
+            aValue.Value <<= true;
             lComponentDataNV[nCDSize] = aValue;
             Descriptor[nComponentDataLocation].Value <<= lComponentDataNV;
         }
@@ -219,7 +219,7 @@ throw(css::uno::RuntimeException, std::exception)
             lComponentDataPV.realloc(nCDSize + 1);
             beans::PropertyValue aProp;
             aProp.Name = "IsPackage";
-            aProp.Value = comphelper::makeBoolAny(true);
+            aProp.Value <<= true;
             aProp.Handle = -1;
             aProp.State = beans::PropertyState_DIRECT_VALUE;
             lComponentDataPV[nCDSize] = aProp;
