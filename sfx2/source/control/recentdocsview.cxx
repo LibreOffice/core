@@ -327,6 +327,9 @@ IMPL_STATIC_LINK_TYPED( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
     {
     }
 
+    if ( !pLoadRecentFile->pView->IsDisposed() )
+        pLoadRecentFile->pView->SetPointer( PointerStyle::Arrow );
+
     delete pLoadRecentFile;
 }
 

@@ -221,6 +221,7 @@ void RecentDocsViewItem::OpenDocument()
         pLoadRecentFile->xDispatch = xDispatch;
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq = aArgsList;
+        pLoadRecentFile->pView.set(&mrParent);
 
         Application::PostUserEvent(LINK(nullptr, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile, true);
     }
