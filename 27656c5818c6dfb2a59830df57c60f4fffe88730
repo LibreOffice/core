@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_3502883f",
+        "filename": "external/libcmis/libcmis-fix-google-drive.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-03T10:56:13Z",
+      "side": 1,
+      "message": "Are we sure about the \u0026 ampersand here, or is that a copy\u0026paste error of the previous code that concatenated the URL parameters?\n\nNote that /me has ~no idea about the OAuth2 login, just caught my eye.",
+      "range": {
+        "startLine": 72,
+        "startChar": 25,
+        "endLine": 72,
+        "endChar": 26
+      },
+      "revId": "27656c5818c6dfb2a59830df57c60f4fffe88730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
