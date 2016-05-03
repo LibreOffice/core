@@ -23,6 +23,7 @@ struct LoadRecentFile
     css::util::URL                                    aTargetURL;
     css::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
     css::uno::Reference< css::frame::XDispatch >      xDispatch;
+    VclPtr< ThumbnailView >                           pView;
 };
 
 enum ApplicationType
