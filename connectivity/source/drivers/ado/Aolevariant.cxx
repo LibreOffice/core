@@ -673,7 +673,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
     {
         case VT_EMPTY:
         case VT_NULL:
-            aValue.setValue(NULL, Type());
+            aValue.setValue(nullptr, Type());
             break;
         case VT_I2:
             aValue.setValue( & iVal, cppu::UnoType<sal_Int16>::get());
@@ -729,7 +729,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
             aValue.setValue( & uintVal, cppu::UnoType<sal_uInt32>::get());
             break;
         case VT_VOID:
-            aValue.setValue( NULL, Type());
+            aValue.setValue( nullptr, Type());
             break;
          case VT_DECIMAL:
          {
