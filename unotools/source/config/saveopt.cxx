@@ -799,9 +799,8 @@ SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
 
 void SvtLoadOptions_Impl::ImplCommit()
 {
-    Sequence< OUString > aNames { cUserDefinedSettings };
-    Sequence< Any > aValues { Any(bLoadUserDefinedSettings) };
-    PutProperties( aNames, aValues );
+    PutProperties(
+        {cUserDefinedSettings}, {css::uno::Any(bLoadUserDefinedSettings)});
 }
 
 void SvtLoadOptions_Impl::Notify( const Sequence<OUString>& )

@@ -380,10 +380,10 @@ void SAL_CALL ORowSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
         switch(nHandle)
         {
         case PROPERTY_ID_ISMODIFIED:
-            rValue.setValue(&m_bModified,cppu::UnoType<bool>::get());
+            rValue <<= m_bModified;
             break;
         case PROPERTY_ID_ISNEW:
-            rValue.setValue(&m_bNew,cppu::UnoType<bool>::get());
+            rValue <<= m_bNew;
             break;
         case PROPERTY_ID_PRIVILEGES:
             rValue <<= m_pCache->m_nPrivileges;

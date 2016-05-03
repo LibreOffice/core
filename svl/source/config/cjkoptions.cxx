@@ -246,7 +246,6 @@ void    SvtCJKOptions_Impl::ImplCommit()
     Any* pValues = aValues.getArray();
     sal_Int32 nRealCount = 0;
 
-    const Type& rType = cppu::UnoType<bool>::get();
     for(int nProp = 0; nProp < nOrgCount; nProp++)
     {
         switch(nProp)
@@ -256,7 +255,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bROCJKFont)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bCJKFont, rType);
+                        pValues[nRealCount] <<= bCJKFont;
                         ++nRealCount;
                     }
                 }
@@ -267,7 +266,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bROVerticalText)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bVerticalText, rType);
+                        pValues[nRealCount] <<= bVerticalText;
                         ++nRealCount;
                     }
                 }
@@ -278,7 +277,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bROAsianTypography)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bAsianTypography, rType);
+                        pValues[nRealCount] <<= bAsianTypography;
                         ++nRealCount;
                     }
                 }
@@ -289,7 +288,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bROJapaneseFind)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bJapaneseFind, rType);
+                        pValues[nRealCount] <<= bJapaneseFind;
                         ++nRealCount;
                     }
                 }
@@ -300,7 +299,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bRORuby)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bRuby, rType);
+                        pValues[nRealCount] <<= bRuby;
                         ++nRealCount;
                     }
                 }
@@ -311,7 +310,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bROChangeCaseMap)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bChangeCaseMap, rType);
+                        pValues[nRealCount] <<= bChangeCaseMap;
                         ++nRealCount;
                     }
                 }
@@ -322,7 +321,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bRODoubleLines)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bDoubleLines, rType);
+                        pValues[nRealCount] <<= bDoubleLines;
                         ++nRealCount;
                     }
                 }
@@ -333,7 +332,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bROEmphasisMarks)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bEmphasisMarks, rType);
+                        pValues[nRealCount] <<= bEmphasisMarks;
                         ++nRealCount;
                     }
                 }
@@ -344,7 +343,7 @@ void    SvtCJKOptions_Impl::ImplCommit()
                     if (!bROVerticalCallOut)
                     {
                         pNames[nRealCount] = pOrgNames[nProp];
-                        pValues[nRealCount].setValue(&bVerticalCallOut, rType);
+                        pValues[nRealCount] <<= bVerticalCallOut;
                         ++nRealCount;
                     }
                 }

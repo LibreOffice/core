@@ -90,11 +90,6 @@ static bool lcl_GetBoolFromAny( const uno::Any& aAny )
     return false;
 }
 
-static void lcl_SetBoolInAny( uno::Any& rAny, bool bValue )
-{
-    rAny.setValue( &bValue, cppu::UnoType<bool>::get() );
-}
-
 ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pData( pD ),
     pDimensions( nullptr ),
@@ -1168,13 +1163,13 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_COLGRAND )
-        lcl_SetBoolInAny(aRet, bColumnGrand);
+        aRet <<= bColumnGrand;
     else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
-        lcl_SetBoolInAny(aRet, bRowGrand);
+        aRet <<= bRowGrand;
     else if ( aPropertyName == SC_UNO_DP_IGNOREEMPTY )
-        lcl_SetBoolInAny(aRet, bIgnoreEmptyRows);
+        aRet <<= bIgnoreEmptyRows;
     else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
-        lcl_SetBoolInAny(aRet, bRepeatIfEmpty);
+        aRet <<= bRepeatIfEmpty;
     else if ( aPropertyName == SC_UNO_DP_DATADESC )             // read-only
         aRet <<= getDataDescription();
     else if ( aPropertyName == SC_UNO_DP_ROWFIELDCOUNT )        // read-only
@@ -1614,7 +1609,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aRet <<= aReferenceValue;
     else if ( aPropertyName == SC_UNO_DP_ISDATALAYOUT )                 // read-only properties
-        lcl_SetBoolInAny( aRet, getIsDataLayoutDimension() );
+        aRet <<= getIsDataLayoutDimension();
     else if ( aPropertyName == SC_UNO_DP_NUMBERFO )
     {
         sal_Int32 nFormat = 0;
@@ -2233,9 +2228,9 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
-        lcl_SetBoolInAny(aRet, bShowEmpty);
+        aRet <<= bShowEmpty;
     else if ( aPropertyName == SC_UNO_DP_REPEATITEMLABELS )
-        lcl_SetBoolInAny(aRet, bRepeatItemLabels);
+        aRet <<= bRepeatItemLabels;
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
         uno::Sequence<sheet::GeneralFunction> aSeq = getSubTotals();        //TODO: avoid extra copy?
@@ -2681,9 +2676,9 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_ISVISIBLE )
-        lcl_SetBoolInAny(aRet, bVisible);
+        aRet <<= bVisible;
     else if ( aPropertyName == SC_UNO_DP_SHOWDETAILS )
-        lcl_SetBoolInAny(aRet, bShowDet);
+        aRet <<= bShowDet;
     else if ( aPropertyName == SC_UNO_DP_POSITION )
         aRet <<= nPosition;
     else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)

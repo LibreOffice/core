@@ -671,7 +671,6 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
 
     bool bRet = false;
-    const uno::Type &rBOOL     = cppu::UnoType<bool>::get();
     const uno::Type &rINT16    = cppu::UnoType<sal_Int16>::get();
     const uno::Type &rINT32    = cppu::UnoType<sal_Int32>::get();
 
@@ -686,41 +685,41 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         OUString aTmp( lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage ) );
         *pValue++ = uno::makeAny( aTmp );                               //   0
         *pValue++ = uno::makeAny( rOpt.aActiveDics );                   //   1
-        pValue++->setValue( &rOpt.bIsUseDictionaryList, rBOOL );        //   2
-        pValue++->setValue( &rOpt.bIsIgnoreControlCharacters, rBOOL );  //   3
+        *pValue++ <<= rOpt.bIsUseDictionaryList;        //   2
+        *pValue++ <<= rOpt.bIsIgnoreControlCharacters;  //   3
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CJK );
         *pValue++ = uno::makeAny( aTmp );                               //   5
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CTL );
         *pValue++ = uno::makeAny( aTmp );                               //   6
 
-        pValue++->setValue( &rOpt.bIsSpellUpperCase, rBOOL );          //   7
-        pValue++->setValue( &rOpt.bIsSpellWithDigits, rBOOL );         //   8
-        pValue++->setValue( &rOpt.bIsSpellCapitalization, rBOOL );     //   9
-        pValue++->setValue( &rOpt.bIsSpellAuto, rBOOL );               //  10
-        pValue++->setValue( &rOpt.bIsSpellSpecial, rBOOL );            //  11
-        pValue++->setValue( &rOpt.bIsSpellReverse, rBOOL );            //  14
+        *pValue++ <<= rOpt.bIsSpellUpperCase;          //   7
+        *pValue++ <<= rOpt.bIsSpellWithDigits;         //   8
+        *pValue++ <<= rOpt.bIsSpellCapitalization;     //   9
+        *pValue++ <<= rOpt.bIsSpellAuto;               //  10
+        *pValue++ <<= rOpt.bIsSpellSpecial;            //  11
+        *pValue++ <<= rOpt.bIsSpellReverse;            //  14
 
         pValue++->setValue( &rOpt.nHyphMinLeading, rINT16 );           //  15
         pValue++->setValue( &rOpt.nHyphMinTrailing, rINT16 );          //  16
         pValue++->setValue( &rOpt.nHyphMinWordLength, rINT16 );        //  17
-        pValue++->setValue( &rOpt.bIsHyphSpecial, rBOOL );             //  18
-        pValue++->setValue( &rOpt.bIsHyphAuto, rBOOL );                //  19
+        *pValue++ <<= rOpt.bIsHyphSpecial;             //  18
+        *pValue++ <<= rOpt.bIsHyphAuto;                //  19
 
         *pValue++ = uno::makeAny( rOpt.aActiveConvDics );               //   20
 
-        pValue++->setValue( &rOpt.bIsIgnorePostPositionalWord, rBOOL ); //  21
-        pValue++->setValue( &rOpt.bIsAutoCloseDialog, rBOOL );          //  22
-        pValue++->setValue( &rOpt.bIsShowEntriesRecentlyUsedFirst, rBOOL ); //  23
-        pValue++->setValue( &rOpt.bIsAutoReplaceUniqueEntries, rBOOL ); //  24
+        *pValue++ <<= rOpt.bIsIgnorePostPositionalWord; //  21
+        *pValue++ <<= rOpt.bIsAutoCloseDialog;          //  22
+        *pValue++ <<= rOpt.bIsShowEntriesRecentlyUsedFirst; //  23
+        *pValue++ <<= rOpt.bIsAutoReplaceUniqueEntries; //  24
 
-        pValue++->setValue( &rOpt.bIsDirectionToSimplified, rBOOL ); //  25
-        pValue++->setValue( &rOpt.bIsUseCharacterVariants, rBOOL ); //  26
-        pValue++->setValue( &rOpt.bIsTranslateCommonTerms, rBOOL ); //  27
-        pValue++->setValue( &rOpt.bIsReverseMapping, rBOOL ); //  28
+        *pValue++ <<= rOpt.bIsDirectionToSimplified; //  25
+        *pValue++ <<= rOpt.bIsUseCharacterVariants; //  26
+        *pValue++ <<= rOpt.bIsTranslateCommonTerms; //  27
+        *pValue++ <<= rOpt.bIsReverseMapping; //  28
 
         pValue++->setValue( &rOpt.nDataFilesChangedCheckValue, rINT32 ); //  29
-        pValue++->setValue( &rOpt.bIsGrammarAuto, rBOOL ); //  30
-        pValue++->setValue( &rOpt.bIsGrammarInteractive, rBOOL ); // 31
+        *pValue++ <<= rOpt.bIsGrammarAuto; //  30
+        *pValue++ <<= rOpt.bIsGrammarInteractive; // 31
 
         bRet |= PutProperties( rProperyNames, aValues );
     }

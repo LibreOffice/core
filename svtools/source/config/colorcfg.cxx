@@ -271,7 +271,6 @@ void ColorConfig_Impl::ImplCommit()
     beans::PropertyValue* pPropValues = aPropValues.getArray();
     const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
-    const uno::Type& rBoolType = cppu::UnoType<bool>::get();
     for(int i = 0; i < 2 * ColorConfigEntryCount && aColorNames.getLength() > nIndex; i+= 2)
     {
         pPropValues[nIndex].Name = pColorNames[nIndex];
@@ -286,7 +285,7 @@ void ColorConfig_Impl::ImplCommit()
         if(pColorNames[nIndex].endsWith(g_sIsVisible))
         {
              pPropValues[nIndex].Name = pColorNames[nIndex];
-             pPropValues[nIndex].Value.setValue(&m_aConfigValues[i/2].bIsVisible, rBoolType);
+             pPropValues[nIndex].Value <<= m_aConfigValues[i/2].bIsVisible;
              nIndex++;
         }
     }

@@ -737,8 +737,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                bool bVal = IsItalic( rFace );
-                (*pValue).setValue(&bVal, (*ppEntries)->maType);
+                *pValue <<= IsItalic( rFace );
             }
             break;
             case HANDLE_CUSTOM_FONT_FIXED_WEIGHT :
@@ -750,8 +749,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                bool bVal = IsBold( rFace ); // bold?
-                (*pValue).setValue(&bVal, (*ppEntries)->maType);
+                *pValue <<= IsBold( rFace );
             }
             break;
             case HANDLE_BASE_FONT_HEIGHT                   :

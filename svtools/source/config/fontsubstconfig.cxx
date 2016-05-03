@@ -97,10 +97,7 @@ void SvtFontSubstConfig::Notify( const css::uno::Sequence< OUString >& )
 
 void SvtFontSubstConfig::ImplCommit()
 {
-    Sequence<OUString> aNames { cReplacement };
-    Sequence<Any> aValues(1);
-    aValues.getArray()[0].setValue(&bIsEnabled, cppu::UnoType<bool>::get());
-    PutProperties(aNames, aValues);
+    PutProperties({cReplacement}, {css::uno::Any(bIsEnabled)});
 
     OUString sNode(cFontPairs);
     if(pImpl->aSubstArr.empty())
@@ -116,7 +113,6 @@ void SvtFontSubstConfig::ImplCommit()
         const OUString sAlways(cAlways);
         const OUString sOnScreenOnly(cOnScreenOnly);
 
-        const uno::Type& rBoolType = cppu::UnoType<bool>::get();
         for(size_t i = 0; i < pImpl->aSubstArr.size(); i++)
         {
             OUString sPrefix = sNode + "/_" + OUString::number(i) + "/";
@@ -127,9 +123,9 @@ void SvtFontSubstConfig::ImplCommit()
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sSubstituteFont;
             pSetValues[nSetValue++].Value <<= rSubst.sReplaceBy;
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sAlways;
-            pSetValues[nSetValue++].Value.setValue(&rSubst.bReplaceAlways, rBoolType);
+            pSetValues[nSetValue++].Value <<= rSubst.bReplaceAlways;
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sOnScreenOnly;
-            pSetValues[nSetValue++].Value.setValue(&rSubst.bReplaceOnScreenOnly, rBoolType);
+            pSetValues[nSetValue++].Value <<= rSubst.bReplaceOnScreenOnly;
         }
         ReplaceSetProperties(sNode, aSetValues);
     }

@@ -213,6 +213,18 @@ public:
     */
     inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescription * pTypeDescr );
 
+#if defined LIBO_INTERNAL_ONLY
+    void setValue(bool const *, Type const &) = delete;
+    void setValue(bool const *, typelib_TypeDescriptionReference *) = delete;
+    void setValue(bool const *, typelib_TypeDescription *) = delete;
+    void setValue(std::nullptr_t, Type const & type)
+    { setValue(static_cast<void *>(nullptr), type); }
+    void setValue(std::nullptr_t, typelib_TypeDescriptionReference * type)
+    { setValue(static_cast<void *>(nullptr), type); }
+    void setValue(std::nullptr_t, typelib_TypeDescription * type)
+    { setValue(static_cast<void *>(nullptr), type); }
+#endif
+
     /** Clears this any. If the any already contains a value, that value will be destructed
         and its memory freed. After this has been called, the any does not contain a value.
     */

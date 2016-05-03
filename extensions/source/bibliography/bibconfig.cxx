@@ -234,9 +234,7 @@ void    BibConfig::ImplCommit()
             case  4: pValues[nProp] <<= nViewSize;  break;
             case  5: pValues[nProp] <<= sQueryText;  break;
             case  6: pValues[nProp] <<= sQueryField;  break;
-            case  7:
-                pValues[nProp].setValue(&bShowColumnAssignmentWarning, cppu::UnoType<bool>::get());
-            break;
+            case  7: pValues[nProp] <<= bShowColumnAssignmentWarning; break;
         }
     }
     PutProperties(aPropertyNames, aValues);

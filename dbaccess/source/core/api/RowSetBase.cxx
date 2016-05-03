@@ -141,7 +141,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
             rValue <<= impl_getRowCount();
             break;
         case PROPERTY_ID_ISROWCOUNTFINAL:
-            rValue.setValue(&m_pCache->m_bRowCountFinal,cppu::UnoType<bool>::get());
+            rValue <<= m_pCache->m_bRowCountFinal;
             break;
         default:
             OPropertyStateContainer::getFastPropertyValue(rValue,nHandle);

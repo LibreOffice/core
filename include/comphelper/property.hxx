@@ -132,7 +132,7 @@ inline bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::A
     if (bool(bNewValue) != _bCurrentValue)
     {
         _rConvertedValue.setValue(&bNewValue, cppu::UnoType<bool>::get());
-        _rOldValue.setValue(&_bCurrentValue, cppu::UnoType<bool>::get());
+        _rOldValue <<= _bCurrentValue;
         bModified = true;
     }
     return bModified;

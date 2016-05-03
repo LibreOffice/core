@@ -150,8 +150,6 @@ void SvtCTLOptions_Impl::ImplCommit()
     Any* pValues = aValues.getArray();
     sal_Int32 nRealCount = 0;
 
-    const uno::Type& rType = cppu::UnoType<bool>::get();
-
     for ( int nProp = 0; nProp < nOrgCount; nProp++ )
     {
         switch ( nProp )
@@ -161,7 +159,7 @@ void SvtCTLOptions_Impl::ImplCommit()
                 if (!m_bROCTLFontEnabled)
                 {
                     pNames[nRealCount] = pOrgNames[nProp];
-                    pValues[nRealCount].setValue( &m_bCTLFontEnabled, rType );
+                    pValues[nRealCount] <<= m_bCTLFontEnabled;
                     ++nRealCount;
                 }
             }
@@ -172,7 +170,7 @@ void SvtCTLOptions_Impl::ImplCommit()
                 if (!m_bROCTLSequenceChecking)
                 {
                     pNames[nRealCount] = pOrgNames[nProp];
-                    pValues[nRealCount].setValue( &m_bCTLSequenceChecking, rType );
+                    pValues[nRealCount] <<= m_bCTLSequenceChecking;
                     ++nRealCount;
                 }
             }
@@ -205,7 +203,7 @@ void SvtCTLOptions_Impl::ImplCommit()
                 if (!m_bROCTLRestricted)
                 {
                     pNames[nRealCount] = pOrgNames[nProp];
-                    pValues[nRealCount].setValue( &m_bCTLRestricted, rType );
+                    pValues[nRealCount] <<= m_bCTLRestricted;
                     ++nRealCount;
                 }
             }
@@ -215,7 +213,7 @@ void SvtCTLOptions_Impl::ImplCommit()
                 if(!m_bROCTLTypeAndReplace)
                 {
                     pNames[nRealCount] = pOrgNames[nProp];
-                    pValues[nRealCount].setValue( &m_bCTLTypeAndReplace, rType );
+                    pValues[nRealCount] <<= m_bCTLTypeAndReplace;
                     ++nRealCount;
                 }
             }

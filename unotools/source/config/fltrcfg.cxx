@@ -93,18 +93,8 @@ SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
 
 void    SvtAppFilterOptions_Impl::ImplCommit()
 {
-    Sequence<OUString> aNames(2);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = "Load";
-    pNames[1] = "Save";
-    Sequence<Any> aValues(aNames.getLength());
-    Any* pValues = aValues.getArray();
-
-    const Type& rType = cppu::UnoType<bool>::get();
-    pValues[0].setValue(&bLoadVBA, rType);
-    pValues[1].setValue(&bSaveVBA, rType);
-
-    PutProperties(aNames, aValues);
+    PutProperties(
+        {"Load", "Save"}, {css::uno::Any(bLoadVBA), css::uno::Any(bSaveVBA)});
 }
 
 void SvtAppFilterOptions_Impl::Notify( const Sequence< OUString >&  )

@@ -116,18 +116,17 @@ void  SvtTabAppearanceCfg::ImplCommit()
     Sequence<Any> aValues(rNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = cppu::UnoType<bool>::get();
     for(int nProp = 0; nProp < rNames.getLength(); nProp++)
     {
         switch(nProp)
         {
             case  0: pValues[nProp] <<= nScaleFactor; break;            // "FontScaling",
             case  1: pValues[nProp] <<= nDragMode; break;               //"Window/Drag",
-            case  2: pValues[nProp].setValue(&bMenuMouseFollow, rType); break; //"Menu/FollowMouse",
+            case  2: pValues[nProp] <<= bMenuMouseFollow; break; //"Menu/FollowMouse",
             case  3: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
             case  4: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break;               //"Dialog/MiddleMouseButton",
 #if defined( UNX )
-            case  5: pValues[nProp].setValue(&bFontAntialiasing, rType); break; // "FontAntialising/Enabled",
+            case  5: pValues[nProp] <<= bFontAntialiasing; break; // "FontAntialising/Enabled",
             case  6: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
 #endif
         }

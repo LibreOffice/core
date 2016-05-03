@@ -129,8 +129,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
 
     // right aligned?
     pValues[nNextEntry].Name = rTemplateContext.sTabStopRightAligned;
-    pValues[nNextEntry].Value.setValue( &bTabRightAligned,
-                                        cppu::UnoType<bool>::get());
+    pValues[nNextEntry].Value <<= bTabRightAligned;
     nNextEntry++;
 
     // position
@@ -151,8 +150,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
 
     // tab character #i21237#
      pValues[nNextEntry].Name = "WithTab";
-    pValues[nNextEntry].Value.setValue( &bWithTab,
-                                        cppu::UnoType<bool>::get());
+    pValues[nNextEntry].Value <<= bWithTab;
     nNextEntry++;
 
     // check whether we really filled all elements of the sequence

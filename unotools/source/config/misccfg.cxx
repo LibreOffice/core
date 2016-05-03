@@ -161,14 +161,13 @@ void SfxMiscCfg::ImplCommit()
     Sequence<Any> aValues(rNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = cppu::UnoType<bool>::get();
     for(int nProp = 0; nProp < rNames.getLength(); nProp++)
     {
         switch(nProp)
         {
-            case  0: pValues[nProp].setValue(&bPaperSize, rType);break;  //"Print/Warning/PaperSize",
-            case  1: pValues[nProp].setValue(&bPaperOrientation, rType);break;     //"Print/Warning/PaperOrientation",
-            case  2: pValues[nProp].setValue(&bNotFound, rType);break;   //"Print/Warning/NotFound",
+            case  0: pValues[nProp] <<= bPaperSize;break;  //"Print/Warning/PaperSize",
+            case  1: pValues[nProp] <<= bPaperOrientation;break;     //"Print/Warning/PaperOrientation",
+            case  2: pValues[nProp] <<= bNotFound;break;   //"Print/Warning/NotFound",
             case  3: pValues[nProp] <<= nYear2000;break;                 //"DateFormat/TwoDigitYear",
         }
     }

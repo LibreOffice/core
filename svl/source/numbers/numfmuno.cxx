@@ -737,13 +737,11 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         else if (aPropertyName == PROPERTYNAME_STDFORM)
         {
             //! Pass through SvNumberformat Member bStandard?
-            sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
-            aRet.setValue( &bStandard, cppu::UnoType<bool>::get() );
+            aRet <<= ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
         }
         else if (aPropertyName == PROPERTYNAME_USERDEF)
         {
-            sal_Bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
-            aRet.setValue( &bUserDef, cppu::UnoType<bool>::get() );
+            aRet <<= ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
         }
         else if (aPropertyName == PROPERTYNAME_DECIMALS)
         {
@@ -758,12 +756,12 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         else if (aPropertyName == PROPERTYNAME_NEGRED)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet.setValue( &bRed, cppu::UnoType<bool>::get() );
+            aRet <<= bRed;
         }
         else if (aPropertyName == PROPERTYNAME_THOUS)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet.setValue( &bThousand, cppu::UnoType<bool>::get() );
+            aRet <<= bThousand;
         }
         else if (aPropertyName == PROPERTYNAME_CURRSYM)
         {
@@ -852,9 +850,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
 
         OUString aFmtStr = pFormat->GetFormatstring();
         OUString aComment = pFormat->GetComment();
-        sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
+        bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
         //! Pass through SvNumberformat Member bStandard?
-        sal_Bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
+        bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
         bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
@@ -872,17 +870,17 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         pArray[3].Name = PROPERTYNAME_COMMENT;
         pArray[3].Value <<= aComment;
         pArray[4].Name = PROPERTYNAME_STDFORM;
-        pArray[4].Value.setValue( &bStandard, cppu::UnoType<bool>::get() );
+        pArray[4].Value <<= bStandard;
         pArray[5].Name = PROPERTYNAME_USERDEF;
-        pArray[5].Value.setValue( &bUserDef, cppu::UnoType<bool>::get() );
+        pArray[5].Value <<= bUserDef;
         pArray[6].Name = PROPERTYNAME_DECIMALS;
         pArray[6].Value <<= (sal_Int16)( nDecimals );
         pArray[7].Name = PROPERTYNAME_LEADING;
         pArray[7].Value <<= (sal_Int16)( nLeading );
         pArray[8].Name = PROPERTYNAME_NEGRED;
-        pArray[8].Value.setValue( &bRed, cppu::UnoType<bool>::get() );
+        pArray[8].Value <<= bRed;
         pArray[9].Name = PROPERTYNAME_THOUS;
-        pArray[9].Value.setValue( &bThousand, cppu::UnoType<bool>::get() );
+        pArray[9].Value <<= bThousand;
         pArray[10].Name = PROPERTYNAME_CURRSYM;
         pArray[10].Value <<= aSymbol;
         pArray[11].Name = PROPERTYNAME_CURREXT;
@@ -1001,8 +999,7 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
     {
         if (aPropertyName == PROPERTYNAME_NOZERO)
         {
-            sal_Bool bNoZero = pFormatter->GetNoZero();
-            aRet.setValue( &bNoZero, cppu::UnoType<bool>::get() );
+            aRet <<= pFormatter->GetNoZero();
         }
         else if (aPropertyName == PROPERTYNAME_NULLDATE)
         {

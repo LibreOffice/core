@@ -236,7 +236,7 @@ void    SvxHtmlOptions::ImplCommit()
             case 15: bSet = 0 != (pImp->nFlags & HTMLCFG_NUMBERS_ENGLISH_US);break;//"Import/NumbersEnglishUS"
         }
         if(nProp < 2 || ( nProp > 9 && nProp < 14 ) || nProp == 15)
-            pValues[nProp].setValue(&bSet, cppu::UnoType<bool>::get());
+            pValues[nProp] <<= bSet;
     }
     PutProperties(aNames, aValues);
 }
