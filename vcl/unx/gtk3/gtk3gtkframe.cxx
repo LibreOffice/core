@@ -783,8 +783,6 @@ void GtkSalFrame::EnsureAppMenuWatch()
                                                        static_cast<GtkSalFrame*>(this),
                                                        nullptr );
     }
-
-    //ensure_dbus_setup( this );
 #else
     (void) this; // loplugin:staticmethods
 #endif
