@@ -808,7 +808,7 @@ class FilterCache : public BaseLock
         /** TODO */
         static void impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xSet  ,
                                  EItemType                                            eType ,
-                           const CacheItem                                           aValue)
+                           const CacheItem & aValue)
             throw(css::uno::Exception);
 
 
