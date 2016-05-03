@@ -146,13 +146,13 @@ typedef unsigned char sal_uChar;
     // "By default wchar_t is a typedef for unsigned short."
     // But MinGW has a native wchar_t, and on many places, we cannot deal with
     // that, so sal_Unicode has to be explicitly typedef'd as sal_uInt16 there.
-    typedef wchar_t             sal_Unicode;
+    typedef wchar_t sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
 #if LIBO_INTERNAL_ONLY && defined __cplusplus
     typedef char16_t sal_Unicode;
 #else
-    typedef sal_uInt16          sal_Unicode;
+    typedef sal_uInt16 sal_Unicode;
 #endif
 #endif
 
