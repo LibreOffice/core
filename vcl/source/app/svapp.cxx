@@ -515,8 +515,11 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
 
-    // Process all Tasks
-    Scheduler::ProcessTaskScheduling(eResult == SalYieldResult::EVENT);
+    if (nReleased == 0) // tdf#99383 don't run stuff from ReAcquireSolarMutex
+    {
+        // Process all Tasks
+        Scheduler::ProcessTaskScheduling(eResult == SalYieldResult::EVENT);
+    }
 
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
