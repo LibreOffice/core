@@ -456,21 +456,15 @@ FileProvider::getPropertyValue(
     initProperties();
     if( aPropertyName == "FileSystemNotation" )
     {
-        Any aAny;
-        aAny <<= m_FileSystemNotation;
-        return aAny;
+        return Any(m_FileSystemNotation);
     }
     else if( aPropertyName == "HomeDirectory" )
     {
-        Any aAny;
-        aAny <<= m_HomeDirectory;
-        return aAny;
+        return Any(m_HomeDirectory);
     }
     else if( aPropertyName == "HostName" )
     {
-        Any aAny;
-        aAny <<= m_HostName;
-        return aAny;
+        return Any(m_HostName);
     }
     else
         throw UnknownPropertyException( THROW_WHERE );

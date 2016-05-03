@@ -128,7 +128,6 @@ void XMLSectionFootnoteConfigImport::StartElement(
     }
 
     // OK, now we have all values and can fill the XMLPropertyState vector
-    Any aAny;
 
     sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_OWN : CTF_SECTION_FOOTNOTE_NUM_OWN );
@@ -140,33 +139,29 @@ void XMLSectionFootnoteConfigImport::StartElement(
     XMLPropertyState aNumRestart( nIndex, css::uno::Any(bNumRestart) );
     rProperties.push_back( aNumRestart );
 
-    aAny <<= nNumRestartAt;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_RESTART_AT :
         CTF_SECTION_FOOTNOTE_NUM_RESTART_AT );
-    XMLPropertyState aNumRestartAtState( nIndex, aAny );
+    XMLPropertyState aNumRestartAtState( nIndex, css::uno::Any(nNumRestartAt) );
     rProperties.push_back( aNumRestartAtState );
 
     sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
                                                     sNumFormat,
                                                     sNumLetterSync );
-    aAny <<= nNumType;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_TYPE : CTF_SECTION_FOOTNOTE_NUM_TYPE );
-    XMLPropertyState aNumFormatState( nIndex, aAny );
+    XMLPropertyState aNumFormatState( nIndex, css::uno::Any(nNumType) );
     rProperties.push_back( aNumFormatState );
 
-    aAny <<= sNumPrefix;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_PREFIX : CTF_SECTION_FOOTNOTE_NUM_PREFIX );
-    XMLPropertyState aPrefixState( nIndex, aAny );
+    XMLPropertyState aPrefixState( nIndex, css::uno::Any(sNumPrefix) );
     rProperties.push_back( aPrefixState );
 
-    aAny <<= sNumSuffix;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_SUFFIX : CTF_SECTION_FOOTNOTE_NUM_SUFFIX );
-    XMLPropertyState aSuffixState( nIndex, aAny );
+    XMLPropertyState aSuffixState( nIndex, css::uno::Any(sNumSuffix) );
     rProperties.push_back( aSuffixState );
 
     nIndex = rMapper->FindEntryIndex( bEndnote ?

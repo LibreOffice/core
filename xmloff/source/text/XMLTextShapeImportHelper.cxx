@@ -120,11 +120,9 @@ void XMLTextShapeImportHelper::addShape(
     }
 
     Reference < XPropertySet > xPropSet( rShape, UNO_QUERY );
-    Any aAny;
 
     // anchor type
-    aAny <<= eAnchorType;
-    xPropSet->setPropertyValue( sAnchorType, aAny );
+    xPropSet->setPropertyValue( sAnchorType, Any(eAnchorType) );
 
     Reference < XTextContent > xTxtCntnt( rShape, UNO_QUERY );
     xTxtImport->InsertTextContent( xTxtCntnt );
@@ -137,13 +135,11 @@ void XMLTextShapeImportHelper::addShape(
         // only set positive page numbers
         if ( nPage > 0 )
         {
-            aAny <<= nPage;
-            xPropSet->setPropertyValue( sAnchorPageNo, aAny );
+            xPropSet->setPropertyValue( sAnchorPageNo, Any(nPage) );
         }
         break;
     case TextContentAnchorType_AS_CHARACTER:
-        aAny <<= nY;
-        xPropSet->setPropertyValue( sVertOrientPosition, aAny );
+        xPropSet->setPropertyValue( sVertOrientPosition, Any(nY) );
         break;
     default:
         break;

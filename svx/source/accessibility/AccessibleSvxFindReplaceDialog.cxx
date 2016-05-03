@@ -58,11 +58,9 @@ void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::Accessi
         {
             return;
         }
-        Any aAny;
-        aAny <<= ( pSrchDlg->GetSrchFlag() );
 
         const sal_Int32 FORFINDREPLACEFLOWTO = 2;
-        uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo( aAny,  FORFINDREPLACEFLOWTO );
+        uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo( Any(pSrchDlg->GetSrchFlag()),  FORFINDREPLACEFLOWTO );
 
         sal_Int32 nLen = aAnySeq.getLength();
         if ( nLen )

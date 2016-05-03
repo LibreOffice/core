@@ -263,16 +263,13 @@ namespace fileaccess {
         {
             IllegalArgumentException excep;
             excep.ArgumentPosition = 0;
-            aAny <<= excep;
-            cancelCommandExecution(
-                aAny,xEnv);
+            cancelCommandExecution(Any(excep), xEnv);
         }
         else if( errorCode == TASKHANDLING_UNSUPPORTED_OPEN_MODE )
         {
             UnsupportedOpenModeException excep;
             excep.Mode = sal::static_int_cast< sal_Int16 >(minorCode);
-            aAny <<= excep;
-                cancelCommandExecution( aAny,xEnv );
+            cancelCommandExecution( Any(excep),xEnv );
         }
         else if(errorCode == TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND  ||
                 errorCode == TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND ||
@@ -554,8 +551,7 @@ namespace fileaccess {
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "file exists and overwrite forbidden";
-            aAny <<= excep;
-            cancelCommandExecution( aAny,xEnv );
+            cancelCommandExecution( Any(excep), xEnv );
         }
         else if( errorCode == TASKHANDLING_INVALID_NAME_MKDIR )
         {
@@ -579,8 +575,7 @@ namespace fileaccess {
             if(isHandled)
                 throw excep;
             else {
-                aAny <<= excep;
-                cancelCommandExecution( aAny,xEnv );
+                cancelCommandExecution( Any(excep), xEnv );
             }
 //              ioErrorCode = IOErrorCode_INVALID_CHARACTER;
 //              cancelCommandExecution(
@@ -600,8 +595,7 @@ namespace fileaccess {
             if(isHandled)
                 throw excep;
             else {
-                aAny <<= excep;
-                cancelCommandExecution( aAny,xEnv );
+                cancelCommandExecution( Any(excep), xEnv );
             }
 //              ioErrorCode = IOErrorCode_ALREADY_EXISTING;
 //              cancelCommandExecution(
@@ -853,9 +847,8 @@ namespace fileaccess {
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "name clash during copy or move";
-            aAny <<= excep;
 
-            cancelCommandExecution(aAny,xEnv);
+            cancelCommandExecution(Any(excep), xEnv);
         }
         else if( errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE   ||
                  errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY )
@@ -865,8 +858,7 @@ namespace fileaccess {
             excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "name clash value not supported during copy or move";
 
-            aAny <<= excep;
-            cancelCommandExecution(aAny,xEnv);
+            cancelCommandExecution(Any(excep), xEnv);
         }
         else
         {

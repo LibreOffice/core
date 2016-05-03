@@ -551,9 +551,7 @@ uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
     const ScFormatEntry* pEntry = getCoreObject()->GetEntry(nIndex);
     uno::Reference<beans::XPropertySet> xCondEntry =
         createConditionEntry(pEntry, this);
-    uno::Any aAny;
-    aAny <<= xCondEntry;
-    return aAny;
+    return uno::Any(xCondEntry);
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySetInfo()

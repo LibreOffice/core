@@ -1304,14 +1304,12 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
 void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, SdrObject& rCandidate, bool bVisible, bool bOnClick, double fDuration)
 {
     Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
-    Any aAny;
 
     // create par container node
     Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
 
     // set begin
-    aAny <<= (double)(0.0);
-    xOuterSeqTimeContainer->setBegin(aAny);
+    xOuterSeqTimeContainer->setBegin(Any((double)0.0));
 
     // set fill
     xOuterSeqTimeContainer->setFill(AnimationFill::HOLD);
@@ -1329,12 +1327,10 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
     Reference< XAnimationNode > xAnimateSetForLast(xMsf->createInstance("com.sun.star.animations.AnimateSet"), UNO_QUERY_THROW);
 
     // set begin
-    aAny <<= (double)(0.0);
-    xAnimateSetForLast->setBegin(aAny);
+    xAnimateSetForLast->setBegin(Any((double)0.0));
 
     // set duration
-    aAny <<= fDuration;
-    xAnimateSetForLast->setDuration(aAny);
+    xAnimateSetForLast->setDuration(Any(fDuration));
 
     // set fill
     xAnimateSetForLast->setFill(AnimationFill::HOLD);
@@ -1342,15 +1338,13 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
     // set target
     Reference< XAnimate > xAnimate(xAnimateSetForLast, UNO_QUERY);
     Reference< XShape > xTargetShape(rCandidate.getUnoShape(), UNO_QUERY);
-    aAny <<= xTargetShape;
-    xAnimate->setTarget(aAny);
+    xAnimate->setTarget(Any(xTargetShape));
 
     // set AttributeName
     xAnimate->setAttributeName("Visibility");
 
     // set attribute value
-    aAny <<= bVisible;
-    xAnimate->setTo(aAny);
+    xAnimate->setTo(Any(bVisible));
 
     // ad set node to par node
     Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);
@@ -1391,11 +1385,9 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
             // create main node
             Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
             Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
-            Any aAny;
 
             // set begin
-            aAny <<= (double)(0.0);
-            xOuterSeqTimeContainer->setBegin(aAny);
+            xOuterSeqTimeContainer->setBegin(Any((double)(0.0)));
 
             // prepare parent container
             Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);

@@ -240,13 +240,11 @@ void XMLIndexTOCContext::StartElement(
             pStyle->FillPropertySet( xTOCPropertySet );
         }
 
-        Any aAny;
         xTOCPropertySet->setPropertyValue( sIsProtected, Any(bProtected) );
 
         if (!sIndexName.isEmpty())
         {
-            aAny <<= sIndexName;
-            xTOCPropertySet->setPropertyValue( sName, aAny );
+            xTOCPropertySet->setPropertyValue( sName, Any(sIndexName) );
         }
     }
 }

@@ -684,9 +684,7 @@ void SchXMLChartContext::EndElement()
             {
                 try
                 {
-                    uno::Any aAny;
-                    aAny <<= maMainTitle;
-                    xTitleProp->setPropertyValue("String", aAny );
+                    xTitleProp->setPropertyValue("String", uno::Any(maMainTitle) );
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
@@ -701,9 +699,7 @@ void SchXMLChartContext::EndElement()
             {
                 try
                 {
-                    uno::Any aAny;
-                    aAny <<= maSubTitle;
-                    xTitleProp->setPropertyValue("String", aAny );
+                    xTitleProp->setPropertyValue("String", uno::Any(maSubTitle) );
                 }
                 catch(const beans::UnknownPropertyException&)
                 {

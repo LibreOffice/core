@@ -575,10 +575,8 @@ void SvFileObject::SendStateChg_Impl( sfx2::LinkManager::LinkState nState )
 {
     if( !bStateChangeCalled && HasDataLinks() )
     {
-        css::uno::Any aAny;
-        aAny <<= OUString::number( nState );
         DataChanged( SotExchange::GetFormatName(
-                        sfx2::LinkManager::RegisterStatusInfoId()), aAny );
+                        sfx2::LinkManager::RegisterStatusInfoId()), css::uno::Any(OUString::number( nState )) );
         bStateChangeCalled = true;
     }
 }

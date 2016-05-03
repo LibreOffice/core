@@ -267,9 +267,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPr
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int32)static_cast<const XColorEntry*>(pEntry)->GetColor().GetColor();
-    return aAny;
+    return uno::Any( (sal_Int32)static_cast<const XColorEntry*>(pEntry)->GetColor().GetColor() );
 }
 
 XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
@@ -328,18 +326,14 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( X
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-
-    uno::Any aAny;
     drawing::PolyPolygonBezierCoords aBezier;
     basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd(),
                                                           aBezier );
-    aAny <<= aBezier;
-    return aAny;
+    return uno::Any(aBezier);
 }
 
 XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw(lang::IllegalArgumentException)
 {
-
     if( !rAny.getValue() || rAny.getValueType() != cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
         return nullptr;
 
@@ -411,9 +405,7 @@ uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
     aLineDash.DashLen = rXD.GetDashLen();
     aLineDash.Distance = rXD.GetDistance();
 
-    uno::Any aAny;
-    aAny <<= aLineDash;
-    return aAny;
+    return uno::Any(aLineDash);
 }
 
 XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
@@ -489,9 +481,7 @@ uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
     aUnoHatch.Distance = aHatch.GetDistance();
     aUnoHatch.Angle = aHatch.GetAngle();
 
-    uno::Any aAny;
-    aAny <<= aUnoHatch;
-    return aAny;
+    return uno::Any(aUnoHatch);
 }
 
 XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
@@ -569,9 +559,7 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     aGradient.EndIntensity = aXGradient.GetEndIntens();
     aGradient.StepCount = aXGradient.GetSteps();
 
-    uno::Any aAny;
-    aAny <<= aGradient;
-    return aAny;
+    return uno::Any(aGradient);
 }
 
 XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
@@ -646,9 +634,7 @@ uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw(
     const GraphicObject& rGraphicObject(static_cast<const XBitmapEntry*>(pEntry)->GetGraphicObject());
     aURL += OStringToOUString(rGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
 
-    uno::Any aAny;
-    aAny <<= aURL;
-    return aAny;
+    return uno::Any(aURL);
 }
 
 XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw(uno::RuntimeException)

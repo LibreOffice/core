@@ -327,11 +327,9 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 
     OUString aPropName( "MediaType" );
     OUString aMime( "text/xml" );
-    uno::Any aAny;
-    aAny <<= aMime;
 
     uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-    xSet->setPropertyValue( aPropName, aAny );
+    xSet->setPropertyValue( aPropName, Any(aMime) );
 
     // all streams must be encrypted in encrypted document
     OUString aTmpPropName( "UseCommonStoragePasswordEncryption" );

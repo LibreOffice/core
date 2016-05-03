@@ -54,13 +54,10 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
         if ( rTree.endsWith("/") )
             --nTokenCount;
 
-        Any aAny;
-        aAny <<= rTree.getToken(i++, '/');
-
         // creation arguments: nodepath
         PropertyValue aPathArgument;
         aPathArgument.Name = "nodepath";
-        aPathArgument.Value = aAny;
+        aPathArgument.Value = Any(rTree.getToken(i++, '/'));
 
         Sequence< Any > aArguments( 1 );
         aArguments[ 0 ] <<= aPathArgument;
@@ -113,19 +110,16 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
     OUString sTree = "/org.openoffice." + rSubTree;
     if ( ImpIsTreeAvailable(xCfgProv, sTree) )
     {
-        Any aAny;
         // creation arguments: nodepath
         PropertyValue aPathArgument;
-        aAny <<= sTree;
         aPathArgument.Name = "nodepath";
-        aPathArgument.Value = aAny;
+        aPathArgument.Value = Any(sTree);
 
         // creation arguments: commit mode
         PropertyValue aModeArgument;
         bool bAsynchron = true;
-        aAny <<= bAsynchron;
         aModeArgument.Name = "lazywrite";
-        aModeArgument.Value = aAny;
+        aModeArgument.Value = Any(bAsynchron);
 
         Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= aPathArgument;
@@ -355,10 +349,9 @@ void FilterConfigItem::WriteBool( const OUString& rKey, bool bNewValue )
             {
                 if ( bOldValue != bNewValue )
                 {
-                    aAny <<= bNewValue;
                     try
                     {
-                        xPropSet->setPropertyValue( rKey, aAny );
+                        xPropSet->setPropertyValue( rKey, Any(bNewValue) );
                         bModified = true;
                     }
                     catch ( css::uno::Exception& )
@@ -389,10 +382,9 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
             {
                 if ( nOldValue != nNewValue )
                 {
-                    aAny <<= nNewValue;
                     try
                     {
-                        xPropSet->setPropertyValue( rKey, aAny );
+                        xPropSet->setPropertyValue( rKey, Any(nNewValue) );
                         bModified = true;
                     }
                     catch ( css::uno::Exception& )

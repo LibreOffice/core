@@ -404,8 +404,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         else if (i->first == "fillOpacity" && xPropertySet.is())
         {
             int opacity = 100 - (i->second.toInt32())*100/65536;
-            aAny <<= uno::makeAny(sal_uInt32(opacity));
-            xPropertySet->setPropertyValue("FillTransparence", aAny);
+            xPropertySet->setPropertyValue("FillTransparence", uno::Any(sal_uInt32(opacity)));
         }
         else if (i->first == "lineWidth")
             aLineWidth <<= i->second.toInt32()/360;

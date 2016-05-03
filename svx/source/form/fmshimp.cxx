@@ -1642,9 +1642,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
             {
                 try
                 {
-                    Any aVal;
-                    aVal <<= n;
-                    xSet->setPropertyValue("TwoDigitDateStart", aVal);
+                    xSet->setPropertyValue("TwoDigitDateStart", makeAny<sal_uInt16>(n));
                 }
                 catch(Exception&)
                 {
@@ -1683,9 +1681,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
             {
                 try
                 {
-                    Any aVal;
-                    aVal <<= n;
-                    xSet->setPropertyValue("TwoDigitDateStart", aVal);
+                    xSet->setPropertyValue("TwoDigitDateStart", makeAny<sal_uInt16>(n));
                 }
                 catch(Exception&)
                 {

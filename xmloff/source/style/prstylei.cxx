@@ -363,9 +363,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
             if( !mxStyle.is() )
                 return;
 
-            Any aAny;
-            aAny <<= mxStyle;
-            xFamilies->insertByName( rName, aAny );
+            xFamilies->insertByName( rName, Any(mxStyle) );
             bNew = true;
         }
 
@@ -501,8 +499,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
             aAny >>= sCurrFollow;
             if( sCurrFollow != sFollow )
             {
-                aAny <<= sFollow;
-                xPropSet->setPropertyValue( msFollowStyle, aAny );
+                xPropSet->setPropertyValue( msFollowStyle, Any(sFollow) );
             }
         }
 
