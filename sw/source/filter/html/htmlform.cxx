@@ -62,6 +62,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <fmtanchr.hxx>
@@ -664,6 +665,8 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
             m_pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
             CallStartAction();
             pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+            // this ridiculous hack also enables Undo, so turn it off again
+            m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
         }
     }
 
