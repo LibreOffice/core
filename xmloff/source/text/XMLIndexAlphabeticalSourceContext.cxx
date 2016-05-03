@@ -226,8 +226,7 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
 
     if (!sAlgorithm.isEmpty())
     {
-        aAny <<= sAlgorithm;
-        rIndexPropertySet->setPropertyValue(sSortAlgorithm, aAny);
+        rIndexPropertySet->setPropertyValue(sSortAlgorithm, css::uno::Any(sAlgorithm));
     }
 
     if ( !maLanguageTagODF.isEmpty() )

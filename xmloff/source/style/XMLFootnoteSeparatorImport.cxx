@@ -163,43 +163,35 @@ void XMLFootnoteSeparatorImport::StartElement(
     }
 
     // OK, now we have all values and can fill the XMLPropertyState vector
-    Any aAny;
     sal_Int32 nIndex;
 
-    aAny <<= eLineAdjust;
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_ADJUST);
-    XMLPropertyState aLineAdjust( nIndex, aAny);
+    XMLPropertyState aLineAdjust( nIndex, uno::Any(eLineAdjust));
     rProperties.push_back(aLineAdjust);
 
-    aAny <<= nLineColor;
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_COLOR);
-    XMLPropertyState aLineColor( nIndex, aAny );
+    XMLPropertyState aLineColor( nIndex, uno::Any(nLineColor) );
     rProperties.push_back(aLineColor);
 
-    aAny <<= nLineStyle;
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_STYLE);
-    XMLPropertyState aLineStyle( nIndex, aAny );
+    XMLPropertyState aLineStyle( nIndex, uno::Any(nLineStyle) );
     rProperties.push_back(aLineStyle);
 
-    aAny <<= nLineDistance;
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_DISTANCE);
-    XMLPropertyState aLineDistance( nIndex, aAny );
+    XMLPropertyState aLineDistance( nIndex, uno::Any(nLineDistance) );
     rProperties.push_back(aLineDistance);
 
-    aAny <<= nLineRelWidth;
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WIDTH);
-    XMLPropertyState aLineRelWidth( nIndex, aAny);
+    XMLPropertyState aLineRelWidth( nIndex, uno::Any(nLineRelWidth));
     rProperties.push_back(aLineRelWidth);
 
-    aAny <<= nLineTextDistance;
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_DISTANCE);
-    XMLPropertyState aLineTextDistance( nIndex, aAny);
+    XMLPropertyState aLineTextDistance( nIndex, uno::Any(nLineTextDistance));
     rProperties.push_back(aLineTextDistance);
 
     DBG_ASSERT( rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WEIGHT) == nPropIndex,
                 "Received wrong property map index!" );
-    aAny <<= nLineWeight;
-    XMLPropertyState aLineWeight( nPropIndex, aAny );
+    XMLPropertyState aLineWeight( nPropIndex, uno::Any(nLineWeight) );
     rProperties.push_back(aLineWeight);
 }
 

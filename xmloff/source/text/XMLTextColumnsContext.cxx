@@ -452,33 +452,27 @@ void XMLTextColumnsContext::EndElement( )
         {
             if( pColumnSep->GetWidth() )
             {
-                aAny <<= pColumnSep->GetWidth();
-                xPropSet->setPropertyValue( sSeparatorLineWidth, aAny );
+                xPropSet->setPropertyValue( sSeparatorLineWidth, Any(pColumnSep->GetWidth()) );
             }
             if( pColumnSep->GetHeight() )
             {
-                aAny <<= pColumnSep->GetHeight();
                 xPropSet->setPropertyValue( sSeparatorLineRelativeHeight,
-                                            aAny );
+                                            Any(pColumnSep->GetHeight()) );
             }
             if ( pColumnSep->GetStyle() )
             {
-                aAny <<= pColumnSep->GetStyle();
-                xPropSet->setPropertyValue( sSeparatorLineStyle, aAny );
+                xPropSet->setPropertyValue( sSeparatorLineStyle, Any(pColumnSep->GetStyle()) );
             }
 
-            aAny <<= pColumnSep->GetColor();
-            xPropSet->setPropertyValue( sSeparatorLineColor, aAny );
+            xPropSet->setPropertyValue( sSeparatorLineColor, Any(pColumnSep->GetColor()) );
 
-            aAny <<= pColumnSep->GetVertAlign();
-            xPropSet->setPropertyValue( sSeparatorLineVerticalAlignment, aAny );
+            xPropSet->setPropertyValue( sSeparatorLineVerticalAlignment, Any(pColumnSep->GetVertAlign()) );
         }
 
         // handle 'automatic columns': column distance
         if( bAutomatic )
         {
-            aAny <<= nAutomaticDistance;
-            xPropSet->setPropertyValue( sAutomaticDistance, aAny );
+            xPropSet->setPropertyValue( sAutomaticDistance, Any(nAutomaticDistance) );
         }
     }
 

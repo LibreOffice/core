@@ -157,13 +157,12 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    OUString sKey;
-    sal_Bool bSort(sal_True);
-
     // process children here and use default context!
     if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&
          IsXMLToken( rLocalName, XML_SORT_KEY ) )
     {
+        OUString sKey;
+        bool bSort(true);
         sal_Int16 nLength = xAttrList->getLength();
         for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
         {
@@ -195,20 +194,16 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
         if (SvXMLUnitConverter::convertEnum(nKey, sKey,
                                             aBibliographyDataFieldMap))
         {
-
-            Any aAny;
             Sequence<PropertyValue> aKey(2);
 
             PropertyValue aNameValue;
             aNameValue.Name = sSortKey;
-            aAny <<= (sal_Int16)nKey;
-            aNameValue.Value = aAny;
+            aNameValue.Value = Any((sal_Int16)nKey);
             aKey[0] = aNameValue;
 
             PropertyValue aSortValue;
             aSortValue.Name = sIsSortAscending;
-            aAny.setValue(&bSort, cppu::UnoType<bool>::get());
-            aSortValue.Value = aAny;
+            aSortValue.Value = Any(bSort);
             aKey[1] = aSortValue;
 
             aSortKeys.push_back(aKey);
@@ -251,17 +246,10 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
                 Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
                 Any aAny;
 
-                aAny <<= sSuffix;
-                xPropSet->setPropertyValue(sBracketAfter, aAny);
-
-                aAny <<= sPrefix;
-                xPropSet->setPropertyValue(sBracketBefore, aAny);
-
-                aAny.setValue(&bNumberedEntries, cppu::UnoType<bool>::get());
-                xPropSet->setPropertyValue(sIsNumberEntries, aAny);
-
-                aAny.setValue(&bSortByPosition, cppu::UnoType<bool>::get());
-                xPropSet->setPropertyValue(sIsSortByPosition, aAny);
+                xPropSet->setPropertyValue(sBracketAfter, Any(sSuffix));
+                xPropSet->setPropertyValue(sBracketBefore, Any(sPrefix));
+                xPropSet->setPropertyValue(sIsNumberEntries, Any(bNumberedEntries));
+                xPropSet->setPropertyValue(sIsSortByPosition, Any(bSortByPosition));
 
                 if( !maLanguageTagODF.isEmpty() )
                 {
@@ -271,8 +259,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
 
                 if( !sAlgorithm.isEmpty() )
                 {
-                    aAny <<= sAlgorithm;
-                    xPropSet->setPropertyValue(sSortAlgorithm, aAny);
+                    xPropSet->setPropertyValue(sSortAlgorithm, Any(sAlgorithm));
                 }
 
                 sal_Int32 nCount = aSortKeys.size();
@@ -281,8 +268,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
                 {
                     aKeysSeq[i] = aSortKeys[i];
                 }
-                aAny <<= aKeysSeq;
-                xPropSet->setPropertyValue(sSortKeys, aAny);
+                xPropSet->setPropertyValue(sSortKeys, Any(aKeysSeq));
             }
             // else: can't get FieldMaster -> ignore
         }

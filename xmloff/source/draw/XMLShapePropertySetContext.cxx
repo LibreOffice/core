@@ -57,10 +57,7 @@ void XMLShapePropertySetContext::EndElement()
             pBulletStyle->FillUnoNumRule(xNumRule);
     }
 
-    Any aAny;
-    aAny <<= xNumRule;
-
-    XMLPropertyState aPropState( mnBulletIndex, aAny );
+    XMLPropertyState aPropState( mnBulletIndex, Any(xNumRule) );
     mrProperties.push_back( aPropState );
 
     SvXMLPropertySetContext::EndElement();

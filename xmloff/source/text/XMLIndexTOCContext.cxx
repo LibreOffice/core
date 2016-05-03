@@ -246,8 +246,7 @@ void XMLIndexTOCContext::StartElement(
 
         if (!sIndexName.isEmpty())
         {
-            aAny <<= sIndexName;
-            xTOCPropertySet->setPropertyValue( sName, aAny );
+            xTOCPropertySet->setPropertyValue( sName, Any(sIndexName) );
         }
     }
 }

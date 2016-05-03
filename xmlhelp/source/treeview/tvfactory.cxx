@@ -71,13 +71,11 @@ TVFactory::createInstance(
     throw( Exception,
            RuntimeException, std::exception )
 {
-    Any aAny;
-    aAny <<= OUString();
     Sequence< Any > seq( 1 );
     seq[0] <<= PropertyValue(
         OUString( "nodepath" ),
         -1,
-        aAny,
+        Any( OUString() ),
         PropertyState_DIRECT_VALUE );
 
     return createInstanceWithArguments( aServiceSpecifier,

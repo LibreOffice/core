@@ -126,9 +126,7 @@ uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
     aData.Type = "CDATA";
     aData.Value = mpContainer->GetAttrValue(nAttr);
 
-    uno::Any aAny;
-    aAny <<= aData;
-    return aAny;
+    return uno::Any(aData);
 }
 
 uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames() throw( uno::RuntimeException, std::exception )

@@ -212,8 +212,7 @@ void SvxOpenGraphicDialog::AsLink(bool bState)
     {
         try
         {
-            Any aAny; aAny <<= bState;
-            mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
+            mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(bState) );
         }
         catch(const IllegalArgumentException&)
         {

@@ -570,7 +570,6 @@ void SdXMLShapeContext::SetTransformation()
             }
 
             // now set transformation for this object
-            uno::Any aAny;
             drawing::HomogenMatrix3 aMatrix;
 
             aMatrix.Line1.Column1 = maUsedTransformation.get(0, 0);
@@ -585,9 +584,7 @@ void SdXMLShapeContext::SetTransformation()
             aMatrix.Line3.Column2 = maUsedTransformation.get(2, 1);
             aMatrix.Line3.Column3 = maUsedTransformation.get(2, 2);
 
-            aAny <<= aMatrix;
-
-            xPropSet->setPropertyValue("Transformation", aAny);
+            xPropSet->setPropertyValue("Transformation", Any(aMatrix));
         }
     }
 }
@@ -691,9 +688,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 try
                 {
                     // set style on object
-                    uno::Any aAny;
-                    aAny <<= xStyle;
-                    xPropSet->setPropertyValue("Style", aAny);
+                    xPropSet->setPropertyValue("Style", Any(xStyle));
                 }
                 catch(const uno::Exception&)
                 {
@@ -749,10 +744,7 @@ void SdXMLShapeContext::SetLayer()
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is() )
             {
-                uno::Any aAny;
-                aAny <<= maLayerName;
-
-                xPropSet->setPropertyValue("LayerName", aAny);
+                xPropSet->setPropertyValue("LayerName", Any(maLayerName));
                 return;
             }
         }
@@ -1163,14 +1155,12 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             drawing::PointSequence* pOuterSequence = aPolyPoly.getArray();
             pOuterSequence->realloc(2L);
             awt::Point* pInnerSequence = pOuterSequence->getArray();
-            uno::Any aAny;
 
             *pInnerSequence = awt::Point( mnX1 - aTopLeft.X, mnY1 - aTopLeft.Y);
             pInnerSequence++;
             *pInnerSequence = awt::Point( mnX2 - aTopLeft.X, mnY2 - aTopLeft.Y);
 
-            aAny <<= aPolyPoly;
-            xPropSet->setPropertyValue("Geometry", aAny);
+            xPropSet->setPropertyValue("Geometry", Any(aPolyPoly));
         }
 
         // set sizes for transformation
@@ -1304,15 +1294,9 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
             if( xPropSet.is() )
             {
-                uno::Any aAny;
-                aAny <<= (drawing::CircleKind)meKind;
-                xPropSet->setPropertyValue("CircleKind", aAny );
-
-                aAny <<= mnStartAngle;
-                xPropSet->setPropertyValue("CircleStartAngle", aAny );
-
-                aAny <<= mnEndAngle;
-                xPropSet->setPropertyValue("CircleEndAngle", aAny );
+                xPropSet->setPropertyValue("CircleKind", Any( (drawing::CircleKind)meKind) );
+                xPropSet->setPropertyValue("CircleStartAngle", Any(mnStartAngle) );
+                xPropSet->setPropertyValue("CircleEndAngle", Any(mnEndAngle) );
             }
         }
 
@@ -1411,11 +1395,9 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                         }
 
                         com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence;
-                        uno::Any aAny;
 
                         basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(basegfx::B2DPolyPolygon(aPolygon), aPointSequenceSequence);
-                        aAny <<= aPointSequenceSequence;
-                        xPropSet->setPropertyValue("Geometry", aAny);
+                        xPropSet->setPropertyValue("Geometry", Any(aPointSequenceSequence));
                     }
                 }
             }
@@ -2041,24 +2023,12 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
             if( xProps.is() )
             {
-                uno::Any aAny;
-                aAny <<= maStart;
-                xProps->setPropertyValue("StartPosition", aAny);
-
-                aAny <<= maEnd;
-                xProps->setPropertyValue("EndPosition", aAny );
-
-                aAny <<= (drawing::ConnectorType)mnType;
-                xProps->setPropertyValue("EdgeKind", aAny );
-
-                aAny <<= mnDelta1;
-                xProps->setPropertyValue("EdgeLine1Delta", aAny );
-
-                aAny <<= mnDelta2;
-                xProps->setPropertyValue("EdgeLine2Delta", aAny );
-
-                aAny <<= mnDelta3;
-                xProps->setPropertyValue("EdgeLine3Delta", aAny );
+                xProps->setPropertyValue("StartPosition", Any(maStart));
+                xProps->setPropertyValue("EndPosition", Any(maEnd) );
+                xProps->setPropertyValue("EdgeKind", Any((drawing::ConnectorType)mnType) );
+                xProps->setPropertyValue("EdgeLine1Delta", Any(mnDelta1) );
+                xProps->setPropertyValue("EdgeLine2Delta", Any(mnDelta2) );
+                xProps->setPropertyValue("EdgeLine3Delta", Any(mnDelta3) );
             }
             SetStyle();
             SetLayer();
@@ -2167,12 +2137,8 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
         if( xProps.is() )
         {
-            uno::Any aAny;
-            aAny <<= maStart;
-            xProps->setPropertyValue("StartPosition", aAny);
-
-            aAny <<= maEnd;
-            xProps->setPropertyValue("EndPosition", aAny );
+            xProps->setPropertyValue("StartPosition", Any(maStart));
+            xProps->setPropertyValue("EndPosition", Any(maEnd) );
         }
 
         // delete pre created fields
@@ -2607,8 +2573,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
                 const OUString aCLSID( "12DCAE26-281F-416F-a234-c3086127382e");
 
-                aAny <<= aCLSID;
-                xProps->setPropertyValue("CLSID", aAny );
+                xProps->setPropertyValue("CLSID", Any(aCLSID) );
 
                 aAny = xProps->getPropertyValue("Model");
                 uno::Reference< frame::XModel > xChartModel;
@@ -2946,49 +2911,40 @@ void SdXMLAppletShapeContext::EndElement()
     uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
     if( xProps.is() )
     {
-        uno::Any aAny;
-
         if ( maSize.Width && maSize.Height )
         {
             // the visual area for applet must be set on loading
             awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
-            aAny <<= aRect;
-            xProps->setPropertyValue("VisibleArea", aAny );
+            xProps->setPropertyValue("VisibleArea", Any(aRect) );
         }
 
         if( maParams.getLength() )
         {
-            aAny <<= maParams;
-            xProps->setPropertyValue("AppletCommands", aAny );
+            xProps->setPropertyValue("AppletCommands", Any(maParams) );
         }
 
         if( !maHref.isEmpty() )
         {
-            aAny <<= maHref;
-            xProps->setPropertyValue("AppletCodeBase", aAny );
+            xProps->setPropertyValue("AppletCodeBase", Any(maHref) );
         }
 
         if( !maAppletName.isEmpty() )
         {
-            aAny <<= maAppletName;
-            xProps->setPropertyValue("AppletName", aAny );
+            xProps->setPropertyValue("AppletName", Any(maAppletName) );
         }
 
         if( mbIsScript )
         {
-            aAny <<= mbIsScript;
-            xProps->setPropertyValue("AppletIsScript", aAny );
+            xProps->setPropertyValue("AppletIsScript", Any(mbIsScript) );
 
         }
 
         if( !maAppletCode.isEmpty() )
         {
-            aAny <<= maAppletCode;
-            xProps->setPropertyValue("AppletCode", aAny );
+            xProps->setPropertyValue("AppletCode", Any(maAppletCode) );
         }
 
-        aAny <<= OUString( GetImport().GetDocumentBase() );
-        xProps->setPropertyValue("AppletDocBase", aAny );
+        xProps->setPropertyValue("AppletDocBase", Any(GetImport().GetDocumentBase()) );
 
         SetThumbnail();
     }
@@ -3168,8 +3124,6 @@ void SdXMLPluginShapeContext::EndElement()
 
     if( xProps.is() )
     {
-        uno::Any aAny;
-
         if ( maSize.Width && maSize.Height )
         {
             const OUString sVisibleArea(  "VisibleArea"  );
@@ -3178,8 +3132,7 @@ void SdXMLPluginShapeContext::EndElement()
             {
                 // the visual area for a plugin must be set on loading
                 awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
-                aAny <<= aRect;
-                xProps->setPropertyValue( sVisibleArea, aAny );
+                xProps->setPropertyValue( sVisibleArea, Any(aRect) );
             }
         }
 
@@ -3188,20 +3141,17 @@ void SdXMLPluginShapeContext::EndElement()
             // in case we have a plugin object
             if( maParams.getLength() )
             {
-                aAny <<= maParams;
-                xProps->setPropertyValue("PluginCommands", aAny );
+                xProps->setPropertyValue("PluginCommands", Any(maParams) );
             }
 
             if( !maMimeType.isEmpty() )
             {
-                aAny <<= maMimeType;
-                xProps->setPropertyValue("PluginMimeType", aAny );
+                xProps->setPropertyValue("PluginMimeType", Any(maMimeType) );
             }
 
             if( !maHref.isEmpty() )
             {
-                aAny <<= maHref;
-                xProps->setPropertyValue("PluginURL", aAny );
+                xProps->setPropertyValue("PluginURL", Any(maHref) );
             }
         }
         else
@@ -3344,18 +3294,14 @@ void SdXMLFloatingFrameShapeContext::StartElement( const ::com::sun::star::uno::
         uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
         if( xProps.is() )
         {
-            uno::Any aAny;
-
             if( !maFrameName.isEmpty() )
             {
-                aAny <<= maFrameName;
-                xProps->setPropertyValue("FrameName", aAny );
+                xProps->setPropertyValue("FrameName", Any(maFrameName) );
             }
 
             if( !maHref.isEmpty() )
             {
-                aAny <<= maHref;
-                xProps->setPropertyValue("FrameURL", aAny );
+                xProps->setPropertyValue("FrameURL", Any(maHref) );
             }
         }
 
@@ -3399,9 +3345,7 @@ void SdXMLFloatingFrameShapeContext::EndElement()
         {
             // the visual area for a floating frame must be set on loading
             awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
-            uno::Any aAny;
-            aAny <<= aRect;
-            xProps->setPropertyValue("VisibleArea", aAny );
+            xProps->setPropertyValue("VisibleArea", Any(aRect) );
         }
     }
 
@@ -3779,15 +3723,11 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
             {
                 if ( !maCustomShapeEngine.isEmpty() )
                 {
-                    uno::Any aAny;
-                    aAny <<= maCustomShapeEngine;
-                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), aAny );
+                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), Any(maCustomShapeEngine) );
                 }
                 if ( !maCustomShapeData.isEmpty() )
                 {
-                    uno::Any aAny;
-                    aAny <<= maCustomShapeData;
-                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), aAny );
+                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), Any(maCustomShapeData) );
                 }
             }
         }
@@ -3871,9 +3811,7 @@ void SdXMLCustomShapeContext::EndElement()
             uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
             if( xPropSet.is() )
             {
-                uno::Any aAny;
-                aAny <<= aSeq;
-                xPropSet->setPropertyValue( sCustomShapeGeometry, aAny );
+                xPropSet->setPropertyValue( sCustomShapeGeometry, Any(aSeq) );
             }
         }
         catch(const uno::Exception&)

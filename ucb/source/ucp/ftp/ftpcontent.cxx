@@ -742,8 +742,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
         MissingPropertiesException excep;
         excep.Properties.realloc(1);
         excep.Properties[0] = "Title";
-        Any aAny; aAny <<= excep;
-        ucbhelper::cancelCommandExecution(aAny,Env);
+        ucbhelper::cancelCommandExecution(Any(excep), Env);
     }
 
     if(m_bInserted &&
@@ -751,8 +750,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
        !aInsertCommand.Data.is())
     {
         MissingInputStreamException excep;
-        Any aAny; aAny <<= excep;
-        ucbhelper::cancelCommandExecution(aAny,Env);
+        ucbhelper::cancelCommandExecution(Any(excep), Env);
     }
 
     bool bReplace(aInsertCommand.ReplaceExisting);
@@ -770,9 +768,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
             // Deprecated, not used anymore:
             NameClashException excep;
             excep.Name = m_aFTPURL.child();
-            Any aAny;
-            aAny <<= excep;
-            ucbhelper::cancelCommandExecution(aAny,Env);
+            ucbhelper::cancelCommandExecution(Any(excep), Env);
         } else if(e.code() == FOLDER_MIGHT_EXIST_DURING_INSERT ||
                   e.code() == FILE_MIGHT_EXIST_DURING_INSERT) {
             // Interact
@@ -784,9 +780,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
             excep.NameClash = 0; //NameClash::ERROR;
 
             if(!xInt.is()) {
-                Any aAny;
-                aAny <<= excep;
-                ucbhelper::cancelCommandExecution(aAny,Env);
+                ucbhelper::cancelCommandExecution(Any(excep), Env);
             }
 
             XInteractionRequestImpl request;

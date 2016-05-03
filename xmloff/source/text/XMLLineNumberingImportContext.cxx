@@ -233,25 +233,18 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
                 xLineNumbering->setPropertyValue(sCharStyleName, aAny);
             }
 
-            aAny <<= sSeparator;
-            xLineNumbering->setPropertyValue(sSeparatorText, aAny);
-
-            aAny <<= nOffset;
-            xLineNumbering->setPropertyValue(sDistance, aAny);
-
-            aAny <<= nNumberPosition;
-            xLineNumbering->setPropertyValue(sNumberPosition, aAny);
+            xLineNumbering->setPropertyValue(sSeparatorText, Any(sSeparator));
+            xLineNumbering->setPropertyValue(sDistance, Any(nOffset));
+            xLineNumbering->setPropertyValue(sNumberPosition, Any(nNumberPosition));
 
             if (nIncrement >= 0)
             {
-                aAny <<= nIncrement;
-                xLineNumbering->setPropertyValue(sInterval, aAny);
+                xLineNumbering->setPropertyValue(sInterval, Any(nIncrement));
             }
 
             if (nSeparatorIncrement >= 0)
             {
-                aAny <<= nSeparatorIncrement;
-                xLineNumbering->setPropertyValue(sSeparatorInterval, aAny);
+                xLineNumbering->setPropertyValue(sSeparatorInterval, Any(nSeparatorIncrement));
             }
 
             aAny.setValue(&bNumberLines, cppu::UnoType<bool>::get());
@@ -270,8 +263,7 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
             GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
                                                     sNumFormat,
                                                     sNumLetterSync );
-            aAny <<= nNumType;
-            xLineNumbering->setPropertyValue(sNumberingType, aAny);
+            xLineNumbering->setPropertyValue(sNumberingType, Any(nNumType));
         }
     }
 }

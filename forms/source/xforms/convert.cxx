@@ -59,7 +59,7 @@ namespace
 
 
     Any lcl_toAny_OUString( const OUString& rStr )
-    { Any aAny; aAny <<= rStr; return aAny; }
+    { return Any(rStr); }
 
 
     OUString lcl_toXSD_bool( const Any& rAny )

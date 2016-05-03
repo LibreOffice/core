@@ -326,19 +326,14 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
         if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
 
         sal_Int32 nType = sdb::CommandType::TABLE;
-        uno::Any aAny;
 
-        aAny <<= xConnection;
-        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, uno::Any(xConnection) );
 
-        aAny <<= nType;
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(nType) );
 
-        aAny <<= OUString( aTabName );
-        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(aTabName) );
 
-        aAny <<= false;
-        xRowProp->setPropertyValue( SC_DBPROP_PROPCHANGE_NOTIFY, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_PROPCHANGE_NOTIFY, uno::Any(false) );
 
         xRowSet->execute();
 
@@ -795,7 +790,6 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
     KillFile( aDeleteObj );
 
     sal_uLong nErr = eERR_OK;
-    uno::Any aAny;
 
     SCCOL nFirstCol, nLastCol;
     SCROW  nFirstRow, nLastRow;
@@ -870,8 +864,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
         OSL_ENSURE( xTableDesc.is(), "can't get table descriptor" );
         if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
-        aAny <<= OUString( aTabName );
-        xTableDesc->setPropertyValue( SC_DBPROP_NAME, aAny );
+        xTableDesc->setPropertyValue( SC_DBPROP_NAME, uno::Any(aTabName) );
 
         // create columns
 
@@ -903,17 +896,13 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
             OSL_ENSURE( xColumnDesc.is(), "can't get column descriptor" );
             if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
-            aAny <<= pColNames[nCol];
-            xColumnDesc->setPropertyValue( SC_DBPROP_NAME, aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_NAME, uno::Any(pColNames[nCol]) );
 
-            aAny <<= pColTypes[nCol];
-            xColumnDesc->setPropertyValue( SC_DBPROP_TYPE, aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_TYPE, uno::Any(pColTypes[nCol]) );
 
-            aAny <<= pColLengths[nCol];
-            xColumnDesc->setPropertyValue( SC_DBPROP_PRECISION, aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_PRECISION, uno::Any(pColLengths[nCol]) );
 
-            aAny <<= pColScales[nCol];
-            xColumnDesc->setPropertyValue( SC_DBPROP_SCALE, aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_SCALE, uno::Any(pColScales[nCol]) );
 
             xColumnsAppend->appendByDescriptor( xColumnDesc );
         }
@@ -929,14 +918,11 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
         OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
 
-        aAny <<= xConnection;
-        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, uno::Any(xConnection) );
 
-        aAny <<= (sal_Int32) sdb::CommandType::TABLE;
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any((sal_Int32) sdb::CommandType::TABLE) );
 
-        aAny <<= OUString( aTabName );
-        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(aTabName) );
 
         xRowSet->execute();
 

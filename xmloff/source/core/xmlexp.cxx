@@ -559,11 +559,8 @@ SvXMLExport::~SvXMLExport()
                     {
                         sal_Int32 nProgressMax(mpProgressBarHelper->GetReference());
                         sal_Int32 nProgressCurrent(mpProgressBarHelper->GetValue());
-                        uno::Any aAny;
-                        aAny <<= nProgressMax;
-                        mxExportInfo->setPropertyValue(sProgressMax, aAny);
-                        aAny <<= nProgressCurrent;
-                        mxExportInfo->setPropertyValue(sProgressCurrent, aAny);
+                        mxExportInfo->setPropertyValue(sProgressMax, uno::Any(nProgressMax));
+                        mxExportInfo->setPropertyValue(sProgressCurrent, uno::Any(nProgressCurrent));
                     }
                     if (xPropertySetInfo->hasPropertyByName(sRepeat))
                         mxExportInfo->setPropertyValue(sRepeat, css::uno::makeAny(mpProgressBarHelper->GetRepeat()));
@@ -575,9 +572,7 @@ SvXMLExport::~SvXMLExport()
                     {
                         uno::Sequence<sal_Int32> aWasUsed;
                         mpNumExport->GetWasUsed(aWasUsed);
-                        uno::Any aAny;
-                        aAny <<= aWasUsed;
-                        mxExportInfo->setPropertyValue(sWrittenNumberFormats, aAny);
+                        mxExportInfo->setPropertyValue(sWrittenNumberFormats, Any(aWasUsed));
                     }
                 }
             }
@@ -1363,9 +1358,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 ::comphelper::GenericPropertySet_CreateInstance(
                         new ::comphelper::PropertySetInfo( aInfoMap ) ) );
 
-            Any aAny;
-            aAny <<= GetXMLToken( eClass );
-            xConvPropSet->setPropertyValue( "Class", aAny );
+            xConvPropSet->setPropertyValue( "Class", Any(GetXMLToken( eClass )) );
 
             Reference< XPropertySet > xPropSet =
                 mxExportInfo.is()

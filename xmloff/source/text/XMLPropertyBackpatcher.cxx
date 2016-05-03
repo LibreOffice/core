@@ -118,9 +118,7 @@ void XMLPropertyBackpatcher<A>::SetProperty(
     if (aIDMap.count(sName))
     {
         // we know this ID -> set property
-        Any aAny;
-        aAny <<= aIDMap[sName];
-        xPropSet->setPropertyValue(sPropertyName, aAny);
+        xPropSet->setPropertyValue(sPropertyName, css::uno::Any(aIDMap[sName]));
     }
     else
     {

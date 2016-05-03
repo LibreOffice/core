@@ -264,10 +264,7 @@ Any SAL_CALL ListboxGetItems( HWND hwnd )
         }
     }
 
-    Any aAny;
-    aAny <<= aItemList;
-
-    return aAny;
+    return Any(aItemList);
 }
 
 
@@ -277,10 +274,7 @@ Any SAL_CALL ListboxGetSelectedItem( HWND hwnd )
 
     LRESULT idxItem = SendMessageW( hwnd, CB_GETCURSEL, 0, 0 );
 
-    Any aAny;
-    aAny <<= ListboxGetString( hwnd, idxItem );
-
-    return aAny;
+    return Any( ListboxGetString( hwnd, idxItem ) );
 }
 
 
@@ -290,10 +284,7 @@ Any SAL_CALL ListboxGetSelectedItemIndex( HWND hwnd )
 
     LRESULT idxItem = SendMessageW( hwnd, CB_GETCURSEL, 0, 0 );
 
-    Any aAny;
-    aAny <<= static_cast< sal_Int32 >( idxItem );
-
-    return aAny;
+    return Any( static_cast< sal_Int32 >( idxItem ) );
 }
 
 
@@ -302,10 +293,8 @@ Any SAL_CALL CheckboxGetState( HWND hwnd )
     OSL_ASSERT( IsWindow( hwnd ) );
 
     LRESULT lChkState = SendMessageW( hwnd, BM_GETCHECK, 0, 0 );
-    sal_Bool bChkState = (lChkState == BST_CHECKED) ? sal_True : sal_False;
-    Any aAny;
-    aAny.setValue( &bChkState, cppu::UnoType<sal_Bool>::get());
-    return aAny;
+    bool bChkState = (lChkState == BST_CHECKED);
+    return Any(bChkState);
 }
 
 

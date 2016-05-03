@@ -228,21 +228,16 @@ static void lcl_addOutplaceProperties(
 
         if( aSize.Width() && aSize.Height() )
         {
-            Any aAny;
-            aAny <<= 0L;
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), aAny );
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(0L) );
             pStates++;
 
-            aAny <<= 0L;
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), aAny );
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(0L) );
             pStates++;
 
-            aAny <<= (sal_Int32)aSize.Width();
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any((sal_Int32)aSize.Width()) );
             pStates++;
 
-            aAny <<= (sal_Int32)aSize.Height();
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), Any((sal_Int32)aSize.Height()) );
         }
     }
 }
@@ -303,16 +298,12 @@ static void lcl_addFrameProperties(
     }
     if( SIZE_NOT_SET != nWidth )
     {
-        Any aAny2;
-        aAny <<= nWidth;
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), aAny2 );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), Any(nWidth) );
         pStates++;
     }
     if( SIZE_NOT_SET != nHeight )
     {
-        Any aAny2;
-        aAny <<= nHeight;
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), aAny2 );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), Any(nHeight) );
     }
 }
 

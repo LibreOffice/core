@@ -577,11 +577,8 @@ void SAL_CALL SvXMLImport::endDocument()
                 {
                     sal_Int32 nProgressMax(mpProgressBarHelper->GetReference());
                     sal_Int32 nProgressCurrent(mpProgressBarHelper->GetValue());
-                    uno::Any aAny;
-                    aAny <<= nProgressMax;
-                    mxImportInfo->setPropertyValue(sProgressMax, aAny);
-                    aAny <<= nProgressCurrent;
-                    mxImportInfo->setPropertyValue(sProgressCurrent, aAny);
+                    mxImportInfo->setPropertyValue(sProgressMax, uno::Any(nProgressMax));
+                    mxImportInfo->setPropertyValue(sProgressCurrent, uno::Any(nProgressCurrent));
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
                     mxImportInfo->setPropertyValue(sRepeat, css::uno::makeAny(mpProgressBarHelper->GetRepeat()));
@@ -590,9 +587,7 @@ void SAL_CALL SvXMLImport::endDocument()
             OUString sNumberStyles(XML_NUMBERSTYLES);
             if (mxNumberStyles.is() && xPropertySetInfo->hasPropertyByName(sNumberStyles))
             {
-                uno::Any aAny;
-                aAny <<= mxNumberStyles;
-                mxImportInfo->setPropertyValue(sNumberStyles, aAny);
+                mxImportInfo->setPropertyValue(sNumberStyles, Any(mxNumberStyles));
             }
         }
     }
@@ -1427,9 +1422,7 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
             {
                 Reference < XInterface > xIfc(
                         static_cast< XUnoTunnel *>( mpStyleMap ) );
-                Any aAny;
-                aAny <<= xIfc;
-                mxImportInfo->setPropertyValue( sPrivateData, aAny );
+                mxImportInfo->setPropertyValue( sPrivateData, Any(xIfc) );
             }
         }
     }
@@ -1525,11 +1518,9 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         mxNumberStyles.set( comphelper::NameContainer_createInstance( ::cppu::UnoType<sal_Int32>::get()) );
     if (mxNumberStyles.is())
     {
-        uno::Any aAny;
-        aAny <<= nKey;
         try
         {
-            mxNumberStyles->insertByName(rName, aAny);
+            mxNumberStyles->insertByName(rName, Any(nKey));
         }
         catch ( uno::Exception& )
         {

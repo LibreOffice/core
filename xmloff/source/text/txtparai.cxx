@@ -975,17 +975,13 @@ void XMLMetaFieldImportContext::InsertMeta(
 
             if (-1 != nKey)
             {
-                static OUString sPropertyIsFixedLanguage(
-                    OUString("IsFixedLanguage") );
-                Any any;
-                any <<= nKey;
-                xPropertySet->setPropertyValue("NumberFormat", any);
+                OUString sPropertyIsFixedLanguage("IsFixedLanguage");
+                xPropertySet->setPropertyValue("NumberFormat", Any(nKey));
                 if ( xPropertySet->getPropertySetInfo()->
                         hasPropertyByName( sPropertyIsFixedLanguage ) )
                 {
-                    any <<= static_cast<bool>(!isDefaultLanguage);
                     xPropertySet->setPropertyValue( sPropertyIsFixedLanguage,
-                        any );
+                        Any(!isDefaultLanguage) );
                 }
             }
         }
@@ -2166,10 +2162,7 @@ XMLParaContext::~XMLParaContext()
                             {
                                 // set anchor position for at-character anchored objects
                                 Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
-                                Any aPos;
-                                aPos <<= xRange;
-                                OUString sTextRange( "TextRange"  );
-                                xPropSet->setPropertyValue(sTextRange, aPos);
+                                xPropSet->setPropertyValue("TextRange", Any(xRange));
                             }
                         }
                     }
@@ -2198,10 +2191,7 @@ XMLParaContext::~XMLParaContext()
                         {
                             // set anchor position for at-character anchored objects
                             Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
-                            Any aPos;
-                            aPos <<= xRange;
-                            OUString sTextRange( "TextRange"  );
-                            xPropSet->setPropertyValue(sTextRange, aPos);
+                            xPropSet->setPropertyValue("TextRange", Any(xRange));
                         }
                     }
                 }

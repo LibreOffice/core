@@ -173,9 +173,7 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue() throw (uno::R
     else
         fValue = maCellPos.Row();
 
-    uno::Any aAny;
-    aAny <<= fValue;
-    return aAny;
+    return uno::Any(fValue);
 }
 
 sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& /* aNumber */ )
@@ -195,17 +193,13 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue() throw (uno::R
         fValue = MAXCOL;
     else
         fValue = MAXROW;
-    uno::Any aAny;
-    aAny <<= fValue;
-    return aAny;
+    return uno::Any(fValue);
 }
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue() throw (uno::RuntimeException, std::exception)
 {
     double fValue(0.0);
-    uno::Any aAny;
-    aAny <<= fValue;
-    return aAny;
+    return uno::Any(fValue);
 }
 
 //=====  XAccessibleComponent  ============================================

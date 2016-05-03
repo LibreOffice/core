@@ -213,16 +213,12 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
                             ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                             sdb::CommandType::TABLE );
-                uno::Any aAny;
 
-                aAny <<= rParam.aDBName;
-                xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, aAny );
+                xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, uno::Any(rParam.aDBName) );
 
-                aAny <<= rParam.aStatement;
-                xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
+                xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(rParam.aStatement) );
 
-                aAny <<= nType;
-                xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
+                xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(nType) );
 
                 uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
                 if ( xExecute.is() )

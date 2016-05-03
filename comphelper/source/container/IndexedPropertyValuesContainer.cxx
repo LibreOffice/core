@@ -196,9 +196,7 @@ css::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIn
     if (!((nIndex < nSize) && (nIndex >= 0)))
         throw lang::IndexOutOfBoundsException();
 
-    uno::Any aAny;
-    aAny <<= maProperties[nIndex];
-    return aAny;
+    return uno::Any( maProperties[nIndex] );
 }
 
 // XElementAccess

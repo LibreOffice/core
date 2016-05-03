@@ -524,14 +524,12 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             const OUString  aMimeType( ImplGetGraphicMimeType( rPictureStreamName ) );
-            uno::Any        aAny;
             uno::Reference < beans::XPropertySet > xProps( aStream.xStream, uno::UNO_QUERY );
 
             // set stream properties (MediaType/Compression)
             if( !aMimeType.isEmpty() )
             {
-                aAny <<= aMimeType;
-                xProps->setPropertyValue( "MediaType", aAny );
+                xProps->setPropertyValue( "MediaType", Any(aMimeType) );
             }
 
             // picture formats that actuall _do_ benefit from zip
@@ -561,8 +559,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                 }
             }
 
-            aAny <<= bCompressed;
-            xProps->setPropertyValue( "Compressed", aAny );
+            xProps->setPropertyValue( "Compressed", Any(bCompressed) );
 
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )

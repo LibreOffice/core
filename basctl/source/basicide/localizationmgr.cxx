@@ -247,12 +247,10 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             xStringResourceManager->setStringForLocale( aPureIdStr, aPropStr, rLocale );
                         }
 
-                        OUString aPropIdStr = aEsc;
-                        aPropIdStr += aPureIdStr;
+                        OUString aPropIdStr = aEsc + aPureIdStr;
                         // TODO?: Change here and in toolkit
                         (void)aSemi;
-                        aPropAny <<= aPropIdStr;
-                        xPropertySet->setPropertyValue( aPropName, aPropAny );
+                        xPropertySet->setPropertyValue( aPropName, Any(aPropIdStr) );
                     }
                     // Replace id by string from StringResource
                     else if( eMode == RESET_IDS )
@@ -268,8 +266,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             catch(const MissingResourceException&)
                             {
                             }
-                            aPropAny <<= aNewPropStr;
-                            xPropertySet->setPropertyValue( aPropName, aPropAny );
+                            xPropertySet->setPropertyValue( aPropName, Any(aNewPropStr) );
                         }
                     }
                     // Remove Id for all locales
@@ -319,12 +316,10 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             {}
                         }
 
-                        OUString aPropIdStr = aEsc;
-                        aPropIdStr += aPureIdStr;
+                        OUString aPropIdStr = aEsc + aPureIdStr;
                         // TODO?: Change here and in toolkit
                         (void)aSemi;
-                        aPropAny <<= aPropIdStr;
-                        xPropertySet->setPropertyValue( aPropName, aPropAny );
+                        xPropertySet->setPropertyValue( aPropName, Any(aPropIdStr) );
                     }
                     // Replace string by string from source StringResourceResolver
                     else if( eMode == MOVE_RESOURCES && xSourceStringResolver.is() )
@@ -356,12 +351,10 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
                         }
 
-                        OUString aPropIdStr = aEsc;
-                        aPropIdStr += aPureIdStr;
+                        OUString aPropIdStr = aEsc + aPureIdStr;
                         // TODO?: Change here and in toolkit
                         (void)aSemi;
-                        aPropAny <<= aPropIdStr;
-                        xPropertySet->setPropertyValue( aPropName, aPropAny );
+                        xPropertySet->setPropertyValue( aPropName, Any(aPropIdStr) );
                     }
                     // Copy string from source to target resource
                     else if( eMode == COPY_RESOURCES && xSourceStringResolver.is() )
@@ -444,8 +437,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             aPropIdStr += aPureIdStr;
                             pIdStrings[i] = aPropIdStr;
                         }
-                        aPropAny <<= aIdStrings;
-                        xPropertySet->setPropertyValue( aPropName, aPropAny );
+                        xPropertySet->setPropertyValue( aPropName, Any(aIdStrings) );
                     }
                     // Replace id by string from StringResource
                     else if( eMode == RESET_IDS )
@@ -472,8 +464,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             }
                             pNewPropStrings[i] = aNewPropStr;
                         }
-                        aPropAny <<= aNewPropStrings;
-                        xPropertySet->setPropertyValue( aPropName, aPropAny );
+                        xPropertySet->setPropertyValue( aPropName, Any(aNewPropStrings) );
                     }
                     // Remove Id for all locales
                     else if( eMode == REMOVE_IDS_FROM_RESOURCE )
@@ -548,8 +539,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             aPropIdStr += aPureIdStr;
                             pIdStrings[i] = aPropIdStr;
                         }
-                        aPropAny <<= aIdStrings;
-                        xPropertySet->setPropertyValue( aPropName, aPropAny );
+                        xPropertySet->setPropertyValue( aPropName, Any(aIdStrings) );
                     }
                     // Replace string by string from source StringResourceResolver
                     else if( eMode == MOVE_RESOURCES && xSourceStringResolver.is() )
@@ -599,8 +589,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             aPropIdStr += aPureIdStr;
                             pIdStrings[i] = aPropIdStr;
                         }
-                        aPropAny <<= aIdStrings;
-                        xPropertySet->setPropertyValue( aPropName, aPropAny );
+                        xPropertySet->setPropertyValue( aPropName, Any(aIdStrings) );
                     }
                     // Copy string from source to target resource
                     else if( eMode == COPY_RESOURCES && xSourceStringResolver.is() )
@@ -924,9 +913,7 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
         }
 
         Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-        Any aStringResourceManagerAny;
-        aStringResourceManagerAny <<= xStringResourceManager;
-        xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+        xDlgPSet->setPropertyValue( aResourceResolverPropName, Any(xStringResourceManager) );
     }
 }
 

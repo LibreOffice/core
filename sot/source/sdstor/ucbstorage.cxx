@@ -677,9 +677,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
             {
                 sal_uInt8* pBuffer = aBuffer;
                 css::uno::Sequence < sal_Int8 > aSequ( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
-                css::uno::Any aAny;
-                aAny <<= aSequ;
-                m_pContent->setPropertyValue("EncryptionKey", aAny );
+                m_pContent->setPropertyValue("EncryptionKey", Any(aSequ) );
             }
         }
     }
@@ -1108,12 +1106,10 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 // create wrapper to stream that is only used while reading inside package component
                 Reference < XInputStream > xStream = new FileStreamWrapper_Impl( m_aTempURL );
 
-                Any aAny;
                 InsertCommandArgument aArg;
                 aArg.Data = xStream;
                 aArg.ReplaceExisting = true;
-                aAny <<= aArg;
-                m_pContent->executeCommand( "insert", aAny );
+                m_pContent->executeCommand( "insert", Any(aArg) );
 
                 // wrapper now controls lifetime of temporary file
                 m_aTempURL.clear();
@@ -2169,18 +2165,14 @@ sal_Int16 UCBStorage_Impl::Commit()
                     {
                         // name ( title ) of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
-                        Any aAny;
-                        aAny <<= pElement->m_aName;
-                        pContent->setPropertyValue("Title", aAny );
+                        pContent->setPropertyValue("Title", Any(pElement->m_aName) );
                     }
 
                     if (pContent && pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType())
                     {
                         // mediatype of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
-                        Any aAny;
-                        aAny <<= pElement->GetContentType();
-                        pContent->setPropertyValue("MediaType", aAny );
+                        pContent->setPropertyValue("MediaType", Any(pElement->GetContentType()) );
                     }
 
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )

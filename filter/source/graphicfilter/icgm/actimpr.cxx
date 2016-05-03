@@ -106,19 +106,14 @@ bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 
 void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrientation )
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int32)rRefPoint.X;
-    maXPropSet->setPropertyValue( "RotationPointX", aAny );
-    aAny <<= (sal_Int32)rRefPoint.Y;
-    maXPropSet->setPropertyValue( "RotationPointY", aAny );
-    aAny <<= (sal_Int32)( rOrientation * 100.0 );
-    maXPropSet->setPropertyValue( "RotateAngle", aAny );
+    maXPropSet->setPropertyValue( "RotationPointX", uno::Any((sal_Int32)rRefPoint.X) );
+    maXPropSet->setPropertyValue( "RotationPointY", uno::Any((sal_Int32)rRefPoint.Y) );
+    maXPropSet->setPropertyValue( "RotateAngle", uno::Any((sal_Int32)( rOrientation * 100.0 )) );
 }
 
 
 void CGMImpressOutAct::ImplSetLineBundle()
 {
-    uno::Any            aAny;
     drawing::LineStyle  eLS;
 
     sal_uInt32          nLineColor;
@@ -138,11 +133,9 @@ void CGMImpressOutAct::ImplSetLineBundle()
     else
         fLineWidth = mpCGM->pElement->aLineBundle.nLineWidth;
 
-    aAny <<= (sal_Int32)nLineColor;
-    maXPropSet->setPropertyValue( "LineColor", aAny );
+    maXPropSet->setPropertyValue( "LineColor", uno::Any((sal_Int32)nLineColor) );
 
-    aAny <<= (sal_Int32)fLineWidth;
-    maXPropSet->setPropertyValue( "LineWidth", aAny );
+    maXPropSet->setPropertyValue( "LineWidth", uno::Any((sal_Int32)fLineWidth) );
 
     switch( eLineType )
     {
@@ -162,20 +155,16 @@ void CGMImpressOutAct::ImplSetLineBundle()
             eLS = drawing::LineStyle_SOLID;
         break;
     }
-    aAny <<= eLS;
-    maXPropSet->setPropertyValue( "LineStyle", aAny );
+    maXPropSet->setPropertyValue( "LineStyle", uno::Any(eLS) );
     if ( eLS == drawing::LineStyle_DASH )
     {
         drawing::LineDash aLineDash( drawing::DashStyle_RECTRELATIVE, 1, 50, 3, 33, 100 );
-        aAny <<= aLineDash;
-        maXPropSet->setPropertyValue( "LineDash", aAny );
+        maXPropSet->setPropertyValue( "LineDash", uno::Any(aLineDash) );
     }
 }
 
 void CGMImpressOutAct::ImplSetFillBundle()
 {
-
-    uno::Any                aAny;
     drawing::LineStyle      eLS;
     drawing::FillStyle      eFS;
 
@@ -218,8 +207,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
     else
         nHatchIndex = (sal_uInt32)mpCGM->pElement->aFillBundle.nFillHatchIndex;
 
-    aAny <<= (sal_Int32)nFillColor;
-    maXPropSet->setPropertyValue( "FillColor", aAny );
+    maXPropSet->setPropertyValue( "FillColor", uno::Any((sal_Int32)nFillColor) );
 
     switch ( eFillStyle )
     {
@@ -266,28 +254,22 @@ void CGMImpressOutAct::ImplSetFillBundle()
 
     if ( eFS == drawing::FillStyle_GRADIENT )
     {
-        aAny <<= *mpGradient;
-        maXPropSet->setPropertyValue( "FillGradient", aAny );
+        maXPropSet->setPropertyValue( "FillGradient", uno::Any(*mpGradient) );
     }
-    aAny <<= eFS;
-    maXPropSet->setPropertyValue( "FillStyle", aAny );
+    maXPropSet->setPropertyValue( "FillStyle", uno::Any(eFS) );
 
     eLS = drawing::LineStyle_NONE;
     if ( eFillStyle == FIS_HOLLOW )
     {
         eLS = drawing::LineStyle_SOLID;
-        aAny <<= (sal_Int32)nFillColor;
-        maXPropSet->setPropertyValue( "LineColor", aAny );
-        aAny <<= (sal_Int32)0;
-        maXPropSet->setPropertyValue( "LineWidth", aAny );
+        maXPropSet->setPropertyValue( "LineColor", uno::Any((sal_Int32)nFillColor) );
+        maXPropSet->setPropertyValue( "LineWidth", uno::Any((sal_Int32)0) );
     }
     else if ( eEdgeType != ET_NONE )
     {
-        aAny <<= (sal_Int32)nEdgeColor;
-        maXPropSet->setPropertyValue( "LineColor", aAny );
+        maXPropSet->setPropertyValue( "LineColor", uno::Any((sal_Int32)nEdgeColor) );
 
-        aAny <<= (sal_Int32)fEdgeWidth;
-        maXPropSet->setPropertyValue( "LineWidth", aAny );
+        maXPropSet->setPropertyValue( "LineWidth", uno::Any((sal_Int32)fEdgeWidth) );
 
         switch( eEdgeType )
         {
@@ -306,8 +288,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
         }
     }
 
-    aAny <<= eLS;
-    maXPropSet->setPropertyValue( "LineStyle", aAny );
+    maXPropSet->setPropertyValue( "LineStyle", uno::Any(eLS) );
 
     if ( eFS == drawing::FillStyle_HATCH )
     {
@@ -332,14 +313,12 @@ void CGMImpressOutAct::ImplSetFillBundle()
             aHatch.Distance = 10 * ( nHatchIndex & 0x1f ) | 100;
             aHatch.Angle = 15 * ( ( nHatchIndex & 0x1f ) - 5 );
         }
-        aAny <<= aHatch;
-        maXPropSet->setPropertyValue( "FillHatch", aAny );
+        maXPropSet->setPropertyValue( "FillHatch", uno::Any(aHatch) );
     }
 }
 
 void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XPropertySet > & rProperty )
 {
-    uno::Any        aAny;
     sal_uInt32      nTextFontIndex;
     sal_uInt32      nTextColor;
 
@@ -352,8 +331,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     else
         nTextColor = mpCGM->pElement->aTextBundle.GetColor();
 
-    aAny <<= (sal_Int32)nTextColor;
-    rProperty->setPropertyValue( "CharColor", aAny );
+    rProperty->setPropertyValue( "CharColor", uno::Any((sal_Int32)nTextColor) );
 
     sal_uInt32 nFontType = 0;
     awt::FontDescriptor aFontDescriptor;
@@ -375,8 +353,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     {
         aFontDescriptor.Underline = awt::FontUnderline::SINGLE;
     }
-    aAny <<= aFontDescriptor;
-    rProperty->setPropertyValue( "FontDescriptor", aAny );
+    rProperty->setPropertyValue( "FontDescriptor", uno::Any(aFontDescriptor) );
 }
 
 void CGMImpressOutAct::InsertPage()
@@ -516,16 +493,13 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
         if ( (long)fStartAngle == (long)fEndAngle )
         {
             eCircleKind = drawing::CircleKind_FULL;
-            aAny.setValue( &eCircleKind, ::cppu::UnoType<drawing::CircleKind>::get() );
+            maXPropSet->setPropertyValue( "CircleKind", uno::Any(eCircleKind) );
         }
         else
         {
-            aAny.setValue( &eCircleKind, ::cppu::UnoType<drawing::CircleKind>::get() );
-            maXPropSet->setPropertyValue( "CircleKind", aAny );
-            aAny <<= (sal_Int32)( (long)( fStartAngle * 100 ) );
-            maXPropSet->setPropertyValue( "CircleStartAngle", aAny );
-            aAny <<= (sal_Int32)( (long)( fEndAngle * 100 ) );
-            maXPropSet->setPropertyValue( "CircleEndAngle", aAny );
+            maXPropSet->setPropertyValue( "CircleKind", uno::Any(eCircleKind) );
+            maXPropSet->setPropertyValue( "CircleStartAngle", uno::Any((sal_Int32)( fStartAngle * 100 )) );
+            maXPropSet->setPropertyValue( "CircleEndAngle", uno::Any((sal_Int32)( fEndAngle * 100 )) );
         }
         maXShape->setPosition( awt::Point( (long)( rCenter.X - rSize.X ), (long)( rCenter.Y - rSize.Y ) ) );
         if ( rOrientation != 0 )
@@ -581,9 +555,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
             }
 
             uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( BitmapEx( *( pBmpDesc->mpBitmap ) ) ) );
-            uno::Any aAny;
-            aAny <<= xBitmap;
-            maXPropSet->setPropertyValue( "GraphicObjectFillBitmap", aAny );
+            maXPropSet->setPropertyValue( "GraphicObjectFillBitmap", uno::Any(xBitmap) );
 
         }
     }
@@ -779,12 +751,9 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
 
         if ( nOrientation )
         {
-            aAny <<= (sal_Int32)( aTextPos.X );
-            maXPropSet->setPropertyValue( "RotationPointX", aAny );
-            aAny <<= (sal_Int32)( aTextPos.Y + nHeight );
-            maXPropSet->setPropertyValue( "RotationPointY", aAny );
-            aAny <<= (sal_Int32)( (sal_Int32)( nOrientation * 100 ) );
-            maXPropSet->setPropertyValue( "RotateAngle", aAny );
+            maXPropSet->setPropertyValue( "RotationPointX", uno::Any((sal_Int32)( aTextPos.X )) );
+            maXPropSet->setPropertyValue( "RotationPointY", uno::Any((sal_Int32)( aTextPos.Y + nHeight )) );
+            maXPropSet->setPropertyValue( "RotateAngle", uno::Any((sal_Int32)( nOrientation * 100 )) );
         }
         if ( nWidth == -1 )
         {
@@ -807,8 +776,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                     eTextAdjust = drawing::TextAdjust_CENTER;
                 break;
             }
-            aAny <<= eTextAdjust;
-            maXPropSet->setPropertyValue( "TextHorizontalAdjust", aAny );
+            maXPropSet->setPropertyValue( "TextHorizontalAdjust", uno::Any(eTextAdjust) );
         }
         if ( nHeight == -1 )
         {

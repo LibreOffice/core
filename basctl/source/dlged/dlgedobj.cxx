@@ -369,15 +369,10 @@ void DlgEdObj::SetPropsFromRect()
         Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
         if ( xPSet.is() )
         {
-            Any aValue;
-            aValue <<= nXOut;
-            xPSet->setPropertyValue( DLGED_PROP_POSITIONX, aValue );
-            aValue <<= nYOut;
-            xPSet->setPropertyValue( DLGED_PROP_POSITIONY, aValue );
-            aValue <<= nWidthOut;
-            xPSet->setPropertyValue( DLGED_PROP_WIDTH, aValue );
-            aValue <<= nHeightOut;
-            xPSet->setPropertyValue( DLGED_PROP_HEIGHT, aValue );
+            xPSet->setPropertyValue( DLGED_PROP_POSITIONX, Any(nXOut) );
+            xPSet->setPropertyValue( DLGED_PROP_POSITIONY, Any(nYOut) );
+            xPSet->setPropertyValue( DLGED_PROP_WIDTH, Any(nWidthOut) );
+            xPSet->setPropertyValue( DLGED_PROP_HEIGHT, Any(nHeightOut) );
         }
     }
 }
@@ -439,10 +434,8 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 
                 if ( nNewValue != nValue )
                 {
-                    Any aNewValue;
-                    aNewValue <<= nNewValue;
                     EndListening( false );
-                    xPSet->setPropertyValue( evt.PropertyName, aNewValue );
+                    xPSet->setPropertyValue( evt.PropertyName, Any(nNewValue) );
                     StartListening();
                 }
             }
@@ -489,9 +482,7 @@ void SAL_CALL DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt 
                 // set old name property
                 EndListening(false);
                 Reference< beans::XPropertySet >  xPSet(GetUnoControlModel(), UNO_QUERY);
-                Any aName;
-                aName <<= aOldName;
-                xPSet->setPropertyValue( DLGED_PROP_NAME, aName );
+                xPSet->setPropertyValue( DLGED_PROP_NAME, Any(aOldName) );
                 StartListening();
             }
         }
@@ -610,9 +601,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
                    aCtrl >>= xPSet;
                 if ( xPSet.is() )
                 {
-                    Any aTabIndex;
-                    aTabIndex <<= (sal_Int16) i;
-                    xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
+                    xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) i) );
                 }
             }
 
@@ -885,15 +874,11 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
         {
             // set tabindex
                Sequence< OUString > aNames = xCont->getElementNames();
-            Any aTabIndex;
-            aTabIndex <<= (sal_Int16) aNames.getLength();
-            xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
+            xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) aNames.getLength()) );
 
             // insert control model in dialog model
             Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
-            Any aCtrl;
-            aCtrl <<= xCtrl;
-            xCont->insertByName( aOUniqueName , aCtrl );
+            xCont->insertByName( aOUniqueName, Any(xCtrl) );
 
             pDlgEdForm->UpdateTabOrderAndGroups();
         }
@@ -984,9 +969,7 @@ void DlgEdObj::SetDefaults()
             OUString aOUniqueName( GetUniqueName() );
 
             // set name property
-            Any aUniqueName;
-            aUniqueName <<= aOUniqueName;
-            xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
+            xPSet->setPropertyValue( DLGED_PROP_NAME, Any(aOUniqueName) );
 
             // set labels
             if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) ||
@@ -995,7 +978,7 @@ void DlgEdObj::SetDefaults()
                 supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) ||
                 supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
             {
-                xPSet->setPropertyValue( DLGED_PROP_LABEL, aUniqueName );
+                xPSet->setPropertyValue( DLGED_PROP_LABEL, Any(aOUniqueName) );
             }
 
             // set number formats supplier for formatted field
@@ -1004,9 +987,7 @@ void DlgEdObj::SetDefaults()
                 Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor().GetNumberFormatsSupplier();
                 if ( xSupplier.is() )
                 {
-                    Any aSupplier;
-                    aSupplier <<= xSupplier;
-                    xPSet->setPropertyValue( DLGED_PROP_FORMATSSUPPLIER, aSupplier );
+                    xPSet->setPropertyValue( DLGED_PROP_FORMATSSUPPLIER, Any(xSupplier) );
                 }
             }
 
@@ -1267,15 +1248,10 @@ void DlgEdForm::SetPropsFromRect()
         Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
         if ( xPSet.is() )
         {
-            Any aValue;
-            aValue <<= nXOut;
-            xPSet->setPropertyValue( DLGED_PROP_POSITIONX, aValue );
-            aValue <<= nYOut;
-            xPSet->setPropertyValue( DLGED_PROP_POSITIONY, aValue );
-            aValue <<= nWidthOut;
-            xPSet->setPropertyValue( DLGED_PROP_WIDTH, aValue );
-            aValue <<= nHeightOut;
-            xPSet->setPropertyValue( DLGED_PROP_HEIGHT, aValue );
+            xPSet->setPropertyValue( DLGED_PROP_POSITIONX, Any(nXOut) );
+            xPSet->setPropertyValue( DLGED_PROP_POSITIONY, Any(nYOut) );
+            xPSet->setPropertyValue( DLGED_PROP_WIDTH, Any(nWidthOut) );
+            xPSet->setPropertyValue( DLGED_PROP_HEIGHT, Any(nHeightOut) );
         }
     }
 }
@@ -1333,10 +1309,8 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 
             if ( nNewValue != nValue )
             {
-                Any aNewValue;
-                aNewValue <<= nNewValue;
                 EndListening( false );
-                xPSetForm->setPropertyValue( evt.PropertyName, aNewValue );
+                xPSetForm->setPropertyValue( evt.PropertyName, Any(nNewValue) );
                 StartListening();
             }
         }
@@ -1375,10 +1349,8 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                     }
                     if ( nNewX != nX )
                     {
-                        Any aValue;
-                        aValue <<= nNewX;
                         EndListening( false );
-                        xPSet->setPropertyValue( DLGED_PROP_POSITIONX, aValue );
+                        xPSet->setPropertyValue( DLGED_PROP_POSITIONX, Any(nNewX) );
                         StartListening();
                     }
 
@@ -1391,10 +1363,8 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                     }
                     if ( nNewY != nY )
                     {
-                        Any aValue;
-                        aValue <<= nNewY;
                         EndListening( false );
-                        xPSet->setPropertyValue( DLGED_PROP_POSITIONY, aValue );
+                        xPSet->setPropertyValue( DLGED_PROP_POSITIONY, Any(nNewY) );
                         StartListening();
                     }
                 }
@@ -1467,9 +1437,8 @@ void DlgEdForm::UpdateTabIndices()
                aCtrl >>= xPSet;
             if ( xPSet.is() )
             {
-                Any aTabIndex;
-                aTabIndex <<= (sal_Int16) nNewTabIndex++;
-                xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
+                xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) nNewTabIndex) );
+                nNewTabIndex++;
             }
         }
 

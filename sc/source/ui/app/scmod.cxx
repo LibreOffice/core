@@ -2265,9 +2265,7 @@ void ScModule::SetAutoSpellProperty( bool bSet )
     // loading the linguistic component
     SvtLinguConfig aConfig;
 
-    uno::Any aAny;
-    aAny <<= bSet;
-    aConfig.SetProperty( OUString( LINGUPROP_AUTOSPELL ), aAny );
+    aConfig.SetProperty( OUString( LINGUPROP_AUTOSPELL ), uno::Any(bSet) );
 }
 
 bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )

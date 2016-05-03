@@ -452,7 +452,6 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                 }
                 if ( pO )
                 {
-                    Any aAny;
                     SdrGluePoint aGluePoint;
                     Reference< XShape > aXShape( pO->getUnoShape(), UNO_QUERY );
                     Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape(), UNO_QUERY );
@@ -749,20 +748,16 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 if ( nN )
                                 {
                                     OUString aPropName( "EndShape" );
-                                    aAny <<= aXShape;
-                                    SetPropValue( aAny, xPropSet, aPropName, true );
+                                    SetPropValue( Any(aXShape), xPropSet, aPropName, true );
                                     aPropName = "EndGluePointIndex";
-                                    aAny <<= nId;
-                                    SetPropValue( aAny, xPropSet, aPropName, true );
+                                    SetPropValue( Any(nId), xPropSet, aPropName, true );
                                 }
                                 else
                                 {
                                     OUString aPropName( "StartShape" );
-                                    aAny <<= aXShape;
-                                    SetPropValue( aAny, xPropSet, aPropName, true );
+                                    SetPropValue( Any(aXShape), xPropSet, aPropName, true );
                                     aPropName = "StartGluePointIndex";
-                                    aAny <<= nId;
-                                    SetPropValue( aAny, xPropSet, aPropName, true );
+                                    SetPropValue( Any(nId), xPropSet, aPropName, true );
                                 }
 
                                 // Not sure what this is good for, repaint or broadcast of object change.

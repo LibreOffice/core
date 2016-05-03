@@ -191,12 +191,9 @@ void XMLEventsImportContext::AddEventValues(
         // set event (if name is known)
         if (xEvents->hasByName(rEventName))
         {
-            Any aAny;
-            aAny <<= rValues;
-
             try
             {
-                xEvents->replaceByName(rEventName, aAny);
+                xEvents->replaceByName(rEventName, Any(rValues));
             } catch ( const IllegalArgumentException & rException )
             {
                 Sequence<OUString> aMsgParams { rEventName };

@@ -71,29 +71,23 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
         return;
 
     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
-    uno::Any aAny;
 
-    aAny <<= OUString(rName);
-    xPropSet->setPropertyValue("Label", aAny );
+    xPropSet->setPropertyValue("Label", uno::Any(rName) );
 
     OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
-    aAny <<= aTmp;
-    xPropSet->setPropertyValue("TargetURL", aAny );
+    xPropSet->setPropertyValue("TargetURL", uno::Any(aTmp) );
 
     if( !rTarget.isEmpty() )
     {
-        aAny <<= rTarget;
-        xPropSet->setPropertyValue("TargetFrame", aAny );
+        xPropSet->setPropertyValue("TargetFrame", uno::Any(rTarget) );
     }
 
     form::FormButtonType eButtonType = form::FormButtonType_URL;
-    aAny <<= eButtonType;
-    xPropSet->setPropertyValue("ButtonType", aAny );
+    xPropSet->setPropertyValue("ButtonType", uno::Any(eButtonType) );
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
     {
-        aAny <<= true;
-        xPropSet->setPropertyValue("DispatchURLInternal", aAny );
+        xPropSet->setPropertyValue("DispatchURLInternal", uno::Any(true) );
     }
 
     Point aPos;

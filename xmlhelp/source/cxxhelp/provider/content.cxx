@@ -473,9 +473,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 uno::Sequence< OUString > seq( 2 );
                 seq[0] = "Heading";
                 seq[1] = "FullText";
-                uno::Any aAny;
-                aAny <<= seq;
-                xRow->appendObject( rProp,aAny );
+                xRow->appendObject( rProp, uno::Any(seq) );
             }
             else if ( rProp.Name == "Order" )
             {

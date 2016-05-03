@@ -463,11 +463,9 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
                 {
                     //Need summary type for export. Detail type(checkbox, button ...) has been contained by mnObjType
                     const sal_Int16 nTBXControlType = eCreateFromMSTBXControl ;
-                    Any aAny;
-                    aAny <<= nTBXControlType;
                     try
                     {
-                        xPropSet->setPropertyValue(sPropertyName, aAny);
+                        xPropSet->setPropertyValue(sPropertyName, Any(nTBXControlType));
                     }
                     catch(const Exception&)
                     {
@@ -482,14 +480,11 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
                     if( pObj != nullptr && pObj->IsOcxControl() )
                     {
                         const sal_Int16 nOCXControlType =  eCreateFromMSOCXControl;
-                        Any aAny;
                         try
                         {
-                            aAny <<= nOCXControlType;
-                            xPropSet->setPropertyValue(sPropertyName, aAny);
+                            xPropSet->setPropertyValue(sPropertyName, Any(nOCXControlType));
                             //Detail type(checkbox, button ...)
-                            aAny<<= mnObjId;
-                            xPropSet->setPropertyValue(sObjIdPropertyName, aAny);
+                            xPropSet->setPropertyValue(sObjIdPropertyName, makeAny<sal_uInt16>(mnObjId));
                         }
                         catch(const Exception&)
                         {

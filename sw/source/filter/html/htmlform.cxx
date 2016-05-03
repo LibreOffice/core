@@ -2405,16 +2405,11 @@ void SwHTMLParser::EndSelect()
             pValues[i] = sText;
         }
 
-        Any aAny( &aList, cppu::UnoType<uno::Sequence<OUString>>::get() );
+        rPropSet->setPropertyValue("StringItemList", Any(aList) );
 
-        rPropSet->setPropertyValue("StringItemList", aAny );
+        rPropSet->setPropertyValue("ListSourceType", Any(ListSourceType_VALUELIST) );
 
-        aAny <<= ListSourceType_VALUELIST;
-        rPropSet->setPropertyValue("ListSourceType", aAny );
-
-        aAny.setValue( &aValueList, cppu::UnoType<uno::Sequence<OUString>>::get() );
-
-        rPropSet->setPropertyValue("ListSource", aAny );
+        rPropSet->setPropertyValue("ListSource", Any(aValueList) );
 
         size_t nSelCnt = m_pFormImpl->GetSelectedList().size();
         if( !nSelCnt && 1 == m_nSelectEntryCnt && nEntryCnt )
@@ -2430,10 +2425,7 @@ void SwHTMLParser::EndSelect()
         {
             pSels[i] = (sal_Int16)m_pFormImpl->GetSelectedList()[i];
         }
-        aAny.setValue( &aSelList,
-                       cppu::UnoType<uno::Sequence<sal_Int16>>::get() );
-
-        rPropSet->setPropertyValue("DefaultSelection", aAny );
+        rPropSet->setPropertyValue("DefaultSelection", Any(aSelList) );
 
         m_pFormImpl->EraseStringList();
         m_pFormImpl->EraseValueList();

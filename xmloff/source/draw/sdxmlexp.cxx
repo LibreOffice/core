@@ -2156,12 +2156,9 @@ void SdXMLExport::_ExportStyles(bool bUsed)
     {
         Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-        Any aAny;
-
         if( xInfoSetInfo->hasPropertyByName( msPageLayoutNames ) )
         {
-            aAny <<= maDrawPagesAutoLayoutNames;
-            xInfoSet->setPropertyValue( msPageLayoutNames, aAny );
+            xInfoSet->setPropertyValue( msPageLayoutNames, Any(maDrawPagesAutoLayoutNames) );
         }
     }
 }

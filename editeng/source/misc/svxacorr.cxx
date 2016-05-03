@@ -2045,9 +2045,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 xStrm->SetSize( 0 );
                 xStrm->SetBufferSize( 8192 );
                 OUString aMime( "text/xml" );
-                uno::Any aAny;
-                aAny <<= aMime;
-                xStrm->SetProperty( "MediaType", aAny );
+                xStrm->SetProperty( "MediaType", Any(aMime) );
 
 
                 uno::Reference< uno::XComponentContext > xContext =
@@ -2340,14 +2338,12 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             sal_Int32 nSlashPos = sMain.lastIndexOf(cSlash);
             sMain = sMain.copy(0, nSlashPos);
             ::ucbhelper::Content aNewContent( sMain, uno::Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            Any aAny;
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
             aInfo.NewTitle  = aDest.GetName();
             aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DECODE_TO_IURI );
             aInfo.MoveData  = false;
-            aAny <<= aInfo;
-            aNewContent.executeCommand( "transfer", aAny);
+            aNewContent.executeCommand( "transfer", Any(aInfo));
         }
         catch (...)
         {
@@ -2417,9 +2413,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
             refList->SetBufferSize( 8192 );
             OUString aPropName( "MediaType" );
             OUString aMime( "text/xml" );
-            uno::Any aAny;
-            aAny <<= aMime;
-            refList->SetProperty( aPropName, aAny );
+            refList->SetProperty( aPropName, Any(aMime) );
 
             uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();

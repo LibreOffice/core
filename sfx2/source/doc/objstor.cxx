@@ -1711,7 +1711,6 @@ bool SfxObjectShell::SaveTo_Impl
                 OUString aAuthor( "Author" );
                 OUString aKeywords( "Keywords" );
                 OUString aSubject( "Subject" );
-                Any aAny;
 
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     GetModel(), uno::UNO_QUERY_THROW);
@@ -1720,19 +1719,18 @@ bool SfxObjectShell::SaveTo_Impl
 
                 if ( xProps->hasPropertyByName( aAuthor ) )
                 {
-                    aAny <<= xDocProps->getAuthor();
-                    aContent.setPropertyValue( aAuthor, aAny );
+                    aContent.setPropertyValue( aAuthor, Any(xDocProps->getAuthor()) );
                 }
                 if ( xProps->hasPropertyByName( aKeywords ) )
                 {
+                    Any aAny;
                     aAny <<= ::comphelper::string::convertCommaSeparated(
                                 xDocProps->getKeywords());
                     aContent.setPropertyValue( aKeywords, aAny );
                 }
                 if ( xProps->hasPropertyByName( aSubject ) )
                 {
-                    aAny <<= xDocProps->getSubject();
-                    aContent.setPropertyValue( aSubject, aAny );
+                    aContent.setPropertyValue( aSubject, Any(xDocProps->getSubject()) );
                 }
             }
         }

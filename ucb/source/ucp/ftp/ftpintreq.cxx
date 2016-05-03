@@ -70,11 +70,9 @@ XInteractionRequestImpl::XInteractionRequestImpl()
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> continuations{
         Reference<XInteractionContinuation>(p1),
         Reference<XInteractionContinuation>(p2) };
-    Any aAny;
     UnsupportedNameClashException excep;
     excep.NameClash = NameClash::ERROR;
-    aAny <<= excep;
-    m_xRequest.set(new ::comphelper::OInteractionRequest(aAny, continuations));
+    m_xRequest.set(new ::comphelper::OInteractionRequest(Any(excep), continuations));
 }
 
 bool XInteractionRequestImpl::approved() const

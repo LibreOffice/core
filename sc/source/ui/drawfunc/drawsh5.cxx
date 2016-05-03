@@ -189,28 +189,23 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                     OUString sPropTargetFrame( "TargetFrame" );
                                     OUString sPropLabel( "Label" );
 
-                                    uno::Any aAny;
                                     if ( xInfo->hasPropertyByName( sPropLabel ) )
                                     {
-                                        aAny <<= OUString(rName);
-                                        xPropSet->setPropertyValue( sPropLabel, aAny );
+                                        xPropSet->setPropertyValue( sPropLabel, uno::Any(rName) );
                                     }
 
                                     OUString aTmp = INetURLObject::GetAbsURL( pViewData->GetDocShell()->GetMedium()->GetBaseURL(), rURL );
-                                    aAny <<= aTmp;
-                                    xPropSet->setPropertyValue( sPropTargetURL, aAny );
+                                    xPropSet->setPropertyValue( sPropTargetURL, uno::Any(aTmp) );
 
                                     if( !rTarget.isEmpty() && xInfo->hasPropertyByName( sPropTargetFrame ) )
                                     {
-                                        aAny <<= OUString(rTarget);
-                                        xPropSet->setPropertyValue( sPropTargetFrame, aAny );
+                                        xPropSet->setPropertyValue( sPropTargetFrame, uno::Any(rTarget) );
                                     }
 
                                     if ( xInfo->hasPropertyByName( sPropButtonType ) )
                                     {
                                         form::FormButtonType eButtonType = form::FormButtonType_URL;
-                                        aAny <<= eButtonType;
-                                        xPropSet->setPropertyValue( sPropButtonType, aAny );
+                                        xPropSet->setPropertyValue( sPropButtonType, uno::Any(eButtonType) );
                                     }
 
                                     //! Undo ???

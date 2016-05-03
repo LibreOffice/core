@@ -536,10 +536,8 @@ TVChildTarget::getByName( const OUString& aName )
     if( idx < 0 || Elements.size() <= sal_uInt32( idx ) )
         throw NoSuchElementException();
 
-    Any aAny;
     cppu::OWeakObject* p = Elements[idx].get();
-    aAny <<= Reference< XInterface >( p );
-    return aAny;
+    return Any( Reference< XInterface >( p ) );
 }
 
 Sequence< OUString > SAL_CALL

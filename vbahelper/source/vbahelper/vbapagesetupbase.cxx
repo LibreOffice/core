@@ -77,8 +77,7 @@ void SAL_CALL VbaPageSetupBase::setTopMargin( double margin ) throw (css::uno::R
             topMargin -= headerHeight;
         }
 
-        aValue <<= topMargin;
-        mxPageProps->setPropertyValue( "TopMargin" , aValue );
+        mxPageProps->setPropertyValue( "TopMargin" , uno::Any(topMargin) );
     }
     catch( uno::Exception& )
     {
@@ -133,8 +132,7 @@ void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin ) throw (css::uno
             bottomMargin -= footerHeight;
         }
 
-        aValue <<= bottomMargin;
-        mxPageProps->setPropertyValue( "BottomMargin" , aValue );
+        mxPageProps->setPropertyValue( "BottomMargin", uno::Any(bottomMargin) );
     }
     catch( uno::Exception& )
     {
@@ -161,9 +159,7 @@ void SAL_CALL VbaPageSetupBase::setRightMargin( double margin ) throw (css::uno:
     sal_Int32 rightMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        uno::Any aValue;
-        aValue <<= rightMargin;
-        mxPageProps->setPropertyValue( "RightMargin" , aValue );
+        mxPageProps->setPropertyValue( "RightMargin", uno::Any(rightMargin) );
     }
     catch( uno::Exception& )
     {
@@ -191,9 +187,7 @@ void SAL_CALL VbaPageSetupBase::setLeftMargin( double margin ) throw (css::uno::
     sal_Int32 leftMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        uno::Any aValue;
-        aValue <<= leftMargin;
-        mxPageProps->setPropertyValue( "LeftMargin" , aValue );
+        mxPageProps->setPropertyValue( "LeftMargin", uno::Any(leftMargin) );
     }
     catch( uno::Exception& )
     {
@@ -220,9 +214,7 @@ void SAL_CALL VbaPageSetupBase::setHeaderMargin( double margin ) throw (css::uno
     sal_Int32 headerMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        uno::Any aValue;
-        aValue <<= headerMargin;
-        mxPageProps->setPropertyValue( "TopMargin" , aValue );
+        mxPageProps->setPropertyValue( "TopMargin", uno::Any(headerMargin) );
     }
     catch( uno::Exception& )
     {
@@ -249,9 +241,7 @@ void SAL_CALL VbaPageSetupBase::setFooterMargin( double margin ) throw (css::uno
     sal_Int32 footerMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        uno::Any aValue;
-        aValue <<= footerMargin;
-        mxPageProps->setPropertyValue( "BottomMargin" , aValue );
+        mxPageProps->setPropertyValue( "BottomMargin", uno::Any(footerMargin) );
     }
     catch( uno::Exception& )
     {
@@ -301,10 +291,9 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation ) throw (c
 
         if( switchOrientation )
         {
-            aValue <<= !isLandscape;
             uno::Any aHeight = mxPageProps->getPropertyValue( "Height" );
             uno::Any aWidth = mxPageProps->getPropertyValue( "Width" );
-            mxPageProps->setPropertyValue( "IsLandscape" , aValue );
+            mxPageProps->setPropertyValue( "IsLandscape", uno::Any(!isLandscape) );
             mxPageProps->setPropertyValue( "Width" ,  aHeight );
             mxPageProps->setPropertyValue( "Height" , aWidth );
         }

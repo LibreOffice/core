@@ -343,9 +343,7 @@ void ConvDicNameContainer::AddConvDics(
 
             if (xDic.is())
             {
-                uno::Any aAny;
-                aAny <<= xDic;
-                insertByName( xDic->getName(), aAny );
+                insertByName( xDic->getName(), Any(xDic) );
             }
         }
     }

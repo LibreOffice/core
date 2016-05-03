@@ -162,10 +162,8 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 
     SvtSaveOptions aSaveOpt;
     OUString sUsePrettyPrinting("UsePrettyPrinting");
-    sal_Bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
-    Any aAny;
-    aAny.setValue( &bUsePrettyPrinting, cppu::UnoType<bool>::get() );
-    xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
+    bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
+    xInfoSet->setPropertyValue( sUsePrettyPrinting, Any(bUsePrettyPrinting) );
 
     // Set base URI
     OUString sPropName( "BaseURI" );
@@ -330,17 +328,13 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 
     OUString aPropName( "MediaType" );
     OUString aMime( "text/xml" );
-    uno::Any aAny;
-    aAny <<= aMime;
 
     uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-    xSet->setPropertyValue( aPropName, aAny );
+    xSet->setPropertyValue( aPropName, Any(aMime) );
 
     // all streams must be encrypted in encrypted document
     OUString aTmpPropName( "UseCommonStoragePasswordEncryption" );
-    sal_Bool bTrue = sal_True;
-    aAny.setValue( &bTrue, cppu::UnoType<bool>::get() );
-    xSet->setPropertyValue( aTmpPropName, aAny );
+    xSet->setPropertyValue( aTmpPropName, Any(true) );
 
     // set Base URL
     if ( rPropSet.is() )

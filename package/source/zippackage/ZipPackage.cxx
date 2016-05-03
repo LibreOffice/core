@@ -1518,10 +1518,8 @@ void SAL_CALL ZipPackage::commitChanges()
                     aInfo.NewTitle = rtl::Uri::decode ( m_aURL.copy ( 1 + m_aURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) ),
                                                         rtl_UriDecodeWithCharset,
                                                         RTL_TEXTENCODING_UTF8 );
-                    aAny <<= aInfo;
-
                     // if the file is still not corrupted, it can become after the next step
-                    aContent.executeCommand ("transfer", aAny );
+                    aContent.executeCommand ("transfer", Any(aInfo) );
                 }
                 catch ( const css::uno::Exception& r )
                 {
@@ -1782,11 +1780,9 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     // if ( m_nFormat != embed::StorageFormats::PACKAGE )
     //  throw UnknownPropertyException(THROW_WHERE );
 
-    Any aAny;
     if ( PropertyName == ENCRYPTION_KEY_PROPERTY )
     {
-        aAny <<= m_aEncryptionKey;
-        return aAny;
+        return Any(m_aEncryptionKey);
     }
     else if ( PropertyName == ENCRYPTION_ALGORITHMS_PROPERTY )
     {
@@ -1794,33 +1790,27 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         aAlgorithms["StartKeyGenerationAlgorithm"] <<= m_nStartKeyGenerationID;
         aAlgorithms["EncryptionAlgorithm"] <<= m_nCommonEncryptionID;
         aAlgorithms["ChecksumAlgorithm"] <<= m_nChecksumDigestID;
-        aAny <<= aAlgorithms.getAsConstNamedValueList();
-        return aAny;
+        return Any(aAlgorithms.getAsConstNamedValueList());
     }
     if ( PropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
-        aAny <<= m_aStorageEncryptionKeys;
-        return aAny;
+        return Any(m_aStorageEncryptionKeys);
     }
     else if ( PropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY )
     {
-        aAny <<= m_bHasEncryptedEntries;
-        return aAny;
+        return Any(m_bHasEncryptedEntries);
     }
     else if ( PropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY )
     {
-        aAny <<= m_bHasNonEncryptedEntries;
-        return aAny;
+        return Any(m_bHasNonEncryptedEntries);
     }
     else if ( PropertyName == IS_INCONSISTENT_PROPERTY )
     {
-        aAny <<= m_bInconsistent;
-        return aAny;
+        return Any(m_bInconsistent);
     }
     else if ( PropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY )
     {
-        aAny <<= m_bMediaTypeFallbackUsed;
-        return aAny;
+        return Any(m_bMediaTypeFallbackUsed);
     }
     throw UnknownPropertyException(THROW_WHERE );
 }

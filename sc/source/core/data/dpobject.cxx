@@ -3172,15 +3172,9 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
 
         //  set source parameters
 
-        uno::Any aAny;
-        aAny <<= rDBName;
-        xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, aAny );
-
-        aAny <<= rCommand;
-        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
-
-        aAny <<= nSdbType;
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, Any(rDBName) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, Any(rCommand) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, Any(nSdbType) );
 
         uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
         if ( xExecute.is() )

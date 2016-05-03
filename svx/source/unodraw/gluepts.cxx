@@ -481,9 +481,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
             SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( (sal_uInt16)Index );
             aGluePoint.IsUserDefined = sal_False;
             convert( aTempPoint, aGluePoint );
-            uno::Any aAny;
-            aAny <<= aGluePoint;
-            return aAny;
+            return uno::Any(aGluePoint);
         }
         else
         {
@@ -494,9 +492,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
                 const SdrGluePoint& rTempPoint = (*pList)[(sal_uInt16)Index];
                 aGluePoint.IsUserDefined = sal_True;
                 convert( rTempPoint, aGluePoint );
-                uno::Any aAny;
-                aAny <<= aGluePoint;
-                return aAny;
+                return uno::Any(aGluePoint);
             }
         }
     }

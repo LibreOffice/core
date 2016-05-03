@@ -114,56 +114,48 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
         uno::Reference< task::XInteractionHandler2 > xHandler(
             task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xFactory), 0) );
 
-        uno::Any aAny;
         sal_Int32 nLen = 3;
         uno::Sequence<beans::PropertyValue> aSeq( nLen );
 
-        aAny <<= uno::Reference<uno::XInterface>(
-            m_xDocument, uno::UNO_QUERY);
         aSeq[0] = beans::PropertyValue(
             OUString("Model"),
             -1,
-            aAny,
+            uno::Any(uno::Reference<uno::XInterface>(m_xDocument, uno::UNO_QUERY)),
             beans::PropertyState_DIRECT_VALUE);
 
-        aAny <<= sal_False;
         aSeq[1] = beans::PropertyValue(
             OUString("ReadOnly"),
             -1,
-            aAny,
+            uno::Any(false),
             beans::PropertyState_DIRECT_VALUE);
 
-        aAny <<= (sal_Bool) sal_True;
         aSeq[2] = beans::PropertyValue(
             OUString("NoAutoSave"),
             -1,
-            aAny,
+            uno::Any(true),
             beans::PropertyState_DIRECT_VALUE);
 
         if ( bPluginMode )
         {
             aSeq.realloc( ++nLen );
-            aAny <<= (sal_Int16) 3;
             aSeq[nLen-1] = beans::PropertyValue(
                 OUString("PluginMode"),
                 -1,
-                aAny,
+                uno::Any((sal_Int16) 3),
                 beans::PropertyState_DIRECT_VALUE);
         }
 
         aSeq.realloc( nLen+=2 );
-        aAny <<= xHandler;
         aSeq[nLen-2] = beans::PropertyValue(
             OUString("InteractionHandler"),
             -1,
-            aAny,
+            uno::Any(xHandler),
             beans::PropertyState_DIRECT_VALUE);
 
-        aAny <<= m_nMacroExecMode;
         aSeq[nLen-1] = beans::PropertyValue(
             OUString("MacroExecutionMode"),
             -1,
-            aAny,
+            uno::Any(m_nMacroExecMode),
             beans::PropertyState_DIRECT_VALUE);
 
         xComponentLoader->loadComponentFromURL(
@@ -291,10 +283,9 @@ HRESULT DocumentHolder::InPlaceActivate(
                 hWndxWinParent = hWndSite;
             }
 
-            aAny <<= sal_Int32(hWndxWinParent);
             xWin.set(
                 xToolkit->createSystemChild(
-                    aAny,
+                    uno::Any(sal_Int32(hWndxWinParent)),
                     aProcessIdent,
                     lang::SystemDependent::SYSTEM_WIN32),
                 uno::UNO_QUERY);
@@ -1231,11 +1222,9 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
         uno::Sequence<sal_Int8> aProcessIdent(16);
         rtl_getGlobalProcessId((sal_uInt8*)aProcessIdent.getArray());
 
-        uno::Any aAny;
-        aAny <<= sal_Int32(hWnd);
         xWin.set(
             xToolkit->createSystemChild(
-                aAny,
+                uno::Any(sal_Int32(hWnd)),
                 aProcessIdent,
                 lang::SystemDependent::SYSTEM_WIN32),
             uno::UNO_QUERY);
@@ -1253,7 +1242,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
             uno::Reference<awt::XSystemDependentWindowPeer> xSysWin(
                 xWin,uno::UNO_QUERY);
             if(xSysWin.is()) {
-                aAny = xSysWin->getWindowHandle(
+                uno::Any aAny = xSysWin->getWindowHandle(
                     aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
                 sal_Int64 tmp;
                 if( aAny >>= tmp )

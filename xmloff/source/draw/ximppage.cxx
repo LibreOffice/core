@@ -500,28 +500,13 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
                     Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
                     if(xPropSet.is())
                     {
-                        uno::Any aAny;
-
-                        aAny <<= pPageMasterContext->GetBorderBottom();
-                        xPropSet->setPropertyValue("BorderBottom", aAny);
-
-                        aAny <<= pPageMasterContext->GetBorderLeft();
-                        xPropSet->setPropertyValue("BorderLeft", aAny);
-
-                        aAny <<= pPageMasterContext->GetBorderRight();
-                        xPropSet->setPropertyValue("BorderRight", aAny);
-
-                        aAny <<= pPageMasterContext->GetBorderTop();
-                        xPropSet->setPropertyValue("BorderTop", aAny);
-
-                        aAny <<= pPageMasterContext->GetWidth();
-                        xPropSet->setPropertyValue("Width", aAny);
-
-                        aAny <<= pPageMasterContext->GetHeight();
-                        xPropSet->setPropertyValue("Height", aAny);
-
-                        aAny <<= pPageMasterContext->GetOrientation();
-                        xPropSet->setPropertyValue("Orientation", aAny);
+                        xPropSet->setPropertyValue("BorderBottom", Any(pPageMasterContext->GetBorderBottom()));
+                        xPropSet->setPropertyValue("BorderLeft", Any(pPageMasterContext->GetBorderLeft()));
+                        xPropSet->setPropertyValue("BorderRight", Any(pPageMasterContext->GetBorderRight()));
+                        xPropSet->setPropertyValue("BorderTop", Any(pPageMasterContext->GetBorderTop()));
+                        xPropSet->setPropertyValue("Width", Any(pPageMasterContext->GetWidth()));
+                        xPropSet->setPropertyValue("Height", Any(pPageMasterContext->GetHeight()));
+                        xPropSet->setPropertyValue("Orientation", Any(pPageMasterContext->GetOrientation()));
                     }
                 }
             }

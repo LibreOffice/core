@@ -594,9 +594,7 @@ void SAL_CALL UnoDialogControl::setHelpId( const OUString& i_id ) throw (Runtime
 void UnoDialogControl::setTitle( const OUString& Title ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Any aAny;
-    aAny <<= Title;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ), uno::Any(Title), true );
 }
 
 OUString UnoDialogControl::getTitle() throw(RuntimeException, std::exception)
@@ -931,9 +929,7 @@ uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString( "com.sun.star.awt.UnoControlMultiPage" );
-        return aAny;
+        return uno::Any( OUString( "com.sun.star.awt.UnoControlMultiPage" ) );
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
 }
@@ -1051,9 +1047,7 @@ uno::Any UnoPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString( "com.sun.star.awt.UnoControlPage" );
-        return aAny;
+        return uno::Any( OUString( "com.sun.star.awt.UnoControlPage" ) );
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
 }
@@ -1214,20 +1208,17 @@ OUString UnoFrameModel::getServiceName() throw(css::uno::RuntimeException, std::
 
 uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    uno::Any aAny;
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
         {
-            aAny <<= OUString( "com.sun.star.awt.UnoControlFrame" );
-            return aAny;
+            return uno::Any( OUString( "com.sun.star.awt.UnoControlFrame" ) );
         }
         case BASEPROPERTY_SCROLLWIDTH:
         case BASEPROPERTY_SCROLLHEIGHT:
         case BASEPROPERTY_SCROLLTOP:
         case BASEPROPERTY_SCROLLLEFT:
-            aAny <<= sal_Int32(0);
-            return aAny;
+            return uno::Any( sal_Int32(0) );
         case BASEPROPERTY_USERFORMCONTAINEES:
         {
             uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();

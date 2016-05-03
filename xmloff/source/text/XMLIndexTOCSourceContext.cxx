@@ -146,8 +146,7 @@ void XMLIndexTOCSourceContext::EndElement()
     aAny.setValue(&bUseParagraphStyles, cppu::UnoType<bool>::get());
     rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
 
-    aAny <<= (sal_Int16)nOutlineLevel;
-    rIndexPropertySet->setPropertyValue(sLevel, aAny);
+    rIndexPropertySet->setPropertyValue(sLevel, css::uno::Any((sal_Int16)nOutlineLevel));
 
     // process common attributes
     XMLIndexSourceBaseContext::EndElement();

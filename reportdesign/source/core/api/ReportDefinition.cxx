@@ -1549,9 +1549,7 @@ bool OReportDefinition::WriteThroughComponent(
 
         OUString aPropName("MediaType");
         OUString aMime("text/xml");
-        uno::Any aAny;
-        aAny <<= aMime;
-        xStreamProp->setPropertyValue( aPropName, aAny );
+        xStreamProp->setPropertyValue( aPropName, uno::Any(aMime) );
 
         // encrypt all streams
         xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",

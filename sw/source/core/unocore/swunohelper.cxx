@@ -96,14 +96,12 @@ bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, bool bCopyIsMo
                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
 
-        css::uno::Any aAny;
         css::ucb::TransferInfo aInfo;
         aInfo.NameClash = css::ucb::NameClash::ERROR;
         aInfo.NewTitle = sName;
         aInfo.SourceURL = rURL;
         aInfo.MoveData = bCopyIsMove;
-        aAny <<= aInfo;
-        aTempContent.executeCommand( "transfer", aAny );
+        aTempContent.executeCommand( "transfer", uno::Any(aInfo) );
     }
     catch( css::uno::Exception& )
     {

@@ -1172,9 +1172,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 {
                     try
                     {
-                        Any aXmlDialogNameAny;
-                        aXmlDialogNameAny <<= OUString( aNewDlgName );
-                        xDialogModelPropSet->setPropertyValue( DLGED_PROP_NAME, aXmlDialogNameAny );
+                        xDialogModelPropSet->setPropertyValue( DLGED_PROP_NAME, Any(aNewDlgName) );
                         bRenamed = true;
                     }
                     catch(const beans::UnknownPropertyException& )

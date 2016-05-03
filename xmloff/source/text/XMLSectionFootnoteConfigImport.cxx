@@ -128,53 +128,45 @@ void XMLSectionFootnoteConfigImport::StartElement(
     }
 
     // OK, now we have all values and can fill the XMLPropertyState vector
-    Any aAny;
 
-    aAny.setValue( &bNumOwn, cppu::UnoType<bool>::get() );
     sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_OWN : CTF_SECTION_FOOTNOTE_NUM_OWN );
-    XMLPropertyState aNumOwn( nIndex, aAny );
+    XMLPropertyState aNumOwn( nIndex, css::uno::Any(bNumOwn) );
     rProperties.push_back( aNumOwn );
 
-    aAny.setValue( &bNumRestart, cppu::UnoType<bool>::get() );
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_RESTART : CTF_SECTION_FOOTNOTE_NUM_RESTART );
-    XMLPropertyState aNumRestart( nIndex, aAny );
+    XMLPropertyState aNumRestart( nIndex, css::uno::Any(bNumRestart) );
     rProperties.push_back( aNumRestart );
 
-    aAny <<= nNumRestartAt;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_RESTART_AT :
         CTF_SECTION_FOOTNOTE_NUM_RESTART_AT );
-    XMLPropertyState aNumRestartAtState( nIndex, aAny );
+    XMLPropertyState aNumRestartAtState( nIndex, css::uno::Any(nNumRestartAt) );
     rProperties.push_back( aNumRestartAtState );
 
     sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
                                                     sNumFormat,
                                                     sNumLetterSync );
-    aAny <<= nNumType;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_TYPE : CTF_SECTION_FOOTNOTE_NUM_TYPE );
-    XMLPropertyState aNumFormatState( nIndex, aAny );
+    XMLPropertyState aNumFormatState( nIndex, css::uno::Any(nNumType) );
     rProperties.push_back( aNumFormatState );
 
-    aAny <<= sNumPrefix;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_PREFIX : CTF_SECTION_FOOTNOTE_NUM_PREFIX );
-    XMLPropertyState aPrefixState( nIndex, aAny );
+    XMLPropertyState aPrefixState( nIndex, css::uno::Any(sNumPrefix) );
     rProperties.push_back( aPrefixState );
 
-    aAny <<= sNumSuffix;
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_NUM_SUFFIX : CTF_SECTION_FOOTNOTE_NUM_SUFFIX );
-    XMLPropertyState aSuffixState( nIndex, aAny );
+    XMLPropertyState aSuffixState( nIndex, css::uno::Any(sNumSuffix) );
     rProperties.push_back( aSuffixState );
 
-    aAny.setValue( &bEnd, cppu::UnoType<bool>::get() );
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_END : CTF_SECTION_FOOTNOTE_END );
-    XMLPropertyState aEndState( nIndex, aAny );
+    XMLPropertyState aEndState( nIndex, css::uno::Any(bEnd) );
     rProperties.push_back( aEndState );
 }
 

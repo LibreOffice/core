@@ -3232,14 +3232,12 @@ Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw
         Reference < container::XIndexContainer > xCont( m_pData->m_contViewData, UNO_QUERY );
         sal_Int32 nCount = 0;
         Sequence < beans::PropertyValue > aSeq;
-        Any aAny;
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell ); pFrame;
                 pFrame = SfxViewFrame::GetNext( *pFrame, m_pData->m_pObjectShell ) )
         {
             bool bIsActive = ( pFrame == pActFrame );
             pFrame->GetViewShell()->WriteUserDataSequence( aSeq );
-            aAny <<= aSeq;
-            xCont->insertByIndex( bIsActive ? 0 : nCount, aAny );
+            xCont->insertByIndex( bIsActive ? 0 : nCount, Any(aSeq) );
             nCount++;
         }
     }
@@ -3551,8 +3549,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
             Any a = xPropSet->getPropertyValue( aMediaTypeProp );
             if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty())
             {
-                a <<= aUIConfigMediaType;
-                xPropSet->setPropertyValue( aMediaTypeProp, a );
+                xPropSet->setPropertyValue( aMediaTypeProp, Any(aUIConfigMediaType) );
             }
         }
         else

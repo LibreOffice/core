@@ -170,11 +170,9 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
             xStatusIndicator->start(SW_RESSTR( STR_STATSTR_SWGWRITE),
                                     nProgressRange);
         }
-        aAny <<= nProgressRange;
-        xInfoSet->setPropertyValue("ProgressRange", aAny);
+        xInfoSet->setPropertyValue("ProgressRange", Any(nProgressRange));
 
-        aAny <<= static_cast < sal_Int32 >( -1 );
-        xInfoSet->setPropertyValue("ProgressMax", aAny);
+        xInfoSet->setPropertyValue("ProgressMax", Any(static_cast < sal_Int32 >( -1 )));
     }
 
     SvtSaveOptions aSaveOpt;
@@ -486,9 +484,7 @@ bool SwXMLWriter::WriteThroughComponent(
         if( !xSet.is() )
             return false;
 
-        uno::Any aAny;
-        aAny <<= OUString("text/xml");
-        xSet->setPropertyValue("MediaType", aAny );
+        xSet->setPropertyValue("MediaType", Any(OUString("text/xml")) );
 
         // even plain stream should be encrypted in encrypted documents
         xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", makeAny(true) );

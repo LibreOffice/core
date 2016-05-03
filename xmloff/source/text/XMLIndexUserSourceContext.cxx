@@ -176,8 +176,7 @@ void XMLIndexUserSourceContext::EndElement()
 
     if( !sIndexName.isEmpty() )
     {
-        aAny <<= sIndexName;
-        rIndexPropertySet->setPropertyValue(sUserIndexName, aAny);
+        rIndexPropertySet->setPropertyValue(sUserIndexName, css::uno::Any(sIndexName));
     }
 
     XMLIndexSourceBaseContext::EndElement();

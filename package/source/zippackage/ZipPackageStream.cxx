@@ -1350,41 +1350,33 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
         throw( beans::UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Any aAny;
     if ( PropertyName == "MediaType" )
     {
-        aAny <<= msMediaType;
-        return aAny;
+        return Any(msMediaType);
     }
     else if ( PropertyName == "Size" )
     {
-        aAny <<= aEntry.nSize;
-        return aAny;
+        return Any(aEntry.nSize);
     }
     else if ( PropertyName == "Encrypted" )
     {
-        aAny <<= ((m_nStreamMode == PACKAGE_STREAM_RAW) || m_bToBeEncrypted);
-        return aAny;
+        return Any((m_nStreamMode == PACKAGE_STREAM_RAW) || m_bToBeEncrypted);
     }
     else if ( PropertyName == "WasEncrypted" )
     {
-        aAny <<= m_bIsEncrypted;
-        return aAny;
+        return Any(m_bIsEncrypted);
     }
     else if ( PropertyName == "Compressed" )
     {
-        aAny <<= m_bToBeCompressed;
-        return aAny;
+        return Any(m_bToBeCompressed);
     }
     else if ( PropertyName == ENCRYPTION_KEY_PROPERTY )
     {
-        aAny <<= m_aEncryptionKey;
-        return aAny;
+        return Any(m_aEncryptionKey);
     }
     else if ( PropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
-        aAny <<= m_aStorageEncryptionKeys;
-        return aAny;
+        return Any(m_aStorageEncryptionKeys);
     }
     else
         throw beans::UnknownPropertyException(THROW_WHERE );

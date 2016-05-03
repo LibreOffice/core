@@ -730,8 +730,7 @@ void
 
                 if( xShapes->getCount() )
                 {
-                    aAny <<= xShapes;
-                    xSel->select( aAny );
+                    xSel->select( Any(xShapes) );
                 }
             }
         }
@@ -776,8 +775,7 @@ void
                     else if( bFound && !bSelect )
                         xShapes->remove( xShape );
 
-                    aAny <<= xShapes;
-                    xSel->select( aAny );
+                    xSel->select( Any(xShapes) );
                 }
             }
         }

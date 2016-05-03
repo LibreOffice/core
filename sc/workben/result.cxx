@@ -37,13 +37,11 @@ void ScAddInResult::NewValue()
 {
     ++nTickCount;
 
-    uno::Any aAny;
     String aRet = aArg;
     aRet += nTickCount;
     OUString aUStr = StringToOUString( aRet, CHARSET_SYSTEM );
-    aAny <<= aUStr;
 
-    sheet::ResultEvent aEvent( (cppu::OWeakObject*)this, aAny );
+    sheet::ResultEvent aEvent( (cppu::OWeakObject*)this, Any(aUStr) );
 
     for (size_t n = 0; n < m_Listeners.size(); ++n)
         m_Listeners[n]->modified( aEvent );

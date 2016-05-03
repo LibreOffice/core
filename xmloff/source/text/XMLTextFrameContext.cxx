@@ -285,7 +285,6 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     {
         const SdXMLImExViewBox aViewBox( sViewBox, GetImport().GetMM100UnitConverter());
         basegfx::B2DPolyPolygon aPolyPolygon;
-        Any aAny;
 
         if( bPath )
         {
@@ -320,24 +319,21 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
             com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence;
             basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
-            aAny <<= aPointSequenceSequence;
-            xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
+            xPropSet->setPropertyValue( sContourPolyPolygon, Any(aPointSequenceSequence) );
         }
 
         const OUString sIsPixelContour("IsPixelContour");
 
         if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
         {
-            aAny.setValue( &bPixelWidth, cppu::UnoType<bool>::get() );
-            xPropSet->setPropertyValue( sIsPixelContour, aAny );
+            xPropSet->setPropertyValue( sIsPixelContour, Any(bPixelWidth) );
         }
 
         const OUString sIsAutomaticContour("IsAutomaticContour");
 
         if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
         {
-            aAny.setValue( &bAuto, cppu::UnoType<bool>::get() );
-            xPropSet->setPropertyValue( sIsAutomaticContour, aAny );
+            xPropSet->setPropertyValue( sIsAutomaticContour, Any(bAuto) );
         }
     }
 }
@@ -626,16 +622,14 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         if( rStyles.is() &&
             rStyles->hasByName( sDisplayStyleName ) )
         {
-            aAny <<= sDisplayStyleName;
-            xPropSet->setPropertyValue( sFrameStyleName, aAny );
+            xPropSet->setPropertyValue( sFrameStyleName, Any(sDisplayStyleName) );
         }
     }
 
     // anchor type (must be set before any other properties, because
     // otherwise some orientations cannot be set or will be changed
     // afterwards)
-    aAny <<= eAnchorType;
-    xPropSet->setPropertyValue( sAnchorType, aAny );
+    xPropSet->setPropertyValue( sAnchorType, Any(eAnchorType) );
 
     // hard properties
     if( pStyle )
@@ -647,8 +641,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     aAny >>= nHoriOrient;
     if( HoriOrientation::NONE == nHoriOrient )
     {
-        aAny <<= nX;
-        xPropSet->setPropertyValue( sHoriOrientPosition, aAny );
+        xPropSet->setPropertyValue( sHoriOrientPosition, Any(nX) );
     }
 
     sal_Int16 nVertOrient =  VertOrientation::NONE;
@@ -656,26 +649,21 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     aAny >>= nVertOrient;
     if( VertOrientation::NONE == nVertOrient )
     {
-        aAny <<= nY;
-        xPropSet->setPropertyValue( sVertOrientPosition, aAny );
+        xPropSet->setPropertyValue( sVertOrientPosition, Any(nY) );
     }
 
     // width
     if( nWidth > 0 )
     {
-        aAny <<= nWidth;
-        xPropSet->setPropertyValue( sWidth, aAny );
+        xPropSet->setPropertyValue( sWidth, Any(nWidth) );
     }
     if( nRelWidth > 0 || nWidth > 0 )
     {
-        aAny <<= nRelWidth;
-        xPropSet->setPropertyValue( sRelativeWidth, aAny );
+        xPropSet->setPropertyValue( sRelativeWidth, Any(nRelWidth) );
     }
     if( bSyncWidth || nWidth > 0 )
     {
-        sal_Bool bTmp = bSyncWidth;
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue( sIsSyncWidthToHeight, aAny );
+        xPropSet->setPropertyValue( sIsSyncWidthToHeight, Any(bSyncWidth) );
     }
     if( xPropSetInfo->hasPropertyByName( sWidthType ) &&
         (bMinWidth || nWidth > 0 || nRelWidth > 0 ) )
@@ -683,25 +671,20 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         sal_Int16 nSizeType =
             (bMinWidth && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
                                                            : SizeType::FIX;
-        aAny <<= nSizeType;
-        xPropSet->setPropertyValue( sWidthType, aAny );
+        xPropSet->setPropertyValue( sWidthType, Any(nSizeType) );
     }
 
     if( nHeight > 0 )
     {
-        aAny <<= nHeight;
-        xPropSet->setPropertyValue( sHeight, aAny );
+        xPropSet->setPropertyValue( sHeight, Any(nHeight) );
     }
     if( nRelHeight > 0 || nHeight > 0 )
     {
-        aAny <<= nRelHeight;
-        xPropSet->setPropertyValue( sRelativeHeight, aAny );
+        xPropSet->setPropertyValue( sRelativeHeight, Any(nRelHeight) );
     }
     if( bSyncHeight || nHeight > 0 )
     {
-        sal_Bool bTmp = bSyncHeight;
-        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue( sIsSyncHeightToWidth, aAny );
+        xPropSet->setPropertyValue( sIsSyncHeightToWidth, Any(bSyncHeight) );
     }
     if( xPropSetInfo->hasPropertyByName( sSizeType ) &&
         (bMinHeight || nHeight > 0 || nRelHeight > 0 ) )
@@ -709,8 +692,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         sal_Int16 nSizeType =
             (bMinHeight && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
                                                             : SizeType::FIX;
-        aAny <<= nSizeType;
-        xPropSet->setPropertyValue( sSizeType, aAny );
+        xPropSet->setPropertyValue( sSizeType, Any(nSizeType) );
     }
 
     if( XML_TEXT_FRAME_GRAPHIC == nType )
@@ -733,24 +715,20 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
             sHRef = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
             xBase64Stream = nullptr;
         }
-        aAny <<= sHRef;
-        xPropSet->setPropertyValue( sGraphicURL, aAny );
+        xPropSet->setPropertyValue( sGraphicURL, Any(sHRef) );
 
         // filter name
-        aAny <<=sFilterName;
-        xPropSet->setPropertyValue( sGraphicFilter, aAny );
+        xPropSet->setPropertyValue( sGraphicFilter, Any(sFilterName) );
 
         // rotation
-        aAny <<= nRotation;
-        xPropSet->setPropertyValue( sGraphicRotation, aAny );
+        xPropSet->setPropertyValue( sGraphicRotation, Any(nRotation) );
     }
 
     // page number (must be set after the frame is inserted, because it
     // will be overwritten then inserting the frame.
     if( TextContentAnchorType_AT_PAGE == eAnchorType && nPage > 0 )
     {
-        aAny <<= nPage;
-        xPropSet->setPropertyValue( sAnchorPageNo, aAny );
+        xPropSet->setPropertyValue( sAnchorPageNo, Any(nPage) );
     }
 
     if( XML_TEXT_FRAME_OBJECT != nType  &&
@@ -1287,26 +1265,21 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
         !xPropSetInfo->hasPropertyByName(s_HyperLinkURL))
         return;
 
-    Any aAny;
-    aAny <<= rHRef;
-    xPropSet->setPropertyValue( s_HyperLinkURL, aAny );
+    xPropSet->setPropertyValue( s_HyperLinkURL, Any(rHRef) );
 
     if (xPropSetInfo->hasPropertyByName(s_HyperLinkName))
     {
-        aAny <<= rName;
-        xPropSet->setPropertyValue(s_HyperLinkName, aAny);
+        xPropSet->setPropertyValue(s_HyperLinkName, Any(rName));
     }
 
     if (xPropSetInfo->hasPropertyByName(s_HyperLinkTarget))
     {
-        aAny <<= rTargetFrameName;
-        xPropSet->setPropertyValue( s_HyperLinkTarget, aAny );
+        xPropSet->setPropertyValue( s_HyperLinkTarget, Any(rTargetFrameName) );
     }
 
     if (xPropSetInfo->hasPropertyByName(s_ServerMap))
     {
-        aAny.setValue( &bMap, cppu::UnoType<bool>::get() );
-        xPropSet->setPropertyValue(s_ServerMap, aAny);
+        xPropSet->setPropertyValue(s_ServerMap, Any(bMap));
     }
 }
 

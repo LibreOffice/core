@@ -267,20 +267,14 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getMaximumValue(  )
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= DBL_MAX;
-
-    return aAny;
+    return uno::Any(DBL_MAX);
 }
 
 uno::Any SAL_CALL
     ScAccessibleCellBase::getMinimumValue(  )
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= -DBL_MAX;
-
-    return aAny;
+    return uno::Any(-DBL_MAX);
 }
 
     //=====  XServiceInfo  ====================================================

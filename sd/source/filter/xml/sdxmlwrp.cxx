@@ -977,9 +977,7 @@ bool SdXMLFilter::Export()
                     if( !xDocOut.is() || !xProps.is() )
                         return false;
 
-                    uno::Any aAny;
-                    aAny <<= OUString( "text/xml");
-                    xProps->setPropertyValue( "MediaType" , aAny);
+                    xProps->setPropertyValue( "MediaType", Any(OUString( "text/xml")));
 
                     // encrypt all streams
                     xProps->setPropertyValue( "UseCommonStoragePasswordEncryption",

@@ -806,9 +806,7 @@ short ChineseDictionaryDialog::Execute()
     {
         //save settings to configuration
         SvtLinguConfig  aLngCfg;
-        Any aAny;
-        aAny <<= m_pCB_Reverse->IsChecked();
-        aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), aAny );
+        aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), uno::Any(m_pCB_Reverse->IsChecked()) );
 
         m_pCT_DictionaryToSimplified->save();
         m_pCT_DictionaryToTraditional->save();

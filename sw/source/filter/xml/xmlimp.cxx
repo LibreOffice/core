@@ -1285,10 +1285,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if( ! bPrinterIndependentLayout )
     {
-        Any aAny;
         sal_Int16 nTmp = document::PrinterIndependentLayout::DISABLED;
-        aAny <<= nTmp;
-        xProps->setPropertyValue( "PrinterIndependentLayout", aAny );
+        xProps->setPropertyValue( "PrinterIndependentLayout", Any(nTmp) );
     }
 
     if( ! bAddExternalLeading )

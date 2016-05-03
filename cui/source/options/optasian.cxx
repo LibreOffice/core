@@ -203,9 +203,7 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
         OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
-            Any aVal;
-            aVal <<= nSet;
-            pImpl->xPrSet->setPropertyValue(sCompress, aVal);
+            pImpl->xPrSet->setPropertyValue(sCompress, Any(nSet));
         }
     }
     pImpl->aConfig.Commit();

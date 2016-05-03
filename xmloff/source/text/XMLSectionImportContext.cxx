@@ -183,8 +183,7 @@ void XMLSectionImportContext::StartElement(
 
                     if (bCondOK)
                     {
-                        aAny <<= sCond;
-                        xPropSet->setPropertyValue( sCondition, aAny );
+                        xPropSet->setPropertyValue( sCondition, Any(sCond) );
                     }
                 }
 
@@ -192,9 +191,7 @@ void XMLSectionImportContext::StartElement(
                 if ( bSequenceOK &&
                      IsXMLToken(GetLocalName(), XML_SECTION) )
                 {
-                    Any aAny;
-                    aAny <<= aSequence;
-                    xPropSet->setPropertyValue(sProtectionKey, aAny);
+                    xPropSet->setPropertyValue(sProtectionKey, Any(aSequence));
                 }
 
                 // protection

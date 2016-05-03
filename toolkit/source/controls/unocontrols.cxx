@@ -297,9 +297,7 @@ void UnoEditControl::textChanged(const awt::TextEvent& e) throw(uno::RuntimeExce
 
     if ( mbHasTextProperty )
     {
-        uno::Any aAny;
-        aAny <<= xText->getText();
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, false );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), uno::Any(xText->getText()), false );
     }
     else
     {
@@ -324,9 +322,7 @@ void UnoEditControl::setText( const OUString& aText ) throw(uno::RuntimeExceptio
 {
     if ( mbHasTextProperty )
     {
-        uno::Any aAny;
-        aAny <<= aText;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), uno::Any(aText), true );
     }
     else
     {
@@ -431,9 +427,7 @@ sal_Bool UnoEditControl::isEditable() throw(uno::RuntimeException, std::exceptio
 
 void UnoEditControl::setEditable( sal_Bool bEditable ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= !bEditable;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_READONLY ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_READONLY ), uno::Any(!bEditable), true );
 }
 
 sal_Int16 UnoEditControl::getMaxTextLen() throw(uno::RuntimeException, std::exception)
@@ -450,9 +444,7 @@ void UnoEditControl::setMaxTextLen( sal_Int16 nLen ) throw(uno::RuntimeException
 {
     if ( ImplHasProperty( BASEPROPERTY_MAXTEXTLEN) )
     {
-        uno::Any aAny;
-        aAny <<= (sal_Int16)nLen;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), aAny, true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), uno::Any((sal_Int16)nLen), true );
     }
     else
     {
@@ -546,9 +538,7 @@ uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFileControl );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlFileControl ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -883,9 +873,7 @@ void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source ) thr
 void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw (uno::RuntimeException, std::exception)
 {
     // forward to model
-    uno::Any aAny;
-    aAny <<= (sal_Int16)rEvent.Selected;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16)rEvent.Selected), false );
 
     // multiplex
     ItemEvent aEvent( rEvent );
@@ -895,9 +883,7 @@ void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
 
 void UnoButtonControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= rLabel;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(rLabel), true );
 }
 
 void UnoButtonControl::setActionCommand( const OUString& rCommand ) throw(uno::RuntimeException, std::exception)
@@ -1283,9 +1269,7 @@ void UnoRadioButtonControl::removeActionListener(const uno::Reference< awt::XAct
 
 void UnoRadioButtonControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= rLabel;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(rLabel), true );
 }
 
 void UnoRadioButtonControl::setActionCommand( const OUString& rCommand ) throw(uno::RuntimeException, std::exception)
@@ -1301,9 +1285,7 @@ void UnoRadioButtonControl::setActionCommand( const OUString& rCommand ) throw(u
 void UnoRadioButtonControl::setState( sal_Bool bOn ) throw(uno::RuntimeException, std::exception)
 {
     sal_Int16 nState = bOn ? 1 : 0;
-    uno::Any aAny;
-    aAny <<= nState;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(nState), true );
 }
 
 sal_Bool UnoRadioButtonControl::getState() throw(uno::RuntimeException, std::exception)
@@ -1316,9 +1298,7 @@ sal_Bool UnoRadioButtonControl::getState() throw(uno::RuntimeException, std::exc
 
 void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int16)rEvent.Selected;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16)rEvent.Selected), false );
 
     // compatibility:
     // in OOo 1.0.x, when the user clicked a radio button in a group of buttons, this resulted
@@ -1541,16 +1521,12 @@ void UnoCheckBoxControl::setActionCommand( const OUString& rCommand ) throw(uno:
 
 void UnoCheckBoxControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= rLabel;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(rLabel), true );
 }
 
 void UnoCheckBoxControl::setState( short n ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int16)n;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16) n), true );
 }
 
 short UnoCheckBoxControl::getState() throw(uno::RuntimeException, std::exception)
@@ -1563,16 +1539,12 @@ short UnoCheckBoxControl::getState() throw(uno::RuntimeException, std::exception
 
 void UnoCheckBoxControl::enableTriState( sal_Bool b ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= b;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TRISTATE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TRISTATE ), uno::Any(b), true );
 }
 
 void UnoCheckBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int16)rEvent.Selected;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any((sal_Int16) rEvent.Selected), false );
 
     if ( maItemListeners.getLength() )
         maItemListeners.itemStateChanged( rEvent );
@@ -1635,21 +1607,15 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString( "com.sun.star.awt.UnoControlFixedHyperlink" );
-        return aAny;
+        return uno::Any( OUString( "com.sun.star.awt.UnoControlFixedHyperlink" ) );
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
-        uno::Any aAny;
-        aAny <<= (sal_Int16)0;
-        return aAny;
+        return uno::Any((sal_Int16) 0);
     }
     else if ( nPropId == BASEPROPERTY_URL )
     {
-        uno::Any aAny;
-        aAny <<= OUString();
-        return aAny;
+        return uno::Any( OUString() );
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -1720,9 +1686,7 @@ sal_Bool UnoFixedHyperlinkControl::isTransparent() throw(uno::RuntimeException, 
 
 void UnoFixedHyperlinkControl::setText( const OUString& Text ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Text;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(Text), true );
 }
 
 OUString UnoFixedHyperlinkControl::getText() throw(uno::RuntimeException, std::exception)
@@ -1732,9 +1696,7 @@ OUString UnoFixedHyperlinkControl::getText() throw(uno::RuntimeException, std::e
 
 void UnoFixedHyperlinkControl::setURL( const OUString& URL ) throw(css::uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= URL;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), uno::Any(URL), true );
 }
 
 OUString UnoFixedHyperlinkControl::getURL(  ) throw(css::uno::RuntimeException, std::exception)
@@ -1744,9 +1706,7 @@ OUString UnoFixedHyperlinkControl::getURL(  ) throw(css::uno::RuntimeException, 
 
 void UnoFixedHyperlinkControl::setAlignment( short nAlign ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int16)nAlign;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any((sal_Int16) nAlign), true );
 }
 
 short UnoFixedHyperlinkControl::getAlignment() throw(uno::RuntimeException, std::exception)
@@ -1838,15 +1798,11 @@ uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFixedText );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlFixedText ) );
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
-        uno::Any aAny;
-        aAny <<= (sal_Int16)0;
-        return aAny;
+        return uno::Any((sal_Int16)0);
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -1933,9 +1889,7 @@ sal_Bool UnoFixedTextControl::isTransparent() throw(uno::RuntimeException, std::
 
 void UnoFixedTextControl::setText( const OUString& Text ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Text;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(Text), true );
 }
 
 OUString UnoFixedTextControl::getText() throw(uno::RuntimeException, std::exception)
@@ -1945,9 +1899,7 @@ OUString UnoFixedTextControl::getText() throw(uno::RuntimeException, std::except
 
 void UnoFixedTextControl::setAlignment( short nAlign ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int16)nAlign;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any((sal_Int16) nAlign), true );
 }
 
 short UnoFixedTextControl::getAlignment() throw(uno::RuntimeException, std::exception)
@@ -2027,9 +1979,7 @@ uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlGroupBox );
-        return aAny;
+        return uno::Any(OUString::createFromAscii( szServiceName_UnoControlGroupBox ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2274,9 +2224,7 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlListBox );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlListBox ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2322,9 +2270,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
     {
         // reset selection
         uno::Sequence<sal_Int16> aSeq;
-        uno::Any aAny;
-        aAny <<= aSeq;
-        setDependentFastPropertyValue( BASEPROPERTY_SELECTEDITEMS, aAny );
+        setDependentFastPropertyValue( BASEPROPERTY_SELECTEDITEMS, uno::Any(aSeq) );
 
         if ( !m_xData->m_bSettingLegacyProperty )
         {
@@ -2734,9 +2680,7 @@ void UnoListBoxControl::ImplUpdateSelectedItemsProperty()
         DBG_ASSERT( xListBox.is(), "XListBox?" );
 
         uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
-        uno::Any aAny;
-        aAny <<= aSeq;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), aAny, false );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), uno::Any(aSeq), false );
     }
 }
 
@@ -2844,9 +2788,7 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
     for ( n = nPos; n < nOldLen; n++ )
         pNewData[nNewItems+n] = pOldData[n];
 
-    uno::Any aAny;
-    aAny <<= aNewSeq;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
 }
 
 void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(uno::RuntimeException, std::exception)
@@ -2875,9 +2817,7 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(un
         for ( n = nPos; n < (nOldLen-nCount); n++ )
             pNewData[n] = pOldData[n+nCount];
 
-        uno::Any aAny;
-        aAny <<= aNewSeq;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
     }
 }
 
@@ -2993,9 +2933,7 @@ void UnoListBoxControl::makeVisible( sal_Int16 nEntry ) throw(uno::RuntimeExcept
 
 void UnoListBoxControl::setDropDownLineCount( sal_Int16 nLines ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int16)nLines;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), uno::Any((sal_Int16) nLines), true );
 }
 
 sal_Int16 UnoListBoxControl::getDropDownLineCount() throw(uno::RuntimeException, std::exception)
@@ -3010,9 +2948,7 @@ sal_Bool UnoListBoxControl::isMutipleMode() throw(uno::RuntimeException, std::ex
 
 void UnoListBoxControl::setMultipleMode( sal_Bool bMulti ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= bMulti;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTISELECTION ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTISELECTION ), uno::Any(bMulti), true );
 }
 
 void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException, std::exception)
@@ -3213,9 +3149,7 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlComboBox );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlComboBox ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3479,9 +3413,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
     for ( n = nPos; n < nOldLen; n++ )
         pNewData[nNewItems+n] = pOldData[n];
 
-    uno::Any aAny;
-    aAny <<= aNewSeq;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), Any(aNewSeq), true );
 }
 
 void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(uno::RuntimeException, std::exception)
@@ -3510,9 +3442,7 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(u
         for ( n = nPos; n < (nOldLen-nCount); n++ )
             pNewData[n] = pOldData[n+nCount];
 
-        uno::Any aAny;
-        aAny <<= aNewSeq;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), aAny, true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
     }
 }
 
@@ -3545,9 +3475,7 @@ uno::Sequence< OUString> UnoComboBoxControl::getItems() throw(uno::RuntimeExcept
 
 void UnoComboBoxControl::setDropDownLineCount( sal_Int16 nLines ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= nLines;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), uno::Any(nLines), true );
 }
 
 sal_Int16 UnoComboBoxControl::getDropDownLineCount() throw(uno::RuntimeException, std::exception)
@@ -3673,9 +3601,7 @@ uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlDateField );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlDateField ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3809,9 +3735,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
 
 void UnoDateFieldControl::setDate( const util::Date& Date ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Date;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), uno::Any(Date), true );
 }
 
 util::Date UnoDateFieldControl::getDate() throw(uno::RuntimeException, std::exception)
@@ -3821,9 +3745,7 @@ util::Date UnoDateFieldControl::getDate() throw(uno::RuntimeException, std::exce
 
 void UnoDateFieldControl::setMin( const util::Date& Date ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Date;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMIN ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMIN ), uno::Any(Date), true );
 }
 
 util::Date UnoDateFieldControl::getMin() throw(uno::RuntimeException, std::exception)
@@ -3833,9 +3755,7 @@ util::Date UnoDateFieldControl::getMin() throw(uno::RuntimeException, std::excep
 
 void UnoDateFieldControl::setMax( const util::Date& Date ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Date;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMAX ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMAX ), uno::Any(Date), true );
 }
 
 util::Date UnoDateFieldControl::getMax() throw(uno::RuntimeException, std::exception)
@@ -3910,9 +3830,7 @@ sal_Bool UnoDateFieldControl::isEmpty() throw(uno::RuntimeException, std::except
 
 void UnoDateFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
 sal_Bool UnoDateFieldControl::isStrictFormat() throw(uno::RuntimeException, std::exception)
@@ -3962,9 +3880,7 @@ uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlTimeField );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlTimeField ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4072,9 +3988,7 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
 
 void UnoTimeFieldControl::setTime( const util::Time& Time ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Time;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), Any(Time), true );
 }
 
 util::Time UnoTimeFieldControl::getTime() throw(uno::RuntimeException, std::exception)
@@ -4084,9 +3998,7 @@ util::Time UnoTimeFieldControl::getTime() throw(uno::RuntimeException, std::exce
 
 void UnoTimeFieldControl::setMin( const util::Time& Time ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Time;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMIN ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMIN ), uno::Any(Time), true );
 }
 
 util::Time UnoTimeFieldControl::getMin() throw(uno::RuntimeException, std::exception)
@@ -4096,9 +4008,7 @@ util::Time UnoTimeFieldControl::getMin() throw(uno::RuntimeException, std::excep
 
 void UnoTimeFieldControl::setMax( const util::Time& Time ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Time;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMAX ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMAX ), uno::Any(Time), true );
 }
 
 util::Time UnoTimeFieldControl::getMax() throw(uno::RuntimeException, std::exception)
@@ -4158,9 +4068,7 @@ sal_Bool UnoTimeFieldControl::isEmpty() throw(uno::RuntimeException, std::except
 
 void UnoTimeFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
 sal_Bool UnoTimeFieldControl::isStrictFormat() throw(uno::RuntimeException, std::exception)
@@ -4210,9 +4118,7 @@ uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlNumericField );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlNumericField ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4303,9 +4209,7 @@ void UnoNumericFieldControl::createPeer( const uno::Reference< awt::XToolkit > &
 void UnoNumericFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException, std::exception)
 {
     uno::Reference < awt::XNumericField >  xField( getPeer(), uno::UNO_QUERY );
-    uno::Any aAny;
-    aAny <<= xField->getValue();
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), uno::Any(xField->getValue()), false );
 
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
@@ -4313,9 +4217,7 @@ void UnoNumericFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::R
 
 void UnoNumericFieldControl::setValue( double Value ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), uno::Any(Value), true );
 }
 
 double UnoNumericFieldControl::getValue() throw(uno::RuntimeException, std::exception)
@@ -4325,9 +4227,7 @@ double UnoNumericFieldControl::getValue() throw(uno::RuntimeException, std::exce
 
 void UnoNumericFieldControl::setMin( double Value ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), uno::Any(Value), true );
 }
 
 double UnoNumericFieldControl::getMin() throw(uno::RuntimeException, std::exception)
@@ -4337,9 +4237,7 @@ double UnoNumericFieldControl::getMin() throw(uno::RuntimeException, std::except
 
 void UnoNumericFieldControl::setMax( double Value ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), uno::Any(Value), true );
 }
 
 double UnoNumericFieldControl::getMax() throw(uno::RuntimeException, std::exception)
@@ -4379,9 +4277,7 @@ double UnoNumericFieldControl::getLast() throw(uno::RuntimeException, std::excep
 
 void UnoNumericFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
 sal_Bool UnoNumericFieldControl::isStrictFormat() throw(uno::RuntimeException, std::exception)
@@ -4407,9 +4303,7 @@ css::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
 
 void UnoNumericFieldControl::setSpinSize( double Digits ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), uno::Any(Digits), true );
 }
 
 double UnoNumericFieldControl::getSpinSize() throw(uno::RuntimeException, std::exception)
@@ -4419,9 +4313,7 @@ double UnoNumericFieldControl::getSpinSize() throw(uno::RuntimeException, std::e
 
 void UnoNumericFieldControl::setDecimalDigits( sal_Int16 Digits ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), uno::Any(Digits), true );
 }
 
 sal_Int16 UnoNumericFieldControl::getDecimalDigits() throw(uno::RuntimeException, std::exception)
@@ -4455,15 +4347,11 @@ uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId )
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlCurrencyField );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlCurrencyField ) );
     }
     if ( nPropId == BASEPROPERTY_CURSYM_POSITION )
     {
-        uno::Any aAny;
-        aAny <<= false;
-        return aAny;
+        return uno::Any(false);
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4553,9 +4441,7 @@ void UnoCurrencyFieldControl::createPeer( const uno::Reference< awt::XToolkit > 
 void UnoCurrencyFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException, std::exception)
 {
     uno::Reference < awt::XCurrencyField >  xField( getPeer(), uno::UNO_QUERY );
-    uno::Any aAny;
-    aAny <<= xField->getValue();
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), uno::Any(xField->getValue()), false );
 
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
@@ -4563,9 +4449,7 @@ void UnoCurrencyFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::
 
 void UnoCurrencyFieldControl::setValue( double Value ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), Any(Value), true );
 }
 
 double UnoCurrencyFieldControl::getValue() throw(uno::RuntimeException, std::exception)
@@ -4575,9 +4459,7 @@ double UnoCurrencyFieldControl::getValue() throw(uno::RuntimeException, std::exc
 
 void UnoCurrencyFieldControl::setMin( double Value ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), uno::Any(Value), true );
 }
 
 double UnoCurrencyFieldControl::getMin() throw(uno::RuntimeException, std::exception)
@@ -4587,9 +4469,7 @@ double UnoCurrencyFieldControl::getMin() throw(uno::RuntimeException, std::excep
 
 void UnoCurrencyFieldControl::setMax( double Value ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Value;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), uno::Any(Value), true );
 }
 
 double UnoCurrencyFieldControl::getMax() throw(uno::RuntimeException, std::exception)
@@ -4629,9 +4509,7 @@ double UnoCurrencyFieldControl::getLast() throw(uno::RuntimeException, std::exce
 
 void UnoCurrencyFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
 sal_Bool UnoCurrencyFieldControl::isStrictFormat() throw(uno::RuntimeException, std::exception)
@@ -4658,9 +4536,7 @@ UnoCurrencyFieldControl::getSupportedServiceNames()
 
 void UnoCurrencyFieldControl::setSpinSize( double Digits ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), uno::Any(Digits), true );
 }
 
 double UnoCurrencyFieldControl::getSpinSize() throw(uno::RuntimeException, std::exception)
@@ -4670,9 +4546,7 @@ double UnoCurrencyFieldControl::getSpinSize() throw(uno::RuntimeException, std::
 
 void UnoCurrencyFieldControl::setDecimalDigits( sal_Int16 Digits ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= Digits;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), uno::Any(Digits), true );
 }
 
 sal_Int16 UnoCurrencyFieldControl::getDecimalDigits() throw(uno::RuntimeException, std::exception)
@@ -4706,9 +4580,7 @@ uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlPatternField );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlPatternField ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4820,11 +4692,8 @@ OUString UnoPatternFieldControl::getString() throw(uno::RuntimeException, std::e
 
 void UnoPatternFieldControl::setMasks( const OUString& EditMask, const OUString& LiteralMask ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= EditMask;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_EDITMASK ), aAny, true );
-    aAny <<= LiteralMask;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LITERALMASK ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_EDITMASK ), uno::Any(EditMask), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LITERALMASK ), uno::Any(LiteralMask), true );
 }
 
 void UnoPatternFieldControl::getMasks( OUString& EditMask, OUString& LiteralMask ) throw(uno::RuntimeException, std::exception)
@@ -4835,9 +4704,7 @@ void UnoPatternFieldControl::getMasks( OUString& EditMask, OUString& LiteralMask
 
 void UnoPatternFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= bStrict;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
 sal_Bool UnoPatternFieldControl::isStrictFormat() throw(uno::RuntimeException, std::exception)
@@ -4899,9 +4766,7 @@ uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlProgressBar );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlProgressBar ) );
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4980,23 +4845,17 @@ IMPL_XTYPEPROVIDER_END
 // css::awt::XProgressBar
 void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= nColor;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), uno::Any(nColor), true );
 }
 
 void UnoProgressBarControl::setBackgroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= nColor;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), uno::Any(nColor), true );
 }
 
 void UnoProgressBarControl::setValue( sal_Int32 nValue ) throw(css::uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-    aAny <<= nValue;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), aAny, true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), uno::Any(nValue), true );
 }
 
 void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(css::uno::RuntimeException, std::exception )
@@ -5077,9 +4936,7 @@ uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFixedLine );
-        return aAny;
+        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlFixedLine ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }

@@ -531,16 +531,12 @@ uno::Any SAL_CALL ResultSetBase::getPropertyValue(
 {
     if( PropertyName == "IsRowCountFinal" )
     {
-        uno::Any aAny;
-        aAny <<= m_bRowCountFinal;
-        return aAny;
+        return uno::Any(m_bRowCountFinal);
     }
     else if ( PropertyName == "RowCount" )
     {
-        uno::Any aAny;
         sal_Int32 count = m_aItems.size();
-        aAny <<= count;
-        return aAny;
+        return uno::Any(count);
     }
     else
         throw beans::UnknownPropertyException();

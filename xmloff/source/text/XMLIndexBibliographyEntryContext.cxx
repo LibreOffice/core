@@ -157,9 +157,7 @@ void XMLIndexBibliographyEntryContext::FillPropertyValues(
     // bibliography data field
     sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
     rValues[nIndex].Name = rTemplateContext.sBibliographyDataField;
-    Any aAny;
-    aAny <<= nBibliographyInfo;
-    rValues[nIndex].Value = aAny;
+    rValues[nIndex].Value = css::uno::Any(nBibliographyInfo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -320,8 +320,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
             case SID_OBJECT:
                 if ( GetViewShell() && GetViewShell()->GetVerbs().getLength() && !GetObjectShell()->IsInPlaceActive() )
                 {
-                    uno::Any aAny;
-                    aAny <<= GetViewShell()->GetVerbs();
+                    uno::Any aAny(GetViewShell()->GetVerbs());
                     rSet.Put( SfxUnoAnyItem( sal_uInt16( SID_OBJECT ), aAny ) );
                 }
                 else

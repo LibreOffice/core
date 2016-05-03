@@ -939,9 +939,7 @@ void SAL_CALL DummyText::setPosition(const awt::Point& rPosition )
 
 void DummyText::setTransformatAsProperty(const drawing::HomogenMatrix3& rMatrix)
 {
-    uno::Any aNewTrans;
-    aNewTrans <<= rMatrix;
-    setPropertyValue("Transformation", aNewTrans);
+    setPropertyValue("Transformation", uno::Any(rMatrix));
 }
 
 DummyGroup3D::DummyGroup3D(const OUString& rName)

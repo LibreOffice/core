@@ -183,25 +183,19 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
     m_pImpl->aSize.Width = nCheckBoxHeight;
     m_pImpl->aSize.Height = m_pImpl->aSize.Width;
 
-    uno::Any aAny;
     if (!m_pFFData->getStatusText().isEmpty())
     {
-        aAny <<= m_pFFData->getStatusText();
-
-        xPropSet->setPropertyValue("HelpText", aAny);
+        xPropSet->setPropertyValue("HelpText", uno::Any(m_pFFData->getStatusText()));
     }
 
-    aAny <<= m_pFFData->getCheckboxChecked();
-    xPropSet->setPropertyValue("DefaultState", aAny);
+    xPropSet->setPropertyValue("DefaultState", uno::Any(m_pFFData->getCheckboxChecked()));
 
     if (!m_pFFData->getHelpText().isEmpty())
     {
-        aAny <<= m_pFFData->getHelpText();
-        xPropSet->setPropertyValue("HelpF1Text", aAny);
+        xPropSet->setPropertyValue("HelpF1Text", uno::Any(m_pFFData->getHelpText()));
     }
 
-    aAny <<= rControlName;
-    xPropSet->setPropertyValue("Name", aAny);
+    xPropSet->setPropertyValue("Name", uno::Any(rControlName));
 
     return true;
 }
@@ -323,17 +317,12 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
 
     sal_uInt16 nTmp = text::TextContentAnchorType_AS_CHARACTER;
-    aAny <<= nTmp;
-
-    xShapeProps->setPropertyValue("AnchorType", aAny);
+    xShapeProps->setPropertyValue("AnchorType", uno::makeAny<sal_uInt16>(nTmp));
 
     nTmp = text::VertOrientation::CENTER;
-    aAny <<= nTmp;
-    xShapeProps->setPropertyValue("VertOrient", aAny);
+    xShapeProps->setPropertyValue("VertOrient", uno::makeAny<sal_uInt16>(nTmp));
 
-    aAny <<= xTextRange;
-
-    xShapeProps->setPropertyValue("TextRange", aAny);
+    xShapeProps->setPropertyValue("TextRange", uno::Any(xTextRange));
 
     uno::Reference<drawing::XControlShape> xControlShape(xShape, uno::UNO_QUERY);
     uno::Reference<awt::XControlModel> xControlModel(m_pImpl->rFormComponent, uno::UNO_QUERY);

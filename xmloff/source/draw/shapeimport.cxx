@@ -796,8 +796,7 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 
     if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( "ZOrder" ) )
     {
-        aAny <<= nDestPos;
-        xPropSet->setPropertyValue( "ZOrder", aAny );
+        xPropSet->setPropertyValue( "ZOrder", uno::Any(nDestPos) );
 
         for( ZOrderHint& rHint : maZOrderList )
         {
@@ -950,8 +949,6 @@ void XMLShapeImportHelper::restoreConnections()
 {
     if( !mpImpl->maConnections.empty() )
     {
-        uno::Any aAny;
-
         const vector<ConnectionHint>::size_type nCount = mpImpl->maConnections.size();
         for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
         {
@@ -977,12 +974,10 @@ void XMLShapeImportHelper::restoreConnections()
                     mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );
                 if( xShape.is() )
                 {
-                    aAny <<= xShape;
-                    xConnector->setPropertyValue( rHint.bStart ? msStartShape : msEndShape, aAny );
+                    xConnector->setPropertyValue( rHint.bStart ? msStartShape : msEndShape, uno::Any(xShape) );
 
                     sal_Int32 nGlueId = rHint.nDestGlueId < 4 ? rHint.nDestGlueId : getGluePointId( xShape, rHint.nDestGlueId );
-                    aAny <<= nGlueId;
-                    xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
+                    xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, uno::Any(nGlueId) );
                 }
 
                 // #86637# restore line deltas

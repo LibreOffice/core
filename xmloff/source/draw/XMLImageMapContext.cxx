@@ -25,7 +25,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <xmloff/xmltoken.hxx>
@@ -54,7 +53,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::drawing::PointSequenceSequence;
 using ::com::sun::star::document::XEventsSupplier;
 
 
@@ -128,21 +126,18 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XIndexContainer> xMap,
+        css::uno::Reference<css::container::XIndexContainer> const & xMap,
         const sal_Char* pServiceName);
 
     void StartElement(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
 
     void EndElement() override;
 
     SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 
 protected:
 
@@ -151,8 +146,7 @@ protected:
         const OUString& rValue);
 
     virtual void Prepare(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+        css::uno::Reference<css::beans::XPropertySet> & rPropertySet);
 };
 
 
@@ -160,7 +154,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<XIndexContainer> xMap,
+    Reference<XIndexContainer> const & xMap,
     const sal_Char* pServiceName) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         sBoundary("Boundary"),
@@ -226,9 +220,7 @@ void XMLImageMapObjectContext::EndElement()
         Prepare( xMapEntry );
 
         // insert into image map
-        Any aAny;
-        aAny <<= xMapEntry;
-        xImageMap->insertByIndex( xImageMap->getCount(), aAny );
+        xImageMap->insertByIndex( xImageMap->getCount(), Any(xMapEntry) );
     }
     // else: not valid -> don't create and insert
 }
@@ -317,8 +309,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XIndexContainer> xMap);
+        css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
     virtual ~XMLImageMapRectangleContext();
 
@@ -328,8 +319,7 @@ protected:
         const OUString& rValue) override;
 
     virtual void Prepare(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet) override;
+        css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
 
@@ -337,7 +327,7 @@ XMLImageMapRectangleContext::XMLImageMapRectangleContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<XIndexContainer> xMap) :
+    Reference<XIndexContainer> const & xMap) :
         XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
                                  "com.sun.star.image.ImageMapRectangleObject"),
         bXOK(false),
@@ -400,9 +390,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
 void XMLImageMapRectangleContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
-    Any aAny;
-    aAny <<= aRectangle;
-    rPropertySet->setPropertyValue( sBoundary, aAny );
+    rPropertySet->setPropertyValue( sBoundary, uno::Any(aRectangle) );
 
     // common properties handled by super class
     XMLImageMapObjectContext::Prepare(rPropertySet);
@@ -423,8 +411,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XIndexContainer> xMap);
+        css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
     virtual ~XMLImageMapPolygonContext();
 
@@ -434,8 +421,7 @@ protected:
         const OUString& rValue) override;
 
     virtual void Prepare(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet) override;
+        css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
 
@@ -443,7 +429,7 @@ XMLImageMapPolygonContext::XMLImageMapPolygonContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<XIndexContainer> xMap) :
+    Reference<XIndexContainer> const & xMap) :
         XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
                                  "com.sun.star.image.ImageMapPolygonObject"),
         bViewBoxOK(false),
@@ -493,8 +479,7 @@ void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
             uno::Any aAny;
 
             basegfx::tools::B2DPolygonToUnoPointSequence(aPolygon, aPointSequence);
-            aAny <<= aPointSequence;
-            rPropertySet->setPropertyValue(sPolygon, aAny);
+            rPropertySet->setPropertyValue(sPolygon, Any(aPointSequence));
         }
     }
 
@@ -517,8 +502,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XIndexContainer> xMap);
+        css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
     virtual ~XMLImageMapCircleContext();
 
@@ -528,8 +512,7 @@ protected:
         const OUString& rValue) override;
 
     virtual void Prepare(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet) override;
+        css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
 
@@ -537,7 +520,7 @@ XMLImageMapCircleContext::XMLImageMapCircleContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<XIndexContainer> xMap)
+    Reference<XIndexContainer> const & xMap)
     : XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
           "com.sun.star.image.ImageMapCircleObject")
     , nRadius(0)
@@ -593,13 +576,9 @@ void XMLImageMapCircleContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
     // center (x,y)
-    Any aAny;
-    aAny <<= aCenter;
-    rPropertySet->setPropertyValue( sCenter, aAny );
-
+    rPropertySet->setPropertyValue( sCenter, uno::Any(aCenter) );
     // radius
-    aAny <<= nRadius;
-    rPropertySet->setPropertyValue( sRadius, aAny );
+    rPropertySet->setPropertyValue( sRadius, uno::Any(nRadius) );
 
     // common properties handled by super class
     XMLImageMapObjectContext::Prepare(rPropertySet);

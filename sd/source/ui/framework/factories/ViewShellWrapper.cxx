@@ -95,11 +95,8 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) th
     if( mpSlideSorterViewShell &&
         rType == cppu::UnoType<view::XSelectionSupplier>::get() )
     {
-        uno::Any aAny;
         uno::Reference<view::XSelectionSupplier> xSupplier( this );
-        aAny <<= xSupplier;
-
-        return aAny;
+        return Any(xSupplier);
     }
     else
         return ViewShellWrapperInterfaceBase::queryInterface( rType );

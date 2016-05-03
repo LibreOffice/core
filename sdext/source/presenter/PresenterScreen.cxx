@@ -441,9 +441,7 @@ void PresenterScreen::SwitchMonitors()
 
         // Set the new presentation display
         Reference<beans::XPropertySet> xProperties (xPresentation, UNO_QUERY_THROW);
-        uno::Any aDisplay;
-        aDisplay <<= nNewScreen;
-        xProperties->setPropertyValue("Display", aDisplay);
+        xProperties->setPropertyValue("Display", Any(nNewScreen));
     } catch (const uno::Exception &) {
     }
 }

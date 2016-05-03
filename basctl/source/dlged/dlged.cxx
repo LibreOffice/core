@@ -794,9 +794,7 @@ void DlgEditor::Copy()
             memcpy( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
             memcpy( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
 
-            Any aCombinedDataAny;
-            aCombinedDataAny <<= aCombinedData;
-            aSeqData[1] = aCombinedDataAny;
+            aSeqData[1] = Any(aCombinedData);
 
             pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavorsResource, aSeqData );
         }
@@ -935,16 +933,12 @@ void DlgEditor::Paste()
                         // set new name
                         OUString aOUniqueName( pCtrlObj->GetUniqueName() );
                         Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
-                        Any aUniqueName;
-                        aUniqueName <<= aOUniqueName;
-                        xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
+                        xPSet->setPropertyValue( DLGED_PROP_NAME, Any(aOUniqueName) );
 
                         // set tabindex
                         Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
                            Sequence< OUString > aNames_ = xNA->getElementNames();
-                        Any aTabIndex;
-                        aTabIndex <<= (sal_Int16) aNames_.getLength();
-                        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
+                        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) aNames_.getLength()) );
 
                         if( bLocalized )
                         {

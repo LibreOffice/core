@@ -1933,11 +1933,9 @@ void SfxMedium::Transfer_Impl()
 
                 // set segment size property; package will automatically be divided in pieces fitting
                 // into this size
-                css::uno::Any aAny;
-                aAny <<= pSegmentSize->GetValue();
 
                 uno::Reference < beans::XPropertySet > xSet( pImp->xStorage, uno::UNO_QUERY );
-                xSet->setPropertyValue("SegmentSize", aAny );
+                xSet->setPropertyValue("SegmentSize", Any(pSegmentSize->GetValue()) );
 
                 // copy the temporary storage into the disk spanned package
                 GetStorage()->copyToStorage( xStor );

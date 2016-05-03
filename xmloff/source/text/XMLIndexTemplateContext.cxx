@@ -188,8 +188,7 @@ void XMLIndexTemplateContext::EndElement()
         aAny >>= xIndexReplace;
 
         // ... and insert
-        aAny <<= aValueSequence;
-        xIndexReplace->replaceByIndex(nOutlineLevel, aAny);
+        xIndexReplace->replaceByIndex(nOutlineLevel, Any(aValueSequence));
 
         if (bStyleNameOK)
         {
@@ -209,9 +208,8 @@ void XMLIndexTemplateContext::EndElement()
                 if( rStyles.is() &&
                     rStyles->hasByName( sDisplayStyleName ) )
                 {
-                    aAny <<= sDisplayStyleName;
                     rPropertySet->setPropertyValue(
-                        OUString::createFromAscii(pStyleProperty), aAny);
+                        OUString::createFromAscii(pStyleProperty), css::uno::Any(sDisplayStyleName));
                 }
             }
         }
