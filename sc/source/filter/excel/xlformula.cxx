@@ -583,7 +583,9 @@ static const XclFunctionInfo saFuncTable_2016[] =
     EXC_FUNCENTRY_V_VR(  ocConcat_MS,           1,  MX, 0,  "CONCAT" ),
     EXC_FUNCENTRY_V_VR(  ocTextJoin_MS,         3,  MX, 0,  "TEXTJOIN" ),
     EXC_FUNCENTRY_V_VR(  ocIfs_MS,              2,  MX, 0,  "IFS" ),
-    EXC_FUNCENTRY_V_VR(  ocSwitch_MS,           3,  MX, 0,  "SWITCH" )
+    EXC_FUNCENTRY_V_VR(  ocSwitch_MS,           3,  MX, 0,  "SWITCH" ),
+    EXC_FUNCENTRY_V_VR(  ocMinIfs_MS,           3,  MX, 0,  "MINIFS" ),
+    EXC_FUNCENTRY_V_VR(  ocMaxIfs_MS,           3,  MX, 0,  "MAXIFS" )
 };
 
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \

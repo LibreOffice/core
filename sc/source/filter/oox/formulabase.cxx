@@ -913,7 +913,9 @@ static const FunctionData saFuncTable2016[] =
     { "COM.MICROSOFT.CONCAT",                   "CONCAT",                   NOID,   NOID,   1,  MX, V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.TEXTJOIN",                 "TEXTJOIN",                 NOID,   NOID,   3,  MX, V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.IFS",                      "IFS",                      NOID,   NOID,   2,  MX, R, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.SWITCH",                   "SWITCH",                   NOID,   NOID,   3,  MX, R, { VO, RO }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.SWITCH",                   "SWITCH",                   NOID,   NOID,   3,  MX, R, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.MINIFS",                   "MINIFS",                   NOID,   NOID,   3,  MX, R, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.MAXIFS",                   "MAXIFS",                   NOID,   NOID,   3,  MX, R, { VO, RO }, FUNCFLAG_MACROCALL_NEW }
 };
 
 

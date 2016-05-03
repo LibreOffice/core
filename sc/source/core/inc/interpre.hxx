@@ -100,7 +100,9 @@ enum ScIterFuncIfs
 {
     ifSUMIFS,     // Multi-Conditional sum
     ifAVERAGEIFS, // Multi-Conditional average
-    ifCOUNTIFS    // Multi-Conditional count
+    ifCOUNTIFS,   // Multi-Conditional count
+    ifMINIFS,     // Multi-Conditional minimum
+    ifMAXIFS      // Multi-Conditional maximum
 };
 
 enum ScETSType
@@ -608,6 +610,8 @@ void ScConcat_MS();
 void ScTextJoin_MS();
 void ScIfs_MS();
 void ScSwitch_MS();
+void ScMinIfs_MS();
+void ScMaxIfs_MS();
 void ScExternal();
 void ScMissing();
 void ScMacro();
