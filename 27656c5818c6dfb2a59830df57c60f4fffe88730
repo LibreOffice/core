@@ -22,6 +22,30 @@
       "revId": "27656c5818c6dfb2a59830df57c60f4fffe88730",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_75aa501b",
+        "filename": "external/libcmis/libcmis-fix-google-drive.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-05-03T12:34:49Z",
+      "side": 1,
+      "message": "Probably a copy \u0026 paste error, seems I missed it.\n\nThis will end up in an empty value, like:\n...\u0026PersistentCookie\u003dyes\u0026\u0026Passwd\u003d\n\nGoogle seems it doesn\u0027t bother, though.",
+      "parentUuid": "da7fb54a_3502883f",
+      "range": {
+        "startLine": 72,
+        "startChar": 25,
+        "endLine": 72,
+        "endChar": 26
+      },
+      "revId": "27656c5818c6dfb2a59830df57c60f4fffe88730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
