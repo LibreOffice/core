@@ -8215,8 +8215,8 @@
       <attribute name="val" tokenid="ooxml:CT_Style_val" action="setValue"/>
     </resource>
     <resource name="ST_Jc" resource="List">
-      <value tokenid="ooxml:Value_math_ST_Jc_start">left</value>
-      <value tokenid="ooxml:Value_math_ST_Jc_end">right</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_start">start</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_end">end</value>
       <value tokenid="ooxml:Value_math_ST_Jc_left">left</value>
       <value tokenid="ooxml:Value_math_ST_Jc_right">right</value>
       <value tokenid="ooxml:Value_math_ST_Jc_center">center</value>
