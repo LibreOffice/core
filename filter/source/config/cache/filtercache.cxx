@@ -1786,7 +1786,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
 void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xItem,
                                       EItemType                                            eType,
-                                const CacheItem&                                           aItem)
+                                const CacheItem                                            aItem)
     throw(css::uno::Exception)
 {
     CacheItem::const_iterator pIt;
