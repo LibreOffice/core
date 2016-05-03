@@ -319,6 +319,9 @@ COMPHELPER_DLLPUBLIC OString join(const OString& rSeparator, const std::vector<O
 COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
     OUString const & str );
 
+COMPHELPER_DLLPUBLIC std::vector<OUString>
+    split(const OUString& rString, const sal_Unicode cSeparator);
+
 /** Convert a single comma separated string to a sequence of strings.
 
     Note that no escaping of commas or anything fancy is done.
