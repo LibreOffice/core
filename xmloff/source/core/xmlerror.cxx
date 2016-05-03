@@ -210,10 +210,8 @@ void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
         {
             // we throw the error
             ErrorRecord& rErr = aErrors[0];
-            Any aAny;
-            aAny <<= rErr.aParams;
             throw SAXParseException(
-                rErr.sExceptionMessage, nullptr, aAny,
+                rErr.sExceptionMessage, nullptr, Any(rErr.aParams),
                 rErr.sPublicId, rErr.sSystemId, rErr.nRow, rErr.nColumn );
         }
     }

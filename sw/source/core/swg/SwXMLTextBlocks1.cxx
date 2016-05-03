@@ -361,9 +361,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
 
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
     OUString aMime ( "text/xml" );
-    Any aAny;
-    aAny <<= aMime;
-    xSet->setPropertyValue("MediaType", aAny );
+    xSet->setPropertyValue("MediaType", Any(aMime) );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
        xSrc->setOutputStream(xOut);
@@ -483,9 +481,7 @@ void SwXMLTextBlocks::WriteInfo()
 
         uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
         OUString aMime ( "text/xml" );
-        Any aAny;
-        aAny <<= aMime;
-        xSet->setPropertyValue("MediaType", aAny );
+        xSet->setPropertyValue("MediaType", Any(aMime) );
         uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
         uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
         xSrc->setOutputStream(xOut);
@@ -548,9 +544,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
 
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
             OUString aMime( "text/xml" );
-            Any aAny;
-            aAny <<= aMime;
-            xSet->setPropertyValue("MediaType", aAny );
+            xSet->setPropertyValue("MediaType", Any(aMime) );
             uno::Reference < io::XOutputStream > xOutputStream = xDocStream->getOutputStream();
 
             // get XML writer

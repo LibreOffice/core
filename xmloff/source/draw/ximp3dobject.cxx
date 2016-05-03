@@ -87,9 +87,7 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
         // set parameters
         if(mbSetTransform)
         {
-            uno::Any aAny;
-            aAny <<= mxHomMat;
-            xPropSet->setPropertyValue("D3DTransformMatrix", aAny);
+            xPropSet->setPropertyValue("D3DTransformMatrix", uno::Any(mxHomMat));
         }
 
         // call parent
@@ -188,11 +186,8 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
             aDirection3D.DirectionY = maMaxEdge.getY();
             aDirection3D.DirectionZ = maMaxEdge.getZ();
 
-            uno::Any aAny;
-            aAny <<= aPosition3D;
-            xPropSet->setPropertyValue("D3DPosition", aAny);
-            aAny <<= aDirection3D;
-            xPropSet->setPropertyValue("D3DSize", aAny);
+            xPropSet->setPropertyValue("D3DPosition", uno::Any(aPosition3D));
+            xPropSet->setPropertyValue("D3DSize", uno::Any(aDirection3D));
         }
     }
 }
@@ -285,11 +280,8 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
             aDirection3D.DirectionY = maSize.getY();
             aDirection3D.DirectionZ = maSize.getZ();
 
-            uno::Any aAny;
-            aAny <<= aPosition3D;
-            xPropSet->setPropertyValue("D3DPosition", aAny);
-            aAny <<= aDirection3D;
-            xPropSet->setPropertyValue("D3DSize", aAny);
+            xPropSet->setPropertyValue("D3DPosition", uno::Any(aPosition3D));
+            xPropSet->setPropertyValue("D3DSize", uno::Any(aDirection3D));
         }
     }
 }
@@ -364,9 +356,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
                     aPolyPolygon3D);
 
                 // set polygon data
-                uno::Any aAny;
-                aAny <<= aPolyPolygon3D;
-                xPropSet->setPropertyValue("D3DPolyPolygon3D", aAny);
+                xPropSet->setPropertyValue("D3DPolyPolygon3D", uno::Any(aPolyPolygon3D));
             }
             else
             {

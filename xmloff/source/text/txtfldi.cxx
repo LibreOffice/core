@@ -707,9 +707,7 @@ void XMLSenderFieldImportContext::PrepareField(
     const Reference<XPropertySet> & rPropSet)
 {
     // set members
-    Any aAny;
-    aAny <<= nSubType;
-    rPropSet->setPropertyValue(sPropertyFieldSubType, aAny);
+    rPropSet->setPropertyValue(sPropertyFieldSubType, Any(nSubType));
 
     // set fixed
     rPropSet->setPropertyValue(sPropertyFixed, Any(bFixed));
@@ -725,8 +723,7 @@ void XMLSenderFieldImportContext::PrepareField(
         }
         else
         {
-            aAny <<= GetContent();
-            rPropSet->setPropertyValue(sPropertyContent, aAny);
+            rPropSet->setPropertyValue(sPropertyContent, Any(GetContent()));
         }
     }
 }
@@ -839,8 +836,7 @@ void XMLPageContinuationImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny <<= eSelectPage;
-    xPropertySet->setPropertyValue(sPropertySubType, aAny);
+    xPropertySet->setPropertyValue(sPropertySubType, Any(eSelectPage));
 
     aAny <<= (sStringOK ? sString : GetContent());
     xPropertySet->setPropertyValue(sPropertyUserText, aAny);
@@ -906,8 +902,6 @@ void XMLPageNumberImportContext::ProcessAttribute(
 void XMLPageNumberImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     // all properties are optional
     Reference<XPropertySetInfo> xPropertySetInfo(
         xPropertySet->getPropertySetInfo());
@@ -925,8 +919,7 @@ void XMLPageNumberImportContext::PrepareField(
         else
             nNumType = style::NumberingType::PAGE_DESCRIPTOR;
 
-        aAny <<= nNumType;
-        xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+        xPropertySet->setPropertyValue(sPropertyNumberingType, Any(nNumType));
     }
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyOffset))
@@ -945,14 +938,12 @@ void XMLPageNumberImportContext::PrepareField(
             default:
                 SAL_WARN("xmloff.text", "unknown page number type");
         }
-        aAny <<= nPageAdjust;
-        xPropertySet->setPropertyValue(sPropertyOffset, aAny);
+        xPropertySet->setPropertyValue(sPropertyOffset, Any(nPageAdjust));
     }
 
     if (xPropertySetInfo->hasPropertyByName(sPropertySubType))
     {
-        aAny <<= eSelectPage;
-        xPropertySet->setPropertyValue(sPropertySubType, aAny);
+        xPropertySet->setPropertyValue(sPropertySubType, Any(eSelectPage));
     }
 }
 
@@ -1017,8 +1008,7 @@ void XMLPlaceholderFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet) {
 
     Any aAny;
-    aAny <<= sDescription;
-    xPropertySet->setPropertyValue(sPropertyHint, aAny);
+    xPropertySet->setPropertyValue(sPropertyHint, Any(sDescription));
 
     // remove <...> around content (if present)
     OUString aContent = GetContent();
@@ -1036,8 +1026,7 @@ void XMLPlaceholderFieldImportContext::PrepareField(
     aAny <<= aContent.copy(nStart, nLength);
     xPropertySet->setPropertyValue(sPropertyPlaceholder, aAny);
 
-    aAny <<= nPlaceholderType;
-    xPropertySet->setPropertyValue(sPropertyPlaceholderType, aAny);
+    xPropertySet->setPropertyValue(sPropertyPlaceholderType, Any(nPlaceholderType));
 }
 
 
@@ -1117,8 +1106,6 @@ void XMLTimeFieldImportContext::ProcessAttribute(
 void XMLTimeFieldImportContext::PrepareField(
     const Reference<XPropertySet> & rPropertySet)
 {
-    Any aAny;
-
     // all properties are optional (except IsDate)
     Reference<XPropertySetInfo> xPropertySetInfo(
         rPropertySet->getPropertySetInfo());
@@ -1132,8 +1119,7 @@ void XMLTimeFieldImportContext::PrepareField(
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyAdjust))
     {
-        aAny <<= nAdjust;
-        rPropertySet->setPropertyValue(sPropertyAdjust, aAny);
+        rPropertySet->setPropertyValue(sPropertyAdjust, Any(nAdjust));
     }
 
     // set value
@@ -1152,13 +1138,11 @@ void XMLTimeFieldImportContext::PrepareField(
             {
                if (xPropertySetInfo->hasPropertyByName(sPropertyDateTimeValue))
                {
-                   aAny <<= aDateTimeValue;
-                   rPropertySet->setPropertyValue(sPropertyDateTimeValue,aAny);
+                   rPropertySet->setPropertyValue(sPropertyDateTimeValue, Any(aDateTimeValue));
                }
                else if (xPropertySetInfo->hasPropertyByName(sPropertyDateTime))
                {
-                   aAny <<= aDateTimeValue;
-                   rPropertySet->setPropertyValue(sPropertyDateTime, aAny);
+                   rPropertySet->setPropertyValue(sPropertyDateTime, Any(aDateTimeValue));
                }
             }
         }
@@ -1167,8 +1151,7 @@ void XMLTimeFieldImportContext::PrepareField(
     if (bFormatOK &&
         xPropertySetInfo->hasPropertyByName(sPropertyNumberFormat))
     {
-        aAny <<= nFormatKey;
-        rPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+        rPropertySet->setPropertyValue(sPropertyNumberFormat, Any(nFormatKey));
 
         if( xPropertySetInfo->hasPropertyByName( sPropertyIsFixedLanguage ) )
         {
@@ -1331,28 +1314,22 @@ SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
 void XMLDatabaseFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
-    aAny <<= sTableName;
-    xPropertySet->setPropertyValue(sPropertyTableName, aAny);
+    xPropertySet->setPropertyValue(sPropertyTableName, Any(sTableName));
 
     if( bDatabaseNameOK )
     {
-        aAny <<= sDatabaseName;
-        xPropertySet->setPropertyValue(sPropertyDataBaseName, aAny);
+        xPropertySet->setPropertyValue(sPropertyDataBaseName, Any(sDatabaseName));
     }
     else if( bDatabaseURLOK )
     {
-        aAny <<= sDatabaseURL;
-        xPropertySet->setPropertyValue(sPropertyDataBaseURL, aAny);
+        xPropertySet->setPropertyValue(sPropertyDataBaseURL, Any(sDatabaseURL));
     }
 
     // #99980# load/save command type for all fields; also load
     //         old documents without command type
     if( bCommandTypeOK )
     {
-        aAny <<= nCommandType;
-        xPropertySet->setPropertyValue( sPropertyDataCommandType, aAny );
+        xPropertySet->setPropertyValue( sPropertyDataCommandType, Any(nCommandType) );
     }
 
     if( bUseDisplay && bDisplayOK )
@@ -1484,10 +1461,7 @@ void XMLDatabaseSelectImportContext::ProcessAttribute(
 void XMLDatabaseSelectImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
-    aAny <<= nNumber;
-    xPropertySet->setPropertyValue(sPropertySetNumber, aAny);
+    xPropertySet->setPropertyValue(sPropertySetNumber, Any(nNumber));
 
     XMLDatabaseNextImportContext::PrepareField(xPropertySet);
 }
@@ -1545,19 +1519,15 @@ void XMLDatabaseNumberImportContext::ProcessAttribute(
 void XMLDatabaseNumberImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     sal_Int16 nNumType = style::NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
                                                     sNumberFormat,
                                                     sNumberSync );
-    aAny <<= nNumType;
-    xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+    xPropertySet->setPropertyValue(sPropertyNumberingType, Any(nNumType));
 
     if (bValueOK)
     {
-        aAny <<= nValue;
-        xPropertySet->setPropertyValue(sPropertySetNumber, aAny);
+        xPropertySet->setPropertyValue(sPropertySetNumber, Any(nValue));
     }
 
     XMLDatabaseFieldImportContext::PrepareField(xPropertySet);
@@ -1736,9 +1706,7 @@ void XMLRevisionDocInfoImportContext::PrepareField(
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(nTmp, GetContent()))
             {
-                Any aAny;
-                aAny <<= nTmp;
-                rPropertySet->setPropertyValue(sPropertyRevision, aAny);
+                rPropertySet->setPropertyValue(sPropertyRevision, Any(nTmp));
             }
         }
     }
@@ -1825,8 +1793,6 @@ void XMLDateTimeDocInfoImportContext::PrepareField(
     // process fixed and presentation
     XMLSimpleDocInfoImportContext::PrepareField(xPropertySet);
 
-    Any aAny;
-
     if (bHasDateTime)
     {
         xPropertySet->setPropertyValue(sPropertyIsDate, Any(bIsDate));
@@ -1834,8 +1800,7 @@ void XMLDateTimeDocInfoImportContext::PrepareField(
 
     if (bFormatOK)
     {
-        aAny <<= nFormat;
-        xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+        xPropertySet->setPropertyValue(sPropertyNumberFormat, Any(nFormat));
 
         if( xPropertySet->getPropertySetInfo()->
                 hasPropertyByName( sPropertyIsFixedLanguage ) )
@@ -1906,19 +1871,16 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
 void XMLUserDocInfoImportContext::PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet)
 {
-    uno::Any aAny;
     if ( !aName.isEmpty() )
     {
-        aAny <<= aName;
-        xPropertySet->setPropertyValue(sPropertyName, aAny);
+        xPropertySet->setPropertyValue(sPropertyName, Any(aName));
     }
     Reference<XPropertySetInfo> xPropertySetInfo(
         xPropertySet->getPropertySetInfo());
     if (bFormatOK &&
         xPropertySetInfo->hasPropertyByName(sPropertyNumberFormat))
     {
-        aAny <<= nFormat;
-        xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+        xPropertySet->setPropertyValue(sPropertyNumberFormat, Any(nFormat));
 
         if( xPropertySetInfo->hasPropertyByName( sPropertyIsFixedLanguage ) )
         {
@@ -1977,10 +1939,7 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
 void XMLHiddenParagraphImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-    aAny <<= sCondition;
-    xPropertySet->setPropertyValue(sPropertyCondition, aAny);
-
+    xPropertySet->setPropertyValue(sPropertyCondition, Any(sCondition));
     xPropertySet->setPropertyValue(sPropertyIsHidden, Any(bIsHidden));
 }
 
@@ -2050,21 +2009,11 @@ void XMLConditionalTextImportContext::ProcessAttribute(
 void XMLConditionalTextImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
-    aAny <<= sCondition;
-    xPropertySet->setPropertyValue(sPropertyCondition, aAny);
-
-    aAny <<= sFalseContent;
-    xPropertySet->setPropertyValue(sPropertyFalseContent, aAny);
-
-    aAny <<= sTrueContent;
-    xPropertySet->setPropertyValue(sPropertyTrueContent, aAny);
-
+    xPropertySet->setPropertyValue(sPropertyCondition, Any(sCondition));
+    xPropertySet->setPropertyValue(sPropertyFalseContent, Any(sFalseContent));
+    xPropertySet->setPropertyValue(sPropertyTrueContent, Any(sTrueContent));
     xPropertySet->setPropertyValue(sPropertyIsConditionTrue, Any(bCurrentValue));
-
-    aAny <<= GetContent();
-    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, Any(GetContent()));
 }
 
 
@@ -2126,14 +2075,8 @@ void XMLHiddenTextImportContext::ProcessAttribute(
 void XMLHiddenTextImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
-    aAny <<= sCondition;
-    xPropertySet->setPropertyValue(sPropertyCondition, aAny);
-
-    aAny <<= sString;
-    xPropertySet->setPropertyValue(sPropertyContent, aAny);
-
+    xPropertySet->setPropertyValue(sPropertyCondition, Any(sCondition));
+    xPropertySet->setPropertyValue(sPropertyContent, Any(sString));
     xPropertySet->setPropertyValue(sPropertyIsHidden, Any(bIsHidden));
 }
 
@@ -2199,28 +2142,23 @@ void XMLFileNameImportContext::ProcessAttribute(
 void XMLFileNameImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     // properties are optional
     Reference<XPropertySetInfo> xPropertySetInfo(
         xPropertySet->getPropertySetInfo());
 
      if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
      {
-         aAny <<= bFixed;
-         xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+         xPropertySet->setPropertyValue(sPropertyFixed, Any(bFixed));
      }
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyFileFormat))
     {
-        aAny <<= nFormat;
-        xPropertySet->setPropertyValue(sPropertyFileFormat, aAny);
+        xPropertySet->setPropertyValue(sPropertyFileFormat, Any(nFormat));
     }
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyCurrentPresentation))
     {
-        aAny <<= GetContent();
-        xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+        xPropertySet->setPropertyValue(sPropertyCurrentPresentation, Any(GetContent()));
     }
 }
 
@@ -2276,10 +2214,7 @@ void XMLTemplateNameImportContext::ProcessAttribute(
 void XMLTemplateNameImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
-    aAny <<= nFormat;
-    xPropertySet->setPropertyValue(sPropertyFileFormat, aAny);
+    xPropertySet->setPropertyValue(sPropertyFileFormat, Any(nFormat));
 }
 
 
@@ -2349,13 +2284,8 @@ void XMLChapterImportContext::ProcessAttribute(
 void XMLChapterImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
-    aAny <<= nFormat;
-    xPropertySet->setPropertyValue(sPropertyChapterFormat, aAny);
-
-    aAny <<= nLevel;
-    xPropertySet->setPropertyValue(sPropertyLevel, aAny);
+    xPropertySet->setPropertyValue(sPropertyChapterFormat, Any(nFormat));
+    xPropertySet->setPropertyValue(sPropertyLevel, Any(nLevel));
 }
 
 
@@ -2395,8 +2325,6 @@ void XMLCountFieldImportContext::ProcessAttribute(
 void XMLCountFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     // properties optional
     // (only page count, but do for all to save common implementation)
 
@@ -2413,8 +2341,7 @@ void XMLCountFieldImportContext::PrepareField(
         }
         else
             nNumType = style::NumberingType::PAGE_DESCRIPTOR;
-        aAny <<= nNumType;
-        xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+        xPropertySet->setPropertyValue(sPropertyNumberingType, Any(nNumType));
     }
 }
 
@@ -2492,8 +2419,6 @@ void XMLPageVarGetFieldImportContext::ProcessAttribute(
 void XMLPageVarGetFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     sal_Int16 nNumType;
     if( bNumberFormatOK )
     {
@@ -2504,12 +2429,10 @@ void XMLPageVarGetFieldImportContext::PrepareField(
     }
     else
         nNumType = style::NumberingType::PAGE_DESCRIPTOR;
-    aAny <<= nNumType;
-    xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+    xPropertySet->setPropertyValue(sPropertyNumberingType, Any(nNumType));
 
     // display old content (#96657#)
-    aAny <<= GetContent();
-    xPropertySet->setPropertyValue( sAPI_current_presentation, aAny );
+    xPropertySet->setPropertyValue( sAPI_current_presentation, Any(GetContent()) );
 }
 
 
@@ -2561,12 +2484,8 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
 void XMLPageVarSetFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     xPropertySet->setPropertyValue(sPropertyOn, Any(bActive));
-
-    aAny <<= nAdjust;
-    xPropertySet->setPropertyValue(sPropertyOffset, aAny);
+    xPropertySet->setPropertyValue(sPropertyOffset, Any(nAdjust));
 }
 
 
@@ -2695,14 +2614,9 @@ void XMLMacroFieldImportContext::PrepareField(
             sMacroName = sMacro;
     }
 
-    aAny <<= sScriptURL;
-    xPropertySet->setPropertyValue(sPropertyScriptURL, aAny);
-
-    aAny <<= sMacroName;
-    xPropertySet->setPropertyValue(sPropertyMacroName, aAny);
-
-    aAny <<= sLibraryName;
-    xPropertySet->setPropertyValue(sPropertyMacroLibrary, aAny);
+    xPropertySet->setPropertyValue(sPropertyScriptURL, Any(sScriptURL));
+    xPropertySet->setPropertyValue(sPropertyMacroName, Any(sMacroName));
+    xPropertySet->setPropertyValue(sPropertyMacroLibrary, Any(sLibraryName));
 }
 
 
@@ -2812,20 +2726,15 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
 void XMLReferenceFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
+    xPropertySet->setPropertyValue(sPropertyReferenceFieldPart, Any(nType));
 
-    aAny <<= nType;
-    xPropertySet->setPropertyValue(sPropertyReferenceFieldPart, aAny);
-
-    aAny <<= nSource;
-    xPropertySet->setPropertyValue(sPropertyReferenceFieldSource, aAny);
+    xPropertySet->setPropertyValue(sPropertyReferenceFieldSource, Any(nSource));
 
     switch (nElementToken)
     {
         case XML_TOK_TEXT_REFERENCE_REF:
         case XML_TOK_TEXT_BOOKMARK_REF:
-            aAny <<= sName;
-            xPropertySet->setPropertyValue(sPropertySourceName, aAny);
+            xPropertySet->setPropertyValue(sPropertySourceName, Any(sName));
             break;
 
         case XML_TOK_TEXT_NOTE_REF:
@@ -2837,8 +2746,7 @@ void XMLReferenceFieldImportContext::PrepareField(
             break;
     }
 
-    aAny <<= GetContent();
-    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, Any(GetContent()));
 }
 
 
@@ -2994,20 +2902,14 @@ void XMLDdeFieldDeclImportContext::StartElement(
                         xPropSet->getPropertySetInfo()->hasPropertyByName(
                                                                           sPropertyDDECommandType))
                     {
-                        Any aAny;
+                        xPropSet->setPropertyValue(sPropertyName, Any(sName));
 
-                        aAny <<= sName;
-                        xPropSet->setPropertyValue(sPropertyName, aAny);
+                        xPropSet->setPropertyValue(sPropertyDDECommandType, Any(sCommandApplication));
 
-                        aAny <<= sCommandApplication;
-                        xPropSet->setPropertyValue(sPropertyDDECommandType, aAny);
+                        xPropSet->setPropertyValue(sPropertyDDECommandFile, Any(sCommandTopic));
 
-                        aAny <<= sCommandTopic;
-                        xPropSet->setPropertyValue(sPropertyDDECommandFile, aAny);
-
-                        aAny <<= sCommandItem;
                         xPropSet->setPropertyValue(sPropertyDDECommandElement,
-                                                   aAny);
+                                                   Any(sCommandItem));
 
                         xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
                                                    Any(bUpdate));
@@ -3202,19 +3104,14 @@ void XMLUrlFieldImportContext::ProcessAttribute(
 void XMLUrlFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
-    aAny <<= sURL;
-    xPropertySet->setPropertyValue(sPropertyURL, aAny);
+    xPropertySet->setPropertyValue(sPropertyURL, Any(sURL));
 
     if (bFrameOK)
     {
-        aAny <<= sFrame;
-        xPropertySet->setPropertyValue(sPropertyTargetFrame, aAny);
+        xPropertySet->setPropertyValue(sPropertyTargetFrame, Any(sFrame));
     }
 
-    aAny <<= GetContent();
-    xPropertySet->setPropertyValue(sPropertyRepresentation, aAny);
+    xPropertySet->setPropertyValue(sPropertyRepresentation, Any(GetContent()));
 }
 
 
@@ -3330,9 +3227,7 @@ void XMLBibliographyFieldImportContext::PrepareField(
     }
 
     // set sequence
-    Any aAny;
-    aAny <<= aValueSequence;
-    xPropertySet->setPropertyValue(sPropertyFields, aAny);
+    xPropertySet->setPropertyValue(sPropertyFields, Any(aValueSequence));
 }
 
 const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
@@ -3745,21 +3640,17 @@ void XMLScriptImportContext::ProcessAttribute(
 void XMLScriptImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     // if href attribute was present, we use it. Else we use element content
     if (! bContentOK)
     {
         sContent = GetContent();
     }
-    aAny <<= sContent;
-    xPropertySet->setPropertyValue(sPropertyContent, aAny);
+    xPropertySet->setPropertyValue(sPropertyContent, Any(sContent));
 
     // URL or script text? We use URL if we have an href-attribute
     xPropertySet->setPropertyValue(sPropertyURLContent, Any(bContentOK));
 
-    aAny <<= sScriptType;
-    xPropertySet->setPropertyValue(sPropertyScriptType, aAny);
+    xPropertySet->setPropertyValue(sPropertyScriptType, Any(sScriptType));
 }
 
 
@@ -3803,9 +3694,7 @@ void XMLMeasureFieldImportContext::ProcessAttribute(
 void XMLMeasureFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-    aAny <<= mnKind;
-    xPropertySet->setPropertyValue("Kind", aAny);
+    xPropertySet->setPropertyValue("Kind", Any(mnKind));
 }
 
 
@@ -3918,34 +3807,28 @@ void XMLDropDownFieldImportContext::PrepareField(
         pSequence[n] = aLabels[n];
 
     // now set values:
-    Any aAny;
 
-    aAny <<= aSequence;
-    xPropertySet->setPropertyValue( sPropertyItems, aAny );
+    xPropertySet->setPropertyValue( sPropertyItems, Any(aSequence) );
 
     if( nSelected >= 0  &&  nSelected < nLength )
     {
-        aAny <<= pSequence[nSelected];
-        xPropertySet->setPropertyValue( sPropertySelectedItem, aAny );
+        xPropertySet->setPropertyValue( sPropertySelectedItem, Any(pSequence[nSelected]) );
     }
 
     // set name
     if( bNameOK )
     {
-        aAny <<= sName;
-        xPropertySet->setPropertyValue( sPropertyName, aAny );
+        xPropertySet->setPropertyValue( sPropertyName, Any(sName) );
     }
     // set help
     if( bHelpOK )
     {
-        aAny <<= sHelp;
-        xPropertySet->setPropertyValue( sPropertyHelp, aAny );
+        xPropertySet->setPropertyValue( sPropertyHelp, Any(sHelp) );
     }
     // set hint
     if( bHintOK )
     {
-        aAny <<= sHint;
-        xPropertySet->setPropertyValue( sPropertyToolTip, aAny );
+        xPropertySet->setPropertyValue( sPropertyToolTip, Any(sHint) );
     }
 
 }

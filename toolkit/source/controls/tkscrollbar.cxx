@@ -158,9 +158,7 @@ namespace toolkit
 
                 if ( xScrollBar.is() )
                 {
-                    uno::Any aAny;
-                    aAny <<= xScrollBar->getValue();
-                    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), aAny, false );
+                    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), uno::Any(xScrollBar->getValue()), false );
                 }
             }
             break;
@@ -193,13 +191,9 @@ namespace toolkit
 
     void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(css::uno::RuntimeException, std::exception)
     {
-        uno::Any aAny;
-        aAny <<= nValue;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), aAny, true );
-        aAny <<= nVisible;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), aAny, true );
-        aAny <<= nMax;
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), aAny, true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), uno::Any(nValue), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), uno::Any(nVisible), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), uno::Any(nMax), true );
     }
 
     sal_Int32 UnoScrollBarControl::getValue() throw(css::uno::RuntimeException, std::exception)

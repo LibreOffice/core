@@ -72,9 +72,7 @@ void OTableStyleContext::FillPropertySet(
         {
             if ( !sPageStyle.isEmpty() )
             {
-                uno::Any aAny;
-                aAny <<= sPageStyle;
-                AddProperty(CTF_DB_MASTERPAGENAME, aAny);
+                AddProperty(CTF_DB_MASTERPAGENAME, Any(sPageStyle));
             }
         }
         else if ( GetFamily() == XML_STYLE_FAMILY_TABLE_COLUMN )

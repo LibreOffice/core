@@ -328,9 +328,7 @@ void ConvDicNameContainer::AddConvDics(
 
             if (xDic.is())
             {
-                uno::Any aAny;
-                aAny <<= xDic;
-                insertByName( xDic->getName(), aAny );
+                insertByName( xDic->getName(), Any(xDic) );
             }
         }
     }
@@ -455,9 +453,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
     else
     {
         xRes->setActive( true );
-        uno::Any aAny;
-        aAny <<= xRes;
-        GetNameContainer().insertByName( rName, aAny );
+        GetNameContainer().insertByName( rName, Any(xRes) );
     }
     return xRes;
 }

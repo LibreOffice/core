@@ -204,10 +204,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
             xProp->setPropertyValue("HasZAxis", aFalseBool );
             xProp->setPropertyValue("HasZAxisDescription", aFalseBool );
 
-            uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
-            aAny <<= eSource;
-            xProp->setPropertyValue("DataRowSource", aAny );
+            xProp->setPropertyValue("DataRowSource", uno::Any(eSource) );
         }
         catch( const beans::UnknownPropertyException & )
         {
@@ -282,12 +280,8 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         {
             try
             {
-                uno::Any aAny;
-                aAny <<= mrColHasLabels;
-                xDocProp->setPropertyValue("DataSourceLabelsInFirstColumn", aAny );
-
-                aAny <<= mrRowHasLabels;
-                xDocProp->setPropertyValue("DataSourceLabelsInFirstRow", aAny );
+                xDocProp->setPropertyValue("DataSourceLabelsInFirstColumn", uno::Any(mrColHasLabels) );
+                xDocProp->setPropertyValue("DataSourceLabelsInFirstRow", uno::Any(mrRowHasLabels) );
             }
             catch( const beans::UnknownPropertyException & )
             {

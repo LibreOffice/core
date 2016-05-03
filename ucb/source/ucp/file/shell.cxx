@@ -294,13 +294,11 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
 
 
     // ContentType
-    uno::Any aAny;
-    aAny <<= OUString();
     m_aDefaultProperties.insert( MyProperty( false,
                                              ContentType,
                                              -1 ,
                                              cppu::UnoType<OUString>::get(),
-                                             aAny,
+                                             uno::Any(OUString()),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -2203,7 +2201,6 @@ void SAL_CALL
 shell::commit( const shell::ContentMap::iterator& it,
                const osl::FileStatus& aFileStatus )
 {
-    uno::Any aAny;
     shell::PropertySet::iterator it1;
 
     if( it->second.properties == nullptr )
@@ -2219,8 +2216,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     {
         if( aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
         {
-            aAny <<= aFileStatus.getFileName();
-            it1->setValue( aAny );
+            it1->setValue( uno::Any(aFileStatus.getFileName()) );
         }
     }
 
@@ -2229,8 +2225,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     {
         if( aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) )
         {
-            aAny <<= aFileStatus.getFileURL();
-            it1->setValue( aAny );
+            it1->setValue( uno::Any(aFileStatus.getFileURL()) );
         }
     }
 
@@ -2327,8 +2322,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
         else
         {
-            bool dummy = false;
-            aAny <<= dummy;
+            uno::Any aAny(false);
             it1 = properties.find( MyProperty( IsRemote ) );
             if( it1 != properties.end() )
                 it1->setValue( aAny );

@@ -137,8 +137,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         if( !xStyle.is() )
             return;
 
-        aAny <<= xStyle;
-        xPageStyles->insertByName( sDisplayName, aAny );
+        xPageStyles->insertByName( sDisplayName, Any(xStyle) );
         bNew = true;
     }
 
@@ -283,8 +282,7 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
             aAny >>= sCurrFollow;
             if( sCurrFollow != sDisplayFollow )
             {
-                aAny <<= sDisplayFollow;
-                xPropSet->setPropertyValue( sFollowStyle, aAny );
+                xPropSet->setPropertyValue( sFollowStyle, Any(sDisplayFollow) );
             }
         }
 

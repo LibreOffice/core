@@ -550,7 +550,6 @@ void XMLAnimationsEffectContext::EndElement()
     try
     {
         rtl::Reference< XMLShapeImportHelper > xShapeImport( GetImport().GetShapeImport() );
-        Any aAny;
 
         if( !maShapeId.isEmpty() )
         {
@@ -580,16 +579,13 @@ void XMLAnimationsEffectContext::EndElement()
             {
                 if( meKind == XMLE_DIM )
                 {
-                    aAny <<= true;
-                    xSet->setPropertyValue( mpImpl->msDimPrev, aAny );
+                    xSet->setPropertyValue( mpImpl->msDimPrev, Any(true) );
 
-                    aAny <<= maDimColor;
-                    xSet->setPropertyValue( mpImpl->msDimColor, aAny );
+                    xSet->setPropertyValue( mpImpl->msDimColor, Any(maDimColor) );
                 }
                 else if( meKind == XMLE_PLAY )
                 {
-                    aAny <<= true;
-                    xSet->setPropertyValue( mpImpl->msIsAnimation, aAny );
+                    xSet->setPropertyValue( mpImpl->msIsAnimation, Any(true) );
 
                     // #i42894# speed is not supported for the old group animation fallback, so no need to set it
                     // aAny <<= meSpeed;
@@ -599,8 +595,7 @@ void XMLAnimationsEffectContext::EndElement()
                 {
                     if( meKind == XMLE_HIDE && !mbTextEffect && meEffect == EK_none )
                     {
-                        aAny <<= true;
-                        xSet->setPropertyValue( mpImpl->msDimHide, aAny );
+                        xSet->setPropertyValue( mpImpl->msDimHide, Any(true) );
                     }
                     else
                     {
@@ -622,14 +617,9 @@ void XMLAnimationsEffectContext::EndElement()
             {
                 if( xSet.is() )
                 {
-                    aAny <<= maSoundURL;
-                    xSet->setPropertyValue( mpImpl->msSound, aAny );
-
-                    aAny <<= mbPlayFull;
-                    xSet->setPropertyValue( mpImpl->msPlayFull, aAny );
-
-                    aAny <<= true;
-                    xSet->setPropertyValue( mpImpl->msSoundOn, aAny );
+                    xSet->setPropertyValue( mpImpl->msSound, Any(maSoundURL) );
+                    xSet->setPropertyValue( mpImpl->msPlayFull, Any(mbPlayFull) );
+                    xSet->setPropertyValue( mpImpl->msSoundOn, Any(true) );
                 }
                 else
                 {

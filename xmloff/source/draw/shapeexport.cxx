@@ -2313,9 +2313,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                             aStreamURL = aStreamURL.concat( aStr );
                         }
 
-                        uno::Any aAny;
-                        aAny <<= aStreamURL;
-                        xPropSet->setPropertyValue( "GraphicStreamURL", aAny );
+                        xPropSet->setPropertyValue( "GraphicStreamURL", uno::Any(aStreamURL) );
                     }
 
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );

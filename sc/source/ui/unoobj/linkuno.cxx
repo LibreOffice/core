@@ -1203,9 +1203,7 @@ void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >&
         size_t nPos = 0;
         if ( rDoc.FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
         {
-            uno::Any aAny;
-            aAny <<= aResults;
-            ScMatrixRef xMatrix = ScSequenceToMatrix::CreateMixedMatrix( aAny );
+            ScMatrixRef xMatrix = ScSequenceToMatrix::CreateMixedMatrix( Any(aResults) );
             bSuccess = rDoc.SetDdeLinkResultMatrix( nPos, xMatrix );
         }
     }
@@ -1572,9 +1570,7 @@ Any SAL_CALL ScExternalDocLinkObj::getByName(const OUString &aName)
 
     Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
 
-    Any aAny;
-    aAny <<= aSheetCache;
-    return aAny;
+    return Any(aSheetCache);
 }
 
 Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
@@ -1634,9 +1630,7 @@ Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nApiIndex)
 
     Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
 
-    Any aAny;
-    aAny <<= aSheetCache;
-    return aAny;
+    return Any(aSheetCache);
 }
 
 Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createEnumeration()
@@ -1703,9 +1697,7 @@ Any SAL_CALL ScExternalDocLinksObj::getByName(const OUString &aName)
     sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocUrl);
     Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
 
-    Any aAny;
-    aAny <<= aDocLink;
-    return aAny;
+    return Any(aDocLink);
 }
 
 Sequence< OUString > SAL_CALL ScExternalDocLinksObj::getElementNames()
@@ -1750,9 +1742,7 @@ Any SAL_CALL ScExternalDocLinksObj::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
-    Any aAny;
-    aAny <<= aDocLink;
-    return aAny;
+    return Any(aDocLink);
 }
 
 Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::createEnumeration()

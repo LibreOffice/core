@@ -220,9 +220,7 @@ void XMLImageMapObjectContext::EndElement()
         Prepare( xMapEntry );
 
         // insert into image map
-        Any aAny;
-        aAny <<= xMapEntry;
-        xImageMap->insertByIndex( xImageMap->getCount(), aAny );
+        xImageMap->insertByIndex( xImageMap->getCount(), Any(xMapEntry) );
     }
     // else: not valid -> don't create and insert
 }
@@ -392,9 +390,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
 void XMLImageMapRectangleContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
-    Any aAny;
-    aAny <<= aRectangle;
-    rPropertySet->setPropertyValue( sBoundary, aAny );
+    rPropertySet->setPropertyValue( sBoundary, uno::Any(aRectangle) );
 
     // common properties handled by super class
     XMLImageMapObjectContext::Prepare(rPropertySet);
@@ -480,11 +476,8 @@ void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
         if(aPolygon.count())
         {
             css::drawing::PointSequence aPointSequence;
-            uno::Any aAny;
-
             basegfx::tools::B2DPolygonToUnoPointSequence(aPolygon, aPointSequence);
-            aAny <<= aPointSequence;
-            rPropertySet->setPropertyValue(sPolygon, aAny);
+            rPropertySet->setPropertyValue(sPolygon, Any(aPointSequence));
         }
     }
 
@@ -581,13 +574,9 @@ void XMLImageMapCircleContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
     // center (x,y)
-    Any aAny;
-    aAny <<= aCenter;
-    rPropertySet->setPropertyValue( sCenter, aAny );
-
+    rPropertySet->setPropertyValue( sCenter, uno::Any(aCenter) );
     // radius
-    aAny <<= nRadius;
-    rPropertySet->setPropertyValue( sRadius, aAny );
+    rPropertySet->setPropertyValue( sRadius, uno::Any(nRadius) );
 
     // common properties handled by super class
     XMLImageMapObjectContext::Prepare(rPropertySet);

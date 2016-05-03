@@ -135,14 +135,11 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
 void XMLIndexTOCSourceContext::EndElement()
 {
-    Any aAny;
-
     rIndexPropertySet->setPropertyValue(sCreateFromMarks, css::uno::Any(bUseMarks));
     rIndexPropertySet->setPropertyValue(sCreateFromOutline, css::uno::Any(bUseOutline));
     rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, css::uno::Any(bUseParagraphStyles));
 
-    aAny <<= (sal_Int16)nOutlineLevel;
-    rIndexPropertySet->setPropertyValue(sLevel, aAny);
+    rIndexPropertySet->setPropertyValue(sLevel, css::uno::Any((sal_Int16)nOutlineLevel));
 
     // process common attributes
     XMLIndexSourceBaseContext::EndElement();

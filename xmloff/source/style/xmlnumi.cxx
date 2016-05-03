@@ -1098,9 +1098,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
                 {
                     Sequence<beans::PropertyValue> aProps =
                         pLevelStyle->GetProperties();
-                    Any aAny;
-                    aAny <<= aProps;
-                    rNumRule->replaceByIndex( nLevel, aAny );
+                    rNumRule->replaceByIndex( nLevel, Any(aProps) );
                 }
             }
         }
@@ -1175,9 +1173,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             if( !xStyle.is() )
                 return;
 
-            Any aAny;
-            aAny <<= xStyle;
-            rNumStyles->insertByName( rName, aAny );
+            rNumStyles->insertByName( rName, Any(xStyle) );
             bNew = true;
         }
 
@@ -1203,8 +1199,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         if( bOverwrite || bNew )
         {
             FillUnoNumRule(xNumRules);
-            aAny <<= xNumRules;
-            xPropSet->setPropertyValue( sNumberingRules, aAny );
+            xPropSet->setPropertyValue( sNumberingRules, Any(xNumRules) );
         }
         else
         {
@@ -1291,9 +1286,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         (pProps++)->Value <<= OUString( "Numbering Symbols"  );
     }
 
-    Any aAny;
-    aAny <<= aPropSeq;
-    rNumRule->replaceByIndex( nLevel, aAny );
+    rNumRule->replaceByIndex( nLevel, Any(aPropSeq) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

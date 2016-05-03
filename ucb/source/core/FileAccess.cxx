@@ -347,9 +347,7 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    Any aAny;
-    aAny <<= bReadOnly;
-    aCnt.setPropertyValue("IsReadOnly", aAny );
+    aCnt.setPropertyValue("IsReadOnly", Any(bReadOnly) );
 }
 
 void OFileAccess::createFolder( const OUString& NewFolderURL )
@@ -759,9 +757,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    Any aAny;
-    aAny <<= bHidden;
-    aCnt.setPropertyValue("IsHidden", aAny );
+    aCnt.setPropertyValue("IsHidden", Any(bHidden) );
 }
 
 }; // namespace end

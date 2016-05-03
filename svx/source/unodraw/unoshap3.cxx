@@ -218,9 +218,7 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );
-    uno::Any aAny;
-    aAny <<= xShape;
-    return aAny;
+    return uno::Any(xShape);
 }
 
 
