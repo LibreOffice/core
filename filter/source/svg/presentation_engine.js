@@ -68,7 +68,6 @@
  *  @source http://code.google.com/p/jessyink/
  */
 
-
 /** Convenience function to get an element depending on whether it has a
  *  property with a particular name.
  *
@@ -3652,6 +3651,9 @@ SVGPathElement.prototype.changeOrientation = function()
  *  Note: Opera doesn't have any SVGPathSeg* class and rises an error.
  *  We exploit this fact for providing a different implementation.
  */
+
+var SVGPathSeg = typeof SVGPathSeg === 'undefined' ? function() {} : SVGPathSeg;
+
 try
 {   // Firefox, Google Chrome, Internet Explorer, Safari.
 
@@ -13379,7 +13381,7 @@ function ElapsedTime( aTimeBase )
 {
     this.aTimeBase = aTimeBase;
     this.nLastQueriedTime = 0.0;
-    this.nStartTime = this.getCurrentTime();
+    this.nStartTime = this.getSystemTime();
     this.nFrozenTime = 0.0;
     this.bInPauseMode = false;
     this.bInHoldMode = false;
@@ -13394,7 +13396,7 @@ ElapsedTime.prototype.getTimeBase = function()
 ElapsedTime.prototype.reset = function()
 {
     this.nLastQueriedTime = 0.0;
-    this.nStartTime = this.getCurrentTime();
+    this.nStartTime = this.getSystemTime();
     this.nFrozenTime = 0.0;
     this.bInPauseMode = false;
     this.bInHoldMode = false;
