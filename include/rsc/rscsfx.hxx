@@ -33,6 +33,7 @@ enum SfxStyleFamily { SFX_STYLE_FAMILY_CHAR    = 1,
                       SFX_STYLE_FAMILY_FRAME   = 4,
                       SFX_STYLE_FAMILY_PAGE    = 8,
                       SFX_STYLE_FAMILY_PSEUDO  = 16,
+                      SFX_STYLE_FAMILY_TABLE   = 32,
                       SFX_STYLE_FAMILY_ALL   = 0x7fff
                       };
 

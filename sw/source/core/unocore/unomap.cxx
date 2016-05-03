@@ -1488,6 +1488,11 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 m_aMapEntriesArr[nPropertyId] = aMetaFieldMap;
             }
             break;
+            case PROPERTY_MAP_TABLE_STYLE:
+            {
+                // TODO: PROPERTY_MAP_TABLE_STYLE
+            }
+            break;
 
             default:
                 OSL_FAIL( "unexpected property map ID" );
