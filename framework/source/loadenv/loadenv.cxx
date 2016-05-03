@@ -1402,6 +1402,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         {
             // bring it to front ...
             impl_makeFrameWindowVisible(aTasksAnalyzer.m_xBackingComponent->getContainerWindow(), true);
+            m_bReactivateControllerOnError = true;
             return aTasksAnalyzer.m_xBackingComponent;
         }
     }
