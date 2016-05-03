@@ -210,8 +210,9 @@ f
 
 
 
-"#include".* |
-.            {
+"#define".*[^\\][\r]*\n |                             |
+"#include".*            |
+.                       {
     LOCptr->copySource(yytext);
 
     // Just to please compiler.
