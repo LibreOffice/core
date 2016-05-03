@@ -98,7 +98,7 @@ f
 
 
 <ID>{IDENT} {
-    LOCptr->setName(LOCptr->copySource(yytext));
+    LOCptr->setName(LOCptr->copySource(yytext), true);
     BEGIN(INITIAL);
 }
 
@@ -178,7 +178,7 @@ f
 
 
 <CMD>{IDENT} {
-    LOCptr->setName(LOCptr->copySource(yytext));
+    LOCptr->setName(LOCptr->copySource(yytext),false);
     BEGIN(INITIAL);
 }
 

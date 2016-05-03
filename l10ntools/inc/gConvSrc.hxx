@@ -35,7 +35,7 @@ class convert_src : public convert_gen
 
         void setValue(string& syyText);
         bool setLang(string& syyText);
-        void setName(string& syyText);
+        void setName(string& syyText, bool revertLevel);
         void setCmd(string& syyText);
         void startBlock();
         void stopBlock();

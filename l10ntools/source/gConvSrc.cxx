@@ -60,7 +60,7 @@ void convert_src::setValue(string& syyText)
     {
         cout << "test value\n";
         for (int i = 0; i < stackSize; i++)
-            cout << mcStack[i] << "\n";
+            cout << i << ")  " << mcStack[i] << "\n";
     }
     string subid = (stackSize > 3) ? mcStack[stackSize - 1] : "";
     string stringid = mcStack[stackSize - 2];
@@ -82,8 +82,10 @@ bool convert_src::setLang(string& syyText)
 
 
 
-void convert_src::setName(string& syyText)
+void convert_src::setName(string& syyText, bool revertLevel)
 {
+    if (revertLevel)
+        mcStack.pop_back();
     mcStack.push_back(syyText);
 }
 

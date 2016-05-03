@@ -49,7 +49,8 @@ FIN   [^/>]*">"
 
 "component-data" {
     LOCptr->addLevel();
-    LOCptr->copySource(yytext, false);
+    LOCptr->pushKey("");
+//    LOCptr->copySource(yytext, false);
 }
 
 
