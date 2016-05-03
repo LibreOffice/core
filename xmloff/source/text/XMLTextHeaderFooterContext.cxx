@@ -65,7 +65,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
             if (bLeft)
             {
                 aAny = xPropSet->getPropertyValue( sShareContent );
-                bool bShared;
+                bool bShared = bool();
                 if (!(aAny >>= bShared))
                     assert(false); // should return a value!
                 if( bShared )
@@ -77,7 +77,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
             if (bFirst)
             {
                 aAny = xPropSet->getPropertyValue( sShareContentFirst );
-                bool bSharedFirst;
+                bool bSharedFirst = bool();
                 if (!(aAny >>= bSharedFirst))
                     assert(false); // should return a value!
                 if( bSharedFirst )
