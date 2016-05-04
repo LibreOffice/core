@@ -100,11 +100,6 @@ class OfficeConnection:
             if ret != 0:
                 raise Exception("Exit status indicates failure: " + str(ret))
 
-    def kill(self):
-        command = "kill " + str(self.pro.pid)
-        print(command)
-        os.system(command)
-
     @classmethod
     def getHelpText(cls):
         message = """
@@ -140,8 +135,5 @@ class PersistentConnection:
                 self.connection.tearDown()
             finally:
                 self.connection = None
-    def kill(self):
-        if self.connection:
-            self.connection.kill()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
