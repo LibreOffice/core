@@ -26,7 +26,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     {
         SfxStyleFamilyItem
         {
-            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            StyleFamily = SfxStyleFamily::Para ;
             FilterList [ en-US ] =
             {
                 < "All Styles" ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
@@ -39,7 +39,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
 
         SfxStyleFamilyItem
         {
-            StyleFamily = SFX_STYLE_FAMILY_PAGE ;
+            StyleFamily = SfxStyleFamily::Page ;
             FilterList [ en-US ] =
             {
                 < "All Styles" ; SFXSTYLEBIT_ALL ; > ;

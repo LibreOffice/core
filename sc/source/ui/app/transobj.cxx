@@ -668,7 +668,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         Size aPaperSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );       // Twips
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
         OUString aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
-        SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+        SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SfxStyleFamily::Page );
         if (pStyleSheet)
         {
             const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
@@ -676,7 +676,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
             //  CopyStyleFrom kopiert SetItems mit richtigem Pool
             ScStyleSheetPool* pDestPool = rDestDoc.GetStyleSheetPool();
-            pDestPool->CopyStyleFrom( pStylePool, aStyleName, SFX_STYLE_FAMILY_PAGE );
+            pDestPool->CopyStyleFrom( pStylePool, aStyleName, SfxStyleFamily::Page );
         }
 
         ScViewData aViewData( pDocSh, nullptr );

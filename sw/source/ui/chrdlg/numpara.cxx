@@ -339,7 +339,7 @@ IMPL_LINK_NOARG_TYPED( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, ListBo
 IMPL_LINK_NOARG_TYPED(SwParagraphNumTabPage, EditNumStyleHdl_Impl, Button*, void)
 {
     OUString aTemplName(m_pNumberStyleLB->GetSelectEntry());
-    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PSEUDO );
+    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SfxStyleFamily::Pseudo );
 }
 
 // Internal: Perform functions through the Dispatcher

@@ -113,7 +113,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                           2, 2, 2,
                           TransliterationModules_IGNORE_CASE,
                           SearchAlgorithms2::ABSOLUTE, '\\' ),
-    m_eFamily         ( SFX_STYLE_FAMILY_PARA ),
+    m_eFamily         ( SfxStyleFamily::Para ),
     m_nCommand        ( SvxSearchCmd::FIND ),
     m_nCellType       ( SvxSearchCellType::FORMULA ),
     m_nAppFlag        ( SvxSearchApp::WRITER ),

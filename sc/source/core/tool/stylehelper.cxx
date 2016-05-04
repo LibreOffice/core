@@ -44,7 +44,7 @@ struct ScDisplayNameMap
 
 static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
 {
-    if ( nType == SFX_STYLE_FAMILY_PARA )
+    if ( nType == SfxStyleFamily::Para )
     {
         static bool bCellMapFilled = false;
         static ScDisplayNameMap aCellMap[6];
@@ -71,7 +71,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
         }
         return aCellMap;
     }
-    else if ( nType == SFX_STYLE_FAMILY_PAGE )
+    else if ( nType == SfxStyleFamily::Page )
     {
         static bool bPageMapFilled = false;
         static ScDisplayNameMap aPageMap[3];

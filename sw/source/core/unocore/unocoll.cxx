@@ -671,24 +671,24 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         case SW_SERVICE_STYLE_PAGE_STYLE:
         case SW_SERVICE_STYLE_NUMBERING_STYLE:
         {
-            SfxStyleFamily eFamily = SFX_STYLE_FAMILY_CHAR;
+            SfxStyleFamily eFamily = SfxStyleFamily::Char;
             switch(nObjectType)
             {
                 case SW_SERVICE_STYLE_PARAGRAPH_STYLE:
-                    eFamily = SFX_STYLE_FAMILY_PARA;
+                    eFamily = SfxStyleFamily::Para;
                 break;
                 case SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE:
-                    eFamily = SFX_STYLE_FAMILY_PARA;
+                    eFamily = SfxStyleFamily::Para;
                     xRet = SwXStyleFamilies::CreateStyleCondParagraph(rDoc);
                 break;
                 case SW_SERVICE_STYLE_FRAME_STYLE:
-                    eFamily = SFX_STYLE_FAMILY_FRAME;
+                    eFamily = SfxStyleFamily::Frame;
                 break;
                 case SW_SERVICE_STYLE_PAGE_STYLE:
-                    eFamily = SFX_STYLE_FAMILY_PAGE;
+                    eFamily = SfxStyleFamily::Page;
                 break;
                 case SW_SERVICE_STYLE_NUMBERING_STYLE:
-                    eFamily = SFX_STYLE_FAMILY_PSEUDO;
+                    eFamily = SfxStyleFamily::Pseudo;
                 break;
             }
             if(!xRet.is())

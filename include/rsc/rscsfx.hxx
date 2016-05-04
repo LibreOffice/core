@@ -28,13 +28,14 @@
 // Public       (RSC_NOTYPE + 0x300) bis (RSC_NOTYPE + 0x3FF)
 
 //========== S F X =======================================
-enum SfxStyleFamily { SFX_STYLE_FAMILY_CHAR    = 1,
-                      SFX_STYLE_FAMILY_PARA    = 2,
-                      SFX_STYLE_FAMILY_FRAME   = 4,
-                      SFX_STYLE_FAMILY_PAGE    = 8,
-                      SFX_STYLE_FAMILY_PSEUDO  = 16,
-                      SFX_STYLE_FAMILY_ALL   = 0x7fff
-                      };
+enum class SfxStyleFamily {
+    Char    = 1,
+    Para    = 2,
+    Frame   = 4,
+    Page    = 8,
+    Pseudo  = 16,
+    All     = 0x7fff
+};
 
 
 // SfxTemplate

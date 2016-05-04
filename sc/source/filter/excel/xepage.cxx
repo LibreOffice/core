@@ -210,7 +210,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
     ScDocument& rDoc = GetDoc();
     SCTAB nScTab = GetCurrScTab();
 
-    if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( rDoc.GetPageStyle( nScTab ), SFX_STYLE_FAMILY_PAGE ) )
+    if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( rDoc.GetPageStyle( nScTab ), SfxStyleFamily::Page ) )
     {
         const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
         maData.mbValid = true;

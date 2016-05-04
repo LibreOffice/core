@@ -757,7 +757,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                         if (!aStyle.isEmpty())
                         {
                             SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
-                                    aStyle, SFX_STYLE_FAMILY_PARA );
+                                    aStyle, SfxStyleFamily::Para );
                             if ( pStyleSheet && pStyleSheet->GetItemSet().GetItemState(
                                         nWhich, true, &pItem ) == SfxItemState::SET )
                                 return pItem;
@@ -802,7 +802,7 @@ const SfxItemSet* ScDocument::GetCondResult(
         if (!aStyle.isEmpty())
         {
             SfxStyleSheetBase* pStyleSheet =
-                xPoolHelper->GetStylePool()->Find(aStyle, SFX_STYLE_FAMILY_PARA);
+                xPoolHelper->GetStylePool()->Find(aStyle, SfxStyleFamily::Para);
 
             if (pStyleSheet)
                 return &pStyleSheet->GetItemSet();

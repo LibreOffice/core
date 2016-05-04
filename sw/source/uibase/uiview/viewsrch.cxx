@@ -914,7 +914,7 @@ void SwView::StateSearch(SfxItemSet &rSet)
                 if ( !m_pSrchItem )
                 {
                     m_pSrchItem = new SvxSearchItem( SID_SEARCH_ITEM );
-                    m_pSrchItem->SetFamily(SFX_STYLE_FAMILY_PARA);
+                    m_pSrchItem->SetFamily(SfxStyleFamily::Para);
                     m_pSrchItem->SetSearchString( m_pWrtShell->GetSelText() );
                 }
 

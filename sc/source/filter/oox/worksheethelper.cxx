@@ -947,7 +947,7 @@ void WorksheetGlobals::initializeWorksheetImport()
 
     ScStyleSheet* pStyleSheet =
         static_cast<ScStyleSheet*>(rDoc.getDoc().GetStyleSheetPool()->Find(
-            getStyles().getDefaultStyleName(), SFX_STYLE_FAMILY_PARA));
+            getStyles().getDefaultStyleName(), SfxStyleFamily::Para));
 
     if (pStyleSheet)
         rDoc.setCellStyleToSheet(getSheetIndex(), *pStyleSheet);

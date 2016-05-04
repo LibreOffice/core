@@ -203,7 +203,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
     ScStyleSheetPool* pStylePool    = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet  = pStylePool->Find(
                                             pDoc->GetPageStyle( nPrintTab ),
-                                            SFX_STYLE_FAMILY_PAGE );
+                                            SfxStyleFamily::Page );
     if (pStyleSheet)
         pParamSet = &pStyleSheet->GetItemSet();
     else
@@ -424,7 +424,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     bool bDoGrid, bNullVal, bFormula;
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SfxStyleFamily::Page );
     if (pStyleSheet)
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();

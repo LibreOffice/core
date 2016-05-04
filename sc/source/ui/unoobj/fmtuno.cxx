@@ -308,7 +308,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
             OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
-                                                aStrVal, SFX_STYLE_FAMILY_PARA );
+                                                aStrVal, SfxStyleFamily::Para );
         }
         else if ( rProp.Name == SC_UNONAME_FORMULANMSP1 )
         {
@@ -592,14 +592,14 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
 OUString SAL_CALL ScTableConditionalEntry::getStyleName() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return ScStyleNameConversion::DisplayToProgrammaticName( aData.maStyle, SFX_STYLE_FAMILY_PARA );
+    return ScStyleNameConversion::DisplayToProgrammaticName( aData.maStyle, SfxStyleFamily::Para );
 }
 
 void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName )
                                             throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
+    aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SfxStyleFamily::Para );
 }
 
 ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,

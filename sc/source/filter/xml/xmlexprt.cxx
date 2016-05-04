@@ -4315,7 +4315,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             default:
                                 SAL_WARN("sc", "unimplemented conditional format export");
                         }
-                        OUString sStyle = ScStyleNameConversion::DisplayToProgrammaticName(pEntry->GetStyle(), SFX_STYLE_FAMILY_PARA);
+                        OUString sStyle = ScStyleNameConversion::DisplayToProgrammaticName(pEntry->GetStyle(), SfxStyleFamily::Para);
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, sStyle);
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, aCond.makeStringAndClear());
 
@@ -4464,7 +4464,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     {
                         const ScCondDateFormatEntry& rDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
                         OUString aDateType = getDateStringForType(rDateFormat.GetDateType());
-                        OUString aStyleName = ScStyleNameConversion::DisplayToProgrammaticName(rDateFormat.GetStyleName(), SFX_STYLE_FAMILY_PARA );
+                        OUString aStyleName = ScStyleNameConversion::DisplayToProgrammaticName(rDateFormat.GetStyleName(), SfxStyleFamily::Para );
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_STYLE, aStyleName);
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_DATE, aDateType);
                         SvXMLElementExport aElementDateFormat(*this, XML_NAMESPACE_CALC_EXT, XML_DATE_IS, true, true);

@@ -116,7 +116,7 @@ class SW_DLLPUBLIC SwDocShell
     /// Methods for StyleSheets
 
     /// @param nSlot
-    /// Only used for nFamily == SFX_STYLE_FAMILY_PAGE. Identifies optional Slot by which the edit is triggered.
+    /// Only used for nFamily == SfxStyleFamily::Page. Identifies optional Slot by which the edit is triggered.
     /// Used to activate certain dialog pane
     SAL_DLLPRIVATE sal_uInt16 Edit(
         const OUString &rName,

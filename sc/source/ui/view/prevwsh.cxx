@@ -240,7 +240,7 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
 
     ScStyleSheetPool*   pStylePool  = rDoc.GetStyleSheetPool();
     SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( rDoc.GetPageStyle( nTab ),
-                                                        SFX_STYLE_FAMILY_PAGE );
+                                                        SfxStyleFamily::Page );
     OSL_ENSURE(pStyleSheet,"No style sheet");
     if (!pStyleSheet) return false;
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
@@ -727,7 +727,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 SCTAB nTab                      = pPreview->GetTab();
                 OUString aOldName               = pDocShell->GetDocument().GetPageStyle( pPreview->GetTab() );
                 ScStyleSheetPool* pStylePool    = pDocShell->GetDocument().GetStyleSheetPool();
-                SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
+                SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SfxStyleFamily::Page );
                 OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
                 if ( pReqArgs && pStyleSheet && SfxItemState::SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, true, &pItem ) )
@@ -841,7 +841,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                     {
                         OUString aOldName               = pDocShell->GetDocument().GetPageStyle( pPreview->GetTab() );
                         ScStyleSheetPool* pStylePool    = pDocShell->GetDocument().GetStyleSheetPool();
-                        SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
+                        SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SfxStyleFamily::Page );
                         OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
                         if ( pStyleSheet )

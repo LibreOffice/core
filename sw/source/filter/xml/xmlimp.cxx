@@ -344,7 +344,7 @@ void SwXMLDocStylesContext_Impl::EndElement()
     // are imported and finished.
     SwXMLImport& rSwImport = dynamic_cast<SwXMLImport&>( GetImport());
     GetImport().GetTextImport()->SetOutlineStyles(
-            (rSwImport.GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA ) != 0);
+            (rSwImport.GetStyleFamilyMask() & SfxStyleFamily::Para ) != 0);
 }
 
 const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
@@ -404,7 +404,7 @@ SwXMLImport::SwXMLImport(
     m_pTableCellAttrTokenMap( nullptr ),
     m_pGraphicResolver( nullptr ),
     m_pEmbeddedResolver( nullptr ),
-    m_nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
+    m_nStyleFamilyMask( SfxStyleFamily::All ),
     m_bLoadDoc( true ),
     m_bInsert( false ),
     m_bBlock( false ),
@@ -526,15 +526,15 @@ void SwXMLImport::startDocument()
                 {
                     const OUString& rFamily = pSeq[i];
                     if( rFamily=="FrameStyles" )
-                        nFamilyMask |= SFX_STYLE_FAMILY_FRAME;
+                        nFamilyMask |= SfxStyleFamily::Frame;
                     else if( rFamily=="PageStyles" )
-                        nFamilyMask |= SFX_STYLE_FAMILY_PAGE;
+                        nFamilyMask |= SfxStyleFamily::Page;
                     else if( rFamily=="CharacterStyles" )
-                        nFamilyMask |= SFX_STYLE_FAMILY_CHAR;
+                        nFamilyMask |= SfxStyleFamily::Char;
                     else if( rFamily=="ParagraphStyles" )
-                        nFamilyMask |= SFX_STYLE_FAMILY_PARA;
+                        nFamilyMask |= SfxStyleFamily::Para;
                     else if( rFamily=="NumberingStyles" )
-                        nFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
+                        nFamilyMask |= SfxStyleFamily::Pseudo;
                 }
 
                 bool bOverwrite = false;

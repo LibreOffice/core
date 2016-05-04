@@ -372,7 +372,7 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 #define SC_FAMILYNAME_CELL  "CellStyles"
 #define SC_FAMILYNAME_PAGE  "PageStyles"
 
-static const sal_uInt16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SFX_STYLE_FAMILY_PARA, SFX_STYLE_FAMILY_PAGE };
+static const sal_uInt16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page };
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
@@ -426,10 +426,10 @@ ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(sal_uInt16 nType) cons
 {
     if ( pDocShell )
     {
-        if ( nType == SFX_STYLE_FAMILY_PARA )
-            return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PARA );
-        else if ( nType == SFX_STYLE_FAMILY_PAGE )
-            return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
+        if ( nType == SfxStyleFamily::Para )
+            return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Para );
+        else if ( nType == SfxStyleFamily::Page )
+            return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Page );
     }
     OSL_FAIL("getStyleFamilyByType: keine DocShell oder falscher Typ");
     return nullptr;
@@ -448,9 +448,9 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName
     if ( pDocShell )
     {
         if ( aName == SC_FAMILYNAME_CELL )
-            return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PARA );
+            return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Para );
         else if ( aName == SC_FAMILYNAME_PAGE )
-            return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
+            return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Page );
     }
     // no assertion - called directly from getByName
     return nullptr;
@@ -694,7 +694,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
             {
                 (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
 
-                if ( eFamily == SFX_STYLE_FAMILY_PARA && !rDoc.IsImportingXML() )
+                if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
                     rDoc.GetPool()->CellStyleCreated( aNameStr, &rDoc );
 
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
@@ -747,7 +747,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
         if (pStyle)
         {
             bFound = true;
-            if ( eFamily == SFX_STYLE_FAMILY_PARA )
+            if ( eFamily == SfxStyleFamily::Para )
             {
                 // wie ScViewFunc::RemoveStyleSheetInUse
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
@@ -907,9 +907,9 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
         sal_uInt32 nResId = 0;
         switch ( eFamily )
         {
-            case SFX_STYLE_FAMILY_PARA:
+            case SfxStyleFamily::Para:
                 nResId = STR_STYLE_FAMILY_CELL; break;
-            case SFX_STYLE_FAMILY_PAGE:
+            case SfxStyleFamily::Page:
                 nResId = STR_STYLE_FAMILY_PAGE; break;
             default:
                 OSL_FAIL( "ScStyleFamilyObj::getPropertyValue(): invalid family" );
@@ -951,7 +951,7 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, c
 //  Default-ctor wird fuer die Reflection gebraucht
 
 ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName) :
-    pPropSet( (eFam == SFX_STYLE_FAMILY_PARA) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() ),
+    pPropSet( (eFam == SfxStyleFamily::Para) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() ),
     pDocShell( pDocSh ),
     eFamily( eFam ),
     aStyleName( rName )
@@ -1074,7 +1074,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
     if (pStyle)
     {
         //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             return;         //! exception?
 
         //! DocFunc-Funktion??
@@ -1087,7 +1087,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
             //  wie bei setPropertyValue
 
             ScDocument& rDoc = pDocShell->GetDocument();
-            if ( eFamily == SFX_STYLE_FAMILY_PARA )
+            if ( eFamily == SfxStyleFamily::Para )
             {
                 //  Zeilenhoehen anpassen...
 
@@ -1133,7 +1133,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
     if (pStyle)
     {
         //  cell styles cannot be renamed if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             return;         //! exception?
 
         //! DocFunc-Funktion??
@@ -1145,11 +1145,11 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
             aStyleName = aNewName;       //! notify other objects for this style?
 
             ScDocument& rDoc = pDocShell->GetDocument();
-            if ( eFamily == SFX_STYLE_FAMILY_PARA && !rDoc.IsImportingXML() )
+            if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
                 rDoc.GetPool()->CellStyleCreated( aNewName, &rDoc );
 
             //  Zellvorlagen = 2, Seitenvorlagen = 4
-            sal_uInt16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?
+            sal_uInt16 nId = ( eFamily == SfxStyleFamily::Para ) ?
                             SID_STYLE_FAMILY2 : SID_STYLE_FAMILY4;
             SfxBindings* pBindings = pDocShell->GetViewBindings();
             if (pBindings)
@@ -1178,7 +1178,7 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
     if (pStyle)
     {
         const SfxItemPropertySimpleEntry* pEntry = nullptr;
-        if ( eFamily == SFX_STYLE_FAMILY_PAGE )
+        if ( eFamily == SfxStyleFamily::Page )
         {
             pEntry = lcl_GetHeaderStyleMap()->getByName( rPropName );
             if ( pEntry )     // only item-wids in header/footer map
@@ -1444,7 +1444,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
     if ( pStyle )
     {
         //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
         SfxItemSet& rSet = pStyle->GetItemSet();
@@ -1453,7 +1453,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
         //! merge with SetOneProperty
 
         ScDocument& rDoc = pDocShell->GetDocument();
-        if ( eFamily == SFX_STYLE_FAMILY_PARA )
+        if ( eFamily == SfxStyleFamily::Para )
         {
             //  row heights
 
@@ -1558,12 +1558,12 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
     if ( pStyle && pEntry )
     {
         //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
+        if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
         SfxItemSet& rSet = pStyle->GetItemSet();    // direkt im lebenden Style aendern...
         bool bDone = false;
-        if ( eFamily == SFX_STYLE_FAMILY_PAGE )
+        if ( eFamily == SfxStyleFamily::Page )
         {
             if(pEntry->nWID == SC_WID_UNO_HEADERSET)
             {
@@ -1835,7 +1835,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
         //! Undo ?????????????
 
         ScDocument& rDoc = pDocShell->GetDocument();
-        if ( eFamily == SFX_STYLE_FAMILY_PARA )
+        if ( eFamily == SfxStyleFamily::Para )
         {
             //  Zeilenhoehen anpassen...
 
@@ -2017,7 +2017,7 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
+    bool bPage = ( eFamily == SfxStyleFamily::Page );
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = SCSTYLE_SERVICE;

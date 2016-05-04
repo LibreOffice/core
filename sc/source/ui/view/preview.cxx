@@ -790,7 +790,7 @@ static Size lcl_GetDocPageSize( ScDocument* pDoc, SCTAB nTab )
 {
     OUString aName = pDoc->GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aName, SFX_STYLE_FAMILY_PAGE );
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aName, SfxStyleFamily::Page );
     if ( pStyleSheet )
     {
         SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
@@ -1061,7 +1061,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             OUString aOldName = rDoc.GetPageStyle( nTab );
             bool bUndo = rDoc.IsUndoEnabled();
             ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
-            SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
+            SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aOldName, SfxStyleFamily::Page );
 
             if ( pStyleSheet )
             {
@@ -1115,7 +1115,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     if( bUndo )
                     {
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            new ScUndoModifyStyle( pDocShell, SFX_STYLE_FAMILY_PAGE,
+                            new ScUndoModifyStyle( pDocShell, SfxStyleFamily::Page,
                             aOldData, aNewData ) );
                     }
 
@@ -1156,7 +1156,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 ScDocument& rDoc = pDocShell->GetDocument();
                 bool bUndo = rDoc.IsUndoEnabled();
                 ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
-                SfxStyleSheetBase* pStyleSheet = pStylePool->Find( rDoc.GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
+                SfxStyleSheetBase* pStyleSheet = pStylePool->Find( rDoc.GetPageStyle( nTab ), SfxStyleFamily::Page );
                 OSL_ENSURE( pStyleSheet, "PageStyle not found" );
                 if ( pStyleSheet )
                 {
@@ -1217,7 +1217,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     if( bUndo )
                     {
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            new ScUndoModifyStyle( pDocShell, SFX_STYLE_FAMILY_PAGE,
+                            new ScUndoModifyStyle( pDocShell, SfxStyleFamily::Page,
                             aOldData, aNewData ) );
                     }
 

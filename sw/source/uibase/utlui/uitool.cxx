@@ -707,7 +707,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
 {
     const sal_Int32 nOffset = rToFill.GetEntryCount() > 0 ? 1 : 0;
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
-    pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR);
+    pPool->SetSearchMask(SfxStyleFamily::Char);
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First();
     OUString sStandard;

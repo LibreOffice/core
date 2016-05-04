@@ -473,7 +473,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             if(!m_aCharStyle.isEmpty() && !bNoCharacterFormats )
             {
                 // look for the named text format in the pool
-                SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aCharStyle, SFX_STYLE_FAMILY_CHAR));
+                SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aCharStyle, SfxStyleFamily::Char));
 
                 // if the style is found
                 if( pStyle )
@@ -492,7 +492,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             if(!m_aParaStyle.isEmpty() && !bNoParagraphFormats )
             {
                 // look for the named pragraph format in the pool
-                SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SFX_STYLE_FAMILY_PARA));
+                SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SfxStyleFamily::Para));
                 if( pStyle )
                 {
                     // store the attributes from this style in aItemVector in order

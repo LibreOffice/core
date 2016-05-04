@@ -1961,7 +1961,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                                 //TODO: sort?
 
     ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
-                                ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA ));
+                                ScGlobal::GetRscString(STR_STYLENAME_RESULT), SfxStyleFamily::Para ));
 
     bool bSpaceLeft = true;                                         // Success when inserting?
 

@@ -26,10 +26,10 @@ public:
 
 void SdrTextObjTest::AllFamiliesCanBeRestoredFromSavedString() {
     std::vector<SfxStyleFamily> allFamilies;
-    allFamilies.push_back(SFX_STYLE_FAMILY_CHAR);
-    allFamilies.push_back(SFX_STYLE_FAMILY_PARA);
-    allFamilies.push_back(SFX_STYLE_FAMILY_PAGE);
-    allFamilies.push_back(SFX_STYLE_FAMILY_PSEUDO);
+    allFamilies.push_back(SfxStyleFamily::Char);
+    allFamilies.push_back(SfxStyleFamily::Para);
+    allFamilies.push_back(SfxStyleFamily::Page);
+    allFamilies.push_back(SfxStyleFamily::Pseudo);
 
     for (SfxStyleFamily family : allFamilies) {
       OUString styleName = "styleName";

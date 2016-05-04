@@ -394,7 +394,7 @@ public:
                                                 const OUString* pFormatStr = nullptr) = 0;
     /// @param nSlot
     /// Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
-    /// Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
+    /// Currently used, if nRegion == SfxStyleFamily::Page in order to activate certain dialog pane
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,

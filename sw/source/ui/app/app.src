@@ -85,7 +85,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             Text [ en-US ] = "Paragraph Styles" ;
-            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            StyleFamily = SfxStyleFamily::Para ;
             FilterList [ en-US ] =
             {
                 < "All Styles"          ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
@@ -105,7 +105,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             Text [ en-US ] = "Character Styles" ;
-            StyleFamily = SFX_STYLE_FAMILY_CHAR ;
+            StyleFamily = SfxStyleFamily::Char ;
             FilterList [ en-US ] =
             {
                 < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
@@ -117,7 +117,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             Text [ en-US ] = "Frame Styles" ;
-            StyleFamily = SFX_STYLE_FAMILY_FRAME ;
+            StyleFamily = SfxStyleFamily::Frame ;
             FilterList [ en-US ] =
             {
                 < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
@@ -129,7 +129,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             Text [ en-US ] = "Page Styles" ;
-            StyleFamily = SFX_STYLE_FAMILY_PAGE ;
+            StyleFamily = SfxStyleFamily::Page ;
             FilterList [ en-US ] =
             {
                 < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
@@ -140,7 +140,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         SfxStyleFamilyItem
         {
-            StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            StyleFamily = SfxStyleFamily::Pseudo ;
             FilterList [ en-US ] =
             {
                 < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
