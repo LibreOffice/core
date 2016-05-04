@@ -965,11 +965,11 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                     aNumInfo.bExpSign = bAttrBool;
                 break;
             case XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS:
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 1 ))  // at least one '?' (tdf#38097)
                     aNumInfo.nNumerDigits = nAttrVal;
                 break;
-            case XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS:
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+            case XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS:  // while max-denominator-digits not treated (tdf#99661)
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 1 ))  // at least one '?' (tdf#38097)
                     aNumInfo.nDenomDigits = nAttrVal;
                 break;
             case XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE:
