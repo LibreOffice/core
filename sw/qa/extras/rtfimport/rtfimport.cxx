@@ -2403,7 +2403,7 @@ DECLARE_RTFIMPORT_TEST(testTdf65642, "tdf65642.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty<sal_Int32>(getParagraph(2), "PageNumberOffset"));
 }
 
-#ifndef WNT
+#if !defined(WNT) && !defined(MACOSX)
 DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
 {
     // Get the second child of the group shape.
