@@ -2418,7 +2418,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         [&](size_t nRow, size_t nCol, bool nVal)
         {
             OUString aStr;
-            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            rFormatter.GetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
             aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
@@ -2468,7 +2468,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         [&](size_t nRow, size_t nCol, bool nVal)
         {
             OUString aStr;
-            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            rFormatter.GetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
             aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 
