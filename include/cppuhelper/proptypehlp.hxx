@@ -87,6 +87,12 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const css::uno::Any 
     }
 }
 
+void convertPropertyValue(bool & target, css::uno::Any const & source) {
+    sal_Bool b;
+    convertPropertyValue(b, source);
+    target = b;
+}
+
 inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any & a )
 {
     const enum css::uno::TypeClass tc = a.getValueType().getTypeClass();

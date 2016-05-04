@@ -38,6 +38,7 @@ inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any 
   conversion of basic types
 */
 inline void SAL_CALL convertPropertyValue( sal_Bool & target  , const css::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( bool & target      , const css::uno::Any & source );
 inline void SAL_CALL convertPropertyValue( sal_Int64 & target , const css::uno::Any & source );
 inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const css::uno::Any & source );
 inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const css::uno::Any & source );
