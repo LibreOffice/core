@@ -344,10 +344,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFunctionName == "sdext::presenter::PresenterFrameworkObserver::True") {
         return true;
     }
-    //  hidden behind the ENABLE_PANE_RESIZING macro
-    if (aFunctionName == "sdext::presenter::PresenterWindowManager::UpdateWindowList") {
-        return true;
-    }
     // callback, sw/source/core/doc/tblrwcl.cxx
     if (aFunctionName == "lcl_DelOtherBox") {
         return true;
