@@ -91,6 +91,10 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             pFunc->MarkRange(aRange, true, bExtend);
             mxGridWindow->CursorChanged();
         }
+        else
+        {
+            SAL_WARN("sc.uitest", "unknown selection method");
+        }
     }
     else
     {
