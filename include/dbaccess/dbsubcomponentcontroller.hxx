@@ -76,8 +76,6 @@ namespace dbaui
         virtual void     impl_onModifyChanged();
 
     public:
-        DBSubComponentController() = delete;
-
         bool            isReadOnly()            const;
         bool            isEditable()            const;
         void            setEditable(bool _bEditable);

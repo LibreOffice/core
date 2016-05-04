@@ -30,7 +30,6 @@ class EDITENG_DLLPUBLIC FieldUpdater
 public:
     FieldUpdater(EditTextObject& rObj);
     FieldUpdater(const FieldUpdater& r);
-    FieldUpdater() = delete;
     ~FieldUpdater();
 
     /**

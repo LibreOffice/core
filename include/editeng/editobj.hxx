@@ -71,7 +71,6 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
     void CreateData( SvStream& rStrm );
 
 public:
-    EditTextObject() = delete;
     EditTextObject( const EditTextObject& r );
     virtual ~EditTextObject();
     EditTextObject&      operator=( const EditTextObject& ) = delete;

@@ -48,7 +48,6 @@ private:
     static INetURLObject    ImplGetURLIgnoreCase( const INetURLObject& rURL );
 
 public:
-                            GalleryThemeEntry() = delete;
                             GalleryThemeEntry( bool bCreateUniqueURL,
                                                const INetURLObject& rBaseURL,
                                                const OUString& rName,

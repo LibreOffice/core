@@ -225,7 +225,6 @@ namespace comphelper
     protected:
         virtual ~OAccessibleContextWrapperHelper( );
 
-        OAccessibleContextWrapperHelper() = delete;
         OAccessibleContextWrapperHelper(const OAccessibleContextWrapperHelper&) = delete;
         OAccessibleContextWrapperHelper& operator=(const OAccessibleContextWrapperHelper&) = delete;
     };
