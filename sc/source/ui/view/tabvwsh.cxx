@@ -39,6 +39,7 @@
 #include "dwfunctr.hxx"
 #include "sc.hrc"
 #include "spelldialog.hxx"
+#include "formulacell.hxx"
 #include <searchresults.hxx>
 
 #include <sfx2/request.hxx>
@@ -115,7 +116,7 @@ OUString ScTabViewShell::GetFormula(ScAddress& rAddress)
     ScRefCellValue aCell(*pDoc, rAddress);
     if (!aCell.isEmpty() && aCell.meType == CELLTYPE_FORMULA)
     {
-        sFormula = aCell.mpString->getString();
+        aCell.mpFormula->GetFormula( sFormula);
     }
     return sFormula;
 }
