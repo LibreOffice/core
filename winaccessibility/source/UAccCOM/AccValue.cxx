@@ -88,8 +88,7 @@ STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
     {
     case VT_UI1:
         {
-            css::uno::Type     typeInfo(TypeClass_CHAR, (sal_Char *)"char");
-            anyVal.setValue(&value.bVal, typeInfo);
+            anyVal <<= sal_Unicode(value.bVal);
         }
         break;
 
