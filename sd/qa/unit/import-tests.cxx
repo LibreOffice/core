@@ -121,6 +121,7 @@ public:
     void testTdf93868();
     void testTdf95932();
     void testTdf99030();
+    void testTdf49561();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -170,6 +171,7 @@ public:
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf95932);
     CPPUNIT_TEST(testTdf99030);
+    CPPUNIT_TEST(testTdf49561);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1374,6 +1376,32 @@ void SdImportTest::testTdf99030()
         xBackgroundPropSet->getPropertyValue( "FillColor" ) >>= nFillColor;
     }
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0x676A55), nFillColor );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf49561()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf49561.ppt"), PPT);
+
+    uno::Reference< drawing::XMasterPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getMasterPages()->getByIndex( 0 ), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(5), xPage->getCount() );
+
+    uno::Reference< beans::XPropertySet > xShape( getShape( 3, xPage ) );
+    uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
+    uno::Reference< beans::XPropertySet > xPropSet(xRun , uno::UNO_QUERY_THROW );
+
+    float fCharHeight = 0;
+    CPPUNIT_ASSERT(xPropSet->getPropertyValue("CharHeight") >>= fCharHeight);
+    CPPUNIT_ASSERT_EQUAL(12.f, fCharHeight);
+
+    OUString aCharFontName;
+    CPPUNIT_ASSERT(xPropSet->getPropertyValue("CharFontName") >>= aCharFontName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Stencil"), aCharFontName);
 
     xDocShRef->DoClose();
 }

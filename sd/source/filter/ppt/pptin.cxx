@@ -2287,7 +2287,9 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         break;
         default: break;
     }
+
     pText = static_cast<SdrTextObj*>(SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPageCapsule, pSheet, ppStyleSheetAry ));
+
     if ( pPlaceHolder && pPlaceHolder->nPlaceholderId != PptPlaceholder::NONE )
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
@@ -2330,7 +2332,6 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             rItemSet.Put( pText->GetMergedItemSet() );
                         }
                     }
-                    pText->NbcSetStyleSheet( pSheet2, false );
                 }
 
                 SfxItemSet aTempAttr( mpDoc->GetPool() );
