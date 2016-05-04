@@ -507,7 +507,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, PaperOrientationModifyHdl, ListBox&, void
     SvxPageItem aPageItem(SID_ATTR_PAGE);
     aPageItem.SetLandscape( mpPaperOrientation->GetSelectEntryPos() == 0 );
 
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD,&aPageItem,0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_PAGE, SfxCallMode::RECORD,&aPageItem,0L);
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
