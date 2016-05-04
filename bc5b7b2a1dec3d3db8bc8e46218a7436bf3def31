@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d5cb1c1d",
+        "filename": "sax/source/tools/converter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-05-04T06:13:12Z",
+      "side": 1,
+      "message": "The additional elements should also be initialized",
+      "revId": "bc5b7b2a1dec3d3db8bc8e46218a7436bf3def31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
