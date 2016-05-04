@@ -148,7 +148,6 @@ public:
     void            GetCtrlState(SfxItemSet& rSet);
     void            GetDrawAttrState(SfxItemSet& rSet);
     void            GetMenuState(SfxItemSet& rSet);
-    void            GetPageProperties(SfxItemSet& rSet);
     void            GetTableMenuState(SfxItemSet& rSet);
     /** Set the items of the given item set that are related to
         switching the editing mode to the correct values.
@@ -158,6 +157,9 @@ public:
     void            GetModeSwitchingMenuState (SfxItemSet &rSet);
     void            GetAttrState(SfxItemSet& rSet);
     void            GetSnapItemState(SfxItemSet& rSet);
+
+    void            SetPageProperties (SfxRequest& rReq);
+    void            GetPageProperties(SfxItemSet& rSet);
 
     void            GetState (SfxItemSet& rSet);
     void            Execute (SfxRequest& rReq);
