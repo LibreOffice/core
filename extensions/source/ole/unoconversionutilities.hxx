@@ -1312,7 +1312,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq)
     pArray = SafeArrayCreate(VT_VARIANT, 1, rgsabound);
 
     Any unoElement;
-    sal_uInt8 * pSeqData= (sal_uInt8*) punoSeq->elements;
+    char * pSeqData= punoSeq->elements;
 
     for (sal_uInt32 i = 0; i < n; i++)
     {
