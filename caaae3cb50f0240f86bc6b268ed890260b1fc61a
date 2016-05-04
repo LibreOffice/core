@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_db626bad",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-04T21:53:59Z",
+      "side": 1,
+      "message": "I\u0027d rather keep these calls to IterateParametersIfs() together with the already existing ones. I\u0027ll move them in a follow-up commit.",
+      "revId": "caaae3cb50f0240f86bc6b268ed890260b1fc61a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
