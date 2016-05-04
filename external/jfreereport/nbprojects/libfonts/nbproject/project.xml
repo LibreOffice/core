@@ -1,42 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://www.netbeans.org/ns/project/1">
-    <type>org.netbeans.modules.ant.freeform</type>
-    <configuration>
-        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
-            <!-- Do not use Project Properties customizer when editing this file manually. -->
-            <name>libfonts</name>
-            <properties>
-                <property name="project.dir">../../wntmsci10/misc/build/libfonts</property>
-                <property name="ant.script">${project.dir}/ant/build.xml</property>
-            </properties>
-            <folders>
-                <source-folder>
-                    <label>libfonts</label>
-                    <location>${project.dir}</location>
-                </source-folder>
-            </folders>
-            <ide-actions>
-                <action name="build">
-                    <script>${ant.script}</script>
-                    <target>all</target>
-                </action>
-                <action name="javadoc">
-                    <script>${ant.script}</script>
-                    <target>javadoc</target>
-                </action>
-            </ide-actions>
-            <view>
-                <items>
-                    <source-file>
-                        <location>${ant.script}</location>
-                    </source-file>
-                </items>
-                <context-menu>
-                    <ide-action name="build"/>
-                    <ide-action name="javadoc"/>
-                </context-menu>
-            </view>
-        </general-data>
-        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1"/>
-    </configuration>
+<project name="libfonts" default="all" basedir=".">
+    <import file="ant/build-lib.xml"/>
+    <target name="initialise">
+        <tstamp/>
+        <property name="builddir" value="build"/>
+        <property file="${user.home}/.build-pentaho-reporting-libfonts.properties"/>
+        <property file="build.properties"/>
+        <isClassAndFileAvailable class-name="org.jfree.JCommon" property-name="lib.jcommon.present" file-name="${libdir}/${jcommon-jar-file}"/>
+        <fail unless="lib.jcommon.present"/>
+        <isClassAndFileAvailable class-name="org.jfree.resourceloader.LibLoaderInfo" property-name="lib.libloader.present" file-name="${libdir}/${libloader-jar-file}">
+            <test-classpath>
+                <pathelement location="${libdir}/${jcommon-jar-file}"/>
+            </test-classpath>
+        </isClassAndFileAvailable>
+        <fail unless="lib.libloader.present"/>
+        <isClassAndFileAvailable class-name="com.lowagie.text.Font" property-name="lib.itext.present" file-name="${libdir}/${itext-jar-file}">
+        </isClassAndFileAvailable>
+    </target>
+    <target name="compile-itext" depends="compile-core" if="lib.itext.present" description="Compile the libFonts source code (iText module).">
+        <build-module target-jar="${libfonts-itext-jar-file}" module-path="org/jfree/fonts/itext" source-dir="source">
+            <module-classpath>
+                <pathelement location="${libfonts-core-jar-file}"/>
+                <pathelement location="${libdir}/${jcommon-jar-file}"/>
+                <pathelement location="${libdir}/${libloader-jar-file}"/>
+                <pathelement location="${libdir}/${itext-jar-file}"/>
+            </module-classpath>
+            <module-resources>
+                <include name="**/*.properties"/>
+                <include name="*.properties"/>
+                <include name="**/*.ser"/>
+                <include name="*.ser"/>
+            </module-resources>
+        </build-module>
+    </target>
+    <target name="compile-core" depends="initialise" description="Compile the libFonts source code (Core file).">
+        <build-core target-jar="${libfonts-core-jar-file}" module-path="org/jfree/fonts/itext" source-dir="source">
+            <core-classpath>
+                <pathelement location="${libdir}/${jcommon-jar-file}"/>
+                <pathelement location="${libdir}/${libloader-jar-file}"/>
+            </core-classpath>
+            <core-resources>
+                <include name="**/*.properties"/>
+                <include name="*.properties"/>
+                <include name="**/*.ser"/>
+                <include name="*.ser"/>
+            </core-resources>
+        </build-core>
+    </target>
+    <target name="compile" depends="initialise" description="Compile the libFonts source code (Monolithic build)">
+        <build-all target-jar="${libfonts-jar-file}" source-dir="source">
+            <all-sources>
+                <exclude name="org/jfree/fonts/itext/**" unless="lib.itext.present"/>
+            </all-sources>
+            <all-classpath>
+                <pathelement location="${libdir}/${jcommon-jar-file}"/>
+                <pathelement location="${libdir}/${libloader-jar-file}"/>
+                <pathelement location="${libdir}/${itext-jar-file}"/>
+            </all-classpath>
+            <all-resources>
+                <include name="**/*.properties"/>
+                <include name="*.properties"/>
+                <include name="**/*.ser"/>
+                <include name="*.ser"/>
+                <exclude name="org/jfree/fonts/itext/**" unless="lib.itext.present"/>
+            </all-resources>
+        </build-all>
+    </target>
+    <target name="compile-retro" depends="initialise" description="Compile the libFonts source code (Retro-Monolithic build).">
+        <build-retro target-jar="${libfonts-jar-file}" source-dir="source" jdk-dir="${build.retro.jdk}">
+            <all-sources>
+                <exclude name="org/jfree/fonts/itext/**" unless="lib.itext.present"/>
+            </all-sources>
+            <all-classpath>
+                <pathelement location="${libdir}/${itext-jar-file}"/>
+                <pathelement location="${libdir}/${jcommon-jar-file}"/>
+                <pathelement location="${libdir}/${libloader-jar-file}"/>
+            </all-classpath>
+            <all-resources>
+                <include name="**/*.properties"/>
+                <include name="*.properties"/>
+                <include name="**/*.ser"/>
+                <include name="*.ser"/>
+                <exclude name="org/jfree/fonts/itext/**" unless="lib.itext.present"/>
+            </all-resources>
+        </build-retro>
+    </target>
+    <target name="javadoc" depends="initialise">
+        <description>
+        </description>
+        <delete dir="javadoc"/>
+        <mkdir dir="javadoc"/>
+        <javadoc destdir="javadoc" windowtitle="LibFonts Class Library (version ${libfonts.version})" overview="source/overview.html" linksource="true">
+            <classpath>
+                <pathelement location="${libdir}/${itext-jar-file}"/>
+                <pathelement location="${libdir}/${jcommon-jar-file}"/>
+                <pathelement location="${libdir}/${libloader-jar-file}"/>
+            </classpath>
+            <packageset dir="source" defaultexcludes="yes">
+                <include name="org/jfree/fonts"/>
+                <exclude name="**/junit/**"/>
+            </packageset>
+        </javadoc>
+    </target>
+    <target name="fill-dist-dir" depends="initialise">
+        <copy file="README.txt" tofile="distribution/README.txt"/>
+        <copy file="ChangeLog.txt" tofile="distribution/ChangeLog.txt"/>
+        <copy file="licence-LGPL.txt" tofile="distribution/licence-LGPL.txt"/>
+        <copy file="${libfonts-jar-file}" tofile="distribution/${libfonts-jar-file}"/>
+        <copy file="maven-project.xml" tofile="distribution/maven-project.xml"/>
+        <copy todir="distribution/source">
+            <fileset dir="source"/>
+        </copy>
+        <copy todir="distribution/lib">
+            <fileset dir="lib"/>
+        </copy>
+        <copy file="build.xml" tofile="distribution/build.xml"/>
+        <copy file="ant/build-lib.xml" tofile="distribution/ant/build-lib.xml"/>
+        <copy file="build.properties" tofile="distribution/build.properties"/>
+    </target>
+    <target name="zip" depends="compile">
+        <description>
+      Make .zip distribution for libfonts
+    </description>
+        <make-zip lib.version="${libfonts.version}" lib.name="${libfonts.name}"/>
+    </target>
+    <target name="targz" depends="compile">
+        <description>
+      Make .tar.gz distribution for libfonts
+    </description>
+        <make-targz lib.version="${libfonts.version}" lib.name="${libfonts.name}"/>
+    </target>
+    <target name="maven-bundle" depends="compile">
+        <description>
+      Make a Maven-Bundle jar for LibFonts.
+    </description>
+        <make-maven-bundle lib.version="${libfonts.version}" lib.name="${libfonts.name}" lib.file="${libfonts-jar-file}" target="${libfonts-bundle-file}"/>
+    </target>
+    <target name="all" depends="compile,javadoc,zip,targz,maven-bundle" description="Compiles Libfonts, builds the jar files, generates the Javadoc HTML pages and creates distribution files (.zip and .tar.gz).">
+    </target>
 </project>
