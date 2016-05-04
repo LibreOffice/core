@@ -34,9 +34,6 @@ namespace cppu {
 template < class target >
 inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any & a);
 
-template < class target >
-inline void SAL_CALL convertPropertyValue( target &value ,  css::uno::Any & a);
-
 /**
   conversion of basic types
 */
