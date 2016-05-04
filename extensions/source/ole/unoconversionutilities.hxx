@@ -1820,8 +1820,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
 
     Any  params[3];
     params[0] <<= reinterpret_cast<sal_uIntPtr>(spUnknown.p);
-    sal_Bool bDisp = pVar->vt == VT_DISPATCH ? sal_True : sal_False;
-    params[1].setValue( & bDisp, cppu::UnoType<bool>::get());
+    params[1] <<= (pVar->vt == VT_DISPATCH);
     params[2] <<= seqTypes;
 
     xInit->initialize( Sequence<Any>( params, 3));
