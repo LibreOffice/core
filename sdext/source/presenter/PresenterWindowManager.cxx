@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#undef ENABLE_PANE_RESIZING
-//#define ENABLE_PANE_RESIZING
-
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "PresenterWindowManager.hxx"
@@ -28,7 +25,6 @@
 #include "PresenterHelper.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterPaneBase.hxx"
-#include "PresenterPaneBorderManager.hxx"
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneFactory.hxx"
@@ -86,7 +82,7 @@ PresenterWindowManager::PresenterWindowManager (
       maLayoutListeners(),
       mbIsMouseClickPending(false)
 {
-    UpdateWindowList();
+
 }
 
 PresenterWindowManager::~PresenterWindowManager()
@@ -112,9 +108,6 @@ void SAL_CALL PresenterWindowManager::disposing()
         {
             (*iPane)->mxBorderWindow->removeWindowListener(this);
             (*iPane)->mxBorderWindow->removeFocusListener(this);
-#ifndef ENABLE_PANE_RESIZING
-            (*iPane)->mxBorderWindow->removeMouseListener(this);
-#endif
         }
     }
 }
@@ -313,15 +306,7 @@ void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& 
 void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-#ifndef ENABLE_PANE_RESIZING
-    if (mbIsMouseClickPending)
-    {
-        mbIsMouseClickPending = false;
-        mpPresenterController->HandleMouseClick(rEvent);
-    }
-#else
     (void)rEvent;
-#endif
 }
 
 void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent& rEvent)
@@ -1121,56 +1106,6 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
     return xPolyPolygon;
 }
 
-void PresenterWindowManager::UpdateWindowList()
-{
-#ifdef ENABLE_PANE_RESIZING
-    try
-    {
-        OSL_ASSERT(mxComponentContext.is());
-
-        Reference<lang::XComponent> xComponent (mxPaneBorderManager, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-
-        Reference<lang::XMultiComponentFactory> xFactory (mxComponentContext->getServiceManager());
-        if (xFactory.is())
-        {
-            Sequence<Any> aArguments (1 + mpPaneContainer->maPanes.size()*2);
-            sal_Int32 nIndex (0);
-            aArguments[nIndex++] = Any(mxParentWindow);
-            for (sal_uInt32 nPaneIndex=0; nPaneIndex<mpPaneContainer->maPanes.size(); ++nPaneIndex)
-            {
-                if ( ! mpPaneContainer->maPanes[nPaneIndex]->mbIsActive)
-                    continue;
-
-                const Reference<awt::XWindow> xBorderWindow (
-                    mpPaneContainer->maPanes[nPaneIndex]->mxBorderWindow);
-                const Reference<awt::XWindow> xContentWindow (
-                    mpPaneContainer->maPanes[nPaneIndex]->mxContentWindow);
-                const Reference<awt::XWindow2> xBorderWindow2(xBorderWindow, UNO_QUERY);
-                if (xBorderWindow.is()
-                    && xContentWindow.is()
-                    && ( ! xBorderWindow2.is() || xBorderWindow2->isVisible()))
-                {
-                    aArguments[nIndex++] = Any(xBorderWindow);
-                    aArguments[nIndex++] = Any(xContentWindow);
-                }
-            }
-
-            aArguments.realloc(nIndex);
-            rtl::Reference<PresenterPaneBorderManager> pManager (
-                new PresenterPaneBorderManager (
-                    mxComponentContext,
-                    mpPresenterController));
-            pManager->initialize(aArguments);
-            mxPaneBorderManager.set(static_cast<XWeak*>(pManager.get()));
-        }
-    }
-    catch (RuntimeException&)
-    {
-    }
-#endif
-}
 
 void PresenterWindowManager::Invalidate()
 {
@@ -1181,7 +1116,6 @@ void PresenterWindowManager::Update()
     mxClipPolygon = nullptr;
     mbIsLayoutPending = true;
 
-    UpdateWindowList();
     Invalidate();
 }
 
