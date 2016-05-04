@@ -43,7 +43,6 @@ $(eval $(call gb_Library_add_exception_objects,PresenterScreen,\
     sdext/source/presenter/PresenterPaintManager \
     sdext/source/presenter/PresenterPane \
     sdext/source/presenter/PresenterPaneBase \
-    sdext/source/presenter/PresenterPaneBorderManager \
     sdext/source/presenter/PresenterPaneBorderPainter \
     sdext/source/presenter/PresenterPaneContainer \
     sdext/source/presenter/PresenterPaneFactory \
