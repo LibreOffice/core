@@ -706,8 +706,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
         }
         case VT_BOOL:
         {
-            sal_Bool b= boolVal == VARIANT_TRUE;
-            aValue.setValue( &b, cppu::UnoType<decltype(b)>::get());
+            aValue <<= (boolVal == VARIANT_TRUE);
             break;
         }
         case VT_I1:
