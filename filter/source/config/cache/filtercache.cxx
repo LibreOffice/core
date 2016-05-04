@@ -1791,69 +1791,74 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
                                 const CacheItem & aItem)
     throw(css::uno::Exception)
 {
+    // This function changes the properties of aItem one-by-one; but it also
+    // listens to the configuration changes and reloads the whole item from the
+    // configuration on change, so use a copy of aItem throughout:
+    CacheItem copiedItem(aItem);
+
     CacheItem::const_iterator pIt;
     switch(eType)
     {
 
         case E_TYPE :
         {
-            pIt = aItem.find(PROPNAME_PREFERREDFILTER);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_PREFERREDFILTER);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_PREFERREDFILTER, pIt->second);
-            pIt = aItem.find(PROPNAME_DETECTSERVICE);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_DETECTSERVICE);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_DETECTSERVICE, pIt->second);
-            pIt = aItem.find(PROPNAME_URLPATTERN);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_URLPATTERN);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_URLPATTERN, pIt->second);
-            pIt = aItem.find(PROPNAME_EXTENSIONS);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_EXTENSIONS);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_EXTENSIONS, pIt->second);
-            pIt = aItem.find(PROPNAME_PREFERRED);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_PREFERRED);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_PREFERRED, pIt->second);
-            pIt = aItem.find(PROPNAME_MEDIATYPE);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_MEDIATYPE);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_MEDIATYPE, pIt->second);
-            pIt = aItem.find(PROPNAME_CLIPBOARDFORMAT);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_CLIPBOARDFORMAT);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_CLIPBOARDFORMAT, pIt->second);
 
             css::uno::Reference< css::container::XNameReplace > xUIName;
             xItem->getByName(PROPNAME_UINAME) >>= xUIName;
-            impl_savePatchUINames(xUIName, aItem);
+            impl_savePatchUINames(xUIName, copiedItem);
         }
         break;
 
 
         case E_FILTER :
         {
-            pIt = aItem.find(PROPNAME_TYPE);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_TYPE);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_TYPE, pIt->second);
-            pIt = aItem.find(PROPNAME_FILEFORMATVERSION);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_FILEFORMATVERSION);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_FILEFORMATVERSION, pIt->second);
-            pIt = aItem.find(PROPNAME_UICOMPONENT);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_UICOMPONENT);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_UICOMPONENT, pIt->second);
-            pIt = aItem.find(PROPNAME_FILTERSERVICE);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_FILTERSERVICE);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_FILTERSERVICE, pIt->second);
-            pIt = aItem.find(PROPNAME_DOCUMENTSERVICE);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_DOCUMENTSERVICE);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_DOCUMENTSERVICE, pIt->second);
-            pIt = aItem.find(PROPNAME_USERDATA);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_USERDATA);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_USERDATA, pIt->second);
-            pIt = aItem.find(PROPNAME_TEMPLATENAME);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_TEMPLATENAME);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_TEMPLATENAME, pIt->second);
 
             // special handling for flags! Convert it from an integer flag field back
             // to a list of names ...
-            pIt = aItem.find(PROPNAME_FLAGS);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_FLAGS);
+            if (pIt != copiedItem.end())
             {
                 sal_Int32 nFlags = 0;
                 pIt->second >>= nFlags;
@@ -1867,7 +1872,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
 #ifdef AS_ENABLE_FILTER_UINAMES
             css::uno::Reference< css::container::XNameReplace > xUIName;
             xItem->getByName(PROPNAME_UINAME) >>= xUIName;
-            impl_savePatchUINames(xUIName, aItem);
+            impl_savePatchUINames(xUIName, copiedItem);
 #endif //  AS_ENABLE_FILTER_UINAMES
         }
         break;
@@ -1876,8 +1881,8 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
         case E_FRAMELOADER :
         case E_CONTENTHANDLER :
         {
-            pIt = aItem.find(PROPNAME_TYPES);
-            if (pIt != aItem.end())
+            pIt = copiedItem.find(PROPNAME_TYPES);
+            if (pIt != copiedItem.end())
                 xItem->replaceByName(PROPNAME_TYPES, pIt->second);
         }
         break;
