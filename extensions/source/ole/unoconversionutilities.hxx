@@ -1564,7 +1564,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                     rAny.setValue( & var.cVal, cppu::UnoType<sal_Int8>::get());
                     break;
                 case VT_UI1: // there is no unsigned char in UNO
-                    rAny.setValue( & var.bVal, cppu::UnoType<sal_Int8>::get());
+                    rAny <<= sal_Int8(var.bVal);
                     break;
                 case VT_UI2:
                     rAny.setValue( & var.uiVal, cppu::UnoType<cppu::UnoUnsignedShortType>::get() );
