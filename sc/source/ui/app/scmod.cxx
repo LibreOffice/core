@@ -1264,7 +1264,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         // Re-compile cells with name error, and recalc if at least one cell
         // has been re-compiled.  In the future we may want to find a way to
         // recalc only those that are affected.
-        if (pDoc->CompileErrorCells(ScErrorCodes::errNoName))
+        if (pDoc->CompileErrorCells(formula::errNoName))
             bCalcAll = true;
     }
 

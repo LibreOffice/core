@@ -22,8 +22,7 @@
 
 #include <rtl/math.hxx>
 
-namespace ScErrorCodes
-{
+namespace formula {
 
 const sal_uInt16 errIllegalChar          = 501;
 const sal_uInt16 errIllegalArgument      = 502;
@@ -111,10 +110,7 @@ inline sal_uInt16 GetDoubleErrorValue( double fVal )
     return (sal_uInt16)(nErr & 0x0000ffff);     // any other error
 }
 
-} // namespace ScErrorCodes
-
-// yes, exceptionally we put a "using namespace" in a header file..
-using namespace ScErrorCodes;
+} // namespace formula
 
 #endif // INCLUDED_FORMULA_ERRORCODES_HXX
 

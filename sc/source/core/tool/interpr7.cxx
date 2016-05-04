@@ -37,7 +37,7 @@ void ScInterpreter::ScFilterXML()
         OUString aString = GetString().getString();
         if(aString.isEmpty() || aXPathExpression.isEmpty())
         {
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
 
@@ -54,7 +54,7 @@ void ScInterpreter::ScFilterXML()
 
         if(!pDoc)
         {
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
 
@@ -66,7 +66,7 @@ void ScInterpreter::ScFilterXML()
 
         if(!pXPathObj)
         {
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
 
@@ -81,7 +81,7 @@ void ScInterpreter::ScFilterXML()
                     xmlNodeSetPtr pNodeSet = pXPathObj->nodesetval;
                     if(!pNodeSet)
                     {
-                        PushError( errNoValue );
+                        PushError( formula::errNoValue );
                         return;
                     }
 
@@ -104,7 +104,7 @@ void ScInterpreter::ScFilterXML()
                     }
                     else
                     {
-                        PushError( errNoValue );
+                        PushError( formula::errNoValue );
                         return;
                     }
                 }
@@ -154,14 +154,14 @@ void ScInterpreter::ScWebservice()
 
         if(aURI.isEmpty())
         {
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
 
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
         if(!xFileAccess.is())
         {
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
 
@@ -172,12 +172,12 @@ void ScInterpreter::ScWebservice()
         catch (...)
         {
             // don't let any exceptions pass
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
         if ( !xStream.is() )
         {
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
 
@@ -221,7 +221,7 @@ void ScInterpreter::ScEncodeURL()
         OUString aStr = GetString().getString();
         if ( aStr.isEmpty() )
         {
-            PushError( errNoValue );
+            PushError( formula::errNoValue );
             return;
         }
 
@@ -252,7 +252,7 @@ void ScInterpreter::ScDebugVar()
     SvtMiscOptions aMiscOptions;
     if (!aMiscOptions.IsExperimentalMode())
     {
-        PushError(ScErrorCodes::errNoName);
+        PushError(formula::errNoName);
         return;
     }
 

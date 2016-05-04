@@ -30,7 +30,7 @@ namespace sc {
 inline double div( const double& fNumerator, const double& fDenominator )
 {
     return (fDenominator != 0.0) ? (fNumerator / fDenominator) :
-        CreateDoubleError( errDivisionByZero);
+        formula::CreateDoubleError( formula::errDivisionByZero);
 }
 
 /** Return fNumerator/fDenominator if fDenominator!=0 else +-Infinity if

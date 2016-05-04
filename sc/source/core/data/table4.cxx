@@ -1697,9 +1697,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         }
 
                         if (bError)
-                            aCol[nCol].SetError(static_cast<SCROW>(nRow), errNoValue);
+                            aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errNoValue);
                         else if (bOverflow)
-                            aCol[nCol].SetError(static_cast<SCROW>(nRow), errIllegalFPOperation);
+                            aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errIllegalFPOperation);
                         else
                             aCol[nCol].SetValue(static_cast<SCROW>(nRow), nVal);
                     }
@@ -1799,9 +1799,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             }
 
                             if (bError)
-                                aCol[nCol].SetError(static_cast<SCROW>(nRow), errNoValue);
+                                aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errNoValue);
                             else if (bOverflow)
-                                aCol[nCol].SetError(static_cast<SCROW>(nRow), errIllegalFPOperation);
+                                aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errIllegalFPOperation);
                             else
                             {
                                 nStringValue = (sal_Int32)nVal;

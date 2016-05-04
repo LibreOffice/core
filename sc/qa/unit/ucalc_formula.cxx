@@ -1141,11 +1141,11 @@ void Test::testFormulaRefUpdate()
     aPos = ScAddress(2,1,0);
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
     aPos = ScAddress(2,2,0);
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
 
     // Clear all and start over.
     clearRange(m_pDoc, ScRange(0,0,0,10,10,0));
@@ -1245,11 +1245,11 @@ void Test::testFormulaRefUpdate()
     // Both A4 and A5 should show #REF! errors.
     pFC = m_pDoc->GetFormulaCell(ScAddress(0,3,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
 
     m_pDoc->DeleteTab(0);
 }

@@ -1707,28 +1707,28 @@ void ExcelToSc::ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData 
 
 const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 {
-    sal_uInt16                  nError;
+    sal_uInt16 nError;
     aPool.Reset();
     aStack.Reset();
 
-    DefTokenId              eOc;
+    DefTokenId eOc;
 
     switch( eType )
     {
-        case xlErrNull:     eOc = ocStop;       nError = errNoCode;             break;
-        case xlErrDiv0:     eOc = ocStop;       nError = errDivisionByZero;     break;
-        case xlErrValue:    eOc = ocStop;       nError = errNoValue;            break;
-        case xlErrRef:      eOc = ocStop;       nError = errNoRef;              break;
-        case xlErrName:     eOc = ocStop;       nError = errNoName;             break;
-        case xlErrNum:      eOc = ocStop;       nError = errIllegalFPOperation; break;
-        case xlErrNA:       eOc = ocNotAvail;   nError = NOTAVAILABLE;          break;
-        case xlErrTrue:     eOc = ocTrue;       nError = 0;                     break;
-        case xlErrFalse:    eOc = ocFalse;      nError = 0;                     break;
-        case xlErrUnknown:  eOc = ocStop;       nError = errUnknownState;       break;
+        case xlErrNull:     eOc = ocStop;       nError = formula::errNoCode;             break;
+        case xlErrDiv0:     eOc = ocStop;       nError = formula::errDivisionByZero;     break;
+        case xlErrValue:    eOc = ocStop;       nError = formula::errNoValue;            break;
+        case xlErrRef:      eOc = ocStop;       nError = formula::errNoRef;              break;
+        case xlErrName:     eOc = ocStop;       nError = formula::errNoName;             break;
+        case xlErrNum:      eOc = ocStop;       nError = formula::errIllegalFPOperation; break;
+        case xlErrNA:       eOc = ocNotAvail;   nError = formula::NOTAVAILABLE;          break;
+        case xlErrTrue:     eOc = ocTrue;       nError = 0;                              break;
+        case xlErrFalse:    eOc = ocFalse;      nError = 0;                              break;
+        case xlErrUnknown:  eOc = ocStop;       nError = formula::errUnknownState;       break;
         default:
             OSL_FAIL( "ExcelToSc::GetBoolErr - wrong enum!" );
             eOc = ocNoName;
-            nError = errUnknownState;
+            nError = formula::errUnknownState;
     }
 
     aPool << eOc;
@@ -1779,11 +1779,11 @@ void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
 
     switch( eErr )
     {
-        case ConvErrNi:         nInd = errUnknownToken; break;
-        case ConvErrNoMem:      nInd = errCodeOverflow; break;
-        case ConvErrExternal:   nInd = errNoName; break;
-        case ConvErrCount:      nInd = errCodeOverflow; break;
-        default:                nInd = errNoCode;   // I had no better idea
+        case ConvErrNi:         nInd = formula::errUnknownToken; break;
+        case ConvErrNoMem:      nInd = formula::errCodeOverflow; break;
+        case ConvErrExternal:   nInd = formula::errNoName; break;
+        case ConvErrCount:      nInd = formula::errCodeOverflow; break;
+        default:                nInd = formula::errNoCode;   // I had no better idea
     }
 
     rCell.SetErrCode( nInd );

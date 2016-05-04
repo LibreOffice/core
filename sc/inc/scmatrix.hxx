@@ -64,7 +64,7 @@ struct ScMatrixValue
     const svl::SharedString& GetString() const { return aStr; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
-    sal_uInt16 GetError() const         { return GetDoubleErrorValue( fVal); }
+    sal_uInt16 GetError() const { return formula::GetDoubleErrorValue( fVal); }
 
     /// Only valid if ScMatrix methods indicate that this is a boolean
     bool GetBoolean() const         { return fVal != 0.0; }

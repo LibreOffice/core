@@ -46,7 +46,7 @@ ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
     // Initialize result matrix in case of
     // a premature end of the interpreter
     // due to errors.
-    pMat->FillDouble(CreateDoubleError(NOTAVAILABLE), 0, 0, nCols - 1, nRows - 1);
+    pMat->FillDouble(formula::CreateDoubleError(formula::NOTAVAILABLE), 0, 0, nCols - 1, nRows - 1);
     /*! pJump not initialized */
 }
 
@@ -151,15 +151,15 @@ void ScJumpMatrix::SetNewResMat(SCSIZE nNewCols, SCSIZE nNewRows)
         pMat = pMat->CloneAndExtend(nNewCols, nNewRows);
         if (nResMatCols < nNewCols)
         {
-            pMat->FillDouble(CreateDoubleError(
-                                 NOTAVAILABLE), nResMatCols, 0, nNewCols - 1,
-                             nResMatRows - 1);
+            pMat->FillDouble(
+                formula::CreateDoubleError(formula::NOTAVAILABLE),
+                nResMatCols, 0, nNewCols - 1, nResMatRows - 1);
         }
         if (nResMatRows < nNewRows)
         {
-            pMat->FillDouble(CreateDoubleError(
-                                 NOTAVAILABLE), 0, nResMatRows, nNewCols - 1,
-                             nNewRows - 1);
+            pMat->FillDouble(
+                formula::CreateDoubleError(formula::NOTAVAILABLE),
+                0, nResMatRows, nNewCols - 1, nNewRows - 1);
         }
         if (nRows == 1 && nCurCol != 0)
         {

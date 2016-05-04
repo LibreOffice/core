@@ -2254,7 +2254,7 @@ public:
                         ScAddress aAdr(mnCol, nThisRow, mnTab);
 
                         if (nErr)
-                            fVal = CreateDoubleError(nErr);
+                            fVal = formula::CreateDoubleError(nErr);
 
                         if (!aBucket.maNumVals.empty() && nThisRow == nPrevRow + 1)
                         {
@@ -2387,7 +2387,7 @@ bool appendToBlock(
 
                     if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError)
                     {
-                        if (aRes.mnError == ScErrorCodes::errCircularReference)
+                        if (aRes.mnError == formula::errCircularReference)
                         {
                             // This cell needs to be recalculated on next visit.
                             rFC.SetErrCode(0);
@@ -2508,7 +2508,7 @@ copyFirstFormulaBlock(
         sc::FormulaResultValue aRes = rFC.GetResult();
         if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError)
         {
-            if (aRes.mnError == ScErrorCodes::errCircularReference)
+            if (aRes.mnError == formula::errCircularReference)
             {
                 // This cell needs to be recalculated on next visit.
                 rFC.SetErrCode(0);
@@ -2753,7 +2753,7 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
     for (; pResults != pResEnd; ++pResults, ++itCell)
     {
         ScFormulaCell& rCell = **itCell;
-        sal_uInt16 nErr = GetDoubleErrorValue(*pResults);
+        sal_uInt16 nErr = formula::GetDoubleErrorValue(*pResults);
         if (nErr != 0)
             rCell.SetResultError(nErr);
         else
