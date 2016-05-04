@@ -434,6 +434,9 @@ public:
                                   long nTileWidth,
                                   long nTileHeight);
 
+    ScViewData* getViewData();
+    virtual FactoryFunction GetUITestFactory() const override;
+
 protected:
     void ImpCreateOverlayObjects();
     void ImpDestroyOverlayObjects();
