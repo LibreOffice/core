@@ -1128,8 +1128,7 @@ void OResultSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             {
                 VARIANT_BOOL bBool;
                 m_pRecordSet->Supports(adBookmark,&bBool);
-                sal_Bool bRet = bBool == VARIANT_TRUE;
-                rValue.setValue(&bRet, cppu::UnoType<bool>::get() );
+                rValue <<= (bBool == VARIANT_TRUE);
             }
             break;
         case PROPERTY_ID_CURSORNAME:
