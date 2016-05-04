@@ -350,8 +350,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_LAST_LINE_ADJUST : rVal <<= (sal_Int16)GetLastBlock(); break;
         case MID_EXPAND_SINGLE    :
         {
-            sal_Bool bValue = bOneBlock;
-            rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
+            rVal <<= bOneBlock;
             break;
         }
         default: ;//prevent warning

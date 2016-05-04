@@ -770,10 +770,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             break;
 
             case HANDLE_IS_TEXT_MODE                       :
-            {
-                sal_Bool bVal = aFormat.IsTextmode();
-                (*pValue).setValue(&bVal, cppu::UnoType<bool>::get());
-            }
+                *pValue <<= aFormat.IsTextmode();
             break;
 
             case HANDLE_GREEK_CHAR_STYLE                    :
@@ -812,10 +809,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 *pValue <<= static_cast<sal_Int16>(aFormat.GetDistance((*ppEntries)->mnMemberId));
             break;
             case HANDLE_IS_SCALE_ALL_BRACKETS              :
-            {
-                sal_Bool bVal = aFormat.IsScaleNormalBrackets();
-                (*pValue).setValue(&bVal, cppu::UnoType<bool>::get());
-            }
+                *pValue <<= aFormat.IsScaleNormalBrackets();
             break;
             case HANDLE_PRINTER_NAME:
             {

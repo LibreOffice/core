@@ -113,6 +113,9 @@ public:
     Any(bool const *, Type const &) = delete;
     Any(bool const *, typelib_TypeDescription *) = delete;
     Any(bool const *, typelib_TypeDescriptionReference *) = delete;
+    Any(sal_Bool const *, Type const &) = delete;
+    Any(sal_Bool const *, typelib_TypeDescription *) = delete;
+    Any(sal_Bool const *, typelib_TypeDescriptionReference *) = delete;
     Any(std::nullptr_t, Type const & type):
         Any(static_cast<void *>(nullptr), type) {}
     Any(std::nullptr_t, typelib_TypeDescription * type):
@@ -221,6 +224,10 @@ public:
     void setValue(bool const *, Type const &) = delete;
     void setValue(bool const *, typelib_TypeDescriptionReference *) = delete;
     void setValue(bool const *, typelib_TypeDescription *) = delete;
+    void setValue(sal_Bool const *, Type const &) = delete;
+    void setValue(sal_Bool const *, typelib_TypeDescriptionReference *)
+        = delete;
+    void setValue(sal_Bool const *, typelib_TypeDescription *) = delete;
     void setValue(std::nullptr_t, Type const & type)
     { setValue(static_cast<void *>(nullptr), type); }
     void setValue(std::nullptr_t, typelib_TypeDescriptionReference * type)

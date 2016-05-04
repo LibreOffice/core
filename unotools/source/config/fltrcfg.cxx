@@ -371,12 +371,10 @@ void SvtFilterOptions::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = cppu::UnoType<bool>::get();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_uLong nFlag = lcl_GetFlag(nProp);
-        sal_Bool bVal = pImp->IsFlag( nFlag);
-        pValues[nProp].setValue(&bVal, rType);
+        pValues[nProp] <<= pImp->IsFlag(nFlag);
 
     }
     PutProperties(aNames, aValues);

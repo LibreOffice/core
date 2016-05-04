@@ -148,16 +148,16 @@ void Indexes::refresh()
                            m_schemaName, m_tableName );
 
             (void) C_SCHEMA; (void) C_TABLENAME;
-            sal_Bool isUnique = row->getBoolean( C_IS_UNIQUE );
-            sal_Bool isPrimary = row->getBoolean( C_IS_PRIMARY );
-            sal_Bool isClusterd = row->getBoolean( C_IS_CLUSTERED );
+            bool isUnique = row->getBoolean( C_IS_UNIQUE );
+            bool isPrimary = row->getBoolean( C_IS_PRIMARY );
+            bool isClusterd = row->getBoolean( C_IS_CLUSTERED );
             Reference< com::sun::star::beans::XPropertySet > prop = pIndex;
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.IS_UNIQUE, Any( &isUnique, cppu::UnoType<bool>::get() ) );
+                st.IS_UNIQUE, Any( isUnique ) );
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.IS_PRIMARY_KEY_INDEX, Any( &isPrimary, cppu::UnoType<bool>::get() ) );
+                st.IS_PRIMARY_KEY_INDEX, Any( isPrimary ) );
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.IS_CLUSTERED, Any( &isClusterd, cppu::UnoType<bool>::get() ) );
+                st.IS_CLUSTERED, Any( isClusterd ) );
             pIndex->setPropertyValue_NoBroadcast_public(
                 st.NAME, makeAny( currentIndexName ) );
 

@@ -628,8 +628,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
 IMPL_LINK_TYPED(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
-    sal_Bool bAbove = !rBox.GetSelectEntryPos();
-    const Type& rType = cppu::UnoType<bool>::get();
+    bool bAbove = !rBox.GetSelectEntryPos();
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
     for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
@@ -638,7 +637,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
         for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
             if (pProps[nProp].Name == cRubyIsAbove)
-                pProps[nProp].Value.setValue(&bAbove, rType);
+                pProps[nProp].Value <<= bAbove;
         }
         SetModified(true);
     }

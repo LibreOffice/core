@@ -334,14 +334,14 @@ bool XMLOpaquePropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = false;
+    bool bVal = false;
     if( IsXMLToken( rStrImpValue, XML_FOREGROUND ) )
         bVal = true;
     else if( !IsXMLToken( rStrImpValue, XML_BACKGROUND ) )
         bRet = false;
 
     if( bRet )
-        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
+        rValue <<= bVal;
 
     return bRet;
 }
@@ -384,14 +384,14 @@ bool XMLContourModePropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = false;
+    bool bVal = false;
     if( IsXMLToken( rStrImpValue, XML_OUTSIDE ) )
         bVal = true;
     else if( ! IsXMLToken( rStrImpValue, XML_FULL ) )
         bRet = false;
 
     if( bRet )
-        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
+        rValue <<= bVal;
 
     return bRet;
 }
@@ -434,7 +434,7 @@ bool XMLParagraphOnlyPropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = false;
+    bool bVal = false;
 
     if( ! IsXMLToken( rStrImpValue, XML_NO_LIMIT ) )
     {
@@ -444,7 +444,7 @@ bool XMLParagraphOnlyPropHdl_Impl::importXML(
     }
 
     if( bRet )
-        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
+        rValue <<= bVal;
 
     return bRet;
 }
@@ -552,7 +552,7 @@ bool XMLFrameProtectPropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = false;
+    bool bVal = false;
     if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = false;
@@ -570,7 +570,7 @@ bool XMLFrameProtectPropHdl_Impl::importXML(
     }
 
     if( bRet )
-        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
+        rValue <<= bVal;
 
     return bRet;
 }
@@ -746,8 +746,7 @@ bool XMLHoriMirrorPropHdl_Impl::importXML(
 
     if( bRet )
     {
-        sal_Bool bTmp = nHoriMirror != 0;
-        rValue.setValue( &bTmp, cppu::UnoType<bool>::get() );
+        rValue <<= (nHoriMirror != 0);
     }
 
     return bRet;
@@ -794,7 +793,7 @@ bool XMLGrfMirrorPropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
-    sal_Bool bVal = false;
+    bool bVal = false;
     if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = false;
@@ -813,7 +812,7 @@ bool XMLGrfMirrorPropHdl_Impl::importXML(
     }
 
     if( bRet )
-        rValue.setValue( &bVal, cppu::UnoType<bool>::get() );
+        rValue <<= bVal;
 
     return bRet;
 }
@@ -1087,8 +1086,7 @@ bool XMLTextSyncWidthHeightPropHdl_Impl::importXML(
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue = (rStrImpValue == sValue );
-    rValue.setValue( &bValue, cppu::UnoType<bool>::get() );
+    rValue <<= (rStrImpValue == sValue);
 
     return true;
 }

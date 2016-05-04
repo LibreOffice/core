@@ -153,8 +153,8 @@ namespace offapp
         const SfxBoolItem* pEnabled = _rSourceItems.GetItem<SfxBoolItem>(SID_SB_POOLING_ENABLED);
         if (pEnabled)
         {
-            sal_Bool bEnabled = pEnabled->GetValue();
-            aConnectionPoolRoot.setNodeValue(getEnablePoolingNodeName(), Any(&bEnabled, cppu::UnoType<bool>::get()));
+            bool bEnabled = pEnabled->GetValue();
+            aConnectionPoolRoot.setNodeValue(getEnablePoolingNodeName(), Any(bEnabled));
             bNeedCommit = true;
         }
 

@@ -270,7 +270,7 @@ static bool performAnyTest( const Reference< XBridgeTest > &xLBT, const TestData
 
     Any a;
     {
-        a.setValue( &(data.Bool) , cppu::UnoType<bool>::get() );
+        a <<= data.Bool;
         OSL_ASSERT( xLBT->transportAny( a ) == a );
     }
 
@@ -643,10 +643,9 @@ static bool performTest(
         // compared with the results:
         sal_Int32 _arLong[] = {
             static_cast< sal_Int32 >(0x80000000), 1, 0x7FFFFFFF };
-        sal_Bool _aBool = true;
         sal_Int32 _aInt = 0xBABEBABE;
         float _aFloat = 3.14f;
-        Any _any1(&_aBool, cppu::UnoType<bool>::get());
+        Any _any1(true);
         Any _any2(&_aInt, cppu::UnoType<sal_Int32>::get());
         Any _any3(&_aFloat, cppu::UnoType<float>::get());
         Any _arAny[] = { _any1, _any2, _any3 };

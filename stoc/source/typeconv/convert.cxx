@@ -729,8 +729,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         {
         default:
         {
-            sal_Bool bTmp = (toDouble( rVal ) != 0.0);
-            aRet.setValue( &bTmp, cppu::UnoType<bool>::get() );
+            aRet <<= (toDouble( rVal ) != 0.0);
         }
         case TypeClass_ENUM:  // exclude enums
             break;
@@ -740,13 +739,11 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             const OUString & aStr = *static_cast<const OUString *>(rVal.getValue());
             if ( aStr == "0" || aStr.equalsIgnoreAsciiCase( "false" ))
             {
-                sal_Bool bFalse = false;
-                aRet.setValue( &bFalse, cppu::UnoType<bool>::get() );
+                aRet <<= false;
             }
             else if ( aStr == "1" || aStr.equalsIgnoreAsciiCase( "true" ))
             {
-                sal_Bool bTrue = true;
-                aRet.setValue( &bTrue, cppu::UnoType<bool>::get() );
+                aRet <<= true;
             }
             else
             {

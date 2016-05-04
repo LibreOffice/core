@@ -242,8 +242,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
         {
-            sal_Bool bVal = m_bIsBookmarkable;
-            rValue.setValue(&bVal, cppu::UnoType<bool>::get());
+            rValue <<= m_bIsBookmarkable;
         }   break;
         default:
         {

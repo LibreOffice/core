@@ -788,8 +788,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         }
         if ( nWidth == -1 )
         {
-            sal_Bool bTrue( true );
-            aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
+            aAny <<= true;
             maXPropSet->setPropertyValue( "TextAutoGrowWidth", aAny );
 
             drawing::TextAdjust eTextAdjust;
@@ -812,8 +811,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         }
         if ( nHeight == -1 )
         {
-            sal_Bool bTrue = true;
-            aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
+            aAny <<= true;
             maXPropSet->setPropertyValue( "TextAutoGrowHeight", aAny );
         }
         uno::Reference< text::XText >  xText;
@@ -854,8 +852,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                         }
                         if ( nWidth > 0 && nHeight > 0 )    // restricted text
                         {
-                            sal_Bool bTrue = true;
-                            aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
+                            aAny <<= true;
                             maXPropSet->setPropertyValue( "TextFitToSize", aAny );
                         }
                         aCursorText->setString( aStr );

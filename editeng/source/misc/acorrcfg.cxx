@@ -242,60 +242,46 @@ void SvxBaseAutoCorrCfg::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = cppu::UnoType<bool>::get();
-    sal_Bool bVal;
     const long nFlags = rParent.pAutoCorrect->GetFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
         {
             case  0:
-                bVal = 0 != (nFlags & SaveWordCplSttLst);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & SaveWordCplSttLst) != 0);
             break;//"Exceptions/TwoCapitalsAtStart",
             case  1:
-                bVal = 0 != (nFlags & SaveWordWrdSttLst);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & SaveWordWrdSttLst) != 0);
             break;//"Exceptions/CapitalAtStartSentence",
             case  2:
-                bVal = 0 != (nFlags & Autocorrect);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & Autocorrect) != 0);
             break;//"UseReplacementTable",
             case  3:
-                bVal = 0 != (nFlags & CapitalStartWord);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & CapitalStartWord) != 0);
             break;//"TwoCapitalsAtStart",
             case  4:
-                bVal = 0 != (nFlags & CapitalStartSentence);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & CapitalStartSentence) != 0);
             break;//"CapitalAtStartSentence",
             case  5:
-                bVal = 0 != (nFlags & ChgWeightUnderl);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & ChgWeightUnderl) != 0);
             break;//"ChangeUnderlineWeight",
             case  6:
-                bVal = 0 != (nFlags & SetINetAttr);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & SetINetAttr) != 0);
             break;//"SetInetAttribute",
             case  7:
-                bVal = 0 != (nFlags & ChgOrdinalNumber);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & ChgOrdinalNumber) != 0);
             break;//"ChangeOrdinalNumber",
             case 8:
-                bVal = 0 != (nFlags & AddNonBrkSpace);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & AddNonBrkSpace) != 0);
             break;//"AddNonBreakingSpace"
             case  9:
-                bVal = 0 != (nFlags & ChgToEnEmDash);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & ChgToEnEmDash) != 0);
             break;//"ChangeDash",
             case 10:
-                bVal = 0 != (nFlags & IgnoreDoubleSpace);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & IgnoreDoubleSpace) != 0);
             break;//"RemoveDoubleSpaces",
             case 11:
-                bVal = 0 != (nFlags & ChgSglQuotes);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & ChgSglQuotes) != 0);
             break;//"ReplaceSingleQuote",
             case 12:
                 pValues[nProp] <<= (sal_Int32)rParent.pAutoCorrect->GetStartSingleQuote();
@@ -304,8 +290,7 @@ void SvxBaseAutoCorrCfg::ImplCommit()
                 pValues[nProp] <<= (sal_Int32) rParent.pAutoCorrect->GetEndSingleQuote();
             break;//"SingleQuoteAtEnd",
             case 14:
-                bVal = 0 != (nFlags & ChgQuotes);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & ChgQuotes) != 0);
             break;//"ReplaceDoubleQuote",
             case 15:
                 pValues[nProp] <<= (sal_Int32) rParent.pAutoCorrect->GetStartDoubleQuote();
@@ -314,8 +299,7 @@ void SvxBaseAutoCorrCfg::ImplCommit()
                 pValues[nProp] <<= (sal_Int32) rParent.pAutoCorrect->GetEndDoubleQuote();
             break;//"DoubleQuoteAtEnd"
             case 17:
-                bVal = 0 != (nFlags & CorrectCapsLock);
-                pValues[nProp].setValue(&bVal, rType);
+                pValues[nProp] <<= ((nFlags & CorrectCapsLock) != 0);
             break;//"CorrectAccidentalCapsLock"
         }
     }

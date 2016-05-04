@@ -1357,30 +1357,26 @@ void FmXFormShell::LoopGrids(LoopGridsSync nSync, LoopGridsFlags nFlags)
             {
                 case LoopGridsSync::DISABLE_SYNC:
                 {
-                    sal_Bool bB(false);
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
+                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(false));
                 }
                 break;
                 case LoopGridsSync::FORCE_SYNC:
                 {
                     Any aOldVal( xModelSet->getPropertyValue(FM_PROP_DISPLAYSYNCHRON) );
-                    sal_Bool bB(true);
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
+                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(true));
                     xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, aOldVal);
                 }
                 break;
                 case LoopGridsSync::ENABLE_SYNC:
                 {
-                    sal_Bool bB(true);
-                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
+                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(true));
                 }
                 break;
             }
 
             if (nFlags & LoopGridsFlags::DISABLE_ROCTRLR)
             {
-                sal_Bool bB(false);
-                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,cppu::UnoType<bool>::get()));
+                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(false));
                 Reference< XPropertyState> xModelPropState(xModelSet, UNO_QUERY);
                 if (xModelPropState.is())
                     xModelPropState->setPropertyToDefault(FM_PROP_CURSORCOLOR);

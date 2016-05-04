@@ -1415,8 +1415,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
 
         case TypeClass_BOOLEAN:
         {
-            sal_Bool b = pVar->GetBool();
-            aRetVal.setValue( &b, cppu::UnoType<bool>::get() );
+            aRetVal <<= pVar->GetBool();
             break;
         }
         case TypeClass_CHAR:

@@ -2469,7 +2469,7 @@ namespace
         OUString currentSchema = xRow->getString( C_SCHEMA );
         OUString currentTable = xRow->getString( C_TABLENAME );
         OUString currentIndexName = xRow->getString( C_INDEXNAME );
-        sal_Bool isNonUnique = ! xRow->getBoolean( C_IS_UNIQUE );
+        bool isNonUnique = ! xRow->getBoolean( C_IS_UNIQUE );
         bool isPrimary = xRow->getBoolean( C_IS_PRIMARY );
         (void)isPrimary;
         sal_Int32 indexType =  xRow->getBoolean( C_IS_CLUSTERED ) ?
@@ -2490,8 +2490,7 @@ namespace
                 result[R_TABLE_SCHEM] = makeAny(currentSchema);
                 result[R_TABLE_NAME] = makeAny(currentTable);
                 result[R_INDEX_NAME] = makeAny(currentIndexName);
-                result[R_NON_UNIQUE] =
-                    Any( &isNonUnique, cppu::UnoType<bool>::get() );
+                result[R_NON_UNIQUE] <<= isNonUnique;
                 result[R_TYPE] = makeAny( indexType );
                 result[R_COLUMN_NAME] = makeAny( rowColumn->getString(2) );
                 sal_Int32 nPos = (sal_Int32)(findIt - columns.begin() +1); // MSVC++ nonsense

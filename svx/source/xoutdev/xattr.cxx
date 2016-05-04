@@ -2038,8 +2038,8 @@ bool XLineStartCenterItem::GetPresentation
 
 bool XLineStartCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    sal_Bool bValue = GetValue();
-    rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
+    bool bValue = GetValue();
+    rVal <<= bValue;
     return true;
 }
 
@@ -2089,8 +2089,8 @@ bool XLineEndCenterItem::GetPresentation
 
 bool XLineEndCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    sal_Bool bValue = GetValue();
-    rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
+    bool bValue = GetValue();
+    rVal <<= bValue;
     return true;
 }
 

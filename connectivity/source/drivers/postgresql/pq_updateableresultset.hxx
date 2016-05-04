@@ -94,16 +94,15 @@ protected:
         //           Why is an updatable ResultSet a sequenceresultset in the first place?
         //           This seems to imply that the whole data is fetched once and kept in memory. BAAAAD.
         // LEM TODO: shouldn't these things be inherited from the statement or something like that?
-        sal_Bool b = false;
         // Positioned update/delete not supported, so no cursor name
         // Fetch direction and size are cursor-specific things, so not used now.
         // Fetch size not set
         m_props[ BASERESULTSET_FETCH_DIRECTION ] = com::sun::star::uno::makeAny(
             com::sun::star::sdbc::FetchDirection::UNKNOWN);
         // No escape processing for now
-        m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = com::sun::star::uno::Any( &b, cppu::UnoType<bool>::get() );
+        m_props[ BASERESULTSET_ESCAPE_PROCESSING ] <<= false;
         // Bookmarks not implemented for now
-        m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = com::sun::star::uno::Any( &b, cppu::UnoType<bool>::get() );
+        m_props[ BASERESULTSET_IS_BOOKMARKABLE ] <<= false;
         m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] = com::sun::star::uno::makeAny(
             com::sun::star::sdbc::ResultSetConcurrency::UPDATABLE );
         m_props[ BASERESULTSET_RESULT_SET_TYPE ] = com::sun::star::uno::makeAny(
