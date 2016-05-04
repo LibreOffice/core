@@ -129,10 +129,13 @@ void FuPage::DoExecute( SfxRequest& )
 {
     mpDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
     DBG_ASSERT( mpDrawViewShell, "sd::FuPage::FuPage(), called without a current DrawViewShell!" );
+
     if( mpDrawViewShell )
     {
         mbMasterPage = mpDrawViewShell->GetEditMode() == EM_MASTERPAGE;
-        mbDisplayBackgroundTabPage = (mpDrawViewShell->GetPageKind() == PK_STANDARD);
+        // we don't really want to format page background with SID_ATTR_PAGE[_SIZE] slots
+        mbDisplayBackgroundTabPage = ( mpDrawViewShell->GetPageKind() == PK_STANDARD) &&
+                                      ( nSlotId != SID_ATTR_PAGE_SIZE) && ( nSlotId != SID_ATTR_PAGE );
         mpPage = mpDrawViewShell->getCurrentPage();
     }
 
