@@ -63,13 +63,21 @@ void ScGridWinUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
+        bool bExtend = false;
+        if (rParameters.find("EXTEND") != rParameters.end())
+        {
+            auto itr = rParameters.find("EXTEND");
+            if (itr->second.equalsIgnoreAsciiCaseAscii("true") || itr->second == "1")
+                bExtend = true;
+        }
+
         if (rParameters.find("CELL") != rParameters.end())
         {
             auto itr = rParameters.find("CELL");
             const OUString& rStr = itr->second;
             ScAddress aAddr = get_address_from_string(rStr);
             ScDBFunc* pFunc = getDBFunc();
-            pFunc->MarkRange(ScRange(aAddr));
+            pFunc->MarkRange(ScRange(aAddr), true, bExtend);
             mxGridWindow->CursorChanged();
         }
         else if (rParameters.find("RANGE") != rParameters.end())
@@ -78,7 +86,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             const OUString rStr = itr->second;
             ScRange aRange = get_range_from_string(rStr);
             ScDBFunc* pFunc = getDBFunc();
-            pFunc->MarkRange(aRange);
+            pFunc->MarkRange(aRange, true, bExtend);
             mxGridWindow->CursorChanged();
         }
     }
