@@ -48,11 +48,30 @@ def select_range(xContext):
 
     xGridWindow = xTopWindow.getChild("grid_window")
 
-    time.sleep(1)
-
     selectProps = mkPropertyValues({"RANGE": "B10:C20"})
     xGridWindow.executeAction("SELECT", selectProps)
 
     time.sleep(20)
+
+def extend_range(xContext):
+    xUITest = xContext.ServiceManager.createInstanceWithContext(
+            "org.libreoffice.uitest.UITest", xContext)
+
+    ui_test = UITest(xUITest, xContext)
+
+    ui_test.create_doc_in_start_center("calc")
+    xTopWindow = xUITest.getTopFocusWindow()
+
+    xGridWindow = xTopWindow.getChild("grid_window")
+
+    selectProps = mkPropertyValues({"RANGE": "B10:C20"})
+    xGridWindow.executeAction("SELECT", selectProps)
+
+    time.sleep(5)
+
+    select2Props = mkPropertyValues({"RANGE": "D3:F5", "EXTEND": "true"})
+    xGridWindow.executeAction("SELECT", select2Props)
+
+    time.sleep(5)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
