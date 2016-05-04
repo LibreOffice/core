@@ -1564,7 +1564,8 @@ void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 }
 
 
-void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient )
+void SfxViewShell::CheckIPClient_Impl(
+        SfxInPlaceClient *const pIPClient, const Rectangle& rVisArea)
 {
     if ( GetObjectShell()->IsInClose() )
         return;
@@ -1574,11 +1575,25 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient )
     bool bActiveWhenVisible =
         ( (( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 ) ||
          svt::EmbeddedObjectRef::IsGLChart(pIPClient->GetObject()));
-    // object in client is currently active
-    // check if the object wants to be activated always or when it becomes at least partially visible
-    // in this case selecting of the "Edit/Plugin" checkbox should let such objects deactivate
-    if ( bAlwaysActive || bActiveWhenVisible )
-        pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
+
+    // this method is called when a client is created
+    if (!pIPClient->IsObjectInPlaceActive())
+    {
+        // object in client is currently not active
+        // check if the object wants to be activated always or when it becomes at least partially visible
+        // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
+        if (bAlwaysActive || (bActiveWhenVisible && rVisArea.IsOver(pIPClient->GetObjArea())))
+        {
+            try
+            {
+                pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+            }
+            catch (const uno::Exception& e)
+            {
+                SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl exception: " << e.Message);
+            }
+        }
+    }
 }
 
 

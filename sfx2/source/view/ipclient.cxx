@@ -593,7 +593,10 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
 IMPL_LINK_NOARG_TYPED(SfxInPlaceClient_Impl, TimerHdl, Timer *, void)
 {
     if ( m_pClient && m_xObject.is() )
-        m_pClient->GetViewShell()->CheckIPClient_Impl( m_pClient );
+    {
+        m_pClient->GetViewShell()->CheckIPClient_Impl(m_pClient,
+                m_pClient->GetViewShell()->GetObjectShell()->GetVisArea());
+    }
 }
 
 
