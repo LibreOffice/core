@@ -77,12 +77,11 @@ def input(xContext):
 
     xGridWindow = xTopWindow.getChild("grid_window")
 
-    time.sleep(2)
-
     selectProps = mkPropertyValues({"CELL": "C3"})
     xGridWindow.executeAction("SELECT", selectProps)
 
-    typeProps = mkPropertyValues({"TEXT": "hello"})
+    # TODO: how to handle the enter
+    typeProps = mkPropertyValues({"TEXT": "=2"})
     xGridWindow.executeAction("TYPE", typeProps)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
