@@ -2004,18 +2004,25 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
                                               nPrec, rFormatter.GetNumDecimalSep()[0], true );
 }
 
-sal_Int32 lcl_GetForcedDenominator(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+
+OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
 {
     sal_uInt16 i;
-    OUString aDiv;
+    OUStringBuffer aDenominatorString;
     for( i = 0; i < nAnz; i++ )
     {
-        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV )
+        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC )
         {
-            aDiv += rInfo.sStrArray[i];
+            for( i++; i < nAnz; i++ )
+            {
+                if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV || rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT )
+                    aDenominatorString.append( rInfo.sStrArray[i] );
+                else
+                    i = nAnz;
+            }
         }
     }
-    return aDiv.toInt32();
+    return aDenominatorString.makeStringAndClear();
 }
 
 // TODO: More optimizations?
@@ -2037,11 +2044,11 @@ void lcl_ForcedDenominator(sal_uLong &nFrac, sal_uLong &nDiv, sal_uLong nForcedD
 
 }
 
-sal_Int32 SvNumberformat::GetForcedDenominatorForType( sal_uInt16 nNumFor ) const
+OUString SvNumberformat::GetDenominatorString( sal_uInt16 nNumFor ) const
 {
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
     sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-    return lcl_GetForcedDenominator( rInfo, nAnz );
+    return lcl_GetDenominatorString( rInfo, nAnz );
 }
 
 bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUString& rOutString) const
@@ -2613,7 +2620,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         }
     }
 
-    if( sal_Int32 nForcedDiv = lcl_GetForcedDenominator(NumFor[nIx].Info(), nAnz) )
+    if( sal_Int32 nForcedDiv = lcl_GetDenominatorString(NumFor[nIx].Info(), nAnz).toInt32() )
     {
         lcl_ForcedDenominator(nFrac, nDiv, nForcedDiv);
         if( nFrac >= nDiv )

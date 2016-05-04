@@ -1470,8 +1470,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                         //  min-integer-digits attribute must be written.
                                         nInteger = -1;
                                     }
-                                    sal_Int32 nDenominator = rFormat.GetForcedDenominatorForType( nPart );
-                                    WriteFractionElement_Impl( nInteger, bThousand, nPrecision, nPrecision, nDenominator );
+                                    OUString aDenominatorString = rFormat.GetDenominatorString( nPart );
+                                    sal_Int32 nDenominator = aDenominatorString.toInt32();
+                                    sal_Int32 nDenominatorLength = aDenominatorString.getLength();
+                                    WriteFractionElement_Impl( nInteger, bThousand, nPrecision, nDenominatorLength, nDenominator );
                                     bAnyContent = true;
                                 }
                                 break;
