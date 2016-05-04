@@ -713,7 +713,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
             aValue.setValue( & cVal, cppu::UnoType<sal_Int8>::get());
             break;
         case VT_UI1: // there is no unsigned char in UNO
-            aValue.setValue( & bVal, cppu::UnoType<sal_Int8>::get());
+            aValue <<= sal_Int8(bVal);
             break;
         case VT_UI2:
             aValue.setValue( & uiVal, cppu::UnoType<cppu::UnoUnsignedShortType>::get());
