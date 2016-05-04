@@ -2019,16 +2019,4 @@ void ScInterpreter::ScSwitch_MS()
         PushError( errUnknownStackVariable );
 }
 
-
-void ScInterpreter::ScMinIfs_MS()
-{
-    PushDouble( IterateParametersIfs( ifMINIFS ) );
-}
-
-
-void ScInterpreter::ScMaxIfs_MS()
-{
-    PushDouble( IterateParametersIfs( ifMAXIFS ) );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

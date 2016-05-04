@@ -5665,6 +5665,17 @@ void ScInterpreter::ScCountIfs()
     PushDouble( IterateParametersIfs( ifCOUNTIFS));
 }
 
+void ScInterpreter::ScMinIfs_MS()
+{
+    PushDouble( IterateParametersIfs( ifMINIFS ) );
+}
+
+
+void ScInterpreter::ScMaxIfs_MS()
+{
+    PushDouble( IterateParametersIfs( ifMAXIFS ) );
+}
+
 void ScInterpreter::ScLookup()
 {
     sal_uInt8 nParamCount = GetByte();
