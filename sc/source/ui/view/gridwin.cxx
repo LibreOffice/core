@@ -129,6 +129,7 @@
 #include "dociter.hxx"
 #include "hints.hxx"
 #include "spellcheckcontext.hxx"
+#include "uiobject.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -6519,6 +6520,16 @@ void ScGridWindow::flushOverlayManager()
 
     if (xOverlayManager.is())
         xOverlayManager->flush();
+}
+
+ScViewData* ScGridWindow::getViewData()
+{
+    return pViewData;
+}
+
+FactoryFunction ScGridWindow::GetUITestFactory() const
+{
+    return ScGridWinUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
