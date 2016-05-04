@@ -30,6 +30,7 @@
 #include "../misc/WinImplHelper.hxx"
 #include "shared.hxx"
 
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
@@ -573,7 +574,11 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
         }
         break;
     }
-
+    css::uno::Reference<css::awt::XWindow> xParentWindow;
+    if(lArguments.getLength() > 1)
+    {
+        lArguments[1] >>= xParentWindow;
+    }
     RequestRef rRequest(new Request());
     if (bFileOpenDialog)
         rRequest->setRequest (VistaFilePickerImpl::E_CREATE_OPEN_DIALOG);
@@ -581,6 +586,8 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
         rRequest->setRequest (VistaFilePickerImpl::E_CREATE_SAVE_DIALOG);
     rRequest->setArgument(PROP_FEATURES, nFeatures);
     rRequest->setArgument(PROP_TEMPLATE_DESCR, nTemplate);
+    if(xParentWindow.is())
+        rRequest->setArgument(PROP_PARENT_WINDOW, xParentWindow);
     if ( ! m_aAsyncExecute.isRunning())
         m_aAsyncExecute.create();
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);

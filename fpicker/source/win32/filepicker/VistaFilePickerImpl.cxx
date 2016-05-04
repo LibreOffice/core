@@ -26,9 +26,13 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
 #include <comphelper/sequence.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/process.h>
 #ifdef __MINGW32__
 #include <limits.h>
 #endif
@@ -479,6 +483,21 @@ void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
 
     ::sal_Int32 nFeatures = rRequest->getArgumentOrDefault(PROP_FEATURES, (::sal_Int32)0);
     ::sal_Int32 nTemplate = rRequest->getArgumentOrDefault(PROP_TEMPLATE_DESCR, (::sal_Int32)0);
+    css::uno::Reference<css::awt::XWindow> xWindow = rRequest->getArgumentOrDefault(PROP_PARENT_WINDOW, css::uno::Reference<css::awt::XWindow>());
+    if(xWindow.is())
+    {
+        css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xWindow,css::uno::UNO_QUERY);
+        if(xSysDepWin.is()) {
+            css::uno::Sequence<sal_Int8> aProcessIdent(16);
+            rtl_getGlobalProcessId((sal_uInt8*)aProcessIdent.getArray());
+            css::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,css::lang::SystemDependent::SYSTEM_WIN32);
+            sal_Int64 tmp;
+            aAny >>= tmp;
+            if(tmp != 0)
+                m_hParentWindow = (HWND) tmp;
+        }
+    }
+
     impl_sta_enableFeatures(nFeatures, nTemplate);
 
     VistaFilePickerEventHandler* pHandlerImpl = (VistaFilePickerEventHandler*)iHandler.get();
