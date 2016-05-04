@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d01c0a7a",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-04T12:53:05Z",
+      "side": 1,
+      "message": "Can be \u0027const OUString\u0026\u0027 since you\u0027re not modifying aPersonaSetting string",
+      "revId": "c4c66537092690c9fdd039838cfb8e08a9b0359d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_300c5642",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-04T12:53:05Z",
+      "side": 1,
+      "message": "Please don\u0027t leave commented out old code behind, unless it is relevant to the new code",
+      "revId": "c4c66537092690c9fdd039838cfb8e08a9b0359d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
