@@ -1030,6 +1030,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         if ( mbSystemPicker )
         {
             aInitArguments[0] <<= nTemplateDescription;
+            if ( mpPreferredParentWindow )
+                aInitArguments[1] <<= makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) );
         }
         else
         {
@@ -2230,10 +2232,11 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
     const OUString& rStandardDir,
-    const css::uno::Sequence< OUString >& rBlackList)
+    const css::uno::Sequence< OUString >& rBlackList,
+    vcl::Window* _pPreferredParent)
     : m_nError(0)
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, nullptr, rStandardDir, rBlackList );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, _pPreferredParent, rStandardDir, rBlackList );
     mxImp = mpImp;
 
     // create the list of filters
