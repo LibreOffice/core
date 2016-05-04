@@ -2184,12 +2184,12 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
                 switch ( eFamily )
                 {
-                    case SFX_STYLE_FAMILY_PARA:
+                    case SfxStyleFamily::Para:
                         pViewData->GetView()->SetStyleSheetToMarked( pStyleSheet );
                         pViewData->GetView()->DoneBlockMode();
                         break;
 
-                    case SFX_STYLE_FAMILY_PAGE:
+                    case SfxStyleFamily::Page:
                         pViewData->GetDocument()->SetPageStyle( pViewData->GetTabNo(),
                                                                 pStyleSheet->GetName() );
 

@@ -28,7 +28,7 @@ class SwWrtShell;
 class SwTemplateDlg: public SfxStyleDialog
 {
 
-    sal_uInt16      nType;
+    SfxStyleFamily  nType;
     sal_uInt16      nHtmlMode;
     SwWrtShell*     pWrtShell;
     bool            bNewStyle;
@@ -71,7 +71,7 @@ public:
     /// Identifies name of page to open at by default
     SwTemplateDlg(  vcl::Window*             pParent,
                     SfxStyleSheetBase&  rBase,
-                    sal_uInt16          nRegion,
+                    SfxStyleFamily      nRegion,
                     const OString&      sPage = OString(),
                     SwWrtShell*         pActShell = nullptr,
                     bool                bNew = false );

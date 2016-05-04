@@ -102,7 +102,7 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
                                              sal_uInt16          nMaskP )
 {
     ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
-    if ( eFamily == SFX_STYLE_FAMILY_PARA && ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != rName )
+    if ( eFamily == SfxStyleFamily::Para && ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != rName )
         pSheet->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
     return pSheet;
@@ -142,7 +142,7 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
         rDestSet.PutExtended( rSourceSet, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
 
         const SfxPoolItem* pItem;
-        if ( eFamily == SFX_STYLE_FAMILY_PAGE )
+        if ( eFamily == SfxStyleFamily::Page )
         {
             //  Set-Items
 
@@ -188,13 +188,13 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 {
     //  Copy Default styles
 
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT),       SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT1),      SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE),     SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE1),    SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SFX_STYLE_FAMILY_PAGE );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SFX_STYLE_FAMILY_PAGE );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT),       SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT1),      SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE),     SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE1),    SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Page );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SfxStyleFamily::Page );
 }
 
 static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, DefaultFontType nFontType, sal_uInt16 nItemId )
@@ -241,7 +241,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 1. Standard
 
-    pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard, SFX_STYLE_FAMILY_PARA, SCSTYLEBIT_STANDARD ) );
+    pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard, SfxStyleFamily::Para, SCSTYLEBIT_STANDARD ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_STD );
 
     //  if default fonts for the document's languages are different from the pool default,
@@ -273,7 +273,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // 2. Result
 
     pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_RESULT ),
-                                    SFX_STYLE_FAMILY_PARA,
+                                    SfxStyleFamily::Para,
                                     SCSTYLEBIT_STANDARD ) );
     pSheet->SetParent( aStrStandard );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG );
@@ -285,7 +285,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // 3. Result1
 
     pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_RESULT1 ),
-                                    SFX_STYLE_FAMILY_PARA,
+                                    SfxStyleFamily::Para,
                                     SCSTYLEBIT_STANDARD ) );
 
     pSheet->SetParent( SCSTR( STR_STYLENAME_RESULT ) );
@@ -294,7 +294,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // 4. headline
 
     pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_HEADLINE ),
-                                    SFX_STYLE_FAMILY_PARA,
+                                    SfxStyleFamily::Para,
                                     SCSTYLEBIT_STANDARD ) );
 
     pSheet->SetParent( aStrStandard );
@@ -308,7 +308,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // 5. Ueberschrift1
 
     pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_HEADLINE1 ),
-                                    SFX_STYLE_FAMILY_PARA,
+                                    SfxStyleFamily::Para,
                                     SCSTYLEBIT_STANDARD ) );
 
     pSheet->SetParent( SCSTR( STR_STYLENAME_HEADLINE ) );
@@ -321,7 +321,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // 1. Standard
 
     pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard,
-                                    SFX_STYLE_FAMILY_PAGE,
+                                    SfxStyleFamily::Page,
                                     SCSTYLEBIT_STANDARD ) );
 
     pSet = &pSheet->GetItemSet();
@@ -362,7 +362,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // 2. Report
 
     pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_REPORT ),
-                                    SFX_STYLE_FAMILY_PAGE,
+                                    SfxStyleFamily::Page,
                                     SCSTYLEBIT_STANDARD ) );
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_REP );

@@ -131,13 +131,13 @@ struct SwApplyTemplate
         SwNumRule*    pNumRule;
     } aColl;
 
-    int eType;
+    SfxStyleFamily eType;
     sal_uInt16 nColor;
     SwFormatClipboard* m_pFormatClipboard;
     size_t nUndo;     //< The initial undo stack depth.
 
     SwApplyTemplate() :
-        eType(0),
+        eType(SfxStyleFamily::None),
         nColor(0),
         m_pFormatClipboard(nullptr),
         nUndo(0)

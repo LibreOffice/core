@@ -112,7 +112,7 @@ const XParaPortion& XParaPortionList::operator [](size_t i) const
 }
 
 ContentInfo::ContentInfo( SfxItemPool& rPool ) :
-    eFamily(SFX_STYLE_FAMILY_PARA),
+    eFamily(SfxStyleFamily::Para),
     aParaAttribs(rPool, EE_PARA_START, EE_CHAR_END)
 {
 }
@@ -1182,7 +1182,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
         // StyleName and Family...
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rC.GetStyle(), eEncoding);
-        rOStream.WriteUInt16( rC.GetFamily() );
+        rOStream.WriteUInt16( (sal_uInt16)rC.GetFamily() );
 
         // Paragraph attributes ...
         rC.GetParaAttribs().Store( rOStream );

@@ -936,7 +936,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const O
 
 SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(
                                                 SfxStyleSheetBase&  rBase,
-                                                sal_uInt16          nRegion,
+                                                SfxStyleFamily      nRegion,
                                                 const OString&      sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )

@@ -4853,7 +4853,7 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
     if ( bStyleSheetUsageInvalid || rStyle.GetUsage() == ScStyleSheet::UNKNOWN )
     {
         SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(),
-                    SFX_STYLE_FAMILY_PARA );
+                    SfxStyleFamily::Para );
         for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
                                        pStyle = aIter.Next() )
         {
@@ -6196,7 +6196,7 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
         OUString aNew = maTabs[nTab+1]->GetPageStyle();
         if ( aNew != maTabs[nTab]->GetPageStyle() )
         {
-            SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aNew, SFX_STYLE_FAMILY_PAGE );
+            SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aNew, SfxStyleFamily::Page );
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();

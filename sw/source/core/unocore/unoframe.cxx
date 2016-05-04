@@ -988,7 +988,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
         *pStyleName >>= sStyle;
         SwStyleNameMapper::FillUIName(sStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
         pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME));
+                                                    SfxStyleFamily::Frame));
     }
 
     const ::uno::Any* pColumns = nullptr;
@@ -1062,7 +1062,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
         *pStyleName >>= sStyle;
         SwStyleNameMapper::FillUIName(sStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
         pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME));
+                                                    SfxStyleFamily::Frame));
     }
 
     const ::uno::Any* pHEvenMirror = nullptr;
@@ -1396,7 +1396,7 @@ static SwFrameFormat *lcl_GetFrameFormat( const ::uno::Any& rValue, SwDoc *pDoc 
                 nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
         SwDocStyleSheet* pStyle =
                 static_cast<SwDocStyleSheet*>(pDocSh->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME));
+                                                    SfxStyleFamily::Frame));
         if(pStyle)
             pRet = pStyle->GetFrameFormat();
     }

@@ -613,7 +613,7 @@ OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
 void Cell::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr )
 {
     // only allow cell styles for cells
-    if( pStyleSheet && pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_FRAME )
+    if( pStyleSheet && pStyleSheet->GetFamily() != SfxStyleFamily::Frame )
         return;
 
     if( mpProperties && (mpProperties->GetStyleSheet() != pStyleSheet) )

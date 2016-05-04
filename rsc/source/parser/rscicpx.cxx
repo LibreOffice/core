@@ -1312,11 +1312,11 @@ RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
         pSfxStyleFamily = new RscEnum( pHS->getID( "StyleFamily" ),
                                     RSC_NOTYPE );
 
-        SETCONST( pSfxStyleFamily, "SFX_STYLE_FAMILY_PARA", SFX_STYLE_FAMILY_PARA );
-        SETCONST( pSfxStyleFamily, "SFX_STYLE_FAMILY_CHAR", SFX_STYLE_FAMILY_CHAR );
-        SETCONST( pSfxStyleFamily, "SFX_STYLE_FAMILY_FRAME",SFX_STYLE_FAMILY_FRAME);
-        SETCONST( pSfxStyleFamily, "SFX_STYLE_FAMILY_PAGE", SFX_STYLE_FAMILY_PAGE );
-        SETCONST( pSfxStyleFamily, "SFX_STYLE_FAMILY_PSEUDO", SFX_STYLE_FAMILY_PSEUDO );
+        SETCONST( pSfxStyleFamily, "SfxStyleFamily::Para", SfxStyleFamily::Para );
+        SETCONST( pSfxStyleFamily, "SfxStyleFamily::Char", SfxStyleFamily::Char );
+        SETCONST( pSfxStyleFamily, "SfxStyleFamily::Frame",SfxStyleFamily::Frame);
+        SETCONST( pSfxStyleFamily, "SfxStyleFamily::Page", SfxStyleFamily::Page );
+        SETCONST( pSfxStyleFamily, "SfxStyleFamily::Pseudo", SfxStyleFamily::Pseudo );
         aBaseLst.push_back( pSfxStyleFamily );
 
         nId = aNmTb.Put( "StyleFamily", VARNAME );

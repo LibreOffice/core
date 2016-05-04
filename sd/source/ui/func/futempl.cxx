@@ -103,11 +103,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     SfxStyleSheetBase* pStyleSheet = nullptr;
 
     const SfxPoolItem* pItem;
-    sal_uInt16 nFamily = USHRT_MAX;
+    SfxStyleFamily nFamily = (SfxStyleFamily)USHRT_MAX;
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
         false, &pItem ))
     {
-        nFamily = static_cast<const SfxUInt16Item &>( pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
+        nFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item &>( pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
     }
     else if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
         false, &pItem ))
@@ -162,13 +162,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     {
         case SID_STYLE_NEW:
         {
-            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily );
+            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, nFamily );
             if(p)
             {
                 pSSPool->Remove(p);
                 p = nullptr;
             }
-            pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
+            pStyleSheet = &pSSPool->Make( aStyleName, nFamily, SFXSTYLEBIT_USERDEF );
 
             if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SfxItemState::SET)
             {
@@ -185,23 +185,23 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
             // at the moment, the dialog to enter the name of the template is still opened
-            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily );
+            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, nFamily );
             if(p)
             {
                 pSSPool->Remove(p);
                 p = nullptr;
             }
-            pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
+            pStyleSheet = &pSSPool->Make( aStyleName, nFamily, SFXSTYLEBIT_USERDEF );
             pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
         }
         break;
 
         case SID_STYLE_EDIT:
-            pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
+            pStyleSheet = pSSPool->Find( aStyleName, nFamily);
         break;
 
         case SID_STYLE_DELETE:
-            pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
+            pStyleSheet = pSSPool->Find( aStyleName, nFamily);
             if( pStyleSheet )
             {
                 pSSPool->Remove( pStyleSheet );
@@ -216,14 +216,14 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_HIDE:
         case SID_STYLE_SHOW:
-            pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
+            pStyleSheet = pSSPool->Find( aStyleName, nFamily);
             pStyleSheet->SetHidden( nSId == SID_STYLE_HIDE );
             nRetMask = sal_uInt16(true);
         break;
 
         case SID_STYLE_APPLY:
             // apply the template to the document
-            pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
+            pStyleSheet = pSSPool->Find( aStyleName, nFamily);
 
             // do not set presentation styles, they will be set implicit
             if ( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
@@ -258,7 +258,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 {
                     aStyleName = static_cast<const SfxStringItem &>( pArgs->Get( nSId ) ).GetValue();
                     SD_MOD()->SetWaterCan( true );
-                    pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
+                    pStyleSheet = pSSPool->Find( aStyleName, nFamily);
                 }
                 // no presentation object templates, they are only allowed implicitly
                 if( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )

@@ -42,7 +42,7 @@ class SfxStyleFamilyItem: public Resource
     Bitmap          aBitmap;
     OUString        aText;
     OUString        aHelpText;
-    sal_uInt16      nFamily;
+    SfxStyleFamily  nFamily;
     SfxStyleFilter  aFilterList;
 
 public:
@@ -50,7 +50,7 @@ public:
                     ~SfxStyleFamilyItem();
 
     const OUString& GetText() const { return aText; }
-    SfxStyleFamily  GetFamily() const { return (SfxStyleFamily)nFamily; }
+    SfxStyleFamily  GetFamily() const { return nFamily; }
     const SfxStyleFilter& GetFilterList() const { return aFilterList; }
     const Image&    GetImage() const { return aImage; }
 

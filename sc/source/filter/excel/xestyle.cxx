@@ -2837,7 +2837,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
 
 void XclExpXFBuffer::InsertUserStyles()
 {
-    SfxStyleSheetIterator aStyleIter( GetDoc().GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    SfxStyleSheetIterator aStyleIter( GetDoc().GetStyleSheetPool(), SfxStyleFamily::Para );
     for( SfxStyleSheetBase* pStyleSheet = aStyleIter.First(); pStyleSheet; pStyleSheet = aStyleIter.Next() )
         if( pStyleSheet->IsUserDefined() && !lclIsBuiltInStyle( pStyleSheet->GetName() ) )
             InsertStyleXF( *pStyleSheet );
@@ -2884,7 +2884,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
     maFills.push_back( lcl_GetPatternFill_Gray125() );
 
     // index 0: default style
-    if( SfxStyleSheetBase* pDefStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) )
+    if( SfxStyleSheetBase* pDefStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) )
     {
         XclExpXFRef xDefStyle( new XclExpXF( GetRoot(), *pDefStyleSheet ) );
         sal_uInt32 nXFId = AppendBuiltInXFWithStyle( xDefStyle, EXC_STYLE_NORMAL );

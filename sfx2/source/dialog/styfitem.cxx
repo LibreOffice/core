@@ -57,10 +57,11 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     }
     if(nMask & (sal_uInt32)SfxStyleItem::StyleFamily)
     {
-        nFamily = static_cast<sal_uInt16>(ReadLongRes());
+        nFamily = static_cast<SfxStyleFamily>(ReadLongRes());
     }
     else
-        nFamily = SFX_STYLE_FAMILY_PARA;
+        nFamily = SfxStyleFamily::Para;
+
     if(nMask & (sal_uInt32)SfxStyleItem::Image)
     {
         aImage = Image(ResId(static_cast<RSHEADER_TYPE *>(GetClassRes()),*rResId.GetResMgr()));

@@ -435,7 +435,7 @@ public:
                                                 const OUString*   pFormatStr  = nullptr) override;
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 SfxStyleSheetBase&  rBase,
-                                                sal_uInt16          nRegion,
+                                                SfxStyleFamily      nRegion,
                                                 const OString&      sPage = OString(),
                                                 SwWrtShell*         pActShell = nullptr,
                                                 bool                bNew = false) override;

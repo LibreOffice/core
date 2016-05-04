@@ -528,7 +528,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
 {
     const ScStyleSheet* pSearchStyle = static_cast<const ScStyleSheet*>(
                                         pDocument->GetStyleSheetPool()->Find(
-                                        rSearchItem.GetSearchString(), SFX_STYLE_FAMILY_PARA ));
+                                        rSearchItem.GetSearchString(), SfxStyleFamily::Para ));
 
     SCsCOL nCol = rCol;
     SCsROW nRow = rRow;
@@ -620,7 +620,7 @@ bool ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW&
     {
         const ScStyleSheet* pReplaceStyle = static_cast<const ScStyleSheet*>(
                                         pDocument->GetStyleSheetPool()->Find(
-                                        rSearchItem.GetReplaceString(), SFX_STYLE_FAMILY_PARA ));
+                                        rSearchItem.GetReplaceString(), SfxStyleFamily::Para ));
 
         if (pReplaceStyle)
             ApplyStyle( rCol, rRow, *pReplaceStyle );
@@ -638,7 +638,7 @@ bool ScTable::SearchAllStyle(
 {
     const ScStyleSheet* pSearchStyle = static_cast<const ScStyleSheet*>(
                                         pDocument->GetStyleSheetPool()->Find(
-                                        rSearchItem.GetSearchString(), SFX_STYLE_FAMILY_PARA ));
+                                        rSearchItem.GetSearchString(), SfxStyleFamily::Para ));
     bool bSelect = rSearchItem.GetSelection();
     bool bBack = rSearchItem.GetBackward();
     bool bEverFound = false;
@@ -678,7 +678,7 @@ bool ScTable::ReplaceAllStyle(
     {
         const ScStyleSheet* pReplaceStyle = static_cast<const ScStyleSheet*>(
                                         pDocument->GetStyleSheetPool()->Find(
-                                        rSearchItem.GetReplaceString(), SFX_STYLE_FAMILY_PARA ));
+                                        rSearchItem.GetReplaceString(), SfxStyleFamily::Para ));
 
         if (pReplaceStyle)
         {

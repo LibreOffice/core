@@ -288,7 +288,7 @@ namespace sdr
                             SfxStyleSheet* pNewStyleSheet = dynamic_cast<SfxStyleSheet*>(
                                 pNewModel->GetStyleSheetPool()->Find(
                                     pStySheet->GetName(),
-                                    SFX_STYLE_FAMILY_ALL));
+                                    SfxStyleFamily::All));
                             if (pNewStyleSheet == nullptr
                                 || &pNewStyleSheet->GetPool().GetPool() != pDestPool)
                             {

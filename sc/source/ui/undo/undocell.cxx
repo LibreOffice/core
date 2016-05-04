@@ -591,7 +591,7 @@ void ScUndoPrintZoom::DoChange( bool bUndo )
     ScDocument& rDoc = pDocShell->GetDocument();
     OUString aStyleName = rDoc.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SfxStyleFamily::Page );
     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
     if ( pStyleSheet )
     {

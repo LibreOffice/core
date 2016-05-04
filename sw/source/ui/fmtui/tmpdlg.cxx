@@ -69,14 +69,14 @@
 // the dialog's carrier
 SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
                              SfxStyleSheetBase& rBase,
-                             sal_uInt16 nRegion,
+                             SfxStyleFamily nRegion,
                              const OString& sPage,
                              SwWrtShell* pActShell,
                              bool bNew)
     : SfxStyleDialog(pParent,
-                    "TemplateDialog" + OUString::number(nRegion),
+                    "TemplateDialog" + OUString::number((sal_uInt16)nRegion),
                     "modules/swriter/ui/templatedialog" +
-                        OUString::number(nRegion) + ".ui",
+                        OUString::number((sal_uInt16)nRegion) + ".ui",
                     rBase)
     , nType(nRegion)
     , pWrtShell(pActShell)
@@ -121,7 +121,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
     switch( nRegion )
     {
         // character styles
-        case SFX_STYLE_FAMILY_CHAR:
+        case SfxStyleFamily::Char:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) , "GetTabPageRangesFunc fail!");
@@ -153,7 +153,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
         }
         break;
         // paragraph styles
-        case SFX_STYLE_FAMILY_PARA:
+        case SfxStyleFamily::Para:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
@@ -240,7 +240,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
         }
         break;
         // frame styles
-        case SFX_STYLE_FAMILY_FRAME:
+        case SfxStyleFamily::Frame:
         {
             m_nTypeId = AddTabPage("type", SwFramePage::Create,
                                         SwFramePage::GetRanges);
@@ -263,7 +263,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
         break;
         }
         // page styles
-        case SFX_STYLE_FAMILY_PAGE:
+        case SfxStyleFamily::Page:
         {
             //UUUU remove?
             //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
@@ -309,7 +309,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
         }
         break;
         // numbering styles
-        case SFX_STYLE_FAMILY_PSEUDO:
+        case SfxStyleFamily::Pseudo:
         {
             m_nSingleId = AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
             m_nBulletId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
@@ -380,7 +380,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         sal_uInt32 nFlags = 0;
         if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
             nFlags = SVX_RELATIVE_MODE;
-        if( SFX_STYLE_FAMILY_CHAR == nType )
+        if( SfxStyleFamily::Char == nType )
             nFlags = nFlags|SVX_PREVIEW_CHARACTER;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
         rPage.PageCreated(aSet);
@@ -388,14 +388,14 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nFontEffectId)
     {
         sal_uInt32 nFlags = SVX_ENABLE_FLASH;
-        if( SFX_STYLE_FAMILY_CHAR == nType )
+        if( SfxStyleFamily::Char == nType )
             nFlags = nFlags|SVX_PREVIEW_CHARACTER;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nPositionId)
     {
-        if( SFX_STYLE_FAMILY_CHAR == nType )
+        if( SfxStyleFamily::Char == nType )
         {
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
             rPage.PageCreated(aSet);
@@ -403,7 +403,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nAsianLayoutId)
     {
-        if( SFX_STYLE_FAMILY_CHAR == nType )
+        if( SfxStyleFamily::Char == nType )
         {
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
             rPage.PageCreated(aSet);
@@ -430,7 +430,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         }//<-end
         ListBox & rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
-        pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO);
+        pPool->SetSearchMask(SfxStyleFamily::Pseudo);
         const SfxStyleSheetBase* pBase = pPool->First();
         std::set<OUString> aNames;
         while(pBase)
@@ -462,7 +462,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nColumnId)
     {
-        if( nType == SFX_STYLE_FAMILY_FRAME )
+        if( nType == SfxStyleFamily::Frame )
             static_cast<SwColumnPage&>(rPage).SetFrameMode(true);
         static_cast<SwColumnPage&>(rPage).SetFormatUsed( true );
     }
@@ -471,7 +471,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nBackgroundId)
     {
         SvxBackgroundTabFlags nFlagType = SvxBackgroundTabFlags::NONE;
-        if( SFX_STYLE_FAMILY_CHAR == nType || SFX_STYLE_FAMILY_PARA == nType )
+        if( SfxStyleFamily::Char == nType || SfxStyleFamily::Para == nType )
             nFlagType |= SvxBackgroundTabFlags::SHOW_HIGHLIGHTING;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
@@ -493,7 +493,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             {
                 SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
                             GetView().GetDocShell()->GetStyleSheetPool();
-                pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
+                pStyleSheetPool->SetSearchMask(SfxStyleFamily::Para);
                 SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
                 while(pFirstStyle)
                 {
@@ -579,11 +579,11 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nBorderId)
     {
-        if( SFX_STYLE_FAMILY_PARA == nType )
+        if( SfxStyleFamily::Para == nType )
         {
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::PARA)));
         }
-        else if( SFX_STYLE_FAMILY_FRAME == nType )
+        else if( SfxStyleFamily::Frame == nType )
         {
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::FRAME)));
         }
@@ -593,7 +593,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
     // the color table) need to be added as items (e.g. SvxColorTableItem) to make
     // these pages find the needed attributes for fill style suggestions.
-    // These are added in SwDocStyleSheet::GetItemSet() for the SFX_STYLE_FAMILY_PARA on
+    // These are added in SwDocStyleSheet::GetItemSet() for the SfxStyleFamily::Para on
     // demand, but could also be directly added from the DrawModel.
     else if (nId == m_nAreaId)
     {

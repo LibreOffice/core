@@ -1924,7 +1924,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxI
     if ( pSh )
     {
         SfxStyleSheetBasePool* pPool = pSh->GetStyleSheetPool();
-        pPool->SetSearchMask( SFX_STYLE_FAMILY_PAGE );
+        pPool->SetSearchMask( SfxStyleFamily::Page );
         SfxStyleSheetBase* pStyle = pPool->First();
         OUString aStdName;
 

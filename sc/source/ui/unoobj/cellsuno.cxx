@@ -2066,7 +2066,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                         break;
                     case SC_WID_UNO_CELLSTYL:
                         aAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
-                                    ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA ) );
+                                    ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SfxStyleFamily::Para ) );
                         break;
                     case SC_WID_UNO_TBLBORD:
                     case SC_WID_UNO_TBLBORD2:
@@ -2351,7 +2351,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         OUString aStrVal;
                         aValue >>= aStrVal;
                         OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName(
-                                                            aStrVal, SFX_STYLE_FAMILY_PARA ));
+                                                            aStrVal, SfxStyleFamily::Para ));
                         pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aString, true );
                     }
                     break;
@@ -2539,7 +2539,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         if (pStyle)
                             aStyleName = pStyle->GetName();
                         rAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
-                                                                aStyleName, SFX_STYLE_FAMILY_PARA ) );
+                                                                aStyleName, SfxStyleFamily::Para ) );
                     }
                     break;
                 case SC_WID_UNO_TBLBORD:
@@ -8130,7 +8130,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             OUString aStrVal;
             aValue >>= aStrVal;
             OUString aNewStr(ScStyleNameConversion::ProgrammaticToDisplayName(
-                                                aStrVal, SFX_STYLE_FAMILY_PAGE ));
+                                                aStrVal, SfxStyleFamily::Page ));
 
             //! Undo? (auch bei SID_STYLE_APPLY an der View)
 
@@ -8455,7 +8455,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if ( pEntry->nWID == SC_WID_UNO_PAGESTL )
         {
             rAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
-                                rDoc.GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE ) );
+                                rDoc.GetPageStyle( nTab ), SfxStyleFamily::Page ) );
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {

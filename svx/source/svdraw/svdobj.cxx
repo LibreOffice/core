@@ -2227,7 +2227,7 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHar
 void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
 {
     // only allow graphic and presentation styles for shapes
-    if( pNewStyleSheet && (pNewStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PARA) && (pNewStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PAGE) )
+    if( pNewStyleSheet && (pNewStyleSheet->GetFamily() == SfxStyleFamily::Para) && (pNewStyleSheet->GetFamily() == SfxStyleFamily::Page) )
         return;
 
     GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);

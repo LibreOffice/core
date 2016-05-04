@@ -200,7 +200,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         // styles   special regions
         // paragraph
     SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
-    pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SWSTYLEBIT_EXTRA);
+    pStyleSheetPool->SetSearchMask(SfxStyleFamily::Para, SWSTYLEBIT_EXTRA);
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
     while(pStyle)
     {
@@ -353,9 +353,9 @@ static SwCharFormat* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFo
     {
         SfxStyleSheetBasePool* pPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
         SfxStyleSheetBase* pBase;
-        pBase = pPool->Find(rCharFormatName, SFX_STYLE_FAMILY_CHAR);
+        pBase = pPool->Find(rCharFormatName, SfxStyleFamily::Char);
         if(!pBase)
-            pBase = &pPool->Make(rCharFormatName, SFX_STYLE_FAMILY_CHAR);
+            pBase = &pPool->Make(rCharFormatName, SfxStyleFamily::Char);
         pFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
     }
     return pFormat;

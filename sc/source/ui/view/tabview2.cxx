@@ -1288,7 +1288,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                     ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
                     SfxStyleSheetBase*  pStyleSheet =
                                             pStylePool->Find( pDoc->GetPageStyle( nCurTab ),
-                                                              SFX_STYLE_FAMILY_PAGE );
+                                                              SfxStyleFamily::Page );
 
                     OSL_ENSURE( pStyleSheet, "PageStyle not found :-/" );
 

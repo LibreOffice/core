@@ -94,7 +94,7 @@ ScUndoModifyStyle::~ScUndoModifyStyle()
 
 OUString ScUndoModifyStyle::GetComment() const
 {
-    sal_uInt16 nId = (eFamily == SFX_STYLE_FAMILY_PARA) ?
+    sal_uInt16 nId = (eFamily == SfxStyleFamily::Para) ?
                                 STR_UNDO_EDITCELLSTYLE :
                                 STR_UNDO_EDITPAGESTYLE;
     return ScGlobal::GetRscString( nId );
@@ -143,7 +143,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         // create style (with new name)
         pStyle = &pStlPool->Make( aNewName, eStyleFamily, SFXSTYLEBIT_USERDEF );
 
-        if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
+        if ( eStyleFamily == SfxStyleFamily::Para )
             rDoc.GetPool()->CellStyleCreated( aNewName, &rDoc );
     }
 
@@ -151,7 +151,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
     {
         if ( bDelete )
         {
-            if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
+            if ( eStyleFamily == SfxStyleFamily::Para )
                 lcl_DocStyleChanged( &rDoc, pStyle, true );      // TRUE: remove usage of style
             else
                 rDoc.RemovePageStyleInUse( rName );
@@ -173,7 +173,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
             if (pNewSet)
                 rStyleSet.Set( *pNewSet, false );
 
-            if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
+            if ( eStyleFamily == SfxStyleFamily::Para )
             {
                 lcl_DocStyleChanged( &rDoc, pStyle, false );     // cell styles: row heights
             }

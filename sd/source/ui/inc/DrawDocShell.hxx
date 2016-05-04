@@ -156,8 +156,8 @@ public:
     void                    SetSlotFilter(bool bEnable = false, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = nullptr) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
-    sal_uInt16              GetStyleFamily() const { return mnStyleFamily; }
-    void                    SetStyleFamily( sal_uInt16 nSF ) { mnStyleFamily = nSF; }
+    SfxStyleFamily          GetStyleFamily() const { return mnStyleFamily; }
+    void                    SetStyleFamily( SfxStyleFamily nSF ) { mnStyleFamily = nSF; }
 
     /** executes the SID_OPENDOC slot to let the framework open a document
         with the given URL and this document as a referer */
@@ -212,7 +212,7 @@ protected:
     FontList*               mpFontList;
     rtl::Reference<FuPoor> mxDocShellFunction;
     DocumentType            meDocType;
-    sal_uInt16              mnStyleFamily;
+    SfxStyleFamily          mnStyleFamily;
     const sal_uInt16*       mpFilterSIDs;
     sal_uInt16              mnFilterCount;
     bool                    mbFilterEnable;

@@ -286,12 +286,12 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
 
     OUString aStyleName = ScGlobal::GetRscString( nStrId );
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
-    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>( pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA ) );
+    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>( pStlPool->Find( aStyleName, SfxStyleFamily::Para ) );
     if (!pStyle)
     {
         //  create new style (was in ScPivot::SetStyle)
 
-        pStyle = static_cast<ScStyleSheet*>( &pStlPool->Make( aStyleName, SFX_STYLE_FAMILY_PARA,
+        pStyle = static_cast<ScStyleSheet*>( &pStlPool->Make( aStyleName, SfxStyleFamily::Para,
                                                     SFXSTYLEBIT_USERDEF ) );
         pStyle->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();

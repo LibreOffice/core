@@ -339,18 +339,18 @@ IMPL_LINK_NOARG_TYPED( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, ListBo
 IMPL_LINK_NOARG_TYPED(SwParagraphNumTabPage, EditNumStyleHdl_Impl, Button*, void)
 {
     OUString aTemplName(m_pNumberStyleLB->GetSelectEntry());
-    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PSEUDO );
+    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(), SfxStyleFamily::Pseudo );
 }
 
 // Internal: Perform functions through the Dispatcher
 bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
-    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, sal_uInt16 nFamily,
+    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, SfxStyleFamily nFamily,
     sal_uInt16 nMask)
 {
 
     SfxDispatcher &rDispatcher = *SfxViewShell::Current()->GetDispatcher();
     SfxStringItem aItem(nId, rStr);
-    SfxUInt16Item aFamily(SID_STYLE_FAMILY, nFamily);
+    SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)nFamily);
     SfxUInt16Item aMask( SID_STYLE_MASK, nMask );
     SfxStringItem aUpdName(SID_STYLE_UPD_BY_EX_NAME, rStr);
     SfxStringItem aRefName( SID_STYLE_REFERENCE, rRefStr );

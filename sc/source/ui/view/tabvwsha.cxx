@@ -278,7 +278,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     OUString aStyleName = pDoc->GetPageStyle( nTab );
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName,
-                                                    SFX_STYLE_FAMILY_PAGE );
+                                                    SfxStyleFamily::Page );
                     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
                     if ( pStyleSheet )
                     {
