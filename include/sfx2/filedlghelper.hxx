@@ -117,7 +117,8 @@ public:
                                               SfxFilterFlags nMust,
                                               SfxFilterFlags nDont,
                                               const OUString& rStandardDir,
-                                              const css::uno::Sequence< OUString >& rBlackList);
+                                              const css::uno::Sequence< OUString >& rBlackList,
+                                              vcl::Window* _pPreferredParent = nullptr);
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,

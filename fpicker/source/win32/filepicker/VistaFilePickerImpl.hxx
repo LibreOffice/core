@@ -90,6 +90,7 @@ static const OUString PROP_CONTROL_ACTION("control_action"     ); // [sal_Int16]
 static const OUString PROP_CONTROL_VALUE("control_value"      ); // [Any]
 static const OUString PROP_CONTROL_LABEL("control_label"      ); // [OUString]
 static const OUString PROP_CONTROL_ENABLE("control_enable"     ); // [sal_Bool] true=ON, false=OFF
+static const OUString PROP_PARENT_WINDOW("ParentWindow"); //[css::awt::XWindow] preferred parent window
 static const OUString STRING_SEPARATOR("------------------------------------------" );
 
 

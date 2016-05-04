@@ -909,7 +909,9 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     else
     {
         // This is the normal dialog
-        pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList ));
+        vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
+        pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog,
+            nMust, nDont, rStandardDir, rBlackList, pWin ));
         pFileDlg->CreateMatcher( aDocServiceName );
     }
 
