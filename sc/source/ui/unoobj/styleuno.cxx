@@ -547,13 +547,13 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderO
     beans::PropertyValue* pArray = aSequence.getArray();
 
     pArray[0].Name = SC_UNONAME_OVERWSTL;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, true );
+    pArray[0].Value <<= true;
 
     pArray[1].Name = SC_UNONAME_LOADCELL;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, true );
+    pArray[1].Value <<= true;
 
     pArray[2].Name = SC_UNONAME_LOADPAGE;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, true );
+    pArray[2].Value <<= true;
 
     return aSequence;
 }

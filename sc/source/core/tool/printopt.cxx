@@ -162,13 +162,13 @@ void ScPrintCfg::ImplCommit()
         {
             case SCPRINTOPT_EMPTYPAGES:
                 // reversed
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], !GetSkipEmpty() );
+                pValues[nProp] <<= !GetSkipEmpty();
                 break;
             case SCPRINTOPT_ALLSHEETS:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetAllSheets() );
+                pValues[nProp] <<= GetAllSheets();
                 break;
             case SCPRINTOPT_FORCEBREAKS:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetForceBreaks() );
+                pValues[nProp] <<= GetForceBreaks();
                 break;
         }
     }

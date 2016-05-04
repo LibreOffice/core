@@ -348,7 +348,7 @@ void ScPrintUIOptions::SetDefaults()
                         }
                         else if ( aPropertyValue.Name == "IsSuppressEmptyPages" )
                         {
-                            ScUnoHelpFunctions::SetBoolInAny( aPropertyValue.Value, bSuppress );
+                            aPropertyValue.Value <<= bSuppress;
                             aUIProp[nPropPos].Value <<= aPropertyValue;
                         }
                     }
@@ -2332,14 +2332,14 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
             // default for no model is TRUE
             ScDrawLayer* pModel = rDoc.GetDrawLayer();
             bool bOpenInDesign = pModel == nullptr || pModel->GetOpenInDesignMode();
-            ScUnoHelpFunctions::SetBoolInAny( aRet, bOpenInDesign );
+            aRet <<= bOpenInDesign;
         }
         else if ( aPropertyName == SC_UNO_AUTOCONTFOC )
         {
             // default for no model is FALSE
             ScDrawLayer* pModel = rDoc.GetDrawLayer();
             bool bAutoControlFocus = pModel && pModel->GetAutoControlFocus();
-            ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoControlFocus );
+            aRet <<= bAutoControlFocus;
         }
         else if ( aPropertyName == SC_UNO_FORBIDDEN )
         {
@@ -2347,7 +2347,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aPropertyName == SC_UNO_HASDRAWPAGES )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetDocument().GetDrawLayer() != nullptr) );
+            aRet <<= (pDocShell->GetDocument().GetDrawLayer() != nullptr);
         }
         else if ( aPropertyName == SC_UNO_BASICLIBRARIES )
         {
@@ -2376,31 +2376,31 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aPropertyName == SC_UNO_ISLOADED )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, !pDocShell->IsEmpty() );
+            aRet <<= !pDocShell->IsEmpty();
         }
         else if ( aPropertyName == SC_UNO_ISUNDOENABLED )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, rDoc.IsUndoEnabled() );
+            aRet <<= rDoc.IsUndoEnabled();
         }
         else if ( aPropertyName == SC_UNO_RECORDCHANGES )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->IsChangeRecording() );
+            aRet <<= pDocShell->IsChangeRecording();
         }
         else if ( aPropertyName == SC_UNO_ISRECORDCHANGESPROTECTED )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasChangeRecordProtection() );
+            aRet <<= pDocShell->HasChangeRecordProtection();
         }
         else if ( aPropertyName == SC_UNO_ISADJUSTHEIGHTENABLED )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, rDoc.IsAdjustHeightEnabled() );
+            aRet <<= rDoc.IsAdjustHeightEnabled();
         }
         else if ( aPropertyName == SC_UNO_ISEXECUTELINKENABLED )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, rDoc.IsExecuteLinkEnabled() );
+            aRet <<= rDoc.IsExecuteLinkEnabled();
         }
         else if ( aPropertyName == SC_UNO_ISCHANGEREADONLYENABLED )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, rDoc.IsChangeReadOnlyEnabled() );
+            aRet <<= rDoc.IsChangeReadOnlyEnabled();
         }
         else if ( aPropertyName == SC_UNO_REFERENCEDEVICE )
         {
@@ -2414,7 +2414,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aPropertyName == "InternalDocument" )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL) );
+            aRet <<= (pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL);
         }
         else if ( aPropertyName == SC_UNO_INTEROPGRABBAG )
         {
@@ -3736,22 +3736,22 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
         bool bVis = !rDoc.ColHidden(nStartCol, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
+        aAny <<= bVis;
     }
     else if ( aPropertyName == SC_UNONAME_OWIDTH )
     {
         bool bOpt = !(rDoc.GetColFlags( nStartCol, nTab ) & CR_MANUALSIZE);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bOpt );
+        aAny <<= bOpt;
     }
     else if ( aPropertyName == SC_UNONAME_NEWPAGE )
     {
         ScBreakType nBreak = rDoc.HasColBreak(nStartCol, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak != BREAK_NONE );
+        aAny <<= (nBreak != BREAK_NONE);
     }
     else if ( aPropertyName == SC_UNONAME_MANPAGE )
     {
         ScBreakType nBreak = rDoc.HasColBreak(nStartCol, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) != 0 );
+        aAny <<= ((nBreak & BREAK_MANUAL) != 0);
     }
 
     return aAny;
@@ -4006,27 +4006,27 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     {
         SCROW nLastRow;
         bool bVis = !rDoc.RowHidden(nStartRow, nTab, nullptr, &nLastRow);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
+        aAny <<= bVis;
     }
     else if ( aPropertyName == SC_UNONAME_CELLFILT )
     {
         bool bVis = rDoc.RowFiltered(nStartRow, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
+        aAny <<= bVis;
     }
     else if ( aPropertyName == SC_UNONAME_OHEIGHT )
     {
         bool bOpt = !(rDoc.GetRowFlags( nStartRow, nTab ) & CR_MANUALSIZE);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bOpt );
+        aAny <<= bOpt;
     }
     else if ( aPropertyName == SC_UNONAME_NEWPAGE )
     {
         ScBreakType nBreak = rDoc.HasRowBreak(nStartRow, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak != BREAK_NONE );
+        aAny <<= (nBreak != BREAK_NONE);
     }
     else if ( aPropertyName == SC_UNONAME_MANPAGE )
     {
         ScBreakType nBreak = rDoc.HasRowBreak(nStartRow, nTab);
-        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) != 0 );
+        aAny <<= ((nBreak & BREAK_MANUAL) != 0);
     }
     else if ( aPropertyName == SC_UNONAME_CELLBACK || aPropertyName == SC_UNONAME_CELLTRAN )
     {

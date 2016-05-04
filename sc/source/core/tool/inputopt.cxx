@@ -199,37 +199,37 @@ void ScInputCfg::ImplCommit()
                 pValues[nProp] <<= (sal_Int32) GetMoveDir();
                 break;
             case SCINPUTOPT_MOVESEL:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetMoveSelection() );
+                pValues[nProp] <<= GetMoveSelection();
                 break;
             case SCINPUTOPT_EDTEREDIT:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetEnterEdit() );
+                pValues[nProp] <<= GetEnterEdit();
                 break;
             case SCINPUTOPT_EXTENDFMT:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetExtendFormat() );
+                pValues[nProp] <<= GetExtendFormat();
                 break;
             case SCINPUTOPT_RANGEFIND:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetRangeFinder() );
+                pValues[nProp] <<= GetRangeFinder();
                 break;
             case SCINPUTOPT_EXPANDREFS:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetExpandRefs() );
+                pValues[nProp] <<= GetExpandRefs();
                 break;
             case SCINPUTOPT_SORT_REF_UPDATE:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetSortRefUpdate() );
+                pValues[nProp] <<= GetSortRefUpdate();
                 break;
             case SCINPUTOPT_MARKHEADER:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetMarkHeader() );
+                pValues[nProp] <<= GetMarkHeader();
                 break;
             case SCINPUTOPT_USETABCOL:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetUseTabCol() );
+                pValues[nProp] <<= GetUseTabCol();
                 break;
             case SCINPUTOPT_TEXTWYSIWYG:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetTextWysiwyg() );
+                pValues[nProp] <<= GetTextWysiwyg();
                 break;
             case SCINPUTOPT_REPLCELLSWARN:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetReplaceCellsWarn() );
+                pValues[nProp] <<= GetReplaceCellsWarn();
                 break;
             case SCINPUTOPT_LEGACY_CELL_SELECTION:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetLegacyCellSelection() );
+                pValues[nProp] <<= GetLegacyCellSelection();
                 break;
         }
     }

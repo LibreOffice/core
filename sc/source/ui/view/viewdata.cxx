@@ -2684,36 +2684,36 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Name = SC_PAGEVIEWZOOMVALUE;
         pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
         pSettings[SC_PAGE_BREAK_PREVIEW].Name = SC_SHOWPAGEBREAKPREVIEW;
-        ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_PAGE_BREAK_PREVIEW].Value, bPagebreak);
+        pSettings[SC_PAGE_BREAK_PREVIEW].Value <<= bPagebreak;
 
         if (pOptions)
         {
             pSettings[SC_SHOWZERO].Name = SC_UNO_SHOWZERO;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWZERO].Value, pOptions->GetOption( VOPT_NULLVALS ) );
+            pSettings[SC_SHOWZERO].Value <<= pOptions->GetOption( VOPT_NULLVALS );
             pSettings[SC_SHOWNOTES].Name = SC_UNO_SHOWNOTES;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWNOTES].Value, pOptions->GetOption( VOPT_NOTES ) );
+            pSettings[SC_SHOWNOTES].Value <<= pOptions->GetOption( VOPT_NOTES );
             pSettings[SC_SHOWGRID].Name = SC_UNO_SHOWGRID;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWGRID].Value, pOptions->GetOption( VOPT_GRID ) );
+            pSettings[SC_SHOWGRID].Value <<= pOptions->GetOption( VOPT_GRID );
             pSettings[SC_GRIDCOLOR].Name = SC_UNO_GRIDCOLOR;
             OUString aColorName;
             Color aColor = pOptions->GetGridColor(&aColorName);
             pSettings[SC_GRIDCOLOR].Value <<= static_cast<sal_Int64>(aColor.GetColor());
             pSettings[SC_SHOWPAGEBR].Name = SC_UNO_SHOWPAGEBR;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWPAGEBR].Value, pOptions->GetOption( VOPT_PAGEBREAKS ) );
+            pSettings[SC_SHOWPAGEBR].Value <<= pOptions->GetOption( VOPT_PAGEBREAKS );
             pSettings[SC_COLROWHDR].Name = SC_UNO_COLROWHDR;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_COLROWHDR].Value, pOptions->GetOption( VOPT_HEADER ) );
+            pSettings[SC_COLROWHDR].Value <<= pOptions->GetOption( VOPT_HEADER );
             pSettings[SC_SHEETTABS].Name = SC_UNO_SHEETTABS;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHEETTABS].Value, pOptions->GetOption( VOPT_TABCONTROLS ) );
+            pSettings[SC_SHEETTABS].Value <<= pOptions->GetOption( VOPT_TABCONTROLS );
             pSettings[SC_OUTLSYMB].Name = SC_UNO_OUTLSYMB;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_OUTLSYMB].Value, pOptions->GetOption( VOPT_OUTLINER ) );
+            pSettings[SC_OUTLSYMB].Value <<= pOptions->GetOption( VOPT_OUTLINER );
             pSettings[SC_VALUE_HIGHLIGHTING].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_VALUEHIGH ) );
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_VALUE_HIGHLIGHTING].Value, pOptions->GetOption( VOPT_SYNTAX ) );
+            pSettings[SC_VALUE_HIGHLIGHTING].Value <<= pOptions->GetOption( VOPT_SYNTAX );
 
             const ScGridOptions& aGridOpt = pOptions->GetGridOptions();
             pSettings[SC_SNAPTORASTER].Name = SC_UNO_SNAPTORASTER;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SNAPTORASTER].Value, aGridOpt.GetUseGridSnap() );
+            pSettings[SC_SNAPTORASTER].Value <<= aGridOpt.GetUseGridSnap();
             pSettings[SC_RASTERVIS].Name = SC_UNO_RASTERVIS;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_RASTERVIS].Value, aGridOpt.GetGridVisible() );
+            pSettings[SC_RASTERVIS].Value <<= aGridOpt.GetGridVisible();
             pSettings[SC_RASTERRESX].Name = SC_UNO_RASTERRESX;
             pSettings[SC_RASTERRESX].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawX() );
             pSettings[SC_RASTERRESY].Name = SC_UNO_RASTERRESY;
@@ -2723,7 +2723,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             pSettings[SC_RASTERSUBY].Name = SC_UNO_RASTERSUBY;
             pSettings[SC_RASTERSUBY].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionY() );
             pSettings[SC_RASTERSYNC].Name = SC_UNO_RASTERSYNC;
-            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_RASTERSYNC].Value, aGridOpt.GetSynchronize() );
+            pSettings[SC_RASTERSYNC].Value <<= aGridOpt.GetSynchronize();
         }
     }
 }

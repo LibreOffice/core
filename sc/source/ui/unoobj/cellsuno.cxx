@@ -2062,7 +2062,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                 {
                     case SC_WID_UNO_CHCOLHDR:
                     case SC_WID_UNO_CHROWHDR:
-                        ScUnoHelpFunctions::SetBoolInAny( aAny, false );
+                        aAny <<= false;
                         break;
                     case SC_WID_UNO_CELLSTYL:
                         aAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
@@ -2527,10 +2527,10 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
             switch ( pEntry->nWID )
             {
                 case SC_WID_UNO_CHCOLHDR:
-                    ScUnoHelpFunctions::SetBoolInAny( rAny, bChartColAsHdr );
+                    rAny <<= bChartColAsHdr;
                     break;
                 case SC_WID_UNO_CHROWHDR:
-                    ScUnoHelpFunctions::SetBoolInAny( rAny, bChartRowAsHdr );
+                    rAny <<= bChartRowAsHdr;
                     break;
                 case SC_WID_UNO_CELLSTYL:
                     {
@@ -8460,7 +8460,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             bool bVis = rDoc.IsVisible( nTab );
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bVis );
+            rAny <<= bVis;
         }
         else if ( pEntry->nWID == SC_WID_UNO_LINKDISPBIT )
         {
@@ -8475,7 +8475,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if ( pEntry->nWID == SC_WID_UNO_ISACTIVE )
         {
             if (rDoc.IsScenario(nTab))
-                ScUnoHelpFunctions::SetBoolInAny( rAny, rDoc.IsActiveScenario( nTab ));
+                rAny <<= rDoc.IsActiveScenario( nTab );
         }
         else if ( pEntry->nWID == SC_WID_UNO_BORDCOL )
         {
@@ -8498,7 +8498,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_uInt16 nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_PROTECT) != 0 );
+                rAny <<= ((nFlags & SC_SCENARIO_PROTECT) != 0);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_SHOWBORD )
@@ -8510,7 +8510,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_uInt16 nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_SHOWFRAME) != 0 );
+                rAny <<= ((nFlags & SC_SCENARIO_SHOWFRAME) != 0);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_PRINTBORD )
@@ -8522,7 +8522,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_uInt16 nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_PRINTFRAME) != 0 );
+                rAny <<= ((nFlags & SC_SCENARIO_PRINTFRAME) != 0);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_COPYBACK )
@@ -8534,7 +8534,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_uInt16 nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_TWOWAY) != 0 );
+                rAny <<= ((nFlags & SC_SCENARIO_TWOWAY) != 0);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_COPYSTYL )
@@ -8546,7 +8546,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_uInt16 nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_ATTRIB) != 0 );
+                rAny <<= ((nFlags & SC_SCENARIO_ATTRIB) != 0);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_COPYFORM )
@@ -8558,7 +8558,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_uInt16 nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                ScUnoHelpFunctions::SetBoolInAny( rAny, !(nFlags & SC_SCENARIO_VALUE));
+                rAny <<= !(nFlags & SC_SCENARIO_VALUE);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABLAYOUT )
@@ -8571,7 +8571,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if ( pEntry->nWID == SC_WID_UNO_AUTOPRINT )
         {
             bool bAutoPrint = rDoc.IsPrintEntireSheet( nTab );
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bAutoPrint );
+            rAny <<= bAutoPrint;
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
         {
@@ -8833,23 +8833,23 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             bool bHidden = rDoc.ColHidden(nCol, nTab);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, !bHidden );
+            rAny <<= !bHidden;
         }
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
         {
             //! momentan immer gesetzt ??!?!
             bool bOpt = !(rDoc.GetColFlags( nCol, nTab ) & CR_MANUALSIZE);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bOpt );
+            rAny <<= bOpt;
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak != BREAK_NONE );
+            rAny <<= (nBreak != BREAK_NONE);
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
-            ScUnoHelpFunctions::SetBoolInAny(rAny, (nBreak & BREAK_MANUAL) != 0);
+            rAny <<= ((nBreak & BREAK_MANUAL) != 0);
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
@@ -8982,27 +8982,27 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             bool bHidden = rDoc.RowHidden(nRow, nTab);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, !bHidden );
+            rAny <<= !bHidden;
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLFILT )
         {
             bool bVis = rDoc.RowFiltered(nRow, nTab);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bVis );
+            rAny <<= bVis;
         }
         else if ( pEntry->nWID == SC_WID_UNO_OHEIGHT )
         {
             bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CR_MANUALSIZE);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bOpt );
+            rAny <<= bOpt;
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
             ScBreakType nBreak = rDoc.HasRowBreak(nRow, nTab);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak != BREAK_NONE );
+            rAny <<= (nBreak != BREAK_NONE);
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
             bool bBreak = (rDoc.HasRowBreak(nRow, nTab) & BREAK_MANUAL) != 0;
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bBreak );
+            rAny <<= bBreak;
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);

@@ -318,7 +318,7 @@ IMPL_LINK_NOARG_TYPED(ScDocCfg, CalcCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCCALCOPT_ITER_ITER:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsIter() );
+                pValues[nProp] <<= IsIter();
                 break;
             case SCCALCOPT_ITER_STEPS:
                 pValues[nProp] <<= (sal_Int32) GetIterCount();
@@ -340,22 +340,22 @@ IMPL_LINK_NOARG_TYPED(ScDocCfg, CalcCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCCALCOPT_CASESENSITIVE:
                 // content is reversed
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], !IsIgnoreCase() );
+                pValues[nProp] <<= !IsIgnoreCase();
                 break;
             case SCCALCOPT_PRECISION:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsCalcAsShown() );
+                pValues[nProp] <<= IsCalcAsShown();
                 break;
             case SCCALCOPT_SEARCHCRIT:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsMatchWholeCell() );
+                pValues[nProp] <<= IsMatchWholeCell();
                 break;
             case SCCALCOPT_FINDLABEL:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsLookUpColRowNames() );
+                pValues[nProp] <<= IsLookUpColRowNames();
                 break;
             case SCCALCOPT_REGEX :
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsFormulaRegexEnabled() );
+                pValues[nProp] <<= IsFormulaRegexEnabled();
                 break;
             case SCCALCOPT_WILDCARDS :
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsFormulaWildcardsEnabled() );
+                pValues[nProp] <<= IsFormulaWildcardsEnabled();
                 break;
         }
     }

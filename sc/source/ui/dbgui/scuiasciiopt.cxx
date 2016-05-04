@@ -221,10 +221,10 @@ static void save_Separators(
     }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
-    ScUnoHelpFunctions::SetBoolInAny( pProperties[0], bMergeDelimiters );
+    pProperties[0] <<= bMergeDelimiters;
     pProperties[1] <<= sFieldSeparators;
     pProperties[2] <<= sTextSeparators;
-    ScUnoHelpFunctions::SetBoolInAny( pProperties[3], bFixedWidth );
+    pProperties[3] <<= bFixedWidth;
     if (eCall != SC_TEXTTOCOLUMNS)
     {
         pProperties[4] <<= nFromRow;

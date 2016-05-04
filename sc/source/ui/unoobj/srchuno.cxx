@@ -167,21 +167,21 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyNa
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    if (aPropertyName == SC_UNO_SRCHBACK)        ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetBackward() );
-    else if (aPropertyName == SC_UNO_SRCHBYROW)  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRowDirection() );
-    else if (aPropertyName == SC_UNO_SRCHCASE)   ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetExact() );
-    else if (aPropertyName == SC_UNO_SRCHREGEXP) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRegExp() );
-    else if (aPropertyName == SC_UNO_SRCHWILDCARD) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetWildcard() );
-    else if (aPropertyName == SC_UNO_SRCHSIM)    ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLevenshtein() );
-    else if (aPropertyName == SC_UNO_SRCHSIMREL) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLEVRelaxed() );
-    else if (aPropertyName == SC_UNO_SRCHSTYLES) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetPattern() );
-    else if (aPropertyName == SC_UNO_SRCHWORDS)  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetWordOnly() );
+    if (aPropertyName == SC_UNO_SRCHBACK)        aRet <<= pSearchItem->GetBackward();
+    else if (aPropertyName == SC_UNO_SRCHBYROW)  aRet <<= pSearchItem->GetRowDirection();
+    else if (aPropertyName == SC_UNO_SRCHCASE)   aRet <<= pSearchItem->GetExact();
+    else if (aPropertyName == SC_UNO_SRCHREGEXP) aRet <<= pSearchItem->GetRegExp();
+    else if (aPropertyName == SC_UNO_SRCHWILDCARD) aRet <<= pSearchItem->GetWildcard();
+    else if (aPropertyName == SC_UNO_SRCHSIM)    aRet <<= pSearchItem->IsLevenshtein();
+    else if (aPropertyName == SC_UNO_SRCHSIMREL) aRet <<= pSearchItem->IsLEVRelaxed();
+    else if (aPropertyName == SC_UNO_SRCHSTYLES) aRet <<= pSearchItem->GetPattern();
+    else if (aPropertyName == SC_UNO_SRCHWORDS)  aRet <<= pSearchItem->GetWordOnly();
     else if (aPropertyName == SC_UNO_SRCHSIMADD) aRet <<= (sal_Int16) pSearchItem->GetLEVLonger();
     else if (aPropertyName == SC_UNO_SRCHSIMEX)  aRet <<= (sal_Int16) pSearchItem->GetLEVOther();
     else if (aPropertyName == SC_UNO_SRCHSIMREM) aRet <<= (sal_Int16) pSearchItem->GetLEVShorter();
     else if (aPropertyName == SC_UNO_SRCHTYPE)   aRet <<= (sal_Int16) pSearchItem->GetCellType();
-    else if (aPropertyName == SC_UNO_SRCHFILTERED) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsSearchFiltered() );
-    else if (aPropertyName == SC_UNO_SRCHFORMATTED) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsSearchFormatted() );
+    else if (aPropertyName == SC_UNO_SRCHFILTERED) aRet <<= pSearchItem->IsSearchFiltered();
+    else if (aPropertyName == SC_UNO_SRCHFORMATTED) aRet <<= pSearchItem->IsSearchFormatted();
 
     return aRet;
 }

@@ -162,11 +162,6 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
     return nRet;
 }
 
-void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, bool bValue )
-{
-    rAny <<= bValue;
-}
-
 void ScUnoHelpFunctions::SetOptionalPropertyValue(
     Reference<beans::XPropertySet>& rPropSet, const sal_Char* pPropName, const Any& rVal )
 {

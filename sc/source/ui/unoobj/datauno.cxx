@@ -197,7 +197,7 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
     pArray[2].Value <<= rParam.aStatement;
 
     pArray[3].Name = SC_UNONAME_ISNATIVE;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[3].Value, rParam.bNative );
+    pArray[3].Value <<= rParam.bNative;
 }
 
 void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
@@ -297,7 +297,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     pArray[0].Value <<= !rParam.bByRow;
 
     pArray[1].Name = SC_UNONAME_CONTHDR;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, rParam.bHasHeader );
+    pArray[1].Value <<= rParam.bHasHeader;
 
     pArray[2].Name = SC_UNONAME_MAXFLD;
     pArray[2].Value <<= static_cast<sal_Int32>( rParam.GetSortKeyCount() );
@@ -306,16 +306,16 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     pArray[3].Value <<= aFields;
 
     pArray[4].Name = SC_UNONAME_BINDFMT;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[4].Value, rParam.bIncludePattern );
+    pArray[4].Value <<= rParam.bIncludePattern;
 
     pArray[5].Name = SC_UNONAME_COPYOUT;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[5].Value, !rParam.bInplace );
+    pArray[5].Value <<= !rParam.bInplace;
 
     pArray[6].Name = SC_UNONAME_OUTPOS;
     pArray[6].Value <<= aOutPos;
 
     pArray[7].Name = SC_UNONAME_ISULIST;
-    ScUnoHelpFunctions::SetBoolInAny( pArray[7].Value, rParam.bUserDef );
+    pArray[7].Value <<= rParam.bUserDef;
 
     pArray[8].Name = SC_UNONAME_UINDEX;
     pArray[8].Value <<= static_cast<sal_Int32>( rParam.nUserIndex );
@@ -728,17 +728,17 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const OUString& aP
     // some old property names are for 5.2 compatibility
 
     if (aPropertyName == SC_UNONAME_CASE || aPropertyName == SC_UNONAME_ISCASE )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bCaseSens );
+        aRet <<= aParam.bCaseSens;
     else if (aPropertyName == SC_UNONAME_FORMATS || aPropertyName == SC_UNONAME_BINDFMT )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bIncludePattern );
+        aRet <<= aParam.bIncludePattern;
     else if (aPropertyName == SC_UNONAME_ENABSORT )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bDoSort );
+        aRet <<= aParam.bDoSort;
     else if (aPropertyName == SC_UNONAME_SORTASC )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bAscending );
+        aRet <<= aParam.bAscending;
     else if (aPropertyName == SC_UNONAME_INSBRK )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bPagebreak );
+        aRet <<= aParam.bPagebreak;
     else if (aPropertyName == SC_UNONAME_ULIST || aPropertyName == SC_UNONAME_ENUSLIST )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bUserDef );
+        aRet <<= aParam.bUserDef;
     else if (aPropertyName == SC_UNONAME_UINDEX || aPropertyName == SC_UNONAME_USINDEX )
         aRet <<= (sal_Int32) aParam.nUserIndex;
     else if (aPropertyName == SC_UNONAME_MAXFLD )
@@ -1484,11 +1484,11 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPro
     uno::Any aRet;
 
     if (aPropertyName == SC_UNONAME_CONTHDR )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bHasHeader );
+        aRet <<= aParam.bHasHeader;
     else if (aPropertyName == SC_UNONAME_COPYOUT )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, !(aParam.bInplace) );
+        aRet <<= !(aParam.bInplace);
     else if (aPropertyName == SC_UNONAME_ISCASE )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bCaseSens );
+        aRet <<= aParam.bCaseSens;
     else if (aPropertyName == SC_UNONAME_MAXFLD )
         aRet <<= (sal_Int32) aParam.GetEntryCount();
     else if (aPropertyName == SC_UNONAME_ORIENT )
@@ -1506,11 +1506,11 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPro
         aRet <<= aOutPos;
     }
     else if (aPropertyName == SC_UNONAME_SAVEOUT )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bDestPers );
+        aRet <<= aParam.bDestPers;
     else if (aPropertyName == SC_UNONAME_SKIPDUP )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, !(aParam.bDuplicate) );
+        aRet <<= !(aParam.bDuplicate);
     else if (aPropertyName == SC_UNONAME_USEREGEX )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.eSearchType == utl::SearchParam::SRCH_REGEXP );
+        aRet <<= (aParam.eSearchType == utl::SearchParam::SRCH_REGEXP);
 
     return aRet;
 }
@@ -2096,16 +2096,15 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
     if ( pData )
     {
         if ( aPropertyName == SC_UNONAME_KEEPFORM )
-            ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsKeepFmt() );
+            aRet <<= pData->IsKeepFmt();
         else if ( aPropertyName == SC_UNONAME_MOVCELLS )
-            ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsDoSize() );
+            aRet <<= pData->IsDoSize();
         else if ( aPropertyName == SC_UNONAME_STRIPDAT )
-            ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsStripData() );
+            aRet <<= pData->IsStripData();
         else if ( aPropertyName == SC_UNONAME_ISUSER )
         {
             //  all database ranges except "unnamed" are user defined
-            ScUnoHelpFunctions::SetBoolInAny(
-                aRet, pData->GetName() != STR_DB_LOCAL_NONAME);
+            aRet <<= (pData->GetName() != STR_DB_LOCAL_NONAME);
         }
         else if ( aPropertyName == SC_UNO_LINKDISPBIT )
         {
@@ -2118,14 +2117,14 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
         {
             bool bAutoFilter(GetDBData_Impl()->HasAutoFilter());
 
-            ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoFilter );
+            aRet <<= bAutoFilter;
         }
         else if (aPropertyName == SC_UNONAME_USEFLTCRT )
         {
             ScRange aRange;
             bool bIsAdvancedSource(GetDBData_Impl()->GetAdvancedQuerySource(aRange));
 
-            ScUnoHelpFunctions::SetBoolInAny( aRet, bIsAdvancedSource );
+            aRet <<= bIsAdvancedSource;
         }
         else if (aPropertyName == SC_UNONAME_FLTCRT )
         {
@@ -2138,7 +2137,7 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
         }
         else if (aPropertyName == SC_UNONAME_FROMSELECT )
         {
-            ScUnoHelpFunctions::SetBoolInAny( aRet, GetDBData_Impl()->HasImportSelection() );
+            aRet <<= GetDBData_Impl()->HasImportSelection();
         }
         else if (aPropertyName == SC_UNONAME_REFPERIOD )
         {
@@ -2157,13 +2156,13 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
         {
             bool bTotals(GetDBData_Impl()->HasTotals());
 
-            ScUnoHelpFunctions::SetBoolInAny( aRet, bTotals );
+            aRet <<= bTotals;
         }
         else if (aPropertyName == SC_UNONAME_CONTHDR )
         {
             bool bHeader(GetDBData_Impl()->HasHeader());
 
-            ScUnoHelpFunctions::SetBoolInAny( aRet, bHeader );
+            aRet <<= bHeader;
         }
     }
     return aRet;

@@ -350,7 +350,7 @@ void ScfPropSetHelper::WriteValue( const Any& rAny )
 void ScfPropSetHelper::WriteValue( const bool& rbValue )
 {
     if( Any* pAny = GetNextAny() )
-        ScUnoHelpFunctions::SetBoolInAny( *pAny, rbValue );
+        *pAny <<= rbValue;
 }
 
 void ScfPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet ) const

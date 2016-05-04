@@ -639,7 +639,7 @@ ScAppCfg::ScAppCfg() :
                 pValues[nProp] <<= (sal_Int32) GetZoomType();
                 break;
             case SCLAYOUTOPT_SYNCZOOM:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetSynchronizeZoom() );
+                pValues[nProp] <<= GetSynchronizeZoom();
                 break;
             case SCLAYOUTOPT_STATUSBARMULTI:
                 pValues[nProp] <<= GetStatusFunc();
@@ -663,10 +663,10 @@ IMPL_LINK_NOARG_TYPED(ScAppCfg, InputCommitHdl, ScLinkConfigItem&, void)
                 lcl_GetLastFunctions( pValues[nProp], *this );
                 break;
             case SCINPUTOPT_AUTOINPUT:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetAutoComplete() );
+                pValues[nProp] <<= GetAutoComplete();
                 break;
             case SCINPUTOPT_DET_AUTO:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetDetectiveAuto() );
+                pValues[nProp] <<= GetDetectiveAuto();
                 break;
         }
     }
@@ -753,7 +753,7 @@ IMPL_LINK_NOARG_TYPED(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
                 pValues[nProp] <<= (sal_Int32) GetDefaultObjectSizeHeight();
                 break;
             case SCMISCOPT_SHOWSHAREDDOCWARN:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetShowSharedDocumentWarning() );
+                pValues[nProp] <<= GetShowSharedDocumentWarning();
                 break;
         }
     }

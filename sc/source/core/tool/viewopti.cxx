@@ -533,31 +533,31 @@ IMPL_LINK_NOARG_TYPED(ScViewCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
                 pValues[nProp] <<= (sal_Int32) GetGridColor().GetColor();
                 break;
             case SCLAYOUTOPT_GRIDLINES:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_GRID ) );
+                pValues[nProp] <<= GetOption( VOPT_GRID );
                 break;
             case SCLAYOUTOPT_GRID_ONCOLOR:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_GRID_ONTOP ) );
+                pValues[nProp] <<= GetOption( VOPT_GRID_ONTOP );
                 break;
             case SCLAYOUTOPT_PAGEBREAK:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_PAGEBREAKS ) );
+                pValues[nProp] <<= GetOption( VOPT_PAGEBREAKS );
                 break;
             case SCLAYOUTOPT_GUIDE:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_HELPLINES ) );
+                pValues[nProp] <<= GetOption( VOPT_HELPLINES );
                 break;
             case SCLAYOUTOPT_COLROWHDR:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_HEADER ) );
+                pValues[nProp] <<= GetOption( VOPT_HEADER );
                 break;
             case SCLAYOUTOPT_HORISCROLL:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_HSCROLL ) );
+                pValues[nProp] <<= GetOption( VOPT_HSCROLL );
                 break;
             case SCLAYOUTOPT_VERTSCROLL:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_VSCROLL ) );
+                pValues[nProp] <<= GetOption( VOPT_VSCROLL );
                 break;
             case SCLAYOUTOPT_SHEETTAB:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_TABCONTROLS ) );
+                pValues[nProp] <<= GetOption( VOPT_TABCONTROLS );
                 break;
             case SCLAYOUTOPT_OUTLINE:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_OUTLINER ) );
+                pValues[nProp] <<= GetOption( VOPT_OUTLINER );
                 break;
         }
     }
@@ -575,22 +575,22 @@ IMPL_LINK_NOARG_TYPED(ScViewCfg, DisplayCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCDISPLAYOPT_FORMULA:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_FORMULAS ) );
+                pValues[nProp] <<= GetOption( VOPT_FORMULAS );
                 break;
             case SCDISPLAYOPT_ZEROVALUE:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_NULLVALS ) );
+                pValues[nProp] <<= GetOption( VOPT_NULLVALS );
                 break;
             case SCDISPLAYOPT_NOTETAG:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_NOTES ) );
+                pValues[nProp] <<= GetOption( VOPT_NOTES );
                 break;
             case SCDISPLAYOPT_VALUEHI:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_SYNTAX ) );
+                pValues[nProp] <<= GetOption( VOPT_SYNTAX );
                 break;
             case SCDISPLAYOPT_ANCHOR:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_ANCHOR ) );
+                pValues[nProp] <<= GetOption( VOPT_ANCHOR );
                 break;
             case SCDISPLAYOPT_TEXTOVER:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_CLIPMARKS ) );
+                pValues[nProp] <<= GetOption( VOPT_CLIPMARKS );
                 break;
             case SCDISPLAYOPT_OBJECTGRA:
                 pValues[nProp] <<= (sal_Int32) GetObjMode( VOBJ_TYPE_OLE );
@@ -637,16 +637,16 @@ IMPL_LINK_NOARG_TYPED(ScViewCfg, GridCommitHdl, ScLinkConfigItem&, void)
                 pValues[nProp] <<= (sal_Int32) rGrid.GetFieldSnapY();
                 break;
             case SCGRIDOPT_SNAPTOGRID:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], rGrid.GetUseGridSnap() );
+                pValues[nProp] <<= rGrid.GetUseGridSnap();
                 break;
             case SCGRIDOPT_SYNCHRON:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], rGrid.GetSynchronize() );
+                pValues[nProp] <<= rGrid.GetSynchronize();
                 break;
             case SCGRIDOPT_VISIBLE:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], rGrid.GetGridVisible() );
+                pValues[nProp] <<= rGrid.GetGridVisible();
                 break;
             case SCGRIDOPT_SIZETOGRID:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], rGrid.GetEqualGrid() );
+                pValues[nProp] <<= rGrid.GetEqualGrid();
                 break;
         }
     }

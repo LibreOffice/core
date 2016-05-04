@@ -166,7 +166,6 @@ public:
     static sal_Int16        GetInt16FromAny( const css::uno::Any& aAny );
     static sal_Int32        GetInt32FromAny( const css::uno::Any& aAny );
     static sal_Int32        GetEnumFromAny( const css::uno::Any& aAny );
-    static void             SetBoolInAny( css::uno::Any& rAny, bool bValue );
 
     static void             SetOptionalPropertyValue(
         css::uno::Reference< css::beans::XPropertySet >& rPropSet,

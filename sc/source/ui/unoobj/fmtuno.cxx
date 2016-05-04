@@ -947,9 +947,9 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    if ( aPropertyName == SC_UNONAME_SHOWINP )       ScUnoHelpFunctions::SetBoolInAny( aRet, bShowInput );
-    else if ( aPropertyName == SC_UNONAME_SHOWERR )  ScUnoHelpFunctions::SetBoolInAny( aRet, bShowError );
-    else if ( aPropertyName == SC_UNONAME_IGNOREBL ) ScUnoHelpFunctions::SetBoolInAny( aRet, bIgnoreBlank );
+    if ( aPropertyName == SC_UNONAME_SHOWINP )       aRet <<= bShowInput;
+    else if ( aPropertyName == SC_UNONAME_SHOWERR )  aRet <<= bShowError;
+    else if ( aPropertyName == SC_UNONAME_IGNOREBL ) aRet <<= bIgnoreBlank;
     else if ( aPropertyName == SC_UNONAME_SHOWLIST ) aRet <<= nShowList;
     else if ( aPropertyName == SC_UNONAME_INPTITLE ) aRet <<= OUString( aInputTitle );
     else if ( aPropertyName == SC_UNONAME_INPMESS )  aRet <<= OUString( aInputMessage );
