@@ -720,9 +720,9 @@ IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
         {
             SfxStyleSheetBasePool* pPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
             SfxStyleSheetBase* pBase;
-            pBase = pPool->Find(sEntry, SFX_STYLE_FAMILY_CHAR);
+            pBase = pPool->Find(sEntry, SfxStyleFamily::Char);
             if(!pBase)
-                pBase = &pPool->Make(sEntry, SFX_STYLE_FAMILY_PAGE);
+                pBase = &pPool->Make(sEntry, SfxStyleFamily::Page);
             pFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
 
         }

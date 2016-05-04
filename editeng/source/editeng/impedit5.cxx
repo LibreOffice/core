@@ -82,8 +82,8 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
 
             InsertUndo(
                 new EditUndoSetStyleSheet(pEditEngine, aEditDoc.GetPos( pNode ),
-                        aPrevStyleName, pCurStyle ? pCurStyle->GetFamily() : SFX_STYLE_FAMILY_PARA,
-                        aNewStyleName, pStyle ? pStyle->GetFamily() : SFX_STYLE_FAMILY_PARA,
+                        aPrevStyleName, pCurStyle ? pCurStyle->GetFamily() : SfxStyleFamily::Para,
+                        aNewStyleName, pStyle ? pStyle->GetFamily() : SfxStyleFamily::Para,
                         pNode->GetContentAttribs().GetItems() ) );
         }
         if ( pCurStyle )

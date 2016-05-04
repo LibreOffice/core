@@ -196,7 +196,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 SCTAB           nCurTab     = GetViewData()->GetTabNo();
                 OUString        aPageStyle  = pDoc->GetPageStyle( nCurTab );
                 SfxStyleSheet*  pStyleSheet = pStylePool ? static_cast<SfxStyleSheet*>(pStylePool->
-                                    Find( aPageStyle, SFX_STYLE_FAMILY_PAGE )) : nullptr;
+                                    Find( aPageStyle, SfxStyleFamily::Page )) : nullptr;
 
                 if ( pStyleSheet )
                     rSet.Put( SfxTemplateItem( nSlotId, aPageStyle ) );
@@ -217,7 +217,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
 
-                bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
+                bool bPage = pFamilyItem && SfxStyleFamily::Page == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
 
                 if ( bProtected || bPage )
                     rSet.DisableItem( nSlotId );
@@ -232,7 +232,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
+                bool bPage = pFamilyItem && SfxStyleFamily::Page == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
 
                 if ( bProtected && !bPage )
                     rSet.DisableItem( nSlotId );
@@ -274,7 +274,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     {
         if (nSlotId == SID_STYLE_PREVIEW)
         {
-            SfxStyleFamily eFamily = SFX_STYLE_FAMILY_PARA;
+            SfxStyleFamily eFamily = SfxStyleFamily::Para;
             const SfxPoolItem* pFamItem;
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
                 eFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item*>(pFamItem)->GetValue();
@@ -282,7 +282,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             OUString aStyleName;
             if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
                 aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
-            if ( eFamily == SFX_STYLE_FAMILY_PARA ) // CellStyles
+            if ( eFamily == SfxStyleFamily::Para ) // CellStyles
             {
                 ScMarkData aFuncMark( pViewData->GetMarkData() );
                 ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
@@ -354,7 +354,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         ScStyleSaveData aOldData;       // for undo/redo
         ScStyleSaveData aNewData;
 
-        SfxStyleFamily eFamily = SFX_STYLE_FAMILY_PARA;
+        SfxStyleFamily eFamily = SfxStyleFamily::Para;
         const SfxPoolItem* pFamItem;
         if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
             eFamily = (SfxStyleFamily) static_cast<const SfxUInt16Item*>(pFamItem)->GetValue();
@@ -362,9 +362,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         {
             OUString sFamily = static_cast<const SfxStringItem*>(pFamItem)->GetValue();
             if (sFamily == "CellStyles")
-                eFamily = SFX_STYLE_FAMILY_PARA;
+                eFamily = SfxStyleFamily::Para;
             else if (sFamily == "PageStyles")
-                eFamily = SFX_STYLE_FAMILY_PAGE;
+                eFamily = SfxStyleFamily::Page;
         }
 
         OUString                aStyleName;
@@ -495,7 +495,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         switch ( eFamily )
         {
-            case SFX_STYLE_FAMILY_PARA:
+            case SfxStyleFamily::Para:
             {
                 switch ( nSlotId )
                 {
@@ -652,10 +652,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     default:
                         break;
                 }
-            } // case SFX_STYLE_FAMILY_PARA:
+            } // case SfxStyleFamily::Para:
             break;
 
-            case SFX_STYLE_FAMILY_PAGE:
+            case SfxStyleFamily::Page:
             {
                 switch ( nSlotId )
                 {
@@ -764,7 +764,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     default:
                         break;
                 } // switch ( nSlotId )
-            } // case SFX_STYLE_FAMILY_PAGE:
+            } // case SfxStyleFamily::Page:
             break;
 
             default:
@@ -786,11 +786,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 switch ( eFam )
                 {
-                    case SFX_STYLE_FAMILY_PAGE:
+                    case SfxStyleFamily::Page:
                         nRsc = RID_SCDLG_STYLES_PAGE;
                         break;
 
-                    case SFX_STYLE_FAMILY_PARA:
+                    case SfxStyleFamily::Para:
                     default:
                         {
                             SfxItemSet& rSet = pStyleSheet->GetItemSet();
@@ -876,7 +876,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                         // Attribute comparisons (earlier in ModifyStyleSheet) now here
                         // with the old values (the style is already changed)
-                        if ( SFX_STYLE_FAMILY_PARA == eFam )
+                        if ( SfxStyleFamily::Para == eFam )
                         {
                             SfxItemSet& rNewSet = pStyleSheet->GetItemSet();
                             bool bNumFormatChanged;
@@ -923,7 +923,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                         pDocSh->SetDocumentModified();
 
-                        if ( SFX_STYLE_FAMILY_PARA == eFam )
+                        if ( SfxStyleFamily::Para == eFam )
                         {
                             ScTabViewShell::UpdateNumberFormatter(
                                 static_cast<const SvxNumberInfoItem&>(

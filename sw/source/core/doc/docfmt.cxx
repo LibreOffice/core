@@ -677,7 +677,7 @@ void SwDoc::DelCharFormat(size_t nFormat, bool bBroadcast)
     SwCharFormat * pDel = (*mpCharFormatTable)[nFormat];
 
     if (bBroadcast)
-        BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_CHAR,
+        BroadcastStyleOperation(pDel->GetName(), SfxStyleFamily::Char,
                                 SfxStyleSheetHintId::ERASED);
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -718,7 +718,7 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFormat->GetName(),
-                                        SFX_STYLE_FAMILY_FRAME,
+                                        SfxStyleFamily::Frame,
                                         SfxStyleSheetHintId::ERASED);
 
             if (GetIDocumentUndoRedo().DoesUndo())
@@ -832,7 +832,7 @@ SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
 
     if (bBroadcast)
     {
-        BroadcastStyleOperation(rFormatName, SFX_STYLE_FAMILY_FRAME,
+        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Frame,
                                 SfxStyleSheetHintId::CREATED);
     }
 
@@ -868,7 +868,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
 
     if (bBroadcast)
     {
-        BroadcastStyleOperation(rFormatName, SFX_STYLE_FAMILY_CHAR,
+        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Char,
                                 SfxStyleSheetHintId::CREATED);
     }
 
@@ -904,7 +904,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
     }
 
     if (bBroadcast)
-        BroadcastStyleOperation(rFormatName, SFX_STYLE_FAMILY_PARA,
+        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Para,
                                 SfxStyleSheetHintId::CREATED);
 
     return pFormatColl;
@@ -938,7 +938,7 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
     }
 
     if (bBroadcast)
-        BroadcastStyleOperation(rFormatName, SFX_STYLE_FAMILY_PARA,
+        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Para,
                                 SfxStyleSheetHintId::CREATED);
 
     return pFormatColl;
@@ -967,7 +967,7 @@ void SwDoc::DelTextFormatColl(size_t nFormatColl, bool bBroadcast)
         return;     // never delete default!
 
     if (bBroadcast)
-        BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PARA,
+        BroadcastStyleOperation(pDel->GetName(), SfxStyleFamily::Para,
                                 SfxStyleSheetHintId::ERASED);
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1879,7 +1879,7 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
 void SwDoc::RenameFormat(SwFormat & rFormat, const OUString & sNewName,
                       bool bBroadcast)
 {
-    SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
+    SfxStyleFamily eFamily = SfxStyleFamily::All;
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1889,15 +1889,15 @@ void SwDoc::RenameFormat(SwFormat & rFormat, const OUString & sNewName,
         {
         case RES_CHRFMT:
             pUndo = new SwUndoRenameCharFormat(rFormat.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_CHAR;
+            eFamily = SfxStyleFamily::Char;
             break;
         case RES_TXTFMTCOLL:
             pUndo = new SwUndoRenameFormatColl(rFormat.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_PARA;
+            eFamily = SfxStyleFamily::Para;
             break;
         case RES_FRMFMT:
             pUndo = new SwUndoRenameFrameFormat(rFormat.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_FRAME;
+            eFamily = SfxStyleFamily::Frame;
             break;
 
         default:

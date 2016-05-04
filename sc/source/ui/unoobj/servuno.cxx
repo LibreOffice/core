@@ -412,10 +412,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 new ScEditFieldObj(xNullContent, nullptr, getFieldType(nType), ESelection())));
         }   break;
         case Type::CELLSTYLE:
-            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SFX_STYLE_FAMILY_PARA, OUString() )));
+            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Para, OUString() )));
             break;
         case Type::PAGESTYLE:
-            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SFX_STYLE_FAMILY_PAGE, OUString() )));
+            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Page, OUString() )));
             break;
         case Type::AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));

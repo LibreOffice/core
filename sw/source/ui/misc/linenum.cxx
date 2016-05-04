@@ -38,9 +38,9 @@
 
 static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(const OUString& rName, SwWrtShell *pSh)
 {
-    sal_uInt16 nFamily = SFX_STYLE_FAMILY_PARA;
+    SfxStyleFamily nFamily = SfxStyleFamily::Para;
     SfxStyleSheetBasePool* pBase =  pSh->GetView().GetDocShell()->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyle = pBase->Find(rName, (SfxStyleFamily)nFamily);
+    SfxStyleSheetBase* pStyle = pBase->Find(rName, nFamily);
     SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
     if(!pStyle)
         return nullptr;
@@ -205,9 +205,9 @@ IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, OKHdl, Button*, void)
     {
         SfxStyleSheetBasePool* pPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
         SfxStyleSheetBase* pBase;
-        pBase = pPool->Find(sCharFormatName, SFX_STYLE_FAMILY_CHAR);
+        pBase = pPool->Find(sCharFormatName, SfxStyleFamily::Char);
         if(!pBase)
-            pBase = &pPool->Make(sCharFormatName, SFX_STYLE_FAMILY_CHAR);
+            pBase = &pPool->Make(sCharFormatName, SfxStyleFamily::Char);
         pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
     }
 

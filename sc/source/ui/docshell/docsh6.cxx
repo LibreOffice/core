@@ -199,7 +199,7 @@ SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 
 static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
 {
-    pStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE);
+    pStylePool->SetSearchMask(SfxStyleFamily::Page);
     SfxStyleSheetBase *pStyle = pStylePool->First();
     while ( pStyle )
     {
@@ -252,8 +252,8 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     ScStyleSheetPool* pDestPool = aDocument.GetStyleSheetPool();
 
     SfxStyleFamily eFamily = bCellStyles ?
-            ( bPageStyles ? SFX_STYLE_FAMILY_ALL : SFX_STYLE_FAMILY_PARA ) :
-            SFX_STYLE_FAMILY_PAGE;
+            ( bPageStyles ? SfxStyleFamily::All : SfxStyleFamily::Para ) :
+            SfxStyleFamily::Page;
     SfxStyleSheetIterator aIter( pSourcePool, eFamily );
     sal_uInt16 nSourceCount = aIter.Count();
     if ( nSourceCount == 0 )

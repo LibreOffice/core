@@ -624,11 +624,11 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 
                 if(!aStyleName.isEmpty())
                 {
-                    if(pDocument->GetStyleSheetPool()->Find(aStyleName, SFX_STYLE_FAMILY_PARA))
+                    if(pDocument->GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para))
                         continue;
 
                     pDocument->GetStyleSheetPool()->CopyStyleFrom(
-                            pTable->pDocument->GetStyleSheetPool(), aStyleName, SFX_STYLE_FAMILY_PARA );
+                            pTable->pDocument->GetStyleSheetPool(), aStyleName, SfxStyleFamily::Para );
                 }
             }
         }
@@ -2077,7 +2077,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                                     if (!aStyleName.isEmpty())
                                     {
                                         SfxStyleSheetBase* pStyleSheet =
-                                            pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
+                                            pStylePool->Find( aStyleName, SfxStyleFamily::Para );
                                         if ( pStyleSheet )
                                         {
                                             FillMaxRot( pRowInfo, nArrCount, nX1, nX2,

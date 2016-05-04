@@ -621,7 +621,7 @@ void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
     SwPageDesc &rDel = *m_PageDescs[i];
 
     if (bBroadcast)
-        BroadcastStyleOperation(rDel.GetName(), SFX_STYLE_FAMILY_PAGE,
+        BroadcastStyleOperation(rDel.GetName(), SfxStyleFamily::Page,
                                 SfxStyleSheetHintId::ERASED);
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -669,7 +669,7 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
     m_PageDescs.push_back(std::unique_ptr<SwPageDesc>(pNew));
 
     if (bBroadcast)
-        BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PAGE,
+        BroadcastStyleOperation(rName, SfxStyleFamily::Page,
                                 SfxStyleSheetHintId::CREATED);
 
     if (GetIDocumentUndoRedo().DoesUndo())

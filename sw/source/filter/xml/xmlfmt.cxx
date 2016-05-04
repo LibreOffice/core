@@ -812,22 +812,22 @@ SwXMLStylesContext_Impl::~SwXMLStylesContext_Impl()
 bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
 {
     const SwXMLImport& rSwImport = GetSwImport();
-    const sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
+    const SfxStyleFamily nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
 
     bool bIns = true;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_PARA) != 0;
+        bIns = bool(nStyleFamilyMask & SfxStyleFamily::Para);
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
-        bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_CHAR) != 0;
+        bIns = bool(nStyleFamilyMask & SfxStyleFamily::Char);
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_FRAME) != 0;
+        bIns = bool(nStyleFamilyMask & SfxStyleFamily::Frame);
         break;
     case XML_STYLE_FAMILY_TEXT_LIST:
-        bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_PSEUDO) != 0;
+        bIns = bool(nStyleFamilyMask & SfxStyleFamily::Pseudo);
         break;
     case XML_STYLE_FAMILY_TEXT_OUTLINE:
     case XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG:
@@ -923,9 +923,9 @@ bool SwXMLMasterStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) cons
     bool bIns;
 
     const SwXMLImport& rSwImport = GetSwImport();
-    const sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
+    const SfxStyleFamily nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
     if( XML_STYLE_FAMILY_MASTER_PAGE == nFamily )
-        bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_PAGE) != 0;
+        bIns = bool(nStyleFamilyMask & SfxStyleFamily::Page);
     else
         bIns = XMLTextMasterStylesContext::InsertStyleFamily( nFamily );
 

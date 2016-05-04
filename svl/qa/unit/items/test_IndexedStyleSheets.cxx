@@ -23,7 +23,7 @@ using namespace svl;
 class MockedStyleSheet : public SfxStyleSheetBase
 {
     public:
-    MockedStyleSheet(const rtl::OUString& name, SfxStyleFamily fam = SFX_STYLE_FAMILY_CHAR)
+    MockedStyleSheet(const rtl::OUString& name, SfxStyleFamily fam = SfxStyleFamily::Char)
     : SfxStyleSheetBase(name, nullptr, fam, 0)
     {;}
 
@@ -172,28 +172,28 @@ void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
     rtl::OUString name1("name1");
     rtl::OUString name2("name2");
     rtl::OUString name3("name3");
-    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1, SFX_STYLE_FAMILY_CHAR));
-    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name2, SFX_STYLE_FAMILY_PARA));
-    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name3, SFX_STYLE_FAMILY_CHAR));
+    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1, SfxStyleFamily::Char));
+    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name2, SfxStyleFamily::Para));
+    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name3, SfxStyleFamily::Char));
 
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);
     iss.AddStyleSheet(sheet2);
     iss.AddStyleSheet(sheet3);
 
-    const std::vector<unsigned>& v = iss.GetStyleSheetPositionsByFamily(SFX_STYLE_FAMILY_CHAR);
+    const std::vector<unsigned>& v = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::Char);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Separation by family works.", static_cast<size_t>(2), v.size());
 
-    const std::vector<unsigned>& w = iss.GetStyleSheetPositionsByFamily(SFX_STYLE_FAMILY_ALL);
+    const std::vector<unsigned>& w = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::All);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wildcard works for family queries.", static_cast<size_t>(3), w.size());
 }
 
 void IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed()
 {
     rtl::OUString name("name1");
-    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name, SFX_STYLE_FAMILY_CHAR));
-    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name, SFX_STYLE_FAMILY_PARA));
-    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name, SFX_STYLE_FAMILY_CHAR));
+    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name, SfxStyleFamily::Char));
+    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name, SfxStyleFamily::Para));
+    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name, SfxStyleFamily::Char));
 
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);

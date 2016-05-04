@@ -1220,9 +1220,9 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                 {
                     SfxStyleSheetBase* pBase;
                     pBase = pDocShell->GetStyleSheetPool()->Find(m_sNewCharStyleNames[i],
-                                                                    SFX_STYLE_FAMILY_CHAR);
+                                                                    SfxStyleFamily::Char);
                     if(!pBase)
-                        pBase = &pDocShell->GetStyleSheetPool()->Make(m_sNewCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
+                        pBase = &pDocShell->GetStyleSheetPool()->Make(m_sNewCharStyleNames[i], SfxStyleFamily::Char);
                     pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
 
                 }
@@ -1744,9 +1744,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
 
                                 SfxStyleSheetBase* pBase;
                                 SfxStyleSheetBasePool* pPool = pLocalDoc->GetDocShell()->GetStyleSheetPool();
-                                pBase = static_cast<SfxStyleSheetBasePool*>(pPool)->Find(sCharFormatName, SFX_STYLE_FAMILY_CHAR);
+                                pBase = static_cast<SfxStyleSheetBasePool*>(pPool)->Find(sCharFormatName, SfxStyleFamily::Char);
                                 if(!pBase)
-                                    pBase = &pPool->Make(sCharFormatName, SFX_STYLE_FAMILY_CHAR);
+                                    pBase = &pPool->Make(sCharFormatName, SfxStyleFamily::Char);
                                 pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
                             }
                         }

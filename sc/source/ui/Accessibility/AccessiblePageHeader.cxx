@@ -228,7 +228,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
         ScDocument& rDoc = mpViewShell->GetDocument();
         // find out how many regions (left,center, right) are with content
 
-        SfxStyleSheetBase* pStyle = rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(mpViewShell->GetLocationData().GetPrintTab()), SFX_STYLE_FAMILY_PAGE);
+        SfxStyleSheetBase* pStyle = rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(mpViewShell->GetLocationData().GetPrintTab()), SfxStyleFamily::Page);
         if (pStyle)
         {
             sal_uInt16 nPageWhichId(0);

@@ -328,7 +328,7 @@ bool handleConditionalFormat(ScConditionalFormatList* pCondFormList, const std::
         if (!aData.aStyleName.isEmpty())
         {
             SfxStyleSheetBase* pStyleSheet =
-                pStlPool->Find( aData.aStyleName, SFX_STYLE_FAMILY_PARA );
+                pStlPool->Find( aData.aStyleName, SfxStyleFamily::Para );
             if ( pStyleSheet )
             {
                 //TODO: cache Style-Sets !!!

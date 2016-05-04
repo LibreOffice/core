@@ -110,7 +110,7 @@ void DrawDocShell::Construct( bool bClipboard )
     mpDoc->SetSdrUndoManager( mpUndoManager );
     mpDoc->SetSdrUndoFactory( new sd::UndoFactory );
     UpdateTablePointers();
-    SetStyleFamily(5);       //CL: actually SFX_STYLE_FAMILY_PSEUDO
+    SetStyleFamily(SfxStyleFamily::Pseudo);
 }
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,

@@ -458,7 +458,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     if ( GetStyleSheetPool() )
     {
         SfxStyleSheetIteratorPtr aSSSIterator = std::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
-                SFX_STYLE_FAMILY_ALL);
+                SfxStyleFamily::All);
         // fill aStyleSheetToIdMap
         sal_uInt32 nId = 1;
         for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;

@@ -2273,16 +2273,16 @@ SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
 {
     switch ( nActFamily-1 + SID_STYLE_FAMILY_START )
     {
-        case SID_STYLE_FAMILY1: return SFX_STYLE_FAMILY_CHAR;
-        case SID_STYLE_FAMILY2: return SFX_STYLE_FAMILY_PARA;
-        case SID_STYLE_FAMILY3: return SFX_STYLE_FAMILY_FRAME;
-        case SID_STYLE_FAMILY4: return SFX_STYLE_FAMILY_PAGE;
-        case SID_STYLE_FAMILY5: return SFX_STYLE_FAMILY_PSEUDO;
+        case SID_STYLE_FAMILY1: return SfxStyleFamily::Char;
+        case SID_STYLE_FAMILY2: return SfxStyleFamily::Para;
+        case SID_STYLE_FAMILY3: return SfxStyleFamily::Frame;
+        case SID_STYLE_FAMILY4: return SfxStyleFamily::Page;
+        case SID_STYLE_FAMILY5: return SfxStyleFamily::Pseudo;
         default:
             OSL_FAIL( "unknown style family" );
             break;
     }
-    return SFX_STYLE_FAMILY_PARA;
+    return SfxStyleFamily::Para;
 }
 
 void SvxStyleToolBoxControl::FillStyleBox()
@@ -2543,7 +2543,7 @@ VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pPare
 {
     VclPtrInstance<SvxStyleBox_Impl> pBox( pParent,
                                            OUString( ".uno:StyleApply" ),
-                                           SFX_STYLE_FAMILY_PARA,
+                                           SfxStyleFamily::Para,
                                            Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
                                            m_xFrame,
                                            pImpl->aClearForm,

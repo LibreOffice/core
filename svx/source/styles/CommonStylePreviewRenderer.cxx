@@ -115,7 +115,7 @@ bool CommonStylePreviewRenderer::recalculate()
         maFontColor = Color(static_cast<const SvxColorItem*>(pItem)->GetValue());
     }
 
-    if (mpStyle->GetFamily() == SFX_STYLE_FAMILY_PARA)
+    if (mpStyle->GetFamily() == SfxStyleFamily::Para)
     {
         if ((pItem = pItemSet->GetItem(XATTR_FILLSTYLE)) != nullptr)
         {

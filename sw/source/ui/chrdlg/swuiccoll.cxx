@@ -102,7 +102,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     size_t nCount = aFamilies.size();
     for( size_t i = 0; i < nCount; ++i )
     {
-        if(SFX_STYLE_FAMILY_PARA == (pFamilyItem = aFamilies.at( i ))->GetFamily())
+        if(SfxStyleFamily::Para == (pFamilyItem = aFamilies.at( i ))->GetFamily())
             break;
     }
 
@@ -182,7 +182,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
     m_pTbLinks->Clear();
 
     SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
-    pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
+    pPool->SetSearchMask(SfxStyleFamily::Para);
     m_pStyleLB->Clear();
     const SfxStyleSheetBase* pBase = pPool->First();
     while( pBase )
@@ -284,7 +284,7 @@ void SwCondCollPage::SelectHdl(void* pBox)
         const sal_Int32 nSelPos = static_cast<ListBox*>(pBox)->GetSelectEntryPos();
         const sal_uInt16 nSearchFlags = *static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(nSelPos));
         SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
-        pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
+        pPool->SetSearchMask(SfxStyleFamily::Para, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
 
         while( pBase )

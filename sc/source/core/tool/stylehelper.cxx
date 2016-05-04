@@ -42,9 +42,9 @@ struct ScDisplayNameMap
     OUString  aProgName;
 };
 
-static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
+static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
 {
-    if ( nType == SFX_STYLE_FAMILY_PARA )
+    if ( nType == SfxStyleFamily::Para )
     {
         static bool bCellMapFilled = false;
         static ScDisplayNameMap aCellMap[6];
@@ -71,7 +71,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
         }
         return aCellMap;
     }
-    else if ( nType == SFX_STYLE_FAMILY_PAGE )
+    else if ( nType == SfxStyleFamily::Page )
     {
         static bool bPageMapFilled = false;
         static ScDisplayNameMap aPageMap[3];
@@ -104,7 +104,7 @@ static bool lcl_EndsWithUser( const OUString& rString )
     return rString.endsWith(SC_SUFFIX_USER);
 }
 
-OUString ScStyleNameConversion::DisplayToProgrammaticName( const OUString& rDispName, sal_uInt16 nType )
+OUString ScStyleNameConversion::DisplayToProgrammaticName( const OUString& rDispName, SfxStyleFamily nType )
 {
     bool bDisplayIsProgrammatic = false;
 
@@ -131,7 +131,7 @@ OUString ScStyleNameConversion::DisplayToProgrammaticName( const OUString& rDisp
     return rDispName;
 }
 
-OUString ScStyleNameConversion::ProgrammaticToDisplayName( const OUString& rProgName, sal_uInt16 nType )
+OUString ScStyleNameConversion::ProgrammaticToDisplayName( const OUString& rProgName, SfxStyleFamily nType )
 {
     if ( lcl_EndsWithUser( rProgName ) )
     {

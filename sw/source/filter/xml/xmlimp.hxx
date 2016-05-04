@@ -32,6 +32,7 @@
 #include <xmloff/xmlimp.hxx>
 
 #include "xmlitmap.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 class SwDoc;
 class SvXMLUnitConverter;
@@ -42,6 +43,7 @@ class SwNodeIndex;
 class XMLTextImportHelper;
 class SvXMLGraphicHelper;
 class SvXMLEmbeddedObjectHelper;
+enum class SfxStyleFamily;
 
 // define, how many steps ( = paragraphs ) the progress bar should advance
 // for styles, autostyles and settings + meta
@@ -49,6 +51,12 @@ class SvXMLEmbeddedObjectHelper;
 
 namespace SwImport {
     SwDoc* GetDocFromXMLImport( SvXMLImport& );
+}
+
+// we only need this scoped enum to be flags here, in sw
+namespace o3tl
+{
+    template<> struct typed_flags<SfxStyleFamily> : is_typed_flags<SfxStyleFamily, 0xffff> {};
 }
 
 class SwXMLImport: public SvXMLImport
@@ -70,7 +78,7 @@ class SwXMLImport: public SvXMLImport
     css::uno::Reference< css::container::XNameContainer >
                             m_xLateInitSettings;
 
-    sal_uInt16              m_nStyleFamilyMask;// Mask of styles to load
+    SfxStyleFamily      m_nStyleFamilyMask;// Mask of styles to load
     bool                m_bLoadDoc : 1;   // Load doc or styles only
     bool                m_bInsert : 1;    // Insert mode. If styles are
                                             // loaded only false means that
@@ -90,7 +98,7 @@ class SwXMLImport: public SvXMLImport
 
     void         setTextInsertMode(
                      const css::uno::Reference< css::text::XTextRange > & rInsertPos );
-    void         setStyleInsertMode( sal_uInt16 nFamilies,
+    void         setStyleInsertMode( SfxStyleFamily nFamilies,
                                      bool bOverwrite );
     void         setBlockMode();
     void         setOrganizerMode();
@@ -149,7 +157,7 @@ public:
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateBodyContentContext( const OUString& rLocalName );
-    sal_uInt16 GetStyleFamilyMask() const { return m_nStyleFamilyMask; }
+    SfxStyleFamily GetStyleFamilyMask() const { return m_nStyleFamilyMask; }
     bool IsInsertMode() const { return m_bInsert; }
     bool IsStylesOnlyMode() const { return !m_bLoadDoc; }
     bool IsBlockMode() const { return m_bBlock; }

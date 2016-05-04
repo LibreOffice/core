@@ -103,9 +103,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
                 if( pStyleSheet )
                 {
-                    SfxStyleFamily eFamily = pStyleSheet->GetFamily();
-                    nFamily = SfxTemplate::SfxFamilyIdToNId(eFamily);
-                    GetDocSh()->SetStyleFamily(nFamily);
+                    GetDocSh()->SetStyleFamily(pStyleSheet->GetFamily());
                 }
             }
         }
