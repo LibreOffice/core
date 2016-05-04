@@ -51,7 +51,6 @@ private:
     VclPtr<PushButton> maMoreOptions;
 
     FontLineStyle getLineStyle(Button* pButton);
-    Color GetUnderlineColor();
 
     DECL_LINK_TYPED(PBClickHdl, Button*, void);
 };

@@ -110,7 +110,9 @@ FontLineStyle TextUnderlineControl::getLineStyle(Button* pButton)
     return LINESTYLE_NONE;
 }
 
-Color TextUnderlineControl::GetUnderlineColor()
+namespace {
+
+Color GetUnderlineColor()
 {
     const SfxPoolItem* pItem;
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, pItem);
@@ -121,6 +123,8 @@ Color TextUnderlineControl::GetUnderlineColor()
         return pUnderlineItem->GetColor();
 
     return COL_AUTO;
+}
+
 }
 
 IMPL_LINK_TYPED(TextUnderlineControl, PBClickHdl, Button*, pButton, void)
