@@ -206,7 +206,7 @@ void convert_po::save(const string& sFileName,
 {
     string sName;
     ostream outFile(&mfOutBuffer);
-    int newPos;
+    int newPos, oldPos;
 
     // isolate filename
     newPos = sFileName.find_last_of("/\\", sFileName.length());
@@ -224,7 +224,16 @@ void convert_po::save(const string& sFileName,
     outFile << "\"" << sResource << ".text\"" << endl;
     if (bFuzzy)
         outFile << "#, fuzzy" << endl;
-    outFile << "msgid \"" << sENUStext << "\"" << endl
+    outFile << "msgid \"";
+    newPos = oldPos = 0;
+    while ((newPos = sENUStext.find("\\n", oldPos)) > 0) {
+        newPos += 2;
+        outFile << "\"" << endl
+                << "\"" << sENUStext.substr(oldPos, newPos - oldPos);
+        oldPos = newPos;
+    }
+    outFile << "\"" << endl
+            << "\"" << sENUStext.substr(oldPos) << "\"" << endl
             << "msgstr \"" << sText     << "\"" << endl;
 }
 
@@ -248,6 +257,10 @@ string convert_po::genKeyId(const string& text)
     }
     for (i = 0; (i = newText.find("\\\"", 0)) != (int)string::npos;) {
         newText.erase(i, 1);
+    }
+    for (i = 0; (i = newText.find("\\n", 0)) != (int)string::npos;) {
+        newText.erase(i, 1);
+        newText[i] = 0x0A;
     }
     aCRC32.process_bytes(newText.c_str(), newText.length());
     unsigned int nCRC = aCRC32.checksum();
