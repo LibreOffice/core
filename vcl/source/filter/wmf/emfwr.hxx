@@ -36,7 +36,7 @@ private:
     ScopedVclPtr<VirtualDevice> maVDev;
     MapMode             maDestMapMode;
     SvStream& m_rStm;
-    bool*               mpHandlesUsed;
+    std::vector<bool>       mHandlesUsed;
     sal_uLong               mnHandleCount;
     sal_uLong               mnRecordCount;
     sal_uLong               mnRecordPos;
@@ -92,7 +92,6 @@ public:
     explicit EMFWriter(SvStream &rStream)
         : maVDev( VclPtr<VirtualDevice>::Create() )
         , m_rStm(rStream)
-        , mpHandlesUsed(nullptr)
         , mnHandleCount(0)
         , mnRecordCount(0)
         , mnRecordPos(0)

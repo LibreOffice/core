@@ -293,8 +293,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     maVDev->SetMapMode( rMtf.GetPrefMapMode() );
     // don't work with pixel as destination map mode -> higher resolution preferable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
-    mpHandlesUsed = new bool[ MAXHANDLES ];
-    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( bool ) );
+    mHandlesUsed = std::vector<bool>(MAXHANDLES, false);
     mnHandleCount = mnRecordCount = mnRecordPos = mnRecordPlusPos = 0;
     mbRecordOpen = mbRecordPlusOpen = false;
     mbLineChanged = mbFillChanged = mbTextChanged = false;
@@ -365,7 +364,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
             .WriteInt32( aMtfSizeLog.Width() * 10 ).WriteInt32( aMtfSizeLog.Height() * 10 ); //use [MS-EMF 2.2.11] HeaderExtension2 Object
 
     m_rStm.Seek( nEndPos );
-    delete[] mpHandlesUsed;
+    mHandlesUsed.clear();
 
     return( m_rStm.GetError() == ERRCODE_NONE );
 }
@@ -374,11 +373,11 @@ sal_uLong EMFWriter::ImplAcquireHandle()
 {
     sal_uLong nHandle = HANDLE_INVALID;
 
-    for( sal_uLong i = 0; i < MAXHANDLES && ( HANDLE_INVALID == nHandle ); i++ )
+    for( sal_uLong i = 0; i < mHandlesUsed.size() && ( HANDLE_INVALID == nHandle ); i++ )
     {
-        if( !mpHandlesUsed[ i ] )
+        if( !mHandlesUsed[ i ] )
         {
-            mpHandlesUsed[ i ] = true;
+            mHandlesUsed[ i ] = true;
 
             if( ( nHandle = i ) == mnHandleCount )
                 mnHandleCount++;
@@ -391,8 +390,8 @@ sal_uLong EMFWriter::ImplAcquireHandle()
 
 void EMFWriter::ImplReleaseHandle( sal_uLong nHandle )
 {
-    DBG_ASSERT( nHandle && ( nHandle < MAXHANDLES ), "Handle out of range" );
-    mpHandlesUsed[ nHandle - 1 ] = false;
+    DBG_ASSERT( nHandle && ( nHandle < mHandlesUsed.size() ), "Handle out of range" );
+    mHandlesUsed[ nHandle - 1 ] = false;
 }
 
 void EMFWriter::ImplBeginRecord( sal_uInt32 nType )

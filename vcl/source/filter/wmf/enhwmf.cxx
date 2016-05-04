@@ -20,6 +20,7 @@
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/dibtools.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "winmtf.hxx"
 
@@ -401,7 +402,7 @@ bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
 } // anonymous namespace
 
 EnhWMFReader::EnhWMFReader(SvStream& rStream,GDIMetaFile& rGDIMetaFile,FilterConfigItem* pConfigItem)
-    : WinMtf(new WinMtfOutput(rGDIMetaFile), rStream , pConfigItem)
+    : WinMtf(rGDIMetaFile, rStream , pConfigItem)
     , bRecordPath(false)
     , nRecordCount(0)
     , bEMFPlus(false)
@@ -702,26 +703,26 @@ bool EnhWMFReader::ReadEnhWMF()
             switch( nRecType )
             {
                 case EMR_POLYBEZIERTO :
-                    ReadAndDrawPolygon<sal_Int32>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int32>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyBezier( rPolygon, aTo, aRecordPath ); }, true );
                 break;
                 case EMR_POLYBEZIER :
-                    ReadAndDrawPolygon<sal_Int32>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int32>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyBezier( rPolygon, aTo, aRecordPath ); }, false );
                 break;
 
                 case EMR_POLYGON :
-                    ReadAndDrawPolygon<sal_Int32>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int32>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolygon( rPolygon, aTo, aRecordPath ); }, false );
                 break;
 
                 case EMR_POLYLINETO :
-                    ReadAndDrawPolygon<sal_Int32>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int32>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyLine( rPolygon, aTo, aRecordPath ); }, true );
                 break;
 
                 case EMR_POLYLINE :
-                    ReadAndDrawPolygon<sal_Int32>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int32>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyLine( rPolygon, aTo, aRecordPath ); }, false );
                 break;
 
@@ -977,7 +978,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             default :
                                 aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                         }
-                        pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( ReadColor(), aLineInfo, bTransparent ) );
+                        pOut->CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
                     }
                 }
                 break;
@@ -1065,7 +1066,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             default :
                                 aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                         }
-                        pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( aColorRef, aLineInfo, bTransparent ) );
+                        pOut->CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfLineStyle>( aColorRef, aLineInfo, bTransparent ));
                     }
                 }
                 break;
@@ -1077,7 +1078,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
                         pWMF->ReadUInt32( nStyle );
-                        pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ) );
+                        pOut->CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
                     }
                 }
                 break;
@@ -1519,7 +1520,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         // aLogFont.lfWidth = aTransVec.getX();
                         // aLogFont.lfHeight = aTransVec.getY();
 
-                        pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
+                        pOut->CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
                     }
                 }
                 break;
@@ -1617,27 +1618,27 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_POLYBEZIERTO16 :
-                    ReadAndDrawPolygon<sal_Int16>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int16>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyBezier( rPolygon, aTo, aRecordPath ); }, true );
                 break;
 
                 case EMR_POLYBEZIER16 :
-                    ReadAndDrawPolygon<sal_Int16>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int16>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyBezier( rPolygon, aTo, aRecordPath ); }, false );
                 break;
 
                 case EMR_POLYGON16 :
-                    ReadAndDrawPolygon<sal_Int16>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int16>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolygon( rPolygon, aTo, aRecordPath ); }, false );
                 break;
 
                 case EMR_POLYLINETO16 :
-                    ReadAndDrawPolygon<sal_Int16>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int16>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyLine( rPolygon, aTo, aRecordPath ); }, true );
                 break;
 
                 case EMR_POLYLINE16 :
-                    ReadAndDrawPolygon<sal_Int16>( [] ( WinMtfOutput* pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
+                    ReadAndDrawPolygon<sal_Int16>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
                                                    { pWinMtfOutput->DrawPolyLine( rPolygon, aTo, aRecordPath ); }, false );
                 break;
 
@@ -1710,7 +1711,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         }
                     }
 
-                    pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( aBitmap ) );
+                    pOut->CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFillStyle>( aBitmap ));
                 }
                 break;
 

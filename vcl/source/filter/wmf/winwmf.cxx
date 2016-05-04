@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/dibtools.hxx>
 #include <tools/fract.hxx>
+#include <o3tl/make_unique.hxx>
 
 // MS Windows defines
 
@@ -766,7 +767,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 Bitmap::ReleaseAccess( pBmp );
             }
             Color aColor( (sal_uInt8)( nRed / nCount ), (sal_uInt8)( nGreen / nCount ), (sal_uInt8)( nBlue / nCount ) );
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( aColor, false ) );
+            pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( aColor, false ));
         }
         break;
 
@@ -780,19 +781,19 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_CREATEPALETTE:
         {
-            pOut->CreateObject( GDI_DUMMY );
+            pOut->CreateObject();
         }
         break;
 
         case W_META_CREATEBRUSH:
         {
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), false ) );
+            pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
         }
         break;
 
         case W_META_CREATEPATTERNBRUSH:
         {
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), false ) );
+            pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
         }
         break;
 
@@ -869,7 +870,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 default :
                     aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
             }
-            pOut->CreateObject( GDI_PEN, new WinMtfLineStyle( ReadColor(), aLineInfo, bTransparent ) );
+            pOut->CreateObject(o3tl::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
         }
         break;
 
@@ -877,7 +878,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             sal_uInt16  nStyle = 0;
             pWMF->ReadUInt16( nStyle );
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ) );
+            pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
         }
         break;
 
@@ -920,25 +921,25 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 eCharSet = RTL_TEXTENCODING_MS_1252;
             aLogFont.alfFaceName = OUString( lfFaceName, strlen(lfFaceName), eCharSet );
 
-            pOut->CreateObject( GDI_FONT, new WinMtfFontStyle( aLogFont ) );
+            pOut->CreateObject(o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
         }
         break;
 
         case W_META_CREATEBITMAPINDIRECT:
         {
-            pOut->CreateObject( GDI_DUMMY );
+            pOut->CreateObject();
         }
         break;
 
         case W_META_CREATEBITMAP:
         {
-            pOut->CreateObject( GDI_DUMMY );
+            pOut->CreateObject();
         }
         break;
 
         case W_META_CREATEREGION:
         {
-            pOut->CreateObject( GDI_DUMMY );
+            pOut->CreateObject();
         }
         break;
 
@@ -1091,22 +1092,20 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             {   // first EMF comment
                                 nEMFRecCount    = nComRecCount;
                                 nEMFSize        = nEMFTotalSize;
-                                pEMFStream = new SvMemoryStream( nEMFSize );
+                                pEMFStream = o3tl::make_unique<SvMemoryStream>( nEMFSize );
                             }
                             else if( ( nEMFRecCount != nComRecCount ) || ( nEMFSize != nEMFTotalSize ) ) // add additional checks here
                             {
                                 // total records should be the same as in previous comments
                                 nEMFRecCount = 0xFFFFFFFF;
-                                delete pEMFStream;
-                                pEMFStream = nullptr;
+                                pEMFStream.reset();
                             }
                             nEMFRec++;
 
                             if( pEMFStream && nCurRecSize + 34 > nLen )
                             {
                                 nEMFRecCount = 0xFFFFFFFF;
-                                delete pEMFStream;
-                                pEMFStream = nullptr;
+                                pEMFStream.reset();
                             }
 
                             if( pEMFStream )
@@ -1298,7 +1297,7 @@ void WMFReader::ReadWMF()
     nCurrentAction = 0;
     nUnicodeEscapeAction = 0;
 
-    pEMFStream      = nullptr;
+    pEMFStream.reset();
     nEMFRecCount    = 0;
     nEMFRec         = 0;
     nEMFSize        = 0;
@@ -1364,9 +1363,9 @@ void WMFReader::ReadWMF()
                     {
                         GDIMetaFile aMeta;
                         pEMFStream->Seek( 0 );
-                        EnhWMFReader* pEMFReader = new EnhWMFReader ( *pEMFStream, aMeta );
+                        std::unique_ptr<EnhWMFReader> pEMFReader(o3tl::make_unique<EnhWMFReader>( *pEMFStream, aMeta ));
                         bEMFAvailable = pEMFReader->ReadEnhWMF();
-                        delete pEMFReader; // destroy first!!!
+                        pEMFReader.reset(); // destroy first!!!
 
                         if( bEMFAvailable )
                         {
@@ -1383,8 +1382,7 @@ void WMFReader::ReadWMF()
                         {
                             // something went wrong
                             // continue with WMF, don't try this again
-                            delete pEMFStream;
-                            pEMFStream = nullptr;
+                            pEMFStream.reset();
                         }
                     }
                 }
@@ -1789,10 +1787,9 @@ void WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 
 WMFReader::WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
                      FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER* pExtHeader)
-    : WinMtf(new WinMtfOutput(rGDIMetaFile) , rStreamWMF, pConfigItem)
+    : WinMtf(rGDIMetaFile, rStreamWMF, pConfigItem)
     , nUnitsPerInch(96)
     , nRecSize(0)
-    , pEMFStream(nullptr)
     , nEMFRecCount(0)
     , nEMFRec(0)
     , nEMFSize(0)
@@ -1801,10 +1798,5 @@ WMFReader::WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
     , nUnicodeEscapeAction(0)
     , pExternalHeader(pExtHeader)
 {}
-
-WMFReader::~WMFReader()
-{
-    delete pEMFStream;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
