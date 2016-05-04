@@ -3454,7 +3454,7 @@ void SwUiWriterTest::testTdf96536()
     uno::Reference<lang::XComponent> xParagraph(getParagraph(2), uno::UNO_QUERY);
     xParagraph->dispose();
     calcLayout();
-    CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds", "height").toInt32() == nSingleParaPageHeight);
+    CPPUNIT_ASSERT_EQUAL(nSingleParaPageHeight, parseDump("/root/page[1]/infos/bounds", "height").toInt32());
 }
 
 void SwUiWriterTest::testTdf96479()
