@@ -20,19 +20,25 @@
 #ifndef INCLUDED_OOX_DUMP_DUMPERBASE_HXX
 #define INCLUDED_OOX_DUMP_DUMPERBASE_HXX
 
-#include <math.h>
-#include <vector>
-#include <stack>
-#include <set>
+#include <cmath>
+#include <cstddef>
 #include <map>
 #include <memory>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <set>
+#include <utility>
+#include <vector>
+
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/helper.hxx>
+#include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/storagebase.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <sal/types.h>
 
 #define OOX_INCLUDE_DUMPER (OSL_DEBUG_LEVEL > 0)
 
@@ -45,12 +51,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 
-namespace comphelper {
-    class IDocPasswordVerifier;
-}
-
 namespace oox {
-    class BinaryOutputStream;
     class TextInputStream;
 }
 
@@ -355,7 +356,7 @@ public:
 template< typename Type >
 void StringHelper::appendFix( OUStringBuffer& rStr, Type nData, sal_Int32 nWidth )
 {
-    appendDec( rStr, static_cast< double >( nData ) / pow( 2.0, 4.0 * sizeof( Type ) ), nWidth );
+    appendDec( rStr, static_cast< double >( nData ) / std::pow( 2.0, 4.0 * sizeof( Type ) ), nWidth );
 }
 
 template< typename Type >
@@ -388,8 +389,6 @@ public:
 
 static const String EMPTY_STRING;
 
-
-class Base;
 
 /** Base class for all dumper classes.
 

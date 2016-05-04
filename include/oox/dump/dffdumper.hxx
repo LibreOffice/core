@@ -21,8 +21,11 @@
 #define INCLUDED_OOX_DUMP_DFFDUMPER_HXX
 
 #include <oox/dump/dumperbase.hxx>
+#include <sal/types.h>
 
 #if OOX_INCLUDE_DUMPER
+
+namespace oox { class BinaryInputStream; }
 
 namespace oox {
 namespace dump {
