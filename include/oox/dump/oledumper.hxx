@@ -20,8 +20,17 @@
 #ifndef INCLUDED_OOX_DUMP_OLEDUMPER_HXX
 #define INCLUDED_OOX_DUMP_OLEDUMPER_HXX
 
-#include <oox/helper/storagebase.hxx>
+#include <map>
+#include <memory>
+#include <vector>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dump/dumperbase.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/storagebase.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #if OOX_INCLUDE_DUMPER
 
