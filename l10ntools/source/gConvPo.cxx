@@ -232,8 +232,9 @@ void convert_po::save(const string& sFileName,
                 << "\"" << sENUStext.substr(oldPos, newPos - oldPos);
         oldPos = newPos;
     }
-    outFile << "\"" << endl
-            << "\"" << sENUStext.substr(oldPos) << "\"" << endl
+    if (oldPos)
+        outFile << "\"" << endl << "\"";
+    outFile << sENUStext.substr(oldPos) << "\"" << endl
             << "msgstr \"" << sText     << "\"" << endl;
 }
 

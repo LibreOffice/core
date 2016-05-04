@@ -105,7 +105,7 @@ void convert_tree::setString(char *yytext)
         case STATE_VAL_TITLE:
              string sText = copySourceSpecial(yytext, 1);
              sText.erase(sText.size()-1);
-             mcMemory.setSourceKey(miLineNo, msSourceFile, msId, sText, "", "", "", mbMergeMode);
+             mcMemory.setSourceKey(miLineNo, msSourceFile, msId, sText, "", "help_section", "", mbMergeMode);
              break;
     }
     meStateVal = STATE_VAL_NONE;
