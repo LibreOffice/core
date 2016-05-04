@@ -621,7 +621,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         //  if there is no matrix result
 
         const ScMatrix* pMat = (mbArray && pFormula) ? pFormula->GetMatrix() : nullptr;
-        sal_uInt16 nErrCode = pFormula ? pFormula->GetErrCode() : errIllegalArgument;
+        sal_uInt16 nErrCode = pFormula ? pFormula->GetErrCode() : formula::errIllegalArgument;
         if ( nErrCode == 0 )
         {
             if ( pMat )
@@ -641,7 +641,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                 aRet <<= aStrVal;
             }
         }
-        else if ( nErrCode == NOTAVAILABLE )
+        else if ( nErrCode == formula::NOTAVAILABLE )
         {
             // #N/A: leave result empty, no exception
         }

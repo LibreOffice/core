@@ -1147,7 +1147,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                     case uno::TypeClass_VOID:
                     {
                         // void = "no value"
-                        rDoc.SetError( nDocCol, nDocRow, nTab, NOTAVAILABLE );
+                        rDoc.SetError( nDocCol, nDocRow, nTab, formula::NOTAVAILABLE );
                     }
                     break;
 

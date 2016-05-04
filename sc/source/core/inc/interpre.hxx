@@ -1030,7 +1030,7 @@ inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUStri
 {
     if ( rResult.getLength() + rAdd.getLength() > SAL_MAX_UINT16 )
     {
-        SetError( errStringOverflow );
+        SetError( formula::errStringOverflow );
         rResult.clear();
         return false;
     }
@@ -1041,11 +1041,11 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
 {
     if ( !::rtl::math::isFinite( rVal ) )
     {
-        sal_uInt16 nErr = GetDoubleErrorValue( rVal );
+        sal_uInt16 nErr = formula::GetDoubleErrorValue( rVal );
         if ( nErr )
             SetError( nErr );
         else
-            SetError( errNoValue );
+            SetError( formula::errNoValue );
         rVal = 0.0;
     }
 }

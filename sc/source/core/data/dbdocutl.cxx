@@ -157,7 +157,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         pDoc->SetEmptyCell(aPos);
     else if (bError)
     {
-        pDoc->SetError( nCol, nRow, nTab, NOTAVAILABLE );
+        pDoc->SetError( nCol, nRow, nTab, formula::NOTAVAILABLE );
     }
     else if (bValue)
     {

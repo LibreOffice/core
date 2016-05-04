@@ -385,7 +385,7 @@ double ScGlobal::ConvertStringToValue( const OUString& rStr, const ScCalcConfig&
     // we provide a friendly way to convert string numbers into numbers in the UI.
 
     double fValue = 0.0;
-    if (nStringNoValueError == errCellNoValue)
+    if (nStringNoValueError == formula::errCellNoValue)
     {
         // Requested that all strings result in 0, error handled by caller.
         rError = nStringNoValueError;
