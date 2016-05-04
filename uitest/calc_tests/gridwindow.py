@@ -35,8 +35,6 @@ def select_cell(xContext):
     selectProps = mkPropertyValues({"CELL": "B10"})
     xGridWindow.executeAction("SELECT", selectProps)
 
-    time.sleep(20)
-
 def select_range(xContext):
     xUITest = xContext.ServiceManager.createInstanceWithContext(
             "org.libreoffice.uitest.UITest", xContext)
@@ -50,8 +48,6 @@ def select_range(xContext):
 
     selectProps = mkPropertyValues({"RANGE": "B10:C20"})
     xGridWindow.executeAction("SELECT", selectProps)
-
-    time.sleep(20)
 
 def extend_range(xContext):
     xUITest = xContext.ServiceManager.createInstanceWithContext(
@@ -67,11 +63,7 @@ def extend_range(xContext):
     selectProps = mkPropertyValues({"RANGE": "B10:C20"})
     xGridWindow.executeAction("SELECT", selectProps)
 
-    time.sleep(5)
-
     select2Props = mkPropertyValues({"RANGE": "D3:F5", "EXTEND": "true"})
     xGridWindow.executeAction("SELECT", select2Props)
-
-    time.sleep(5)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
