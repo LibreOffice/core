@@ -21,6 +21,7 @@
 #include <svsys.h>
 #include <process.h>
 
+#include <osl/conditn.hxx>
 #include <osl/file.hxx>
 #include <comphelper/solarmutex.hxx>
 

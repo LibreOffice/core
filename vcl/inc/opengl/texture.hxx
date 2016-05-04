@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 
+#include <functional>
 #include <memory>
 #include <vector>
 
