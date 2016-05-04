@@ -48,7 +48,7 @@ namespace xmlscript
         OUString m_aLocalName;
         css::uno::Reference< css::xml::input::XAttributes > m_xAttributes;
 
-        static bool getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
+        static bool getBoolAttr( bool* pRet, const OUString& rAttrName,
             const css::uno::Reference< css::xml::input::XAttributes >& xAttributes,
             sal_Int32 nUid );
 

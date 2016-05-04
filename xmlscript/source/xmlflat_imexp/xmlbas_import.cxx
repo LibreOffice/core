@@ -62,7 +62,7 @@ namespace xmlscript
             m_pParent->release();
     }
 
-    bool BasicElementBase::getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
+    bool BasicElementBase::getBoolAttr( bool* pRet, const OUString& rAttrName,
         const css::uno::Reference< css::xml::input::XAttributes >& xAttributes,
         sal_Int32 nUid )
     {
@@ -180,7 +180,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
 
                 OUString aStorageURL = xAttributes->getValueByUidName(m_pImport->XMLNS_XLINK_UID, "href" );
 
-                sal_Bool bReadOnly = false;
+                bool bReadOnly = false;
                 getBoolAttr( &bReadOnly,"readonly", xAttributes, m_pImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
@@ -211,7 +211,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
             {
                 OUString aName = xAttributes->getValueByUidName( m_pImport->XMLNS_UID, "name" );
 
-                sal_Bool bReadOnly = false;
+                bool bReadOnly = false;
                 getBoolAttr( &bReadOnly, "readonly", xAttributes, m_pImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
