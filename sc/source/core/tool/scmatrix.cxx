@@ -2415,15 +2415,15 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         };
 
     std::function<void(size_t, size_t, bool)> aBoolFunc =
-        [&](size_t nRow, size_t nCol, double nVal)
+        [&](size_t nRow, size_t nCol, bool nVal)
         {
             OUString aStr;
             rFormatter.GetInputLineString( nVal, nKey, aStr);
             aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
-    std::function<void(size_t, size_t, svl::SharedString)> aStringFunc =
-        [&](size_t nRow, size_t nCol, svl::SharedString aStr)
+    std::function<void(size_t, size_t, const svl::SharedString&)> aStringFunc =
+        [&](size_t nRow, size_t nCol, const svl::SharedString& aStr)
         {
             aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString();
         };
@@ -2465,15 +2465,15 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         };
 
     std::function<void(size_t, size_t, bool)> aBoolFunc2 =
-        [&](size_t nRow, size_t nCol, double nVal)
+        [&](size_t nRow, size_t nCol, bool nVal)
         {
             OUString aStr;
             rFormatter.GetInputLineString( nVal, nKey, aStr);
             aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 
-    std::function<void(size_t, size_t, svl::SharedString)> aStringFunc2 =
-        [&](size_t nRow, size_t nCol, svl::SharedString aStr)
+    std::function<void(size_t, size_t, const svl::SharedString&)> aStringFunc2 =
+        [&](size_t nRow, size_t nCol, const svl::SharedString& aStr)
         {
             aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] =
                 rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString());
