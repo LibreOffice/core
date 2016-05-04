@@ -308,7 +308,8 @@ void SwMMResultPrintDialog::dispose()
 }
 
 SwMMResultEmailDialog::SwMMResultEmailDialog(vcl::Window* pParent)
-    : SfxModalDialog(pParent, "MMResultEmailDialog", "modules/swriter/ui/mmresultemaildialog.ui")
+    : SfxModalDialog(pParent, "MMResultEmailDialog", "modules/swriter/ui/mmresultemaildialog.ui"),
+     m_sConfigureMail(SW_RES(ST_CONFIGUREMAIL))
 {
     get(m_pMailToFT, "mailtoft");
     get(m_pMailToLB, "mailto");
