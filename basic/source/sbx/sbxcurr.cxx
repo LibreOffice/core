@@ -31,7 +31,7 @@ static OUString ImpCurrencyToString( const sal_Int64 &rVal )
     bool isNeg = ( rVal < 0 );
     sal_Int64 absVal = isNeg ? -rVal : rVal;
 
-    sal_Unicode cDecimalSep = '.';
+    const sal_Unicode cDecimalSep = '.';
 #ifdef MAYBEFUTURE
     sal_Unicode cThousandSep = ',';
     ImpGetIntntlSep( cDecimalSep, cThousandSep );
@@ -107,8 +107,8 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
 
     sal_Int32   nFractDigit = 4;
 
-    sal_Unicode cDeciPnt = '.';
-    sal_Unicode c1000Sep = ',';
+    const sal_Unicode cDeciPnt = '.';
+    const sal_Unicode c1000Sep = ',';
 
 #ifdef MAYBEFUTURE
     sal_Unicode cLocaleDeciPnt, cLocale1000Sep;

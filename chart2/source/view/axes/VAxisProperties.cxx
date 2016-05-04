@@ -42,7 +42,7 @@ AxisLabelAlignment::AxisLabelAlignment() :
 
 sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
 {
-    sal_Int32 nWidth = AXIS2D_TICKLENGTH; //@maybefuturetodo this length could be offered by the model
+    const sal_Int32 nWidth = AXIS2D_TICKLENGTH; //@maybefuturetodo this length could be offered by the model
     double fPercent = 1.0;
     switch(nDepth)
     {

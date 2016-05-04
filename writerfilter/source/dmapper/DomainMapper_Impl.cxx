@@ -765,7 +765,7 @@ void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFramePr
             PROP_BOTTOM_BORDER_DISTANCE
         };
 
-        sal_uInt32 nBorderPropertyCount = sizeof( aBorderProperties ) / sizeof(PropertyIds);
+        const sal_uInt32 nBorderPropertyCount = sizeof( aBorderProperties ) / sizeof(PropertyIds);
 
         for( sal_uInt32 nProperty = 0; nProperty < nBorderPropertyCount; ++nProperty)
         {
@@ -2849,12 +2849,9 @@ if(!bFilled)
 //            {OUString(""), "", "", FIELD_},
 
         };
-        size_t nConversions = SAL_N_ELEMENTS(aFields);
-        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
+        for( const FieldConversion& rFC : aFields)
         {
-            aFieldConversionMap.insert( FieldConversionMap_t::value_type(
-                aFields[nConversion].sWordCommand,
-                aFields[nConversion] ));
+            aFieldConversionMap.insert( FieldConversionMap_t::value_type( rFC.sWordCommand, rFC ));
         }
 
         bFilled = true;
@@ -2878,12 +2875,9 @@ const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
             {OUString("FORMTEXT"),     "Fieldmark", FIELD_FORMTEXT},
         };
 
-        size_t nConversions = SAL_N_ELEMENTS(aEnhancedFields);
-        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
+        for( const FieldConversion & rFD : aEnhancedFields)
         {
-            aEnhancedFieldConversionMap.insert( FieldConversionMap_t::value_type(
-                aEnhancedFields[nConversion].sWordCommand,
-                aEnhancedFields[nConversion] ));
+            aEnhancedFieldConversionMap.insert( FieldConversionMap_t::value_type( rFD.sWordCommand, rFD ));
         }
     }
     return aEnhancedFieldConversionMap;

@@ -13,6 +13,7 @@
 
 #include "plugin.hxx"
 #include "compat.hxx"
+#include "typecheck.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Idea from tml.
@@ -31,7 +32,9 @@ public:
     explicit OnceVar(InstantiationData const & data): Plugin(data), mbChecking(false) {}
 
     virtual void run() override {
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        if (compiler.getLangOpts().CPlusPlus) {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
     }
 
     bool TraverseFunctionDecl( FunctionDecl* stmt );
@@ -54,6 +57,7 @@ StringRef OnceVar::getFilename(SourceLocation loc)
 
 bool OnceVar::TraverseFunctionDecl(FunctionDecl * decl)
 {
+    assert(!mbChecking);
     if (ignoreLocation(decl)) {
         return true;
     }
@@ -65,8 +69,14 @@ bool OnceVar::TraverseFunctionDecl(FunctionDecl * decl)
     }
 
     // some places, it makes the code worse
-    StringRef aFileName = getFilename(decl->getLocStart());
+    StringRef aFileName = getFilename(decl->getBody()->getLocStart());
     if (aFileName.startswith(SRCDIR "/sal/qa/osl/module/osl_Module.cxx")) {
+        return true;
+    }
+    // #ifdefs confuse things here
+    if (aFileName.startswith(SRCDIR "/sal/osl/unx/thread.cxx")
+        || aFileName.startswith(SRCDIR "/sot/source/base/formats.cxx")
+        || aFileName.startswith(SRCDIR "/desktop/source/app/check_ext_deps.cxx")) {
         return true;
     }
 
@@ -80,7 +90,7 @@ bool OnceVar::TraverseFunctionDecl(FunctionDecl * decl)
         if (it->second == 1)
         {
             report(DiagnosticsEngine::Warning,
-                    "OUString var used only once, should be inlined",
+                    "var used only once, should be inlined",
                    it->first)
                 << maVarDeclSourceRangeMap[it->first];
             report(DiagnosticsEngine::Note,
@@ -92,6 +102,43 @@ bool OnceVar::TraverseFunctionDecl(FunctionDecl * decl)
     return true;
 }
 
+static bool checkForPassByReference(const CallExpr* callExpr, const Stmt* declRefExpr)
+{
+    const FunctionDecl* callee = callExpr->getDirectCallee();
+    if (!callee) {
+        return true;
+    }
+    for (unsigned i=0; i<callExpr->getNumArgs(); ++i) {
+        if (callExpr->getArg(i) == declRefExpr) {
+           if (i >= callee->getNumParams()) {
+               return true;
+           }
+           if (callee->getParamDecl(i)->getType()->isReferenceType()) {
+               return true;
+           }
+           break;
+       }
+   }
+   return false;
+}
+
+static bool checkForPassByReference(const CXXConstructExpr* constructExpr, const Stmt* declRefExpr)
+{
+    const CXXConstructorDecl* callee = constructExpr->getConstructor();
+    for (unsigned i=0; i<constructExpr->getNumArgs(); ++i) {
+        if (constructExpr->getArg(i) == declRefExpr) {
+           if (i >= callee->getNumParams()) {
+               return true;
+           }
+           if (callee->getParamDecl(i)->getType()->isReferenceType()) {
+               return true;
+           }
+           break;
+       }
+   }
+   return false;
+}
+
 bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
     if (!mbChecking)
@@ -101,18 +148,39 @@ bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
         return true;
     }
     const VarDecl * varDecl = dyn_cast<VarDecl>(decl)->getCanonicalDecl();
-    if (!varDecl->hasInit() || varDecl->hasGlobalStorage()) {
+    if (varDecl->hasGlobalStorage()) {
         return true;
     }
-    if (varDecl->getType().getUnqualifiedType().getAsString().find("OUString") == std::string::npos) {
+    const bool bOUStringType = (bool) loplugin::TypeCheck(varDecl->getType()).Class("OUString").Namespace("rtl");
+    const bool bScalarType = varDecl->getType().getUnqualifiedType()->isScalarType();
+    if (!bOUStringType && !bScalarType) {
         return true;
     }
-    const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(varDecl->getInit());
-    if (!constructExpr || constructExpr->getNumArgs() < 1) {
-        return true;
+    if (!varDecl->hasInit()) {
+         return true;
     }
-    if (!isa<StringLiteral>(constructExpr->getArg(0))) {
-        return true;
+    if (bOUStringType) {
+        const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(varDecl->getInit());
+        if (!constructExpr || constructExpr->getNumArgs() < 1) {
+            return true;
+        }
+        if (!isa<StringLiteral>(constructExpr->getArg(0))) {
+            return true;
+        }
+    } else {
+        if (loplugin::TypeCheck(varDecl->getType()).Const()) {
+            return true;
+        }
+        if (!varDecl->getType()->isArithmeticType()) {
+            return true;
+        }
+        if (!varDecl->getInit()->isEvaluatable(compiler.getASTContext())) {
+            return true;
+        }
+        APFloat res(0.0);
+        if (!varDecl->getInit()->EvaluateAsFloat(res, compiler.getASTContext())) {
+            return true;
+        }
     }
 
     SourceLocation loc = varDecl->getLocation();
@@ -123,10 +191,37 @@ bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     // and
     //      foo(&xxx);
     // where we cannot inline the declaration.
-    if (isa<MemberExpr>(parentStmt(declRefExpr))
-        || isa<UnaryOperator>(parentStmt(declRefExpr))) {
-        maVarUsesMap[loc] = 2;
-        return true;
+    const Stmt* parent = parentStmt(declRefExpr);
+    if (parent) {
+        if (isa<MemberExpr>(parent) || isa<UnaryOperator>(parent)) {
+            maVarUsesMap[loc] = 2;
+            return true;
+        }
+        // check for var being passed by reference
+        if (isa<CallExpr>(parent)) {
+            const CallExpr* callExpr = dyn_cast<CallExpr>(parent);
+            if (checkForPassByReference(callExpr, declRefExpr)) {
+                maVarUsesMap[loc] = 2;
+                return true;
+            }
+        }
+        else if (isa<CXXConstructExpr>(parent)) {
+            const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(parent);
+            if (checkForPassByReference(constructExpr, declRefExpr)) {
+                maVarUsesMap[loc] = 2;
+                return true;
+            }
+        }
+        else if (isa<ImplicitCastExpr>(parent)) {
+            const Stmt* parent2 = parentStmt(parent);
+            if (parent2 && isa<CallExpr>(parent2)) {
+                const CallExpr* callExpr = dyn_cast<CallExpr>(parent2);
+                if (checkForPassByReference(callExpr, parent)) {
+                    maVarUsesMap[loc] = 2;
+                    return true;
+                }
+            }
+        }
     }
 
     if (maVarUsesMap.find(loc) == maVarUsesMap.end()) {

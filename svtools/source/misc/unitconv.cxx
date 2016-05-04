@@ -292,8 +292,7 @@ long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor )
     // ggf. aufrunden
     if ( SFX_MAPUNIT_TWIP != eUnit )
     {
-        long nMod = 10;
-        long nTmp = nRet % nMod;
+        long nTmp = nRet % 10;
 
         if ( nTmp >= 4 )
             nRet += 10 - nTmp;

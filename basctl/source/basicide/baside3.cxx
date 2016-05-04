@@ -1029,9 +1029,8 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             // Resource?
             css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             Reference< task::XInteractionHandler > xDummyHandler;
-            bool bReadOnly = true;
             Reference< XStringResourceWithLocation > xImportStringResource =
-                StringResourceWithLocation::create( xContext, aBasePath, bReadOnly,
+                StringResourceWithLocation::create( xContext, aBasePath, true/*bReadOnly*/,
                 aLocale, aXmlDlgName, OUString(), xDummyHandler );
 
             Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();

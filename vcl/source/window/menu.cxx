@@ -1747,7 +1747,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
     {
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( i_rRect );
-        ControlState        nState = ControlState::PRESSED | ControlState::ENABLED;
+        const ControlState  nState = ControlState::PRESSED | ControlState::ENABLED;
 
         aControlValue.setTristateVal(BUTTONVALUE_ON);
 

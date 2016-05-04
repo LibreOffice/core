@@ -106,8 +106,7 @@ namespace
         // logic to be written with portability in mind.
         sal_uInt64 whereToWriteEndOfSwBlock = rStream.Tell();
 
-        sal_uInt64 endOfSwBlock = 0;
-        rStream.WriteUInt64( endOfSwBlock );
+        rStream.WriteUInt64( 0 ); // endOfSwBlock
 
         return whereToWriteEndOfSwBlock;
     }

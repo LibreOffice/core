@@ -1452,7 +1452,6 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
 {
     // nStartPos has to point to opening quote
 
-    bool bRet = false;
     const sal_Unicode cQuote = '\'';
 
     if (rSource[nStartPos] == cQuote)
@@ -1488,7 +1487,7 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
         // no closing quote before the end of the string -> error (bRet still false)
     }
 
-    return bRet;
+    return false;
 }
 
 struct ScGetPivotDataFunctionEntry

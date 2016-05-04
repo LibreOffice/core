@@ -551,7 +551,7 @@ void generateFunctionParameterMap(std::ostream& o,
                                  rtl::Reference< TypeManager > const & manager,
                                  OUString const & name,
                                  ::codemaker::GeneratedTypeSet & generated,
-                                 bool bFirst)
+                                 bool& rbFirst)
 {
     if ( name == "com.sun.star.uno.XInterface" ||
          name == "com.sun.star.lang.XLocalizable" ||
@@ -583,7 +583,7 @@ void generateFunctionParameterMap(std::ostream& o,
          i != ent2->getDirectMandatoryBases().end(); ++i)
     {
         generateFunctionParameterMap(
-            o, options, manager, i->name, generated, bFirst);
+            o, options, manager, i->name, generated, rbFirst);
     }
 
     if ( generated.contains(u2b(name)) )
@@ -595,7 +595,7 @@ void generateFunctionParameterMap(std::ostream& o,
              ent2->getDirectMethods().begin());
          i != ent2->getDirectMethods().end(); ++i)
     {
-        if ( bFirst ) {
+        if ( rbFirst ) {
             if (options.language == 2) {
                 o << "        ParamMap fpm;\n";
             }
@@ -603,7 +603,7 @@ void generateFunctionParameterMap(std::ostream& o,
                 o << "        java.util.Hashtable< Integer, String > fpm = "
                     "new java.util.Hashtable< Integer, String >();\n";
             }
-            bFirst = false;
+            rbFirst = false;
         } else
             if ( options.language == 2 ) {
                 o << "        fpm = ParamMap();\n";

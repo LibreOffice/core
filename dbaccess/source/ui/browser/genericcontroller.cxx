@@ -1132,16 +1132,6 @@ namespace
             }
             else
             {
-#if OSL_DEBUG_LEVEL > 0
-                Sequence< OUString > sServiceNames = xSI->getSupportedServiceNames();
-                const OUString* pLoop = sServiceNames.getConstArray();
-                for ( sal_Int32 i=0; i<sServiceNames.getLength(); ++i, ++pLoop )
-                {
-                    sal_Int32 nDummy = 0;
-                    (void)nDummy;
-                }
-#endif
-
                 // check which service we know ....
                 static const sal_Char* pTransTable[] = {
                     "com.sun.star.sdb.OfficeDatabaseDocument","sdatabase",
@@ -1157,7 +1147,7 @@ namespace
                     "lcl_getModuleHelpModuleName: odd size of translation table!" );
 
                 // loop through the table
-                sal_Int32 nTableEntries = SAL_N_ELEMENTS( pTransTable ) / 2;
+                const sal_Int32 nTableEntries = SAL_N_ELEMENTS( pTransTable ) / 2;
                 const sal_Char** pDocumentService = pTransTable;
                 const sal_Char** pHelpModuleName = pTransTable + 1;
                 for ( sal_Int32 j=0; j<nTableEntries; ++j )

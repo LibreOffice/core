@@ -161,7 +161,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
                  | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
                 &nInfo, &nConverted);
 
-            sal_uInt32 nExpectedInfo = (RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_UNDEFINED);
+            const sal_uInt32 nExpectedInfo = (RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_UNDEFINED);
 
             CPPUNIT_ASSERT_EQUAL((sal_Size) 0, nSize);
             CPPUNIT_ASSERT_EQUAL(nExpectedInfo, nInfo);

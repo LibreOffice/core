@@ -2266,19 +2266,19 @@ RTLFUNC(DateDiff)
         }
         case INTERVAL_H:
         {
-            double dFactor = 24.0;
+            const double dFactor = 24.0;
             dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
             break;
         }
         case INTERVAL_N:
         {
-            double dFactor =1440.0;
+            const double dFactor =1440.0;
             dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
             break;
         }
         case INTERVAL_S:
         {
-            double dFactor = 86400.0;
+            const double dFactor = 86400.0;
             dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
             break;
         }

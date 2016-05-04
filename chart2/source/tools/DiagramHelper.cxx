@@ -1053,9 +1053,8 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                 if( !( nType & util::NumberFormat::DATE ) )
                 {
                     //set a date format to the axis
-                    bool bCreate = true;
                     const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-                    Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
+                    Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), true/*bCreate*/ );
                     if( aKeySeq.getLength() )
                     {
                         xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(aKeySeq[0]));

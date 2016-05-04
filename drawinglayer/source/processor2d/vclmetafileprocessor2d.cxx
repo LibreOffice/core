@@ -119,7 +119,6 @@ namespace
     // #112245# helper to evtl. split filled polygons to maximum metafile point count
     bool fillPolyPolygonNeededToBeSplit(basegfx::B2DPolyPolygon& rPolyPolygon)
     {
-        bool bRetval(false);
         const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
         if(nPolyCount)
@@ -204,7 +203,7 @@ namespace
             }
         }
 
-        return bRetval;
+        return false;
     }
 
     /** Filter input polypolygon for effectively empty sub-fills

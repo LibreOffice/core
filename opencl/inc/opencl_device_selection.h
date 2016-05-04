@@ -464,8 +464,6 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
 
 inline ds_status readProfile(const OUString& rStreamName, std::unique_ptr<ds_profile>& pProfile)
 {
-    ds_status eStatus = DS_SUCCESS;
-
     if (rStreamName.isEmpty())
         return DS_INVALID_PROFILE;
 
@@ -557,7 +555,7 @@ inline ds_status readProfile(const OUString& rStreamName, std::unique_ptr<ds_pro
         aWalker.parent();
     }
 
-    return eStatus;
+    return DS_SUCCESS;
 }
 
 #endif

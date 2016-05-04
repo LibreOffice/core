@@ -845,7 +845,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
 
     if (!bText)
     {
-        double dPreviewVal = 1234.56789;
+        const double dPreviewVal = 1234.56789;
         SvxNumberInfoItem aFormatter(_pFormatter, dPreviewVal, SID_ATTR_NUMBERFORMAT_INFO);
         pFormatDescriptor->Put(aFormatter);
     }

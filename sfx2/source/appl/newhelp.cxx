@@ -854,7 +854,7 @@ void IndexTabPage_Impl::OpenKeyword()
 VCL_BUILDER_DECL_FACTORY(SearchBox)
 {
     (void)rMap;
-    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_DROPDOWN;
+    const WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_DROPDOWN;
     VclPtrInstance<SearchBox_Impl> pComboBox(pParent, nWinBits);
     pComboBox->EnableAutoSize(true);
     rRet = pComboBox;

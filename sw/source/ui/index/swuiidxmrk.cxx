@@ -444,8 +444,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
     bool bCancel;
 
     //todo/mba: assuming that notes should not be searched
-    bool bSearchInNotes = false;
-    rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
+    rSh.Find( aSearchOpt,  false/*bSearchInNotes*/, DOCPOS_START, DOCPOS_END, bCancel,
                         (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY) );
 }
 

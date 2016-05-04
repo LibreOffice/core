@@ -53,7 +53,6 @@ javaFrameworkError jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        javaFrameworkError errcode = JFW_E_NONE;
         if (pparInfo == nullptr || pSize == nullptr)
             return JFW_E_INVALID_ARG;
 
@@ -186,7 +185,7 @@ javaFrameworkError jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
             (*pparInfo)[index++] = l->detach();
 
         *pSize = nSize;
-        return errcode;
+        return JFW_E_NONE;
     }
     catch (const jfw::FrameworkException& e)
     {

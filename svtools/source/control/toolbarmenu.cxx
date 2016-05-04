@@ -1191,12 +1191,13 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
     if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_BUTTON))
     {
         ImplControlValue aControlValue;
-        ControlState nState = ControlState::PRESSED | ControlState::ENABLED;
 
         aControlValue.setTristateVal(BUTTONVALUE_ON);
 
         bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, PART_BUTTON,
-                                                     i_rRect, nState, aControlValue, OUString());
+                                                     i_rRect,
+                                                     ControlState::PRESSED | ControlState::ENABLED,
+                                                     aControlValue, OUString());
     }
 
     if (!bNativeOk)

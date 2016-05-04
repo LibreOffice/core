@@ -317,8 +317,6 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.WriteUInt16( nLen );
         else
         {
-            sal_uInt16 nSystem = JOBSET_FILE605_SYSTEM;
-
             const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
             Impl364JobSetupData aOldJobData;
             sal_uInt16 nOldJobDataSize = sizeof( aOldJobData );
@@ -340,7 +338,7 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
 //          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
             int nPos = rOStream.Tell();
             rOStream.WriteUInt16( nLen );
-            rOStream.WriteUInt16( nSystem );
+            rOStream.WriteUInt16( JOBSET_FILE605_SYSTEM );
             rOStream.Write( &aOldData, sizeof( aOldData ) );
             rOStream.Write( &aOldJobData, nOldJobDataSize );
             rOStream.Write( pJobData->mpDriverData, pJobData->mnDriverDataLen );

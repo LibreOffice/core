@@ -369,8 +369,7 @@ RTLFUNC(Chr)
     (void)pBasic;
     (void)bWrite;
 
-    bool bChrW = false;
-    implChr( rPar, bChrW );
+    implChr( rPar, false/*bChrW*/ );
 }
 
 RTLFUNC(ChrW)
@@ -378,8 +377,7 @@ RTLFUNC(ChrW)
     (void)pBasic;
     (void)bWrite;
 
-    bool bChrW = true;
-    implChr( rPar, bChrW );
+    implChr( rPar, true/*bChrW*/ );
 }
 
 RTLFUNC(CurDir)

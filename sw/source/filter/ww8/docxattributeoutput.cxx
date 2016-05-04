@@ -1900,12 +1900,11 @@ const NameToId constNameToIdMapping[] =
 
 boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
 {
-    sal_Int32 aLength = sizeof (constNameToIdMapping) / sizeof(NameToId);
-    for (sal_Int32 i=0; i < aLength; ++i)
+    for (const NameToId & rMapping : constNameToIdMapping)
     {
-        if (rName == constNameToIdMapping[i].maName)
+        if (rName == rMapping.maName)
         {
-            return constNameToIdMapping[i].maId;
+            return rMapping.maId;
         }
     }
     return boost::optional<sal_Int32>();

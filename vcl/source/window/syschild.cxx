@@ -53,7 +53,6 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                        sal_uInt16 nEvent, const void* /* pEvent */ )
 {
     VclPtr<SystemChildWindow> pWindow = static_cast<SystemChildWindow*>(pInst);
-    long nRet = 0;
 
     switch ( nEvent )
     {
@@ -100,7 +99,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             break;
     }
 
-    return nRet;
+    return 0;
 }
 
 void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )

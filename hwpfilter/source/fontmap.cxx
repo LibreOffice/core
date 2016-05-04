@@ -146,7 +146,7 @@ const char* RepFontTab[] =
 int getRepFamilyName(const char* orig, char *buf, double &ratio)
 {
     int i;
-    int size = sizeof(FontMapTab)/sizeof(FontEntry);
+    const int size = sizeof(FontMapTab)/sizeof(FontEntry);
     for( i = 0 ; i < size ; i++)
     {
         if( !strcmp(orig, FontMapTab[i].familyname) ){

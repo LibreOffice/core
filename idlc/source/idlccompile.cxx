@@ -185,13 +185,12 @@ bool copyFile(const OString* source, const OString& target)
         return false;
     }
 
-    size_t totalSize = 512;
-    char   pBuffer[513];
+    char pBuffer[513];
 
     while ( !feof(pSource) )
     {
         size_t readSize;
-        if ( (readSize = fread(pBuffer, 1, totalSize, pSource)) > 0 && !ferror(pSource) )
+        if ( (readSize = fread(pBuffer, 1, sizeof(pBuffer)-1, pSource)) > 0 && !ferror(pSource) )
         {
             if ( (fwrite(pBuffer, 1, readSize, pTarget)) != readSize || ferror(pTarget) )
             {
