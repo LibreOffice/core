@@ -374,7 +374,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             if( m_pApplyTempl->m_pFormatClipboard )
                 bFrameIsValidTarget = m_pApplyTempl->m_pFormatClipboard->HasContentForThisType( nsSelectionType::SEL_FRM );
             else if( !m_pApplyTempl->nColor )
-                bFrameIsValidTarget = ( m_pApplyTempl->eType == SFX_STYLE_FAMILY_FRAME );
+                bFrameIsValidTarget = ( m_pApplyTempl->eType == SfxStyleFamily::Frame );
 
             if( bFrameIsValidTarget &&
                         nullptr !=(pFormat = rSh.GetFormatFromObj( rLPt, &pRect )) &&
@@ -4869,7 +4869,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             OUString aStyleName;
             switch ( m_pApplyTempl->eType )
             {
-                case SFX_STYLE_FAMILY_PARA:
+                case SfxStyleFamily::Para:
                     if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
@@ -4881,7 +4881,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             aStyleName = m_pApplyTempl->aColl.pTextColl->GetName();
                     }
                     break;
-                case SFX_STYLE_FAMILY_CHAR:
+                case SfxStyleFamily::Char:
                     if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
@@ -4896,7 +4896,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             aStyleName = m_pApplyTempl->aColl.pCharFormat->GetName();
                     }
                     break;
-                case SFX_STYLE_FAMILY_FRAME :
+                case SfxStyleFamily::Frame :
                 {
                     const SwFrameFormat* pFormat = rSh.GetFormatFromObj( aDocPt );
                     if(dynamic_cast<const SwFlyFrameFormat*>( pFormat) )
@@ -4910,7 +4910,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     break;
                 }
-                case SFX_STYLE_FAMILY_PAGE:
+                case SfxStyleFamily::Page:
                     // no Undo with page templates
                     rSh.ChgCurPageDesc( *m_pApplyTempl->aColl.pPageDesc );
                     if ( m_pApplyTempl->aColl.pPageDesc )
@@ -4919,7 +4919,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                     bCallBase = false;
                     break;
-                case SFX_STYLE_FAMILY_PSEUDO:
+                case SfxStyleFamily::Pseudo:
                     if( !rSh.HasReadonlySel() )
                     {
                         rSh.SetCurNumRule( *m_pApplyTempl->aColl.pNumRule,
@@ -4932,6 +4932,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             aStyleName = m_pApplyTempl->aColl.pNumRule->GetName();
                     }
                     break;
+                default: break;
             }
 
             uno::Reference< frame::XDispatchRecorder > xRecorder =
@@ -5008,7 +5009,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
         bIdle = rSh.GetViewOptions()->IsIdle();
         rSh.GetViewOptions()->SetIdle( false );
     }
-    else if( rTempl.eType )
+    else if( rTempl.eType != SfxStyleFamily::None )
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
         m_pApplyTempl->nUndo = rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount();

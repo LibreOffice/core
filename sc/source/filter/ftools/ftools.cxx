@@ -257,12 +257,12 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyle
 
 ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, bool bForceName )
 {
-    return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PARA, bForceName );
+    return lclMakeStyleSheet( rPool, rStyleName, SfxStyleFamily::Para, bForceName );
 }
 
 ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, bool bForceName )
 {
-    return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PAGE, bForceName );
+    return lclMakeStyleSheet( rPool, rStyleName, SfxStyleFamily::Page, bForceName );
 }
 
 // *** byte string import operations *** --------------------------------------

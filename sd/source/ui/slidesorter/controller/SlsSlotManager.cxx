@@ -348,7 +348,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                     const SfxPoolItem& rItem (
                         rRequest.GetArgs()->Get(SID_STYLE_FAMILY));
                     pDocument->GetDocSh()->SetStyleFamily(
-                        static_cast<const SfxUInt16Item&>(rItem).GetValue());
+                        (SfxStyleFamily) static_cast<const SfxUInt16Item&>(rItem).GetValue());
                 }
             }
             break;

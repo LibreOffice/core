@@ -28,13 +28,17 @@
 // Public       (RSC_NOTYPE + 0x300) bis (RSC_NOTYPE + 0x3FF)
 
 //========== S F X =======================================
-enum SfxStyleFamily { SFX_STYLE_FAMILY_CHAR    = 1,
-                      SFX_STYLE_FAMILY_PARA    = 2,
-                      SFX_STYLE_FAMILY_FRAME   = 4,
-                      SFX_STYLE_FAMILY_PAGE    = 8,
-                      SFX_STYLE_FAMILY_PSEUDO  = 16,
-                      SFX_STYLE_FAMILY_ALL   = 0x7fff
-                      };
+// This is used as a flags enum in sw/, but only there,
+// so I don't pull in o3tl::typed_flags here
+enum class SfxStyleFamily {
+    None    = 0x00,
+    Char    = 0x01,
+    Para    = 0x02,
+    Frame   = 0x04,
+    Page    = 0x08,
+    Pseudo  = 0x10,
+    All     = 0x7fff
+};
 
 
 // SfxTemplate

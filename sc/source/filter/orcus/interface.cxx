@@ -1207,7 +1207,7 @@ size_t ScOrcusStyles::commit_cell_style()
     }
 
     ScStyleSheetPool* pPool = mrDoc.GetStyleSheetPool();
-    SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SFX_STYLE_FAMILY_PARA);
+    SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SfxStyleFamily::Para);
     SfxItemSet& rSet = rBase.GetItemSet();
 
     xf& rXf = maCellStyleXfs[maCurrentCellStyle.mnXFId];

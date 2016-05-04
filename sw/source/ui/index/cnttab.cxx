@@ -2229,7 +2229,7 @@ IMPL_LINK_TYPED(SwTOXEntryTabPage, EditStyleHdl, Button*, pBtn, void)
     if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectEntry());
-        SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_CHAR);
+        SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Char);
         vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell().
@@ -3742,7 +3742,7 @@ IMPL_LINK_TYPED( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn, void )
     if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pParaLayLB->GetSelectEntry());
-        SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA);
+        SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Para);
         vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();

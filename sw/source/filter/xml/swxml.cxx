@@ -703,19 +703,19 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         Sequence< OUString> aFamiliesSeq( nCount );
         OUString *pSeq = aFamiliesSeq.getArray();
         if( aOpt.IsFrameFormats() )
-            // SFX_STYLE_FAMILY_FRAME;
+            // SfxStyleFamily::Frame;
             *pSeq++ = "FrameStyles";
         if( aOpt.IsPageDescs() )
-            // SFX_STYLE_FAMILY_PAGE;
+            // SfxStyleFamily::Page;
             *pSeq++ = "PageStyles";
         if( aOpt.IsTextFormats() )
         {
-            // (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
+            // (SfxStyleFamily::Char|SfxStyleFamily::Para);
             *pSeq++ = "CharacterStyles";
             *pSeq++ = "ParagraphStyles";
         }
         if( aOpt.IsNumRules() )
-            // SFX_STYLE_FAMILY_PSEUDO;
+            // SfxStyleFamily::Pseudo;
             *pSeq++ = "NumberingStyles";
 
         xInfoSet->setPropertyValue( "StyleInsertModeFamilies",

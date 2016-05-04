@@ -1508,19 +1508,19 @@ IMPL_LINK_NOARG_TYPED(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
             // Enable templates controller
             switch ( pSearchItem->GetFamily() )
             {
-                case SFX_STYLE_FAMILY_CHAR:
+                case SfxStyleFamily::Char:
                     nId = SID_STYLE_FAMILY1; break;
 
-                case SFX_STYLE_FAMILY_PARA:
+                case SfxStyleFamily::Para:
                     nId = SID_STYLE_FAMILY2; break;
 
-                case SFX_STYLE_FAMILY_FRAME:
+                case SfxStyleFamily::Frame:
                     nId = SID_STYLE_FAMILY3; break;
 
-                case SFX_STYLE_FAMILY_PAGE:
+                case SfxStyleFamily::Page:
                     nId = SID_STYLE_FAMILY4; break;
 
-                case SFX_STYLE_FAMILY_ALL:
+                case SfxStyleFamily::All:
                     break;
 
                 default:

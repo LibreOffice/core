@@ -36,6 +36,7 @@
 #include "itabenum.hxx"
 #include <boost/optional.hpp>
 #include "dbmgr.hxx"
+#include <cnttab.hxx>
 
 class SfxViewFrame;
 class SfxBindings;
@@ -74,7 +75,7 @@ class SwTOXMark;
 struct SwDocStat;
 enum class SwBorderModes;
 enum class SwCharDlgMode;
-#include <cnttab.hxx>
+enum class SfxStyleFamily;
 
 namespace com{namespace sun{namespace star{
     namespace frame{
@@ -394,10 +395,10 @@ public:
                                                 const OUString* pFormatStr = nullptr) = 0;
     /// @param nSlot
     /// Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
-    /// Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
+    /// Currently used, if nRegion == SfxStyleFamily::Page in order to activate certain dialog pane
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 SfxStyleSheetBase&  rBase,
-                                                sal_uInt16          nRegion,
+                                                SfxStyleFamily      nRegion,
                                                 const OString&      sPage = OString(),
                                                 SwWrtShell*         pActShell = nullptr,
                                                 bool                bNew = false) = 0;

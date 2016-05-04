@@ -522,7 +522,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlag
     {
         OUString aStyle = aDocument.GetPageStyle( GetCurTab() );
         ScStyleSheetPool* pStPl = aDocument.GetStyleSheetPool();
-        SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(pStPl->Find(aStyle, SFX_STYLE_FAMILY_PAGE));
+        SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(pStPl->Find(aStyle, SfxStyleFamily::Page));
         if (pStyleSheet)
         {
             SfxItemSet& rSet = pStyleSheet->GetItemSet();

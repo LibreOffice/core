@@ -116,28 +116,28 @@ class SW_DLLPUBLIC SwDocShell
     /// Methods for StyleSheets
 
     /// @param nSlot
-    /// Only used for nFamily == SFX_STYLE_FAMILY_PAGE. Identifies optional Slot by which the edit is triggered.
+    /// Only used for nFamily == SfxStyleFamily::Page. Identifies optional Slot by which the edit is triggered.
     /// Used to activate certain dialog pane
     SAL_DLLPRIVATE sal_uInt16 Edit(
         const OUString &rName,
         const OUString& rParent,
-        const sal_uInt16 nFamily,
+        const SfxStyleFamily nFamily,
         sal_uInt16 nMask,
         const bool bNew,
         const OString& sPageId = OString(),
         SwWrtShell* pActShell = nullptr,
         const bool bBasic = false );
 
-    SAL_DLLPRIVATE bool                  Delete(const OUString &rName, sal_uInt16 nFamily);
-    SAL_DLLPRIVATE bool                  Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
-    SAL_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName,
-        const sal_uInt16 nFamily,
+    SAL_DLLPRIVATE bool                  Delete(const OUString &rName, SfxStyleFamily nFamily);
+    SAL_DLLPRIVATE bool                  Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden);
+    SAL_DLLPRIVATE SfxStyleFamily        ApplyStyles(const OUString &rName,
+        const SfxStyleFamily nFamily,
         SwWrtShell* pShell = nullptr,
         sal_uInt16 nMode = 0);
-    SAL_DLLPRIVATE sal_uInt16            DoWaterCan( const OUString &rName, sal_uInt16 nFamily);
-    SAL_DLLPRIVATE sal_uInt16            UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = nullptr);
-    SAL_DLLPRIVATE sal_uInt16            MakeByExample(const OUString &rName,
-                                        sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = nullptr);
+    SAL_DLLPRIVATE SfxStyleFamily        DoWaterCan( const OUString &rName, SfxStyleFamily nFamily);
+    SAL_DLLPRIVATE SfxStyleFamily        UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell = nullptr);
+    SAL_DLLPRIVATE SfxStyleFamily        MakeByExample(const OUString &rName,
+                                               SfxStyleFamily nFamily, sal_uInt16 nMask, SwWrtShell* pShell = nullptr);
 
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
 

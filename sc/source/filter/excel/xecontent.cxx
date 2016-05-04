@@ -621,7 +621,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     /*  Get formatting attributes here, and not in WriteBody(). This is needed to
         correctly insert all colors into the palette. */
 
-    if( SfxStyleSheetBase* pStyleSheet = GetDoc().GetStyleSheetPool()->Find( mrFormatEntry.GetStyle(), SFX_STYLE_FAMILY_PARA ) )
+    if( SfxStyleSheetBase* pStyleSheet = GetDoc().GetStyleSheetPool()->Find( mrFormatEntry.GetStyle(), SfxStyleFamily::Para ) )
     {
         const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
 

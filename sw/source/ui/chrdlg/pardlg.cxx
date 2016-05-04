@@ -246,7 +246,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         static_cast<SwParagraphNumTabPage&>(rPage).EnableNewStart();
         ListBox & rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
-        pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO);
+        pPool->SetSearchMask(SfxStyleFamily::Pseudo);
         const SfxStyleSheetBase* pBase = pPool->First();
         std::set<OUString> aNames;
         while(pBase)
@@ -261,7 +261,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
     // the color table) need to be added as items (e.g. SvxColorTableItem) to make
     // these pages find the needed attributes for fill style suggestions.
-    // These are added in SwDocStyleSheet::GetItemSet() for the SFX_STYLE_FAMILY_PARA on
+    // These are added in SwDocStyleSheet::GetItemSet() for the SfxStyleFamily::Para on
     // demand, but could also be directly added from the DrawModel.
     else if (m_nAreaId == nId)
     {

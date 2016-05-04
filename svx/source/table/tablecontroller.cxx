@@ -1417,7 +1417,7 @@ bool SvxTableController::GetStyleSheet( SfxStyleSheet*& rpStyleSheet ) const
 
 bool SvxTableController::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr )
 {
-    if( hasSelectedCells() && (!pStyleSheet || pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_FRAME) )
+    if( hasSelectedCells() && (!pStyleSheet || pStyleSheet->GetFamily() == SfxStyleFamily::Frame) )
     {
         if( mxTable.is() )
         {

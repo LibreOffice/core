@@ -86,7 +86,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
     const SfxItemPool* pEditPool(rExportP.GetDocument()->GetEditPool());
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
-    SfxStyleSheetIteratorPtr pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF);
+    SfxStyleSheetIteratorPtr pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page, 0xFFFF);
 
     if(pItr)
     {

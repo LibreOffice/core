@@ -221,7 +221,7 @@ lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
         SwStyleNameMapper::FillUIName(uStyle, sStyle,
                 nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
         SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
-            pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR));
+            pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
         if (!pStyle)
         {
             throw lang::IllegalArgumentException();
@@ -272,7 +272,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
             nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
-            pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_PARA));
+            pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Para));
     if (!pStyle)
     {
         throw lang::IllegalArgumentException();
@@ -412,7 +412,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     //default character style must not be set as default format
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDoc->GetDocShell()
-            ->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR));
+            ->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
     if (!pStyle ||
         (static_cast<SwDocStyleSheet*>(pStyle)->GetCharFormat() ==
              pDoc->GetDfltCharFormat()))

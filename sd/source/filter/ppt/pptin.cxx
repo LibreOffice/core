@@ -142,7 +142,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
         // iterate over all styles
         SdStyleSheetPool* pStyleSheetPool = pDocument->GetSdStyleSheetPool();
         SfxStyleSheetIteratorPtr aIter =
-                std::make_shared<SfxStyleSheetIterator>(pStyleSheetPool, SFX_STYLE_FAMILY_ALL);
+                std::make_shared<SfxStyleSheetIterator>(pStyleSheetPool, SfxStyleFamily::All);
 
         for (SfxStyleSheetBase *pSheet = aIter->First(); pSheet; pSheet = aIter->Next())
         {

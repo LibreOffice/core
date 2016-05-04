@@ -69,7 +69,7 @@ void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPa
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
     // the color table) need to be added as items (e.g. SvxColorTableItem) to make
     // these pages find the needed attributes for fill style suggestions.
-    // These are added in SwDocStyleSheet::GetItemSet() for the SFX_STYLE_FAMILY_PARA on
+    // These are added in SwDocStyleSheet::GetItemSet() for the SfxStyleFamily::Para on
     // demand, but could also be directly added from the DrawModel.
     else if (nPageId == m_nAreaPageId)
     {

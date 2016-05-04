@@ -221,7 +221,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
     switch ( rStyleSheet.GetFamily() )
     {
-        case SFX_STYLE_FAMILY_PAGE:
+        case SfxStyleFamily::Page:
             {
                 const sal_uInt16 nOldScale = getScaleValue(rStyleSheet, ATTR_PAGE_SCALE);
                 const sal_uInt16 nOldScaleToPages = getScaleValue(rStyleSheet, ATTR_PAGE_SCALETOPAGES);
@@ -241,7 +241,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
             }
             break;
 
-        case SFX_STYLE_FAMILY_PARA:
+        case SfxStyleFamily::Para:
             {
                 bool bNumFormatChanged;
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
@@ -367,7 +367,7 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
     EEHorizontalTextDirection eRet = EE_HTEXTDIR_DEFAULT;
 
     OUString aStyleName = GetPageStyle( nTab );
-    SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+    SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aStyleName, SfxStyleFamily::Page );
     if ( pStyle )
     {
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
@@ -482,7 +482,7 @@ public:
         // the calls.
 
         mrDoc.EnableIdle(false);
-        mpStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE);
+        mpStylePool->SetSearchMask(SfxStyleFamily::Page);
     }
 
     ~IdleCalcTextWidthScope()
@@ -553,7 +553,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
         aScope.setTab(0);
 
     ScTable* pTab = maTabs[aScope.Tab()];
-    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE));
+    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(pTab->aPageStyle, SfxStyleFamily::Page));
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
     if (!pStyle || getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
@@ -641,7 +641,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 {
                     pTab = maTabs[aScope.Tab()];
                     pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(
-                        pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE));
+                        pTab->aPageStyle, SfxStyleFamily::Page));
 
                     if ( pStyle )
                     {

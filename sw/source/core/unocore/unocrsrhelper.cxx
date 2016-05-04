@@ -801,10 +801,10 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                             {
                                 SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
                                 SfxStyleSheetBase* pBase;
-                                pBase = pPool->Find(pNewCharStyles[i], SFX_STYLE_FAMILY_CHAR);
+                                pBase = pPool->Find(pNewCharStyles[i], SfxStyleFamily::Char);
                             // shall it really be created?
                                 if(!pBase)
-                                    pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
+                                    pBase = &pPool->Make(pNewCharStyles[i], SfxStyleFamily::Page);
                                 pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
                             }
                             if(pCharFormat)

@@ -370,7 +370,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             auto const& pS = it->second;
             mpEditEngine->SetStyleSheet(
                 EditSelection(aStartPaM, aEndPaM),
-                static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find(pS->sName, SFX_STYLE_FAMILY_ALL)));
+                static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find(pS->sName, SfxStyleFamily::All)));
             nOutlLevel = pS->nOutlineNo;
         }
     }
@@ -443,7 +443,7 @@ SvxRTFStyleType* EditRTFParser::FindStyleSheet( const OUString& rName )
 SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
 {
     // Check if a template exists, then it will not be changed!
-    SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find( pRTFStyle->sName, SFX_STYLE_FAMILY_ALL ));
+    SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find( pRTFStyle->sName, SfxStyleFamily::All ));
     if ( pStyle )
         return pStyle;
 
@@ -460,7 +460,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
         }
     }
 
-    pStyle = static_cast<SfxStyleSheet*>( &mpEditEngine->GetStyleSheetPool()->Make( aName, SFX_STYLE_FAMILY_PARA ) );
+    pStyle = static_cast<SfxStyleSheet*>( &mpEditEngine->GetStyleSheetPool()->Make( aName, SfxStyleFamily::Para ) );
 
     // 1) convert and take over Items ...
     ConvertAndPutItems( pStyle->GetItemSet(), pRTFStyle->aAttrSet );
@@ -468,7 +468,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
     // 2) As long as Parent is not in the pool, also create this ...
     if ( !aParent.isEmpty() && ( aParent != aName ) )
     {
-        SfxStyleSheet* pS = static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find( aParent, SFX_STYLE_FAMILY_ALL ));
+        SfxStyleSheet* pS = static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find( aParent, SfxStyleFamily::All ));
         if ( !pS )
         {
             // If not found anywhere, create from RTF ...

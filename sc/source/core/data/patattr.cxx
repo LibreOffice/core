@@ -181,7 +181,7 @@ SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */)
         rStream.WriteUniOrByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                                     rStream.GetStreamCharSet() );
 
-    rStream.WriteInt16( SFX_STYLE_FAMILY_PARA );  // due to old data format
+    rStream.WriteInt16( (sal_uInt16) SfxStyleFamily::Para );  // due to old data format
 
     GetItemSet().Store( rStream );
 
@@ -1245,14 +1245,14 @@ void ScPatternAttr::UpdateStyleSheet(ScDocument* pDoc)
 {
     if (pName)
     {
-        pStyle = static_cast<ScStyleSheet*>(pDoc->GetStyleSheetPool()->Find(*pName, SFX_STYLE_FAMILY_PARA));
+        pStyle = static_cast<ScStyleSheet*>(pDoc->GetStyleSheetPool()->Find(*pName, SfxStyleFamily::Para));
 
         //  use Standard if Style is not found,
         //  to avoid empty display in Toolbox-Controller
         //  Assumes that "Standard" is always the 1st entry!
         if (!pStyle)
         {
-            SfxStyleSheetIteratorPtr pIter = pDoc->GetStyleSheetPool()->CreateIterator( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
+            SfxStyleSheetIteratorPtr pIter = pDoc->GetStyleSheetPool()->CreateIterator( SfxStyleFamily::Para, SFXSTYLEBIT_ALL );
             pStyle = dynamic_cast< ScStyleSheet* >(pIter->First());
         }
 

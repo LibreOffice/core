@@ -1278,10 +1278,10 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
 {
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     ScStyleSheet* pStyleSheet =
-        pStylePool->FindCaseIns( rStyle, SFX_STYLE_FAMILY_PARA );
+        pStylePool->FindCaseIns( rStyle, SfxStyleFamily::Para );
     if (!pStyleSheet)
         pStyleSheet = static_cast<ScStyleSheet*>(
-            pStylePool->Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA ));
+            pStylePool->Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SfxStyleFamily::Para ));
     if (pStyleSheet)
     {
         OSL_ENSURE(rRange.aStart.Tab() == rRange.aEnd.Tab(),
@@ -1304,7 +1304,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
     if (!pStyle)
         return;
 
-    if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PAGE )
+    if ( pStyle->GetFamily() == SfxStyleFamily::Page )
     {
         if ( nId == SfxStyleSheetHintId::MODIFIED )
         {
@@ -1344,7 +1344,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
             }
         }
     }
-    else if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PARA )
+    else if ( pStyle->GetFamily() == SfxStyleFamily::Para )
     {
         if ( nId == SfxStyleSheetHintId::MODIFIED)
         {
@@ -1375,7 +1375,7 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
 {
     OUString aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SfxStyleFamily::Page );
     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
     if ( pStyleSheet )
     {
@@ -1411,7 +1411,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
     OUString aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SfxStyleFamily::Page );
     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
     if ( pStyleSheet )
     {
@@ -1539,7 +1539,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                     OUString aOldName = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet
-                        = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
+                        = pStylePool->Find( aOldName, SfxStyleFamily::Page );
 
                     OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
@@ -1588,7 +1588,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             if (bUndo)
                             {
                                 GetUndoManager()->AddUndoAction(
-                                        new ScUndoModifyStyle( this, SFX_STYLE_FAMILY_PAGE,
+                                        new ScUndoModifyStyle( this, SfxStyleFamily::Page,
                                                     aOldData, aNewData ) );
                             }
 
@@ -1613,7 +1613,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         = aDocument.GetStyleSheetPool();
 
                     SfxStyleSheetBase* pStyleSheet
-                        = pStylePool->Find( aStr, SFX_STYLE_FAMILY_PAGE );
+                        = pStylePool->Find( aStr, SfxStyleFamily::Page );
 
                     OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
@@ -1761,7 +1761,7 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
                 {
                     OUString            aStr        = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool*   pStylePool  = aDocument.GetStyleSheetPool();
-                    SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( aStr, SFX_STYLE_FAMILY_PAGE );
+                    SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( aStr, SfxStyleFamily::Page );
 
                     OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
@@ -2068,7 +2068,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
         ScStyleSheetPool*  pStylePool  = aDocument.GetStyleSheetPool();
         SfxStyleSheetBase* pStyleSheet = pStylePool->
                                             Find( aDocument.GetPageStyle( nCurTab ),
-                                                  SFX_STYLE_FAMILY_PAGE );
+                                                  SfxStyleFamily::Page );
 
         OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 

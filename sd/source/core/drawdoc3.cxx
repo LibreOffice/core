@@ -1645,8 +1645,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 }
 
                 // Now look for all of them when searching
-                pSourceStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_ALL);
-                mxStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_ALL);
+                pSourceStyleSheetPool->SetSearchMask(SfxStyleFamily::All);
+                mxStyleSheetPool->SetSearchMask(SfxStyleFamily::All);
             }
 
             if (bUndo && !aCreatedStyles.empty())

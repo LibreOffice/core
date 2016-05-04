@@ -22,11 +22,13 @@
 
 #include <rtl/ustring.hxx>
 
+enum class SfxStyleFamily;
+
 class ScStyleNameConversion
 {
 public:
-    static OUString DisplayToProgrammaticName( const OUString& rDispName, sal_uInt16 nType );
-    static OUString ProgrammaticToDisplayName( const OUString& rProgName, sal_uInt16 nType );
+    static OUString DisplayToProgrammaticName( const OUString& rDispName, SfxStyleFamily nType );
+    static OUString ProgrammaticToDisplayName( const OUString& rProgName, SfxStyleFamily nType );
 };
 
 #endif

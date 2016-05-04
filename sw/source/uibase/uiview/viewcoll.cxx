@@ -55,7 +55,7 @@ void SwView::ExecColl(SfxRequest &rReq)
                         SfxStringItem aName(SID_STYLE_APPLY,
                                    static_cast<const SfxStringItem*>(pItem)->GetValue());
                         SfxUInt16Item aFamItem( SID_STYLE_FAMILY,
-                                            SFX_STYLE_FAMILY_PAGE);
+                                            (sal_uInt16) SfxStyleFamily::Page);
                         SwPtrItem aShell(FN_PARAM_WRTSHELL, GetWrtShellPtr());
                         SfxRequest aReq(SID_STYLE_APPLY, SfxCallMode::SLOT, GetPool());
                         aReq.AppendItem(aName);

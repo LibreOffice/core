@@ -72,7 +72,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     }
 
     SfxStyleSheetBase* pStyle = pDocument->GetStyleSheetPool()->
-                                    Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
+                                    Find( aPageStyle, SfxStyleFamily::Page );
     if ( !pStyle )
     {
         OSL_FAIL("UpdatePageBreaks: Style not found");
@@ -1121,17 +1121,17 @@ void ScTable::SetPageStyle( const OUString& rName )
     {
         OUString           aStrNew    = rName;
         SfxStyleSheetBasePool*  pStylePool = pDocument->GetStyleSheetPool();
-        SfxStyleSheetBase*      pNewStyle  = pStylePool->Find( aStrNew, SFX_STYLE_FAMILY_PAGE );
+        SfxStyleSheetBase*      pNewStyle  = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
 
         if ( !pNewStyle )
         {
             aStrNew = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-            pNewStyle = pStylePool->Find( aStrNew, SFX_STYLE_FAMILY_PAGE );
+            pNewStyle = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
         }
 
         if ( aPageStyle != aStrNew )
         {
-            SfxStyleSheetBase* pOldStyle = pStylePool->Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
+            SfxStyleSheetBase* pOldStyle = pStylePool->Find( aPageStyle, SfxStyleFamily::Page );
 
             if ( pOldStyle && pNewStyle )
             {

@@ -2151,7 +2151,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             {
                 ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(
                     pStylePool->Find(
-                        ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA));
+                        ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SfxStyleFamily::Para));
 
                 if (pStyleSheet)
                     rPat.SetStyleSheet( pStyleSheet, false );
@@ -2243,7 +2243,7 @@ void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRan
 
         ScStyleSheet* pStyleSheet =
             static_cast<ScStyleSheet*>(
-                rDoc.getDoc().GetStyleSheetPool()->Find(aStyleName, SFX_STYLE_FAMILY_PARA));
+                rDoc.getDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para));
 
         if (pStyleSheet)
         {
@@ -2631,16 +2631,16 @@ void CellStyle::createCellStyle()
         {
             // use existing "Default" style sheet
             mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find(
-                ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) );
+                ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) );
             OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
             bCreatePattern = true;
         }
         else
         {
-            mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find( maFinalName, SFX_STYLE_FAMILY_PARA ) );
+            mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find( maFinalName, SfxStyleFamily::Para ) );
             if( !mpStyleSheet )
             {
-                mpStyleSheet = &static_cast< ScStyleSheet& >( rDoc.GetStyleSheetPool()->Make( maFinalName, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ) );
+                mpStyleSheet = &static_cast< ScStyleSheet& >( rDoc.GetStyleSheetPool()->Make( maFinalName, SfxStyleFamily::Para, SFXSTYLEBIT_USERDEF ) );
                 bCreatePattern = true;
             }
         }

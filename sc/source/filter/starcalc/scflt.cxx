@@ -689,7 +689,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         OUString aName = lcl_MakeOldPageStyleFormatName( i );
 
         ScStyleSheet* pSheet = static_cast<ScStyleSheet*>( &pStylePool->Make( aName,
-                                    SFX_STYLE_FAMILY_PAGE,
+                                    SfxStyleFamily::Page,
                                     SFXSTYLEBIT_USERDEF | SCSTYLEBIT_STANDARD ) );
         // #i68483# set page style name at sheet...
         pDoc->SetPageStyle( static_cast< SCTAB >( i ), aName );
@@ -1107,17 +1107,17 @@ void Sc10Import::LoadPatternCollection()
     {
         Sc10PatternData* pPattern = pPatternCollection->At( i );
         OUString aName( pPattern->Name, strlen(pPattern->Name), DEFCHARSET );
-        SfxStyleSheetBase* pStyle = pStylePool->Find( aName, SFX_STYLE_FAMILY_PARA );
+        SfxStyleSheetBase* pStyle = pStylePool->Find( aName, SfxStyleFamily::Para );
         if( pStyle == nullptr )
-            pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
+            pStylePool->Make( aName, SfxStyleFamily::Para );
         else
         {
             pPattern->Name[ 27 ] = 0;
             strcat( pPattern->Name, "_Old" );
             aName = SC10TOSTRING( pPattern->Name );
-            pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
+            pStylePool->Make( aName, SfxStyleFamily::Para );
         }
-        pStyle = pStylePool->Find( aName, SFX_STYLE_FAMILY_PARA );
+        pStyle = pStylePool->Find( aName, SfxStyleFamily::Para );
         if( pStyle != nullptr )
         {
             SfxItemSet &rItemSet = pStyle->GetItemSet();
@@ -2104,7 +2104,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             if (pPattern != nullptr)
             {
                 ScStyleSheet* pStyle = static_cast<ScStyleSheet*>( pStylePool->Find(
-                                    SC10TOSTRING( pPattern->Name ), SFX_STYLE_FAMILY_PARA) );
+                                    SC10TOSTRING( pPattern->Name ), SfxStyleFamily::Para) );
 
                 if (pStyle != nullptr)
                     pDoc->ApplyStyleAreaTab(Col, nStart, Col, nEnd, Tab, *pStyle);

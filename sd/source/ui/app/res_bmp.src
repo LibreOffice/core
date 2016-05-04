@@ -287,7 +287,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem RID_GRAPHICSTYLEFAMILY
         {
             Text [ en-US ] = "Graphic Styles" ;
-            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            StyleFamily = SfxStyleFamily::Para ;
             FilterList [ en-US ] =
             {
                 < "All Styles" ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
@@ -299,7 +299,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem RID_PRESENTATIONSTYLEFAMILY
         {
             Text [ en-US ] = "Presentation Styles" ;
-            StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            StyleFamily = SfxStyleFamily::Pseudo ;
             FilterList [ en-US ] =
             {
                 < "All Styles" ; SFXSTYLEBIT_ALL_VISIBLE ; > ;

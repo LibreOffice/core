@@ -1707,7 +1707,7 @@ void ScUndoSelectionStyle::DoChange( const bool bUndo )
     {
         ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
         ScStyleSheet* pStyleSheet =
-            static_cast<ScStyleSheet*>( pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA ) );
+            static_cast<ScStyleSheet*>( pStlPool->Find( aStyleName, SfxStyleFamily::Para ) );
         if (!pStyleSheet)
         {
             OSL_FAIL("StyleSheet not found");
@@ -1746,7 +1746,7 @@ void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
         ScDocument& rDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
         ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>( pStlPool->
-                                            Find( aStyleName, SFX_STYLE_FAMILY_PARA ));
+                                            Find( aStyleName, SfxStyleFamily::Para ));
         if (!pStyleSheet)
         {
             OSL_FAIL("StyleSheet not found");

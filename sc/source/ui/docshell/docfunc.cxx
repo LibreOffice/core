@@ -1392,7 +1392,7 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
     }
 
     ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>( rDoc.GetStyleSheetPool()->Find(
-                                                rStyleName, SFX_STYLE_FAMILY_PARA ));
+                                                rStyleName, SfxStyleFamily::Para ));
     if (!pStyleSheet)
         return false;
 

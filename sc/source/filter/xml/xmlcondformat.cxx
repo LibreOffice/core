@@ -588,7 +588,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                 sExpression = sValue;
                 break;
             case XML_TOK_CONDITION_APPLY_STYLE_NAME:
-                sStyle = ScStyleNameConversion::ProgrammaticToDisplayName(sValue, SFX_STYLE_FAMILY_PARA );
+                sStyle = ScStyleNameConversion::ProgrammaticToDisplayName(sValue, SfxStyleFamily::Para );
                 break;
             case XML_TOK_CONDITION_BASE_CELL_ADDRESS:
                 sAddress = sValue;
@@ -789,7 +789,7 @@ ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                 sDateType = sValue;
                 break;
             case XML_TOK_COND_DATE_STYLE:
-                sStyle = ScStyleNameConversion::ProgrammaticToDisplayName(sValue, SFX_STYLE_FAMILY_PARA );
+                sStyle = ScStyleNameConversion::ProgrammaticToDisplayName(sValue, SfxStyleFamily::Para );
                 break;
             default:
                 break;

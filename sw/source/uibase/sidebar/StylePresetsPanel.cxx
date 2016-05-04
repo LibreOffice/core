@@ -48,7 +48,7 @@ namespace {
 void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
                    OUString const & sName, sal_Int32 nHeight, Rectangle& aRect)
 {
-    SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(sName, SFX_STYLE_FAMILY_PARA);
+    SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(sName, SfxStyleFamily::Para);
 
     if (pStyleSheet)
     {
