@@ -117,6 +117,8 @@ public:
 
     bool AddFilterNameCheckOwnFile(
                         css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr );
+    bool HasValidProgClassId(
+                        css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr );
 #endif
 
     OUString GetDefaultFilterFromServiceName( const OUString& aServName, sal_Int32 nVersion );

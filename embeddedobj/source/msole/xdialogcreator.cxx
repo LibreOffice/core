@@ -219,7 +219,8 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator;
             ::comphelper::MimeConfigurationHelper aHelper( comphelper::getComponentContext(m_xFactory) );
 
-            if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
+            if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) ||
+                    !aHelper.HasValidProgClassId( aMediaDescr ) ) // If windows can't open it, let Libreoffice try
                 xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
             else
                 xEmbCreator = embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );

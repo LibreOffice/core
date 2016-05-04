@@ -42,6 +42,10 @@ $(eval $(call gb_Library_use_externals,comphelper,\
     icu_headers \
 ))
 
+$(eval $(call gb_Library_use_system_win32_libs,comphelper,\
+	urlmon \
+    ole32 \
+))
 $(eval $(call gb_Library_use_libraries,comphelper,\
     cppu \
     cppuhelper \

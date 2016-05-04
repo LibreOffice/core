@@ -31,6 +31,12 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
 
+#ifdef _WIN32
+
+#include <urlmon.h>
+#include <ole2.h>
+
+#endif
 
 using namespace ::com::sun::star;
 using namespace comphelper;
@@ -705,6 +711,45 @@ bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
     return false;
 }
 
+bool MimeConfigurationHelper::HasValidProgClassId(
+                        uno::Sequence< beans::PropertyValue >& aMediaDescr )
+{
+    ::rtl::OUString aUrl;
+    ::rtl::OUString aFilePath;
+    for (sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++)
+        if (aMediaDescr[nInd].Name == "URL")
+           aMediaDescr[nInd].Value >>= aUrl;
+
+    if ( aUrl.isEmpty() )
+        return false; // Exception should be thrown later in the appropriate place
+
+    if ( ::osl::FileBase::getSystemPathFromFileURL(aUrl, aFilePath) != ::osl::FileBase::E_None )
+        throw ::css::uno::RuntimeException();
+
+    CLSID aClassID;
+    HRESULT aRes = GetClassFileOrMime(
+        NULL                                            // Default binding context
+        , reinterpret_cast<LPCWSTR>(aFilePath.getStr()) // Filepath
+        , NULL                                          // Buffer containing beginning of file
+        , 0                                             // Size of buffer
+        , NULL                                          // Mimetype of file
+        , 0                                             // reserved
+        , &aClassID);                                   // Out classID
+
+    if ( FAILED( aRes ) || IsEqualCLSID( aClassID, CLSID_NULL ) )
+        return false;
+
+    LPOLESTR pProgID;
+
+    aRes = ProgIDFromCLSID(aClassID, &pProgID);
+
+    if ( FAILED( aRes ) )
+        return false;
+
+    CoTaskMemFree(pProgID);
+
+    return true;
+}
 #endif
 
 OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUString& aServiceName, sal_Int32 nVersion )
