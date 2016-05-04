@@ -599,6 +599,76 @@ SearchAndParseThread::~SearchAndParseThread()
 {
 }
 
+namespace {
+
+bool getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPersonaSetting )
+{
+    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+    if ( !xFileAccess.is() )
+        return false;
+
+    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference< io::XInputStream > xStream;
+    try {
+        css:: uno::Reference< task::XInteractionHandler > xIH(
+            css::task::InteractionHandler::createWithParent( xContext, nullptr ) );
+
+        xFileAccess->setInteractionHandler( new comphelper::SimpleFileAccessInteraction( xIH ) );
+        xStream = xFileAccess->openFileRead( rURL );
+
+        if( !xStream.is() )
+            return false;
+    }
+    catch (...)
+    {
+        return false;
+    }
+
+    // read the persona specification
+    // NOTE: Parsing for real is an overkill here; and worse - I tried, and
+    // the HTML the site provides is not 100% valid ;-)
+    const sal_Int32 BUF_LEN = 8000;
+    uno::Sequence< sal_Int8 > buffer( BUF_LEN );
+    OStringBuffer aBuffer( 64000 );
+
+    sal_Int32 nRead = 0;
+    while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+
+    if ( nRead > 0 )
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+
+    xStream->closeInput();
+
+    // get the important bits of info
+    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
+
+    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) )
+        return false;
+
+    // copy the images to the user's gallery
+    OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros( gallery );
+    gallery += "/user/gallery/personas/";
+    gallery += aName + "/";
+    osl::Directory::createPath( gallery );
+
+    OUString aPreviewFile( INetURLObject( aPreviewURL ).getName() );
+
+    try {
+        xFileAccess->copy( aPreviewURL, gallery + aPreviewFile );
+    }
+    catch ( const uno::Exception & )
+    {
+        return false;
+    }
+    *pPreviewFile = gallery + aPreviewFile;
+    *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
+    return true;
+}
+
+}
+
 void SearchAndParseThread::execute()
 {
     if( m_aURL.startsWith( "https://" ) )
@@ -775,72 +845,6 @@ void SearchAndParseThread::execute()
         m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
         m_pPersonaDialog->EndDialog( RET_OK );
     }
-}
-
-bool SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPersonaSetting )
-{
-    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-    if ( !xFileAccess.is() )
-        return false;
-
-    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference< io::XInputStream > xStream;
-    try {
-        css:: uno::Reference< task::XInteractionHandler > xIH(
-            css::task::InteractionHandler::createWithParent( xContext, nullptr ) );
-
-        xFileAccess->setInteractionHandler( new comphelper::SimpleFileAccessInteraction( xIH ) );
-        xStream = xFileAccess->openFileRead( rURL );
-
-        if( !xStream.is() )
-            return false;
-    }
-    catch (...)
-    {
-        return false;
-    }
-
-    // read the persona specification
-    // NOTE: Parsing for real is an overkill here; and worse - I tried, and
-    // the HTML the site provides is not 100% valid ;-)
-    const sal_Int32 BUF_LEN = 8000;
-    uno::Sequence< sal_Int8 > buffer( BUF_LEN );
-    OStringBuffer aBuffer( 64000 );
-
-    sal_Int32 nRead = 0;
-    while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
-        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
-
-    if ( nRead > 0 )
-        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
-
-    xStream->closeInput();
-
-    // get the important bits of info
-    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
-
-    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) )
-        return false;
-
-    // copy the images to the user's gallery
-    OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
-    rtl::Bootstrap::expandMacros( gallery );
-    gallery += "/user/gallery/personas/";
-    gallery += aName + "/";
-    osl::Directory::createPath( gallery );
-
-    OUString aPreviewFile( INetURLObject( aPreviewURL ).getName() );
-
-    try {
-        xFileAccess->copy( aPreviewURL, gallery + aPreviewFile );
-    }
-    catch ( const uno::Exception & )
-    {
-        return false;
-    }
-    *pPreviewFile = gallery + aPreviewFile;
-    *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

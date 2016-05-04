@@ -125,7 +125,6 @@ private:
 
     virtual ~SearchAndParseThread();
     virtual void execute() override;
-    bool getPreviewFile( const OUString&, OUString *, OUString * );
 
 public:
 
