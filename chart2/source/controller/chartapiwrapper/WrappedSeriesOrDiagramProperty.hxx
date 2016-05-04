@@ -141,7 +141,7 @@ public:
         if( m_ePropertyType == DIAGRAM )
         {
             bool bHasAmbiguousValue = false;
-            PROPERTYTYPE aValue;
+            PROPERTYTYPE aValue = PROPERTYTYPE();
             if( detectInnerValue( aValue, bHasAmbiguousValue ) )
             {
                 if(bHasAmbiguousValue)
