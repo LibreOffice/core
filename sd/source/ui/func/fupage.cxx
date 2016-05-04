@@ -154,15 +154,6 @@ void FuPage::DoExecute( SfxRequest& )
             ApplyItemSet( mpArgs );
             mpView->SetAttributes( *mpArgs );
         }
-
-        static sal_uInt16 SidArray[] = {
-                        SID_ATTR_PAGE_COLOR,
-                        SID_ATTR_PAGE_GRADIENT,
-                        SID_ATTR_PAGE_HATCH,
-                        SID_ATTR_PAGE_BITMAP,
-                        SID_ATTR_PAGE_FILLSTYLE,
-                        0 };
-        mpDrawViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
 }
 
