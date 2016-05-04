@@ -1008,7 +1008,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     XMLTokenEnum eType = XML_TOKEN_INVALID;
     switch ( nFmtType )
     {
-        // type is 0 if a format contains no recognized elements
+        // Type UNDEFINED likely is a crappy format string for that we could
+        // not decide on any format type (and maybe could try harder?), but the
+        // resulting XMLTokenEnum should be something valid, so make that
+        // number-style.
+        case css::util::NumberFormat::UNDEFINED:
+            SAL_WARN("xmloff.style","UNDEFINED number format: '" << rFormat.GetFormatstring() << "'");
+            // fallthru
+        // Type is 0 if a format contains no recognized elements
         // (like text only) - this is handled as a number-style.
         case 0:
         case css::util::NumberFormat::EMPTY:
