@@ -227,7 +227,7 @@ public:
     void setValue(sal_Bool const *, Type const &) = delete;
     void setValue(sal_Bool const *, typelib_TypeDescriptionReference *)
         = delete;
-    void setValue(sal_Bool const *, typelib_TypeDescription *) = delete;
+    // void setValue(sal_Bool const *, typelib_TypeDescription *) = delete;
     void setValue(std::nullptr_t, Type const & type)
     { setValue(static_cast<void *>(nullptr), type); }
     void setValue(std::nullptr_t, typelib_TypeDescriptionReference * type)

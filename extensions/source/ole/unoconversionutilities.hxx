@@ -1557,8 +1557,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 }
                 case VT_BOOL:
                 {
-                    sal_Bool b= var.boolVal == VARIANT_TRUE;
-                    rAny.setValue( &b, cppu::UnoType<decltype(b)>::get());
+                    rAny <<= (var.boolVal == VARIANT_TRUE);
                     break;
                 }
                 case VT_I1:
