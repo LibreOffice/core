@@ -46,7 +46,9 @@ StringMap ScGridWinUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap["SelectedTable"] = OUString::number(0);
+    aMap["SelectedTable"] = OUString::number(mxGridWindow->getViewData()->GetTabNo());
+    aMap["CurrentColumn"] = OUString::number(mxGridWindow->getViewData()->GetCurX());
+    aMap["CurrentRow"] = OUString::number(mxGridWindow->getViewData()->GetCurY());
     return aMap;
 }
 
