@@ -256,8 +256,8 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     aFont.SetFontSize(aFontSize);
 };
 
-WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem )
-    : pOut( pWinMtfOutput )
+WinMtf::WinMtf( GDIMetaFile& rGDIMetaFile, SvStream& rStreamWMF, FilterConfigItem* pConfigItem )
+    : pOut( o3tl::make_unique<WinMtfOutput>(rGDIMetaFile) )
     , pWMF( &rStreamWMF )
     , nEndPos( 0 )
     , pFilterConfigItem( pConfigItem )
@@ -282,8 +282,6 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigI
 
 WinMtf::~WinMtf()
 {
-    delete pOut;
-
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
 }
@@ -532,97 +530,89 @@ tools::PolyPolygon& WinMtfOutput::ImplMap( tools::PolyPolygon& rPolyPolygon )
 
 void WinMtfOutput::SelectObject( sal_Int32 nIndex )
 {
-    std::unique_ptr<GDIObj> stock_object;
-    GDIObj *pGDIObj = nullptr;
-
     if ( nIndex & ENHMETA_STOCK_OBJECT )
     {
-        stock_object = o3tl::make_unique<GDIObj>();
-        pGDIObj = stock_object.get();
-    }
-    else
-    {
-        nIndex &= 0xffff;       // safety check: don't allow index to be > 65535
-
-        if ( (sal_uInt32)nIndex < vGDIObj.size() )
-            pGDIObj = vGDIObj[ nIndex ].get();
-    }
-
-    if( !pGDIObj )
-        return;
-
-    if ( nIndex & ENHMETA_STOCK_OBJECT )
-    {
-        sal_uInt16 nStockId = (sal_uInt8)nIndex;
+         sal_uInt16 nStockId = (sal_uInt8)nIndex;
         switch( nStockId )
         {
             case WHITE_BRUSH :
             {
-                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ) ) );
+                maFillStyle = WinMtfFillStyle( Color( COL_WHITE ) );
+                mbFillStyleSelected = true;
             }
             break;
             case LTGRAY_BRUSH :
             {
-                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_LIGHTGRAY ) ) );
+                maFillStyle = WinMtfFillStyle( Color( COL_LIGHTGRAY ) );
+                mbFillStyleSelected = true;
             }
             break;
             case GRAY_BRUSH :
             case DKGRAY_BRUSH :
             {
-                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_GRAY ) ) );
+                maFillStyle = WinMtfFillStyle( Color( COL_GRAY ) );
+                mbFillStyleSelected = true;
             }
             break;
             case BLACK_BRUSH :
             {
-                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_BLACK ) ) );
+                maFillStyle = WinMtfFillStyle( Color( COL_BLACK ) );
+                mbFillStyleSelected = true;
             }
             break;
             case NULL_BRUSH :
             {
-                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_TRANSPARENT ), true ) );
+               maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
+               mbFillStyleSelected = true;
             }
             break;
             case WHITE_PEN :
             {
-                pGDIObj->Set( GDI_PEN, new WinMtfLineStyle( Color( COL_WHITE ) ) );
+                maLineStyle = WinMtfLineStyle( Color( COL_WHITE ) );
             }
             break;
             case BLACK_PEN :
             {
-                pGDIObj->Set( GDI_PEN, new WinMtfLineStyle( Color( COL_BLACK ) ) );
+                maLineStyle = WinMtfLineStyle( Color( COL_BLACK ) );
             }
             break;
             case NULL_PEN :
             {
-                pGDIObj->Set( GDI_PEN, new WinMtfLineStyle( Color( COL_TRANSPARENT ), true ) );
+                maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), true );
             }
             break;
             default:
             break;
         }
     }
-    if ( pGDIObj->pStyle )
+    else
     {
-        switch( pGDIObj->eType )
+        nIndex &= 0xffff;       // safety check: don't allow index to be > 65535
+
+        GDIObj *pGDIObj = nullptr;
+
+        if ( (sal_uInt32)nIndex < vGDIObj.size() )
+            pGDIObj = vGDIObj[ nIndex ].get();
+
+        if ( pGDIObj )
         {
-            case GDI_PEN :
-                maLineStyle = static_cast<WinMtfLineStyle*>(pGDIObj->pStyle);
-            break;
-            case GDI_BRUSH :
+            const auto pen = dynamic_cast<WinMtfLineStyle*>(pGDIObj);
+            if (pen)
+                maLineStyle = *pen;
+
+            const auto brush = dynamic_cast<WinMtfFillStyle*>(pGDIObj);
+            if (brush)
             {
-                maFillStyle = static_cast<WinMtfFillStyle*>(pGDIObj->pStyle);
+                maFillStyle = *brush;
                 mbFillStyleSelected = true;
             }
-            break;
-            case GDI_FONT :
-                maFont = static_cast<WinMtfFontStyle*>(pGDIObj->pStyle)->aFont;
-            break;
-            default:
-            break;  //  -Wall many options not handled.
+
+            const auto font = dynamic_cast<WinMtfFontStyle*>(pGDIObj);
+            if (font)
+                maFont = font->aFont;
         }
     }
 }
-
 
 void WinMtfOutput::SetTextLayoutMode( ComplexTextLayoutMode nTextLayoutMode )
 {
@@ -683,20 +673,21 @@ void WinMtfOutput::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPo
     }
 }
 
-void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
+void WinMtfOutput::CreateObject( std::unique_ptr<GDIObj> pObject )
 {
-    if ( pStyle )
+    if ( pObject )
     {
-        if ( eType == GDI_FONT )
+        const auto pLineStyle = dynamic_cast<WinMtfLineStyle*>(pObject.get());
+        const auto pFontStyle = dynamic_cast<WinMtfFontStyle*>(pObject.get());
+
+        if ( pFontStyle )
         {
-            WinMtfFontStyle* pFontStyle = static_cast<WinMtfFontStyle*>(pStyle);
             if (pFontStyle->aFont.GetFontHeight() == 0)
                 pFontStyle->aFont.SetFontHeight(423);
             ImplMap(pFontStyle->aFont); // defaulting to 12pt
         }
-        else if ( eType == GDI_PEN )
+        else if ( pLineStyle )
         {
-            WinMtfLineStyle* pLineStyle = static_cast<WinMtfLineStyle*>(pStyle);
             Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
             aSize = ImplMap(aSize);
             pLineStyle->aLineInfo.SetWidth(aSize.Width());
@@ -711,26 +702,26 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
     if ( nIndex == vGDIObj.size() )
         ImplResizeObjectArry( vGDIObj.size() + 16 );
 
-    vGDIObj[ nIndex ] = o3tl::make_unique<GDIObj>( eType, pStyle );
+    vGDIObj[ nIndex ] = std::move(pObject);
 }
 
-void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pStyle )
+void WinMtfOutput::CreateObjectIndexed( sal_Int32 nIndex, std::unique_ptr<GDIObj> pObject )
 {
     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
     {
         nIndex &= 0xffff;       // safety check: do not allow index to be > 65535
-        if ( pStyle )
+        if ( pObject )
         {
-            if ( eType == GDI_FONT )
+            const auto pLineStyle = dynamic_cast<WinMtfLineStyle*>(pObject.get());
+            const auto pFontStyle = dynamic_cast<WinMtfFontStyle*>(pObject.get());
+            if ( pFontStyle )
             {
-                WinMtfFontStyle* pFontStyle = static_cast<WinMtfFontStyle*>(pStyle);
                 if (pFontStyle->aFont.GetFontHeight() == 0)
                     pFontStyle->aFont.SetFontHeight(423);
                 ImplMap(pFontStyle->aFont);
             }
-            else if ( eType == GDI_PEN )
+            else if ( pLineStyle )
             {
-                WinMtfLineStyle* pLineStyle = static_cast<WinMtfLineStyle*>(pStyle);
                 Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
                 pLineStyle->aLineInfo.SetWidth( ImplMap(aSize).Width() );
 
@@ -747,27 +738,12 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )
             ImplResizeObjectArry( nIndex + 16 );
 
-        vGDIObj[ nIndex ] = o3tl::make_unique<GDIObj>( eType, pStyle );
+        vGDIObj[ nIndex ] = std::move(pObject);
     }
-    else
-    {
-        switch ( eType )
-        {
-            case GDI_PEN :
-                delete static_cast<WinMtfLineStyle*>(pStyle);
-            break;
-            case GDI_BRUSH :
-                delete static_cast<WinMtfFillStyle*>(pStyle);
-            break;
-            case GDI_FONT :
-                delete static_cast<WinMtfFontStyle*>(pStyle);
-            break;
+}
 
-            default:
-                OSL_FAIL( "unsupported style not deleted" );
-                break;
-        }
-    }
+GDIObj::~GDIObj()
+{
 }
 
 void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
