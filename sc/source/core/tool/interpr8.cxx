@@ -1396,15 +1396,7 @@ void ScInterpreter::ScConcat_MS()
     short nParamCount = GetByte();
 
     //reverse order of parameter stack to simplify concatenation:
-    FormulaToken* p;
-    assert( sp >= nParamCount && " less stack elements than parameters");
-    short nStackParams = std::min<short>( sp, nParamCount);
-    for ( short i = 0; i < short( nStackParams / 2 ); i++ )
-    {
-        p = pStack[ sp - ( nStackParams - i ) ];
-        pStack[ sp - ( nStackParams - i ) ] = pStack[ sp - 1 - i ];
-        pStack[ sp - 1 - i ] = p;
-    }
+    ReverseStack( nParamCount );
 
     size_t nRefInList = 0;
     while ( nParamCount-- > 0 && !nGlobalError )
@@ -1524,15 +1516,7 @@ void ScInterpreter::ScTextJoin_MS()
     if ( MustHaveParamCountMin( nParamCount, 3 ) )
     {
         //reverse order of parameter stack to simplify processing
-        FormulaToken* p;
-        assert( sp >= nParamCount && " less stack elements than parameters");
-        short nStackParams = std::min<short>( sp, nParamCount);
-        for ( short i = 0; i < short( nStackParams / 2 ); i++ )
-        {
-            p = pStack[ sp - ( nStackParams - i ) ];
-            pStack[ sp - ( nStackParams - i ) ] = pStack[ sp - 1 - i ];
-            pStack[ sp - 1 - i ] = p;
-        }
+        ReverseStack( nParamCount );
 
         // get aDelimiters and bSkipEmpty
         std::vector< OUString > aDelimiters;
