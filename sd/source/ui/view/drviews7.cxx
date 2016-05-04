@@ -44,6 +44,10 @@
 #include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -1548,16 +1552,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     GetModeSwitchingMenuState (rSet);
 }
 
-void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
-{
-    SdPage *pPage = getCurrentPage();
-    SvxPageItem aPageItem(SID_ATTR_PAGE);
-    aPageItem.SetLandscape( pPage->GetOrientation() == ORIENTATION_LANDSCAPE );
-
-    rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize()));
-    rSet.Put( aPageItem );
-}
-
 void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 {
     //DrawView
@@ -1642,6 +1636,125 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     svx::ExtrusionBar::getState( mpDrawView, rSet );
     svx::FontworkBar::getState( mpDrawView, rSet );
 }
+
+void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
+{
+    SdPage *pPage = getCurrentPage();
+
+    if (pPage != nullptr && GetDoc() != nullptr)
+    {
+        SvxPageItem aPageItem(SID_ATTR_PAGE);
+        aPageItem.SetLandscape( pPage->GetOrientation() == ORIENTATION_LANDSCAPE );
+
+        rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize() ));
+        rSet.Put(aPageItem);
+
+        SfxItemSet aMergedAttr(GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0);
+        SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
+        MergePageBackgroundFilling(pPage, pStyleSheet, meEditMode == EM_MASTERPAGE, aMergedAttr);
+
+        drawing::FillStyle eXFS = (drawing::FillStyle) static_cast<const XFillStyleItem*>( aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue();
+        XFillStyleItem aFillStyleItem( eXFS );
+        aFillStyleItem.SetWhich( SID_ATTR_PAGE_FILLSTYLE );
+        rSet.Put(aFillStyleItem);
+
+        switch (eXFS)
+        {
+            case (drawing::FillStyle_SOLID):
+            {
+                Color aColor =  static_cast<const XFillColorItem*>( aMergedAttr.GetItem( XATTR_FILLCOLOR ) )->GetColorValue();
+                XFillColorItem aFillColorItem( OUString(), aColor );
+                aFillColorItem.SetWhich( SID_ATTR_PAGE_COLOR );
+                rSet.Put( aFillColorItem );
+            }
+            break;
+
+            case (drawing::FillStyle_GRADIENT):
+            {
+                const XGradient& xGradient =  static_cast<const XFillGradientItem*>( aMergedAttr.GetItem( XATTR_FILLGRADIENT ) )->GetGradientValue();
+                XFillGradientItem aFillGradientItem( OUString(), xGradient, SID_ATTR_PAGE_GRADIENT  );
+                rSet.Put( aFillGradientItem );
+            }
+
+            case (drawing::FillStyle_HATCH):
+            {
+                const XFillHatchItem *pFillHatchItem( static_cast<const XFillHatchItem*>( aMergedAttr.GetItem( XATTR_FILLHATCH ) ) );
+                XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
+                aFillHatchItem.SetWhich( SID_ATTR_PAGE_HATCH );
+                rSet.Put( aFillHatchItem );
+            }
+
+            case (drawing::FillStyle_BITMAP):
+            {
+                const XFillBitmapItem *pFillBitmapItem = static_cast<const XFillBitmapItem*>( aMergedAttr.GetItem( XATTR_FILLBITMAP ) );
+                XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
+                aFillBitmapItem.SetWhich( SID_ATTR_PAGE_BITMAP );
+                rSet.Put( aFillBitmapItem );
+            }
+
+            default:
+            break;
+        }
+    }
+}
+
+void DrawViewShell::SetPageProperties (SfxRequest& rReq)
+{
+    SdPage *pPage = getCurrentPage();
+    sal_uInt16 nSlotId = rReq.GetSlot();
+    const SfxItemSet *pArgs = rReq.GetArgs();
+
+    if ( pPage && pArgs )
+    {
+        if ( ( nSlotId >= SID_ATTR_PAGE_COLOR ) && ( nSlotId <= SID_ATTR_PAGE_FILLSTYLE ) )
+        {
+            SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
+            rPageProperties.ClearItem(XATTR_FILLSTYLE);
+            rPageProperties.ClearItem(XATTR_FILLGRADIENT);
+            rPageProperties.ClearItem(XATTR_FILLHATCH);
+            rPageProperties.ClearItem(XATTR_FILLBITMAP);
+
+            switch (nSlotId)
+            {
+                case(SID_ATTR_PAGE_COLOR):
+                {
+                    XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pArgs->Get( XATTR_FILLCOLOR )) );
+                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
+                    rPageProperties.PutItem( XFillColorItem( aColorItem ));
+                }
+                break;
+
+                case(SID_ATTR_PAGE_GRADIENT):
+                {
+                    XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pArgs->Get( XATTR_FILLGRADIENT )) );
+                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
+                    rPageProperties.PutItem( XFillGradientItem( aGradientItem ) );
+                }
+                break;
+
+                case(SID_ATTR_PAGE_HATCH):
+                {
+                    XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pArgs->Get( XATTR_FILLHATCH )) );
+                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_HATCH ) );
+                    rPageProperties.PutItem( XFillHatchItem( aHatchItem ));
+                }
+                break;
+
+                case(SID_ATTR_PAGE_BITMAP):
+                {
+                    XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pArgs->Get( XATTR_FILLBITMAP )) );
+                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_BITMAP ) );
+                    rPageProperties.PutItem( XFillBitmapItem( aBitmapItem ));
+                }
+                break;
+
+                default:
+                break;
+            }
+        }
+    }
+}
+
 
 void DrawViewShell::GetState (SfxItemSet& rSet)
 {

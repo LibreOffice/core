@@ -1199,11 +1199,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_ATTR_PAGE_COLOR:
-        case SID_ATTR_PAGE_GRADIENT:
-        case SID_ATTR_PAGE_HATCH:
-        case SID_ATTR_PAGE_BITMAP:
-        case SID_ATTR_PAGE_FILLSTYLE:
         case SID_SELECT_BACKGROUND:
         case SID_ATTR_PAGE_SIZE:
         case SID_ATTR_PAGE:

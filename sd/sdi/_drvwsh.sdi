@@ -2624,22 +2624,22 @@ interface DrawView
     ]
     SID_ATTR_PAGE_COLOR
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = SetPageProperties ;
         StateMethod = GetPageProperties;
     ]
     SID_ATTR_PAGE_GRADIENT
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = SetPageProperties ;
         StateMethod = GetPageProperties ;
     ]
     SID_ATTR_PAGE_HATCH
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = SetPageProperties ;
         StateMethod = GetPageProperties ;
     ]
     SID_ATTR_PAGE_BITMAP
     [
-        ExecMethod = FuTemporary ;
+        ExecMethod = SetPageProperties ;
         StateMethod = GetPageProperties ;
     ]
     SID_ATTR_PAGE_FILLSTYLE

@@ -385,15 +385,10 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             }
             break;
             case SID_ATTR_FILL_STYLE:
-            case SID_ATTR_PAGE_FILLSTYLE:
             case SID_ATTR_FILL_COLOR:
-            case SID_ATTR_PAGE_COLOR:
             case SID_ATTR_FILL_GRADIENT:
-            case SID_ATTR_PAGE_GRADIENT:
             case SID_ATTR_FILL_HATCH:
-            case SID_ATTR_PAGE_HATCH:
             case SID_ATTR_FILL_BITMAP:
-            case SID_ATTR_PAGE_BITMAP:
             case SID_ATTR_FILL_SHADOW:
             case SID_ATTR_SHADOW_COLOR:
             case SID_ATTR_SHADOW_TRANSPARENCE:
