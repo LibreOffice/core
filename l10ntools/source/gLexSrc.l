@@ -164,13 +164,16 @@ f
 }
 
 
-"#define"                             |
-[fF][iI][xX][eE][dD][tT][eE][xX][tT]  |
-[mM][eE][nN][uU]                      |
-[mM][eE][nN][uU][iI][tT][eE][mM]      |
-[rR][eE][sS][oO][uU][rR][cC][eE]      |
-[sS][tT][rR][iI][nN][gG]              |
-[wW][iI][nN][dD][oO][wW]              {
+"#define"                                                                |
+[cC][oO][nN][tT][rR][oO][lL]                                             |
+[fF][iI][xX][eE][dD][tT][eE][xX][tT]                                     |
+[mM][eE][nN][uU]                                                         |
+[mM][eE][nN][uU][iI][tT][eE][mM]                                         |
+[rR][eE][sS][oO][uU][rR][cC][eE]                                         |
+[sS][fF][xX][sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][iI][eS][sS]         |
+[sS][fF][xX][sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][yY][iI][tT][eE][mM] |
+[sS][tT][rR][iI][nN][gG]                                                 |
+[wW][iI][nN][dD][oO][wW]                                                 {
     LOCptr->setCmd(LOCptr->copySource(yytext));
     BEGIN(CMD);
 }
@@ -209,10 +212,10 @@ f
 }
 
 
-
-"#define".*[^\\][\r]*\n |                             |
-"#include".*            |
-.                       {
+[dD][iI][aA][lL][oO][gG][cC][oO][nN][tT][rR][oO][lL]  |
+"#define".*[^\\][\r]*\n                               |
+"#include".*                                          |
+.                                                     {
     LOCptr->copySource(yytext);
 
     // Just to please compiler.
@@ -250,7 +253,6 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[bB][uU][tT][tT][oO][nN][iI][mM][aA][gG][eE]{SUF}                             |
 {PRE}[cC][aA][nN][cC][eE][lL][bB][uU][tT][tT][oO][nN]{SUF}                         |
 {PRE}[cC][hH][eE][cC][kK][bB][oO][xX]{SUF}                                         |
-{PRE}[cC][oO][nN][tT][rR][oO][lL]{SUF}                                             |
 {PRE}[cC][oO][mM][bB][oO][bB][oO][xX]{SUF}                                         |
 {PRE}[dD][oO][cC][kK][iI][nN][gG][wW][iI][nN][dD][oO][wW]{SUF}                     |
 {PRE}[eE][dD][iI][tT]{SUF}                                                         |
@@ -280,8 +282,6 @@ KEYID [a-zA-Z0-9_-]+
 {PRE}[pP][uU][sS][hH][bB][uU][tT][tT][oO][nN]{SUF}                                 |
 {PRE}[qQ][uU][eE][rR][yY][bB][oO][xX]{SUF}                                         |
 {PRE}[rR][aA][dD][iI][oO][bB][uU][tT][tT][oO][nN]{SUF}                             |
-{PRE}[sS][fF][xX][sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][iI][eS][sS]{SUF}         |
-{PRE}[sS][fF][xX][sS][tT][yY][lL][eE][fF][aA][mM][iI][lL][yY][iI][tT][eE][mM]{SUF} |
 {PRE}[sS][pP][iI][nN][fF][iI][eE][lL][dD]{SUF}                                     |
 {PRE}[sS][tT][rR][iI][nN][gG][aA][rR][rR][aA][yY]{SUF}                             |
 {PRE}[tT][aA][bB][cC][oO][nN][tT][rR][oO][lL]{SUF}                                 |
