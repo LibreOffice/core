@@ -236,9 +236,6 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
         }
     }
 
-    if ( xWindow->IsDisposed() )
-        return;
-
     while ( xWindow )
     {
 
