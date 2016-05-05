@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_dbe18bd2",
+        "filename": "oox/source/drawingml/fillpropertiesgroupcontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_Int32 or auto",
+      "range": {
+        "startLine": 363,
+        "startChar": 8,
+        "endLine": 363,
+        "endChar": 11
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_fbe64fe7",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_Int32 or auto",
+      "range": {
+        "startLine": 836,
+        "startChar": 25,
+        "endLine": 836,
+        "endChar": 28
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_1becd3c6",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_Int32 or auto",
+      "range": {
+        "startLine": 507,
+        "startChar": 17,
+        "endLine": 507,
+        "endChar": 20
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_3bd197fc",
+        "filename": "opencl/source/openclwrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_uInt8 or auto",
+      "range": {
+        "startLine": 74,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 21
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_5bce5b5b",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_Unicode or auto",
+      "range": {
+        "startLine": 1572,
+        "startChar": 24,
+        "endLine": 1572,
+        "endChar": 32
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_7baddf87",
+        "filename": "reportdesign/source/ui/dlg/DateTime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "aCheckBox",
+      "range": {
+        "startLine": 90,
+        "startChar": 19,
+        "endLine": 90,
+        "endChar": 29
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_bbb5a7d1",
+        "filename": "reportdesign/source/ui/inspection/DataProviderHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "Property",
+      "range": {
+        "startLine": 377,
+        "startChar": 29,
+        "endLine": 377,
+        "endChar": 38
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_dbba6bc0",
+        "filename": "reportdesign/source/ui/inspection/DefaultInspection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "Factory",
+      "range": {
+        "startLine": 122,
+        "startChar": 20,
+        "endLine": 122,
+        "endChar": 28
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_7bdb1f1c",
+        "filename": "reportdesign/source/ui/report/ReportController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2738,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_Int32 or auto",
+      "range": {
+        "startLine": 2738,
+        "startChar": 9,
+        "endLine": 2738,
+        "endChar": 12
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9bd8e31f",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "rSignal to avoid Signal.Signal",
+      "range": {
+        "startLine": 211,
+        "startChar": 24,
+        "endLine": 211,
+        "endChar": 30
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9bc1c331",
+        "filename": "sal/rtl/hash.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_uInt32 or auto",
+      "range": {
+        "startLine": 61,
+        "startChar": 9,
+        "endLine": 61,
+        "endChar": 21
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_bbdcc719",
+        "filename": "sax/source/tools/fastattribs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-05T09:18:43Z",
+      "side": 1,
+      "message": "sal_Int32 or auto",
+      "range": {
+        "startLine": 123,
+        "startChar": 9,
+        "endLine": 123,
+        "endChar": 12
+      },
+      "revId": "9666e6481d0ae6b3d4c9f555cf39759d423283fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
