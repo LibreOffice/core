@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_9b1703ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2016-05-05T02:58:11Z",
+      "side": 1,
+      "message": "You are right.\nI will change the subject in the future.",
+      "parentUuid": "9ad45d7e_96cebb81",
+      "revId": "8a0cf053ddd12292466761ffdbeff845812ed1f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_76cb4773",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2016-04-13T05:55:43Z",
       "side": 1,
       "message": "Can you elaborate here? I\u0027ve never seen a mismatch here, that why, I re-used already exposed variables. What environment? Can you post what is Windows SDK location and UCRT SDK location on those environment?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 10
+      },
+      "revId": "8a0cf053ddd12292466761ffdbeff845812ed1f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_bbd20733",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2016-05-05T02:58:11Z",
+      "side": 1,
+      "message": "I use Windows 10 Enterprise 64 bit version.\nI installed both Visual Studio 2013 and Visual Studio 2015.\nI made my development environment without LODE.\n\nWindows SDK location is \"C:\\Program Files (x86)\\Windows Kits\\8.1\".\nUCR SDK location is \"C:\\Program Files (x86)\\Windows Kits\\10\\\".\n\nIn config_host.mk These are defined as follows.\nexport WINDOWS_SDK_HOME\u003dC:/PROGRA~2/WI3CF2~1/8.1\nexport UCRTSDKDIR\u003dC:/PROGRA~2/WI3CF2~1/10/",
+      "parentUuid": "9ad45d7e_76cb4773",
       "range": {
         "startLine": 16,
         "startChar": 0,
