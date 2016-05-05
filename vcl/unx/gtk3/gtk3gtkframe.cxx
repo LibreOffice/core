@@ -104,6 +104,7 @@
 using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
+GtkWidget* GtkSalFrame::m_pGrabWidgetBeforeShowFloats = nullptr;
 
 #if defined ENABLE_GMENU_INTEGRATION
 static GDBusConnection* pSessionBus = nullptr;
@@ -1424,21 +1425,6 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 SetDefaultSize();
             setMinMaxSize();
 
-            if( isFloatGrabWindow() &&
-                m_pParent &&
-                m_nFloats == 0 &&
-                ! getDisplay()->GetCaptureFrame() )
-            {
-                /* #i63086#
-                 * outsmart Metacity's "focus:mouse" mode
-                 * which insists on taking the focus from the document
-                 * to the new float. Grab focus to parent frame BEFORE
-                 * showing the float (cannot grab it to the float
-                 * before show).
-                 */
-                 m_pParent->grabPointer( true, true );
-            }
-
             if( ! bNoActivate && (m_nStyle & SalFrameStyleFlags::TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
 
@@ -1449,6 +1435,9 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats++;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
                 {
+                    m_pGrabWidgetBeforeShowFloats = gtk_grab_get_current();
+                    if (m_pGrabWidgetBeforeShowFloats)
+                        gtk_grab_remove(m_pGrabWidgetBeforeShowFloats);
                     grabPointer(true, true);
                     GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
                     pKeyboardFrame->grabKeyboard(true);
@@ -1470,6 +1459,11 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                     GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
                     pKeyboardFrame->grabKeyboard(false);
                     grabPointer(false);
+                    if (m_pGrabWidgetBeforeShowFloats)
+                    {
+                        gtk_grab_add(m_pGrabWidgetBeforeShowFloats);
+                        m_pGrabWidgetBeforeShowFloats = nullptr;
+                    }
                 }
             }
             gtk_widget_hide( m_pWindow );
@@ -2414,13 +2408,6 @@ void GtkSalFrame::SetModal(bool bModal)
     if (!m_pWindow)
         return;
     gtk_window_set_modal(GTK_WINDOW(m_pWindow), bModal);
-    if (bModal)
-    {
-        //gtk_window_set_modal bTrue adds a grab, so ungrab here. Quite
-        //possibly we should alternatively call grab_add grab_ungrab on
-        //show/hide of menus ?
-        gtk_grab_remove(m_pWindow);
-    }
 }
 
 gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
