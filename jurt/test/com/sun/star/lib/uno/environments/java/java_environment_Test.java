@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -50,3 +51,5 @@ public final class java_environment_Test {
             env.getRegisteredInterface(oid[0], new Type(XInterface.class)));
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

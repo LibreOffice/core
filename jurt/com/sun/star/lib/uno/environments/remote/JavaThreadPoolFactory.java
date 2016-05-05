@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -82,3 +83,5 @@ final class JavaThreadPoolFactory {
     private static final WeakHashMap<Thread, ThreadId> threadIdMap = new WeakHashMap<Thread, ThreadId>();
     private final HashMap<ThreadId, JobQueue> jobQueues = new HashMap<ThreadId, JobQueue>();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
