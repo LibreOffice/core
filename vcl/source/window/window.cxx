@@ -78,27 +78,28 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-
 namespace vcl {
 
-Window::Window( WindowType nType )
+Window::Window( WindowType nType ) :
+    mpWindowImpl(new WindowImpl( nType ))
 {
-    ImplInitWindowData( nType );
+    meOutDevType = OUTDEV_WINDOW;
+
+    // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
+    mbEnableRTL = AllSettings::GetLayoutRTL();
 }
 
-Window::Window( vcl::Window* pParent, WinBits nStyle )
+Window::Window( vcl::Window* pParent, WinBits nStyle ) :
+    Window(WINDOW_WINDOW)
 {
-
-    ImplInitWindowData( WINDOW_WINDOW );
     ImplInit( pParent, nStyle, nullptr );
 }
 
-Window::Window( vcl::Window* pParent, const ResId& rResId )
-    : mpWindowImpl(nullptr)
+Window::Window( vcl::Window* pParent, const ResId& rResId ) :
+    Window(WINDOW_WINDOW)
 {
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
-    ImplInitWindowData( WINDOW_WINDOW );
     ImplInit( pParent, nStyle, nullptr );
     ImplLoadRes( rResId );
 
@@ -526,17 +527,7 @@ void Window::dispose()
         }
     }
 
-    // cleanup Extra Window Data, TODO: add and use ImplWinData destructor
-    if ( mpWindowImpl->mpWinData )
-    {
-        delete mpWindowImpl->mpWinData->mpExtOldText;
-        delete mpWindowImpl->mpWinData->mpExtOldAttrAry;
-        delete mpWindowImpl->mpWinData->mpCursorRect;
-        delete[] mpWindowImpl->mpWinData->mpCompositionCharRects;
-        delete mpWindowImpl->mpWinData->mpFocusRect;
-        delete mpWindowImpl->mpWinData->mpTrackRect;
-        delete mpWindowImpl->mpWinData;
-    }
+    delete mpWindowImpl->mpWinData;
 
     // remove BorderWindow or Frame window data
     mpWindowImpl->mpBorderWindow.disposeAndClear();
@@ -751,6 +742,30 @@ WindowImpl::~WindowImpl()
     delete mpAccessibleInfos;
     delete mpControlFont;
 }
+
+ImplWinData::ImplWinData() :
+    mpExtOldText(nullptr),
+    mpExtOldAttrAry(nullptr),
+    mpCursorRect(nullptr),
+    mnCursorExtWidth(),
+    mpCompositionCharRects(nullptr),
+    mpFocusRect(nullptr),
+    mpTrackRect(nullptr),
+    mnTrackFlags(0),
+    mnIsTopWindow((sal_uInt16) ~0) // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
+{
+}
+
+ImplWinData::~ImplWinData()
+{
+    delete mpExtOldText;
+    delete mpExtOldAttrAry;
+    delete mpCursorRect;
+    delete[] mpCompositionCharRects;
+    delete mpFocusRect;
+    delete mpTrackRect;
+}
+
 
 namespace vcl {
 
@@ -1201,15 +1216,6 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
         pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
 }
 
-void Window::ImplInitWindowData( WindowType nType )
-{
-    mpWindowImpl = new WindowImpl( nType );
-
-    meOutDevType        = OUTDEV_WINDOW;
-
-    mbEnableRTL         = AllSettings::GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
-}
-
 ImplWinData* Window::ImplGetWinData() const
 {
     if ( !mpWindowImpl->mpWinData )
@@ -1217,17 +1223,6 @@ ImplWinData* Window::ImplGetWinData() const
         static const char* pNoNWF = getenv( "SAL_NO_NWF" );
 
         const_cast<vcl::Window*>(this)->mpWindowImpl->mpWinData = new ImplWinData;
-        mpWindowImpl->mpWinData->mpExtOldText     = nullptr;
-        mpWindowImpl->mpWinData->mpExtOldAttrAry  = nullptr;
-        mpWindowImpl->mpWinData->mpCursorRect     = nullptr;
-        mpWindowImpl->mpWinData->mnCursorExtWidth = 0;
-        mpWindowImpl->mpWinData->mpCompositionCharRects = nullptr;
-        mpWindowImpl->mpWinData->mnCompositionCharRects = 0;
-        mpWindowImpl->mpWinData->mpFocusRect      = nullptr;
-        mpWindowImpl->mpWinData->mpTrackRect      = nullptr;
-        mpWindowImpl->mpWinData->mnTrackFlags     = 0;
-        mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
-        mpWindowImpl->mpWinData->mbMouseOver      = false;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = !(pNoNWF && *pNoNWF); // true: try to draw this control with native theme API
     }
 
