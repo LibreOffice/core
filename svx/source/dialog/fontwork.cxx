@@ -194,37 +194,40 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
     get(m_pTbxStyle, "style");
     nStyleOffId = m_pTbxStyle->GetItemId(0);
     m_pTbxStyle->SetItemBits(nStyleOffId, ToolBoxItemBits::AUTOCHECK);
-    nStyleRotateId = m_pTbxStyle->GetItemId(1);
+    // separator is item "1"
+    nStyleRotateId = m_pTbxStyle->GetItemId(2);
     m_pTbxStyle->SetItemBits(nStyleRotateId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nStyleUprightId = m_pTbxStyle->GetItemId(2);
+    nStyleUprightId = m_pTbxStyle->GetItemId(3);
     m_pTbxStyle->SetItemBits(nStyleUprightId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nStyleSlantXId = m_pTbxStyle->GetItemId(3);
+    nStyleSlantXId = m_pTbxStyle->GetItemId(4);
     m_pTbxStyle->SetItemBits(nStyleSlantXId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nStyleSlantYId = m_pTbxStyle->GetItemId(4);
+    nStyleSlantYId = m_pTbxStyle->GetItemId(5);
     m_pTbxStyle->SetItemBits(nStyleSlantYId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
 
     get(m_pTbxShadow, "shadow");
     nShowFormId = m_pTbxShadow->GetItemId(0);
     m_pTbxShadow->SetItemBits(nShowFormId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::CHECKABLE);
     nOutlineId = m_pTbxShadow->GetItemId(1);
-    m_pTbxShadow->SetItemBits(nOutlineId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nShadowOffId = m_pTbxShadow->GetItemId(2);
+    m_pTbxShadow->SetItemBits(nOutlineId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::CHECKABLE);
+    // separator is item "2"
+    nShadowOffId = m_pTbxShadow->GetItemId(3);
     m_pTbxShadow->SetItemBits(nShadowOffId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nShadowNormalId = m_pTbxShadow->GetItemId(3);
+    nShadowNormalId = m_pTbxShadow->GetItemId(4);
     m_pTbxShadow->SetItemBits(nShadowNormalId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nShadowSlantId = m_pTbxShadow->GetItemId(4);
+    nShadowSlantId = m_pTbxShadow->GetItemId(5);
     m_pTbxShadow->SetItemBits(nShadowSlantId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
 
     get(m_pTbxAdjust, "adjust");
     nAdjustMirrorId = m_pTbxAdjust->GetItemId(0);
     m_pTbxAdjust->SetItemBits(nAdjustMirrorId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::CHECKABLE);
-    nAdjustLeftId = m_pTbxAdjust->GetItemId(1);
-    m_pTbxAdjust->SetItemBits(nAdjustLeftId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::CHECKABLE);
-    nAdjustCenterId = m_pTbxAdjust->GetItemId(2);
+    // separator is item "1"
+    nAdjustLeftId = m_pTbxAdjust->GetItemId(2);
+    m_pTbxAdjust->SetItemBits(nAdjustLeftId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nAdjustCenterId = m_pTbxAdjust->GetItemId(3);
     m_pTbxAdjust->SetItemBits(nAdjustCenterId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nAdjustRightId = m_pTbxAdjust->GetItemId(3);
+    nAdjustRightId = m_pTbxAdjust->GetItemId(4);
     m_pTbxAdjust->SetItemBits(nAdjustRightId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
-    nAdjustAutoSizeId = m_pTbxAdjust->GetItemId(4);
+    nAdjustAutoSizeId = m_pTbxAdjust->GetItemId(5);
     m_pTbxAdjust->SetItemBits(nAdjustAutoSizeId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
 
     ApplyImageList();
