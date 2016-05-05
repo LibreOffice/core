@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -147,3 +148,5 @@ public final class Acceptor implements XAcceptor {
     private XAcceptor acceptor = null;
     private String acceptingDescription;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -234,3 +235,5 @@ public final class java_remote_bridge_Test {
         private static int count = 0;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

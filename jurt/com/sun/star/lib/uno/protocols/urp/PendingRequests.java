@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -59,3 +60,5 @@ final class PendingRequests {
 
     private final HashMap<ThreadId, Stack<Item>> map = new HashMap<ThreadId, Stack<Item>>(); // from ThreadId to Stack of Item
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
