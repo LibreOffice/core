@@ -67,7 +67,7 @@ public:
     friend VCL_DLLPUBLIC SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
     friend VCL_DLLPUBLIC SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );
 
-    typedef o3tl::cow_wrapper< ImplMapMode > ImplType;
+    typedef o3tl::cow_wrapper< ImplMapMode, o3tl::ThreadSafeRefCountingPolicy > ImplType;
 
 private:
     ImplType        mpImplMapMode;

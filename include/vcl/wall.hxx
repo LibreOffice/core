@@ -50,7 +50,7 @@ enum class WallpaperStyle
 class VCL_DLLPUBLIC Wallpaper
 {
 public:
-    typedef o3tl::cow_wrapper<ImplWallpaper> ImplType;
+    typedef o3tl::cow_wrapper<ImplWallpaper, o3tl::ThreadSafeRefCountingPolicy> ImplType;
 
     SAL_DLLPRIVATE void             ImplSetCachedBitmap( BitmapEx& rBmp ) const;
     SAL_DLLPRIVATE const BitmapEx*  ImplGetCachedBitmap() const;
