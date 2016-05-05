@@ -198,6 +198,7 @@ public:
     void testTdf98987();
     void testTdf99004();
     void testTdf84695();
+    void testTdf84695NormalChar();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -298,6 +299,7 @@ public:
     CPPUNIT_TEST(testTdf98987);
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
+    CPPUNIT_TEST(testTdf84695NormalChar);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3677,6 +3679,28 @@ void SwUiWriterTest::testTdf84695()
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, Enter did not start the fly frame edit mode.
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+}
+
+void SwUiWriterTest::testTdf84695NormalChar()
+{
+    SwDoc* pDoc = createDoc("tdf84695.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(1);
+    SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
+    // First, make sure that pTextBox is a fly frame (textbox of a shape).
+    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFormat()->Which()));
+
+    // Then select it.
+    pWrtShell->SelectObj(Point(), 0, pObject);
+
+    // Now pressing 'a' should add a character.
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    // This was empty, pressing a normal character did not start the fly frame edit mode.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
 }
 
