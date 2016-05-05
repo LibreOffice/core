@@ -303,7 +303,7 @@ void SlideBackground::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpFillStyle->SelectEntryPos(1);
-                mpColorItem.reset(pState ? static_cast< XFillColorItem* >(pState->Clone()) : 0);
+                mpColorItem.reset(pState ? static_cast< XFillColorItem* >(pState->Clone()) : nullptr);
                 Update();
             }
         }
@@ -314,7 +314,7 @@ void SlideBackground::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpFillStyle->SelectEntryPos(3);
-                mpHatchItem.reset(pState ? static_cast < XFillHatchItem* >(pState->Clone()) : 0);
+                mpHatchItem.reset(pState ? static_cast < XFillHatchItem* >(pState->Clone()) : nullptr);
                 Update();
             }
         }
@@ -325,7 +325,7 @@ void SlideBackground::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpFillStyle->SelectEntryPos(2);
-                mpGradientItem.reset(pState ? static_cast< XFillGradientItem* >(pState->Clone()) : 0);
+                mpGradientItem.reset(pState ? static_cast< XFillGradientItem* >(pState->Clone()) : nullptr);
                 Update();
             }
         }
@@ -335,7 +335,7 @@ void SlideBackground::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mpFillStyle->SelectEntryPos(4);
-                mpBitmapItem.reset(pState ? static_cast< XFillBitmapItem* >(pState->Clone()) : 0);
+                mpBitmapItem.reset(pState ? static_cast< XFillBitmapItem* >(pState->Clone()) : nullptr);
                 Update();
             }
         }
