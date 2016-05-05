@@ -21,57 +21,6 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def select_cell(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
-
-    ui_test = UITest(xUITest, xContext)
-
-    ui_test.create_doc_in_start_center("calc")
-    xTopWindow = xUITest.getTopFocusWindow()
-
-    xGridWindow = xTopWindow.getChild("grid_window")
-
-    selectProps = mkPropertyValues({"CELL": "B10"})
-    xGridWindow.executeAction("SELECT", selectProps)
-
-    ui_test.close_doc()
-
-def select_range(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
-
-    ui_test = UITest(xUITest, xContext)
-
-    ui_test.create_doc_in_start_center("calc")
-    xTopWindow = xUITest.getTopFocusWindow()
-
-    xGridWindow = xTopWindow.getChild("grid_window")
-
-    selectProps = mkPropertyValues({"RANGE": "B10:C20"})
-    xGridWindow.executeAction("SELECT", selectProps)
-
-    ui_test.close_doc()
-
-def extend_range(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
-
-    ui_test = UITest(xUITest, xContext)
-
-    ui_test.create_doc_in_start_center("calc")
-    xTopWindow = xUITest.getTopFocusWindow()
-
-    xGridWindow = xTopWindow.getChild("grid_window")
-
-    selectProps = mkPropertyValues({"RANGE": "B10:C20"})
-    xGridWindow.executeAction("SELECT", selectProps)
-
-    select2Props = mkPropertyValues({"RANGE": "D3:F5", "EXTEND": "true"})
-    xGridWindow.executeAction("SELECT", select2Props)
-
-    ui_test.close_doc()
-
 def input(xContext):
     xUITest = xContext.ServiceManager.createInstanceWithContext(
             "org.libreoffice.uitest.UITest", xContext)
