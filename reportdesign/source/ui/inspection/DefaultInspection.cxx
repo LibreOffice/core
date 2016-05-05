@@ -119,9 +119,9 @@ namespace rptui
         const size_t nFactories = SAL_N_ELEMENTS( aFactories );
         Sequence< Any > aReturn( nFactories );
         Any* pReturn = aReturn.getArray();
-        for ( size_t i = 0; i < nFactories; ++i )
+        for (auto& aFactorie : aFactories)
         {
-            *pReturn++ <<= OUString::createFromAscii( aFactories[i].serviceName );
+            *pReturn++ <<= OUString::createFromAscii( aFactorie.serviceName );
         }
 
         return aReturn;

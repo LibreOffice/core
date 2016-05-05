@@ -194,8 +194,8 @@ void PropBrw::dispose()
             const OUString pProps[] = { OUString( "ContextDocument" )
                                             ,  OUString( "DialogParentWindow" )
                                             , OUString( "ActiveConnection" )};
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i)
-                xName->removeByName(pProps[i]);
+            for (const auto & i : pProps)
+                xName->removeByName(i);
         }
     }
     catch(Exception&)

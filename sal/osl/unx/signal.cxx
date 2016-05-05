@@ -208,21 +208,21 @@ bool onInitSignal()
     sigfillset(&(act.sa_mask));
 
     /* Initialize the rest of the signals */
-    for (int i = 0; i < NoSignals; ++i)
+    for (SignalAction & Signal : Signals)
     {
 #if defined HAVE_VALGRIND_HEADERS
-        if (Signals[i].Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
-            Signals[i].Action = ACT_IGNORE;
+        if (Signal.Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
+            Signal.Action = ACT_IGNORE;
 #endif
 
         /* hack: stomcatd is attaching JavaVM which does not work with an sigaction(SEGV) */
-        if ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
-        && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH)
-        && (bSetILLHandler   || Signals[i].Signal != SIGILL))
+        if ((bSetSEGVHandler || Signal.Signal != SIGSEGV)
+        && (bSetWINCHHandler || Signal.Signal != SIGWINCH)
+        && (bSetILLHandler   || Signal.Signal != SIGILL))
         {
-            if (Signals[i].Action != ACT_SYSTEM)
+            if (Signal.Action != ACT_SYSTEM)
             {
-                if (Signals[i].Action == ACT_HIDE)
+                if (Signal.Action == ACT_HIDE)
                 {
                     struct sigaction ign;
 
@@ -231,18 +231,18 @@ bool onInitSignal()
                     sigemptyset(&ign.sa_mask);
 
                     struct sigaction oact;
-                    if (sigaction(Signals[i].Signal, &ign, &oact) == 0)
-                        Signals[i].Handler = oact.sa_handler;
+                    if (sigaction(Signal.Signal, &ign, &oact) == 0)
+                        Signal.Handler = oact.sa_handler;
                     else
-                        Signals[i].Handler = SIG_DFL;
+                        Signal.Handler = SIG_DFL;
                 }
                 else
                 {
                     struct sigaction oact;
-                    if (sigaction(Signals[i].Signal, &act, &oact) == 0)
-                        Signals[i].Handler = oact.sa_handler;
+                    if (sigaction(Signal.Signal, &act, &oact) == 0)
+                        Signal.Handler = oact.sa_handler;
                     else
-                        Signals[i].Handler = SIG_DFL;
+                        Signal.Handler = SIG_DFL;
                 }
             }
         }
