@@ -201,6 +201,8 @@ public:
     VclPtr<vcl::Window> mpLastFocusWindow;
     VclPtr<vcl::Window> mpDlgCtrlDownWindow;
     std::vector<Link<VclWindowEvent&,void>> maEventListeners;
+    int mnEventListenersIteratingCount;
+    std::set<Link<VclWindowEvent&,void>> maEventListenersDeleted;
     std::vector<Link<VclWindowEvent&,void>> maChildEventListeners;
     int mnChildEventListenersIteratingCount;
     std::set<Link<VclWindowEvent&,void>> maChildEventListenersDeleted;
