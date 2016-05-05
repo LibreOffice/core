@@ -172,7 +172,7 @@ public:
         { m_pImageProvider = provider; }
 };
 
-class SvxScriptSelectorDialog : public ModelessDialog
+class SvxScriptSelectorDialog : public ModalDialog
 {
     VclPtr<FixedText>                      m_pDialogDescription;
     VclPtr<SvxConfigGroupListBox>          m_pCategories;

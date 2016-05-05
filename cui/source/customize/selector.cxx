@@ -874,7 +874,7 @@ void SvxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     vcl::Window* pParent, bool bShowSlots, const Reference< frame::XFrame >& xFrame)
-    : ModelessDialog(pParent, "MacroSelectorDialog", "cui/ui/macroselectordialog.ui")
+    : ModalDialog(pParent, "MacroSelectorDialog", "cui/ui/macroselectordialog.ui")
     , m_bShowSlots(bShowSlots)
 {
     get<FixedText>("libraryft")->Show(!m_bShowSlots);
@@ -934,7 +934,7 @@ void SvxScriptSelectorDialog::dispose()
     m_pOKButton.clear();
     m_pCancelButton.clear();
     m_pDescriptionText.clear();
-    ModelessDialog::dispose();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_TYPED( SvxScriptSelectorDialog, SelectHdl, SvTreeListBox*, pCtrl, void )
@@ -982,16 +982,7 @@ IMPL_LINK_TYPED( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
 {
     if (pButton == m_pCancelButton)
     {
-        // If we are displaying Slot API commands then the dialog is being
-        // run from Tools/Configure and we should not close it, just hide it
-        if ( !m_bShowSlots )
-        {
-            EndDialog();
-        }
-        else
-        {
-            Hide();
-        }
+        EndDialog();
     }
     else if (pButton == m_pOKButton)
     {

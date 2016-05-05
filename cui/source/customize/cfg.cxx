@@ -2816,7 +2816,7 @@ IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
 
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
-    m_pSelectorDlg->Show();
+    m_pSelectorDlg->Execute();
 }
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
@@ -4702,7 +4702,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
 
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
-    m_pSelectorDlg->Show();
+    m_pSelectorDlg->Execute();
 }
 
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
