@@ -55,9 +55,9 @@ public:
 
     virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) override;
 
-    virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const override;
+    virtual bool IsVisibleLayerId( SdrLayerID _nLayerId ) const override;
 
-    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) override;
+    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( SdrLayerID _nVisibleLayerId ) override;
 
     virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) override;
 

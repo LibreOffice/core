@@ -42,10 +42,17 @@ public:
     bool VisitLambdaExpr(const LambdaExpr * expr);
 
 private:
+    void checkParams(const FunctionDecl * functionDecl);
+    void checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl);
     bool isFat(QualType type);
+    bool isPrimitiveConstRef(QualType type);
     bool mbInsideFunctionDecl;
     bool mbFoundDisqualifier;
 };
+
+bool startswith(const std::string& rStr, const char* pSubStr) {
+    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
 
 bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (ignoreLocation(functionDecl)) {
@@ -59,31 +66,60 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (methodDecl && methodDecl->size_overridden_methods() > 0) {
             return true;
     }
+
+    checkParams(functionDecl);
+    checkReturnValue(functionDecl, methodDecl);
+    return true;
+}
+
+void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     // only warn on the definition/prototype of the function,
     // not on the function implementation
-    if (!functionDecl->isThisDeclarationADefinition())
-    {
-        unsigned n = functionDecl->getNumParams();
-        for (unsigned i = 0; i != n; ++i) {
-            const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
-            auto const t = pvDecl->getType();
-            if (isFat(t)) {
-                report(
-                    DiagnosticsEngine::Warning,
-                    ("passing %0 by value, rather pass by const lvalue reference"),
-                    pvDecl->getLocation())
-                    << t << pvDecl->getSourceRange();
-            }
-        }
-        return true;
+    if (functionDecl->isThisDeclarationADefinition()) {
+        return;
     }
+    unsigned n = functionDecl->getNumParams();
+    for (unsigned i = 0; i != n; ++i) {
+        const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
+        auto const t = pvDecl->getType();
+        if (isFat(t)) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("passing %0 by value, rather pass by const lvalue reference"),
+                pvDecl->getLocation())
+                << t << pvDecl->getSourceRange();
+        }
+    }
+    // ignore stuff that forms part of the stable URE interface
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
+                              functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
+        return;
+    }
+    // these functions are passed as parameters to another function
+    std::string aFunctionName = functionDecl->getQualifiedNameAsString();
+    if (startswith(aFunctionName, "slideshow::internal::ShapeAttributeLayer")) {
+        return;
+    }
+    for (unsigned i = 0; i != n; ++i) {
+        const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
+        auto const t = pvDecl->getType();
+        if (isPrimitiveConstRef(t)) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("passing primitive type param %0 by const &, rather pass by value"),
+                pvDecl->getLocation())
+                << t << pvDecl->getSourceRange();
+        }
+    }
+}
 
+void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl) {
 
     if (methodDecl && methodDecl->isVirtual()) {
-        return true;
+        return;
     }
     if( !functionDecl->hasBody()) {
-        return true;
+        return;
     }
 
     const QualType type = functionDecl->getReturnType().getDesugaredType(compiler.getASTContext());
@@ -91,37 +127,37 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
         || type->isTemplateTypeParmType() || type->isDependentType() || type->isBuiltinType()
         || type->isScalarType())
     {
-        return true;
+        return;
     }
 
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
                               functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
-        return true;
+        return;
     }
     std::string aFunctionName = functionDecl->getQualifiedNameAsString();
     // function is passed as parameter to another function
     if (aFunctionName == "GDIMetaFile::ImplColMonoFnc"
         || aFunctionName == "editeng::SvxBorderLine::darkColor"
         || aFunctionName.compare(0, 8, "xforms::") == 0)
-        return true;
+        return;
     // not sure how to exclude this yet, returns copy of one of it's params
     if (aFunctionName == "sameDistColor" || aFunctionName == "sameColor"
         || aFunctionName == "pcr::(anonymous namespace)::StringIdentity::operator()"
         || aFunctionName == "matop::COp<type-parameter-0-0, svl::SharedString>::operator()"
         || aFunctionName == "slideshow::internal::accumulate"
         || aFunctionName == "slideshow::internal::lerp")
-        return true;
+        return;
     // depends on a define
     if (aFunctionName == "SfxObjectShell::GetSharedFileURL")
-        return true;
+        return;
     mbInsideFunctionDecl = true;
     mbFoundDisqualifier = false;
     TraverseStmt(functionDecl->getBody());
     mbInsideFunctionDecl = false;
 
     if (mbFoundDisqualifier)
-        return true;
+        return;
 
     report(
             DiagnosticsEngine::Warning,
@@ -138,8 +174,6 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
                 functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
             << functionDecl->getCanonicalDecl()->getSourceRange();
     }
-    //functionDecl->dump();
-    return true;
 }
 
 bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
@@ -184,6 +218,27 @@ bool PassStuffByRef::isFat(QualType type) {
     return t2 != nullptr
         && compiler.getASTContext().getTypeSizeInChars(t2).getQuantity() > 64;
 }
+
+bool PassStuffByRef::isPrimitiveConstRef(QualType type) {
+    if (type->isIncompleteType()) {
+        return false;
+    }
+    if (!type->isReferenceType()) {
+        return false;
+    }
+    const clang::ReferenceType* referenceType = dyn_cast<ReferenceType>(type);
+    QualType pointeeQT = referenceType->getPointeeType();
+    if (!pointeeQT.isConstQualified()) {
+        return false;
+    }
+    if (!pointeeQT->isFundamentalType()) {
+        return false;
+    }
+    // ignore double for now, some of our code seems to believe it is cheaper to pass by ref
+    const BuiltinType* builtinType = dyn_cast<BuiltinType>(pointeeQT);
+    return builtinType->getKind() != BuiltinType::Kind::Double;
+}
+
 
 loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref");
 

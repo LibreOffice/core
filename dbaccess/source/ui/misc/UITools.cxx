@@ -735,7 +735,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
     return nAlignment;
 }
 
-SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
+SvxCellHorJustify mapTextJustify(sal_Int32 _nAlignment)
 {
     SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_LEFT;
     switch (_nAlignment)

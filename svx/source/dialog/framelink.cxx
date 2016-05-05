@@ -1425,7 +1425,7 @@ drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const DiagStyle& /*rLFromTR*/, const Style& rLFromT, const Style& /*rLFromL*/, const Style& rLFromB, const DiagStyle& /*rLFromBR*/,
         const DiagStyle& /*rRFromTL*/, const Style& rRFromT, const Style& /*rRFromR*/, const Style& rRFromB, const DiagStyle& /*rRFromBL*/,
-        const Color* /*pForceColor*/, const long& nRotateT, const long& nRotateB )
+        const Color* /*pForceColor*/, long nRotateT, long nRotateB )
 {
     drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
 
@@ -1453,7 +1453,7 @@ drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
         const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,
-        const Color* pForceColor, const long& nRotateT, const long& nRotateB )
+        const Color* pForceColor, long nRotateT, long nRotateB )
 {
     return CreateBorderPrimitives( rLPos, rRPos, rBorder,
             DiagStyle(), rLFromT, rLFromL, rLFromB, DiagStyle(),

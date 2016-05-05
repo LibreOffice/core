@@ -84,7 +84,7 @@ protected:
 
     writerfilter::Reference<Stream>::Pointer_t
     getXNoteStream(OOXMLStream::StreamType_t nType,
-                   const Id & rType,
+                   Id aType,
                    const sal_Int32 nNoteId);
 
     void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
@@ -99,10 +99,10 @@ public:
     virtual void resolve(Stream & rStream) override;
 
     virtual void resolveFootnote(Stream & rStream,
-                                 const Id & rType,
+                                 Id aType,
                                  const sal_Int32 nNoteId) override;
     virtual void resolveEndnote(Stream & rStream,
-                                const Id & rType,
+                                Id aType,
                                 const sal_Int32 nNoteId) override;
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
@@ -126,7 +126,7 @@ public:
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) override;
     virtual void setXNoteId(const sal_Int32 nId) override;
     virtual sal_Int32 getXNoteId() const override;
-    virtual void setXNoteType(const Id & rId) override;
+    virtual void setXNoteType(Id aId) override;
     virtual const OUString & getTarget() const override;
     virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) override;
     virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) override;

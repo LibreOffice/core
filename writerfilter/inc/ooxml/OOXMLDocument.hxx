@@ -138,7 +138,7 @@ public:
        @param rNoteId       id of the footnote to resolve
      */
     virtual void resolveFootnote(Stream & rStream,
-                                 const Id & rNoteType,
+                                 Id aNoteType,
                                  const sal_Int32 nNoteId) = 0;
     /**
        Resolves an endnote to a stream handler.
@@ -151,7 +151,7 @@ public:
        @param rNoteId       id of the endnote to resolve
      */
     virtual void resolveEndnote(Stream & rStream,
-                                const Id & rNoteType,
+                                Id  aNoteType,
                                 const sal_Int32 NoteId) = 0;
 
     /**
@@ -220,7 +220,7 @@ public:
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) = 0;
     virtual void setXNoteId(const sal_Int32 nId) = 0;
     virtual sal_Int32 getXNoteId() const = 0;
-    virtual void setXNoteType(const Id & nId) = 0;
+    virtual void setXNoteType(Id nId) = 0;
     virtual const OUString & getTarget() const = 0;
     virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
     virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) = 0;

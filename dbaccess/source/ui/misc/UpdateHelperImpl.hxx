@@ -60,7 +60,7 @@ namespace dbaui
         {
             m_xRowUpdate->updateTimestamp(_nPos, _nValue);
         }
-        virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) override
+        virtual void updateInt(sal_Int32 _nPos, sal_Int32 _nValue) override
         {
             m_xRowUpdate->updateInt(_nPos, _nValue);
         }
@@ -110,7 +110,7 @@ namespace dbaui
         {
             m_xParameters->setTimestamp(_nPos, _nValue);
         }
-        virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) override
+        virtual void updateInt(sal_Int32 _nPos, sal_Int32 _nValue) override
         {
             m_xParameters->setInt(_nPos, _nValue);
         }

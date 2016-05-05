@@ -79,7 +79,7 @@ public:
         pStrm->SkipExtra();
     }
     inline LwpMargins& operator = (const LwpMargins& rOther);
-    inline double GetMarginsValue(const sal_uInt8& nWhichSide);
+    inline double GetMarginsValue(sal_uInt8 nWhichSide);
 private:
     sal_Int32       m_nLeft;
     sal_Int32       m_nTop;
@@ -96,7 +96,7 @@ inline LwpMargins& LwpMargins::operator = (const LwpMargins& rOther)
     return *this;
 }
 
-inline double LwpMargins::GetMarginsValue(const sal_uInt8& nWhichSide)
+inline double LwpMargins::GetMarginsValue(sal_uInt8 nWhichSide)
 {
     switch (nWhichSide)
     {

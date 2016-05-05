@@ -59,7 +59,7 @@ namespace reportdesign
      */
     void throwIllegallArgumentException(const OUString& _sTypeName
                                         ,const css::uno::Reference< css::uno::XInterface >& ExceptionContext_
-                                        ,const ::sal_Int16& ArgumentPosition_
+                                        ,sal_Int16 ArgumentPosition_
                                         ,const css::uno::Reference< css::uno::XComponentContext >& Context_);
 
     /** clones the given object

@@ -178,7 +178,7 @@ private:
     bool                    mbShowHeader;
 
     void            DeleteEntries();
-    void            DoQuickSearch( const sal_Unicode& rChar );
+    void            DoQuickSearch( sal_Unicode rChar );
     bool            Kill( const OUString& rURL );
 
 protected:
@@ -860,7 +860,7 @@ bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
 }
 
 
-void ViewTabListBox_Impl::DoQuickSearch( const sal_Unicode& rChar )
+void ViewTabListBox_Impl::DoQuickSearch( sal_Unicode rChar )
 {
     ::osl::MutexGuard aGuard( maMutex );
 

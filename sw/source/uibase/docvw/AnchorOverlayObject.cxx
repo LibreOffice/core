@@ -229,7 +229,7 @@ ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
 /*static*/ AnchorOverlayObject* AnchorOverlayObject::CreateAnchorOverlayObject(
                                                        SwView& rDocView,
                                                        const SwRect& aAnchorRect,
-                                                       const long& aPageBorder,
+                                                       long aPageBorder,
                                                        const Point& aLineStart,
                                                        const Point& aLineEnd,
                                                        const Color& aColorAnchor )

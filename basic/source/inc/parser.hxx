@@ -81,7 +81,7 @@ public:
 
     SbiParser( StarBASIC*, SbModule* );
     bool Parse();
-    void SetCodeCompleting( const bool& b );
+    void SetCodeCompleting( bool b );
     bool IsCodeCompleting() const { return bCodeCompleting;}
     SbiExprNode* GetWithVar();
 

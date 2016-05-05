@@ -290,7 +290,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
 }
 
 bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                     const SCCOL& nLastCol, const SCROW& nLastRow,
+                     SCCOL nLastCol, SCROW nLastRow,
                      const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;

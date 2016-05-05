@@ -688,7 +688,7 @@ void SbxValue::PutErr( sal_uInt16 n )
 
 PUT( PutByte,     SbxBYTE,       sal_uInt8,        nByte )
 PUT( PutChar,     SbxCHAR,       sal_Unicode,      nChar )
-PUT( PutCurrency, SbxCURRENCY,   const sal_Int64&, nInt64 )
+PUT( PutCurrency, SbxCURRENCY,   sal_Int64,        nInt64 )
 PUT( PutDouble,   SbxDOUBLE,     double,           nDouble )
 PUT( PutInteger,  SbxINTEGER,    sal_Int16,        nInteger )
 PUT( PutLong,     SbxLONG,       sal_Int32,        nLong )

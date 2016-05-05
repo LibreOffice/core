@@ -1017,11 +1017,11 @@ void EventMultiplexer::notifySwitchEraserMode(){
 }
 
 //adding erasing all ink features with UserPaintOverlay
-void EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
+void EventMultiplexer::notifyEraseAllInk( bool bEraseAllInk )
 {
     mpImpl->maUserPaintEventHandlers.applyAll(
-        [&rEraseAllInk]( const UserPaintEventHandlerSharedPtr& pHandler )
-        { return pHandler->eraseAllInkChanged( rEraseAllInk ); } );
+        [&bEraseAllInk]( const UserPaintEventHandlerSharedPtr& pHandler )
+        { return pHandler->eraseAllInkChanged( bEraseAllInk ); } );
 }
 
 //adding erasing features with UserPaintOverlay

@@ -447,8 +447,8 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimit
     const DiagStyle&    rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
 
     const Color*        pForceColor = nullptr,/// If specified, overrides frame border color.
-    const long&         rRotationT = 9000, /// Angle of the top slanted frames in 100th of degree
-    const long&         rRotationB = 9000  /// Angle of the bottom slanted frames in 100th of degree
+    const long          rRotationT = 9000, /// Angle of the top slanted frames in 100th of degree
+    const long          rRotationB = 9000  /// Angle of the bottom slanted frames in 100th of degree
 );
 
 SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
@@ -465,8 +465,8 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimit
     const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
 
     const Color*        pForceColor = nullptr,/// If specified, overrides frame border color.
-    const long&         rRotationT = 9000, /// Angle of the top slanted frame in 100th of degrees
-    const long&         rRotationB = 9000  /// Angle of the bottom slanted frame in 100th of degrees
+    const long          rRotationT = 9000, /// Angle of the top slanted frame in 100th of degrees
+    const long          rRotationB = 9000  /// Angle of the bottom slanted frame in 100th of degrees
 );
 
 SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateClippedBorderPrimitives (

@@ -166,7 +166,7 @@ ScVbaInterior::setColorIndex( const css::uno::Any& _colorindex ) throw (css::uno
     }
 }
 uno::Any
-ScVbaInterior::GetIndexColor( const sal_Int32& nColorIndex )
+ScVbaInterior::GetIndexColor( sal_Int32 nColorIndex )
 {
     sal_Int32 nIndex = nColorIndex;
     // #FIXME  xlColorIndexAutomatic & xlColorIndexNone are not really

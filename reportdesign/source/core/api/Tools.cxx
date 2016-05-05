@@ -42,7 +42,7 @@ uno::Reference< report::XSection> lcl_getSection(const uno::Reference< uno::XInt
 
 void throwIllegallArgumentException( const OUString& _sTypeName
                                     ,const uno::Reference< uno::XInterface >& ExceptionContext_
-                                    ,const ::sal_Int16& ArgumentPosition_
+                                    ,sal_Int16 ArgumentPosition_
                                     ,const css::uno::Reference< css::uno::XComponentContext >& Context_
                                     )
 {

@@ -469,7 +469,7 @@ OUString LwpStory::RegisterFirstFribStyle()
     return sName;
 }
 
-bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos)
+bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, sal_uInt8 nPos)
 {
     std::vector <NamePosPair>::reverse_iterator rIter;
     for (rIter = m_vBulletStyleNameList.rbegin(); rIter != m_vBulletStyleNameList.rend(); ++rIter)

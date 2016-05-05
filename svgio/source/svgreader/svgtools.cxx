@@ -292,17 +292,17 @@ namespace svgio
             return basegfx::fTools::moreOrEqual(mfNumber, 0.0);
         }
 
-        void skip_char(const OUString& rCandidate, const sal_Unicode& rChar, sal_Int32& nPos, const sal_Int32 nLen)
+        void skip_char(const OUString& rCandidate, sal_Unicode nChar, sal_Int32& nPos, const sal_Int32 nLen)
         {
-            while(nPos < nLen && rChar == rCandidate[nPos])
+            while(nPos < nLen && nChar == rCandidate[nPos])
             {
                 nPos++;
             }
         }
 
-        void skip_char(const OUString& rCandidate, const sal_Unicode& rCharA, const sal_Unicode& rCharB, sal_Int32& nPos, const sal_Int32 nLen)
+        void skip_char(const OUString& rCandidate, sal_Unicode nCharA, sal_Unicode nCharB, sal_Int32& nPos, const sal_Int32 nLen)
         {
-            while(nPos < nLen && (rCharA == rCandidate[nPos] || rCharB == rCandidate[nPos]))
+            while(nPos < nLen && (nCharA == rCandidate[nPos] || nCharB == rCandidate[nPos]))
             {
                 nPos++;
             }
@@ -380,9 +380,9 @@ namespace svgio
             }
         }
 
-        void copyToLimiter(const OUString& rCandidate, const sal_Unicode& rLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyToLimiter(const OUString& rCandidate, sal_Unicode nLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
-            while(nPos < nLen && rLimiter != rCandidate[nPos])
+            while(nPos < nLen && nLimiter != rCandidate[nPos])
             {
                 rTarget.append(rCandidate[nPos]);
                 nPos++;
@@ -622,19 +622,19 @@ namespace svgio
             return false;
         }
 
-        sal_Int32 read_hex(const sal_Unicode& rChar)
+        sal_Int32 read_hex(sal_Unicode nChar)
         {
-            if(rChar >= '0' && rChar <= '9')
+            if(nChar >= '0' && nChar <= '9')
             {
-                return sal_Int32(rChar - sal_Unicode('0'));
+                return sal_Int32(nChar - sal_Unicode('0'));
             }
-            else if(rChar >= 'A' && rChar <= 'F')
+            else if(nChar >= 'A' && nChar <= 'F')
             {
-                return 10 + sal_Int32(rChar - sal_Unicode('A'));
+                return 10 + sal_Int32(nChar - sal_Unicode('A'));
             }
-            else if(rChar >= 'a' && rChar <= 'f')
+            else if(nChar >= 'a' && nChar <= 'f')
             {
-                return 10 + sal_Int32(rChar - sal_Unicode('a'));
+                return 10 + sal_Int32(nChar - sal_Unicode('a'));
             }
             else
             {
@@ -1514,7 +1514,7 @@ namespace svgio
             }
         }
 
-        OUString convert(const OUString& rCandidate, const sal_Unicode& rPattern, const sal_Unicode& rNew, bool bRemove)
+        OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew, bool bRemove)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -1528,13 +1528,13 @@ namespace svgio
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
 
-                    if(rPattern == aChar)
+                    if(nPattern == aChar)
                     {
                         bChanged = true;
 
                         if(!bRemove)
                         {
-                            aBuffer.append(rNew);
+                            aBuffer.append(nNew);
                         }
                     }
                     else

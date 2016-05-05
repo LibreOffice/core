@@ -105,7 +105,7 @@ public:
     DateTime&       operator =( const DateTime& rDateTime );
 
     void            GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper );
-    static DateTime CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const sal_uInt32 & rUpper );
+    static DateTime CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rUpper );
 };
 
 inline DateTime& DateTime::operator =( const DateTime& rDateTime )

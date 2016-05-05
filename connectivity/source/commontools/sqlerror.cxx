@@ -67,11 +67,11 @@ namespace connectivity
     private:
         /// returns the basic error message associated with the given error condition, without any parameter replacements
         OUString
-                impl_getErrorMessage( const ErrorCondition& _eCondition );
+                impl_getErrorMessage( ErrorCondition _eCondition );
 
         /// returns the SQLState associated with the given error condition
         OUString
-                impl_getSQLState( const ErrorCondition& _eCondition );
+                impl_getSQLState( ErrorCondition _eCondition );
 
         /// returns an SQLException describing the given error condition
         SQLException
@@ -224,7 +224,7 @@ namespace connectivity
     }
 
 
-    OUString SQLError_Impl::impl_getErrorMessage( const ErrorCondition& _eCondition )
+    OUString SQLError_Impl::impl_getErrorMessage( ErrorCondition _eCondition )
     {
         OUStringBuffer aMessage;
 
@@ -239,7 +239,7 @@ namespace connectivity
     }
 
 
-    OUString SQLError_Impl::impl_getSQLState( const ErrorCondition& _eCondition )
+    OUString SQLError_Impl::impl_getSQLState( ErrorCondition _eCondition )
     {
         OUString sState;
 

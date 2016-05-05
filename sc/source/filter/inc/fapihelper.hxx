@@ -249,7 +249,7 @@ public:
     inline void         WriteValue( const Color& rColor )
                             { WriteValue( ScfApiHelper::ConvertToApiColor( rColor ) ); }
     /** Writes a C++ boolean value to the value sequence. */
-    void                WriteValue( const bool& rbValue );
+    void                WriteValue( bool rbValue );
 
     /** Writes all values to the passed property set. */
     void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;

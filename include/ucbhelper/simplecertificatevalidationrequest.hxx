@@ -51,7 +51,7 @@ public:
       * @param lCertificateValidity contains a bitmask which validation error occur.
       * @param pCertificate contains the server certificate.
       */
-    SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
+    SimpleCertificateValidationRequest( sal_Int32 lCertificateValidity,
         const css::uno::Reference<css::security::XCertificate>& certificate,
         const OUString & hostname );
 };

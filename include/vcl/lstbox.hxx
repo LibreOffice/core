@@ -271,7 +271,7 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
 
-    void EnableQuickSelection( const bool& b );
+    void EnableQuickSelection( bool b );
 
     static sal_Int32 NaturalSortCompare(const OUString &rA, const OUString &rB);
 };

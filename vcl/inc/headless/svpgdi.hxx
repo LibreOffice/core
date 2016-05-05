@@ -78,7 +78,7 @@ private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
     void setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPoly);
-    void applyColor(cairo_t *cr, const SalColor &rColor);
+    void applyColor(cairo_t *cr, SalColor rColor);
     void drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly);
 protected:
     vcl::Region                         m_aClipRegion;

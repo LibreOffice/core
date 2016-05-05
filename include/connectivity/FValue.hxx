@@ -288,22 +288,22 @@ namespace connectivity
         ORowSetValue& operator=(const ORowSetValue& _rRH);
 
         // simple types
-        ORowSetValue& operator=(const bool _rRH);
+        ORowSetValue& operator=(bool _rRH);
 
-        ORowSetValue& operator=(const sal_Int8& _rRH);
-        ORowSetValue& operator=(const sal_uInt8& _rRH);
+        ORowSetValue& operator=(sal_Int8 _rRH);
+        ORowSetValue& operator=(sal_uInt8 _rRH);
 
-        ORowSetValue& operator=(const sal_Int16& _rRH);
-        ORowSetValue& operator=(const sal_uInt16& _rRH);
+        ORowSetValue& operator=(sal_Int16 _rRH);
+        ORowSetValue& operator=(sal_uInt16 _rRH);
 
-        ORowSetValue& operator=(const sal_Int32& _rRH);
-        ORowSetValue& operator=(const sal_uInt32& _rRH);
+        ORowSetValue& operator=(sal_Int32 _rRH);
+        ORowSetValue& operator=(sal_uInt32 _rRH);
 
-        ORowSetValue& operator=(const sal_Int64& _rRH);
-        ORowSetValue& operator=(const sal_uInt64& _rRH);
+        ORowSetValue& operator=(sal_Int64 _rRH);
+        ORowSetValue& operator=(sal_uInt64 _rRH);
 
-        ORowSetValue& operator=(const double& _rRH);
-        ORowSetValue& operator=(const float& _rRH);
+        ORowSetValue& operator=(double _rRH);
+        ORowSetValue& operator=(float _rRH);
 
         // ADT's
         ORowSetValue& operator=(const css::util::Date& _rRH);

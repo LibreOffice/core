@@ -180,7 +180,7 @@ namespace dbaui
         @param css::awt::TextAlign& _nAlignment
         @return the corresponding SvxCellHorJustify
     */
-    SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment);
+    SvxCellHorJustify mapTextJustify(sal_Int32 _nAlignment);
 
     /** call the format dialog and set the selected format at the column
         @param  _xAffectedCol   Font to be converted

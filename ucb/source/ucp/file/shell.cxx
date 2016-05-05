@@ -121,13 +121,13 @@ shell::MyProperty::MyProperty( const OUString&                         theProper
     // empty
 }
 
-shell::MyProperty::MyProperty( const bool&                        theisNative,
+shell::MyProperty::MyProperty( bool                               theisNative,
                                const OUString&                    thePropertyName,
-                               const sal_Int32&                   theHandle,
+                               sal_Int32                          theHandle,
                                const css::uno::Type&              theTyp,
                                const css::uno::Any&               theValue,
                                const css::beans::PropertyState&   theState,
-                               const sal_Int16&                   theAttributes )
+                               sal_Int16                          theAttributes )
     : PropertyName( thePropertyName ),
       Handle( theHandle ),
       isNative( theisNative ),

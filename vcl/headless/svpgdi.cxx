@@ -879,18 +879,18 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     return true;
 }
 
-void SvpSalGraphics::applyColor(cairo_t *cr, const SalColor &rColor)
+void SvpSalGraphics::applyColor(cairo_t *cr, SalColor aColor)
 {
     if (CAIRO_FORMAT_ARGB32 == cairo_image_surface_get_format(m_pSurface))
     {
-        cairo_set_source_rgba(cr, SALCOLOR_RED(rColor)/255.0,
-                                  SALCOLOR_GREEN(rColor)/255.0,
-                                  SALCOLOR_BLUE(rColor)/255.0,
+        cairo_set_source_rgba(cr, SALCOLOR_RED(aColor)/255.0,
+                                  SALCOLOR_GREEN(aColor)/255.0,
+                                  SALCOLOR_BLUE(aColor)/255.0,
                                   1.0);
     }
     else
     {
-        double fSet = rColor == COL_BLACK ? 0.0 : 1.0;
+        double fSet = aColor == COL_BLACK ? 0.0 : 1.0;
         cairo_set_source_rgba(cr, 1, 1, 1, fSet);
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     }
