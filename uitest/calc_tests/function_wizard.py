@@ -39,4 +39,6 @@ def open_function_wizard(xContext):
     xCancelBtn = xFunctionDlg.getChild("cancel")
     xCancelBtn.executeAction("CLICK", tuple())
 
+    ui_test.close_doc()
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
