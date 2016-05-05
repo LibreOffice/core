@@ -101,8 +101,8 @@ private:
     sal_Int32 FindNextMarkConnCell(sal_uInt16 nMarkConnCell,sal_uInt8 nEndCol);
 
 public:
-    void ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
-    void ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
+    void ConvertRow(rtl::Reference<XFTable> const & pXFTable, sal_uInt8 nStartCol, sal_uInt8 nEndCol);
+    void ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sal_uInt8 nStartCol, sal_uInt8 nEndCol);
     void CollectMergeInfo();
     void SetCellSplit(sal_uInt16 nEffectRows);
     bool GetMergeCellFlag();
