@@ -127,7 +127,7 @@ private:
 
 public:
     void XFConvert(XFContentContainer* pCont) override;
-    void ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
+    void ConvertTable(rtl::Reference<XFTable> const & pXFTable, sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     const OUString& GetDefaultRowStyleName(){return m_DefaultRowStyleName;}
     void SetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol,XFCell* pXFCell);
@@ -135,17 +135,17 @@ public:
    const  std::map<sal_uInt16,LwpRowLayout*>& GetRowsMap(){return m_RowsMap;}
     LwpRowLayout* GetRowLayout(sal_uInt16 nRow);
 private:
-    void ConvertDefaultRow(XFTable* pXFTable,sal_uInt8 nStartCol,
-                sal_uInt8 nEndCol,sal_uInt16 nRowID);
-    void ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
-    sal_uInt16 ConvertHeadingRow(XFTable* pXFTable,sal_uInt16 nStartHeadRow,sal_uInt16 nEndHeadRow);
+    void ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable, sal_uInt8 nStartCol,
+                sal_uInt8 nEndCol, sal_uInt16 nRowID);
+    void ConvertColumn(rtl::Reference<XFTable> const & pXFTable, sal_uInt8 nStartCol, sal_uInt8 nEndCol);
+    sal_uInt16 ConvertHeadingRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt16 nStartHeadRow,sal_uInt16 nEndHeadRow);
     static bool FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
-    void SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
+    void SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable> const & pXFTable,
                 sal_uInt8 nFirstColSpann,sal_uInt8* pCellMark);
 
     std::map<sal_uInt16,LwpRowLayout*> m_RowsMap;
     void SplitConflictCells();
-    XFTable* m_pXFTable;
+    rtl::Reference<XFTable> m_pXFTable;
     std::map<std::pair<sal_uInt16,sal_uInt8>,XFCell*> m_CellsMap;
 
     void PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID);
