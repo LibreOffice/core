@@ -10,7 +10,11 @@ diff /tmp/jix1 /tmp/jix2
 
 for i in `find . -name \*.pot`
 do
- echo ">>>>>>>> " $i
- diff ../pot/$i $i | sed '/^6c6$/,/^16c16$/d'
+ CMD=$(diff ../pot/$i $i | sed '/^6c6$/,/^16c16$/d')
+ if [ "$CMD" != "" ]
+ then
+   echo ">>>>>>>> " $i
+   echo "$CMD"
+ fi
 done
 
