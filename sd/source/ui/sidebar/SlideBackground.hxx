@@ -55,15 +55,15 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings );
     virtual ~SlideBackground();
-    virtual void dispose();
+    virtual void dispose() override;
     SfxBindings* GetBindings() { return mpBindings; }
     // Window
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void DataChanged (const DataChangedEvent& rEvent) override;
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSID,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) override;
 
 private:
 
