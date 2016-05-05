@@ -71,9 +71,8 @@ OString generateMD5(const void* pData, size_t length)
 
     OStringBuffer aBuffer;
     const char* pString = "0123456789ABCDEF";
-    for(size_t i = 0; i < RTL_DIGEST_LENGTH_MD5; ++i)
+    for(sal_uInt8 val : pBuffer)
     {
-        sal_uInt8 val = pBuffer[i];
         aBuffer.append(pString[val/16]);
         aBuffer.append(pString[val%16]);
     }
@@ -272,12 +271,12 @@ void releaseOpenCLEnv( GPUEnv *gpuInfo )
         return;
     }
 
-    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+    for (_cl_command_queue* & i : gpuEnv.mpCmdQueue)
     {
-        if (gpuEnv.mpCmdQueue[i])
+        if (i)
         {
-            clReleaseCommandQueue(gpuEnv.mpCmdQueue[i]);
-            gpuEnv.mpCmdQueue[i] = nullptr;
+            clReleaseCommandQueue(i);
+            i = nullptr;
         }
     }
     gpuEnv.mnCmdQueuePos = 0;

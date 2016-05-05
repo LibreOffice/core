@@ -833,13 +833,13 @@ Reference< XShape > Shape::createAndInsert(
                     {
                         PROP_TopBorder, PROP_LeftBorder, PROP_BottomBorder, PROP_RightBorder
                     };
-                    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
+                    for (sal_Int32 nBorder : aBorders)
                     {
-                        css::table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<css::table::BorderLine2>();
+                        css::table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(nBorder)).get<css::table::BorderLine2>();
                         aBorderLine.Color = aShapeProps.getProperty(PROP_LineColor).get<sal_Int32>();
                         if (aLineProperties.moLineWidth.has())
                             aBorderLine.LineWidth = convertEmuToHmm(aLineProperties.moLineWidth.get());
-                        aShapeProps.setProperty(aBorders[i], uno::makeAny(aBorderLine));
+                        aShapeProps.setProperty(nBorder, uno::makeAny(aBorderLine));
                     }
                     aShapeProps.erase(PROP_LineColor);
                 }

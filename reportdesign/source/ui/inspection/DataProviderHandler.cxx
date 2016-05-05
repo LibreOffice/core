@@ -374,9 +374,9 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
             ,OUString(PROPERTY_PREVIEW_COUNT)
         };
 
-        for (size_t nPos = 0; nPos < SAL_N_ELEMENTS(s_pProperties); ++nPos )
+        for (const OUString & rName : s_pProperties)
         {
-            aValue.Name = s_pProperties[nPos];
+            aValue.Name = rName;
             aNewProps.push_back(aValue);
         }
     }
