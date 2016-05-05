@@ -4126,16 +4126,18 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 
     OUString sUrl;
     xPropSet->getPropertyValue("GraphicURL") >>= sUrl;
-    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( sUrl ).GetPrefSize() );
+    const GraphicObject aGrafObj(GraphicObject::CreateGraphicObjectFromURL(sUrl));
+
+    Size aOriginalSize(aGrafObj.GetPrefSize());
 
     css::text::GraphicCrop aGraphicCropStruct;
     xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
     const MapMode aMap100mm( MAP_100TH_MM );
-    const MapMode& mapMode = GraphicObject::CreateGraphicObjectFromURL( sUrl ).GetPrefMapMode();
-    if( mapMode.GetMapUnit() == MAP_PIXEL )
+    const MapMode& rMapMode = aGrafObj.GetPrefMapMode();
+    if (rMapMode.GetMapUnit() == MAP_PIXEL)
     {
-        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, aMap100mm );
+        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, aMap100mm);
     }
 
     if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
