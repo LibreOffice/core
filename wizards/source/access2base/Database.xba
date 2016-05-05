@@ -979,19 +979,29 @@ Dim oStatement As Object		&apos;For CreateStatement method
 Dim sExpr As String				&apos;For inclusion of aggregate function
 Dim sTempField As String		&apos;Random temporary field in SQL expression
 
+Dim sTarget as String, sWhere As String, sOrderBy As String, sLimit As String
+
     vResult = Null
 
-	If psFunction = &quot;&quot; Then sExpr = &quot;TOP 1 &quot; &amp; psExpr Else sExpr = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
-
 	Randomize 2^14-1
-	sTempField = &quot;TEMP&quot; &amp; Right(&quot;00000&quot; &amp; Int(100000 * Rnd), 5)
-    sSql = &quot;SELECT &quot; &amp; sExpr &amp; &quot; AS [&quot; &amp; sTempField &amp; &quot;] FROM &quot; &amp; psDomain
-    If pvCriteria &lt;&gt; &quot;&quot; Then
-        sSql = sSql &amp; &quot; WHERE &quot; &amp; pvCriteria
-    End If
-    If pvOrderClause &lt;&gt; &quot;&quot; Then
-        sSql = sSql &amp; &quot; ORDER BY &quot; &amp; pvOrderClause
-    End If
+	sTempField = &quot;[TEMP&quot; &amp; Right(&quot;00000&quot; &amp; Int(100000 * Rnd), 5) &amp; &quot;]&quot;
+	If pvCriteria &lt;&gt; &quot;&quot; Then sWhere = &quot; WHERE &quot; &amp; pvCriteria Else sWhere = &quot;&quot;
+	If pvOrderClause &lt;&gt; &quot;&quot; Then sOrderBy = &quot; ORDER BY &quot; &amp; pvOrderClause Else sOrderBy = &quot;&quot;
+	sLimit = &quot;&quot;
+
+	Select Case UCase(MetaData.getDatabaseProductName())
+		Case &quot;MYSQL&quot;, &quot;SQLITE&quot;
+			If psFunction = &quot;&quot; Then
+				sTarget = psExpr
+				sLimit = &quot; LIMIT 1&quot;
+			Else
+				sTarget = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
+			End If
+			sSql = &quot;SELECT &quot; &amp; sTarget &amp; &quot; AS &quot; &amp; sTempField &amp; &quot; FROM &quot; &amp; psDomain &amp;  sWhere &amp; sOrderBy &amp; sLimit
+		Case Else		&apos;	Standard syntax - Includes HSQLDB
+			If psFunction = &quot;&quot; Then sTarget = &quot;TOP 1 &quot; &amp; psExpr Else sTarget = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
+			sSql = &quot;SELECT &quot; &amp; sTarget &amp; &quot; AS &quot; &amp; sTempField &amp; &quot; FROM &quot; &amp; psDomain &amp; sWhere &amp; sOrderBy
+	End Select
 
     &apos;Lookup the value.
     Set oStatement = Connection.createStatement()
