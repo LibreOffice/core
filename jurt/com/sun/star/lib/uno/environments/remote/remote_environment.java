@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -61,3 +62,5 @@ public final class remote_environment implements IEnvironment {
 
     private final Object context;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

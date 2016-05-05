@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -30,3 +31,5 @@ interface RequestHandler {
     Object sendRequest(String oid, Type type, String operation, Object[] args)
         throws Throwable;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
