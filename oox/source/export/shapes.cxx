@@ -237,18 +237,18 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
 
     const char * pFilterName(nullptr);
     SvGlobalName const classId(xObj->getClassID());
-    for (size_t i = 0; i < SAL_N_ELEMENTS(s_Mapping); ++i)
+    for (auto & i : s_Mapping)
     {
-        auto const& rId(s_Mapping[i].ClassId);
+        auto const& rId(i.ClassId);
         SvGlobalName const temp(rId.n1, rId.n2, rId.n3, rId.b8, rId.b9, rId.b10, rId.b11, rId.b12, rId.b13, rId.b14, rId.b15);
         if (temp == classId)
         {
             assert(SvGlobalName(SO3_SCH_CLASSID_60) != classId); // chart should be written elsewhere!
             assert(SvGlobalName(SO3_SM_CLASSID_60) != classId); // formula should be written elsewhere!
-            pFilterName = s_Mapping[i].pFilterName;
-            o_rMediaType = OUString::createFromAscii(s_Mapping[i].pMediaType);
-            o_rpProgID = s_Mapping[i].pProgID;
-            o_rSuffix = OUString::createFromAscii(s_Mapping[i].pSuffix);
+            pFilterName = i.pFilterName;
+            o_rMediaType = OUString::createFromAscii(i.pMediaType);
+            o_rpProgID = i.pProgID;
+            o_rSuffix = OUString::createFromAscii(i.pSuffix);
             o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
             break;
         }

@@ -1309,15 +1309,15 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     };
     const uno::Reference < beans::XPropertySetInfo > xInfo = m_xReportComponent->getPropertySetInfo();
     const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pIncludeProperties); ++i )
+    for (const auto & rIncludeProp : pIncludeProperties)
     {
         const beans::Property* pIter = aSeq.getConstArray();
         const beans::Property* pEnd  = pIter + aSeq.getLength();
-        const beans::Property* pFind = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyCompare(),boost::cref(pIncludeProperties[i])));
+        const beans::Property* pFind = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyCompare(),boost::cref(rIncludeProp)));
         if ( pFind != pEnd )
         {
             // special case for controls which contain a data field
-            if ( PROPERTY_DATAFIELD == pIncludeProperties[i] )
+            if ( PROPERTY_DATAFIELD == rIncludeProp )
             {
                 beans::Property aValue;
                 aValue.Name = PROPERTY_FORMULALIST;

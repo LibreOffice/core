@@ -360,13 +360,13 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
             XML_size, XML_brushSize, XML_scaling, XML_detail, XML_bright, XML_contrast,
             XML_colorTemp, XML_sat, XML_amount
     };
-    for( sal_Int32 i=0; i<19; ++i )
+    for(sal_Int32 nAttrib : aAttribs)
     {
-        if( rAttribs.hasAttribute( aAttribs[i] ) )
+        if( rAttribs.hasAttribute( nAttrib ) )
         {
-            OUString sName = ArtisticEffectProperties::getEffectString( aAttribs[i] );
+            OUString sName = ArtisticEffectProperties::getEffectString( nAttrib );
             if( !sName.isEmpty() )
-                maEffect.maAttribs[sName] = uno::makeAny( rAttribs.getInteger( aAttribs[i], 0 ) );
+                maEffect.maAttribs[sName] = uno::makeAny( rAttribs.getInteger( nAttrib, 0 ) );
         }
     }
 
