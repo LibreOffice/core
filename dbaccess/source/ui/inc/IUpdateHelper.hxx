@@ -30,7 +30,7 @@ namespace dbaui
     public:
         virtual void updateString(sal_Int32 _nPos, const OUString& _sValue) = 0;
         virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) = 0;
-        virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) = 0;
+        virtual void updateInt(sal_Int32 _nPos, sal_Int32 _nValue) = 0;
         virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType) = 0;
         virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) = 0;
         virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) = 0;

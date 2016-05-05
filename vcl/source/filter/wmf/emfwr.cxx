@@ -252,7 +252,7 @@ void EMFWriter::ImplWritePlusEOF()
     ImplEndCommentRecord();
 }
 
-void EMFWriter::ImplWritePlusColor( const Color& rColor, const sal_uInt32& nTrans )
+void EMFWriter::ImplWritePlusColor( const Color& rColor, sal_uInt32 nTrans )
 {
     sal_uInt32 nAlpha = ((100-nTrans)*0xFF)/100;
     sal_uInt32 nCol = rColor.GetBlue();
@@ -270,7 +270,7 @@ void EMFWriter::ImplWritePlusPoint( const Point& rPoint )
     m_rStm.WriteUInt16( aPoint.X() ).WriteUInt16( aPoint.Y() );
 }
 
-void EMFWriter::ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, const sal_uInt32& nTrans )
+void EMFWriter::ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, sal_uInt32 nTrans )
 {
     ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
     if( rPoly.GetSize() )

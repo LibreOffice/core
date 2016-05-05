@@ -42,7 +42,7 @@ bool CodeCompleteOptions::IsCodeCompleteOn()
     return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsCodeCompleteOn;
 }
 
-void CodeCompleteOptions::SetCodeCompleteOn( const bool& b )
+void CodeCompleteOptions::SetCodeCompleteOn( bool b )
 {
     theCodeCompleteOptions::get().bIsCodeCompleteOn = b;
 }
@@ -52,7 +52,7 @@ bool CodeCompleteOptions::IsExtendedTypeDeclaration()
     return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bExtendedTypeDeclarationOn;
 }
 
-void CodeCompleteOptions::SetExtendedTypeDeclaration( const bool& b )
+void CodeCompleteOptions::SetExtendedTypeDeclaration( bool b )
 {
     theCodeCompleteOptions::get().bExtendedTypeDeclarationOn = b;
 }
@@ -62,7 +62,7 @@ bool CodeCompleteOptions::IsProcedureAutoCompleteOn()
     return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn;
 }
 
-void CodeCompleteOptions::SetProcedureAutoCompleteOn( const bool& b )
+void CodeCompleteOptions::SetProcedureAutoCompleteOn( bool b )
 {
     theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn = b;
 }
@@ -72,7 +72,7 @@ bool CodeCompleteOptions::IsAutoCloseQuotesOn()
     return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCloseQuotesOn;
 }
 
-void CodeCompleteOptions::SetAutoCloseQuotesOn( const bool& b )
+void CodeCompleteOptions::SetAutoCloseQuotesOn( bool b )
 {
     theCodeCompleteOptions::get().bIsAutoCloseQuotesOn = b;
 }
@@ -82,7 +82,7 @@ bool CodeCompleteOptions::IsAutoCloseParenthesisOn()
     return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn;
 }
 
-void CodeCompleteOptions::SetAutoCloseParenthesisOn( const bool& b )
+void CodeCompleteOptions::SetAutoCloseParenthesisOn( bool b )
 {
     theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn = b;
 }
@@ -92,7 +92,7 @@ bool CodeCompleteOptions::IsAutoCorrectOn()
     return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCorrectOn;
 }
 
-void CodeCompleteOptions::SetAutoCorrectOn( const bool& b )
+void CodeCompleteOptions::SetAutoCorrectOn( bool b )
 {
     theCodeCompleteOptions::get().bIsAutoCorrectOn = b;
 }

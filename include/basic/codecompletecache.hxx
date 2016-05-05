@@ -52,22 +52,22 @@ public:
     CodeCompleteOptions();
 
     static bool IsCodeCompleteOn();
-    static void SetCodeCompleteOn( const bool& b );
+    static void SetCodeCompleteOn( bool b );
 
     static bool IsExtendedTypeDeclaration();
-    static void SetExtendedTypeDeclaration( const bool& b );
+    static void SetExtendedTypeDeclaration( bool b );
 
     static bool IsProcedureAutoCompleteOn();
-    static void SetProcedureAutoCompleteOn( const bool& b );
+    static void SetProcedureAutoCompleteOn( bool b );
 
     static bool IsAutoCloseQuotesOn();
-    static void SetAutoCloseQuotesOn( const bool& b );
+    static void SetAutoCloseQuotesOn( bool b );
 
     static bool IsAutoCloseParenthesisOn();
-    static void SetAutoCloseParenthesisOn( const bool& b );
+    static void SetAutoCloseParenthesisOn( bool b );
 
     static bool IsAutoCorrectOn();
-    static void SetAutoCorrectOn( const bool& b );
+    static void SetAutoCorrectOn( bool b );
 };
 
 class BASIC_DLLPUBLIC CodeCompleteDataCache

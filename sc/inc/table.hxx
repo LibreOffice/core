@@ -1014,7 +1014,7 @@ private:
     bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                        const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                       const SCCOL& nLastCol, const SCROW& nLastRow,
+                       SCCOL nLastCol, SCROW nLastRow,
                        const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMark,
                           ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);

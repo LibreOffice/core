@@ -50,7 +50,7 @@ protected:
     static Color GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern );
     static Color GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans );
     static sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans );
-    css::uno::Any GetIndexColor( const sal_Int32& nColorIndex );
+    css::uno::Any GetIndexColor( sal_Int32 nColorIndex );
     sal_Int32 GetColorIndex( const sal_Int32 nColor );
     css::uno::Any GetUserDefinedAttributes( const OUString& sName );
     void SetUserDefinedAttributes( const OUString& sName, const css::uno::Any& aValue );

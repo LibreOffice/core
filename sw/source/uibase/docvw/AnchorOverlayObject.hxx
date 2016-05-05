@@ -43,7 +43,7 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
     public:
         static AnchorOverlayObject* CreateAnchorOverlayObject( SwView& rDocView,
                                                                const SwRect& aAnchorRect,
-                                                               const long& aPageBorder,
+                                                               long aPageBorder,
                                                                const Point& aLineStart,
                                                                const Point& aLineEnd,
                                                                const Color& aColorAnchor );

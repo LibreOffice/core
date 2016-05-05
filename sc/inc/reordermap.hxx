@@ -29,7 +29,7 @@ public:
     std::pair<iterator, bool>
         insert( DataType::value_type const& val );
 
-    const_iterator find( DataType::key_type const& key ) const;
+    const_iterator find( DataType::key_type key ) const;
 };
 
 }

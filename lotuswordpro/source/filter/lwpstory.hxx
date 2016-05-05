@@ -129,8 +129,8 @@ public:
     LwpPara* GetLastParaOfPreviousStory();
 
     OUString GetContentText(bool bAllText = false);
-    inline void AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos);
-    bool IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos);
+    inline void AddBullStyleName2List(const OUString& rStyleName, sal_uInt8 nPos);
+    bool IsBullStyleUsedBefore(const OUString& rStyleName, sal_uInt8 nPos);
 
     OUString RegisterFirstFribStyle();
 };
@@ -165,7 +165,7 @@ void LwpStory::SetSectionName(const OUString& StyleName)
 {
     m_CurrSectionName = StyleName;
 }
-inline void LwpStory::AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos)
+inline void LwpStory::AddBullStyleName2List(const OUString& rStyleName, sal_uInt8 nPos)
 {
     m_vBulletStyleNameList.push_back(std::make_pair(rStyleName, nPos));
 }

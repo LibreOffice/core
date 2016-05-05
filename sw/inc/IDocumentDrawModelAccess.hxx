@@ -59,7 +59,7 @@ public:
 
         @return bool, indicating, if given layer ID belongs to the visible ones.
     */
-    virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const = 0;
+    virtual bool IsVisibleLayerId( SdrLayerID _nLayerId ) const = 0;
 
     /** method to determine, if the corresponding invisible layer ID for a visible one.
 
@@ -74,7 +74,7 @@ public:
 
         @return sal_Int8, invisible layer ID corresponding to given layer ID
     */
-    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) = 0;
+    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( SdrLayerID _nVisibleLayerId ) = 0;
 
     /// Searches text in shapes anchored inside rPaM.
     virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) = 0;

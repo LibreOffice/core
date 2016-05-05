@@ -111,7 +111,7 @@ public:
     virtual ~UserPaintEventHandler() {}
     virtual bool colorChanged( RGBColor const& rUserColor ) = 0;
     virtual bool widthChanged( double nUserStrokeWidth ) = 0;
-    virtual bool eraseAllInkChanged(bool const& rEraseAllInk) =0;
+    virtual bool eraseAllInkChanged(bool bEraseAllInk) =0;
     virtual bool eraseInkWidthChanged(sal_Int32 rEraseInkSize) =0;
     virtual bool switchEraserMode() = 0;
     virtual bool switchPenMode() = 0;
@@ -529,7 +529,7 @@ public:
      enabled. User paint denotes the feature to draw colored lines
      on top of the slide content.
      */
-    void notifyEraseAllInk( bool const& rEraseAllInk );
+    void notifyEraseAllInk( bool bEraseAllInk );
     void notifySwitchPenMode();
     void notifySwitchEraserMode();
     void notifyEraseInkWidth( sal_Int32 rEraseInkSize );

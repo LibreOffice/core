@@ -609,7 +609,7 @@ struct ImplEntryMetrics
     long    nImgHeight;
 };
 
-void ImplListBoxWindow::EnableQuickSelection( const bool& b )
+void ImplListBoxWindow::EnableQuickSelection( bool b )
 {
     maQuickSelectionEngine.SetEnabled( b );
 }

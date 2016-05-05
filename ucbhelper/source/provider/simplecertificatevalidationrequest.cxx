@@ -24,7 +24,7 @@ using namespace com::sun::star;
 using namespace ucbhelper;
 
 
-SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
+SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( sal_Int32 lCertificateValidity,
                                                                         const css::uno::Reference<css::security::XCertificate>& certificate,
                                                                         const OUString & hostname)
 {

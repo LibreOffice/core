@@ -121,7 +121,7 @@ TextEffectsContext::~TextEffectsContext()
 {
 }
 
-void TextEffectsContext::pushAttributeToGrabBag (const sal_Int32& aAttributeId, const OUString& rElementName, const AttributeList& rAttribs)
+void TextEffectsContext::pushAttributeToGrabBag (sal_Int32 aAttributeId, const OUString& rElementName, const AttributeList& rAttribs)
 {
     if (!rAttribs.hasAttribute(aAttributeId))
         return;

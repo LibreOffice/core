@@ -176,7 +176,7 @@ public:
     void PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec );
     bool PutDecimal( SbxDecimal* pDecimal ); // This function is needed for Windows build, don't remove
     void fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
-    bool PutCurrency( const sal_Int64& );
+    bool PutCurrency( sal_Int64 );
             // Interface for CDbl in Basic
     static SbxError ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );
 

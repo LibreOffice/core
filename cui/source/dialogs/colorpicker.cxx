@@ -134,7 +134,7 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
 class HexColorControl : public Edit
 {
 public:
-    HexColorControl( vcl::Window* pParent, const WinBits& nStyle );
+    HexColorControl( vcl::Window* pParent, WinBits nStyle );
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     virtual void Paste() override;
@@ -146,7 +146,7 @@ private:
     static bool ImplProcessKeyInput( const KeyEvent& rKEv );
 };
 
-HexColorControl::HexColorControl( vcl::Window* pParent, const WinBits& nStyle )
+HexColorControl::HexColorControl( vcl::Window* pParent, WinBits nStyle )
     : Edit(pParent, nStyle)
 {
     SetMaxTextLen( 6 );
@@ -256,7 +256,7 @@ bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
 class ColorPreviewControl : public Control
 {
 public:
-    ColorPreviewControl( vcl::Window* pParent, const WinBits& nStyle );
+    ColorPreviewControl( vcl::Window* pParent, WinBits nStyle );
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
@@ -266,7 +266,7 @@ private:
     Color maColor;
 };
 
-ColorPreviewControl::ColorPreviewControl(vcl::Window* pParent, const WinBits& nStyle)
+ColorPreviewControl::ColorPreviewControl(vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
 {
 }
@@ -304,7 +304,7 @@ const ColorMode DefaultMode = HUE;
 class ColorFieldControl : public Control
 {
 public:
-    ColorFieldControl(vcl::Window* pParent, const WinBits& nStyle);
+    ColorFieldControl(vcl::Window* pParent, WinBits nStyle);
     virtual ~ColorFieldControl();
 
     virtual void dispose() override;
@@ -346,7 +346,7 @@ private:
     std::vector<sal_uInt16> maPercent_Vert;
 };
 
-ColorFieldControl::ColorFieldControl( vcl::Window* pParent, const WinBits& nStyle )
+ColorFieldControl::ColorFieldControl( vcl::Window* pParent, WinBits nStyle )
 : Control( pParent, nStyle )
 , meMode( DefaultMode )
 , mdX( -1.0 )
@@ -715,7 +715,7 @@ void ColorFieldControl::UpdatePosition()
 class ColorSliderControl : public Control
 {
 public:
-    ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle );
+    ColorSliderControl( vcl::Window* pParent, WinBits nStyle );
     virtual ~ColorSliderControl();
     virtual void dispose() override;
 
@@ -748,7 +748,7 @@ private:
     double mdValue;
 };
 
-ColorSliderControl::ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle )
+ColorSliderControl::ColorSliderControl( vcl::Window* pParent, WinBits nStyle )
     : Control( pParent, nStyle )
     , meMode( DefaultMode )
     , mpBitmap( nullptr )

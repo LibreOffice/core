@@ -85,7 +85,7 @@ namespace reportdesign
             l.notify();
         }
         void setSection(     const OUString& _sProperty
-                            ,const bool& _bOn
+                            ,bool _bOn
                             ,const OUString& _sName
                             ,css::uno::Reference< css::report::XSection>& _member);
     protected:

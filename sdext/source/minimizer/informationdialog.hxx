@@ -46,7 +46,7 @@ public:
 
     InformationDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             css::uno::Reference< css::frame::XFrame >& rxFrame, const OUString& rSaveAsURL,
-                bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
+                bool& bOpenNewDocument, sal_Int64 nSourceSize, sal_Int64 nDestSize, sal_Int64 nApproxDest );
     ~InformationDialog();
 
     void                execute();

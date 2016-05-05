@@ -475,7 +475,7 @@ void OOXMLFastContextHandler::setLastSectionGroup()
 }
 
 void OOXMLFastContextHandler::newProperty
-(const Id & /*nId*/, const OOXMLValue::Pointer_t& /*pVal*/)
+(Id /*nId*/, const OOXMLValue::Pointer_t& /*pVal*/)
 {
 }
 
@@ -649,12 +649,12 @@ void OOXMLFastContextHandler::propagateCharacterProperties()
     mpParserState->setCharacterProperties(getPropertySet());
 }
 
-void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(const Id & rId)
+void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(Id nId)
 {
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
-    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(rId, pValue, OOXMLProperty::SPRM));
+    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(nId, pValue, OOXMLProperty::SPRM));
 
     pPropertySet->add(pProp);
     mpParserState->setCharacterProperties(pPropertySet);
@@ -698,12 +698,12 @@ void OOXMLFastContextHandler::clearTableProps()
                                      (new OOXMLPropertySet));
 }
 
-void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
+void OOXMLFastContextHandler::sendPropertiesWithId(Id nId)
 {
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
-    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(rId, pValue, OOXMLProperty::SPRM));
+    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(nId, pValue, OOXMLProperty::SPRM));
 
     pPropertySet->add(pProp);
     mpStream->props(pPropertySet);
@@ -877,12 +877,12 @@ OOXMLFastContextHandlerStream::~OOXMLFastContextHandlerStream()
 {
 }
 
-void OOXMLFastContextHandlerStream::newProperty(const Id & rId,
+void OOXMLFastContextHandlerStream::newProperty(Id nId,
                                                 const OOXMLValue::Pointer_t& pVal)
 {
-    if (rId != 0x0)
+    if (nId != 0x0)
     {
-        OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(rId, pVal, OOXMLProperty::ATTRIBUTE));
+        OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(nId, pVal, OOXMLProperty::ATTRIBUTE));
 
         mpPropertySetAttrs->add(pProperty);
     }
@@ -952,11 +952,11 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
 }
 
 void OOXMLFastContextHandlerProperties::newProperty
-(const Id & rId, const OOXMLValue::Pointer_t& pVal)
+(Id nId, const OOXMLValue::Pointer_t& pVal)
 {
-    if (rId != 0x0)
+    if (nId != 0x0)
     {
-        OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(rId, pVal, OOXMLProperty::ATTRIBUTE));
+        OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(nId, pVal, OOXMLProperty::ATTRIBUTE));
 
         mpPropertySet->add(pProperty);
     }
@@ -1760,7 +1760,7 @@ OOXMLFastContextHandlerWrapper::getResource() const
     return UNKNOWN;
 }
 
-void OOXMLFastContextHandlerWrapper::addNamespace(const Id & nId)
+void OOXMLFastContextHandlerWrapper::addNamespace(Id nId)
 {
     mMyNamespaces.insert(nId);
 }
@@ -1844,13 +1844,13 @@ OOXMLFastContextHandlerWrapper::getFastContextHandler() const
 }
 
 void OOXMLFastContextHandlerWrapper::newProperty
-(const Id & rId, const OOXMLValue::Pointer_t& pVal)
+(Id nId, const OOXMLValue::Pointer_t& pVal)
 {
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
-            pHandler->newProperty(rId, pVal);
+            pHandler->newProperty(nId, pVal);
     }
 }
 

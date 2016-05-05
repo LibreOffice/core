@@ -73,7 +73,7 @@ namespace vcl
 
         bool    HandleKeyEvent( const KeyEvent& _rKEvt );
         void    Reset();
-        void SetEnabled( const bool& b );
+        void    SetEnabled( bool b );
 
     private:
         ::std::unique_ptr< QuickSelectionEngine_Data >    m_pData;

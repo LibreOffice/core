@@ -347,7 +347,7 @@ void ScfPropSetHelper::WriteValue( const Any& rAny )
         *pAny = rAny;
 }
 
-void ScfPropSetHelper::WriteValue( const bool& rbValue )
+void ScfPropSetHelper::WriteValue( bool rbValue )
 {
     if( Any* pAny = GetNextAny() )
         *pAny <<= rbValue;

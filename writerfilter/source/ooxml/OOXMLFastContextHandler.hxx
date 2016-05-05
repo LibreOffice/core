@@ -99,7 +99,7 @@ public:
 
     virtual void attributes(const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) throw (css::uno::RuntimeException, css::xml::sax::SAXException);
 
-    virtual void newProperty(const Id & rId, const OOXMLValue::Pointer_t& pVal);
+    virtual void newProperty(Id aId, const OOXMLValue::Pointer_t& pVal);
     virtual void setPropertySet(const OOXMLPropertySet::Pointer_t& pPropertySet);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
@@ -171,11 +171,11 @@ public:
     void startTxbxContent();
     void endTxbxContent();
     void propagateCharacterProperties();
-    void propagateCharacterPropertiesAsSet(const Id & rId);
+    void propagateCharacterPropertiesAsSet(Id nId);
     void propagateTableProperties();
     void propagateRowProperties();
     void propagateCellProperties();
-    void sendPropertiesWithId(const Id & rId);
+    void sendPropertiesWithId(Id nId);
     void sendPropertiesToParent();
     void sendCellProperties();
     void sendRowProperties();
@@ -247,7 +247,7 @@ public:
 
     const OOXMLPropertySet::Pointer_t& getPropertySetAttrs() const { return mpPropertySetAttrs;}
 
-    virtual void newProperty(const Id & rId, const OOXMLValue::Pointer_t& pVal) override;
+    virtual void newProperty(Id aId, const OOXMLValue::Pointer_t& pVal) override;
     void sendProperty(Id nId);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const override;
 
@@ -266,7 +266,7 @@ public:
     virtual OOXMLValue::Pointer_t getValue() const override;
     virtual ResourceEnum_t getResource() const override { return PROPERTIES; }
 
-    virtual void newProperty(const Id & nId, const OOXMLValue::Pointer_t& pVal) override;
+    virtual void newProperty(Id nId, const OOXMLValue::Pointer_t& pVal) override;
 
     void handleXNotes();
     void handleHdrFtr();
@@ -500,10 +500,10 @@ public:
 
     virtual ResourceEnum_t getResource() const override;
 
-    void addNamespace(const Id & nId);
+    void addNamespace(Id nId);
     void addToken( Token_t Element );
 
-    virtual void newProperty(const Id & rId, const OOXMLValue::Pointer_t& pVal) override;
+    virtual void newProperty(Id nId, const OOXMLValue::Pointer_t& pVal) override;
     virtual void setPropertySet(const OOXMLPropertySet::Pointer_t& pPropertySet) override;
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const override;
 

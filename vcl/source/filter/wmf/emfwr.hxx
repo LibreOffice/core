@@ -83,8 +83,8 @@ private:
     void                ImplWrite( const GDIMetaFile& rMtf );
     void                WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSizeLog );
     void                ImplWritePlusEOF();
-    void                ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, const sal_uInt32& nTrans );
-    void                ImplWritePlusColor( const Color& rColor, const sal_uInt32& nTrans );
+    void                ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, sal_uInt32 nTrans );
+    void                ImplWritePlusColor( const Color& rColor, sal_uInt32 nTrans );
     void                ImplWritePlusPoint( const Point& rPoint );
 
 public:

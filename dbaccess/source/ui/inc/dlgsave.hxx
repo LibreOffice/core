@@ -52,7 +52,7 @@ namespace dbaui
         OSaveAsDlgImpl* m_pImpl;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
     public:
-        OSaveAsDlg( vcl::Window * pParent,const sal_Int32& _rType,
+        OSaveAsDlg( vcl::Window * pParent, sal_Int32 _rType,
                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,

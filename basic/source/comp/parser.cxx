@@ -310,7 +310,7 @@ void SbiParser::StmntBlock( SbiToken eEnd )
     }
 }
 
-void SbiParser::SetCodeCompleting( const bool& b )
+void SbiParser::SetCodeCompleting( bool b )
 {
     bCodeCompleting = b;
 }

@@ -104,7 +104,7 @@ namespace vcl
     {
     }
 
-    void QuickSelectionEngine::SetEnabled( const bool& b )
+    void QuickSelectionEngine::SetEnabled( bool b )
     {
         bEnabled = b;
     }

@@ -161,9 +161,9 @@ namespace slideshow
                     }
             }
 
-            bool eraseAllInkChanged( bool const& rEraseAllInk ) override
+            bool eraseAllInkChanged( bool bEraseAllInk ) override
             {
-                this->mbIsEraseAllModeActivated= rEraseAllInk;
+                this->mbIsEraseAllModeActivated = bEraseAllInk;
                 // if the erase all mode is activated it will remove all ink from slide,
                 // therefore destroy all the polygons stored
                 if(mbIsEraseAllModeActivated)

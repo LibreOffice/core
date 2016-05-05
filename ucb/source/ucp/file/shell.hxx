@@ -89,13 +89,13 @@ namespace fileaccess {
         public:
             MyProperty();
             explicit MyProperty( const OUString&  thePropertyName );
-            MyProperty( const bool&                       theIsNative,
+            MyProperty( bool                              theIsNative,
                         const OUString&                   thePropertyName,
-                        const sal_Int32&                  theHandle,
+                        sal_Int32                         theHandle,
                         const css::uno::Type&             theTyp,
                         const css::uno::Any&              theValue,
                         const css::beans::PropertyState&  theState,
-                        const sal_Int16&                  theAttributes );
+                        sal_Int16                         theAttributes );
 
             ~MyProperty();
             inline const bool& SAL_CALL IsNative() const;

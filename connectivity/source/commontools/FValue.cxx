@@ -533,7 +533,7 @@ ORowSetValue& ORowSetValue::operator=(const OUString& _rRH)
 }
 
 
-ORowSetValue& ORowSetValue::operator=(const double& _rRH)
+ORowSetValue& ORowSetValue::operator=(double _rRH)
 {
     if(m_eTypeKind != DataType::DOUBLE)
         free();
@@ -545,7 +545,7 @@ ORowSetValue& ORowSetValue::operator=(const double& _rRH)
     return *this;
 }
 
-ORowSetValue& ORowSetValue::operator=(const float& _rRH)
+ORowSetValue& ORowSetValue::operator=(float _rRH)
 {
     if(m_eTypeKind != DataType::FLOAT)
         free();
@@ -558,7 +558,7 @@ ORowSetValue& ORowSetValue::operator=(const float& _rRH)
 }
 
 
-ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_Int8 _rRH)
 {
     if(m_eTypeKind != DataType::TINYINT )
         free();
@@ -571,7 +571,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
 }
 
 
-ORowSetValue& ORowSetValue::operator=(const sal_uInt8& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_uInt8 _rRH)
 {
     if(m_eTypeKind != DataType::TINYINT )
         free();
@@ -584,7 +584,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt8& _rRH)
 }
 
 
-ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_Int16 _rRH)
 {
     if(m_eTypeKind != DataType::SMALLINT )
         free();
@@ -598,7 +598,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
 }
 
 
-ORowSetValue& ORowSetValue::operator=(const sal_uInt16& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_uInt16 _rRH)
 {
     if(m_eTypeKind != DataType::SMALLINT )
         free();
@@ -612,7 +612,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt16& _rRH)
 }
 
 
-ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_Int32 _rRH)
 {
     if(m_eTypeKind != DataType::INTEGER )
         free();
@@ -627,7 +627,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
 }
 
 
-ORowSetValue& ORowSetValue::operator=(const sal_uInt32& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_uInt32 _rRH)
 {
     if(m_eTypeKind != DataType::INTEGER )
         free();
@@ -654,7 +654,7 @@ ORowSetValue& ORowSetValue::operator=(const bool _rRH)
     return *this;
 }
 
-ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_Int64 _rRH)
 {
     if ( DataType::BIGINT != m_eTypeKind)
         free();
@@ -667,7 +667,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
     return *this;
 }
 
-ORowSetValue& ORowSetValue::operator=(const sal_uInt64& _rRH)
+ORowSetValue& ORowSetValue::operator=(sal_uInt64 _rRH)
 {
     if ( DataType::BIGINT != m_eTypeKind)
         free();

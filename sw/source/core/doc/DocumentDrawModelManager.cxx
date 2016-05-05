@@ -281,7 +281,7 @@ void DocumentDrawModelManager::NotifyInvisibleLayers( SdrPageView& _rSdrPageView
     _rSdrPageView.SetLayerVisible( sLayerNm, false );
 }
 
-bool DocumentDrawModelManager::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
+bool DocumentDrawModelManager::IsVisibleLayerId( SdrLayerID _nLayerId ) const
 {
     bool bRetVal;
 
@@ -306,7 +306,7 @@ bool DocumentDrawModelManager::IsVisibleLayerId( const SdrLayerID& _nLayerId ) c
     return bRetVal;
 }
 
-SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId )
+SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( SdrLayerID _nVisibleLayerId )
 {
     SdrLayerID nInvisibleLayerId;
 

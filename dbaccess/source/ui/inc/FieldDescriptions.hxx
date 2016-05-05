@@ -74,10 +74,10 @@ namespace dbaui
         void SetType(const TOTypeInfoSP& _pType);
         void SetTypeValue(sal_Int32 _nType);
         void SetTypeName(const OUString& _sTypeName);
-        void SetPrecision(const sal_Int32& _rPrecision);
-        void SetScale(const sal_Int32& _rScale);
-        void SetIsNullable(const sal_Int32& _rIsNullable);
-        void SetFormatKey(const sal_Int32& _rFormatKey);
+        void SetPrecision(sal_Int32 _rPrecision);
+        void SetScale(sal_Int32 _rScale);
+        void SetIsNullable(sal_Int32 _rIsNullable);
+        void SetFormatKey(sal_Int32 _rFormatKey);
         void SetHorJustify(const SvxCellHorJustify& _rHorJustify);
         void SetAutoIncrement(bool _bAuto);
         void SetPrimaryKey(bool _bPKey);

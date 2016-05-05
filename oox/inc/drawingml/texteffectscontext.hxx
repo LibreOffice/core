@@ -40,7 +40,7 @@ protected:
 
 private:
     void processAttributes(const AttributeList& rAttribs);
-    void pushAttributeToGrabBag (const sal_Int32& aAttributeId, const OUString& rElementName, const AttributeList& rAttribs);
+    void pushAttributeToGrabBag (sal_Int32 aAttributeId, const OUString& rElementName, const AttributeList& rAttribs);
 };
 
 } }

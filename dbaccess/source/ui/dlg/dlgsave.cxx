@@ -64,7 +64,7 @@ public:
     sal_Int32                  m_nType;
     sal_Int32                  m_nFlags;
 
-    OSaveAsDlgImpl( OSaveAsDlg* pParent,const sal_Int32& _rType,
+    OSaveAsDlgImpl( OSaveAsDlg* pParent, sal_Int32 _rType,
                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
@@ -78,7 +78,7 @@ public:
 } // dbaui
 
 OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
-                               const sal_Int32& _rType,
+                               sal_Int32 _rType,
                                const Reference< XConnection>& _xConnection,
                                const OUString& rDefault,
                                const IObjectNameCheck& _rObjectNameCheck,
@@ -170,7 +170,7 @@ void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxCon
 }
 
 OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
-                        const sal_Int32& _rType,
+                        sal_Int32 _rType,
                         const Reference< XComponentContext >& _rxContext,
                         const Reference< XConnection>& _xConnection,
                         const OUString& rDefault,

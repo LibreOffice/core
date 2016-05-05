@@ -1051,7 +1051,7 @@ uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  ) t
 }
 
 void OReportDefinition::setSection(  const OUString& _sProperty
-                            ,const bool& _bOn
+                            ,bool _bOn
                             ,const OUString& _sName
                             ,uno::Reference< report::XSection>& _member)
 {

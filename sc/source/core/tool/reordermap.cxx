@@ -23,7 +23,7 @@ ColRowReorderMapType::insert( ColRowReorderMapType::value_type const& val )
 }
 
 ColRowReorderMapType::const_iterator
-ColRowReorderMapType::find( DataType::key_type const& key ) const
+ColRowReorderMapType::find( DataType::key_type key ) const
 {
     return maData.find(key);
 }
