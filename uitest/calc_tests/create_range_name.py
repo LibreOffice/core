@@ -67,4 +67,6 @@ def create_local_range_name(xContext):
     xAddBtn = xAddNameDlg.getChild("add")
     xAddBtn.executeAction("CLICK", tuple())
 
+    ui_test.close_doc()
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
