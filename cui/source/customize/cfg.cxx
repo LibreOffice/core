@@ -3518,7 +3518,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
                 }
             }
 
-            VclPtr<SvxIconSelectorDialog> pIconDialog(
+            ScopedVclPtr<SvxIconSelectorDialog> pIconDialog(
                 VclPtr<SvxIconSelectorDialog>::Create( nullptr,
                     GetSaveInData()->GetImageManager(),
                     GetSaveInData()->GetParentImageManager() ));
