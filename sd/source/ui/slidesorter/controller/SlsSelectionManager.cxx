@@ -36,6 +36,9 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "drawdoc.hxx"
+#include "drawview.hxx"
+#include "DrawViewShell.hxx"
+#include "ViewShellBase.hxx"
 #include "Window.hxx"
 #include <svx/svxids.hrc>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -108,6 +111,13 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     else
         --nNewCurrentSlide;
 
+    const auto pViewShell = mrSlideSorter.GetViewShell();
+    const auto pDrawViewShell = pViewShell ? std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell->GetViewShellBase().GetMainViewShell()) : nullptr;
+    const auto pDrawView = pDrawViewShell ? dynamic_cast<sd::DrawView*>(pDrawViewShell->GetDrawView()) : nullptr;
+
+    if (pDrawView)
+        pDrawView->BlockPageOrderChangedHint(true);
+
     // The actual deletion of the selected pages is done in one of two
     // helper functions.  They are specialized for normal respectively for
     // master pages.
@@ -120,6 +130,12 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
 
     mrController.HandleModelChange();
     aLock.Release();
+    if (pDrawView)
+    {
+        assert(pDrawViewShell);
+        pDrawView->BlockPageOrderChangedHint(false);
+        pDrawViewShell->ResetActualPage();
+    }
 
     // Show focus and move it to next valid location.
     if (bIsFocusShowing)
