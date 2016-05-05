@@ -529,14 +529,14 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, AssignMasterPage, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, DspBackground, Button*, void)
 {
-    bool IsChecked = (mpDspMasterBackground->IsChecked() ? true : false);
+    bool IsChecked = mpDspMasterBackground->IsChecked();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_BACKGROUND, IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_BACKGROUND, SfxCallMode::RECORD, { &aBoolItem });
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, DspObjects, Button*, void)
 {
-    bool IsChecked = (mpDspMasterObjects->IsChecked() ? true : false);
+    bool IsChecked = mpDspMasterObjects->IsChecked();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_OBJECTS,IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_OBJECTS, SfxCallMode::RECORD, { &aBoolItem, &aBoolItem });
 }
