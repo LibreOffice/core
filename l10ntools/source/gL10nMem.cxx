@@ -21,6 +21,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include<rtl/character.hxx>
 using namespace std;
 
 #include "gL10nMem.hxx"
@@ -977,6 +978,6 @@ void l10nMem::keyToLower(string& sKey)
         if (ch == ' ' || ch == '*' || ch == '+' || ch == '%')
             sKey[i] = '_';
         else
-            sKey[i] = tolower(ch);
+            sKey[i] = toAsciiLowerCase(ch);
     }
 }
