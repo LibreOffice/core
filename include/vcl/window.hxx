@@ -629,8 +629,6 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void                 ImplInitWindowData( WindowType nType );
-
     SAL_DLLPRIVATE void                 ImplSetFrameParent( const vcl::Window* pParent );
 
     SAL_DLLPRIVATE void                 ImplInsertWindow( vcl::Window* pParent );

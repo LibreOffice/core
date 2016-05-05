@@ -99,6 +99,9 @@ struct ImplWinData
     bool                mbEnableNativeWidget;   //< toggle native widget rendering
     ::std::list< VclPtr<vcl::Window> >
                         maTopWindowChildren;
+
+     ImplWinData();
+    ~ImplWinData();
 };
 
 struct ImplFrameData
