@@ -91,6 +91,13 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             pFunc->MarkRange(aRange, true, bExtend);
             mxGridWindow->CursorChanged();
         }
+        else if (rParameters.find("TABLE") != rParameters.end())
+        {
+            auto itr = rParameters.find("TABLE");
+            const OUString rStr = itr->second;
+            sal_Int32 nTab = rStr.toUInt32();
+            mxGridWindow->getViewData()->SetTabNo(nTab);
+        }
         else
         {
             SAL_WARN("sc.uitest", "unknown selection method");
