@@ -19,6 +19,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 
+#include <comphelper/string.hxx>
+
 #include <rtl/ustrbuf.hxx>
 
 #include <iostream>
@@ -62,7 +64,6 @@ void UIObject::dumpHierarchy() const
 {
 }
 
-
 namespace {
 
 bool isDialogWindow(vcl::Window* pWindow)
@@ -103,6 +104,64 @@ std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
     {
         aEvents.push_back(KeyEvent(rStr[i], aCode));
     }
+    return aEvents;
+}
+
+sal_uInt16 get_key(sal_Unicode cChar, bool& bShift)
+{
+    bShift = false;
+    if (cChar >= 'a' && cChar <= 'z')
+        return KEY_A + (cChar - 'a');
+    else if (cChar >= 'A' && cChar <= 'Z')
+    {
+        bShift = true;
+        return KEY_A + (cChar - 'A');
+    }
+    else if (cChar >= '0' && cChar <= '9')
+        return KEY_0 + (cChar - 'A');
+
+    return cChar;
+}
+
+std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
+{
+    std::vector<KeyEvent> aEvents;
+
+    // split string along '+'
+    // then translate to keycodes
+    bool bShift = false;
+    bool bMod1 = false;
+    bool bMod2 = false;
+    OUString aRemainingText;
+
+    std::vector<OUString> aTokens = comphelper::string::split(rStr, '+');
+    for (auto itr = aTokens.begin(), itrEnd = aTokens.end(); itr != itrEnd; ++itr)
+    {
+        OUString aToken = itr->trim();
+        if (aToken == "CTRL")
+        {
+            bMod1 = true;
+        }
+        else if (aToken == "SHIFT")
+        {
+            bShift = true;
+        }
+        else if (aToken == "ALT")
+        {
+            bMod2 = true;
+        }
+        else
+            aRemainingText = aToken;
+    }
+
+    for (sal_Int32 i = 0; i < aRemainingText.getLength(); ++i)
+    {
+        bool bShiftThroughKey = false;
+        sal_uInt16 nKey = get_key(aRemainingText[i], bShiftThroughKey);
+        vcl::KeyCode aCode(nKey, bShift || bShiftThroughKey, bMod1, bMod2, false);
+        aEvents.push_back(KeyEvent(aRemainingText[i], aCode));
+    }
+
     return aEvents;
 }
 
@@ -187,18 +246,31 @@ void WindowUIObject::execute(const OUString& rAction,
     else if (rAction == "TYPE")
     {
         auto it = rParameters.find("TEXT");
-        if (it == rParameters.end())
+        if (it != rParameters.end())
+        {
+            const OUString& rText = it->second;
+            auto aKeyEvents = generate_key_events_from_text(rText);
+            for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
+                    itr != itrEnd; ++itr)
+            {
+                mxWindow->KeyInput(*itr);
+            }
+        }
+        else if (rParameters.find("KEYCODE") != rParameters.end())
+        {
+            auto itr = rParameters.find("KEYCODE");
+            const OUString rText = itr->second;
+            auto aKeyEvents = generate_key_events_from_keycode(rText);
+            for (auto itrKey = aKeyEvents.begin(), itrKeyEnd = aKeyEvents.end();
+                    itrKey != itrKeyEnd; ++itrKey)
+            {
+                mxWindow->KeyInput(*itrKey);
+            }
+        }
+        else
         {
             SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE");
             return;
-        }
-
-        const OUString& rText = it->second;
-        auto aKeyEvents = generate_key_events_from_text(rText);
-        for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
-                itr != itrEnd; ++itr)
-        {
-            mxWindow->KeyInput(*itr);
         }
     }
     else
