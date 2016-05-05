@@ -34,4 +34,6 @@ def toggle_checkbox(xContext):
     xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
     xNegativeNumRedCB.executeAction("CLICK",tuple())
 
+    ui_test.close_doc()
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
