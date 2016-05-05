@@ -419,7 +419,6 @@ LwpTableLayout::LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     , m_nCols(0)
     , m_pDefaultCellLayout(nullptr)
     , m_pColumns(nullptr)
-    , m_pXFTable(nullptr)
 {
     m_CellsMap.clear();
 }
@@ -829,7 +828,7 @@ void LwpTableLayout::Read()
 void LwpTableLayout::XFConvert(XFContentContainer* pCont)
 {
 
-    pCont->Add(m_pXFTable);
+    pCont->Add(m_pXFTable.get());
 }
 /**
  * @short   convert heading row
@@ -838,7 +837,7 @@ void LwpTableLayout::XFConvert(XFContentContainer* pCont)
  * @param  nEndRow - end heading row ID
  */
 sal_uInt16 LwpTableLayout::ConvertHeadingRow(
-        XFTable* pXFTable,sal_uInt16 nStartHeadRow,sal_uInt16 nEndHeadRow)
+        rtl::Reference<XFTable> const & pXFTable, sal_uInt16 nStartHeadRow, sal_uInt16 nEndHeadRow)
 {
     sal_uInt16 nContentRow;
     sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
@@ -880,7 +879,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     return nContentRow;
 }
 
-void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
+void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable> const & pXFTable,
         sal_uInt8 nFirstColSpann,sal_uInt8* pCellMark)
 {
     sal_uInt16 i;
@@ -1059,7 +1058,7 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
  * @param  nStartCol - start column ID
  * @param  nEndCol - end column ID
  */
-void LwpTableLayout::ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
+void LwpTableLayout::ConvertTable(rtl::Reference<XFTable> const & pXFTable, sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
     //out put column info TO BE CHANGED
@@ -1249,7 +1248,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
  * @short   Parse all cols of table
  * @param  pXFTable - pointer to created XFTable
  */
-void LwpTableLayout::ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
+void LwpTableLayout::ConvertColumn(rtl::Reference<XFTable> const & pXFTable, sal_uInt8 nStartCol, sal_uInt8 nEndCol)
 {
     LwpTable * pTable = GetTable();
     if (!pTable)
@@ -1337,8 +1336,8 @@ void LwpTableLayout::SplitConflictCells()
  * @param   nEndCol  - end column
  * @return   pXFTable
  */
-void LwpTableLayout::ConvertDefaultRow(XFTable* pXFTable,sal_uInt8 nStartCol,
-         sal_uInt8 nEndCol,sal_uInt16 nRowID)
+void LwpTableLayout::ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable, sal_uInt8 nStartCol,
+         sal_uInt8 nEndCol, sal_uInt16 nRowID)
 {
     // current row doesn't exist in the file
     XFRow * pRow = new XFRow();
