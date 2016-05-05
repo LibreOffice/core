@@ -110,8 +110,10 @@ void TextPropertyPanel::HandleContextChange (
             break;
 
         case CombinedEnumContext(Application_Calc, Context_EditCell):
-        case CombinedEnumContext(Application_Calc, Context_DrawText):
+            bNeedTextSpacing = true;
+            break;
 
+        case CombinedEnumContext(Application_Calc, Context_DrawText):
         case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
