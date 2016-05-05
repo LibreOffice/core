@@ -118,7 +118,7 @@ SlideBackground::SlideBackground(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings
      ) :
-    PanelLayout( pParent, "SlideBackground", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame ),
+    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame ),
     mrBase( rBase ),
     maPaperController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
     maBckColorController(SID_ATTR_PAGE_COLOR, *pBindings, *this),
