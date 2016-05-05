@@ -20,6 +20,9 @@
 #include "altstrfunc.hxx"
 
 #include <sal/types.h>
+#include<rtl/character.hxx>
+
+using namespace rtl;
 
 int start(const std::string &s1, const std::string &s2){
     size_t i;
@@ -30,7 +33,7 @@ int start(const std::string &s1, const std::string &s2){
         min = s2.length();
 
     for(i = 0; i < min && s2[i] && s1[i] && !ret; i++){
-        ret = toupper(s1[i]) - toupper(s2[i]);
+        ret =   toAsciiUpperCase(s1[i]) -  toAsciiUpperCase(s2[i]);
         if(s1[i] == '.' || s2[i] == '.'){ret = 0;}//. is a neutral character
     }
     return ret;
