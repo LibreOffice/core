@@ -400,20 +400,22 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_DISPLAY_MASTER_BACKGROUND:
         {
-            const SfxBoolItem* aBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
-            if(aBoolItem->GetValue())
-                mpDspMasterBackground->SetState(TRISTATE_TRUE);
-            else
-                mpDspMasterBackground->SetState(TRISTATE_FALSE);
+            if(eState >= SfxItemState::DEFAULT)
+            {
+                const SfxBoolItem* aBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
+                if(aBoolItem)
+                    mpDspMasterBackground->Check(aBoolItem->GetValue());
+            }
         }
         break;
         case SID_DISPLAY_MASTER_OBJECTS:
         {
-            const SfxBoolItem* aBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
-            if(aBoolItem->GetValue())
-                mpDspMasterObjects->SetState(TRISTATE_TRUE);
-            else
-                mpDspMasterObjects->SetState(TRISTATE_FALSE);
+            if(eState >= SfxItemState::DEFAULT)
+            {
+                const SfxBoolItem* aBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
+                if(aBoolItem)
+                    mpDspMasterObjects->Check(aBoolItem->GetValue());
+            }
         }
         break;
 
