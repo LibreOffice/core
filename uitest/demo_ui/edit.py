@@ -43,5 +43,4 @@ def type_text(xContext):
     
     ui_test.close_doc()
 
-
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
