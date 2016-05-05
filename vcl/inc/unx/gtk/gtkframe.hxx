@@ -271,7 +271,6 @@ class GtkSalFrame : public SalFrame
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
 #endif
-           gboolean     handleKey(GtkWidget* pWidget, GdkEventKey* pEvent);
 #else
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
 #endif

@@ -1424,6 +1424,21 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 SetDefaultSize();
             setMinMaxSize();
 
+            if( isFloatGrabWindow() &&
+                m_pParent &&
+                m_nFloats == 0 &&
+                ! getDisplay()->GetCaptureFrame() )
+            {
+                /* #i63086#
+                 * outsmart Metacity's "focus:mouse" mode
+                 * which insists on taking the focus from the document
+                 * to the new float. Grab focus to parent frame BEFORE
+                 * showing the float (cannot grab it to the float
+                 * before show).
+                 */
+                 m_pParent->grabPointer( true, true );
+            }
+
             if( ! bNoActivate && (m_nStyle & SalFrameStyleFlags::TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
 
@@ -1434,9 +1449,9 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats++;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
                 {
-                    gtk_grab_add(getMouseEventWidget());
-                    grabPointer(true);
-                    grabKeyboard(true);
+                    grabPointer(true, true);
+                    GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
+                    pKeyboardFrame->grabKeyboard(true);
                 }
                 // #i44068# reset parent's IM context
                 if( m_pParent )
@@ -1452,9 +1467,9 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats--;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 0)
                 {
-                    grabKeyboard(false);
+                    GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
+                    pKeyboardFrame->grabKeyboard(false);
                     grabPointer(false);
-                    gtk_grab_remove(getMouseEventWidget());
                 }
             }
             gtk_widget_hide( m_pWindow );
@@ -2061,13 +2076,9 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
     GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
     if (bGrab)
-    {
         gdk_device_grab(pPointer, widget_get_window(getMouseEventWidget()), GDK_OWNERSHIP_NONE, bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, gtk_get_current_event_time());
-    }
     else
-    {
         gdk_device_ungrab(pPointer, gtk_get_current_event_time());
-    }
 }
 
 void GtkSalFrame::grabKeyboard( bool bGrab )
@@ -2403,6 +2414,13 @@ void GtkSalFrame::SetModal(bool bModal)
     if (!m_pWindow)
         return;
     gtk_window_set_modal(GTK_WINDOW(m_pWindow), bModal);
+    if (bModal)
+    {
+        //gtk_window_set_modal bTrue adds a grab, so ungrab here. Quite
+        //possibly we should alternatively call grab_add grab_ungrab on
+        //show/hide of menus ?
+        gtk_grab_remove(m_pWindow);
+    }
 }
 
 gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
@@ -2582,12 +2600,9 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     {
         if( m_nFloats > 0 )
         {
-            // close popups if user clicks outside our menu
-            if (aEvent.mnX < 0 || aEvent.mnY < 0 ||
-                aEvent.mnX > (long)pThis->maGeometry.nWidth || aEvent.mnY > (long)pThis->maGeometry.nHeight)
-            {
-                bClosePopups = true;
-            }
+            // close popups if user clicks outside our application
+            gint x, y;
+            bClosePopups = (gdk_display_get_window_at_pointer( GtkSalFrame::getGdkDisplay(), &x, &y ) == nullptr);
         }
         /*  #i30306# release implicit pointer grab if no popups are open; else
          *  Drag cannot grab the pointer and will fail.
@@ -2780,7 +2795,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
             // ask for the next hint
             gint x, y;
             GdkModifierType mask;
-            gdk_window_get_pointer( widget_get_window(GTK_WIDGET(pThis->getMouseEventWidget())), &x, &y, &mask );
+            gdk_window_get_pointer( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &x, &y, &mask );
         }
     }
 
@@ -2962,28 +2977,15 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
     return false;
 }
 
-gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer frame)
+gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    return pThis->handleKey(pWidget, pEvent);
-}
 
-gboolean GtkSalFrame::handleKey(GtkWidget* pWidget, GdkEventKey* pEvent)
-{
-    //If we're the type of menu that wants to forward keypresses to our parent
-    //widget, do that here, this is related to the gtk_grab_add use in
-    //GtkSalFrame::Show where we want the mouse events to go to us, but
-    //the keyboard events to go to our parent
-    if (isFloatGrabWindow() && !getDisplay()->GetCaptureFrame() && m_nFloats == 1 && m_pParent)
+    vcl::DeletionListener aDel( pThis );
+
+    if( pThis->m_pIMHandler )
     {
-        return m_pParent->handleKey(pWidget, pEvent);
-    }
-
-    vcl::DeletionListener aDel(this);
-
-    if( m_pIMHandler )
-    {
-        if( m_pIMHandler->handleKeyEvent( pEvent ) )
+        if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
             return true;
     }
 
@@ -2999,13 +3001,13 @@ gboolean GtkSalFrame::handleKey(GtkWidget* pWidget, GdkEventKey* pEvent)
         sal_uInt16 nModCode = GetKeyModCode( pEvent->state );
 
         aModEvt.mnModKeyCode = 0; // emit no MODKEYCHANGE events
-        if( pEvent->type == GDK_KEY_PRESS && !m_nKeyModifiers )
-            m_bSendModChangeOnRelease = true;
+        if( pEvent->type == GDK_KEY_PRESS && !pThis->m_nKeyModifiers )
+            pThis->m_bSendModChangeOnRelease = true;
 
         else if( pEvent->type == GDK_KEY_RELEASE &&
-                 m_bSendModChangeOnRelease )
+                 pThis->m_bSendModChangeOnRelease )
         {
-            aModEvt.mnModKeyCode = m_nKeyModifiers;
+            aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
         }
 
         sal_uInt16 nExtModMask = 0;
@@ -3056,37 +3058,37 @@ gboolean GtkSalFrame::handleKey(GtkWidget* pWidget, GdkEventKey* pEvent)
         if( pEvent->type == GDK_KEY_RELEASE )
         {
             nModCode &= ~nModMask;
-            m_nKeyModifiers &= ~nExtModMask;
+            pThis->m_nKeyModifiers &= ~nExtModMask;
         }
         else
         {
             nModCode |= nModMask;
-            m_nKeyModifiers |= nExtModMask;
+            pThis->m_nKeyModifiers |= nExtModMask;
         }
 
         aModEvt.mnCode = nModCode;
         aModEvt.mnTime = pEvent->time;
-        aModEvt.mnModKeyCode = m_nKeyModifiers;
+        aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
 
-        CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
+        pThis->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
 
     }
     else
     {
-        doKeyCallback( pEvent->state,
-                       pEvent->keyval,
-                       pEvent->hardware_keycode,
-                       pEvent->group,
-                       pEvent->time,
-                       sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
-                       (pEvent->type == GDK_KEY_PRESS),
-                       false );
+        pThis->doKeyCallback( pEvent->state,
+                              pEvent->keyval,
+                              pEvent->hardware_keycode,
+                              pEvent->group,
+                              pEvent->time,
+                              sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
+                              (pEvent->type == GDK_KEY_PRESS),
+                              false );
         if( ! aDel.isDeleted() )
-            m_bSendModChangeOnRelease = false;
+            pThis->m_bSendModChangeOnRelease = false;
     }
 
-    if( !aDel.isDeleted() && m_pIMHandler )
-        m_pIMHandler->updateIMSpotLocation();
+    if( !aDel.isDeleted() && pThis->m_pIMHandler )
+        pThis->m_pIMHandler->updateIMSpotLocation();
 
     return false;
 }
