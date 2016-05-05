@@ -1891,7 +1891,13 @@ int NeonSession::PUT( ne_session * sess,
     ne_request * req = ne_request_create( sess, "PUT", uri );
     int ret;
 
-    ne_lock_using_resource( req, uri, 0 );
+    // tdf#99246
+    // extract the path of uri
+    // ne_lock_using_resource below compares path, ignores all the rest.
+    // in case of Web proxy active, this function uri parameter is instead absolute
+    ne_uri aUri;
+    ne_uri_parse( uri, &aUri );
+    ne_lock_using_resource( req, aUri.path, 0 );
     ne_lock_using_parent( req, uri );
 
     ne_set_request_body_buffer( req, buffer, size );
