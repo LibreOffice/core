@@ -87,8 +87,8 @@ ODateTimeDialog::ODateTimeDialog( vcl::Window* _pParent
     m_aTimeControlling.enableOnCheckMark( *m_pTime, *m_pFTTimeFormat, *m_pTimeListBox);
 
     CheckBox* aCheckBoxes[] = { m_pDate,m_pTime};
-    for ( size_t i = 0 ; i < SAL_N_ELEMENTS(aCheckBoxes); ++i)
-        aCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
+    for (CheckBox* pCheckBox : aCheckBoxes)
+        pCheckBox->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
 
 }
 

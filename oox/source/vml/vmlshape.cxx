@@ -504,13 +504,13 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             static const sal_Int32 aBorders[] = {
                 PROP_TopBorder, PROP_LeftBorder, PROP_BottomBorder, PROP_RightBorder
             };
-            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
+            for (sal_Int32 nBorder : aBorders)
             {
-                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<table::BorderLine2>();
+                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(nBorder)).get<table::BorderLine2>();
                 aBorderLine.Color = aPropMap.getProperty(PROP_LineColor).get<sal_Int32>();
                 if (oLineWidth)
                     aBorderLine.LineWidth = *oLineWidth;
-                aPropMap.setProperty(aBorders[i], uno::makeAny(aBorderLine));
+                aPropMap.setProperty(nBorder, uno::makeAny(aBorderLine));
             }
             aPropMap.erase(PROP_LineColor);
         }

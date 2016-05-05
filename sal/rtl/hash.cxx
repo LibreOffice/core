@@ -58,10 +58,10 @@ getNextSize (sal_uInt32 nSize)
                                           2097143, 4194301, 8388593, 16777213,
                                           33554393, 67108859, 134217689 };
 
-    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(nPrimes); i++)
+    for (sal_uInt32 nPrime : nPrimes)
     {
-        if (nPrimes[i] > nSize)
-            return nPrimes[i];
+        if (nPrime > nSize)
+            return nPrime;
     }
     return nSize * 2;
 }
