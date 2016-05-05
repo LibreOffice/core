@@ -2328,9 +2328,18 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( !bIsDocReadOnly && bNormalChar )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
-                        if((nSelectionType & nsSelectionType::SEL_DRW) &&
+                        const bool bDrawObject = (nSelectionType & nsSelectionType::SEL_DRW) &&
                             0 == (nSelectionType & nsSelectionType::SEL_DRW_TXT) &&
-                            rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
+                            rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1;
+
+                        bool bTextBox = false;
+                        if (bDrawObject && lcl_goIntoTextBox(*this, rSh))
+                            // A draw shape was selected, but it has a TextBox,
+                            // start editing that instead when the normal
+                            // character is pressed.
+                            bTextBox = true;
+
+                        if (bDrawObject && !bTextBox)
                         {
                             SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                             if(pObj)
@@ -2341,7 +2350,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 rSh.GetDrawView()->KeyInput( rKEvt, this );
                             }
                         }
-                        else if(nSelectionType & nsSelectionType::SEL_FRM)
+                        else if (nSelectionType & nsSelectionType::SEL_FRM || bTextBox)
                         {
                             rSh.UnSelectFrame();
                             rSh.LeaveSelFrameMode();
