@@ -25,4 +25,6 @@ def select_entry_pos(xContext):
     actionProps = mkPropertyValues(props)
     scopeCB.executeAction("SELECT", actionProps)
 
+    ui_test.close_doc()
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

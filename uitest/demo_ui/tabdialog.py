@@ -26,7 +26,7 @@ def select_tab_page_pos(xContext):
     propsUNO = mkPropertyValues(props)
     xCellsDlg.executeAction("SELECT", propsUNO)
 
-    time.sleep(20)
+    ui_test.close_doc()
 
 def select_tab_page_name(xContext):
     xUITest = xContext.ServiceManager.createInstanceWithContext(
@@ -43,7 +43,6 @@ def select_tab_page_name(xContext):
     propsUNO = mkPropertyValues(props)
     xCellsDlg.executeAction("SELECT", propsUNO)
 
-    time.sleep(20)
-
+    ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
