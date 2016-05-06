@@ -38,7 +38,6 @@
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
-#include <boost/type_traits.hpp>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>

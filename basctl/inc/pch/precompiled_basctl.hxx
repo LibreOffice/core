@@ -54,7 +54,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>

@@ -37,8 +37,7 @@
 #include "resource/common_res.hrc"
 #include <connectivity/sqlparse.hxx>
 #include <memory>
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <type_traits>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -299,7 +298,7 @@ template <typename T> void OPreparedStatement::setScalarParameter(const sal_Int3
     ::osl::MutexGuard aGuard( m_aMutex );
     setParameterPre(parameterIndex);
 
-    typedef typename boost::remove_reference< T >::type TnoRef;
+    typedef typename std::remove_reference<T>::type TnoRef;
 
     TnoRef *bindBuf = static_cast< TnoRef* >( allocBindBuf(parameterIndex, sizeof(i_Value)) );
     *bindBuf = i_Value;

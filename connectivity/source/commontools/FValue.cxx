@@ -25,7 +25,6 @@
 #include <comphelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <boost/type_traits.hpp>
 
 using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;

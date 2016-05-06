@@ -23,8 +23,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <string.h>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>

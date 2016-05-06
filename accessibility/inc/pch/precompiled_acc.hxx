@@ -52,7 +52,6 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
