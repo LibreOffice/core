@@ -54,7 +54,6 @@ private:
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, int& rDupsToSkip, gboolean bGetSubmenu );
     void                        ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries);
     void                        ActivateAllSubmenus(Menu* pMenuBar);
 
@@ -98,17 +97,18 @@ public:
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
 
-    void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        ActivateAllSubmenus()
     {
         ActivateAllSubmenus(mpVCLMenu);
     }
-    void                        Activate( const gchar* aMenuCommand );
-    void                        Deactivate( const gchar* aMenuCommand );
+    static void                 DispatchCommand(const gchar* pMenuCommand);
+    static void                 Activate(const gchar* pMenuCommand);
+    static void                 Deactivate(const gchar* pMenuCommand);
     void                        EnableUnity(bool bEnable);
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
     void                        UpdateFull();       // Update full menu hierarchy from this menu.
+    GtkSalMenu*                 GetTopLevel();
 
     void CreateMenuBarWidget();
     void DestroyMenuBarWidget();

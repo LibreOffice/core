@@ -28,54 +28,17 @@
 #include <window.h>
 #include <svids.hrc>
 
-// FIXME Copied from framework/inc/framework/menuconfiguration.hxx to
-// avoid circular dependency between modules. It should be in a common
-// header (probably in vcl).
-const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
-const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
-
 static bool bUnityMode = false;
 
 /*
- * This function generates the proper command name for all actions, including
- * duplicated or special ones.
+ * This function generates a unique command name for each menu item
  */
-static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCommand, GActionGroup* pActionGroup )
+static gchar* GetCommandForItem(GtkSalMenuItem* pSalMenuItem)
 {
-    gchar* aCommand = nullptr;
-
-    sal_uInt16 nId = pSalMenuItem->mnId;
-    Menu* pMenu = pSalMenuItem->mpVCLMenu;
-
-    // If item belongs to window list, generate a command with "window-(id)" format.
-    if ( ( nId >= START_ITEMID_WINDOWLIST ) && ( nId <= END_ITEMID_WINDOWLIST ) )
-        aCommand = g_strdup_printf( "window-%d", nId );
-    else
-    {
-        if ( !pMenu )
-            return nullptr;
-
-        OUString aMenuCommand = pMenu->GetItemCommand(nId);
-        if (aMenuCommand.isEmpty())
-            aMenuCommand = "slot:" + OUString::number(nId);
-        gchar* aCommandStr = g_strdup( OUStringToOString( aMenuCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
-        aCommand = g_strdup( aCommandStr );
-
-        // Some items could have duplicated commands. A new one should be generated.
-        for ( sal_uInt16 i = 1; ; i++ )
-        {
-            if ( !g_action_group_has_action( pActionGroup, aCommand )
-                    || ( aCurrentCommand && g_strcmp0( aCurrentCommand, aCommand ) == 0 ) )
-                break;
-
-            g_free( aCommand );
-            aCommand = g_strdup_printf("dup:%d:%s", i, aCommandStr);
-        }
-
-        g_free( aCommandStr );
-    }
-
-    return aCommand;
+    OString aCommand("window-");
+    aCommand = aCommand + OString::number(reinterpret_cast<unsigned long>(pSalMenuItem->mpParentMenu));
+    aCommand = aCommand + "-" + OString::number(pSalMenuItem->mnId);
+    return g_strdup(aCommand.getStr());
 }
 
 bool GtkSalMenu::PrepUpdate()
@@ -278,7 +241,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
             pOldCommandList = g_list_append( pOldCommandList, aCurrentCommand );
 
         // Get the new command for the item.
-        gchar* aNativeCommand = GetCommandForItem( pSalMenuItem, aCurrentCommand, mpActionGroup );
+        gchar* aNativeCommand = GetCommandForItem(pSalMenuItem);
 
         // Force updating of native menu labels.
         NativeSetItemText( nSection, nItemPos, aText );
@@ -409,8 +372,6 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
     aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
 
     GLOActionGroup* pActionGroup = g_lo_action_group_new(static_cast<gpointer>(mpFrame));
-    g_lo_action_group_set_top_menu(pActionGroup, static_cast<gpointer>(this));
-
     mpActionGroup = G_ACTION_GROUP(pActionGroup);
     mpMenuModel = G_MENU_MODEL(g_lo_menu_new());
     // Generate the main menu structure, populates mpMenuModel
@@ -678,7 +639,6 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
     if ( pActionGroup )
     {
         g_lo_action_group_clear( pActionGroup );
-        g_lo_action_group_set_top_menu(pActionGroup, static_cast<gpointer>(this));
         mpActionGroup = G_ACTION_GROUP( pActionGroup );
     }
 
@@ -883,73 +843,42 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
     return bSubMenuAddedOrRemoved;
 }
 
-GtkSalMenu* GtkSalMenu::GetMenuForItemCommand(gchar* aCommand, int& rDupsToSkip, gboolean bGetSubmenu)
+GtkSalMenu* GtkSalMenu::GetTopLevel()
 {
-    SolarMutexGuard aGuard;
-    GtkSalMenu* pMenu = nullptr;
-    for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
-    {
-        GtkSalMenuItem *pSalItem = maItems[ nPos ];
-
-        OUString aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
-        // Do not join the following two lines, or the OString will be destroyed
-        // immediately, and the gchar* pointed to by aItemCommandStr will be
-        // freed before it can be used - fdo#69090
-        OString aItemCommandOStr = OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 );
-        gchar* aItemCommandStr = const_cast<gchar*>(aItemCommandOStr.getStr());
-
-        bool bFound = g_strcmp0( aItemCommandStr, aCommand ) == 0;
-        if (bFound && rDupsToSkip)
-        {
-            --rDupsToSkip;
-            bFound = false;
-        }
-        if (bFound)
-        {
-            pMenu = bGetSubmenu ? pSalItem->mpSubMenu : this;
-            break;
-        }
-        else
-        {
-            if ( pSalItem->mpSubMenu != nullptr )
-                pMenu = pSalItem->mpSubMenu->GetMenuForItemCommand(aCommand, rDupsToSkip, bGetSubmenu);
-
-            if ( pMenu != nullptr )
-               break;
-        }
-    }
-
+    GtkSalMenu *pMenu = this;
+    while (pMenu->mpParentSalMenu)
+        pMenu = pMenu->mpParentSalMenu;
     return pMenu;
 }
 
+typedef std::pair<GtkSalMenu*, sal_uInt16> MenuAndId;
+
 namespace
 {
-    const gchar* DetermineDupIndex(const gchar *aCommand, int& rDupsToSkip)
+    MenuAndId decode_command(const gchar *action_name)
     {
-        if (g_str_has_prefix(aCommand, "dup:"))
-        {
-            aCommand = aCommand + strlen("dup:");
-            gchar *endptr;
-            rDupsToSkip = g_ascii_strtoll(aCommand, &endptr, 10);
-            aCommand = endptr+1;
-        }
-        else
-            rDupsToSkip = 0;
+        OString sCommand(action_name);
 
-        return aCommand;
+        sal_Int32 nIndex = 0;
+        OString sWindow = sCommand.getToken(0, '-', nIndex);
+        OString sGtkSalMenu = sCommand.getToken(0, '-', nIndex);
+        OString sItemId = sCommand.getToken(0, '-', nIndex);
+
+        GtkSalMenu* pSalSubMenu = reinterpret_cast<GtkSalMenu*>(sGtkSalMenu.toInt64());
+
+        assert(sWindow == "window" && pSalSubMenu);
+
+        return MenuAndId(pSalSubMenu, sItemId.toInt32());
     }
 }
 
-void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
+void GtkSalMenu::DispatchCommand(const gchar *pCommand)
 {
     SolarMutexGuard aGuard;
-
-    int nDupsToSkip;
-    aCommand = DetermineDupIndex(aCommand, nDupsToSkip);
-
-    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand(const_cast<gchar*>(aCommand), nDupsToSkip, FALSE);
-    Menu* pSubMenu = ( pSalSubMenu != nullptr ) ? pSalSubMenu->GetMenu() : nullptr;
-    mpVCLMenu->HandleMenuCommandEvent(pSubMenu, itemId);
+    MenuAndId aMenuAndId = decode_command(pCommand);
+    GtkSalMenu* pSalSubMenu = aMenuAndId.first;
+    GtkSalMenu* pTopLevel = pSalSubMenu->GetTopLevel();
+    pTopLevel->GetMenu()->HandleMenuCommandEvent(pSalSubMenu->GetMenu(), aMenuAndId.second);
 }
 
 void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
@@ -967,29 +896,20 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
     }
 }
 
-void GtkSalMenu::Activate( const gchar* aMenuCommand )
+void GtkSalMenu::Activate(const gchar* pCommand)
 {
-    int nDupsToSkip;
-    aMenuCommand = DetermineDupIndex(aMenuCommand, nDupsToSkip);
-
-    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand(const_cast<gchar*>(aMenuCommand), nDupsToSkip, TRUE);
-
-    if ( pSalSubMenu != nullptr ) {
-        mpVCLMenu->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
-        pSalSubMenu->Update();
-    }
+    MenuAndId aMenuAndId = decode_command(pCommand);
+    GtkSalMenu* pSalSubMenu = aMenuAndId.first;
+    GtkSalMenu* pTopLevel = pSalSubMenu->GetTopLevel();
+    pTopLevel->GetMenu()->HandleMenuActivateEvent(pSalSubMenu->GetMenu());
 }
 
-void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
+void GtkSalMenu::Deactivate(const gchar* pCommand)
 {
-    int nDupsToSkip;
-    aMenuCommand = DetermineDupIndex(aMenuCommand, nDupsToSkip);
-
-    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand(const_cast<gchar*>(aMenuCommand), nDupsToSkip, TRUE);
-
-    if ( pSalSubMenu != nullptr ) {
-        mpVCLMenu->HandleMenuDeActivateEvent( pSalSubMenu->mpVCLMenu );
-    }
+    MenuAndId aMenuAndId = decode_command(pCommand);
+    GtkSalMenu* pSalSubMenu = aMenuAndId.first;
+    GtkSalMenu* pTopLevel = pSalSubMenu->GetTopLevel();
+    pTopLevel->GetMenu()->HandleMenuDeActivateEvent(pSalSubMenu->GetMenu());
 }
 
 void GtkSalMenu::EnableUnity(bool bEnable)
