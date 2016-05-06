@@ -1478,13 +1478,13 @@
       <group oor:name="GraphicManager">
         <info>
           <desc>Specifies a group of graphic manager cache options.</desc>
-          <label>Graphic Manager Cache</label>
+          <label>Image Manager Cache</label>
         </info>
         <prop oor:name="TotalCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Specifies the maximum cache size for all graphical display
             objects.</desc>
-            <label>Total Graphic Cache Size</label>
+            <label>Total Image Cache Size</label>
           </info>
           <value>67110000</value>
         </prop>
@@ -1492,7 +1492,7 @@
           <info>
             <desc>Specifies the maximum cache size for a single graphic display
             object.</desc>
-            <label>Graphic Object Cache Size</label>
+            <label>Image Object Cache Size</label>
           </info>
           <value>12600000</value>
         </prop>
@@ -1500,7 +1500,7 @@
           <info>
             <desc>Specifies the time in seconds after which a cached object is
             freed from the cache.</desc>
-            <label>Graphic Object Release Timeout</label>
+            <label>Image Object Release Timeout</label>
           </info>
           <value>600</value>
         </prop>
@@ -1619,7 +1619,7 @@
         <prop oor:name="Graphic" oor:type="xs:string">
           <info>
             <desc>Specifies the directory that is displayed when the dialog for
-            opening a graphic or for saving a new graphic is called.</desc>
+            opening an image or for saving a new image is called.</desc>
           </info>
           <value>$(userurl)/gallery</value>
         </prop>
@@ -1822,7 +1822,7 @@
         <prop oor:name="Graphic" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the default directory used by the dialog for opening
-            a graphic or for saving a new graphic.</desc>
+            an image or for saving a new image.</desc>
           </info>
           <value>$(userurl)/gallery</value>
         </prop>
@@ -2299,7 +2299,7 @@
       </group>
       <group oor:name="Graphic">
         <info>
-          <desc>Contains settings on how graphics contained in a document should
+          <desc>Contains settings on how images contained in a document should
           be saved.</desc>
         </info>
         <prop oor:name="Format" oor:type="xs:int" oor:nillable="false">
@@ -2308,9 +2308,9 @@
           <!-- UIHints: Tools  Options - General  Save - [Section] Save
                graphics -->
           <info>
-            <desc>Specifies how graphics contained in a document are
+            <desc>Specifies how images contained in a document are
             saved.</desc>
-            <label>Save graphics Normal/Compressed/Original format</label>
+            <label>Save images Normal/Compressed/Original format</label>
           </info>
           <constraints>
             <enumeration oor:value="0">
@@ -4992,9 +4992,9 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
-              <desc>Specifies if graphics are copied to the Internet server when
+              <desc>Specifies whether images are copied to the Internet server when
               uploading via FTP.</desc>
-              <label>Copy local graphics to Internet</label>
+              <label>Copy local images to Internet</label>
             </info>
             <value>true</value>
           </prop>
@@ -5600,7 +5600,7 @@
         <info>
           <desc>Determines if a warning dialog should be
           displayed when a user checks the link checkbox in
-          the insert graphics dialog.</desc>
+          the insert images dialog.</desc>
         </info>
         <value>true</value>
       </prop>
@@ -6302,8 +6302,8 @@
           <desc>Indicates whether to allow the graphical animation in all SO/OO
           applications (i.e. animated GIFs and objects in Impress during
           presentation, animated graphical previews (Gallery,
-          Insert-Graphics-From File, Animation Tool in Impress.)</desc>
-          <label>Allow animated graphics</label>
+          Insert-Image, Animation Tool in Impress.)</desc>
+          <label>Allow animated images</label>
         </info>
         <value>true</value>
       </prop>
@@ -6383,7 +6383,7 @@
           <desc>
             This option allows to make previews (e.g. UI previews for object attributes) show the content with a checkered
             background to allow simple identification and better preview of transparent content, e.g. when a draw object
-            is filled with a transparent graphic (SVG or bitmap) the preview will show the checkered background shine
+            is filled with a transparent image (SVG or bitmap) the preview will show the checkered background shine
             through, so the user can identify that the fill has transparency with a single look.
           </desc>
           <label>Shows previews with shining through checkered background to visualize transparency.</label>

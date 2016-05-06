@@ -55,7 +55,7 @@
             <value xml:lang="en-US">Choose settings for optimizing images</value>
         </prop>
         <prop oor:name="STR_IMAGE_OPTIMIZATION">
-            <value xml:lang="en-US">Graphics</value>
+            <value xml:lang="en-US">Images</value>
         </prop>
         <prop oor:name="STR_LOSSLESS_COMPRESSION">
             <value xml:lang="en-US">~Lossless compression</value>
@@ -67,7 +67,7 @@
             <value xml:lang="en-US">~Quality in %</value>
         </prop>
         <prop oor:name="STR_REMOVE_CROP_AREA">
-            <value xml:lang="en-US">~Delete cropped graphic areas</value>
+            <value xml:lang="en-US">~Delete cropped image areas</value>
         </prop>
         <prop oor:name="STR_IMAGE_RESOLUTION">
             <value xml:lang="en-US">Reduce ~image resolution</value>
@@ -85,7 +85,7 @@
             <value xml:lang="en-US">300;300 DPI (print resolution)</value>
         </prop>
         <prop oor:name="STR_EMBED_LINKED_GRAPHICS">
-            <value xml:lang="en-US">~Break links to external graphics</value>
+            <value xml:lang="en-US">~Embed external images</value>
         </prop>
         <prop oor:name="STR_OLE_OBJECTS">
             <value xml:lang="en-US">OLE Objects</value>
@@ -94,7 +94,7 @@
             <value xml:lang="en-US">Choose settings for replacing OLE objects</value>
         </prop>
         <prop oor:name="STR_OLE_REPLACE">
-            <value xml:lang="en-US">Create static replacement graphics for OLE objects</value>
+            <value xml:lang="en-US">Create static replacement images for OLE objects</value>
         </prop>
         <prop oor:name="STR_ALL_OLE_OBJECTS">
             <value xml:lang="en-US">For ~all OLE objects</value>
@@ -152,10 +152,10 @@ The current presentation contains no OLE objects.</value>
             <value xml:lang="en-US">Delete %SLIDES slides.</value>
         </prop>
         <prop oor:name="STR_OPTIMIZE_IMAGES">
-            <value xml:lang="en-US">Optimize %IMAGES graphics to %QUALITY% JPEG quality at %RESOLUTION DPI.</value>
+            <value xml:lang="en-US">Optimize %IMAGES images to %QUALITY% JPEG quality at %RESOLUTION DPI.</value>
         </prop>
         <prop oor:name="STR_CREATE_REPLACEMENT">
-            <value xml:lang="en-US">Create replacement graphics for %OLE objects.</value>
+            <value xml:lang="en-US">Create replacement images for %OLE objects.</value>
         </prop>
         <prop oor:name="STR_CURRENT_FILESIZE">
             <value xml:lang="en-US">Current file size:</value>
@@ -188,10 +188,10 @@ The current presentation contains no OLE objects.</value>
             <value xml:lang="en-US">Deleting slides...</value>
         </prop>
         <prop oor:name="STR_OPTIMIZING_GRAPHICS">
-            <value xml:lang="en-US">Optimizing graphics...</value>
+            <value xml:lang="en-US">Optimizing images...</value>
         </prop>
         <prop oor:name="STR_CREATING_OLE_REPLACEMENTS">
-            <value xml:lang="en-US">Creating replacement graphics for OLE objects...</value>
+            <value xml:lang="en-US">Creating replacement images for OLE objects...</value>
         </prop>
         <prop oor:name="STR_FILESIZESEPARATOR">
             <value xml:lang="en-US">.</value>

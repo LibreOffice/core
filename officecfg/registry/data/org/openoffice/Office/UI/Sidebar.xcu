@@ -536,7 +536,7 @@
 
       <node oor:name="GraphicPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Graphic</value>
+          <value xml:lang="en-US">Image</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>GraphicPropertyPanel</value>
