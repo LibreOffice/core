@@ -78,8 +78,7 @@ public:
 
 private:
 
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 
     // tests
     void testSheetFindAll();
@@ -102,9 +101,6 @@ private:
     void testMatConcatLarge();
 };
 
-sal_Int32 ScPerfObj::nTest = 0;
-uno::Reference< lang::XComponent > ScPerfObj::mxComponent;
-
 ScPerfObj::ScPerfObj()
     : CalcUnoApiTest("sc/qa/perf/testdocuments/")
 {
@@ -112,9 +108,6 @@ ScPerfObj::ScPerfObj()
 
 uno::Reference< uno::XInterface > ScPerfObj::init(const OUString& aFileName)
 {
-    if (mxComponent.is())
-        closeDocument(mxComponent);
-
     OUString aFileURL;
     createFileURL(aFileName, aFileURL);
 
@@ -127,7 +120,6 @@ uno::Reference< uno::XInterface > ScPerfObj::init(const OUString& aFileName)
 
 void ScPerfObj::setUp()
 {
-    nTest++;
     CalcUnoApiTest::setUp();
 }
 
