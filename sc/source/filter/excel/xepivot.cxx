@@ -525,9 +525,9 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
             aTmpDim.SetDateDimension();
         const std::vector<SCROW>& aMemberIds = aTmpDim.GetNumEntries(
             static_cast<SCCOL>(nDim), pCache);
-        for ( size_t  nIdx = 0 ; nIdx < aMemberIds.size(); nIdx++ )
+        for (SCROW nMemberId : aMemberIds)
         {
-            const ScDPItemData* pData = aDPData.GetMemberById(nDim , aMemberIds[nIdx]);
+            const ScDPItemData* pData = aDPData.GetMemberById(nDim, nMemberId);
             if ( pData )
             {
                 OUString aStr = pCache->GetFormattedString(nDim, *pData);

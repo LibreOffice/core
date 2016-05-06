@@ -185,8 +185,8 @@ void ScSheetLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( size_t n=0; n<aRefreshListeners.size(); n++ )
-        aRefreshListeners[n]->refreshed( aEvent );
+    for (uno::Reference<util::XRefreshListener> & xRefreshListener : aRefreshListeners)
+        xRefreshListener->refreshed( aEvent );
 }
 
 void ScSheetLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
@@ -728,8 +728,8 @@ void ScAreaLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( size_t n=0; n<aRefreshListeners.size(); n++ )
-        aRefreshListeners[n]->refreshed( aEvent );
+    for (uno::Reference<util::XRefreshListener> & xRefreshListener : aRefreshListeners)
+        xRefreshListener->refreshed( aEvent );
 }
 
 // XPropertySet
@@ -1219,8 +1219,8 @@ void ScDDELinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( size_t n=0; n<aRefreshListeners.size(); n++ )
-        aRefreshListeners[n]->refreshed( aEvent );
+    for (uno::Reference<util::XRefreshListener> & xRefreshListener : aRefreshListeners)
+        xRefreshListener->refreshed( aEvent );
 }
 
 ScDDELinksObj::ScDDELinksObj(ScDocShell* pDocSh) :

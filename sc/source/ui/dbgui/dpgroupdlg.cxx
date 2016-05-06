@@ -228,8 +228,8 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( vcl::Window* pParent,
     maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd, rNullDate )
 {
     static const size_t nCount = SAL_N_ELEMENTS( nDatePartResIds );
-    for( size_t nIdx = 0 ; nIdx < nCount; ++nIdx )
-        mpLbUnits->InsertEntry( ScGlobal::GetRscString( nDatePartResIds[nIdx] ) );
+    for(sal_uInt16 nDatePartResId : nDatePartResIds)
+        mpLbUnits->InsertEntry( ScGlobal::GetRscString( nDatePartResId ) );
 
     mpEdStart->SetShowDateCentury( true );
     mpEdEnd->SetShowDateCentury( true );

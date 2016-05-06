@@ -1312,9 +1312,8 @@ void ScExternalRefCache::clearCacheTables(sal_uInt16 nFileId)
 
     // Clear all cache table content, but keep the tables.
     std::vector<TableTypeRef>& rTabs = pDocItem->maTables;
-    for (size_t i = 0, n = rTabs.size(); i < n; ++i)
+    for (TableTypeRef & pTab : rTabs)
     {
-        TableTypeRef pTab = rTabs[i];
         if (!pTab)
             continue;
 

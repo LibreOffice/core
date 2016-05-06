@@ -234,9 +234,8 @@ private:
             }
 
             // Read & store new lines from stream.
-            for (size_t i = 0, n = pLines->size(); i < n; ++i)
+            for (DataStream::Line & rLine : *pLines)
             {
-                DataStream::Line& rLine = (*pLines)[i];
                 rLine.maCells.clear();
                 mpStream->ReadLine(rLine.maLine);
 #if ENABLE_ORCUS

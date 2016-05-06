@@ -722,9 +722,9 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1 ) );
 
-                for (SCTAB i = 0, n = static_cast<SCTAB>(maTabs.size()); i < n; ++i)
-                    if (maTabs[i])
-                        maTabs[i]->UpdateDeleteTab(aCxt);
+                for (ScTable* pTab : maTabs)
+                    if (pTab)
+                        pTab->UpdateDeleteTab(aCxt);
 
                 TableContainer::iterator it = maTabs.begin() + nTab;
                 delete *it;
@@ -811,9 +811,9 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1*nSheets ) );
 
-                for (SCTAB i = 0, n = static_cast<SCTAB>(maTabs.size()); i < n; ++i)
-                    if (maTabs[i])
-                        maTabs[i]->UpdateDeleteTab(aCxt);
+                for (ScTable* pTab : maTabs)
+                    if (pTab)
+                        pTab->UpdateDeleteTab(aCxt);
 
                 TableContainer::iterator it = maTabs.begin() + nTab;
                 TableContainer::iterator itEnd = it + nSheets;
@@ -2876,9 +2876,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             if (bPreallocatePattern && (nR2+1) <= nRow2)
             {
                 SCROW nR3 = nR2 + 1;
-                for (size_t j = 0; j < vTables.size(); ++j)
+                for (SCTAB nTab : vTables)
                 {
-                    SCTAB nTab = vTables[j];
                     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
                     {
                         // Pattern count of the first chunk pasted.
@@ -6541,9 +6540,8 @@ SCROW ScDocument::GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const
 
 void ScDocument::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
-    for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
+    for (ScTable* pTab : maTabs)
     {
-        const ScTable* pTab = maTabs[nTab];
         if (!pTab)
             continue;
 

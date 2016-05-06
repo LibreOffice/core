@@ -3002,12 +3002,11 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
         { "LTL", 3.45280,  2 }
     };
 
-    static const size_t nConversionCount = SAL_N_ELEMENTS( aConvertTable );
-    for ( size_t i = 0; i < nConversionCount; ++i )
-        if ( aSearchUnit.equalsIgnoreAsciiCaseAscii( aConvertTable[i].pCurrText ) )
+    for (const auto & i : aConvertTable)
+        if ( aSearchUnit.equalsIgnoreAsciiCaseAscii( i.pCurrText ) )
         {
-            rfRate = aConvertTable[i].fRate;
-            rnDec  = aConvertTable[i].nDec;
+            rfRate = i.fRate;
+            rnDec  = i.nDec;
             return true;
         }
     return false;

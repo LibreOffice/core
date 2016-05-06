@@ -213,9 +213,9 @@ bool InitExternalFunc(const OUString& rModuleName)
         cFuncName[0] = 0;
         cInternalName[0] = 0;
         nParamCount = 0;
-        for ( sal_uInt16 j=0; j<MAXFUNCPARAM; j++ )
+        for (ParamType & rParamType : eParamType)
         {
-            eParamType[j] = ParamType::NONE;
+            rParamType = ParamType::NONE;
         }
         (*reinterpret_cast<GetFuncDataPtr>(fpGetData))(i, cFuncName, nParamCount,
                                        eParamType, cInternalName);

@@ -310,9 +310,9 @@ void XclExpXmlPivotTableManager::Initialize()
     std::vector<XclExpXmlPivotCaches::Entry> aCaches;
     const ScDPCollection::SheetCaches& rSheetCaches = pDPColl->GetSheetCaches();
     const std::vector<ScRange>& rRanges = rSheetCaches.getAllRanges();
-    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    for (const auto & rRange : rRanges)
     {
-        const ScDPCache* pCache = rSheetCaches.getExistingCache(rRanges[i]);
+        const ScDPCache* pCache = rSheetCaches.getExistingCache(rRange);
         if (!pCache)
             continue;
 
@@ -326,7 +326,7 @@ void XclExpXmlPivotTableManager::Initialize()
         XclExpXmlPivotCaches::Entry aEntry;
         aEntry.meType = XclExpXmlPivotCaches::Worksheet;
         aEntry.mpCache = pCache;
-        aEntry.maSrcRange = rRanges[i];
+        aEntry.maSrcRange = rRange;
         aCaches.push_back(aEntry); // Cache ID equals position + 1.
     }
 
@@ -451,9 +451,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     // appearance in each axis.
     const ScDPSaveData::DimsType& rDims = rSaveData.GetDimensions();
 
-    for (size_t i = 0, n = rDims.size(); i < n; ++i)
+    for (const auto & i : rDims)
     {
-        const ScDPSaveDimension& rDim = *rDims[i];
+        const ScDPSaveDimension& rDim = *i;
 
         long nPos = -1; // position in cache
         if (rDim.IsDataLayout())
@@ -554,9 +554,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_count, OString::number(static_cast<long>(aCachedDims.size())).getStr(),
         FSEND);
 
-    for (size_t i = 0, n = aCachedDims.size(); i < n; ++i)
+    for (const ScDPSaveDimension* pDim : aCachedDims)
     {
-        const ScDPSaveDimension* pDim = aCachedDims[i];
         if (!pDim)
         {
             pPivotStrm->singleElement(XML_pivotField,

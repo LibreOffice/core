@@ -222,9 +222,9 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
             }
         }
         // Build up TwipCols only after nLastWidth comparison!
-        for ( size_t i = 0, n = maDefaultList.size(); i < n; ++i )
+        for (std::unique_ptr<ScRTFCellDefault> & pCellDefault : maDefaultList)
         {
-            const ScRTFCellDefault& rD = *maDefaultList[i].get();
+            const ScRTFCellDefault& rD = *pCellDefault.get();
             SCCOL nCol;
             if ( !SeekTwips(rD.nTwips, &nCol) )
                 pColTwips->insert( rD.nTwips );

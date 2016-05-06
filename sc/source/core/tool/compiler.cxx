@@ -2669,12 +2669,11 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             // Renamed new names, prepare to read future names:
             //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };
-        static const size_t nOdffAliases = SAL_N_ELEMENTS(aOdffAliases);
-        for (size_t i=0; i<nOdffAliases; ++i)
+        for (const FunctionName& rOdffAlias : aOdffAliases)
         {
-            if (rName.equalsIgnoreAsciiCaseAscii( aOdffAliases[i].pName))
+            if (rName.equalsIgnoreAsciiCaseAscii( rOdffAlias.pName))
             {
-                maRawToken.SetOpCode( aOdffAliases[i].eOp);
+                maRawToken.SetOpCode( rOdffAlias.eOp);
                 bFound = true;
                 break;  // for
             }
