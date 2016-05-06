@@ -288,8 +288,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "wideslash", TWIDESLASH, MS_SLASH, TGPRODUCT, 0 },
     { "widevec", TWIDEVEC, MS_VEC, TGATTRIBUT, 5},
     { "wp" , TWP, MS_WP, TGSTANDALONE, 5},
-    { "yellow", TYELLOW, '\0', TGCOLOR, 0},
-    { "", TEND, '\0', 0, 0}
+    { "yellow", TYELLOW, '\0', TGCOLOR, 0}
 };
 
 const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
