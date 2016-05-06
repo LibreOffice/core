@@ -1067,15 +1067,21 @@ void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     pDocument->mpCallbackFlushHandler->setPartTilePainting(true);
     try
     {
-        const int nOrigPart = doc_getPart(pThis);
-        if (nPart != nOrigPart)
+        // Text documents have a single coordinate system; don't change part.
+        int nOrigPart = 0;
+        const bool isText = (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT);
+        if (!isText)
         {
-            doc_setPart(pThis, nPart);
+            nOrigPart = doc_getPart(pThis);
+            if (nPart != nOrigPart)
+            {
+                doc_setPart(pThis, nPart);
+            }
         }
 
         doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-        if (nPart != nOrigPart)
+        if (!isText && nPart != nOrigPart)
         {
             doc_setPart(pThis, nOrigPart);
         }
