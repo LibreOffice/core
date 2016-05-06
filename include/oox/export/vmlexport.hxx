@@ -20,12 +20,36 @@
 #ifndef INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
 #define INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
 
-#include <oox/dllapi.h>
-#include <oox/export/drawingml.hxx>
-#include <sax/fshelper.hxx>
-#include <filter/msfilter/escherex.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <editeng/outlobj.hxx>
+#include <filter/msfilter/escherex.hxx>
+#include <oox/dllapi.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <sax/fshelper.hxx>
+#include <vcl/checksum.hxx>
 
+namespace com { namespace sun { namespace star {
+    namespace drawing {
+        class XShape;
+    }
+}}}
+
+namespace oox {
+    namespace drawingml {
+        class DrawingML;
+    }
+}
+
+namespace sax_fastparser {
+    class FastAttributeList;
+}
+
+class Point;
+class Rectangle;
+class SdrObject;
 
 namespace oox {
 
