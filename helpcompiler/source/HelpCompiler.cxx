@@ -29,6 +29,7 @@
 #include <libxslt/xsltutils.h>
 #include <osl/thread.hxx>
 #include <chrono>
+#include<rtl/character.hxx>
 
 static void impl_sleep( sal_uInt32 nSec )
 {
@@ -462,7 +463,7 @@ bool HelpCompiler::compile()
     std::string appl = module.substr(1);
     for (char & i : appl)
     {
-        i=toupper(i);
+        i=rtl::toAsciiUpperCase(i);
     }
     xmlNodePtr docResolved = clone(xmlDocGetRootElement(docResolvedOrg), appl);
     myparser aparser(documentId, fileName, title);
