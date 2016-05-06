@@ -460,17 +460,17 @@ private:
     /*
      * Table methods.
      */
-    void InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner);
-    void StartTable(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner);
-    void StartTableRow(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner);
-    void StartTableCell(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner);
-    void TableCellProperties(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner);
+    void InitTableHelper(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
+    void StartTable(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
+    void StartTableRow(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
+    void StartTableCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
+    void TableCellProperties(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
     void EndTableCell();
     void EndTableRow();
     void EndTable();
 
     /// End cell, row, and even the entire table if necessary.
-    void FinishTableRowCell(ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false);
+    void FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner, bool bForceEmptyParagraph = false);
 
     void WriteTextFootnoteNumStr(const SwFormatFootnote& rFootnote);
 
