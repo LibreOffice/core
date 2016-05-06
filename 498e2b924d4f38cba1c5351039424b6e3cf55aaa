@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b62bfe32",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-06T11:03:59Z",
+      "side": 1,
+      "message": "formatting nit: this would read better with some line break",
+      "revId": "498e2b924d4f38cba1c5351039424b6e3cf55aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_766c169d",
+        "filename": "vcl/source/filter/wmf/emfwr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-06T11:03:59Z",
+      "side": 1,
+      "message": "please also rename the variable to \"mHandlesUsed\", \"mp\" indicates it is a pointer",
+      "revId": "498e2b924d4f38cba1c5351039424b6e3cf55aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_760336b9",
+        "filename": "vcl/source/filter/wmf/winmtf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-06T11:03:59Z",
+      "side": 1,
+      "message": "i don\u0027t really see what it buys us to have this template method creating the object instead of its caller doing it, but whatever...",
+      "revId": "498e2b924d4f38cba1c5351039424b6e3cf55aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

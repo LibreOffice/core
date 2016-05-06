@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_36f9aec9",
+        "filename": "vcl/source/filter/wmf/winmtf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-06T11:03:59Z",
+      "side": 0,
+      "message": "this wasn\u0027t even a discriminated union? ugh... clearly C programmers at work :)",
+      "revId": "00fc1ee1b50229be13b5a5082022d14adf28fc2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
