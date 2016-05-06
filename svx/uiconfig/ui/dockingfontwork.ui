@@ -27,7 +27,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="off">
+              <object class="GtkToggleToolButton" id="off">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Off</property>
@@ -50,7 +50,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="rotate">
+              <object class="GtkRadioToolButton" id="rotate">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Rotate</property>
@@ -63,12 +63,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="upright">
+              <object class="GtkRadioToolButton" id="upright">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Upright</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw03.png</property>
+                <property name="group">rotate</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -76,12 +77,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="hori">
+              <object class="GtkRadioToolButton" id="hori">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Slant Horizontal</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw04.png</property>
+                <property name="group">rotate</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -89,12 +91,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="vert">
+              <object class="GtkRadioToolButton" id="vert">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Slant Vertical</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw05.png</property>
+                <property name="group">rotate</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -112,7 +115,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="orientation">
+              <object class="GtkToggleToolButton" id="orientation">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Orientation</property>
@@ -135,7 +138,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="left">
+              <object class="GtkRadioToolButton" id="left">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Align Left</property>
@@ -148,12 +151,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="center">
+              <object class="GtkRadioToolButton" id="center">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Center</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw08.png</property>
+                <property name="group">left</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -161,12 +165,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="right">
+              <object class="GtkRadioToolButton" id="right">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Align Right</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw09.png</property>
+                <property name="group">left</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -174,12 +179,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="autosize">
+              <object class="GtkRadioToolButton" id="autosize">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">AutoSize Text</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw010.png</property>
+                <property name="group">left</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -272,7 +278,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="contour">
+              <object class="GtkToggleToolButton" id="contour">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Contour</property>
@@ -285,7 +291,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="textcontour">
+              <object class="GtkToggleToolButton" id="textcontour">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Text Contour</property>
@@ -308,7 +314,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="noshadow">
+              <object class="GtkRadioToolButton" id="noshadow">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">No Shadow</property>
@@ -321,12 +327,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="vertical">
+              <object class="GtkRadioToolButton" id="vertical">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Vertical</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw014.png</property>
+                <property name="group">noshadow</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -334,12 +341,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="slant">
+              <object class="GtkRadioToolButton" id="slant">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Slant</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">svx/res/fw015.png</property>
+                <property name="group">noshadow</property>
               </object>
               <packing>
                 <property name="expand">False</property>

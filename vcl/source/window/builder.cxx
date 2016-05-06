@@ -1647,7 +1647,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         xWindow = VclPtr<ToolBox>::Create(pParent, WB_3DLOOK | WB_TABSTOP);
     }
-    else if (name == "GtkToolButton" || name == "GtkMenuToolButton")
+    else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
+             name == "GtkToggleToolButton" || name == "GtkRadioToolButton")
     {
         ToolBox *pToolBox = dynamic_cast<ToolBox*>(pParent);
         if (pToolBox)
@@ -1658,6 +1659,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             ToolBoxItemBits nBits = ToolBoxItemBits::NONE;
             if (name == "GtkMenuToolButton")
                 nBits |= ToolBoxItemBits::DROPDOWN;
+            else if (name == "GtkToggleToolButton")
+                nBits |= ToolBoxItemBits::AUTOCHECK | ToolBoxItemBits::CHECKABLE;
+            else if (name == "GtkRadioToolButton")
+                nBits |= ToolBoxItemBits::AUTOCHECK | ToolBoxItemBits::RADIOCHECK;
 
             if (!aCommand.isEmpty() && m_xFrame.is())
             {
