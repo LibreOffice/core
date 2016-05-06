@@ -2432,8 +2432,8 @@ public:
 
     virtual void GenSlidingWindowFunction( std::stringstream& ss ) override
     {
-        for (size_t i = 0; i < mvSubArguments.size(); i++)
-            mvSubArguments[i]->GenSlidingWindowFunction(ss);
+        for (DynamicKernelArgumentRef & rArg : mvSubArguments)
+            rArg->GenSlidingWindowFunction(ss);
         mpCodeGen->GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
     }
     virtual void GenDeclRef( std::stringstream& ss ) const override
@@ -2459,9 +2459,9 @@ public:
     virtual size_t GetWindowSize() const override
     {
         size_t nCurWindowSize = 0;
-        for (size_t i = 0; i < mvSubArguments.size(); i++)
+        for (const auto & rSubArgument : mvSubArguments)
         {
-            size_t nCurChildWindowSize = mvSubArguments[i]->GetWindowSize();
+            size_t nCurChildWindowSize = rSubArgument->GetWindowSize();
             nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
                 nCurChildWindowSize : nCurWindowSize;
         }
@@ -2518,16 +2518,16 @@ public:
     virtual std::string DumpOpName() const override
     {
         std::string t = "_" + mpCodeGen->BinFuncName();
-        for (size_t i = 0; i < mvSubArguments.size(); i++)
-            t = t + mvSubArguments[i]->DumpOpName();
+        for (const auto & rSubArgument : mvSubArguments)
+            t = t + rSubArgument->DumpOpName();
         return t;
     }
     virtual void DumpInlineFun( std::set<std::string>& decls,
         std::set<std::string>& funs ) const override
     {
         mpCodeGen->BinInlineFun(decls, funs);
-        for (size_t i = 0; i < mvSubArguments.size(); i++)
-            mvSubArguments[i]->DumpInlineFun(decls, funs);
+        for (const auto & rSubArgument : mvSubArguments)
+            rSubArgument->DumpInlineFun(decls, funs);
     }
     virtual ~DynamicKernelSoPArguments()
     {
@@ -3790,9 +3790,9 @@ std::string DynamicKernel::GetMD5()
             mFullProgramSrc.c_str(),
             mFullProgramSrc.length(), result,
             RTL_DIGEST_LENGTH_MD5);
-        for (int i = 0; i < RTL_DIGEST_LENGTH_MD5; i++)
+        for (sal_uInt8 i : result)
         {
-            md5s << std::hex << (int)result[i];
+            md5s << std::hex << (int)i;
         }
         mKernelHash = md5s.str();
     }

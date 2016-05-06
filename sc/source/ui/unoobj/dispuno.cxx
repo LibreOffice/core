@@ -358,8 +358,8 @@ void SAL_CALL ScDispatch::selectionChanged( const css::lang::EventObject& /* aEv
 
             lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
 
-            for ( size_t n=0; n<aDataSourceListeners.size(); n++ )
-                aDataSourceListeners[n]->statusChanged( aEvent );
+            for (uno::Reference<frame::XStatusListener> & xDataSourceListener : aDataSourceListeners)
+                xDataSourceListener->statusChanged( aEvent );
 
             aLastImport = aNewImport;
         }
@@ -377,8 +377,8 @@ void SAL_CALL ScDispatch::disposing( const css::lang::EventObject& rSource )
 
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( size_t n=0; n<aDataSourceListeners.size(); n++ )
-        aDataSourceListeners[n]->disposing( aEvent );
+    for (uno::Reference<frame::XStatusListener> & xDataSourceListener : aDataSourceListeners)
+        xDataSourceListener->disposing( aEvent );
 
     pViewShell = nullptr;
 }

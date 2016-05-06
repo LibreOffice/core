@@ -706,9 +706,9 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
     if (pDoc->GetLinkManager())
     {
         const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
-        for (size_t i = 0; i < rLinks.size(); i++)
+        for (const auto & rLink : rLinks)
         {
-            ScAreaLink *pLink = dynamic_cast<ScAreaLink*>(rLinks[i].get());
+            ScAreaLink *pLink = dynamic_cast<ScAreaLink*>(rLink.get());
             if (pLink)
             {
                 ScMyAreaLink aAreaLink;

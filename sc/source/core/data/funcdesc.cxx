@@ -405,9 +405,9 @@ ScFunctionList::ScFunctionList() :
         RID_SC_FUNCTION_DESCRIPTIONS2
     };
 
-    for (sal_uInt16 k = 0; k < SAL_N_ELEMENTS(nDescBlock); ++k)
+    for (sal_uInt16 k : nDescBlock)
     {
-        std::unique_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
+        std::unique_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( k ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but
         // otherwise the sub resources within the resource blocks and the
         // resource blocks themselves would had to be ordered according to
@@ -693,8 +693,8 @@ ScFunctionMgr::ScFunctionMgr() :
 
 ScFunctionMgr::~ScFunctionMgr()
 {
-    for (sal_uInt16 i = 0; i < MAX_FUNCCAT; ++i)
-        delete aCatLists[i];
+    for (std::vector<const ScFuncDesc*> * pCatList : aCatLists)
+        delete pCatList;
 }
 
 

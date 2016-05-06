@@ -162,9 +162,8 @@ std::set<Color> ScDocument::GetDocColors()
     std::set<Color> aDocColors;
     ScDocumentPool *pPool = GetPool();
     const sal_uInt16 pAttribs[] = {ATTR_BACKGROUND, ATTR_FONT_COLOR};
-    for (size_t i=0; i<SAL_N_ELEMENTS( pAttribs ); i++)
+    for (sal_uInt16 nAttrib : pAttribs)
     {
-        const sal_uInt16 nAttrib = pAttribs[i];
         const sal_uInt32 nCount = pPool->GetItemCount2(nAttrib);
         for (sal_uInt32 j=0; j<nCount; j++)
         {

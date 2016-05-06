@@ -1611,8 +1611,8 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                 lang::EventObject aEvent;
                 aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-                for ( size_t n=0; n<aValueListeners.size(); n++ )
-                    aValueListeners[n]->disposing( aEvent );
+                for (uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
+                    xValueListener->disposing( aEvent );
 
                 aValueListeners.clear();
 
@@ -1641,8 +1641,8 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 // the EventObject holds a Ref to this object until after the listener calls
 
                 ScDocument& rDoc = pDocShell->GetDocument();
-                for ( size_t n=0; n<aValueListeners.size(); n++ )
-                    rDoc.AddUnoListenerCall( aValueListeners[n], aEvent );
+                for (uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
+                    rDoc.AddUnoListenerCall( xValueListener, aEvent );
 
                 bGotDataChangedHint = false;
             }
@@ -4525,12 +4525,12 @@ static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
 
     if ( !rNamedEntries.empty() )
     {
-        for ( size_t n=0; n<rNamedEntries.size(); n++ )
-            if ( rNamedEntries[n].GetName() == rName )
+        for (const auto & rNamedEntry : rNamedEntries)
+            if ( rNamedEntry.GetName() == rName )
             {
                 //  test if named entry is contained in rRanges
 
-                const ScRange& rComp = rNamedEntries[n].GetRange();
+                const ScRange& rComp = rNamedEntry.GetRange();
                 ScMarkData aMarkData;
                 aMarkData.MarkFromRangeList( rRanges, false );
                 aMarkData.MarkToMulti();        // needed for IsAllMarked

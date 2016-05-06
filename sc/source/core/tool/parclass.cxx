@@ -242,9 +242,9 @@ void ScParameterClassification::Init()
     memset( pData, 0, sizeof(RunData) * (SC_OPCODE_LAST_OPCODE_ID + 1));
 
     // init from specified static data above
-    for ( size_t i=0; i < SAL_N_ELEMENTS(pRawData); ++i )
+    for (const auto & i : pRawData)
     {
-        const RawData* pRaw = &pRawData[i];
+        const RawData* pRaw = &i;
         if ( pRaw->eOp > SC_OPCODE_LAST_OPCODE_ID )
         {
             OSL_ENSURE( pRaw->eOp == ocNone, "RawData OpCode error");
@@ -289,9 +289,9 @@ void ScParameterClassification::Init()
                         pRun->aData.nParam[CommonData::nMaxParams-1] != Bounds)
                     pRun->nMinParams = CommonData::nMaxParams;
             }
-            for ( sal_Int32 j=0; j < CommonData::nMaxParams; ++j )
+            for (ScParameterClassification::Type & j : pRun->aData.nParam)
             {
-                if ( pRun->aData.nParam[j] == ForceArray || pRun->aData.nParam[j] == ReferenceOrForceArray )
+                if ( j == ForceArray || j == ReferenceOrForceArray )
                 {
                     pRun->bHasForceArray = true;
                     break;  // for

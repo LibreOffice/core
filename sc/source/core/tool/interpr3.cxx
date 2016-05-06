@@ -2879,8 +2879,8 @@ void ScInterpreter::ScKurt()
 
     double fMean = fSum / fCount;
 
-    for (size_t i = 0; i < values.size(); i++)
-        vSum += (values[i] - fMean) * (values[i] - fMean);
+    for (double v : values)
+        vSum += (v - fMean) * (v - fMean);
 
     double fStdDev = sqrt(vSum / (fCount - 1.0));
     double xpower4 = 0.0;
@@ -2891,9 +2891,9 @@ void ScInterpreter::ScKurt()
         return;
     }
 
-    for (size_t i = 0; i < values.size(); i++)
+    for (double v : values)
     {
-        double dx = (values[i] - fMean) / fStdDev;
+        double dx = (v - fMean) / fStdDev;
         xpower4 = xpower4 + (dx * dx * dx * dx);
     }
 
@@ -3277,8 +3277,8 @@ void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
 
     double fMean = fSum / fCount;
 
-    for (size_t i = 0; i < values.size(); ++i)
-        vSum += (values[i] - fMean) * (values[i] - fMean);
+    for (double v : values)
+        vSum += (v - fMean) * (v - fMean);
 
     double fStdDev = sqrt( vSum / (bSkewp ? fCount : (fCount - 1.0)));
     double xcube = 0.0;
@@ -3289,9 +3289,9 @@ void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
         return;
     }
 
-    for (size_t i = 0; i < values.size(); ++i)
+    for (double v : values)
     {
-        double dx = (values[i] - fMean) / fStdDev;
+        double dx = (v - fMean) / fStdDev;
         xcube = xcube + (dx * dx * dx);
     }
 

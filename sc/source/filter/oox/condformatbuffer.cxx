@@ -269,10 +269,8 @@ ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDoc
 
 void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
 {
-    for(size_t i = 0; i < maColorScaleRuleEntries.size(); ++i)
+    for(ColorScaleRuleModelEntry & rEntry : maColorScaleRuleEntries)
     {
-        const ColorScaleRuleModelEntry& rEntry = maColorScaleRuleEntries[i];
-
         ScColorScaleEntry* pEntry = ConvertToModel( rEntry, pDoc, rAddr );
 
         pFormat->AddEntry( pEntry );
@@ -399,9 +397,9 @@ void IconSetRule::importIcon(const AttributeList& rAttribs)
 
 void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )
 {
-    for(size_t i = 0; i < maEntries.size(); ++i)
+    for(ColorScaleRuleModelEntry & rEntry : maEntries)
     {
-        ScColorScaleEntry* pModelEntry = ConvertToModel( maEntries[i], pDoc, rPos );
+        ScColorScaleEntry* pModelEntry = ConvertToModel( rEntry, pDoc, rPos );
         mxFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pModelEntry));
     }
 
