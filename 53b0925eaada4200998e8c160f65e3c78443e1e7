@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b6d21e33",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4830,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-05-06T12:00:32Z",
+      "side": 1,
+      "message": "brace position",
+      "revId": "53b0925eaada4200998e8c160f65e3c78443e1e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_d6d7a221",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4833,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-05-06T12:00:32Z",
+      "side": 1,
+      "message": "brace position",
+      "revId": "53b0925eaada4200998e8c160f65e3c78443e1e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
