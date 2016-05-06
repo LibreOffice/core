@@ -182,6 +182,13 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
     if( !PrepUpdate() )
         return;
 
+    if (mbNeedsUpdate)
+    {
+        mbNeedsUpdate = false;
+        if (mbMenuBar)
+            maUpdateMenuBarIdle.Stop();
+    }
+
     Menu* pVCLMenu = mpVCLMenu;
     GLOMenu* pLOMenu = G_LO_MENU( mpMenuModel );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
@@ -409,6 +416,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
 
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
+    mbNeedsUpdate( false ),
     mpMenuBarWidget( nullptr ),
     mpCloseButton( nullptr ),
     mpVCLMenu( nullptr ),
@@ -417,6 +425,32 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mpMenuModel( nullptr ),
     mpActionGroup( nullptr )
 {
+    //typically this only gets called after the menu has been customized on the
+    //next idle slot, in the normal case of a new menubar SetFrame is called
+    //directly long before this idle would get called.
+    maUpdateMenuBarIdle.SetPriority(SchedulerPriority::HIGHEST);
+    maUpdateMenuBarIdle.SetIdleHdl(LINK(this, GtkSalMenu, MenuBarHierarchyChangeHandler));
+    maUpdateMenuBarIdle.SetDebugName("Native Gtk Menu Update Idle");
+}
+
+IMPL_LINK_NOARG_TYPED(GtkSalMenu, MenuBarHierarchyChangeHandler, Idle *, void)
+{
+    SAL_WARN_IF(!mpFrame, "vcl.gtk", "MenuBar layout changed, but no frame for some reason!");
+    if (!mpFrame)
+        return;
+    SetFrame(mpFrame);
+}
+
+void GtkSalMenu::SetNeedsUpdate()
+{
+    GtkSalMenu* pMenu = this;
+    while (pMenu && !pMenu->mbNeedsUpdate)
+    {
+        pMenu->mbNeedsUpdate = true;
+        if (mbMenuBar)
+            maUpdateMenuBarIdle.Start();
+        pMenu = pMenu->mpParentSalMenu;
+    }
 }
 
 void GtkSalMenu::SetMenuModel(GMenuModel* pMenuModel)
@@ -460,12 +494,15 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
         maItems.insert( maItems.begin() + nPos, pItem );
 
     pItem->mpParentMenu = this;
+
+    SetNeedsUpdate();
 }
 
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
     SolarMutexGuard aGuard;
     maItems.erase( maItems.begin() + nPos );
+    SetNeedsUpdate();
 }
 
 void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned )
@@ -479,6 +516,8 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 
     pGtkSubMenu->mpParentSalMenu = this;
     pItem->mpSubMenu = pGtkSubMenu;
+
+    SetNeedsUpdate();
 }
 
 #if GTK_CHECK_VERSION(3,0,0)

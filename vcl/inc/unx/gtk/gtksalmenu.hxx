@@ -20,6 +20,7 @@
 
 #include <unx/salmenu.h>
 #include <unx/gtk/gtkframe.hxx>
+#include <vcl/idle.hxx>
 
 #if ENABLE_DBUS && ENABLE_GIO && \
     (GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 36)
@@ -42,8 +43,10 @@ class GtkSalMenu : public SalMenu
 {
 private:
     std::vector< GtkSalMenuItem* >  maItems;
+    Idle                            maUpdateMenuBarIdle;
 
     bool                            mbMenuBar;
+    bool                            mbNeedsUpdate;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpCloseButton;
     Menu*                           mpVCLMenu;
@@ -56,6 +59,8 @@ private:
 
     void                        ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries);
     void                        ActivateAllSubmenus(Menu* pMenuBar);
+
+    DECL_LINK_TYPED(MenuBarHierarchyChangeHandler, Idle*, void);
 
 public:
     GtkSalMenu( bool bMenuBar );
@@ -104,8 +109,9 @@ public:
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
     // Update full menu hierarchy from this menu.
-    void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); }
+    void                        UpdateFull () { if (mbNeedsUpdate) ActivateAllSubmenus(mpVCLMenu); }
     GtkSalMenu*                 GetTopLevel();
+    void                        SetNeedsUpdate();
 
     void CreateMenuBarWidget();
     void DestroyMenuBarWidget();
