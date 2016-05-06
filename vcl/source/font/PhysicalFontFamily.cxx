@@ -158,7 +158,8 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
 
     // add the new physical font face, replacing existing font face if necessary
     // TODO: get rid of linear search?
-    for(std::vector< PhysicalFontFace* >::iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
+    auto it(maFontFaces.begin());
+    for (; it != maFontFaces.end(); ++it)
     {
         PhysicalFontFace* pFoundFontFace = *it;
         sal_Int32 eComp = pNewFontFace->CompareWithSize( *pFoundFontFace );
@@ -177,12 +178,11 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
 
         // replace existing font face with a better one
         delete pFoundFontFace;
-        it = maFontFaces.erase( it );
-        maFontFaces.push_back( pNewFontFace );
+        *it = pNewFontFace; // insert at sort position
         return true;
     }
 
-    maFontFaces.push_back( pNewFontFace );
+    maFontFaces.insert(it, pNewFontFace); // insert at sort position
     return true;
 }
 
