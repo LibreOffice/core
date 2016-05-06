@@ -1933,8 +1933,7 @@ void ScInterpreter::ScSwitch_MS()
         case svDoubleRef :
             {
                 ScAddress aAdr;
-                PopDoubleRefOrSingleRef( aAdr );
-                if ( nGlobalError )
+                if (!PopDoubleRefOrSingleRef( aAdr ))
                     break;
                 ScRefCellValue aCell( *pDok, aAdr );
                 isValue = !( aCell.hasString() || aCell.hasEmptyValue() || aCell.isEmpty() );
