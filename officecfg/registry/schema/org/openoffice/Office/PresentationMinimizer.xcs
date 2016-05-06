@@ -70,13 +70,13 @@
 			</prop>
 			<prop oor:name="EmbedLinkedGraphics" oor:type="xs:boolean">
 				<info>
-					<desc>Specifies if linked graphics are to be embedded</desc>
+					<desc>Specifies if linked images are to be embedded</desc>
 				</info>
 				<value>true</value>
 			</prop>
 			<prop oor:name="OLEOptimization" oor:type="xs:boolean">
 				<info>
-					<desc>Specifies if OLE Objects are converted to Graphic objects at all</desc>
+					<desc>Specifies if OLE Objects are converted to image objects at all</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -169,11 +169,11 @@
 			</prop>
 			<prop oor:name="STR_GRAPHIC_OPTIMIZATION" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_GRAPHIC_OPTIMIZATION.</desc></info>
-				<value>Choose settings for optimizing pictures and graphics</value>
+				<value>Choose settings for optimizing images</value>
 			</prop>
 			<prop oor:name="STR_IMAGE_OPTIMIZATION" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_IMAGE_OPTIMIZATION.</desc></info>
-				<value>Graphics</value>
+				<value>Images</value>
 			</prop>
 			<prop oor:name="STR_LOSSLESS_COMPRESSION" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_LOSSLESS_COMPRESSION.</desc></info>
@@ -189,7 +189,7 @@
 			</prop>
 			<prop oor:name="STR_REMOVE_CROP_AREA" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_REMOVE_CROP_AREA.</desc></info>
-				<value>~Delete cropped graphic areas</value>
+				<value>~Delete cropped image areas</value>
 			</prop>
 			<prop oor:name="STR_IMAGE_RESOLUTION" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_IMAGE_RESOLUTION.</desc></info>
@@ -213,7 +213,7 @@
 			</prop>
 			<prop oor:name="STR_EMBED_LINKED_GRAPHICS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_EMBED_LINKED_GRAPHICS.</desc></info>
-				<value>~Break links to external graphics</value>
+				<value>~Embed external images</value>
 			</prop>
 			<prop oor:name="STR_OLE_OBJECTS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OLE_OBJECTS.</desc></info>
@@ -225,7 +225,7 @@
 			</prop>
 			<prop oor:name="STR_OLE_REPLACE" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OLE_REPLACE.</desc></info>
-				<value>Create static replacement graphics for OLE objects</value>
+				<value>Create static replacement images for OLE objects</value>
 			</prop>
 			<prop oor:name="STR_ALL_OLE_OBJECTS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_ALL_OLE_OBJECTS.</desc></info>
@@ -303,11 +303,11 @@ The current presentation contains no OLE objects.</value>
 				<info>
 					<desc>The following string is only used in plural.</desc>
 				</info>
-				<value>Optimize %IMAGES graphics to %QUALITY% JPEG quality at %RESOLUTION DPI.</value>
+				<value>Optimize %IMAGES images to %QUALITY% JPEG quality at %RESOLUTION DPI.</value>
 			</prop>
 			<prop oor:name="STR_CREATE_REPLACEMENT" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_CREATE_REPLACEMENT.</desc></info>
-				<value>Create replacement graphics for %OLE objects.</value>
+				<value>Create replacement images for %OLE objects.</value>
 			</prop>
 			<prop oor:name="STR_CURRENT_FILESIZE" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_CURRENT_FILESIZE.</desc></info>
@@ -351,11 +351,11 @@ The current presentation contains no OLE objects.</value>
            </prop>
             <prop oor:name="STR_OPTIMIZING_GRAPHICS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OPTIMIZING_GRAPHICS.</desc></info>
-                <value>Optimizing graphics...</value>
+                <value>Optimizing images...</value>
            </prop>
             <prop oor:name="STR_CREATING_OLE_REPLACEMENTS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_CREATING_OLE_REPLACEMENTS.</desc></info>
-                <value>Creating replacement graphics for OLE objects...</value>
+                <value>Creating replacement images for OLE objects...</value>
            </prop>
 			<prop oor:name="STR_FILESIZESEPARATOR" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_FILESIZESEPARATOR.</desc></info>

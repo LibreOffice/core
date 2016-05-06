@@ -60,7 +60,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="animatedgraphics">
-                    <property name="label" translatable="yes">Allow animated _graphics</property>
+                    <property name="label" translatable="yes">Allow animated _images</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
