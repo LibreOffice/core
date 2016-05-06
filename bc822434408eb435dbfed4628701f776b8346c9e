@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_d62a427e",
+        "filename": "sd/source/filter/xml/sdxmlwrp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-05-06T07:22:34Z",
+      "side": 1,
+      "message": "I assume the whole:\n\n #if OSL_DEBUG_LEVEL \u003c\u003d 1\n (void)r;\n #endif\n\ncan go. The (void)r only use to be there to prevent a warning on low debug levels about r being an unused variable. That shouldnt be an issue anymore with SAL_WARN being unconditional.",
+      "parentUuid": "1aa78d24_97db671b",
+      "revId": "bc822434408eb435dbfed4628701f776b8346c9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_77d87b1e",
         "filename": "sd/source/filter/xml/sdxmlwrp.cxx",
         "patchSetId": 2
