@@ -590,10 +590,10 @@ void XclExpPaletteImpl::RawReducePalette( sal_uInt32 nPass )
     sal_uInt8 nFactor3 = static_cast< sal_uInt8 >( 0x40 >> nPass );
 
     // process each color in the old color list
-    for( sal_uInt32 nIdx = 0, nCount = xOldList->size(); nIdx < nCount; ++nIdx )
+    for(std::unique_ptr<XclListColor> & pOldColor : *xOldList)
     {
         // get the old list entry
-        const XclListColor* pOldEntry = xOldList->at( nIdx ).get();
+        const XclListColor* pOldEntry = pOldColor.get();
         nR = pOldEntry->GetColor().GetRed();
         nG = pOldEntry->GetColor().GetGreen();
         nB = pOldEntry->GetColor().GetBlue();

@@ -235,9 +235,9 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
         aTableStack.pop();
 
         bool found = false;
-        for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
+        for (ScEEParseEntry* p : maList)
         {
-            if ( pS->pCellEntry == maList[ i ] )
+            if ( pS->pCellEntry == p )
             {
                 found = true;
                 break;
@@ -496,9 +496,8 @@ void ScHTMLLayoutParser::Adjust()
     SCROW nCurRow = 0;
     sal_uInt16 nPageWidth = (sal_uInt16) aPageSize.Width();
     InnerMap* pTab = nullptr;
-    for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
+    for (ScEEParseEntry* pE : maList)
     {
-        ScEEParseEntry* pE = maList[ i ];
         if ( pE->nTab < nTab )
         {   // Table finished
             if ( !aStack.empty() )
@@ -834,9 +833,9 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
     {   // From the stack in TableOff
         bTabInTabCell = false;
         bool found = false;
-        for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
+        for (ScEEParseEntry* p : maList)
         {
-            if ( pActEntry == maList[ i ] )
+            if ( pActEntry == p )
             {
                 found = true;
                 break;
@@ -960,9 +959,8 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
     bInCell = true;
     bool bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+    for (const auto & rOption : rOptions)
     {
-        const HTMLOption& rOption = rOptions[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_COLSPAN:
@@ -1082,9 +1080,8 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         if ( pInfo->nToken == HTML_TABLE_ON )
         {   // It can still be TD or TH, if we didn't have a TABLE earlier
             const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-            for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+            for (const auto & rOption : rOptions)
             {
-                const HTMLOption& rOption = rOptions[i];
                 switch( rOption.GetToken() )
                 {
                     case HTML_O_WIDTH:
@@ -1142,9 +1139,8 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         {
             // It can still be TD or TH, if we didn't have a TABLE earlier
             const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-            for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+            for (const auto & rOption : rOptions)
             {
-                const HTMLOption& rOption = rOptions[i];
                 switch( rOption.GetToken() )
                 {
                     case HTML_O_WIDTH:
@@ -1334,9 +1330,8 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     pActEntry->maImageList.push_back( o3tl::make_unique<ScHTMLImage>() );
     ScHTMLImage* pImage = pActEntry->maImageList.back().get();
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+    for (const auto & rOption : rOptions)
     {
-        const HTMLOption& rOption = rOptions[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_SRC:
@@ -1408,9 +1403,8 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     if ( pActEntry->maImageList.size() > 0 )
     {
         long nWidth = 0;
-        for ( size_t i=0; i < pActEntry->maImageList.size(); ++i )
+        for (std::unique_ptr<ScHTMLImage> & pI : pActEntry->maImageList)
         {
-            ScHTMLImage* pI = pActEntry->maImageList[ i ].get();
             if ( pI->nDir & nHorizontal )
                 nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();
             else
@@ -1426,9 +1420,8 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
 {
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+    for (const auto & rOption : rOptions)
     {
-        const HTMLOption& rOption = rOptions[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_WIDTH:
@@ -1465,9 +1458,8 @@ sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
 void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
 {
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+    for (const auto & rOption : rOptions)
     {
-        const HTMLOption& rOption = rOptions[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_NAME:
@@ -1492,9 +1484,8 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
     if ( IsAtBeginningOfText( pInfo ) )
     {   // Only at the start of the text; applies to whole line
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-        for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+        for (const auto & rOption : rOptions)
         {
-            const HTMLOption& rOption = rOptions[i];
             switch( rOption.GetToken() )
             {
                 case HTML_O_FACE :

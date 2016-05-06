@@ -1646,10 +1646,10 @@ void ScViewFunc::DeleteMulti( bool bRows )
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( &rDoc, nTab, nTab, !bRows, bRows );      // row height
 
-        for (size_t i = 0, n = aSpans.size(); i < n; ++i)
+        for (sc::ColRowSpan & rSpan : aSpans)
         {
-            SCCOLROW nStart = aSpans[i].mnStart;
-            SCCOLROW nEnd = aSpans[i].mnEnd;
+            SCCOLROW nStart = rSpan.mnStart;
+            SCCOLROW nEnd = rSpan.mnEnd;
             if (bRows)
                 rDoc.CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, InsertDeleteFlags::ALL,false,pUndoDoc );
             else
@@ -1928,10 +1928,10 @@ void ScViewFunc::SetWidthOrHeight(
     {
         nTab = *itr;
 
-        for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+        for (const sc::ColRowSpan & rRange : rRanges)
         {
-            SCCOLROW nStartNo = rRanges[i].mnStart;
-            SCCOLROW nEndNo = rRanges[i].mnEnd;
+            SCCOLROW nStartNo = rRange.mnStart;
+            SCCOLROW nEndNo = rRange.mnEnd;
 
             if ( !bWidth )                      // height always blockwise
             {
@@ -2090,10 +2090,10 @@ void ScViewFunc::SetWidthOrHeight(
             for (; itr != itrEnd; ++itr)
             {
                 nTab = *itr;
-                for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+                for (const sc::ColRowSpan & rRange : rRanges)
                 {
-                    SCCOL nStartCol = rRanges[i].mnStart;
-                    SCCOL nEndCol   = rRanges[i].mnEnd;
+                    SCCOL nStartCol = rRange.mnStart;
+                    SCCOL nEndCol   = rRange.mnEnd;
                     for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
                     {
                         aChangeRanges.Append( ScRange( nCol, 0, nTab ) );

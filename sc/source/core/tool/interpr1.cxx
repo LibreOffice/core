@@ -7039,8 +7039,8 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 
     vMean = fSum / values.size();
 
-    for (size_t i = 0; i < values.size(); i++)
-        vSum += (values[i] - vMean) * (values[i] - vMean);
+    for (double v : values)
+        vSum += (v - vMean) * (v - vMean);
 
     rVal = vSum;
 }

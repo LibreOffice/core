@@ -73,8 +73,8 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
 
 LotAttrCache::~LotAttrCache()
 {
-    for( sal_uInt16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
-        delete ppColorItems[ nCnt ];
+    for(SvxColorItem* p : ppColorItems)
+        delete p;
 
     delete pBlack;
     delete pWhite;

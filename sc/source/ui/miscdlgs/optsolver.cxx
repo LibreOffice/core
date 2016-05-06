@@ -367,9 +367,9 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
     Image aDelNm = ::GetImage( xFrame, aSlotURL, false );
 
-    for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
+    for (VclPtr<PushButton> & pButton : mpDelButton)
     {
-        mpDelButton[nRow]->SetModeImage( aDelNm );
+        pButton->SetModeImage( aDelNm );
     }
 
     m_pBtnOpt->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );

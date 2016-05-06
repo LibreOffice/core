@@ -557,8 +557,8 @@ void SAL_CALL ScSubTotalDescriptorBase::clear() throw(uno::RuntimeException, std
     ScSubTotalParam aParam;
     GetData(aParam);
 
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
-        aParam.bGroupActive[i] = false;
+    for (bool & rn : aParam.bGroupActive)
+        rn = false;
 
     //! Notify oder so fuer die Field-Objekte???
 
@@ -1953,8 +1953,8 @@ void ScDatabaseRangeObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-    for ( size_t n=0; n<aRefreshListeners.size(); n++ )
-        aRefreshListeners[n]->refreshed( aEvent );
+    for (uno::Reference<util::XRefreshListener> & xRefreshListener : aRefreshListeners)
+        xRefreshListener->refreshed( aEvent );
 }
 
 // XCellRangeSource

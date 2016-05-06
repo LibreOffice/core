@@ -103,9 +103,8 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
             {
                 const SfxItemPool& rPagePool(pStyle->GetPool().GetPool());
 
-                for (sal_uInt8 j = 0; j < 4; ++j)
+                for (sal_uInt16 nPageWhichId : aPageWhichIds)
                 {
-                    sal_uInt16 nPageWhichId(aPageWhichIds[j]);
                     sal_uInt32 nPageHFItems(rPagePool.GetItemCount2(nPageWhichId));
                     for (sal_uInt32 k = 0; k < nPageHFItems; ++k)
                     {

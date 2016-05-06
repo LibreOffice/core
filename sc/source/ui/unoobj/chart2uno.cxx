@@ -2834,8 +2834,8 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
                 if( m_pDocument )
                 {
-                    for ( size_t n=0; n<m_aValueListeners.size(); n++ )
-                        m_pDocument->AddUnoListenerCall( m_aValueListeners[n], aEvent );
+                    for (uno::Reference<util::XModifyListener> & xListener: m_aValueListeners)
+                        m_pDocument->AddUnoListenerCall( xListener, aEvent );
                 }
 
                 m_bGotDataChangedHint = false;
