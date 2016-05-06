@@ -16,6 +16,24 @@
       "revId": "0f6028dc0dc8da20f51901cf927f0c8d467bc9a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_766256da",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-05-06T08:40:06Z",
+      "side": 1,
+      "message": "I\u0027m calling Window::Window( WindowType nType ) and this constructor already does it, not enough ?",
+      "parentUuid": "da7fb54a_961a7a6d",
+      "revId": "0f6028dc0dc8da20f51901cf927f0c8d467bc9a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
