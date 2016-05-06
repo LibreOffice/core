@@ -153,6 +153,7 @@ certain functionality.
 
 @li @c sd
 @li @c sd.core
+@li @c sd.eppt
 @li @c sd.filter
 @li @c sd.fwk
 @li @c sd.slideshow
