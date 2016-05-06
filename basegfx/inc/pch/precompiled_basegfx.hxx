@@ -30,7 +30,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <boost/next_prior.hpp>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <rtl/instance.hxx>

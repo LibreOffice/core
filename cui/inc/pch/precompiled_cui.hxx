@@ -54,7 +54,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <osl/diagnose.h>

@@ -29,11 +29,11 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include <o3tl/vector_pool.hxx>
-#include <boost/next_prior.hpp>
 
 #include <algorithm>
 #include <deque>
 #include <list>
+#include <iterator>
 
 namespace basegfx
 {
@@ -716,7 +716,7 @@ namespace basegfx
             ListOfEdges& rList, const ListOfEdges::reverse_iterator& aIter)
         {
             return ListOfEdges::reverse_iterator(
-                    rList.erase(boost::prior(aIter.base())));
+                    rList.erase(std::prev(aIter.base())));
         }
 
         template<int bPerformErase,

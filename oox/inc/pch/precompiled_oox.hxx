@@ -43,7 +43,6 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/next_prior.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <osl/diagnose.h>

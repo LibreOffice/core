@@ -20,9 +20,9 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
 
 #include <osl/mutex.hxx>
-#include <boost/next_prior.hpp>
 #include <algorithm>
 #include <vector>
+#include <iterator>
 
 namespace slideshow {
 namespace internal {
@@ -297,7 +297,7 @@ public:
         {
             std::inplace_merge(
                 maListeners.begin(),
-                boost::prior(maListeners.end()),
+                std::prev(maListeners.end()),
                 maListeners.end() );
         }
 

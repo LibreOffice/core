@@ -20,7 +20,6 @@
 #include <oox/drawingml/fillproperties.hxx>
 
 #include <iterator>
-#include <boost/next_prior.hpp>
 
 #include <drawingml/graphicproperties.hxx>
 
@@ -402,7 +401,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         bool bSymmetric(true);
                         {
                             GradientFillProperties::GradientStopMap::const_iterator aItA( aGradientStops.begin() );
-                            GradientFillProperties::GradientStopMap::const_iterator aItZ( boost::prior( aGradientStops.end() ) );
+                            GradientFillProperties::GradientStopMap::const_iterator aItZ(std::prev(aGradientStops.end()));
                             while( bSymmetric && aItA->first < aItZ->first )
                             {
                                 if( aItA->second.getColor( rGraphicHelper, nPhClr ) != aItZ->second.getColor( rGraphicHelper, nPhClr ) ||
@@ -411,7 +410,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 else
                                 {
                                     ++aItA;
-                                    aItZ = boost::prior(aItZ);
+                                    aItZ = std::prev(aItZ);
                                 }
                             }
                             // Don't be fooled if the middlemost stop isn't at 0.5.
@@ -454,10 +453,10 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         ++aIt;
                         while( aIt != aGradientStops.end() )
                         {
-                            if( aIt->first - boost::prior(aIt)->first > nWidestWidth )
+                            if (aIt->first - std::prev(aIt)->first > nWidestWidth)
                             {
-                                nWidestWidth = aIt->first - boost::prior(aIt)->first;
-                                aWidestSegmentStart = boost::prior(aIt);
+                                nWidestWidth = aIt->first - std::prev(aIt)->first;
+                                aWidestSegmentStart = std::prev(aIt);
                             }
                             ++aIt;
                         }
@@ -470,42 +469,42 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         // segments, and the widest one is the first or last one, and is it of uniform colour? If
                         // so, deduce the border from it, and drop that segment.
                         if( aGradientStops.size() == 3 &&
-                            aGradientStops.begin()->second.getColor( rGraphicHelper, nPhClr ) == boost::next(aGradientStops.begin())->second.getColor( rGraphicHelper, nPhClr ) &&
-                            aGradientStops.begin()->second.getTransparency() == boost::next(aGradientStops.begin())->second.getTransparency( ) )
+                            aGradientStops.begin()->second.getColor(rGraphicHelper, nPhClr) == std::next(aGradientStops.begin())->second.getColor(rGraphicHelper, nPhClr) &&
+                            aGradientStops.begin()->second.getTransparency() == std::next(aGradientStops.begin())->second.getTransparency())
                         {
                             // Two segments, first is uniformly coloured
                             SAL_INFO("oox.drawingml.gradient", "two segments, first is uniformly coloured");
-                            nBorder = boost::next(aGradientStops.begin())->first - aGradientStops.begin()->first;
+                            nBorder = std::next(aGradientStops.begin())->first - aGradientStops.begin()->first;
                             aGradientStops.erase(aGradientStops.begin());
                             aWidestSegmentStart = aGradientStops.begin();
                         }
                         else if( !bSymmetric &&
                                  aGradientStops.size() == 3 &&
-                                 boost::next(aGradientStops.begin())->second.getColor( rGraphicHelper, nPhClr ) == boost::prior(aGradientStops.end())->second.getColor( rGraphicHelper, nPhClr ) &&
-                                 boost::next(aGradientStops.begin())->second.getTransparency() == boost::prior(aGradientStops.end())->second.getTransparency( ) )
+                                 std::next(aGradientStops.begin())->second.getColor(rGraphicHelper, nPhClr) == std::prev(aGradientStops.end())->second.getColor(rGraphicHelper, nPhClr) &&
+                                 std::next(aGradientStops.begin())->second.getTransparency() == std::prev(aGradientStops.end())->second.getTransparency())
                         {
                             // Two segments, second is uniformly coloured
                             SAL_INFO("oox.drawingml.gradient", "two segments, second is uniformly coloured");
-                            nBorder = boost::prior(aGradientStops.end())->first - boost::next(aGradientStops.begin())->first;
-                            aGradientStops.erase(boost::next(aGradientStops.begin()));
+                            nBorder = std::prev(aGradientStops.end())->first - std::next(aGradientStops.begin())->first;
+                            aGradientStops.erase(std::next(aGradientStops.begin()));
                             aWidestSegmentStart = aGradientStops.begin();
                             bSwap = true;
                             nShapeRotation = 180*60000 - nShapeRotation;
                         }
                         else if( !bSymmetric &&
                                  aGradientStops.size() >= 4 &&
-                                 aWidestSegmentStart->second.getColor( rGraphicHelper, nPhClr ) == boost::next(aWidestSegmentStart)->second.getColor( rGraphicHelper, nPhClr ) &&
-                                 aWidestSegmentStart->second.getTransparency() == boost::next(aWidestSegmentStart)->second.getTransparency() &&
+                                 aWidestSegmentStart->second.getColor( rGraphicHelper, nPhClr ) == std::next(aWidestSegmentStart)->second.getColor(rGraphicHelper, nPhClr) &&
+                                 aWidestSegmentStart->second.getTransparency() == std::next(aWidestSegmentStart)->second.getTransparency() &&
                                  ( aWidestSegmentStart == aGradientStops.begin() ||
-                                   boost::next(aWidestSegmentStart) == boost::prior( aGradientStops.end() ) ) )
+                                   std::next(aWidestSegmentStart) == std::prev(aGradientStops.end())))
                         {
                             // Not symmetric, three or more segments, the widest is first or last and is uniformly coloured
                             SAL_INFO("oox.drawingml.gradient", "first or last segment is widest and is uniformly coloured");
-                            nBorder = boost::next(aWidestSegmentStart)->first - aWidestSegmentStart->first;
+                            nBorder = std::next(aWidestSegmentStart)->first - aWidestSegmentStart->first;
 
                             // If it's the last segment that is uniformly coloured, rotate the gradient 180
                             // degrees and swap start and end colours
-                            if( boost::next(aWidestSegmentStart) == boost::prior( aGradientStops.end() ) )
+                            if (std::next(aWidestSegmentStart) == std::prev(aGradientStops.end()))
                             {
                                 bSwap = true;
                                 nShapeRotation = 180*60000 - nShapeRotation;
@@ -514,14 +513,14 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             aGradientStops.erase( aWidestSegmentStart++ );
 
                             // Look for which is widest now
-                            aIt = boost::next(aGradientStops.begin());
+                            aIt = std::next(aGradientStops.begin());
                             nWidestWidth = -1;
                             while( aIt != aGradientStops.end() )
                             {
-                                if( aIt->first - boost::prior(aIt)->first > nWidestWidth )
+                                if (aIt->first - std::prev(aIt)->first > nWidestWidth)
                                 {
-                                    nWidestWidth = aIt->first - boost::prior(aIt)->first;
-                                    aWidestSegmentStart = boost::prior(aIt);
+                                    nWidestWidth = aIt->first - std::prev(aIt)->first;
+                                    aWidestSegmentStart = std::prev(aIt);
                                 }
                                 ++aIt;
                             }
@@ -538,19 +537,19 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         Color aStartColor, aEndColor;
                         if( bSymmetric )
                         {
-                            aStartColor = boost::next(aWidestSegmentStart)->second;
+                            aStartColor = std::next(aWidestSegmentStart)->second;
                             aEndColor = aWidestSegmentStart->second;
                             nBorder *= 2;
                         }
                         else if( bSwap )
                         {
-                            aStartColor = boost::next(aWidestSegmentStart)->second;
+                            aStartColor = std::next(aWidestSegmentStart)->second;
                             aEndColor = aWidestSegmentStart->second;
                         }
                         else
                         {
                             aStartColor = aWidestSegmentStart->second;
-                            aEndColor = boost::next(aWidestSegmentStart)->second;
+                            aEndColor = std::next(aWidestSegmentStart)->second;
                         }
 
                         SAL_INFO("oox.drawingml.gradient", "start color: " << std::hex << aStartColor.getColor( rGraphicHelper, nPhClr ) << std::dec <<
