@@ -3210,7 +3210,11 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     switch ( nCode )
     {
         case KEY_RETURN:
-            if (bControl && !bShift && (!bInputLine || pInputWin))
+            // New line when in the input line and Shift/Ctrl-Enter is pressed,
+            // or when in a cell and Ctrl-Enter is pressed.
+            if (pInputWin &&
+                ((bInputLine && bControl != bShift) ||
+                (!bInputLine && bControl && !bShift)))
                 bDoEnter = true;
             else if (nModi == 0 && nTipVisible && pFormulaData && miAutoPosFormula != pFormulaData->end())
             {
