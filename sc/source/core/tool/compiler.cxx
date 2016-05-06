@@ -1023,7 +1023,8 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         if( !bSingleRef )
             aAbs2 = rRef.Ref2.toAbs(rPos);
 
-        if (FormulaGrammar::isODFF(eGram) && (!ValidAddress(aAbs1) || !ValidAddress(aAbs2)))
+        if (FormulaGrammar::isODFF(eGram) && (rRef.Ref1.IsDeleted() || !ValidAddress(aAbs1) ||
+                    (!bSingleRef && (rRef.Ref2.IsDeleted() || !ValidAddress(aAbs2)))))
         {
             rBuffer.append(rErrRef);
             // For ODFF write [#REF!], but not for PODF so apps reading ODF
