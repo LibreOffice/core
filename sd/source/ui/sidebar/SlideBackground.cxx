@@ -162,8 +162,8 @@ void SlideBackground::Initialize()
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperOrientationModifyHdl));
 
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
-    SdDrawDocument* pDoc = pDocSh->GetDoc();
-    sal_uInt16 nCount = pDoc->GetMasterPageCount();
+    SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
+    sal_uInt16 nCount = pDoc ? pDoc->GetMasterPageCount() : 0;
     for( sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++ )
     {
         SdPage* pMaster = static_cast<SdPage*>(pDoc->GetMasterPage(nLayout));
@@ -539,18 +539,20 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
 IMPL_LINK_NOARG_TYPED(SlideBackground, AssignMasterPage, ListBox&, void)
 {
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
-    SdDrawDocument* mpDoc = pDocSh->GetDoc();
+    SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
+    if (!pDoc)
+        return;
     sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
-    for( sal_uInt16 nPage = 0; nPage < mpDoc->GetSdPageCount(PK_STANDARD); nPage++ )
+    for( sal_uInt16 nPage = 0; nPage < pDoc->GetSdPageCount(PK_STANDARD); nPage++ )
     {
-        if(mpDoc->GetSdPage(nPage,PK_STANDARD)->IsSelected())
+        if (pDoc->GetSdPage(nPage,PK_STANDARD)->IsSelected())
         {
             nSelectedPage = nPage;
             break;
         }
     }
     OUString aLayoutName(mpMasterSlide->GetSelectEntry());
-    mpDoc->SetMasterPage(nSelectedPage, aLayoutName, mpDoc, false, false);
+    pDoc->SetMasterPage(nSelectedPage, aLayoutName, pDoc, false, false);
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, DspBackground, Button*, void)
