@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_961a7a6d",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-06T07:18:31Z",
+      "side": 1,
+      "message": "I think you need to \n\n  meOutDevType \u003d\n  mbEnableRTL \u003d\n\nlines of code here too",
+      "revId": "0f6028dc0dc8da20f51901cf927f0c8d467bc9a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
