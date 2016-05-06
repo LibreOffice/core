@@ -99,13 +99,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    /**
-     * Basic performance regression test. Pick some actions that *should* take
-     * only a fraction of a second to complete, and make sure they stay that
-     * way. We set the threshold to 1 second for each action which should be
-     * large enough to accommodate slower machines or machines with high load.
-     */
-    void testPerf();
     void testCollator();
     void testSharedStringPool();
     void testSharedStringPoolUndoDoc();
@@ -488,9 +481,6 @@ public:
     void testTdf97587();
 
     CPPUNIT_TEST_SUITE(Test);
-#if CALC_TEST_PERF
-    CPPUNIT_TEST(testPerf);
-#endif
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testSharedStringPool);
     CPPUNIT_TEST(testSharedStringPoolUndoDoc);
