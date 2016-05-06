@@ -486,7 +486,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="savegrflocal">
-                        <property name="label" translatable="yes">_Copy local graphics to Internet</property>
+                        <property name="label" translatable="yes">_Copy local images to Internet</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
