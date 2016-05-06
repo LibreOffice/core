@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f608262b",
+        "filename": "include/vcl/opengl/OpenGLContext.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-05-06T07:07:10Z",
+      "side": 1,
+      "message": "A nitpick: why don\u0027t you simply return RenderState\u0026 here? IMHO the unique_ptr is an impl. detail. Also, returning unique_ptr\u003c\u003e\u0026 is dangerous--it\u0027s too easy to \"gut\" the GLWindow object by a mistake.",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 7
+      },
+      "revId": "b1b18c6982681085b3c811d9a269e762ef087fae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
