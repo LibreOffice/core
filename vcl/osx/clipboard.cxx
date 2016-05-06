@@ -277,7 +277,7 @@ void AquaClipboard::fireClipboardChangedEvent()
 
 void AquaClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> oldOwner, Reference<XTransferable> oldContent)
 {
-    BOOST_ASSERT(oldOwner.is());
+    assert(oldOwner.is());
 
     try { oldOwner->lostOwnership(static_cast<XClipboardEx*>(this), oldContent); }
     catch(RuntimeException&) { }
