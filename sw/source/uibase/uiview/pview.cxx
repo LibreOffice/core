@@ -601,6 +601,7 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DataChangedEventType::FONTS:
     case DataChangedEventType::FONTSUBSTITUTION:
         mrView.GetDocShell()->UpdateFontList(); // Font change
+        mpViewShell->InvalidateLayout(true);
         if ( mpViewShell->GetWin() )
             mpViewShell->GetWin()->Invalidate();
         break;

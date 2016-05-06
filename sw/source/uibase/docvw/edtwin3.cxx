@@ -156,6 +156,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         pSh->LockPaint();
         bUnlockPaint = true;
         GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
+        pSh->InvalidateLayout(true);
         break;
     default: break;
     }
