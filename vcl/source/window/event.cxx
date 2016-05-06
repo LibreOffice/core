@@ -216,22 +216,11 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     {
         // Copy the list, because this can be destroyed when calling a Link...
         std::vector<Link<VclWindowEvent&,void>> aCopy( mpWindowImpl->maEventListeners );
-        // we use an iterating counter/flag and a set of deleted Link's to avoid O(n^2) behaviour
-        mpWindowImpl->mnEventListenersIteratingCount++;
-        auto& rWindowImpl = *mpWindowImpl;
-        comphelper::ScopeGuard aGuard(
-            [&rWindowImpl]()
-            {
-                rWindowImpl.mnEventListenersIteratingCount--;
-                if (rWindowImpl.mnEventListenersIteratingCount == 0)
-                    rWindowImpl.maEventListenersDeleted.clear();
-            }
-        );
         for ( Link<VclWindowEvent&,void>& rLink : aCopy )
         {
             if (xWindow->IsDisposed()) break;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
-            if( rWindowImpl.maEventListenersDeleted.find(rLink) == rWindowImpl.maEventListenersDeleted.end() )
+            if( std::find(mpWindowImpl->maEventListeners.begin(), mpWindowImpl->maEventListeners.end(), rLink) != mpWindowImpl->maEventListeners.end() )
                 rLink.Call( aEvent );
         }
     }
