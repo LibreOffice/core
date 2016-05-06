@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#define UNICODE
+#define _UNICODE
+
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
@@ -31,29 +34,20 @@
 #endif
 
 #include <malloc.h>
-
-#ifdef UNICODE
-#define _UNICODE
-#define _tstring    wstring
-#else
-#define _tstring    string
-#endif
-#include <tchar.h>
 #include <string>
 
-
-std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
+std::wstring GetMsiPropertyW( MSIHANDLE handle, const std::wstring& sProperty )
 {
-    std::_tstring   result;
-    TCHAR   szDummy[1] = TEXT("");
+    std::wstring   result;
+    WCHAR   szDummy[1] = L"";
     DWORD   nChars = 0;
 
-    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
+    if ( MsiGetPropertyW( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
     {
-        DWORD nBytes = ++nChars * sizeof(TCHAR);
-        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
+        DWORD nBytes = ++nChars * sizeof(WCHAR);
+        PWSTR buffer = reinterpret_cast<PWSTR>(_alloca(nBytes));
         ZeroMemory( buffer, nBytes );
-        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
+        MsiGetPropertyW(handle, sProperty.c_str(), buffer, &nChars);
         result = buffer;
     }
 
@@ -66,9 +60,9 @@ std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 */
 extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 {
-    std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
-    std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
-    std::_tstring   sIconFile = GetMsiProperty( handle, TEXT("INSTALLLOCATION") ) + TEXT("program\\soffice.exe");
+    std::wstring sOfficeMenuFolder = GetMsiPropertyW( handle, L"OfficeMenuFolder" );
+    std::wstring sDesktopFile = sOfficeMenuFolder + L"Desktop.ini";
+    std::wstring sIconFile = GetMsiPropertyW( handle, L"INSTALLLOCATION" ) + L"program\\soffice.exe";
 
 // the Win32 SDK 8.1 deprecates GetVersionEx()
 #ifdef _WIN32_WINNT_WINBLUE
@@ -82,16 +76,16 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 
     if (!bIsVistaOrLater)
     {
-        WritePrivateProfileString(
-            TEXT(".ShellClassInfo"),
-            TEXT("IconFile"),
+        WritePrivateProfileStringW(
+            L".ShellClassInfo",
+            L"IconFile",
             sIconFile.c_str(),
             sDesktopFile.c_str() );
 
-        WritePrivateProfileString(
-            TEXT(".ShellClassInfo"),
-            TEXT("IconIndex"),
-            TEXT("0"),
+        WritePrivateProfileStringW(
+            L".ShellClassInfo",
+            L"IconIndex",
+            L"0",
             sDesktopFile.c_str() );
     }
     // else
@@ -101,14 +95,14 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
     // }
 
     // The value '0' is to avoid a message like "You Are Deleting a System Folder" warning when deleting or moving the folder.
-    WritePrivateProfileString(
-        TEXT(".ShellClassInfo"),
-        TEXT("ConfirmFileOp"),
-        TEXT("0"),
+    WritePrivateProfileStringW(
+        L".ShellClassInfo",
+        L"ConfirmFileOp",
+        L"0",
         sDesktopFile.c_str() );
 
-    SetFileAttributes( sDesktopFile.c_str(), FILE_ATTRIBUTE_HIDDEN );
-    SetFileAttributes( sOfficeMenuFolder.c_str(), FILE_ATTRIBUTE_SYSTEM );
+    SetFileAttributesW( sDesktopFile.c_str(), FILE_ATTRIBUTE_HIDDEN );
+    SetFileAttributesW( sOfficeMenuFolder.c_str(), FILE_ATTRIBUTE_SYSTEM );
 
 
     return ERROR_SUCCESS;
@@ -116,13 +110,13 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 
 extern "C" UINT __stdcall DeinstallStartmenuFolderIcon(MSIHANDLE handle)
 {
-    std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
-    std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
+    std::wstring sOfficeMenuFolder = GetMsiPropertyW( handle, L"OfficeMenuFolder" );
+    std::wstring sDesktopFile = sOfficeMenuFolder + L"Desktop.ini";
 
-    SetFileAttributes( sDesktopFile.c_str(), FILE_ATTRIBUTE_NORMAL );
-    DeleteFile( sDesktopFile.c_str() );
+    SetFileAttributesW( sDesktopFile.c_str(), FILE_ATTRIBUTE_NORMAL );
+    DeleteFileW( sDesktopFile.c_str() );
 
-    SetFileAttributes( sOfficeMenuFolder.c_str(), FILE_ATTRIBUTE_NORMAL );
+    SetFileAttributesW( sOfficeMenuFolder.c_str(), FILE_ATTRIBUTE_NORMAL );
 
     return ERROR_SUCCESS;
 }
