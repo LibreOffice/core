@@ -1592,7 +1592,7 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
     if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders() )
         return;
 
-    SAL_INFO("write Notes %" SAL_PRIuUINT32 "\n----------------", nPageNum);
+    SAL_INFO("sd.eppt", "write Notes " << nPageNum << "\n----------------");
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
                                                         .append( "ppt/notesSlides/notesSlide" )
