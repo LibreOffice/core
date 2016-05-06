@@ -21,10 +21,10 @@ namespace writerfilter
 namespace rtftok
 {
 
-std::vector<RTFSymbol> RTFTokenizer::m_aRTFControlWords;
-bool RTFTokenizer::m_bControlWordsSorted;
-std::vector<RTFMathSymbol> RTFTokenizer::m_aRTFMathControlWords;
-bool RTFTokenizer::m_bMathControlWordsSorted;
+std::vector<RTFSymbol> RTFTokenizer::s_aRTFControlWords;
+bool RTFTokenizer::s_bControlWordsSorted;
+std::vector<RTFMathSymbol> RTFTokenizer::s_aRTFMathControlWords;
+bool RTFTokenizer::s_bMathControlWordsSorted;
 
 RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_rImport(rImport),
@@ -35,17 +35,17 @@ RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Refer
       m_nLineStartPos(0),
       m_nGroupStart(0)
 {
-    if (!RTFTokenizer::m_bControlWordsSorted)
+    if (!RTFTokenizer::s_bControlWordsSorted)
     {
-        RTFTokenizer::m_bControlWordsSorted = true;
-        m_aRTFControlWords = std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords);
-        std::sort(m_aRTFControlWords.begin(), m_aRTFControlWords.end());
+        RTFTokenizer::s_bControlWordsSorted = true;
+        s_aRTFControlWords = std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords);
+        std::sort(s_aRTFControlWords.begin(), s_aRTFControlWords.end());
     }
-    if (!RTFTokenizer::m_bMathControlWordsSorted)
+    if (!RTFTokenizer::s_bMathControlWordsSorted)
     {
-        RTFTokenizer::m_bMathControlWordsSorted = true;
-        m_aRTFMathControlWords = std::vector<RTFMathSymbol>(aRTFMathControlWords, aRTFMathControlWords + nRTFMathControlWords);
-        std::sort(m_aRTFMathControlWords.begin(), m_aRTFMathControlWords.end());
+        RTFTokenizer::s_bMathControlWordsSorted = true;
+        s_aRTFMathControlWords = std::vector<RTFMathSymbol>(aRTFMathControlWords, aRTFMathControlWords + nRTFMathControlWords);
+        std::sort(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end());
     }
 }
 
@@ -271,11 +271,11 @@ RTFError RTFTokenizer::resolveKeyword()
 
 bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
 {
-    std::vector<RTFMathSymbol>::iterator low = std::lower_bound(m_aRTFMathControlWords.begin(), m_aRTFMathControlWords.end(), rSymbol);
-    int i = low - m_aRTFMathControlWords.begin();
-    if (low == m_aRTFMathControlWords.end() || rSymbol < *low)
+    std::vector<RTFMathSymbol>::iterator low = std::lower_bound(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end(), rSymbol);
+    int i = low - s_aRTFMathControlWords.begin();
+    if (low == s_aRTFMathControlWords.end() || rSymbol < *low)
         return false;
-    rSymbol = m_aRTFMathControlWords[i];
+    rSymbol = s_aRTFMathControlWords[i];
     return true;
 }
 
@@ -293,9 +293,9 @@ RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nPara
              "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
     RTFSymbol aSymbol;
     aSymbol.sKeyword = rKeyword.getStr();
-    std::vector<RTFSymbol>::iterator low = std::lower_bound(m_aRTFControlWords.begin(), m_aRTFControlWords.end(), aSymbol);
-    int i = low - m_aRTFControlWords.begin();
-    if (low == m_aRTFControlWords.end() || aSymbol < *low)
+    std::vector<RTFSymbol>::iterator low = std::lower_bound(s_aRTFControlWords.begin(), s_aRTFControlWords.end(), aSymbol);
+    int i = low - s_aRTFControlWords.begin();
+    if (low == s_aRTFControlWords.end() || aSymbol < *low)
     {
         SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword.getStr() << "'");
         RTFSkipDestination aSkip(m_rImport);
@@ -304,36 +304,36 @@ RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nPara
     }
 
     RTFError ret;
-    switch (m_aRTFControlWords[i].nControlType)
+    switch (s_aRTFControlWords[i].nControlType)
     {
     case CONTROL_FLAG:
         // flags ignore any parameter by definition
-        ret = m_rImport.dispatchFlag(m_aRTFControlWords[i].nIndex);
+        ret = m_rImport.dispatchFlag(s_aRTFControlWords[i].nIndex);
         if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_DESTINATION:
         // same for destinations
-        ret = m_rImport.dispatchDestination(m_aRTFControlWords[i].nIndex);
+        ret = m_rImport.dispatchDestination(s_aRTFControlWords[i].nIndex);
         if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_SYMBOL:
         // and symbols
-        ret = m_rImport.dispatchSymbol(m_aRTFControlWords[i].nIndex);
+        ret = m_rImport.dispatchSymbol(s_aRTFControlWords[i].nIndex);
         if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_TOGGLE:
-        ret = m_rImport.dispatchToggle(m_aRTFControlWords[i].nIndex, bParam, nParam);
+        ret = m_rImport.dispatchToggle(s_aRTFControlWords[i].nIndex, bParam, nParam);
         if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_VALUE:
         // Values require a parameter by definition, but Word doesn't respect this for \dibitmap.
-        if (bParam || m_aRTFControlWords[i].nIndex == RTF_DIBITMAP)
+        if (bParam || s_aRTFControlWords[i].nIndex == RTF_DIBITMAP)
         {
-            ret = m_rImport.dispatchValue(m_aRTFControlWords[i].nIndex, nParam);
+            ret = m_rImport.dispatchValue(s_aRTFControlWords[i].nIndex, nParam);
             if (ret != RTFError::OK)
                 return ret;
         }

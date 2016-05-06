@@ -60,11 +60,11 @@ private:
     SvStream* m_pInStream;
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
     // This is the same as aRTFControlWords, but sorted
-    static std::vector<RTFSymbol> m_aRTFControlWords;
-    static bool m_bControlWordsSorted;
+    static std::vector<RTFSymbol> s_aRTFControlWords;
+    static bool s_bControlWordsSorted;
     // This is the same as aRTFMathControlWords, but sorted
-    static std::vector<RTFMathSymbol> m_aRTFMathControlWords;
-    static bool m_bMathControlWordsSorted;
+    static std::vector<RTFMathSymbol> s_aRTFMathControlWords;
+    static bool s_bMathControlWordsSorted;
     /// Same as the size of the importer's states, except that this can be negative for invalid input.
     int m_nGroup;
     sal_Int32 m_nLineNumber;
