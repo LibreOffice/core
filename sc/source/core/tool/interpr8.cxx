@@ -1913,6 +1913,9 @@ void ScInterpreter::ScSwitch_MS()
 {
     short nParamCount = GetByte();
 
+    if (!MustHaveParamCountMin( nParamCount, 3))
+        return;
+
     ReverseStack( nParamCount );
 
     nGlobalError = 0;   // propagate only for match or active result path
@@ -1970,13 +1973,6 @@ void ScInterpreter::ScSwitch_MS()
              ( !isValue && aRefStr.getDataIgnoreCase() == aStr.getDataIgnoreCase() )) )
         {
             // TRUE
-            if ( nParamCount < 1 )
-            {
-                // no parameter given for THEN
-                nGlobalError = nFirstMatchError;
-                PushParameterExpected();
-                return;
-            }
             bFinished = true;
         }
         else
