@@ -57,7 +57,8 @@ MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
     meUnit( rImplMapMode.meUnit ),
     maOrigin( rImplMapMode.maOrigin ),
     maScaleX( rImplMapMode.maScaleX ),
-    maScaleY( rImplMapMode.maScaleY )
+    maScaleY( rImplMapMode.maScaleY ),
+    mbSimple( rImplMapMode.mbSimple )
 {
 }
 
