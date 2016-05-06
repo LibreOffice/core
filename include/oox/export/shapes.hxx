@@ -20,13 +20,20 @@
 #ifndef INCLUDED_OOX_EXPORT_SHAPES_HXX
 #define INCLUDED_OOX_EXPORT_SHAPES_HXX
 
-#include <oox/dllapi.h>
-#include <com/sun/star/uno/XReference.hpp>
-#include <oox/export/drawingml.hxx>
-#include <sax/fshelper.hxx>
-#include <vcl/mapmod.hxx>
-#include <tools/fract.hxx>
+#include <cstddef>
+#include <memory>
 #include <unordered_map>
+
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
+#include <oox/export/drawingml.hxx>
+#include <oox/export/utils.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <sax/fshelper.hxx>
+#include <tools/fract.hxx>
+#include <vcl/mapmod.hxx>
 
 namespace com { namespace sun { namespace star {
 namespace beans {
@@ -34,12 +41,26 @@ namespace beans {
 }
 namespace drawing {
     class XShape;
-    class XShapes;
 }
+
 namespace embed {
     class XEmbeddedObject;
 }
+namespace io {
+    class XInputStream;
+}
+namespace uno {
+    class XComponentContext;
+    class XInterface;
+}
 }}}
+
+namespace oox {
+namespace core {
+    class XmlFilterBase;
+}}
+
+class Graphic;
 
 namespace oox {
 

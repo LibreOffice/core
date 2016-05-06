@@ -20,47 +20,51 @@
 #ifndef INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
 #define INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
 
-#include <oox/dllapi.h>
-#include <com/sun/star/uno/XReference.hpp>
-#include <oox/export/drawingml.hxx>
-#include <oox/token/tokens.hxx>
-#include <sax/fshelper.hxx>
-#include <vcl/mapmod.hxx>
-
-#include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/RelativeSize.hpp>
-
 #include <set>
+#include <vector>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <oox/dllapi.h>
+#include <oox/export/drawingml.hxx>
+#include <oox/export/utils.hxx>
+#include <oox/token/tokens.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <sax/fshelper.hxx>
 
 namespace com { namespace sun { namespace star {
+    namespace beans {
+        class XPropertySet;
+    }
     namespace chart {
         class XDiagram;
         class XChartDocument;
-        class XChartDataArray;
-        struct ChartSeriesAddress;
     }
     namespace chart2 {
+        struct RelativePosition;
+        struct RelativeSize;
         class XDiagram;
         class XChartDocument;
         class XDataSeries;
         class XChartType;
         namespace data
         {
-            class XDataProvider;
             class XDataSequence;
         }
     }
     namespace drawing {
         class XShape;
-        class XShapes;
-    }
-    namespace task {
-        class XStatusIndicator;
     }
     namespace frame {
         class XModel;
     }
 }}}
+
+namespace oox {
+namespace core {
+    class XmlFilterBase;
+}}
 
 namespace oox { namespace drawingml {
 

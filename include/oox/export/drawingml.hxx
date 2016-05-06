@@ -20,16 +20,22 @@
 #ifndef INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 #define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 
+#include <map>
+
+#include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/dllapi.h>
-#include <sax/fshelper.hxx>
-#include <rtl/strbuf.hxx>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/uno/XReference.hpp>
-#include <filter/msfilter/escherex.hxx>
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <sax/fshelper.hxx>
+#include <svx/msdffdef.hxx>
+#include <vcl/checksum.hxx>
 
 #ifndef OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY
 // Our rotation is counter-clockwise and is in 100ths of a degree.
@@ -40,7 +46,12 @@
 class Graphic;
 
 namespace com { namespace sun { namespace star {
+namespace awt {
+    struct FontDescriptor;
+    struct Gradient;
+}
 namespace beans {
+    struct PropertyValue;
     class XPropertySet;
     class XPropertyState;
 }
@@ -57,9 +68,14 @@ namespace text {
 namespace io {
     class XOutputStream;
 }
+namespace uno {
+    class XInterface;
+}
 }}}
 
+struct EscherConnectorListEntry;
 class OutlinerParaObject;
+class Rectangle;
 
 namespace tools {
     class PolyPolygon;
