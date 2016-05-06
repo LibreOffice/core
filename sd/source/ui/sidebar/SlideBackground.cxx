@@ -381,10 +381,12 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_ATTR_PAGE_FILLSTYLE:
         {
-            if(eState >= SfxItemState::DEFAULT)
+            const XFillStyleItem* pFillStyleItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+                pFillStyleItem = dynamic_cast< const XFillStyleItem* >(pState);
+            if (pFillStyleItem)
             {
-                const XFillStyleItem* aFillStyleItem = dynamic_cast< const XFillStyleItem* >(pState);
-                css::drawing::FillStyle eXFS = aFillStyleItem->GetValue();
+                css::drawing::FillStyle eXFS = pFillStyleItem->GetValue();
                 switch(eXFS)
                 {
                     case drawing::FillStyle_NONE:
@@ -412,10 +414,12 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_ATTR_PAGE_SIZE:
         {
-            if(eState >= SfxItemState::DEFAULT)
+            const SvxSizeItem* pSizeItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+                pSizeItem = dynamic_cast< const SvxSizeItem* >(pState);
+            if (pSizeItem)
             {
-                const SvxSizeItem* aSizeItem = dynamic_cast< const SvxSizeItem* >(pState);
-                Size aPaperSize = aSizeItem->GetSize();
+                Size aPaperSize = pSizeItem->GetSize();
                 if(mpPaperOrientation->GetSelectEntryPos() == 0)
                    Swap(aPaperSize);
 
@@ -438,10 +442,12 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_ATTR_PAGE:
         {
-            if(eState >= SfxItemState::DEFAULT)
+            const SvxPageItem* pPageItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+                pPageItem = dynamic_cast< const SvxPageItem* >(pState);
+            if (pPageItem)
             {
-                const SvxPageItem* aPageItem = dynamic_cast< const SvxPageItem* >(pState);
-                bool bIsLandscape = aPageItem->IsLandscape();
+                bool bIsLandscape = pPageItem->IsLandscape();
 
                 mpPaperOrientation->SelectEntryPos( bIsLandscape ? 0 : 1 );
             }
@@ -450,22 +456,20 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_DISPLAY_MASTER_BACKGROUND:
         {
-            if(eState >= SfxItemState::DEFAULT)
-            {
-                const SfxBoolItem* aBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
-                if(aBoolItem)
-                    mpDspMasterBackground->Check(aBoolItem->GetValue());
-            }
+            const SfxBoolItem* pBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
+            if (eState >= SfxItemState::DEFAULT)
+                pBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
+            if (pBoolItem)
+                mpDspMasterBackground->Check(pBoolItem->GetValue());
         }
         break;
         case SID_DISPLAY_MASTER_OBJECTS:
         {
-            if(eState >= SfxItemState::DEFAULT)
-            {
-                const SfxBoolItem* aBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
-                if(aBoolItem)
-                    mpDspMasterObjects->Check(aBoolItem->GetValue());
-            }
+            const SfxBoolItem* pBoolItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+                pBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
+            if (pBoolItem)
+                mpDspMasterObjects->Check(pBoolItem->GetValue());
         }
         break;
 
