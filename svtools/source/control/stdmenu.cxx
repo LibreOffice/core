@@ -54,8 +54,8 @@ void FontNameMenu::Fill( const FontList* pList )
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
         // more than 100 fonts reduces the speed of opening the menu.
         // So only the first 100 fonts will be displayed.
-        sal_uInt16 nFontCount = ::std::min( pList->GetFontNameCount(), static_cast< sal_uInt16 >(100) );
-        for (sal_uInt16 i = 0; i < nFontCount; ++i)
+        size_t nFontCount = ::std::min<size_t>(pList->GetFontNameCount(), 100);
+        for (size_t i = 0; i < nFontCount; ++i)
         {
             const OUString& rName = pList->GetFontName( i ).GetFamilyName();
 

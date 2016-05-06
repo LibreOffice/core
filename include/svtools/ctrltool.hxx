@@ -127,9 +127,6 @@ You should thus not reference the array after the next method call on the
 FontList.
 */
 
-
-#define FONTLIST_FONTINFO_NOTFOUND  ((sal_uInt16)0xFFFF)
-
 class SVT_DLLPUBLIC FontList
 {
 private:
@@ -182,11 +179,11 @@ public:
                                  FontItalic eItalic ) const;
 
     bool                    IsAvailable( const OUString& rName ) const;
-    sal_uInt16              GetFontNameCount() const
+    size_t GetFontNameCount() const
     {
-        return (sal_uInt16)m_Entries.size();
+        return m_Entries.size();
     }
-    const FontMetric&    GetFontName( sal_uInt16 nFont ) const;
+    const FontMetric& GetFontName(size_t nFont) const;
     sal_Handle              GetFirstFontMetric( const OUString& rName ) const;
     static sal_Handle           GetNextFontMetric( sal_Handle hFontMetric );
     static const FontMetric& GetFontMetric( sal_Handle hFontMetric );

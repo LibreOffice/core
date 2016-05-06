@@ -249,9 +249,8 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
         nType = FontListFontNameType::PRINTER;
 
     // inquire all fonts from the device
-    int n = pDevice->GetDevFontCount();
-    sal_uInt16  i;
-    for( i = 0; i < n; i++ )
+    int const n = pDevice->GetDevFontCount();
+    for (int i = 0; i < n; ++i)
     {
         FontMetric aFontMetric = pDevice->GetDevFont( i );
 
@@ -387,7 +386,7 @@ FontList::~FontList()
 FontList* FontList::Clone() const
 {
     FontList* pReturn = new FontList(
-            mpDev, mpDev2, GetFontNameCount() == mpDev->GetDevFontCount());
+            mpDev, mpDev2, sal::static_int_cast<int>(GetFontNameCount()) == mpDev->GetDevFontCount());
     return pReturn;
 }
 
@@ -696,7 +695,7 @@ bool FontList::IsAvailable(const OUString& rName) const
     return (ImplFindByName( rName ) != nullptr);
 }
 
-const FontMetric& FontList::GetFontName( sal_uInt16 nFont ) const
+const FontMetric& FontList::GetFontName(size_t const nFont) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontName(): nFont >= Count" );
 
@@ -752,11 +751,10 @@ const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const
     MapMode aMap( MAP_10TH_INCH, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
     pDevice->SetMapMode( aMap );
 
-    sal_uInt16  i;
-    sal_uInt16  nRealCount = 0;
+    int nRealCount = 0;
     long    nOldHeight = 0;
     const_cast<FontList*>(this)->mpSizeAry = new sal_IntPtr[nDevSizeCount+1];
-    for ( i = 0; i < nDevSizeCount; i++ )
+    for (int i = 0; i < nDevSizeCount; ++i)
     {
         Size aSize = pDevice->GetDevFontSize( rInfo, i );
         if ( aSize.Height() != nOldHeight )
