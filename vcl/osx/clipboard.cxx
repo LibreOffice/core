@@ -24,7 +24,6 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include "comphelper/processfactory.hxx"
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/assert.hpp>
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;

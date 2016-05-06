@@ -30,8 +30,6 @@
 #include "Window.hxx"
 #include "sdpage.hxx"
 
-#include <boost/limits.hpp>
-
 #include <vcl/scrbar.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {

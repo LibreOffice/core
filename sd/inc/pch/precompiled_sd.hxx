@@ -43,7 +43,6 @@
 #include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/limits.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>

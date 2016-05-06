@@ -26,7 +26,7 @@
 #include <vcl/bitmap.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <boost/enable_shared_from_this.hpp>
+#include <memory>
 
 class SdPage;
 class SdrPage;
@@ -44,7 +44,7 @@ namespace sd { namespace slidesorter { namespace model {
     fade symbol.</p>
 */
 class PageDescriptor
-    : public ::boost::enable_shared_from_this<PageDescriptor>
+    : public ::std::enable_shared_from_this<PageDescriptor>
 {
 public:
     /** Create a PageDescriptor for the given SdPage object.
