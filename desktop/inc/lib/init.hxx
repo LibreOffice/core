@@ -33,7 +33,8 @@ namespace desktop {
         explicit CallbackFlushHandler(LibreOfficeKitCallback pCallback, void* pData)
             : Idle( "lokit timer callback" ),
               m_pCallback(pCallback),
-              m_pData(pData)
+              m_pData(pData),
+              m_bPartTilePainting(false)
         {
             SetPriority(SchedulerPriority::POST_PAINT);
 
@@ -78,6 +79,13 @@ namespace desktop {
 
         void queue(const int type, const char* data)
         {
+            if (m_bPartTilePainting)
+            {
+                // We drop notifications when this is set.
+                return;
+            }
+
+
             const std::string payload(data ? data : "(nil)");
             std::unique_lock<std::mutex> lock(m_mutex);
 
@@ -145,6 +153,9 @@ namespace desktop {
             }
         }
 
+        void setPartTilePainting(const bool bPartPainting) { m_bPartTilePainting = bPartPainting; }
+        bool isPartTilePainting() const { return m_bPartTilePainting; }
+
     private:
         void flush()
         {
@@ -187,6 +198,7 @@ namespace desktop {
         std::map<int, std::string> m_states;
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
+        bool m_bPartTilePainting;
         std::mutex m_mutex;
     };
 

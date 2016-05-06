@@ -323,6 +323,12 @@ void        doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
+void        doc_paintPartTile(LibreOfficeKitDocument* pThis,
+                              unsigned char* pBuffer,
+                              const int nPart,
+                              const int nCanvasWidth, const int nCanvasHeight,
+                              const int nTilePosX, const int nTilePosY,
+                              const int nTileWidth, const int nTileHeight);
 static int doc_getTileMode(LibreOfficeKitDocument* pThis);
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pWidth,
@@ -401,6 +407,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->paintTile = doc_paintTile;
+        m_pDocumentClass->paintPartTile = doc_paintPartTile;
         m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
         m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
@@ -1040,6 +1047,45 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
     (void) nTileWidth;
     (void) nTileHeight;
 #endif
+}
+
+
+void doc_paintPartTile(LibreOfficeKitDocument* pThis,
+                       unsigned char* pBuffer,
+                       const int nPart,
+                       const int nCanvasWidth, const int nCanvasHeight,
+                       const int nTilePosX, const int nTilePosY,
+                       const int nTileWidth, const int nTileHeight)
+{
+    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
+               << nTileWidth << "x" << nTileHeight << "]@("
+               << nTilePosX << ", " << nTilePosY << ") to ["
+               << nCanvasWidth << "x" << nCanvasHeight << "]px" );
+
+    // Disable callbacks while we are painting.
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    pDocument->mpCallbackFlushHandler->setPartTilePainting(true);
+    try
+    {
+        const int nOrigPart = doc_getPart(pThis);
+        if (nPart != nOrigPart)
+        {
+            doc_setPart(pThis, nPart);
+        }
+
+        doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+        if (nPart != nOrigPart)
+        {
+            doc_setPart(pThis, nOrigPart);
+        }
+    }
+    catch (const std::exception& exception)
+    {
+        // Nothing to do but restore the PartTilePainting flag.
+    }
+
+    pDocument->mpCallbackFlushHandler->setPartTilePainting(false);
 }
 
 static int doc_getTileMode(LibreOfficeKitDocument* /*pThis*/)

@@ -226,6 +226,19 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getPartHash().
     char* (*getPartHash) (LibreOfficeKitDocument* pThis,
                           int nPart);
+
+    /// Paints a tile from a specific part.
+    /// @see lok::Document::paintTile().
+    void (*paintPartTile) (LibreOfficeKitDocument* pThis,
+                           unsigned char* pBuffer,
+                           const int nPart,
+                           const int nCanvasWidth,
+                           const int nCanvasHeight,
+                           const int nTilePosX,
+                           const int nTilePosY,
+                           const int nTileWidth,
+                           const int nTileHeight);
+
 #endif // LOK_USE_UNSTABLE_API
 };
 

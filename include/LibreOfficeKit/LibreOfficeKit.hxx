@@ -414,6 +414,27 @@ public:
         return mpDoc->pClass->renderFont(mpDoc, pFontName, pFontWidth, pFontHeight);
     }
 
+    /**
+     * Renders a subset of the document's part to a pre-allocated buffer.
+     *
+     * @param nPart the part number of the document of which the tile is painted.
+     * @see paintTile.
+     */
+    inline void paintPartTile(unsigned char* pBuffer,
+                              const int nPart,
+                              const int nCanvasWidth,
+                              const int nCanvasHeight,
+                              const int nTilePosX,
+                              const int nTilePosY,
+                              const int nTileWidth,
+                              const int nTileHeight)
+    {
+        return mpDoc->pClass->paintPartTile(mpDoc, pBuffer, nPart,
+                                            nCanvasWidth, nCanvasHeight,
+                                            nTilePosX, nTilePosY,
+                                            nTileWidth, nTileHeight);
+    }
+
 #endif // LOK_USE_UNSTABLE_API
 };
 
