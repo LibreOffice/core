@@ -3210,7 +3210,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     switch ( nCode )
     {
         case KEY_RETURN:
-            if (bControl && !bShift && (!bInputLine || pInputWin))
+            if ((bControl || bShift) && (!bInputLine || pInputWin))
                 bDoEnter = true;
             else if (nModi == 0 && nTipVisible && pFormulaData && miAutoPosFormula != pFormulaData->end())
             {
