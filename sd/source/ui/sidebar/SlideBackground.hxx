@@ -112,6 +112,10 @@ private:
 
     void Initialize();
     void Update();
+    Color GetColorSetOrDefault();
+    XGradient GetGradientSetOrDefault();
+    const OUString GetHatchingSetOrDefault();
+    const OUString GetBitmapSetOrDefault();
 };
 
 }}
