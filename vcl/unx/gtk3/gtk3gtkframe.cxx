@@ -504,7 +504,7 @@ void GtkSalFrame::EnsureDbusMenuSynced()
     GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(GetMenu());
     if(m_pLastSyncedDbusMenu != pSalMenu) {
         m_pLastSyncedDbusMenu = pSalMenu;
-        static_cast<GtkSalMenu*>(pSalMenu)->Activate();
+        static_cast<GtkSalMenu*>(pSalMenu)->ActivateAllSubmenus();
     }
 }
 #endif

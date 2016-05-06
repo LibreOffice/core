@@ -969,11 +969,6 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
 
 void GtkSalMenu::Activate( const gchar* aMenuCommand )
 {
-    if ( !aMenuCommand ) {
-        ActivateAllSubmenus(mpVCLMenu);
-        return;
-    }
-
     int nDupsToSkip;
     aMenuCommand = DetermineDupIndex(aMenuCommand, nDupsToSkip);
 

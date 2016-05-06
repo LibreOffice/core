@@ -99,7 +99,11 @@ public:
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
 
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
-    void                        Activate( const gchar* aMenuCommand = nullptr );
+    void                        ActivateAllSubmenus()
+    {
+        ActivateAllSubmenus(mpVCLMenu);
+    }
+    void                        Activate( const gchar* aMenuCommand );
     void                        Deactivate( const gchar* aMenuCommand );
     void                        EnableUnity(bool bEnable);
     bool                        PrepUpdate();
