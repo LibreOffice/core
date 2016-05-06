@@ -46,27 +46,25 @@ static void do_pagein (const char * filename)
 
 int isRotational(char const * path)
 {
+    int ret = 1;
 #ifdef LINUX
     FILE * fp = NULL;
     char fullpath[4096];
     struct stat out;
     int major, minor;
     char type;
-    if(stat( path , &out ) == -1)
-        return 1;
+    if (stat(path , &out) == -1)
+        return ret;
     major = major(out.st_dev);
     minor = 0; /* minor(out.st_dev); only the device itself has a queue */
     sprintf(fullpath,"/sys/dev/block/%d:%d/queue/rotational",major,minor);
-    if ((fp = fopen (fullpath, "r")))
-    {
-        if (fgets(&type, 1, fp))
-        {
-            fclose(fp);
-            return type == '1';
-        }
-    }
+    if ((fp = fopen(fullpath, "r")) == NULL)
+        return ret;
+    if (fgets(&type, 1, fp))
+        ret = type == '1';
+    fclose(fp);
 #endif
-    return 1;
+    return ret;
 }
 
 void pagein_execute(char const * path, char const * file)
