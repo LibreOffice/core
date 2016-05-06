@@ -16,6 +16,24 @@
       "revId": "7ea9519a85087af185ce49310fc1ecac689cdf55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f65746c8",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-05-06T10:21:08Z",
+      "side": 1,
+      "message": "I think the same. There is GetGrafPrefMapMode() which should be used. Also better use  Application::GetDefaultDevice()-\u003eLogicToLogic, it\u0027s static and does not need a specific OutputDevice (one less source for errors)",
+      "parentUuid": "da7fb54a_1573c4b2",
+      "revId": "7ea9519a85087af185ce49310fc1ecac689cdf55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
