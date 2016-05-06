@@ -149,18 +149,7 @@ g_lo_action_group_query_action (GActionGroup        *group,
 {
     //SAL_INFO("vcl.unity", "g_lo_action_group_query_action on " << group);
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
-    GLOAction* action;
-
-    if (enabled)
-    {
-        GtkSalFrame* pFrame = lo_group->priv->frame;
-        if (pFrame) {
-            pFrame->EnsureDbusMenuSynced();
-        }
-    }
-
-    // note: EnsureDbusMenuSynced could have deleted the action!
-    action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
+    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
     if (action == nullptr)
         return FALSE;

@@ -314,16 +314,6 @@ void GtkSalMenu::Update()
     ImplUpdate(false, !pMenu->mbMenuBar);
 }
 
-void GtkSalMenu::UpdateFull()
-{
-    //find out if top level is a menubar or not, if not, then its a popup menu
-    //hierarchy and in those we hide (most) disabled entries
-    const GtkSalMenu* pMenu = this;
-    while (pMenu->mpParentSalMenu)
-        pMenu = pMenu->mpParentSalMenu;
-    ImplUpdate(true, !pMenu->mbMenuBar);
-}
-
 #if GTK_CHECK_VERSION(3,0,0)
 static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in, gpointer user_data)
 {
@@ -375,7 +365,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
     mpActionGroup = G_ACTION_GROUP(pActionGroup);
     mpMenuModel = G_MENU_MODEL(g_lo_menu_new());
     // Generate the main menu structure, populates mpMenuModel
-    ActivateAllSubmenus();
+    UpdateFull();
 
     GtkWidget *pWidget = gtk_menu_new_from_model(mpMenuModel);
     gtk_menu_attach_to_widget(GTK_MENU(pWidget), mpFrame->getMouseEventWidget(), nullptr);

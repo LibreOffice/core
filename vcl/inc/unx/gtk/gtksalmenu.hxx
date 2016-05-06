@@ -97,14 +97,14 @@ public:
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
 
-    void                        ActivateAllSubmenus() { ActivateAllSubmenus(mpVCLMenu); }
     static void                 DispatchCommand(const gchar* pMenuCommand);
     static void                 Activate(const gchar* pMenuCommand);
     static void                 Deactivate(const gchar* pMenuCommand);
     void                        EnableUnity(bool bEnable);
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
-    void                        UpdateFull();       // Update full menu hierarchy from this menu.
+    // Update full menu hierarchy from this menu.
+    void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); }
     GtkSalMenu*                 GetTopLevel();
 
     void CreateMenuBarWidget();
