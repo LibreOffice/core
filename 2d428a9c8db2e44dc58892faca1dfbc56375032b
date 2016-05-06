@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_3641ae3a",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-06T08:11:07Z",
+      "side": 1,
+      "message": "@Maxim: Is this the right way to create a popup menu or is there some better way?",
+      "revId": "2d428a9c8db2e44dc58892faca1dfbc56375032b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
