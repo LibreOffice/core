@@ -220,7 +220,7 @@ void SlideBackground::Update()
             const SvxColorListItem aItem( *static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
             mpFillLB->Fill(aItem.GetColorList());
 
-            const Color aColor = mpColorItem->GetColorValue();
+            const Color aColor = GetColorSetOrDefault();
             mpFillLB->SelectEntry( aColor );
 
             if(mpFillLB->GetSelectEntryCount() == 0)
@@ -241,7 +241,7 @@ void SlideBackground::Update()
             mpFillLB->Fill(aItem.GetColorList());
             mpFillGrad->Fill(aItem.GetColorList());
 
-            const XGradient xGradient = mpGradientItem->GetGradientValue();
+            const XGradient xGradient = GetGradientSetOrDefault();
             const Color aStartColor = xGradient.GetStartColor();
             const Color aEndColor = xGradient.GetEndColor();
             mpFillLB->SelectEntry( aStartColor );
@@ -270,7 +270,7 @@ void SlideBackground::Update()
             mpFillAttr->Fill(aItem.GetHatchList());
             mpFillGrad->Hide();
 
-            const OUString aHatchName = mpHatchItem->GetName();
+            const OUString aHatchName = GetHatchingSetOrDefault();
             mpFillAttr->SelectEntry( aHatchName );
         }
         break;
@@ -284,7 +284,7 @@ void SlideBackground::Update()
             mpFillAttr->Fill(aItem.GetBitmapList());
             mpFillGrad->Hide();
 
-            const OUString aBitmapName = mpBitmapItem->GetName();
+            const OUString aBitmapName = GetBitmapSetOrDefault();
             mpFillAttr->SelectEntry( aBitmapName );
         }
         break;
@@ -321,10 +321,65 @@ void SlideBackground::dispose()
     PanelLayout::dispose();
 }
 
+Color SlideBackground::GetColorSetOrDefault()
+{
+   // Tango Sky Blue 1, to be consistent w/ area fill panel (b/c COL_AUTO for slides is transparent)
+   if ( !mpColorItem )
+        mpColorItem.reset( new XFillColorItem( OUString(), Color(0x72, 0x9f, 0xcf) ) );
+
+   return mpColorItem->GetColorValue();
+}
+
+XGradient SlideBackground::GetGradientSetOrDefault()
+{
+    if( !mpGradientItem )
+    {
+        SfxObjectShell* pSh = SfxObjectShell::Current();
+        const SvxGradientListItem aGradListItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+        const XGradient aGradient = aGradListItem.GetGradientList()->GetGradient(0)->GetGradient();
+        const OUString aGradientName = aGradListItem.GetGradientList()->GetGradient(0)->GetName();
+
+        mpGradientItem.reset( new XFillGradientItem( aGradientName, aGradient ) );
+    }
+
+    return mpGradientItem->GetGradientValue();
+}
+
+const OUString SlideBackground::GetHatchingSetOrDefault()
+{
+    if( !mpHatchItem )
+    {
+        SfxObjectShell* pSh = SfxObjectShell::Current();
+        const SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+        const XHatch aHatch = aHatchListItem.GetHatchList()->GetHatch(0)->GetHatch();
+        const OUString aHatchName = aHatchListItem.GetHatchList()->GetHatch(0)->GetName();
+
+        mpHatchItem.reset( new XFillHatchItem( aHatchName, aHatch ) );
+    }
+
+    return mpHatchItem->GetName();
+}
+
+const OUString SlideBackground::GetBitmapSetOrDefault()
+{
+    if( !mpBitmapItem )
+    {
+        SfxObjectShell* pSh = SfxObjectShell::Current();
+        const SvxBitmapListItem aBmpListItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+        const GraphicObject aGraphObj = aBmpListItem.GetBitmapList()->GetBitmap(0)->GetGraphicObject();
+        const OUString aBmpName = aBmpListItem.GetBitmapList()->GetBitmap(0)->GetName();
+
+        mpBitmapItem.reset( new XFillBitmapItem( aBmpName, aGraphObj ) );
+    }
+
+    return mpBitmapItem->GetName();
+}
+
 void SlideBackground::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
 
 }
+
 void SlideBackground::NotifyItemUpdate(
     const sal_uInt16 nSID,
     const SfxItemState eState,
@@ -492,7 +547,33 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);
     Update();
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::RECORD, { &aXFillStyleItem });
+
+    switch (eXFS)
+    {
+        case drawing::FillStyle_SOLID:
+        {
+            XFillColorItem aItem( OUString(), mpColorItem->GetColorValue() );
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
+        }
+        break;
+
+        case drawing::FillStyle_GRADIENT:
+        {
+            XFillGradientItem aItem( mpGradientItem->GetName(), mpGradientItem->GetGradientValue() );
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
+        }
+        break;
+
+        case drawing::FillStyle_HATCH:
+        {
+            XFillHatchItem aItem( mpHatchItem->GetName(), mpHatchItem->GetHatchValue() );
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+        }
+        break;
+
+        default:
+        break;
+    }
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
@@ -532,6 +613,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
             XGradient aGradient;
             aGradient.SetStartColor(mpFillLB->GetSelectEntryColor());
             aGradient.SetEndColor(mpFillGrad->GetSelectEntryColor());
+
             XFillGradientItem aItem(aGradient);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
         }
@@ -554,6 +636,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
             sal_uInt16 nPos = mpFillAttr->GetSelectEntryPos();
             XHatch aHatch = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetHatch();
             const OUString aHatchName = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetName();
+
             XFillHatchItem aItem(aHatchName, aHatch);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
         }
@@ -565,6 +648,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
             sal_Int16 nPos = mpFillAttr->GetSelectEntryPos();
             GraphicObject aBitmap = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetGraphicObject();
             OUString aBitmapName = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetName();
+
             XFillBitmapItem aItem(aBitmapName, aBitmap);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
         }
