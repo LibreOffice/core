@@ -63,7 +63,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     ::comphelper::AttributeList* pRootAttrList = new ::comphelper::AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
-        "xmlns:groupinames",
+        "xmlns:groupuinames",
         aCDATAString,
         "http://openoffice.org/2006/groupuinames" );
 
