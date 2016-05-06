@@ -97,10 +97,7 @@ public:
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
 
-    void                        ActivateAllSubmenus()
-    {
-        ActivateAllSubmenus(mpVCLMenu);
-    }
+    void                        ActivateAllSubmenus() { ActivateAllSubmenus(mpVCLMenu); }
     static void                 DispatchCommand(const gchar* pMenuCommand);
     static void                 Activate(const gchar* pMenuCommand);
     static void                 Deactivate(const gchar* pMenuCommand);

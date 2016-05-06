@@ -375,7 +375,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
     mpActionGroup = G_ACTION_GROUP(pActionGroup);
     mpMenuModel = G_MENU_MODEL(g_lo_menu_new());
     // Generate the main menu structure, populates mpMenuModel
-    UpdateFull();
+    ActivateAllSubmenus();
 
     GtkWidget *pWidget = gtk_menu_new_from_model(mpMenuModel);
     gtk_menu_attach_to_widget(GTK_MENU(pWidget), mpFrame->getMouseEventWidget(), nullptr);
@@ -894,6 +894,7 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
             pSalItem->mpSubMenu->Update();
         }
     }
+    Update();
 }
 
 void GtkSalMenu::Activate(const gchar* pCommand)
