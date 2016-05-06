@@ -16,6 +16,24 @@
       "revId": "2d428a9c8db2e44dc58892faca1dfbc56375032b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f6f2e605",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-05-06T09:40:39Z",
+      "side": 1,
+      "message": "Yes that\u0027s the right way. Optionally it can be moved to a .src description, instead of those \"InsertItems\" calls (using xml for such local menu with a custom handler isn\u0027t implemented yet), but the current is fine too.\n\nBut please wrap it in a smart ptr, so it won\u0027t leak.",
+      "parentUuid": "da7fb54a_3641ae3a",
+      "revId": "2d428a9c8db2e44dc58892faca1dfbc56375032b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
