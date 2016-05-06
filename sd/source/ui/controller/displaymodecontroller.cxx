@@ -162,12 +162,10 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
     appendEntry( -1, aTitle1 );
     appendEntry( 1, mpDisplayModeSet1 );
 
-    mpDisplayModeSet2 = VclPtr<ValueSet>::Create( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    mpDisplayModeSet2 = createEmptyValueSetControl();
 
     mpDisplayModeSet2->SetSelectHdl( LINK( this, DisplayModeToolbarMenu, SelectValueSetHdl ) );
     mpDisplayModeSet2->SetColCount( nColCount );
-    mpDisplayModeSet2->EnableFullItemMode( false );
-    mpDisplayModeSet2->SetColor( GetControlBackground() );
 
     fillLayoutValueSet( mpDisplayModeSet2, &mastermodes[0] );
 
