@@ -20,6 +20,7 @@
 #include <sal/types.h>
 
 #include <stdlib.h>
+#include <type_traits>
 
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
@@ -43,7 +44,6 @@
 #include "Struct2.hpp"
 #include "Struct2a.hpp"
 #include "Struct2b.hpp"
-#include "boost/type_traits/is_same.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -455,7 +455,7 @@ void Test::testByte() {
     }
     {
         sal_Unicode b = '2';
-        if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
+        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
             CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b) && b == 1);
         } else {
             CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
@@ -550,7 +550,7 @@ void Test::testShort() {
     }
     {
         sal_Unicode b = '2';
-        if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
+        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
             CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b) && b == 1);
         } else {
             CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
@@ -647,7 +647,7 @@ void Test::testUnsignedShort() {
     }
     {
         sal_Unicode b = '2';
-        if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
+        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
             CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b) && b == 1);
         } else {
             CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
@@ -1289,7 +1289,7 @@ void Test::testChar() {
     }
     {
         sal_Unicode b = '2';
-        if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
+        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
             CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", !(a >>= b) && b == '2');
         } else {
             CPPUNIT_ASSERT_MESSAGE("sal_Unicode", (a >>= b) && b == '1');
