@@ -25,6 +25,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include<rtl/character.hxx>
+
+using namespace rtl;
 
 // All symbol names are laid down int the symbol-pool's stringpool, so that
 // all symbols are handled in the same case. On saving the code-image, the
@@ -326,7 +329,7 @@ void SbiSymDef::SetType( SbxDataType t )
             {
                 ch = 'Z';
             }
-            int ch2 = toupper( ch );
+            int ch2 = toAsciiUpperCase( ch );
             int nIndex = ch2 - 'A';
             if (nIndex >= 0 && nIndex < N_DEF_TYPES)
                 t = pIn->pParser->eDefTypes[nIndex];
