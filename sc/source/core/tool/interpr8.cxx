@@ -1952,6 +1952,7 @@ void ScInterpreter::ScSwitch_MS()
             isValue = ScMatrix::IsValueType( GetDoubleOrStringFromMatrix( fRefVal, aRefStr ) );
             break;
         default :
+            PopError();
             PushIllegalArgument();
             return;
     }
