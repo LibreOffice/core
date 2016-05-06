@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f6b3c608",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-06T12:53:45Z",
+      "side": 1,
+      "message": "This will make entering array/matrix formulas with Shift+Ctrl+Enter impossible, see below in the else block. You\u0027d have to test for bControl XOR bShift.",
+      "revId": "245934cca07d7a19a6af02ac2aa69ecce35f439d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
