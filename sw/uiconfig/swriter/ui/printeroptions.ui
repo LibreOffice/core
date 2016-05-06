@@ -43,7 +43,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pictures">
-                    <property name="label" translatable="yes">Pictures and other graphic objects</property>
+                    <property name="label" translatable="yes">Images and other graphic objects</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
