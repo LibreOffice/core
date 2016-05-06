@@ -30,14 +30,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/iterator_adaptors.hpp>
-#ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_ // from iterator_adaptors.hpp
-// N.B.: the check for the header guard _of a specific version of boost_
-//       is here so this may work on different versions of boost,
-//       which sadly put the goods in different header files
-#include <boost/iterator/transform_iterator.hpp>
-#endif
-
 #include <map>
 #include <iterator>
 #include <functional>
@@ -291,7 +283,7 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
     }
 }
 
-uno::Reference< rdf::XResource>
+uno::Reference<rdf::XResource>
 RDFaInserter::MakeResource( OUString const & i_rResource)
 {
     if (i_rResource.startsWith("_:")) // blank node
@@ -328,18 +320,14 @@ void RDFaInserter::InsertRDFaEntry(
 
     predicates.reserve(i_rEntry.m_xRDFaAttributes->m_Properties.size());
 
-    auto aPropertyToXURI = [this](OUString const& aProperty) { return this->MakeURI(aProperty); };
-    // Store as variable so the type matches in both calls.
-
-    ::std::remove_copy_if(
-        ::boost::make_transform_iterator(
-            i_rEntry.m_xRDFaAttributes->m_Properties.begin(),
-            aPropertyToXURI),
-        ::boost::make_transform_iterator(
-            i_rEntry.m_xRDFaAttributes->m_Properties.end(),
-            aPropertyToXURI),
-        ::std::back_inserter(predicates),
-        [this](uno::Reference<rdf::XURI> const& arRef) { return !arRef.is(); } );
+    for (OUString const& prop : i_rEntry.m_xRDFaAttributes->m_Properties)
+    {
+        auto const xURI(MakeURI(prop));
+        if (xURI.is())
+        {
+            predicates.push_back(xURI);
+        }
+    }
 
     if (predicates.empty())
     {
