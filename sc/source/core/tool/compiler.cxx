@@ -1422,6 +1422,14 @@ struct ConventionXL_OOX : public ConventionXL_A1
             aPos.SetRow(0);
         }
 
+        if (rRef.Ref1.IsDeleted() || (!bSingleRef && rRef.Ref2.IsDeleted()))
+        {
+            // For OOXML write plain "#REF!" instead of detailed sheet/col/row
+            // information.
+            rBuf.append(rErrRef);
+            return;
+        }
+
         ConventionXL_A1::makeRefStr( rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
     }
 
