@@ -958,7 +958,7 @@ void RtfAttributeOutput::TableRowEnd(sal_uInt32 /*nDepth*/)
  * Our private table methods.
  */
 
-void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void RtfAttributeOutput::InitTableHelper(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     if (m_pTableWrt && pTable == m_pTableWrt->GetTable())
@@ -980,13 +980,13 @@ void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t p
         m_pTableWrt.reset(new SwWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTableSz, false));
 }
 
-void RtfAttributeOutput::StartTable(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+void RtfAttributeOutput::StartTable(const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
     // To trigger calling InitTableHelper()
     m_pTableWrt.reset(nullptr);
 }
 
-void RtfAttributeOutput::StartTableRow(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void RtfAttributeOutput::StartTableRow(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", (depth is " << nCurrentDepth << ")");
@@ -1006,12 +1006,12 @@ void RtfAttributeOutput::StartTableRow(ww8::WW8TableNodeInfoInner::Pointer_t pTa
     m_rExport.Strm().WriteCharPtr(m_aRowDefs.makeStringAndClear().getStr());
 }
 
-void RtfAttributeOutput::StartTableCell(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
+void RtfAttributeOutput::StartTableCell(const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
     m_bTableCellOpen = true;
 }
 
-void RtfAttributeOutput::TableCellProperties(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+void RtfAttributeOutput::TableCellProperties(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     TableDefaultBorders(pTableTextNodeInfoInner);
     TableBackgrounds(pTableTextNodeInfoInner);
@@ -1088,7 +1088,7 @@ void RtfAttributeOutput::EndTable()
     m_pTableWrt.reset(nullptr);
 }
 
-void RtfAttributeOutput::FinishTableRowCell(ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool /*bForceEmptyParagraph*/)
+void RtfAttributeOutput::FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner, bool /*bForceEmptyParagraph*/)
 {
     if (pInner.get())
     {
