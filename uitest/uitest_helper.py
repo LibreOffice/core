@@ -11,6 +11,8 @@ from helper import EventListener
 
 class UITest(object):
 
+    DEFAULT_SLEEP = 0.1
+
     def __init__(self, xUITest, xContext):
         self._xUITest = xUITest
         self._xContext = xContext
@@ -21,10 +23,10 @@ class UITest(object):
             time_ = 0
             while time_ < 30:
                 if event.executed:
-                    time.sleep(0.1)
+                    time.sleep(self.DEFAULT_SLEEP)
                     return
-                time_ += 0.1
-                time.sleep(0.1)
+                time_ += self.DEFAULT_SLEEP
+                time.sleep(self.DEFAULT_SLEEP)
 
         # report a failure here
         print("failure execute modal dialog")
@@ -35,10 +37,10 @@ class UITest(object):
             time_ = 0
             while time_ < 30:
                 if event.executed:
-                    time.sleep(0.1)
+                    time.sleep(self.DEFAULT_SLEEP)
                     return
-                time_ += 0.1
-                time.sleep(0.11)
+                time_ += self.DEFAULT_SLEEP
+                time.sleep(self.DEFAULT_SLEEP)
 
         # report a failure here
         print("failure execute modeless dialog")
@@ -52,8 +54,8 @@ class UITest(object):
             while time_ < 30:
                 if event.executed:
                     return
-                time_ += 0.1
-                time.sleep(0.1)
+                time_ += self.DEFAULT_SLEEP
+                time.sleep(self.DEFAULT_SLEEP)
 
         print("failure doc in start center")
 
@@ -72,7 +74,7 @@ class UITest(object):
                 elif event.hasExecuted("OnViewClosed"):
                     return
 
-                time_ += 0.1
-                time.sleep(0.1)
+                time_ += self.DEFAULT_SLEEP
+                time.sleep(self.DEFAULT_SLEEP)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
