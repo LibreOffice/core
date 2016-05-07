@@ -20,10 +20,8 @@
 #ifndef INCLUDED_OOX_HELPER_REFMAP_HXX
 #define INCLUDED_OOX_HELPER_REFMAP_HXX
 
-#include <sal/types.h>
-
-#include <functional>
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <memory>
 

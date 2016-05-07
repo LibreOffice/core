@@ -20,6 +20,8 @@
 #include "chartsheetfragment.hxx"
 
 #include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include "biffinputstream.hxx"
 #include "pagesettings.hxx"
 #include "viewsettings.hxx"

@@ -23,6 +23,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
+#include <oox/token/tokens.hxx>
 
 using ::oox::core::XmlFilterBase;
 

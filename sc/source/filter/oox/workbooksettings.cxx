@@ -29,6 +29,7 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "biffinputstream.hxx"
 #include "unitconverter.hxx"
 

@@ -27,6 +27,8 @@
 #include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/olestorage.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include "biffinputstream.hxx"
 #include "chartsheetfragment.hxx"

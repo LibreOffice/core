@@ -25,6 +25,8 @@
 #include "drawingml/customshapeproperties.hxx"
 #include "diagramdefinitioncontext.hxx"
 #include "constraintlistcontext.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::oox::core;

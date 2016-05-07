@@ -23,6 +23,8 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <sfx2/docfile.hxx>
 
 using namespace ::com::sun::star;

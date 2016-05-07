@@ -22,6 +22,7 @@
 #include "oox/drawingml/shape.hxx"
 #include "drawingml/customshapeproperties.hxx"
 #include "drawingml/textbody.hxx"
+#include <oox/token/namespaces.hxx>
 
 using namespace ::com::sun::star;
 using ::oox::core::ContextHandlerRef;

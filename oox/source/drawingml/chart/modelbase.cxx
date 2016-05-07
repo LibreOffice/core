@@ -20,6 +20,7 @@
 #include "oox/drawingml/chart/modelbase.hxx"
 
 #include "oox/helper/attributelist.hxx"
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace drawingml {

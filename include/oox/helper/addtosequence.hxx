@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <oox/dllapi.h>
-#include <rtl/ustring.hxx>
 
 namespace oox
 {

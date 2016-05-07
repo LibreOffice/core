@@ -20,12 +20,12 @@
 #ifndef INCLUDED_OOX_HELPER_REFVECTOR_HXX
 #define INCLUDED_OOX_HELPER_REFVECTOR_HXX
 
-#include <sal/types.h>
-
-#include <functional>
 #include <algorithm>
+#include <functional>
 #include <memory>
 #include <vector>
+
+#include <sal/types.h>
 
 namespace oox {
 

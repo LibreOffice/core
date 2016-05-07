@@ -27,6 +27,8 @@
 #include "drawingml/textparagraphproperties.hxx"
 #include "oox/core/relations.hxx"
 #include "hyperlinkcontext.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
 
+#include <memory>
+
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/frame/XModel.hpp>

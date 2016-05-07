@@ -20,6 +20,8 @@
 #include "drawingml/textliststylecontext.hxx"
 #include "drawingml/textparagraphpropertiescontext.hxx"
 #include "oox/helper/attributelist.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

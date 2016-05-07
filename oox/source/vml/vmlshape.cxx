@@ -54,6 +54,7 @@
 #include "oox/ole/axcontrol.hxx"
 #include "oox/ole/axcontrolfragment.hxx"
 #include "oox/ole/oleobjecthelper.hxx"
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"

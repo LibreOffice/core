@@ -38,6 +38,8 @@
 #include "oox/ppt/pptimport.hxx"
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include "animationtypes.hxx"
 

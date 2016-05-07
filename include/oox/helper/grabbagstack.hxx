@@ -11,12 +11,17 @@
 #ifndef INCLUDED_OOX_HELPER_GRABBAGSTACK_HXX
 #define INCLUDED_OOX_HELPER_GRABBAGSTACK_HXX
 
+#include <stack>
+#include <vector>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <sal/types.h>
 
-#include <vector>
-#include <stack>
+namespace com { namespace sun { namespace star {
+    namespace uno { class Any; }
+} } }
 
 namespace oox {
 

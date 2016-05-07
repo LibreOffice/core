@@ -36,6 +36,8 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertymap.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "biffinputstream.hxx"
 #include "scitems.hxx"
 #include "document.hxx"

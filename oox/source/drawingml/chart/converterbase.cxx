@@ -35,6 +35,7 @@
 #include "basegfx/numeric/ftools.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <comphelper/processfactory.hxx>
 

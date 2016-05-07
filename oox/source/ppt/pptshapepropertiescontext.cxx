@@ -33,6 +33,7 @@
 #include "drawingml/customshapegeometry.hxx"
 #include "drawingml/textbodycontext.hxx"
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace oox::core;

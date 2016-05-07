@@ -30,6 +30,9 @@
 #include "oox/helper/attributelist.hxx"
 #include "textspacingcontext.hxx"
 #include "texttabstoplistcontext.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

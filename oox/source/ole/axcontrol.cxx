@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -55,6 +56,8 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/ole/axbinarywriter.hxx"
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 namespace oox {
 namespace ole {
 

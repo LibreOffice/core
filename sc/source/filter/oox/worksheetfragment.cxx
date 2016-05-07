@@ -22,6 +22,8 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
 #include "autofilterbuffer.hxx"
 #include "autofiltercontext.hxx"

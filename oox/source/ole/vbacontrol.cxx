@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <set>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -37,6 +38,8 @@
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
 #include "oox/ole/vbahelper.hxx"
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include <unordered_map>
 
 namespace oox {

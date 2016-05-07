@@ -28,6 +28,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include "drawingml/chart/chartdrawingfragment.hxx"

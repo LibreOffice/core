@@ -19,6 +19,7 @@
 
 #include "externallinkbuffer.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/DDELinkInfo.hpp>
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
@@ -34,7 +35,9 @@
 #include <rtl/strbuf.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "excelhandlers.hxx"

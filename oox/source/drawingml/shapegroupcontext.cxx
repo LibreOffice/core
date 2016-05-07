@@ -30,6 +30,8 @@
 #include "drawingml/customshapegeometry.hxx"
 #include <drawingml/shapepropertiescontext.hxx>
 #include "drawingml/textbodycontext.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
