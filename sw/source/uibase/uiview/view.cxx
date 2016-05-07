@@ -1326,6 +1326,8 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                pValue->Value >>= bSelectedFrame;
                bGotIsSelectedFrame = true;
             }
+            // Fallback to common SdrModel processing
+            else GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->ReadUserDataSequenceValue(pValue);
             pValue++;
         }
         if (bGotVisibleBottom)
@@ -1490,6 +1492,9 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     aVector.push_back(comphelper::makePropertyValue("IsSelectedFrame", FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType()));
 
     rSequence = comphelper::containerToSequence(aVector);
+
+    // Common SdrModel processing
+    GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->WriteUserDataSequence(rSequence);
 }
 
 void SwView::ShowCursor( bool bOn )

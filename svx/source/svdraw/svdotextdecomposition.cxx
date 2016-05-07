@@ -917,7 +917,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
-    const bool bVerticalWritintg(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
+    const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(bIsCell)
@@ -931,7 +931,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         // #i106214# This was not completely correct; to still measure the real
         // text height to allow vertical adjust (and vice versa for VerticalWritintg)
         // only one aspect has to be set, but the other one to zero
-        if(bVerticalWritintg)
+        if(bVerticalWriting)
         {
             // measure the horizontal text size
             rOutliner.SetMinAutoPaperSize(Size(0, aAnchorTextSize.Height()));
@@ -949,8 +949,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     else
     {
         // check if block text is used (only one of them can be true)
-        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
-        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
+        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWriting);
+        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWriting);
 
         // set minimal paper size horizontally/vertically if needed
         if(bHorizontalIsBlock)
@@ -972,14 +972,24 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             // 'measurement' of the real size of block text would not work
             Size aMaxAutoPaperSize(aAnchorTextSize);
 
-            if(bHorizontalIsBlock)
+            // Usual processing - always grow in one of directions
+            bool bAllowGrowVertical = !bVerticalWriting;
+            bool bAllowGrowHorizontal = bVerticalWriting;
+            // Compatibility mode for tdf#93124
+            if (this->pModel->IsAnchoredTextOverflowLegacy())
             {
-                // allow to grow vertical for horizontal blocks
+                bAllowGrowVertical = bHorizontalIsBlock;
+                bAllowGrowHorizontal = bVerticalIsBlock;
+            }
+
+            if (bAllowGrowVertical)
+            {
+                // allow to grow vertical for horizontal texts
                 aMaxAutoPaperSize.setHeight(1000000);
             }
-            else if(bVerticalIsBlock)
+            else if (bAllowGrowHorizontal)
             {
-                // allow to grow horizontal for vertical blocks
+                // allow to grow horizontal for vertical texts
                 aMaxAutoPaperSize.setWidth(1000000);
             }
 
@@ -1003,7 +1013,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // formatted to the left edge (or top edge when vertical) of the draw object.
     if(!IsTextFrame() && !bIsCell)
     {
-        if(aAnchorTextRange.getWidth() < aOutlinerScale.getX() && !bVerticalWritintg)
+        if(aAnchorTextRange.getWidth() < aOutlinerScale.getX() && !bVerticalWriting)
         {
             // Horizontal case here. Correct only if eHAdj == SDRTEXTHORZADJUST_BLOCK,
             // else the alignment is wanted.
@@ -1013,7 +1023,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             }
         }
 
-        if(aAnchorTextRange.getHeight() < aOutlinerScale.getY() && bVerticalWritintg)
+        if(aAnchorTextRange.getHeight() < aOutlinerScale.getY() && bVerticalWriting)
         {
             // Vertical case here. Correct only if eHAdj == SDRTEXTVERTADJUST_BLOCK,
             // else the alignment is wanted.
@@ -1061,7 +1071,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // Translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
-    const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    const double fStartInX(bVerticalWriting ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
     const basegfx::B2DTuple aAdjOffset(fStartInX, aAdjustTranslate.getY());
     basegfx::B2DHomMatrix aNewTransformA(basegfx::tools::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
 
