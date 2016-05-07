@@ -178,7 +178,7 @@ namespace desktop {
             {
                 if (m_queue[i].first == type)
                 {
-                    SAL_WARN("idle", "Found [" + std::to_string(type) + "] at " + std::to_string(i));
+                    //SAL_WARN("idle", "Found [" + std::to_string(type) + "] at " + std::to_string(i));
                     break;
                 }
             }
@@ -187,7 +187,7 @@ namespace desktop {
             {
                 if (m_queue[i].first == type)
                 {
-                    SAL_WARN("idle", "Removing [" + std::to_string(type) + "] at " + std::to_string(i));
+                    //SAL_WARN("idle", "Removing [" + std::to_string(type) + "] at " + std::to_string(i));
                     m_queue.erase(m_queue.begin() + i);
                 }
             }
