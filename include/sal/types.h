@@ -120,7 +120,7 @@ typedef unsigned char       sal_uInt8;
         #error "Could not find 64-bit type, add support for your architecture"
     #endif
 #else
-    #error "Please define the 64-bit types for your architecture/compiler in sal/inc/sal/types.h"
+    #error "Please define the 64-bit types for your architecture/compiler in include/sal/types.h"
 #endif
 
 /** A legacy synonym for `char`.
