@@ -85,6 +85,11 @@ void ListBox::dispose()
     Control::dispose();
 }
 
+void ListBox::SetMRUEntries( const OUString& rEntries )
+{
+    mpImplLB->SetMRUEntries( rEntries, ';' );
+}
+
 void ListBox::ImplInitListBoxData()
 {
     mpFloatWin      = nullptr;
