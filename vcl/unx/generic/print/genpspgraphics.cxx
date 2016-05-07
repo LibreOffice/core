@@ -423,7 +423,7 @@ void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 
 void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
+    // Point must be equal to SalPoint! see include/vcl/salgtype.hxx
     m_pPrinterGfx->DrawPolygon (nPoints, reinterpret_cast<Point const *>(pPtAry));
 }
 
@@ -469,7 +469,7 @@ bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
                                              const SalPoint* const* pPtAry,
                                              const sal_uInt8* const* pFlgAry )
 {
-    // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
+    // Point must be equal to SalPoint! see include/vcl/salgtype.hxx
     m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, reinterpret_cast<Point const * const *>(pPtAry), pFlgAry);
     return true;
 }

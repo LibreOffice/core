@@ -178,7 +178,7 @@ void X11SalInstance::DestroyObject( SalObject* pObject )
 }
 
 // SalClipRegion is a member of SalObject
-// definition of SalClipRegion my be found in unx/inc/salobj.h
+// definition of SalClipRegion my be found in vcl/inc/unx/salobj.h
 
 SalClipRegion::SalClipRegion()
 {
