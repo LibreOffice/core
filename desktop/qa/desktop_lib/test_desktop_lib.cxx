@@ -73,16 +73,6 @@ public:
     void closeDoc();
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
-    void flushTimers()
-    {
-        // Need these to make sure idle tasks are also invoked.
-        // Yielding once is not enough since there are higher
-        // priority timers that take precedence over idle.
-        for (auto i = 0; i < 10; ++i)
-        {
-            Application::Reschedule(true);
-        }
-    }
 
     void testGetStyles();
     void testGetFonts();
@@ -104,6 +94,7 @@ public:
     void testModifiedStatus();
     void testSheetOperations();
     void testNotificationCompression();
+
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
@@ -349,7 +340,7 @@ void DesktopLOKTest::testSearchCalc()
     }));
 
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
-    flushTimers();
+    Scheduler::ProcessEventsToIdle();
 
     std::vector<OString> aSelections;
     sal_Int32 nIndex = 0;
@@ -631,7 +622,7 @@ void DesktopLOKTest::testCommandResult()
     // the condition var.
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
-    flushTimers();
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(&aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
@@ -641,7 +632,7 @@ void DesktopLOKTest::testCommandResult()
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
-    flushTimers();
+    Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(&aTimeValue);
 
     boost::property_tree::ptree aTree;
@@ -664,7 +655,7 @@ void DesktopLOKTest::testWriterComments()
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
-    flushTimers();
+    Scheduler::ProcessEventsToIdle();
 
     m_aCommandResultCondition.wait(&aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
@@ -824,7 +815,7 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
     handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
 
-    flushTimers();
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), notifs.size());
 
