@@ -22,6 +22,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <string.h>
+#include <algorithm>
 #include <vector>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>

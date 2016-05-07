@@ -28,6 +28,9 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/ppt/timenodelistcontext.hxx"
 #include "buildlistcontext.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;

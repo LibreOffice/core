@@ -40,6 +40,7 @@
 #include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/vbaproject.hxx>
+#include <oox/token/properties.hxx>
 #include <vcl/msgbox.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"

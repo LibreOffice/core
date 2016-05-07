@@ -19,6 +19,8 @@
 
 #include "oox/helper/propertyset.hxx"
 
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include "oox/helper/propertymap.hxx"

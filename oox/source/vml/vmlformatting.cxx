@@ -32,6 +32,8 @@
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace vml {

@@ -21,9 +21,10 @@
 #define INCLUDED_OOX_HELPER_PROGRESSBAR_HXX
 
 #include <memory>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
-
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace task { class XStatusIndicator; }

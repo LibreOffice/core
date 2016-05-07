@@ -20,10 +20,18 @@
 #ifndef INCLUDED_OOX_HELPER_PROPERTYSET_HXX
 #define INCLUDED_OOX_HELPER_PROPERTYSET_HXX
 
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { class XMultiPropertySet; }
+    namespace beans { class XPropertySet; }
+    namespace beans { class XPropertySetInfo; }
+} } }
 
 namespace oox {
 

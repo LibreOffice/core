@@ -25,6 +25,8 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "drawingml/embeddedwavaudiofile.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

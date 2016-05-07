@@ -24,7 +24,8 @@
 #include <osl/diagnose.h>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "oox/ole/axcontrol.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"

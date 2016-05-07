@@ -25,6 +25,9 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "drawingml/embeddedwavaudiofile.hxx"
 
 using namespace ::oox::core;

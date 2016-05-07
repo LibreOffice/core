@@ -26,6 +26,7 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/vml/vmldrawing.hxx"
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "drawingml/textliststyle.hxx"

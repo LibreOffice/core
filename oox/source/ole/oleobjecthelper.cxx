@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include "oox/helper/propertymap.hxx"
+#include <oox/token/properties.hxx>
 
 namespace oox {
 namespace ole {

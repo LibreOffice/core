@@ -19,6 +19,7 @@
 
 #include "scenariobuffer.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XScenario.hpp>
 #include <com/sun/star/sheet/XScenarios.hpp>
@@ -29,6 +30,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 

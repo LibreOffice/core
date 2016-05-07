@@ -23,6 +23,7 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "biffinputstream.hxx"
 #include "pagesettings.hxx"
 #include "workbooksettings.hxx"

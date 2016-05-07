@@ -21,7 +21,8 @@
 #include "drawingml/colorchoicecontext.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/color.hxx"
-
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace drawingml {

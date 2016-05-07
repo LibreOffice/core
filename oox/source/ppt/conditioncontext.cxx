@@ -31,6 +31,8 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/ppt/animationspersist.hxx"
 #include "animationtypes.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include "timetargetelementcontext.hxx"
 

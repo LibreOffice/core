@@ -22,6 +22,7 @@
 #include <cstdio>
 #include <set>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

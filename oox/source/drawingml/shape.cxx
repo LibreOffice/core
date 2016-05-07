@@ -43,6 +43,7 @@
 #include "oox/helper/modelobjecthelper.hxx"
 #include <oox/mathml/importutils.hxx>
 #include <oox/mathml/import.hxx>
+#include <oox/token/properties.hxx>
 
 #include <comphelper/classids.hxx>
 #include <tools/gen.hxx>

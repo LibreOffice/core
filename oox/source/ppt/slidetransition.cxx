@@ -28,8 +28,9 @@
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/token/namespaces.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 
 using namespace ::com::sun::star::uno;

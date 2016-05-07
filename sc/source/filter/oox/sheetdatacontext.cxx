@@ -25,6 +25,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "formulaparser.hxx"

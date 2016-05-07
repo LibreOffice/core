@@ -18,6 +18,7 @@
  */
 
 #include "oox/helper/binarystreambase.hxx"
+#include <oox/helper/helper.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include <osl/diagnose.h>

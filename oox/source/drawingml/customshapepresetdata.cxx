@@ -13,6 +13,7 @@
 #include <comphelper/sequence.hxx>
 
 #include "drawingml/customshapeproperties.hxx"
+#include <oox/token/properties.hxx>
 #include "oox/token/tokenmap.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 

@@ -33,6 +33,7 @@
 #include "drawingml/chart/typegroupconverter.hxx"
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
 namespace oox {

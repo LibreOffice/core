@@ -21,7 +21,9 @@
 #define INCLUDED_OOX_HELPER_TEXTINPUTSTREAM_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }

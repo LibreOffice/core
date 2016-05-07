@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_AUTOFILTERBUFFER_HXX
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <oox/helper/helper.hxx>
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 

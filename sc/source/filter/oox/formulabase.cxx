@@ -20,6 +20,7 @@
 #include "formulabase.hxx"
 
 #include <map>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/AddressConvention.hpp>

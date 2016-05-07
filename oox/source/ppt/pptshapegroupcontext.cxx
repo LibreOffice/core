@@ -37,6 +37,8 @@
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "extdrawingfragmenthandler.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;

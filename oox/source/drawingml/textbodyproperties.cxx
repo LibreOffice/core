@@ -21,6 +21,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "drawingml/textbodyproperties.hxx"
+#include <oox/token/properties.hxx>
 #include "oox/token/tokens.hxx"
 
 using namespace ::com::sun::star::drawing;

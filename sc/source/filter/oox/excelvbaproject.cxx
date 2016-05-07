@@ -21,6 +21,7 @@
 
 #include <list>
 #include <set>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>

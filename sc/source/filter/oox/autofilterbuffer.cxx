@@ -19,6 +19,7 @@
 
 #include "autofilterbuffer.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/FilterConnection.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField3.hpp>
@@ -30,7 +31,9 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"

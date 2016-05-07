@@ -20,6 +20,7 @@
 #include "pivotcachebuffer.hxx"
 
 #include <set>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -32,7 +33,9 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"
 #include "excelhandlers.hxx"

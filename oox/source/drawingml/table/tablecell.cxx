@@ -26,6 +26,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>

@@ -41,6 +41,7 @@
 #include "drawingml/textliststyle.hxx"
 #include "oox/ppt/pptimport.hxx"
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star;

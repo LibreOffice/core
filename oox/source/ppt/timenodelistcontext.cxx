@@ -43,6 +43,8 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "drawingml/colorchoicecontext.hxx"
 #include "oox/ppt/slidetransition.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 #include "animvariantcontext.hxx"
 #include "commonbehaviorcontext.hxx"

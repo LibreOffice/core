@@ -20,9 +20,18 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYINPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_BINARYINPUTSTREAM_HXX
 
+#include <cstddef>
+#include <memory>
 #include <vector>
-#include <com/sun/star/io/XInputStream.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/helper.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }

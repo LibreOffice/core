@@ -20,10 +20,14 @@
 #ifndef INCLUDED_OOX_HELPER_STORAGEBASE_HXX
 #define INCLUDED_OOX_HELPER_STORAGEBASE_HXX
 
+#include <functional>
+#include <memory>
 #include <vector>
+
 #include <com/sun/star/uno/Reference.hxx>
-#include <oox/helper/refmap.hxx>
 #include <oox/dllapi.h>
+#include <oox/helper/refmap.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace embed { class XStorage; }

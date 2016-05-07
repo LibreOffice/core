@@ -20,8 +20,16 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 
-#include <oox/helper/binarystreambase.hxx>
+#include <cstddef>
 #include <memory>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/helper.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XOutputStream; }

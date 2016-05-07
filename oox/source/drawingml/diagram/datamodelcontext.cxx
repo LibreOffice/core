@@ -22,6 +22,8 @@
 #include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "drawingml/shapepropertiescontext.hxx"
 #include "drawingml/textbodycontext.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::oox::core;

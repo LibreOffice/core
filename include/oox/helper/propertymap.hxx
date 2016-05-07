@@ -20,13 +20,14 @@
 #ifndef INCLUDED_OOX_HELPER_PROPERTYMAP_HXX
 #define INCLUDED_OOX_HELPER_PROPERTYMAP_HXX
 
-#include <vector>
 #include <map>
+
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <rtl/ustring.hxx>
-#include <oox/token/properties.hxx>
 #include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;

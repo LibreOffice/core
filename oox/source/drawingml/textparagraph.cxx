@@ -27,6 +27,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <oox/token/properties.hxx>
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;

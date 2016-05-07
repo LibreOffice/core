@@ -22,6 +22,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include "oox/helper/attributelist.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace core {

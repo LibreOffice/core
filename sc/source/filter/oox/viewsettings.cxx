@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
@@ -34,6 +35,8 @@
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "unitconverter.hxx"
