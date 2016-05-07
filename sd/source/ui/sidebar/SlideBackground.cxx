@@ -511,7 +511,7 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_DISPLAY_MASTER_BACKGROUND:
         {
-            const SfxBoolItem* pBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
+            const SfxBoolItem* pBoolItem = nullptr;
             if (eState >= SfxItemState::DEFAULT)
                 pBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
             if (pBoolItem)
