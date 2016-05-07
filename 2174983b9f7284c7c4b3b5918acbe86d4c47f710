@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b6177e53",
+        "filename": "setup_native/source/win32/customactions/shellextensions/startmenuicon.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-07T15:30:07Z",
+      "side": 1,
+      "message": "given that this is a .cxx file, and these lines are at the top of the file, they can be reduced to:\n  #define UNICODE\n  #define _UNICODE",
+      "revId": "2174983b9f7284c7c4b3b5918acbe86d4c47f710",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
