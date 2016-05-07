@@ -3383,7 +3383,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(LIBGLTF_LIBS))
 
 endef
 
-endif # SYSTEN_LIBGLTF
+endif # SYSTEM_LIBGLTF
 
 ifeq ($(ENABLE_COLLADA),TRUE)
 
