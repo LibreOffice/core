@@ -264,6 +264,13 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = false;
 
+    // If this is an ODF file being loaded, then by default, use legacy processing
+    // for tdf#93124 (if required, it will be overriden in *::ReadUserDataSequence())
+    if (IsOwnStorageFormat_Impl(rMedium))
+    {
+        mpDoc->SetAnchoredTextOverflowLegacy(true);
+    }
+
     bool       bRet = false;
     bool       bStartPresentation = false;
     ErrCode nError = ERRCODE_NONE;

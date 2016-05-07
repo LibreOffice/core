@@ -564,12 +564,20 @@ public:
     void SetAddExtLeading( bool bEnabled );
     bool IsAddExtLeading() const { return mbAddExtLeading; }
 
+    // tdf#93124 compatibility flag
+    void SetAnchoredTextOverflowLegacy(bool bEnabled);
+    bool IsAnchoredTextOverflowLegacy() const;
+
     void ReformatAllTextObjects();
 
     SdrOutliner* createOutliner( OutlinerMode nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
 
     bool IsWriter() const { return !bMyPool; }
+
+    // Used as a fallback in *::ReadUserDataSequence() to process common properties
+    void ReadUserDataSequenceValue(const css::beans::PropertyValue *pValue);
+    void WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool bBrowse = false);
 
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType GetPageNumType() const;
