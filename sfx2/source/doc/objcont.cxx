@@ -514,7 +514,7 @@ bool SfxObjectShell::IsHelpDocument() const
 void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName )
 {
     // only care about reseting this data for openoffice formats otherwise
-    if ( IsOwnStorageFormat_Impl( *GetMedium())  )
+    if ( IsOwnStorageFormat( *GetMedium()) )
     {
         uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
         xDocProps->setTemplateURL( OUString() );

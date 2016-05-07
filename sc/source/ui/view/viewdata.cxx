@@ -112,7 +112,7 @@ ScViewDataTable::~ScViewDataTable()
 {
 }
 
-void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& /*rViewData*/, SCTAB /*nTab*/) const
+void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB /*nTab*/) const
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);
     beans::PropertyValue* pSettings = rSettings.getArray();
@@ -159,6 +159,9 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_TABLE_SHOWGRID].Name = SC_UNO_SHOWGRID;
         pSettings[SC_TABLE_SHOWGRID].Value <<= bShowGrid;
     }
+
+    // Common SdrModel processing
+    rViewData.GetDocument()->GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
 void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& aSettings, ScViewData& rViewData, SCTAB nTab, bool& rHasZoom )
@@ -288,6 +291,8 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
                 pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
             }
         }
+        // Fallback to common SdrModel processing
+        else rViewData.GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&aSettings[i]);
     }
     if (eHSplitMode == SC_SPLIT_FIX)
         nFixPosX = SanitizeCol( static_cast<SCCOL>( bHasHSplitInTwips ? nTempPosHTw : nTempPosH ));
@@ -2728,6 +2733,9 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             pSettings[SC_RASTERSYNC].Value <<= aGridOpt.GetSynchronize();
         }
     }
+
+    // Common SdrModel processing
+    GetDocument()->GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
 void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& rSettings)
@@ -2881,6 +2889,9 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 aGridOpt.SetFieldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
             else if ( sName == SC_UNO_RASTERSYNC )
                 aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            // Fallback to common SdrModel processing
+            else GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&rSettings[i]);
+
             pOptions->SetGridOptions(aGridOpt);
         }
     }
