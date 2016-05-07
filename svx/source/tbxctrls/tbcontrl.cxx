@@ -305,6 +305,7 @@ private:
     DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 
 public:
+    SvNumberFormatter aFormatter;
     SvxCurrencyList_Impl( sal_uInt16 nId, const Reference< XFrame >& rxFrame,
                           vcl::Window* pParentWindow,
                           const Reference< css::uno::XComponentContext >& rxContext,
@@ -313,6 +314,9 @@ public:
                           LanguageType& eSelectLanguage );
     virtual ~SvxCurrencyList_Impl() { disposeOnce(); }
     virtual void dispose() override;
+    void FillList();
+    virtual bool Notify( NotifyEvent& rNEvt );
+
 };
 
 class SvxStyleToolBoxControl;
@@ -1871,18 +1875,36 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     m_pCurrencyLb( VclPtr<ListBox>::Create(this) ),
     m_xControl( pControl ),
     m_rSelectedFormat( rSelectedFormat ),
-    m_eSelectedLanguage( eSelectedLanguage )
+    m_eSelectedLanguage( eSelectedLanguage ),
+    aFormatter( rxContext, LANGUAGE_SYSTEM )
 {
     m_pCurrencyLb->setPosSizePixel( 2, 2, 300, 140 );
     SetOutputSizePixel( Size( 304, 144 ) );
+    m_eFormatLanguage = aFormatter.GetLanguage();
+    m_pCurrencyLb->SetMaxMRUCount( 5 );
 
+    FillList();
+
+    m_pCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
+    SetText( SVX_RESSTR( RID_SVXSTR_TBLAFMT_CURRENCY ) );
+}
+
+bool SvxCurrencyList_Impl::Notify( NotifyEvent& rNEvt )
+{
+    MouseNotifyEvent nType = rNEvt.GetType();
+
+    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType )
+        FillList();
+
+    return SfxPopupWindow::Notify( rNEvt );
+}
+
+void SvxCurrencyList_Impl::FillList()
+{
     std::vector< OUString > aList;
     std::vector< sal_uInt16 > aCurrencyList;
     const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nLen = rCurrencyTable.size();
-
-    SvNumberFormatter aFormatter( rxContext, LANGUAGE_SYSTEM );
-    m_eFormatLanguage = aFormatter.GetLanguage();
 
     SvxCurrencyToolBoxControl::GetCurrencySymbols( aList, true, aCurrencyList );
 
@@ -1890,6 +1912,7 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     sal_Int32 nSelectedPos = -1;
     bool bIsSymbol;
     NfWSStringsDtor aStringsDtor;
+
 
     for( std::vector< OUString >::iterator i = aList.begin(); i != aList.end(); ++i, ++nCount )
     {
@@ -1912,10 +1935,10 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
             ++nPos;
         }
     }
-    m_pCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
-    SetText( SVX_RESSTR( RID_SVXSTR_TBLAFMT_CURRENCY ) );
+
     if ( nSelectedPos >= 0 )
         m_pCurrencyLb->SelectEntryPos( nSelectedPos );
+    m_pCurrencyLb->SetMRUEntries("xxxxxxxxxxxxxxxxxxxxxxx");
     m_pCurrencyLb->Show();
 }
 

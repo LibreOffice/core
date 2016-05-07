@@ -85,6 +85,16 @@ void ListBox::dispose()
     Control::dispose();
 }
 
+void ListBox::SetMRUEntries( const OUString& rEntries )
+{
+    mpImplLB->SetMRUEntries( rEntries, ';' );
+}
+
+void ListBox::SetMaxMRUCount( sal_Int32 n )
+{
+    mpImplLB->SetMaxMRUCount( n );
+}
+
 void ListBox::ImplInitListBoxData()
 {
     mpFloatWin      = nullptr;
