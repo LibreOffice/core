@@ -245,6 +245,7 @@ public:
 
     bool                GetEdgeBlending() const { return mbEdgeBlending; }
     void                SetEdgeBlending(bool bNew);
+    void                SetMRUEntries( const OUString& rEntries );
 
     /** checks whether a certain point lies within the bounds of
         a listbox item and returns the item as well as the character position
