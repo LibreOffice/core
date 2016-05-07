@@ -225,7 +225,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Suggested Categories</property>
+                <property name="label" translatable="yes">Categories</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
