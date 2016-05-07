@@ -971,14 +971,14 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             // 'measurement' of the real size of block text would not work
             Size aMaxAutoPaperSize(aAnchorTextSize);
 
-            if(bHorizontalIsBlock)
+            if (!bVerticalWritintg)
             {
-                // allow to grow vertical for horizontal blocks
+                // allow to grow vertical for horizontal texts
                 aMaxAutoPaperSize.setHeight(1000000);
             }
-            else if(bVerticalIsBlock)
+            else
             {
-                // allow to grow horizontal for vertical blocks
+                // allow to grow horizontal for vertical texts
                 aMaxAutoPaperSize.setWidth(1000000);
             }
 
