@@ -426,7 +426,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 return;
             }
 
-            if ( !IsOwnStorageFormat_Impl( *GetMedium() ) )
+            if ( !IsOwnStorageFormat( *GetMedium() ) )
                 return;
 
             ScopedVclPtrInstance< SfxVersionDialog > pDlg( pFrame, IsSaveVersionOnClose() );
@@ -993,7 +993,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     }
 
                     if ( !pFrame || !pDoc->HasName() ||
-                        !IsOwnStorageFormat_Impl( *pDoc->GetMedium() ) )
+                        !IsOwnStorageFormat( *pDoc->GetMedium() ) )
                         rSet.DisableItem( nWhich );
                     break;
                 }
@@ -1291,7 +1291,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
     uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
 
     bool bSupportsSigning = GetMedium() && GetMedium()->GetFilter() && GetMedium()->GetFilter()->GetSupportsSigning();
-    if (GetMedium() && !GetMedium()->GetName().isEmpty() && (IsOwnStorageFormat_Impl(*GetMedium()) || bSupportsSigning) && GetMedium()->GetStorage().is())
+    if (GetMedium() && !GetMedium()->GetName().isEmpty() && (IsOwnStorageFormat(*GetMedium()) || bSupportsSigning) && GetMedium()->GetStorage().is())
     {
         try
         {
