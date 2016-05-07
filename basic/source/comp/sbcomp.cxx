@@ -25,6 +25,7 @@
 #include <svtools/miscopt.hxx>
 #include <rtl/character.hxx>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 // This routine is defined here, so that the
 // compiler can be loaded as a discrete segment.
@@ -41,7 +42,7 @@ bool SbModule::Compile()
     SbModule* pOld = GetSbData()->pCompMod;
     GetSbData()->pCompMod = this;
 
-    std::unique_ptr<SbiParser> pParser(new SbiParser( static_cast<StarBASIC*>(GetParent()), this ));
+    auto pParser = o3tl::make_unique<SbiParser>( pBasic, this );
     while( pParser->Parse() ) {}
     if( !pParser->GetErrors() )
         pParser->aGen.Save();
