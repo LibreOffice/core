@@ -697,6 +697,7 @@ void DesktopLOKTest::testModifiedStatus()
     m_bModified = false;
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    Scheduler::ProcessEventsToIdle();
     TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
@@ -710,6 +711,7 @@ void DesktopLOKTest::testModifiedStatus()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", "TakeOwnership"));
+    Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
 
@@ -719,6 +721,7 @@ void DesktopLOKTest::testModifiedStatus()
     // Modify the document again
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
 
