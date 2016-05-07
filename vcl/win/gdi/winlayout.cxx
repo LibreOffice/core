@@ -3675,6 +3675,16 @@ bool ExTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
 
 #if ENABLE_GRAPHITE_DWRITE
 
+
+namespace
+{
+    //D2D1::ColorF and COLORREF aren't compatible
+    D2D1::ColorF GetDirect2DColor(COLORREF color)
+    {
+        return D2D1::ColorF(GetRValue(color) / 255.0, GetGValue(color) / 255.0, GetBValue(color) / 255.0);
+    }
+}
+
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
     : mpD2DFactory(nullptr),
     mpDWriteFactory(nullptr),
@@ -3729,7 +3739,7 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
 
     ID2D1SolidColorBrush* pBlackBrush = NULL;
-    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetTextColor(hDC)), &pBlackBrush));
+    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(GetDirect2DColor(GetTextColor(hDC)), &pBlackBrush));
 
     HRESULT hr = S_OK;
     int nGlyphs = 0;
@@ -3869,7 +3879,7 @@ bool D2DWriteTextOutRenderer::DrawGlyphs(const Point & origin, uint16_t * pGid, 
     bool succeeded = BindDC(mhDC, bounds);   // Update the bounding rect.
 
     ID2D1SolidColorBrush* pBrush = NULL;
-    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetTextColor(mhDC)), &pBrush));
+    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(GetDirect2DColor(GetTextColor(mhDC)), &pBrush));
 
     HRESULT hr = S_OK;
     if (succeeded)
