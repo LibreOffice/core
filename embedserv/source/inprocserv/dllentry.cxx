@@ -101,6 +101,7 @@ namespace {
                 const char pSubKeyTemplate[] = "Software\\Classes\\CLSID\\.....................................\\InprocHandler32";
                 char pSubKey[SAL_N_ELEMENTS(pSubKeyTemplate)];
                 strncpy(pSubKey, pSubKeyTemplate, SAL_N_ELEMENTS(pSubKeyTemplate));
+                pSubKey[SAL_N_ELEMENTS(pSubKeyTemplate)-1] = 0;
 
                 int nGuidLen = GetStringFromClassID( *guidList[nInd], &pSubKey[23], 38 );
 

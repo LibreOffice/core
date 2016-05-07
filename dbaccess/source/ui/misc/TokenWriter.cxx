@@ -650,7 +650,7 @@ OHTMLImportExport::OHTMLImportExport(const svx::ODataAccessDescriptor& _aDataDes
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     m_eDestEnc = rHtmlOptions.GetTextEncoding();
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
-    sIndent[0] = 0;
+    sIndent[sizeof(sIndent)-1] = 0;
 }
 
 bool OHTMLImportExport::Write()

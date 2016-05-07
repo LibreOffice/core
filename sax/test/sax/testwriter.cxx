@@ -49,7 +49,7 @@ class OFileWriter :
         public WeakImplHelper< XOutputStream >
 {
 public:
-    explicit OFileWriter( char *pcFile ) { strncpy( m_pcFile, pcFile, 256 - 1 ); m_f = 0; }
+    explicit OFileWriter( char *pcFile ) { strncpy( m_pcFile, pcFile, 256 - 1 ); m_pcFile[sizeof(m_pcFile)-1] = 0;m_f = 0; }
 
 
 public:

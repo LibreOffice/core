@@ -543,6 +543,7 @@ bool ODbaseIndex::CreateImpl()
 
     OString aCol(OUStringToOString(aName, m_pTable->getConnection()->getTextEncoding()));
     strncpy(m_aHeader.db_name, aCol.getStr(), std::min<size_t>(sizeof(m_aHeader.db_name), aCol.getLength()));
+    m_aHeader.db_name[sizeof(m_aHeader.db_name)-1] = 0;
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;
 

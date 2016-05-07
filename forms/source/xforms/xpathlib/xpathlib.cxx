@@ -377,6 +377,7 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
     char *pString = static_cast<char*>(rtl_allocateMemory(nLength));
     char *pString0 = pString;
     strncpy(pString, reinterpret_cast<char const *>(aString), nLength);
+    pString[nLength-1] = 0;
 
     if (pString[0] == '-') {
         bNegative = true;
