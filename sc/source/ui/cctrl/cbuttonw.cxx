@@ -62,13 +62,12 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     bool        bOldEnable = pOut->IsMapModeEnabled();
 
     Rectangle   aBtnRect( rAt, rSize );
-    Rectangle   aInnerRect = aBtnRect;
 
     pOut->EnableMapMode( false );
 
     DecorationView aDecoView( pOut);
 
-    aInnerRect=aDecoView.DrawButton( aBtnRect, DrawButtonFlags::Default );
+    Rectangle aInnerRect=aDecoView.DrawButton( aBtnRect, DrawButtonFlags::Default );
 
     aInnerRect.Left()   += 1;
     aInnerRect.Top()    += 1;

@@ -365,8 +365,6 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         aParam.bCaseSens = bSubTotalsIsCaseSensitive;
         aParam.bDoSort = bSubTotalsSortGroups;
         aParam.bAscending = bSubTotalsAscending;
-        aParam.bUserDef = bSubTotalsEnabledUserList;
-        aParam.nUserIndex = nSubTotalsUserListIndex;
         std::vector <ScSubTotalRule>::iterator itr = aSubTotalRules.begin(), itrEnd = aSubTotalRules.end();
         for (size_t nPos = 0; itr != itrEnd; ++itr, ++nPos)
         {

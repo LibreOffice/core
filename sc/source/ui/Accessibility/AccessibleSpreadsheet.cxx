@@ -1576,7 +1576,6 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
         AccessibleEventObject aEvent;
         aEvent.Source = uno::Reference< XAccessible >(this);
         aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-        aEvent.Source = uno::Reference< XAccessible >(this);
         aEvent.OldValue <<= uno::Reference<XAccessible>(m_pAccFormulaCell.get());
         m_pAccFormulaCell = GetAccessibleCellAt(aFormulaAddr.Row(), aFormulaAddr.Col());
         uno::Reference< XAccessible > xNew = m_pAccFormulaCell.get();
