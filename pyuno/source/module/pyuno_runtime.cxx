@@ -658,13 +658,11 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
     {
         if( o == Py_True )
         {
-            sal_Bool b = sal_True;
-            a = Any( &b, cppu::UnoType<bool>::get() );
+            a <<= true;
         }
         else if ( o == Py_False )
         {
-            sal_Bool b = sal_False;
-            a = Any( &b, cppu::UnoType<bool>::get() );
+            a <<= false;
         }
         else
         {
