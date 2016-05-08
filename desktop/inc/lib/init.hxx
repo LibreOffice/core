@@ -62,7 +62,7 @@ namespace desktop {
         static
         void callback(const int type, const char* payload, void* data)
         {
-            CallbackFlushHandler* self = reinterpret_cast<CallbackFlushHandler*>(data);
+            CallbackFlushHandler* self = static_cast<CallbackFlushHandler*>(data);
             if (self)
             {
                 self->queue(type, payload);
