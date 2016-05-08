@@ -1367,10 +1367,10 @@ RscTop * RscTypCont::InitClassSfxSlotInfo( RscTop * pSuper )
 
     nId = aNmTb.Put( "SlotName", VARNAME );
     pClassSfxSlotInfo->SetVariable( nId, &aLangString, nullptr, 0,
-                                    RSC_SFX_SLOT_INFO_SLOTNAME );
+                                    SfxSlotInfo::SlotName );
     nId = aNmTb.Put( "HelpText", VARNAME );
     pClassSfxSlotInfo->SetVariable( nId, &aLangString, nullptr, 0,
-                                    RSC_SFX_SLOT_INFO_HELPTEXT );
+                                    SfxSlotInfo::HelpText );
     return pClassSfxSlotInfo;
 }
 

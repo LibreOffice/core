@@ -68,6 +68,10 @@ public:
                                  Atom nDataBaseName ) override;
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt,
+                                 RSCVAR nVarType, SfxSlotInfo nMask,
+                                 Atom nDataBaseName ) override;
+    ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
+                                 RSCINST * pDflt,
                                  RSCVAR nVarType, sal_uInt32 nMask,
                                  Atom nDataBaseName ) override;
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc ) override;

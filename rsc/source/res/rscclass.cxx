@@ -288,6 +288,16 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
     return SetVariable(nVarName, pClass, pDflt, nVarType, (sal_uInt32)nMask, nDataBaseName);
 }
 
+ERRTYPE RscClass::SetVariable( Atom nVarName,
+                               RscTop * pClass,
+                               RSCINST * pDflt,
+                               RSCVAR nVarType,
+                               SfxSlotInfo nMask,
+                               Atom nDataBaseName)
+{
+    return SetVariable(nVarName, pClass, pDflt, nVarType, (sal_uInt32)nMask, nDataBaseName);
+}
+
 void RscClass::EnumVariables( void * pData, VarEnumCallbackProc pProc )
 {
     sal_uInt32 i;

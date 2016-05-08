@@ -50,8 +50,10 @@ enum class SfxStyleItem {
 
 
 // SfxSlotInfo
-#define RSC_SFX_SLOT_INFO_SLOTNAME      0x1
-#define RSC_SFX_SLOT_INFO_HELPTEXT      0x2
+enum class SfxSlotInfo {
+    SlotName  = 0x1,
+    HelpText  = 0x2
+};
 
 
 #endif
