@@ -43,6 +43,7 @@ namespace desktop {
             m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_START, "NIL");
             m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_END, "NIL");
             m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
+            m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL");
             m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
             m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
             m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL");
@@ -85,7 +86,6 @@ namespace desktop {
                 return;
             }
 
-
             const std::string payload(data ? data : "(nil)");
             std::unique_lock<std::mutex> lock(m_mutex);
 
@@ -124,13 +124,14 @@ namespace desktop {
                 case LOK_CALLBACK_TEXT_SELECTION_START:
                 case LOK_CALLBACK_TEXT_SELECTION_END:
                 case LOK_CALLBACK_TEXT_SELECTION:
+                case LOK_CALLBACK_GRAPHIC_SELECTION:
                 case LOK_CALLBACK_MOUSE_POINTER:
                 case LOK_CALLBACK_CELL_CURSOR:
                 case LOK_CALLBACK_CELL_FORMULA:
                 case LOK_CALLBACK_CURSOR_VISIBLE:
                 case LOK_CALLBACK_SET_PART:
                 case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-                    removeAllButLast(type);
+                    removeAllButLast(type, false);
                 break;
 
                 // These come with rects, so drop earlier
@@ -139,10 +140,15 @@ namespace desktop {
                 case LOK_CALLBACK_INVALIDATE_TILES:
                     if (payload.empty())
                     {
-                        // Invalidating everything means previous
+                        // Invalidating everything means previously
                         // invalidated tiles can be dropped.
-                        removeAllButLast(type);
+                        removeAllButLast(type, false);
                     }
+                    else
+                    {
+                        removeAllButLast(type, true);
+                    }
+
                 break;
             }
 
@@ -171,23 +177,26 @@ namespace desktop {
             }
         }
 
-        void removeAllButLast(const int type)
+        void removeAllButLast(const int type, const bool identical)
         {
             int i = m_queue.size() - 1;
+            std::string payload;
             for (; i >= 0; --i)
             {
                 if (m_queue[i].first == type)
                 {
-                    //SAL_WARN("idle", "Found [" + std::to_string(type) + "] at " + std::to_string(i));
+                    payload = m_queue[i].second;
+                    //SAL_WARN("idle", "Found [" + std::to_string(type) + "] at " + std::to_string(i) + ": [" + payload + "].");
                     break;
                 }
             }
 
             for (--i; i >= 0; --i)
             {
-                if (m_queue[i].first == type)
+                if (m_queue[i].first == type &&
+                    (!identical || m_queue[i].second == payload))
                 {
-                    //SAL_WARN("idle", "Removing [" + std::to_string(type) + "] at " + std::to_string(i));
+                    //SAL_WARN("idle", "Removing [" + std::to_string(type) + "] at " + std::to_string(i) + ": " + m_queue[i].second + "].");
                     m_queue.erase(m_queue.begin() + i);
                 }
             }
