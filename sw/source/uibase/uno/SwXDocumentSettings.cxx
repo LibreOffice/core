@@ -207,7 +207,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("ApplyParagraphMarkFormatToNumbering"), HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("PropLineSpacingShrinksFirstLine"),       HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE,         cppu::UnoType<bool>::get(),           0,   0},
         { OUString("SubtractFlysAnchoredAtFlys"),       HANDLE_SUBTRACT_FLYS,         cppu::UnoType<bool>::get(),           0,   0},
-        { OUString("InBrowseMode"), HANDLE_BROWSE_MODE, cppu::UnoType<bool>::get(), 0},
+        { OUString("InBrowseMode"), HANDLE_BROWSE_MODE, cppu::UnoType<bool>::get(), 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
