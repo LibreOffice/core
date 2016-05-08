@@ -99,7 +99,7 @@ namespace drawinglayer
                 bool bUnderlineAbove = false,
                 TextStrikeout eTextStrikeout = TEXT_STRIKEOUT_NONE,
                 bool bWordLineMode = false,
-                TextEmphasisMark eTextEmphasisMark = TEXT_EMPHASISMARK_NONE,
+                TextEmphasisMark eTextEmphasisMark = TEXT_FONT_EMPHASIS_MARK_NONE,
                 bool bEmphasisMarkAbove = true,
                 bool bEmphasisMarkBelow = false,
                 TextRelief eTextRelief = TEXT_RELIEF_NONE,

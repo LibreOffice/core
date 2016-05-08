@@ -333,11 +333,11 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
     if ( !nHeight )
         return;
 
-    FontEmphasisMark    nEmphasisStyle = eEmphasis & EMPHASISMARK_STYLE;
+    FontEmphasisMark    nEmphasisStyle = eEmphasis & FontEmphasisMark::Style;
     long                nDotSize = 0;
     switch ( nEmphasisStyle )
     {
-        case EMPHASISMARK_DOT:
+        case FontEmphasisMark::Dot:
             // Dot has 55% of the height
             nDotSize = (nHeight*550)/1000;
             if ( !nDotSize )
@@ -354,7 +354,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             rWidth = nDotSize;
             break;
 
-        case EMPHASISMARK_CIRCLE:
+        case FontEmphasisMark::Circle:
             // Dot has 80% of the height
             nDotSize = (nHeight*800)/1000;
             if ( !nDotSize )
@@ -380,7 +380,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             rWidth = nDotSize;
             break;
 
-        case EMPHASISMARK_DISC:
+        case FontEmphasisMark::Disc:
             // Dot has 80% of the height
             nDotSize = (nHeight*800)/1000;
             if ( !nDotSize )
@@ -396,7 +396,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             rWidth = nDotSize;
             break;
 
-        case EMPHASISMARK_ACCENT:
+        case FontEmphasisMark::Accent:
             // Dot has 80% of the height
             nDotSize = (nHeight*800)/1000;
             if ( !nDotSize )
@@ -429,6 +429,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                 rPolyPoly.Insert( aTemp );
             }
             break;
+        default: break;
     }
 
     // calculate position
@@ -436,7 +437,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
     long nSpaceY = nHeight-nDotSize;
     if ( nSpaceY >= nOffY*2 )
         rYOff += nOffY;
-    if ( !(eEmphasis & EMPHASISMARK_POS_BELOW) )
+    if ( !(eEmphasis & FontEmphasisMark::PosBelow) )
         rYOff += nDotSize;
 }
 
@@ -446,20 +447,20 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont 
 
     // If no Position is set, then calculate the default position, which
     // depends on the language
-    if ( !(nEmphasisMark & (EMPHASISMARK_POS_ABOVE | EMPHASISMARK_POS_BELOW)) )
+    if ( !(nEmphasisMark & (FontEmphasisMark::PosAbove | FontEmphasisMark::PosBelow)) )
     {
         LanguageType eLang = rFont.GetLanguage();
         // In Chinese Simplified the EmphasisMarks are below/left
         if (MsLangId::isSimplifiedChinese(eLang))
-            nEmphasisMark |= EMPHASISMARK_POS_BELOW;
+            nEmphasisMark |= FontEmphasisMark::PosBelow;
         else
         {
             eLang = rFont.GetCJKContextLanguage();
             // In Chinese Simplified the EmphasisMarks are below/left
             if (MsLangId::isSimplifiedChinese(eLang))
-                nEmphasisMark |= EMPHASISMARK_POS_BELOW;
+                nEmphasisMark |= FontEmphasisMark::PosBelow;
             else
-                nEmphasisMark |= EMPHASISMARK_POS_ABOVE;
+                nEmphasisMark |= FontEmphasisMark::PosAbove;
         }
     }
 
@@ -1112,13 +1113,13 @@ bool OutputDevice::ImplNewFont() const
     // calculate EmphasisArea
     mnEmphasisAscent = 0;
     mnEmphasisDescent = 0;
-    if ( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
+    if ( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
     {
         FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
         long                nEmphasisHeight = (pFontInstance->mnLineHeight*250)/1000;
         if ( nEmphasisHeight < 1 )
             nEmphasisHeight = 1;
-        if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
+        if ( nEmphasisMark & FontEmphasisMark::PosBelow )
             mnEmphasisDescent = nEmphasisHeight;
         else
             mnEmphasisAscent = nEmphasisHeight;
@@ -1255,7 +1256,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     long                nEmphasisHeight;
     bool                bPolyLine;
 
-    if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
+    if ( nEmphasisMark & FontEmphasisMark::PosBelow )
         nEmphasisHeight = mnEmphasisDescent;
     else
         nEmphasisHeight = mnEmphasisAscent;
@@ -1279,7 +1280,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
     Point aOffset = Point(0,0);
 
-    if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
+    if ( nEmphasisMark & FontEmphasisMark::PosBelow )
         aOffset.Y() += mpFontInstance->mxFontMetric->GetDescent() + nEmphasisYOff;
     else
         aOffset.Y() -= mpFontInstance->mxFontMetric->GetAscent() + nEmphasisYOff;

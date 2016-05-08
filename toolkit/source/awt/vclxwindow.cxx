@@ -1569,7 +1569,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             if ( Value >>= n )
             {
                 vcl::Font aFont = pWindow->GetControlFont();
-                aFont.SetEmphasisMark( n );
+                aFont.SetEmphasisMark( (FontEmphasisMark)n );
                 pWindow->SetControlFont( aFont );
             }
         }
