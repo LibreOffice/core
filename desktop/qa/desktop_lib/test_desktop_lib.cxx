@@ -1279,7 +1279,7 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // Should be dropped.
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 1
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // Superseeded.
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 2
@@ -1308,14 +1308,11 @@ void DesktopLOKTest::testNotificationCompression()
 
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), notifs.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(13), notifs.size());
 
     size_t i = 0;
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
-
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[i]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
