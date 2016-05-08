@@ -2081,7 +2081,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WLM ) == SfxItemState::SET ) )
         rFont.SetWordLineMode( static_cast<const SvxWordLineModeItem&>(rSet.Get( EE_CHAR_WLM )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_EMPHASISMARK ) == SfxItemState::SET ) )
-        rFont.SetEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rSet.Get( EE_CHAR_EMPHASISMARK )).GetValue() );
+        rFont.SetEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rSet.Get( EE_CHAR_EMPHASISMARK )).GetEmphasisMark() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SfxItemState::SET ) )
         rFont.SetRelief( (FontRelief)static_cast<const SvxCharReliefItem&>(rSet.Get( EE_CHAR_RELIEF )).GetValue() );
 
