@@ -1243,7 +1243,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                                 RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
             SetAllScriptItem( aSet, SvxFontHeightItem( nH, 100, RES_CHRATR_FONTSIZE));
             aSet.Put(SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE ));
-            aSet.Put(SvxEmphasisMarkItem( EMPHASISMARK_NONE, RES_CHRATR_EMPHASIS_MARK) );
+            aSet.Put(SvxEmphasisMarkItem( FontEmphasisMark::NONE, RES_CHRATR_EMPHASIS_MARK) );
         }
         break;
 

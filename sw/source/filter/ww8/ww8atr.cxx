@@ -1448,15 +1448,18 @@ void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
 void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisMark )
 {
     sal_uInt8 nVal;
-    switch ( rEmphasisMark.GetValue() )
-    {
-        case EMPHASISMARK_NONE:             nVal = 0;   break;
-        case EMPHASISMARK_SIDE_DOTS:        nVal = 2;   break;
-        case EMPHASISMARK_CIRCLE_ABOVE:     nVal = 3;   break;
-        case EMPHASISMARK_DOTS_BELOW:       nVal = 4;   break;
+    const FontEmphasisMark v = rEmphasisMark.GetEmphasisMark();
+    if (v == FontEmphasisMark::NONE)
+        nVal = 0;
+    else if (v == (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove))
+        nVal = 2;
+    else if (v == (FontEmphasisMark::Circle | FontEmphasisMark::PosAbove))
+        nVal = 3;
+    else if (v == (FontEmphasisMark::Dot | FontEmphasisMark::PosBelow))
+        nVal = 4;
+    else
         // case 1:
-        default:                            nVal = 1;   break;
-    }
+        nVal = 1;
 
     m_rWW8Export.InsUInt16( NS_sprm::LN_CKcd );
     m_rWW8Export.pO->push_back( nVal );

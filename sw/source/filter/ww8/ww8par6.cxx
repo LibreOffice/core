@@ -4427,34 +4427,34 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
                 GetFormatAttr(RES_CHRATR_CJK_LANGUAGE))->GetLanguage();
         }
 
-        sal_uInt16 nVal;
+        FontEmphasisMark nVal;
         switch( *pData )
         {
         case 0:
-            nVal = EMPHASISMARK_NONE;
+            nVal = FontEmphasisMark::NONE;
             break;
         case 2:
             if (MsLangId::isKorean(nLang) || MsLangId::isTraditionalChinese(nLang))
-                nVal = EMPHASISMARK_CIRCLE_ABOVE;
+                nVal = (FontEmphasisMark::Circle | FontEmphasisMark::PosAbove);
             else if (nLang == LANGUAGE_JAPANESE)
-                nVal = EMPHASISMARK_SIDE_DOTS;
+                nVal = (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove);
             else
-                nVal = EMPHASISMARK_DOTS_BELOW;
+                nVal = (FontEmphasisMark::Dot | FontEmphasisMark::PosBelow);
             break;
         case 3:
-            nVal = EMPHASISMARK_CIRCLE_ABOVE;
+            nVal = (FontEmphasisMark::Circle | FontEmphasisMark::PosAbove);
             break;
         case 4:
-            nVal = EMPHASISMARK_DOTS_BELOW;
+            nVal = (FontEmphasisMark::Dot | FontEmphasisMark::PosBelow);
             break;
         case 1:
             if (MsLangId::isSimplifiedChinese(nLang))
-                nVal = EMPHASISMARK_DOTS_BELOW;
+                nVal = (FontEmphasisMark::Dot | FontEmphasisMark::PosBelow);
             else
-                nVal = EMPHASISMARK_DOTS_ABOVE;
+                nVal = (FontEmphasisMark::Dot | FontEmphasisMark::PosAbove);
             break;
         default:
-            nVal = EMPHASISMARK_DOTS_ABOVE;
+            nVal = (FontEmphasisMark::Dot | FontEmphasisMark::PosAbove);
             break;
         }
 

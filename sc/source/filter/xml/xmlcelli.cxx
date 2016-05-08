@@ -579,7 +579,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
             case EE_CHAR_EMPHASISMARK:
             {
                 if (!pPoolItem)
-                    pPoolItem.reset(new SvxEmphasisMarkItem(EMPHASISMARK_NONE, pEntry->mnItemID));
+                    pPoolItem.reset(new SvxEmphasisMarkItem(FontEmphasisMark::NONE, pEntry->mnItemID));
 
                 pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }

@@ -326,7 +326,7 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
             maFont.IsWordLineMode(), ImplIsUnderlineAbove( maFont ) );
 
     // emphasis marks
-    if( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
+    if( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
         ImplDrawEmphasisMarks( rSalLayout );
 
     return true;

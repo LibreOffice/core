@@ -757,7 +757,7 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
     nHeight *= 1.18;
 
     if ( static_cast<const SvxEmphasisMarkItem&>(rPattern.
-            GetItem(ATTR_FONT_EMPHASISMARK)).GetEmphasisMark() != EMPHASISMARK_NONE )
+            GetItem(ATTR_FONT_EMPHASISMARK)).GetEmphasisMark() != FontEmphasisMark::NONE )
     {
         //  add height for emphasis marks
         //TODO: font metrics should be used instead

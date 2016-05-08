@@ -2534,24 +2534,17 @@ void RtfAttributeOutput::CharRotate(const SvxCharRotateItem& rRotate)
 
 void RtfAttributeOutput::CharEmphasisMark(const SvxEmphasisMarkItem& rEmphasisMark)
 {
-    switch (rEmphasisMark.GetEmphasisMark())
-    {
-    case EMPHASISMARK_NONE:
+    FontEmphasisMark v = rEmphasisMark.GetEmphasisMark();
+    if (v == FontEmphasisMark::NONE)
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCNONE);
-        break;
-    case EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE:
+    else if (v == (FontEmphasisMark::Dot | FontEmphasisMark::PosAbove))
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCDOT);
-        break;
-    case EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE:
+    else if (v == (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove))
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCCOMMA);
-        break;
-    case EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE:
+    else if (v == (FontEmphasisMark::Circle | FontEmphasisMark::PosAbove))
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCCIRCLE);
-        break;
-    case EMPHASISMARK_DOT|EMPHASISMARK_POS_BELOW:
+    else if (v == (FontEmphasisMark::Dot | FontEmphasisMark::PosBelow))
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCUNDERDOT);
-        break;
-    }
 }
 
 void RtfAttributeOutput::CharTwoLines(const SvxTwoLinesItem& rTwoLines)

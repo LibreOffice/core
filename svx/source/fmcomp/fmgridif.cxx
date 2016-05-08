@@ -1853,7 +1853,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
     {
         vcl::Font aGridFont = pGrid->GetControlFont();
         sal_Int16 nValue = ::comphelper::getINT16(Value);
-        aGridFont.SetEmphasisMark( nValue );
+        aGridFont.SetEmphasisMark( (FontEmphasisMark)nValue );
         pGrid->SetControlFont( aGridFont );
     }
     else if ( PropertyName == FM_PROP_FONTRELIEF )
