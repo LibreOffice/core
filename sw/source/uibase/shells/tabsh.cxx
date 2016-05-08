@@ -46,6 +46,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <fmtornt.hxx>
 #include <fmtclds.hxx>
@@ -487,10 +488,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( pArgs->GetItemState(RES_BOX, true, &pBoxItem) == SfxItemState::SET )
             {
                 aBox = *static_cast<const SvxBoxItem*>(pBoxItem);
+                sal_uInt16 nDefValue = MIN_BORDER_DIST;
                 if ( !rReq.IsAPI() )
-                    aBox.SetDistance( std::max(rCoreBox.GetDistance(),sal_uInt16(55)) );
-                else if ( aBox.GetDistance() < MIN_BORDER_DIST )
-                    aBox.SetDistance( std::max(rCoreBox.GetDistance(),(sal_uInt16)MIN_BORDER_DIST)  );
+                    nDefValue = 55;
+                if ( !rReq.IsAPI() || aBox.GetDistance() < MIN_BORDER_DIST )
+                    for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
+                        aBox.SetDistance( std::max(rCoreBox.GetDistance(k), nDefValue) , k );
             }
             else
                 OSL_ENSURE( false, "where is BoxItem?" );
