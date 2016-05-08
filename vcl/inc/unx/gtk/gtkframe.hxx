@@ -300,7 +300,7 @@ class GtkSalFrame : public SalFrame
     static GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
 
     static int m_nFloats;
-    static GtkWidget* m_pGrabWidgetBeforeShowFloats;
+    static std::vector<GtkWidget*> m_aGrabWidgetsBeforeShowFloat;
 
     bool isFloatGrabWindow() const
     {

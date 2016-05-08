@@ -104,7 +104,7 @@
 using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
-GtkWidget* GtkSalFrame::m_pGrabWidgetBeforeShowFloats = nullptr;
+std::vector<GtkWidget*> GtkSalFrame::m_aGrabWidgetsBeforeShowFloat;
 
 #if defined ENABLE_GMENU_INTEGRATION
 static GDBusConnection* pSessionBus = nullptr;
@@ -1418,9 +1418,12 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats++;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
                 {
-                    m_pGrabWidgetBeforeShowFloats = gtk_grab_get_current();
-                    if (m_pGrabWidgetBeforeShowFloats)
-                        gtk_grab_remove(m_pGrabWidgetBeforeShowFloats);
+                    GtkWidget* pGrabWidgetBeforeShowFloat;
+                    while ((pGrabWidgetBeforeShowFloat = gtk_grab_get_current()))
+                    {
+                        m_aGrabWidgetsBeforeShowFloat.push_back(pGrabWidgetBeforeShowFloat);
+                        gtk_grab_remove(pGrabWidgetBeforeShowFloat);
+                    }
                     grabPointer(true, true);
                     GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
                     pKeyboardFrame->grabKeyboard(true);
@@ -1442,11 +1445,9 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                     GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
                     pKeyboardFrame->grabKeyboard(false);
                     grabPointer(false);
-                    if (m_pGrabWidgetBeforeShowFloats)
-                    {
-                        gtk_grab_add(m_pGrabWidgetBeforeShowFloats);
-                        m_pGrabWidgetBeforeShowFloats = nullptr;
-                    }
+                    for (auto i = m_aGrabWidgetsBeforeShowFloat.rbegin(); i != m_aGrabWidgetsBeforeShowFloat.rend(); ++i)
+                        gtk_grab_add(*i);
+                    m_aGrabWidgetsBeforeShowFloat.clear();
                 }
             }
             gtk_widget_hide( m_pWindow );
