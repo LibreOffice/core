@@ -225,7 +225,7 @@ const OUString& SelectPersonaDialog::GetAppliedPersonaSetting() const
     return m_aAppliedPersona;
 }
 
-void SelectPersonaDialog::SetProgress( OUString& rProgress )
+void SelectPersonaDialog::SetProgress( const OUString& rProgress )
 {
     if(rProgress.isEmpty())
         m_pProgressLabel->Hide();
@@ -677,7 +677,7 @@ void SearchAndParseThread::execute()
     if( m_aURL.startsWith( "https://" ) )
     {
         m_pPersonaDialog->ClearSearchResults();
-        OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) );
+        OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) ), sError;
         m_pPersonaDialog->SetProgress( sProgress );
 
         PersonasDocHandler* pHandler = new PersonasDocHandler();
@@ -704,9 +704,11 @@ void SearchAndParseThread::execute()
                 {
                     // in case of a returned CommandFailedException
                     // SimpleFileAccess serves it, returning an empty stream
-                    sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
-                    sProgress = sProgress.replaceAll("%1", m_aURL);
-                    m_pPersonaDialog->SetProgress(sProgress);
+                    sError = CUI_RES(RID_SVXSTR_SEARCHERROR);
+                    sError = sError.replaceAll("%1", m_aURL);
+                    m_pPersonaDialog->SetProgress( OUString() );
+                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
+                    aBox->Execute();
                     return;
                 }
             }
@@ -714,9 +716,11 @@ void SearchAndParseThread::execute()
             {
                 // a catch all clause, in case the exception is not
                 // served elsewhere
-                sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
-                sProgress = sProgress.replaceAll("%1", m_aURL);
-                m_pPersonaDialog->SetProgress(sProgress);
+                sError = CUI_RES(RID_SVXSTR_SEARCHERROR);
+                sError = sError.replaceAll("%1", m_aURL);
+                m_pPersonaDialog->SetProgress( OUString() );
+                ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError );
+                aBox->Execute();
                 return;
             }
 
@@ -752,9 +756,11 @@ void SearchAndParseThread::execute()
             {
                 if( m_bDirectURL )
                 {
-                    sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
-                    sProgress = sProgress.replaceAll("%1", m_aURL);
-                    m_pPersonaDialog->SetProgress(sProgress);
+                    sError = CUI_RES(RID_SVXSTR_SEARCHERROR);
+                    sError = sError.replaceAll("%1", m_aURL);
+                    m_pPersonaDialog->SetProgress( OUString() );
+                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
+                    aBox->Execute();
                     return;
                 }
                 continue;
@@ -784,7 +790,7 @@ void SearchAndParseThread::execute()
 
     else
     {
-        OUString sProgress( CUI_RES( RID_SVXSTR_APPLYPERSONA ) );
+        OUString sProgress( CUI_RES( RID_SVXSTR_APPLYPERSONA ) ), sError;
         m_pPersonaDialog->SetProgress( sProgress );
 
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
@@ -833,9 +839,11 @@ void SearchAndParseThread::execute()
         }
         catch ( const uno::Exception & )
         {
-            sProgress = CUI_RES( RID_SVXSTR_SEARCHERROR );
-            sProgress = sProgress.replaceAll("%1", m_aURL);
-            m_pPersonaDialog->SetProgress( sProgress );
+            sError = CUI_RES( RID_SVXSTR_SEARCHERROR );
+            sError = sError.replaceAll("%1", m_aURL);
+            m_pPersonaDialog->SetProgress( OUString() );
+            ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
+            aBox->Execute();
             return;
         }
 
