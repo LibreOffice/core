@@ -464,7 +464,7 @@ protected:
         xml::AttributeData aValue;
         attrsCnt->getByName(name) >>= aValue;
         if (!rValue.isEmpty())
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("attribtes of cell does not contain expected value", rValue, aValue.Value);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("attribute of cell does not contain expected value", rValue, aValue.Value);
 
         return aValue;
     }

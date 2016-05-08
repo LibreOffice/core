@@ -492,7 +492,7 @@ SwVbaSelection::TypeParagraph() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL
 SwVbaSelection::InsertParagraph() throw ( uno::RuntimeException, std::exception )
 {
-    // #FIME: the selection should include the new paragraph.
+    // #FIXME: the selection should include the new paragraph.
     getRange()->InsertParagraph();
 }
 

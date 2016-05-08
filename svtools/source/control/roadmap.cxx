@@ -230,7 +230,7 @@ void ORoadmap::implInit(vcl::RenderContext& rRenderContext)
 // TODO: if somebody sets a new font from outside (OutputDevice::SetFont), we would have to react
 // on this with calculating a new bold font.
 // Unfortunately, the OutputDevice does not offer a notify mechanism for a changed font.
-// So settings the font from outside is simply a forbidded scenario at the moment
+// So settings the font from outside is simply a forbidden scenario at the moment
     rRenderContext.EnableMapMode(false);
 }
 

@@ -311,7 +311,7 @@ public:
  * parsed XML DOM tree.
  *
  * It hides all the libxml2 and C -isms and makes the useage more
- * confortable from LO developer point of view.
+ * comfortable from LO developer point of view.
  *
  * TODO: move to common code
  */
