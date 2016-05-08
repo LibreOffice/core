@@ -1537,7 +1537,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     nPos = m_pPositionLB->GetSelectEntryPos();
     bool bUnder = ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPos )) );
     FontEmphasisMark eMark = (FontEmphasisMark)m_pEmphasisLB->GetSelectEntryPos();
-    eMark |= bUnder ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE;
+    eMark |= bUnder ? FontEmphasisMark::PosBelow : FontEmphasisMark::PosAbove;
     rFont.SetEmphasisMark( eMark );
     rCJKFont.SetEmphasisMark( eMark );
     rCTLFont.SetEmphasisMark( eMark );
@@ -1982,11 +1982,11 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         rCJKFont.SetEmphasisMark( eMark );
         rCTLFont.SetEmphasisMark( eMark );
 
-        m_pEmphasisLB->SelectEntryPos( (sal_Int32)( eMark & EMPHASISMARK_STYLE ) );
-        eMark &= ~EMPHASISMARK_STYLE;
-        sal_uLong nEntryData = ( eMark == EMPHASISMARK_POS_ABOVE )
+        m_pEmphasisLB->SelectEntryPos( (sal_Int32)( eMark & FontEmphasisMark::Style ) );
+        eMark &= ~FontEmphasisMark::Style;
+        sal_uLong nEntryData = ( eMark == FontEmphasisMark::PosAbove )
             ? CHRDLG_POSITION_OVER
-            : ( eMark == EMPHASISMARK_POS_BELOW ) ? CHRDLG_POSITION_UNDER : 0;
+            : ( eMark == FontEmphasisMark::PosBelow ) ? CHRDLG_POSITION_UNDER : 0;
 
         for ( sal_Int32 i = 0; i < m_pPositionLB->GetEntryCount(); i++ )
         {
@@ -2371,7 +2371,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if ( m_pPositionLB->IsEnabled() )
     {
         eMark |= ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPosPos )) )
-            ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE;
+            ? FontEmphasisMark::PosBelow : FontEmphasisMark::PosAbove;
     }
 
     if ( pOld )

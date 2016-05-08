@@ -471,7 +471,7 @@ namespace svgio
                         false,
                         TextDecoration_line_through == aDeco ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE,
                         false,
-                        drawinglayer::primitive2d::TEXT_EMPHASISMARK_NONE,
+                        drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE,
                         true,
                         false,
                         drawinglayer::primitive2d::TEXT_RELIEF_NONE,

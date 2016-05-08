@@ -1450,10 +1450,10 @@ void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisM
     sal_uInt8 nVal;
     switch ( rEmphasisMark.GetValue() )
     {
-        case EMPHASISMARK_NONE:             nVal = 0;   break;
-        case EMPHASISMARK_SIDE_DOTS:        nVal = 2;   break;
-        case EMPHASISMARK_CIRCLE_ABOVE:     nVal = 3;   break;
-        case EMPHASISMARK_DOTS_BELOW:       nVal = 4;   break;
+        case FontEmphasisMark::None:             nVal = 0;   break;
+        case (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove):        nVal = 2;   break;
+        case (FontEmphasisMark::Circle | FontEmphasisMark::PosAbove):     nVal = 3;   break;
+        case (FontEmphasisMark::Dot | FontEmphasisMark::PosBelow):       nVal = 4;   break;
         // case 1:
         default:                            nVal = 1;   break;
     }
