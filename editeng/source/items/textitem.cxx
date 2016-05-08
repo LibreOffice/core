@@ -127,7 +127,7 @@ SfxPoolItem* SvxNoLinebreakItem::CreateDefault() {return new SvxNoLinebreakItem(
 SfxPoolItem* SvxNoHyphenItem::CreateDefault() {return new SvxNoHyphenItem(true, 0);}
 SfxPoolItem* SvxLineColorItem::CreateDefault() {return new SvxLineColorItem(0);}
 SfxPoolItem* SvxBlinkItem::CreateDefault() {return new SvxBlinkItem(false, 0);}
-SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(EMPHASISMARK_NONE, 0);}
+SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(FontEmphasisMark::None, 0);}
 SfxPoolItem* SvxTwoLinesItem::CreateDefault() {return new SvxTwoLinesItem(true, 0, 0, 0);}
 SfxPoolItem* SvxScriptTypeItem::CreateDefault() {return new SvxScriptTypeItem();}
 SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0, false, 0);}
@@ -2649,10 +2649,10 @@ bool SvxEmphasisMarkItem::GetPresentation
 {
     sal_uInt16 nVal = GetValue();
     rText = EE_RESSTR( RID_SVXITEMS_EMPHASIS_BEGIN_STYLE +
-                            ( EMPHASISMARK_STYLE & nVal ));
-    sal_uInt16 nId = ( EMPHASISMARK_POS_ABOVE & nVal )
+                            ( FontEmphasisMark::Style & nVal ));
+    sal_uInt16 nId = ( FontEmphasisMark::PosAbove & nVal )
                     ? RID_SVXITEMS_EMPHASIS_ABOVE_POS
-                    : ( EMPHASISMARK_POS_BELOW & nVal )
+                    : ( FontEmphasisMark::PosBelow & nVal )
                         ? RID_SVXITEMS_EMPHASIS_BELOW_POS
                         : 0;
     if( nId )
@@ -2670,15 +2670,15 @@ bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
     {
         sal_Int16 nValue = GetValue();
         sal_Int16 nRet = 0;
-        switch(nValue & EMPHASISMARK_STYLE)
+        switch(nValue & FontEmphasisMark::Style)
         {
-            case EMPHASISMARK_NONE   : nRet = FontEmphasis::NONE;           break;
-            case EMPHASISMARK_DOT    : nRet = FontEmphasis::DOT_ABOVE;      break;
-            case EMPHASISMARK_CIRCLE : nRet = FontEmphasis::CIRCLE_ABOVE;   break;
-            case EMPHASISMARK_DISC   : nRet = FontEmphasis::DISK_ABOVE;     break;
-            case EMPHASISMARK_ACCENT : nRet = FontEmphasis::ACCENT_ABOVE;   break;
+            case FontEmphasisMark::None   : nRet = FontEmphasis::NONE;           break;
+            case FontEmphasisMark::Dot    : nRet = FontEmphasis::DOT_ABOVE;      break;
+            case FontEmphasisMark::Circle : nRet = FontEmphasis::CIRCLE_ABOVE;   break;
+            case FontEmphasisMark::Disc   : nRet = FontEmphasis::DISK_ABOVE;     break;
+            case FontEmphasisMark::Accent : nRet = FontEmphasis::ACCENT_ABOVE;   break;
         }
-        if(nRet && nValue & EMPHASISMARK_POS_BELOW)
+        if(nRet && nValue & FontEmphasisMark::PosBelow)
             nRet += 10;
         rVal <<= nRet;
     }
@@ -2699,15 +2699,15 @@ bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         rVal >>= nValue;
         switch(nValue)
         {
-            case FontEmphasis::NONE        : nValue = EMPHASISMARK_NONE;   break;
-            case FontEmphasis::DOT_ABOVE   : nValue = EMPHASISMARK_DOT|EMPHASISMARK_POS_ABOVE;    break;
-            case FontEmphasis::CIRCLE_ABOVE: nValue = EMPHASISMARK_CIRCLE|EMPHASISMARK_POS_ABOVE; break;
-            case FontEmphasis::DISK_ABOVE  : nValue = EMPHASISMARK_DISC|EMPHASISMARK_POS_ABOVE;   break;
-            case FontEmphasis::ACCENT_ABOVE: nValue = EMPHASISMARK_ACCENT|EMPHASISMARK_POS_ABOVE; break;
-            case FontEmphasis::DOT_BELOW   : nValue = EMPHASISMARK_DOT|EMPHASISMARK_POS_BELOW;    break;
-            case FontEmphasis::CIRCLE_BELOW: nValue = EMPHASISMARK_CIRCLE|EMPHASISMARK_POS_BELOW; break;
-            case FontEmphasis::DISK_BELOW  : nValue = EMPHASISMARK_DISC|EMPHASISMARK_POS_BELOW;   break;
-            case FontEmphasis::ACCENT_BELOW: nValue = EMPHASISMARK_ACCENT|EMPHASISMARK_POS_BELOW; break;
+            case FontEmphasis::NONE        : nValue = FontEmphasisMark::None;   break;
+            case FontEmphasis::DOT_ABOVE   : nValue = FontEmphasisMark::Dot|FontEmphasisMark::PosAbove;    break;
+            case FontEmphasis::CIRCLE_ABOVE: nValue = FontEmphasisMark::Circle|FontEmphasisMark::PosAbove; break;
+            case FontEmphasis::DISK_ABOVE  : nValue = FontEmphasisMark::Disc|FontEmphasisMark::PosAbove;   break;
+            case FontEmphasis::ACCENT_ABOVE: nValue = FontEmphasisMark::Accent|FontEmphasisMark::PosAbove; break;
+            case FontEmphasis::DOT_BELOW   : nValue = FontEmphasisMark::Dot|FontEmphasisMark::PosBelow;    break;
+            case FontEmphasis::CIRCLE_BELOW: nValue = FontEmphasisMark::Circle|FontEmphasisMark::PosBelow; break;
+            case FontEmphasis::DISK_BELOW  : nValue = FontEmphasisMark::Disc|FontEmphasisMark::PosBelow;   break;
+            case FontEmphasis::ACCENT_BELOW: nValue = FontEmphasisMark::Accent|FontEmphasisMark::PosBelow; break;
             default: return false;
         }
         SetValue( (sal_Int16)nValue );

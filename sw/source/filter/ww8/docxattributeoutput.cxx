@@ -3982,7 +3982,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxCharRotateItem& >(rHt).GetValue() != 0;
             break;
         case RES_CHRATR_EMPHASIS_MARK:
-            bMustWrite = static_cast< const SvxEmphasisMarkItem& >(rHt).GetValue() != EMPHASISMARK_NONE;
+            bMustWrite = static_cast< const SvxEmphasisMarkItem& >(rHt).GetValue() != FontEmphasisMark::None;
             break;
         case RES_CHRATR_TWO_LINES:
             bMustWrite = static_cast< const SvxTwoLinesItem& >(rHt).GetValue();
@@ -6497,19 +6497,19 @@ void DocxAttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasis
     switch ( rEmphasisMark.GetValue() )
     {
     default:
-    case EMPHASISMARK_NONE:
+    case FontEmphasisMark::None:
         pEmphasis = "none";
         break;
-    case EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE:
+    case FontEmphasisMark::Dot | FontEmphasisMark::PosAbove:
         pEmphasis = "dot";
         break;
-    case EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE:
+    case FontEmphasisMark::Accent | FontEmphasisMark::PosAbove:
         pEmphasis = "comma";
         break;
-    case EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE:
+    case FontEmphasisMark::Circle | FontEmphasisMark::PosAbove:
         pEmphasis = "circle";
         break;
-    case EMPHASISMARK_DOT|EMPHASISMARK_POS_BELOW:
+    case FontEmphasisMark::Dot|FontEmphasisMark::PosBelow:
         pEmphasis = "underDot";
         break;
     }

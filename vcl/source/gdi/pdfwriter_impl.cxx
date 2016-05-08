@@ -9098,7 +9098,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     // write eventual emphasis marks
-    if( m_aCurrentPDFState.m_aFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
+    if( m_aCurrentPDFState.m_aFont.GetEmphasisMark() & FontEmphasisMark::Style )
     {
         tools::PolyPolygon             aEmphPoly;
         Rectangle               aEmphRect1;
@@ -9115,7 +9115,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         aLine.append( "q\n" );
 
         nEmphMark = OutputDevice::ImplGetEmphasisMarkStyle( m_aCurrentPDFState.m_aFont );
-        if ( nEmphMark & EMPHASISMARK_POS_BELOW )
+        if ( nEmphMark & FontEmphasisMark::PosBelow )
             nEmphHeight = m_pReferenceDevice->mnEmphasisDescent;
         else
             nEmphHeight = m_pReferenceDevice->mnEmphasisAscent;
@@ -9142,7 +9142,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         Point aOffset = Point(0,0);
 
-        if ( nEmphMark & EMPHASISMARK_POS_BELOW )
+        if ( nEmphMark & FontEmphasisMark::PosBelow )
             aOffset.Y() += m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent() + nEmphYOff;
         else
             aOffset.Y() -= m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() + nEmphYOff;
