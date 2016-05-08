@@ -22,7 +22,7 @@
 
 #include <vector>
 
-class VCL_DLLPUBLIC VclEventListeners
+class VclEventListeners
 {
 public:
     void Call( VclSimpleEvent& rEvent ) const;
