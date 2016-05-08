@@ -706,7 +706,10 @@ void SearchAndParseThread::execute()
                     // SimpleFileAccess serves it, returning an empty stream
                     sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
                     sProgress = sProgress.replaceAll("%1", m_aURL);
-                    m_pPersonaDialog->SetProgress(sProgress);
+                    OUString sBlank = "";
+                    m_pPersonaDialog->SetProgress( sBlank );
+                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sProgress);
+                    aBox->Execute();
                     return;
                 }
             }
@@ -716,7 +719,10 @@ void SearchAndParseThread::execute()
                 // served elsewhere
                 sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
                 sProgress = sProgress.replaceAll("%1", m_aURL);
-                m_pPersonaDialog->SetProgress(sProgress);
+                OUString sBlank = "";
+                m_pPersonaDialog->SetProgress( sBlank );
+                ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sProgress);
+                aBox->Execute();
                 return;
             }
 
@@ -754,7 +760,10 @@ void SearchAndParseThread::execute()
                 {
                     sProgress = CUI_RES(RID_SVXSTR_SEARCHERROR);
                     sProgress = sProgress.replaceAll("%1", m_aURL);
-                    m_pPersonaDialog->SetProgress(sProgress);
+                    OUString sBlank = "";
+                    m_pPersonaDialog->SetProgress( sBlank );
+                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sProgress);
+                    aBox->Execute();
                     return;
                 }
                 continue;
@@ -835,7 +844,10 @@ void SearchAndParseThread::execute()
         {
             sProgress = CUI_RES( RID_SVXSTR_SEARCHERROR );
             sProgress = sProgress.replaceAll("%1", m_aURL);
-            m_pPersonaDialog->SetProgress( sProgress );
+            OUString sBlank = "";
+            m_pPersonaDialog->SetProgress( sBlank );
+            ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sProgress);
+            aBox->Execute();
             return;
         }
 
