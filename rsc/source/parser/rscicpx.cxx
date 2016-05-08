@@ -1297,16 +1297,16 @@ RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
 
     nId = aNmTb.Put( "FilterList", VARNAME );
     pClassSfxFamilyStyleItem->SetVariable( nId, pStrLst, nullptr, 0,
-                                           RSC_SFX_STYLE_ITEM_LIST );
+                                           SfxStyleItem::List );
     nId = aNmTb.Put( "StyleBitmap", VARNAME );
     pClassSfxFamilyStyleItem->SetVariable( nId, pClassBitmap, nullptr, 0,
-                                           RSC_SFX_STYLE_ITEM_BITMAP );
+                                           SfxStyleItem::Bitmap );
     nId = aNmTb.Put( "Text", VARNAME );
     pClassSfxFamilyStyleItem->SetVariable( nId, &aLangString, nullptr, 0,
-                                           RSC_SFX_STYLE_ITEM_TEXT );
+                                           SfxStyleItem::Text );
     nId = aNmTb.Put( "HelpText", VARNAME );
     pClassSfxFamilyStyleItem->SetVariable( nId, &aLangString, nullptr, 0,
-                                           RSC_SFX_STYLE_ITEM_HELPTEXT );
+                                           SfxStyleItem::HelpText );
     {
         RscEnum * pSfxStyleFamily;
         pSfxStyleFamily = new RscEnum( pHS->getID( "StyleFamily" ),
@@ -1321,11 +1321,11 @@ RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
 
         nId = aNmTb.Put( "StyleFamily", VARNAME );
         pClassSfxFamilyStyleItem->SetVariable( nId, pSfxStyleFamily, nullptr, 0,
-                                           RSC_SFX_STYLE_ITEM_STYLEFAMILY );
+                                           SfxStyleItem::StyleFamily );
     }
     nId = aNmTb.Put( "StyleImage", VARNAME );
     pClassSfxFamilyStyleItem->SetVariable( nId, pClassImage, nullptr, 0,
-                                           RSC_SFX_STYLE_ITEM_IMAGE );
+                                           SfxStyleItem::Image );
     return pClassSfxFamilyStyleItem;
 }
 

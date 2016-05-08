@@ -40,7 +40,7 @@
 
 ObjectStack                     S;
 RscTop *                        pCurClass;
-sal_uInt32                      nCurMask;
+SfxStyleItem                    nCurMask;
 char                            szErrBuf[ 100 ];
 
 RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
@@ -450,14 +450,14 @@ new_class_definition_header
       // Klasse anlegen
       Atom nId = pHS->getID( $2 );
       pCurClass = new RscClass( nId, lType, $5 );
-      nCurMask = 1;
+      nCurMask = SfxStyleItem::List;
       pTC->aNmTb.Put( nId, CLASSNAME, pCurClass );
       pTC->GetRoot()->Insert( pCurClass );
   }
   | CLASS CLASSNAME id_expression ':' CLASSNAME
   {
       pCurClass = $2;
-      nCurMask = 1;
+      nCurMask = SfxStyleItem::List;
   }
 ;
 
@@ -472,12 +472,12 @@ property_definition
       // Variable anlegen
       Atom nId = pTC->aNmTb.Put( $3, VARNAME );
       pCurClass->SetVariable( nId, $2, nullptr, $1, nCurMask );
-      nCurMask <<= 1;
+      nCurMask = SfxStyleItem(((int)nCurMask) << 1);
   }
   | type_flags type VARNAME
   {
       pCurClass->SetVariable( $3, $2, nullptr, $1, nCurMask );
-      nCurMask <<= 1;
+      nCurMask = SfxStyleItem(((int)nCurMask) << 1);
   }
   ;
 
