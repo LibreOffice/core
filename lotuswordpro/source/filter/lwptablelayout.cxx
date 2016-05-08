@@ -754,9 +754,8 @@ void LwpTableLayout::RegisterStyle()
     //         so the NULL pointer cause sodc freeze. Add code to check the
     //         the pointer.
     //New Code
-    if( GetFoundry() && GetTable() )
-
-    PutCellVals( GetFoundry(),GetTable()->GetObjectID() );
+    if (GetFoundry() && GetTable())
+        PutCellVals(GetFoundry(), GetTable()->GetObjectID());
 }
 /**
  * @short   read table layout
@@ -765,11 +764,15 @@ void LwpTableLayout::RegisterStyle()
 void LwpTableLayout::ParseTable()
 {
     // get super table layout
-    LwpSuperTableLayout * pSuper = GetSuperTableLayout();
-    if(!pSuper)
+    LwpSuperTableLayout* pSuper = GetSuperTableLayout();
+    if (!pSuper)
     {
-        assert(false);
-        return;
+        throw std::runtime_error("missing super table");
+    }
+
+    if (m_pXFTable.get())
+    {
+        throw std::runtime_error("this table is already parsed");
     }
 
     // set name of object
