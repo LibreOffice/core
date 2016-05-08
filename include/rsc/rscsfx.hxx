@@ -38,12 +38,15 @@ enum SfxStyleFamily { SFX_STYLE_FAMILY_CHAR    = 1,
 
 
 // SfxTemplate
-#define RSC_SFX_STYLE_ITEM_LIST         0x1
-#define RSC_SFX_STYLE_ITEM_BITMAP       0x2
-#define RSC_SFX_STYLE_ITEM_TEXT         0x4
-#define RSC_SFX_STYLE_ITEM_HELPTEXT     0x8
-#define RSC_SFX_STYLE_ITEM_STYLEFAMILY  0x10
-#define RSC_SFX_STYLE_ITEM_IMAGE        0x20
+enum class SfxStyleItem {
+    None         = 0x00,
+    List         = 0x01,
+    Bitmap       = 0x02,
+    Text         = 0x04,
+    HelpText     = 0x08,
+    StyleFamily  = 0x10,
+    Image        = 0x20
+};
 
 
 // SfxSlotInfo

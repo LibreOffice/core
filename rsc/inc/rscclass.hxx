@@ -64,6 +64,10 @@ public:
     void            Pre_dtor() override;
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt,
+                                 RSCVAR nVarType, SfxStyleItem nMask,
+                                 Atom nDataBaseName ) override;
+    ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
+                                 RSCINST * pDflt,
                                  RSCVAR nVarType, sal_uInt32 nMask,
                                  Atom nDataBaseName ) override;
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc ) override;

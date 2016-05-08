@@ -31,7 +31,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 {
     const sal_Int32 nMask = ReadLongRes();
 
-    if(nMask & RSC_SFX_STYLE_ITEM_LIST)
+    if(nMask & (sal_uInt32)SfxStyleItem::List)
     {
         const sal_Int32 nCount = ReadLongRes();
         for( sal_Int32 i = 0; i < nCount; ++i )
@@ -42,26 +42,26 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
             aFilterList.push_back( pTupel );
         }
     }
-    if(nMask & RSC_SFX_STYLE_ITEM_BITMAP)
+    if(nMask & (sal_uInt32)SfxStyleItem::Bitmap)
     {
         aBitmap = Bitmap(ResId(static_cast<RSHEADER_TYPE *>(GetClassRes()),*rResId.GetResMgr()));
         IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
     }
-    if(nMask & RSC_SFX_STYLE_ITEM_TEXT)
+    if(nMask & (sal_uInt32)SfxStyleItem::Text)
     {
         aText = ReadStringRes();
     }
-    if(nMask & RSC_SFX_STYLE_ITEM_HELPTEXT)
+    if(nMask & (sal_uInt32)SfxStyleItem::HelpText)
     {
         aHelpText = ReadStringRes();
     }
-    if(nMask & RSC_SFX_STYLE_ITEM_STYLEFAMILY)
+    if(nMask & (sal_uInt32)SfxStyleItem::StyleFamily)
     {
         nFamily = static_cast<sal_uInt16>(ReadLongRes());
     }
     else
         nFamily = SFX_STYLE_FAMILY_PARA;
-    if(nMask & RSC_SFX_STYLE_ITEM_IMAGE)
+    if(nMask & (sal_uInt32)SfxStyleItem::Image)
     {
         aImage = Image(ResId(static_cast<RSHEADER_TYPE *>(GetClassRes()),*rResId.GetResMgr()));
         IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );

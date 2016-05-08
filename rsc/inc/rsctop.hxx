@@ -23,6 +23,7 @@
 #include <rsctools.hxx>
 #include <rschash.hxx>
 #include <rscclobj.hxx>
+#include <rsc/rscsfx.hxx>
 
 typedef sal_uInt32 RSCVAR;
 #define VAR_POINTER     0x0001
@@ -80,6 +81,11 @@ public:
     virtual ERRTYPE SetRef( const RSCINST & rInst, const RscId & rRefId );
 
                     // sets the variable
+    virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
+                                 RSCINST * pDflt,
+                                 RSCVAR nVarType, SfxStyleItem nMask,
+                                 Atom nDataBaseName = InvalidAtom );
+
     virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt = nullptr,
                                  RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
