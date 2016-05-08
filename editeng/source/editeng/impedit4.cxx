@@ -921,10 +921,10 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_EMPHASISMARK:
         {
-            sal_uInt16 nMark = static_cast<const SvxEmphasisMarkItem&>(rItem).GetValue();
-            if ( nMark == EMPHASISMARK_NONE )
+            FontEmphasisMark nMark = static_cast<const SvxEmphasisMarkItem&>(rItem).GetEmphasisMark();
+            if ( nMark == FontEmphasisMark::NONE )
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ACCNONE );
-            else if ( nMark == EMPHASISMARK_SIDE_DOTS )
+            else if ( nMark == (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove) )
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ACCCOMMA );
             else
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ACCDOT );

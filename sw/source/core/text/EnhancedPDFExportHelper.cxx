@@ -790,7 +790,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Overline );
             if ( STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::LineThrough );
-            if ( EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() )
+            if ( FontEmphasisMark::NONE != rInf.GetFont()->GetEmphasisMark() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Overline );
         }
 
@@ -1382,7 +1382,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     if ( LINESTYLE_NONE    != rInf.GetFont()->GetUnderline() ||
                          LINESTYLE_NONE    != rInf.GetFont()->GetOverline()  ||
                          STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() ||
-                         EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() ||
+                         FontEmphasisMark::NONE != rInf.GetFont()->GetEmphasisMark() ||
                          0                 != rInf.GetFont()->GetEscapement() ||
                          SwFontScript::Latin != nFont ||
                          nCurrentLanguage  != nDefaultLang ||

@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC SvxEmphasisMarkItem : public SfxUInt16Item
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= EMPHASISMARK_NONE*/,
+    SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= FontEmphasisMark::NONE*/,
                           const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem + SfxEnumItem

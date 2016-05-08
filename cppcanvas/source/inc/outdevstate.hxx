@@ -57,7 +57,7 @@ namespace cppcanvas
                 mapModeTransform(),
                 fontRotation(0.0),
 
-                textEmphasisMarkStyle(EMPHASISMARK_NONE),
+                textEmphasisMarkStyle(FontEmphasisMark::NONE),
                 pushFlags(PushFlags::ALL),
                 textDirection(css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
@@ -99,7 +99,7 @@ namespace cppcanvas
             ::basegfx::B2DHomMatrix                                                  mapModeTransform;
             double                                                                   fontRotation;
 
-            sal_uInt16                                                               textEmphasisMarkStyle;
+            FontEmphasisMark                                                         textEmphasisMarkStyle;
             PushFlags                                                                pushFlags;
             sal_Int8                                                                 textDirection;
             sal_Int8                                                                 textAlignment;

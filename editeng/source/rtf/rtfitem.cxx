@@ -1005,14 +1005,14 @@ ATTR_SETOVERLINE:
 
 
             case RTF_ACCNONE:
-                eEmphasis = EMPHASISMARK_NONE;
+                eEmphasis = FontEmphasisMark::NONE;
                 goto ATTR_SETEMPHASIS;
             case RTF_ACCDOT:
-                eEmphasis = EMPHASISMARK_DOTS_ABOVE;
+                eEmphasis = (FontEmphasisMark::Dot | FontEmphasisMark::PosAbove);
                 goto ATTR_SETEMPHASIS;
 
             case RTF_ACCCOMMA:
-                eEmphasis = EMPHASISMARK_SIDE_DOTS;
+                eEmphasis = (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove);
 ATTR_SETEMPHASIS:
                 if( aPlainMap.nEmphasis )
                 {

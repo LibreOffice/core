@@ -179,27 +179,27 @@ namespace drawinglayer
 
 
                         // set EmphasisMark attribute
-                        FontEmphasisMark eFontEmphasisMark = EMPHASISMARK_NONE;
+                        FontEmphasisMark eFontEmphasisMark = FontEmphasisMark::NONE;
                         switch( pTCPP->getTextEmphasisMark() )
                         {
                             default:
                                 SAL_WARN("drawinglayer", "Unknown EmphasisMark style " << pTCPP->getTextEmphasisMark() );
                                 // fall through
-                            case primitive2d::TEXT_EMPHASISMARK_NONE:   eFontEmphasisMark = EMPHASISMARK_NONE; break;
-                            case primitive2d::TEXT_EMPHASISMARK_DOT:    eFontEmphasisMark = EMPHASISMARK_DOT; break;
-                            case primitive2d::TEXT_EMPHASISMARK_CIRCLE: eFontEmphasisMark = EMPHASISMARK_CIRCLE; break;
-                            case primitive2d::TEXT_EMPHASISMARK_DISC:   eFontEmphasisMark = EMPHASISMARK_DISC; break;
-                            case primitive2d::TEXT_EMPHASISMARK_ACCENT: eFontEmphasisMark = EMPHASISMARK_ACCENT; break;
+                            case primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE:   eFontEmphasisMark = FontEmphasisMark::NONE; break;
+                            case primitive2d::TEXT_FONT_EMPHASIS_MARK_DOT:    eFontEmphasisMark = FontEmphasisMark::Dot; break;
+                            case primitive2d::TEXT_FONT_EMPHASIS_MARK_CIRCLE: eFontEmphasisMark = FontEmphasisMark::Circle; break;
+                            case primitive2d::TEXT_FONT_EMPHASIS_MARK_DISC:   eFontEmphasisMark = FontEmphasisMark::Disc; break;
+                            case primitive2d::TEXT_FONT_EMPHASIS_MARK_ACCENT: eFontEmphasisMark = FontEmphasisMark::Accent; break;
                         }
 
-                        if( eFontEmphasisMark != EMPHASISMARK_NONE )
+                        if( eFontEmphasisMark != FontEmphasisMark::NONE )
                         {
                             DBG_ASSERT( (pTCPP->getEmphasisMarkAbove() != pTCPP->getEmphasisMarkBelow()),
                                 "DrawingLayer: Bad EmphasisMark position!" );
                             if( pTCPP->getEmphasisMarkAbove() )
-                                eFontEmphasisMark |= EMPHASISMARK_POS_ABOVE;
+                                eFontEmphasisMark |= FontEmphasisMark::PosAbove;
                             else
-                                eFontEmphasisMark |= EMPHASISMARK_POS_BELOW;
+                                eFontEmphasisMark |= FontEmphasisMark::PosBelow;
                             aFont.SetEmphasisMark( eFontEmphasisMark );
                         }
 

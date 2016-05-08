@@ -352,7 +352,7 @@ namespace drawinglayer
             return (TEXT_LINE_NONE != getFontOverline()
                  || TEXT_LINE_NONE != getFontUnderline()
                  || TEXT_STRIKEOUT_NONE != getTextStrikeout()
-                 || TEXT_EMPHASISMARK_NONE != getTextEmphasisMark()
+                 || TEXT_FONT_EMPHASIS_MARK_NONE != getTextEmphasisMark()
                  || TEXT_RELIEF_NONE != getTextRelief()
                  || getShadow());
         }
