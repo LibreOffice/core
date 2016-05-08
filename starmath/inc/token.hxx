@@ -120,9 +120,8 @@ struct SmToken
             sal_uInt16 nTokenLevel = 0);
 };
 
-struct SmTokenTableEntry
+struct SmTokenEntry
 {
-    const sal_Char* pIdent;
     SmTokenType     eType;
     sal_Unicode     cMathChar;
     sal_uLong       nGroup;

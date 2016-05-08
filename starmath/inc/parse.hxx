@@ -23,6 +23,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <unordered_map>
 
 #include "types.hxx"
 #include "token.hxx"
@@ -114,7 +115,7 @@ public:
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError(size_t i);
-    static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
+    static const std::unordered_map< OUString, SmTokenEntry, OUStringHash>& GetTokenMap();
     const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 

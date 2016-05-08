@@ -2236,9 +2236,9 @@ void SmTextNode::AdjustFontDesc()
         nFontDesc = FNT_FUNCTION;
     else {
         SmTokenType nTok;
-        const SmTokenTableEntry *pEntry = SmParser::GetTokenTableEntry( aText );
-        if (pEntry && pEntry->nGroup == TGFUNCTION) {
-            nTok = pEntry->eType;
+        auto pEntry = SmParser::GetTokenMap().find(aText.toAsciiLowerCase());
+        if (pEntry != SmParser::GetTokenMap().end() && pEntry->second.nGroup == TGFUNCTION) {
+            nTok = pEntry->second.eType;
             nFontDesc = FNT_FUNCTION;
         } else {
             sal_Unicode firstChar = aText[0];
