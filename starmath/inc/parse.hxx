@@ -23,11 +23,20 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <unordered_map>
 
 #include "types.hxx"
 #include "token.hxx"
 #include "error.hxx"
 #include "node.hxx"
+
+struct eqFunc
+{
+    bool operator()( const OUString &r1, const OUString &r2) const
+    {
+        return r1.equalsIgnoreAsciiCase(r2);
+    }
+};
 
 class SmParser
 {
@@ -114,7 +123,7 @@ public:
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError(size_t i);
-    static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
+    static const std::unordered_map< OUString, SmTokenEntry, OUStringHash, eqFunc>& GetTokenMap();
     const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
