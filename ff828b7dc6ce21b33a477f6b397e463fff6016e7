@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0ae8fa7b",
+        "filename": "include/tools/fontenum.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-08T14:57:01Z",
+      "side": 1,
+      "message": "no comma at the end",
+      "range": {
+        "startLine": 70,
+        "startChar": 26,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "ff828b7dc6ce21b33a477f6b397e463fff6016e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
