@@ -100,7 +100,7 @@ public:
     ::rtl::Reference< SearchAndParseThread > m_rSearchThread;
 
     OUString GetSelectedPersona() const;
-    void SetProgress( OUString& );
+    void SetProgress( const OUString& );
     void SetImages( const Image&, sal_Int32 );
     void AddPersonaSetting( OUString& );
     void ClearSearchResults();
