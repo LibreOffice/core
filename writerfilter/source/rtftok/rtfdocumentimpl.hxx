@@ -322,6 +322,16 @@ struct RTFStack : public std::deque<RTFParserState>
     }
 };
 
+void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pValue);
+void putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue);
+Id getParagraphBorder(sal_uInt32 nIndex);
+void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue, RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true);
+bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId);
+/// Checks if rName is contained at least once in rProperties as a key.
+bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties, const OUString& rName);
+RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId);
+OString DTTM22OString(long nDTTM);
+
 class RTFTokenizer;
 class RTFSdrImport;
 
@@ -423,7 +433,7 @@ private:
     void tableBreak();
     writerfilter::Reference<Properties>::Pointer_t getProperties(RTFSprms& rAttributes, RTFSprms& rSprms);
     void checkNeedPap();
-    void sectBreak(bool bFinal);
+    void sectBreak(bool bFinal = false);
     void prepareProperties(
         RTFParserState& rState,
         writerfilter::Reference<Properties>::Pointer_t&,
