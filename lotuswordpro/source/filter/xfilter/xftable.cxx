@@ -91,6 +91,13 @@ void XFTable::AddRow(XFRow *pRow)
 {
     assert(pRow);
 
+    for (sal_Int32 i = 0; i < pRow->GetCellCount(); ++i)
+    {
+        XFCell* pFirstCell = pRow->GetCell(i + 1); //starts at 1, not 0
+        if (pFirstCell->GetSubTable() == this)
+            throw std::runtime_error("table is a subtable of itself");
+    }
+
     int row = pRow->GetRow();
 
     if( row<1 )
