@@ -54,7 +54,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
        bool bInteractive ) :
     SdrOutliner(pVw->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->
                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
-                OUTLINERMODE_TEXTOBJECT ),
+                OutlinerMode::TextObject ),
     pView( pVw ),
     pTextObj( nullptr ),
     pOutlView( nullptr ),

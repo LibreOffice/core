@@ -34,7 +34,7 @@ protected:
     const SdrPage* mpVisualizedPage;
 
 public:
-    SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode );
+    SdrOutliner( SfxItemPool* pItemPool, OutlinerMode nMode );
     virtual ~SdrOutliner() ;
 
     void  SetTextObj( const SdrTextObj* pObj );

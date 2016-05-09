@@ -1119,11 +1119,11 @@ namespace {
             // Get and set up the outliner.
             const Rectangle aOutRect (rPrinter.GetPageOffset(), rPrinter.GetOutputSize());
             Outliner* pOutliner = rDocument.GetInternalOutliner();
-            const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
+            const OutlinerMode nSavedOutlMode (pOutliner->GetMode());
             const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
             const Size aSavedPaperSize (pOutliner->GetPaperSize());
 
-            pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
+            pOutliner->Init(OutlinerMode::OutlineView);
             pOutliner->SetPaperSize(aOutRect.GetSize());
             pOutliner->SetUpdateMode(true);
             pOutliner->Clear();
@@ -1636,8 +1636,8 @@ private:
         }
 
         Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
-        pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
-        const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
+        pOutliner->Init(OutlinerMode::OutlineView);
+        const OutlinerMode nSavedOutlMode (pOutliner->GetMode());
         const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
         const Size aSavedPaperSize (pOutliner->GetPaperSize());
         const MapMode aSavedMapMode (pOutliner->GetRefMapMode());

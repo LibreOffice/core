@@ -405,7 +405,7 @@ namespace sdr
                 && !rObj.IsTextEditActive()
                 && !rObj.IsLinkedText())
             {
-                Outliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *rObj.GetModel());
+                Outliner* pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, *rObj.GetModel());
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nText = rTextProvider.getTextCount();
 

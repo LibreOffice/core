@@ -1747,7 +1747,7 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
     mbInEditMode = true;
 
-    rOutl.Init( OUTLINERMODE_TEXTOBJECT );
+    rOutl.Init( OutlinerMode::TextObject );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
         bool bUpdMerk=rOutl.GetUpdateMode();

@@ -764,8 +764,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
                 if (nId == OBJ_TITLETEXT)
                 {
-                    if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                        pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+                    if( pOPO && pOPO->GetOutlinerMode() == OutlinerMode::DontKnow )
+                        pOPO->SetOutlinerMode( OutlinerMode::TitleObject );
 
                     // sal_True: don't delete "hard" attributes when doing this.
                     if (pTitleSheet)
@@ -773,8 +773,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                 }
                 else if (nId == OBJ_OUTLINETEXT)
                 {
-                    if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                        pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
+                    if( pOPO && pOPO->GetOutlinerMode() == OutlinerMode::DontKnow )
+                        pOPO->SetOutlinerMode( OutlinerMode::OutlineObject );
 
                     std::vector<SfxStyleSheetBase*>::iterator iter;
                     for (iter = aOutlineList.begin(); iter != aOutlineList.end(); ++iter)
@@ -816,7 +816,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 {
     if (!mpOutliner && bCreateOutliner)
     {
-        mpOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
+        mpOutliner = new ::sd::Outliner( this, OutlinerMode::TextObject );
 
         if (mpDocSh)
             mpOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -834,7 +834,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 {
     if ( !mpInternalOutliner && bCreateOutliner )
     {
-        mpInternalOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
+        mpInternalOutliner = new ::sd::Outliner( this, OutlinerMode::TextObject );
 
         // This outliner is only used to create special text objects. As no
         // information about portions is saved in this outliner, the update mode

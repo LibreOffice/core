@@ -321,12 +321,12 @@ const SfxItemPool* EditTextObject::GetPool() const
     return mpImpl->GetPool();
 }
 
-sal_uInt16 EditTextObject::GetUserType() const
+OutlinerMode EditTextObject::GetUserType() const
 {
     return mpImpl->GetUserType();
 }
 
-void EditTextObject::SetUserType( sal_uInt16 n )
+void EditTextObject::SetUserType( OutlinerMode n )
 {
     mpImpl->SetUserType(n);
 }
@@ -510,7 +510,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
 {
     nVersion = 0;
     nMetric = 0xFFFF;
-    nUserType = 0;
+    nUserType = OutlinerMode::DontKnow;
     nObjSettings = 0;
     pPortionInfo = nullptr;
 
@@ -604,7 +604,7 @@ EditTextObjectImpl::~EditTextObjectImpl()
 }
 
 
-void EditTextObjectImpl::SetUserType( sal_uInt16 n )
+void EditTextObjectImpl::SetUserType( OutlinerMode n )
 {
     nUserType = n;
 }
@@ -1207,7 +1207,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
     rOStream.WriteUInt16( nMetric );
 
-    rOStream.WriteUInt16( nUserType );
+    rOStream.WriteUInt16( (sal_uInt16)nUserType );
     rOStream.WriteUInt32( nObjSettings );
 
     rOStream.WriteBool( bVertical );
@@ -1454,7 +1454,9 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     if ( nVersion >= 600 )
     {
-        rIStream.ReadUInt16( nUserType );
+        sal_uInt16 nTmp;
+        rIStream.ReadUInt16( nTmp );
+        nUserType = (OutlinerMode)nTmp;
         rIStream.ReadUInt32( nObjSettings );
     }
 

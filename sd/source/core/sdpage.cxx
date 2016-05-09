@@ -458,8 +458,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         {
             SdrOutliner* pOutliner = static_cast<SdDrawDocument*>( GetModel() )->GetInternalOutliner();
 
-            sal_uInt16 nOutlMode = pOutliner->GetMode();
-            pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
+            OutlinerMode nOutlMode = pOutliner->GetMode();
+            pOutliner->Init( OutlinerMode::TextObject );
             pOutliner->SetStyleSheet( 0, nullptr );
             pOutliner->SetVertical( bVertical );
 
@@ -2384,7 +2384,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         if (!pOutliner)
         {
             SfxItemPool* pPool = static_cast<SdDrawDocument*>(GetModel())->GetDrawOutliner().GetEmptyItemSet().GetPool();
-            pOutl = new ::Outliner( pPool, OUTLINERMODE_OUTLINEOBJECT );
+            pOutl = new ::Outliner( pPool, OutlinerMode::OutlineObject );
             pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *static_cast<SdDrawDocument*>( GetModel() )->GetDocSh() ) );
             pOutl->SetEditTextObjectPool(pPool);
             pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetModel()->GetStyleSheetPool()));
@@ -2392,7 +2392,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             pOutl->SetUpdateMode( false );
         }
 
-        sal_uInt16 nOutlMode = pOutl->GetMode();
+        OutlinerMode nOutlMode = pOutl->GetMode();
         Size aPaperSize = pOutl->GetPaperSize();
         bool bUpdateMode = pOutl->GetUpdateMode();
         pOutl->SetUpdateMode(false);
@@ -2411,7 +2411,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         {
             case PRESOBJ_OUTLINE:
             {
-                pOutl->Init( OUTLINERMODE_OUTLINEOBJECT );
+                pOutl->Init( OutlinerMode::OutlineObject );
 
                 aString += "\t";
                 aString += rString;
@@ -2443,14 +2443,14 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 
             case PRESOBJ_TITLE:
             {
-                pOutl->Init( OUTLINERMODE_TITLEOBJECT );
+                pOutl->Init( OutlinerMode::TitleObject );
                 aString += rString;
             }
             break;
 
             default:
             {
-                pOutl->Init( OUTLINERMODE_TEXTOBJECT );
+                pOutl->Init( OutlinerMode::TextObject );
                 aString += rString;
 
                 // check if we need to add a text field

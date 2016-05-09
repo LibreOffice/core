@@ -624,8 +624,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         if( pObj )
         {
             Outliner* pOutl = mpDoc->GetInternalOutliner();
-            pOutl->Init( OUTLINERMODE_TEXTOBJECT );
-            sal_uInt16 nOutlMode = pOutl->GetMode();
+            pOutl->Init( OutlinerMode::TextObject );
+            OutlinerMode nOutlMode = pOutl->GetMode();
 
             EditEngine* pEdit = const_cast< EditEngine* >(&pOutl->GetEditEngine());
 

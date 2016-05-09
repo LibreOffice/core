@@ -431,7 +431,7 @@ void Cell::SetModel(SdrModel* pNewModel)
 
         SetStyleSheet( nullptr, true );
         SdrText::SetModel( pNewModel );
-        ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
+        ForceOutlinerParaObject( OutlinerMode::TextObject );
     }
 }
 
@@ -713,7 +713,7 @@ sal_Int32 Cell::getMinimumHeight()
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
         rOutliner.SetUpdateMode(true);
-        ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
+        ForceOutlinerParaObject( OutlinerMode::TextObject );
 
         if( GetOutlinerParaObject() )
         {
@@ -770,7 +770,7 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 
     if( pTextObject == nullptr )
-        ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
+        ForceOutlinerParaObject( OutlinerMode::TextObject );
 }
 
 

@@ -963,7 +963,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
 
         EditTextObject* pTemporaryText = m_pDrawEditEngine->CreateTextObject();
         pRet = new OutlinerParaObject(*pTemporaryText);
-        pRet->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+        pRet->SetOutlinerMode( OutlinerMode::TextObject );
         delete pTemporaryText;
 
         m_pDrawEditEngine->SetText( OUString() );
@@ -1172,7 +1172,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         bool bVertical = pTextObj->IsVerticalWriting();
         EditTextObject* pTemporaryText = m_pDrawEditEngine->CreateTextObject();
         OutlinerParaObject* pOp = new OutlinerParaObject(*pTemporaryText);
-        pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+        pOp->SetOutlinerMode( OutlinerMode::TextObject );
         pOp->SetVertical( bVertical );
         delete pTemporaryText;
         pTextObj->NbcSetOutlinerParaObject( pOp );

@@ -427,7 +427,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     TextApiObject* pTextApi = getTextApiObject( xAnnotation );
     if( pTextApi )
     {
-        std::unique_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
+        std::unique_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
 
         mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
         pOutliner->SetUpdateMode( true );

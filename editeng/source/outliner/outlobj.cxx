@@ -110,12 +110,12 @@ bool OutlinerParaObject::isWrongListEqual( const OutlinerParaObject& r ) const
     return mpImpl->isWrongListEqual(*r.mpImpl);
 }
 
-sal_uInt16 OutlinerParaObject::GetOutlinerMode() const
+OutlinerMode OutlinerParaObject::GetOutlinerMode() const
 {
     return mpImpl->mpEditTextObject->GetUserType();
 }
 
-void OutlinerParaObject::SetOutlinerMode(sal_uInt16 nNew)
+void OutlinerParaObject::SetOutlinerMode(OutlinerMode nNew)
 {
     // create a const pointer to avoid an early call to
     // make_unique() in the dereference of mpImpl

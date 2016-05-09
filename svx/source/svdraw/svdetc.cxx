@@ -406,7 +406,7 @@ SdrEngineDefaults& SdrEngineDefaults::GetDefaults()
     return *rGlobalData.pDefaults;
 }
 
-SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rModel)
+SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rModel)
 {
     SfxItemPool* pPool = &rModel.GetItemPool();
     SdrOutliner* pOutl = new SdrOutliner( pPool, nOutlinerMode );

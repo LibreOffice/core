@@ -444,7 +444,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
            - the draw outliner of the drawing engine has to draw something in
              between
            - the global outliner could be used in SdPage::CreatePresObj */
-        std::unique_ptr<SdrOutliner> pOutliner(new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT ));
+        std::unique_ptr<SdrOutliner> pOutliner(new ::sd::Outliner( mpDoc, OutlinerMode::TextObject ));
 
         // set reference device
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -594,7 +594,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
        - the draw outliner of the drawing engine has to draw something in
          between
        - the global outliner could be used in SdPage::CreatePresObj */
-    std::unique_ptr< ::Outliner> pOutliner(new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT ));
+    std::unique_ptr< ::Outliner> pOutliner(new ::Outliner( &mpDoc->GetItemPool(), OutlinerMode::OutlineObject ));
     pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
     // set reference device

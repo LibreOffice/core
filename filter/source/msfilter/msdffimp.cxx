@@ -3615,7 +3615,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
     if ( pText )
     {
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
-        rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
+        rOutliner.Init( OutlinerMode::TextObject );
 
         bool bOldUpdateMode = rOutliner.GetUpdateMode();
         rOutliner.SetUpdateMode( false );
@@ -4444,7 +4444,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 if  ( bCreateNewParaObject )
                                 {
                                     OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
-                                    rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
+                                    rOutliner.Init( OutlinerMode::TextObject );
                                     static_cast<SdrObjCustomShape*>(pRet)->NbcSetOutlinerParaObject( pNewText );
                                 }
                             }

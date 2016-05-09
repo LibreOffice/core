@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star { namespace lang {
  * The resulting default font height, however, stays the same (the logical
  * font height is converted).
  */
-SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rMod);
+SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rMod);
 
 /**
  * Global default settings for the DrawingEngine.
@@ -95,7 +95,7 @@ public:
     // Create an Outliner with the engine-global default values on the heap.
     // If pMod != nullptr, the MapMode of the passed model is used.
     // The resulting default font height, however, stays the same (the logical font height is converted).
-    friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rMod);
+    friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rMod);
 };
 
 class SfxItemSet;
