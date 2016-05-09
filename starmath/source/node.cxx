@@ -448,17 +448,13 @@ SmNode * SmStructureNode::GetSubNode(sal_uInt16 nIndex)
 
 void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
-    sal_uInt16 nNodes = GetNumSubNodes();
-    for (sal_uInt16 i = 0;  i < nNodes;  ++i)
-    {
-        SmNode *pNode = const_cast<SmStructureNode *>(this)->GetSubNode(i);
-        if (pNode)
+    ForEachNonNull(const_cast<SmStructureNode *>(this),
+                   [&rText](SmNode *pNode)
         {
             if (pNode->IsVisible())
                 static_cast<SmStructureNode *>(pNode)->mnAccIndex = rText.getLength();
             pNode->GetAccessibleText( rText );
-        }
-    }
+        });
 }
 
 
