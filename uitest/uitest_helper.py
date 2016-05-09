@@ -9,6 +9,13 @@ import time
 
 from helper import EventListener
 
+class DialogNotExecutedException(Exception):
+    def __init__(self, command):
+        self.command = command
+
+    def __str__(self):
+        return "Dialog not executed for: " + self.command
+
 class UITest(object):
 
     DEFAULT_SLEEP = 0.1
@@ -28,8 +35,7 @@ class UITest(object):
                 time_ += self.DEFAULT_SLEEP
                 time.sleep(self.DEFAULT_SLEEP)
 
-        # report a failure here
-        print("failure execute modal dialog")
+        raise DialogNotExecutedException(command)
 
     def execute_modeless_dialog_through_command(self, command):
         with EventListener(self._xContext, "ModelessDialogVisible") as event:
@@ -42,8 +48,7 @@ class UITest(object):
                 time_ += self.DEFAULT_SLEEP
                 time.sleep(self.DEFAULT_SLEEP)
 
-        # report a failure here
-        print("failure execute modeless dialog")
+        raise DialogNotExecutedException(command)
 
     def create_doc_in_start_center(self, app):
         xStartCenter = self._xUITest.getTopFocusWindow()
