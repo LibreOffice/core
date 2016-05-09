@@ -1403,27 +1403,27 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) &&
         ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) ) )
     {
-        sal_uInt16 nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
-        if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
+        ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
+        if ( nAttr & ExtTextInputAttr::Underline )
             rFont.SetUnderline( LINESTYLE_SINGLE );
-        else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
+        else if ( nAttr & ExtTextInputAttr::BoldUnderline )
             rFont.SetUnderline( LINESTYLE_BOLD );
-        else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
+        else if ( nAttr & ExtTextInputAttr::DottedUnderline )
             rFont.SetUnderline( LINESTYLE_DOTTED );
-        else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
+        else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
             rFont.SetUnderline( LINESTYLE_DOTTED );
-        if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
+        if ( nAttr & ExtTextInputAttr::RedText )
             rFont.SetColor( Color( COL_RED ) );
-        else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
+        else if ( nAttr & ExtTextInputAttr::HalfToneText )
             rFont.SetColor( Color( COL_LIGHTGRAY ) );
-        if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
+        if ( nAttr & ExtTextInputAttr::Highlight )
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
             rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
             rFont.SetTransparent( false );
         }
-        else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
+        else if ( nAttr & ExtTextInputAttr::GrayWaveline )
         {
             rFont.SetUnderline( LINESTYLE_WAVE );
 //          if( pOut )
@@ -1746,7 +1746,7 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
-        sal_uInt16 nLastAttr = 0xFFFF;
+        ExtTextInputAttr nLastAttr = (ExtTextInputAttr)0xffff;
         for( sal_Int32 n = 0; n < mpIMEInfos->nLen; n++ )
         {
             if ( mpIMEInfos->pAttribs[n] != nLastAttr )

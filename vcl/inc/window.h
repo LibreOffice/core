@@ -86,7 +86,7 @@ bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEven
 struct ImplWinData
 {
     OUString*           mpExtOldText;
-    sal_uInt16*         mpExtOldAttrAry;
+    ExtTextInputAttr*   mpExtOldAttrAry;
     Rectangle*          mpCursorRect;
     long                mnCursorExtWidth;
     bool                mbVertical;
