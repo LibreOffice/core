@@ -25,18 +25,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/keycod.hxx>
 #include <vcl/font.hxx>
-
-#define EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((sal_uInt16)0x0100)
-#define EXTTEXTINPUT_ATTR_UNDERLINE             ((sal_uInt16)0x0200)
-#define EXTTEXTINPUT_ATTR_BOLDUNDERLINE         ((sal_uInt16)0x0400)
-#define EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE       ((sal_uInt16)0x0800)
-#define EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE      ((sal_uInt16)0x1000)
-#define EXTTEXTINPUT_ATTR_HIGHLIGHT             ((sal_uInt16)0x2000)
-#define EXTTEXTINPUT_ATTR_REDTEXT               ((sal_uInt16)0x4000)
-#define EXTTEXTINPUT_ATTR_HALFTONETEXT          ((sal_uInt16)0x8000)
-
-#define EXTTEXTINPUT_CURSOR_INVISIBLE           ((sal_uInt16)0x0001)
-#define EXTTEXTINPUT_CURSOR_OVERWRITE           ((sal_uInt16)0x0002)
+#include <o3tl/typed_flags_set.hxx>
 
 class CommandExtTextInputData;
 class CommandWheelData;
@@ -48,6 +37,26 @@ class CommandSelectionChangeData;
 class CommandSwipeData;
 class CommandLongPressData;
 enum class CommandEventId;
+
+enum class ExtTextInputAttr {
+    NONE                  = 0x0000,
+    GrayWaveline          = 0x0100,
+    Underline             = 0x0200,
+    BoldUnderline         = 0x0400,
+    DottedUnderline       = 0x0800,
+    DashDotUnderline      = 0x1000,
+    Highlight             = 0x2000,
+    RedText               = 0x4000,
+    HalfToneText          = 0x8000
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ExtTextInputAttr> : is_typed_flags<ExtTextInputAttr, 0xff00> {};
+}
+
+#define EXTTEXTINPUT_CURSOR_INVISIBLE           ((sal_uInt16)0x0001)
+#define EXTTEXTINPUT_CURSOR_OVERWRITE           ((sal_uInt16)0x0002)
+
 
 class VCL_DLLPUBLIC CommandEvent
 {
@@ -82,14 +91,14 @@ class VCL_DLLPUBLIC CommandExtTextInputData
 {
 private:
     OUString            maText;
-    sal_uInt16*         mpTextAttr;
+    ExtTextInputAttr*   mpTextAttr;
     sal_Int32           mnCursorPos;
     sal_uInt16          mnCursorFlags;
     bool                mbOnlyCursor;
 
 public:
                         CommandExtTextInputData( const OUString& rText,
-                                                 const sal_uInt16* pTextAttr,
+                                                 const ExtTextInputAttr* pTextAttr,
                                                  sal_Int32 nCursorPos,
                                                  sal_uInt16 nCursorFlags,
                                                  bool bOnlyCursor );
@@ -97,7 +106,7 @@ public:
                         ~CommandExtTextInputData();
 
     const OUString&     GetText() const { return maText; }
-    const sal_uInt16*   GetTextAttr() const { return mpTextAttr; }
+    const ExtTextInputAttr* GetTextAttr() const { return mpTextAttr; }
 
     sal_Int32           GetCursorPos() const { return mnCursorPos; }
     bool                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }

@@ -6001,9 +6001,9 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         OUString sStr( m_aHelpStrings[ nCurArrPos ] );
         sStr = sStr.copy( nLen );
         sal_uInt16 nL = sStr.getLength();
-        const sal_uInt16 nVal = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE |
-                                EXTTEXTINPUT_ATTR_HIGHLIGHT;
-        const std::vector<sal_uInt16> aAttrs( nL, nVal );
+        const ExtTextInputAttr nVal = ExtTextInputAttr::DottedUnderline |
+                                ExtTextInputAttr::Highlight;
+        const std::vector<ExtTextInputAttr> aAttrs( nL, nVal );
         CommandExtTextInputData aCETID( sStr, &aAttrs[0], nL,
                                         0, false );
 

@@ -2862,7 +2862,7 @@ void X11SalFrame::beginUnicodeSequence()
 
     if( ! aDeleteWatch.isDeleted() )
     {
-        sal_uInt16 nTextAttr = EXTTEXTINPUT_ATTR_UNDERLINE;
+        ExtTextInputAttr nTextAttr = ExtTextInputAttr::Underline;
         SalExtTextInputEvent aEv;
         aEv.mnTime          = 0;
         aEv.maText          = rSeq;
@@ -2890,7 +2890,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             aBuf.append( rSeq );
             aBuf.append( c );
             rSeq = aBuf.makeStringAndClear();
-            std::vector<sal_uInt16> attribs( rSeq.getLength(), EXTTEXTINPUT_ATTR_UNDERLINE );
+            std::vector<ExtTextInputAttr> attribs( rSeq.getLength(), ExtTextInputAttr::Underline );
 
             SalExtTextInputEvent aEv;
             aEv.mnTime          = 0;
@@ -2923,7 +2923,7 @@ bool X11SalFrame::endUnicodeSequence()
         sal_uInt32 nValue = aNumbers.toUInt32( 16 );
         if( nValue >= 32 )
         {
-            sal_uInt16 nTextAttr = EXTTEXTINPUT_ATTR_UNDERLINE;
+            ExtTextInputAttr nTextAttr = ExtTextInputAttr::Underline;
             SalExtTextInputEvent aEv;
             aEv.mnTime          = 0;
             aEv.maText          = OUString( sal_Unicode(nValue) );

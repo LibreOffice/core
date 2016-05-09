@@ -24,6 +24,8 @@
 #include <svl/smplhint.hxx>
 #include <vcl/dllapi.h>
 
+enum class ExtTextInputAttr;
+
 // for Notify, if all paragraphs were deleted
 #define TEXT_PARA_ALL               SAL_MAX_UINT32
 #define TEXT_INDEX_ALL              SAL_MAX_INT32
@@ -138,7 +140,7 @@ public:
 struct TEIMEInfos
 {
     OUString    aOldTextAfterStartPos;
-    sal_uInt16* pAttribs;
+    ExtTextInputAttr* pAttribs;
     TextPaM     aPos;
     sal_Int32   nLen;
     bool        bCursor;
@@ -147,7 +149,7 @@ struct TEIMEInfos
     TEIMEInfos(const TextPaM& rPos, const OUString& rOldTextAfterStartPos);
     ~TEIMEInfos();
 
-    void CopyAttribs(const sal_uInt16* pA, sal_Int32 nL);
+    void CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL);
     void DestroyAttribs();
 };
 

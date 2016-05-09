@@ -5048,17 +5048,17 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                     sal_uInt16   nSalAttr;
                     if ( nWinAttr == ATTR_TARGET_CONVERTED )
                     {
-                        nSalAttr = EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::BoldUnderline;
                         aEvt.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
                     }
                     else if ( nWinAttr == ATTR_CONVERTED )
-                        nSalAttr = EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::DashDotUnderline;
                     else if ( nWinAttr == ATTR_TARGET_NOTCONVERTED )
-                        nSalAttr = EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                        nSalAttr = ExtTextInputAttr::Highlight;
                     else if ( nWinAttr == ATTR_INPUT_ERROR )
-                        nSalAttr = EXTTEXTINPUT_ATTR_REDTEXT | EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::RedText | ExtTextInputAttr::DottedUnderline;
                     else /* ( nWinAttr == ATTR_INPUT ) */
-                        nSalAttr = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::DottedUnderline;
                     pSalAttrAry[i] = nSalAttr;
                 }
 

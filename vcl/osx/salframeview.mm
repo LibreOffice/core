@@ -1621,16 +1621,16 @@ private:
 
             switch (nUnderlineValue & 0xff) {
             case NSUnderlineStyleSingle:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_UNDERLINE;
+                aInputFlags[i] = ExtTextInputAttr::Underline;
                 break;
             case NSUnderlineStyleThick:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_UNDERLINE | EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                aInputFlags[i] = ExtTextInputAttr::Underline | ExtTextInputAttr::Highlight;
                 break;
             case NSUnderlineStyleDouble:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
+                aInputFlags[i] = ExtTextInputAttr::BoldUnderline;
                 break;
             default:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                aInputFlags[i] = ExtTextInputAttr::Highlight;
                 break;
             }
         }

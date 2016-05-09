@@ -22,14 +22,14 @@
 #include <vcl/commandevent.hxx>
 
 CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
-    const sal_uInt16* pTextAttr, sal_Int32 nCursorPos, sal_uInt16 nCursorFlags,
+    const ExtTextInputAttr* pTextAttr, sal_Int32 nCursorPos, sal_uInt16 nCursorFlags,
     bool bOnlyCursor)
     : maText(rText)
 {
     if ( pTextAttr && !maText.isEmpty() )
     {
-        mpTextAttr = new sal_uInt16[maText.getLength()];
-        memcpy( mpTextAttr, pTextAttr, maText.getLength()*sizeof(sal_uInt16) );
+        mpTextAttr = new ExtTextInputAttr[maText.getLength()];
+        memcpy( mpTextAttr, pTextAttr, maText.getLength()*sizeof(ExtTextInputAttr) );
     }
     else
     {
@@ -46,8 +46,8 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 {
     if ( rData.mpTextAttr && !maText.isEmpty() )
     {
-        mpTextAttr = new sal_uInt16[maText.getLength()];
-        memcpy( mpTextAttr, rData.mpTextAttr, maText.getLength()*sizeof(sal_uInt16) );
+        mpTextAttr = new ExtTextInputAttr[maText.getLength()];
+        memcpy( mpTextAttr, rData.mpTextAttr, maText.getLength()*sizeof(ExtTextInputAttr) );
     }
     else
     {

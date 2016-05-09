@@ -137,7 +137,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
         const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
         if( pExtInp || USHRT_MAX != nRedlPos )
         {
-            const std::vector<sal_uInt16> *pArr = nullptr;
+            const std::vector<ExtTextInputAttr> *pArr = nullptr;
             sal_Int32 nInputStt = 0;
             if( pExtInp )
             {
@@ -169,7 +169,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 // Redline is active, nStart and nEnd are invalid.
 SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
                             SwAttrHandler& rAH, sal_Int32 nRed, bool bShw,
-                            const std::vector<sal_uInt16> *pArr,
+                            const std::vector<ExtTextInputAttr> *pArr,
                             sal_Int32 nExtStart )
     : rDoc( *rTextNd.GetDoc() ), rAttrHandler( rAH ), pSet( nullptr ),
       nNdIdx( rTextNd.GetIndex() ), nFirst( nRed ),
@@ -402,27 +402,27 @@ bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
     return bRet;
 }
 
-void SwExtend::ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr )
+void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
 {
-    if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
+    if ( nAttr & ExtTextInputAttr::Underline )
         rFnt.SetUnderline( LINESTYLE_SINGLE );
-    else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
+    else if ( nAttr & ExtTextInputAttr::BoldUnderline )
         rFnt.SetUnderline( LINESTYLE_BOLD );
-    else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
+    else if ( nAttr & ExtTextInputAttr::DottedUnderline )
         rFnt.SetUnderline( LINESTYLE_DOTTED );
-    else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
+    else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
         rFnt.SetUnderline( LINESTYLE_DOTTED );
 
-    if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
+    if ( nAttr & ExtTextInputAttr::RedText )
         rFnt.SetColor( Color( COL_RED ) );
 
-    if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
+    if ( nAttr & ExtTextInputAttr::Highlight )
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         rFnt.SetColor( rStyleSettings.GetHighlightTextColor() );
         rFnt.SetBackColor( new Color( rStyleSettings.GetHighlightColor() ) );
     }
-    if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
+    if ( nAttr & ExtTextInputAttr::GrayWaveline )
         rFnt.SetGreyWave( true );
 }
 
@@ -443,11 +443,11 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
 bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
-    const sal_uInt16 nOldAttr = rArr[ nPos - nStart ];
+    const ExtTextInputAttr nOldAttr = rArr[ nPos - nStart ];
     nPos = nNew;
     if( Inside() )
     {   // We stayed within the ExtendText-section
-        const sal_uInt16 nAttr = rArr[ nPos - nStart ];
+        const ExtTextInputAttr nAttr = rArr[ nPos - nStart ];
         if( nOldAttr != nAttr ) // Is there an (inner) change of attributes?
         {
             rFnt = *pFnt;
@@ -474,7 +474,7 @@ sal_Int32 SwExtend::Next( sal_Int32 nNext )
     else if( nPos < nEnd )
     {
         sal_Int32 nIdx = nPos - nStart;
-        const sal_uInt16 nAttr = rArr[ nIdx ];
+        const ExtTextInputAttr nAttr = rArr[ nIdx ];
         while( static_cast<size_t>(++nIdx) < rArr.size() && nAttr == rArr[ nIdx ] )
             ; //nothing
         nIdx = nIdx + nStart;

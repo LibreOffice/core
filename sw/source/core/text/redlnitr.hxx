@@ -34,15 +34,15 @@ class SwAttrHandler;
 class SwExtend
 {
     SwFont *pFnt;
-    const std::vector<sal_uInt16> &rArr;    // XAMA: Array of sal_uInt16
+    const std::vector<ExtTextInputAttr> &rArr;
     sal_Int32 nStart;
     sal_Int32 nPos;
     sal_Int32 nEnd;
     bool Leave_( SwFont& rFnt, sal_Int32 nNew );
     bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
-    static void ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr );
+    static void ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr );
 public:
-    SwExtend( const std::vector<sal_uInt16> &rA, sal_Int32 nSt ) : pFnt(nullptr), rArr( rA ),
+    SwExtend( const std::vector<ExtTextInputAttr> &rA, sal_Int32 nSt ) : pFnt(nullptr), rArr( rA ),
         nStart( nSt ), nPos( COMPLETE_STRING ), nEnd( nStart + rA.size() ) {}
     ~SwExtend() { delete pFnt; }
     bool IsOn() const { return pFnt != nullptr; }
@@ -85,7 +85,7 @@ class SwRedlineItr
     }
 public:
     SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt, SwAttrHandler& rAH,
-        sal_Int32 nRedlPos, bool bShw, const std::vector<sal_uInt16> *pArr = nullptr,
+        sal_Int32 nRedlPos, bool bShw, const std::vector<ExtTextInputAttr> *pArr = nullptr,
         sal_Int32 nExtStart = COMPLETE_STRING );
     ~SwRedlineItr();
     inline bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }
