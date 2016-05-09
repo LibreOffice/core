@@ -445,12 +445,6 @@ SwNumRule::SwNumRule( const OUString& rNm,
             SwNumRule::maBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
         }
         // position-and-space mode LABEL_ALIGNMENT:
-        // indent values of default outline numbering in inch:
-        //  0,3         0,4         0,5         0,6         0,7
-        //  0,8         0,9         1,0         1,1         1,2
-        const long cOutlineIndentAt[ MAXLEVEL ] = {
-            1440*3/10,  1440*2/5,   1440/2,     1440*3/5,   1440*7/10,
-            1440*4/5,   1440*9/10,  1440,       1440*11/10, 1440*6/5 };
         for( n = 0; n < MAXLEVEL; ++n )
         {
             pFormat = new SwNumFormat;
@@ -458,10 +452,6 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetIncludeUpperLevels( MAXLEVEL );
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
-            pFormat->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
-            pFormat->SetListtabPos( cOutlineIndentAt[ n ] );
-            pFormat->SetFirstLineIndent( -cOutlineIndentAt[ n ] );
-            pFormat->SetIndentAt( cOutlineIndentAt[ n ] );
             pFormat->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::maLabelAlignmentBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;
         }
