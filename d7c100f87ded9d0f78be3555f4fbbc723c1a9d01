@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_ed3bf09a",
+        "filename": "sw/source/uibase/dbui/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-05-09T06:53:44Z",
+      "side": 1,
+      "message": "The correct word is \"concatenated\".",
+      "range": {
+        "startLine": 27,
+        "startChar": 34,
+        "endLine": 27,
+        "endChar": 44
+      },
+      "revId": "d7c100f87ded9d0f78be3555f4fbbc723c1a9d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_0d41f40b",
+        "filename": "writerfilter/source/dmapper/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-05-09T06:53:44Z",
+      "side": 1,
+      "message": "The correct word is \"determines\".",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 271,
+        "endChar": 20
+      },
+      "revId": "d7c100f87ded9d0f78be3555f4fbbc723c1a9d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
