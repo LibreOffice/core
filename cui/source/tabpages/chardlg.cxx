@@ -1982,7 +1982,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         rCJKFont.SetEmphasisMark( eMark );
         rCTLFont.SetEmphasisMark( eMark );
 
-        m_pEmphasisLB->SelectEntryPos( (sal_Int32)( eMark & FontEmphasisMark::Style ) );
+        m_pEmphasisLB->SelectEntryPos( (sal_Int32)FontEmphasisMark( eMark & FontEmphasisMark::Style ) );
         eMark &= ~FontEmphasisMark::Style;
         sal_uLong nEntryData = ( eMark == FontEmphasisMark::PosAbove )
             ? CHRDLG_POSITION_OVER
