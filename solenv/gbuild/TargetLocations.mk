@@ -121,6 +121,7 @@ gb_Module_get_slowcheck_target = $(WORKDIR)/Module/slowcheck/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_stagingcheck_target = $(WORKDIR)/Module/stagingcheck/$(1)
 gb_Module_get_perfcheck_target = $(WORKDIR)/Module/perfcheck/$(1)
+gb_Module_get_uicheck_target = $(WORKDIR)/Module/uicheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
@@ -160,6 +161,7 @@ gb_UIImageListTarget_get_target = $(WORKDIR)/UIImageListTarget/$(1).ilst
 gb_UILocalizeTarget_get_target = $(WORKDIR)/UILocalizeTarget/$(1).done
 gb_UILocalizeTarget_get_workdir = $(WORKDIR)/UILocalizeTarget/$(1)
 gb_UIMenubarTarget_get_target = $(WORKDIR)/UIMenubarTarget/$(1).xml
+gb_UITest_get_target = $(WORKDIR)/UITest/$(1)/done
 gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
 gb_UnoApiHeadersTarget_get_bootstrap_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/$(call gb_UnoApiHeadersTarget_select_variant,$(1),bootstrap)
 gb_UnoApiHeadersTarget_get_comprehensive_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/$(call gb_UnoApiHeadersTarget_select_variant,$(1),comprehensive)
@@ -284,6 +286,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	UIImageListTarget \
 	UILocalizeTarget \
 	UIMenubarTarget \
+	UITest \
 	UnoApi \
 	UnoApiHeadersTarget \
 	UnoApiTarget \
