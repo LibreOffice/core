@@ -112,7 +112,7 @@ struct DDInfo
 struct Impl_IMEInfos
 {
     OUString      aOldTextAfterStartPos;
-    sal_uInt16*   pAttribs;
+    ExtTextInputAttr* pAttribs;
     sal_Int32     nPos;
     sal_Int32     nLen;
     bool          bCursor;
@@ -121,7 +121,7 @@ struct Impl_IMEInfos
     Impl_IMEInfos(sal_Int32 nPos, const OUString& rOldTextAfterStartPos);
     ~Impl_IMEInfos();
 
-    void        CopyAttribs(const sal_uInt16* pA, sal_Int32 nL);
+    void        CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL);
     void        DestroyAttribs();
 };
 
@@ -140,12 +140,12 @@ Impl_IMEInfos::~Impl_IMEInfos()
     delete[] pAttribs;
 }
 
-void Impl_IMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
+void Impl_IMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
 {
     nLen = nL;
     delete[] pAttribs;
-    pAttribs = new sal_uInt16[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
+    pAttribs = new ExtTextInputAttr[ nL ];
+    memcpy( pAttribs, pA, nL*sizeof(ExtTextInputAttr) );
 }
 
 void Impl_IMEInfos::DestroyAttribs()
@@ -586,7 +586,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
 
             if (mpIMEInfos && mpIMEInfos->pAttribs &&
                 i >= mpIMEInfos->nPos && i < (mpIMEInfos->nPos+mpIMEInfos->nLen) &&
-                (mpIMEInfos->pAttribs[i - mpIMEInfos->nPos] & EXTTEXTINPUT_ATTR_HIGHLIGHT))
+                (mpIMEInfos->pAttribs[i - mpIMEInfos->nPos] & ExtTextInputAttr::Highlight))
             {
                 bHighlight = true;
             }
@@ -649,7 +649,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
 
                 for(i = 0; i < mpIMEInfos->nLen; )
                 {
-                    sal_uInt16 nAttr = mpIMEInfos->pAttribs[i];
+                    ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[i];
                     vcl::Region aClip;
                     int nIndex = i;
                     while (nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
@@ -663,27 +663,27 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
                     }
                     i = nIndex;
                     aClip.Intersect(aRegion);
-                    if (!aClip.IsEmpty() && nAttr)
+                    if (!aClip.IsEmpty() && nAttr != ExtTextInputAttr::NONE)
                     {
                         vcl::Font aFont = rRenderContext.GetFont();
-                        if (nAttr & EXTTEXTINPUT_ATTR_UNDERLINE)
+                        if (nAttr & ExtTextInputAttr::Underline)
                             aFont.SetUnderline(LINESTYLE_SINGLE);
-                        else if (nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE)
+                        else if (nAttr & ExtTextInputAttr::BoldUnderline)
                             aFont.SetUnderline( LINESTYLE_BOLD);
-                        else if (nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE)
+                        else if (nAttr & ExtTextInputAttr::DottedUnderline)
                             aFont.SetUnderline( LINESTYLE_DOTTED);
-                        else if (nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE)
+                        else if (nAttr & ExtTextInputAttr::DashDotUnderline)
                             aFont.SetUnderline( LINESTYLE_DASHDOT);
-                        else if (nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE)
+                        else if (nAttr & ExtTextInputAttr::GrayWaveline)
                         {
                             aFont.SetUnderline(LINESTYLE_WAVE);
                             rRenderContext.SetTextLineColor(Color(COL_LIGHTGRAY));
                         }
                         rRenderContext.SetFont(aFont);
 
-                        if (nAttr & EXTTEXTINPUT_ATTR_REDTEXT)
+                        if (nAttr & ExtTextInputAttr::RedText)
                             rRenderContext.SetTextColor(Color(COL_RED));
-                        else if (nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT)
+                        else if (nAttr & ExtTextInputAttr::HalfToneText)
                             rRenderContext.SetTextColor(Color(COL_LIGHTGRAY));
 
                         rRenderContext.SetClipRegion(aClip);

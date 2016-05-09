@@ -817,12 +817,12 @@ ImplIMEInfos::~ImplIMEInfos()
     delete[] pAttribs;
 }
 
-void ImplIMEInfos::CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL )
+void ImplIMEInfos::CopyAttribs( const ExtTextInputAttr* pA, sal_uInt16 nL )
 {
     nLen = nL;
     delete[] pAttribs;
-    pAttribs = new sal_uInt16[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
+    pAttribs = new ExtTextInputAttr[ nL ];
+    memcpy( pAttribs, pA, nL*sizeof(ExtTextInputAttr) );
 }
 
 void ImplIMEInfos::DestroyAttribs()

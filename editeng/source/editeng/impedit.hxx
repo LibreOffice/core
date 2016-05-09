@@ -137,16 +137,16 @@ struct DragAndDropInfo
 struct ImplIMEInfos
 {
     OUString    aOldTextAfterStartPos;
-    sal_uInt16* pAttribs;
+    ExtTextInputAttr* pAttribs;
     EditPaM     aPos;
     sal_Int32   nLen;
-    bool    bCursor;
-    bool    bWasCursorOverwrite;
+    bool        bCursor;
+    bool        bWasCursorOverwrite;
 
             ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterStartPos );
             ~ImplIMEInfos();
 
-    void    CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
+    void    CopyAttribs( const ExtTextInputAttr* pA, sal_uInt16 nL );
     void    DestroyAttribs();
 };
 

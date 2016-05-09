@@ -3722,7 +3722,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_aInputEvent.mnCursorFlags      = 0;
     pThis->m_aInputEvent.mbOnlyCursor       = False;
 
-    pThis->m_aInputFlags = std::vector<sal_uInt16>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), 0 );
+    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), ExtTextInputAttr::NONE );
 
     PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do
@@ -3730,7 +3730,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         GSList *attr_list = nullptr;
         GSList *tmp_list = nullptr;
         gint start, end;
-        guint sal_attr = 0;
+        ExtTextInputAttr sal_attr = ExtTextInputAttr::NONE;
 
         pango_attr_iterator_range (iter, &start, &end);
         if (end == G_MAXINT)
@@ -3749,14 +3749,14 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             switch (pango_attr->klass->type)
             {
                 case PANGO_ATTR_BACKGROUND:
-                    sal_attr |= EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                    sal_attr |= ExtTextInputAttr::Highlight;
                     pThis->m_aInputEvent.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
                     break;
                 case PANGO_ATTR_UNDERLINE:
-                    sal_attr |= EXTTEXTINPUT_ATTR_UNDERLINE;
+                    sal_attr |= ExtTextInputAttr::Underline;
                     break;
                 case PANGO_ATTR_STRIKETHROUGH:
-                    sal_attr |= EXTTEXTINPUT_ATTR_REDTEXT;
+                    sal_attr |= ExtTextInputAttr::RedText;
                     break;
                 default:
                     break;
@@ -3764,8 +3764,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             pango_attribute_destroy (pango_attr);
             tmp_list = tmp_list->next;
         }
-        if (sal_attr == 0)
-            sal_attr |= EXTTEXTINPUT_ATTR_UNDERLINE;
+        if (sal_attr == ExtTextInputAttr::NONE)
+            sal_attr |= ExtTextInputAttr::Underline;
         g_slist_free (attr_list);
 
         // Set the sal attributes on our text
