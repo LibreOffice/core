@@ -138,14 +138,14 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
         bool bVisible = (GetWindowStyle( pFrame->mhWnd ) & WS_VISIBLE) != 0;
         if ( IsIconic( pFrame->mhWnd ) )
         {
-            pFrame->maState.mnState |= WINDOWSTATE_STATE_MINIMIZED;
+            pFrame->maState.mnState |= WindowStateState::Minimized;
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWMAXIMIZED;
         }
         else if ( IsZoomed( pFrame->mhWnd ) )
         {
-            pFrame->maState.mnState &= ~WINDOWSTATE_STATE_MINIMIZED;
-            pFrame->maState.mnState |= WINDOWSTATE_STATE_MAXIMIZED;
+            pFrame->maState.mnState &= ~WindowStateState::Minimized;
+            pFrame->maState.mnState |= WindowStateState::Maximized;
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWMAXIMIZED;
             pFrame->mbRestoreMaximize = TRUE;
@@ -183,7 +183,7 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
             long nRightDeco = abs( aRect.right - aRect2.right );
 
-            pFrame->maState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_MAXIMIZED);
+            pFrame->maState.mnState &= ~(WindowStateState::Minimized | WindowStateState::Maximized);
             // subtract decoration
             pFrame->maState.mnX      = aRect.left+nLeftDeco;
             pFrame->maState.mnY      = aRect.top+nTopDeco;
@@ -1708,14 +1708,14 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
         {
             if ( pState->mnMask & WindowStateMask::State )
             {
-                if ( pState->mnState & WINDOWSTATE_STATE_MINIMIZED )
+                if ( pState->mnState & WindowStateState::Minimized )
                     mnShowState = SW_SHOWMINIMIZED;
-                else if ( pState->mnState & WINDOWSTATE_STATE_MAXIMIZED )
+                else if ( pState->mnState & WindowStateState::Maximized )
                 {
                     mnShowState = SW_SHOWMAXIMIZED;
                     bUpdateHiddenFramePos = TRUE;
                 }
-                else if ( pState->mnState & WINDOWSTATE_STATE_NORMAL )
+                else if ( pState->mnState & WindowStateState::Normal )
                     mnShowState = SW_SHOWNORMAL;
             }
         }
@@ -1724,15 +1724,15 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     {
         if ( pState->mnMask & WindowStateMask::State )
         {
-            if ( pState->mnState & WINDOWSTATE_STATE_MINIMIZED )
+            if ( pState->mnState & WindowStateState::Minimized )
             {
-                if ( pState->mnState & WINDOWSTATE_STATE_MAXIMIZED )
+                if ( pState->mnState & WindowStateState::Maximized )
                     aPlacement.flags |= WPF_RESTORETOMAXIMIZED;
                 aPlacement.showCmd = SW_SHOWMINIMIZED;
             }
-            else if ( pState->mnState & WINDOWSTATE_STATE_MAXIMIZED )
+            else if ( pState->mnState & WindowStateState::Maximized )
                 aPlacement.showCmd = SW_SHOWMAXIMIZED;
-            else if ( pState->mnState & WINDOWSTATE_STATE_NORMAL )
+            else if ( pState->mnState & WindowStateState::Normal )
                 aPlacement.showCmd = SW_RESTORE;
         }
     }
@@ -1785,9 +1785,9 @@ bool WinSalFrame::GetWindowState( SalFrameState* pState )
         *pState = maState;
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - Don't save minimize
-        //if ( !(pState->mnState & WINDOWSTATE_STATE_MAXIMIZED) )
-        if ( !(pState->mnState & (WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_MAXIMIZED)) )
-            pState->mnState |= WINDOWSTATE_STATE_NORMAL;
+        //if ( !(pState->mnState & WindowStateState::Maximized) )
+        if ( !(pState->mnState & (WindowStateState::Minimized | WindowStateState::Maximized)) )
+            pState->mnState |= WindowStateState::Normal;
         return TRUE;
     }
 

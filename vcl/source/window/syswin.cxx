@@ -459,13 +459,13 @@ static void ImplWindowStateFromStr(WindowStateData& rData,
     {
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        sal_uInt32 nState = (sal_uInt32)aTokenStr.toInt32();
-        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        WindowStateState nState = (WindowStateState)aTokenStr.toInt32();
+        //nState &= ~(WindowStateState::Minimized);
         rData.SetState( nState );
         nValidMask |= WindowStateMask::State;
     }
     else
-        rData.SetState( 0 );
+        rData.SetState( WindowStateState::NONE );
 
     // read maximized pos/size
     aTokenStr = rStr.getToken(0, ',', nIndex);
@@ -541,7 +541,7 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
     {
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        sal_uInt32 nState = rData.GetState();
+        WindowStateState nState = rData.GetState();
         rStrBuf.append(static_cast<sal_Int32>(nState));
     }
     rStrBuf.append(';');
@@ -631,7 +631,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
     if ( pWindow->mpWindowImpl->mbFrame )
     {
-        const sal_uInt32 nState     = rData.GetState();
+        const WindowStateState nState = rData.GetState();
         SalFrameState   aState;
         aState.mnMask               = rData.GetMask();
         aState.mnX                  = rData.GetX();
@@ -655,8 +655,8 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnMaximizedHeight    = rData.GetMaximizedHeight();
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
-        aState.mnState  = nState & WINDOWSTATE_STATE_SYSTEMMASK;
+        //nState &= ~(WindowStateState::Minimized);
+        aState.mnState  = nState & WindowStateState::SystemMask;
 
         // normalize window positions onto screen
         ImplMoveToScreen( aState.mnX, aState.mnY, aState.mnWidth, aState.mnHeight, pWindow );
@@ -664,7 +664,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
         // #96568# avoid having multiple frames at the same screen location
         //  do the check only if not maximized
-        if( !((rData.GetMask() & WindowStateMask::State) && (nState & WINDOWSTATE_STATE_MAXIMIZED)) )
+        if( !((rData.GetMask() & WindowStateMask::State) && (nState & WindowStateState::Maximized)) )
             if( rData.GetMask() & (WindowStateMask::Pos|WindowStateMask::Width|WindowStateMask::Height) )
             {
                 Rectangle aDesktop = GetDesktopRectPixel();
@@ -711,7 +711,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         // do a synchronous resize for layout reasons
         //  but use rData only when the window is not to be maximized (#i38089#)
         //  otherwise we have no useful size information
-        if( (rData.GetMask() & WindowStateMask::State) && (nState & WINDOWSTATE_STATE_MAXIMIZED) )
+        if( (rData.GetMask() & WindowStateMask::State) && (nState & WindowStateState::Maximized) )
         {
             // query maximized size from frame
             SalFrameGeometry aGeometry = mpWindowImpl->mpFrame->GetGeometry();
@@ -760,8 +760,8 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         // 91625 - ignore Minimize
         if ( nValidMask & WindowStateMask::State )
         {
-            const sal_uInt32 nState = rData.GetState();
-            if ( nState & WINDOWSTATE_STATE_ROLLUP )
+            const WindowStateState nState = rData.GetState();
+            if ( nState & WindowStateState::Rollup )
                 RollUp();
             else
                 RollDown();
@@ -821,7 +821,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
                 // #94144# allow Minimize again, should be masked out when read from configuration
                 // 91625 - ignore Minimize
                 if ( !(nValidMask&WindowStateMask::Minimized) )
-                    aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+                    aState.mnState &= ~(WindowStateState::Minimized);
                 rData.SetState( aState.mnState );
             }
             rData.SetMask( nValidMask );
@@ -833,12 +833,12 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
     {
         Point   aPos = GetPosPixel();
         Size    aSize = GetSizePixel();
-        sal_uInt32 nState = 0;
+        WindowStateState nState = WindowStateState::NONE;
 
         if ( IsRollUp() )
         {
             aSize.Height() += maOrgSize.Height();
-            nState = WINDOWSTATE_STATE_ROLLUP;
+            nState = WindowStateState::Rollup;
         }
 
         if ( nValidMask & WindowStateMask::X )

@@ -340,7 +340,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 
 bool SvpSalFrame::GetWindowState( SalFrameState* pState )
 {
-    pState->mnState = WINDOWSTATE_STATE_NORMAL;
+    pState->mnState = WindowStateState::Normal;
     pState->mnX      = maGeometry.nX;
     pState->mnY      = maGeometry.nY;
     pState->mnWidth  = maGeometry.nWidth;

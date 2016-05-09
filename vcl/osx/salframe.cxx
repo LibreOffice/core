@@ -551,7 +551,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
 
     [mpNSWindow setFrame: aStateRect display: NO];
-    if( pState->mnState == WINDOWSTATE_STATE_MINIMIZED )
+    if( pState->mnState == WindowStateState::Minimized )
         [mpNSWindow miniaturize: NSApp];
     else if( [mpNSWindow isMiniaturized] )
         [mpNSWindow deminiaturize: NSApp];
@@ -560,7 +560,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
        the program specified one), but comes closest since the default behavior is
        "maximized" if the user did not intervene
     */
-    if( pState->mnState == WINDOWSTATE_STATE_MAXIMIZED )
+    if( pState->mnState == WindowStateState::Maximized )
     {
         if(! [mpNSWindow isZoomed])
             [mpNSWindow zoom: NSApp];
@@ -624,11 +624,11 @@ bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnHeight    = long(aStateRect.size.height);
 
     if( [mpNSWindow isMiniaturized] )
-        pState->mnState = WINDOWSTATE_STATE_MINIMIZED;
+        pState->mnState = WindowStateState::Minimized;
     else if( ! [mpNSWindow isZoomed] )
-        pState->mnState = WINDOWSTATE_STATE_NORMAL;
+        pState->mnState = WindowStateState::Normal;
     else
-        pState->mnState = WINDOWSTATE_STATE_MAXIMIZED;
+        pState->mnState = WindowStateState::Maximized;
 
     return TRUE;
 }
