@@ -90,10 +90,11 @@ static const TypeGroupInfo saUnknownTypeInfo =
 
 const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )
 {
-    const TypeGroupInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
-    for( const TypeGroupInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
-        if( pIt->meTypeId == eTypeId )
-            return *pIt;
+    for( auto const &rIt : spTypeInfos)
+    {
+        if( rIt.meTypeId == eTypeId )
+            return rIt;
+    }
     OSL_ENSURE( eTypeId == TYPEID_UNKNOWN, "lclGetTypeInfoFromTypeId - unexpected chart type identifier" );
     return saUnknownTypeInfo;
 }

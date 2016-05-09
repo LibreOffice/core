@@ -960,9 +960,8 @@ ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Re
     maEnUsLocale( "en", "US", OUString() ),
     mnMaxSeriesIdx( -1 )
 {
-    const ObjectTypeFormatEntry* pEntryEnd = STATIC_ARRAY_END( spObjTypeFormatEntries );
-    for( const ObjectTypeFormatEntry* pEntry = spObjTypeFormatEntries; pEntry != pEntryEnd; ++pEntry )
-        maTypeFormatters[ pEntry->meObjType ].reset( new ObjectTypeFormatter( *this, *pEntry, rChartSpace, pEntry->meObjType ) );
+    for(auto const &rEntry : spObjTypeFormatEntries)
+        maTypeFormatters[ rEntry.meObjType ].reset( new ObjectTypeFormatter( *this, rEntry, rChartSpace, rEntry.meObjType ) );
 
     try
     {

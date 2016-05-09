@@ -33,11 +33,6 @@ namespace oox {
 
 // Helper macros ==============================================================
 
-/** Expands to a pointer behind the last element of a STATIC data array (like
-    STL end()). */
-#define STATIC_ARRAY_END( array ) \
-    ((array)+SAL_N_ELEMENTS(array))
-
 /** Expands to the 'index'-th element of a STATIC data array, or to 'def', if
     'index' is out of the array limits. */
 #define STATIC_ARRAY_SELECT( array, index, def ) \
