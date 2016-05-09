@@ -2318,6 +2318,8 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
     pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
+    nEndCol = std::max(nEndCol, aViewData.GetMaxTiledCol());
+    nEndRow = std::max(nEndRow, aViewData.GetMaxTiledRow());
 
     boost::property_tree::ptree aRows;
     long nTotal = 0;

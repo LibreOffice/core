@@ -93,6 +93,8 @@ ScViewDataTable::ScViewDataTable() :
                 nCurY( 0 ),
                 nOldCurX( 0 ),
                 nOldCurY( 0 ),
+                nMaxTiledCol( 20 ),
+                nMaxTiledRow( 50 ),
                 bShowGrid( true ),
                 mbOldCursorValid( false )
 {

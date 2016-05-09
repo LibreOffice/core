@@ -35,6 +35,8 @@
 
 #include <comphelper/lok.hxx>
 
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
 
@@ -55,6 +57,7 @@ public:
     void testRowColumnSelections();
     void testSortAscendingDescending();
     void testPartHash();
+    void testDocumentSize();
 #endif
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
@@ -62,6 +65,7 @@ public:
     CPPUNIT_TEST(testRowColumnSelections);
     CPPUNIT_TEST(testSortAscendingDescending);
     CPPUNIT_TEST(testPartHash);
+    CPPUNIT_TEST(testDocumentSize);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -70,6 +74,9 @@ private:
     ScModelObj* createDoc(const char* pName);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+
+    /// document size changed callback.
+    osl::Condition m_aDocSizeCondition;
 #endif
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -146,12 +153,16 @@ static void lcl_convertRectangle(const OUString& rString, Rectangle& rRectangle)
 }
 */
 
-void ScTiledRenderingTest::callbackImpl(int /*nType*/, const char* /*pPayload*/)
+void ScTiledRenderingTest::callbackImpl(int nType, const char* /*pPayload*/)
 {
-    // TODO when needed...
-    //switch (nType)
-    //{
-    //}
+    switch (nType)
+    {
+    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+    {
+        m_aDocSizeCondition.set();
+    }
+    break;
+    }
 }
 
 void ScTiledRenderingTest::testRowColumnSelections()
@@ -272,6 +283,40 @@ void ScTiledRenderingTest::testPartHash()
 
     // check part that it does not exists
     CPPUNIT_ASSERT(pModelObj->getPartHash(100).isEmpty());
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testDocumentSize()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("sort-range.ods");
+    pModelObj->registerCallback(&ScTiledRenderingTest::callback, this);
+
+    // check initial document size
+    Size aDocSize = pModelObj->getDocumentSize();
+    CPPUNIT_ASSERT(aDocSize.Width() > 0);
+    CPPUNIT_ASSERT(aDocSize.Height() > 0);
+
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocSh);
+
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Set cursor column
+    pViewShell->SetCursor(100, 0);
+    // 2 seconds
+    TimeValue aTime = { 2 , 0 };
+    osl::Condition::Result aResult = m_aDocSizeCondition.wait(aTime);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
+    // Set cursor row
+    pViewShell->SetCursor(0, 100);
+    // 2 seconds
+    aTime = { 2 , 0 };
+    aResult = m_aDocSizeCondition.wait(aTime);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
