@@ -420,7 +420,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
     // prepare checksum to test
     sal_uInt8 nTestChecksum[ RTL_DIGEST_LENGTH_MD5 ];
     const sal_Unicode* pChar = rChkSum.getStr();
-    for( unsigned int i = 0; i < RTL_DIGEST_LENGTH_MD5; i++ )
+    for(sal_uInt8 & rn : nTestChecksum)
     {
         sal_uInt8 nByte = sal_uInt8( ( (*pChar >= '0' && *pChar <= '9') ? *pChar - '0' :
                           ( (*pChar >= 'A' && *pChar <= 'F') ? *pChar - 'A' + 10 :
@@ -433,7 +433,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
                  ( (*pChar >= 'a' && *pChar <= 'f') ? *pChar - 'a' + 10 :
                  0 ) ) );
         pChar++;
-        nTestChecksum[i] = nByte;
+        rn = nByte;
     }
 
     // open file and calculate actual checksum up to index nBytes
@@ -470,12 +470,12 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
     bRet = (0 == memcmp( nActualChecksum, nTestChecksum, sizeof( nActualChecksum ) ));
 #if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "test checksum: " );
-    for( unsigned int i = 0; i < sizeof(nTestChecksum); i++ )
-        OSL_TRACE( "%.2X", int(nTestChecksum[i]) );
+    for(sal_uInt8 i : nTestChecksum)
+        OSL_TRACE( "%.2X", int(i) );
     OSL_TRACE( "\n" );
     OSL_TRACE( "file checksum: " );
-    for( unsigned int i = 0; i < sizeof(nActualChecksum); i++ )
-        OSL_TRACE( "%.2X", int(nActualChecksum[i]) );
+    for(sal_uInt8 i : nActualChecksum)
+        OSL_TRACE( "%.2X", int(i) );
     OSL_TRACE( "\n" );
 #endif
     return bRet;
