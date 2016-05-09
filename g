@@ -220,7 +220,7 @@ local module
     if [ -f .gitmodules ] ; then
 	git submodule update
 	if [ -n "$branch" ] ; then
-	    git submodules foreach git checkout -b ${branch} HEAD || return $?
+	    git submodule foreach git checkout -b ${branch} HEAD || return $?
 	fi
     else
 	# now that is the nasty case we moved prior to submodules
