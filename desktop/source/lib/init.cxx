@@ -1344,7 +1344,7 @@ void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             doc_setPart(pThis, nOrigPart);
         }
     }
-    catch (const std::exception& exception)
+    catch (const std::exception&)
     {
         // Nothing to do but restore the PartTilePainting flag.
     }
