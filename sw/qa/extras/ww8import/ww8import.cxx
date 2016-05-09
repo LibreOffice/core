@@ -567,6 +567,47 @@ reading page numbers at sections > 255, in this case 256
     CPPUNIT_ASSERT_EQUAL(sal_Int16(256), nOffset);
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf95576, "tdf95576.doc")
+{
+    // The first three paragraphs in this document (which are headings)
+    // should have zero indent and first line indent
+    for (int nPara = 1; nPara <= 3; ++nPara) {
+        std::cout << "nPara = " << nPara << "\n";
+        auto xPara = getParagraph(nPara);
+
+        // get the numbering rules effective at this paragraph
+        uno::Reference<container::XIndexReplace> xNumRules(
+            getProperty< uno::Reference<container::XIndexReplace> >(
+                xPara, "NumberingRules"),
+            uno::UNO_QUERY);
+
+        // get the numbering level of this paragraph, and the properties
+        // associated with that numbering level
+        int numLevel = getProperty<sal_Int32>(xPara, "NumberingLevel");
+        uno::Sequence< beans::PropertyValue > aPropertyValues;
+        xNumRules->getByIndex(numLevel) >>= aPropertyValues;
+
+        // Now look through these properties for the indent and
+        // first line indent settings
+        sal_Int32 nIndentAt = -1;
+        sal_Int32 nFirstLineIndent = -1;
+        for(int j = 0 ; j< aPropertyValues.getLength() ; ++j)
+        {
+            auto aProp = aPropertyValues[j];
+            std::cout << "Prop.Name: " << aProp.Name << "\n";
+            if (aProp.Name == "FirstLineIndent") {
+                nFirstLineIndent = aProp.Value.get<sal_Int32>();
+            } else if (aProp.Name == "IndentAt") {
+                nIndentAt = aProp.Value.get<sal_Int32>();
+            }
+        }
+
+        // The indent and first line indent should be zero
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nIndentAt);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nFirstLineIndent);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
