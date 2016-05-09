@@ -40,7 +40,7 @@ public:
         }
         else
         {
-            VCL_GL_INFO(TYPE::className() << ": enable called but already set");
+            VCL_GL_INFO(TYPE::className() << ": enable called but already enabled");
         }
 #ifdef DBG_UTIL
         checkState();
@@ -57,7 +57,7 @@ public:
         }
         else
         {
-            VCL_GL_INFO(TYPE::className() << ": disable called but already set");
+            VCL_GL_INFO(TYPE::className() << ": disable called but already disabled");
         }
 #ifdef DBG_UTIL
         checkState();
