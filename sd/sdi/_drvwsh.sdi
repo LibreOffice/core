@@ -2644,7 +2644,7 @@ interface DrawView
     ]
     SID_ATTR_PAGE_FILLSTYLE
     [
-        ExecMethod = FuTemporary;
+        ExecMethod = SetPageProperties;
         StateMethod = GetPageProperties;
     ]
     SID_DISPLAY_MASTER_BACKGROUND
