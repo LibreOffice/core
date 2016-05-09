@@ -1864,18 +1864,26 @@ paintTileInThread (gpointer data)
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
+    GTimer* aTimer = g_timer_new();
+    gulong nElapsedMs;
     ss << "lok::Document::paintTile(" << static_cast<void*>(pBuffer) << ", "
         << nTileSizePixels << ", " << nTileSizePixels << ", "
         << aTileRectangle.x << ", " << aTileRectangle.y << ", "
         << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ", "
         << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ")";
-    g_info("%s", ss.str().c_str());
+
     priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
                                          pBuffer,
                                          nTileSizePixels, nTileSizePixels,
                                          aTileRectangle.x, aTileRectangle.y,
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
+
+    g_timer_elapsed(aTimer, &nElapsedMs);
+    ss << " rendered in " << (nElapsedMs / 1000.) << " milliseconds";
+    g_info("%s", ss.str().c_str());
+    g_timer_destroy(aTimer);
+
     cairo_surface_mark_dirty(pSurface);
 
     // Its likely that while the tilebuffer has changed, one of the paint tile
