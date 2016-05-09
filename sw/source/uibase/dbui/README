@@ -24,7 +24,7 @@ implemented. But the list contains implementation proposals for both.
 * Mode: FILE
 ** false: Saves each merged document as an individual file. The file name can
    be selected from a database column!
-** true: Saves a combined file of concated documents. Each document starts
+** true: Saves a combined file of concatenated documents. Each document starts
    with a new / reset page style. Depending on the page style this inserts
    hidden blank pages
 * Mode: PRINTER

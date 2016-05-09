@@ -2567,7 +2567,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
 
                 if( pDispatcher )
                 {
-                    // filter all forbbiden slots
+                    // filter all forbidden slots
                     pDispatcher->SetSlotFilter( SfxSlotFilterState::ENABLED, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
                 }
 

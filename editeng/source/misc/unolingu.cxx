@@ -444,7 +444,7 @@ public:
 LinguMgrExitLstnr::LinguMgrExitLstnr()
 {
     // add object to frame::Desktop EventListeners in order to properly call
-    // the AtExit function at appliction exit.
+    // the AtExit function at application exit.
 
     uno::Reference< XComponentContext >  xContext = getProcessComponentContext();
     xDesktop = Desktop::create( xContext );

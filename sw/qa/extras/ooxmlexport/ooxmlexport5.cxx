@@ -853,7 +853,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
 {
-    // Issue was Direct Foramatting for non-first Table cells was not getting preserved.
+    // Issue was Direct Formatting for non-first Table cells was not getting preserved.
 
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)

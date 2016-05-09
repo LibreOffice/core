@@ -750,7 +750,7 @@ uno::Reference< XDictionary > GetIgnoreAllList()
 AppExitListener::AppExitListener()
 {
     // add object to Desktop EventListeners in order to properly call
-    // the AtExit function at appliction exit.
+    // the AtExit function at application exit.
     uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     try

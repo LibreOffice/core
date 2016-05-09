@@ -268,7 +268,7 @@ class SectionPropertyMap : public PropertyMap
                            sal_Int32 nDistance,
                            sal_Int32 nOffsetFrom,
                            sal_uInt32 nLineWidth);
-    /// Determintes if conversion of a given floating table is wanted or not.
+    /// Determines if conversion of a given floating table is wanted or not.
     bool FloatingTableConversion(FloatingTableInfo& rInfo);
 
 public:

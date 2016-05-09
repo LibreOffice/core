@@ -100,7 +100,7 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
             break;
 
         case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-            // TODO: depricate or remember all children
+            // TODO: deprecate or remember all children
             break;
 
         case AccessibleEventId::BOUNDRECT_CHANGED:

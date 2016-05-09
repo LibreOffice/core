@@ -159,7 +159,7 @@ public class _XTextComponent extends MultiMethodTest {
         String itext = num ? "6" :  "insert" ;
         log.println("Setting text to : '" + text + "'") ;
         oObj.setText(text);
-        log.println("Iserting text to (0,1) : '" + itext + "'") ;
+        log.println("Inserting text to (0,1) : '" + itext + "'") ;
         oObj.insertText(new Selection(0,1), itext);
         log.println("getText() returns: " + oObj.getText());
         tRes.tested("insertText()", oObj.getText().equals
