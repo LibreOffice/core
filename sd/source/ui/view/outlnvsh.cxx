@@ -1602,7 +1602,7 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         OutlinerParaObject* pOPO = pTO ? rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1) : nullptr;
         if (pOPO)
         {
-            pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+            pOPO->SetOutlinerMode( OutlinerMode::TitleObject );
             pOPO->SetVertical( pTO->IsVerticalWriting() );
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
             {
@@ -1665,11 +1665,11 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 
     bool bNewObject = false;
 
-    sal_uInt16 eOutlinerMode = OUTLINERMODE_TITLEOBJECT;
+    OutlinerMode eOutlinerMode = OutlinerMode::TitleObject;
     pTO = static_cast<SdrTextObj*>(pPage->GetPresObj( PRESOBJ_TEXT ));
     if( !pTO )
     {
-        eOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
+        eOutlinerMode = OutlinerMode::OutlineObject;
         pTO = OutlineView::GetOutlineTextObject( pPage );
     }
 

@@ -137,7 +137,7 @@ private:
     OutlinerView* mpOutlineView;
 };
 
-Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
+Outliner::Outliner( SdDrawDocument* pDoc, OutlinerMode nMode )
     : SdrOutliner( &pDoc->GetItemPool(), nMode ),
       mpImpl(new Implementation()),
       meMode(SEARCH),

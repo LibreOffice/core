@@ -1943,8 +1943,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 Outliner* pOutl = GetDoc()->GetInternalOutliner();
-                pOutl->Init( OUTLINERMODE_TEXTOBJECT );
-                sal_uInt16 nOutlMode = pOutl->GetMode();
+                pOutl->Init( OutlinerMode::TextObject );
+                OutlinerMode nOutlMode = pOutl->GetMode();
                 pOutl->SetStyleSheet( 0, nullptr );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
                 OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();

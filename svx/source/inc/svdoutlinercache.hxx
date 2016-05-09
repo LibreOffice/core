@@ -26,7 +26,7 @@
 
 class SdrModel;
 class SdrOutliner;
-
+enum class OutlinerMode;
 
 class SdrOutlinerCache
 {
@@ -40,7 +40,7 @@ public:
     SdrOutlinerCache( SdrModel* pModel );
     ~SdrOutlinerCache();
 
-    SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
+    SdrOutliner* createOutliner( OutlinerMode nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
     std::vector< SdrOutliner* > GetActiveOutliners() const;
 };

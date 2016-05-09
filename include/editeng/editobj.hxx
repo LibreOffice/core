@@ -39,6 +39,7 @@ class SfxStyleSheetPool;
 class SvxFieldItem;
 class SvxFieldData;
 class SvStream;
+enum class OutlinerMode;
 
 namespace editeng {
 
@@ -85,8 +86,8 @@ public:
     std::vector<svl::SharedString> GetSharedStrings() const;
 
     const SfxItemPool* GetPool() const;
-    sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
-    void SetUserType( sal_uInt16 n );
+    OutlinerMode GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
+    void SetUserType( OutlinerMode n );
 
     bool IsVertical() const;
     void SetVertical( bool bVertical );

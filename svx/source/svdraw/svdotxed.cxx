@@ -45,9 +45,9 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
     mbInEditMode = true;
 
-    sal_uInt16 nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
+    OutlinerMode nOutlinerMode = OutlinerMode::OutlineObject;
     if ( !IsOutlText() )
-        nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
+        nOutlinerMode = OutlinerMode::TextObject;
     rOutl.Init( nOutlinerMode );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 

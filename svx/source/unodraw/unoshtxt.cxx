@@ -563,9 +563,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         if( mpOutliner == nullptr )
         {
             SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-            sal_uInt16 nOutlMode = OUTLINERMODE_TEXTOBJECT;
+            OutlinerMode nOutlMode = OutlinerMode::TextObject;
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
-                nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
+                nOutlMode = OutlinerMode::OutlineObject;
 
             mpOutliner = mpModel->createOutliner( nOutlMode );
 

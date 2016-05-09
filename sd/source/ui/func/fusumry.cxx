@@ -159,7 +159,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 
-                    pOutl = new ::sd::Outliner( mpDoc, OUTLINERMODE_OUTLINEOBJECT );
+                    pOutl = new ::sd::Outliner( mpDoc, OutlinerMode::OutlineObject );
                     pOutl->SetUpdateMode(false);
                     pOutl->EnableUndo(false);
 
@@ -177,7 +177,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                 // #118876#, check if the OutlinerParaObject is created successfully
                 if( pParaObj )
                 {
-                    pParaObj->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
+                    pParaObj->SetOutlinerMode( OutlinerMode::OutlineObject );
                     pOutl->AddText(*pParaObj);
                 }
             }

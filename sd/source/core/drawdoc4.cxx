@@ -884,12 +884,12 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
         Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
 
-        sal_uInt16 nOldOutlMode = pOutl->GetMode();
-        sal_uInt16 nOutlMode = OUTLINERMODE_TEXTOBJECT;
+        OutlinerMode nOldOutlMode = pOutl->GetMode();
+        OutlinerMode nOutlMode = OutlinerMode::TextObject;
         if (pObj->GetObjInventor() == SdrInventor &&
             pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
-            nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
+            nOutlMode = OutlinerMode::OutlineObject;
         }
         pOutl->Init( nOutlMode );
 

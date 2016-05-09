@@ -30,6 +30,7 @@ class SdrOutliner;
 class SdrTextObj;
 class SdrModel;
 class SfxItemSet;
+enum class OutlinerMode;
 
 namespace sdr { namespace properties {
     class TextProperties;
@@ -46,7 +47,7 @@ public:
     virtual ~SdrText();
 
     virtual void SetModel(SdrModel* pNewModel);
-    void ForceOutlinerParaObject( sal_uInt16 nOutlMode );
+    void ForceOutlinerParaObject( OutlinerMode nOutlMode );
 
     virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
     OutlinerParaObject* GetOutlinerParaObject() const;

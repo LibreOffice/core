@@ -580,7 +580,7 @@ public:
 
     void ReformatAllTextObjects();
 
-    SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
+    SdrOutliner* createOutliner( OutlinerMode nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
 
     bool IsWriter() const { return !bMyPool; }

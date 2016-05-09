@@ -27,7 +27,7 @@
 SdrOutliner* FuText::MakeOutliner()
 {
     ScViewData& rViewData = pViewShell->GetViewData();
-    SdrOutliner* pOutl = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *pDrDoc);
+    SdrOutliner* pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *pDrDoc);
 
     rViewData.UpdateOutlinerFlags(*pOutl);
 

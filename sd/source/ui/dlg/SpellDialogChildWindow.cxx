@@ -147,7 +147,7 @@ void SpellDialogChildWindow::ProvideOutliner()
                 // to create one.
                 mbOwnOutliner = true;
                 SdDrawDocument *pDoc = pViewShell->GetDoc();
-                mpSdOutliner = new Outliner(pDoc, OUTLINERMODE_TEXTOBJECT);
+                mpSdOutliner = new Outliner(pDoc, OutlinerMode::TextObject);
                 StartListening(*pDoc);
             }
             else if( dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr)

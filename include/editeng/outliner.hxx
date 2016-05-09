@@ -560,16 +560,21 @@ struct EBulletInfo
     EBulletInfo() : bVisible( false ), nType( 0 ), nParagraph( EE_PARA_NOT_FOUND ) {}
 };
 
-#define OUTLINERMODE_DONTKNOW       0x0000
-#define OUTLINERMODE_TEXTOBJECT     0x0001
-#define OUTLINERMODE_TITLEOBJECT    0x0002
-#define OUTLINERMODE_OUTLINEOBJECT  0x0003
-#define OUTLINERMODE_OUTLINEVIEW    0x0004
+enum class OutlinerMode {
+    DontKnow       = 0x0000,
+    TextObject     = 0x0001,
+    TitleObject    = 0x0002,
+    OutlineObject  = 0x0003,
+    OutlineView    = 0x0004,
+    Subtitle       = 0x0101,
+    Note           = 0x0201
+};
+namespace o3tl
+{
+    template<> struct typed_flags<OutlinerMode> : is_typed_flags<OutlinerMode, 0x030f> {};
+}
 
-#define OUTLINERMODE_USERMASK       0x00FF
-
-#define OUTLINERMODE_SUBTITLE       (0x0100|OUTLINERMODE_TEXTOBJECT)
-#define OUTLINERMODE_NOTE           (0x0200|OUTLINERMODE_TEXTOBJECT)
+#define OUTLINERMODE_USERMASK       (OutlinerMode)0x00FF
 
 class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 {
@@ -611,7 +616,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     const sal_Int16     nMinDepth;
     sal_Int32           nFirstPage;
 
-    sal_uInt16          nOutlinerMode;
+    OutlinerMode        nOutlinerMode;
 
     bool                bFirstParaIsEmpty;
     sal_uInt8           nBlockInsCallback;
@@ -646,7 +651,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
 
-    sal_uInt16  ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    OutlinerMode ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
     void        ImplCheckDepth( sal_Int16& rnDepth ) const;
 
 protected:
@@ -667,11 +672,11 @@ protected:
 
 public:
 
-                    Outliner( SfxItemPool* pPool, sal_uInt16 nOutlinerMode );
+                    Outliner( SfxItemPool* pPool, OutlinerMode nOutlinerMode );
     virtual         ~Outliner();
 
-    void            Init( sal_uInt16 nOutlinerMode );
-    sal_uInt16      GetMode() const { return nOutlinerMode; }
+    void            Init( OutlinerMode nOutlinerMode );
+    OutlinerMode    GetMode() const { return nOutlinerMode; }
 
     void            SetVertical( bool bVertical );
     bool            IsVertical() const;
@@ -950,7 +955,7 @@ public:
     // this is needed for StarOffice Api
     void            SetLevelDependendStyleSheet( sal_Int32 nPara );
 
-    sal_uInt16      GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    OutlinerMode    GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
 
     // spell and return a sentence
     bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );

@@ -27,6 +27,7 @@
 #include <o3tl/cow_wrapper.hxx>
 
 class EditTextObject;
+enum class OutlinerMode;
 
 /**
  * This is the guts of OutlinerParaObject, refcounted and shared among
@@ -74,8 +75,8 @@ public:
     bool isWrongListEqual(const OutlinerParaObject& rCompare) const;
 
     // outliner mode access
-    sal_uInt16 GetOutlinerMode() const;
-    void SetOutlinerMode(sal_uInt16 nNew);
+    OutlinerMode GetOutlinerMode() const;
+    void SetOutlinerMode(OutlinerMode nNew);
 
     // vertical access
     bool IsVertical() const;

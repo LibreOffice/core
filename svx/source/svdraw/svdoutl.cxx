@@ -26,7 +26,7 @@
 #include <svl/itempool.hxx>
 
 
-SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
+SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, OutlinerMode nMode )
 :   Outliner( pItemPool, nMode ),
     //mpPaintInfoRec( NULL )
     mpVisualizedPage(nullptr)
@@ -44,9 +44,9 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
     if( pObj && pObj != mpTextObj.get() )
     {
         SetUpdateMode(false);
-        sal_uInt16 nOutlinerMode2 = OUTLINERMODE_OUTLINEOBJECT;
+        OutlinerMode nOutlinerMode2 = OutlinerMode::OutlineObject;
         if ( !pObj->IsOutlText() )
-            nOutlinerMode2 = OUTLINERMODE_TEXTOBJECT;
+            nOutlinerMode2 = OutlinerMode::TextObject;
         Init( nOutlinerMode2 );
 
         SetGlobalCharStretching();

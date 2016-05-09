@@ -269,7 +269,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     bool bOutlineViewSh = dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr;
 
                     if (pOLV &&
-                        ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
+                        ( pOLV->GetOutliner()->GetMode() == OutlinerMode::OutlineObject || bOutlineViewSh ) )
                     {
                         // Outliner at outline-mode
                         ::Outliner* pOutl = pOLV->GetOutliner();
@@ -279,7 +279,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         Paragraph* pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
 
                         // find out if we are a OutlineView
-                        bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
+                        bool bIsOutlineView(OutlinerMode::OutlineView == pOLV->GetOutliner()->GetMode());
 
                         // This is ONLY for OutlineViews
                         if(bIsOutlineView)
@@ -294,7 +294,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         }
                         else
                         {
-                            // old behaviour for OUTLINERMODE_OUTLINEOBJECT
+                            // old behaviour for OutlinerMode::OutlineObject
                             if(pOutl->GetAbsPos(pPara) > 0)
                             {
                                 // not at top

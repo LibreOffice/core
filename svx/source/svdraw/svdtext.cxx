@@ -169,7 +169,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
     }
 }
 
-void SdrText::ForceOutlinerParaObject( sal_uInt16 nOutlMode )
+void SdrText::ForceOutlinerParaObject( OutlinerMode nOutlMode )
 {
     if( mpModel && !mpOutlinerParaObject )
     {
