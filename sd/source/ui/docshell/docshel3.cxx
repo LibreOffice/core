@@ -80,8 +80,8 @@ static void lcl_setLanguageForObj( SdrObject *pObj, LanguageType nLang, bool bLa
     {
         if( nLang == LANGUAGE_NONE )
         {
-            for(sal_Int32 n = 0; n < 3; n++ )
-                pObj->SetMergedItem( SvxLanguageItem( nLang, aLangWhichId_EE[n] ) );
+            for(sal_uInt16 n : aLangWhichId_EE)
+                pObj->SetMergedItem( SvxLanguageItem( nLang, n ) );
         }
         else
         {
@@ -101,8 +101,8 @@ static void lcl_setLanguageForObj( SdrObject *pObj, LanguageType nLang, bool bLa
     }
     else    // Reset to default
     {
-        for( sal_Int32 n = 0; n < 3; n++ )
-            pObj->ClearMergedItem( aLangWhichId_EE[n] );
+        for(sal_uInt16 n : aLangWhichId_EE)
+            pObj->ClearMergedItem( n );
     }
 }
 

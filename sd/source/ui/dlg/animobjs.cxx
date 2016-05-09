@@ -213,10 +213,10 @@ void AnimationWindow::dispose()
 {
     DELETEZ( pControllerItem );
 
-    for (size_t i = 0; i < m_FrameList.size(); ++i)
+    for (const std::pair<BitmapEx*, tools::Time*> & i : m_FrameList)
     {
-        delete m_FrameList[i].first;
-        delete m_FrameList[i].second;
+        delete i.first;
+        delete i.second;
     }
     m_FrameList.clear();
     m_nCurrentFrame = EMPTY_FRAMELIST;

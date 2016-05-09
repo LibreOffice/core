@@ -267,9 +267,9 @@ void SdTPAction::Construct()
     maCurrentActions.push_back( presentation::ClickAction_STOPPRESENTATION );
 
     // fill Action-Listbox
-    for (size_t nAction = 0, n = maCurrentActions.size(); nAction < n; nAction++)
+    for (presentation::ClickAction & rAction : maCurrentActions)
     {
-        sal_uInt16 nRId = GetClickActionSdResId( maCurrentActions[ nAction ] );
+        sal_uInt16 nRId = GetClickActionSdResId( rAction );
         m_pLbAction->InsertEntry( SD_RESSTR( nRId ) );
     }
 

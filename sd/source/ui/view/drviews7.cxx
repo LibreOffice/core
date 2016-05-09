@@ -1445,10 +1445,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                                                      SID_DRAWTBX_CS_CALLOUT, SID_DRAWTBX_CS_STAR };
 
             const sal_uInt16 nCurrentSId = GetCurrentFunction()->GetSlotID();
-            for ( size_t i = 0; i < SAL_N_ELEMENTS( nCSTbArray ); ++i )
+            for (sal_uInt16 i : nCSTbArray)
             {
-                rSet.ClearItem( nCSTbArray[i] ); // Why is this necessary?
-                rSet.Put( SfxStringItem( nCSTbArray[i], nCurrentSId == nCSTbArray[i] && pShapeFunc
+                rSet.ClearItem( i ); // Why is this necessary?
+                rSet.Put( SfxStringItem( i, nCurrentSId == i && pShapeFunc
                                          ? pShapeFunc->GetShapeType() : OUString() ) );
             }
         }

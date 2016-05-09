@@ -1436,8 +1436,8 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 
 void InitFuncDataList( FuncDataList& rList, ResMgr& rResMgr )
 {
-    for( sal_uInt16 n = 0 ; n < SAL_N_ELEMENTS(pFuncDatas) ; n++ )
-        rList.push_back( FuncData( pFuncDatas[ n ], rResMgr ) );
+    for(const auto & rFuncData : pFuncDatas)
+        rList.push_back( FuncData( rFuncData, rResMgr ) );
 }
 
 
@@ -2073,8 +2073,8 @@ void Complex::Csch() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 
 ComplexList::~ComplexList()
 {
-    for( size_t i = 0; i < maVector.size(); ++i )
-        delete maVector[i];
+    for(Complex* p : maVector)
+        delete p;
 }
 
 
