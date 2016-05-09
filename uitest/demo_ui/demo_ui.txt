@@ -1,0 +1,10 @@
+demo_ui.checkbox.toggle_checkbox
+demo_ui.combobox.select_entry_pos
+demo_ui.edit.type_text
+demo_ui.gridwin.select_cell
+demo_ui.gridwin.select_range
+demo_ui.gridwin.extend_range
+demo_ui.listbox.select_entry_pos
+demo_ui.listbox.select_entry_text
+demo_ui.tabdialog.select_tab_page_pos
+demo_ui.tabdialog.select_tab_page_name
