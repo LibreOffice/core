@@ -1310,7 +1310,7 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt1
             {
                 OUString aLocalName;
                 const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-                /* fixme sven, this needs to be chekced! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
+                /* fixme sven, this needs to be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
 
                 switch( EASGet( aLocalName ) )
                 {
@@ -1339,7 +1339,7 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt1
         {
             OUString aLocalName;
             const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            /* fixme sven, this needs to be chekced! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
+            /* fixme sven, this needs to be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
             switch( EASGet( aLocalName ) )
             {
                 case EAS_handle_mirror_vertical :

@@ -183,7 +183,7 @@ private:
     virtual sal_Bool SAL_CALL rowDeleted() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
-    // conatiner::XChild
+    // container::XChild
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
