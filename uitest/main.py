@@ -19,6 +19,7 @@ def load_test(name):
     return obj
 
 def generic_test(opts, test_name):
+    print("executing: " + test_name)
     connection = PersistentConnection(opts)
     connection.setUp()
     xContext = connection.getContext()
