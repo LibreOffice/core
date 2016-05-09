@@ -1632,7 +1632,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
          */
         if( ! IsChildWindow() &&
             (pState->mnMask & WindowStateMask::State) &&
-            (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED) &&
+            (pState->mnState & WindowStateState::Maximized) &&
             (pState->mnMask & FRAMESTATE_MASK_GEOMETRY) == FRAMESTATE_MASK_GEOMETRY &&
             (pState->mnMask & FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
             )
@@ -1732,15 +1732,15 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     // request for status change
     if (pState->mnMask & WindowStateMask::State)
     {
-        if (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED)
+        if (pState->mnState & WindowStateState::Maximized)
         {
             nShowState_ = SHOWSTATE_NORMAL;
-            if( ! (pState->mnState & (WINDOWSTATE_STATE_MAXIMIZED_HORZ|WINDOWSTATE_STATE_MAXIMIZED_VERT) ) )
+            if( ! (pState->mnState & (WindowStateState::MaximizedHorz|WindowStateState::MaximizedVert) ) )
                 Maximize();
             else
             {
-                bool bHorz = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_HORZ) != 0;
-                bool bVert = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_VERT) != 0;
+                bool bHorz(pState->mnState & WindowStateState::MaximizedHorz);
+                bool bVert(pState->mnState & WindowStateState::MaximizedVert);
                 GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
             }
             maRestorePosSize.Left() = pState->mnX;
@@ -1751,18 +1751,18 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         else if( mbMaximizedHorz || mbMaximizedVert )
             GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
 
-        if (pState->mnState & WINDOWSTATE_STATE_MINIMIZED)
+        if (pState->mnState & WindowStateState::Minimized)
         {
             if (nShowState_ == SHOWSTATE_UNKNOWN)
                 nShowState_ = SHOWSTATE_NORMAL;
             Minimize();
         }
-        if (pState->mnState & WINDOWSTATE_STATE_NORMAL)
+        if (pState->mnState & WindowStateState::Normal)
         {
             if (nShowState_ != SHOWSTATE_NORMAL)
                 Restore();
         }
-        if (pState->mnState & WINDOWSTATE_STATE_ROLLUP)
+        if (pState->mnState & WindowStateState::Rollup)
             GetDisplay()->getWMAdaptor()->shade( this, true );
     }
 }
@@ -1770,9 +1770,9 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
 bool X11SalFrame::GetWindowState( SalFrameState* pState )
 {
     if( SHOWSTATE_MINIMIZED == nShowState_ )
-        pState->mnState = WINDOWSTATE_STATE_MINIMIZED;
+        pState->mnState = WindowStateState::Minimized;
     else
-        pState->mnState = WINDOWSTATE_STATE_NORMAL;
+        pState->mnState = WindowStateState::Normal;
 
     Rectangle aPosSize;
     if( maRestorePosSize.IsEmpty() )
@@ -1781,11 +1781,11 @@ bool X11SalFrame::GetWindowState( SalFrameState* pState )
         aPosSize = maRestorePosSize;
 
     if( mbMaximizedHorz )
-        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED_HORZ;
+        pState->mnState |= WindowStateState::MaximizedHorz;
     if( mbMaximizedVert )
-        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED_VERT;
+        pState->mnState |= WindowStateState::MaximizedVert;
     if( mbShaded )
-        pState->mnState |= WINDOWSTATE_STATE_ROLLUP;
+        pState->mnState |= WindowStateState::Rollup;
 
     pState->mnX      = aPosSize.Left();
     pState->mnY      = aPosSize.Top();
@@ -1797,7 +1797,7 @@ bool X11SalFrame::GetWindowState( SalFrameState* pState )
     if (! maRestorePosSize.IsEmpty() )
     {
         GetPosSize( aPosSize );
-        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED;
+        pState->mnState |= WindowStateState::Maximized;
         pState->mnMaximizedX      = aPosSize.Left();
         pState->mnMaximizedY      = aPosSize.Top();
         pState->mnMaximizedWidth  = aPosSize.GetWidth();

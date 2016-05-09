@@ -63,13 +63,20 @@ namespace o3tl
     template<> struct typed_flags<WindowStateMask> : is_typed_flags<WindowStateMask, 0x0f3f> {};
 }
 
-#define WINDOWSTATE_STATE_NORMAL         ((sal_uInt32)0x00000001)
-#define WINDOWSTATE_STATE_MINIMIZED      ((sal_uInt32)0x00000002)
-#define WINDOWSTATE_STATE_MAXIMIZED      ((sal_uInt32)0x00000004)
-#define WINDOWSTATE_STATE_ROLLUP         ((sal_uInt32)0x00000008)
-#define WINDOWSTATE_STATE_MAXIMIZED_HORZ ((sal_uInt32)0x00000010)
-#define WINDOWSTATE_STATE_MAXIMIZED_VERT ((sal_uInt32)0x00000020)
-#define WINDOWSTATE_STATE_SYSTEMMASK     ((sal_uInt32)0x0000FFFF)
+enum class WindowStateState {
+    NONE           = 0x0000,
+    Normal         = 0x0001,
+    Minimized      = 0x0002,
+    Maximized      = 0x0004,
+    Rollup         = 0x0008,
+    MaximizedHorz  = 0x0010,
+    MaximizedVert  = 0x0020,
+    SystemMask     = 0xffff
+};
+namespace o3tl
+{
+    template<> struct typed_flags<WindowStateState> : is_typed_flags<WindowStateState, 0xffff> {};
+}
 
 class VCL_PLUGIN_PUBLIC WindowStateData
 {
@@ -83,7 +90,7 @@ private:
     int                 mnMaximizedY;
     unsigned int        mnMaximizedWidth;
     unsigned int        mnMaximizedHeight;
-    sal_uInt32          mnState;
+    WindowStateState    mnState;
 
 public:
     WindowStateData()
@@ -96,7 +103,7 @@ public:
         , mnMaximizedY(0)
         , mnMaximizedWidth(0)
         , mnMaximizedHeight(0)
-        , mnState(0)
+        , mnState(WindowStateState::NONE)
     {
     }
 
@@ -111,8 +118,8 @@ public:
     unsigned int GetWidth() const { return mnWidth; }
     void         SetHeight( unsigned int nHeight ) { mnHeight = nHeight; }
     unsigned int GetHeight() const { return mnHeight; }
-    void         SetState( sal_uInt32 nState ) { mnState = nState; }
-    sal_uInt32   GetState() const { return mnState; }
+    void         SetState( WindowStateState nState ) { mnState = nState; }
+    WindowStateState GetState() const { return mnState; }
     void         SetMaximizedX( int nRX ) { mnMaximizedX = nRX; }
     int          GetMaximizedX() const { return mnMaximizedX; }
     void         SetMaximizedY( int nRY ) { mnMaximizedY = nRY; }

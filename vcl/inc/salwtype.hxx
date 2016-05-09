@@ -32,6 +32,7 @@ namespace vcl { class Window; }
 class FontSelectPattern;
 enum class InputContextFlags;
 enum class WindowStateMask;
+enum class WindowStateState;
 
 #define SALEVENT_MOUSEMOVE              ((sal_uInt16)1)
 #define SALEVENT_MOUSELEAVE             ((sal_uInt16)2)
@@ -234,7 +235,7 @@ struct SalFrameState
     long            mnMaximizedY;
     long            mnMaximizedWidth;
     long            mnMaximizedHeight;
-    sal_uLong       mnState;
+    WindowStateState mnState;
 };
 
 struct SalInputContext

@@ -1836,7 +1836,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
 
     if( (pState->mnMask & WindowStateMask::State) &&
         ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) &&
-        (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED) &&
+        (pState->mnState & WindowStateState::Maximized) &&
         (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
     {
         resizeWindow( pState->mnWidth, pState->mnHeight );
@@ -1876,7 +1876,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
     }
     if( pState->mnMask & WindowStateMask::State && ! isChild() )
     {
-        if( pState->mnState & WINDOWSTATE_STATE_MAXIMIZED )
+        if( pState->mnState & WindowStateState::Maximized )
             gtk_window_maximize( GTK_WINDOW(m_pWindow) );
         else
             gtk_window_unmaximize( GTK_WINDOW(m_pWindow) );
@@ -1888,7 +1888,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         *  on windows with a parent (that is transient frames) since these tend
         *  to not be represented in an icon task list.
         */
-        if( (pState->mnState & WINDOWSTATE_STATE_MINIMIZED)
+        if( (pState->mnState & WindowStateState::Minimized)
             && ! m_pParent )
             gtk_window_iconify( GTK_WINDOW(m_pWindow) );
         else
@@ -1899,14 +1899,14 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
 
 bool GtkSalFrame::GetWindowState( SalFrameState* pState )
 {
-    pState->mnState = WINDOWSTATE_STATE_NORMAL;
+    pState->mnState = WindowStateState::Normal;
     pState->mnMask  = WindowStateMask::State;
     // rollup ? gtk 2.2 does not seem to support the shaded state
     if( (m_nState & GDK_WINDOW_STATE_ICONIFIED) )
-        pState->mnState |= WINDOWSTATE_STATE_MINIMIZED;
+        pState->mnState |= WindowStateState::Minimized;
     if( m_nState & GDK_WINDOW_STATE_MAXIMIZED )
     {
-        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED;
+        pState->mnState |= WindowStateState::Maximized;
         pState->mnX                 = m_aRestorePosSize.Left();
         pState->mnY                 = m_aRestorePosSize.Top();
         pState->mnWidth             = m_aRestorePosSize.GetWidth();
