@@ -89,25 +89,34 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mbIsFlip(false),
     mxSidebar(rxSidebar)
 {
-    get( mpFtPosX,    "horizontallabel" );
+    get( mpFtPos,   "positionlabel" );
+    get( mpFtPosX,  "horizontallabel" );
     get( mpMtrPosX,   "horizontalpos" );
-    get( mpFtPosY,    "verticallabel" );
+    get( mpFtPosY,  "verticallabel" );
     get( mpMtrPosY,   "verticalpos" );
-    get( mpFtWidth,   "widthlabel" );
+    get( mpProtectPos, "protectposition" );
+    get( mpFtSize,   "sizelabel" );
+    get( mpFtWidth,  "widthlabel" );
     get( mpMtrWidth,  "selectwidth" );
     get( mpFtHeight,  "heightlabel" );
     get( mpMtrHeight, "selectheight" );
+    get( mpProtectSize, "protectsize" );
     get( mpCbxScale,  "ratio" );
     get( mpFtAngle,   "rotationlabel" );
     get( mpMtrAngle,  "rotation" );
-    get( mpDial,      "orientationcontrol" );
+    get( mpRotateLeft, "rotateleft" );
+    get( mpRotateRight, "rotateright" );
     get( mpFtFlip,    "fliplabel" );
-    get( mpFlipTbx,   "selectrotationtype" );
+    get( mpFlipTbx,   "fliptbx" );
+
     Initialize();
 
     mpBindings->Update( SID_ATTR_TRANSFORM_WIDTH );
     mpBindings->Update( SID_ATTR_TRANSFORM_HEIGHT );
+    mpBindings->Update( SID_ATTR_TRANSFORM_POS_X );
+    mpBindings->Update( SID_ATTR_TRANSFORM_POS_Y );
     mpBindings->Update( SID_ATTR_TRANSFORM_PROTECT_SIZE );
+    mpBindings->Update( SID_ATTR_TRANSFORM_PROTECT_POS );
     mpBindings->Update( SID_ATTR_METRIC );
 }
 
@@ -118,18 +127,23 @@ PosSizePropertyPanel::~PosSizePropertyPanel()
 
 void PosSizePropertyPanel::dispose()
 {
+    mpFtPos.clear();
     mpFtPosX.clear();
     mpMtrPosX.clear();
     mpFtPosY.clear();
     mpMtrPosY.clear();
+    mpProtectPos.clear();
+    mpFtSize.clear();
     mpFtWidth.clear();
     mpMtrWidth.clear();
     mpFtHeight.clear();
     mpMtrHeight.clear();
+    mpProtectSize.clear();
     mpCbxScale.clear();
     mpFtAngle.clear();
     mpMtrAngle.clear();
-    mpDial.clear();
+    mpRotateLeft.clear();
+    mpRotateRight.clear();
     mpFtFlip.clear();
     mpFlipTbx.clear();
 
@@ -149,7 +163,6 @@ void PosSizePropertyPanel::dispose()
 
     PanelLayout::dispose();
 }
-
 
 namespace
 {
@@ -183,10 +196,12 @@ void PosSizePropertyPanel::Initialize()
     //Position : Horizontal / Vertical
     mpMtrPosX->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
     mpMtrPosY->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
+    mpProtectPos->SetClickHdl( LINK( this, PosSizePropertyPanel, ProtectPosition ) );
 
     //Size : Width / Height
     mpMtrWidth->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
     mpMtrHeight->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpProtectSize->SetClickHdl( LINK( this, PosSizePropertyPanel, ProtectSize ) );
 
     //Size : Keep ratio
     mpCbxScale->SetClickHdl( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
@@ -194,10 +209,8 @@ void PosSizePropertyPanel::Initialize()
     //rotation:
     mpMtrAngle->SetModifyHdl(LINK( this, PosSizePropertyPanel, AngleModifiedHdl));
     mpMtrAngle->EnableAutocomplete( false );
-
-    //rotation control
-    mpDial->SetModifyHdl(LINK( this, PosSizePropertyPanel, RotationHdl));
-
+    mpRotateLeft->SetClickHdl(LINK( this, PosSizePropertyPanel, RotationClickHdl ));
+    mpRotateRight->SetClickHdl(LINK( this, PosSizePropertyPanel, RotationClickHdl ));
     //flip:
     mpFlipTbx->SetSelectHdl( LINK( this, PosSizePropertyPanel, FlipHdl) );
 
@@ -263,7 +276,6 @@ void PosSizePropertyPanel::HandleContextChange(
 
     maContext = rContext;
 
-    bool bShowPosition = false;
     bool bShowAngle = false;
     bool bShowFlip = false;
 
@@ -285,35 +297,16 @@ void PosSizePropertyPanel::HandleContextChange(
         case CombinedEnumContext(Application_DrawImpress, Context_DrawLine):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-            bShowPosition = true;
             bShowAngle = true;
             bShowFlip = true;
             break;
-
-        case CombinedEnumContext(Application_Calc, Context_Chart):
-        case CombinedEnumContext(Application_Calc, Context_Form):
-        case CombinedEnumContext(Application_Calc, Context_Media):
-        case CombinedEnumContext(Application_Calc, Context_OLE):
-        case CombinedEnumContext(Application_Calc, Context_MultiObject):
-        case CombinedEnumContext(Application_DrawImpress, Context_Media):
-        case CombinedEnumContext(Application_DrawImpress, Context_Form):
-        case CombinedEnumContext(Application_DrawImpress, Context_OLE):
-        case CombinedEnumContext(Application_DrawImpress, Context_3DObject):
-        case CombinedEnumContext(Application_DrawImpress, Context_MultiObject):
-            bShowPosition = true;
-            break;
     }
-
-    // Position
-    mpFtPosX->Show(bShowPosition);
-    mpMtrPosX->Show(bShowPosition);
-    mpFtPosY->Show(bShowPosition);
-    mpMtrPosY->Show(bShowPosition);
 
     // Rotation
     mpFtAngle->Show(bShowAngle);
     mpMtrAngle->Show(bShowAngle);
-    mpDial->Show(bShowAngle);
+    mpRotateLeft->Show(bShowAngle);
+    mpRotateRight->Show(bShowAngle);
 
     // Flip
     mpFtFlip->Show(bShowFlip);
@@ -324,6 +317,55 @@ void PosSizePropertyPanel::HandleContextChange(
         mxSidebar->requestLayout();
 }
 
+
+double PosSizePropertyPanel::GetAngle()
+{
+    OUString sTmp = mpMtrAngle->GetText();
+    if (sTmp.isEmpty())
+        return DBL_MAX;
+    sal_Unicode nChar = sTmp[0];
+    if( nChar == '-' )
+    {
+        if (sTmp.getLength() < 2)
+            return DBL_MAX;
+        nChar = sTmp[1];
+    }
+
+    if( (nChar < '0') || (nChar > '9') )
+        return DBL_MAX;
+
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
+
+    // Do not check that the entire string was parsed up to its end, there may
+    // be a degree symbol following the number. Note that this also means that
+    // the number recognized just stops at any non-matching character.
+    /* TODO: we could check for the degree symbol stop if there are no other
+     * cases with different symbol characters in any language? */
+    rtl_math_ConversionStatus eStatus;
+    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
+    if (eStatus != rtl_math_ConversionStatus_Ok)
+        return DBL_MAX;
+
+    return fTmp;
+}
+
+void PosSizePropertyPanel::ExecuteAngleChange( double fTmp )
+{
+    while (fTmp < 0)
+        fTmp += 360;
+
+    sal_Int64 nTmp = fTmp*100;
+
+    // #i123993# Need to take UIScale into account when executing rotations
+    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
+    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
+    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
+    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
+
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_TRANSFORM,
+        SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem } );
+}
 
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 {
@@ -368,6 +410,10 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
     executeSize();
 }
 
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ProtectSize, Button*, void )
+{
+    executeProtectSize();
+}
 
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
 {
@@ -380,6 +426,11 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
     executePosY();
 }
 
+
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ProtectPosition, Button*, void )
+{
+    executeProtectPos();
+}
 
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
 {
@@ -397,63 +448,25 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
 
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
 {
-    OUString sTmp = mpMtrAngle->GetText();
-    if (sTmp.isEmpty())
+    double fTmp = GetAngle();
+    if(fTmp == DBL_MAX)
         return;
-    sal_Unicode nChar = sTmp[0];
-    if( nChar == '-' )
-    {
-        if (sTmp.getLength() < 2)
-            return;
-        nChar = sTmp[1];
-    }
-
-    if( (nChar < '0') || (nChar > '9') )
-        return;
-
-    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
-
-    // Do not check that the entire string was parsed up to its end, there may
-    // be a degree symbol following the number. Note that this also means that
-    // the number recognized just stops at any non-matching character.
-    /* TODO: we could check for the degree symbol stop if there are no other
-     * cases with different symbol characters in any language? */
-    rtl_math_ConversionStatus eStatus;
-    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
-    if (eStatus != rtl_math_ConversionStatus_Ok)
-        return;
-
-    while (fTmp < 0)
-        fTmp += 360;
-
-    sal_Int64 nTmp = fTmp*100;
-
-    // #i123993# Need to take UIScale into account when executing rotations
-    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
-
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-            SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
+    ExecuteAngleChange( fTmp );
 }
 
-
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, RotationHdl, DialControl*, void )
+IMPL_LINK_TYPED( PosSizePropertyPanel, RotationClickHdl, Button*, pBtn, void )
 {
-    sal_Int32 nTmp = mpDial->GetRotation();
+    double fTmp = GetAngle();
+    if(fTmp == DBL_MAX)
+        return;
 
-    // #i123993# Need to take UIScale into account when executing rotations
-    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
+    if(pBtn == mpRotateLeft)
+        fTmp += 45;
+    else if(pBtn == mpRotateRight)
+        fTmp -= 45;
 
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-            SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
+    ExecuteAngleChange(fTmp);
 }
-
 
 IMPL_LINK_TYPED( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
 {
@@ -462,17 +475,16 @@ IMPL_LINK_TYPED( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
     if(aCommand == UNO_FLIPHORIZONTAL)
     {
         SfxVoidItem aHoriItem(SID_FLIP_HORIZONTAL);
-        GetBindings()->GetDispatcher()->ExecuteList(SID_FLIP_HORIZONTAL,
-                SfxCallMode::RECORD, { &aHoriItem });
+        GetBindings()->GetDispatcher()->ExecuteList(
+                SID_FLIP_HORIZONTAL, SfxCallMode::RECORD,{ &aHoriItem } );
     }
     else if(aCommand == UNO_FLIPVERTICAL)
     {
         SfxVoidItem aVertItem(SID_FLIP_VERTICAL);
-        GetBindings()->GetDispatcher()->ExecuteList(SID_FLIP_VERTICAL,
-                SfxCallMode::RECORD, { &aVertItem });
+        GetBindings()->GetDispatcher()->ExecuteList(
+                SID_FLIP_VERTICAL, SfxCallMode::RECORD,{ &aVertItem });
     }
 }
-
 
 void PosSizePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -484,7 +496,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
     mpFtAngle->Enable();
     mpMtrAngle->Enable();
-    mpDial->Enable();
+    mpRotateLeft->Enable();
+    mpRotateRight->Enable();
     mpFtFlip->Enable();
     mpFlipTbx->Enable();
 
@@ -619,6 +632,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 {
                     // record the state of position protect
                     mbPositionProtected = pItem->GetValue();
+                    if(mbPositionProtected)
+                        mbSizeProtected = true;
                     break;
                 }
             }
@@ -676,7 +691,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     long nTmp = pItem->GetValue();
 
                     mpMtrAngle->SetValue( nTmp );
-                    mpDial->SetRotation( nTmp );
 
                     switch(nTmp)
                     {
@@ -711,7 +725,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             }
 
             mpMtrAngle->SetText( "" );
-            mpDial->SetRotation( 0 );
             break;
 
         case SID_ATTR_METRIC:
@@ -743,7 +756,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             {
                 mpFtAngle->Disable();
                 mpMtrAngle->Disable();
-                mpDial->Disable();
+                mpRotateLeft->Disable();
+                mpRotateRight->Disable();
                 mpFlipTbx->Disable();
                 mpFtFlip->Disable();
             }
@@ -775,7 +789,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             {
                 mpFtAngle->Disable();
                 mpMtrAngle->Disable();
-                mpDial->Disable();
+                mpRotateLeft->Disable();
+                mpRotateRight->Disable();
                 mpFlipTbx->Disable();
                 mpFtFlip->Disable();
             }
@@ -832,20 +847,16 @@ void PosSizePropertyPanel::executeSize()
             || nCombinedContext == CombinedEnumContext(Application_WriterVariants, Context_OLE)
             )
         {
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::RECORD,{ &aWidthItem, &aHeightItem, &aPointItem });
         }
         else
         {
             if ( (mpMtrWidth->IsValueModified()) && (mpMtrHeight->IsValueModified()))
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                    SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::RECORD,{ &aWidthItem, &aHeightItem, &aPointItem });
             else if( mpMtrWidth->IsValueModified())
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                    SfxCallMode::RECORD, { &aWidthItem, &aPointItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::RECORD,{ &aWidthItem, &aPointItem });
             else if ( mpMtrHeight->IsValueModified())
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                    SfxCallMode::RECORD, { &aHeightItem, &aPointItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::RECORD,{ &aHeightItem, &aPointItem });
         }
     }
 }
@@ -870,7 +881,7 @@ void PosSizePropertyPanel::executePosX()
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
         GetBindings()->GetDispatcher()->ExecuteList(
-            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
+            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, {&aPosXItem} );
     }
 }
 
@@ -892,10 +903,59 @@ void PosSizePropertyPanel::executePosY()
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
         GetBindings()->GetDispatcher()->ExecuteList(
-            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });
+            SID_ATTR_TRANSFORM, SfxCallMode::RECORD,{ &aPosYItem });
     }
 }
 
+
+void PosSizePropertyPanel::executeProtectPos()
+{
+    TriState ePosState = mpProtectPos->GetState();
+    TriState eSizeState = TRISTATE_INDET;
+    if(ePosState == TRISTATE_TRUE)
+    {
+        mpProtectPos->SetState(TRISTATE_FALSE);
+        eSizeState = mpProtectSize->GetSavedValue();
+        mpProtectSize->SetState( eSizeState );
+        mbPositionProtected = false;
+    }
+    else if(ePosState == TRISTATE_FALSE)
+    {
+        mpProtectPos->SetState(TRISTATE_TRUE);
+        eSizeState = TRISTATE_TRUE;
+        mpProtectSize->SetState(eSizeState);
+        mbPositionProtected = true;
+    }
+
+    mbSizeProtected = (eSizeState == TRISTATE_TRUE);
+    SfxBoolItem aSizeItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, mbSizeProtected );
+    SfxBoolItem aPosItem( SID_ATTR_TRANSFORM_PROTECT_POS, mbPositionProtected );
+
+    GetBindings()->GetDispatcher()->ExecuteList(
+        SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosItem, &aSizeItem });
+}
+
+void PosSizePropertyPanel::executeProtectSize()
+{
+    TriState eSizeState = mpProtectSize->GetState();
+    TriState ePosState = mpProtectPos->GetState();
+
+    if( (eSizeState == TRISTATE_TRUE) && (ePosState != TRISTATE_TRUE) )
+    {
+        mpProtectSize->SetState(TRISTATE_FALSE);
+        mbSizeProtected = false;
+    }
+    else if(eSizeState == TRISTATE_FALSE)
+    {
+        mpProtectSize->SetState(TRISTATE_TRUE);
+        mbSizeProtected = true;
+    }
+
+    mpProtectSize->SaveValue();
+    SfxBoolItem aItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, mbSizeProtected );
+    GetBindings()->GetDispatcher()->ExecuteList(
+        SID_ATTR_TRANSFORM, SfxCallMode::RECORD, {&aItem});
+}
 
 void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -975,16 +1035,21 @@ void PosSizePropertyPanel::DisableControls()
     {
         // the position is protected("Position protect" option in modal dialog is checked),
         // disable all the Position controls in sidebar
+        mpFtPos->Disable();
         mpFtPosX->Disable();
         mpMtrPosX->Disable();
         mpFtPosY->Disable();
         mpMtrPosY->Disable();
+        mpProtectPos->SetState(TRISTATE_TRUE);
+        mpProtectSize->SetState(TRISTATE_TRUE);
         mpFtAngle->Disable();
         mpMtrAngle->Disable();
-        mpDial->Disable();
+        mpRotateLeft->Disable();
+        mpRotateRight->Disable();
         mpFtFlip->Disable();
         mpFlipTbx->Disable();
 
+        mpFtSize->Disable();
         mpFtWidth->Disable();
         mpMtrWidth->Disable();
         mpFtHeight->Disable();
@@ -993,37 +1058,45 @@ void PosSizePropertyPanel::DisableControls()
     }
     else
     {
+        mpFtPos->Enable();
         mpFtPosX->Enable();
         mpMtrPosX->Enable();
         mpFtPosY->Enable();
         mpMtrPosY->Enable();
+        mpProtectPos->SetState(TRISTATE_FALSE);
 
-        //mpFtAngle->Enable();
-        //mpMtrAngle->Enable();
-        //mpDial->Enable();
-        //mpFtFlip->Enable();
-        //mpFlipTbx->Enable();
+        mpFtAngle->Enable();
+        mpMtrAngle->Enable();
+        mpRotateLeft->Enable();
+        mpRotateRight->Enable();
+        mpFtFlip->Enable();
+        mpFlipTbx->Enable();
 
         if( mbSizeProtected )
         {
+            mpFtSize->Disable();
             mpFtWidth->Disable();
             mpMtrWidth->Disable();
             mpFtHeight->Disable();
             mpMtrHeight->Disable();
+            mpProtectSize->SetState(TRISTATE_TRUE);
             mpCbxScale->Disable();
         }
         else
         {
+            mpProtectSize->SetState(TRISTATE_FALSE);
             if( mbAdjustEnabled )
             {
                 if( mbAutoWidth )
                 {
+                    mpFtSize->Disable();
                     mpFtWidth->Disable();
                     mpMtrWidth->Disable();
                     mpCbxScale->Disable();
                 }
                 else
                 {
+                    mpFtSize->Enable();
                     mpFtWidth->Enable();
                     mpMtrWidth->Enable();
                 }
@@ -1043,6 +1116,7 @@ void PosSizePropertyPanel::DisableControls()
             }
             else
             {
+                mpFtSize->Enable();
                 mpFtWidth->Enable();
                 mpMtrWidth->Enable();
                 mpFtHeight->Enable();
@@ -1130,3 +1204,4 @@ void PosSizePropertyPanel::UpdateUIScale()
 } } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
