@@ -1115,7 +1115,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
 
 static bool ImplHandleExtTextInput( vcl::Window* pWindow,
                                     const OUString& rText,
-                                    const sal_uInt16* pTextAttr,
+                                    const ExtTextInputAttr* pTextAttr,
                                     sal_Int32 nCursorPos, sal_uInt16 nCursorFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1200,8 +1200,8 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
     }
     if ( pTextAttr )
     {
-        pWinData->mpExtOldAttrAry = new sal_uInt16[rText.getLength()];
-        memcpy( pWinData->mpExtOldAttrAry, pTextAttr, rText.getLength()*sizeof( sal_uInt16 ) );
+        pWinData->mpExtOldAttrAry = new ExtTextInputAttr[rText.getLength()];
+        memcpy( pWinData->mpExtOldAttrAry, pTextAttr, rText.getLength()*sizeof( ExtTextInputAttr ) );
     }
     return !ImplCallCommand( pChild, CommandEventId::ExtTextInput, &aData );
 }

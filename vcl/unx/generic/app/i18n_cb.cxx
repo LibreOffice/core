@@ -246,48 +246,48 @@ Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
 // Convert the XIM feedback values into appropriate VCL
 // EXTTEXTINPUT_ATTR values
 // returns an allocate list of attributes, which must be freed by caller
-sal_uInt16*
-Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uInt16>& rSalAttr )
+ExtTextInputAttr*
+Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<ExtTextInputAttr>& rSalAttr )
 {
-      sal_uInt16 *psalattr;
-      sal_uInt16  nval;
-      sal_uInt16  noldval = 0;
-      XIMFeedback nfeedback;
+    ExtTextInputAttr *psalattr;
+    ExtTextInputAttr  nval;
+    ExtTextInputAttr  noldval = ExtTextInputAttr::NONE;
+    XIMFeedback nfeedback;
 
       // only work with reasonable length
-      if (nlength > 0 && nlength > sal::static_int_cast<int>(rSalAttr.size()) )
+    if (nlength > 0 && nlength > sal::static_int_cast<int>(rSalAttr.size()) )
     {
         rSalAttr.reserve( nlength );
         psalattr = &rSalAttr[0];
     }
-      else
+    else
         return nullptr;
 
-      for (int npos = 0; npos < nlength; npos++)
+    for (int npos = 0; npos < nlength; npos++)
     {
-        nval = 0;
+        nval = ExtTextInputAttr::NONE;
         nfeedback = pfeedback[npos];
 
         // means to use the feedback of the previous char
         if (nfeedback == 0)
         {
               nval = noldval;
-           }
+        }
         // convert feedback to attributes
         else
         {
               if (nfeedback & XIMReverse)
-                nval |= EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                nval |= ExtTextInputAttr::Highlight;
               if (nfeedback & XIMUnderline)
-                nval |= EXTTEXTINPUT_ATTR_UNDERLINE;
+                nval |= ExtTextInputAttr::Underline;
               if (nfeedback & XIMHighlight)
-                nval |= EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                nval |= ExtTextInputAttr::Highlight;
               if (nfeedback & XIMPrimary)
-                nval |= EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                nval |= ExtTextInputAttr::DottedUnderline;
               if (nfeedback & XIMSecondary)
-                nval |= EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                nval |= ExtTextInputAttr::DashDotUnderline;
               if (nfeedback & XIMTertiary) // same as 2ery
-                nval |= EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                nval |= ExtTextInputAttr::DashDotUnderline;
 
         }
         // copy in list

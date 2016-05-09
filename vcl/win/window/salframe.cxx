@@ -5020,7 +5020,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
     {
         bDef = FALSE;
 
-        sal_uInt16* pSalAttrAry = NULL;
+        ExtTextInputAttr* pSalAttrAry = NULL;
         LONG    nTextLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, 0, 0 ) / sizeof( WCHAR );
         if ( nTextLen > 0 )
         {
@@ -5040,25 +5040,25 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             if ( pAttrBuf )
             {
                 sal_Int32 nTextLen2 = aEvt.maText.getLength();
-                pSalAttrAry = new sal_uInt16[nTextLen2];
+                pSalAttrAry = new ExtTextInputAttr[nTextLen2];
                 memset( pSalAttrAry, 0, nTextLen2*sizeof( sal_uInt16 ) );
                 for( sal_Int32 i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
                 {
                     BYTE nWinAttr = pAttrBuf[i];
-                    sal_uInt16   nSalAttr;
+                    ExtTextInputAttr   nSalAttr;
                     if ( nWinAttr == ATTR_TARGET_CONVERTED )
                     {
-                        nSalAttr = EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::BoldUnderline;
                         aEvt.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
                     }
                     else if ( nWinAttr == ATTR_CONVERTED )
-                        nSalAttr = EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::DashDotUnderline;
                     else if ( nWinAttr == ATTR_TARGET_NOTCONVERTED )
-                        nSalAttr = EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                        nSalAttr = ExtTextInputAttr::Highlight;
                     else if ( nWinAttr == ATTR_INPUT_ERROR )
-                        nSalAttr = EXTTEXTINPUT_ATTR_REDTEXT | EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::RedText | ExtTextInputAttr::DottedUnderline;
                     else /* ( nWinAttr == ATTR_INPUT ) */
-                        nSalAttr = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                        nSalAttr = ExtTextInputAttr::DottedUnderline;
                     pSalAttrAry[i] = nSalAttr;
                 }
 

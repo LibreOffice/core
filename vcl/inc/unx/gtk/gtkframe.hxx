@@ -145,7 +145,7 @@ class GtkSalFrame : public SalFrame
         bool                            m_bFocused;
         bool                            m_bPreeditJustChanged;
         SalExtTextInputEvent            m_aInputEvent;
-        std::vector< sal_uInt16 >           m_aInputFlags;
+        std::vector< ExtTextInputAttr > m_aInputFlags;
 
         IMHandler( GtkSalFrame* );
         ~IMHandler();

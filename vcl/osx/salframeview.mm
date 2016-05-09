@@ -1610,7 +1610,7 @@ private:
     if( len > 0 ) {
         NSString *pString = [aString string];
         OUString aInsertString( GetOUString( pString ) );
-        std::vector<sal_uInt16> aInputFlags = std::vector<sal_uInt16>( std::max( 1, len ), 0 );
+        std::vector<ExtTextInputAttr> aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, len ), ExtTextInputAttr::NONE );
         for ( int i = 0; i < len; i++ )
         {
             unsigned int nUnderlineValue;
@@ -1621,16 +1621,16 @@ private:
 
             switch (nUnderlineValue & 0xff) {
             case NSUnderlineStyleSingle:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_UNDERLINE;
+                aInputFlags[i] = ExtTextInputAttr::Underline;
                 break;
             case NSUnderlineStyleThick:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_UNDERLINE | EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                aInputFlags[i] = ExtTextInputAttr::Underline | ExtTextInputAttr::Highlight;
                 break;
             case NSUnderlineStyleDouble:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
+                aInputFlags[i] = ExtTextInputAttr::BoldUnderline;
                 break;
             default:
-                aInputFlags[i] = EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                aInputFlags[i] = ExtTextInputAttr::Highlight;
                 break;
             }
         }
