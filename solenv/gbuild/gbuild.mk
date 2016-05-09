@@ -287,6 +287,7 @@ include $(foreach class, \
 	PrecompiledHeaders \
 	Pyuno \
 	PythonTest \
+	UITest \
 	Rdb \
 	CppunitTest \
 	Jar \
