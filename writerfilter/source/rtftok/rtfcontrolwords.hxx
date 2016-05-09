@@ -1980,6 +1980,7 @@ enum RTFKeyword
     RTF_FLYHORZ,
     RTF_FLYANCHOR
 };
+const char* keywordToString(RTFKeyword nKeyword);
 
 /// Types of an RTF Control Word
 enum RTFControlTypes
