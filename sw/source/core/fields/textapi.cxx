@@ -125,7 +125,7 @@ SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
     {
         //init draw model first
         pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+        pImpl->mpOutliner = new Outliner( pImpl->mpPool, OutlinerMode::TextObject );
         pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
     }
 
@@ -143,7 +143,7 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject& rText )
         {
             //init draw model first
             pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-            pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+            pImpl->mpOutliner = new Outliner( pImpl->mpPool, OutlinerMode::TextObject );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
         }
 
@@ -159,7 +159,7 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
         {
             //init draw model first
             pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-            pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+            pImpl->mpOutliner = new Outliner( pImpl->mpPool, OutlinerMode::TextObject );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
         }
         else

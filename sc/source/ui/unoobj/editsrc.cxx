@@ -181,7 +181,7 @@ void ScAnnotationEditSource::UpdateData()
             EditTextObject* pEditObj = pEditEngine->CreateTextObject();
             OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditObj );
             delete pEditObj;
-            pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+            pOPO->SetOutlinerMode( OutlinerMode::TextObject );
             pObj->NbcSetOutlinerParaObject( pOPO );
             pObj->ActionChanged();
         }

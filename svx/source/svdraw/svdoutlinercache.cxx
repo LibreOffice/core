@@ -30,16 +30,16 @@ SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 {
 }
 
-SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
+SdrOutliner* SdrOutlinerCache::createOutliner( OutlinerMode nOutlinerMode )
 {
     SdrOutliner* pOutliner = nullptr;
 
-    if( (OUTLINERMODE_OUTLINEOBJECT == nOutlinerMode) && !maModeOutline.empty() )
+    if( (OutlinerMode::OutlineObject == nOutlinerMode) && !maModeOutline.empty() )
     {
         pOutliner = maModeOutline.back();
         maModeOutline.pop_back();
     }
-    else if( (OUTLINERMODE_TEXTOBJECT == nOutlinerMode) && !maModeText.empty() )
+    else if( (OutlinerMode::TextObject == nOutlinerMode) && !maModeText.empty() )
     {
         pOutliner = maModeText.back();
         maModeText.pop_back();
@@ -76,9 +76,9 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
 {
     if( pOutliner )
     {
-        sal_uInt16 nOutlMode = pOutliner->GetOutlinerMode();
+        OutlinerMode nOutlMode = pOutliner->GetOutlinerMode();
 
-        if( OUTLINERMODE_OUTLINEOBJECT == nOutlMode )
+        if( OutlinerMode::OutlineObject == nOutlMode )
         {
             maModeOutline.push_back(pOutliner);
             pOutliner->Clear();
@@ -87,7 +87,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
             // Deregister on outliner, might be reused from outliner cache
             pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
         }
-        else if( OUTLINERMODE_TEXTOBJECT == nOutlMode )
+        else if( OutlinerMode::TextObject == nOutlMode )
         {
             maModeText.push_back(pOutliner);
             pOutliner->Clear();

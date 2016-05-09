@@ -293,7 +293,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     rWrt.Strm().WriteChar( '>' );
 
     // Was jetzt kommt ist das Gegenstueck zu SdrTextObjectt::SetText()
-    Outliner aOutliner(nullptr, OUTLINERMODE_TEXTOBJECT);
+    Outliner aOutliner(nullptr, OutlinerMode::TextObject);
     aOutliner.SetUpdateMode( false );
     aOutliner.SetText( *pOutlinerParaObj );
     OUString aText( aOutliner.GetText( aOutliner.GetParagraph(0),

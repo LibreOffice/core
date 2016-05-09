@@ -193,7 +193,7 @@ void Outliner::ParagraphDeleted( sal_Int32 nPara )
     }
 }
 
-void Outliner::Init( sal_uInt16 nMode )
+void Outliner::Init( OutlinerMode nMode )
 {
     nOutlinerMode = nMode;
 
@@ -206,14 +206,14 @@ void Outliner::Init( sal_uInt16 nMode )
 
     switch ( ImplGetOutlinerMode() )
     {
-        case OUTLINERMODE_TEXTOBJECT:
-        case OUTLINERMODE_TITLEOBJECT:
+        case OutlinerMode::TextObject:
+        case OutlinerMode::TitleObject:
             break;
 
-        case OUTLINERMODE_OUTLINEOBJECT:
+        case OutlinerMode::OutlineObject:
             nCtrl |= EEControlBits::OUTLINER2;
             break;
-        case OUTLINERMODE_OUTLINEVIEW:
+        case OutlinerMode::OutlineView:
             nCtrl |= EEControlBits::OUTLINER;
             break;
 
@@ -259,7 +259,7 @@ void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
         ImplInitDepth( nPara, nNewDepth, true );
         ImplCalcBulletText( nPara, false, false );
 
-        if ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
+        if ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
             ImplSetLevelDependendStyleSheet( nPara );
 
         DepthChangedHdl();
@@ -385,7 +385,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
         return nullptr;
 
     EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );
-    const bool bIsEditDoc(OUTLINERMODE_TEXTOBJECT == ImplGetOutlinerMode());
+    const bool bIsEditDoc(OutlinerMode::TextObject == ImplGetOutlinerMode());
     ParagraphDataVector aParagraphDataVector(nCount);
     const sal_Int32 nLastPara(nStartPara + nCount - 1);
 
@@ -448,8 +448,8 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 
             // In the outliner mode, filter the tabs and set the indentation
             // about a LRSpaceItem. In EditEngine mode intend over old tabs
-            if( ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT ) ||
-                ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW ) )
+            if( ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject ) ||
+                ( ImplGetOutlinerMode() == OutlinerMode::OutlineView ) )
             {
                 // Extract Tabs
                 sal_uInt16 nTabs = 0;
@@ -693,7 +693,7 @@ void Outliner::ImplCheckNumBulletItem( sal_Int32 nPara )
 void Outliner::ImplSetLevelDependendStyleSheet( sal_Int32 nPara )
 {
 
-    DBG_ASSERT( ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT ) || ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW ), "SetLevelDependendStyleSheet: Wrong Mode!" );
+    DBG_ASSERT( ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject ) || ( ImplGetOutlinerMode() == OutlinerMode::OutlineView ), "SetLevelDependendStyleSheet: Wrong Mode!" );
 
     SfxStyleSheet* pStyle = GetStyleSheet( nPara );
 
@@ -1181,7 +1181,7 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
 
     while( nCount && pPara )
     {
-        if( ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT )
+        if( ImplGetOutlinerMode() != OutlinerMode::TextObject )
         {
             nDepthChangedHdlPrevDepth = pPara->GetDepth();
             mnDepthChangeHdlPrevFlags = pPara->nFlags;
@@ -1234,7 +1234,7 @@ bool Outliner::ImpCanIndentSelectedPages( OutlinerView* pCurView )
 
     // If the first paragraph is on level 0 it can not indented in any case,
     // possible there might be indentations in the following on the 0 level.
-    if ( ( mnFirstSelPage == 0 ) && ( ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
+    if ( ( mnFirstSelPage == 0 ) && ( ImplGetOutlinerMode() != OutlinerMode::TextObject ) )
     {
         if ( nDepthChangedHdlPrevDepth == 1 )   // is the only page
             return false;
@@ -1252,7 +1252,7 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView )
     return RemovingPagesHdl( pCurView );
 }
 
-Outliner::Outliner(SfxItemPool* pPool, sal_uInt16 nMode)
+Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
     : pHdlParagraph(nullptr)
     , mnFirstSelPage(0)
     , nDepthChangedHdlPrevDepth(0)

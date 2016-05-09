@@ -22,6 +22,7 @@
 
 #include <editeng/editobj.hxx>
 #include <editeng/fieldupdater.hxx>
+#include <editeng/outliner.hxx>
 #include <editdoc.hxx>
 
 #include <unotools/fontcvt.hxx>
@@ -171,7 +172,7 @@ private:
     sal_uInt32              nObjSettings;
     sal_uInt16              nMetric;
     sal_uInt16              nVersion;
-    sal_uInt16              nUserType;
+    OutlinerMode            nUserType;
     SvtScriptType           nScriptType;
 
     bool                    bOwnerOfPool:1;
@@ -192,8 +193,8 @@ public:
     EditTextObjectImpl(const EditTextObjectImpl&) = delete;
     EditTextObjectImpl& operator=(const EditTextObjectImpl&) = delete;
 
-    sal_uInt16 GetUserType() const { return nUserType;}
-    void SetUserType( sal_uInt16 n );
+    OutlinerMode GetUserType() const { return nUserType;}
+    void SetUserType( OutlinerMode n );
 
     void NormalizeString( svl::SharedStringPool& rPool );
     std::vector<svl::SharedString> GetSharedStrings() const;

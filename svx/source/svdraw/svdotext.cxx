@@ -1229,9 +1229,9 @@ void SdrTextObj::ImpCheckMasterCachable()
 void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
 {
     rOutl.SetUpdateMode(false);
-    sal_uInt16 nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
+    OutlinerMode nOutlinerMode = OutlinerMode::OutlineObject;
     if ( !IsOutlText() )
-        nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
+        nOutlinerMode = OutlinerMode::TextObject;
     rOutl.Init( nOutlinerMode );
 
     rOutl.SetGlobalCharStretching();
@@ -1520,9 +1520,9 @@ void SdrTextObj::ForceOutlinerParaObject()
     SdrText* pText = getActiveText();
     if( pText && (pText->GetOutlinerParaObject() == nullptr) )
     {
-        sal_uInt16 nOutlMode = OUTLINERMODE_TEXTOBJECT;
+        OutlinerMode nOutlMode = OutlinerMode::TextObject;
         if( IsTextFrame() && eTextKind == OBJ_OUTLINETEXT )
-            nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
+            nOutlMode = OutlinerMode::OutlineObject;
 
         pText->ForceOutlinerParaObject( nOutlMode );
     }

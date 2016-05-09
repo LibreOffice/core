@@ -326,7 +326,7 @@ void AnnotationWindow::InitControls()
     aSettings.SetStyleSettings(aStyleSettings);
     mpMeta->SetSettings(aSettings);
 
-    mpOutliner = new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT);
+    mpOutliner = new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject);
     Doc()->SetCalcFieldValueHdl( mpOutliner );
     mpOutliner->SetUpdateMode( true );
     Rescale();

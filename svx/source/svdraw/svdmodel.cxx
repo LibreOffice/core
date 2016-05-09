@@ -214,15 +214,15 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 
     // can't create DrawOutliner OnDemand, because I can't get the Pool,
     // then (only from 302 onwards!)
-    pDrawOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
+    pDrawOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
     ImpSetOutlinerDefaults(pDrawOutliner, true);
 
-    pHitTestOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
+    pHitTestOutliner = SdrMakeOutliner(OutlinerMode::TextObject, *this);
     ImpSetOutlinerDefaults(pHitTestOutliner, true);
 
     /* Start Text Chaining related code */
     // Initialize Chaining Outliner
-    pChainingOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, *this );
+    pChainingOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *this );
     ImpSetOutlinerDefaults(pChainingOutliner, true);
 
     // Make a TextChain
@@ -1953,7 +1953,7 @@ void SdrModel::ReformatAllTextObjects()
     ImpReformatAllTextObjects();
 }
 
-SdrOutliner* SdrModel::createOutliner( sal_uInt16 nOutlinerMode )
+SdrOutliner* SdrModel::createOutliner( OutlinerMode nOutlinerMode )
 {
     if( nullptr == mpOutlinerCache )
         mpOutlinerCache = new SdrOutlinerCache(this);

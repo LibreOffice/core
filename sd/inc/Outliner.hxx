@@ -114,14 +114,14 @@ public:
         @param pDoc
             The draw document from which to take the content.
         @param nMode
-            The valid values <const>OUTLINERMODE_DONTKNOW</const>,
-            <const>OUTLINERMODE_TEXTOBJECT</const>,
-            <const>OUTLINERMODE_TITLEOBJECT</const>,
-            <const>OUTLINERMODE_OUTLINEOBJECT</const>, and
-            <const>OUTLINERMODE_OUTLINEVIEW</const> are defined in
+            The valid values <const>OutlinerMode::DontKnow</const>,
+            <const>OutlinerMode::TextObject</const>,
+            <const>OutlinerMode::TitleObject</const>,
+            <const>OutlinerMode::OutlineObject</const>, and
+            <const>OutlinerMode::OutlineView</const> are defined in
             editeng/outliner.hxx.
     */
-    Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode );
+    Outliner( SdDrawDocument* pDoc, OutlinerMode nMode );
     virtual ~Outliner();
     /// Forbid copy construction and copy assignment
     Outliner(const Outliner&) = delete;

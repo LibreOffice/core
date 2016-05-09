@@ -598,7 +598,7 @@ void SwSidebarWin::InitControls()
     }
 
     SwDocShell* aShell = mrView.GetDocShell();
-    mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
+    mpOutliner = new Outliner(&aShell->GetPool(),OutlinerMode::TextObject);
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner );
     mpOutliner->SetUpdateMode( true );
     Rescale();
