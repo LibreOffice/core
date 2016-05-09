@@ -232,7 +232,7 @@ bool WorkWindow::SetPluginParent( SystemParentData* pParent )
 void WorkWindow::ImplSetFrameState( sal_uLong aFrameState )
 {
     SalFrameState   aState;
-    aState.mnMask   = WINDOWSTATE_MASK_STATE;
+    aState.mnMask   = WindowStateMask::State;
     aState.mnState  = aFrameState;
     mpWindowImpl->mpFrame->SetWindowState( &aState );
 }

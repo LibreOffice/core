@@ -217,7 +217,7 @@ void IconChoiceDialog::dispose()
     // save configuration at INI-Manager
     // and remove pages
     //SvtViewOptions aTabDlgOpt( E_TABDIALOG, rId );
-    //aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
+    //aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized)), RTL_TEXTENCODING_ASCII_US));
     //aTabDlgOpt.SetPageID( mnCurrentPageId );
 
     for (IconChoicePageData* pData : maPageList)

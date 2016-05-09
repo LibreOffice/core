@@ -31,6 +31,7 @@ namespace vcl { class Window; }
 
 class FontSelectPattern;
 enum class InputContextFlags;
+enum class WindowStateMask;
 
 #define SALEVENT_MOUSEMOVE              ((sal_uInt16)1)
 #define SALEVENT_MOUSELEAVE             ((sal_uInt16)2)
@@ -224,7 +225,7 @@ typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,
 
 struct SalFrameState
 {
-    sal_uLong       mnMask;
+    WindowStateMask mnMask;
     long            mnX;
     long            mnY;
     long            mnWidth;
