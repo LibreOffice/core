@@ -1873,8 +1873,8 @@ OUString StorageObjectBase::getSysFileName( const OUString& rStrmName, const OUS
     // replace all characters reserved in file system
     OUString aFileName = aBuffer.makeStringAndClear();
     static const sal_Unicode spcReserved[] = { '/', '\\', ':', '*', '?', '<', '>', '|' };
-    for( const sal_Unicode* pcChar = spcReserved; pcChar < STATIC_ARRAY_END( spcReserved ); ++pcChar )
-        aFileName = aFileName.replace( *pcChar, '_' );
+    for(const sal_Unicode cChar : spcReserved)
+        aFileName = aFileName.replace(cChar, '_');
 
     // build full path
     return rSysOutPath + "/" + aFileName;
