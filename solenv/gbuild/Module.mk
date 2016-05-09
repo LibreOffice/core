@@ -27,12 +27,14 @@
 #                                                          recursive Module/checks
 # Module/slowcheck            run all slow unit tests
 # Module/subsequentcheck      run system tests             all system tests
+# Module/uicheck	      run uitests	           all uitests
 #                                                          recursive Module/subsequentchecks
 # build (global)              build the product            top-level Module
 # unitcheck (global)          run unit tests               top-level Module/unitcheck
 # slowcheck (global)          run slow unit tests          top-level Module/slowcheck
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
 # perfcheck (global)          run performance unit tests   top-level Module/perfcheck
+# uicheck (global) 	      run the uitests 		   run all uitests
 # all (global)                default goal                 build unitcheck
 
 
@@ -47,6 +49,7 @@ gb_Module_SLOWCHECKTARGETSTACK :=
 gb_Module_SUBSEQUENTCHECKTARGETSTACK :=
 gb_Module_STAGINGCHECKTARGETSTACK :=
 gb_Module_PERFCHECKTARGETSTACK :=
+gb_Module_UICHECKTARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
 
 # The currently read gbuild makefile.
@@ -68,7 +71,7 @@ $(call gb_Module_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MOD,5)
 	$(call gb_Output_announce_title,module $* cleared.)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_nonl10n_target,$*) $(call gb_Module_get_l10n_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*) $(call gb_Module_get_perfcheck_target,$*))
+		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_nonl10n_target,$*) $(call gb_Module_get_l10n_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*) $(call gb_Module_get_perfcheck_target,$*) $(call gb_Module_get_uicheck,$*))
 
 $(call gb_Module_get_l10n_target,%) :
 	$(call gb_Output_announce,$*,$(true),LOC,5)
@@ -112,6 +115,13 @@ $(call gb_Module_get_perfcheck_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
+$(call gb_Module_get_uicheck_target,%) :
+	$(call gb_Output_announce,$*,$(true),UIT,5)
+	$(call gb_Output_announce_title,module $* uicheck done.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
+
 $(call gb_Module_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),MOD,5)
 	$(call gb_Output_announce_title,module $* done.)
@@ -119,7 +129,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : all build build-l10n-only build-non-l10n-only unitcheck slowcheck subsequentcheck stagingcheck perfcheck clean check debugrun help showmodules translations
+.PHONY : all build build-l10n-only build-non-l10n-only unitcheck slowcheck subsequentcheck stagingcheck perfcheck uicheck clean check debugrun help showmodules translations
 .DEFAULT_GOAL := all
 
 all : build $(if $(CROSS_COMPILING),,unitcheck $(if $(gb_PARTIAL_BUILD),,slowcheck))
@@ -174,6 +184,11 @@ perfcheck :
 	$(call gb_Output_announce_title,all perftests checked.)
 	$(call gb_Output_announce_bell)
 
+uicheck : build
+	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),UIT,6))
+	$(call gb_Output_announce_title,all uicheck checked.)
+	$(call gb_Output_announce_bell)
+
 clean :
 	$(if $(gb_VERBOSE),$(call gb_Output_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL,6))
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
@@ -217,6 +232,7 @@ gb_Module_TARGETSTACK := $(call gb_Module_get_target,$(1)) $(gb_Module_TARGETSTA
 gb_Module_L10NTARGETSTACK := $(call gb_Module_get_l10n_target,$(1)) $(gb_Module_L10NTARGETSTACK)
 gb_Module_CHECKTARGETSTACK := $(call gb_Module_get_check_target,$(1)) $(gb_Module_CHECKTARGETSTACK)
 gb_Module_SLOWCHECKTARGETSTACK := $(call gb_Module_get_slowcheck_target,$(1)) $(gb_Module_SLOWCHECKTARGETSTACK)
+gb_Module_UICHECKTARGETSTACK := $(call gb_Module_get_uicheck_target,$(1)) $(gb_Module_UICHECKTARGETSTACK)
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_target,$(1)) $(gb_Module_SUBSEQUENTCHECKTARGETSTACK)
 gb_Module_STAGINGCHECKTARGETSTACK := $(call gb_Module_get_stagingcheck_target,$(1)) $(gb_Module_STAGINGCHECKTARGETSTACK)
 gb_Module_PERFCHECKTARGETSTACK := $(call gb_Module_get_perfcheck_target,$(1)) $(gb_Module_PERFCHECKTARGETSTACK)
@@ -229,6 +245,7 @@ $(if $(filter-out libreoffice instsetoo_native android ios,$(1)),\
 
 $(call gb_Postprocess_get_target,AllModuleTests) : $(call gb_Module_get_check_target,$(1))
 $(call gb_Postprocess_get_target,AllModuleSlowtests) : $(call gb_Module_get_slowcheck_target,$(1))
+$(call gb_Postprocess_get_target,AllModuleUITest) : $(call gb_Module_get_uicheck_target,$(1))
 
 endef
 
@@ -324,6 +341,14 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
+define gb_Module_add_uicheck_target
+$(call gb_Module__read_targetfile,$(1),$(2),uicheck target)
+
+$(call gb_Module_get_uicheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
+
+endef
+
 define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
@@ -333,6 +358,7 @@ $(call gb_Module_get_slowcheck_target,$(1)) : $$(firstword $$(gb_Module_SLOWCHEC
 $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 $(call gb_Module_get_stagingcheck_target,$(1)) : $$(firstword $$(gb_Module_STAGINGCHECKTARGETSTACK))
 $(call gb_Module_get_perfcheck_target,$(1)) : $$(firstword $$(gb_Module_PERFCHECKTARGETSTACK))
+$(call gb_Module_get_uicheck_target,$(1)) : $$(firstword $$(gb_Module_UICHECKTARGETSTACK))
 $(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
 gb_Module_L10NTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_L10NTARGETSTACK)),$$(gb_Module_L10NTARGETSTACK))
@@ -341,6 +367,7 @@ gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKT
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 gb_Module_STAGINGCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_STAGINGCHECKTARGETSTACK)),$$(gb_Module_STAGINGCHECKTARGETSTACK))
 gb_Module_PERFCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_PERFCHECKTARGETSTACK)),$$(gb_Module_PERFCHECKTARGETSTACK))
+gb_Module_UICHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_UICHECKTARGETSTACK)),$$(gb_Module_UICHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
 endef
@@ -389,6 +416,11 @@ $(foreach target,$(sort $(2)),$(call gb_Module_add_moduledir,$(1),$(target)))
 
 endef
 
+define gb_Module_add_uicheck_targets
+$(foreach target,$(2),$(call gb_Module_add_uicheck_target,$(1),$(target)))
+
+endef
+
 define gb_Module_make_global_targets
 ifneq ($$(gb_Module_TARGETSTACK),)
 $$(eval $$(call gb_Output_error,Corrupted module target stack!1))
@@ -404,6 +436,7 @@ slowcheck : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 stagingcheck : $$(firstword $$(gb_Module_STAGINGCHECKTARGETSTACK))
 perfcheck : $$(firstword $$(gb_Module_PERFCHECKTARGETSTACK))
+uicheck : $$(firstword $$(gb_Module_UICHECKTARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
 ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
@@ -415,11 +448,12 @@ gb_Module_L10NTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_L10NTARGETSTACK
 gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
 gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKTARGETSTACK)),$$(gb_Module_SLOWCHECKTARGETSTACK))
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
+gb_Module_UICHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_UICHECKTARGETSTACK)),$$(gb_Module_UICHECKTARGETSTACK))
 gb_Module_STAGINGCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_STAGINGCHECKTARGETSTACK)),$$(gb_Module_STAGINGCHECKTARGETSTACK))
 gb_Module_PERFCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_PERFCHECKTARGETSTACK)),$$(gb_Module_PERFCHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
-ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SLOWCHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK),$$(gb_Module_STAGINGCHECKTARGETSTACK),$$(gb_Module_PERFCHECKTARGETSTACK),$$(gb_Module_L10NTARGETSTACK)),)
+ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SLOWCHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK),$$(gb_Module_UICHECKTARGETSTACK),$$(gb_Module_STAGINGCHECKTARGETSTACK),$$(gb_Module_PERFCHECKTARGETSTACK),$$(gb_Module_L10NTARGETSTACK)),)
 $$(eval $$(call gb_Output_error,Corrupted module target stack!3))
 endif
 
