@@ -1267,7 +1267,7 @@ void DesktopLOKTest::testContextMenuImpress()
 
 static void callbackCompressionTest(const int type, const char* payload, void* data)
 {
-    std::vector<std::tuple<int, std::string>>* notifs = reinterpret_cast<std::vector<std::tuple<int, std::string>>*>(data);
+    std::vector<std::tuple<int, std::string>>* notifs = static_cast<std::vector<std::tuple<int, std::string>>*>(data);
     notifs->emplace_back(type, std::string(payload ? payload : "(nil)"));
 }
 
