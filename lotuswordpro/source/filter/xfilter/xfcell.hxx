@@ -141,6 +141,8 @@ public:
      */
     virtual void    ToXml(IXFStream *pStrm) override;
 
+    const XFTable*  GetSubTable() const { return m_pSubTable; }
+
 private:
     XFRow          *m_pOwnerRow;
     XFTable        *m_pSubTable;
