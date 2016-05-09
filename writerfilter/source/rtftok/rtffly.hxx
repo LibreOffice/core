@@ -10,6 +10,10 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFFLY_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFFLY_HXX
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+
 namespace writerfilter
 {
 namespace rtftok
