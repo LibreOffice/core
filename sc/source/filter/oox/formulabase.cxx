@@ -1060,21 +1060,21 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
         tables from later BIFF versions may overwrite single functions from
         earlier tables. */
     if( eBiff >= BIFF2 )
-        initFuncs( saFuncTableBiff2, STATIC_ARRAY_END( saFuncTableBiff2 ), nMaxParam, bImportFilter, eFilter );
+        initFuncs( saFuncTableBiff2, ::std::end( saFuncTableBiff2 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF3 )
-        initFuncs( saFuncTableBiff3, STATIC_ARRAY_END( saFuncTableBiff3 ), nMaxParam, bImportFilter, eFilter );
+        initFuncs( saFuncTableBiff3, ::std::end( saFuncTableBiff3 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF4 )
-        initFuncs( saFuncTableBiff4, STATIC_ARRAY_END( saFuncTableBiff4 ), nMaxParam, bImportFilter, eFilter );
+        initFuncs( saFuncTableBiff4, ::std::end( saFuncTableBiff4 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF5 )
-        initFuncs( saFuncTableBiff5, STATIC_ARRAY_END( saFuncTableBiff5 ), nMaxParam, bImportFilter, eFilter );
+        initFuncs( saFuncTableBiff5, ::std::end( saFuncTableBiff5 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF8 )
-        initFuncs( saFuncTableBiff8, STATIC_ARRAY_END( saFuncTableBiff8 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTable2010, STATIC_ARRAY_END( saFuncTable2010 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTable2016, STATIC_ARRAY_END( saFuncTable2016 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTableOOoLO, STATIC_ARRAY_END( saFuncTableOOoLO ), nMaxParam, bImportFilter, eFilter );
+        initFuncs( saFuncTableBiff8, ::std::end( saFuncTableBiff8 ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableOox, ::std::end( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTable2010, ::std::end( saFuncTable2010 ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTable2013, ::std::end( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTable2016, ::std::end( saFuncTable2016 ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableOdf, ::std::end( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableOOoLO, ::std::end( saFuncTableOOoLO ), nMaxParam, bImportFilter, eFilter );
 }
 
 void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam )

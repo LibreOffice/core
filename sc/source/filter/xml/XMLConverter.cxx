@@ -358,9 +358,10 @@ const ScXMLConditionInfo* lclGetConditionInfo( const sal_Unicode*& rpcString, co
 
     // search the table for an entry
     if( nLength > 0 )
-        for( const ScXMLConditionInfo* pInfo = spConditionInfos; pInfo < STATIC_ARRAY_END( spConditionInfos ); ++pInfo )
-            if( (nLength == pInfo->mnIdentLength) && (::rtl_ustr_ascii_shortenedCompare_WithLength( pcIdStart, nLength, pInfo->mpcIdentifier, nLength ) == 0) )
-                return pInfo;
+        for(auto const &rInfo : spConditionInfos)
+            if((nLength == rInfo.mnIdentLength)
+               && (::rtl_ustr_ascii_shortenedCompare_WithLength(pcIdStart, nLength, rInfo.mpcIdentifier, nLength) == 0) )
+                return &rInfo;
 
     return nullptr;
 }

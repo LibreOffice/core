@@ -471,8 +471,8 @@ HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     maSheetNameService( "com.sun.star.text.TextField.SheetName" ),
     maFileNameService( "com.sun.star.text.TextField.FileName" ),
     maDateTimeService( "com.sun.star.text.TextField.DateTime" ),
-    maBoldNames( sppcBoldNames, STATIC_ARRAY_END( sppcBoldNames ) ),
-    maItalicNames( sppcItalicNames, STATIC_ARRAY_END( sppcItalicNames ) ),
+    maBoldNames( sppcBoldNames, ::std::end(sppcBoldNames) ),
+    maItalicNames( sppcItalicNames, ::std::end(sppcItalicNames) ),
     maPortions( static_cast< size_t >( HF_COUNT ) ),
     meCurrPortion( HF_CENTER )
 {

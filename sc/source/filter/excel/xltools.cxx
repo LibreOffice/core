@@ -40,8 +40,8 @@
 // GUID import/export
 
 XclGuid::XclGuid()
+    : mpnData{}
 {
-    ::std::fill( mpnData, STATIC_ARRAY_END( mpnData ), 0 );
 }
 
 XclGuid::XclGuid(
@@ -65,7 +65,7 @@ XclGuid::XclGuid(
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
-    return ::std::equal( rCmp1.mpnData, STATIC_ARRAY_END( rCmp1.mpnData ), rCmp2.mpnData );
+    return ::std::equal( rCmp1.mpnData, std::end( rCmp1.mpnData ), rCmp2.mpnData );
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
@@ -389,7 +389,7 @@ pCodePageTable[] =
     {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
     {   32769,  RTL_TEXTENCODING_MS_1252        }   // MS Windows Latin I (BIFF2-BIFF3)
 };
-const XclCodePageEntry* const pCodePageTableEnd = STATIC_ARRAY_END( pCodePageTable );
+const XclCodePageEntry* const pCodePageTableEnd = std::end(pCodePageTable);
 
 struct XclCodePageEntry_CPPred
 {
