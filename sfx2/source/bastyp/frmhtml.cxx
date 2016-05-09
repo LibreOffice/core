@@ -59,35 +59,34 @@ void SfxFrameHTMLParser::ParseFrameOptions(
     // We will not mimic that bug !
     bool bMarginWidth = false, bMarginHeight = false;
 
-    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
+    for (const auto & rOption : rOptions)
     {
-        const HTMLOption& aOption = rOptions[i];
-        switch( aOption.GetToken() )
+        switch( rOption.GetToken() )
         {
         case HTML_O_BORDERCOLOR:
             {
                 Color aColor;
-                aOption.GetColor( aColor );
+                rOption.GetColor( aColor );
                 pFrame->SetWallpaper( Wallpaper( aColor ) );
                 break;
             }
         case HTML_O_SRC:
             pFrame->SetURL(
                     INetURLObject::GetAbsURL(
-                        rBaseURL, aOption.GetString()) );
+                        rBaseURL, rOption.GetString()) );
             break;
         case HTML_O_NAME:
-            pFrame->SetName( aOption.GetString() );
+            pFrame->SetName( rOption.GetString() );
             break;
         case HTML_O_MARGINWIDTH:
-            aMargin.Width() = aOption.GetNumber();
+            aMargin.Width() = rOption.GetNumber();
 
             if( !bMarginHeight )
                 aMargin.Height() = 0;
             bMarginWidth = true;
             break;
         case HTML_O_MARGINHEIGHT:
-            aMargin.Height() = aOption.GetNumber();
+            aMargin.Height() = rOption.GetNumber();
 
             if( !bMarginWidth )
                 aMargin.Width() = 0;
@@ -95,12 +94,12 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             break;
         case HTML_O_SCROLLING:
             pFrame->SetScrollingMode(
-                (ScrollingMode)aOption.GetEnum( aScollingTable,
+                (ScrollingMode)rOption.GetEnum( aScollingTable,
                                                  ScrollingAuto ) );
             break;
         case HTML_O_FRAMEBORDER:
         {
-            const OUString& aStr = aOption.GetString();
+            const OUString& aStr = rOption.GetString();
             bool bBorder = true;
             if ( aStr.equalsIgnoreAsciiCase("NO") ||
                  aStr.equalsIgnoreAsciiCase("0") )
@@ -112,17 +111,17 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             pFrame->SetResizable( false );
             break;
         default:
-            if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_READONLY))
+            if (rOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_READONLY))
             {
-                const OUString& aStr = aOption.GetString();
+                const OUString& aStr = rOption.GetString();
                 bool bReadonly = true;
                 if ( aStr.equalsIgnoreAsciiCase("FALSE") )
                     bReadonly = false;
                 pFrame->SetReadOnly( bReadonly );
             }
-            else if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_EDIT))
+            else if (rOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_EDIT))
             {
-                const OUString& aStr = aOption.GetString();
+                const OUString& aStr = rOption.GetString();
                 bool bEdit = true;
                 if ( aStr.equalsIgnoreAsciiCase("FALSE") )
                     bEdit = false;

@@ -72,9 +72,8 @@ LinkManager::LinkManager(SfxObjectShell* p)
 
 LinkManager::~LinkManager()
 {
-    for( size_t n = 0; n < aLinkTbl.size(); ++n)
+    for(tools::SvRef<SvBaseLink> & rTmp : aLinkTbl)
     {
-        tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
         if( rTmp.Is() )
         {
             rTmp->Disconnect();
@@ -297,14 +296,12 @@ void LinkManager::UpdateAllLinks(
         aTmpArr.push_back( rLink.get() );
     }
 
-    for( size_t n = 0; n < aTmpArr.size(); ++n )
+    for(SvBaseLink* pLink : aTmpArr)
     {
-        SvBaseLink* pLink = aTmpArr[ n ];
-
         // search first in the array after the entry
         bool bFound = false;
-        for( size_t i = 0; i < aLinkTbl.size(); ++i )
-            if( pLink == aLinkTbl[ i ].get() )
+        for(tools::SvRef<SvBaseLink> & i : aLinkTbl)
+            if( pLink == i.get() )
             {
                 bFound = true;
                 break;

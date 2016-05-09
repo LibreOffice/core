@@ -319,9 +319,8 @@ void ContentListBox_Impl::InitRoot()
     std::vector< OUString > aList =
         SfxContentHelper::GetHelpTreeViewContents( aHelpTreeviewURL );
 
-    for(size_t i = 0, n = aList.size(); i < n; ++i )
+    for(const OUString & aRow : aList)
     {
-        const OUString& aRow = aList[i];
         sal_Int32 nIdx = 0;
         OUString aTitle = aRow.getToken( 0, '\t', nIdx );
         OUString aURL = aRow.getToken( 0, '\t', nIdx );
@@ -358,9 +357,8 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                 std::vector<OUString > aList =
                     SfxContentHelper::GetHelpTreeViewContents( aTmpURL );
 
-                for (size_t i = 0,n = aList.size(); i < n; ++i )
+                for (const OUString & aRow : aList)
                 {
-                    const OUString& aRow = aList[i];
                     sal_Int32 nIdx = 0;
                     OUString aTitle = aRow.getToken( 0, '\t', nIdx );
                     OUString aURL = aRow.getToken( 0, '\t', nIdx );
@@ -583,8 +581,8 @@ void IndexTabPage_Impl::InitializeIndex()
 
     // By now more than 256 equal entries are not allowed
     sal_Unicode append[256];
-    for( int k = 0; k < 256; ++k )
-        append[k] =  ' ';
+    for(sal_Unicode & k : append)
+        k =  ' ';
 
     sfx2::KeywordInfo aInfo;
     m_pIndexCB->SetUpdateMode( false );
@@ -1040,9 +1038,8 @@ IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
         if ( m_pScopeCB->IsChecked() )
             aSearchURL.append("&Scope=Heading");
         std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
-        for (size_t i = 0, n = aFactories.size(); i < n; ++i )
+        for (const OUString & rRow : aFactories)
         {
-            const OUString& rRow = aFactories[i];
             sal_Int32 nIdx = 0;
             OUString aTitle = rRow.getToken( 0, '\t', nIdx );
             nIdx = 0;
@@ -1475,9 +1472,8 @@ void SfxHelpIndexWindow_Impl::Initialize()
     OUStringBuffer aHelpURL(HELP_URL);
     AppendConfigToken(aHelpURL, true);
     std::vector<OUString> aFactories = SfxContentHelper::GetResultSet(aHelpURL.makeStringAndClear());
-    for (size_t i = 0, n = aFactories.size(); i < n; ++i )
+    for (const OUString & rRow : aFactories)
     {
-        const OUString& rRow = aFactories[i];
         sal_Int32 nIdx = 0;
         OUString aTitle = rRow.getToken( 0, '\t', nIdx );
         nIdx = 0;

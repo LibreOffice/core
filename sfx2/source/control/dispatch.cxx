@@ -430,8 +430,8 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 
     xImp->bInvalidateOnUnlock = false;
 
-    for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        xImp->aObjBars[n].nResId = 0;
+    for (SfxObjectBars_Impl & rObjBar : xImp->aObjBars)
+        rObjBar.nResId = 0;
 
     Link<SfxRequest*,void> aGenLink( LINK(this, SfxDispatcher, PostMsgHandler) );
 
@@ -1352,8 +1352,8 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     if ( xImp->pParent && !xImp->bQuiet /* && bUIActive */ )
         xImp->pParent->Update_Impl_( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
 
-    for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        xImp->aObjBars[n].nResId = 0;
+    for (SfxObjectBars_Impl & rObjBar : xImp->aObjBars)
+        rObjBar.nResId = 0;
     xImp->aChildWins.clear();
 
     // bQuiet: own shells aren't considered for UI and SlotServer
@@ -1634,8 +1634,8 @@ void SfxDispatcher::FlushImpl()
     if( bAwakeBindings && GetBindings() )
         GetBindings()->DLEAVEREGISTRATIONS();
 
-    for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        xImp->aFixedObjBars[n].nResId = 0;
+    for (SfxObjectBars_Impl & rFixedObjBar : xImp->aFixedObjBars)
+        rFixedObjBar.nResId = 0;
 
     SAL_INFO("sfx.control", "SfxDispatcher(" << this << ")::Flush() done");
 }
