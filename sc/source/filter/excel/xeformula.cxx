@@ -478,8 +478,8 @@ XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
     mnMaxRowMask( static_cast< sal_uInt32 >( rRoot.GetXclMaxPos().Row() ) )
 {
     // build the configuration map
-    for( const XclExpCompConfig* pEntry = spConfigTable; pEntry != STATIC_ARRAY_END( spConfigTable ); ++pEntry )
-        maCfgMap[ pEntry->meType ] = *pEntry;
+    for(auto const &rEntry : spConfigTable)
+        maCfgMap[ rEntry.meType ] = rEntry;
 }
 
 XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,

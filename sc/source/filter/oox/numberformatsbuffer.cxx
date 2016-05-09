@@ -2001,9 +2001,8 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     // build a map containing pointers to all tables
     typedef ::std::map< OUString, const BuiltinFormatTable* > BuiltinMap;
     BuiltinMap aBuiltinMap;
-    for( const BuiltinFormatTable* pTable = spBuiltinFormatTables;
-            pTable != STATIC_ARRAY_END( spBuiltinFormatTables ); ++pTable )
-        aBuiltinMap[ OUString::createFromAscii( pTable->mpcLocale ) ] = pTable;
+    for(auto const &rTable : spBuiltinFormatTables)
+        aBuiltinMap[ OUString::createFromAscii(rTable.mpcLocale) ] = &rTable;
 
     // convert locale string to locale struct
     Locale aSysLocale( LanguageTag::convertToLocale( maLocaleStr));
