@@ -1,1 +1,5 @@
 calc_tests.create_range_name.create_range_name
+calc_tests.create_range_name.create_local_range_name
+calc_tests.function_wizard.open_function_wizard
+calc_tests.gridwindow.input
+calc_tests.about_test.test_about_dlg
