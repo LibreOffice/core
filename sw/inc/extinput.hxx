@@ -27,7 +27,7 @@ class CommandExtTextInputData;
 
 class SwExtTextInput : public SwPaM
 {
-    std::vector<sal_uInt16> aAttrs;
+    std::vector<ExtTextInputAttr> aAttrs;
     OUString sOverwriteText;
     bool bInsText : 1;
     bool bIsOverwriteCursor : 1;
@@ -37,7 +37,7 @@ public:
     virtual ~SwExtTextInput();
 
     void SetInputData( const CommandExtTextInputData& rData );
-    const std::vector<sal_uInt16>& GetAttrs() const { return aAttrs; }
+    const std::vector<ExtTextInputAttr>& GetAttrs() const { return aAttrs; }
     void SetInsText( bool bFlag )       { bInsText = bFlag; }
     bool IsOverwriteCursor() const      { return bIsOverwriteCursor; }
     void SetOverwriteCursor( bool bFlag );

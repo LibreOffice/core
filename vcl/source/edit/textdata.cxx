@@ -283,12 +283,12 @@ TEIMEInfos::~TEIMEInfos()
     delete[] pAttribs;
 }
 
-void TEIMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
+void TEIMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
 {
     nLen = nL;
     delete[] pAttribs;
-    pAttribs = new sal_uInt16[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
+    pAttribs = new ExtTextInputAttr[ nL ];
+    memcpy( pAttribs, pA, nL*sizeof(ExtTextInputAttr) );
 }
 
 void TEIMEInfos::DestroyAttribs()

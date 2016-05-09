@@ -28,11 +28,11 @@ class SalGraphics;
 class SalFrame;
 class SalObject;
 namespace vcl { class Window; }
-
 class FontSelectPattern;
 enum class InputContextFlags;
 enum class WindowStateMask;
 enum class WindowStateState;
+enum class ExtTextInputAttr;
 
 enum class SalEvent {
     NONE,
@@ -163,7 +163,7 @@ struct SalExtTextInputEvent
 {
     sal_uInt64          mnTime;         // Time in ms, when event is created
     OUString            maText;         // Text
-    const sal_uInt16*   mpTextAttr;     // Text-Attribute
+    const ExtTextInputAttr* mpTextAttr;     // Text-Attribute
     sal_Int32           mnCursorPos;    // Cursor-Position
     sal_uInt8           mnCursorFlags;  // EXTTEXTINPUT_CURSOR_xxx
     bool                mbOnlyCursor;   // true: Only Cursor-Position has been changed

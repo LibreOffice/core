@@ -72,7 +72,7 @@ typedef struct {
     preedit_status_t        eState;
     preedit_text_t          aText;
     SalExtTextInputEvent    aInputEv;
-    std::vector< sal_uInt16 >   aInputFlags;
+    std::vector< ExtTextInputAttr >   aInputFlags;
 } preedit_data_t;
 
 #endif // INCLUDED_VCL_INC_UNX_I18N_CB_HXX
