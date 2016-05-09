@@ -121,7 +121,7 @@ namespace frm
 
     FontControlModel::FontControlModel( bool _bToolkitCompatibleDefaults )
         :m_nFontRelief( css::awt::FontRelief::NONE )
-        ,m_nFontEmphasis( FontEmphasisMark::NONE )
+        ,m_nFontEmphasis( css::awt::FontEmphasisMark::NONE )
         ,m_bToolkitCompatibleDefaults( _bToolkitCompatibleDefaults )
     {
     }
@@ -500,7 +500,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONTEMPHASISMARK:
-            aReturn <<= FontEmphasisMark::NONE;
+            aReturn <<= css::awt::FontEmphasisMark::NONE;
             bHandled = true;
             break;
 
