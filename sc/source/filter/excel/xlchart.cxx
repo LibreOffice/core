@@ -448,9 +448,8 @@ static const XclChFormatInfo spFmtInfos[] =
 
 XclChFormatInfoProvider::XclChFormatInfoProvider()
 {
-    const XclChFormatInfo* pEnd = STATIC_ARRAY_END( spFmtInfos );
-    for( const XclChFormatInfo* pIt = spFmtInfos; pIt != pEnd; ++pIt )
-        maInfoMap[ pIt->meObjType ] = pIt;
+    for(auto const &rIt : spFmtInfos)
+        maInfoMap[ rIt.meObjType ] = &rIt;
 }
 
 const XclChFormatInfo& XclChFormatInfoProvider::GetFormatInfo( XclChObjectType eObjType ) const
@@ -515,9 +514,8 @@ void XclChExtTypeInfo::Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool 
 
 XclChTypeInfoProvider::XclChTypeInfoProvider()
 {
-    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
-    for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
-        maInfoMap[ pIt->meTypeId ] = pIt;
+    for(const auto &rIt : spTypeInfos)
+        maInfoMap[ rIt.meTypeId ] = &rIt;
 }
 
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfo( XclChTypeId eTypeId ) const
@@ -529,20 +527,20 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfo( XclChTypeId eTypeId ) c
 
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromRecId( sal_uInt16 nRecId ) const
 {
-    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
-    for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
-        if( pIt->mnRecId == nRecId )
-            return *pIt;
+    for(const auto &rIt : spTypeInfos)
+    {
+        if(rIt.mnRecId == nRecId)
+            return rIt;
+    }
     OSL_FAIL( "XclChTypeInfoProvider::GetTypeInfoFromRecId - unknown record id" );
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUString& rServiceName ) const
 {
-    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
-    for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
-        if( rServiceName.equalsAscii( pIt->mpcServiceName ) )
-            return *pIt;
+    for(auto const &rIt : spTypeInfos)
+        if( rServiceName.equalsAscii( rIt.mpcServiceName ) )
+            return rIt;
     OSL_FAIL( "XclChTypeInfoProvider::GetTypeInfoFromService - unknown service name" );
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
