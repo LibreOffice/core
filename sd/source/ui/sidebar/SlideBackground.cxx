@@ -550,6 +550,12 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 
     switch (eXFS)
     {
+        case drawing::FillStyle_NONE:
+        {
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::RECORD, { &aXFillStyleItem });
+        }
+        break;
+
         case drawing::FillStyle_SOLID:
         {
             XFillColorItem aItem( OUString(), mpColorItem->GetColorValue() );
@@ -568,6 +574,13 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
         {
             XFillHatchItem aItem( mpHatchItem->GetName(), mpHatchItem->GetHatchValue() );
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+        }
+        break;
+
+        case drawing::FillStyle_BITMAP:
+        {
+            XFillBitmapItem aItem( mpBitmapItem->GetName(), mpBitmapItem->GetGraphicObject() );
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
         }
         break;
 
