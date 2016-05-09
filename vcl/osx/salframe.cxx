@@ -539,13 +539,13 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     NSRect aStateRect = [mpNSWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
-    if( pState->mnMask & WINDOWSTATE_MASK_X )
+    if( pState->mnMask & WindowStateMask::X )
         aStateRect.origin.x = float(pState->mnX);
-    if( pState->mnMask & WINDOWSTATE_MASK_Y )
+    if( pState->mnMask & WindowStateMask::Y )
         aStateRect.origin.y = float(pState->mnY);
-    if( pState->mnMask & WINDOWSTATE_MASK_WIDTH )
+    if( pState->mnMask & WindowStateMask::Width )
         aStateRect.size.width = float(pState->mnWidth);
-    if( pState->mnMask & WINDOWSTATE_MASK_HEIGHT )
+    if( pState->mnMask & WindowStateMask::Height )
         aStateRect.size.height = float(pState->mnHeight);
     VCLToCocoa( aStateRect );
     aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
@@ -576,13 +576,13 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     UpdateFrameGeometry();
 
     sal_uInt16 nEvent = 0;
-    if( pState->mnMask & (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y) )
+    if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y) )
     {
         mbPositioned = true;
         nEvent = SALEVENT_MOVE;
     }
 
-    if( pState->mnMask & (WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT) )
+    if( pState->mnMask & (WindowStateMask::Width | WindowStateMask::Height) )
     {
         mbSized = true;
         nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
@@ -609,11 +609,11 @@ bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    pState->mnMask = WINDOWSTATE_MASK_X                 |
-                     WINDOWSTATE_MASK_Y                 |
-                     WINDOWSTATE_MASK_WIDTH             |
-                     WINDOWSTATE_MASK_HEIGHT            |
-                     WINDOWSTATE_MASK_STATE;
+    pState->mnMask = WindowStateMask::X                 |
+                     WindowStateMask::Y                 |
+                     WindowStateMask::Width             |
+                     WindowStateMask::Height            |
+                     WindowStateMask::State;
 
     NSRect aStateRect = [mpNSWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];

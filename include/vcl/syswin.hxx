@@ -26,6 +26,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class ModalDialog;
 class MenuBar;
@@ -42,19 +43,25 @@ class VclContainer;
 #define ICON_MATH_DOCUMENT              13
 #define ICON_MACROLIBRARY               1
 
-
-#define WINDOWSTATE_MASK_X                  ((sal_uInt32)0x00000001)
-#define WINDOWSTATE_MASK_Y                  ((sal_uInt32)0x00000002)
-#define WINDOWSTATE_MASK_WIDTH              ((sal_uInt32)0x00000004)
-#define WINDOWSTATE_MASK_HEIGHT             ((sal_uInt32)0x00000008)
-#define WINDOWSTATE_MASK_STATE              ((sal_uInt32)0x00000010)
-#define WINDOWSTATE_MASK_MINIMIZED          ((sal_uInt32)0x00000020)
-#define WINDOWSTATE_MASK_MAXIMIZED_X        ((sal_uInt32)0x00000100)
-#define WINDOWSTATE_MASK_MAXIMIZED_Y        ((sal_uInt32)0x00000200)
-#define WINDOWSTATE_MASK_MAXIMIZED_WIDTH    ((sal_uInt32)0x00000400)
-#define WINDOWSTATE_MASK_MAXIMIZED_HEIGHT   ((sal_uInt32)0x00000800)
-#define WINDOWSTATE_MASK_POS  (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y)
-#define WINDOWSTATE_MASK_ALL  (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT | WINDOWSTATE_MASK_MAXIMIZED_X | WINDOWSTATE_MASK_MAXIMIZED_Y | WINDOWSTATE_MASK_MAXIMIZED_WIDTH | WINDOWSTATE_MASK_MAXIMIZED_HEIGHT | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)
+enum class WindowStateMask {
+    NONE             = 0x0000,
+    X                = 0x0001,
+    Y                = 0x0002,
+    Width            = 0x0004,
+    Height           = 0x0008,
+    State            = 0x0010,
+    Minimized        = 0x0020,
+    MaximizedX       = 0x0100,
+    MaximizedY       = 0x0200,
+    MaximizedWidth   = 0x0400,
+    MaximizedHeight  = 0x0800,
+    Pos              = X | Y,
+    All              = X | Y | Width | Height | MaximizedX | MaximizedY | MaximizedWidth | MaximizedHeight | State | Minimized
+};
+namespace o3tl
+{
+    template<> struct typed_flags<WindowStateMask> : is_typed_flags<WindowStateMask, 0x0f3f> {};
+}
 
 #define WINDOWSTATE_STATE_NORMAL         ((sal_uInt32)0x00000001)
 #define WINDOWSTATE_STATE_MINIMIZED      ((sal_uInt32)0x00000002)
@@ -67,7 +74,7 @@ class VclContainer;
 class VCL_PLUGIN_PUBLIC WindowStateData
 {
 private:
-    sal_uInt32          mnValidMask;
+    WindowStateMask     mnValidMask;
     int                 mnX;
     int                 mnY;
     unsigned int        mnWidth;
@@ -80,7 +87,7 @@ private:
 
 public:
     WindowStateData()
-        : mnValidMask(0)
+        : mnValidMask(WindowStateMask::NONE)
         , mnX(0)
         , mnY(0)
         , mnWidth(0)
@@ -93,8 +100,8 @@ public:
     {
     }
 
-    void        SetMask( sal_uInt32 nValidMask ) { mnValidMask = nValidMask; }
-    sal_uInt32  GetMask() const { return mnValidMask; }
+    void        SetMask( WindowStateMask nValidMask ) { mnValidMask = nValidMask; }
+    WindowStateMask GetMask() const { return mnValidMask; }
 
     void         SetX( int nX ) { mnX = nX; }
     int          GetX() const { return mnX; }
@@ -222,7 +229,7 @@ public:
     const Size&     GetMaxOutputSizePixel() const;
 
     void            SetWindowState(const OString& rStr);
-    OString         GetWindowState(sal_uInt32 nMask = WINDOWSTATE_MASK_ALL) const;
+    OString         GetWindowState(WindowStateMask nMask = WindowStateMask::All) const;
 
     void            SetMenuBar(MenuBar* pMenuBar);
     MenuBar*        GetMenuBar() const { return mpMenuBar; }

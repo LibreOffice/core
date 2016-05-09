@@ -1655,23 +1655,23 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     long nRightDeco = abs( aWinRect.right - aRect2.right );
 
     // adjust window position/size to fit the screen
-    if ( !(pState->mnMask & (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y)) )
+    if ( !(pState->mnMask & (WindowStateMask::X | WindowStateMask::Y)) )
         nPosSize |= SWP_NOMOVE;
-    if ( !(pState->mnMask & (WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT)) )
+    if ( !(pState->mnMask & (WindowStateMask::Width | WindowStateMask::Height)) )
         nPosSize |= SWP_NOSIZE;
-    if ( pState->mnMask & WINDOWSTATE_MASK_X )
+    if ( pState->mnMask & WindowStateMask::X )
         nX = (int)pState->mnX - nLeftDeco;
     else
         nX = aWinRect.left;
-    if ( pState->mnMask & WINDOWSTATE_MASK_Y )
+    if ( pState->mnMask & WindowStateMask::Y )
         nY = (int)pState->mnY - nTopDeco;
     else
         nY = aWinRect.top;
-    if ( pState->mnMask & WINDOWSTATE_MASK_WIDTH )
+    if ( pState->mnMask & WindowStateMask::Width )
         nWidth = (int)pState->mnWidth + nLeftDeco + nRightDeco;
     else
         nWidth = aWinRect.right-aWinRect.left;
-    if ( pState->mnMask & WINDOWSTATE_MASK_HEIGHT )
+    if ( pState->mnMask & WindowStateMask::Height )
         nHeight = (int)pState->mnHeight + nTopDeco + nBottomDeco;
     else
         nHeight = aWinRect.bottom-aWinRect.top;
@@ -1706,7 +1706,7 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
 
         if ( mbOverwriteState )
         {
-            if ( pState->mnMask & WINDOWSTATE_MASK_STATE )
+            if ( pState->mnMask & WindowStateMask::State )
             {
                 if ( pState->mnState & WINDOWSTATE_STATE_MINIMIZED )
                     mnShowState = SW_SHOWMINIMIZED;
@@ -1722,7 +1722,7 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     }
     else
     {
-        if ( pState->mnMask & WINDOWSTATE_MASK_STATE )
+        if ( pState->mnMask & WindowStateMask::State )
         {
             if ( pState->mnState & WINDOWSTATE_STATE_MINIMIZED )
             {

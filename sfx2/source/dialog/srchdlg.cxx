@@ -171,7 +171,7 @@ void SearchDialog::Move()
 {
     ModelessDialog::Move();
     if ( m_bIsConstructed && IsReallyVisible() )
-        m_sWinState = GetWindowState( WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE );
+        m_sWinState = GetWindowState( WindowStateMask::Pos | WindowStateMask::State );
 }
 
 

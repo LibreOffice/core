@@ -338,9 +338,9 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     aInfo.aSize = pWindow->GetSizePixel();
     if ( pWindow->IsSystemWindow() )
     {
-        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( pWindow->GetStyle() & WB_SIZEABLE )
-            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
         aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
     }
     else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))

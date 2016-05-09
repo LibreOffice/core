@@ -56,8 +56,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 using namespace framework;
 
-#undef WINDOWSTATE_MASK_POS
-
 namespace {
 
 // Zero based indexes, order must be the same as WindowStateMask && CONFIGURATION_PROPERTIES!

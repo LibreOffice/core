@@ -116,7 +116,7 @@ void SfxModalDialog::SetDialogData_Impl()
 
     SvtViewOptions aDlgOpt(E_DIALOG, sConfigId);
     aDlgOpt.SetWindowState(OStringToOUString(
-        GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
+        GetWindowState(WindowStateMask::Pos), RTL_TEXTENCODING_ASCII_US));
     if ( !aExtraData.isEmpty() )
         aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aExtraData ) );
 }
@@ -296,9 +296,9 @@ IMPL_LINK_NOARG_TYPED(SfxModelessDialog, TimerHdl, Idle *, void)
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
-        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( GetStyle() & WB_SIZEABLE )
-            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
         pImp->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
     }
@@ -558,9 +558,9 @@ IMPL_LINK_NOARG_TYPED(SfxFloatingWindow, TimerHdl, Idle *, void)
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
-        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( GetStyle() & WB_SIZEABLE )
-            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
         pImp->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
     }

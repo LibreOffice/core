@@ -1020,7 +1020,7 @@ Point DockingWindow::GetFloatingPos() const
         if ( pWrapper->mpFloatWin )
         {
             WindowStateData aData;
-            aData.SetMask( WINDOWSTATE_MASK_POS );
+            aData.SetMask( WindowStateMask::Pos );
             pWrapper->mpFloatWin->GetWindowStateData( aData );
             Point aPos( aData.GetX(), aData.GetY() );
             aPos = pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
@@ -1033,7 +1033,7 @@ Point DockingWindow::GetFloatingPos() const
     if ( mpFloatWin )
     {
         WindowStateData aData;
-        aData.SetMask( WINDOWSTATE_MASK_POS );
+        aData.SetMask( WindowStateMask::Pos );
         mpFloatWin->GetWindowStateData( aData );
         Point aPos( aData.GetX(), aData.GetY() );
         aPos = mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
