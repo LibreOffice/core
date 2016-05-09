@@ -614,9 +614,9 @@ StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
 inline bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
                              const OUString &rStr)
 {
-    for (size_t n = 0; n < rEntries.size(); ++n)
+    for (const auto & rEntry : rEntries)
     {
-        if (rEntries[n] == rStr)
+        if (rEntry == rStr)
             return true;
     }
     return false;
@@ -711,8 +711,8 @@ void SfxTemplateDialog_Impl::EnableEdit(bool bEnable)
 void SfxCommonTemplateDialog_Impl::ReadResource()
 {
     // Read global user resource
-    for(sal_uInt16 i = 0; i < MAX_FAMILIES; ++i)
-        pFamilyState[i] = nullptr;
+    for(SfxTemplateItem* & rp : pFamilyState)
+        rp = nullptr;
 
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     pCurObjShell = pViewFrame->GetObjectShell();
@@ -1167,10 +1167,10 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
             aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(SFXSTYLEBIT_ALL) );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
-            for( size_t i = 0; i < rFilter.size(); ++i)
+            for(const SfxFilterTupel* i : rFilter)
             {
-                sal_uIntPtr nFilterFlags = rFilter[ i ]->nFlags;
-                nPos = aFilterLb->InsertEntry( rFilter[ i ]->aName );
+                sal_uIntPtr nFilterFlags = i->nFlags;
+                nPos = aFilterLb->InsertEntry( i->aName );
                 aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(nFilterFlags) );
             }
             if(nActFilter < aFilterLb->GetEntryCount() - 1)

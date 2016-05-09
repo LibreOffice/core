@@ -79,8 +79,8 @@ void Deck::dispose()
     // We have to explicitly trigger the destruction of panels.
     // Otherwise that is done by one of our base class destructors
     // without updating maPanels.
-    for (size_t i = 0; i < aPanels.size(); i++)
-        aPanels[i].disposeAndClear();
+    for (VclPtr<Panel> & rpPanel : aPanels)
+        rpPanel.disposeAndClear();
 
     mpTitleBar.disposeAndClear();
     mpFiller.disposeAndClear();
@@ -192,18 +192,18 @@ bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
  * This container may contain existing panels that are
  * being re-used, and new ones too.
  */
-void Deck::ResetPanels(const SharedPanelContainer& rPanels)
+void Deck::ResetPanels(const SharedPanelContainer& rPanelContainer)
 {
     // First dispose old panels we no longer need.
-    for (size_t i = 0; i < maPanels.size(); i++)
+    for (VclPtr<Panel> & rpPanel : maPanels)
     {
         bool bFound = false;
-        for (size_t j = 0; j < rPanels.size(); j++)
-            bFound = bFound || (maPanels[i].get() == rPanels[j].get());
+        for (const auto & i : rPanelContainer)
+            bFound = bFound || (rpPanel.get() == i.get());
         if (!bFound) // this one didn't survive.
-            maPanels[i].disposeAndClear();
+            rpPanel.disposeAndClear();
     }
-    maPanels = rPanels;
+    maPanels = rPanelContainer;
 
     RequestLayout();
 }
@@ -224,11 +224,11 @@ vcl::Window* Deck::GetPanelParentWindow()
 
 Panel* Deck::GetPanel(const OUString & panelId)
 {
-    for (size_t i = 0; i < maPanels.size(); i++)
+    for (VclPtr<Panel> & pPanel : maPanels)
     {
-        if(maPanels[i].get()->GetId() == panelId)
+        if(pPanel->GetId() == panelId)
         {
-            return maPanels[i].get();
+            return pPanel.get();
         }
     }
     return nullptr;

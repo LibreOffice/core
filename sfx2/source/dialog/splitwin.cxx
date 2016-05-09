@@ -441,9 +441,9 @@ void SfxSplitWindow::Split()
     // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
     {
         DeactivateUpdateMode aDeactivateUpdateMode( *this );
-        for ( size_t i = 0; i < aNewOrgSizes.size(); ++i )
+        for (const std::pair< sal_uInt16, long > & rNewOrgSize : aNewOrgSizes)
         {
-            SetItemSize( aNewOrgSizes[i].first, aNewOrgSizes[i].second );
+            SetItemSize( rNewOrgSize.first, rNewOrgSize.second );
         }
     }
 
@@ -780,9 +780,9 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
         }
         // apply new item sizes
         DeactivateUpdateMode aDeactivateUpdateMode( *this );
-        for ( size_t i = 0; i < aNewOrgSizes.size(); ++i )
+        for (const std::pair< sal_uInt16, long > & rNewOrgSize : aNewOrgSizes)
         {
-            SetItemSize( aNewOrgSizes[i].first, aNewOrgSizes[i].second );
+            SetItemSize( rNewOrgSize.first, rNewOrgSize.second );
         }
     }
 }

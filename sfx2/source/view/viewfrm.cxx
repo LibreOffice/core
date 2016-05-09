@@ -1510,9 +1510,8 @@ SfxViewFrame* SfxViewFrame::GetFirst
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // search for a SfxDocument of the specified type
-    for ( size_t nPos = 0; nPos < rFrames.size(); ++nPos )
+    for (SfxViewFrame* pFrame : rFrames)
     {
-        SfxViewFrame *pFrame = rFrames[nPos];
         if  (   ( !pDoc || pDoc == pFrame->GetObjectShell() )
             &&  ( !bOnlyIfVisible || pFrame->IsVisible() )
             )

@@ -1142,14 +1142,14 @@ bool ThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const
 
 void ThumbnailView::deselectItems()
 {
-    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    for (ThumbnailViewItem* p : mItemList)
     {
-        if (mItemList[i]->isSelected())
+        if (p->isSelected())
         {
-            mItemList[i]->setEditTitle(false);
-            mItemList[i]->setSelection(false);
+            p->setEditTitle(false);
+            p->setSelection(false);
 
-            maItemStateHdl.Call(mItemList[i]);
+            maItemStateHdl.Call(p);
         }
     }
 

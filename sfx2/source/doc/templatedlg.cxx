@@ -317,8 +317,8 @@ void SfxTemplateManagerDlg::dispose()
 
     // Synchronize the config before deleting it
     syncRepositories();
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
-        delete maRepositories[i];
+    for (TemplateRepository* p : maRepositories)
+        delete p;
 
     // Ignore view events since we are cleaning the object
     mpLocalView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
@@ -642,11 +642,11 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu, bo
 
         TemplateRepository *pRepository = nullptr;
 
-        for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+        for (TemplateRepository* p : maRepositories)
         {
-            if (maRepositories[i]->mnId == nRepoId)
+            if (p->mnId == nRepoId)
             {
-                pRepository = maRepositories[i];
+                pRepository = p;
                 break;
             }
         }
@@ -748,21 +748,19 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
         std::vector<TemplateItemProperties> aItems =
                 mpLocalView->getFilteredItems(SearchView_Keyword(aKeyword, getCurrentFilter()));
 
-        for (size_t i = 0; i < aItems.size(); ++i)
+        for (TemplateItemProperties& rItem : aItems)
         {
-            TemplateItemProperties *pItem = &aItems[i];
-
             OUString aFolderName;
 
             if (bDisplayFolder)
-                aFolderName = mpLocalView->getRegionName(pItem->nRegionId);
+                aFolderName = mpLocalView->getRegionName(rItem.nRegionId);
 
-            mpSearchView->AppendItem(pItem->nId,mpLocalView->getRegionId(pItem->nRegionId),
-                                     pItem->nDocId,
-                                     pItem->aName,
+            mpSearchView->AppendItem(rItem.nId,mpLocalView->getRegionId(rItem.nRegionId),
+                                     rItem.nDocId,
+                                     rItem.aName,
                                      aFolderName,
-                                     pItem->aPath,
-                                     pItem->aThumbnail);
+                                     rItem.aPath,
+                                     rItem.aThumbnail);
         }
 
         mpSearchView->Invalidate();
@@ -1381,8 +1379,8 @@ void SfxTemplateManagerDlg::createRepositoryMenu()
 
     const std::vector<TemplateRepository*> &rRepos = getRepositories();
 
-    for (size_t i = 0, n = rRepos.size(); i < n; ++i)
-        mpRepositoryMenu->InsertItem(MNI_REPOSITORY_BASE+rRepos[i]->mnId,rRepos[i]->maTitle);
+    for (const TemplateRepository* pRepo : rRepos)
+        mpRepositoryMenu->InsertItem(MNI_REPOSITORY_BASE+pRepo->mnId, pRepo->maTitle);
 
     mpRepositoryMenu->InsertSeparator();
     mpRepositoryMenu->InsertItem(MNI_REPOSITORY_NEW,SfxResId(STR_REPOSITORY_NEW).toString());
@@ -1629,9 +1627,9 @@ void SfxTemplateManagerDlg::loadRepositories()
 
 bool SfxTemplateManagerDlg::insertRepository(const OUString &rName, const OUString &rURL)
 {
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+    for (TemplateRepository* pRepo : maRepositories)
     {
-        if (maRepositories[i]->maTitle == rName)
+        if (pRepo->maTitle == rName)
             return false;
     }
 

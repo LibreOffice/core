@@ -1293,8 +1293,8 @@ RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
 
 RegionData_Impl::~RegionData_Impl()
 {
-    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
-        delete maEntries[ i ];
+    for (DocTempl_EntryData_Impl* p : maEntries)
+        delete p;
     maEntries.clear();
 }
 
@@ -1498,9 +1498,8 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     const
 {
-    for ( size_t i = 0, n = maRegions.size(); i < n; ++i )
+    for (RegionData_Impl* pData : maRegions)
     {
-        RegionData_Impl* pData = maRegions[ i ];
         if( pData->GetTitle() == rName )
             return pData;
     }
@@ -1666,8 +1665,8 @@ bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
     ::osl::MutexGuard   aGuard( maMutex );
 
     // return false (not inserted) if the entry already exists
-    for ( size_t i = 0, n = maRegions.size(); i < n; ++i )
-        if ( maRegions[ i ]->Compare( pNew ) == 0 )
+    for (const RegionData_Impl* pRegion : maRegions)
+        if ( pRegion->Compare( pNew ) == 0 )
             return false;
 
     size_t newPos = nPos;
@@ -1762,8 +1761,8 @@ void SfxDocTemplate_Impl::Clear()
     if ( mnLockCounter )
         return;
 
-    for ( size_t i = 0, n = maRegions.size(); i < n; ++i )
-        delete maRegions[ i ];
+    for (RegionData_Impl* pRegion : maRegions)
+        delete pRegion;
     maRegions.clear();
 }
 

@@ -507,9 +507,8 @@ OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
 {
     OUString         aRet;
 
-    for ( size_t i = 0, n = maNames.size(); i < n; ++i )
+    for (NamePair_Impl* pPair : maNames)
     {
-        NamePair_Impl* pPair = maNames[ i ];
         if ( pPair->maShortName == rShortName )
         {
             aRet = pPair->maLongName;
@@ -1089,8 +1088,8 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    for ( size_t i = 0, n = maNames.size(); i < n; ++i )
-        delete maNames[ i ];
+    for (NamePair_Impl* p : maNames)
+        delete p;
     maNames.clear();
 }
 
@@ -1167,9 +1166,8 @@ void SfxDocTplService_Impl::doUpdate()
     }
 
     // now check the list
-    for( size_t j = 0, n = aGroupList.size(); j < n; ++j )
+    for(GroupData_Impl* pGroup : aGroupList)
     {
-        GroupData_Impl *pGroup = aGroupList[ j ];
         if ( pGroup->getInUse() )
         {
             if ( pGroup->getInHierarchy() )
@@ -2481,11 +2479,11 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
         return;
 
     GroupData_Impl* pGroup = nullptr;
-    for ( size_t i = 0, n = rList.size(); i < n; ++i )
+    for (GroupData_Impl* i : rList)
     {
-        if ( rList[ i ]->getTitle() == aTitle )
+        if ( i->getTitle() == aTitle )
         {
-            pGroup = rList[ i ];
+            pGroup = i;
             break;
         }
     }
@@ -2596,10 +2594,10 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
                 else
                 {
                     OUString aUITitle;
-                    for ( size_t nInd = 0; nInd < aUINames.size(); nInd++ )
-                        if ( aUINames[nInd].First.equals( aTitle ) )
+                    for (beans::StringPair & rUIName : aUINames)
+                        if ( rUIName.First.equals( aTitle ) )
                         {
-                            aUITitle = aUINames[nInd].Second;
+                            aUITitle = rUIName.Second;
                             break;
                         }
 
@@ -2721,8 +2719,8 @@ GroupData_Impl::GroupData_Impl( const OUString& rTitle )
 
 GroupData_Impl::~GroupData_Impl()
 {
-    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
-        delete maEntries[ i ];
+    for (DocTemplates_EntryData_Impl* p : maEntries)
+        delete p;
     maEntries.clear();
 }
 
@@ -2735,9 +2733,9 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
     DocTemplates_EntryData_Impl* pData = nullptr;
     bool EntryFound = false;
 
-    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
+    for (DocTemplates_EntryData_Impl* p : maEntries)
     {
-        pData = maEntries[ i ];
+        pData = p;
         if ( pData->getTitle() == rTitle )
         {
             EntryFound = true;
