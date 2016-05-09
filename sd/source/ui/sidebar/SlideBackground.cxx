@@ -550,6 +550,13 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 
     switch (eXFS)
     {
+        case drawing::FillStyle_NONE:
+        {
+            XFillStyleItem aItem( drawing::FillStyle_NONE );
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::RECORD, { &aItem });
+        }
+        break;
+
         case drawing::FillStyle_SOLID:
         {
             XFillColorItem aItem( OUString(), mpColorItem->GetColorValue() );

@@ -1716,6 +1716,16 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
 
             switch (nSlotId)
             {
+                case(SID_ATTR_PAGE_FILLSTYLE):
+                {
+                    XFillStyleItem aFSItem( static_cast<const XFillStyleItem&>(pArgs->Get( XATTR_FILLSTYLE )) );
+                    drawing::FillStyle eXFS = aFSItem.GetValue();
+
+                    if ( eXFS == drawing::FillStyle_NONE )
+                         rPageProperties.PutItem( XFillStyleItem( eXFS ) );
+                }
+                break;
+
                 case(SID_ATTR_PAGE_COLOR):
                 {
                     XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pArgs->Get( XATTR_FILLCOLOR )) );
