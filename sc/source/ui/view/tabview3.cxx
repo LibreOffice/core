@@ -299,6 +299,21 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         ShowAllCursors();
 
         CursorPosChanged();
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if ( nPosX > aViewData.GetMaxTiledCol() || nPosY > aViewData.GetMaxTiledRow() )
+            {
+                aViewData.SetMaxTiledCol( std::max( nPosX, aViewData.GetMaxTiledCol() ) );
+                aViewData.SetMaxTiledRow( std::max( nPosY, aViewData.GetMaxTiledRow() ) );
+
+                ScDocShell* pDocSh = aViewData.GetDocShell();
+                if (pDocSh)
+                {
+                    pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                }
+            }
+        }
     }
 }
 
