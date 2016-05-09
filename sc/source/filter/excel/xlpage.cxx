@@ -244,21 +244,20 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStric
     }
     else
     {
-        mnPaperSize = 0;
+        mnPaperSize = EXC_PAPERSIZE_DEFAULT;
     }
 
-    for( const XclPaperSize* pEntry = pPaperSizeTable; pEntry != STATIC_ARRAY_END( pPaperSizeTable ); ++pEntry )
+    for( const auto &rEntry : pPaperSizeTable)
     {
-        long nWDiff = std::abs( pEntry->mnWidth - nWidth );
-        long nHDiff = std::abs( pEntry->mnHeight - nHeight );
+        long nWDiff = std::abs( rEntry.mnWidth - nWidth );
+        long nHDiff = std::abs( rEntry.mnHeight - nHeight );
         if( ((nWDiff <= nMaxWDiff) && (nHDiff < nMaxHDiff)) ||
             ((nWDiff < nMaxWDiff) && (nHDiff <= nMaxHDiff)) )
         {
-            sal_uInt16 nIndex = static_cast< sal_uInt16 >( pEntry - pPaperSizeTable );
-            if( !bStrictSize )
-                mnPaperSize = nIndex;
-            else
-                mnStrictPaperSize = mnPaperSize = nIndex;
+            sal_uInt16 nIndex = static_cast< sal_uInt16 >( &rEntry - pPaperSizeTable );
+            mnPaperSize = nIndex;
+            if( bStrictSize )
+                mnStrictPaperSize = nIndex;
 
             nMaxWDiff = nWDiff;
             nMaxHDiff = nHDiff;

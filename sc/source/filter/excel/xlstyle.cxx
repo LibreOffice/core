@@ -1476,9 +1476,8 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     // build a map containing tables for all languages
     typedef ::std::map< LanguageType, const XclBuiltInFormatTable* > XclBuiltInMap;
     XclBuiltInMap aBuiltInMap;
-    for( const XclBuiltInFormatTable* pTable = spBuiltInFormatTables;
-            pTable != STATIC_ARRAY_END( spBuiltInFormatTables ); ++pTable )
-        aBuiltInMap[ pTable->meLanguage ] = pTable;
+    for(const auto &rTable : spBuiltInFormatTables)
+        aBuiltInMap[ rTable.meLanguage ] = &rTable;
 
     // build a list of table pointers for the current language, with all parent tables
     typedef ::std::vector< const XclBuiltInFormatTable* > XclBuiltInVec;

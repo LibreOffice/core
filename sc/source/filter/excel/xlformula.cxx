@@ -629,21 +629,21 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
         from earlier tables. */
     XclBiff eBiff = rRoot.GetBiff();
     if( eBiff >= EXC_BIFF2 )
-        (this->*pFillFunc)( saFuncTable_2, STATIC_ARRAY_END( saFuncTable_2 ) );
+        (this->*pFillFunc)( saFuncTable_2, std::end( saFuncTable_2 ) );
     if( eBiff >= EXC_BIFF3 )
-        (this->*pFillFunc)( saFuncTable_3, STATIC_ARRAY_END( saFuncTable_3 ) );
+        (this->*pFillFunc)( saFuncTable_3, std::end( saFuncTable_3 ) );
     if( eBiff >= EXC_BIFF4 )
-        (this->*pFillFunc)( saFuncTable_4, STATIC_ARRAY_END( saFuncTable_4 ) );
+        (this->*pFillFunc)( saFuncTable_4, std::end( saFuncTable_4 ) );
     if( eBiff >= EXC_BIFF5 )
-        (this->*pFillFunc)( saFuncTable_5, STATIC_ARRAY_END( saFuncTable_5 ) );
+        (this->*pFillFunc)( saFuncTable_5, std::end( saFuncTable_5 ) );
     if( eBiff >= EXC_BIFF8 )
-        (this->*pFillFunc)( saFuncTable_8, STATIC_ARRAY_END( saFuncTable_8 ) );
-    (this->*pFillFunc)( saFuncTable_Oox, STATIC_ARRAY_END( saFuncTable_Oox ) );
-    (this->*pFillFunc)( saFuncTable_2010, STATIC_ARRAY_END( saFuncTable_2010 ) );
-    (this->*pFillFunc)( saFuncTable_2013, STATIC_ARRAY_END( saFuncTable_2013 ) );
-    (this->*pFillFunc)( saFuncTable_2016, STATIC_ARRAY_END( saFuncTable_2016 ) );
-    (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
-    (this->*pFillFunc)( saFuncTable_OOoLO, STATIC_ARRAY_END( saFuncTable_OOoLO ) );
+        (this->*pFillFunc)( saFuncTable_8, std::end( saFuncTable_8 ) );
+    (this->*pFillFunc)( saFuncTable_Oox, std::end( saFuncTable_Oox ) );
+    (this->*pFillFunc)( saFuncTable_2010, std::end( saFuncTable_2010 ) );
+    (this->*pFillFunc)( saFuncTable_2013, std::end( saFuncTable_2013 ) );
+    (this->*pFillFunc)( saFuncTable_2016, std::end( saFuncTable_2016 ) );
+    (this->*pFillFunc)( saFuncTable_Odf, std::end( saFuncTable_Odf ) );
+    (this->*pFillFunc)( saFuncTable_OOoLO, std::end( saFuncTable_OOoLO ) );
 }
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const
