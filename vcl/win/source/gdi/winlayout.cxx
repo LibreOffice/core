@@ -3730,8 +3730,9 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
     }
     succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
 
-    ID2D1SolidColorBrush* pBlackBrush = NULL;
-    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetTextColor(hDC)), &pBlackBrush));
+    ID2D1SolidColorBrush* pBrush = NULL;
+    COLORREF bgrTextColor = GetTextColor(mhDC);
+    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f), &pBrush));
 
     HRESULT hr = S_OK;
     int nGlyphs = 0;
@@ -3766,14 +3767,14 @@ bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
                 0
             };
 
-            mpRT->DrawGlyphRun(baseline, &glyphs, pBlackBrush);
+            mpRT->DrawGlyphRun(baseline, &glyphs, pBrush);
         } while (!pRectToErase);
 
         hr = mpRT->EndDraw();
     }
 
-    if (pBlackBrush)
-        pBlackBrush->Release();
+    if (pBrush)
+        pBrush->Release();
 
     ReleaseFont();
 
@@ -3874,7 +3875,8 @@ bool D2DWriteTextOutRenderer::DrawGlyphs(const Point & origin, uint16_t * pGid, 
     bool succeeded = BindDC(mhDC, bounds);   // Update the bounding rect.
 
     ID2D1SolidColorBrush* pBrush = NULL;
-    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetTextColor(mhDC)), &pBrush));
+    COLORREF bgrTextColor = GetTextColor(mhDC);
+    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f), &pBrush));
 
     HRESULT hr = S_OK;
     if (succeeded)
