@@ -903,14 +903,14 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     if ( !mpWindowImpl->mbFrame && !mpWindowImpl->mbBorderWin && !mpWindowImpl->mpBorderWindow
          && (nStyle & (WB_BORDER | WB_SYSTEMCHILDWINDOW) ) )
     {
-        sal_uInt16 nBorderTypeStyle = 0;
+        BorderWindowStyle nBorderTypeStyle = BorderWindowStyle::NONE;
         if( (nStyle & WB_SYSTEMCHILDWINDOW) )
         {
             // handle WB_SYSTEMCHILDWINDOW
             // these should be analogous to a top level frame; meaning they
-            // should have a border window with style BORDERWINDOW_STYLE_FRAME
+            // should have a border window with style BorderWindowStyle::Frame
             // which controls their size
-            nBorderTypeStyle |= BORDERWINDOW_STYLE_FRAME;
+            nBorderTypeStyle |= BorderWindowStyle::Frame;
             nStyle |= WB_BORDER;
         }
         VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL), nBorderTypeStyle );
