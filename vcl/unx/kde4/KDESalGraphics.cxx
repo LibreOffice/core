@@ -694,6 +694,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
 
                 break;
             }
+            SAL_FALLTHROUGH;
         case CTRL_COMBOBOX:
         case CTRL_LISTBOX:
         {

@@ -426,16 +426,19 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
                 c[0]  =c[0]-h[0];
                 b[n-2]=b[n-2]-h[n-1];
             }
+            SAL_FALLTHROUGH;
         }
         case 1: {
             a[0]  =a[0]-1.5*((y[1]-y[0])/h[0]-Marg0);
             a[n-2]=a[n-2]-1.5*(MargN-(y[n]-y[n-1])/h[n-1]);
             d[0]  =d[0]-h[0]*0.5;
             d[n-2]=d[n-2]-h[n-1]*0.5;
+            SAL_FALLTHROUGH;
         }
         case 2: {
             a[0]  =a[0]-h[0]*Marg0*0.5;
             a[n-2]=a[n-2]-h[n-1]*MargN*0.5;
+            SAL_FALLTHROUGH;
         }
         case 3: {
             a[0]  =a[0]+Marg0*h[0]*h[0]*0.5;
@@ -460,16 +463,19 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
                 c[0]=c[1]+h[0]*(c[1]-c[2])/h[1];
                 c[n]=c[n-1]+h[n-1]*(c[n-1]-c[n-2])/h[n-2];
             }
+            SAL_FALLTHROUGH;
         }
         case 1: {
             c[0]=1.5*((y[1]-y[0])/h[0]-Marg0);
             c[0]=(c[0]-c[1]*h[0]*0.5)/h[0];
             c[n]=1.5*((y[n]-y[n-1])/h[n-1]-MargN);
             c[n]=(c[n]-c[n-1]*h[n-1]*0.5)/h[n-1];
+            SAL_FALLTHROUGH;
         }
         case 2: {
             c[0]=Marg0*0.5;
             c[n]=MargN*0.5;
+            SAL_FALLTHROUGH;
         }
         case 3: {
             c[0]=c[1]-Marg0*h[0]*0.5;

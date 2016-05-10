@@ -570,6 +570,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             {
                 case 16 :
                     mnTargetDepth = 8;  // we have to reduce the bitmap
+                    SAL_FALLTHROUGH;
                 case 8 :
                     mbGrayScale = true;
                     break;

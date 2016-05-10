@@ -876,6 +876,7 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
                         case 4 :
                         case 3 :
                             nBitsPerPixel = 24;
+                            SAL_FALLTHROUGH;
                         case 2 :
                         case 1 :
                             aPixSize.Width() = nColumns;

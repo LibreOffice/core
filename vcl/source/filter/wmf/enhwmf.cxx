@@ -954,12 +954,14 @@ bool EnhWMFReader::ReadEnhWMF()
                                     aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
                                     break;
                                 }
+                                SAL_FALLTHROUGH;
                             case PS_ENDCAP_SQUARE :
                                 if ( aSize.Width() )
                                 {
                                     aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
                                     break;
                                 }
+                                SAL_FALLTHROUGH;
                             case PS_ENDCAP_FLAT :
                             default :
                                 aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
@@ -1042,12 +1044,14 @@ bool EnhWMFReader::ReadEnhWMF()
                                     aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
                                     break;
                                 }
+                                SAL_FALLTHROUGH;
                             case PS_ENDCAP_SQUARE :
                                 if ( aLineInfo.GetWidth() )
                                 {
                                     aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
                                     break;
                                 }
+                                SAL_FALLTHROUGH;
                             case PS_ENDCAP_FLAT :
                             default :
                                 aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
@@ -1168,6 +1172,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_ABORTPATH :
                     pOut->ClearPath();
+                    SAL_FALLTHROUGH;
                 case EMR_ENDPATH :
                     bRecordPath = false;
                 break;
@@ -1527,6 +1532,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
                 case EMR_EXTTEXTOUTA :
                     bFlag = true;
+                    SAL_FALLTHROUGH;
                 case EMR_EXTTEXTOUTW :
                 {
                     sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
