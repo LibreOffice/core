@@ -1708,6 +1708,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                             // Is only counted if it is the current window
                             if (i == nPos)
                                 aInnerRect.Left() += pCli->aSize.Width();
+                            break;
 
                         case SfxChildAlignment::RIGHT:
                             // Toolboxes come always last
