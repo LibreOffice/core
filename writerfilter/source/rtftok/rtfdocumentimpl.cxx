@@ -1515,6 +1515,8 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
             parBreak();
         else if (boost::get<0>(aTuple) == BUFFER_STARTSHAPE)
             m_pSdrImport->resolve(boost::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
+        else if (boost::get<0>(aTuple) == BUFFER_RESOLVESHAPE)
+            m_pSdrImport->resolve(boost::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
         else if (boost::get<0>(aTuple) == BUFFER_ENDSHAPE)
             m_pSdrImport->close();
         else if (boost::get<0>(aTuple) == BUFFER_RESOLVESUBSTREAM)
@@ -5331,7 +5333,14 @@ RTFError RTFDocumentImpl::popState()
         {
             // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
             RTFSdrImport::ShapeOrPict eType = (aState.eDestination == Destination::SHAPEINSTRUCTION) ? RTFSdrImport::SHAPE : RTFSdrImport::PICT;
-            m_pSdrImport->resolve(m_aStates.top().aShape, true, eType);
+            if (!m_aStates.top().pCurrentBuffer || eType != RTFSdrImport::SHAPE)
+                m_pSdrImport->resolve(m_aStates.top().aShape, true, eType);
+            else
+            {
+                // Shape inside table: buffer the import to have correct anchor position.
+                auto pValue = std::make_shared<RTFValue>(m_aStates.top().aShape);
+                m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_RESOLVESHAPE, pValue, nullptr));
+            }
         }
         else if (aState.bInShapeGroup && !aState.bInShape)
         {
