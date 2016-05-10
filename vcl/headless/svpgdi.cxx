@@ -1168,7 +1168,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
         SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
     }
 
-    if (nFlags & SAL_INVERT_TRACKFRAME)
+    if (nFlags & SalInvert::TrackFrame)
     {
         cairo_set_line_width(cr, 2.0);
         const double dashLengths[2] = { 4.0, 4.0 };
@@ -1184,7 +1184,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 
         cairo_clip(cr);
 
-        if (nFlags & SAL_INVERT_50)
+        if (nFlags & SalInvert::N50)
         {
             cairo_pattern_t *pattern = create_stipple();
             cairo_mask(cr, pattern);

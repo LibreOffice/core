@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_SALGTYPE_HXX
 
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 enum class DeviceFormat {
                             NONE = -1,
@@ -71,10 +72,16 @@ typedef sal_uInt16 SalROPColor;
 #define SAL_ROP_1                   ((SalROPColor)1)
 #define SAL_ROP_INVERT              ((SalROPColor)2)
 
-typedef sal_uInt16 SalInvert;
-#define SAL_INVERT_HIGHLIGHT        ((SalInvert)0x0001)
-#define SAL_INVERT_50               ((SalInvert)0x0002)
-#define SAL_INVERT_TRACKFRAME       ((SalInvert)0x0004)
+enum class SalInvert {
+    NONE       = 0x00,
+    Highlight  = 0x01,
+    N50        = 0x02,
+    TrackFrame = 0x04
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SalInvert> : is_typed_flags<SalInvert, 0x07> {};
+}
 
 #endif // INCLUDED_VCL_SALGTYPE_HXX
 
