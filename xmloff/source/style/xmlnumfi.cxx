@@ -781,7 +781,7 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
     return false;
 }
 
-static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
+static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent, bool bForceQuote )
 {
     bool bQuote = true;
     sal_Int32 nLength = rContent.getLength();
@@ -794,7 +794,8 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
     {
         //  don't quote single separator characters like space or percent,
         //  or separator characters followed by space (used in date formats)
-        bQuote = false;
+        //  except if it was quoted by user format tdf#97837
+        bQuote = bForceQuote;
     }
     else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
     {
@@ -1079,7 +1080,7 @@ void SvXMLNumFmtElementContext::EndElement()
             }
             if ( !aContent.isEmpty() )
             {
-                lcl_EnquoteIfNecessary( aContent, rParent );
+                lcl_EnquoteIfNecessary( aContent, rParent, bTextual );
                 rParent.AddToCode( aContent.makeStringAndClear() );
             }
             break;
