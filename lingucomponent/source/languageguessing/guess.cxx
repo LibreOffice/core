@@ -25,7 +25,7 @@
 #else
 #include <textcat.h>
 #endif
-#include <altstrfunc.hxx>
+
 #include <guess.hxx>
 
 /* Old textcat.h versions defined bad spelled constants. */
@@ -38,6 +38,11 @@
 #endif
 
 using namespace std;
+
+inline bool isSeparator(const char c){
+    return c == GUESS_SEPARATOR_OPEN || c == GUESS_SEPARATOR_SEP || c == GUESS_SEPARATOR_CLOSE || c == '\0';
+}
+
 
 Guess::Guess()
     : language_str(DEFAULT_LANGUAGE)

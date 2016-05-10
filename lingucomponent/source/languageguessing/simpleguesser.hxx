@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include <vector>
 #include <guess.hxx>
+#include<rtl/character.hxx>
 
 #define MAX_STRING_LENGTH_TO_ANALYSE 200
 
