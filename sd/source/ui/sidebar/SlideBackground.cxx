@@ -222,12 +222,12 @@ void SlideBackground::Update()
 
             const Color aColor = GetColorSetOrDefault();
             mpFillLB->SelectEntry( aColor );
-
             if(mpFillLB->GetSelectEntryCount() == 0)
             {
                 mpFillLB->InsertEntry(aColor, OUString());
                 mpFillLB->SelectEntry(aColor);
             }
+            mpFillLB->GrabFocus();
         }
         break;
         case drawing::FillStyle_GRADIENT:
@@ -258,6 +258,7 @@ void SlideBackground::Update()
                 mpFillGrad->InsertEntry(aEndColor, OUString());
                 mpFillGrad->SelectEntry(aEndColor);
             }
+            mpFillLB->GrabFocus();
         }
         break;
 
@@ -272,6 +273,7 @@ void SlideBackground::Update()
 
             const OUString aHatchName = GetHatchingSetOrDefault();
             mpFillAttr->SelectEntry( aHatchName );
+            mpFillAttr->GrabFocus();
         }
         break;
 
@@ -286,12 +288,14 @@ void SlideBackground::Update()
 
             const OUString aBitmapName = GetBitmapSetOrDefault();
             mpFillAttr->SelectEntry( aBitmapName );
+            mpFillAttr->GrabFocus();
         }
         break;
 
         default:
             break;
     }
+
 }
 
 void SlideBackground::dispose()

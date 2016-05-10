@@ -1761,6 +1761,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 default:
                 break;
             }
+
+            rReq.Done();
         }
     }
 }
