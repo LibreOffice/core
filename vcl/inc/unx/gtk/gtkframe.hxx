@@ -461,7 +461,7 @@ public:
     virtual void                SetAlwaysOnTop( bool bOnTop ) override;
 
     // Window to top and grab focus
-    virtual void                ToTop( sal_uInt16 nFlags ) override;
+    virtual void                ToTop( SalFrameToTop nFlags ) override;
 
     // this function can call with the same
     // pointer style

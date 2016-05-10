@@ -1960,13 +1960,13 @@ void WinSalFrame::SetAlwaysOnTop( bool bOnTop )
     SetWindowPos( mhWnd, hWnd, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE );
 }
 
-static void ImplSalToTop( HWND hWnd, sal_uInt16 nFlags )
+static void ImplSalToTop( HWND hWnd, SalFrameToTop nFlags )
 {
     WinSalFrame* pToTopFrame = GetWindowPtr( hWnd );
     if( pToTopFrame && (pToTopFrame->mnStyle & SalFrameStyleFlags::SYSTEMCHILD) )
         BringWindowToTop( hWnd );
 
-    if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )
+    if ( nFlags & SalFrameToTop::ForegroundTask )
     {
         // This magic code is necessary to connect the input focus of the
         // current window thread and the thread which owns the window that
@@ -1979,7 +1979,7 @@ static void ImplSalToTop( HWND hWnd, sal_uInt16 nFlags )
         AttachThreadInput(myThreadID,currThreadID,FALSE);
     }
 
-    if ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
+    if ( nFlags & SalFrameToTop::RestoreWhenMin )
     {
         HWND hIconicWnd = hWnd;
         while ( hIconicWnd )
@@ -2013,9 +2013,9 @@ static void ImplSalToTop( HWND hWnd, sal_uInt16 nFlags )
     }
 }
 
-void WinSalFrame::ToTop( sal_uInt16 nFlags )
+void WinSalFrame::ToTop( SalFrameToTop nFlags )
 {
-    nFlags &= ~SAL_FRAME_TOTOP_GRABFOCUS;   // this flag is not needed on win32
+    nFlags &= ~SalFrameToTop::GrabFocus;   // this flag is not needed on win32
     // Post this Message to the window, because this only works
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks
@@ -5782,7 +5782,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case SAL_MSG_TOTOP:
-            ImplSalToTop( hWnd, (sal_uInt16)wParam );
+            ImplSalToTop( hWnd, (SalFrameToTop)wParam );
             rDef = FALSE;
             break;
         case SAL_MSG_SHOW:

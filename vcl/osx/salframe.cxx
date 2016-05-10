@@ -797,7 +797,7 @@ void AquaSalFrame::SetAlwaysOnTop( bool )
 {
 }
 
-void AquaSalFrame::ToTop(sal_uInt16 nFlags)
+void AquaSalFrame::ToTop(SalFrameToTop nFlags)
 {
     if ( !mpNSWindow )
         return;
@@ -805,12 +805,12 @@ void AquaSalFrame::ToTop(sal_uInt16 nFlags)
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if( ! (nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN) )
+    if( ! (nFlags & SalFrameToTop::RestoreWhenMin) )
     {
         if( ! [mpNSWindow isVisible] || [mpNSWindow isMiniaturized] )
             return;
     }
-    if( nFlags & SAL_FRAME_TOTOP_GRABFOCUS )
+    if( nFlags & SalFrameToTop::GrabFocus )
         [mpNSWindow makeKeyAndOrderFront: NSApp];
     else
         [mpNSWindow orderFront: NSApp];
