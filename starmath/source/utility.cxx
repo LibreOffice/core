@@ -55,8 +55,8 @@ SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
 {
     Clear();
     nMaxItems = rList.nMaxItems;
-    for (size_t nPos = 0; nPos < rList.aFontVec.size(); nPos++)
-        aFontVec.push_back( rList.aFontVec[nPos] );
+    for (const auto & nPos : rList.aFontVec)
+        aFontVec.push_back( nPos );
 
     return *this;
 }
@@ -106,10 +106,10 @@ void SmFontPickList::Insert(const vcl::Font &rFont)
 
 void SmFontPickList::Update(const vcl::Font &rFont, const vcl::Font &rNewFont)
 {
-    for (size_t nPos = 0; nPos < aFontVec.size(); nPos++)
-        if (CompareItem( aFontVec[nPos], rFont ))
+    for (vcl::Font & rPos : aFontVec)
+        if (CompareItem( rPos, rFont ))
         {
-            aFontVec[nPos] = rNewFont;
+            rPos = rNewFont;
             break;
         }
 }

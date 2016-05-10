@@ -142,8 +142,8 @@ void SvResizeHelper::InvalidateBorder( vcl::Window * pWin )
 {
     Rectangle   aMoveRects[ 4 ];
     FillMoveRectsPixel( aMoveRects );
-    for( sal_uInt16 i = 0; i < 4; i++ )
-        pWin->Invalidate( aMoveRects[ i ] );
+    for(const auto & rMoveRect : aMoveRects)
+        pWin->Invalidate( rMoveRect );
 }
 
 /*************************************************************************
@@ -186,8 +186,8 @@ short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
         // Move-Rect overlaps Handles
         Rectangle aMoveRects[ 4 ];
         FillMoveRectsPixel( aMoveRects );
-        for( sal_uInt16 i = 0; i < 4; i++ )
-            if( aMoveRects[ i ].IsInside( rPos ) )
+        for(const auto & rMoveRect : aMoveRects)
+            if( rMoveRect.IsInside( rPos ) )
                 return 8;
     }
     else

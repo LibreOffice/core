@@ -421,9 +421,9 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
             aRect.Right() = nY;
 
         // Draw lines
-        for (size_t i = 0; i < mpData->pLines.size(); i++)
+        for (RulerLine & rLine : mpData->pLines)
         {
-            const long n = mpData->pLines[i].nPos + nNullWinOff;
+            const long n = rLine.nPos + nNullWinOff;
             if ((n >= nRulX1) && (n < nRulX2))
             {
                 if (mnWinStyle & WB_HORZ )
@@ -1020,17 +1020,17 @@ void Ruler::ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, s
 
 void Ruler::ImplDrawTabs(vcl::RenderContext& rRenderContext, long nMin, long nMax, long nVirTop, long nVirBottom)
 {
-    for (size_t i = 0; i < mpData->pTabs.size(); i++)
+    for (RulerTab & rTab : mpData->pTabs)
     {
-        if (mpData->pTabs[i].nStyle & RULER_STYLE_INVISIBLE)
+        if (rTab.nStyle & RULER_STYLE_INVISIBLE)
             continue;
 
         long aPosition;
-        aPosition = mpData->pTabs[i].nPos;
+        aPosition = rTab.nPos;
         aPosition += +mpData->nNullVirOff;
         long nTopBottom = (GetStyle() & WB_RIGHT_ALIGNED) ? nVirTop : nVirBottom;
         if (nMin <= aPosition && aPosition <= nMax)
-            ImplDrawTab(rRenderContext, Point( aPosition, nTopBottom ), mpData->pTabs[i].nStyle);
+            ImplDrawTab(rRenderContext, Point( aPosition, nTopBottom ), rTab.nStyle);
     }
 }
 

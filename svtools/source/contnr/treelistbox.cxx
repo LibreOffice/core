@@ -3277,8 +3277,8 @@ Size SvTreeListBox::GetOptimalSize() const
 {
     std::vector<long> aWidths;
     Size aRet(0, getPreferredDimensions(aWidths));
-    for (size_t i = 0; i < aWidths.size(); ++i)
-        aRet.Width() += aWidths[i];
+    for (long aWidth : aWidths)
+        aRet.Width() += aWidth;
     if (GetStyle() & WB_BORDER)
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

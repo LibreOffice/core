@@ -2318,9 +2318,8 @@ Size ValueSet::GetLargestItemSize()
 {
     Size aLargestItem;
 
-    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    for (ValueSetItem* pItem : mItemList)
     {
-        const ValueSetItem* pItem = mItemList[i];
         if (!pItem->mbVisible)
             continue;
 

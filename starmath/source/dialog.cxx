@@ -923,8 +923,8 @@ SmDistanceDialog::~SmDistanceDialog()
 
 void SmDistanceDialog::dispose()
 {
-    for (int i = 0; i < NOCATEGORIES; i++)
-        DELETEZ(Categories[i]);
+    for (SmCategoryDesc* & rpDesc : Categories)
+        DELETEZ(rpDesc);
     m_pFrame.clear();
     m_pFixedText1.clear();
     m_pMetricField1.clear();
@@ -1709,8 +1709,8 @@ void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 
     ComboBox &rBox = &rComboBox == pOldSymbols ? *pOldSymbolSets : *pSymbolSets;
     SymbolPtrVec_t aSymSet( aSymbolMgrCopy.GetSymbolSet( rBox.GetText() ) );
-    for (size_t i = 0;  i < aSymSet.size();  ++i)
-        rComboBox.InsertEntry( aSymSet[i]->GetName() );
+    for (const SmSym* i : aSymSet)
+        rComboBox.InsertEntry( i->GetName() );
 }
 
 

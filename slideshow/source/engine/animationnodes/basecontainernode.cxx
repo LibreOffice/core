@@ -174,10 +174,10 @@ void BaseContainerNode::repeat()
 #if defined(DBG_UTIL)
 void BaseContainerNode::showState() const
 {
-    for( std::size_t i=0; i<maChildren.size(); ++i )
+    for(const auto & i : maChildren)
     {
         BaseNodeSharedPtr pNode =
-            std::dynamic_pointer_cast<BaseNode>(maChildren[i]);
+            std::dynamic_pointer_cast<BaseNode>(i);
         SAL_INFO("slideshow.verbose",
                  "Node connection: n" <<
                  debugGetNodeName(this) <<

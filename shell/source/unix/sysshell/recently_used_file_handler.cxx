@@ -150,16 +150,16 @@ namespace /* private */ {
         static OString escape_content(const string_t &text)
         {
             OStringBuffer aBuf;
-            for (size_t i = 0; i < text.length(); i++)
+            for (auto i : text)
             {
-                switch (text[i])
+                switch (i)
                 {
                     case '&':  aBuf.append("&amp;");  break;
                     case '<':  aBuf.append("&lt;");   break;
                     case '>':  aBuf.append("&gt;");   break;
                     case '\'': aBuf.append("&apos;"); break;
                     case '"':  aBuf.append("&quot;"); break;
-                    default:   aBuf.append(text[i]);  break;
+                    default:   aBuf.append(i);  break;
                 }
             }
             return aBuf.makeStringAndClear();

@@ -341,8 +341,8 @@ void Primitive::display(GLint primitiveTransformLocation, double nTime, double W
 
 void Primitive::applyOperations(glm::mat4& matrix, double nTime, double WidthScale, double HeightScale) const
 {
-    for(size_t i(0); i < Operations.size(); ++i)
-        Operations[i]->interpolate(matrix, nTime, WidthScale, HeightScale);
+    for(const auto & rOperation : Operations)
+        rOperation->interpolate(matrix, nTime, WidthScale, HeightScale);
     matrix = glm::scale(matrix, glm::vec3(WidthScale, HeightScale, 1));
 }
 
