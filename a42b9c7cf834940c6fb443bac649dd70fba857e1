@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_235c0925",
+        "filename": "vcl/unx/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-10T15:20:35Z",
+      "side": 1,
+      "message": "Spaces around operators make the code more readable IMHO.",
+      "revId": "a42b9c7cf834940c6fb443bac649dd70fba857e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_03570503",
+        "filename": "vcl/unx/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-10T15:20:35Z",
+      "side": 1,
+      "message": "This code probably should go inside the if (nCharPos \u003e\u003d 0) block, if nCharPos is \u003c 0 bad things can happen (if it can ever happen, I don’t know).",
+      "revId": "a42b9c7cf834940c6fb443bac649dd70fba857e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_c34c3d79",
+        "filename": "vcl/unx/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-10T15:20:35Z",
+      "side": 1,
+      "message": "It would be better to check that Unicode general category is non-spacing mark here. I’m not quite sure that all non-spacing marks have a non-zero combining class and vice versa.",
+      "revId": "a42b9c7cf834940c6fb443bac649dd70fba857e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e3514110",
+        "filename": "vcl/unx/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-10T15:20:35Z",
+      "side": 1,
+      "message": "No need for the extra variable\nif (hb_unicode_…)\n   bDiacritic \u003d true;",
+      "revId": "a42b9c7cf834940c6fb443bac649dd70fba857e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
