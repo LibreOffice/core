@@ -577,11 +577,11 @@ void OutputDevice::InitLineColor()
     if( mbLineColor )
     {
         if( ROP_0 == meRasterOp )
-            mpGraphics->SetROPLineColor( SAL_ROP_0 );
+            mpGraphics->SetROPLineColor( SalROPColor::N0 );
         else if( ROP_1 == meRasterOp )
-            mpGraphics->SetROPLineColor( SAL_ROP_1 );
+            mpGraphics->SetROPLineColor( SalROPColor::N1 );
         else if( ROP_INVERT == meRasterOp )
-            mpGraphics->SetROPLineColor( SAL_ROP_INVERT );
+            mpGraphics->SetROPLineColor( SalROPColor::Invert );
         else
             mpGraphics->SetLineColor( ImplColorToSal( maLineColor ) );
     }
@@ -599,11 +599,11 @@ void OutputDevice::InitFillColor()
     if( mbFillColor )
     {
         if( ROP_0 == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_0 );
+            mpGraphics->SetROPFillColor( SalROPColor::N0 );
         else if( ROP_1 == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_1 );
+            mpGraphics->SetROPFillColor( SalROPColor::N1 );
         else if( ROP_INVERT == meRasterOp )
-            mpGraphics->SetROPFillColor( SAL_ROP_INVERT );
+            mpGraphics->SetROPFillColor( SalROPColor::Invert );
         else
             mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );
     }

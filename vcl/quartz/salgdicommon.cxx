@@ -498,7 +498,7 @@ static void getBoundRect( sal_uInt32 nPoints, const SalPoint *pPtAry,
 static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 {
     SalColor nSalColor;
-    if ( nROPColor == SAL_ROP_0 )
+    if ( nROPColor == SalROPColor::N0 )
     {
         nSalColor = MAKE_SALCOLOR( 0, 0, 0 );
     }

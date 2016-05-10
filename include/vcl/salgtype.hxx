@@ -66,10 +66,9 @@ struct SalTwoRect
     }
 };
 
-typedef sal_uInt16 SalROPColor;
-#define SAL_ROP_0                   ((SalROPColor)0)
-#define SAL_ROP_1                   ((SalROPColor)1)
-#define SAL_ROP_INVERT              ((SalROPColor)2)
+enum class SalROPColor {
+    N0, N1, Invert
+};
 
 typedef sal_uInt16 SalInvert;
 #define SAL_INVERT_HIGHLIGHT        ((SalInvert)0x0001)
