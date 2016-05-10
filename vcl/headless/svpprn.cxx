@@ -257,7 +257,7 @@ void SvpSalInstance::PostPrintersChanged()
     const std::list< SalFrame* >& rList = SvpSalInstance::s_pDefaultInstance->getFrames();
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )
-        SvpSalInstance::s_pDefaultInstance->PostEvent( *it, nullptr, SALEVENT_PRINTERCHANGED );
+        SvpSalInstance::s_pDefaultInstance->PostEvent( *it, nullptr, SalEvent::PrinterChanged );
 }
 
 GenPspGraphics *SvpSalInstance::CreatePrintGraphics()

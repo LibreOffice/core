@@ -407,7 +407,7 @@ void GtkSalFrame::doKeyCallback( guint state,
 
     if( bDown )
     {
-        bool bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
+        bool bHandled = CallCallback( SalEvent::KeyInput, &aEvent );
         // #i46889# copy AlternateKeyCode handling from generic plugin
         if( ! bHandled )
         {
@@ -417,16 +417,16 @@ void GtkSalFrame::doKeyCallback( guint state,
                 aEvent.mnCode = aAlternate.nKeyCode;
                 if( aAlternate.nCharCode )
                     aEvent.mnCharCode = aAlternate.nCharCode;
-                CallCallback( SALEVENT_KEYINPUT, &aEvent );
+                CallCallback( SalEvent::KeyInput, &aEvent );
             }
         }
         if( bSendRelease && ! aDel.isDeleted() )
         {
-            CallCallback( SALEVENT_KEYUP, &aEvent );
+            CallCallback( SalEvent::KeyUp, &aEvent );
         }
     }
     else
-        CallCallback( SALEVENT_KEYUP, &aEvent );
+        CallCallback( SalEvent::KeyUp, &aEvent );
 }
 
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
@@ -1644,7 +1644,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
             // the display connection used for clipboard and our connection
             Flush();
         }
-        CallCallback( SALEVENT_RESIZE, nullptr );
+        CallCallback( SalEvent::Resize, nullptr );
         TriggerPaintEvent();
     }
 }
@@ -1792,11 +1792,11 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         AllocateFrame();
 
     if( bSized && ! bMoved )
-        CallCallback( SALEVENT_RESIZE, nullptr );
+        CallCallback( SalEvent::Resize, nullptr );
     else if( bMoved && ! bSized )
-        CallCallback( SALEVENT_MOVE, nullptr );
+        CallCallback( SalEvent::Move, nullptr );
     else if( bMoved && bSized )
-        CallCallback( SALEVENT_MOVERESIZE, nullptr );
+        CallCallback( SalEvent::MoveResize, nullptr );
 
     if (bSized)
         TriggerPaintEvent();
@@ -1852,7 +1852,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         m_nState = GdkWindowState( m_nState | GDK_WINDOW_STATE_MAXIMIZED );
         m_aRestorePosSize = Rectangle( Point( pState->mnX, pState->mnY ),
                                        Size( pState->mnWidth, pState->mnHeight ) );
-        CallCallback( SALEVENT_RESIZE, nullptr );
+        CallCallback( SalEvent::Resize, nullptr );
     }
     else if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y |
                                WindowStateMask::Width | WindowStateMask::Height ) )
@@ -2072,7 +2072,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
     m_bDefaultPos = m_bDefaultSize = false;
     updateScreenNumber();
-    CallCallback( SALEVENT_MOVERESIZE, nullptr );
+    CallCallback( SalEvent::MoveResize, nullptr );
 
     if( bVisible )
         Show( true );
@@ -2708,7 +2708,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
                 maGeometry.nWidth  = pEvent->xconfigure.width;
                 maGeometry.nHeight = pEvent->xconfigure.height;
                 setMinMaxSize();
-                getDisplay()->SendInternalEvent( this, nullptr, SALEVENT_RESIZE );
+                getDisplay()->SendInternalEvent( this, nullptr, SalEvent::Resize );
             }
         }
         else if( m_pForeignTopLevel && pEvent->xconfigure.window == m_aForeignTopLevelWindow )
@@ -2727,7 +2727,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             {
                 maGeometry.nX = x;
                 maGeometry.nY = y;
-                getDisplay()->SendInternalEvent( this, nullptr, SALEVENT_MOVE );
+                getDisplay()->SendInternalEvent( this, nullptr, SalEvent::Move );
             }
         }
     }
@@ -2760,14 +2760,14 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalMouseEvent aEvent;
-    sal_uInt16 nEventType = 0;
+    SalEvent nEventType = SalEvent::NONE;
     switch( pEvent->type )
     {
         case GDK_BUTTON_PRESS:
-            nEventType = SALEVENT_MOUSEBUTTONDOWN;
+            nEventType = SalEvent::MouseButtonDown;
             break;
         case GDK_BUTTON_RELEASE:
-            nEventType = SALEVENT_MOUSEBUTTONUP;
+            nEventType = SalEvent::MouseButtonUp;
             break;
         default:
             return false;
@@ -2838,7 +2838,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
             {
                 pThis->maGeometry.nX = frame_x;
                 pThis->maGeometry.nY = frame_y;
-                pThis->CallCallback( SALEVENT_MOVE, nullptr );
+                pThis->CallCallback( SalEvent::Move, nullptr );
             }
         }
     }
@@ -2875,7 +2875,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     if( AllSettings::GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
-    pThis->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
+    pThis->CallCallback( SalEvent::WheelMouse, &aEvent );
 
     return true;
 }
@@ -2897,7 +2897,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     vcl::DeletionListener aDel( pThis );
 
-    pThis->CallCallback( SALEVENT_MOUSEMOVE, &aEvent );
+    pThis->CallCallback( SalEvent::MouseMove, &aEvent );
 
     if( ! aDel.isDeleted() )
     {
@@ -2907,7 +2907,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
         {
             pThis->maGeometry.nX = frame_x;
             pThis->maGeometry.nY = frame_y;
-            pThis->CallCallback( SALEVENT_MOVE, nullptr );
+            pThis->CallCallback( SalEvent::Move, nullptr );
         }
 
         if( ! aDel.isDeleted() )
@@ -2932,7 +2932,7 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
-    pThis->CallCallback( (pEvent->type == GDK_ENTER_NOTIFY) ? SALEVENT_MOUSEMOVE : SALEVENT_MOUSELEAVE, &aEvent );
+    pThis->CallCallback( (pEvent->type == GDK_ENTER_NOTIFY) ? SalEvent::MouseMove : SalEvent::MouseLeave, &aEvent );
 
     return true;
 }
@@ -2944,7 +2944,7 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 
     struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height, OpenGLHelper::isVCLOpenGLEnabled() );
 
-    pThis->CallCallback( SALEVENT_PAINT, &aEvent );
+    pThis->CallCallback( SalEvent::Paint, &aEvent );
 
     return false;
 }
@@ -3019,11 +3019,11 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
         pThis->AllocateFrame();
 
     if( bMoved && bSized )
-        pThis->CallCallback( SALEVENT_MOVERESIZE, nullptr );
+        pThis->CallCallback( SalEvent::MoveResize, nullptr );
     else if( bMoved )
-        pThis->CallCallback( SALEVENT_MOVE, nullptr );
+        pThis->CallCallback( SalEvent::Move, nullptr );
     else if( bSized )
-        pThis->CallCallback( SALEVENT_RESIZE, nullptr );
+        pThis->CallCallback( SalEvent::Resize, nullptr );
 
     if (bSized)
         pThis->TriggerPaintEvent();
@@ -3064,7 +3064,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 
     // in the meantime do not propagate focus get/lose if floats are open
     if( m_nFloats == 0 )
-        pThis->CallCallback( pEvent->in ? SALEVENT_GETFOCUS : SALEVENT_LOSEFOCUS, nullptr );
+        pThis->CallCallback( pEvent->in ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr );
 
     return false;
 }
@@ -3127,7 +3127,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
         GetGenericData()->ErrorTrapPop();
     }
 
-    pThis->CallCallback( SALEVENT_RESIZE, nullptr );
+    pThis->CallCallback( SalEvent::Resize, nullptr );
     pThis->TriggerPaintEvent();
 
     return false;
@@ -3137,7 +3137,7 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    pThis->CallCallback( SALEVENT_RESIZE, nullptr );
+    pThis->CallCallback( SalEvent::Resize, nullptr );
 
     return false;
 }
@@ -3235,7 +3235,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         aModEvt.mnTime = pEvent->time;
         aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
 
-        pThis->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
+        pThis->CallCallback( SalEvent::KeyModChange, &aModEvt );
 
     }
     else
@@ -3262,7 +3262,7 @@ gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    pThis->CallCallback( SALEVENT_CLOSE, nullptr );
+    pThis->CallCallback( SalEvent::Close, nullptr );
 
     return true;
 }
@@ -3278,10 +3278,10 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     if( pPrevious != nullptr )
     {
         // signalStyleSet does NOT usually have the gdk lock
-        // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
+        // so post user event to safely dispatch the SalEvent::SettingsChanged
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SALEVENT_SETTINGSCHANGED );
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SALEVENT_FONTCHANGED );
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::SettingsChanged );
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
     }
 
     /* #i64117# gtk sets a nice background pixmap
@@ -3311,7 +3311,7 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
     {
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SALEVENT_RESIZE );
+        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::Resize );
         pThis->TriggerPaintEvent();
     }
 
@@ -3371,7 +3371,7 @@ GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
 GtkSalFrame::IMHandler::~IMHandler()
 {
     // cancel an eventual event posted to begin preedit again
-    GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+    GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
     deleteIMContext();
 }
 
@@ -3418,13 +3418,13 @@ void GtkSalFrame::IMHandler::deleteIMContext()
 void GtkSalFrame::IMHandler::doCallEndExtTextInput()
 {
     m_aInputEvent.mpTextAttr = nullptr;
-    m_pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
+    m_pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
 }
 
 void GtkSalFrame::IMHandler::updateIMSpotLocation()
 {
     SalExtTextInputPosEvent aPosEvent;
-    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent) );
+    m_pFrame->CallCallback( SalEvent::ExtTextInputPos, static_cast<void*>(&aPosEvent) );
     GdkRectangle aArea;
     aArea.x = aPosEvent.mnX;
     aArea.y = aPosEvent.mnY;
@@ -3446,9 +3446,9 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mbOnlyCursor       = False;
-    m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEmptyEv) );
+    m_pFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
-        m_pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
+        m_pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
 }
 
 void GtkSalFrame::IMHandler::endExtTextInput( EndExtTextInputFlags /*nFlags*/ )
@@ -3467,7 +3467,7 @@ void GtkSalFrame::IMHandler::endExtTextInput( EndExtTextInputFlags /*nFlags*/ )
             if( m_bFocused )
             {
                 // begin preedit again
-                GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+                GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
             }
         }
     }
@@ -3485,7 +3485,7 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
         {
             sendEmptyCommit();
             // begin preedit again
-            GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+            GtkSalFrame::getDisplay()->SendInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
         }
     }
     else
@@ -3494,7 +3494,7 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
         gtk_im_context_focus_out( m_pIMContext );
         GetGenericData()->ErrorTrapPop();
         // cancel an eventual event posted to begin preedit again
-        GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
+        GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
     }
 }
 
@@ -3645,7 +3645,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
          *  never was a preedit and the text is only one character.
          *
          *  In this case there the last ExtText event must have been
-         *  SALEVENT_ENDEXTTEXTINPUT, either because of a regular commit
+         *  SalEvent::EndExtTextInput, either because of a regular commit
          *  or because there never was a preedit.
          */
         bool bSingleCommit = false;
@@ -3665,7 +3665,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
         }
         if( ! bSingleCommit )
         {
-            pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&pThis->m_aInputEvent));
+            pThis->m_pFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&pThis->m_aInputEvent));
             if( ! aDel.isDeleted() )
                 pThis->doCallEndExtTextInput();
         }
@@ -3789,7 +3789,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
 
-    pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&pThis->m_aInputEvent));
+    pThis->m_pFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&pThis->m_aInputEvent));
     if( bEndPreedit && ! aDel.isDeleted() )
         pThis->doCallEndExtTextInput();
     if( ! aDel.isDeleted() )

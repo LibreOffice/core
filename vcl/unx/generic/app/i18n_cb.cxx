@@ -61,7 +61,7 @@ PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
      if (pPreeditData->eState == ePreeditStatusActive )
     {
         if( pPreeditData->pFrame )
-            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
+            pPreeditData->pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
     }
     pPreeditData->eState = ePreeditStatusStartPending;
 }
@@ -369,9 +369,9 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
     pPreeditData->aInputEv.mbOnlyCursor = False;
 
     if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )
-        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&pPreeditData->aInputEv));
+        pPreeditData->pFrame->CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&pPreeditData->aInputEv));
     if (pPreeditData->aText.nLength == 0 && pPreeditData->pFrame )
-        pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
+        pPreeditData->pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
 
     if (pPreeditData->aText.nLength == 0)
         pPreeditData->eState = ePreeditStatusStartPending;
@@ -389,7 +389,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
     preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
 
     if( pPreeditData->pFrame )
-        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent));
+        pPreeditData->pFrame->CallCallback(SalEvent::ExtTextInputPos, static_cast<void*>(&aPosEvent));
 
     XPoint point;
     point.x = aPosEvent.mnX + aPosEvent.mnWidth;

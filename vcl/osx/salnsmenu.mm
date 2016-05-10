@@ -49,8 +49,8 @@
             aMenuEvt.mpMenu = mpMenu->mpVCLMenu;
             if( aMenuEvt.mpMenu )
             {
-                pFrame->CallCallback(SALEVENT_MENUACTIVATE, &aMenuEvt);
-                pFrame->CallCallback(SALEVENT_MENUDEACTIVATE, &aMenuEvt);
+                pFrame->CallCallback(SalEvent::MenuActivate, &aMenuEvt);
+                pFrame->CallCallback(SalEvent::MenuDeactivate, &aMenuEvt);
             }
             else
                 OSL_FAIL( "unconnected menu" );
@@ -118,7 +118,7 @@
     if( pFrame && AquaSalFrame::isAlive( pFrame ) && ! pFrame->GetWindow()->IsInModalMode() )
     {
         SalMenuEvent aMenuEvt( mpMenuItem->mnId, mpMenuItem->mpVCLMenu );
-        pFrame->CallCallback(SALEVENT_MENUCOMMAND, &aMenuEvt);
+        pFrame->CallCallback(SalEvent::MenuCommand, &aMenuEvt);
     }
     else if( mpMenuItem->mpVCLMenu )
     {
@@ -200,7 +200,7 @@
                 if( AquaSalMenu::pCurrentMenuBar->mpFrame && AquaSalFrame::isAlive( AquaSalMenu::pCurrentMenuBar->mpFrame ) )
                 {
                     SalMenuEvent aMenuEvt( rButtons[i].maButton.mnId, AquaSalMenu::pCurrentMenuBar->mpVCLMenu );
-                    AquaSalMenu::pCurrentMenuBar->mpFrame->CallCallback(SALEVENT_MENUBUTTONCOMMAND, &aMenuEvt);
+                    AquaSalMenu::pCurrentMenuBar->mpFrame->CallCallback(SalEvent::MenuButtonCommand, &aMenuEvt);
                 }
                 return;
             }

@@ -2110,7 +2110,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 pFrame->maGeometry.nWidth   = aSize.Width();
                 pFrame->maGeometry.nHeight  = aSize.Height();
             }
-            pFrame->CallCallback( SALEVENT_MOVERESIZE, nullptr );
+            pFrame->CallCallback( SalEvent::MoveResize, nullptr );
         }
     }
     else WMAdaptor::showFullScreen( pFrame, bFullScreen );

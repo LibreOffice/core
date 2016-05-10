@@ -36,10 +36,10 @@ class VCL_DLLPUBLIC SalGenericDisplay
     {
         SalFrame*  m_pFrame;
         void*      m_pData;
-        sal_uInt16 m_nEvent;
+        SalEvent   m_nEvent;
 
         SalUserEvent( SalFrame* pFrame, void* pData,
-                      sal_uInt16 nEvent )
+                      SalEvent nEvent )
                 : m_pFrame( pFrame ),
                   m_pData( pData ),
                   m_nEvent( nEvent )
@@ -62,8 +62,8 @@ public:
     // Event handling
     virtual void PostUserEvent() = 0;
 
-    void SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
-    void CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+    void SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent = SalEvent::UserEvent );
+    void CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
     bool DispatchInternalEvent();
     bool HasUserEvents() const;
 

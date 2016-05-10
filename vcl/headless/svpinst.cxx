@@ -148,7 +148,7 @@ void SvpSalInstance::CreateWakeupPipe()
     }
 }
 
-void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent)
+void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent)
 {
     {
         osl::MutexGuard g(m_aEventGuard);
@@ -182,7 +182,7 @@ void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
         {
             if( it->m_pFrame == pFrame )
             {
-                if (it->m_nEvent == SALEVENT_USEREVENT)
+                if (it->m_nEvent == SalEvent::UserEvent)
                 {
                     delete static_cast<ImplSVEvent *>(it->m_pData);
                 }
@@ -329,7 +329,7 @@ SalYieldResult SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
             if ( isFrameAlive( it->m_pFrame ) )
             {
                 it->m_pFrame->CallCallback( it->m_nEvent, it->m_pData );
-                if( it->m_nEvent == SALEVENT_RESIZE )
+                if( it->m_nEvent == SalEvent::Resize )
                 {
                     // this would be a good time to post a paint
                     const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);

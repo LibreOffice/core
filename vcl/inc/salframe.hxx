@@ -269,7 +269,7 @@ public:
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not know more than necessary about the SalFrame implementation
     // (e.g. input methods, printer update handlers).
-    long                    CallCallback( sal_uInt16 nEvent, const void* pEvent ) const
+    long                    CallCallback( SalEvent nEvent, const void* pEvent ) const
         { return m_pProc ? long(m_pProc( m_pWindow, nEvent, pEvent )) : 0; }
 
     bool PaintsBlocked() const { return m_bPaintsBlocked; }

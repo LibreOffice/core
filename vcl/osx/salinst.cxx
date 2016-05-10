@@ -85,7 +85,7 @@ class AquaDelayedSettingsChanged : public Idle
     {
         SalData* pSalData = GetSalData();
         if( ! pSalData->maFrames.empty() )
-            pSalData->maFrames.front()->CallCallback( SALEVENT_SETTINGSCHANGED, nullptr );
+            pSalData->maFrames.front()->CallCallback( SalEvent::SettingsChanged, nullptr );
 
         if( mbInvalidate )
         {

@@ -48,9 +48,9 @@ static void sendEmptyCommit( SalFrame* pFrame )
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mbOnlyCursor       = False;
-    pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEmptyEv) );
+    pFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
-        pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
+        pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
 }
 
 // Constructor / Destructor, the InputContext is bound to the SalFrame, as it
@@ -260,7 +260,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             {
                 // spot location
                 SalExtTextInputPosEvent aPosEvent;
-                pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent));
+                pFrame->CallCallback(SalEvent::ExtTextInputPos, static_cast<void*>(&aPosEvent));
 
                 static XPoint aSpot;
                 aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
@@ -539,8 +539,8 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         aTextEvent.mnCursorFlags = 0;
         aTextEvent.mbOnlyCursor  = False;
 
-        maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUT,    static_cast<void*>(&aTextEvent));
-        maClientData.pFrame->CallCallback(SALEVENT_ENDEXTTEXTINPUT, nullptr);
+        maClientData.pFrame->CallCallback(SalEvent::ExtTextInput,    static_cast<void*>(&aTextEvent));
+        maClientData.pFrame->CallCallback(SalEvent::EndExtTextInput, nullptr);
     }
 #if OSL_DEBUG_LEVEL > 1
     else
@@ -555,7 +555,7 @@ SalI18N_InputContext::UpdateSpotLocation()
         return -1;
 
     SalExtTextInputPosEvent aPosEvent;
-    maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, static_cast<void*>(&aPosEvent));
+    maClientData.pFrame->CallCallback(SalEvent::ExtTextInputPos, static_cast<void*>(&aPosEvent));
 
     XPoint aSpot;
     aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
@@ -595,7 +595,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
         {
             sendEmptyCommit(pFocusFrame);
             // begin preedit again
-            vcl_sal::getSalDisplay(GetGenericData())->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+            vcl_sal::getSalDisplay(GetGenericData())->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
         }
 
         XSetICFocus( maContext );
@@ -612,7 +612,7 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
     if ( mbUseable && (maContext != nullptr) )
     {
         // cancel an eventual event posted to begin preedit again
-        vcl_sal::getSalDisplay(GetGenericData())->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+        vcl_sal::getSalDisplay(GetGenericData())->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
         maClientData.pFrame = nullptr;
         XUnsetICFocus( maContext );
     }
@@ -635,7 +635,7 @@ SalI18N_InputContext::EndExtTextInput( EndExtTextInputFlags /*nFlags*/ )
             if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
             {
                 // begin preedit again
-                vcl_sal::getSalDisplay(GetGenericData())->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+                vcl_sal::getSalDisplay(GetGenericData())->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
             }
         }
     }

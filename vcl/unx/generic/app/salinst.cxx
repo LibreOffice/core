@@ -217,7 +217,7 @@ void X11SalInstance::PostPrintersChanged()
     const std::list< SalFrame* >& rList = pDisp->getFrames();
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )
-        pDisp->SendInternalEvent( *it, nullptr, SALEVENT_PRINTERCHANGED );
+        pDisp->SendInternalEvent( *it, nullptr, SalEvent::PrinterChanged );
 }
 
 GenPspGraphics *X11SalInstance::CreatePrintGraphics()

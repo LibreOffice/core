@@ -1256,12 +1256,12 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     else
     {
         //DBG_ASSERT( nX && nY, " Windowposition of (0,0) requested!" );
-        nEvent = SALEVENT_MOVE;
+        nEvent = SalEvent::Move;
     }
     if ( !(nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT)) )
         nPosSize |= SWP_NOSIZE;
     else
-        nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
+        nEvent = (nEvent == SalEvent::Move) ? SalEvent::MoveResize : SalEvent::Resize;
 
     if ( !(nFlags & SAL_FRAME_POSSIZE_X) )
         nX = aWindowRect.left;
@@ -1393,7 +1393,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
         mbDefPos = FALSE;   // center only once
         nPosSize &= ~SWP_NOMOVE;        // activate positioning
-        nEvent = SALEVENT_MOVERESIZE;
+        nEvent = SalEvent::MoveResize;
     }
 
     // Adjust Window in the screen
@@ -3078,7 +3078,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                 // for mouseleave in the timeout callback
             }
             aMouseEvt.mnButton = 0;
-            nEvent = SALEVENT_MOUSEMOVE;
+            nEvent = SalEvent::MouseMove;
             }
             break;
 
@@ -3102,7 +3102,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                 aMouseEvt.mnX = aPt.x;
                 aMouseEvt.mnY = aPt.y;
                 aMouseEvt.mnButton = 0;
-                nEvent = SALEVENT_MOUSELEAVE;
+                nEvent = SalEvent::MouseLeave;
             }
             else
                 bCall = FALSE;
@@ -3111,32 +3111,32 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
 
         case WM_LBUTTONDOWN:
             aMouseEvt.mnButton = MOUSE_LEFT;
-            nEvent = SALEVENT_MOUSEBUTTONDOWN;
+            nEvent = SalEvent::MouseButtonDown;
             break;
 
         case WM_MBUTTONDOWN:
             aMouseEvt.mnButton = MOUSE_MIDDLE;
-            nEvent = SALEVENT_MOUSEBUTTONDOWN;
+            nEvent = SalEvent::MouseButtonDown;
             break;
 
         case WM_RBUTTONDOWN:
             aMouseEvt.mnButton = MOUSE_RIGHT;
-            nEvent = SALEVENT_MOUSEBUTTONDOWN;
+            nEvent = SalEvent::MouseButtonDown;
             break;
 
         case WM_LBUTTONUP:
             aMouseEvt.mnButton = MOUSE_LEFT;
-            nEvent = SALEVENT_MOUSEBUTTONUP;
+            nEvent = SalEvent::MouseButtonUp;
             break;
 
         case WM_MBUTTONUP:
             aMouseEvt.mnButton = MOUSE_MIDDLE;
-            nEvent = SALEVENT_MOUSEBUTTONUP;
+            nEvent = SalEvent::MouseButtonUp;
             break;
 
         case WM_RBUTTONUP:
             aMouseEvt.mnButton = MOUSE_RIGHT;
-            nEvent = SALEVENT_MOUSEBUTTONUP;
+            nEvent = SalEvent::MouseButtonUp;
             break;
     }
 
@@ -3147,7 +3147,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
 
     if ( bCall )
     {
-        if ( nEvent == SALEVENT_MOUSEBUTTONDOWN )
+        if ( nEvent == SalEvent::MouseButtonDown )
             UpdateWindow( hWnd );
 
         // --- RTL --- (mirror mouse pos)
@@ -3173,7 +3173,7 @@ static long ImplHandleMouseActivateMsg( HWND hWnd )
     if ( pFrame->mbFloatWin )
         return TRUE;
 
-    return pFrame->CallCallback( SALEVENT_MOUSEACTIVATE, nullptr );
+    return pFrame->CallCallback( SalEvent::MouseActivate, nullptr );
 }
 
 static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
@@ -3238,7 +3238,7 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         if( AllSettings::GetLayoutRTL() )
             aWheelEvt.mnX = pFrame->maGeometry.nWidth-1-aWheelEvt.mnX;
 
-        nRet = pFrame->CallCallback( SALEVENT_WHEELMOUSE, &aWheelEvt );
+        nRet = pFrame->CallCallback( SalEvent::WheelMouse, &aWheelEvt );
     }
 
     ImplSalYieldMutexRelease();
@@ -3430,8 +3430,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         aKeyEvt.mnRepeat    = nRepeat;
         nLastChar = 0;
         nLastVKChar = 0;
-        long nRet = pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-        pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+        long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+        pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
         return nRet;
     }
      // #i11583#, MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition begins
@@ -3455,8 +3455,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             // sal_Unicode ch = (sal_Unicode) Uni_UTF32ToSurrogate1(wParam);
              nLastChar = 0;
              nLastVKChar = 0;
-             pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-             pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+             pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+             pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
             wParam = (sal_Unicode) Uni_UTF32ToSurrogate2( wParam );
          }
 
@@ -3464,8 +3464,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
          nLastChar = 0;
          nLastVKChar = 0;
-         long nRet = pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-         pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+         long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+         pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
 
          return nRet;
      }
@@ -3509,7 +3509,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             if( !tmpCode )
                 bWaitForModKeyRelease = false;
 
-            return pFrame->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
+            return pFrame->CallCallback( SalEvent::KeyModChange, &aModEvt );
         }
         else
         {
@@ -3576,9 +3576,9 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             if ( aKeyEvt.mnCode || aKeyEvt.mnCharCode )
             {
                 if ( bKeyUp )
-                    nEvent = SALEVENT_KEYUP;
+                    nEvent = SalEvent::KeyUp;
                 else
-                    nEvent = SALEVENT_KEYINPUT;
+                    nEvent = SalEvent::KeyInput;
 
                 aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
@@ -3589,7 +3589,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 // independent part only reacts on keyup but Windows does not send
                 // keyup for VK_HANJA
                 if( aKeyEvt.mnCode == KEY_HANGUL_HANJA )
-                    nRet = pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+                    nRet = pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
 
                 bIgnoreCharMsg = FALSE;
 
@@ -3647,9 +3647,9 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
             if ( aKeyEvt.mnCode )
             {
                 if ( bKeyUp )
-                    nEvent = SALEVENT_KEYUP;
+                    nEvent = SalEvent::KeyUp;
                 else
-                    nEvent = SALEVENT_KEYINPUT;
+                    nEvent = SalEvent::KeyInput;
 
                 aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
@@ -3696,8 +3696,8 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     aKeyEvt.mnCode     |= nModCode;
     aKeyEvt.mnCharCode  = ImplGetCharCode( pFrame, cKeyCode );
     aKeyEvt.mnRepeat    = nRepeat;
-    long nRet = pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-    pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+    long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+    pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
     return nRet;
 }
 
@@ -3741,7 +3741,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
             if ( bMutex )
             {
                 SalPaintEvent aPEvt( aUpdateRect.left, aUpdateRect.top, aUpdateRect.right-aUpdateRect.left, aUpdateRect.bottom-aUpdateRect.top, pFrame->mbPresentation );
-                pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+                pFrame->CallCallback( SalEvent::Paint, &aPEvt );
             }
             else
             {
@@ -3778,7 +3778,7 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
         if ( pFrame )
         {
             SalPaintEvent aPEvt( pRect->left, pRect->top, pRect->right-pRect->left, pRect->bottom-pRect->top );
-            pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+            pFrame->CallCallback( SalEvent::Paint, &aPEvt );
         }
         ImplSalYieldMutexRelease();
         delete pRect;
@@ -3879,7 +3879,7 @@ static void ImplCallMoveHdl( HWND hWnd )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
-        pFrame->CallCallback( SALEVENT_MOVE, 0 );
+        pFrame->CallCallback( SalEvent::Move, 0 );
         // to avoid doing Paint twice by VCL and SAL
         //if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
         //    UpdateWindow( hWnd );
@@ -3891,7 +3891,7 @@ static void ImplCallClosePopupsHdl( HWND hWnd )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
-        pFrame->CallCallback( SALEVENT_CLOSEPOPUPS, 0 );
+        pFrame->CallCallback( SalEvent::ClosePopups, 0 );
     }
 }
 
@@ -3944,7 +3944,7 @@ static void ImplCallSizeHdl( HWND hWnd )
         WinSalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
-            pFrame->CallCallback( SALEVENT_RESIZE, 0 );
+            pFrame->CallCallback( SalEvent::Resize, 0 );
             // to avoid double Paints by VCL and SAL
             if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
                 UpdateWindow( hWnd );
@@ -4000,11 +4000,11 @@ static void ImplHandleFocusMsg( HWND hWnd )
                     pFrame->mbHandleIME = !pFrame->mbSpezIME;
                 }
 
-                pFrame->CallCallback( SALEVENT_GETFOCUS, 0 );
+                pFrame->CallCallback( SalEvent::GetFocus, 0 );
             }
             else
             {
-                pFrame->CallCallback( SALEVENT_LOSEFOCUS, 0 );
+                pFrame->CallCallback( SalEvent::LoseFocus, 0 );
             }
         }
 
@@ -4024,7 +4024,7 @@ static void ImplHandleCloseMsg( HWND hWnd )
         WinSalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
-            pFrame->CallCallback( SALEVENT_CLOSE, 0 );
+            pFrame->CallCallback( SalEvent::Close, 0 );
         }
 
         ImplSalYieldMutexRelease();
@@ -4043,7 +4043,7 @@ static long ImplHandleShutDownMsg( HWND hWnd )
     WinSalFrame*   pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
-        nRet = pFrame->CallCallback( SALEVENT_SHUTDOWN, 0 );
+        nRet = pFrame->CallCallback( SalEvent::Shutdown, 0 );
     }
     ImplSalYieldMutexRelease();
     return nRet;
@@ -4052,20 +4052,20 @@ static long ImplHandleShutDownMsg( HWND hWnd )
 static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
                                          WPARAM wParam, LPARAM lParam )
 {
-    sal_uInt16 nSalEvent = SALEVENT_SETTINGSCHANGED;
+    sal_uInt16 nSalEvent = SalEvent::SettingsChanged;
 
     if ( nMsg == WM_DEVMODECHANGE )
-        nSalEvent = SALEVENT_PRINTERCHANGED;
+        nSalEvent = SalEvent::PrinterChanged;
     else if ( nMsg == WM_DISPLAYCHANGE )
-        nSalEvent = SALEVENT_DISPLAYCHANGED;
+        nSalEvent = SalEvent::DisplayChanged;
     else if ( nMsg == WM_FONTCHANGE )
-        nSalEvent = SALEVENT_FONTCHANGED;
+        nSalEvent = SalEvent::FontChanged;
     else if ( nMsg == WM_WININICHANGE )
     {
         if ( lParam )
         {
             if ( ImplSalWICompareAscii( (const wchar_t*)lParam, "devices" ) == 0 )
-                nSalEvent = SALEVENT_PRINTERCHANGED;
+                nSalEvent = SalEvent::PrinterChanged;
         }
     }
 
@@ -4103,7 +4103,7 @@ static void ImplHandleUserEvent( HWND hWnd, LPARAM lParam )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
-        pFrame->CallCallback( SALEVENT_USEREVENT, (void*)lParam );
+        pFrame->CallCallback( SalEvent::UserEvent, (void*)lParam );
     }
     ImplSalYieldMutexRelease();
 }
@@ -4132,7 +4132,7 @@ static void ImplHandleForcePalette( HWND hWnd )
                 {
                     InvalidateRect( hWnd, NULL, FALSE );
                     UpdateWindow( hWnd );
-                    pFrame->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+                    pFrame->CallCallback( SalEvent::DisplayChanged, 0 );
                 }
             }
         }
@@ -4278,7 +4278,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
             {
                 InvalidateRect( pTempFrame->mhWnd, NULL, FALSE );
                 UpdateWindow( pTempFrame->mhWnd );
-                pTempFrame->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+                pTempFrame->CallCallback( SalEvent::DisplayChanged, 0 );
             }
             pTempFrame = pTempFrame->mpNextFrame;
         }
@@ -4676,9 +4676,9 @@ static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM )
     else
         aMenuEvt.mpMenu = NULL;
 
-    long nRet = pFrame->CallCallback( SALEVENT_MENUACTIVATE, &aMenuEvt );
+    long nRet = pFrame->CallCallback( SalEvent::MenuActivate, &aMenuEvt );
     if( nRet )
-        nRet = pFrame->CallCallback( SALEVENT_MENUDEACTIVATE, &aMenuEvt );
+        nRet = pFrame->CallCallback( SalEvent::MenuDeactivate, &aMenuEvt );
     if( nRet )
         pFrame->mLastActivatedhMenu = hMenu;
 
@@ -4716,9 +4716,9 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
         else
             aMenuEvt.mpMenu = NULL;
 
-        nRet = pFrame->CallCallback( SALEVENT_MENUACTIVATE, &aMenuEvt );
+        nRet = pFrame->CallCallback( SalEvent::MenuActivate, &aMenuEvt );
         if( nRet )
-            nRet = pFrame->CallCallback( SALEVENT_MENUDEACTIVATE, &aMenuEvt );
+            nRet = pFrame->CallCallback( SalEvent::MenuDeactivate, &aMenuEvt );
         if( nRet )
             pFrame->mLastActivatedhMenu = hMenu;
     }
@@ -4757,7 +4757,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
         else
             aMenuEvt.mpMenu = NULL;
 
-        nRet = pFrame->CallCallback( SALEVENT_MENUHIGHLIGHT, &aMenuEvt );
+        nRet = pFrame->CallCallback( SalEvent::MenuHighlight, &aMenuEvt );
     }
 
     return (nRet != 0);
@@ -4784,7 +4784,7 @@ static int ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM )
             else
                 aMenuEvt.mpMenu = NULL;
 
-            nRet = pFrame->CallCallback( SALEVENT_MENUCOMMAND, &aMenuEvt );
+            nRet = pFrame->CallCallback( SalEvent::MenuCommand, &aMenuEvt );
         }
     }
     return (nRet != 0);
@@ -4843,8 +4843,8 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
             aKeyEvt.mnCode      = KEY_MENU;
             aKeyEvt.mnCharCode  = 0;
             aKeyEvt.mnRepeat    = 0;
-            long nRet = pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-            pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+            long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+            pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
             return (nRet != 0);
         }
         else
@@ -4878,8 +4878,8 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
                     aKeyEvt.mnCode     |= nModCode;
                     aKeyEvt.mnCharCode  = cKeyCode;
                     aKeyEvt.mnRepeat    = 0;
-                    long nRet = pFrame->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-                    pFrame->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+                    long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+                    pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
                     return (nRet != 0);
                 }
             }
@@ -4915,7 +4915,7 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
 
     // notify change
     if( nLang != pFrame->mnInputLang )
-        pFrame->CallCallback( SALEVENT_INPUTLANGUAGECHANGE, 0 );
+        pFrame->CallCallback( SalEvent::InputLanguageChange, 0 );
 
     ImplSalYieldMutexRelease();
 }
@@ -4928,7 +4928,7 @@ static void ImplUpdateIMECursorPos( WinSalFrame* pFrame, HIMC hIMC )
     // get cursor position and from it calculate default position
     // for the composition window
     SalExtTextInputPosEvent aPosEvt;
-    pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvt );
+    pFrame->CallCallback( SalEvent::ExtTextInputPos, (void*)&aPosEvt );
     if ( (aPosEvt.mnX == -1) && (aPosEvt.mnY == -1) )
         aForm.dwStyle |= CFS_DEFAULT;
     else
@@ -5005,8 +5005,8 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         }
 
         aEvt.mnCursorPos = aEvt.maText.getLength();
-        pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
-        pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+        pFrame->CallCallback( SalEvent::ExtTextInput, (void*)&aEvt );
+        pFrame->CallCallback( SalEvent::EndExtTextInput, (void*)NULL );
         ImplUpdateIMECursorPos( pFrame, hIMC );
     }
 
@@ -5073,8 +5073,8 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             // End the mode, if the last character is deleted
             if ( !nTextLen && !pFrame->mbCandidateMode )
             {
-                pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
-                pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+                pFrame->CallCallback( SalEvent::ExtTextInput, (void*)&aEvt );
+                pFrame->CallCallback( SalEvent::EndExtTextInput, (void*)NULL );
             }
             else
             {
@@ -5094,7 +5094,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                 if ( lParam & CS_NOMOVECARET )
                     aEvt.mnCursorFlags |= EXTTEXTINPUT_CURSOR_OVERWRITE;
 
-                pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
+                pFrame->CallCallback( SalEvent::ExtTextInput, (void*)&aEvt );
             }
             ImplUpdateIMECursorPos( pFrame, hIMC );
         }
@@ -5131,8 +5131,8 @@ static bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
             aEvt.mnCursorPos        = 0;
             aEvt.mbOnlyCursor       = FALSE;
             aEvt.mnCursorFlags      = 0;
-            pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
-            pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            pFrame->CallCallback( SalEvent::ExtTextInput, (void*)&aEvt );
+            pFrame->CallCallback( SalEvent::EndExtTextInput, (void*)NULL );
         }
         else if ( lParam & (GCS_RESULTSTR | GCS_COMPSTR | GCS_COMPATTR | GCS_CURSORPOS) )
         {
@@ -5238,7 +5238,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
                 if ( nBufLen >= 1 )
                 {
                     SalExtTextInputPosEvent aPosEvt;
-                    pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvt );
+                    pFrame->CallCallback( SalEvent::ExtTextInputPos, (void*)&aPosEvt );
 
                     // Vertical !!!
                     CANDIDATEFORM aForm;
@@ -5326,10 +5326,10 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     if( !pReconvertString )
     {
     // The first call for reconversion.
-    pFrame->CallCallback( SALEVENT_STARTRECONVERSION, (void*)NULL );
+    pFrame->CallCallback( SalEvent::StartReconversion, (void*)NULL );
 
     // Retrieve the surrounding text from the focused control.
-    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
+    pFrame->CallCallback( SalEvent::SurroundingTextRequest, (void*)&aEvt );
 
     if( aEvt.maText.isEmpty())
     {
@@ -5343,7 +5343,7 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     // The second call for reconversion.
 
     // Retrieve the surrounding text from the focused control.
-    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
+    pFrame->CallCallback( SalEvent::SurroundingTextRequest, (void*)&aEvt );
     nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.getLength() + 1) * sizeof(WCHAR);
 
     pReconvertString->dwStrOffset = sizeof(RECONVERTSTRING);
@@ -5368,7 +5368,7 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
     aEvt.maText.clear();
     aEvt.mnStart = aEvt.mnEnd = 0;
 
-    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
+    pFrame->CallCallback( SalEvent::SurroundingTextRequest, (void*)&aEvt );
 
     sal_uLong nTmpStart = pReconvertString->dwCompStrOffset / sizeof(WCHAR);
     sal_uLong nTmpEnd = nTmpStart + pReconvertString->dwCompStrLen;
@@ -5379,7 +5379,7 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
     aSelEvt.mnStart = nTmpStart;
     aSelEvt.mnEnd = nTmpEnd;
 
-    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTSELECTIONCHANGE, (void*)&aSelEvt );
+    pFrame->CallCallback( SalEvent::SurroundingTextSelectionChange, (void*)&aSelEvt );
     }
 
     return TRUE;
@@ -5395,7 +5395,7 @@ static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
     aEvt.mbValid = false;
     aEvt.mnCharPos = pQueryCharPosition->dwCharPos;
 
-    pFrame->CallCallback( SALEVENT_QUERYCHARPOSITION, (void*)&aEvt );
+    pFrame->CallCallback( SalEvent::QueryCharPosition, (void*)&aEvt );
 
     if ( !aEvt.mbValid )
         return FALSE;
