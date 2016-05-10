@@ -180,24 +180,24 @@ void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
 
     if ( !(pBorderWindow->GetStyle() & (WB_MOVEABLE | WB_POPUP)) ||
-          (pData->mnTitleType == BORDERWINDOW_TITLE_NONE) )
+          (pData->mnTitleType == BorderWindowTitleType::NONE) )
     {
-        pData->mnTitleType   = BORDERWINDOW_TITLE_NONE;
+        pData->mnTitleType   = BorderWindowTitleType::NONE;
         pData->mnTitleHeight = 0;
     }
     else
     {
         const StyleSettings& rStyleSettings = pData->mpOutDev->GetSettings().GetStyleSettings();
-        if (pData->mnTitleType == BORDERWINDOW_TITLE_TEAROFF)
+        if (pData->mnTitleType == BorderWindowTitleType::Tearoff)
             pData->mnTitleHeight = rStyleSettings.GetTearOffTitleHeight();
         else
         {
-            if (pData->mnTitleType == BORDERWINDOW_TITLE_SMALL)
+            if (pData->mnTitleType == BorderWindowTitleType::Small)
             {
                 pBorderWindow->SetPointFont(*pBorderWindow, rStyleSettings.GetFloatTitleFont() );
                 pData->mnTitleHeight = rStyleSettings.GetFloatTitleHeight();
             }
-            else // pData->mnTitleType == BORDERWINDOW_TITLE_NORMAL
+            else // pData->mnTitleType == BorderWindowTitleType::Normal
             {
                 // FIXME RenderContext
                 pBorderWindow->SetPointFont(*pBorderWindow, rStyleSettings.GetTitleFont());
@@ -1397,9 +1397,9 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     pData->mnTitleType      = pBorderWindow->mnTitleType;
     pData->mbFloatWindow    = pBorderWindow->mbFloatWindow;
 
-    if ( !(pBorderWindow->GetStyle() & (WB_MOVEABLE | WB_POPUP)) || (pData->mnTitleType == BORDERWINDOW_TITLE_NONE) )
+    if ( !(pBorderWindow->GetStyle() & (WB_MOVEABLE | WB_POPUP)) || (pData->mnTitleType == BorderWindowTitleType::NONE) )
         pData->mnBorderSize = 0;
-    else if ( pData->mnTitleType == BORDERWINDOW_TITLE_TEAROFF )
+    else if ( pData->mnTitleType == BorderWindowTitleType::Tearoff )
         pData->mnBorderSize = 0;
     else
         pData->mnBorderSize = rStyleSettings.GetBorderSize();
@@ -1429,7 +1429,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
         pData->maTitleRect.Top()     = pData->mnTopBorder;
         pData->maTitleRect.Bottom()  = pData->maTitleRect.Top()+pData->mnTitleHeight-1;
 
-        if ( pData->mnTitleType & (BORDERWINDOW_TITLE_NORMAL | BORDERWINDOW_TITLE_SMALL) )
+        if ( pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small) )
         {
             long nLeft          = pData->maTitleRect.Left() + 1;
             long nRight         = pData->maTitleRect.Right() - 3;
@@ -1546,7 +1546,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, sal
         vcl::Region oldClipRgn(rRenderContext.GetClipRegion());
 
         // for popups, don't draw part of the frame
-        if (pData->mnTitleType == BORDERWINDOW_TITLE_POPUP)
+        if (pData->mnTitleType == BorderWindowTitleType::Popup)
         {
             FloatingWindow* pWin = dynamic_cast<FloatingWindow*>(pData->mpBorderWindow->GetWindow(GetWindowType::Client));
             if (pWin)
@@ -1572,7 +1572,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, sal
         --aInRect.Bottom();
 
         // restore
-        if (pData->mnTitleType == BORDERWINDOW_TITLE_POPUP)
+        if (pData->mnTitleType == BorderWindowTitleType::Popup)
             rRenderContext.SetClipRegion(oldClipRgn);
     }
     else
@@ -1600,7 +1600,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, sal
         aInRect = pData->maTitleRect;
 
         // use no gradient anymore, just a static titlecolor
-        if (pData->mnTitleType != BORDERWINDOW_TITLE_POPUP)
+        if (pData->mnTitleType != BorderWindowTitleType::Popup)
             rRenderContext.SetFillColor(aFrameColor);
         else
             rRenderContext.SetFillColor(aFaceColor);
@@ -1611,7 +1611,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, sal
             aTitleRect.Move(pOffset->X(), pOffset->Y());
         rRenderContext.DrawRect(aTitleRect);
 
-        if (pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF)
+        if (pData->mnTitleType != BorderWindowTitleType::Tearoff)
         {
             aInRect.Left()  += 2;
             aInRect.Right() -= 2;
@@ -1800,9 +1800,9 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     mbDisplayActive = IsActive();
 
     if ( nTypeStyle & BORDERWINDOW_STYLE_FLOAT )
-        mnTitleType = BORDERWINDOW_TITLE_SMALL;
+        mnTitleType = BorderWindowTitleType::Small;
     else
-        mnTitleType = BORDERWINDOW_TITLE_NORMAL;
+        mnTitleType = BorderWindowTitleType::Normal;
     mnBorderStyle   = WindowBorderStyle::NORMAL;
     InitView();
 }
@@ -2096,7 +2096,7 @@ void ImplBorderWindow::SetDisplayActive( bool bActive )
     }
 }
 
-void ImplBorderWindow::SetTitleType( sal_uInt16 nTitleType, const Size& rSize )
+void ImplBorderWindow::SetTitleType( BorderWindowTitleType nTitleType, const Size& rSize )
 {
     mnTitleType = nTitleType;
     UpdateView( false, rSize );
