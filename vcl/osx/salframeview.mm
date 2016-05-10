@@ -394,7 +394,7 @@ static AquaSalFrame* getMouseContainerFrame()
     SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-        mpFrame->ToTop( SAL_FRAME_TOTOP_RESTOREWHENMIN | SAL_FRAME_TOTOP_GRABFOCUS );
+        mpFrame->ToTop( SalFrameToTop::RestoreWhenMin | SalFrameToTop::GrabFocus );
 }
 
 -(css::uno::Reference < css::accessibility::XAccessibleContext >)accessibleContext
