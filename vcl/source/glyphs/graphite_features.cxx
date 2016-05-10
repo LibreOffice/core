@@ -32,20 +32,62 @@
 #include <graphite_features.hxx>
 
 using namespace grutils;
+
+namespace {
+
+short getIntValue(const OString & id, size_t offset, size_t length)
+{
+    short value = 0;
+    int sign = 1;
+    for (size_t i = 0; i < length; i++)
+    {
+        switch (id[offset + i])
+        {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            value *= 10;
+            if (sign < 0)
+            {
+                value = -(id[offset + i] - '0');
+                sign = 1;
+            }
+            value += (id[offset + i] - '0');
+            break;
+        case '-':
+            if (i == 0)
+                sign = -1;
+            break;
+        default:
+            break;
+        }
+    }
+    return value;
+}
+
+}
+
 // These mustn't conflict with font name lists which use ; and ,
 const char GrFeatureParser::FEAT_PREFIX = ':';
 const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
 
 GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& lang)
-    : mnNumSettings(0), mbErrors(false), mpSettings(nullptr)
+    : mnNumSettings(0), mpSettings(nullptr)
 {
     maLang.label[0] = maLang.label[1] = maLang.label[2] = maLang.label[3] = '\0';
     setLang(pFace, lang);
 }
 
 GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features, const OString& lang)
-    : mnNumSettings(0), mbErrors(false), mpSettings(nullptr)
+    : mnNumSettings(0), mpSettings(nullptr)
 {
     sal_Int32 nEquals = 0;
     sal_Int32 nFeatEnd = 0;
@@ -57,7 +99,6 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features,
         nEquals = features.indexOf(FEAT_ID_VALUE_SEPARATOR, pos);
         if (nEquals == -1)
         {
-            mbErrors = true;
             break;
         }
         // check for a lang=xxx specification
@@ -70,9 +111,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features,
             {
                 nFeatEnd = features.getLength();
             }
-            if (nFeatEnd - pos > 3)
-                mbErrors = true;
-            else
+            if (nFeatEnd - pos <= 3)
             {
                 FeatId aLang = maLang;
                 aLang.num = 0;
@@ -105,8 +144,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features,
                         break;
                     }
                 }
-                if (i == gr_face_n_languages(pFace)) mbErrors = true;
-                else
+                if (i != gr_face_n_languages(pFace))
                 {
                     mnHash = maLang.num;
                     mpSettings = gr_face_featureval_for_lang(pFace, maLang.num);
@@ -138,8 +176,6 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features,
                 mnHash = (mnHash << 16) ^ ((featId << 8) | featValue);
                 mnNumSettings++;
             }
-            else
-                mbErrors = true;
         }
         pos = nFeatEnd + 1;
     }
@@ -230,49 +266,6 @@ gr_uint32 GrFeatureParser::getCharId(const OString & id, size_t offset, size_t l
     }
 #endif
     return charId.num;
-}
-
-short GrFeatureParser::getIntValue(const OString & id, size_t offset, size_t length)
-{
-    short value = 0;
-    int sign = 1;
-    for (size_t i = 0; i < length; i++)
-    {
-        switch (id[offset + i])
-        {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            value *= 10;
-            if (sign < 0)
-            {
-                value = -(id[offset + i] - '0');
-                sign = 1;
-            }
-            value += (id[offset + i] - '0');
-            break;
-        case '-':
-            if (i == 0)
-                sign = -1;
-            else
-            {
-                mbErrors = true;
-                break;
-            }
-            break;
-        default:
-            mbErrors = true;
-            break;
-        }
-    }
-    return value;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

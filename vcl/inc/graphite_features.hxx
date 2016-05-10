@@ -54,10 +54,8 @@ namespace grutils
         void setLang(const gr_face * face, const OString & lang);
         static bool isCharId(const OString & id, size_t offset, size_t length);
         static gr_uint32 getCharId(const OString & id, size_t offset, size_t length);
-        short getIntValue(const OString & id, size_t offset, size_t length);
         size_t mnNumSettings;
         FeatId maLang;
-        bool mbErrors;
         sal_uInt32 mnHash;
         gr_feature_val * mpSettings;
     };
