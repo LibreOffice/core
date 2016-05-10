@@ -93,12 +93,12 @@ SmNode * SmNode::GetSubNode(sal_uInt16 /*nIndex*/)
 }
 
 
-SmNode * SmNode::GetLeftMost()
+const SmNode * SmNode::GetLeftMost() const
     //  returns leftmost node of current subtree.
     //! (this assumes the one with index 0 is always the leftmost subnode
     //! for the current node).
 {
-    SmNode *pNode = GetNumSubNodes() > 0 ?
+    const SmNode *pNode = GetNumSubNodes() > 0 ?
                         GetSubNode(0) : nullptr;
 
     return pNode ? pNode->GetLeftMost() : this;
@@ -569,7 +569,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 }
 
-SmNode * SmTableNode::GetLeftMost()
+const SmNode * SmTableNode::GetLeftMost() const
 {
     return this;
 }
@@ -660,7 +660,7 @@ void SmExpressionNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmLineNode::Arrange(rDev, rFormat);
 
     //  copy alignment of leftmost subnode if any
-    SmNode *pNode = GetLeftMost();
+    const SmNode *pNode = GetLeftMost();
     if (pNode)
         SetRectHorAlign(pNode->GetRectHorAlign(), false);
 }
@@ -965,7 +965,7 @@ void SmBinVerNode::CreateTextFromNode(OUString &rText)
 }
 
 
-SmNode * SmBinVerNode::GetLeftMost()
+const SmNode * SmBinVerNode::GetLeftMost() const
 {
     return this;
 }
@@ -2419,7 +2419,7 @@ void SmMatrixNode::SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols)
 }
 
 
-SmNode * SmMatrixNode::GetLeftMost()
+const SmNode * SmMatrixNode::GetLeftMost() const
 {
     return this;
 }

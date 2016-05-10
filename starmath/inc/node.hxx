@@ -119,11 +119,7 @@ public:
                 return const_cast<SmNode *>(this)->GetSubNode(nIndex);
             }
 
-    virtual SmNode *       GetLeftMost();
-            const SmNode * GetLeftMost() const
-            {
-                return const_cast<SmNode *>(this)->GetLeftMost();
-            }
+    virtual const SmNode * GetLeftMost() const;
 
             sal_uInt16 &    Flags() { return mnFlags; }
             sal_uInt16 &    Attributes() { return mnAttributes; }
@@ -661,8 +657,7 @@ public:
     {
     }
 
-    using   SmNode::GetLeftMost;
-    virtual SmNode * GetLeftMost() override;
+    virtual const SmNode * GetLeftMost() const override;
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     virtual long GetFormulaBaseline() const override;
@@ -859,8 +854,7 @@ public:
         SetNumSubNodes(3);
     }
 
-    using   SmNode::GetLeftMost;
-    virtual SmNode * GetLeftMost() override;
+    virtual const SmNode * GetLeftMost() const override;
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void CreateTextFromNode(OUString &rText) override;
@@ -1201,8 +1195,7 @@ public:
     sal_uInt16 GetNumCols() const {return nNumCols;}
     void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols);
 
-    using   SmNode::GetLeftMost;
-    virtual SmNode * GetLeftMost() override;
+    virtual const SmNode * GetLeftMost() const override;
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void CreateTextFromNode(OUString &rText) override;
