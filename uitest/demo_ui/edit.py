@@ -39,8 +39,6 @@ def type_text(xContext):
     xAddBtn = xAddNameDlg.getChild("cancel")
     xAddBtn.executeAction("CLICK", tuple())
 
-    xUITest.executeCommand(".uno:CloseDoc")
-    
     ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

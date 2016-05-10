@@ -25,6 +25,9 @@ def select_entry_pos(xContext):
     actionProps = mkPropertyValues(props)
     scopeCB.executeAction("SELECT", actionProps)
 
+    xCancelBtn = xAddNameDlg.getChild("cancel")
+    xCancelBtn.executeAction("CLICK", tuple())
+
     ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
