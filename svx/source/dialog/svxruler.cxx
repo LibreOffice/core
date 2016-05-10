@@ -319,7 +319,7 @@ SvxRuler::SvxRuler(
         {
             mpObjectBorders[nBorder].nPos   = 0;
             mpObjectBorders[nBorder].nWidth = 0;
-            mpObjectBorders[nBorder].nStyle = RULER_BORDER_MOVEABLE;
+            mpObjectBorders[nBorder].nStyle = RulerBorderStyle::Moveable;
         }
     }
 
@@ -796,19 +796,19 @@ void SvxRuler::UpdateColumns()
     {
         mpBorders.resize(mxColumnItem->Count());
 
-        sal_uInt16 nStyleFlags = RULER_BORDER_VARIABLE;
+        RulerBorderStyle nStyleFlags = RulerBorderStyle::Variable;
 
         bool bProtectColumns =
                     mxRulerImpl->aProtectItem.IsSizeProtected() ||
                     mxRulerImpl->aProtectItem.IsPosProtected();
 
         if( !bProtectColumns )
-            nStyleFlags |= RULER_BORDER_MOVEABLE;
+            nStyleFlags |= RulerBorderStyle::Moveable;
 
         if( mxColumnItem->IsTable() )
-            nStyleFlags |= RULER_BORDER_TABLE;
+            nStyleFlags |= RulerBorderStyle::Table;
         else if ( !bProtectColumns )
-            nStyleFlags |= RULER_BORDER_SIZEABLE;
+            nStyleFlags |= RulerBorderStyle::Sizeable;
 
         sal_uInt16 nBorders = mxColumnItem->Count();
 
@@ -819,7 +819,7 @@ void SvxRuler::UpdateColumns()
         {
             mpBorders[i].nStyle = nStyleFlags;
             if(!mxColumnItem->At(i).bVisible)
-                mpBorders[i].nStyle |= RULER_STYLE_INVISIBLE;
+                mpBorders[i].nStyle |= RulerBorderStyle::Invisible;
 
             mpBorders[i].nPos = ConvertPosPixel(mxColumnItem->At(i).nEnd + lAppNullOffset);
 

@@ -139,25 +139,25 @@ has to be passed. In the array, the following values have to be initialized:
     long    nWidth          - column spacing in pixels (can also be 0, for example,
                               for table columns)
     sal_uInt16 nStyle       - bit style:
-                                RULER_BORDER_SIZEABLE
+                                RulerBorderStyle::Sizeable
                                 Column spacing can be changed. This flag should
                                 only be set if the size of the spacing is changed,
                                 not that of a cell.
-                                RULER_BORDER_MOVEABLE
+                                RulerBorderStyle::Moveable
                                 Column spacing/border can be moved. Whenever
                                 table borders are to be moved, this flag should
                                 be set instead of SIZEABLE (SIZEABLE indicates
                                 that the size of a spacing, not that of a single
                                 cell can be changed).
-                                RULER_BORDER_VARIABLE
+                                RulerBorderStyle::Variable
                                 Not all of the column spacings are equal
-                                RULER_BORDER_TABLE
+                                RulerBorderStyle::Table
                                 Table border. Whenever this style is set, the column
                                 width must be 0.
-                                RULER_BORDER_SNAP
+                                RulerBorderStyle::Snap
                                 Auxiliary line. Whenever this style is set, the
                                 column width must be 0.
-                                RULER_BORDER_MARGIN
+                                RulerBorderStyle::Margin
                                 Margin. Whenever this style is set, the column
                                 width must be 0.
 
@@ -485,22 +485,27 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 #define RULER_MARGIN_SIZEABLE   ((sal_uInt16)0x0001)
 
 
-#define RULER_BORDER_SIZEABLE   ((sal_uInt16)0x0001)
-#define RULER_BORDER_MOVEABLE   ((sal_uInt16)0x0002)
-#define RULER_BORDER_VARIABLE   ((sal_uInt16)0x0004)
-#define RULER_BORDER_TABLE      ((sal_uInt16)0x0008)
-#define RULER_BORDER_SNAP       ((sal_uInt16)0x0010)
-#define RULER_BORDER_MARGIN     ((sal_uInt16)0x0020)
+enum class RulerBorderStyle {
+    Sizeable   = 0x0001,
+    Moveable   = 0x0002,
+    Variable   = 0x0004,
+    Table      = 0x0008,
+    Snap       = 0x0010,
+    Margin     = 0x0020,
+    Invisible  = 0x0040
+};
+namespace o3tl {
+    template<> struct typed_flags<RulerBorderStyle> : is_typed_flags<RulerBorderStyle, 0x007f> {};
+}
 
 struct RulerBorder
 {
-    long        nPos;
-    long        nWidth;
-    sal_uInt16  nStyle;
-    long        nMinPos; //minimum/maximum position, supported for table borders/rows
-    long        nMaxPos;
+    long             nPos;
+    long             nWidth;
+    RulerBorderStyle nStyle;
+    long             nMinPos; //minimum/maximum position, supported for table borders/rows
+    long             nMaxPos;
 };
-
 
 #define RULER_INDENT_TOP        ((sal_uInt16)0x0000)
 #define RULER_INDENT_BOTTOM     ((sal_uInt16)0x0001)
