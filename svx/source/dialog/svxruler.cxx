@@ -293,14 +293,14 @@ SvxRuler::SvxRuler(
         for(size_t nIn = 0; nIn < mpIndents.size(); nIn++)
         {
             mpIndents[nIn].nPos = 0;
-            mpIndents[nIn].nStyle = RULER_STYLE_DONTKNOW;
+            mpIndents[nIn].nStyle = RulerIndentStyle::Top;
         }
 
-        mpIndents[0].nStyle = RULER_STYLE_DONTKNOW;
-        mpIndents[1].nStyle = RULER_STYLE_DONTKNOW;
-        mpIndents[INDENT_FIRST_LINE].nStyle = RULER_INDENT_TOP;
-        mpIndents[INDENT_LEFT_MARGIN].nStyle = RULER_INDENT_BOTTOM;
-        mpIndents[INDENT_RIGHT_MARGIN].nStyle = RULER_INDENT_BOTTOM;
+        mpIndents[0].nStyle = RulerIndentStyle::Top;
+        mpIndents[1].nStyle = RulerIndentStyle::Top;
+        mpIndents[INDENT_FIRST_LINE].nStyle = RulerIndentStyle::Top;
+        mpIndents[INDENT_LEFT_MARGIN].nStyle = RulerIndentStyle::Bottom;
+        mpIndents[INDENT_RIGHT_MARGIN].nStyle = RulerIndentStyle::Bottom;
     }
 
     if( (nFlags & SvxRulerSupportFlags::BORDERS) ==  SvxRulerSupportFlags::BORDERS )
@@ -916,10 +916,7 @@ void SvxRuler::UpdatePara()
         mpIndents[INDENT_FIRST_LINE].nPos   = ConvertHPosPixel(leftFirstLine);
         mpIndents[INDENT_RIGHT_MARGIN].nPos = ConvertHPosPixel(rightMargin);
 
-        if( mxParaItem->IsAutoFirst() )
-            mpIndents[INDENT_FIRST_LINE].nStyle |= RULER_STYLE_INVISIBLE;
-        else
-            mpIndents[INDENT_FIRST_LINE].nStyle &= ~RULER_STYLE_INVISIBLE;
+        mpIndents[INDENT_FIRST_LINE].bInvisible = mxParaItem->IsAutoFirst();
 
         SetIndents(INDENT_COUNT, &mpIndents[0] + INDENT_GAP);
     }
@@ -3179,7 +3176,6 @@ bool SvxRuler::StartDrag()
             sal_uInt16 nIndent = INDENT_LEFT_MARGIN;
             if((nIndent) == GetDragAryPos() + INDENT_GAP) {  // Left paragraph indent
                 mpIndents[0] = mpIndents[INDENT_FIRST_LINE];
-                mpIndents[0].nStyle |= RULER_STYLE_DONTKNOW;
                 EvalModifier();
             }
             else
@@ -3187,7 +3183,6 @@ bool SvxRuler::StartDrag()
                 nDragType = SvxRulerDragFlags::OBJECT;
             }
             mpIndents[1] = mpIndents[GetDragAryPos() + INDENT_GAP];
-            mpIndents[1].nStyle |= RULER_STYLE_DONTKNOW;
             break;
         }
         case RULER_TYPE_TAB: // Tabs (Modifier)

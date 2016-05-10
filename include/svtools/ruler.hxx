@@ -171,9 +171,9 @@ initialized:
 
     long    nPos            - offset relative to the origin in pixels
     sal_uInt16 nStyle       - bit style:
-                                RULER_INDENT_TOP    (indent of the first line)
-                                RULER_INDENT_BOTTOM (left/right indent)
-                                RULER_INDENT_BORDER (Vertical line that shows the border distance)
+                                RulerIndentStyle::Top    (indent of the first line)
+                                RulerIndentStyle::Bottom (left/right indent)
+                                RulerIndentStyle::Border (Vertical line that shows the border distance)
                                 The following bits can be set in addition
                                 to these styles:
                                 RULER_STYLE_DONTKNOW (for old position or for
@@ -502,15 +502,15 @@ struct RulerBorder
 };
 
 
-#define RULER_INDENT_TOP        ((sal_uInt16)0x0000)
-#define RULER_INDENT_BOTTOM     ((sal_uInt16)0x0001)
-#define RULER_INDENT_BORDER     ((sal_uInt16)0x0002)
-#define RULER_INDENT_STYLE      ((sal_uInt16)0x000F)
+enum class RulerIndentStyle {
+    Top, Bottom, Border
+};
 
 struct RulerIndent
 {
-    long        nPos;
-    sal_uInt16  nStyle;
+    long              nPos;
+    RulerIndentStyle  nStyle;
+    bool              bInvisible;
 };
 
 
@@ -659,7 +659,7 @@ private:
     SVT_DLLPRIVATE void ImplDrawBorders(vcl::RenderContext& rRenderContext,
                                         long nMin, long nMax, long nVirTop, long nVirBottom);
     SVT_DLLPRIVATE void ImplDrawIndent(vcl::RenderContext& rRenderContext,
-                                       const tools::Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit = false);
+                                       const tools::Polygon& rPoly, bool bIsHit = false);
     SVT_DLLPRIVATE void ImplDrawIndents(vcl::RenderContext& rRenderContext,
                                         long nMin, long nMax, long nVirTop, long nVirBottom);
     SVT_DLLPRIVATE void ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, sal_uInt16 nStyle);
@@ -683,7 +683,7 @@ private:
     SVT_DLLPRIVATE bool ImplHitTest( const Point& rPosition,
                                          RulerSelection* pHitTest,
                                          bool bRequiredStyle = false,
-                                         sal_uInt16 nRequiredStyle = 0 ) const;
+                                         RulerIndentStyle nRequiredStyle = RulerIndentStyle::Top ) const;
     SVT_DLLPRIVATE bool     ImplDocHitTest( const Point& rPos, RulerType eDragType, RulerSelection* pHitTest ) const;
     SVT_DLLPRIVATE bool     ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier );
     SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );

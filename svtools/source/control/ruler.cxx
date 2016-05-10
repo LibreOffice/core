@@ -789,12 +789,9 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
     }
 }
 
-void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit)
+void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Polygon& rPoly, bool bIsHit)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-
-    if (nStyle & RULER_STYLE_INVISIBLE)
-        return;
 
     rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
     rRenderContext.SetFillColor(bIsHit ? rStyleSettings.GetDarkShadowColor() : rStyleSettings.GetWorkspaceColor());
@@ -812,23 +809,22 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
 
     for (j = 0; j < mpData->pIndents.size(); j++)
     {
-        if (mpData->pIndents[j].nStyle & RULER_STYLE_INVISIBLE)
+        if (mpData->pIndents[j].bInvisible)
             continue;
 
-        sal_uInt16  nStyle = mpData->pIndents[j].nStyle;
-        sal_uInt16  nIndentStyle = nStyle & RULER_INDENT_STYLE;
+        RulerIndentStyle nIndentStyle = mpData->pIndents[j].nStyle;
 
         n = mpData->pIndents[j].nPos+mpData->nNullVirOff;
 
         if ((n >= nMin) && (n <= nMax))
         {
-            if (nIndentStyle == RULER_INDENT_BORDER)
+            if (nIndentStyle == RulerIndentStyle::Border)
             {
                 const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
                 rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
                 ImplVDrawLine(rRenderContext, n, nVirTop + 1, n, nVirBottom - 1);
             }
-            else if (nIndentStyle == RULER_INDENT_BOTTOM)
+            else if (nIndentStyle == RulerIndentStyle::Bottom)
             {
                 aPoly.SetPoint(Point(n + 0, nVirBottom - nIndentHeight), 0);
                 aPoly.SetPoint(Point(n - nIndentWidth2, nVirBottom - 3), 1);
@@ -855,7 +851,7 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
                     aPoly[i] = aSet;
                 }
             }
-            if (RULER_INDENT_BORDER != nIndentStyle)
+            if (RulerIndentStyle::Border != nIndentStyle)
             {
                 bool bIsHit = false;
                 if(mxCurrentHitTest.get() != nullptr && mxCurrentHitTest->eType == RULER_TYPE_INDENT)
@@ -866,7 +862,7 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
                 {
                     bIsHit = mnDragAryPos == j;
                 }
-                ImplDrawIndent(rRenderContext, aPoly, nStyle, bIsHit);
+                ImplDrawIndent(rRenderContext, aPoly, bIsHit);
             }
         }
     }
@@ -1476,7 +1472,7 @@ void Ruler::ImplUpdate( bool bMustCalc )
 }
 
 bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
-                         bool bRequireStyle, sal_uInt16 nRequiredStyle ) const
+                         bool bRequireStyle, RulerIndentStyle nRequiredStyle ) const
 {
     sal_Int32   i;
     sal_uInt16  nStyle;
@@ -1586,14 +1582,13 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
 
         for ( i = mpData->pIndents.size(); i; i-- )
         {
-            nStyle = mpData->pIndents[i-1].nStyle;
-            if ( (! bRequireStyle || nStyle == nRequiredStyle) &&
-                 !(nStyle & RULER_STYLE_INVISIBLE) )
+            RulerIndentStyle nIndentStyle = mpData->pIndents[i-1].nStyle;
+            if ( (! bRequireStyle || nIndentStyle == nRequiredStyle) &&
+                 !mpData->pIndents[i-1].bInvisible )
             {
-                nStyle &= RULER_INDENT_STYLE;
                 n1 = mpData->pIndents[i-1].nPos;
 
-                if ( (nStyle == RULER_INDENT_BOTTOM) != !bIsHori )
+                if ( (nIndentStyle == RulerIndentStyle::Bottom) != !bIsHori )
                 {
                     aRect.Left()    = n1-nIndentWidth2;
                     aRect.Right()   = n1+nIndentWidth2;
@@ -1781,12 +1776,12 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
 {
     Point aPos = rPos;
     bool bRequiredStyle = false;
-    sal_uInt16 nRequiredStyle = 0;
+    RulerIndentStyle nRequiredStyle = RulerIndentStyle::Top;
 
     if (eDragType == RULER_TYPE_INDENT)
     {
         bRequiredStyle = true;
-        nRequiredStyle = RULER_INDENT_BOTTOM;
+        nRequiredStyle = RulerIndentStyle::Bottom;
     }
 
     if ( mnWinStyle & WB_HORZ )
