@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <vector>
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -47,9 +48,15 @@ class  PopupMenu;
 #define TOOLBOX_MENUITEM_START      ((sal_uInt16)0x1000)
 
 // defines for the menubutton
-#define TOOLBOX_MENUTYPE_NONE           ((sal_uInt16)0x0000)    // no menu at all, scrolling by spin buttons
-#define TOOLBOX_MENUTYPE_CLIPPEDITEMS   ((sal_uInt16)0x0001)    // menu will contain "more" indicator
-#define TOOLBOX_MENUTYPE_CUSTOMIZE      ((sal_uInt16)0x0002)    // menu will contain "customization" and "more" indicator
+enum class ToolBoxMenuType {
+    NONE           = 0x0000,    // no menu at all, scrolling by spin buttons
+    ClippedItems   = 0x0001,    // menu will contain "more" indicator
+    Customize      = 0x0002     // menu will contain "customization" and "more" indicator
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ToolBoxMenuType> : is_typed_flags<ToolBoxMenuType, 0x0003> {};
+}
 
 // small or large force an exact toolbox size for proper alignemnt
 // dontcare will let the toolbox decide about its size
@@ -477,8 +484,8 @@ public:
     //       the private toolbox items will only use item ids starting from TOOLBOX_MENUITEM_START
     // to allow for customization of the menu the coresponding handler is called
     // when the menu button was clicked and before the menu is executed
-    void                SetMenuType( sal_uInt16 aType = TOOLBOX_MENUTYPE_CUSTOMIZE );
-    sal_uInt16          GetMenuType() const;
+    void                SetMenuType( ToolBoxMenuType aType = ToolBoxMenuType::Customize );
+    ToolBoxMenuType     GetMenuType() const;
     bool                IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
     void                UpdateCustomMenu();

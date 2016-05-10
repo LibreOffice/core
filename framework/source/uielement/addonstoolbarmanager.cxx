@@ -80,7 +80,7 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >
                                 ToolBox* pToolBar ) :
     ToolBarManager( rxContext, rFrame, rResourceName, pToolBar )
 {
-    m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );
+    m_pToolBar->SetMenuType( ToolBoxMenuType::ClippedItems );
     m_pToolBar->SetSelectHdl( LINK( this, AddonsToolBarManager, Select) );
     m_pToolBar->SetClickHdl( LINK( this, AddonsToolBarManager, Click ) );
     m_pToolBar->SetDoubleClickHdl( LINK( this, AddonsToolBarManager, DoubleClick ) );

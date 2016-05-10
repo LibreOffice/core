@@ -881,7 +881,7 @@ void ToolBox::ImplSetMinMaxFloatSize( ToolBox *pThis )
     {
         pWrapper->SetMinOutputSizePixel( aMinSize );
         pWrapper->SetMaxOutputSizePixel( aMaxSize );
-        pWrapper->ShowTitleButton( TitleButton::Menu, ( pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) != 0 );
+        pWrapper->ShowTitleButton( TitleButton::Menu, bool( pThis->GetMenuType() & ToolBoxMenuType::Customize) );
     }
     else
     {
