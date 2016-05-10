@@ -237,7 +237,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnDragPos       = 0;                    // Drag-Position (Null point)
     mnUpdateEvtId   = nullptr;                    // Update event was not sent yet
     mnDragAryPos    = 0;                    // Drag-Array-Index
-    mnDragSize      = 0;                    // Did size change at dragging
+    mnDragSize      = RulerDragSize::Move;  // Did size change at dragging
     mnDragModifier  = 0;                    // Modifier key at dragging
     mnExtraStyle    = 0;                    // Style of Extra field
     mnExtraClicks   = 0;                    // No. of clicks for Extra field
@@ -1500,7 +1500,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
 
     // #i32608#
     pHitTest->nAryPos = 0;
-    pHitTest->mnDragSize = 0;
+    pHitTest->mnDragSize = RulerDragSize::Move;
     pHitTest->bSize = false;
     pHitTest->bSizeBar = false;
 
@@ -1654,7 +1654,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
                     if ( nStyle & RULER_BORDER_MOVEABLE )
                     {
                         pHitTest->bSizeBar = true;
-                        pHitTest->mnDragSize = RULER_DRAGSIZE_MOVE;
+                        pHitTest->mnDragSize = RulerDragSize::Move;
                     }
                 }
                 else
@@ -1674,19 +1674,19 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
                     if ( nX <= n1+nMOff )
                     {
                         pHitTest->bSize = true;
-                        pHitTest->mnDragSize = RULER_DRAGSIZE_1;
+                        pHitTest->mnDragSize = RulerDragSize::N1;
                     }
                     else if ( nX >= n2-nMOff )
                     {
                         pHitTest->bSize = true;
-                        pHitTest->mnDragSize = RULER_DRAGSIZE_2;
+                        pHitTest->mnDragSize = RulerDragSize::N2;
                     }
                     else
                     {
                         if ( nStyle & RULER_BORDER_MOVEABLE )
                         {
                             pHitTest->bSizeBar = true;
-                            pHitTest->mnDragSize = RULER_DRAGSIZE_MOVE;
+                            pHitTest->mnDragSize = RulerDragSize::Move;
                         }
                     }
                 }
@@ -1871,7 +1871,7 @@ bool Ruler::ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier )
         meDragType      = RULER_TYPE_DONTKNOW;
         mnDragPos       = 0;
         mnDragAryPos    = 0;
-        mnDragSize      = 0;
+        mnDragSize      = RulerDragSize::Move;
         mnDragModifier  = 0;
         mpData          = mpSaveData;
     }
@@ -1972,7 +1972,7 @@ void Ruler::ImplEndDrag()
     meDragType      = RULER_TYPE_DONTKNOW;
     mnDragPos       = 0;
     mnDragAryPos    = 0;
-    mnDragSize      = 0;
+    mnDragSize      = RulerDragSize::Move;
     mbDragCanceled  = false;
     mbDragDelete    = false;
     mnDragModifier  = 0;
@@ -2067,18 +2067,18 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
         {
             if (mnWinStyle & WB_HORZ)
             {
-                if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
+                if (mxCurrentHitTest->mnDragSize == RulerDragSize::N1)
                     ePtrStyle = PointerStyle::TabSelectW;
-                else if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
+                else if (mxCurrentHitTest->mnDragSize == RulerDragSize::N2)
                     ePtrStyle = PointerStyle::TabSelectE;
                 else
                     ePtrStyle = PointerStyle::ESize;
             }
             else
             {
-                if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
+                if (mxCurrentHitTest->mnDragSize == RulerDragSize::N1)
                     ePtrStyle = PointerStyle::WindowNSize;
-                else if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
+                else if (mxCurrentHitTest->mnDragSize == RulerDragSize::N2)
                     ePtrStyle = PointerStyle::WindowSSize;
                 else
                     ePtrStyle = PointerStyle::SSize;

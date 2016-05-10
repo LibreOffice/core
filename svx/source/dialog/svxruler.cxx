@@ -1755,7 +1755,7 @@ void SvxRuler::DragBorders()
         nIndex = 0;
     }
 
-    sal_uInt16 nDragSize = GetDragSize();
+    RulerDragSize nDragSize = GetDragSize();
     long lDiff = 0;
 
     // the drag position has to be corrected to be able to prevent borders from passing each other
@@ -1763,7 +1763,7 @@ void SvxRuler::DragBorders()
 
     switch(nDragSize)
     {
-        case RULER_DRAGSIZE_MOVE:
+        case RulerDragSize::Move:
         {
 ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
             if(GetDragType() == RULER_TYPE_BORDER)
@@ -1925,14 +1925,14 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                 mpBorders[nIndex].nPos += lDiff;
             break;
         }
-      case RULER_DRAGSIZE_1:
+      case RulerDragSize::N1:
         {
             lDiff = lPos - mpBorders[nIndex].nPos;
             mpBorders[nIndex].nWidth += mpBorders[nIndex].nPos - lPos;
             mpBorders[nIndex].nPos = lPos;
             break;
         }
-      case RULER_DRAGSIZE_2:
+      case RulerDragSize::N2:
         {
             const long nOld = mpBorders[nIndex].nWidth;
             mpBorders[nIndex].nWidth = lPos - mpBorders[nIndex].nPos;
@@ -1942,7 +1942,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
     }
     if(!bRightIndentsCorrected &&
        GetActRightColumn() == nIndex &&
-       nDragSize != RULER_DRAGSIZE_2 &&
+       nDragSize != RulerDragSize::N2 &&
        !mpIndents.empty() &&
        !mxRulerImpl->bIsTableRows)
     {
@@ -1950,7 +1950,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
     }
     else if(!bLeftIndentsCorrected &&
             GetActLeftColumn() == nIndex &&
-            nDragSize != RULER_DRAGSIZE_1 &&
+            nDragSize != RulerDragSize::N1 &&
             !mpIndents.empty())
     {
         UpdateParaContents_Impl(lDiff, MOVE_LEFT);
@@ -1961,7 +1961,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
 void SvxRuler::DragObjectBorder()
 {
     /* Dragging of object edges */
-    if(RULER_DRAGSIZE_MOVE == GetDragSize())
+    if(RulerDragSize::Move == GetDragSize())
     {
         const long lPosition = MakePositionSticky(GetCorrectedDragPos(), GetLeftFrameMargin());
 
@@ -2770,7 +2770,7 @@ void SvxRuler::CalcMinMax()
         const sal_uInt16 nIdx = GetDragAryPos();
         switch(GetDragSize())
         {
-          case RULER_DRAGSIZE_1 :
+          case RulerDragSize::N1 :
             {
                 nMaxRight = mpBorders[nIdx].nPos +
                     mpBorders[nIdx].nWidth + lNullPix;
@@ -2801,7 +2801,7 @@ void SvxRuler::CalcMinMax()
                 nMaxLeft += nDragOffset;
                 break;
             }
-          case RULER_DRAGSIZE_MOVE:
+          case RulerDragSize::Move:
             {
                 if(mxColumnItem.get())
                 {
@@ -2982,7 +2982,7 @@ void SvxRuler::CalcMinMax()
                 }
                 break;
             }
-          case RULER_DRAGSIZE_2:
+          case RulerDragSize::N2:
             {
                 nMaxLeft = lNullPix + mpBorders[nIdx].nPos;
                 if(nIdx == mxColumnItem->Count()-2) { // last column
