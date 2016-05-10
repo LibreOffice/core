@@ -69,6 +69,24 @@
       "revId": "ce418aff72934350592a64166104c1f57370eef6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_43410d39",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-10T15:20:34Z",
+      "side": 1,
+      "message": "Registering a new entry to a vector\u003cStyleFamilyEntry\u003e would require making a new SFX_STYLE_ category.",
+      "parentUuid": "da7fb54a_a31ad96c",
+      "revId": "ce418aff72934350592a64166104c1f57370eef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
