@@ -183,7 +183,7 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
             long nRightDeco = abs( aRect.right - aRect2.right );
 
-            pFrame->maState.mnState &= ~(WindowStateState::Minimized | WindowStateState::Maximized);
+            pFrame->maState.mnState &= WindowStateState(~(WindowStateState::Minimized | WindowStateState::Maximized));
             // subtract decoration
             pFrame->maState.mnX      = aRect.left+nLeftDeco;
             pFrame->maState.mnY      = aRect.top+nTopDeco;
