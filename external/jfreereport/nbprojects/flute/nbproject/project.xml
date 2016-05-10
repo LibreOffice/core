@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://www.netbeans.org/ns/project/1">
-    <type>org.netbeans.modules.ant.freeform</type>
+<?xml version="7.0-SNAPSHOT" encoding="UTF-8"?>
+<project xmlns="pentaho-library">
+    <type>org.w3c.flute.*</type>
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
             <!-- Do not use Project Properties customizer when editing this file manually. -->
-            <name>flute-13a</name>
+            <name>flute</name>
             <properties>
                 <property name="project.dir">../../wntmsci10/misc/build/flute</property>
                 <property name="ant.script">${project.dir}/ant/build.xml</property>
@@ -12,23 +12,23 @@
             <folders>
                 <source-folder>
                     <label>flute</label>
-                    <location>${project.dir}</location>
+                    <location>${basedir}/source</location>
                 </source-folder>
             </folders>
             <ide-actions>
                 <action name="build">
-                    <script>${ant.script}</script>
+                    <script>${basedir}/source</script>
                     <target>all</target>
                 </action>
                 <action name="javadoc">
-                    <script>${ant.script}</script>
+                    <script>${basedir}/source</script>
                     <target>javadoc</target>
                 </action>
             </ide-actions>
             <view>
                 <items>
                     <source-file>
-                        <location>${ant.script}</location>
+                        <location>${basedir}/source</location>
                     </source-file>
                 </items>
                 <context-menu>
