@@ -198,6 +198,7 @@ bool PSDReader::ImplReadHeader()
         {
             case 5 :
                 mbTransparent = true;
+                SAL_FALLTHROUGH;
             case 4 :
                 mnDestBitDepth = 24;
             break;
@@ -214,6 +215,7 @@ bool PSDReader::ImplReadHeader()
             break;
         case 4 :
             mbTransparent = true;
+            SAL_FALLTHROUGH;
         case 3 :
             mnDestBitDepth = 24;
             break;

@@ -677,6 +677,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 default:
                 case 2:
                     aContext.Encryption.CanPrintFull            = true;
+                    SAL_FALLTHROUGH;
                 case 1:
                     aContext.Encryption.CanPrintTheDocument     = true;
                     break;
