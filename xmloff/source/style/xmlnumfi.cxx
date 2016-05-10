@@ -125,6 +125,7 @@ class SvXMLNumFmtElementContext : public SvXMLImportContext
     LanguageType            nElementLang;
     bool                    bLong;
     bool                    bTextual;
+    bool                    bQuoted;
     OUString                sCalendar;
 
 public:
@@ -268,6 +269,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_COUNTRY,
     XML_TOK_ELEM_ATTR_STYLE,
     XML_TOK_ELEM_ATTR_TEXTUAL,
+    XML_TOK_ELEM_ATTR_QUOTED,
     XML_TOK_ELEM_ATTR_CALENDAR
 };
 
@@ -566,6 +568,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_COUNTRY,                 XML_TOK_ELEM_ATTR_COUNTRY              },
             { XML_NAMESPACE_NUMBER, XML_STYLE,                   XML_TOK_ELEM_ATTR_STYLE                },
             { XML_NAMESPACE_NUMBER, XML_TEXTUAL,                 XML_TOK_ELEM_ATTR_TEXTUAL              },
+            { XML_NAMESPACE_LO_EXT, XML_QUOTED,                  XML_TOK_ELEM_ATTR_QUOTED               },
             { XML_NAMESPACE_NUMBER, XML_CALENDAR,                XML_TOK_ELEM_ATTR_CALENDAR             },
             XML_TOKEN_MAP_END
         };
@@ -781,7 +784,7 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
     return false;
 }
 
-static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
+static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent, bool bForceQuote )
 {
     bool bQuote = true;
     sal_Int32 nLength = rContent.getLength();
@@ -794,7 +797,8 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
     {
         //  don't quote single separator characters like space or percent,
         //  or separator characters followed by space (used in date formats)
-        bQuote = false;
+        //  except if it was quoted by user format tdf#97837
+        bQuote = bForceQuote;
     }
     else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
     {
@@ -898,7 +902,8 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     nType( nNewType ),
     nElementLang( LANGUAGE_SYSTEM ),
     bLong( false ),
-    bTextual( false )
+    bTextual( false ),
+    bQuoted( false )
 {
     LanguageTagODF aLanguageTagODF;
     sal_Int32 nAttrVal;
@@ -996,6 +1001,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bTextual = bAttrBool;
                 break;
+            case XML_TOK_ELEM_ATTR_QUOTED:
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                    bQuoted = bAttrBool;
+                break;
             case XML_TOK_ELEM_ATTR_CALENDAR:
                 sCalendar = sValue;
                 break;
@@ -1079,7 +1088,7 @@ void SvXMLNumFmtElementContext::EndElement()
             }
             if ( !aContent.isEmpty() )
             {
-                lcl_EnquoteIfNecessary( aContent, rParent );
+                lcl_EnquoteIfNecessary( aContent, rParent, bQuoted );
                 rParent.AddToCode( aContent.makeStringAndClear() );
             }
             break;
