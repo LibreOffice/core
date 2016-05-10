@@ -1245,7 +1245,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
                 ShowWindow( mhWnd, SW_RESTORE );
     }
 
-    sal_uInt16 nEvent = 0;
+    SalEvent nEvent = SalEvent::NONE;
     UINT    nPosSize = 0;
     RECT    aClientRect, aWindowRect;
     GetClientRect( mhWnd, &aClientRect );   // x,y always 0,0, but width and height without border
@@ -3020,7 +3020,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     }
     SalMouseEvent   aMouseEvt;
     long            nRet;
-    sal_uInt16          nEvent = 0;
+    SalEvent        nEvent = SalEvent::NONE;
     bool            bCall = TRUE;
 
     aMouseEvt.mnX       = (short)LOWORD( lParam );
@@ -3514,9 +3514,9 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         else
         {
             SalKeyEvent     aKeyEvt;
-            sal_uInt16          nEvent;
+            SalEvent        nEvent;
             MSG             aCharMsg;
-            BOOL        bCharPeek = FALSE;
+            BOOL            bCharPeek = FALSE;
             UINT            nCharMsg = WM_CHAR;
             bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
@@ -3637,7 +3637,7 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
         if ( (wParam != VK_SHIFT) && (wParam != VK_CONTROL) && (wParam != VK_MENU) )
         {
             SalKeyEvent     aKeyEvt;
-            sal_uInt16          nEvent;
+            SalEvent        nEvent;
             bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
             // convert KeyCode
@@ -4052,7 +4052,7 @@ static long ImplHandleShutDownMsg( HWND hWnd )
 static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
                                          WPARAM wParam, LPARAM lParam )
 {
-    sal_uInt16 nSalEvent = SalEvent::SettingsChanged;
+    SalEvent nSalEvent = SalEvent::SettingsChanged;
 
     if ( nMsg == WM_DEVMODECHANGE )
         nSalEvent = SalEvent::PrinterChanged;
