@@ -1434,7 +1434,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     UpdateFrameGeometry( mhWnd, this );
 
     // Notification -- really ???
-    if( nEvent )
+    if( nEvent != SalEvent::NONE )
         CallCallback( nEvent, NULL );
 }
 

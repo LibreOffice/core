@@ -387,7 +387,7 @@ void AquaSalInstance::wakeupYield()
     }
 }
 
-void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, void* pData )
+void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData )
 {
     {
         osl::MutexGuard g( maUserEventListMutex );

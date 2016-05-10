@@ -549,7 +549,7 @@ private:
     }
 }
 
--(void)sendMouseEventToFrame: (NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(sal_uInt16)nEvent
+-(void)sendMouseEventToFrame: (NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(SalEvent)nEvent
 {
     SolarMutexGuard aGuard;
 

@@ -141,7 +141,7 @@ public:
  public:
     friend class AquaSalFrame;
 
-    void PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, void* pData );
+    void PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData );
     void delayedSettingsChanged( bool bInvalidate );
 
     bool isNSAppThread() const;

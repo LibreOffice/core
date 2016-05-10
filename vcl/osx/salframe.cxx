@@ -1245,7 +1245,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    sal_uInt16 nEvent = 0;
+    SalEvent nEvent = SalEvent::NONE;
 
     if( [mpNSWindow isMiniaturized] )
         [mpNSWindow deminiaturize: NSApp]; // expand the window
@@ -1314,7 +1314,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
 
     UpdateFrameGeometry();
 
-    if (nEvent)
+    if (nEvent != SalEvent::NONE)
         CallCallback(nEvent, nullptr);
 
     if( mbShown && bPaint )

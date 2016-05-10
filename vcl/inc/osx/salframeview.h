@@ -22,6 +22,8 @@
 
 #include "osx/a11ywrapper.h"
 
+enum class SalEvent;
+
 @interface SalFrameWindow : NSWindow<NSWindowDelegate>
 {
     AquaSalFrame*       mpFrame;
@@ -103,7 +105,7 @@
 -(void)swipeWithEvent: (NSEvent*)pEvent;
 -(void)keyDown: (NSEvent*)pEvent;
 -(void)flagsChanged: (NSEvent*)pEvent;
--(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(sal_uInt16)nEvent;
+-(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(SalEvent)nEvent;
 -(BOOL)sendKeyInputAndReleaseToFrame: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar;
 -(BOOL)sendKeyInputAndReleaseToFrame: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
 -(BOOL)sendKeyToFrameDirect: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
