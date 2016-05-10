@@ -233,6 +233,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 break;
             case OBJ_TYPE_DOCUMENT_OBJECTS:
                 bDocumentObjects = true;
+                SAL_FALLTHROUGH;
             case OBJ_TYPE_USERFORMS:
             case OBJ_TYPE_NORMAL_MODULES:
             case OBJ_TYPE_CLASS_MODULES:
