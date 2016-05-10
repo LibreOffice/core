@@ -18,6 +18,7 @@
  */
 
 #define UNICODE
+#define _UNICODE
 
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
@@ -31,21 +32,21 @@
 #include <string.h>
 #include <malloc.h>
 #include <stdio.h>
-#include "strsafe.h"
+#include <strsafe.h>
 
-#include <seterror.hxx>
+#include "seterror.hxx"
 
 
-BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
+BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
-       if ( MsiGetProperty( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )
+       if ( MsiGetPropertyW( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )
        {
            sz++;
            DWORD nbytes = sz * sizeof( wchar_t );
            wchar_t* buff = reinterpret_cast<wchar_t*>( malloc( nbytes ) );
            ZeroMemory( buff, nbytes );
-           MsiGetProperty( hMSI, pPropName, buff, &sz );
+           MsiGetPropertyW( hMSI, pPropName, buff, &sz );
            *ppValue = buff;
 
         return TRUE;
@@ -56,18 +57,18 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 
 
 #ifdef DEBUG
-inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
+inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
 {
-    TCHAR    buffer[1024];
+    WCHAR    buffer[1024];
     va_list  args;
 
     va_start( args, pFormat );
-    StringCchVPrintf( buffer, sizeof(buffer), pFormat, args );
-    OutputDebugString( buffer );
+    StringCchVPrintfW( buffer, sizeof(buffer)/sizeof(buffer[0]), pFormat, args );
+    OutputDebugStringW( buffer );
     va_end(args);
 }
 #else
-static inline void OutputDebugStringFormat( LPCTSTR, ... )
+static inline void OutputDebugStringFormatW( PCWSTR, ... )
 {
 }
 #endif
@@ -75,21 +76,21 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 
 extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
 {
-    // MessageBox(NULL, L"CheckVersions", L"Information", MB_OK | MB_ICONINFORMATION);
+    // MessageBoxW(NULL, L"CheckVersions", L"Information", MB_OK | MB_ICONINFORMATION);
 
     wchar_t* pVal = NULL;
 
-    if ( GetMsiProp( hMSI, L"NEWPRODUCTS", &pVal ) && pVal )
+    if ( GetMsiPropW( hMSI, L"NEWPRODUCTS", &pVal ) && pVal )
     {
-        OutputDebugStringFormat( TEXT("DEBUG: NEWPRODUCTS found [%s]"), pVal );
+        OutputDebugStringFormatW( L"DEBUG: NEWPRODUCTS found [%s]", pVal );
         if ( *pVal != 0 )
             SetMsiErrorCode( MSI_ERROR_NEW_VERSION_FOUND );
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"OLDPRODUCTS", &pVal ) && pVal )
+    if ( GetMsiPropW( hMSI, L"OLDPRODUCTS", &pVal ) && pVal )
     {
-        OutputDebugStringFormat( TEXT("DEBUG: OLDPRODUCTS found [%s]"), pVal );
+        OutputDebugStringFormatW( L"DEBUG: OLDPRODUCTS found [%s]", pVal );
         if ( *pVal != 0 )
             SetMsiErrorCode( MSI_ERROR_OLD_VERSION_FOUND );
         free( pVal );
