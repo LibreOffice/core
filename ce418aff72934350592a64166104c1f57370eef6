@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_831dd568",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-10T14:32:46Z",
+      "side": 1,
+      "message": "Please avoid the sdr::table code here, that\u0027s the table shape, has nothing to do with SwTables.",
+      "parentUuid": "da7fb54a_230ec934",
+      "revId": "ce418aff72934350592a64166104c1f57370eef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_0309c52c",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-05-10T14:22:58Z",
       "side": 1,
       "message": "this approach would be applied to all SwXStyleFamilies interfaces",
+      "revId": "ce418aff72934350592a64166104c1f57370eef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a31ad96c",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-10T14:32:46Z",
+      "side": 1,
+      "message": "Why not have a look at how character or paragraph styles are registered in pEntries, and do the same for table styles as well? :-)",
+      "parentUuid": "da7fb54a_0309c52c",
       "revId": "ce418aff72934350592a64166104c1f57370eef6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
