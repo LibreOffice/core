@@ -453,11 +453,15 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
 
         // cloneAndDeduplicate() wants to know about only a single "style", so
         // let's merge paragraph and character style properties here.
-        int nCharStyle = m_aStates.top().nCurrentCharacterStyleIndex;
-        RTFReferenceTable::Entries_t::iterator itChar = m_aStyleTableEntries.find(nCharStyle);
+        RTFReferenceTable::Entries_t::iterator itChar = m_aStyleTableEntries.end();
+        if (!m_aStates.empty())
+        {
+            int nCharStyle = m_aStates.top().nCurrentCharacterStyleIndex;
+            itChar = m_aStyleTableEntries.find(nCharStyle);
+        }
+
         RTFSprms aStyleSprms;
         RTFSprms aStyleAttributes;
-
         // Ensure the paragraph style is a flat list.
         lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
 
