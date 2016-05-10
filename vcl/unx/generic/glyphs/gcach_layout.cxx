@@ -21,6 +21,7 @@
 #include <sallayout.hxx>
 #include <salgdi.hxx>
 #include <scrptrun.h>
+#include <limits>
 
 #include <i18nlangtag/mslangid.hxx>
 
@@ -308,14 +309,16 @@ static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/
 {
     return 0;
 }
+#endif
 
 static hb_unicode_funcs_t* getUnicodeFuncs()
 {
     static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
+#if !HB_VERSION_ATLEAST(1, 1, 0)
     hb_unicode_funcs_set_decompose_compatibility_func(ufuncs, unicodeDecomposeCompatibility, nullptr, nullptr);
+#endif
     return ufuncs;
 }
-#endif
 
 class HbLayoutEngine : public ServerFontLayoutEngine
 {
@@ -489,8 +492,8 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
 
             hb_buffer_t *pHbBuffer = hb_buffer_create();
-#if !HB_VERSION_ATLEAST(1, 1, 0)
             static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
+#if !HB_VERSION_ATLEAST(1, 1, 0)
             hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
             hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
@@ -500,11 +503,19 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             hb_buffer_add_utf16(
                 pHbBuffer, reinterpret_cast<uint16_t const *>(pStr), nLength,
                 nMinRunPos, nRunLen);
+#if HB_VERSION_ATLEAST(0, 9, 42)
+            hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
+#endif
             hb_shape(pHbFont, pHbBuffer, nullptr, 0);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
             hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, nullptr);
+
+            sal_Int32 nGraphemeStartPos = std::numeric_limits<sal_Int32>::max();
+            sal_Int32 nGraphemeEndPos = std::numeric_limits<sal_Int32>::min();
+            css::uno::Reference<css::i18n::XBreakIterator> xBreak = vcl::unohelper::CreateBreakIterator();
+            com::sun::star::lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
 
             for (int i = 0; i < nRunGlyphCount; ++i) {
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
@@ -521,15 +532,26 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 // apply vertical flags and glyph substitution
                 // XXX: Use HB_DIRECTION_TTB above and apply whatever flags magic
                 // FixupGlyphIndex() is doing, minus the GSUB part.
-                if (nCharPos >= 0)
-                {
-                    sal_UCS4 aChar = rArgs.mrStr[nCharPos];
-                    nGlyphIndex = rFont.FixupGlyphIndex(nGlyphIndex, aChar);
-                }
+                sal_UCS4 aChar = rArgs.mrStr[nCharPos];
+                nGlyphIndex = rFont.FixupGlyphIndex(nGlyphIndex, aChar);
 
                 bool bInCluster = false;
-                if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
+                if(bRightToLeft && (nCharPos < nGraphemeStartPos))
+                {
+                    sal_Int32 nDone;
+                    nGraphemeStartPos = xBreak->previousCharacters(rArgs.mrStr, nCharPos+1, aLocale,
+                                                  com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                }
+                else if(!bRightToLeft && (nCharPos >= nGraphemeEndPos))
+                {
+                    sal_Int32 nDone;
+                    nGraphemeEndPos = xBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
+                                                  com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                }
+                else
+                {
                     bInCluster = true;
+                }
 
                 long nGlyphFlags = 0;
                 if (bRightToLeft)
@@ -569,9 +591,14 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 }
                 else
                 {
+#if HB_VERSION_ATLEAST(0, 9, 42)
+                    if(hb_unicode_general_category (pHbUnicodeFuncs, aChar) == HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK)
+                        bDiacritic = true;
+#else
                     // the font lacks GDEF table
                     if (pHbPositions[i].x_advance == 0)
                         bDiacritic = true;
+#endif
                 }
 
                 if (bDiacritic)
