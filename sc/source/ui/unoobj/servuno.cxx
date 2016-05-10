@@ -540,6 +540,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> (pComp))));
                 break;
             }
+            break;
 #if HAVE_FEATURE_SCRIPTING
         case Type::VBAOBJECTPROVIDER:
             if (pDocShell && pDocShell->GetDocument().IsInVBAMode())
