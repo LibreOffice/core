@@ -1280,6 +1280,7 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
                     case AnimationNodeType::ANIMATE:
                         if( !implIsColorAttribute( xAnimate->getAttributeName() ) )
                             break;
+                        SAL_FALLTHROUGH;
                     case AnimationNodeType::ANIMATECOLOR:
                         Sequence<Any> aValues( xAnimate->getValues() );
                         if( aValues.hasElements() )
@@ -1326,6 +1327,7 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
                     case AnimationNodeType::ANIMATE:
                         if( !implIsColorAttribute( xAnimate->getAttributeName() ) )
                             break;
+                        SAL_FALLTHROUGH;
                     case AnimationNodeType::ANIMATECOLOR:
                     {
                         Sequence<Any> aValues( xAnimate->getValues() );
