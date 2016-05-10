@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include "svx/sdr/table/tabledesign.hxx"
 
 #include <svx/svxids.hrc>
 #include <hintids.hxx>
@@ -154,6 +155,7 @@ namespace
     static const std::vector<ParagraphStyleCategoryEntry>* our_pParagraphStyleCategoryEntries;
 }
 static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries();
+static const uno::Reference< container::XNameAccess > lcl_GetTableStyleFamily();
 
 using namespace ::com::sun::star;
 
@@ -460,6 +462,12 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
+
+    if (Name == "TableStyle")
+    {
+        return uno::makeAny( lcl_GetTableStyleFamily() );
+    }
+
     auto pEntries(lcl_GetStyleFamilyEntries());
     const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
         [&Name] (const StyleFamilyEntry& e) { return e.m_sName == Name; });
@@ -956,6 +964,16 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
        };
     }
     return our_pStyleFamilyEntries;
+}
+
+static const uno::Reference< container::XNameAccess > lcl_GetTableStyleFamily()
+{
+    static uno::Reference< container::XNameAccess > tblStyleFamily;
+    if(!tblStyleFamily.is())
+    {
+        tblStyleFamily = sdr::table::CreateTableDesignFamily();
+    }
+    return tblStyleFamily;
 }
 
 static const std::vector<ParagraphStyleCategoryEntry>* lcl_GetParagraphStyleCategoryEntries()
