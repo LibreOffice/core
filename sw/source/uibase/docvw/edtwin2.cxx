@@ -306,7 +306,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             }
                         case RES_INPUTFLD:  // BubbleHelp, because the suggestion could be quite long
                             bBalloon = true;
-                            /* no break */
+                            SAL_FALLTHROUGH;
                         case RES_JUMPEDITFLD:
                             sText = pField->GetPar2();
                             break;

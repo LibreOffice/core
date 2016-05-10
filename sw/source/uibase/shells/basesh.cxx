@@ -229,7 +229,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 break;
             }
 
-            // otherwise call DelLeft
+            SAL_FALLTHROUGH; // otherwise call DelLeft
         case FN_SHIFT_BACKSPACE:
             rSh.DelLeft();
             break;
@@ -1852,7 +1852,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             case FN_FRAME_WRAPTHRU_TRANSP:
                 if (aWrap.IsContour())
                     aWrap.SetContour(false);
-                // No break!!!
+                SAL_FALLTHROUGH;
             case FN_FRAME_WRAPTHRU:
                 nSurround = SURROUND_THROUGHT;
                 break;
@@ -1971,8 +1971,8 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
                     if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
                         nScripts = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
                 }
+                SAL_FALLTHROUGH;
             }
-            // fall-through
             case SID_ATTR_CHAR_POSTURE:
             case SID_ATTR_CHAR_WEIGHT:
             {

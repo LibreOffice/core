@@ -1454,7 +1454,7 @@ namespace xmloff
             case FormComponentType::DATEFIELD:
                 m_eType = DATE;
                 knownType = true;
-                // NO BREAK
+                SAL_FALLTHROUGH;
             case FormComponentType::TIMEFIELD:
                 if ( !knownType )
                 {
@@ -1462,7 +1462,7 @@ namespace xmloff
                     knownType = true;
                 }
                 m_nIncludeSpecial |= SCA_VALIDATION;
-                // NO BREAK
+                SAL_FALLTHROUGH;
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:
@@ -1471,7 +1471,7 @@ namespace xmloff
                     m_eType = FORMATTED_TEXT;
                     knownType = true;
                 }
-                // NO BREAK
+                SAL_FALLTHROUGH;
             case FormComponentType::TEXTFIELD:
             {   // it's some kind of edit. To know which type we need further investigation
 
@@ -1625,7 +1625,7 @@ namespace xmloff
                 m_eType = BUTTON;
                 m_nIncludeCommon |= CCA_TAB_STOP | CCA_LABEL;
                 m_nIncludeSpecial = SCA_DEFAULT_BUTTON | SCA_TOGGLE | SCA_FOCUS_ON_CLICK | SCA_IMAGE_POSITION | SCA_REPEAT_DELAY;
-                // NO BREAK !
+                SAL_FALLTHROUGH;
             case FormComponentType::IMAGEBUTTON:
                 if (BUTTON != m_eType)
                 {
@@ -1642,7 +1642,7 @@ namespace xmloff
             case FormComponentType::CHECKBOX:
                 m_eType = CHECKBOX;
                 m_nIncludeSpecial = SCA_CURRENT_STATE | SCA_IS_TRISTATE | SCA_STATE;
-                // NO BREAK !
+                SAL_FALLTHROUGH;
             case FormComponentType::RADIOBUTTON:
                 m_nIncludeCommon =
                     CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_LABEL | CCA_PRINTABLE |
@@ -1707,7 +1707,7 @@ namespace xmloff
 
             default:
                 OSL_FAIL("OControlExport::examineControl: unknown control type (class id)!");
-                // NO break!
+                SAL_FALLTHROUGH;
 
             case FormComponentType::NAVIGATIONBAR:
                 // TODO: should we have an own file format for this?

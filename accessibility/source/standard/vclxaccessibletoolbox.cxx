@@ -617,7 +617,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             }
             m_aAccessibleChildren.clear();
 
-            //!!! no break to call base class
+            SAL_FALLTHROUGH; // call base class
         }
 
         default:

@@ -1908,7 +1908,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_ATTR_ZOOM:
             rSet.Put(SvxZoomItem( SvxZoomType::PERCENT, aGraphic->GetZoom()));
-            /* no break here */
+            SAL_FALLTHROUGH;
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
         case SID_ZOOM_OPTIMAL:

@@ -278,8 +278,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         }
                         break;
                     }
+                    SAL_FALLTHROUGH;
                 }
-                // no break here
                 case text::VertOrientation::TOP:
                 {
                     // #i22341# - special case for vertical

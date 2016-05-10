@@ -118,7 +118,8 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
                 bWasSetTypeAttribute = true;
             }
-        }       // No Break
+            SAL_FALLTHROUGH;
+        }
     case util::NumberFormat::PERCENT:
         {
             if (!bWasSetTypeAttribute)
@@ -126,7 +127,8 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_PERCENTAGE);
                 bWasSetTypeAttribute = true;
             }
-        }       // No Break
+            SAL_FALLTHROUGH;
+        }
     case util::NumberFormat::CURRENCY:
         {
             if (!bWasSetTypeAttribute)
@@ -385,7 +387,8 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 pExport->AddAttribute(sAttrValType, XML_FLOAT);
                 bWasSetTypeAttribute = true;
             }
-        }       // No Break
+            SAL_FALLTHROUGH;
+        }
     case util::NumberFormat::PERCENT:
         {
             if (!bWasSetTypeAttribute)
@@ -393,7 +396,8 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 pExport->AddAttribute(sAttrValType, XML_PERCENTAGE);
                 bWasSetTypeAttribute = true;
             }
-        }       // No Break
+            SAL_FALLTHROUGH;
+        }
     case util::NumberFormat::CURRENCY:
         {
             if (!bWasSetTypeAttribute)

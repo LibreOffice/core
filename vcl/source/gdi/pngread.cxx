@@ -516,7 +516,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
                     break;
                 case 16 :
                     mnTargetDepth = 8;  // we have to reduce the bitmap
-                    // fall through
+                    SAL_FALLTHROUGH;
                 case 1 :
                 case 4 :
                 case 8 :
@@ -550,7 +550,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             {
                 case 2 :
                     mnTargetDepth = 4;  // we have to expand the bitmap
-                    // fall through
+                    SAL_FALLTHROUGH;
                 case 1 :
                 case 4 :
                 case 8 :

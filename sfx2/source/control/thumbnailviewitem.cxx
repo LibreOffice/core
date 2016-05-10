@@ -77,7 +77,7 @@ bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
         {
             case KEY_RETURN:
                 mpItem->setTitle( GetText() );
-                //fall-through
+                SAL_FALLTHROUGH;
             case KEY_ESCAPE:
                 mpItem->setEditTitle(false);
                 bDone = true;

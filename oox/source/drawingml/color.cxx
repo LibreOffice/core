@@ -695,7 +695,7 @@ void Color::toCrgb() const
     {
         case COLOR_HSL:
             toRgb();
-            // run through!
+            SAL_FALLTHROUGH;
         case COLOR_RGB:
             meMode = COLOR_CRGB;
             mnC1 = lclGamma( lclRgbCompToCrgbComp( mnC1 ), DEC_GAMMA );
@@ -716,7 +716,7 @@ void Color::toHsl() const
     {
         case COLOR_CRGB:
             toRgb();
-            // run through!
+            SAL_FALLTHROUGH;
         case COLOR_RGB:
         {
             meMode = COLOR_HSL;

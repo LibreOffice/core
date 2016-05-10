@@ -288,7 +288,7 @@ namespace cairocanvas
 
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
                     nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_RIGHT;

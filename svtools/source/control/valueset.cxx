@@ -1336,7 +1336,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 return;
             }
             nVStep *= mnVisLines;
-            // intentional fall-through
+            SAL_FALLTHROUGH;
         case KEY_UP:
             if (nCurPos != VALUESET_ITEM_NONEITEM)
             {
@@ -1373,7 +1373,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 return;
             }
             nVStep *= mnVisLines;
-            // intentional fall-through
+            SAL_FALLTHROUGH;
         case KEY_DOWN:
             if (nCurPos != nLastItem)
             {
@@ -1398,7 +1398,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 Select();
                 break;
             }
-            // intentional fall-through
+            SAL_FALLTHROUGH;
         default:
             Control::KeyInput( rKeyEvent );
             return;

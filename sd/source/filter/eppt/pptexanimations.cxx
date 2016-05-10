@@ -829,7 +829,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     {
         case AnimationNodeType::PAR :
             aAnim.mnGroupType = mso_Anim_GroupType_PAR;
-            // PASSTROUGH!!! (as it was intended)
+            SAL_FALLTHROUGH;
         case AnimationNodeType::SEQ :
         {
             sal_Int16 nType = 0;

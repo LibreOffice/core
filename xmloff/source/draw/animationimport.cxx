@@ -875,9 +875,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                     xAudio->setSource( makeAny( GetImport().GetAbsoluteReference( rValue ) ) );
                     break;
                 }
-
+                SAL_FALLTHROUGH;
             }
-            // fall through intended!
             case ANA_Target:
             {
                 {

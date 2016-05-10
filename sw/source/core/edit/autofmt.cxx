@@ -2004,7 +2004,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             case '?':
                 if( m_aFlags.bCapitalStartSentence )
                     bFirstSent = true;
-                /* fallthrough */
+                SAL_FALLTHROUGH;
             default:
                 if( !( rAppCC.isLetterNumeric( *pText, nPos )
                         || '/' == cChar )) //  '/' should not be a word separator (e.g. '1/2' needs to be handled as one word for replacement)

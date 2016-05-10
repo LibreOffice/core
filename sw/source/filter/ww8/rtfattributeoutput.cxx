@@ -3402,7 +3402,7 @@ void RtfAttributeOutput::WriteExpand(const SwField* pField)
     //#i119803# Export user field and DB field for RTF filter
     case RES_DBFLD:
         sCmd = FieldString(ww::eMERGEFIELD);
-    // no break !!
+        SAL_FALLTHROUGH;
     case RES_USERFLD:
         sCmd += pField->GetTyp()->GetName();
         m_rExport.OutputField(pField, ww::eNONE, sCmd);

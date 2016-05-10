@@ -416,7 +416,7 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
         case RES_CNTNT:
         case RES_FOOTER:
             OSL_FAIL( "Unknown Fly attribute." );
-            // no break;
+            SAL_FALLTHROUGH;
         case RES_CHAIN:
             rSet.ClearItem( nWhich );
             break;
@@ -797,7 +797,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
 
                     aNewAnch.SetType( FLY_AT_PAGE );
-                    // no break
+                    SAL_FALLTHROUGH;
                 }
             case FLY_AT_PAGE:
                 {

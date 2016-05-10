@@ -993,7 +993,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             // no wrapping: disable para-only and contour
             if( pWrapParagraphOnlyState )
                 pWrapParagraphOnlyState->mnIndex = -1;
-            // no break
+            SAL_FALLTHROUGH;
         case WrapTextMode_THROUGHT:
             // wrap through: disable only contour
             if( pWrapContourState )

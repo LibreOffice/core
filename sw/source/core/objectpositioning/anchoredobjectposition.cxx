@@ -653,7 +653,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
                             (ToCharOrientFrame()->Frame().*fnRect->fnGetLeft)() );
                 break;
             }
-            // no break!
+            SAL_FALLTHROUGH;
         }
         case text::RelOrientation::PAGE_PRINT_AREA:
         {

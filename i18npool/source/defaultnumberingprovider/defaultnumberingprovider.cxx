@@ -318,8 +318,8 @@ OUString toRoman( sal_Int32 n )
         }
         switch( nZahl )
         {
-            case 3: sTmp.append(*cRomanStr);           //no break!
-            case 2: sTmp.append(*cRomanStr);           //no break!
+            case 3: sTmp.append(*cRomanStr);           SAL_FALLTHROUGH;
+            case 2: sTmp.append(*cRomanStr);           SAL_FALLTHROUGH;
             case 1: sTmp.append(*cRomanStr);           break;
             case 4: sTmp.append(*cRomanStr).append(*(cRomanStr-nDiff)); break;
             case 5: sTmp.append(*(cRomanStr-nDiff));   break;

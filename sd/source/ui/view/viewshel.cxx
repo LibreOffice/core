@@ -771,7 +771,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                     break;
                 }
             }
-            // fall through when not running slideshow
+            SAL_FALLTHROUGH;
         case CommandEventId::StartAutoScroll:
         case CommandEventId::AutoScroll:
         {

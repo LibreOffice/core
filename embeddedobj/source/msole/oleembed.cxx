@@ -405,7 +405,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
 
                     throw uno::RuntimeException(); // the repairing is not possible
                 }
-                // no break as designed!
+                SAL_FALLTHROUGH;
 
             case 1:
             case 0:

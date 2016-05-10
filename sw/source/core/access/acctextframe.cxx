@@ -107,8 +107,8 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             {
                 break;
             }
+            SAL_FALLTHROUGH;
         }
-        // intentionally no break here
         case RES_DESCRIPTION_CHANGED:
         {
             if ( pFlyFrame )

@@ -3180,7 +3180,7 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
         case RES_UL_SPACE:
             rInvFlags |= 0x1C;
-            /* no break here */
+            SAL_FALLTHROUGH;
 
         default:
             bClear = false;

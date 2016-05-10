@@ -219,7 +219,7 @@ rtl::Reference< Entity > readEntity(
         if (probe) {
             return rtl::Reference< Entity >();
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         throw FileFormatException(
             key.getRegistryName(),

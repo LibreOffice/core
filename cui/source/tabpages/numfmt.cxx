@@ -974,7 +974,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
                 m_pBtnEngineering->Enable();
                 m_pBtnEngineering->Check( bThousand );
             }
-            // fallthru
+            SAL_FALLTHROUGH;
         case CAT_NUMBER:
         case CAT_PERCENT:
         case CAT_CURRENCY:

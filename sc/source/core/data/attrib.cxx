@@ -403,7 +403,7 @@ bool ScRangeItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
         rText = ScGlobal::GetRscString(STR_AREA) + ": ";
-        /* !!! fall-through !!! */
+        SAL_FALLTHROUGH;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
@@ -850,7 +850,7 @@ bool ScViewObjectModeItem::GetPresentation
             ePres = SFX_ITEM_PRESENTATION_NAMELESS; // Default setting!
             break;
         }
-        /* !!! fall-through !!! */
+        SAL_FALLTHROUGH;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
         return true;

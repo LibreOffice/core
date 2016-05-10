@@ -904,7 +904,7 @@ FltError ImportExcel8::Read()
                         break;
                     case Biff8W:    // workbook
                         OSL_FAIL( "ImportExcel8::Read - double workbook globals" );
-                        // run through
+                        SAL_FALLTHROUGH;
                     case Biff8V:    // VB module
                     default:
                         // TODO: do not create a sheet in the Calc document

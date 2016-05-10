@@ -2003,8 +2003,9 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                 EditBrowseBox::Command(rEvt);
                 return;
             }
+
+            SAL_FALLTHROUGH;
         }
-        //fall-through
         default:
             EditBrowseBox::Command(rEvt);
     }

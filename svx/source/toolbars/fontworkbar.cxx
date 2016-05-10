@@ -275,7 +275,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
                     SdrTextHorzAdjust eHorzAdjust;
                     switch ( nValue )
                     {
-                        case 4 : eFTS = SDRTEXTFIT_ALLLINES; // passthrough
+                        case 4 : eFTS = SDRTEXTFIT_ALLLINES; SAL_FALLTHROUGH;
                         case 3 : eHorzAdjust = SDRTEXTHORZADJUST_BLOCK; break;
                         default: eHorzAdjust = SDRTEXTHORZADJUST_LEFT; break;
                         case 1 : eHorzAdjust = SDRTEXTHORZADJUST_CENTER; break;
@@ -506,17 +506,20 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_ALIGNMENT;
-        }   // PASSTROUGH
+            SAL_FALLTHROUGH;
+        }
         case SID_FONTWORK_CHARACTER_SPACING:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
-        }   // PASSTROUGH
+            SAL_FALLTHROUGH;
+        }
         case SID_FONTWORK_KERN_CHARACTER_PAIRS:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
-        }   // PASSTROUGH
+            SAL_FALLTHROUGH;
+        }
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {
             if ( !nStrResId )

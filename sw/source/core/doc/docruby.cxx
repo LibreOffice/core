@@ -281,7 +281,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt1
 
         case UnicodeType::OTHER_LETTER:
             bChkNxtWrd = true;
-            //fall-through
+            SAL_FALLTHROUGH;
         default:
                 bIsAlphaNum = false;
                 break;

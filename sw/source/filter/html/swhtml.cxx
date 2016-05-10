@@ -1238,7 +1238,7 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_UNKNOWNCONTROL_OFF:
                 if( m_aUnknownToken != sSaveToken )
                     return;
-                //fall-through
+                SAL_FALLTHROUGH;
             case HTML_FRAMESET_ON:
             case HTML_HEAD_OFF:
             case HTML_BODY_ON:
@@ -2012,7 +2012,7 @@ void SwHTMLParser::NextToken( int nToken )
             !sSaveToken.isEmpty() && '!' != sSaveToken[0] &&
             '%' != sSaveToken[0] )
             m_aUnknownToken = sSaveToken;
-        // no break
+        SAL_FALLTHROUGH;
 
     default:
         bInsertUnknown = m_bKeepUnknown;
@@ -2051,7 +2051,7 @@ static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
     {
     case RES_CHRATR_FONT:
         rFont = true;
-        //fall-through
+        SAL_FALLTHROUGH;
     case RES_CHRATR_FONTSIZE:
     case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_POSTURE:
@@ -2061,7 +2061,7 @@ static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
         break;
     case RES_CHRATR_CJK_FONT:
         rFont = true;
-        //fall-through
+        SAL_FALLTHROUGH;
     case RES_CHRATR_CJK_FONTSIZE:
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CJK_POSTURE:
@@ -2071,7 +2071,7 @@ static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
         break;
     case RES_CHRATR_CTL_FONT:
         rFont = true;
-        //fall-through
+        SAL_FALLTHROUGH;
     case RES_CHRATR_CTL_FONTSIZE:
     case RES_CHRATR_CTL_LANGUAGE:
     case RES_CHRATR_CTL_POSTURE:
@@ -2873,7 +2873,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     }
                     OSL_ENSURE( false,
                             "LRSpace ueber mehrere Absaetze gesetzt!" );
-                    // no break (shouldn't reach this point anyway)
+                    SAL_FALLTHROUGH; // (shouldn't reach this point anyway)
 
                 // tdf#94088 expand RES_BACKGROUND to the new fill attribute
                 // definitions in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST].
@@ -4158,7 +4158,7 @@ void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
         // Fuer dem Fall, dass ein CLASS angegeben ist, loeschen wir
         // es damit wir nicht die CLASS der PRE-Vorlage bekommen.
         aClass = aEmptyOUStr;
-        // fall-through
+        SAL_FALLTHROUGH;
     case HTML_BLOCKQUOTE_ON:
     case HTML_BLOCKQUOTE30_ON:
     case HTML_PREFORMTXT_ON:

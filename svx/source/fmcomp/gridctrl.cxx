@@ -2901,8 +2901,9 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 DbGridControl_Base::Command(rEvt);
                 return;
             }
+
+            SAL_FALLTHROUGH;
         }
-        //fall-through
         default:
             DbGridControl_Base::Command(rEvt);
     }
@@ -3321,7 +3322,9 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
                     return true;
                 }
             }
-        }   // no break!
+
+            SAL_FALLTHROUGH;
+        }
         default:
             return DbGridControl_Base::PreNotify(rEvt);
     }

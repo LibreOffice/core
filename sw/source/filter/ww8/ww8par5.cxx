@@ -983,7 +983,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
             case FLD_TAGTXT:
                 if ((m_nFieldTagBad[nI] & nMask)) // Flag: Tag bad
                     return Read_F_Tag(&aF);       // Taggen
-                //fall through...
+                SAL_FALLTHROUGH;
             case FLD_TEXT:
                 // so viele ueberlesen, das Resultfeld wird wie Haupttext
                 // eingelesen
@@ -3478,7 +3478,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
             case 'h':
             case 'm':
                 OSL_ENSURE( false, "Auswertung fehlt noch - Daten unbekannt" );
-                //fall-through
+                SAL_FALLTHROUGH;
             case 's':   //worthless fake anchor option
                 bOptions = true;
                 break;

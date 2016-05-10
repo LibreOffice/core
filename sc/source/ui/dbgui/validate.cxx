@@ -635,7 +635,8 @@ IMPL_LINK_NOARG_TYPED(ScTPValidationValue, SelectHdl, ListBox&, void)
             case SC_VALIDDLG_DATA_EQLESS:       m_pFtMin->SetText( maStrMax );    break;
 
             case SC_VALIDDLG_DATA_VALIDRANGE:
-            case SC_VALIDDLG_DATA_INVALIDRANGE:   bShowMax = true;    // fall through
+            case SC_VALIDDLG_DATA_INVALIDRANGE:   bShowMax = true;
+                SAL_FALLTHROUGH;
             case SC_VALIDDLG_DATA_GREATER:
             case SC_VALIDDLG_DATA_EQGREATER:    m_pFtMin->SetText( maStrMin );    break;
 

@@ -363,7 +363,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     bReturn = true;
                     break;
                 }
-                // run through
+                SAL_FALLTHROUGH;
             default:
             {
                 bReturn = m_rView.KeyInput(_rEvent, m_pParent);

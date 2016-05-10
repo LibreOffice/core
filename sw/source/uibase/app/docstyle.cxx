@@ -901,7 +901,7 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                                     aItemPresentation = SW_RESSTR(STR_WESTERN_FONT) + aItemPresentation;
                                     bHasWesternFontPrefix = true;
                                 }
-                                // no break;
+                                SAL_FALLTHROUGH;
                                 default:
                                     bIsDefault = true;
                             }
@@ -2701,7 +2701,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 case SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF:
                     if(IsPoolUserFormat(nId))
                         break;
-                    // otherwise move on
+                    SAL_FALLTHROUGH;
                 case SWSTYLEBIT_HTML:
                     if( (nId  & COLL_GET_RANGE_BITS) != COLL_HTML_BITS)
                     {

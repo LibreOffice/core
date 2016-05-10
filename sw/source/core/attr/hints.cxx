@@ -226,9 +226,11 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
             switch( nScript)
             {
             case i18n::ScriptType::COMPLEX:
-                ++pM;  // no break;
+                ++pM;
+                SAL_FALLTHROUGH;
             case i18n::ScriptType::ASIAN:
-                ++pM;  // no break;
+                ++pM;
+                SAL_FALLTHROUGH;
             default:
                 nRet = *pM;
             }

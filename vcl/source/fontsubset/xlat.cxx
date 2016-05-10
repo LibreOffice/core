@@ -68,7 +68,7 @@ void ConverterCache::ensureConverter( int nSelect )
         rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
         switch( nSelect )
         {
-            default: nSelect = 1; // fall through to unicode recoding
+            default: nSelect = 1; SAL_FALLTHROUGH; // to unicode recoding
             case 1: eRecodeFrom = RTL_TEXTENCODING_UNICODE; break;
             case 2: eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS; break;
             case 3: eRecodeFrom = RTL_TEXTENCODING_GB_2312; break;

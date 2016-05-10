@@ -709,7 +709,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                 case DataType::CHAR:
                 case DataType::CLOB:
                     bFormattedIsNumeric = false;
-                    // _NO_ break !
+                    SAL_FALLTHROUGH;
                 default:
                     sCurrentModelType = "FormattedField";
                     bIsFormatted = true;

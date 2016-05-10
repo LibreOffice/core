@@ -2493,7 +2493,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
                 rString.append(m_aNodeValue);
                 break;
             }
-            // fall through
+            SAL_FALLTHROUGH;
         default:
             if (!rString.isEmpty() && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
             {

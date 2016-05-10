@@ -553,7 +553,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = false;
                 break;
             }
-            // run through
+            SAL_FALLTHROUGH;
         default:
             aReturn = OJoinController::GetState(_nId);
             break;

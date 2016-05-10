@@ -1472,7 +1472,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         break;
     case XML_TOK_TABLE_HEADER_ROWS:
         bHeader = true;
-        //fall-through
+        SAL_FALLTHROUGH;
     case XML_TOK_TABLE_ROWS:
         pContext = new SwXMLTableRowsContext_Impl( GetSwImport(), nPrefix,
                                                    rLocalName, xAttrList,

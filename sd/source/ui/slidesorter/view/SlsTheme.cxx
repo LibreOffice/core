@@ -186,7 +186,7 @@ ColorData Theme::GetGradientColor (
         case Border2: return rDescriptor.maBorderColor2;
         case Fill1: return rDescriptor.maFillColor1;
         case Fill2: return rDescriptor.maFillColor2;
-        default: OSL_ASSERT(false); // fall through
+        default: OSL_ASSERT(false); SAL_FALLTHROUGH;
         case Base: return rDescriptor.maBaseColor;
     }
 }

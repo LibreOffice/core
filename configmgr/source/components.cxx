@@ -650,7 +650,7 @@ void Components::parseFiles(
         if (!recursive) {
             return;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         throw css::uno::RuntimeException(
             "cannot open directory " + url);
@@ -808,7 +808,7 @@ void Components::parseXcsXcuIniLayer(
             case ':':
             case '\\':
                 prefix.append('\\');
-                // fall through
+                SAL_FALLTHROUGH;
             default:
                 prefix.append(c);
             }

@@ -2559,7 +2559,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             ImplHandleSurroundingTextSelectionChange( pWindow,
                               pEvt->mnStart,
                               pEvt->mnEnd );
-            // Fallthrough really intended?
+            SAL_FALLTHROUGH; // TODO: Fallthrough really intended?
         }
         case SalEvent::StartReconversion:
             ImplHandleStartReconversion( pWindow );

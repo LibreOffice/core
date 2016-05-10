@@ -251,7 +251,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeExc
 
         default:
             SAL_WARN("i18npool","TextSearch::setOptions2 - default what?");
-            // fallthru
+            SAL_FALLTHROUGH;
         case SearchAlgorithms2::ABSOLUTE:
             fnForward = &TextSearch::NSrchFrwrd;
             fnBackward = &TextSearch::NSrchBkwrd;
@@ -272,7 +272,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
             break;
         default:
             SAL_WARN("i18npool","TextSearch::setOptions - default what?");
-            // fallthru
+            SAL_FALLTHROUGH;
         case SearchAlgorithms_ABSOLUTE:
             nAlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
             break;

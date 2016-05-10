@@ -698,11 +698,11 @@ void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle 
         break;
         case PEN_DASHDOT :
             nDashCount++;
-            //fall-through
+            SAL_FALLTHROUGH;
         case PEN_DOT :
             nDotCount++;
             nDashCount--;
-            //fall-through
+            SAL_FALLTHROUGH;
         case PEN_DASH :
             nDashCount++;
             aLineInfo.SetDotCount( nDotCount );

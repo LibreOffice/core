@@ -2107,7 +2107,7 @@ void SmParser::DoFunction()
     {
         case TFUNC:
             NextToken();    // skip "FUNC"-statement
-            // fall through
+            SAL_FALLTHROUGH;
 
         case TSIN :
         case TCOS :

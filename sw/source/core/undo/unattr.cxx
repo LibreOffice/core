@@ -252,7 +252,7 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
                     }
                 }
             }
-            // no break!
+            SAL_FALLTHROUGH;
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
             bFound = pDoc->GetSpzFrameFormats()->Contains( m_pFormat );
@@ -378,7 +378,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( bool bSvDrwPt )
     case FLY_AS_CHAR:
     case FLY_AT_CHAR:
         nContent = rAnchor.GetContentAnchor()->nContent.GetIndex();
-        // fallthrough
+        SAL_FALLTHROUGH;
     case FLY_AT_PARA:
     case FLY_AT_FLY:
         m_nNodeIndex = rAnchor.GetContentAnchor()->nNode.GetIndex();

@@ -184,7 +184,7 @@ namespace drawinglayer
                         {
                             default:
                                 SAL_WARN("drawinglayer", "Unknown EmphasisMark style " << pTCPP->getTextEmphasisMark() );
-                                // fall through
+                                SAL_FALLTHROUGH;
                             case primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE:   eFontEmphasisMark = FontEmphasisMark::NONE; break;
                             case primitive2d::TEXT_FONT_EMPHASIS_MARK_DOT:    eFontEmphasisMark = FontEmphasisMark::Dot; break;
                             case primitive2d::TEXT_FONT_EMPHASIS_MARK_CIRCLE: eFontEmphasisMark = FontEmphasisMark::Circle; break;
@@ -209,7 +209,7 @@ namespace drawinglayer
                         {
                             default:
                                 SAL_WARN( "drawinglayer", "Unknown Relief style " << pTCPP->getTextRelief() );
-                                // fall through
+                                SAL_FALLTHROUGH;
                             case primitive2d::TEXT_RELIEF_NONE:     eFontRelief = RELIEF_NONE; break;
                             case primitive2d::TEXT_RELIEF_EMBOSSED: eFontRelief = RELIEF_EMBOSSED; break;
                             case primitive2d::TEXT_RELIEF_ENGRAVED: eFontRelief = RELIEF_ENGRAVED; break;

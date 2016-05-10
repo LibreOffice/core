@@ -155,7 +155,7 @@ SvxLineTabPage::SvxLineTabPage
         case FUNIT_M:
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
-            // no break -> we now have mm
+            SAL_FALLTHROUGH; // we now have mm
         case FUNIT_MM:
             m_pMtrLineWidth->SetSpinSize( 50 );
             m_pMtrStartWidth->SetSpinSize( 50 );

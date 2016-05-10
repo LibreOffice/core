@@ -379,7 +379,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
             switch (nNew)
             {
                 case CH_BREAK  : bFull = true;
-                            // no break
+                    SAL_FALLTHROUGH;
                 case ' ' :
                 case CH_TAB    :
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
@@ -1275,16 +1275,20 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
         nBotDiff = ( Width() - nMaxWidth ) / 2;
     switch( nTop)
     {
-        case 3: aPos[1] = aPos[0] + nTopDiff;  // no break
+        case 3: aPos[1] = aPos[0] + nTopDiff;
+            SAL_FALLTHROUGH;
         case 2: aPos[nTop-1] = Width() - aPos[nTop-1];
     }
     aPos[0] = 0;
     switch( nCount )
     {
-        case 5: aPos[4] = aPos[3] + nBotDiff;   // no break
+        case 5: aPos[4] = aPos[3] + nBotDiff;
+            SAL_FALLTHROUGH;
         case 3: aPos[nTop] = nBotDiff;          break;
-        case 6: aPos[4] = aPos[3] + nBotDiff;   // no break
-        case 4: aPos[nTop] = 0;                 // no break
+        case 6: aPos[4] = aPos[3] + nBotDiff;
+            SAL_FALLTHROUGH;
+        case 4: aPos[nTop] = 0;
+            SAL_FALLTHROUGH;
         case 2: aPos[nCount-1] = Width() - aPos[nCount-1];
     }
 

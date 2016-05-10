@@ -165,7 +165,7 @@ void wwSection::SetDirection()
     {
         default:
             OSL_ENSURE(false, "Unknown layout type");
-            //fall-through
+            SAL_FALLTHROUGH;
         case 0:
             meDir=FRMDIR_HORI_LEFT_TOP;
             break;
@@ -240,7 +240,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
             break;
         default:
             OSL_ENSURE(false, "Unknown grid type");
-            //fall-through
+            SAL_FALLTHROUGH;
         case 3:
             eType = GRID_LINES_CHARS;
             aGrid.SetSnapToChars(true);
@@ -3274,7 +3274,8 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
                     // 9 = dotdash 10 = dotdotdash 11 = wave
         switch( *pData )
         {
-            case 2: bWordLine = true;       // no break;
+            case 2: bWordLine = true;
+                SAL_FALLTHROUGH;
             case 1: eUnderline = (FontLineStyle)LINESTYLE_SINGLE;       break;
             case 3: eUnderline = (FontLineStyle)LINESTYLE_DOUBLE;       break;
             case 4: eUnderline = (FontLineStyle)LINESTYLE_DOTTED;       break;

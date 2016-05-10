@@ -1462,7 +1462,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
         {
             aRange.aStart.SetCol(0);
             aRange.aEnd.SetCol(MAXCOL);
-            // Continue below.
+            SAL_FALLTHROUGH;
         }
         case INS_CELLSDOWN:
         {
@@ -1498,7 +1498,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
         {
             aRange.aStart.SetRow(0);
             aRange.aEnd.SetRow(MAXROW);
-            // Continue below.
+            SAL_FALLTHROUGH;
         }
         case INS_CELLSRIGHT:
         {
@@ -1560,7 +1560,7 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         {
             aRange.aStart.SetCol(0);
             aRange.aEnd.SetCol(MAXCOL);
-            // Continue below.
+            SAL_FALLTHROUGH;
         }
         case DEL_CELLSUP:
         {
@@ -1585,7 +1585,7 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         {
             aRange.aStart.SetRow(0);
             aRange.aEnd.SetRow(MAXROW);
-            // Continue below.
+            SAL_FALLTHROUGH;
         }
         case DEL_CELLSLEFT:
         {

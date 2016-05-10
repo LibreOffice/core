@@ -1093,7 +1093,8 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             case MOVE_RIGHT_SMALL:
                 if( aTmp.Width() < aSnap.Width() + MINFLY )
                     break;
-                nRight = aSnap.Width(); // no break
+                nRight = aSnap.Width();
+                SAL_FALLTHROUGH;
             case MOVE_RIGHT_HUGE:
             case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight );
                 break;
@@ -1101,7 +1102,8 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             case MOVE_DOWN_SMALL:
                 if( aTmp.Height() < aSnap.Height() + MINFLY )
                     break;
-                nDown = aSnap.Height(); // no break
+                nDown = aSnap.Height();
+                SAL_FALLTHROUGH;
             case MOVE_DOWN_HUGE:
             case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown );
                 break;
@@ -2412,7 +2414,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
             }
             aCh = '\t';
-            // no break!
+            SAL_FALLTHROUGH;
         case KS_InsChar:
             if (rSh.GetChar(false)==CH_TXT_ATR_FORMELEMENT)
             {
@@ -3480,8 +3482,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     default:
                         return;
                 }
+
+                SAL_FALLTHROUGH;
             }
-            /* no break */
             case MOUSE_LEFT + KEY_SHIFT:
             case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
             {
@@ -4214,8 +4217,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
             else
                 m_rView.GetPostItMgr()->SetShadowState(nullptr,false);
+            SAL_FALLTHROUGH;
         }
-        // no break;
         case KEY_SHIFT:
         case KEY_MOD2:
         case KEY_MOD1:
@@ -4573,7 +4576,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 break;
             }
             bPopMode = true;
-            // no break
+            SAL_FALLTHROUGH;
         case MOUSE_LEFT + KEY_SHIFT:
             if (rSh.IsSelFrameMode())
             {

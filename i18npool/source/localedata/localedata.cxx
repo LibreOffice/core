@@ -649,7 +649,7 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
             return ref_cal.PartitiveMonths;
         default:
             OSL_FAIL( "LocaleDataImpl::getCalendarItemByName: unhandled REF_* case");
-            // fallthru
+            SAL_FALLTHROUGH;
         case REF_ERAS:
             return ref_cal.Eras;
     }

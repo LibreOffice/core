@@ -1325,7 +1325,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     pPor = NewExtraPortion( rInf );
                     break;
                 }
-                // No break
+                SAL_FALLTHROUGH;
             default        :
                 {
                 SwTabPortion* pLastTabPortion = rInf.GetLastTab();

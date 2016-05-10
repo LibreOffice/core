@@ -1742,7 +1742,7 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
                     PrepareParam( rFuncData );
                     AppendIntToken( 0 );
                     FinishParam( rFuncData );
-                 // do not break, add next default parameter
+                    SAL_FALLTHROUGH; // add next default parameter
                 case 2:
                     PrepareParam( rFuncData );
                     AppendIntToken( 1 );

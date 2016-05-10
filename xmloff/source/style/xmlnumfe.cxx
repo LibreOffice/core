@@ -1014,7 +1014,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         // number-style.
         case css::util::NumberFormat::UNDEFINED:
             SAL_WARN("xmloff.style","UNDEFINED number format: '" << rFormat.GetFormatstring() << "'");
-            // fallthru
+            SAL_FALLTHROUGH;
         // Type is 0 if a format contains no recognized elements
         // (like text only) - this is handled as a number-style.
         case 0:

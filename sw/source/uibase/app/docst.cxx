@@ -335,7 +335,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 }
             }
 
-            // intentionally no break
+            SAL_FALLTHROUGH;
 
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:

@@ -235,7 +235,7 @@ SpecialType translateUnoTypeToDescriptor(
             }
             return SPECIAL_TYPE_INTERFACE;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     case codemaker::UnoType::Sort::Sequence:
     case codemaker::UnoType::Sort::Enum:
     case codemaker::UnoType::Sort::PlainStruct:

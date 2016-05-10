@@ -271,7 +271,7 @@ void Dependencies::insert(OUString const & name, bool base) {
         {
             insert(b2u(arg));
         }
-        // fall through
+        SAL_FALLTHROUGH;
     case UnoType::Sort::Sequence:
     case UnoType::Sort::Enum:
     case UnoType::Sort::PlainStruct:

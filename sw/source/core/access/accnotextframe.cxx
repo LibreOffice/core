@@ -134,8 +134,8 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
             {
                 break;
             }
+            SAL_FALLTHROUGH;
         }
-        // intentional no break here
         case RES_DESCRIPTION_CHANGED:
         {
             if ( pNd && GetFrame() )

@@ -1002,7 +1002,7 @@ void CffSubsetterContext::convertOneTypeEsc()
         assert( mnStackIdx >= 1 );
         if( pTop[0] >= 0)
             break;
-        // fall through
+        SAL_FALLTHROUGH;
     case TYPE2OP::NEG:
         assert( mnStackIdx >= 1 );
         pTop[0] = -pTop[0];

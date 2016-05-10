@@ -120,7 +120,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 break;
             }
             bEnumAsInt = true;
-            // NO BREAK! handle it as enum
+            SAL_FALLTHROUGH;
         case TypeClass_ENUM:
         {
             sal_uInt16 nEnumValue(0);

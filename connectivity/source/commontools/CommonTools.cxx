@@ -75,8 +75,10 @@ namespace connectivity
                         else
                             pWild += pos;
                     else
-                        break;          // WARNING in certain circumstances
-                // it will run into the next 'case'!!
+                        break;
+                    // WARNING/TODO: in certain circumstances it will run into
+                    // the next 'case'!
+                    SAL_FALLTHROUGH;
                 case CHAR_WILD:
                     while ( *pWild == CHAR_WILD )
                         pWild++;

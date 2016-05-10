@@ -86,11 +86,9 @@ bool hasUnsupportedActions( const GDIMetaFile& rMtf )
                 {
                     break;
                 }
-                // FALLTHROUGH intended
+                SAL_FALLTHROUGH;
             case MetaActionType::MOVECLIPREGION:
-                // FALLTHROUGH intended
             case MetaActionType::REFPOINT:
-                // FALLTHROUGH intended
             case MetaActionType::WALLPAPER:
                 return true; // at least one unsupported
                              // action encountered

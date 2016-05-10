@@ -443,7 +443,7 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
             case TYP_INPUTFLD:
             {
                 rToFill.push_back(SW_RES(aSwFields[nPos].nSubTypeStart));
-                // move on at generic types
+                SAL_FALLTHROUGH; // move on at generic types
             }
             case TYP_DDEFLD:
             case TYP_SEQFLD:

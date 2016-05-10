@@ -117,8 +117,8 @@ namespace dbaui
                 if ( m_pAccel.get() && m_pAccel->execute( aKeyCode ) )
                     // the accelerator consumed the event
                     return true;
+                SAL_FALLTHROUGH;
             }
-            // NO break
             case MouseNotifyEvent::KEYUP:
             case MouseNotifyEvent::MOUSEBUTTONDOWN:
             case MouseNotifyEvent::MOUSEBUTTONUP:

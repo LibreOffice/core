@@ -469,7 +469,7 @@ namespace svt
                         Control::KeyInput(rEvt);
                     return;
                 }
-                // fall-through
+                SAL_FALLTHROUGH;
             default:
                 BrowseBox::KeyInput(rEvt);
         }

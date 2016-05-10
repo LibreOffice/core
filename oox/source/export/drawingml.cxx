@@ -633,7 +633,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
                 SAL_INFO("oox.shape", "dash dots: " << aLineDash.Dots << " dashes: " << aLineDash.Dashes
                         << " dotlen: " << aLineDash.DotLen << " dashlen: " << aLineDash.DashLen <<  " distance: " <<  aLineDash.Distance);
             }
-            /* fallthru intended */
+            SAL_FALLTHROUGH;
         case drawing::LineStyle_SOLID:
         default:
             if ( GETA( LineColor ) )

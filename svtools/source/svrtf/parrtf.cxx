@@ -467,8 +467,9 @@ void SvRTFParser::ScanText()
             }
             break;
 
-        case sal_Unicode(EOF): eState = SVPAR_ERROR;
-                // continue
+        case sal_Unicode(EOF):
+            eState = SVPAR_ERROR;
+            SAL_FALLTHROUGH;
         case '{':
         case '}':
             bContinue = false;

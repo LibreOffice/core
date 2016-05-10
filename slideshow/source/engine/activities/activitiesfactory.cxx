@@ -764,11 +764,9 @@ AnimationActivitySharedPtr createActivity(
 
             default:
                 OSL_FAIL( "createActivity(): unexpected case" );
-                // FALLTHROUGH intended
+                SAL_FALLTHROUGH;
             case animations::AnimationCalcMode::PACED:
-                // FALLTHROUGH intended
             case animations::AnimationCalcMode::SPLINE:
-                // FALLTHROUGH intended
             case animations::AnimationCalcMode::LINEAR:
                 return createValueListActivity< ContinuousKeyTimeActivityBase >(
                     xNode->getValues(),
@@ -832,11 +830,9 @@ AnimationActivitySharedPtr createActivity(
 
             default:
                 OSL_FAIL( "createActivity(): unexpected case" );
-                // FALLTHROUGH intended
+                SAL_FALLTHROUGH;
             case animations::AnimationCalcMode::PACED:
-                // FALLTHROUGH intended
             case animations::AnimationCalcMode::SPLINE:
-                // FALLTHROUGH intended
             case animations::AnimationCalcMode::LINEAR:
                 return createFromToByActivity< ContinuousActivityBase >(
                     xNode->getFrom(),

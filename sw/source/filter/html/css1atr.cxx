@@ -348,7 +348,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     {
     case FUNIT_100TH_MM:
         OSL_ENSURE( FUNIT_MM == eUnit, "Measuring unit not supported" );
-        //fall-through
+        SAL_FALLTHROUGH;
     case FUNIT_MM:
         // 0.01mm = 0.57twip
         nMul = 25400;   // 25.4 * 1000
@@ -360,7 +360,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     case FUNIT_M:
     case FUNIT_KM:
         OSL_ENSURE( FUNIT_CM == eUnit, "Measuring unit not supported" );
-        //fall-through
+        SAL_FALLTHROUGH;
     case FUNIT_CM:
         // 0.01cm = 5.7twip (not exact, but the UI is also not exact)
         nMul = 2540;    // 2.54 * 1000
@@ -371,7 +371,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 
     case FUNIT_TWIP:
         OSL_ENSURE( FUNIT_POINT == eUnit, "Measuring unit not supported" );
-        //fall-through
+        SAL_FALLTHROUGH;
     case FUNIT_POINT:
         // 0.1pt = 2.0twip (not exact, but the UI is also not exact)
         nMul = 100;

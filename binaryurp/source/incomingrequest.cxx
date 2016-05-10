@@ -171,7 +171,7 @@ bool IncomingRequest::execute_throw(
             }
             break;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         {
             OSL_ASSERT(object_.is());

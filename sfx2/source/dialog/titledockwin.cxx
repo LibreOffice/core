@@ -274,7 +274,7 @@ namespace sfx2
             case DataChangedEventType::SETTINGS:
                 if ( !( i_rDataChangedEvent.GetFlags() & AllSettingsFlags::STYLE ) )
                     break;
-                // else fall through.
+                SAL_FALLTHROUGH;
             case DataChangedEventType::FONTS:
             case DataChangedEventType::FONTSUBSTITUTION:
             {

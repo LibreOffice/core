@@ -168,10 +168,9 @@ namespace internal
                                 return;
                             }
                         }
+                        SAL_FALLTHROUGH;
                     }
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::PAR:
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::SEQ:
                     {
                         /// forward bInitial

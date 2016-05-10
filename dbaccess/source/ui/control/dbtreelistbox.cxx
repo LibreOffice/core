@@ -606,7 +606,7 @@ std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
 
                 default:
                     OSL_FAIL( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
-
+                    SAL_FALLTHROUGH;
                 case ContextMenuInterceptorAction_IGNORED:
                     break;
             }

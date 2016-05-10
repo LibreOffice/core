@@ -142,8 +142,8 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 }
             }
 
+            SAL_FALLTHROUGH;
         }
-        //fall-through
         default:
             EditBrowseBox::Command(rEvt);
     }

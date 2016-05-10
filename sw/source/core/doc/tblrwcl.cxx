@@ -4161,7 +4161,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
         pLines = &pLine->GetUpper()->GetTabLines();
         nBaseLinePos = pLines->GetPos( pLine );
         pBaseLine = pLine;
-        // no break!
+        SAL_FALLTHROUGH;
 
     case nsTableChgWidthHeightType::WH_ROW_TOP:
     case nsTableChgWidthHeightType::WH_ROW_BOTTOM:

@@ -603,7 +603,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
             break;
         default:
             SAL_WARN("vcl.layout", "todo unimplemented layout style");
-            //fall-through
+            SAL_FALLTHROUGH;
         case VCL_BUTTONBOX_DEFAULT_STYLE:
         case VCL_BUTTONBOX_END:
             if (!aReq.m_aMainGroupDimensions.empty())

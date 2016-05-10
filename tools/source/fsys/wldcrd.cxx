@@ -48,8 +48,10 @@ bool WildCard::ImpMatch( const char *pWild, const char *pStr )
                     else
                         pWild += pos;
                 else
-                    break;          // WARNING: may cause execution of next case
-                                    // in some circumstances!
+                    break;
+                // WARNING/TODO: may cause execution of next case in some
+                // circumstances!
+                SAL_FALLTHROUGH;
             case '*':
                 while ( *pWild == '*' )
                     pWild++;

@@ -517,7 +517,7 @@ css::registry::RegistryValueType RegistryKey::getValueType()
         {
             return css::registry::RegistryValueType_STRINGLIST;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         return css::registry::RegistryValueType_NOT_DEFINED;
     }

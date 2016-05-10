@@ -675,7 +675,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
     {
         case LTYPE_TABLE:
             bTable = true;
-            // no break here
+            SAL_FALLTHROUGH;
         case LTYPE_FLY:
             // At the FlySection's Beginning/End insert the corresponding Node with its Field.
             // The Frame is created automatically.
