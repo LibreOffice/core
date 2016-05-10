@@ -84,6 +84,7 @@
 #include "externalrefmgr.hxx"
 #include "appoptio.hxx"
 #include "scmod.hxx"
+#include "../../ui/inc/viewdata.hxx"
 #include "../../ui/inc/viewutil.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
@@ -697,9 +698,35 @@ bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) 
     return false;
 }
 
-bool ScDocument::GetTiledRenderingArea(SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow) const
+void ScDocument::GetTiledRenderingArea(SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow) const
 {
-    return GetPrintArea(nTab, rEndCol, rEndRow, false);
+    bool bHasPrintArea = GetPrintArea(nTab, rEndCol, rEndRow, false);
+
+    // we need some reasonable minimal document size
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+    {
+        if (!bHasPrintArea)
+        {
+            rEndCol = 20;
+            rEndRow = 50;
+        }
+        else
+        {
+            rEndCol += 20;
+            rEndRow += 50;
+        }
+    }
+    else if (!bHasPrintArea)
+    {
+        rEndCol = pViewData->GetMaxTiledCol();
+        rEndRow = pViewData->GetMaxTiledRow();
+    }
+    else
+    {
+        rEndCol = std::max(rEndCol, pViewData->GetMaxTiledCol());
+        rEndRow = std::max(rEndRow, pViewData->GetMaxTiledRow());
+    }
 }
 
 bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
