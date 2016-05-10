@@ -152,6 +152,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
                 aViewWin.H *= fRatio;
                 break;
             }
+            SAL_FALLTHROUGH;
         case AS_HOLD_X:
             if (nNewW == 0)
                 throw o3tl::divide_by_zero();

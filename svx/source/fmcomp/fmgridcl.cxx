@@ -803,51 +803,61 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             break;
         case SID_FM_EDIT + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_EDIT:
             aFieldType = FM_COL_TEXTFIELD;
             break;
         case SID_FM_COMBOBOX + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_COMBOBOX:
             aFieldType = FM_COL_COMBOBOX;
             break;
         case SID_FM_LISTBOX + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_LISTBOX:
             aFieldType = FM_COL_LISTBOX;
             break;
         case SID_FM_CHECKBOX + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_CHECKBOX:
             aFieldType = FM_COL_CHECKBOX;
             break;
         case SID_FM_DATEFIELD + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_DATEFIELD:
             aFieldType = FM_COL_DATEFIELD;
             break;
         case SID_FM_TIMEFIELD + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_TIMEFIELD:
             aFieldType = FM_COL_TIMEFIELD;
             break;
         case SID_FM_NUMERICFIELD + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_NUMERICFIELD:
             aFieldType = FM_COL_NUMERICFIELD;
             break;
         case SID_FM_CURRENCYFIELD + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_CURRENCYFIELD:
             aFieldType = FM_COL_CURRENCYFIELD;
             break;
         case SID_FM_PATTERNFIELD + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_PATTERNFIELD:
             aFieldType = FM_COL_PATTERNFIELD;
             break;
         case SID_FM_FORMATTEDFIELD + nChangeTypeOffset:
             bReplace = true;
+            SAL_FALLTHROUGH;
         case SID_FM_FORMATTEDFIELD:
             aFieldType = FM_COL_FORMATTEDFIELD;
             break;

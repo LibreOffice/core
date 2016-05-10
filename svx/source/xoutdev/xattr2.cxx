@@ -70,6 +70,7 @@ bool XLineTransparenceItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
+            SAL_FALLTHROUGH;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());
@@ -429,6 +430,7 @@ bool XFillTransparenceItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
+            SAL_FALLTHROUGH;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());

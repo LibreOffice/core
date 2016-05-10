@@ -1498,6 +1498,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         }
                         aNewB2DPolygon.clear();
                     }
+                    SAL_FALLTHROUGH;
                 }
                 case ANGLEELLIPSETO :
                 {
@@ -1704,6 +1705,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     }
 
                     aNewB2DPolygon.clear();
+
+                    SAL_FALLTHROUGH;
                 }
                 case ARCTO :
                 case CLOCKWISEARCTO :
