@@ -77,6 +77,7 @@ const sal_uInt16 POOLGRP_CHARFMT        = (0 << 11) + POOLGRP_NOCOLLID;
 const sal_uInt16 POOLGRP_FRAMEFMT       = (1 << 11) + POOLGRP_NOCOLLID;
 const sal_uInt16 POOLGRP_PAGEDESC       = (2 << 11) + POOLGRP_NOCOLLID;
 const sal_uInt16 POOLGRP_NUMRULE        = (3 << 11) + POOLGRP_NOCOLLID;
+const sal_uInt16 POOLGRP_TABLESTYLE     = (4 << 11) + POOLGRP_NOCOLLID;
 
 /// Recognize whether it's a user defined style or not:
 const sal_uInt16 POOL_IDUSER_FMT =
@@ -195,6 +196,14 @@ RES_POOLNUMRULE_BUL3,                               ///< NumRule Bullets 3.
 RES_POOLNUMRULE_BUL4,                               ///< NumRule Bullets 4.
 RES_POOLNUMRULE_BUL5,                               ///< NumRule Bullets 5.
 RES_POOLNUMRULE_END
+};
+
+// IDs for table styles.
+enum RES_POOL_TABLESTYLE_TYPE
+{
+RES_POOLTABLESTYLE_BEGIN = POOLGRP_TABLESTYLE,
+RES_POOLTABLESTYLE_DEFAULT = RES_POOLTABLESTYLE_BEGIN,
+RES_POOLTABLESTYLE_END
 };
 
 // IDs for paragraph styles.

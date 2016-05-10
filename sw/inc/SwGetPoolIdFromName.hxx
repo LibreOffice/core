@@ -26,11 +26,12 @@ typedef sal_uInt16 SwGetPoolIdFromName;
 
 namespace nsSwGetPoolIdFromName
 {
-    const SwGetPoolIdFromName GET_POOLID_TXTCOLL  = 0x01;
-    const SwGetPoolIdFromName GET_POOLID_CHRFMT   = 0x02;
-    const SwGetPoolIdFromName GET_POOLID_FRMFMT   = 0x04;
-    const SwGetPoolIdFromName GET_POOLID_PAGEDESC = 0x08;
-    const SwGetPoolIdFromName GET_POOLID_NUMRULE  = 0x10;
+    const SwGetPoolIdFromName GET_POOLID_TXTCOLL     = 0x01;
+    const SwGetPoolIdFromName GET_POOLID_CHRFMT      = 0x02;
+    const SwGetPoolIdFromName GET_POOLID_FRMFMT      = 0x04;
+    const SwGetPoolIdFromName GET_POOLID_PAGEDESC    = 0x08;
+    const SwGetPoolIdFromName GET_POOLID_NUMRULE     = 0x10;
+    const SwGetPoolIdFromName GET_POOLID_TABLESTYLE  = 0x20;
 }
 
 #endif

@@ -61,6 +61,7 @@
 #include <sfx2/printer.hxx>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+//#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -85,6 +86,7 @@
 
 #include "ccoll.hxx"
 #include "unocore.hrc"
+#include "unotbl.hxx"
 
 #include <cassert>
 #include <memory>
@@ -446,7 +448,10 @@ uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames() throw( un
 SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
         SwUnoCollection(rDocShell.GetDoc()),
         m_pDocShell(&rDocShell)
-    { }
+    {
+        // lets make use of this map
+        //m_vFamilies[SFX_STYLE_FAMILY_TABLE] = new XTableStyleFamily(&rDocShell);
+    }
 
 SwXStyleFamilies::~SwXStyleFamilies()
     { }
@@ -698,6 +703,12 @@ sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUStrin
     return nCount + nPoolNumRange;
 }
 
+template<>
+sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_TABLE>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+{
+    return rDoc.GetDocShell()->GetDoc()->GetTableStyles().size();
+}
+
 template<enum SfxStyleFamily eFamily>
 static uno::Reference< css::style::XStyle> lcl_CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
     { return pBasePool ? new SwXStyle(pBasePool, eFamily, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), eFamily, false); };
@@ -756,6 +767,12 @@ sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>(const sal_uInt16 nIndex)
     else if(nIndex < nPoolCollHtmlStackedStart + nPoolCollTextRange)
         return nIndex + RES_POOLCOLL_HTML_BEGIN - nPoolCollHtmlStackedStart;
     throw lang::IndexOutOfBoundsException();
+}
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_TABLE>(const sal_uInt16 nIndex)
+{
+    return nIndex;
 }
 
 template<sal_uInt16 nRangeBegin, sal_uInt16 nRangeSize>
@@ -948,11 +965,12 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     if(!our_pStyleFamilyEntries)
     {
         our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
-            { SFX_STYLE_FAMILY_CHAR,   PROPERTY_MAP_CHAR_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>                       },
-            { SFX_STYLE_FAMILY_PARA,   PROPERTY_MAP_PARA_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>                       },
-            { SFX_STYLE_FAMILY_PAGE,   PROPERTY_MAP_PAGE_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
-            { SFX_STYLE_FAMILY_FRAME,  PROPERTY_MAP_FRAME_STYLE, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
-            { SFX_STYLE_FAMILY_PSEUDO, PROPERTY_MAP_NUM_STYLE,   nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   }
+            { SFX_STYLE_FAMILY_CHAR,   PROPERTY_MAP_CHAR_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,     "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>                       },
+            { SFX_STYLE_FAMILY_PARA,   PROPERTY_MAP_PARA_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,    "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>                       },
+            { SFX_STYLE_FAMILY_PAGE,   PROPERTY_MAP_PAGE_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,   "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
+            { SFX_STYLE_FAMILY_FRAME,  PROPERTY_MAP_FRAME_STYLE, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,     "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
+            { SFX_STYLE_FAMILY_PSEUDO, PROPERTY_MAP_NUM_STYLE,   nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,    "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   },
+            { SFX_STYLE_FAMILY_TABLE,  PROPERTY_MAP_TABLE_STYLE, nsSwGetPoolIdFromName::GET_POOLID_TABLESTYLE, "TableStyles",     STR_STYLE_FAMILY_TABLE,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_TABLE>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_TABLE>,  &lcl_TranslateIndex<SFX_STYLE_FAMILY_TABLE>                      }
        };
     }
     return our_pStyleFamilyEntries;
@@ -4214,4 +4232,86 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::
     return aRet;
 }
 
+/*
+XTextTableStyle::XTextTableStyle(SwDocShell* pDocShell, SwTableAutoFormat* pSwTableAutoFormat)
+{
+    m_pDocShell = pDocShell;
+    m_pSwTableAutoFormat = pSwTableAutoFormat;
+}
+
+// XStyle
+sal_Bool SAL_CALL XTextTableStyle::isUserDefined() throw (css::uno::RuntimeException, std::exception)
+{
+    return false;
+}
+
+sal_Bool SAL_CALL XTextTableStyle::isInUse() throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Reference<css::text::XTextTablesSupplier> xTablesSupp(m_pDocShell->GetModel(), css::uno::UNO_QUERY);
+    if (!xTablesSupp.is())
+    {
+        OSL_FAIL("XTextTablesSupplier missing");
+        throw css::uno::RuntimeException();
+    }
+    css::uno::Reference<css::container::XIndexAccess> xTables(xTablesSupp->getTextTables(), css::uno::UNO_QUERY);
+    if (!xTables.is())
+    {
+        OSL_FAIL("XTextTables missing");
+        throw css::uno::RuntimeException();
+    }
+    int nCount = xTables->getCount();
+    for(sal_Int32 i = 0; i < nCount; ++i)
+    {
+        css::uno::Any aAny = xTables->getByIndex(i);
+        css::uno::Reference<css::text::XTextTable> xTable = *static_cast<css::uno::Reference<css::text::XTextTable> const *>(aAny.getValue());
+        if(!xTable.is())
+        {
+
+        }
+        SwXTextTable *pXTable = nullptr;
+        css::uno::Reference<css::lang::XUnoTunnel> xTableTunnel(xTable, css::uno::UNO_QUERY);
+        if(xTableTunnel.is())
+        {
+            pXTable = reinterpret_cast< SwXTextTable * >(sal::static_int_cast<sal_IntPtr>(xTableTunnel->getSomething(SwXTextTable::getUnoTunnelId())));
+            OSL_ENSURE(pXTable, "SwXTextTable missing");
+        }
+        if(pXTable)
+        {
+            SwFrameFormat *const pFormat = pXTable->GetFrameFormat();
+            OSL_ENSURE(pFormat, "table format missing");
+            const SwTable *pTable = SwTable::FindTable(pFormat);
+            OSL_ENSURE(pTable, "table missing");
+            const SwTableNode *pTableNd = pTable->GetTableNode();
+            OSL_ENSURE(pTableNd, "table node missing");
+            OUString sName = pTableNd->GetTable().GetTableStyleName();
+
+            if (sName == m_pSwTableAutoFormat->GetName())
+                return true;
+        }
+    }
+
+    return false;
+}
+
+OUString SAL_CALL XTextTableStyle::getParentStyle() throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString();
+}
+
+void SAL_CALL XTextTableStyle::setParentStyle( const OUString& aParentStyle ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+{
+
+}
+
+//XNamed
+OUString SAL_CALL XTextTableStyle::getName() throw( css::uno::RuntimeException, std::exception )
+{
+    return m_pSwTableAutoFormat->GetName();
+}
+
+void SAL_CALL XTextTableStyle::setName(const OUString& Name_) throw( css::uno::RuntimeException, std::exception )
+{
+    m_pSwTableAutoFormat->SetName(Name_);
+}
+*/
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

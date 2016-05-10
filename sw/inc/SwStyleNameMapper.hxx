@@ -93,6 +93,7 @@ protected:
                             *m_pHTMLChrFormatUINameArray,
                             *m_pPageDescUINameArray,
                             *m_pNumRuleUINameArray,
+                            *m_pTableStyleUINameArray,
     // Programmatic Name tables
                             *m_pTextProgNameArray,
                             *m_pListsProgNameArray,
@@ -104,19 +105,22 @@ protected:
                             *m_pChrFormatProgNameArray,
                             *m_pHTMLChrFormatProgNameArray,
                             *m_pPageDescProgNameArray,
-                            *m_pNumRuleProgNameArray;
+                            *m_pNumRuleProgNameArray,
+                            *m_pTableStyleProgNameArray;
 
     static NameToIdHash     *m_pParaUIMap,
                             *m_pCharUIMap,
                             *m_pPageUIMap,
                             *m_pFrameUIMap,
                             *m_pNumRuleUIMap,
+                            *m_pTableStyleUIMap,
 
                             *m_pParaProgMap,
                             *m_pCharProgMap,
                             *m_pPageProgMap,
                             *m_pFrameProgMap,
-                            *m_pNumRuleProgMap;
+                            *m_pNumRuleProgMap,
+                            *m_pTableStyleProgMap;
 
     static void fillNameFromId(sal_uInt16 nId, OUString &rName, bool bProgName);
     static const OUString& getNameFromId(sal_uInt16 nId, const OUString &rName,
@@ -176,6 +180,7 @@ public:
     static const ::std::vector<OUString>& GetHTMLChrFormatUINameArray();
     static const ::std::vector<OUString>& GetPageDescUINameArray();
     static const ::std::vector<OUString>& GetNumRuleUINameArray();
+    static const ::std::vector<OUString>& GetTableStylesUINameArray();
 
     static const ::std::vector<OUString>& GetTextProgNameArray();
     static const ::std::vector<OUString>& GetListsProgNameArray();
@@ -188,6 +193,7 @@ public:
     static const ::std::vector<OUString>& GetHTMLChrFormatProgNameArray();
     static const ::std::vector<OUString>& GetPageDescProgNameArray();
     static const ::std::vector<OUString>& GetNumRuleProgNameArray();
+    static const ::std::vector<OUString>& GetTableStylesProgNameArray();
 };
 #endif // _NAME_MAPPER_HXX
 

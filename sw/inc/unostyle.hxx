@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
+//#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <calbck.hxx>
@@ -38,6 +39,7 @@
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/style/XAutoStyles.hpp>
 #include <com/sun/star/style/XAutoStyle.hpp>
+#include <tblafmt.hxx>
 
 #include <istyleaccess.hxx>
 #include <memory>
@@ -246,6 +248,25 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 };
+/*
+class XTextTableStyle : public cppu::WeakImplHelper< css::style::XStyle >
+{
+    SwTableAutoFormat* m_pSwTableAutoFormat;
+    SwDocShell* m_pDocShell;
+public:
+    XTextTableStyle(SwDocShell* pDocShell, SwTableAutoFormat* pSwTableAutoFormat);
+    // XStyle
+    virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isInUse() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getParentStyle() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+
+    //XNamed
+    virtual OUString SAL_CALL getName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setName(const OUString& Name_) throw( css::uno::RuntimeException, std::exception ) override;
+
+};
+*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

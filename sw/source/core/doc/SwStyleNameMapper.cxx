@@ -42,6 +42,7 @@ extern ResMgr* pSwResMgr;
                 *SwStyleNameMapper::m_pHTMLChrFormatUINameArray = nullptr,
                 *SwStyleNameMapper::m_pPageDescUINameArray = nullptr,
                 *SwStyleNameMapper::m_pNumRuleUINameArray = nullptr,
+                *SwStyleNameMapper::m_pTableStyleUINameArray = nullptr,
 
 // Initialise programmatic names to 0
                 *SwStyleNameMapper::m_pTextProgNameArray = nullptr,
@@ -54,19 +55,22 @@ extern ResMgr* pSwResMgr;
                 *SwStyleNameMapper::m_pChrFormatProgNameArray = nullptr,
                 *SwStyleNameMapper::m_pHTMLChrFormatProgNameArray = nullptr,
                 *SwStyleNameMapper::m_pPageDescProgNameArray = nullptr,
-                *SwStyleNameMapper::m_pNumRuleProgNameArray = nullptr;
+                *SwStyleNameMapper::m_pNumRuleProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pTableStyleProgNameArray = nullptr;
 
 NameToIdHash    *SwStyleNameMapper::m_pParaUIMap = nullptr,
                 *SwStyleNameMapper::m_pCharUIMap = nullptr,
                 *SwStyleNameMapper::m_pPageUIMap = nullptr,
                 *SwStyleNameMapper::m_pFrameUIMap = nullptr,
                 *SwStyleNameMapper::m_pNumRuleUIMap = nullptr,
+                *SwStyleNameMapper::m_pTableStyleUIMap = nullptr,
 
                 *SwStyleNameMapper::m_pParaProgMap = nullptr,
                 *SwStyleNameMapper::m_pCharProgMap = nullptr,
                 *SwStyleNameMapper::m_pPageProgMap = nullptr,
                 *SwStyleNameMapper::m_pFrameProgMap = nullptr,
-                *SwStyleNameMapper::m_pNumRuleProgMap = nullptr;
+                *SwStyleNameMapper::m_pNumRuleProgMap = nullptr,
+                *SwStyleNameMapper::m_pTableStyleProgMap = nullptr;
 
 // SwTableEntry so we can pass the length to the String CTOR
 struct SwTableEntry
@@ -310,6 +314,12 @@ const struct SwTableEntry NumRuleProgNameTable [] =
     ENTRY( "List 5" ), // STR_POOLNUMRULE_PRGM_BUL5
     { 0, nullptr }
 };
+
+const struct SwTableEntry TableStyleProgNameTable [] =
+{
+    ENTRY( "Default Style" ), // RES_POOLTABLESTYLE_DEFAULT
+    { 0, nullptr }
+};
 #undef ENTRY
 
 ::std::vector<OUString>*
@@ -467,6 +477,12 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         {
             pHashPointer = bProgName ? &m_pNumRuleProgMap : &m_pNumRuleUIMap;
             vIndexes.push_back( std::make_tuple(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray) );
+        }
+        break;
+        case nsSwGetPoolIdFromName::GET_POOLID_TABLESTYLE:
+        {
+            pHashPointer = bProgName ? &m_pTableStyleProgMap : &m_pTableStyleUIMap;
+            vIndexes.push_back( std::make_tuple(RES_POOLTABLESTYLE_BEGIN, RES_POOLTABLESTYLE_END, bProgName ? &GetTableStylesProgNameArray : &GetTableStylesUINameArray) );
         }
         break;
     }
@@ -667,6 +683,13 @@ const OUString& SwStyleNameMapper::getNameFromId(
             nStt = RES_POOLNUMRULE_BEGIN;
         }
         break;
+    case POOLGRP_TABLESTYLE:
+        if( RES_POOLTABLESTYLE_BEGIN <= nId && nId < RES_POOLTABLESTYLE_END )
+        {
+            pStrArr = bProgName ? &GetTableStylesProgNameArray() : &GetTableStylesUINameArray();
+            nStt = RES_POOLTABLESTYLE_BEGIN;
+        }
+        break;
     }
     return pStrArr ? pStrArr->operator[](nId - nStt) : rFillName;
 }
@@ -809,6 +832,17 @@ const ::std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
     return *m_pNumRuleUINameArray;
 }
 
+// TODO: Styles -> Style
+// same with ...sProgName...
+const ::std::vector<OUString>& SwStyleNameMapper::GetTableStylesUINameArray()
+{
+    // TODO: RC_POOL TABLE !
+    if (!m_pTableStyleUINameArray)
+        m_pTableStyleUINameArray = lcl_NewUINameArray( RC_POOLNUMRULE_BEGIN,
+            RC_POOLNUMRULE_BEGIN + (RES_POOLTABLESTYLE_END - RES_POOLTABLESTYLE_BEGIN) );
+    return *m_pTableStyleUINameArray;
+}
+
 const ::std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 {
     if (!m_pTextProgNameArray)
@@ -895,6 +929,14 @@ const ::std::vector<OUString>& SwStyleNameMapper::GetNumRuleProgNameArray()
         m_pNumRuleProgNameArray = lcl_NewProgNameArray( NumRuleProgNameTable,
             sizeof ( NumRuleProgNameTable ) / sizeof ( SwTableEntry ) );
     return *m_pNumRuleProgNameArray;
+}
+
+const ::std::vector<OUString>& SwStyleNameMapper::GetTableStylesProgNameArray()
+{
+    if (!m_pTableStyleProgNameArray)
+        m_pTableStyleProgNameArray = lcl_NewProgNameArray( TableStyleProgNameTable,
+            sizeof ( TableStyleProgNameTable ) / sizeof ( SwTableEntry ) );
+    return *m_pTableStyleProgNameArray;
 }
 
 const OUString
