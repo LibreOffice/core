@@ -84,6 +84,8 @@ boost_patches += boost_1_60_0.undef.warning.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
 boost_patches += boost_1_60_0.android.undef.warning.patch
 
+boost_patches += fallthrough.patch.0
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))

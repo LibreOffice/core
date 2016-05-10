@@ -564,8 +564,8 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
             setDouble( _parameterIndex, nValue );
             break;
         }
+        BOOST_FALLTHROUGH;
     }
-    // run through
 
     case DataType::CHAR:
     case DataType::VARCHAR:
@@ -591,8 +591,8 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
             setFloat(_parameterIndex,nValue);
             break;
         }
+        BOOST_FALLTHROUGH;
     }
-    // run through if we couldn't set a float value
 
     case DataType::DOUBLE:
     {
