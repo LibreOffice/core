@@ -47,6 +47,8 @@ private:
 
     bool                            mbMenuBar;
     bool                            mbNeedsUpdate;
+    bool                            mbReturnFocusToDocument;
+    GtkWidget*                      mpMenuBarContainerWidget;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpCloseButton;
     Menu*                           mpVCLMenu;
@@ -115,9 +117,13 @@ public:
 
     void CreateMenuBarWidget();
     void DestroyMenuBarWidget();
+    gboolean SignalKey(GdkEventKey* pEvent);
+    void ReturnFocus();
 
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void ShowCloseButton(bool bShow) override;
+    virtual bool CanGetFocus() const override;
+    virtual bool TakeFocus() override;
 };
 
 class GtkSalMenuItem : public SalMenuItem

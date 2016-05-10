@@ -41,6 +41,7 @@ public:
     void AddWindow( vcl::Window *pWindow );
     void RemoveWindow( vcl::Window *pWindow );
     bool HandleKeyEvent(const KeyEvent& rKeyEvent);
+    static bool IsCycleKey(const vcl::KeyCode& rKeyCode);
 };
 
 #endif

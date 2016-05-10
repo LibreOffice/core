@@ -370,6 +370,7 @@ public:
     static GdkDisplay*     getGdkDisplay();
     GtkWidget*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
+    GtkEventBox* getEventBox() const { return m_pEventBox; }
     GtkWidget*  getMouseEventWidget() const;
 #if GTK_CHECK_VERSION(3,0,0)
     GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }

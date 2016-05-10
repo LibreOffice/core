@@ -1078,6 +1078,10 @@ void MenuBarWindow::LoseFocus()
 
 void MenuBarWindow::GetFocus()
 {
+    SalMenu *pNativeMenu = pMenu ? pMenu->ImplGetSalMenu() : nullptr;
+    if (pNativeMenu && pNativeMenu->TakeFocus())
+        return;
+
     if ( nHighlightedItem == ITEMPOS_INVALID )
     {
         mbAutoPopup = false;    // do not open menu when activated by focus handling like taskpane cycling

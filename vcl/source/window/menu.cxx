@@ -2597,13 +2597,24 @@ void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
 
 bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
 {
+    // No keyboard processing when our menubar is invisible
+    if (!IsDisplayable())
+        return false;
+
+    // No keyboard processing when system handles the menu.
+    SalMenu *pNativeMenu = ImplGetSalMenu();
+    if (pNativeMenu && pNativeMenu->VisibleMenuBar())
+    {
+        // Except when the event is the F6 cycle pane event and we can put our
+        // focus into it (i.e. the gtk3 menubar case but not the mac/unity case
+        // where its not part of the application window)
+        if (!TaskPaneList::IsCycleKey(rKEvent.GetKeyCode()))
+            return false;
+        if (!pNativeMenu->CanGetFocus())
+            return false;
+    }
+
     bool bDone = false;
-
-    // No keyboard processing when system handles the menu or our menubar is invisible
-    if( !IsDisplayable() ||
-        ( ImplGetSalMenu() && ImplGetSalMenu()->VisibleMenuBar() ) )
-        return bDone;
-
     // check for enabled, if this method is called from another window...
     vcl::Window* pWin = ImplGetWindow();
     if (pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && !pWin->IsInModalMode())

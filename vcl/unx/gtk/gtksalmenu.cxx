@@ -417,6 +417,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mbNeedsUpdate( false ),
+    mbReturnFocusToDocument( false ),
+    mpMenuBarContainerWidget( nullptr ),
     mpMenuBarWidget( nullptr ),
     mpCloseButton( nullptr ),
     mpVCLMenu( nullptr ),
@@ -576,63 +578,139 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
     gtk_widget_set_valign(mpCloseButton, GTK_ALIGN_CENTER);
 
     gtk_container_add(GTK_CONTAINER(mpCloseButton), image);
-    gtk_grid_attach(GTK_GRID(mpMenuBarWidget), GTK_WIDGET(mpCloseButton), 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), GTK_WIDGET(mpCloseButton), 1, 0, 1, 1);
     gtk_widget_show_all(mpCloseButton);
 #else
     (void)bShow;
-    (void)mpMenuBarWidget;
+    (void)mpMenuBarContainerWidget;
     (void)mpCloseButton;
 #endif
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
-//hack-around https://bugzilla.gnome.org/show_bug.cgi?id=762756
-static void ReturnFocus(GtkMenuShell *, gpointer pWidget)
+//Typically when the menubar is deactivated we want the focus to return
+//to where it came from. If the menubar was activated because of F6
+//moving focus into the associated VCL menubar then on pressing ESC
+//or any other normal reason for deactivation we want focus to return
+//to the document, defininitely not still stuck in the associated
+//VCL menubar. But if F6 is pressed while the menubar is activated
+//we want to pass that F6 back to the VCL menubar which will move
+//focus to the next pane by itself.
+void GtkSalMenu::ReturnFocus()
 {
-    GtkWidget* pTopLevel = static_cast<GtkWidget*>(pWidget);
-    GdkWindow *window = gtk_widget_get_window(pTopLevel);
-    GdkEvent *fevent = gdk_event_new(GDK_FOCUS_CHANGE);
-
-    fevent->focus_change.type = GDK_FOCUS_CHANGE;
-    fevent->focus_change.window = GDK_WINDOW(g_object_ref(window));
-    fevent->focus_change.in = static_cast<gint16>(TRUE);
-    gtk_widget_send_focus_change(pTopLevel, fevent);
-    gdk_event_free(fevent);
+    if (!mbReturnFocusToDocument)
+        gtk_widget_grab_focus(GTK_WIDGET(mpFrame->getEventBox()));
+    else
+        mpFrame->GetWindow()->GrabFocusToDocument();
+    mbReturnFocusToDocument = false;
 }
+
+gboolean GtkSalMenu::SignalKey(GdkEventKey* pEvent)
+{
+    if (pEvent->keyval == GDK_F6)
+    {
+        mbReturnFocusToDocument = false;
+        gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
+        //because we return false here, the keypress will continue
+        //to propogate and in the case that vcl focus is in
+        //the vcl menubar then that will also process F6 and move
+        //to the next pane
+    }
+    return false;
+}
+
+//The GtkSalMenu is owner by a Vcl Menu/MenuBar. In the menubar
+//case the vcl menubar is present and "visible", but with a 0 height
+//so it not apparent. Normally it acts as though it is not there when
+//a Native menubar is active. If we return true here, then for keyboard
+//activation and traversal with F6 through panes then the vcl menubar
+//acts as though it *is* present and we translate its take focus and F6
+//traversal key events into the gtk menubar equivalents.
+bool GtkSalMenu::CanGetFocus() const
+{
+    return mpMenuBarWidget != nullptr;
+}
+
+bool GtkSalMenu::TakeFocus()
+{
+    if (!mpMenuBarWidget)
+        return false;
+
+    //Send a keyboard event to the gtk menubar to let it know it has been
+    //activated via the keyboard. Doesn't do anything except cause the gtk
+    //menubar "keyboard_mode" member to get set to true, so typically mnemonics
+    //are shown which will serve as indication that the menubar has focus
+    //(given that we wnt to show it with no menus popped down)
+    GdkEvent *event = gdk_event_new(GDK_KEY_PRESS);
+    event->key.window = GDK_WINDOW(g_object_ref(gtk_widget_get_window(mpMenuBarWidget)));
+    event->key.send_event = TRUE;
+    event->key.time = gtk_get_current_event_time();
+    event->key.state = 0;
+    event->key.keyval = 0;
+    event->key.length = 0;
+    event->key.string = nullptr;
+    event->key.hardware_keycode = 0;
+    event->key.group = 0;
+    event->key.is_modifier = false;
+    gtk_widget_event(mpMenuBarWidget, event);
+    gdk_event_free(event);
+
+    //this pairing results in a menubar with keyboard focus with no menus
+    //auto-popped down
+    gtk_menu_shell_select_first(GTK_MENU_SHELL(mpMenuBarWidget), false);
+    gtk_menu_shell_deselect(GTK_MENU_SHELL(mpMenuBarWidget));
+    mbReturnFocusToDocument = true;
+    return true;
+}
+
+#if GTK_CHECK_VERSION(3,0,0)
+
+static void MenuBarReturnFocus(GtkMenuShell*, gpointer menu)
+{
+    GtkSalMenu* pMenu = static_cast<GtkSalMenu*>(menu);
+    pMenu->ReturnFocus();
+}
+
+static gboolean MenuBarSignalKey(GtkWidget*, GdkEventKey* pEvent, gpointer menu)
+{
+    GtkSalMenu* pMenu = static_cast<GtkSalMenu*>(menu);
+    return pMenu->SignalKey(pEvent);
+}
+
 #endif
 
 void GtkSalMenu::CreateMenuBarWidget()
 {
 #if GTK_CHECK_VERSION(3,0,0)
     GtkGrid* pGrid = mpFrame->getTopLevelGridWidget();
-    mpMenuBarWidget = gtk_grid_new();
+    mpMenuBarContainerWidget = gtk_grid_new();
 
-    gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarWidget), true);
+    gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarContainerWidget), true);
     gtk_grid_insert_row(pGrid, 0);
-    gtk_grid_attach(pGrid, mpMenuBarWidget, 0, 0, 1, 1);
+    gtk_grid_attach(pGrid, mpMenuBarContainerWidget, 0, 0, 1, 1);
 
-    GtkWidget *pMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
-    gtk_widget_insert_action_group(pMenuBarWidget, "win", mpActionGroup);
-    gtk_widget_set_hexpand(GTK_WIDGET(pMenuBarWidget), true);
-    gtk_grid_attach(GTK_GRID(mpMenuBarWidget), pMenuBarWidget, 0, 0, 1, 1);
-    g_signal_connect(G_OBJECT(pMenuBarWidget), "deactivate", G_CALLBACK(ReturnFocus), mpFrame->getWindow());
+    mpMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
+    gtk_widget_insert_action_group(mpMenuBarWidget, "win", mpActionGroup);
+    gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarWidget), true);
+    gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), mpMenuBarWidget, 0, 0, 1, 1);
+    g_signal_connect(G_OBJECT(mpMenuBarWidget), "deactivate", G_CALLBACK(MenuBarReturnFocus), this);
+    g_signal_connect(G_OBJECT(mpMenuBarWidget), "key-press-event", G_CALLBACK(MenuBarSignalKey), this);
 
-    gtk_widget_show_all(mpMenuBarWidget);
+    gtk_widget_show_all(mpMenuBarContainerWidget);
 #else
-    (void)mpMenuBarWidget;
+    (void)mpMenuBarContainerWidget;
 #endif
 }
 
 void GtkSalMenu::DestroyMenuBarWidget()
 {
 #if GTK_CHECK_VERSION(3,0,0)
-    if (mpMenuBarWidget)
+    if (mpMenuBarContainerWidget)
     {
-        gtk_widget_destroy(mpMenuBarWidget);
-        mpMenuBarWidget = nullptr;
+        gtk_widget_destroy(mpMenuBarContainerWidget);
+        mpMenuBarContainerWidget = nullptr;
     }
 #else
-    (void)mpMenuBarWidget;
+    (void)mpMenuBarContainerWidget;
 #endif
 }
 

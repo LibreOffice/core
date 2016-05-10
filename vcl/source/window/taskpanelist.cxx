@@ -146,6 +146,11 @@ bool TaskPaneList::IsInList( vcl::Window *pWindow )
         return false;
 }
 
+bool TaskPaneList::IsCycleKey(const vcl::KeyCode& rKeyCode)
+{
+    return rKeyCode.GetCode() == KEY_F6 && !rKeyCode.IsMod2(); // F6
+}
+
 bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
 {
 
@@ -160,7 +165,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
     // and the shortcut conflicts with tab-control shortcut ), it is no more supported
     vcl::KeyCode aKeyCode = rKeyEvent.GetKeyCode();
     bool bForward = !aKeyCode.IsShift();
-    if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
+    if (TaskPaneList::IsCycleKey(aKeyCode))
     {
         bool bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
