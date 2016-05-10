@@ -88,7 +88,7 @@ inline long ImplCalcProgessWidth( sal_uInt16 nMax, long nSize )
 }
 
 static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
-                                 sal_uInt16 nStyle )
+                                 StatusBarItemBits nStyle )
 {
     long nX;
     long nY;
@@ -96,11 +96,11 @@ static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
     if( delta + rTextSize.Width() > rRectSize.Width() )
         delta = 0;
 
-    if ( nStyle & SIB_LEFT )
+    if ( nStyle & StatusBarItemBits::Left )
         nX = delta;
-    else if ( nStyle & SIB_RIGHT )
+    else if ( nStyle & StatusBarItemBits::Right )
         nX = rRectSize.Width()-rTextSize.Width()-delta;
-    else // SIB_CENTER
+    else // StatusBarItemBits::Center
         nX = (rRectSize.Width()-rTextSize.Width())/2;
     nY = (rRectSize.Height()-rTextSize.Height())/2 + 1;
     return Point( nX, nY );
@@ -239,7 +239,7 @@ void StatusBar::ImplFormat()
         pItem = (*mpItemList)[ i ];
         if ( pItem->mbVisible )
         {
-            if ( pItem->mnBits & SIB_AUTOSIZE ) {
+            if ( pItem->mnBits & StatusBarItemBits::AutoSize ) {
                 nAutoSizeItems++;
             }
 
@@ -280,7 +280,7 @@ void StatusBar::ImplFormat()
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         pItem = (*mpItemList)[ i ];
         if ( pItem->mbVisible ) {
-            if ( pItem->mnBits & SIB_AUTOSIZE ) {
+            if ( pItem->mnBits & StatusBarItemBits::AutoSize ) {
                 pItem->mnExtraWidth = nExtraWidth;
                 if ( nExtraWidth2 ) {
                     pItem->mnExtraWidth++;
@@ -396,7 +396,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     }
 
     // call DrawItem if necessary
-    if (pItem->mnBits & SIB_USERDRAW)
+    if (pItem->mnBits & StatusBarItemBits::UserDraw)
     {
         if (bOffScreen)
         {
@@ -422,11 +422,11 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     // show frame
     if (mpImplData->mbDrawItemFrames)
     {
-        if (!(pItem->mnBits & SIB_FLAT))
+        if (!(pItem->mnBits & StatusBarItemBits::Flat))
         {
             DrawFrameStyle nStyle;
 
-            if (pItem->mnBits & SIB_IN)
+            if (pItem->mnBits & StatusBarItemBits::In)
                 nStyle = DrawFrameStyle::In;
             else
                 nStyle = DrawFrameStyle::Out;
@@ -906,10 +906,10 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
                 "StatusBar::InsertItem(): ItemId already exists" );
 
     // default: IN and CENTER
-    if ( !(nBits & (SIB_IN | SIB_OUT | SIB_FLAT)) )
-        nBits |= SIB_IN;
-    if ( !(nBits & (SIB_LEFT | SIB_RIGHT | SIB_CENTER)) )
-        nBits |= SIB_CENTER;
+    if ( !(nBits & (StatusBarItemBits::In | StatusBarItemBits::Out | StatusBarItemBits::Flat)) )
+        nBits |= StatusBarItemBits::In;
+    if ( !(nBits & (StatusBarItemBits::Left | StatusBarItemBits::Right | StatusBarItemBits::Center)) )
+        nBits |= StatusBarItemBits::Center;
 
     // create item
     if (mbAdjustHiDPI && GetDPIScaleFactor() != 1)
@@ -1129,7 +1129,7 @@ StatusBarItemBits StatusBar::GetItemBits( sal_uInt16 nItemId ) const
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
         return (*mpItemList)[ nPos ]->mnBits;
 
-    return 0;
+    return StatusBarItemBits::NONE;
 }
 
 long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
@@ -1219,7 +1219,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
         pItem->mpUserData = pNewData;
 
         // call Draw-Item if it's a User-Item
-        if ( (pItem->mnBits & SIB_USERDRAW) && pItem->mbVisible &&
+        if ( (pItem->mnBits & StatusBarItemBits::UserDraw) && pItem->mbVisible &&
              !mbFormat && ImplIsItemUpdate() )
         {
             Update();
@@ -1250,7 +1250,7 @@ void StatusBar::RedrawItem(sal_uInt16 nItemId)
         return;
 
     ImplStatusItem* pItem = (*mpItemList)[ nPos ];
-    if (pItem && (pItem->mnBits & SIB_USERDRAW) &&
+    if (pItem && (pItem->mnBits & StatusBarItemBits::UserDraw) &&
         pItem->mbVisible && ImplIsItemUpdate())
     {
         Update();

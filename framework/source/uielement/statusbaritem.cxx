@@ -33,28 +33,28 @@ namespace framework
 
 namespace
 {
-sal_uInt16 impl_convertItemBitsToItemStyle( sal_Int16 nItemBits )
+sal_uInt16 impl_convertItemBitsToItemStyle( StatusBarItemBits nItemBits )
 {
     sal_uInt16 nStyle( 0 );
 
-    if ( ( nItemBits & SIB_RIGHT ) == SIB_RIGHT )
+    if ( nItemBits & StatusBarItemBits::Right )
         nStyle |= ItemStyle::ALIGN_RIGHT;
-    else if ( ( nItemBits & SIB_LEFT ) == SIB_LEFT )
+    else if ( nItemBits & StatusBarItemBits::Left )
         nStyle |= ItemStyle::ALIGN_LEFT;
     else
         nStyle |= ItemStyle::ALIGN_CENTER;
 
-    if ( ( nItemBits & SIB_FLAT ) == SIB_FLAT )
+    if ( nItemBits & StatusBarItemBits::Flat )
         nStyle |= ItemStyle::DRAW_FLAT;
-    else if ( ( nItemBits & SIB_OUT ) == SIB_OUT )
+    else if ( nItemBits & StatusBarItemBits::Out )
         nStyle |= ItemStyle::DRAW_OUT3D;
     else
         nStyle |= ItemStyle::DRAW_IN3D;
 
-    if ( ( nItemBits & SIB_AUTOSIZE ) == SIB_AUTOSIZE )
+    if ( nItemBits & StatusBarItemBits::AutoSize )
         nStyle |= ItemStyle::AUTO_SIZE;
 
-    if ( ( nItemBits & SIB_USERDRAW ) == SIB_USERDRAW )
+    if ( nItemBits & StatusBarItemBits::UserDraw )
         nStyle |= ItemStyle::OWNER_DRAW;
 
     return nStyle;

@@ -100,28 +100,28 @@ struct lcl_RemoveController : public std::unary_function< typename MAP::value_ty
     }
 };
 
-sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
+StatusBarItemBits impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 {
-    sal_uInt16 nItemBits( 0 );
+    StatusBarItemBits nItemBits( StatusBarItemBits::NONE );
 
     if (( nStyle & css::ui::ItemStyle::ALIGN_RIGHT ) == css::ui::ItemStyle::ALIGN_RIGHT )
-        nItemBits |= SIB_RIGHT;
+        nItemBits |= StatusBarItemBits::Right;
     else if ( nStyle & css::ui::ItemStyle::ALIGN_LEFT )
-        nItemBits |= SIB_LEFT;
+        nItemBits |= StatusBarItemBits::Left;
     else
-        nItemBits |= SIB_CENTER;
+        nItemBits |= StatusBarItemBits::Center;
 
     if (( nStyle & css::ui::ItemStyle::DRAW_FLAT ) == css::ui::ItemStyle::DRAW_FLAT )
-        nItemBits |= SIB_FLAT;
+        nItemBits |= StatusBarItemBits::Flat;
     else if ( nStyle & css::ui::ItemStyle::DRAW_OUT3D )
-        nItemBits |= SIB_OUT;
+        nItemBits |= StatusBarItemBits::Out;
     else
-        nItemBits |= SIB_IN;
+        nItemBits |= StatusBarItemBits::In;
 
     if (( nStyle & css::ui::ItemStyle::AUTO_SIZE ) == css::ui::ItemStyle::AUTO_SIZE )
-        nItemBits |= SIB_AUTOSIZE;
+        nItemBits |= StatusBarItemBits::AutoSize;
     if ( nStyle & css::ui::ItemStyle::OWNER_DRAW )
-        nItemBits |= SIB_USERDRAW;
+        nItemBits |= StatusBarItemBits::UserDraw;
 
     return nItemBits;
 }
@@ -469,7 +469,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     OUString aString( vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
-                    sal_uInt16        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
+                    StatusBarItemBits nItemBits( impl_convertItemStyleToItemBits( nStyle ));
 
                     m_pStatusBar->InsertItem( nId, nWidth, nItemBits, nOffset );
                     m_pStatusBar->SetItemCommand( nId, aCommandURL );

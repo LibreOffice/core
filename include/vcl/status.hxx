@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <vector>
 
 struct ImplStatusItem;
@@ -35,18 +36,21 @@ void VCL_DLLPUBLIC DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRende
                                 const Rectangle& rFramePosSize);
 
 
-typedef sal_uInt16 StatusBarItemBits;
-
-
-#define SIB_LEFT                    ((StatusBarItemBits)0x0001)
-#define SIB_CENTER                  ((StatusBarItemBits)0x0002)
-#define SIB_RIGHT                   ((StatusBarItemBits)0x0004)
-#define SIB_IN                      ((StatusBarItemBits)0x0008)
-#define SIB_OUT                     ((StatusBarItemBits)0x0010)
-#define SIB_FLAT                    ((StatusBarItemBits)0x0020)
-#define SIB_AUTOSIZE                ((StatusBarItemBits)0x0040)
-#define SIB_USERDRAW                ((StatusBarItemBits)0x0080)
-
+enum class StatusBarItemBits {
+    NONE            = 0x0000,
+    Left            = 0x0001,
+    Center          = 0x0002,
+    Right           = 0x0004,
+    In              = 0x0008,
+    Out             = 0x0010,
+    Flat            = 0x0020,
+    AutoSize        = 0x0040,
+    UserDraw        = 0x0080,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<StatusBarItemBits> : is_typed_flags<StatusBarItemBits, 0x00ff> {};
+}
 
 #define STATUSBAR_APPEND            ((sal_uInt16)0xFFFF)
 #define STATUSBAR_ITEM_NOTFOUND     ((sal_uInt16)0xFFFF)
@@ -118,7 +122,7 @@ public:
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
     void                InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
-                                    StatusBarItemBits nBits = SIB_CENTER | SIB_IN,
+                                    StatusBarItemBits nBits = StatusBarItemBits::Center | StatusBarItemBits::In,
                                     long nOffset = STATUSBAR_OFFSET,
                                     sal_uInt16 nPos = STATUSBAR_APPEND );
     void                RemoveItem( sal_uInt16 nItemId );

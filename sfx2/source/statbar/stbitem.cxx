@@ -561,7 +561,7 @@ void SfxStatusBarControl::Paint
 /*  [Description]
 
     This virtual method is called to paint the contents if the field
-    at hand is marked with SIB_USERDRAW. The output must be obtained
+    at hand is marked with StatusBarItemBits::UserDraw. The output must be obtained
     within the Rectangle of rUDEvt.GetRect() by the OutputDevice
     given by rUDEvt.GetDevice().
 
